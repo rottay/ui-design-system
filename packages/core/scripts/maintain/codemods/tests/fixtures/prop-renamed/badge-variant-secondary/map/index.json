@@ -15,7 +15,12 @@
       "changeset": "fixture",
       "census": "fixture",
       "mode": "rewrite",
-      "resolves": "fixture: the value map `tone` can honour for Badge; `secondary` is absent because no tone reproduces it on any engine (parity verdict B, W10-RET01-PARITY row 3)"
+      "resolves": "fixture: the value map `tone` can honour for Badge; `secondary` is absent because no tone reproduces it on any engine (parity verdict B, W10-RET01-PARITY row 3)",
+      "parity": {
+        "anchors": ["BadgeBaseProps.variant", "BadgeVariant"],
+        "failing": { "member": "variant", "value": "secondary" },
+        "test": "src/components/primitives/display/badge/tests/Badge.variant-tone-parity.test.tsx"
+      }
     }
   ]
 }

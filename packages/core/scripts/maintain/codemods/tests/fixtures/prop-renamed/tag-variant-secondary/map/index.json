@@ -15,7 +15,12 @@
       "changeset": "fixture",
       "census": "fixture",
       "mode": "rewrite",
-      "resolves": "fixture: the value map `tone` can honour for Tag; `secondary` is absent because no tone reproduces it on any engine (parity verdict B, W10-RET01-PARITY row 9)"
+      "resolves": "fixture: the value map `tone` can honour for Tag; `secondary` is absent because no tone reproduces it on any engine (parity verdict B, W10-RET01-PARITY row 9)",
+      "parity": {
+        "anchors": ["TagProps.variant", "TagVariant"],
+        "failing": { "member": "variant", "value": "secondary" },
+        "test": "src/components/primitives/display/tag/tests/Tag.variant-tone-parity.test.tsx"
+      }
     }
   ]
 }

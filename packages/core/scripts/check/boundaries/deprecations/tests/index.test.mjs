@@ -21,8 +21,8 @@ import { after, describe, it } from 'node:test';
 import {
   BLOCKERS, CLASSES, CODEMOD_FIXTURES_PATH, CODEMOD_MAP_PATH, CODEMOD_TESTS_PATH, GATES_MANIFEST_PATH, HEADER_KEYS,
   LEDGER_PATH, RECEIPTS_PATH, RECEIPT_AUDIT_KEYS, RECEIPT_KEYS, REGISTRY_PATH, ROW_KEYS, codemodIdProblem, digestOf, evaluate,
-  fixtureVerdict, identifierResolves, loadCodemodLookup, matchOf, measure, mintIntegrityOf, parseArgs, reasonProblem,
-  receiptIntegrityOf, rowDigestOf, run, scanMarkers,
+  fixtureVerdict, identifierResolves, loadCodemodLookup, matchOf, measure, mintIntegrityOf, parityVerdict, parseArgs,
+  reasonProblem, receiptIntegrityOf, rowDigestOf, run, scanMarkers,
 } from '../index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 
@@ -239,11 +239,39 @@ const ALL_IDS = ['paddingRight', 'variant', 'dateCellRender', 'materials', 'marg
 const NEW_MARKER_SOURCE = ['  /** @deprecated Use `spacing`. */', '  margin?: number;'].join('\n');
 const WITH_NEW_MARKER = [NEW_MARKER_SOURCE, '  /** @deprecated Use `label`. */', '  title?: string;'].join('\n');
 
+const PARITY_ID = 'prop-renamed/.#WidgetProps.variant';
+const PARITY_TEST = 'src/widget/tests/Widget.variant-tone-parity.test.tsx';
+const PARITY_INPUT = ['export const Page = () => (', '  <Widget variant="primary" />', '  <Widget variant="secondary" />', ');', ''].join('\n');
+const fixtureFile = (name, fixture = FIXTURE) => `packages/core/${CODEMOD_FIXTURES_PATH}/${fixture}/${name}`;
+
+/**
+ * What a fixture owes a `parity-failed` row: an entry that names the row's anchor and the failing value, a
+ * `report` row at that value in `input/`, and the component test it names. `alter` receives the parts before
+ * they are written, as `{ parity, report, input }`.
+ */
+function plantParity(parts, alter = () => {}, fixture = FIXTURE) {
+  const planted = {
+    parity: { anchors: ['WidgetProps.variant'], failing: { member: 'variant', value: 'secondary' }, test: PARITY_TEST },
+    report: [
+      { file: 'index.tsx', line: 2, column: 11, action: 'rewrite', id: PARITY_ID, reason: 'attribute-renamed' },
+      { file: 'index.tsx', line: 3, column: 11, action: 'report', id: PARITY_ID, reason: 'unmapped-value' },
+    ],
+    input: PARITY_INPUT,
+  };
+  alter(planted);
+  const entry = { id: PARITY_ID, ...(planted.parity === undefined ? {} : { parity: planted.parity }) };
+  parts.files[fixtureFile('map/index.json', fixture)] = JSON.stringify({ schemaVersion: 1, entries: [entry] });
+  parts.files[fixtureFile('report/index.json', fixture)] = JSON.stringify(planted.report);
+  parts.files[fixtureFile('input/index.tsx', fixture)] = planted.input;
+  parts.files[`packages/core/${PARITY_TEST}`] = "test('secondary has no tone', () => {});\n";
+}
+
 /** Every row re-homed to the successor, with a verdict fixture and a codemod id; the debt row is retired. */
 function rehome(parts) {
   replaceIn(parts, CONTRACTS, `${NEW_MARKER_SOURCE}\n`, '');
   dropRow(parts, 'WidgetProps.margin');
   parts.files[`packages/core/${CODEMOD_FIXTURES_PATH}/${FIXTURE}/expected/index.tsx`] = 'export {};\n';
+  plantParity(parts);
   for (const row of parts.ledger.rows) {
     row.receiver = SUCCESSOR;
     row.codemod = idOf(row);
@@ -477,11 +505,113 @@ describe('deprecations — negatives', () => {
         hollow(parts);
         parts.files[`packages/core/${CODEMOD_TESTS_PATH}/fixtures/index.test.mjs`] = "test('prop-renamed/hollow', () => {});\n";
       };
-      assertGreen(check(tested, { codemods, assumeDone: [OWNER] }));
+      if (blocker === 'direction-semantics') assertGreen(check(tested, { codemods, assumeDone: [OWNER] }));
+      else assertRedOnlyFor(check(tested, { codemods, assumeDone: [OWNER] }), /prop-renamed\/hollow does not prove a failed parity .*NO SYMBOL/, 1);
     }
     const file = tree((parts) => { parts.files[`packages/core/${CODEMOD_FIXTURES_PATH}/a-file`] = 'x\n'; });
     assert.match(fixtureVerdict(file.packageRoot, 'a-file'), /no fixture directory/);
     assert.match(fixtureVerdict(file.packageRoot, '../fixtures/a-file'), /is not a fixture path/);
+  });
+
+  it('H1.5: a parity-failed fixture names the row, reports the failing value and names a test that exists', () => {
+    const codemods = wiredFor(ALL_IDS);
+    const views = [{ codemods }, { codemods, assumeDone: [OWNER] }];
+    const mutant = (alter, after = () => {}) => (parts) => { rehome(parts); plantParity(parts, alter); after(parts); };
+    const refused = (name, plant, pattern) => {
+      for (const options of views) {
+        const result = check(plant, options);
+        assert.ok(result.failures.length > 0, `${name}: the gate stayed green`);
+        assertRedOnlyFor(result, pattern, 1);
+        assert.match(result.failures[0], /`WidgetProps\.variant`: blocker `parity-failed:prop-renamed\/widget-variant`/, name);
+      }
+    };
+    for (const options of views) assertGreen(check(mutant(() => {}), options));
+
+    // The weak law's whole demand, a non-empty `expected` tree, no longer closes the row.
+    const weak = (parts) => {
+      rehome(parts);
+      for (const name of ['map/index.json', 'report/index.json', 'input/index.tsx']) delete parts.files[fixtureFile(name)];
+    };
+    assert.equal(fixtureVerdict(tree(weak).packageRoot, FIXTURE), null);
+    refused('expected tree only', weak, /NO SYMBOL: it has no map\/index\.json of its own/);
+
+    refused('no declaration', mutant((planted) => { planted.parity = undefined; }), /NO SYMBOL: no entry of map\/index\.json declares `parity`/);
+    refused('another symbol', mutant((planted) => { planted.parity.anchors = ['WidgetProps.materials']; }),
+      /NO SYMBOL: `parity\.anchors` names WidgetProps\.materials, not this row/);
+
+    refused('no report file', mutant(() => {}, (parts) => { delete parts.files[fixtureFile('report/index.json')]; }),
+      /NO REPORT ROW: it has no report\/index\.json/);
+    const noRow = /NO REPORT ROW: report\/index\.json has no `report` row of prop-renamed\/\.#WidgetProps\.variant located at `variant` = `secondary`/;
+    refused('report row dropped', mutant((planted) => { planted.report.pop(); }), noRow);
+    refused('rewritten, not reported', mutant((planted) => { planted.report[1].action = 'rewrite'; }), noRow);
+    refused('row of another entry', mutant((planted) => { planted.report[1].id = 'prop-renamed/.#WidgetProps.materials'; }), noRow);
+    refused('row at another value', mutant((planted) => { planted.report[1].line = 2; }), noRow);
+    refused('row off the member', mutant((planted) => { planted.report[1].column = 3; }), noRow);
+    // `expected/` carries the failing value at the row's own line and column: only containment refuses it.
+    refused('row outside input', mutant(
+      (planted) => { planted.report[1].file = '../expected/index.tsx'; },
+      (parts) => { parts.files[fixtureFile('expected/index.tsx')] = PARITY_INPUT; },
+    ), noRow);
+    refused('value absent from input', mutant((planted) => { planted.input = PARITY_INPUT.replace('"secondary"', '"muted"'); }), noRow);
+    for (const options of views) {
+      assertGreen(check(mutant((planted) => { planted.input = PARITY_INPUT.replace('"secondary"', "{'secondary'}"); }), options));
+      assertGreen(check(mutant((planted) => { delete planted.parity.failing.value; }), options));
+    }
+
+    refused('test path absent', mutant((planted) => { planted.parity.test = 'src/widget/tests/Nowhere.test.tsx'; }),
+      /NO BACKING TEST: the component test it names, src\/widget\/tests\/Nowhere\.test\.tsx, does not exist/);
+    refused('test file deleted', mutant(() => {}, (parts) => { delete parts.files[`packages/core/${PARITY_TEST}`]; }),
+      /NO BACKING TEST: .*Widget\.variant-tone-parity\.test\.tsx, does not exist/);
+
+    const malformed = [
+      ['parity is a string', (planted) => { planted.parity = PARITY_TEST; }, /MALFORMED: `parity` of .* is not an object/],
+      ['unknown key', (planted) => { planted.parity.verdict = 'B'; }, /MALFORMED: `parity` of .* has unknown key\(s\) verdict/],
+      ['no anchors', (planted) => { delete planted.parity.anchors; }, /MALFORMED: `parity` of .* lacks anchors/],
+      ['empty anchors', (planted) => { planted.parity.anchors = []; }, /MALFORMED: `parity\.anchors` of .* is not a non-empty list/],
+      ['duplicate anchors', (planted) => { planted.parity.anchors.push('WidgetProps.variant'); }, /MALFORMED: `parity\.anchors` of .* is not a non-empty list of distinct ledger anchors/],
+      ['no failing', (planted) => { delete planted.parity.failing; }, /MALFORMED: `parity` of .* lacks failing/],
+      ['failing without member', (planted) => { planted.parity.failing = { value: 'secondary' }; }, /MALFORMED: `parity\.failing\.member` of/],
+      ['failing unknown key', (planted) => { planted.parity.failing.prop = 'variant'; }, /MALFORMED: `parity\.failing` of .* has unknown key\(s\) prop/],
+      ['empty value', (planted) => { planted.parity.failing.value = ''; }, /MALFORMED: `parity\.failing\.value` of/],
+      ['no test', (planted) => { delete planted.parity.test; }, /MALFORMED: `parity` of .* lacks test/],
+      ['test escapes the package', (planted) => { planted.parity.test = '../core/src/widget/tests/Widget.variant-tone-parity.test.tsx'; }, /MALFORMED: `parity\.test` of/],
+      ['test is a glob', (planted) => { planted.parity.test = 'src/widget/tests/*.test.tsx'; }, /MALFORMED: `parity\.test` of/],
+      ['test is not a test file', (planted) => { planted.parity.test = CONTRACTS; }, /MALFORMED: `parity\.test` of/],
+      ['report is not a list', (planted) => { planted.report = { rows: [] }; }, /MALFORMED: report\/index\.json is not a list of rows/],
+    ];
+    for (const [name, alter, pattern] of malformed) refused(name, mutant(alter), pattern);
+    refused('map is not JSON', mutant(() => {}, (parts) => { parts.files[fixtureFile('map/index.json')] = '{'; }),
+      /MALFORMED: map\/index\.json is not JSON/);
+    refused('map has no entries', mutant(() => {}, (parts) => { parts.files[fixtureFile('map/index.json')] = '{"schemaVersion":1}'; }),
+      /MALFORMED: map\/index\.json has no list of entries/);
+    refused('two entries name the row', mutant(() => {}, (parts) => {
+      const map = JSON.parse(parts.files[fixtureFile('map/index.json')]);
+      map.entries.push({ ...map.entries[0], id: 'prop-renamed/.#WidgetProps.materials' });
+      parts.files[fixtureFile('map/index.json')] = JSON.stringify(map);
+    }), /MALFORMED: .* both name this row/);
+
+    // `direction-semantics` keeps the verdict law it had: the same undeclared fixture still carries it.
+    for (const options of views) {
+      assertGreen(check((parts) => { weak(parts); rowOf(parts, 'WidgetProps.variant').blocker = `direction-semantics:${FIXTURE}`; }, options));
+    }
+  });
+
+  it('H1.6: the shipped Badge and Tag fixtures prove their rows, and an undeclared shipped fixture proves none', () => {
+    const proven = [
+      ['prop-renamed/badge-variant-secondary', 'BadgeBaseProps.variant'],
+      ['prop-renamed/badge-variant-secondary', 'BadgeVariant'],
+      ['prop-renamed/tag-variant-secondary', 'TagProps.variant'],
+      ['prop-renamed/tag-variant-secondary', 'TagVariant'],
+    ];
+    for (const [fixture, anchor] of proven) {
+      assert.equal(fixtureVerdict(REAL_PACKAGE, fixture), null, fixture);
+      assert.equal(parityVerdict(REAL_PACKAGE, fixture, { anchor }), null, `${fixture} for ${anchor}`);
+    }
+    assert.match(parityVerdict(REAL_PACKAGE, 'prop-renamed/badge-variant-secondary', { anchor: 'TagProps.variant' }), /NO SYMBOL: `parity\.anchors` names/);
+    for (const fixture of ['prop-renamed/value-map', 'prop-renamed/callout-variant-tone']) {
+      assert.equal(fixtureVerdict(REAL_PACKAGE, fixture), null, `${fixture} satisfied the verdict law`);
+      assert.match(parityVerdict(REAL_PACKAGE, fixture, { anchor: 'BadgeBaseProps.variant' }), /NO SYMBOL/, fixture);
+    }
   });
 
   it('H1.4: under --assume-done a non-debt receiver must be listed in compatReceivers', () => {

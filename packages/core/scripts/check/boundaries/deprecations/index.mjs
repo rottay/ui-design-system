@@ -30,6 +30,12 @@
  *   - a `direction-semantics:<fixture>` or `parity-failed:<fixture>` blocker
  *     whose fixture is not a directory of the codemod suite carrying an
  *     `expected` tree or named by one of the suite's `*.test.mjs`;
+ *   - a `parity-failed:<fixture>` blocker whose fixture does not also prove the
+ *     failure for this row: an entry of the fixture's own `map/index.json` must
+ *     declare `parity` and list the row's anchor, the fixture's
+ *     `report/index.json` must carry a `report` row of that entry at the failing
+ *     member and value in `input/`, and the component test it names must exist.
+ *     Missing, ambiguous or malformed metadata refuses the row;
  *   - a non-`debt` row without a blocker, without a canonical owner, or without
  *     evidence that verifies: a frozen-engine implementer that still reads the
  *     legacy name and not the replacement, a persisted-data reader, a consumer;
@@ -137,6 +143,9 @@ export const CODEMOD_MAP_PATH = 'scripts/maintain/codemods/release-3-0-map/index
 export const CODEMOD_KIT_PATH = 'scripts/maintain/codemods/index.mjs';
 export const CODEMOD_FIXTURES_PATH = 'scripts/maintain/codemods/tests/fixtures';
 export const CODEMOD_TESTS_PATH = 'scripts/maintain/codemods/tests';
+export const FIXTURE_MAP_FILE = 'map/index.json';
+export const FIXTURE_REPORT_FILE = 'report/index.json';
+export const FIXTURE_INPUT_DIR = 'input';
 export const MARKER = '@deprecated';
 export const DEBT_LANE = 'retire';
 
@@ -164,6 +173,17 @@ export const BLOCKERS = Object.freeze([
   'parity-unproven',
 ]);
 const FIXTURE_BLOCKERS = new Set(['direction-semantics:', 'parity-failed:']);
+
+/**
+ * What a fixture declares to stand behind a `parity-failed` row: the `parity`
+ * object of one entry of its own map. `anchors` are the ledger anchors it
+ * answers for, `failing` the member (and the value, when one value failed) the
+ * replacement cannot reproduce, `test` the package-relative component test that
+ * measured it. The lists are closed.
+ */
+export const PARITY_KEYS = Object.freeze(['anchors', 'failing', 'test']);
+export const PARITY_FAILING_KEYS = Object.freeze(['member', 'value']);
+const PARITY_TEST_FILE = /\.test\.(?:tsx?|mjs)$/;
 
 const BLOCKERS_BY_CLASS = Object.freeze({
   'compat-consumed': ['parity-unproven', 'parity-failed:', 'direction-semantics:', 'replacement-capability-absent:'],
@@ -1057,6 +1077,125 @@ export function fixtureVerdict(packageRoot, fixture) {
   );
 }
 
+function isRecord(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function isRelativeFile(value) {
+  return isText(value) && !GLOB.test(value) && !value.startsWith('/')
+    && value.split('/').every((part) => part !== '..' && part !== '' && part !== '.');
+}
+
+/** Why one map entry's `parity` declaration is unreadable, or null. */
+function parityShapeProblem(entry) {
+  const { parity } = entry;
+  if (!isText(entry.id)) return 'an entry that declares `parity` has no id';
+  if (!isRecord(parity)) return `\`parity\` of ${entry.id} is not an object`;
+  const unknown = Object.keys(parity).filter((key) => !PARITY_KEYS.includes(key));
+  if (unknown.length > 0) return `\`parity\` of ${entry.id} has unknown key(s) ${unknown.join(', ')}`;
+  const missing = PARITY_KEYS.filter((key) => !(key in parity));
+  if (missing.length > 0) return `\`parity\` of ${entry.id} lacks ${missing.join(', ')}`;
+  if (!Array.isArray(parity.anchors) || parity.anchors.length === 0 || !parity.anchors.every(isText)
+    || new Set(parity.anchors).size !== parity.anchors.length) {
+    return `\`parity.anchors\` of ${entry.id} is not a non-empty list of distinct ledger anchors`;
+  }
+  if (!isRecord(parity.failing)) return `\`parity.failing\` of ${entry.id} is not an object`;
+  const stray = Object.keys(parity.failing).filter((key) => !PARITY_FAILING_KEYS.includes(key));
+  if (stray.length > 0) return `\`parity.failing\` of ${entry.id} has unknown key(s) ${stray.join(', ')}`;
+  if (!isText(parity.failing.member) || !/^[A-Za-z_$][\w$]*$/.test(parity.failing.member)) {
+    return `\`parity.failing.member\` of ${entry.id} is not one member name`;
+  }
+  if ('value' in parity.failing && !isText(parity.failing.value)) {
+    return `\`parity.failing.value\` of ${entry.id} is not a non-empty string`;
+  }
+  if (!isRelativeFile(parity.test) || !PARITY_TEST_FILE.test(parity.test)) {
+    return `\`parity.test\` of ${entry.id} is not one package-relative test file`;
+  }
+  return null;
+}
+
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** Whether the source read from a report row's column is the failing member, assigned the failing value when one is declared. */
+function siteNamesFailure(site, failing) {
+  const member = escapeRegExp(failing.member);
+  if (failing.value === undefined) return new RegExp(`^${member}(?![\\w$])`).test(site);
+  return new RegExp(`^${member}\\s*=\\s*(?:\\{\\s*)?(["'\`])${escapeRegExp(failing.value)}\\1`).test(site);
+}
+
+/**
+ * Whether a fixture proves a failed parity for one ledger row, beyond carrying
+ * a verdict: null, or the first thing it lacks. The fixture must name the row
+ * (`NO SYMBOL`), carry a `report` row at the failing member and value
+ * (`NO REPORT ROW`) and name a component test that exists (`NO BACKING TEST`);
+ * metadata that cannot be read is `MALFORMED` and refuses the row.
+ */
+export function parityVerdict(packageRoot, fixture, row) {
+  const at = `${CODEMOD_FIXTURES_PATH}/${fixture}`;
+  const directory = join(packageRoot, CODEMOD_FIXTURES_PATH, fixture);
+  const refuse = (why) => `fixture ${at} does not prove a failed parity for \`${row.anchor}\`: ${why}`;
+
+  const mapPath = join(directory, FIXTURE_MAP_FILE);
+  if (!existsSync(mapPath) || !statSync(mapPath).isFile()) {
+    return refuse(`NO SYMBOL: it has no ${FIXTURE_MAP_FILE} of its own, so it declares no symbol`);
+  }
+  let entries;
+  try {
+    entries = JSON.parse(readFileSync(mapPath, 'utf8'))?.entries;
+  } catch (error) {
+    return refuse(`MALFORMED: ${FIXTURE_MAP_FILE} is not JSON (${error.message})`);
+  }
+  if (!Array.isArray(entries) || !entries.every(isRecord)) return refuse(`MALFORMED: ${FIXTURE_MAP_FILE} has no list of entries`);
+  const declaring = entries.filter((entry) => 'parity' in entry);
+  for (const entry of declaring) {
+    const malformed = parityShapeProblem(entry);
+    if (malformed) return refuse(`MALFORMED: ${malformed}`);
+  }
+  if (declaring.length === 0) return refuse(`NO SYMBOL: no entry of ${FIXTURE_MAP_FILE} declares \`parity\``);
+  const naming = declaring.filter((entry) => entry.parity.anchors.includes(row.anchor));
+  if (naming.length === 0) {
+    return refuse(
+      `NO SYMBOL: \`parity.anchors\` names ${declaring.flatMap((entry) => entry.parity.anchors).join(', ')}, not this row`,
+    );
+  }
+  if (naming.length > 1) {
+    return refuse(`MALFORMED: ${naming.map((entry) => entry.id).join(' and ')} both name this row; one entry answers for a row`);
+  }
+  const [{ id, parity }] = naming;
+  const failing = parity.failing.value === undefined
+    ? `\`${parity.failing.member}\``
+    : `\`${parity.failing.member}\` = \`${parity.failing.value}\``;
+
+  const reportPath = join(directory, FIXTURE_REPORT_FILE);
+  if (!existsSync(reportPath) || !statSync(reportPath).isFile()) return refuse(`NO REPORT ROW: it has no ${FIXTURE_REPORT_FILE}`);
+  let rows;
+  try {
+    rows = JSON.parse(readFileSync(reportPath, 'utf8'));
+  } catch (error) {
+    return refuse(`MALFORMED: ${FIXTURE_REPORT_FILE} is not JSON (${error.message})`);
+  }
+  if (!Array.isArray(rows) || !rows.every(isRecord)) return refuse(`MALFORMED: ${FIXTURE_REPORT_FILE} is not a list of rows`);
+  const reported = rows.some((item) => {
+    if (item.action !== 'report' || item.id !== id) return false;
+    if (!isRelativeFile(item.file) || !Number.isInteger(item.line) || !Number.isInteger(item.column)) return false;
+    const source = join(directory, FIXTURE_INPUT_DIR, item.file);
+    if (!existsSync(source) || !statSync(source).isFile()) return false;
+    const line = readFileSync(source, 'utf8').split('\n')[item.line - 1];
+    return line !== undefined && item.column >= 1 && siteNamesFailure(line.slice(item.column - 1), parity.failing);
+  });
+  if (!reported) {
+    return refuse(
+      `NO REPORT ROW: ${FIXTURE_REPORT_FILE} has no \`report\` row of ${id} located at ${failing} in ${FIXTURE_INPUT_DIR}/`,
+    );
+  }
+
+  const backing = join(packageRoot, parity.test);
+  if (!existsSync(backing) || !statSync(backing).isFile()) {
+    return refuse(`NO BACKING TEST: the component test it names, ${parity.test}, does not exist`);
+  }
+  return null;
+}
+
 /**
  * The consumer resolver behind `--consumers`: `(row) => { uses, roots }`, where
  * `uses` counts design-system-resolved uses of the row's symbol across the
@@ -1234,7 +1373,8 @@ function checkRow(row, context, report) {
       problems.push('blocker `parity-unproven` under --assume-done: the parity verdict is still owed');
     }
     if (blocker && FIXTURE_BLOCKERS.has(blocker.id)) {
-      const unverified = fixtureVerdict(context.packageRoot, blocker.argument);
+      const unverified = fixtureVerdict(context.packageRoot, blocker.argument)
+        ?? (blocker.id === 'parity-failed:' ? parityVerdict(context.packageRoot, blocker.argument, row) : null);
       if (unverified) problems.push(`blocker \`${row.blocker}\`: ${unverified}`);
     }
 
