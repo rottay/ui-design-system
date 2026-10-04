@@ -92,6 +92,9 @@ const SPLIT_SITE_GAPS: Readonly<Record<string, string>> = {
   "--ds-toolbar-controls-gap": "var(--ds-spacing-2, 0.5rem)",
 };
 
+const RAIL_FOCUS_CLEARANCE =
+  "max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))))";
+
 const context = () => buildLoweringContext({ theme: firstPartyFixture("bithire") });
 
 describe("chrome/toolbar", () => {
@@ -109,6 +112,31 @@ describe("chrome/toolbar", () => {
       const resting = skinFallbacks(channel).map(atThemeRoot);
       expect({ channel, resting }).toEqual({ channel, resting: [value] });
     }
+  });
+
+  it("ends every focus channel in the tenant signature, never in a literal ring", () => {
+    const derived = toolbarChromeDeriver.derive(context(), {});
+    const rings = Object.keys(derived).filter((channel) => channel.endsWith("-focus-ring"));
+    expect(rings).toEqual(["--ds-toolbar-control-focus-ring"]);
+    expect(derived["--ds-toolbar-control-focus-ring"]).toBe(
+      "var(--ds-material-control-focus-ring, var(--ds-focus-ring))"
+    );
+    // The shell ring retired with its only reader: no producer and no read.
+    expect(toolbarChromeDeriver.produces).not.toContain("--ds-toolbar-focus-ring");
+    expect(SKIN).not.toContain("--ds-toolbar-focus-ring");
+    expect(skinFallbacks("--ds-toolbar-control-focus-ring")).toEqual([
+      "var(--ds-material-control-focus-ring, var(--ds-focus-ring))",
+    ]);
+    expect(skinFallbacks("--ds-filter-pill-focus-ring")).toEqual(["var(--ds-focus-ring)"]);
+  });
+
+  it("derives the rail clearance from the signature geometry, floored at the forced-colors outline and the resting gutter", () => {
+    const derived = toolbarChromeDeriver.derive(context(), {});
+    expect(derived["--ds-toolbar-rail-focus-clearance"]).toBe(RAIL_FOCUS_CLEARANCE);
+    expect(derived["--ds-toolbar-mobile-rail-padding"]).toBe(
+      `var(--ds-toolbar-rail-focus-clearance, ${RAIL_FOCUS_CLEARANCE})`
+    );
+    expect(skinFallbacks("--ds-toolbar-rail-focus-clearance")).toEqual([RAIL_FOCUS_CLEARANCE]);
   });
 
   it("keeps the four gap sites the skin states twice at the pixels each one had", () => {

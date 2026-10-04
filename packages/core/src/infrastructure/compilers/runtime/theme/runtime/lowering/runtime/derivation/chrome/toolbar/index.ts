@@ -59,7 +59,6 @@ export const toolbarChromeDeriver: FamilyDeriver = {
     "--ds-toolbar-entry-animation",
     "--ds-toolbar-filter-strip-padding",
     "--ds-toolbar-focus-border",
-    "--ds-toolbar-focus-ring",
     "--ds-toolbar-header-gradient",
     "--ds-toolbar-icon-bg",
     "--ds-toolbar-icon-border",
@@ -107,7 +106,7 @@ export const toolbarChromeDeriver: FamilyDeriver = {
 export function deriveToolbarChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
   vars["--ds-toolbar-compact-padding"] = "calc(0.75rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1))";
-  vars["--ds-toolbar-control-focus-ring"] = "var(--ds-material-control-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent))";
+  vars["--ds-toolbar-control-focus-ring"] = "var(--ds-material-control-focus-ring, var(--ds-focus-ring))";
   vars["--ds-toolbar-control-gap"] = "var(--ds-spacing-1, 0.25rem)";
   vars["--ds-toolbar-control-pressed-scale"] = "0.975";
   vars["--ds-toolbar-control-radius"] = "var(--ds-button-sm-radius, var(--ds-radius-sm, 6px))";
@@ -123,7 +122,6 @@ export function deriveToolbarChannels(): Record<string, string> {
   vars["--ds-toolbar-entry-animation"] = "none";
   vars["--ds-toolbar-filter-strip-padding"] = "calc(0.5rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1))";
   vars["--ds-toolbar-focus-border"] = "var(--ds-material-panel-border-hover, var(--ds-color-primary))";
-  vars["--ds-toolbar-focus-ring"] = "var(--ds-material-panel-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent))";
   vars["--ds-toolbar-header-gradient"] = "linear-gradient(118deg, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 96%, var(--ds-color-primary) 4%) 0%, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 48%, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 94%, var(--ds-surface-inset, var(--ds-color-bg-secondary)) 6%) 100%)";
   vars["--ds-toolbar-icon-bg"] = "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card))";
   vars["--ds-toolbar-icon-border"] = "var(--ds-toolbar-control-border, var(--ds-color-border))";
@@ -137,13 +135,13 @@ export function deriveToolbarChannels(): Record<string, string> {
   vars["--ds-toolbar-mobile-actions-radius"] = "max(calc(var(--ds-toolbar-radius, var(--ds-radius-lg, 12px)) - 4px), var(--ds-button-sm-radius, var(--ds-radius-sm, 6px)))";
   vars["--ds-toolbar-mobile-rail-bg"] = "transparent";
   vars["--ds-toolbar-mobile-rail-border"] = "transparent";
-  vars["--ds-toolbar-mobile-rail-padding"] = "var(--ds-toolbar-rail-focus-clearance, 0.25rem)";
+  vars["--ds-toolbar-mobile-rail-padding"] = "var(--ds-toolbar-rail-focus-clearance, max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width)))))";
   vars["--ds-toolbar-mobile-rail-radius"] = "max(calc(var(--ds-toolbar-radius, var(--ds-radius-lg, 12px)) - 4px), var(--ds-button-sm-radius, var(--ds-radius-sm, 6px)))";
   vars["--ds-toolbar-phone-filter-strip-padding"] = "calc(0.625rem * var(--ds-density-effective-scale, 1)) calc(0.75rem * var(--ds-density-effective-scale, 1))";
   vars["--ds-toolbar-phone-padding"] = "calc(0.625rem * var(--ds-density-effective-scale, 1)) calc(0.75rem * var(--ds-density-effective-scale, 1))";
   vars["--ds-toolbar-popover-radius"] = "var(--ds-radius-md, 0.5rem)";
   vars["--ds-toolbar-primary-action-max-width"] = "18rem";
-  vars["--ds-toolbar-rail-focus-clearance"] = "0.25rem";
+  vars["--ds-toolbar-rail-focus-clearance"] = "max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))))";
   vars["--ds-toolbar-saved-views-bg"] = "color-mix(in srgb, var(--ds-surface-inset) 45%, transparent)";
   vars["--ds-toolbar-saved-views-border"] = "transparent";
   vars["--ds-toolbar-saved-views-radius"] = "max(calc(var(--ds-toolbar-radius, var(--ds-radius-lg, 12px)) - 4px), var(--ds-button-sm-radius, var(--ds-radius-sm, 6px)))";

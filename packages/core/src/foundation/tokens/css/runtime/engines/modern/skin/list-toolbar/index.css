@@ -127,13 +127,6 @@
     --ds-toolbar-focus-border,
     var(--ds-material-panel-border-hover, var(--ds-color-primary))
   );
-  box-shadow: var(
-    --ds-toolbar-focus-ring,
-    var(
-      --ds-material-panel-focus-ring,
-      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent)
-    )
-  );
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern[data-part='root']::before {
@@ -284,10 +277,7 @@
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(
     --ds-toolbar-control-focus-ring,
-    var(
-      --ds-material-control-focus-ring,
-      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)
-    )
+    var(--ds-material-control-focus-ring, var(--ds-focus-ring))
   );
 }
 
@@ -387,7 +377,10 @@
 .ds-list-toolbar__density-options {
   padding-block: var(--ds-spacing-2, 0.5rem);
   /* Room for a focused option's ring inside the scrolling settings panel. */
-  padding-inline: var(--ds-toolbar-rail-focus-clearance, 0.25rem);
+  padding-inline: var(
+    --ds-toolbar-rail-focus-clearance,
+    max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))))
+  );
 }
 
 .ds-list-toolbar__settings-empty[data-part='settings-empty'].ds-list-toolbar__settings-empty {
@@ -499,10 +492,7 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:is([data-state~='focus-visible'], :focus-visible) {
-  box-shadow: var(
-    --ds-filter-pill-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
-  );
+  box-shadow: var(--ds-filter-pill-focus-ring, var(--ds-focus-ring));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -833,8 +823,16 @@
   scrollbar-color: var(--ds-toolbar-border, var(--ds-color-border)) transparent;
   /* Clearance so a focused trigger's ring is not clipped by the rail's
      overflow; the rail is transparent and the margin gives the room back. */
-  padding: var(--ds-toolbar-rail-focus-clearance, 0.25rem);
-  margin: calc(var(--ds-toolbar-rail-focus-clearance, 0.25rem) * -1);
+  padding: var(
+    --ds-toolbar-rail-focus-clearance,
+    max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))))
+  );
+  margin: calc(
+    var(
+      --ds-toolbar-rail-focus-clearance,
+      max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))))
+    ) * -1
+  );
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -1203,7 +1201,10 @@
     margin-inline: calc(-1rem * var(--ds-density-effective-scale, 1));
     padding-block: var(
       --ds-toolbar-mobile-rail-padding,
-      var(--ds-toolbar-rail-focus-clearance, 0.25rem)
+      var(
+        --ds-toolbar-rail-focus-clearance,
+        max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))))
+      )
     );
     padding-inline: calc(1rem * var(--ds-density-effective-scale, 1));
     border: 1px solid var(--ds-toolbar-mobile-rail-border, transparent);

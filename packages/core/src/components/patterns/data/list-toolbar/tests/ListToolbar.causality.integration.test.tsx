@@ -113,11 +113,10 @@ describeCausality({
 /* ---------------------------------------------------------------------------
  * The focus signature, under real focus.
  *
- * The shell paints its focus ring from `:focus-within`, which only real DOM
- * focus inside the toolbar produces, and the ring crosses on the family's own
- * motion channel -- so the probe focuses the filter trigger for real, waits for
- * the transition to land, and reads the shell's box-shadow back. A ring read at
- * t=0 is the transition's transparent start, not the family's paint.
+ * The focused control carries the signature and the shell around it wears
+ * none, so the probe focuses the filter trigger for real, waits for the
+ * transition to land, and reads the trigger's and the shell's box-shadow back.
+ * A ring read at t=0 is the transition's start, not the family's paint.
  * ------------------------------------------------------------------------ */
 
 function chromiumDriver(): { launch(): Promise<any> } {
@@ -133,18 +132,20 @@ function chromiumDriver(): { launch(): Promise<any> } {
   throw new Error('list-toolbar causality: no Playwright chromium is resolvable');
 }
 
-interface ShellFocusReading {
+interface FocusReading {
   readonly focused: boolean;
   readonly focusVisible: boolean;
   readonly focusWithin: boolean;
   readonly restRing: string;
   readonly focusRing: string;
+  readonly shellRest: string;
+  readonly shellFocus: string;
   readonly rowPad: string;
 }
 
-async function shellFocusReading(
+async function focusReading(
   decisions: Readonly<Record<string, unknown>>,
-): Promise<ShellFocusReading> {
+): Promise<FocusReading> {
   const browser = await chromiumDriver().launch();
   try {
     const context = await browser.newContext();
@@ -170,38 +171,44 @@ async function shellFocusReading(
         document.body.append(host);
         const root = host.querySelector(shell) as HTMLElement;
         const control = host.querySelector(trigger) as HTMLElement;
-        const restRing = getComputedStyle(root).boxShadow;
+        const restRing = getComputedStyle(control).boxShadow;
+        const shellRest = getComputedStyle(root).boxShadow;
         control.focus();
-        // The shell ring crosses on the family's motion channel; read where it lands.
+        // The ring crosses on the family's motion channel; read where it lands.
         await new Promise((settle) => setTimeout(settle, 900));
         return {
           focused: document.activeElement === control,
           focusVisible: control.matches(':focus-visible'),
           focusWithin: root.matches(':focus-within'),
           restRing,
-          focusRing: getComputedStyle(root).boxShadow,
+          focusRing: getComputedStyle(control).boxShadow,
+          shellRest,
+          shellFocus: getComputedStyle(root).boxShadow,
           rowPad: getComputedStyle(host.querySelector(row) as HTMLElement).paddingLeft,
         };
       },
       { rootAttributes: arm.rootAttributes, html: markup, shell: SHELL, trigger: TRIGGER, row: ROW },
-    )) as ShellFocusReading;
+    )) as FocusReading;
   } finally {
     await browser.close();
   }
 }
 
 describe('list-toolbar declared consumes', () => {
-  it('moves the real focus-within ring with the focus signature and holds the row geometry', async () => {
-    const base = await shellFocusReading({});
-    const glow = await shellFocusReading({ 'states.focus-style': 'glow' });
+  it('moves the focused control ring with the focus signature, leaves the shell unpainted and holds the row geometry', async () => {
+    const base = await focusReading({});
+    const glow = await focusReading({ 'states.focus-style': 'glow' });
     // The reading is a real focus state, not a stamped attribute.
     expect(base.focused, 'the filter trigger really holds focus').toBe(true);
     expect(base.focusVisible, 'the filter trigger really matches :focus-visible').toBe(true);
     expect(base.focusWithin, 'the shell really matches :focus-within').toBe(true);
-    // The shell really changes under focus: the probe is not reading a resting value.
+    // The control really changes under focus: the probe is not reading a resting value.
     expect(base.focusRing).not.toBe(base.restRing);
-    // `consumes: surfaces.focusStyle` -- the shell's own ring follows the signature.
+    // `consumes: surfaces.focusStyle` -- the focused control's ring follows the signature.
     expect(glow.focusRing).not.toBe(base.focusRing);
+    // One indicator: the shell keeps its resting shadow while a control inside it holds focus.
+    expect(base.shellFocus).toBe(base.shellRest);
+    expect(glow.shellFocus).toBe(glow.shellRest);
     // Negative control: the row rhythm is geometry, not focus.
     expect(glow.rowPad).toBe(base.rowPad);
   }, 180_000);

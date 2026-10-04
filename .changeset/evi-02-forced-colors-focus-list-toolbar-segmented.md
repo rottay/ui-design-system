@@ -20,10 +20,7 @@ components, with `data-engine="modern"` on the document and on a nested
 `[data-ds-root]`, under ring, underline and glow, after real keyboard focus:
 234 of 234 readings of these nodes showed no indicator before and show exactly
 one outline after, including inside the filter menu, the settings panel and
-the mobile overflow panel. Under the ring signature at the shipped 15px root,
-0.25px of that outline is still cut on each side by the filter rail and by the
-settings panel (clearance 0.25rem = 3.75px against a 4px ring extent); under
-underline and glow nothing is cut.
+the mobile overflow panel. Under the ring signature a sliver of that outline was still cut on each side by the filter rail and by the settings panel, because the clearance was 0.25rem against a 4px ring extent: 0.25px at evnto's 15px root (3.75px) and 0.48px at bithire's 14.1px root (3.525px); under underline and glow nothing was cut. The changeset evi-02-focus-toolbar-shell derives the clearance from the signature and removes the cut.
 
 Outside forced colors the indicator is unchanged: the same nodes wear the
 tenant focus signature (`--ds-focus-ring`) under all three focus styles, in
@@ -37,10 +34,9 @@ scrolling hosts that clipped its sides:
 - the desktop filter rail gains the inline focus clearance it already had on
   the block axis (`--ds-toolbar-rail-focus-clearance`), given back by an equal
   negative margin: no trigger or neighbour moves; the first and last trigger's
-  ring, previously cut by its full 4px on the outer side, now keeps all but
-  0.25px of it;
+  ring, previously cut by its full 4px on the outer side, now keeps all but 0.25px of it on evnto and 0.48px on bithire;
 - the density options inside the settings panel are inset by the same
-  clearance on each side (300px to 292.5px wide at the default density).
+  clearance on each side (300px to 292.5px wide at evnto's 15px root, 282px to 274.97px at bithire's 14.1px root).
 
 No channel is added, removed or re-pointed. `--ds-toolbar-control-focus-ring`
 and `--ds-filter-pill-focus-ring` keep precedence over the default.

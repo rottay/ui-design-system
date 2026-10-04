@@ -75,12 +75,21 @@ describe('list-toolbar -- every toolbar-owned control paints keyboard focus from
   it('paints the focus channels on exactly the family focus targets', () => {
     const painted = KEYBOARD_RULES.filter((rule) => !rule.forced && declarations(rule, 'box-shadow').length > 0);
     expect(painted.map((rule) => rule.selector)).toEqual([CONTROL_FOCUS, TRIGGER_FOCUS]);
-    expect(declarations(painted[0]!, 'box-shadow')).toHaveLength(1);
-    expect(declarations(painted[0]!, 'box-shadow')[0]).toMatch(
-      /^var\( ?--ds-toolbar-control-focus-ring, var\( ?--ds-material-control-focus-ring, /,
-    );
-    expect(declarations(painted[1]!, 'box-shadow')).toHaveLength(1);
-    expect(declarations(painted[1]!, 'box-shadow')[0]).toMatch(/^var\( ?--ds-filter-pill-focus-ring, /);
+    expect(declarations(painted[0]!, 'box-shadow')).toEqual([
+      'var(--ds-toolbar-control-focus-ring, var(--ds-material-control-focus-ring, var(--ds-focus-ring)))',
+    ]);
+    expect(declarations(painted[1]!, 'box-shadow')).toEqual(['var(--ds-filter-pill-focus-ring, var(--ds-focus-ring))']);
+  });
+
+  it('paints a focus channel nowhere else: the shell wears no signature while a control inside it holds focus', () => {
+    const readers = RULES.filter((rule) => /-focus-ring\s*[,)]/.test(rule.body));
+    expect(readers.map((rule) => rule.selector)).toEqual([CONTROL_FOCUS, TRIGGER_FOCUS]);
+    expect(SKIN).not.toContain('--ds-toolbar-focus-ring');
+    const within = RULES.filter((rule) => rule.selector.includes(':focus-within'));
+    for (const rule of within) {
+      expect(declarations(rule, 'box-shadow'), rule.selector).toEqual([]);
+      expect(declarations(rule, 'outline'), rule.selector).toEqual([]);
+    }
   });
 
   it('never draws or suppresses focus with a solid or absent outline outside forced colors', () => {
@@ -114,7 +123,8 @@ describe('list-toolbar -- every toolbar-owned control paints keyboard focus from
   });
 
   it('leaves room for the indicator inside the two scrolling hosts that would clip it', () => {
-    const clearance = 'var(--ds-toolbar-rail-focus-clearance, 0.25rem)';
+    const clearance =
+      'var(--ds-toolbar-rail-focus-clearance, max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width)))))';
     const rail = RULES.find(
       (rule) => rule.selector === ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-rail[data-part='filter-rail']",
     );

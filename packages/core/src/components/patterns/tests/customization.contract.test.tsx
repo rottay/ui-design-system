@@ -245,7 +245,7 @@ describe('BrandingPreviewSandbox customization anatomy createElement anatomy', (
     // moved primary through a chain the root holds (the avatar ring through a
     // left-out root alias), so the scope must state them to re-resolve.
     expect(css).toContain(
-      '--ds-toolbar-control-focus-ring: var(--ds-material-control-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent));',
+      '--ds-toolbar-control-focus-ring: var(--ds-material-control-focus-ring, var(--ds-focus-ring));',
     );
     expect(css).toContain('--ds-avatar-focus-ring: 0 0 0 var(--ds-avatar-focus-ring-offset)');
     // A left-out alias takes the cascade-winning root text, and its context rule
