@@ -768,6 +768,11 @@ export const CI_GATES = Object.freeze([
   // committed first-party artifacts.
   { id: 'theme-lowering-artifact-oracle', run: ['pnpm', 'exec', 'vitest', 'run', 'src/infrastructure/compilers/runtime/theme/runtime/lowering/tests/artifact-oracle.test.ts'], blocking: true, phase: 'pre-build', noDrillReason:
       'The oracle is the committed artifact the lowering did not write; perturbing the lowering is what the suite already asserts.', },
+  // ONE compiler for every vertical. Drill first: the structural legs read the
+  // sources from disk, so only a planted branch that changes emitted bytes can
+  // show which leg bites; the drill plants one in the transform and names it.
+  { id: 'no-vertical-branch-drill', run: ['node', '--test', 'tests/architecture/no-vertical-branch/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['no-vertical-branch'], },
+  { id: 'no-vertical-branch', run: ['pnpm', 'exec', 'vitest', 'run', 'src/infrastructure/compilers/runtime/theme/runtime/lowering/tests/no-vertical-branch.test.ts', 'src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/tests/slug-neutral-values.test.ts'], blocking: true, phase: 'pre-build', drillId: 'no-vertical-branch-drill', },
   { id: 'portal-substrate-drill', run: ['node', '--test', 'scripts/check/boundaries/surfaces/portals/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['portal-substrate-gate'], },
   { id: 'portal-substrate-gate', run: ['node', 'scripts/check/boundaries/surfaces/portals/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'portal-substrate-drill', },
   // Bidirectional identity between every `--_ds-proto-*` in the sources and its
