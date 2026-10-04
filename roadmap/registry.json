@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-03",
+ "updated": "2026-10-04",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -6360,6 +6360,11 @@
      "at": "2026-10-03 21:28",
      "by": "claude-dt",
      "note": "2026-10-03 wave 10-12 integrated on main after independent claude-fable-5-1 audits: misc props retired 66a7dedb1 (mobileBreakpoint, Badge overflowCount, SurfaceTabbedView.permissionId), legacy size acceptors d52a3cc3f (Descriptions/List/Segmented/Space/Steps canonical; LegacySizeAlias retired; Descriptions keeps three steps, default lg), Switch alias eaeae8a45, Button loading/loadingText/asChild 69b339945, shared call sites c82742d8d + 9dfb81f69, showroom icons through the semantic door 6d6c44b05. Orphan receipts removed with their rows (3+5+3), audit records kept as historical. Deprecations gate --check --siblings=absent: 0 failures; --assume-done=WO-RET-01 --siblings=absent: 87. OPEN: door dispositions stage A (needs owner Files line for packages/showroom/eslint.config.mjs) and stage B (two doors; gate pins outside Files); parity verdict B rows (Badge/Tag variant: secondary has no tone), Callout re-homed verdict C; P1 Alert/Callout, P4 Stepper, Space parity (LegacySpaceSize rename) packets; generated artifacts (suppliers contract, token-audit baseline, exactness evidence) owed to the regeneration window."
+    },
+    {
+     "at": "2026-10-04 01:40",
+     "by": "claude-dt",
+     "note": "2026-10-04 OWNER RULINGS R30-R31 (verbatim: .tmp/ds-claude-2026-10-03/owner-rulings-2026-10-04.md). R30: lots reviewed by an independent Opus session are accepted (real model, candidate and evidence recorded); no Fable repeat; DT corrections still need independent review; a writer never approves itself. R31: Files widened — stage A: packages/showroom/eslint.config.mjs; stage B: the exact paths of audit-w10-doors.md section 4.3 including family-registry-closure and its test; apply as one coherent lot, keep chart capabilities at their canonical door, keep the empty-manifest fence with its defence active, do not delete useful laws to get green; changeset and codemods mandatory; baselines only through their producers with attribution. Integrated since entry 33 (independent Opus audits, model claude-opus-5-5, reports audit-w13-*.md / audit-w14-*.md): Alert type + Callout variant c04d6bab0 (Callout re-homed to WO-RET-06, receipt stale until closure), Steps alias ae973e156, LegacySpaceSize 92381f3a7. Deprecations gate: CI view 0, closure view 56. Owed inside this WO: AlertType export retirement; R3-vs-R5 amendment for frozen rows (kit --check 52 findings); Badge/Tag variant verdict B; door stages A and B."
     }
    ]
   },
@@ -7515,6 +7520,11 @@
      "at": "2026-10-03 21:29",
      "by": "claude-dt",
      "note": "2026-10-03 record for WO-EVI-03 (done, refuses entries): tests-through-the-door arm 2 limitation (audit-drain2, packet D) — four Anchor/Link rows left the census by assertion form, not by going through the door; the 33 visual-baseline findings stay red and block a certified checkpoint."
+    },
+    {
+     "at": "2026-10-04 01:40",
+     "by": "claude-dt",
+     "note": "2026-10-04 OWNER RULINGS R32-R35 (verbatim: .tmp/ds-claude-2026-10-03/owner-rulings-2026-10-04.md). Q1 single door: keep the effective-vs-original vertical baseline distinction; amend the law by name with validated inputs, explicit ownership and mutants; vertical is not a free customization door. Q2 token-overrides: retire the raw escape in every door including v1, explicit rejection, documented idempotent migration of persisted data, nothing dropped silently, no app or production DB edits. Q3 CI: exceptional normal push of main to origin/main authorized ONLY for the integrated audited checkpoint with applicable gates passed, no WIP, no force-push, remote and divergence verified first; CI on the existing authorized runner; no deploy or package publication; 'verified in CI' never closed by a local run. Q4 ownership: separate and attribute; drain Modern and shared core; transfer only proven frozen-engine debt to an open receiver with its own acceptance; amend F-86 explicitly. Q5 liveness: EVI-02 does not close with liveness pending or excluded; resolve RET-01 -> RET-04 and restore the blocking gate. Q6 width-only four: resolve before DONE, no invented interactivity, correct authority/measurement to real behaviour and publish even if the numerator drops. R33: the axis gate is BLOCKING in CI on the DECLARED population. R34: glow's provisional look (1px inner line) approved as functional repair. R35: bounded docs-engineering window authorized (paths registered first, separate commit). Integrated since entry 182 (independent Opus audits, claude-opus-5-5): tag close e12d1f084, tabs panel 5872e189c, binary controls 18d96b31a + gate repair fe8478871, popover initial focus 9c322834a, toolbar one painter + --ds-toolbar-focus-ring retired 5055d9172, focus-visible stamp follows the platform e904ae6ba (WebKit residual declared), F-72 drill 8d5e3e58d (clause b MET, clause a open), regeneration d9a0c1180 + bb10e48f0, roster 706db7ea1. MEASUREMENT at 706db7ea1: NOT PUBLISHED — the instrument refused its own reading: family 'search' moves on states through outline width/offset alone in all six cells and is not in the width-only pin; per Q6 it is not added to the pin; diagnosis packet dispatched. The recorded reading remains the one at e7140350f."
     }
    ]
   },
