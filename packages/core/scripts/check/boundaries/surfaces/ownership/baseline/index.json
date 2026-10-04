@@ -8367,12 +8367,6 @@
       "rule": "native-select",
       "count": 1
     },
-    "08b53636aa64472dd2eb": {
-      "path": "src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-a",
-      "count": 2
-    },
     "c36b677e6bbc2e903a5e": {
       "path": "src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
       "category": "native-interactive",

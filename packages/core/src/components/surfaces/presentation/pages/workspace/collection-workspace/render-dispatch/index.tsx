@@ -55,6 +55,7 @@ import { Box } from '../../../../../../primitives/layout/box';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Text } from '../../../../../../primitives/display/typography';
 import { Button } from '../../../../../../primitives/inputs/button';
+import { NavLink } from '../../../../../../primitives/navigation/link';
 import { Select } from '../../../../../../primitives/inputs/select';
 import { Skeleton } from '../../../../../../primitives/feedback/skeleton';
 
@@ -320,8 +321,8 @@ function CardItem({
   );
 }
 
-/** The fallback card's own open link: a bare anchor, so its keyboard ring has
- *  to be stamped here for the skin's governed focus channels to reach it. */
+/** The fallback card's own open link: the Link primitive stamps the keyboard
+ *  ring state the skin's governed focus channels key on. */
 function FallbackOpenLink({
   href,
   label,
@@ -331,17 +332,16 @@ function FallbackOpenLink({
   label: string;
   children: ReactNode;
 }) {
-  const link = useInteractionState();
   return (
-    <a
+    <NavLink
       className="ds-collection-render-dispatch__fallback-open-link"
-      {...partAttributes('fallback-open-link', link.state)}
-      {...link.handlers}
+      data-part="fallback-open-link"
+      underline={false}
       href={href}
       aria-label={label}
     >
       {children}
-    </a>
+    </NavLink>
   );
 }
 
@@ -977,15 +977,16 @@ export function CollectionRenderDispatch<T extends object>(
             >
               {cardRenderer && hasActivation ? (
                 href ? (
-                  <a
+                  <NavLink
                     className="ds-collection-render-dispatch__card-activation"
                     data-part="card-activation"
+                    underline={false}
                     href={href}
                     aria-label={activationLabel}
                     onClick={(event) => event.stopPropagation()}
                   >
                     {activationLabel}
-                  </a>
+                  </NavLink>
                 ) : (
                   <button
                     type="button"
