@@ -1,11 +1,11 @@
 {
   "id": "tenant-difference-by-axis",
   "gate": "axis-difference (`capability-propagation` by axis, WO-EVI-02)",
-  "producedAt": "2026-10-04T11:36:44.307Z",
-  "value": "5/6 axes at >= 80 % of declaring families (shape, typography, rhythm, depth, motion; effective-denominator reading 6/6, never the status); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
+  "producedAt": "2026-10-04T14:47:59.374Z",
+  "value": "6/6 axes at >= 80 % of declaring families (shape, typography, rhythm, depth, states, motion; effective-denominator reading 6/6, never the status); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
   "target": "6/6 axes at >= 80 % and the negative test green",
-  "met": false,
-  "commit": "492a52c0e760a9f486d607bac257637e10d8be39",
+  "met": true,
+  "commit": "c6779d2764f31ed6d06de407659ec01eaf91fb62",
   "catalogRevision": "41af5c3698f85c48",
   "browser": "149.0.7827.55",
   "bundleMode": "fresh",
@@ -1318,7 +1318,7 @@
       ]
     },
     "states": {
-      "status": "below-threshold",
+      "status": "at-threshold",
       "declared": 152,
       "effective": 149,
       "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
@@ -1332,7 +1332,7 @@
       "excludedUnmountable": 3,
       "excludedUnsettled": 0,
       "notApplicable": 0,
-      "unobservable": 8,
+      "unobservable": 7,
       "unobservableFamilies": [
         {
           "family": "button-group",
@@ -1359,25 +1359,19 @@
           "class": "no-vocabulary"
         },
         {
-          "family": "operational-ledger",
-          "class": "colour-only"
-        },
-        {
           "family": "table-toolbar",
           "class": "colour-only"
         }
       ],
-      "worstPercentDeclared": 78.9,
-      "worstPercentEffective": 80.5,
+      "worstPercentDeclared": 82.2,
+      "worstPercentEffective": 83.9,
       "effectiveAtThreshold": true,
       "nonMovers": [
         "ascii-diagram",
         "button-group",
-        "card",
         "card-compounds",
         "chart-c",
         "collection-header",
-        "column-settings",
         "dashboard-activity-interactions",
         "dashboard-metrics-interactions",
         "decision-comparison",
@@ -1386,16 +1380,13 @@
         "field-filters-panel",
         "form-builder",
         "grid-view",
-        "input",
         "kbd",
         "list",
         "metrics-chart",
         "metrics-minimal",
         "metrics-rows",
         "navigation-static",
-        "operational-ledger",
         "presence",
-        "saved-views",
         "search-command-bar",
         "statistic",
         "surface-states",
@@ -1418,14 +1409,12 @@
           "list",
           "metrics-chart",
           "metrics-rows",
-          "operational-ledger",
           "table-toolbar"
         ],
         "unreached": [
           "card-compounds",
           "chart-c",
           "field-filters-panel",
-          "input",
           "kbd",
           "search-command-bar",
           "statistic",
@@ -1435,15 +1424,12 @@
         ],
         "measuredNotMoving": [
           "ascii-diagram",
-          "card",
           "collection-header",
-          "column-settings",
           "decision-comparison",
           "descriptions",
           "grid-view",
           "metrics-minimal",
           "presence",
-          "saved-views",
           "widget-board"
         ]
       },
@@ -1452,19 +1438,17 @@
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 120,
+          "moved": 125,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 78.9,
-          "percentEffective": 80.5,
+          "percentDeclared": 82.2,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
-            "card",
             "card-compounds",
             "chart-c",
             "collection-header",
-            "column-settings",
             "dashboard-activity-interactions",
             "dashboard-metrics-interactions",
             "decision-comparison",
@@ -1473,16 +1457,13 @@
             "field-filters-panel",
             "form-builder",
             "grid-view",
-            "input",
             "kbd",
             "list",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
             "navigation-static",
-            "operational-ledger",
             "presence",
-            "saved-views",
             "search-command-bar",
             "statistic",
             "surface-states",
@@ -1496,19 +1477,17 @@
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 120,
+          "moved": 125,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 78.9,
-          "percentEffective": 80.5,
+          "percentDeclared": 82.2,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
-            "card",
             "card-compounds",
             "chart-c",
             "collection-header",
-            "column-settings",
             "dashboard-activity-interactions",
             "dashboard-metrics-interactions",
             "decision-comparison",
@@ -1517,16 +1496,13 @@
             "field-filters-panel",
             "form-builder",
             "grid-view",
-            "input",
             "kbd",
             "list",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
             "navigation-static",
-            "operational-ledger",
             "presence",
-            "saved-views",
             "search-command-bar",
             "statistic",
             "surface-states",
@@ -1540,19 +1516,17 @@
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 120,
+          "moved": 125,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 78.9,
-          "percentEffective": 80.5,
+          "percentDeclared": 82.2,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
-            "card",
             "card-compounds",
             "chart-c",
             "collection-header",
-            "column-settings",
             "dashboard-activity-interactions",
             "dashboard-metrics-interactions",
             "decision-comparison",
@@ -1561,16 +1535,13 @@
             "field-filters-panel",
             "form-builder",
             "grid-view",
-            "input",
             "kbd",
             "list",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
             "navigation-static",
-            "operational-ledger",
             "presence",
-            "saved-views",
             "search-command-bar",
             "statistic",
             "surface-states",
@@ -1584,19 +1555,17 @@
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 120,
+          "moved": 125,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 78.9,
-          "percentEffective": 80.5,
+          "percentDeclared": 82.2,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
-            "card",
             "card-compounds",
             "chart-c",
             "collection-header",
-            "column-settings",
             "dashboard-activity-interactions",
             "dashboard-metrics-interactions",
             "decision-comparison",
@@ -1605,16 +1574,13 @@
             "field-filters-panel",
             "form-builder",
             "grid-view",
-            "input",
             "kbd",
             "list",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
             "navigation-static",
-            "operational-ledger",
             "presence",
-            "saved-views",
             "search-command-bar",
             "statistic",
             "surface-states",
@@ -1628,19 +1594,17 @@
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 120,
+          "moved": 125,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 78.9,
-          "percentEffective": 80.5,
+          "percentDeclared": 82.2,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
-            "card",
             "card-compounds",
             "chart-c",
             "collection-header",
-            "column-settings",
             "dashboard-activity-interactions",
             "dashboard-metrics-interactions",
             "decision-comparison",
@@ -1649,16 +1613,13 @@
             "field-filters-panel",
             "form-builder",
             "grid-view",
-            "input",
             "kbd",
             "list",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
             "navigation-static",
-            "operational-ledger",
             "presence",
-            "saved-views",
             "search-command-bar",
             "statistic",
             "surface-states",
@@ -1672,19 +1633,17 @@
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 120,
+          "moved": 125,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 78.9,
-          "percentEffective": 80.5,
+          "percentDeclared": 82.2,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
-            "card",
             "card-compounds",
             "chart-c",
             "collection-header",
-            "column-settings",
             "dashboard-activity-interactions",
             "dashboard-metrics-interactions",
             "decision-comparison",
@@ -1693,16 +1652,13 @@
             "field-filters-panel",
             "form-builder",
             "grid-view",
-            "input",
             "kbd",
             "list",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
             "navigation-static",
-            "operational-ledger",
             "presence",
-            "saved-views",
             "search-command-bar",
             "statistic",
             "surface-states",
@@ -2095,22 +2051,20 @@
         "vertical": "bithire",
         "theme": "light",
         "measured": true,
-        "moved": 105,
-        "restIsolated": 104,
-        "percentDeclared": 69.1,
-        "percentEffective": 70.5,
-        "chromaticOnly": [
-          "card"
-        ],
-        "nonChromatic": 120,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
+        "chromaticOnly": [],
+        "nonChromatic": 125,
         "byChannel": {
-          "background-color": 23,
-          "box-shadow(colour)": 100,
+          "background-color": 24,
+          "box-shadow(colour)": 103,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 90,
-          "native": 94
+          "stamped": 93,
+          "native": 96
         },
         "movedIds": [
           "activity-cards",
@@ -2159,6 +2113,7 @@
           "gallery-view",
           "header-hero-shared",
           "image",
+          "input",
           "input-compounds",
           "input-number",
           "invoice-template",
@@ -2176,6 +2131,7 @@
           "moderation-gallery",
           "notification-center",
           "notifier",
+          "operational-ledger",
           "otp-input",
           "page-shell",
           "pagination",
@@ -2189,6 +2145,7 @@
           "qrcode",
           "radio",
           "radio-group",
+          "saved-views",
           "scheduler-surface",
           "scroll-area",
           "search",
@@ -2224,22 +2181,20 @@
         "vertical": "bithire",
         "theme": "dark",
         "measured": true,
-        "moved": 105,
-        "restIsolated": 104,
-        "percentDeclared": 69.1,
-        "percentEffective": 70.5,
-        "chromaticOnly": [
-          "card"
-        ],
-        "nonChromatic": 120,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
+        "chromaticOnly": [],
+        "nonChromatic": 125,
         "byChannel": {
-          "background-color": 23,
-          "box-shadow(colour)": 100,
+          "background-color": 24,
+          "box-shadow(colour)": 103,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 90,
-          "native": 94
+          "stamped": 93,
+          "native": 96
         },
         "movedIds": [
           "activity-cards",
@@ -2288,6 +2243,7 @@
           "gallery-view",
           "header-hero-shared",
           "image",
+          "input",
           "input-compounds",
           "input-number",
           "invoice-template",
@@ -2305,6 +2261,7 @@
           "moderation-gallery",
           "notification-center",
           "notifier",
+          "operational-ledger",
           "otp-input",
           "page-shell",
           "pagination",
@@ -2318,6 +2275,7 @@
           "qrcode",
           "radio",
           "radio-group",
+          "saved-views",
           "scheduler-surface",
           "scroll-area",
           "search",
@@ -2353,22 +2311,20 @@
         "vertical": "evnto",
         "theme": "light",
         "measured": true,
-        "moved": 105,
-        "restIsolated": 104,
-        "percentDeclared": 69.1,
-        "percentEffective": 70.5,
-        "chromaticOnly": [
-          "card"
-        ],
-        "nonChromatic": 120,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
+        "chromaticOnly": [],
+        "nonChromatic": 125,
         "byChannel": {
-          "background-color": 23,
-          "box-shadow(colour)": 100,
+          "background-color": 24,
+          "box-shadow(colour)": 103,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 90,
-          "native": 94
+          "stamped": 93,
+          "native": 96
         },
         "movedIds": [
           "activity-cards",
@@ -2417,6 +2373,7 @@
           "gallery-view",
           "header-hero-shared",
           "image",
+          "input",
           "input-compounds",
           "input-number",
           "invoice-template",
@@ -2434,6 +2391,7 @@
           "moderation-gallery",
           "notification-center",
           "notifier",
+          "operational-ledger",
           "otp-input",
           "page-shell",
           "pagination",
@@ -2447,6 +2405,7 @@
           "qrcode",
           "radio",
           "radio-group",
+          "saved-views",
           "scheduler-surface",
           "scroll-area",
           "search",
@@ -2482,22 +2441,20 @@
         "vertical": "evnto",
         "theme": "dark",
         "measured": true,
-        "moved": 105,
-        "restIsolated": 104,
-        "percentDeclared": 69.1,
-        "percentEffective": 70.5,
-        "chromaticOnly": [
-          "card"
-        ],
-        "nonChromatic": 120,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
+        "chromaticOnly": [],
+        "nonChromatic": 125,
         "byChannel": {
-          "background-color": 23,
-          "box-shadow(colour)": 100,
+          "background-color": 24,
+          "box-shadow(colour)": 103,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 90,
-          "native": 94
+          "stamped": 93,
+          "native": 96
         },
         "movedIds": [
           "activity-cards",
@@ -2546,6 +2503,7 @@
           "gallery-view",
           "header-hero-shared",
           "image",
+          "input",
           "input-compounds",
           "input-number",
           "invoice-template",
@@ -2563,6 +2521,7 @@
           "moderation-gallery",
           "notification-center",
           "notifier",
+          "operational-ledger",
           "otp-input",
           "page-shell",
           "pagination",
@@ -2576,6 +2535,7 @@
           "qrcode",
           "radio",
           "radio-group",
+          "saved-views",
           "scheduler-surface",
           "scroll-area",
           "search",
@@ -2611,22 +2571,20 @@
         "vertical": "rottay",
         "theme": "light",
         "measured": true,
-        "moved": 105,
-        "restIsolated": 104,
-        "percentDeclared": 69.1,
-        "percentEffective": 70.5,
-        "chromaticOnly": [
-          "card"
-        ],
-        "nonChromatic": 120,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
+        "chromaticOnly": [],
+        "nonChromatic": 125,
         "byChannel": {
-          "background-color": 23,
-          "box-shadow(colour)": 100,
+          "background-color": 24,
+          "box-shadow(colour)": 103,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 90,
-          "native": 94
+          "stamped": 93,
+          "native": 96
         },
         "movedIds": [
           "activity-cards",
@@ -2675,6 +2633,7 @@
           "gallery-view",
           "header-hero-shared",
           "image",
+          "input",
           "input-compounds",
           "input-number",
           "invoice-template",
@@ -2692,6 +2651,7 @@
           "moderation-gallery",
           "notification-center",
           "notifier",
+          "operational-ledger",
           "otp-input",
           "page-shell",
           "pagination",
@@ -2705,6 +2665,7 @@
           "qrcode",
           "radio",
           "radio-group",
+          "saved-views",
           "scheduler-surface",
           "scroll-area",
           "search",
@@ -2740,22 +2701,20 @@
         "vertical": "rottay",
         "theme": "dark",
         "measured": true,
-        "moved": 105,
-        "restIsolated": 104,
-        "percentDeclared": 69.1,
-        "percentEffective": 70.5,
-        "chromaticOnly": [
-          "card"
-        ],
-        "nonChromatic": 120,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
+        "chromaticOnly": [],
+        "nonChromatic": 125,
         "byChannel": {
-          "background-color": 23,
-          "box-shadow(colour)": 100,
+          "background-color": 24,
+          "box-shadow(colour)": 103,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 90,
-          "native": 94
+          "stamped": 93,
+          "native": 96
         },
         "movedIds": [
           "activity-cards",
@@ -2804,6 +2763,7 @@
           "gallery-view",
           "header-hero-shared",
           "image",
+          "input",
           "input-compounds",
           "input-number",
           "invoice-template",
@@ -2821,6 +2781,7 @@
           "moderation-gallery",
           "notification-center",
           "notifier",
+          "operational-ledger",
           "otp-input",
           "page-shell",
           "pagination",
@@ -2834,6 +2795,7 @@
           "qrcode",
           "radio",
           "radio-group",
+          "saved-views",
           "scheduler-surface",
           "scroll-area",
           "search",
@@ -2866,58 +2828,53 @@
         ]
       }
     ],
-    "worstPercentDeclared": 69.1,
-    "worstPercentEffective": 70.5,
-    "chromaticOnly": [
-      "card"
-    ],
-    "chromaticOnlyPinned": [
-      "card"
-    ],
+    "worstPercentDeclared": 71.1,
+    "worstPercentEffective": 72.5,
+    "chromaticOnly": [],
+    "chromaticOnlyPinned": [],
     "byChannel": {
-      "background-color": 23,
-      "box-shadow(colour)": 100,
+      "background-color": 24,
+      "box-shadow(colour)": 103,
       "outline-color": 1
     },
     "halves": {
-      "stamped": 90,
-      "native": 94
+      "stamped": 93,
+      "native": 96
     },
     "unreached": [
       "edit-fields",
       "list",
       "metrics-chart",
-      "operational-ledger",
       "table-toolbar"
     ],
     "controls": {
       "palette-only": {
         "nonChromatic": "0 on 36/36 (the law)",
-        "chromatic": 120,
+        "chromatic": 122,
         "chromaticByCell": [
           {
             "where": "bithire/light",
-            "moved": 120
+            "moved": 122
           },
           {
             "where": "bithire/dark",
-            "moved": 120
+            "moved": 122
           },
           {
             "where": "evnto/light",
-            "moved": 120
+            "moved": 122
           },
           {
             "where": "evnto/dark",
-            "moved": 120
+            "moved": 122
           },
           {
             "where": "rottay/light",
-            "moved": 120
+            "moved": 122
           },
           {
             "where": "rottay/dark",
-            "moved": 120
+            "moved": 122
           }
         ],
         "channels": [
@@ -2938,31 +2895,31 @@
       },
       "states-emphasis-only": {
         "nonChromatic": "0 on 12/12 (the law)",
-        "chromatic": 23,
+        "chromatic": 24,
         "chromaticByCell": [
           {
             "where": "bithire/light",
-            "moved": 23
+            "moved": 24
           },
           {
             "where": "bithire/dark",
-            "moved": 23
+            "moved": 24
           },
           {
             "where": "evnto/light",
-            "moved": 23
+            "moved": 24
           },
           {
             "where": "evnto/dark",
-            "moved": 23
+            "moved": 24
           },
           {
             "where": "rottay/light",
-            "moved": 23
+            "moved": 24
           },
           {
             "where": "rottay/dark",
-            "moved": 23
+            "moved": 24
           }
         ],
         "channels": [
@@ -2971,7 +2928,7 @@
         "reads": "reference, not a zero: a chromatic reading has no 0 % law"
       }
     },
-    "line": "chromatic-states (reported apart, never a status): 105/152 declared (69.1 %), 105/149 effective (70.5 %), every cell; rest-isolated 104; chromatic-only: card; unreached: 5 colour-only families; palette-only non-chromatic 0 on 36/36 | chromatic 120 (reference)"
+    "line": "chromatic-states (reported apart, never a status): 108/152 declared (71.1 %), 108/149 effective (72.5 %), every cell; rest-isolated 107; chromatic-only: none; unreached: 4 colour-only families; palette-only non-chromatic 0 on 36/36 | chromatic 122 (reference)"
   },
   "negativeTest": {
     "status": "green",
@@ -3051,7 +3008,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 41,
+            "moved": 44,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3059,10 +3016,12 @@
               "auto-complete",
               "avatar",
               "button",
+              "card",
               "carousel",
               "cascader",
               "checkbox",
               "color-picker",
+              "column-settings",
               "command-palette",
               "date-picker",
               "drawer-compounds",
@@ -3070,6 +3029,7 @@
               "float-button",
               "form",
               "form-field",
+              "input",
               "input-compounds",
               "input-number",
               "mentions",
@@ -3102,7 +3062,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 41,
+            "moved": 44,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3110,10 +3070,12 @@
               "auto-complete",
               "avatar",
               "button",
+              "card",
               "carousel",
               "cascader",
               "checkbox",
               "color-picker",
+              "column-settings",
               "command-palette",
               "date-picker",
               "drawer-compounds",
@@ -3121,6 +3083,7 @@
               "float-button",
               "form",
               "form-field",
+              "input",
               "input-compounds",
               "input-number",
               "mentions",
@@ -3153,7 +3116,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 41,
+            "moved": 44,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3161,10 +3124,12 @@
               "auto-complete",
               "avatar",
               "button",
+              "card",
               "carousel",
               "cascader",
               "checkbox",
               "color-picker",
+              "column-settings",
               "command-palette",
               "date-picker",
               "drawer-compounds",
@@ -3172,6 +3137,7 @@
               "float-button",
               "form",
               "form-field",
+              "input",
               "input-compounds",
               "input-number",
               "mentions",
@@ -3204,7 +3170,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 41,
+            "moved": 44,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3212,10 +3178,12 @@
               "auto-complete",
               "avatar",
               "button",
+              "card",
               "carousel",
               "cascader",
               "checkbox",
               "color-picker",
+              "column-settings",
               "command-palette",
               "date-picker",
               "drawer-compounds",
@@ -3223,6 +3191,7 @@
               "float-button",
               "form",
               "form-field",
+              "input",
               "input-compounds",
               "input-number",
               "mentions",
@@ -3255,7 +3224,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 41,
+            "moved": 44,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3263,10 +3232,12 @@
               "auto-complete",
               "avatar",
               "button",
+              "card",
               "carousel",
               "cascader",
               "checkbox",
               "color-picker",
+              "column-settings",
               "command-palette",
               "date-picker",
               "drawer-compounds",
@@ -3274,6 +3245,7 @@
               "float-button",
               "form",
               "form-field",
+              "input",
               "input-compounds",
               "input-number",
               "mentions",
@@ -3306,7 +3278,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 41,
+            "moved": 44,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3314,10 +3286,12 @@
               "auto-complete",
               "avatar",
               "button",
+              "card",
               "carousel",
               "cascader",
               "checkbox",
               "color-picker",
+              "column-settings",
               "command-palette",
               "date-picker",
               "drawer-compounds",
@@ -3325,6 +3299,7 @@
               "float-button",
               "form",
               "form-field",
+              "input",
               "input-compounds",
               "input-number",
               "mentions",
@@ -3383,16 +3358,6 @@
   "statesWidthOnly": [],
   "statesWidthOnlyObserved": [],
   "statesNonMoverNotes": [
-    {
-      "family": "column-settings",
-      "since": "3e8c3fa6b",
-      "reason": "moves, outside the instrument's reach: the grip is a composed Button and wears the Button's own ring"
-    },
-    {
-      "family": "saved-views",
-      "since": "d2ef3211b, 20e4875b5",
-      "reason": "moves, outside the instrument's reach: its controls are composed Buttons and plain Inputs, each wearing its own ring"
-    },
     {
       "family": "widget-board",
       "since": "6e26d5aff",
