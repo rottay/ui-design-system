@@ -42,6 +42,27 @@ describe("ColumnMenu accessibility", () => {
     expect(panel).toHaveAccessibleName();
   });
 
+  it("lands an open on the panel, never on Reset, on a first and on a later open", async () => {
+    await openMenu();
+    const dialog = await screen.findByRole("dialog");
+    const panel = await waitFor(() => {
+      const node = dialog.querySelector('[data-part="panel"]') as HTMLElement;
+      expect(node).not.toBeNull();
+      return node;
+    });
+    await waitFor(() => expect(document.activeElement).toBe(panel));
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    fireEvent.click(document.querySelector('[data-part="control"]') as HTMLElement);
+    const reopened = await screen.findByRole("dialog");
+    await waitFor(() =>
+      expect(document.activeElement).toBe(
+        reopened.querySelector('[data-part="panel"]')
+      )
+    );
+  });
+
   it("reports each column group's expansion on its own toggle", async () => {
     await openMenu();
     const panel = await screen.findByRole("dialog");

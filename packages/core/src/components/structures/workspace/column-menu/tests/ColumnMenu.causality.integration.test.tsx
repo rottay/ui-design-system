@@ -15,7 +15,7 @@
  */
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { fireEvent, waitFor } from '@testing-library/react';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 
 import { ColumnMenu } from '../index';
 import { renderWithEngine } from '@tests/support/engine';
@@ -69,6 +69,11 @@ async function openPanelMarkup(): Promise<string> {
   });
   fireEvent.click(control);
   const surface = await waitForPortalContent(waitFor, SURFACE, '[data-part="row"]', 1);
+  // The open lands focus on the panel; the probes read the panel at rest.
+  const panel = surface.querySelector('[data-part="panel"]') as HTMLElement;
+  await waitFor(() => expect(document.activeElement).toBe(panel));
+  act(() => panel.blur());
+  await waitFor(() => expect(panel.hasAttribute('data-state')).toBe(false));
   return surface.outerHTML;
 }
 

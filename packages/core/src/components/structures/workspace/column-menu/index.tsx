@@ -35,7 +35,13 @@
  * pass their full table column definitions without losing type safety.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { partAttributes, useInteractionState } from "@/foundation/behavior";
@@ -249,7 +255,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
     new Set()
   );
   const [editingWidthKey, setEditingWidthKey] = useState<string | null>(null);
-  const panelRef = useRef<HTMLElement | null>(null);
+  const [panelEl, setPanelEl] = useState<HTMLElement | null>(null);
   const i18n = useOptionalTranslation("components");
   /**
    * Catalog lookup with an honest English floor: when the provider is absent
@@ -636,14 +642,15 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
     };
   }, [externalToggleEventName, handleOpen, isOpen]);
 
-  // Move focus into the dialog after the Popover surface has committed.
-  // Escape, outside interaction, collision handling, portal scope, z-index
-  // and focus restoration belong to the canonical Popover primitive.
-  useEffect(() => {
-    if (!isOpen || typeof window === "undefined") return undefined;
-    const frame = window.requestAnimationFrame(() => panelRef.current?.focus());
+  // An open lands on the panel, never on its first control: Reset commits and
+  // closes. Scheduled at layout so it precedes the Popover's own hand-off.
+  useLayoutEffect(() => {
+    if (!isOpen || !panelEl) return undefined;
+    const frame = window.requestAnimationFrame(() =>
+      panelEl.focus({ preventScroll: true })
+    );
     return () => window.cancelAnimationFrame(frame);
-  }, [isOpen]);
+  }, [isOpen, panelEl]);
 
   const triggerLabel = `${tOr(
     "columnMenu.triggerLabel",
@@ -685,7 +692,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
       content={
         <Box
           data-open={isOpen}
-          ref={panelRef}
+          ref={setPanelEl}
           tabIndex={-1}
           {...panelInteraction.handlers}
           {...partAttributes("panel", panelInteraction.state)}

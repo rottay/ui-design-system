@@ -11,7 +11,9 @@
  * Focus ownership posture (B2.4):
  * - Deliberate initial focus: only activation-driven opens (a click via
  *   pointer or keyboard) move focus into the surface -- the first focusable
- *   descendant, or the surface itself when the content is read-only. Hover
+ *   descendant, or the surface itself when the content is read-only; a
+ *   control that mounts within a second takes over from the parked surface,
+ *   unless focus has left it. Hover
  *   and focus discovery, coarse-pointer taps and controlled/programmatic
  *   opens never steal focus. Without this, portaled interactive content is
  *   unreachable by keyboard because the surface lives at the portal root,
@@ -92,13 +94,15 @@ type PopoverPortalScope = {
 };
 
 const DEFAULT_EXIT_FALLBACK_MS = 240;
+/** How long a surface holding the parked initial focus waits for its first control. */
+const INITIAL_FOCUS_HAND_OFF_MS = 1000;
 const EXIT_FALLBACK_GRACE_MS = 64;
 
 /** Interactive descendants eligible to receive deliberate focus. */
 const TRIGGER_FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-/** Menu/listbox surfaces focus their first item before generic controls. */
+/** First match in document order; the item arms only admit items kept out of the tab order. */
 const SURFACE_FOCUSABLE_SELECTOR = `[role="menuitem"]:not([aria-disabled="true"]), [role="option"]:not([aria-disabled="true"]), ${TRIGGER_FOCUSABLE_SELECTOR}`;
 
 /**
@@ -658,6 +662,33 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       if (lastPointerModalityRef.current === 'touch') return undefined;
       if (typeof window === 'undefined') return undefined;
       didInitialFocusRef.current = true;
+      let handOffFrame: number | null = null;
+      let handOffDeadline: ReturnType<typeof setTimeout> | null = null;
+      let contentObserver: MutationObserver | null = null;
+      const stopHandOff = (): void => {
+        contentObserver?.disconnect();
+        contentObserver = null;
+        if (handOffFrame !== null) window.cancelAnimationFrame(handOffFrame);
+        handOffFrame = null;
+        if (handOffDeadline !== null) clearTimeout(handOffDeadline);
+        handOffDeadline = null;
+        surface.removeEventListener('focusout', stopHandOff);
+      };
+      // Content that mounts just after the pass (a suspended subtree) takes the
+      // parked focus; the wait ends when focus leaves the surface or it expires.
+      const handOff = (): void => {
+        handOffFrame = null;
+        if (!requestedOpenRef.current || document.activeElement !== surface) {
+          stopHandOff();
+          return;
+        }
+        const target = surface.querySelector<HTMLElement>(
+          SURFACE_FOCUSABLE_SELECTOR
+        );
+        if (!target) return;
+        stopHandOff();
+        target.focus({ preventScroll: true });
+      };
       const frame = window.requestAnimationFrame(() => {
         // The open may have been cancelled (Escape, light dismiss) while the
         // frame was pending; never land focus inside a closing surface.
@@ -665,8 +696,23 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         const active = document.activeElement;
         if (active && surface.contains(active)) return;
         focusFirstWithin(surface, SURFACE_FOCUSABLE_SELECTOR, true);
+        if (
+          document.activeElement !== surface ||
+          typeof MutationObserver === 'undefined'
+        )
+          return;
+        contentObserver = new MutationObserver(() => {
+          if (handOffFrame === null)
+            handOffFrame = window.requestAnimationFrame(handOff);
+        });
+        contentObserver.observe(surface, { childList: true, subtree: true });
+        surface.addEventListener('focusout', stopHandOff);
+        handOffDeadline = setTimeout(stopHandOff, INITIAL_FOCUS_HAND_OFF_MS);
       });
-      return () => window.cancelAnimationFrame(frame);
+      return () => {
+        window.cancelAnimationFrame(frame);
+        stopHandOff();
+      };
     }, [isOpen, surfaceEl]);
 
     // Focus ownership, return: closing paths beyond Escape (light dismiss,
