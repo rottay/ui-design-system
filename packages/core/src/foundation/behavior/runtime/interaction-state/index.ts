@@ -8,11 +8,14 @@
  * `data-focus-visible`, which it set on ANY focus — including a mouse click.
  * A focus ring on a clicked button is noise; it is a keyboard affordance.
  *
- * The ring is decided by input modality, not by `element.matches(':focus-visible')`.
- * Several DOM implementations answer that selector without implementing it, so a
- * probe that only checks whether it throws reports support and every keyboard
- * focus silently loses its ring. Skins that want the platform's own answer still
- * have `:focus-visible` available in CSS.
+ * The ring follows the platform. A focus is visible when the element it landed
+ * on matches `:focus-visible`: the browser's own modality heuristic, which also
+ * judges a focus that script moved or a label forwarded. Two guards keep that
+ * honest. A pointer press on the part itself never rings. And the platform is
+ * asked only about a focus that really happened: DOM runners answer the selector
+ * as plain `:focus`, a dispatched focus event has no answer at all, and an old
+ * runtime throws on it, so each of those counts as visible rather than silently
+ * costing every keyboard focus its ring.
  *
  * Hover is a pointer that RESTS on the part, which a finger never does: a tap's
  * `pointerenter` may never get its leave, so touch presses without hovering.
@@ -33,6 +36,18 @@ function modalityOf(event?: { pointerType?: string }): PressModality {
   if (!pointerType) return 'keyboard';
   if (pointerType === 'touch' || pointerType === 'pen') return pointerType;
   return 'mouse';
+}
+
+/** The platform's answer for a focus that really landed on `target`; visible when it has none. */
+function platformShowsFocus(target: Element | null | undefined): boolean {
+  if (!target || typeof target.matches !== 'function') return true;
+  try {
+    const root = target.getRootNode();
+    if (!('activeElement' in root) || root.activeElement !== target) return true;
+    return target.matches(':focus-visible');
+  } catch {
+    return true;
+  }
 }
 
 export interface UseInteractionStateOptions {
@@ -127,12 +142,16 @@ export function useInteractionState(
     [cancelPress]
   );
 
-  const onFocus = useCallback(() => {
-    if (disabled) return;
-    setFocused(true);
-    // Input modality decides the ring, not `element.matches(':focus-visible')`.
-    setFocusVisible(!pointerDownRef.current);
-  }, [disabled]);
+  const onFocus = useCallback(
+    (event?: React.FocusEvent) => {
+      if (disabled) return;
+      setFocused(true);
+      // A focus that script moved or a label forwarded lands on a part nobody
+      // pressed: the platform's answer for the focused element decides its ring.
+      setFocusVisible(!pointerDownRef.current && platformShowsFocus(event?.target));
+    },
+    [disabled]
+  );
 
   const onBlur = useCallback(() => {
     setFocused(false);

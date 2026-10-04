@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { partAttributes, serializeState } from '../../../kernel/anatomy';
@@ -150,6 +150,79 @@ describe('a focus ring is a keyboard affordance', () => {
     fireEvent.focus(trigger());
     fireEvent.blur(trigger());
     expect(trigger()).not.toHaveAttribute('data-state');
+  });
+});
+
+/**
+ * A focus that script moves, or that a label forwards, lands on a part no
+ * pointer went down on. The platform judges it, and the DOM runner answers
+ * `:focus-visible` as plain `:focus`, so its verdict is stubbed per element.
+ */
+describe('a focus nobody pressed wears the ring the platform shows', () => {
+  function platformSays(element: Element, visible: boolean | 'throws') {
+    const matches = element.matches.bind(element);
+    vi.spyOn(element, 'matches').mockImplementation((selector: string) => {
+      if (selector !== ':focus-visible') return matches(selector);
+      if (visible === 'throws') throw new SyntaxError('unknown pseudo-class');
+      return visible;
+    });
+  }
+  const state = () => trigger().getAttribute('data-state');
+
+  it('rings a real focus the platform shows', () => {
+    render(<Probe />);
+    platformSays(trigger(), true);
+    act(() => trigger().focus());
+    expect(state()).toBe('focused focus-visible');
+  });
+
+  it('does not ring a real focus the platform hides: script moved it after a pointer', () => {
+    render(<Probe />);
+    platformSays(trigger(), false);
+    act(() => trigger().focus());
+    expect(state(), 'a pointer user saw the keyboard signature').toBe('focused');
+  });
+
+  it('asks about the element the focus landed on, not about the part', () => {
+    function Binary() {
+      const { state: own, handlers } = useInteractionState();
+      return (
+        <label {...partAttributes('root', own)} {...handlers}>
+          <input type="checkbox" aria-label="binary" />
+        </label>
+      );
+    }
+    render(<Binary />);
+    const input = screen.getByRole('checkbox', { name: 'binary' });
+    const root = input.closest('label');
+    if (!root) throw new Error('the part did not render');
+    platformSays(input, false);
+    platformSays(root, true);
+
+    act(() => input.focus());
+    expect(root.getAttribute('data-state')).toBe('focused');
+  });
+
+  it('still does not ring a pointer press on the part, whatever the platform shows', () => {
+    render(<Probe />);
+    platformSays(trigger(), true);
+    fireEvent.pointerDown(trigger());
+    act(() => trigger().focus());
+    expect(state()).toBe('pressed focused');
+  });
+
+  it('counts a dispatched focus as visible: nothing was focused, the platform has no answer', () => {
+    render(<Probe />);
+    platformSays(trigger(), false);
+    fireEvent.focus(trigger());
+    expect(state()).toBe('focused focus-visible');
+  });
+
+  it('counts a runtime without the selector as visible', () => {
+    render(<Probe />);
+    platformSays(trigger(), 'throws');
+    act(() => trigger().focus());
+    expect(state()).toBe('focused focus-visible');
   });
 });
 
