@@ -2175,12 +2175,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "8adb0e54aea103bb1634": {
-      "path": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-a",
-      "count": 1
-    },
     "f0e3d090e1b66c29ef29": {
       "path": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
       "category": "native-interactive",
@@ -6421,12 +6415,6 @@
       "path": "src/components/patterns/shell/page-shell/engines/classic/index.tsx",
       "category": "shared-chrome-literal",
       "rule": "stable-typography",
-      "count": 1
-    },
-    "d4fd9841f26a9fb6264b": {
-      "path": "src/components/patterns/shell/page-shell/engines/modern/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-a",
       "count": 1
     },
     "1c539f3e4fce972ed10b": {

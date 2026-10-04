@@ -23,6 +23,7 @@
 import React, { useRef, useState } from 'react';
 import type { DetailPanelProps, DetailAction } from '../../contracts';
 import Button from '../../../../../primitives/inputs/button/engines/modern';
+import Link from '../../../../../primitives/navigation/link/engines/modern';
 import Skeleton from '../../../../../primitives/feedback/skeleton/engines/modern';
 import { VisuallyHidden } from '../../../../../primitives/foundation/visually-hidden';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
@@ -227,13 +228,14 @@ function Breadcrumbs({
               </span>
             )}
             {crumb.href && !isLast ? (
-              <a
+              <Link
                 href={crumb.href}
+                underline={false}
                 onClick={crumb.onClick}
                 data-part="breadcrumb-link"
               >
                 {crumb.label}
-              </a>
+              </Link>
             ) : (
               <span
                 data-part="breadcrumb-current"

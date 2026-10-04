@@ -39,6 +39,7 @@
 import React from 'react';
 import type { PageShellProps } from '../../contracts';
 import Button from '../../../../../primitives/inputs/button/engines/modern';
+import Link from '../../../../../primitives/navigation/link/engines/modern';
 import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
@@ -80,21 +81,15 @@ function BreadcrumbItem({
   isLast: boolean;
 }) {
   const isInteractive = !isLast && (href || onClick);
-  const crumb = useInteractionState();
 
   if (isInteractive) {
     return (
-      <a
+      <Link
         href={href ?? '#'}
-        {...partAttributes('crumb', crumb.state)}
+        underline={false}
+        data-part="crumb"
         data-interactive="true"
         data-last="false"
-        onPointerEnter={crumb.handlers.onPointerEnter}
-        onPointerLeave={crumb.handlers.onPointerLeave}
-        onPointerDown={crumb.handlers.onPointerDown}
-        onPointerUp={crumb.handlers.onPointerUp}
-        onFocus={crumb.handlers.onFocus}
-        onBlur={crumb.handlers.onBlur}
         onClick={
           onClick
             ? (e: React.MouseEvent) => {
@@ -105,7 +100,7 @@ function BreadcrumbItem({
         }
       >
         {label}
-      </a>
+      </Link>
     );
   }
 
