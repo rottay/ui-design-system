@@ -47,13 +47,10 @@ export type {
   LabelPlacement,
   StepProps,
   StepContentProps,
-  StepsProps,
-  ProgressDotInfo,
 } from './contracts';
 export { STEPPER_DEFAULTS, SIZE_MAP, FONT_SIZE_MAP } from './contracts';
 
 export { StepperStep, StepperContent };
-export { Steps } from './compound/steps';
 
 // Assemble compound component: Stepper + Stepper.Step + Stepper.Content
 export const Stepper = Object.assign(

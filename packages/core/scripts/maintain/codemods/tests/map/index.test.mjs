@@ -122,7 +122,7 @@ test('prop entries name components and props types the package publishes, or one
       retired.push(name);
     }
   }
-  assert.deepEqual([...new Set(retired)].sort(), ['Switch', 'SwitchProps']);
+  assert.deepEqual([...new Set(retired)].sort(), ['Steps', 'StepsProps', 'Switch', 'SwitchProps']);
 });
 
 test('the two report-only classes of the review stay report-only, with the reason stated', () => {
@@ -227,6 +227,7 @@ test('the entries that need a decision per site are report-only, whatever their 
     'prop-renamed/.#CountUpProps.delay', 'prop-renamed/.#CountUpProps.duration',
     'prop-renamed/.#StaggerChildrenProps.delayChildren', 'prop-renamed/.#StaggerChildrenProps.staggerDelay',
     'prop-renamed/.#TextRevealProps.delay', 'prop-renamed/.#TextRevealProps.duration',
+    'symbol-removed/.#Steps', 'symbol-removed/.#StepsProps',
     'union-member-removed/.#SwitchProps.large', 'union-member-removed/.#SwitchProps.small',
   ]);
   for (const entry of decided) assert.equal(entry.replacement?.values, undefined, `${entry.id}: no value-table workaround`);

@@ -5,7 +5,7 @@ import { render, waitFor } from '@testing-library/react';
 import { Menu } from '../menu';
 import { FloatButton } from '../float-button';
 import { Tabs } from '../tabs';
-import { Stepper, Steps } from '../stepper';
+import { Stepper } from '../stepper';
 import { Pagination } from '../pagination';
 import { Segmented } from '../segmented';
 import { BackTop } from '../back-top';
@@ -185,7 +185,7 @@ describe('Navigation-family data-part contract (WO-SKIN-04 checkpoint N)', () =>
     });
   });
 
-  describe('Steps', () => {
+  describe('Stepper as a display track', () => {
     const items = [
       { title: 'Finished', status: 'finish' as const },
       { title: 'In progress', status: 'process' as const },
@@ -196,7 +196,7 @@ describe('Navigation-family data-part contract (WO-SKIN-04 checkpoint N)', () =>
     it.each(ENGINES)(
       'stamps root/item(data-status) for every status under the %s engine',
       async (engine) => {
-        const { container } = renderWithEngine(<Steps items={items} current={1} />, engine);
+        const { container } = renderWithEngine(<Stepper items={items} current={1} />, engine);
 
         await waitForPart(container, 'root');
         expect(container.querySelector('[data-part="item"][data-status="finish"]')).not.toBeNull();
@@ -208,7 +208,7 @@ describe('Navigation-family data-part contract (WO-SKIN-04 checkpoint N)', () =>
     );
 
     it('rustic: stamps icon/connector', async () => {
-      const { container } = renderWithEngine(<Steps items={items} current={1} />, 'rustic');
+      const { container } = renderWithEngine(<Stepper items={items} current={1} />, 'rustic');
       await waitForPart(container, 'root');
       expect(container.querySelector('[data-part="icon"]')).not.toBeNull();
       expect(container.querySelector('[data-part="connector"]')).not.toBeNull();

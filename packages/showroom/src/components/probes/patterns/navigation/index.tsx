@@ -3,9 +3,9 @@
 /**
  * K3 Lane B probe (showroom): navigation families.
  *
- * One identical component tree for the six Lane-B families (Menu, Breadcrumb,
- * Pagination, Segmented, Steps, Stepper) rendered under two opposing
- * governed sources:
+ * One identical component tree for the five Lane-B families (Menu, Breadcrumb,
+ * Pagination, Segmented, Stepper as a horizontal and a vertical track)
+ * rendered under two opposing governed sources:
  *  - `bithire-static`: the bundled BitHire vertical, code-owned;
  *  - `themanagement-db`: a published customer document, compiled and proven.
  *
@@ -19,8 +19,8 @@
  * and seam hooks are logical, so the Arabic cell is the RTL witness.
  *
  * The state axis is `rest | disabled | error`: Pagination and Segmented own
- * a whole-control disabled posture; Menu/Steps/Stepper carry disabled ITEMS
- * in every cell (their per-item disabled contract); Steps/Stepper own the
+ * a whole-control disabled posture; Menu and Stepper carry disabled ITEMS
+ * in every cell (their per-item disabled contract); Stepper owns the
  * error posture through the `status` prop on the current step; Breadcrumb
  * has neither and renders its rest anatomy in every state cell (the K3-A
  * pattern — no contract exists for it). Every cell is deterministic and
@@ -38,7 +38,6 @@ import {
   Segmented,
   Stack,
   Stepper,
-  Steps,
   Text,
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
@@ -274,8 +273,8 @@ function SpecimenTree({
   const disabled = state === "disabled";
   const stepStatus = state === "error" ? ("error" as const) : ("process" as const);
 
-  // Pagination/Steps are controlled-only contracts; the probe holds their
-  // current page/step so keyboard/pointer activation is observable.
+  // Pagination and the horizontal Stepper are rendered controlled; the probe
+  // holds their current page/step so keyboard/pointer activation is observable.
   const [page, setPage] = useState(6);
   const [step, setStep] = useState(1);
 
@@ -334,7 +333,8 @@ function SpecimenTree({
 
       <Stack spacing="xs" data-testid="k3b-steps">
         <Text weight="semibold">{copy.stepsTitle}</Text>
-        <Steps
+        <Stepper
+          clickable
           current={step}
           status={stepStatus}
           onChange={(next) => setStep(next)}
@@ -381,8 +381,8 @@ function VariantTree({
   const copy = COPY[locale];
   const stepStatus = state === "error" ? ("error" as const) : ("process" as const);
 
-  // Pagination/Steps are controlled-only contracts; the probe holds their
-  // current page/step so keyboard/pointer activation is observable.
+  // Pagination and the horizontal Stepper are rendered controlled; the probe
+  // holds their current page/step so keyboard/pointer activation is observable.
   const [page, setPage] = useState(6);
   const [step, setStep] = useState(1);
 
@@ -448,7 +448,7 @@ function VariantTree({
       {variant === "steps-finished" ? (
         <Stack spacing="xs" data-testid="k3b-steps-finished">
           <Text weight="semibold">{copy.stepsTitle}</Text>
-          <Steps
+          <Stepper
             current={3}
             items={[
               { title: copy.stepAccount, description: copy.stepAccountDesc },

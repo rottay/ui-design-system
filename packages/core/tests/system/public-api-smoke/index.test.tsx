@@ -194,8 +194,8 @@ const SMOKE_CASES: SmokeCase[] = [
   { name: 'Pagination', render: () => <DS.Pagination current={2} total={100} pageSize={10} onChange={() => undefined} /> },
   { name: 'Segmented', render: () => <DS.Segmented options={['Week', 'Month']} /> },
   {
-    name: 'Steps',
-    render: () => <DS.Steps items={[{ title: 'Draft' }, { title: 'Review' }, { title: 'Publish' }]} current={1} />,
+    name: 'Stepper',
+    render: () => <DS.Stepper items={[{ title: 'Draft' }, { title: 'Review' }, { title: 'Publish' }]} current={1} />,
   },
   {
     name: 'Dropdown',

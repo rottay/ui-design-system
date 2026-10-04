@@ -8,7 +8,6 @@ import {
   Menu,
   FloatButton,
   Tabs,
-  Steps,
   Stepper,
   Pagination,
   Segmented,
@@ -24,7 +23,7 @@ import {
 import { Icon } from '@rottay/design-system/icons';
 
 // Fixed fixtures for the WO-SKIN-04 checkpoint N navigation-family data-part
-// probe (Menu, FloatButton, Tabs, Steps, Stepper, Pagination, Segmented,
+// probe (Menu, FloatButton, Tabs, Stepper, Pagination, Segmented,
 // BackTop, Breadcrumb, BottomTabBar, Anchor, MobileHeader, ActionDock, Affix,
 // Link). Every instance below is deterministic -- forced status/state props,
 // never a live clock or real scroll position -- so the grid renders
@@ -192,7 +191,7 @@ export function NavFbStates() {
           <Text size="xs" color="secondary">
             Steps
           </Text>
-          <Steps items={NAV_STEPS_ITEMS} current={1} />
+          <Stepper items={NAV_STEPS_ITEMS} current={1} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-stepper">

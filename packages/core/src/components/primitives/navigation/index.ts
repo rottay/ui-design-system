@@ -43,9 +43,7 @@ export type {
 } from './stepper';
 export { STEPPER_DEFAULTS, SIZE_MAP as STEPPER_SIZE_MAP, FONT_SIZE_MAP as STEPPER_FONT_SIZE_MAP } from './stepper';
 
-// Steps: the deprecated name of Stepper (D-16 idiom), served by its compound
-export { Steps } from './stepper';
-export type { StepsProps, StepItem, StepStatus, ProgressDotInfo } from './stepper';
+export type { StepItem, StepStatus } from './stepper';
 
 export { Affix } from './affix';
 export type { AffixProps } from './affix';

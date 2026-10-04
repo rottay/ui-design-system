@@ -43,7 +43,6 @@
 
 export { StepperStep } from './step';
 export { StepperContent } from './content';
-export { Steps } from './steps';
 
 // ============================================================================
 // Type Exports

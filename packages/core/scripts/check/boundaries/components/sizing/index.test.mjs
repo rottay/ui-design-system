@@ -51,14 +51,13 @@ test('size-axis-law-gate: the Ant Design spellings appear only in the four engin
   assert.deepEqual(carriers, bindings);
 });
 
-test('size-axis-law-gate: the five retired acceptors publish a canonical size', () => {
+test('size-axis-law-gate: the four retired acceptors publish a canonical size', () => {
   const result = runSizeAxisLawGate();
   const literalsOf = (owner, file) => result.census.find((entry) => entry.owner === owner && entry.file === file)?.literals;
   assert.deepEqual(literalsOf('DescriptionsProps', 'src/components/primitives/display/descriptions/index.tsx'), ['lg', 'md', 'sm']);
   assert.deepEqual(literalsOf('ListProps', 'src/components/primitives/display/list/index.tsx'), ['lg', 'md', 'sm']);
   assert.deepEqual(literalsOf('SegmentedProps', 'src/components/primitives/navigation/segmented/index.tsx'), ['lg', 'md', 'sm']);
   assert.deepEqual(literalsOf('SpaceProps', 'src/components/primitives/layout/space/index.ts'), ['lg', 'md', 'sm']);
-  assert.deepEqual(literalsOf('StepsProps', 'src/components/primitives/navigation/stepper/contracts/index.ts'), ['md', 'sm']);
 });
 
 test('size-axis-law-gate: scan floor -- finds real *Props size fields, not a silently-empty scan', () => {
@@ -70,14 +69,14 @@ test('size-axis-law-gate: scan floor -- finds real *Props size fields, not a sil
   assert.ok(result.sizeFieldsChecked >= 40, `expected >= 40 size fields, found ${result.sizeFieldsChecked}`);
 });
 
-test('size-axis-law-gate: the six migrated contracts are in the census and compliant', () => {
+test('size-axis-law-gate: the five migrated contracts still published are in the census and compliant', () => {
   const result = runSizeAxisLawGate();
   const owners = new Set(result.census.map((entry) => entry.owner));
-  for (const owner of ['SwitchProps', 'TimePickerProps', 'DatePickerProps', 'FormProps', 'InputNumberProps', 'TableProps']) {
+  for (const owner of ['TimePickerProps', 'DatePickerProps', 'FormProps', 'InputNumberProps', 'TableProps']) {
     assert.ok(owners.has(owner), `expected ${owner} in the census`);
   }
   const violationOwners = new Set(result.violations.map((entry) => entry.owner));
-  for (const owner of ['SwitchProps', 'TimePickerProps', 'DatePickerProps', 'FormProps', 'InputNumberProps', 'TableProps']) {
+  for (const owner of ['TimePickerProps', 'DatePickerProps', 'FormProps', 'InputNumberProps', 'TableProps']) {
     assert.ok(!violationOwners.has(owner), `${owner} unexpectedly violates the axis law`);
   }
 });

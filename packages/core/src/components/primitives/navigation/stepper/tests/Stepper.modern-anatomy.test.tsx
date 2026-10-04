@@ -1,7 +1,7 @@
 /**
  * The Modern stepper's anatomy contract, executed: one `ds-stepper` namespace
- * across the engine track, the Step and Content compounds and the deprecated
- * Steps name; the interaction kernel deciding a clickable step's state once;
+ * across the engine track and the Step and Content compounds; the
+ * interaction kernel deciding a clickable step's state once;
  * a content panel whose presence is not an interaction state; a track axe
  * accepts; and labels that survive a right-to-left locale.
  */
