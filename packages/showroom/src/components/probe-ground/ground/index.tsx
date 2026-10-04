@@ -83,17 +83,15 @@ export async function groundFor(request: GroundRequest): Promise<Ground> {
       options,
     );
     const name = source.name ?? slug;
-    const tenantConfig = {
+    const tenantConfig: TenantConfig = {
       slug,
       name,
       vertical,
-      engine: 'modern',
       theme: mode,
       plan: 'enterprise',
       features: ['*'],
       branding: { companyName: name },
-      appearance: artifact.normalizedAppearance,
-    } as TenantConfig;
+    };
     return {
       mounted,
       stamp: buildRootStampScript(mounted.rootAttributes),

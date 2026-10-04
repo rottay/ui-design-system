@@ -48,14 +48,17 @@ export const VISUAL_AUTHORITY_DEFAULT_GROUND: Record<VisualAuthorityTenant, Visu
   bithire: 'light',
 };
 
+/** A `TenantConfig` plus the retired `appearance` echo, stated as a type instead of an assertion. */
+type LegacyAppearanceEchoConfig = TenantConfig & {
+  readonly appearance: TenantThemeArtifact['normalizedAppearance'];
+};
+
 /**
- * The exact envelope `buildTenantConfig` hands the provider for a DB tenant:
- * identity-only branding plus the artifact's own compiled appearance, kept so
- * the runtime can still read density, the motion dial, background mode, the
- * recipe profile and the anatomy attributes.
+ * Legacy input on purpose: the envelope a DB consumer still sends, echo included.
+ * Delete the echo when no consumer sends it any more.
  */
 export function dbTenantConfig(artifact: TenantThemeArtifact): TenantConfig {
-  return {
+  const envelope: LegacyAppearanceEchoConfig = {
     slug: artifact.slug,
     name: 'The Management',
     vertical: 'bithire',
@@ -64,5 +67,6 @@ export function dbTenantConfig(artifact: TenantThemeArtifact): TenantConfig {
     features: ['*'],
     branding: { companyName: 'The Management' },
     appearance: artifact.normalizedAppearance,
-  } as TenantConfig;
+  };
+  return envelope;
 }
