@@ -912,9 +912,10 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               </ModernButton>
             )}
 
-            {/* Section content with smooth collapse. The transition and the
-                overflow live in the skin (reduced-motion governs); the
-                max-height/opacity stay inline as runtime state values. */}
+            {/* Section content with smooth collapse. The transition, the
+                overflow and the collapsed opacity live in the skin
+                (reduced-motion governs); the max-height stays inline as a
+                runtime state value. */}
             <div
               data-part="section-content"
               data-collapsed={isCollapsed}
@@ -923,7 +924,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               }}
               style={{
                 maxHeight: hasSectionHeader ? (isCollapsed ? 0 : contentHeight ?? 2000) : undefined,
-                opacity: isCollapsed ? 0 : 1,
               }}
             >
               {renderFields(section.fields)}

@@ -274,13 +274,17 @@
   transform: rotate(90deg);
 }
 
-/* ---- section content collapse: runtime max-height/opacity stay inline;
-        the cadence + overflow are skin-owned so reduced-motion can silence it. ---- */
+/* ---- section content collapse: runtime max-height stays inline; the cadence,
+        overflow + collapsed opacity are skin-owned (reduced-motion silences it). ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-content'] {
   overflow: hidden;
   transition:
     max-height var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out),
     opacity var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-content'][data-collapsed='true'] {
+  opacity: 0;
 }
 
 /* ---- wizard navigation (layout only; Buttons paint themselves) ---- */

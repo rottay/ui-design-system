@@ -62839,13 +62839,17 @@ html[data-ds-motion='reduced']
   transform: rotate(90deg);
 }
 
-/* ---- section content collapse: runtime max-height/opacity stay inline;
-        the cadence + overflow are skin-owned so reduced-motion can silence it. ---- */
+/* ---- section content collapse: runtime max-height stays inline; the cadence,
+        overflow + collapsed opacity are skin-owned (reduced-motion silences it). ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-content'] {
   overflow: hidden;
   transition:
     max-height var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out),
     opacity var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-content'][data-collapsed='true'] {
+  opacity: 0;
 }
 
 /* ---- wizard navigation (layout only; Buttons paint themselves) ---- */
@@ -67932,8 +67936,8 @@ html[data-ds-motion='reduced']
  * with shape + text + count, never a glow and never hue alone.
  *
  * A11Y: the item list is a polite live region (engine-stamped); the loading
- * skeleton keeps its `.animate-pulse` class ONLY as a test query hook — the
- * real channeled shimmer is the `ds-live-feed-skeleton-pulse` below.
+ * skeleton carries no utility class — its channeled shimmer is the
+ * `ds-live-feed-skeleton-pulse` below, stopped under reduced motion.
  *
  * TOKENS: modern reads generic tokens plus the `--ds-live-feed-*` component
  * channels (registered TENANT_CANDIDATE in the previous wave; rung
@@ -68056,9 +68060,13 @@ html[data-ds-motion='reduced']
   line-height: 16px;
 }
 
-/* feed list: layout stays on the test-pinned Tailwind utilities
-   (`flex flex-col gap-2`, see the engine comment) — this file paints no
-   duplicate list rule. The list is a polite live region (engine-stamped). */
+/* feed list (was Tailwind `flex flex-col gap-2`). The list is a polite live
+   region (engine-stamped). */
+.ds-pattern-live-feed.ds-engine-modern [data-part='list'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_ds-live-feed-list-gap, 8px);
+}
 
 /* empty state: rhythm only — the composed Empty primitive owns its paint */
 .ds-pattern-live-feed.ds-engine-modern [data-part='empty'] {
@@ -80875,9 +80883,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * `border` and avatar-initials `color` (both `ringColor = user.color ||
  * DEFAULT_COLOR`), the size-variant pixel geometry (inline-size/block-size,
  * initials font-size), the negative overlap offset and the stacking order;
- * LiveCursor's `cursor-badge` `background` (caller per-user color), coordinate
- * custom-property hatches and visibility `opacity`. The skin consumes those
- * hatches into the transform; everything else is static and owned HERE.
+ * LiveCursor's `cursor-badge` `background` (caller per-user color) and
+ * coordinate custom-property hatches. The skin consumes those hatches into
+ * the transform; everything else is static and owned HERE, including the
+ * LiveCursor visibility fade, keyed on the stamped `data-visible='false'`.
  *
  * RUNTIME HATCH: `--ds-presence-badge-ring` carries the overflow badge's ring
  * WIDTH, which tracks the `size` prop (`sm`: 2px, `md`: 2.5px) and has no
@@ -81043,6 +81052,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   transition: transform var(--ds-motion-feedback) linear,
     opacity var(--ds-motion-reveal) var(--ds-motion-ease-out);
   will-change: transform;
+}
+.ds-presence-live-cursor[data-part='root'][data-visible='false'] {
+  opacity: 0;
 }
 .ds-presence-live-cursor[data-part='root'] svg {
   display: block;
@@ -87601,6 +87613,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   align-items: center;
   gap: var(--ds-spacing-1, 4px);
   block-size: 32px;
+  min-block-size: revert-layer;
   padding-block: 0;
   padding-inline: var(--ds-spacing-3, 12px);
   border-radius: var(--ds-radius-md);
@@ -87620,6 +87633,42 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   block-size: 36px;
   padding-inline: var(--ds-spacing-4, 16px);
   font-size: var(--ds-font-size-sm, 14px);
+}
+/* The action is a Button for behaviour only: its skin is withdrawn to the
+   layers below and its wrappers are unboxed, so this module stays the painter. */
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button[data-part='action-button'] {
+  --ds-button-hover-transform: none;
+  --ds-button-hover-filter: none;
+  --ds-button-active-transform: none;
+  --ds-button-active-filter: none;
+  position: revert-layer;
+  isolation: revert-layer;
+  justify-content: revert-layer;
+  min-inline-size: revert-layer;
+  max-inline-size: revert-layer;
+  appearance: revert-layer;
+  overflow: revert-layer;
+  user-select: revert-layer;
+  touch-action: revert-layer;
+  -webkit-tap-highlight-color: revert-layer;
+  font-family: revert-layer;
+  font-weight: revert-layer;
+  line-height: revert-layer;
+  letter-spacing: revert-layer;
+  text-align: revert-layer;
+  text-decoration: revert-layer;
+  text-transform: revert-layer;
+  white-space: revert-layer;
+  box-shadow: revert-layer;
+  outline-offset: revert-layer;
+}
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button[data-part='action-button']::before {
+  content: revert-layer;
+}
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button :is([data-part='content'], [data-part='prefix'], [data-part='label']) {
+  display: contents;
+  font-variant-numeric: revert-layer;
+  translate: revert-layer;
 }
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;

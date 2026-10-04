@@ -84,6 +84,43 @@ describe('ModernUserProfileCard — keyboard operability', () => {
   });
 });
 
+describe('ModernUserProfileCard — actions ride the Button primitive', () => {
+  it('renders each action as a non-submitting DS Button that keeps the card anatomy', () => {
+    const { container } = renderModern({
+      actions: [{ key: 'msg', label: 'Message', variant: 'primary', icon: <svg />, onClick: vi.fn() }],
+    });
+    const action = container.querySelector('[data-part="action-button"]') as HTMLElement;
+
+    expect(action).toHaveClass('ds-button', 'ds-button--modern', 'ds-user-profile-card__action-button');
+    expect(action).toHaveAttribute('type', 'button');
+    expect(action).toHaveAttribute('data-variant', 'primary');
+    expect(action.querySelector('[data-part="action-icon"] svg')).toBeInTheDocument();
+  });
+
+  it('fires an enabled action once without activating the card', () => {
+    const onClick = vi.fn();
+    const onAction = vi.fn();
+    renderModern({ onClick, actions: [{ key: 'msg', label: 'Message', onClick: onAction }] });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Message' }));
+
+    expect(onAction).toHaveBeenCalledTimes(1);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('keeps a disabled action inert', () => {
+    const onAction = vi.fn();
+    renderModern({ actions: [{ key: 'msg', label: 'Message', disabled: true, onClick: onAction }] });
+    const action = screen.getByRole('button', { name: 'Message' });
+
+    fireEvent.click(action);
+
+    expect(action).toBeDisabled();
+    expect(action).toHaveAttribute('data-disabled', 'true');
+    expect(onAction).not.toHaveBeenCalled();
+  });
+});
+
 describe('ModernUserProfileCard — avatar resilience', () => {
   it('falls back to the initial when the avatar URL fails', () => {
     const { container } = renderModern({

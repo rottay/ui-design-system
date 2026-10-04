@@ -216,7 +216,7 @@ describe('user-profile-card -- data-part contract (cross-capability anatomy)', (
       expect(q(container, `[data-part="action-button"][data-variant="${variant}"]`)).toHaveLength(1);
     }
     expect(q(container, '[data-part="action-button"][data-disabled="true"]')).toHaveLength(1);
-    expect(q(container, '[data-part="action-button"][data-disabled="false"]')).toHaveLength(2);
+    expect(q(container, '[data-part="action-button"]:not([data-disabled="true"])')).toHaveLength(2);
   });
 
   it.each(ENGINES)('pins compact online/offline roots (%s)', async (engine) => {

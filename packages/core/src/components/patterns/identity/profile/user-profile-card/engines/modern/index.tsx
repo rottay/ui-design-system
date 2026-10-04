@@ -33,6 +33,7 @@
 
 import React from 'react';
 import type { UserProfileCardProps, UserProfile } from '../../contracts';
+import Button from '../../../../../../primitives/inputs/button/engines/modern';
 import { panelCardStyle, pillBadgeSmStyle, spinnerStyle } from '../../../../../foundation/engine-styles/modern';
 import { useOptionalFormatter, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
@@ -231,18 +232,17 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
         {actions.length > 0 && (
           <div data-part="actions">
             {actions.map(action => (
-              <button
+              <Button
                 key={action.key}
                 className="ds-user-profile-card__action-button"
                 data-part="action-button"
-                data-variant={action.variant ?? 'default'}
-                data-disabled={!!action.disabled}
+                variant={action.variant ?? 'default'}
                 disabled={action.disabled}
                 onClick={(e) => { e.stopPropagation(); action.onClick(); }}
+                prefix={action.icon ? <span data-part="action-icon">{action.icon}</span> : undefined}
               >
-                {action.icon && <span data-part="action-icon">{action.icon}</span>}
                 {action.label}
-              </button>
+              </Button>
             ))}
           </div>
         )}

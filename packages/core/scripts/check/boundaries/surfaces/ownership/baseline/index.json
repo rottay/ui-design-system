@@ -855,18 +855,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "252131da950eb2986855": {
-      "path": "src/components/patterns/communication/live-feed/engines/modern/index.tsx",
-      "category": "utility-class",
-      "rule": "presentation-utility",
-      "count": 1
-    },
-    "7bf6ee6075f49e732567": {
-      "path": "src/components/patterns/communication/live-feed/engines/modern/index.tsx",
-      "category": "utility-class",
-      "rule": "presentation-utility",
-      "count": 1
-    },
     "8ce00961d25426d71e80": {
       "path": "src/components/patterns/communication/live-feed/engines/rustic/index.tsx",
       "category": "native-interactive",
@@ -4035,12 +4023,6 @@
       "rule": "stable-spacing",
       "count": 2
     },
-    "5f48bffaa89c538a887f": {
-      "path": "src/components/patterns/forms/form-builder/engines/modern/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-paint",
-      "count": 1
-    },
     "94ee2f0f4029e41f819e": {
       "path": "src/components/patterns/forms/form-builder/engines/rustic/index.tsx",
       "category": "native-interactive",
@@ -4711,12 +4693,6 @@
       "path": "src/components/patterns/identity/profile/user-profile-card/engines/classic/index.tsx",
       "category": "shared-chrome-literal",
       "rule": "stable-typography",
-      "count": 1
-    },
-    "87ef25fa70f5a66a0e4c": {
-      "path": "src/components/patterns/identity/profile/user-profile-card/engines/modern/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-button",
       "count": 1
     },
     "9b7e1640e90c202bf856": {

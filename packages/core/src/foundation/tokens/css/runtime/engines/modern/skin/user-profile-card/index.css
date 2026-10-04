@@ -303,6 +303,7 @@
   align-items: center;
   gap: var(--ds-spacing-1, 4px);
   block-size: 32px;
+  min-block-size: revert-layer;
   padding-block: 0;
   padding-inline: var(--ds-spacing-3, 12px);
   border-radius: var(--ds-radius-md);
@@ -322,6 +323,42 @@
   block-size: 36px;
   padding-inline: var(--ds-spacing-4, 16px);
   font-size: var(--ds-font-size-sm, 14px);
+}
+/* The action is a Button for behaviour only: its skin is withdrawn to the
+   layers below and its wrappers are unboxed, so this module stays the painter. */
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button[data-part='action-button'] {
+  --ds-button-hover-transform: none;
+  --ds-button-hover-filter: none;
+  --ds-button-active-transform: none;
+  --ds-button-active-filter: none;
+  position: revert-layer;
+  isolation: revert-layer;
+  justify-content: revert-layer;
+  min-inline-size: revert-layer;
+  max-inline-size: revert-layer;
+  appearance: revert-layer;
+  overflow: revert-layer;
+  user-select: revert-layer;
+  touch-action: revert-layer;
+  -webkit-tap-highlight-color: revert-layer;
+  font-family: revert-layer;
+  font-weight: revert-layer;
+  line-height: revert-layer;
+  letter-spacing: revert-layer;
+  text-align: revert-layer;
+  text-decoration: revert-layer;
+  text-transform: revert-layer;
+  white-space: revert-layer;
+  box-shadow: revert-layer;
+  outline-offset: revert-layer;
+}
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button[data-part='action-button']::before {
+  content: revert-layer;
+}
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button :is([data-part='content'], [data-part='prefix'], [data-part='label']) {
+  display: contents;
+  font-variant-numeric: revert-layer;
+  translate: revert-layer;
 }
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;

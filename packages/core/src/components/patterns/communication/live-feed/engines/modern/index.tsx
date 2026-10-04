@@ -11,14 +11,13 @@
  * `data-skeleton`) and every visual decision lives in the modern skin
  * (`runtime/engines/modern/skin/live-feed/index.css`).
  *
- * PINS (tests untouched, contract minimal intact):
+ * PINS:
  * - `LiveFeed.pulse.test.tsx` queries the list rows as
- *   `.flex.flex-col.gap-2 > div`, so the list keeps those Tailwind layout
- *   utilities; it also requires `ds-pulse-changed` (single-flash,
+ *   `[data-part='list'] > div`; it requires `ds-pulse-changed` (single-flash,
  *   reduced-motion-guarded in foundation/animations/transitions/index.css) on
  *   `isNew` rows and an EMPTY className on the rest.
- * - `PatternLiveFeed.engine-advanced.test.tsx` requires an `.animate-pulse`
- *   node inside the modern loading skeleton, the refresh control as the
+ * - `PatternLiveFeed.engine-advanced.test.tsx` requires the class-free
+ *   `[data-part='skeleton-list']` loading anatomy, the refresh control as the
  *   FIRST button in DOM order, and the banner reachable by
  *   `getByRole('button', { name: /new items/i })`.
  *
@@ -166,7 +165,7 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
       >
         <div data-part="body">
           {headerRow}
-          <div data-part="skeleton-list" className="animate-pulse">
+          <div data-part="skeleton-list">
             <div data-part="skeleton" data-skeleton="title" />
             {[1, 2, 3].map((i) => (
               <div key={i} data-part="skeleton" data-skeleton="row" />
@@ -238,12 +237,9 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             : null}
           {/* Stays mounted while empty: a live region created already-populated
               is not announced, so it must exist before the first items land. */}
-          {/* The Tailwind layout classes on the list are PINNED by
-              LiveFeed.pulse.test.tsx (`.flex.flex-col.gap-2 > div` row
-              queries) — they stay as layout utilities until the test is
-              re-pointed at `data-part='list'`. The list is a polite live
-              region: arriving items are announced to assistive tech. */}
-          <div data-part="list" className="flex flex-col gap-2" role="log" aria-live="polite">
+          {/* The list is a polite live region: arriving items are announced
+              to assistive tech. */}
+          <div data-part="list" role="log" aria-live="polite">
             {/* ds-pulse-changed (foundation/animations/transitions/index.css) flashes
                 ONCE on insertion to signal a freshly-arrived item. Each item
                 has a stable key, so the flash plays when its DOM node is first

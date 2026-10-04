@@ -1,4 +1,6 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -22,6 +24,24 @@ const ENGINE_COMPONENTS = [
   ['modern', ModernLiveFeed<ActivityItem>],
   ['rustic', RusticLiveFeed<ActivityItem>],
 ] as const;
+
+const SKIN = readFileSync(
+  join(
+    __dirname,
+    '../../../../../foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css',
+  ),
+  'utf8',
+).replace(/\/\*[\s\S]*?\*\//g, '');
+
+const REDUCED_MOTION = SKIN.slice(SKIN.indexOf('@media (prefers-reduced-motion: reduce)'), SKIN.indexOf('@media (forced-colors: active)'));
+
+function skinDeclarations(css: string, selector: string): string[] {
+  return [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .filter((match) => match[1].split(',').some((part) => part.trim().replace(/\s+/g, ' ') === selector))
+    .flatMap((match) => match[2].split(';'))
+    .map((declaration) => declaration.trim().replace(/\s+/g, ' '))
+    .filter(Boolean);
+}
 
 function buildProps(overrides: Partial<LiveFeedProps<ActivityItem>> = {}): LiveFeedProps<ActivityItem> {
   return {
@@ -47,14 +67,26 @@ describe('PatternLiveFeed advanced engine coverage', () => {
       if (engine === 'classic') {
         expect(container.querySelector('.ant-skeleton')).toBeTruthy();
       } else if (engine === 'modern') {
-        expect(container.querySelector('.animate-pulse')).toBeTruthy();
+        const skeletonList = container.querySelector('[data-part="skeleton-list"]');
+        expect(skeletonList).toBeTruthy();
+        expect(skeletonList?.getAttribute('class')).toBeNull();
+        expect(skeletonList?.querySelectorAll('[data-part="skeleton"]')).toHaveLength(4);
+        expect(container.querySelector('.animate-pulse')).toBeNull();
+        expect(
+          skinDeclarations(SKIN.replace(REDUCED_MOTION, ''), ".ds-pattern-live-feed.ds-engine-modern [data-part='skeleton-list']")
+            .some((declaration) => /^animation: ds-live-feed-skeleton-pulse .* infinite alternate$/.test(declaration)),
+        ).toBe(true);
+        expect(SKIN).toContain('@keyframes ds-live-feed-skeleton-pulse');
+        expect(
+          skinDeclarations(REDUCED_MOTION, ".ds-pattern-live-feed.ds-engine-modern [data-part='skeleton-list']"),
+        ).toContain('animation: none');
       } else {
         // Rustic renders its loading skeleton as [data-part='skeleton'] nodes.
         // communication-pattern anatomy moved the rustic engine's inline `<style>` keyframes into
         // an unlayered skin, so the old `querySelector('style')` assertion (which
         // only ever proved the scaffolding tag existed, not that the skeleton
         // rendered) no longer holds — assert the actual skeleton element, matching
-        // the classic (.ant-skeleton) and modern (.animate-pulse) branches above.
+        // the classic (.ant-skeleton) and modern ([data-part="skeleton-list"]) branches above.
         expect(container.querySelector('[data-part="skeleton"]')).toBeTruthy();
       }
 
