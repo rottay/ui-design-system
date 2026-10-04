@@ -34,7 +34,8 @@
  * and itself is not a control passing, it is a control with nothing to read.
  */
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
@@ -58,6 +59,14 @@ import {
   STATES_WIDTH_ONLY_DEFECT,
   STATES_WIDTH_ONLY_MOVERS,
   STATES_WIDTH_PROPERTIES,
+  STATES_RING_GEOMETRY_PROPERTIES,
+  STATES_WIDTH_CLASS_PROPERTIES,
+  GATE_REFUSAL_HEAD,
+  conclude,
+  gateRefusal,
+  thresholdSpellingRefusal,
+  isWidthOnlyMove,
+  widthOnlyReading,
   STATES_NON_MOVER_NOTES,
   nonMoverNoteDrift,
   PSEUDO_ONLY_CREDITS,
@@ -139,7 +148,7 @@ import {
   unobservableDrift,
 } from '../index.mjs';
 import {
-  AXIS_IDS, AXES, FLOOR_PATH, axisControls, axisPopulations, axisUnobservable, cssRules, familyAxisDeclarations, focusSignatureProof, groupControls, skinFamilies,
+  AXIS_IDS, AXES, FLOOR_PATH, axisControls, axisPopulations, axisUnobservable, cssRules, familyAxisDeclarations, focusSignatureProof, groupControls, skinFamilies, stripCssComments,
   KERNEL_STATE_TOKENS as POPULATION_KERNEL_STATE_TOKENS, STATE_STAMP_ATTRIBUTES as POPULATION_STAMP_ATTRIBUTES,
 } from '../../population/index.mjs';
 import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
@@ -1009,7 +1018,7 @@ describe('axis-difference drills — every verdict is reachable', () => {
       assert.equal(candidate.defect, STATES_WIDTH_ONLY_DEFECT.defect, candidate.family);
       assert.equal(candidate.defectStatus, STATES_WIDTH_ONLY_DEFECT.defectStatus, candidate.family);
       assert.equal(candidate.receiver, STATES_WIDTH_ONLY_DEFECT.receiver, candidate.family);
-      assert.ok(candidate.properties.length > 0 && candidate.properties.every((name) => STATES_WIDTH_PROPERTIES.includes(name)), candidate.family);
+      assert.ok(isWidthOnlyMove(candidate.properties), candidate.family);
       assert.ok(states.includes(candidate.family), `${candidate.family}: a named states mover declares the axis`);
       for (const pin of [UNSETTLED_FAMILIES, UNMOUNTABLE_FAMILIES, probe.CHROMATIC_ONLY_STATES, Object.keys(UNOBSERVABLE_FAMILIES.states)]) {
         assert.ok(!pin.includes(candidate.family), `${candidate.family}: a mover is in no non-mover pin`);
@@ -1130,6 +1139,149 @@ describe('axis-difference drills — every verdict is reachable', () => {
     // No width-only mover, no finding: the empty pin is not itself a failure.
     assert.ok(!evaluate(result([statesCell()], measuredStates)).some((line) => /STATES_WIDTH_ONLY_MOVERS/u.test(line)));
     assert.deepEqual(widthOnlyDrift(result([cell({ scenario: 'states', axis: 'states' })], measuredStates), RING), []);
+  });
+
+  /**
+   * THE RING'S GEOMETRY IS A WIDTH IN DISGUISE (audit W20-MARGIN 1(e); owner
+   * ruling R36.6). The synthetic family `overlay` is the ledger in miniature:
+   * a host whose outline follows the ring, and a focus overlay whose corner is
+   * `calc(<corner> - <offset> - <width>)`.
+   */
+  const stateReading = (stamped, native = stamped) => ({
+    states: { 'focus-visible': { overlay: stamped } }, native: { 'focus-visible': { overlay: native } },
+  });
+  const corners = (value) => Object.fromEntries(STATES_RING_GEOMETRY_PROPERTIES.map((name) => [name, value]));
+  const armA = { ...corners('4.6px'), 'outline-width': '2px', 'outline-offset': '2px', 'outline-style': 'solid', opacity: '1', 'box-shadow': 'rgb(1, 2, 3) 0px 0px 0px 2px, rgb(4, 5, 6) 0px 0px 0px 4px' };
+  const widthOnlyRun = (entry, over = {}) => result(
+    [statesCell({ movedIds: ['overlay', 'glow'], widthOnly: entry === null ? [] : [entry] })],
+    { effectiveFamilies: { states: ['overlay', 'glow'] }, ...over },
+  );
+
+  it('the class is the ring\'s width, its offset and the four corners derived from them, and nothing of the vocabulary besides', () => {
+    assert.deepEqual([...STATES_WIDTH_PROPERTIES], ['outline-width', 'outline-offset']);
+    assert.deepEqual([...STATES_RING_GEOMETRY_PROPERTIES],
+      ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius']);
+    assert.deepEqual([...STATES_RING_GEOMETRY_PROPERTIES], [...AXES.shape.computed]);
+    assert.deepEqual([...STATES_WIDTH_CLASS_PROPERTIES], [...STATES_WIDTH_PROPERTIES, ...STATES_RING_GEOMETRY_PROPERTIES]);
+    // Every other property the six axes read takes a family OUT of the class on its own.
+    const outside = allProperties().filter((name) => !STATES_WIDTH_CLASS_PROPERTIES.includes(name));
+    assert.deepEqual(outside, ['font-family', 'font-size', 'font-weight', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+      'row-gap', 'column-gap', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left', 'box-shadow', 'border-top-width',
+      'border-right-width', 'border-bottom-width', 'border-left-width', 'transform', 'opacity', 'outline-style', 'transition-duration',
+      'animation-duration']);
+    for (const name of outside) assert.equal(isWidthOnlyMove(['border-top-left-radius', name]), false, name);
+    assert.equal(isWidthOnlyMove([]), false, 'a family that does not move is no mover of any class');
+    for (const name of STATES_WIDTH_CLASS_PROPERTIES) assert.equal(isWidthOnlyMove([name]), true, name);
+  });
+
+  it('MUTANT: a family that moves on a ring-derived RADIUS ALONE is a width-only mover, refused on a full run unless named', () => {
+    const before = stateReading(armA);
+    const after = stateReading({ ...armA, ...corners('7.6px') });
+    // It IS a states mover by the axis's own reading -- that was the gap: credited, on a corner.
+    assert.equal(differsOnAxis('states', before, after, 'overlay'), 'border-top-left-radius');
+    const reading = widthOnlyReading(before, after, 'overlay');
+    assert.deepEqual(reading, { family: 'overlay', properties: [...STATES_RING_GEOMETRY_PROPERTIES] });
+    const refused = evaluate(widthOnlyRun(reading));
+    assert.deepEqual(refused.filter((line) => line.startsWith('overlay:')), [
+      'overlay: moves on states through border-top-left-radius, border-top-right-radius, border-bottom-left-radius, border-bottom-right-radius '
+      + 'ALONE on bithire/light and is not named in STATES_WIDTH_ONLY_MOVERS; name it there with the measurement in this commit',
+    ]);
+    // A --families run measures a subset and refuses no unnamed mover; the reading is still published on the cell.
+    assert.deepEqual(evaluate(widthOnlyRun(reading, { familiesFiltered: true })).filter((line) => line.startsWith('overlay:')), []);
+    // Named, with exactly what it moves on, it holds -- and the pin is stale the day it moves on more.
+    const named = Object.freeze([Object.freeze({ family: 'overlay', properties: Object.freeze([...STATES_RING_GEOMETRY_PROPERTIES]) })]);
+    assert.deepEqual(widthOnlyDrift(widthOnlyRun(reading), named), []);
+    assert.equal(widthOnlyDrift(widthOnlyRun(null), named).length, 1);
+  });
+
+  it('MUTANT: the signature removed and the corner kept -- the auditor\'s third drill -- is refused: outline width + offset + radius is still a width', () => {
+    const before = stateReading(armA);
+    // The host's outline and the overlay's corner follow the ring; the shadow is a literal, so only its colour could differ.
+    const after = stateReading({
+      ...armA, ...corners('6.6px'), 'outline-width': '3px', 'outline-offset': '3px', 'box-shadow': 'rgb(9, 9, 9) 0px 0px 0px 2px, rgb(8, 8, 8) 0px 0px 0px 4px',
+    });
+    const reading = widthOnlyReading(before, after, 'overlay');
+    assert.deepEqual(reading, { family: 'overlay', properties: ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'outline-width', 'outline-offset'] });
+    assert.ok(evaluate(widthOnlyRun(reading)).some((line) => line.startsWith('overlay: moves on states through border-top-left-radius')
+      && line.includes('outline-width, outline-offset ALONE on bithire/light and is not named in STATES_WIDTH_ONLY_MOVERS')));
+    // One half is enough to be a mover and both halves are read: a corner on the forced half alone is the same class.
+    const nativeOnly = widthOnlyReading(stateReading(armA, armA), stateReading(armA, { ...armA, ...corners('6.6px') }), 'overlay');
+    assert.deepEqual(nativeOnly?.properties, [...STATES_RING_GEOMETRY_PROPERTIES]);
+  });
+
+  it('a family that moves on the radius AND the signature\'s box-shadow is credited, in no class -- and so is one that moves on any functional state', () => {
+    const before = stateReading(armA);
+    const signature = stateReading({ ...armA, ...corners('7.6px'), 'box-shadow': 'rgb(1, 2, 3) 0px 0px 0px 2px, rgb(4, 5, 6) 0px 0px 0px 5px' });
+    assert.equal(differsOnAxis('states', before, signature, 'overlay'), 'border-top-left-radius', 'the first property is still the corner, as published');
+    assert.deepEqual(statesDifferences(before, signature, 'overlay'), [...STATES_RING_GEOMETRY_PROPERTIES, 'box-shadow']);
+    assert.equal(widthOnlyReading(before, signature, 'overlay'), null);
+    assert.deepEqual(evaluate(widthOnlyRun(widthOnlyReading(before, signature, 'overlay'))).filter((line) => line.startsWith('overlay:')), []);
+    // The ledger as committed: host outline + overlay corner + overlay signature.
+    const ledger = stateReading({ ...armA, ...corners('7.6px'), 'outline-width': '3px', 'outline-offset': '3px', 'box-shadow': 'rgb(1, 2, 3) 0px 0px 0px 3px, rgb(4, 5, 6) 0px 0px 0px 6px' });
+    assert.equal(widthOnlyReading(before, ledger, 'overlay'), null);
+    for (const functional of [{ opacity: '0.5' }, { 'outline-style': 'dashed' }, { transform: 'matrix(0.97, 0, 0, 0.97, 0, 0)' }]) {
+      assert.equal(widthOnlyReading(before, stateReading({ ...armA, ...corners('7.6px'), ...functional }), 'overlay'), null, Object.keys(functional)[0]);
+    }
+    // A shadow that differs by COLOUR alone is no geometry: it credits nothing and excuses nothing.
+    const tinted = stateReading({ ...armA, ...corners('7.6px'), 'box-shadow': 'rgb(9, 9, 9) 0px 0px 0px 2px, rgb(8, 8, 8) 0px 0px 0px 4px' });
+    assert.deepEqual(widthOnlyReading(before, tinted, 'overlay')?.properties, [...STATES_RING_GEOMETRY_PROPERTIES]);
+    // And the two readings agree: a family not moving is in neither.
+    assert.equal(widthOnlyReading(before, before, 'overlay'), null);
+    assert.equal(differsOnAxis('states', before, before, 'overlay'), null);
+  });
+
+  it('the run reads the class through that one function, on the readings the credit was split on', () => {
+    const cli = readFileSync(join(HERE, '../index.mjs'), 'utf8');
+    assert.match(cli, /if \(property && widthOnly !== null\) \{\n\s+const reading = widthOnlyReading\(splitOn\[0\], splitOn\[1\], family\);\n\s+if \(reading !== null\) widthOnly\.push\(reading\);\n\s+\}/u);
+    assert.equal(cli.match(/STATES_WIDTH_PROPERTIES\.includes/gu), null, 'no second, narrower door decides the class');
+  });
+
+  it('operational-ledger as committed rests on the signature: every overlay whose corner follows the ring paints `--ds-focus-ring`, and is read for it', () => {
+    const RING = /--ds-(?:[a-z0-9]+-)*focus-ring-(?:width|offset)\b/u;
+    const SIGNATURE = /^box-shadow\s*:\s*var\(--ds-(?:[a-z0-9]+-)*focus-ring\b(?!-)/u;
+    const parts = probe.familyAxisParts(undefined, null, null, { nativePseudos: true });
+    const families = skinFamilies(ROOT);
+    const carriers = [];
+    for (const [family, files] of families) {
+      for (const file of files) {
+        for (const [, prelude, body] of stripCssComments(readFileSync(file, 'utf8')).matchAll(/([^{}]+)\{([^{}]*)\}/gu)) {
+          const declarations = body.split(';').map((entry) => entry.trim().replace(/\s+/gu, ' ')).filter(Boolean);
+          if (!declarations.some((entry) => /^border[a-z-]*radius\s*:/u.test(entry) && RING.test(entry))) continue;
+          carriers.push({ family, selector: prelude.trim().replace(/\s+/gu, ' '), signature: declarations.some((entry) => SIGNATURE.test(entry)) });
+        }
+      }
+    }
+    const byFamily = [...new Set(carriers.map((entry) => entry.family))].sort();
+    assert.deepEqual(byFamily, ['anchor', 'app-shell', 'bottom-tab-bar', 'collection-workspace-render-dispatch', 'column-menu', 'menu',
+      'operational-ledger', 'shift-matrix', 'table', 'tabs', 'tree', 'widget-board'], 'the families whose corner follows the ring, by name');
+    for (const family of byFamily) {
+      // The corner is never the family's only ring paint: some rule of the same family writes the signature on an overlay.
+      assert.ok(carriers.some((entry) => entry.family === family && entry.signature), `${family}: a ring-derived corner with no signature beside it`);
+      // And the instrument reads that overlay's shadow wherever it reads its corner (a read is per axis, so this is not implied).
+      const reads = parts.get(family)?.pseudoReads?.reads ?? [];
+      // Keyed by the element the box hangs on -- the host's last compound -- because a variant's corner override
+      // (`[data-variant='pills'] tab-button::before`) is the same box the base rule's shadow is read on.
+      const subject = (host) => {
+        let depth = 0;
+        let start = 0;
+        [...host].forEach((character, index) => {
+          if (character === '(' || character === '[') depth += 1;
+          else if (character === ')' || character === ']') depth -= 1;
+          else if (depth === 0 && /[\s>+~]/u.test(character)) start = index + 1;
+        });
+        return host.slice(start);
+      };
+      const key = (read) => `${subject(read.host)}\u0000${read.pseudo}`;
+      const shadowRead = new Set(reads.filter((read) => read.axis === 'depth' || read.property === 'box-shadow').map(key));
+      const focusCorner = reads.filter((read) => read.axis === 'shape' && /focus-visible/u.test(read.host));
+      assert.ok(focusCorner.length > 0, `${family}: no corner read on a focus overlay`);
+      for (const read of focusCorner) assert.ok(shadowRead.has(key(read)), `${family}: ${read.host}${read.pseudo} is read for its corner and not for its shadow`);
+    }
+    const ledger = carriers.filter((entry) => entry.family === 'operational-ledger');
+    assert.deepEqual(ledger.map((entry) => entry.signature), [true]);
+    assert.match(ledger[0].selector, /\[data-part='table-region'\]:is\(\[data-state~='focus-visible'\], :focus-visible\):not\(:focus-within:not\(:focus\)\)::before$/u);
+    assert.ok(!STATES_WIDTH_ONLY_MOVERS.some((entry) => entry.family === 'operational-ledger'));
+    assert.ok(!Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'operational-ledger'));
   });
 
   it('data-table is pinned pseudo-only on states, on the overlay that paints the tenant focus signature', () => {
@@ -1284,10 +1436,158 @@ describe('axis-difference drills — every verdict is reachable', () => {
 
   it('the CLI exits on the same verdict: the threshold reaches evaluate, a failure exits 1, and the passing line is verdictLine', () => {
     const cli = readFileSync(join(HERE, '../index.mjs'), 'utf8');
-    assert.match(cli, /const failures = evaluate\(result, \{\n    threshold: thresholdArgument === undefined \? null : Number\(thresholdArgument\),\n  \}\);\n  if \(failures\.length > 0\) \{\n    for \(const failure of failures\) console\.error\(`axis-difference FAIL — \$\{failure\}`\);\n    process\.exit\(1\);\n  \}/u);
+    assert.match(cli, /const threshold = thresholdArgument === undefined \? null : Number\(thresholdArgument\);/u);
+    assert.match(cli, /const conclusion = conclude\(result, \{ threshold \}\);\n  if \(conclusion\.exitCode !== 0\) \{\n    for \(const line of conclusion\.errors\) console\.error\(line\);\n    process\.exit\(conclusion\.exitCode\);\n  \}/u);
+    assert.match(cli, /  const failures = evaluate\(result, \{ threshold \}\);\n  if \(failures\.length > 0\) \{\n    return \{ exitCode: 1, errors: failures\.map\(\(failure\) => `axis-difference FAIL — \$\{failure\}`\), verdict: null \};\n  \}\n  return \{ exitCode: 0, errors: \[\], verdict: verdictLine\(result, \{ threshold \}\) \};/u);
     assert.match(cli, /    failures\.push\(\.\.\.declaredBasisFailures\(result, threshold\)\);\n    if \(result\.familiesFiltered !== true && result\.verticals\?\.length > 0 && result\.themes\?\.length > 0\) \{\n      const negative = negativeTest\(result, negativeControlsOf\(SCENARIOS\)\);\n      if \(negative\.status !== 'green'\) \{/u);
     assert.ok(!/every axis at or above \$\{thresholdArgument\} %`/u.test(cli), 'the CLI must print the verdict through verdictLine');
-    assert.match(cli, /console\.log\(verdictLine\(result, \{ threshold: thresholdArgument === undefined \? null : Number\(thresholdArgument\) \}\)\);\n\}\n$/u);
+    assert.match(cli, /console\.log\(conclusion\.verdict\);\n\}\n$/u);
+    assert.equal(cli.match(/console\.log\([^\n]*verdict/gu).length, 1, 'one door prints a verdict, and it is the conclusion\'s');
+  });
+
+  /**
+   * FAIL CLOSED ON AN UNPROVEN BUILD (audit W19-R33 D2; owner ruling R33).
+   * The provenance is injected exactly as the publication drills inject it:
+   * the three facts as a value, never a checkout, never a browser.
+   */
+  const PROVEN = Object.freeze({ dirty: [], dist: { ok: true, failures: [] }, catalog: { run: 'abc', head: 'abc' } });
+  const STALE = Object.freeze({ ...PROVEN, dist: { ok: false, failures: ['dist is STALE: build inputs changed since the stamp'] } });
+  const atTheBar = () => fleet((axis) => positive(axis, 90, 100), {});
+  const counting = (facts) => {
+    const reader = (run) => {
+      reader.calls.push(run.revision);
+      return facts;
+    };
+    reader.calls = [];
+    return reader;
+  };
+
+  it('DRILL (D2): stale dist + threshold is REFUSED -- exit 1, one named line, no verdict -- on a run that is at the bar', () => {
+    const run = atTheBar();
+    assert.deepEqual(evaluate(run, { threshold: 80 }), [], 'the reading itself would pass');
+    const refused = conclude(run, { threshold: 80, provenance: counting(STALE) });
+    assert.equal(refused.exitCode, 1);
+    assert.equal(refused.verdict, null, 'a refusal is never printed as an acceptance');
+    assert.deepEqual(refused.errors, [
+      'axis-difference REFUSED — --threshold asks for a verdict and dist is not built from the sources on disk '
+      + '(dist is STALE: build inputs changed since the stamp); decisions compile through dist, so the arms would be an older compiler\'s',
+    ]);
+    assert.ok(refused.errors[0].startsWith(`${GATE_REFUSAL_HEAD} — `));
+    assert.ok(!refused.errors.some((line) => /axis-difference OK/u.test(line)));
+  });
+
+  it('DRILL (D2): a catalog that is not the commit\'s, or a fact that could not be established, refuses the same way', () => {
+    const run = atTheBar();
+    const reason = (facts) => conclude(run, { threshold: 80, provenance: () => facts });
+    for (const [facts, pattern] of [
+      [{ ...PROVEN, catalog: { run: 'abc', head: 'def' } }, /REFUSED — --threshold asks for a verdict and the run read catalog abc and the commit carries def; the populations are not the commit's$/u],
+      [{ ...PROVEN, catalog: { run: 'abc', head: null } }, /REFUSED — .*the catalog revision of the commit could not be read/u],
+      [{ ...PROVEN, catalog: null }, /REFUSED — .*the catalog revision of the commit could not be read/u],
+      [{ ...PROVEN, dist: null }, /REFUSED — .*the dist build stamp could not be checked/u],
+      [{}, /REFUSED — .*the dist build stamp could not be checked/u],
+    ]) {
+      const refused = reason(facts);
+      assert.deepEqual([refused.exitCode, refused.verdict, refused.errors.length], [1, null, 1], JSON.stringify(facts));
+      assert.match(refused.errors[0], pattern);
+    }
+  });
+
+  it('DRILL (D2): fresh + threshold gives the verdict as before, and a short axis still FAILS (never refuses) on a proven build', () => {
+    const run = atTheBar();
+    const reader = counting(PROVEN);
+    assert.deepEqual(conclude(run, { threshold: 80, provenance: reader }), {
+      exitCode: 0, errors: [], verdict: probe.verdictLine(run, { threshold: 80 }),
+    });
+    assert.equal(reader.calls.length, 1);
+    const short = conclude(depthShort(), { threshold: 80, provenance: () => PROVEN });
+    assert.equal(short.exitCode, 1);
+    assert.equal(short.verdict, null);
+    assert.deepEqual(short.errors, evaluate(depthShort(), { threshold: 80 }).map((line) => `axis-difference FAIL — ${line}`));
+    assert.ok(short.errors.every((line) => !line.startsWith(GATE_REFUSAL_HEAD)));
+    // The working tree is not the gate's fact: a gate is run on the tree it gates.
+    assert.equal(conclude(run, { threshold: 80, provenance: () => ({ ...PROVEN, dirty: ['packages/core/src/a.css'] }) }).exitCode, 0);
+    assert.equal(conclude(run, { threshold: 80, provenance: () => ({ ...PROVEN, dirty: null }) }).exitCode, 0);
+  });
+
+  it('DRILL (D2): stale + NO threshold ends as before -- the provenance is never read, --no-write or not', () => {
+    const run = atTheBar();
+    const reader = counting(STALE);
+    assert.deepEqual(conclude(run, { provenance: reader }), { exitCode: 0, errors: [], verdict: probe.verdictLine(run) });
+    assert.deepEqual(conclude(run, { threshold: null, provenance: reader }), { exitCode: 0, errors: [], verdict: probe.verdictLine(run) });
+    assert.equal(gateRefusal(run, { provenance: reader }), null);
+    assert.deepEqual(reader.calls, [], 'no threshold, no question asked of the checkout');
+    // The write refusal is a publication fact and stays one: it neither refuses the run nor excuses it.
+    assert.match(publicationRefusal({ argv: ['node', 'index.mjs', '--threshold=80', NO_WRITE_FLAG] }), /--no-write was passed/u);
+    assert.equal(conclude(run, { threshold: 80, provenance: counting(STALE) }).exitCode, 1);
+  });
+
+  it('DRILL (D2): the CLI asks before the browser opens and again on the finished run, through the one function', () => {
+    const cli = readFileSync(join(HERE, '../index.mjs'), 'utf8');
+    const early = cli.indexOf('const unproven = gateRefusal({ revision: catalogRevision() }, { threshold });');
+    const launch = cli.indexOf('const result = await run({', early);
+    assert.ok(early > 0 && launch > early, 'the refusal is decided before the run is taken');
+    assert.match(cli.slice(early, launch), /if \(unproven !== null\) \{\n    console\.error\(`\$\{GATE_REFUSAL_HEAD\} — \$\{THRESHOLD_FLAG\} asks for a verdict and \$\{unproven\}`\);\n    console\.error\('  nothing was measured; no verdict exists for this run'\);\n    process\.exit\(1\);\n  \}/u);
+    // Injected: the catalog judged is the one handed in, and the refusal is the indicator's own.
+    const seen = counting({ ...PROVEN, catalog: { run: 'abc', head: 'def' } });
+    assert.match(gateRefusal({ revision: { digest: 'abc' } }, { threshold: 80, provenance: seen }), /^the run read catalog abc and the commit carries def/u);
+    assert.deepEqual(seen.calls, [{ digest: 'abc' }]);
+    // On this checkout, through the real reader: a boolean either way, never a throw.
+    const real = gateRefusal({ revision: probe.catalogRevision?.() ?? { digest: null } }, { threshold: 80 });
+    assert.ok(real === null || typeof real === 'string');
+  });
+
+  it('DRILL (D2): the reader the CLI is left with is the checkout\'s own, and an unbuilt tree is refused through it', () => {
+    const cli = readFileSync(join(HERE, '../index.mjs'), 'utf8');
+    // The CLI passes no reader, so the default IS the gate: a default that proves everything would refuse nothing.
+    assert.match(cli, /export function gateRefusal\(\{ revision \}, \{ threshold = null, provenance = readPublicationProvenance \} = \{\}\) \{/u);
+    assert.match(cli, /export function conclude\(result, \{ threshold = null, provenance = readPublicationProvenance \} = \{\}\) \{/u);
+    const unbuilt = mkdtempSync(join(tmpdir(), 'axis-gate-unbuilt-'));
+    try {
+      const reader = (run) => probe.readPublicationProvenance(run, { root: unbuilt });
+      const facts = reader({ revision: { digest: 'abc', source: join(unbuilt, 'catalog.ts') } });
+      assert.equal(facts.dist.ok, false, 'no build stamp is no proof');
+      assert.equal(facts.catalog.head, null, 'no commit, no catalog of the commit: never the run\'s own digest handed back');
+      assert.match(gateRefusal({ revision: { digest: 'abc' } }, { threshold: 80, provenance: reader }),
+        /^dist is not built from the sources on disk \(build stamp missing at dist\/build-stamp\.json/u);
+      const refused = conclude(atTheBar(), { threshold: 80, provenance: reader });
+      assert.deepEqual([refused.exitCode, refused.verdict], [1, null]);
+    } finally {
+      rmSync(unbuilt, { recursive: true, force: true });
+    }
+  });
+
+  it('DRILL (C3): a threshold that is spelled and not read is REFUSED by name, before anything is measured', () => {
+    for (const [args, named] of [
+      [['--threshold'], '--threshold'],
+      [['--threshold', '80'], '--threshold'],
+      [['--no-write', '--threshold', '80'], '--threshold'],
+      [['--threshold='], '--threshold='],
+      [['--threshold= '], '--threshold= '],
+      [['--threshold=abc'], '--threshold=abc'],
+      [['--threshold=80%'], '--threshold=80%'],
+      [['--threshold=Infinity'], '--threshold=Infinity'],
+      [['--threshold80'], '--threshold80'],
+      [['--thresholds=80'], '--thresholds=80'],
+      // One good spelling does not excuse a bad one beside it.
+      [['--threshold=80', '--threshold'], '--threshold'],
+    ]) {
+      assert.equal(thresholdSpellingRefusal(args), `${named} is not --threshold=<number>; no threshold was read`, args.join(' '));
+    }
+    for (const args of [[], ['--no-write'], ['--threshold=80'], ['--threshold=80', '--no-write'], ['--threshold=0'], ['--threshold=79.5'], ['--families=button', '--json']]) {
+      assert.equal(thresholdSpellingRefusal(args), null, args.join(' '));
+    }
+    assert.equal(thresholdSpellingRefusal(), null);
+    // `--threshold=abc` failed closed before this law too, late and under another name: NaN is a threshold, and nothing is at or above it.
+    const nan = conclude(atTheBar(), { threshold: Number('abc'), provenance: () => PROVEN });
+    assert.deepEqual([nan.exitCode, nan.verdict], [1, null]);
+    assert.ok(nan.errors.length > 0 && nan.errors.every((line) => line.startsWith('axis-difference FAIL — ')));
+    assert.equal(conclude(atTheBar(), { threshold: Number('abc'), provenance: () => STALE }).errors[0].startsWith(GATE_REFUSAL_HEAD), true);
+    // The CLI asks first: before the provenance, before the browser, and it exits 1 on the named line.
+    const cli = readFileSync(join(HERE, '../index.mjs'), 'utf8');
+    const asked = cli.indexOf('const misspelt = thresholdSpellingRefusal(process.argv.slice(2));');
+    const proven = cli.indexOf('const unproven = gateRefusal({ revision: catalogRevision() }, { threshold });');
+    assert.ok(asked > 0 && proven > asked && cli.indexOf('const result = await run({', proven) > proven);
+    assert.match(cli.slice(asked, proven), /if \(misspelt !== null\) \{\n    console\.error\(`\$\{GATE_REFUSAL_HEAD\} — \$\{misspelt\}`\);\n    console\.error\('  nothing was measured; no verdict exists for this run'\);\n    process\.exit\(1\);\n  \}/u);
   });
 
   it('MUTANT: an axis under the threshold is named, and only when a threshold is asked for', () => {

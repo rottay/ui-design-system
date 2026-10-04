@@ -156,7 +156,10 @@
  *   node scripts/check/theme/axis-difference/index.mjs                  measure and publish indicator 7
  *   node scripts/check/theme/axis-difference/index.mjs --json           the full measurement
  *   node scripts/check/theme/axis-difference/index.mjs --vertical=evnto one vertical
- *   node scripts/check/theme/axis-difference/index.mjs --threshold=80   fail below 80 % per axis, on the declared basis
+ *   node scripts/check/theme/axis-difference/index.mjs --threshold=80   fail below 80 % per axis, on the declared basis;
+ *                                                                       REFUSED (exit 1, no verdict) unless dist is fresh and the
+ *                                                                       catalog is the commit's -- `--no-write` does not excuse it;
+ *                                                                       any other spelling of the flag is refused, never ignored
  *   node scripts/check/theme/axis-difference/index.mjs --families=button,card
  *   node scripts/check/theme/axis-difference/index.mjs --no-part-mounts   the pre-lot reading
  *   node scripts/check/theme/axis-difference/index.mjs --collapsed-roots  the pre-repair root
@@ -215,6 +218,7 @@ import {
   buildIndicator,
   chromaticStatesReading,
   axisReadings,
+  gateProvenanceRefusal,
   indicatorRefusal,
   provenanceRefusal,
   negativeControlsOf,
@@ -5794,9 +5798,70 @@ export const UNSETTLED_FAMILIES = Object.freeze([]);
 export const STATES_WIDTH_PROPERTIES = Object.freeze(['outline-width', 'outline-offset']);
 
 /**
+ * THE RING'S GEOMETRY, DERIVED: the properties that move under a state only
+ * because the ring's width or offset moved, and so are that width in disguise.
+ *
+ * They are the four computed corner longhands, and the reason is the reading
+ * itself, not a list of skins. The class is decided on the STATE readings of
+ * the states positive pair (`statesDifferences`): one element, one state, arm
+ * against arm, and the pair moves the states group alone. Of the channels
+ * that group compiles, a corner can only be a function of the two lengths --
+ * `--ds-focus-ring-width` and `--ds-focus-ring-offset` -- which is what a
+ * concentric focus overlay writes
+ * (`border-radius: calc(<corner> - <offset> - <width>)`). Measured on
+ * operational-ledger (audit W20-MARGIN 1(e), 2026-10-04): with the signature
+ * `box-shadow` replaced by a literal and that corner kept, the family was
+ * still credited, on `border-top-left-radius`, and read as no width-only
+ * mover. A corner that follows the ring says the ring's geometry moved; it
+ * does not say the tenant signature is painted.
+ *
+ * An overlay's `inset` is the same disguise and is not listed because no axis
+ * reads it: a property outside the vocabulary credits nobody.
+ *
+ * NOT THE WHOLE DISGUISE, and the class does not claim to be. Three
+ * properties the vocabulary DOES read can follow the same two lengths and
+ * still take a family out of the class: a `box-shadow` whose spread is the
+ * ring's width under a literal or non-signature colour, a `padding` or
+ * `margin` that clears the ring, and a `border-*-width` set to it. The
+ * instrument reads a shadow's geometry, not which custom property wrote it,
+ * so it cannot tell the signature from such a shadow (audit W21-INSTRUMENT
+ * R1, 2026-10-04; receiver WO-EVI-02, focus-signature programme). Named
+ * there as candidates to read in a browser, none convicted: code-block,
+ * markdown-view, record, saved-views-menu, list-toolbar.
+ */
+export const STATES_RING_GEOMETRY_PROPERTIES = Object.freeze([...AXES.shape.computed]);
+
+/** Every property a width-only mover may move on: the ring's width, its offset, and the geometry derived from them. */
+export const STATES_WIDTH_CLASS_PROPERTIES = Object.freeze([...STATES_WIDTH_PROPERTIES, ...STATES_RING_GEOMETRY_PROPERTIES]);
+
+/**
+ * IS THIS A WIDTH-ONLY MOVE: the family differs under a state on something,
+ * and on nothing but the ring's width, its offset and the corners derived
+ * from them. One property of the vocabulary outside that class -- the
+ * signature's `box-shadow`, `outline-style`, `opacity`, `transform`, a keyline
+ * -- and the family moves on more than a width and is credited as before.
+ * Decided on the non-chromatic vocabulary the six axes read: a colour never
+ * credits a states mover here, so a colour does not excuse one either.
+ */
+export function isWidthOnlyMove(properties) {
+  return properties.length > 0 && properties.every((name) => STATES_WIDTH_CLASS_PROPERTIES.includes(name));
+}
+
+/**
+ * One family's width-only reading in one cell, off the readings its states
+ * credit was taken from: `{ family, properties }` when its move is a
+ * width-only move, `null` when it moves on more or does not move.
+ */
+export function widthOnlyReading(before, after, family) {
+  const properties = statesDifferences(before, after, family);
+  return isWidthOnlyMove(properties) ? { family, properties } : null;
+}
+
+/**
  * THE WIDTH-ONLY CLASS: the states movers whose only move is the width or
- * offset of a solid outline, pinned by name with the properties each moves on
- * and held to every states positive cell in both directions
+ * offset of a solid outline, or a corner that follows that width and offset
+ * (`STATES_WIDTH_CLASS_PROPERTIES`), pinned by name with the properties each
+ * moves on and held to every states positive cell in both directions
  * (`widthOnlyDrift`). They are counted, and being counted closes nothing: the
  * outline does not paint the tenant focus signature (`--ds-focus-ring`), and a
  * pair that keeps the width (ring -> underline) would drop each of them.
@@ -7610,10 +7675,8 @@ export async function run({
               }
               if (property) moved.push({ family, property });
               if (property && widthOnly !== null) {
-                const properties = statesDifferences(splitOn[0], splitOn[1], family);
-                if (properties.length > 0 && properties.every((name) => STATES_WIDTH_PROPERTIES.includes(name))) {
-                  widthOnly.push({ family, properties });
-                }
+                const reading = widthOnlyReading(splitOn[0], splitOn[1], family);
+                if (reading !== null) widthOnly.push(reading);
               }
               if (halves !== null) {
                 const split = statesHalves(splitOn[0], splitOn[1], family);
@@ -8464,6 +8527,68 @@ export function readPublicationProvenance(result, { root = CORE_ROOT } = {}) {
   };
 }
 
+/** The head of the one line a refused gate run prints; named so a reader and a drill find the same words. */
+export const GATE_REFUSAL_HEAD = 'axis-difference REFUSED';
+
+/**
+ * A THRESHOLD THAT IS SPELLED AND NOT READ is a verdict asked for and not
+ * given. The CLI reads `--threshold=<number>` and nothing else, so a bare
+ * `--threshold`, `--threshold 80` or `--threshold=` used to end as a run with
+ * no threshold at all: exit 0 on a line a script never reads. Every spelling
+ * that names the flag and does not carry a finite number is refused by name,
+ * before anything is measured. (`--threshold=abc` already failed closed --
+ * `NaN` is not `null`, and no percentage is at or above it -- but only after
+ * the whole measurement, as a fleet failure it is not.)
+ *
+ * @param {readonly string[]} args the arguments after the script path
+ * @returns {string | null}
+ */
+export function thresholdSpellingRefusal(args = []) {
+  const spelled = args.filter((entry) => entry.startsWith(THRESHOLD_FLAG));
+  const unread = spelled.find((entry) => {
+    if (!entry.startsWith(`${THRESHOLD_FLAG}=`)) return true;
+    const value = entry.slice(THRESHOLD_FLAG.length + 1);
+    return value.trim() === '' || !Number.isFinite(Number(value));
+  });
+  return unread === undefined ? null : `${unread} is not ${THRESHOLD_FLAG}=<number>; no threshold was read`;
+}
+
+/**
+ * WHAT A `--threshold` RUN MAY BE JUDGED ON, read before the browser is
+ * opened and again on the finished run (`conclude`): `null` when there is no
+ * threshold or both facts are proven, the reason otherwise. `provenance` is
+ * read lazily, so a run without a threshold never touches the checkout.
+ *
+ * `revision` is the catalog revision the reading is, or will be, taken at:
+ * the run's own once it exists, the population's before it does.
+ */
+export function gateRefusal({ revision }, { threshold = null, provenance = readPublicationProvenance } = {}) {
+  if (threshold === null) return null;
+  return gateProvenanceRefusal(provenance({ revision }), { threshold });
+}
+
+/**
+ * HOW A RUN ENDS: refused, failed or passed, and only a passed run carries a
+ * verdict line. A refusal is not a failure of the fleet and is never an
+ * acceptance: it exits non-zero with one named line and no verdict, because
+ * the reading it would judge cannot be tied to the build it was asked about
+ * (audit W19-R33 D2: under `--no-write` the stale-dist refusal was skipped and
+ * never reached the exit code).
+ *
+ * @returns {{ exitCode: 0 | 1, errors: string[], verdict: string | null }}
+ */
+export function conclude(result, { threshold = null, provenance = readPublicationProvenance } = {}) {
+  const refusal = gateRefusal(result, { threshold, provenance });
+  if (refusal !== null) {
+    return { exitCode: 1, errors: [`${GATE_REFUSAL_HEAD} — ${THRESHOLD_FLAG} asks for a verdict and ${refusal}`], verdict: null };
+  }
+  const failures = evaluate(result, { threshold });
+  if (failures.length > 0) {
+    return { exitCode: 1, errors: failures.map((failure) => `axis-difference FAIL — ${failure}`), verdict: null };
+  }
+  return { exitCode: 0, errors: [], verdict: verdictLine(result, { threshold }) };
+}
+
 /**
  * The verdict a passing run prints. The threshold is judged on the DECLARED
  * basis the indicator's status reads, so no passing line exists while an axis
@@ -8498,6 +8623,21 @@ if (isMain) {
   const argument = (name) =>
     process.argv.find((entry) => entry.startsWith(`--${name}=`))?.slice(`--${name}=`.length);
   const thresholdArgument = argument(THRESHOLD_FLAG.slice(2));
+  const threshold = thresholdArgument === undefined ? null : Number(thresholdArgument);
+  const misspelt = thresholdSpellingRefusal(process.argv.slice(2));
+  if (misspelt !== null) {
+    console.error(`${GATE_REFUSAL_HEAD} — ${misspelt}`);
+    console.error('  nothing was measured; no verdict exists for this run');
+    process.exit(1);
+  }
+  // FAIL CLOSED BEFORE MEASURING: a threshold run on a dist or a catalog that
+  // cannot be proven prints no percentage a reader could take for a verdict.
+  const unproven = gateRefusal({ revision: catalogRevision() }, { threshold });
+  if (unproven !== null) {
+    console.error(`${GATE_REFUSAL_HEAD} — ${THRESHOLD_FLAG} asks for a verdict and ${unproven}`);
+    console.error('  nothing was measured; no verdict exists for this run');
+    process.exit(1);
+  }
   const result = await run({
     verticals: argument('vertical')?.split(',') ?? ['bithire', 'evnto', 'rottay'],
     themes: argument('theme')?.split(',') ?? ['light', 'dark'],
@@ -8618,6 +8758,16 @@ if (isMain) {
     + `${STATES_WIDTH_ONLY_DEFECT.defectStatus.toUpperCase()}, receiver ${STATES_WIDTH_ONLY_DEFECT.receiver}): `
     + `${result.limits.states.widthOnly.length} -- ${result.limits.states.widthOnly.map((entry) => entry.family).join(', ') || 'none'}`,
   );
+  // What the run OBSERVED, beside what is pinned: a `--families` run refuses no
+  // unnamed mover, so without this line its reading would be in `--json` alone.
+  const observedWidthOnly = [...new Map(result.cells
+    .filter((cell) => cell.kind === 'positive' && cell.axis === 'states')
+    .flatMap((cell) => cell.widthOnly ?? [])
+    .map((entry) => [entry.family, entry.properties])).entries()].sort(([left], [right]) => left.localeCompare(right));
+  console.log(
+    `    observed this run (width, offset, or a corner derived from them, and nothing else): ${observedWidthOnly.length} -- `
+    + `${observedWidthOnly.map(([family, properties]) => `${family} (${properties.join(', ')})`).join('; ') || 'none'}`,
+  );
   for (const note of result.limits.states.nonMoverNotes) {
     console.log(`  states non-mover, noted: ${note.family} (${note.since}) -- ${note.reason}`);
   }
@@ -8735,12 +8885,12 @@ if (isMain) {
   } else {
     console.log(`  indicator ${INDICATOR_PATH}: NOT PUBLISHED — ${indicatorBlocked}`);
   }
-  const failures = evaluate(result, {
-    threshold: thresholdArgument === undefined ? null : Number(thresholdArgument),
-  });
-  if (failures.length > 0) {
-    for (const failure of failures) console.error(`axis-difference FAIL — ${failure}`);
-    process.exit(1);
+  // Refused, failed or passed. The provenance is read again on the finished
+  // run: it took minutes, and the catalog judged is the one it actually read.
+  const conclusion = conclude(result, { threshold });
+  if (conclusion.exitCode !== 0) {
+    for (const line of conclusion.errors) console.error(line);
+    process.exit(conclusion.exitCode);
   }
   // The verdict names each control SEPARATELY. "Both negative controls green"
   // was the line this run is not entitled to while one of them is vacuous.
@@ -8769,5 +8919,5 @@ if (isMain) {
       console.log(`    ${control} ${where}: ${reason}`);
     }
   }
-  console.log(verdictLine(result, { threshold: thresholdArgument === undefined ? null : Number(thresholdArgument) }));
+  console.log(conclusion.verdict);
 }

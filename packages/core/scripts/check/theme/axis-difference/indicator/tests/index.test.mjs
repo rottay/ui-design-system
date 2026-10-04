@@ -20,6 +20,7 @@ import {
   axisReadings,
   buildIndicator,
   indicatorRefusal,
+  gateProvenanceRefusal,
   provenanceRefusal,
   negativeControlsOf,
   negativeTest,
@@ -254,6 +255,32 @@ describe('tenant-difference-by-axis indicator', () => {
     assert.match(provenanceRefusal(), /could not be read from git/u);
     // The dirty tree is named first: a rebuilt dist over uncommitted skins is still not the commit.
     assert.match(provenanceRefusal({ dirty: ['x'], dist: { ok: false, failures: ['y'] }, catalog: { run: 'a', head: 'b' } }), /^the working tree/u);
+  });
+
+  it('A VERDICT is refused on the same two facts, in the same words, and only when a threshold asks for one (audit W19-R33 D2)', () => {
+    const proven = { dist: { ok: true, failures: [] }, catalog: { run: 'abc', head: 'abc' } };
+    const stale = { ...proven, dist: { ok: false, failures: ['dist is STALE: source changed'] } };
+    const foreign = { ...proven, catalog: { run: 'abc', head: 'def' } };
+    assert.equal(gateProvenanceRefusal(proven, { threshold: 80 }), null);
+    // Word for word what refuses publication: one judgement, two consequences.
+    for (const facts of [stale, foreign, { ...proven, dist: null }, { ...proven, catalog: null }, { ...proven, catalog: { run: null, head: 'abc' } }, {}]) {
+      const refusal = gateProvenanceRefusal(facts, { threshold: 80 });
+      assert.equal(typeof refusal, 'string', JSON.stringify(facts));
+      assert.equal(refusal, provenanceRefusal({ dirty: [], ...facts }), JSON.stringify(facts));
+    }
+    assert.match(gateProvenanceRefusal(stale, { threshold: 80 }), /^dist is not built from the sources on disk \(dist is STALE: source changed\)/u);
+    assert.match(gateProvenanceRefusal(foreign, { threshold: 80 }), /^the run read catalog abc and the commit carries def/u);
+    assert.match(gateProvenanceRefusal(undefined, { threshold: 80 }), /build stamp could not be checked/u);
+    // No threshold, no verdict asked for, nothing refused -- whatever the build is.
+    for (const facts of [proven, stale, foreign, {}]) {
+      assert.equal(gateProvenanceRefusal(facts), null);
+      assert.equal(gateProvenanceRefusal(facts, { threshold: null }), null);
+    }
+    // The working tree is publication's fact, not the gate's: a gate is run on the tree it gates.
+    assert.equal(gateProvenanceRefusal({ ...proven, dirty: ['packages/core/src/a.css'] }, { threshold: 80 }), null);
+    assert.match(provenanceRefusal({ ...proven, dirty: ['packages/core/src/a.css'] }), /^the working tree has 1 uncommitted path/u);
+    // A threshold of 0 is still a threshold: the question was asked.
+    assert.equal(typeof gateProvenanceRefusal(stale, { threshold: 0 }), 'string');
   });
 
   it('names the width-only states movers the run published, each with its open defect and receiver; none when the run names none', () => {

@@ -287,6 +287,36 @@ export function provenanceRefusal({ dirty = null, dist = null, catalog = null } 
 }
 
 /**
+ * THE GATE'S OWN PROVENANCE (owner ruling R33; audit W19-R33 D2). A run that
+ * is asked for a VERDICT -- `--threshold` -- judges the declared population
+ * against a build, so the two facts that tie the reading to that build must be
+ * proven or there is no verdict: `dist` is built from the sources on disk, and
+ * the catalog the populations were read at is the commit's. They are the same
+ * two facts, judged by the same function and refused in the same words, that
+ * already refuse publication; here they fail the run instead of withholding a
+ * file, and `--no-write` does not excuse them.
+ *
+ * The working tree at large is deliberately NOT judged: a gate is run on the
+ * tree it gates, uncommitted or not, and a rebuilt `dist` over it is a proven
+ * reading of that tree. A dirty tree still refuses PUBLICATION, as before.
+ * ONE uncommitted path does refuse the gate: the catalog. Its fact is read
+ * against HEAD's blob, so an edited, uncommitted catalog -- or a checkout git
+ * cannot read (no `.git`, no `git` on PATH) -- is refused in the catalog's
+ * words. The verdict on a catalog edit is taken after its commit.
+ *
+ * Without a threshold nothing is asked of the run and nothing is refused.
+ *
+ * @param {{ dist?: { ok: boolean, failures: readonly string[] } | null,
+ *   catalog?: { run: string | null, head: string | null } | null }} provenance
+ * @param {{ threshold?: number | null }} [options]
+ * @returns {string | null}
+ */
+export function gateProvenanceRefusal({ dist = null, catalog = null } = {}, { threshold = null } = {}) {
+  if (threshold === null) return null;
+  return provenanceRefusal({ dirty: [], dist, catalog });
+}
+
+/**
  * THE CHROMATIC STATES READING, reported APART (owner directive 2026-10-01;
  * shape ruled by the CR-1 review): a sibling of `axes`, never under it, with no
  * status, no threshold and no `met`. It reads `result.chromaticStates` and the
