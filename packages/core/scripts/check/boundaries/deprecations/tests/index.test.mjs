@@ -8,7 +8,8 @@
  * unrelated rule happened to fire. N1-N14 and P1-P5 are the numbered cases of
  * the instrument's design; the unnumbered ones cover the remaining refusals.
  * E1-E17 drill evidence in a sibling checkout, its receipts and their audited
- * mark against scratch git repositories.
+ * mark against scratch git repositories. NT0-NT6 drill the notice entries a
+ * surviving row names in the codemod map.
  */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
@@ -231,10 +232,20 @@ const replaceIn = (parts, path, from, to) => {
 };
 
 const FIXTURE = 'prop-renamed/widget-variant';
-const idOf = (row) => `prop-renamed/.#WidgetProps.${row.anchor.split('.').at(-1).replace(/'/g, '')}`;
-/** A wired codemod lookup that knows exactly the given ids. */
-const wiredFor = (known) => ({ status: 'wired', has: (id) => known.includes(id) });
-const ALL_IDS = ['paddingRight', 'variant', 'dateCellRender', 'materials', 'margin', 'left'].map((name) => `prop-renamed/.#WidgetProps.${name}`);
+const idOf = (row) => `member-changed/.#WidgetProps.${row.anchor.split('.').at(-1).replace(/'/g, '')}`;
+const LATER_LINE = '4.0';
+/** The map entry a surviving row names: nothing is removed in this line, `removeIn` names the one that removes it. */
+const noticeOf = (id, removeIn = LATER_LINE) => ({ id, class: 'member-changed', mode: 'report-only', notice: { removeIn } });
+/** A wired codemod lookup over exactly the given entries. */
+const lookupOf = (entries) => ({
+  status: 'wired',
+  has: (id) => entries.some((entry) => entry.id === id),
+  entry: (id) => entries.find((entry) => entry.id === id) ?? null,
+  notices: entries.filter((entry) => entry.notice !== undefined),
+});
+/** A wired codemod lookup that knows exactly the given ids, each as a notice entry. */
+const wiredFor = (known) => lookupOf(known.map((id) => noticeOf(id)));
+const ALL_IDS = ['paddingRight', 'variant', 'dateCellRender', 'materials', 'left'].map((name) => `member-changed/.#WidgetProps.${name}`);
 
 const NEW_MARKER_SOURCE = ['  /** @deprecated Use `spacing`. */', '  margin?: number;'].join('\n');
 const WITH_NEW_MARKER = [NEW_MARKER_SOURCE, '  /** @deprecated Use `label`. */', '  title?: string;'].join('\n');
@@ -266,7 +277,7 @@ function plantParity(parts, alter = () => {}, fixture = FIXTURE) {
   parts.files[`packages/core/${PARITY_TEST}`] = "test('secondary has no tone', () => {});\n";
 }
 
-/** Every row re-homed to the successor, with a verdict fixture and a codemod id; the debt row is retired. */
+/** Every row re-homed to the successor for the later line, with a verdict fixture and a notice id; the debt row is retired. */
 function rehome(parts) {
   replaceIn(parts, CONTRACTS, `${NEW_MARKER_SOURCE}\n`, '');
   dropRow(parts, 'WidgetProps.margin');
@@ -274,6 +285,7 @@ function rehome(parts) {
   plantParity(parts);
   for (const row of parts.ledger.rows) {
     row.receiver = SUCCESSOR;
+    row.removeIn = LATER_LINE;
     row.codemod = idOf(row);
   }
   rowOf(parts, 'WidgetProps.variant').blocker = `parity-failed:${FIXTURE}`;
@@ -317,6 +329,7 @@ describe('deprecations — positives', () => {
     assert.equal(closed.report.byClass.debt, 0);
     assert.deepEqual(closed.report.byReceiver, { [SUCCESSOR]: 5 });
     assert.deepEqual(closed.report.codemodLookup, { map: 5 });
+    assert.deepEqual(closed.report.notices, { entries: 5, named: 5 });
   });
 
   it('P5: a debt row naming another open work order of lane retire is green', () => {
@@ -483,7 +496,7 @@ describe('deprecations — negatives', () => {
     assertGreen(live);
     assert.deepEqual(live.report.codemodLookup, { 'shape-only': 5 });
     const absent = check(rehome, { codemods: wiredFor(ALL_IDS.filter((id) => !id.endsWith('.variant'))) });
-    assertRedOnlyFor(absent, /`WidgetProps\.variant`: codemod id `prop-renamed\/\.#WidgetProps\.variant` has no entry in/, 1);
+    assertRedOnlyFor(absent, /`WidgetProps\.variant`: codemod id `member-changed\/\.#WidgetProps\.variant` has no entry in/, 1);
   });
 
   it('H1.3: a parity or direction blocker needs a fixture that carries a verdict', () => {
@@ -617,11 +630,20 @@ describe('deprecations — negatives', () => {
   it('H1.4: under --assume-done a non-debt receiver must be listed in compatReceivers', () => {
     const codemods = wiredFor(ALL_IDS);
     const elsewhere = (parts) => { rehome(parts); for (const row of parts.ledger.rows) row.receiver = OTHER_RETIRE; };
-    assertGreen(check(elsewhere, { codemods }));
+    const plain = lookupOf(ALL_IDS.map((id) => ({ id, class: 'member-changed', mode: 'report-only' })));
+    assertGreen(check(elsewhere, { codemods: plain }));
+    const count = (result, pattern) => result.failures.filter((failure) => pattern.test(failure)).length;
+    // A notice is owed a row homed to a compat receiver, so the same transfer orphans each of the five in both views.
+    const ORPHAN = /notice entry `member-changed\/\.#WidgetProps\.\w+` is named by no ledger row whose receiver is listed in compatReceivers/;
+    assertRedOnlyFor(check(elsewhere, { codemods }), ORPHAN, 5);
     const closed = check(elsewhere, { assumeDone: [OWNER], codemods });
-    assertRedOnlyFor(closed, /must be listed in compatReceivers; WO-RET-04 is not \(WO-FIX-06\)/, 5);
+    assert.equal(count(closed, /must be listed in compatReceivers; WO-RET-04 is not \(WO-FIX-06\)/), 5);
+    assert.equal(count(closed, ORPHAN), 5);
+    assert.equal(closed.failures.length, 10, closed.failures.join('\n'));
     const empty = check((parts) => { rehome(parts); parts.ledger.compatReceivers = []; }, { assumeDone: [OWNER], codemods });
-    assertRedOnlyFor(empty, /must be listed in compatReceivers; WO-FIX-06 is not \(the list is empty\)/, 5);
+    assert.equal(count(empty, /must be listed in compatReceivers; WO-FIX-06 is not \(the list is empty\)/), 5);
+    assert.equal(count(empty, /is named by no ledger row whose receiver is listed in compatReceivers \(the list is empty\)/), 5);
+    assert.equal(empty.failures.length, 10, empty.failures.join('\n'));
     const unknown = check((parts) => { parts.ledger.compatReceivers = ['WO-RET-99']; });
     assertRedOnlyFor(unknown, /compatReceivers entry WO-RET-99 is not a work order of/, 1);
     const missing = check((parts) => { delete parts.ledger.compatReceivers; });
@@ -643,8 +665,10 @@ describe('deprecations — negatives', () => {
     assert.equal(count(/blocker `direction-semantics` is not one of/), 1);
     assert.equal(count(/must be listed in compatReceivers; WO-RET-04 is not/), 5);
     assert.equal(result.failures.length, 12, result.failures.join('\n'));
-    const wired = check(blanket, { assumeDone: [OWNER], codemods: wiredFor(ALL_IDS) });
-    assert.equal(wired.failures.length, 7, 'a confirmed map removes only the codemod failures');
+    const plain = lookupOf(ALL_IDS.map((id) => ({ id, class: 'prop-renamed', mode: 'rewrite' })));
+    const wired = check(blanket, { assumeDone: [OWNER], codemods: plain });
+    assert.equal(wired.failures.filter((failure) => /is a rewrite entry: a removal cannot hide behind a surviving row/.test(failure)).length, 5);
+    assert.equal(wired.failures.length, 12, 'a confirmed map of rewrite entries trades the shape-only failures for the notice ones');
   });
 
   it('N11: replacement-capability-absent is red once the capability exists', () => {
@@ -789,6 +813,10 @@ describe('deprecations — negatives', () => {
     for (const entry of kitMap.entries) assert.equal(codemodIdProblem(entry.id), null, `the gate refuses a real map id: ${entry.id}`);
     assert.equal(real.has(kitMap.entries[0].id), true);
     assert.equal(real.has('prop-renamed/.#WidgetProps.neverDeclared'), false);
+    assert.equal(real.entry(kitMap.entries[0].id).id, kitMap.entries[0].id, 'the lookup returns the entry, not only whether it exists');
+    assert.equal(real.entry('prop-renamed/.#WidgetProps.neverDeclared'), null);
+    assert.deepEqual(real.notices.map((entry) => entry.id), kitMap.entries.filter((entry) => entry.notice !== undefined).map((entry) => entry.id));
+    for (const entry of real.notices) assert.deepEqual([entry.class, entry.mode], ['member-changed', 'report-only'], entry.id);
     const missing = await loadCodemodLookup(tree());
     assert.equal(missing.status, 'unavailable');
     assert.match(missing.reason, /does not exist/);
@@ -830,6 +858,110 @@ describe('deprecations — negatives', () => {
     assert.match(closed.failures[0], /no consumer resolver is wired/);
     const wired = await run(['--check', '--consumers'], { ...roots, resolver: async () => () => ({ uses: 2, roots: ['showroom'] }) });
     assert.equal(wired.code, 0, wired.failures.join('\n'));
+  });
+});
+
+describe('deprecations — notice entries of the codemod map', () => {
+  const views = [{}, { assumeDone: [OWNER] }];
+  const VARIANT_ID = 'member-changed/.#WidgetProps.variant';
+  const withEntry = (replaced) => lookupOf(ALL_IDS.map((id) => (id === replaced.id ? replaced : noticeOf(id))));
+  const ORPHAN = (name) => new RegExp(
+    `^scripts/maintain/codemods/release-3-0-map/index\\.json: notice entry \`member-changed/\\.#WidgetProps\\.${name}\` `
+    + 'is named by no ledger row whose receiver is listed in compatReceivers \\(WO-FIX-06\\): the symbol was retired or never ledgered',
+  );
+
+  it('NT0: every surviving row names a notice of its own removeIn, and every notice is named', () => {
+    for (const view of views) {
+      const result = check(rehome, { ...view, codemods: wiredFor(ALL_IDS) });
+      assertGreen(result);
+      assert.deepEqual(result.report.notices, { entries: 5, named: 5 });
+    }
+    const shared = (parts) => { rehome(parts); rowOf(parts, 'WidgetProps.materials').codemod = VARIANT_ID; };
+    const fewer = wiredFor(ALL_IDS.filter((id) => !id.endsWith('.materials')));
+    for (const view of views) assertGreen(check(shared, { ...view, codemods: fewer }), 'two rows may name one notice');
+  });
+
+  it('NT1: a notice entry no row names is red in both views', () => {
+    const codemods = wiredFor([...ALL_IDS, 'member-changed/.#WidgetProps.neverLedgered']);
+    for (const view of views) {
+      const result = check(rehome, { ...view, codemods });
+      assertRedOnlyFor(result, ORPHAN('neverLedgered'), 1);
+      assert.deepEqual(result.report.notices, { entries: 6, named: 5 });
+    }
+  });
+
+  it('NT2: under --assume-done a surviving row that names a rewrite entry is red', () => {
+    const rewrite = withEntry({ id: VARIANT_ID, class: 'prop-renamed', mode: 'rewrite' });
+    assertGreen(check(rehome, { codemods: rewrite }));
+    assertRedOnlyFor(
+      check(rehome, { assumeDone: [OWNER], codemods: rewrite }),
+      /`WidgetProps\.variant`: under --assume-done a row that survives the closure names a notice entry; `member-changed\/\.#WidgetProps\.variant` is a rewrite entry: a removal cannot hide behind a surviving row/,
+      1,
+    );
+    const silent = withEntry({ id: VARIANT_ID, class: 'member-changed', mode: 'report-only' });
+    assertGreen(check(rehome, { codemods: silent }));
+    assertRedOnlyFor(
+      check(rehome, { assumeDone: [OWNER], codemods: silent }),
+      /`WidgetProps\.variant`: under --assume-done a row that survives the closure names a notice entry; `member-changed\/\.#WidgetProps\.variant` carries no `notice` in/,
+      1,
+    );
+    const hasOnly = { status: 'wired', has: (id) => ALL_IDS.includes(id) };
+    assertGreen(check(rehome, { codemods: hasOnly }));
+    assertRedOnlyFor(check(rehome, { assumeDone: [OWNER], codemods: hasOnly }), /carries no `notice` in/, 5);
+  });
+
+  it('NT3: a notice whose removeIn is not the row\'s is red in both views', () => {
+    const later = withEntry(noticeOf(VARIANT_ID, '5.0'));
+    const MISMATCH = /`WidgetProps\.variant`: codemod id `member-changed\/\.#WidgetProps\.variant` is a notice of removal in `5\.0` and the row says removeIn `4\.0`; the two must be equal/;
+    for (const view of views) assertRedOnlyFor(check(rehome, { ...view, codemods: later }), MISMATCH, 1);
+    const moved = (parts) => { rehome(parts); rowOf(parts, 'WidgetProps.variant').removeIn = '4.1'; };
+    for (const view of views) {
+      assertRedOnlyFor(check(moved, { ...view, codemods: wiredFor(ALL_IDS) }), /is a notice of removal in `4\.0` and the row says removeIn `4\.1`/, 1);
+    }
+    const bare = withEntry({ ...noticeOf(VARIANT_ID), notice: {} });
+    for (const view of views) assertRedOnlyFor(check(rehome, { ...view, codemods: bare }), /is a notice of removal in `undefined`/, 1);
+  });
+
+  it('NT4: a notice left behind by a retired symbol is red in both views', () => {
+    const retired = (parts) => {
+      rehome(parts);
+      replaceIn(parts, CONTRACTS, '  /** @deprecated Use `paddingInlineEnd`. */\n  paddingRight?: number;\n', '');
+      dropRow(parts, 'WidgetProps.paddingRight');
+    };
+    for (const view of views) {
+      assertRedOnlyFor(check(retired, { ...view, codemods: wiredFor(ALL_IDS) }), ORPHAN('paddingRight'), 1);
+      assertGreen(check(retired, { ...view, codemods: wiredFor(ALL_IDS.filter((id) => !id.endsWith('.paddingRight'))) }));
+    }
+  });
+
+  it('NT5: a row homed outside compatReceivers does not keep a notice alive', () => {
+    const elsewhere = (parts) => { rehome(parts); rowOf(parts, 'WidgetProps.materials').receiver = OTHER_RETIRE; };
+    assertRedOnlyFor(check(elsewhere, { codemods: wiredFor(ALL_IDS) }), ORPHAN('materials'), 1);
+    const debt = (parts) => {
+      rehome(parts);
+      parts.sources[CONTRACTS] = SOURCES[CONTRACTS];
+      parts.ledger.rows.push(baseRow('WidgetProps.margin', { codemod: 'member-changed/.#WidgetProps.margin' }));
+    };
+    const withMargin = wiredFor([...ALL_IDS, 'member-changed/.#WidgetProps.margin']);
+    const result = check(debt, { codemods: withMargin });
+    assert.ok(result.failures.some((failure) => ORPHAN('margin').test(failure)), 'a debt row homed to the owner names no surviving symbol');
+  });
+
+  it('NT6: a notice on an entry that migrates something is red in both views', () => {
+    const rewriting = withEntry({ ...noticeOf(VARIANT_ID), class: 'prop-renamed', mode: 'rewrite' });
+    for (const view of views) {
+      assertRedOnlyFor(
+        check(rehome, { ...view, codemods: rewriting }),
+        /`WidgetProps\.variant`: codemod id `member-changed\/\.#WidgetProps\.variant` carries a notice on a `rewrite` entry of class `prop-renamed`; a notice is a report-only member-changed entry and migrates nothing/,
+        1,
+      );
+    }
+  });
+
+  it('the notice law is silent when the map cannot be asked, and closure is already red for that', () => {
+    const unavailable = { status: 'unavailable', reason: 'the kit threw', notices: [noticeOf('member-changed/.#WidgetProps.neverLedgered')] };
+    assertGreen(check(rehome, { codemods: unavailable }));
+    assertRedOnlyFor(check(rehome, { assumeDone: [OWNER], codemods: unavailable }), /was checked for shape only under --assume-done/, 5);
   });
 });
 
@@ -1505,5 +1637,14 @@ describe('deprecations — the real package', () => {
       assert.doesNotMatch(row.file, /[*?[\]{}]/);
       assert.ok(!row.anchor.includes('*'));
     }
+  });
+
+  it('the real map and the real ledger agree on every notice entry', async () => {
+    const codemods = await loadCodemodLookup({ packageRoot: REAL_PACKAGE });
+    assert.equal(codemods.status, 'wired', codemods.reason);
+    const result = evaluate(measure({ packageRoot: REAL_PACKAGE, repoRoot: dirname(dirname(REAL_PACKAGE)) }), { codemods, siblings: 'absent' });
+    assert.deepEqual(result.failures.filter((failure) => /notice/.test(failure)), []);
+    assert.equal(result.report.notices.named, result.report.notices.entries);
+    assert.equal(result.report.notices.entries, codemods.notices.length);
   });
 });

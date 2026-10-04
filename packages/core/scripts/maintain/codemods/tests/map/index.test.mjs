@@ -313,6 +313,68 @@ test('the literal renames of the retired size and alignment spellings are author
   assert.equal(entries.length, sizes.length + sides.length);
 });
 
+const LEDGER = 'contracts/package/deprecations/index.json';
+/** Rows that name an existing entry which states no notice yet; the list only shrinks, and is empty once their notices land. */
+const NOTICE_OWED = ['member-changed/.#Callout', 'member-changed/.#BrandMotion.entranceDuration'];
+
+test('a notice is admitted on a report-only member-changed entry only, and its shape is checked', () => {
+  const ID = 'member-changed/.#Callout';
+  const noticed = (alter = () => {}) => mutant((raw) => {
+    const entry = raw.entries.find((item) => item.id === ID);
+    entry.notice = { removeIn: '4.0' };
+    entry.change = 'not removed in 3.0: `Callout` stays published and deprecated.';
+    entry.guidance = 'The 4.0 line removes `Callout`; write `Alert` before it.';
+    alter(entry, raw);
+  });
+  assert.deepEqual(noticed().byId.get(ID).notice, { removeIn: '4.0' });
+  assert.deepEqual(noticed((entry) => { entry.change = 'not narrowed in 3.0. The interface keeps every field.'; }).byId.get(ID).notice, { removeIn: '4.0' });
+  assert.deepEqual(noticed((entry) => { entry.notice = { removeIn: '3.1' }; entry.guidance = 'Asked by 3.1.'; }).byId.get(ID).notice, { removeIn: '3.1' });
+  for (const notice of [null, 'removeIn 4.0', ['4.0'], {}, { removeIn: '4.0', line: '3.0' }, { line: '4.0' }]) {
+    assert.throws(() => noticed((entry) => { entry.notice = notice; }), /`notice` is exactly `\{ removeIn \}`/, JSON.stringify(notice));
+  }
+  for (const removeIn of ['4', '4.0.0', 'next', 4, '']) {
+    assert.throws(() => noticed((entry) => { entry.notice = { removeIn }; }), /`notice\.removeIn` must be a release line/, String(removeIn));
+  }
+  for (const removeIn of ['3.0', '2.9', '03.0']) {
+    assert.throws(() => noticed((entry) => { entry.notice = { removeIn }; }), /is not later than the 3\.0 line: a removal in this line is not a notice/, removeIn);
+  }
+  assert.throws(() => noticed((entry, raw) => { raw.line = 'next'; }), /needs the release line of the map/);
+  for (const change of ['`Callout` loses its `variant` prop.', 'removed in 3.0: `Callout`.', 'not removed in 3.01: `Callout` stays.', 'not removed in 13.0']) {
+    assert.throws(() => noticed((entry) => { entry.change = change; }), /the `change` of a notice opens with `not removed in 3\.0`/, change);
+  }
+  for (const guidance of ['Write `Alert` instead of `Callout`.', 'The 14.0 line removes it.', 'The 4.01 line removes it.']) {
+    assert.throws(() => noticed((entry) => { entry.guidance = guidance; }), /the `guidance` of a notice names the 4\.0 line/, guidance);
+  }
+  const first = (raw, className) => raw.entries.find((entry) => entry.class === className);
+  for (const className of ['prop-renamed', 'prop-removed', 'symbol-removed', 'symbol-removed-no-replacement', 'glyph-removed', 'subpath-removed']) {
+    assert.throws(() => mutant((raw) => { first(raw, className).notice = { removeIn: '4.0' }; }),
+      /`notice` is stated by a report-only member-changed entry only/, className);
+  }
+});
+
+test('notice entries and the ledger rows that survive 3.0 correspond in both directions', () => {
+  const ledger = JSON.parse(fs.readFileSync(path.join(CORE_ROOT, LEDGER), 'utf8'));
+  const surviving = ledger.rows.filter((row) => row.class !== 'debt' && ledger.compatReceivers.includes(row.receiver));
+  const named = new Map();
+  const owed = [];
+  for (const row of surviving) {
+    const entry = row.codemod === null ? null : map.byId.get(row.codemod);
+    if (!entry) continue;
+    if (entry.notice === undefined) { owed.push(entry.id); continue; }
+    assert.deepEqual([entry.class, entry.mode], ['member-changed', 'report-only'], `${row.anchor}: ${entry.id}`);
+    assert.equal(entry.notice.removeIn, row.removeIn, `${row.anchor}: ${entry.id} and the row disagree on the line of the removal`);
+    named.set(entry.id, row.anchor);
+  }
+  const notices = map.entries.filter((entry) => entry.notice !== undefined);
+  for (const entry of notices) {
+    assert.ok(named.has(entry.id), `${entry.id}: a notice no surviving row of ${LEDGER} names`);
+    assert.ok(surface.exportsOf(entry.subpath).has(entry.symbol), `${entry.id}: a notice is about an export that stays published`);
+  }
+  assert.equal(notices.length, named.size);
+  for (const id of owed) assert.ok(NOTICE_OWED.includes(id), `${id}: a surviving row names an entry that states no notice`);
+  for (const id of NOTICE_OWED) assert.ok(map.byId.has(id), `${id}: drop it from NOTICE_OWED with its entry`);
+});
+
 test('the loader refuses a malformed map', () => {
   const first = (raw, className) => raw.entries.find((entry) => entry.class === className);
   assert.throws(() => mutant((raw) => { first(raw, 'symbol-removed').id = 'symbol-removed/.#SOMETHING_ELSE'; }), /does not restate/);

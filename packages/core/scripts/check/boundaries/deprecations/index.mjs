@@ -27,6 +27,12 @@
  *   - a `debt` row whose receiver is not an open work order of lane `retire`,
  *     or is listed in `noDebtReceivers`;
  *   - a codemod id that is malformed, or absent from the codemod map;
+ *   - a row that names a notice entry of the codemod map (an entry carrying
+ *     `notice: { removeIn }`) whose `removeIn` is not the row's own, or that
+ *     is not a report-only `member-changed` entry;
+ *   - a notice entry that no row whose receiver is listed in `compatReceivers`
+ *     names: the symbol was retired or never ledgered, and a notice cannot
+ *     stand in for a removal;
  *   - a `direction-semantics:<fixture>` or `parity-failed:<fixture>` blocker
  *     whose fixture is not a directory of the codemod suite carrying an
  *     `expected` tree or named by one of the suite's `*.test.mjs`;
@@ -56,6 +62,9 @@
  *   - a non-`debt` row needs a codemod id that the codemod map was actually
  *     asked about; a shape-only check, a missing map or a kit that fails to
  *     load is red;
+ *   - the entry a non-`debt` row names must be a notice entry: a row that
+ *     survives the closure removes nothing in this line, so a rewrite entry,
+ *     or a report-only entry without `notice`, is red;
  *   - `parity-unproven` is red: a verdict still owed cannot cross a closure;
  *   - the evidence kind a class requires must be verified live on this run or
  *     rest on an audited receipt; evidence that is merely unavailable is red;
@@ -143,6 +152,8 @@ export const CODEMOD_MAP_PATH = 'scripts/maintain/codemods/release-3-0-map/index
 export const CODEMOD_KIT_PATH = 'scripts/maintain/codemods/index.mjs';
 export const CODEMOD_FIXTURES_PATH = 'scripts/maintain/codemods/tests/fixtures';
 export const CODEMOD_TESTS_PATH = 'scripts/maintain/codemods/tests';
+const NOTICE_CLASS = 'member-changed';
+const NOTICE_MODE = 'report-only';
 export const FIXTURE_MAP_FILE = 'map/index.json';
 export const FIXTURE_REPORT_FILE = 'report/index.json';
 export const FIXTURE_INPUT_DIR = 'input';
@@ -1038,9 +1049,12 @@ export function codemodIdProblem(id) {
 }
 
 /**
- * The lookup into the codemod map of one package: `{ status: 'wired', has }`,
- * or `{ status: 'unavailable', reason }` when the map is missing, or the kit or
- * the map fails to load. The kit is imported lazily and never trusted to load.
+ * The lookup into the codemod map of one package:
+ * `{ status: 'wired', has, entry, notices }`, where `entry(id)` is the map entry
+ * an id or an alias names (or null) and `notices` are the entries carrying
+ * `notice`; or `{ status: 'unavailable', reason }` when the map is missing, or
+ * the kit or the map fails to load. The kit is imported lazily and never
+ * trusted to load.
  */
 export async function loadCodemodLookup({ packageRoot }) {
   const mapPath = join(packageRoot, CODEMOD_MAP_PATH);
@@ -1050,7 +1064,13 @@ export async function loadCodemodLookup({ packageRoot }) {
     if (typeof kit.loadMap !== 'function') throw new Error('the kit exports no loadMap');
     const map = kit.loadMap(mapPath);
     if (!(map?.byId instanceof Map)) throw new Error('loadMap returned no id index');
-    return { status: 'wired', has: (id) => map.byId.has(id) };
+    if (!Array.isArray(map.entries)) throw new Error('loadMap returned no entries');
+    return {
+      status: 'wired',
+      has: (id) => map.byId.has(id),
+      entry: (id) => map.byId.get(id) ?? null,
+      notices: map.entries.filter((entry) => entry.notice !== undefined),
+    };
   } catch (error) {
     return { status: 'unavailable', reason: `the codemod map could not be loaded: ${error.message}` };
   }
@@ -1234,6 +1254,14 @@ function symbolOf(row) {
   return last.replace(/^'|'$/g, '');
 }
 
+/** The entry a wired lookup holds for an id. A lookup that can only answer `has` yields an entry that states nothing. */
+function codemodEntryOf(codemods, id) {
+  if (typeof codemods.entry === 'function') return codemods.entry(id) ?? null;
+  return codemods.has(id) ? {} : null;
+}
+
+const isNotice = (entry) => entry?.notice !== undefined;
+
 function checkRow(row, context, report) {
   const problems = [];
   const { registry, assumeDone, noDebtReceivers, compatReceivers, sealedAt, version, codemods } = context;
@@ -1414,7 +1442,31 @@ function checkRow(row, context, report) {
     if (shape) problems.push(shape);
     else if (codemods?.status === 'wired') {
       report.codemodLookup.map = (report.codemodLookup.map ?? 0) + 1;
-      if (!codemods.has(row.codemod)) problems.push(`codemod id \`${row.codemod}\` has no entry in ${CODEMOD_MAP_PATH}`);
+      const entry = codemodEntryOf(codemods, row.codemod);
+      if (!entry) problems.push(`codemod id \`${row.codemod}\` has no entry in ${CODEMOD_MAP_PATH}`);
+      else if (isNotice(entry)) {
+        if (entry.class !== NOTICE_CLASS || entry.mode !== NOTICE_MODE) {
+          problems.push(
+            `codemod id \`${row.codemod}\` carries a notice on a \`${entry.mode}\` entry of class \`${entry.class}\`; `
+            + `a notice is a ${NOTICE_MODE} ${NOTICE_CLASS} entry and migrates nothing`,
+          );
+        }
+        if (entry.notice?.removeIn !== row.removeIn) {
+          problems.push(
+            `codemod id \`${row.codemod}\` is a notice of removal in \`${entry.notice?.removeIn}\` `
+            + `and the row says removeIn \`${row.removeIn}\`; the two must be equal`,
+          );
+        }
+        if (isText(entry.id) && compatReceivers.includes(row.receiver)) context.noticesNamed.add(entry.id);
+      } else if (closing && row.class !== 'debt') {
+        problems.push(
+          entry.mode === 'rewrite'
+            ? `under --assume-done a row that survives the closure names a notice entry; \`${row.codemod}\` is a rewrite entry: `
+              + 'a removal cannot hide behind a surviving row'
+            : `under --assume-done a row that survives the closure names a notice entry; \`${row.codemod}\` `
+              + `carries no \`notice\` in ${CODEMOD_MAP_PATH}`,
+        );
+      }
     } else {
       report.codemodLookup['shape-only'] = (report.codemodLookup['shape-only'] ?? 0) + 1;
       if (closing) {
@@ -1478,6 +1530,7 @@ export function evaluate(
     unauditedReceipts: [],
     receipts: 0,
     codemodLookup: {},
+    notices: { entries: 0, named: 0 },
     consumers: consumers ? [] : 'not requested',
   };
 
@@ -1563,6 +1616,7 @@ export function evaluate(
     compatReceivers,
     assumeDone,
     codemods,
+    noticesNamed: new Set(),
   };
 
   const markerKeys = new Map(measurement.scan.markers.map((marker) => [rowKey(marker), marker]));
@@ -1617,6 +1671,21 @@ export function evaluate(
   for (const [key, marker] of markerKeys) {
     if (!seen.has(key)) {
       failures.push(`${marker.file}:${marker.line} \`${marker.anchor}\`: marker without a row in ${LEDGER_PATH}`);
+    }
+  }
+  if (codemods?.status === 'wired') {
+    const notices = Array.isArray(codemods.notices) ? codemods.notices : [];
+    report.notices.entries = notices.length;
+    for (const entry of notices) {
+      if (context.noticesNamed.has(entry.id)) {
+        report.notices.named += 1;
+        continue;
+      }
+      failures.push(
+        `${CODEMOD_MAP_PATH}: notice entry \`${entry.id}\` is named by no ledger row whose receiver is listed in compatReceivers `
+        + `(${compatReceivers.join(', ') || 'the list is empty'}): the symbol was retired or never ledgered, `
+        + 'and a notice cannot stand in for a removal; delete the entry or state the removal',
+      );
     }
   }
   for (const [key, receipt] of receipts) {
@@ -1791,6 +1860,12 @@ async function main() {
     }
     for (const stale of report.staleReceipts) {
       console.log(`  REPORT stale receipt (red under --assume-done): ${stale.row} \`${stale.kind}\` at ${stale.path}: ${stale.why}`);
+    }
+    if (report.notices.entries > 0) {
+      console.log(
+        `  REPORT notice entries: ${report.notices.entries} in the codemod map, ${report.notices.named} named by a row `
+        + 'whose receiver is listed in compatReceivers',
+      );
     }
     const shapeOnly = report.codemodLookup['shape-only'] ?? 0;
     if (shapeOnly > 0) console.log(`  REPORT ${shapeOnly} codemod id(s) checked for shape only: the codemod map was NOT consulted`);

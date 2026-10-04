@@ -49,6 +49,7 @@ const SKIPPED_AT_OPERAND_ROOT = new Set(['.next', 'dist', 'coverage', '.turbo', 
 const SUBPATH = /^\.(\/[A-Za-z0-9._*-]+)*$/;
 const ID = /^([a-z][a-z-]*)\/(\.(?:\/[A-Za-z0-9._*-]+)*)#([A-Za-z_$*][\w$]*|\*)(?:\.([\w$-]+))?$/;
 const MEMBER_NAME = /^[A-Za-z_$][\w$]*$/;
+const RELEASE_LINE = /^(\d+)\.(\d+)$/;
 const MAX_PASSES = 6;
 
 /** The shape every map id has: `<class>/<subpath>#<symbol>` with an optional `.<member>`. */
@@ -92,7 +93,36 @@ function requireMemberProof(entry) {
   }
 }
 
-function validateEntry(entry) {
+/**
+ * A notice is the entry a deprecation that outlives this line is told through: nothing is removed here,
+ * `notice.removeIn` names the later line that removes it. It migrates nothing, so only a report-only
+ * member-changed entry may carry one, and its `change` and `guidance` must say both halves.
+ */
+function requireNotice(entry, line) {
+  if (entry.class !== 'member-changed' || entry.mode !== 'report-only') {
+    fail(entry.id, '`notice` is stated by a report-only member-changed entry only');
+  }
+  const { notice } = entry;
+  if (notice === null || typeof notice !== 'object' || Array.isArray(notice) || Object.keys(notice).join() !== 'removeIn') {
+    fail(entry.id, '`notice` is exactly `{ removeIn }`');
+  }
+  const later = RELEASE_LINE.exec(typeof notice.removeIn === 'string' ? notice.removeIn : '');
+  const current = RELEASE_LINE.exec(typeof line === 'string' ? line : '');
+  if (!later) fail(entry.id, '`notice.removeIn` must be a release line (for example `4.0`)');
+  if (!current) fail(entry.id, '`notice` needs the release line of the map to compare `removeIn` against');
+  if (Number(later[1]) < Number(current[1]) || (Number(later[1]) === Number(current[1]) && Number(later[2]) <= Number(current[2]))) {
+    fail(entry.id, `\`notice.removeIn\` ${notice.removeIn} is not later than the ${line} line: a removal in this line is not a notice`);
+  }
+  const quoted = (text) => text.replace(/\./g, '\\.');
+  if (!new RegExp(`^not (removed|narrowed) in ${quoted(line)}(?!\\d|\\.\\d)`).test(entry.change)) {
+    fail(entry.id, `the \`change\` of a notice opens with \`not removed in ${line}\` (or \`not narrowed in ${line}\`)`);
+  }
+  if (!new RegExp(`(^|[^\\d.])${quoted(notice.removeIn)}(?!\\d|\\.\\d)`).test(entry.guidance)) {
+    fail(entry.id, `the \`guidance\` of a notice names the ${notice.removeIn} line and what it will ask`);
+  }
+}
+
+function validateEntry(entry, line) {
   const parsed = parseEntryId(entry.id ?? '');
   if (!parsed) fail(String(entry.id), 'id is not `<class>/<subpath>#<symbol>[.<member>]`');
   if (!CLASSES.includes(entry.class)) fail(entry.id, `unknown class \`${entry.class}\``);
@@ -158,6 +188,7 @@ function validateEntry(entry) {
       break;
     default:
   }
+  if (entry.notice !== undefined) requireNotice(entry, line);
 }
 
 export function loadMap(mapPath = DEFAULT_MAP) {
@@ -169,7 +200,7 @@ export function loadMap(mapPath = DEFAULT_MAP) {
   for (const authored of raw.entries) {
     if (authored.group !== undefined && !groups[authored.group]) fail(String(authored.id), `unknown group \`${authored.group}\``);
     const entry = { ...(authored.group ? groups[authored.group] : {}), ...authored };
-    validateEntry(entry);
+    validateEntry(entry, raw.line);
     if (byId.has(entry.id)) fail(entry.id, 'duplicate id');
     for (const alias of entry.aliases ?? []) {
       if (!parseEntryId(alias)) fail(entry.id, `alias \`${alias}\` is not an entry id`);
