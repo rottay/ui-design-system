@@ -294,12 +294,6 @@
   visibility: hidden;
 }
 
-.ds-button.ds-button--modern [data-part='content'][data-state='hidden'] {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
 .ds-button.ds-button--modern [data-part='content-frame'] > [data-part='busy-content'] {
   position: absolute;
   inset: 0;
