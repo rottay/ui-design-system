@@ -77,7 +77,7 @@ export function RecordActionBar({
                 icon={ActionIcon ? <ActionIcon /> : undefined}
                 onClick={action.onClick}
                 href={action.href}
-                loading={action.loading}
+                pending={action.loading}
                 disabled={action.disabled}
               >
                 {action.label}

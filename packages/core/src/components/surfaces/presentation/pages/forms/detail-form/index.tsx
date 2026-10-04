@@ -189,7 +189,7 @@ function DetailFormSurfaceContent({
                 variant={resolveSurfaceButtonVariant(submitAction.variant ?? 'primary')}
                 htmlType="submit"
                 disabled={config.behavior.disabled || submitAction.disabled}
-                loading={submitAction.loading}
+                pending={submitAction.loading}
                 icon={submitAction.icon}
               >
                 {submitAction.label}

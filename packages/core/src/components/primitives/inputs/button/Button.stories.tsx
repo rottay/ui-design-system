@@ -67,10 +67,6 @@ A versatile button component supporting multiple variants, sizes, and states wit
       control: 'boolean',
       description: 'Disabled state',
     },
-    loading: {
-      control: 'boolean',
-      description: 'Loading state',
-    },
     pending: {
       control: 'boolean',
       description: 'Width-stable busy state for mutation actions',
@@ -171,9 +167,9 @@ export const Shapes: Story = {
 export const Loading: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-      <Button loading variant="primary">Loading</Button>
-      <Button loading variant="secondary">Loading</Button>
-      <Button loading variant="outline">Loading</Button>
+      <Button pending variant="primary">Loading</Button>
+      <Button pending variant="secondary">Loading</Button>
+      <Button pending variant="outline">Loading</Button>
     </div>
   ),
 };
@@ -537,17 +533,17 @@ export const AllStates: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
         <Button variant="primary">Normal</Button>
-        <Button variant="primary" loading>Loading</Button>
+        <Button variant="primary" pending>Loading</Button>
         <Button variant="primary" disabled>Disabled</Button>
       </div>
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
         <Button variant="secondary">Normal</Button>
-        <Button variant="secondary" loading>Loading</Button>
+        <Button variant="secondary" pending>Loading</Button>
         <Button variant="secondary" disabled>Disabled</Button>
       </div>
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
         <Button variant="outline">Normal</Button>
-        <Button variant="outline" loading>Loading</Button>
+        <Button variant="outline" pending>Loading</Button>
         <Button variant="outline" disabled>Disabled</Button>
       </div>
     </div>
@@ -562,7 +558,7 @@ export const LoadingComparison: Story = {
   render: () => (
     <EngineComparison
       component={Button}
-      props={{ children: 'Loading', variant: 'primary', loading: true }}
+      props={{ children: 'Loading', variant: 'primary', pending: true }}
       showDescriptions
     />
   ),

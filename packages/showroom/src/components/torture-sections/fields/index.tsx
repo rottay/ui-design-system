@@ -187,7 +187,7 @@ export function FieldsStates() {
           </Text>
           <Button.Icon icon={<Icon name="action.add" decorative />} aria-label="Add" />
           <Button.Icon icon={<Icon name="action.add" decorative />} aria-label="Add (disabled)" disabled />
-          <Button.Icon icon={<Icon name="action.add" decorative />} aria-label="Add (loading)" loading />
+          <Button.Icon icon={<Icon name="action.add" decorative />} aria-label="Add (loading)" pending />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-formfield">

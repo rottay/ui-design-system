@@ -500,7 +500,7 @@ function ReportSurfaceContent({
           onClick={() => {
             void config.behavior.onGenerate?.()?.catch(() => undefined);
           }}
-          loading={config.behavior.generating}
+          pending={config.behavior.generating}
           icon={<ActionPlayIcon decorative size={15} />}
         >
           {tSurfaceOr('report.generate', 'Generate')}

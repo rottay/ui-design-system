@@ -329,7 +329,7 @@ export function EditHeader({
                     icon={ActionIcon ? <ActionIcon data-part="action-icon" /> : undefined}
                     onClick={action.onClick}
                     href={action.href}
-                    loading={action.loading}
+                    pending={action.loading}
                     disabled={action.disabled}
                   >
                     {action.label}
@@ -352,7 +352,7 @@ export function EditHeader({
                 variant="primary"
                 icon={<ActionSaveIcon data-part="action-icon" decorative />}
                 onClick={onSave}
-                loading={saving}
+                pending={saving}
               >
                 {saveLabel}
               </Button>

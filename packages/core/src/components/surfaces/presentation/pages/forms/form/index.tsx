@@ -143,7 +143,7 @@ function FormSurfaceContent({ config, loading = false, error, onRetry, adapt }: 
           // async submit work is in flight, so the user cannot navigate away
           // mid-submission.
           disabled={cancelAction.disabled || submitAction?.loading}
-          loading={cancelAction.loading}
+          pending={cancelAction.loading}
           icon={cancelAction.icon}
           block={isMobile}
           onClick={() => {
@@ -160,7 +160,7 @@ function FormSurfaceContent({ config, loading = false, error, onRetry, adapt }: 
           variant={resolveSurfaceButtonVariant(submitAction.variant ?? 'primary')}
           htmlType="submit"
           disabled={config.behavior.disabled || submitAction.disabled}
-          loading={submitAction.loading}
+          pending={submitAction.loading}
           icon={submitAction.icon}
           block={isMobile}
         >

@@ -103,7 +103,7 @@ export function SurfaceActionBar<TView>({
           variant={resolveSurfaceButtonVariant(action.variant)}
           size={size}
           disabled={action.disabled}
-          loading={action.loading}
+          pending={action.loading}
           icon={action.icon}
           aria-label={action.label}
           data-surface-action={action.id}

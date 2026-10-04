@@ -329,7 +329,7 @@ function RecordWorkbenchSurfaceContent(props: RecordWorkbenchSurfaceProps) {
                 size="sm"
                 onClick={action.onClick}
                 disabled={action.disabled || loading}
-                loading={action.loading}
+                pending={action.loading}
                 icon={action.icon}
               >
                 {action.label}

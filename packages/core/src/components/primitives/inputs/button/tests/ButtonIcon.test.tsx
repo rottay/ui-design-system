@@ -29,14 +29,14 @@ describe('ButtonIcon', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it('handles loading and disabled branches without firing clicks', () => {
+  it('handles pending and disabled branches without firing clicks', () => {
     const onClick = vi.fn();
 
     const { rerender } = render(
       <ButtonIcon
         icon={<span>!</span>}
         aria-label="Busy action"
-        loading
+        pending
         onClick={onClick}
       />
     );

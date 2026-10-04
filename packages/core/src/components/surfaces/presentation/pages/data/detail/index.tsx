@@ -194,7 +194,7 @@ function DetailSurfaceContent<TRaw, TView>({
         variant="primary"
         icon={primaryAction.icon}
         disabled={primaryAction.disabled}
-        loading={primaryAction.loading}
+        pending={primaryAction.loading}
         onClick={primaryAction.onClick}
       >
         {primaryAction.label}

@@ -55,7 +55,7 @@
  */
 
 import type { ReactNode, MouseEvent, ButtonHTMLAttributes } from 'react';
-import type { BaseComponentProps, LoadableProps, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
+import type { BaseComponentProps, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import type { ButtonRecipeSizeValue } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
@@ -102,9 +102,9 @@ export type ButtonShape = 'default' | 'circle' | 'round';
 export type ButtonHtmlType = 'button' | 'submit' | 'reset';
 
 /**
- * Button component props.
+ * Button component props: the contract the family publishes as `ButtonProps`.
  */
-export interface ButtonProps extends BaseComponentProps, EngineAwareProps, LoadableProps, DisableableProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onClick' | 'prefix' | 'dir'> {
+export interface ButtonPublicProps extends BaseComponentProps, EngineAwareProps, DisableableProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onClick' | 'prefix' | 'dir'> {
   /**
    * Button size. Accepts a plain value or a responsive breakpoint object.
    * @default 'md'
@@ -182,16 +182,6 @@ export interface ButtonProps extends BaseComponentProps, EngineAwareProps, Loada
   children?: ReactNode;
 
   /**
-   * Reserved for the future cross-engine Slot contract.
-   *
-   * @deprecated No engine clones an arbitrary child today. Use `href` for a
-   * semantic anchor button or compose Button through a product-owned wrapper.
-   * The prop is consumed (never leaked to DOM) for published-package
-   * compatibility.
-   */
-  asChild?: boolean;
-
-  /**
    * URL if the button acts as a link.
    */
   href?: string;
@@ -245,27 +235,10 @@ export interface ButtonProps extends BaseComponentProps, EngineAwareProps, Loada
   suffix?: ReactNode;
 
   /**
-   * @deprecated Use {@link ButtonProps.pending} instead. `loading` still
-   * marks the button busy (disabled + `aria-busy`) but never reserves the
-   * resting label's width -- the button can shrink to spinner-only size.
-   * Kept for backward compatibility (apps pin this package); resolved
-   * alongside `pending` by {@link resolveButtonBusyState}.
-   */
-  loading?: boolean;
-
-  /**
-   * @deprecated Use {@link ButtonProps.pendingLabel} instead. Used as the
-   * fallback busy label only when `pendingLabel` is not set. Kept for
-   * backward compatibility (apps pin this package); resolved by
-   * {@link resolveButtonBusyState}.
-   */
-  loadingText?: string;
-
-  /**
    * Pending posture for mutation-triggering buttons: swaps the label for a
    * spinner WITHOUT a width jump, keeps the button `disabled` and
    * `aria-busy`, and transitions on the state motion tokens. This is the
-   * canonical busy prop -- prefer it over the deprecated `loading`.
+   * only busy prop.
    *
    * @remarks
    * The resting label's box is always reserved: a hidden layer holds the
@@ -276,49 +249,43 @@ export interface ButtonProps extends BaseComponentProps, EngineAwareProps, Loada
    * in which case the overlay clips (`overflow: hidden`) instead of growing
    * the button. This holds unconditionally, not only for short labels.
    *
-   * `pending` and the deprecated `loading` both mark the button busy
-   * (disabled + `aria-busy`); they are not mutually exclusive. When `pending`
-   * is true it always selects the width-stable render path, even if
-   * `loading` is also true. See {@link resolveButtonBusyState} for the full
-   * precedence rules -- it is the one place every engine resolves these
-   * overlapping props, so the order cannot drift between engines.
-   *
    * The modern engine implements the full width-stable posture; the classic
-   * and rustic engines map `pending` onto their existing busy state (same as
-   * `loading` in those two engines -- width stability is modern-only).
+   * and rustic engines map `pending` onto their own busy state (width
+   * stability is modern-only).
    */
   pending?: boolean;
 
   /**
-   * Optional label shown beside the spinner while the button is busy
-   * (`pending` or the deprecated `loading`). Takes precedence over the
-   * deprecated `loadingText`. When neither is set, the button's existing
-   * children are kept (hidden but still reserving width), so the busy swap
-   * never changes the button's size.
+   * Optional label shown beside the spinner while the button is `pending`.
+   * When it is not set, the button's existing children are kept, so the busy
+   * swap never changes the button's size.
    */
   pendingLabel?: ReactNode;
 }
 
 /**
- * Resolved busy state for a Button, computed from every overlapping busy
- * field on {@link ButtonProps}. This is the ONE place that reconciles the
- * canonical `pending` / `pendingLabel` pair with the deprecated `loading` /
- * `loadingText` pair inherited from `LoadableProps` -- every engine calls
- * this instead of reading the raw props, so the precedence below cannot
- * drift between engines.
+ * Props the engines receive. Family-internal and not published: it adds to
+ * the public contract the two busy members the Classic and Rustic engines
+ * read; the family entry publishes {@link ButtonPublicProps} as `ButtonProps`.
+ */
+export interface ButtonProps extends ButtonPublicProps {
+  loading?: boolean;
+  loadingText?: string;
+}
+
+/**
+ * Resolved busy state for a Button, computed from the busy fields of the
+ * engine props. Every engine calls this instead of reading the raw props, so
+ * the precedence below cannot drift between engines. The public contract
+ * states `pending` / `pendingLabel` only; `loading` / `loadingText` reach
+ * this resolver from the Classic and Rustic engines alone.
  *
  * Resolution order (highest precedence first):
- * 1. `widthStable` is true only when `pending` is true. The deprecated
- *    `loading` never triggers the width-stable render path on its own --
- *    that path keeps each engine's pre-existing, width-shrinkable busy
- *    rendering.
- * 2. `busy` is true when EITHER `pending` or `loading` is true. They are not
- *    mutually exclusive flags -- they are two ways to request the same
- *    "disabled + aria-busy" posture.
- * 3. `label` is `pendingLabel` if set, else the deprecated `loadingText` if
- *    set, else `undefined`. The legacy `ButtonLoadingConfig` shape (retired)
- *    was excluded from this resolution: it was never wired to a `ButtonProps`
- *    field, so there was nothing to read from it.
+ * 1. `widthStable` is true only when `pending` is true.
+ * 2. `busy` is true when EITHER `pending` or `loading` is true: two ways to
+ *    request the same "disabled + aria-busy" posture.
+ * 3. `label` is `pendingLabel` if set, else `loadingText` if set, else
+ *    `undefined`.
  */
 export interface ResolvedButtonBusyState {
   /** True when the button should render `disabled` + `aria-busy` (from `pending` or `loading`). */
@@ -390,7 +357,7 @@ export interface ButtonGroupProps extends BaseComponentProps {
 /**
  * IconButton component props (icon-only button).
  */
-export interface IconButtonProps extends Omit<ButtonProps, 'icon' | 'iconPosition' | 'children'> {
+export interface IconButtonProps extends Omit<ButtonPublicProps, 'icon' | 'iconPosition' | 'children'> {
   /**
    * Button icon.
    */

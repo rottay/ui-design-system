@@ -43,8 +43,8 @@
  * // Button with trailing icon
  * <Button icon={<TrashIcon />} iconPosition="end">Delete</Button>
  *
- * // Loading state
- * <Button loading>Processing...</Button>
+ * // Busy state
+ * <Button pending>Processing...</Button>
  * ```
  *
  * @example Button Group
@@ -94,12 +94,12 @@ import {
   mergePersonalityStyle,
   resolveButtonPersonalityStyle,
 } from '@/foundation/tokens/ts/runtime/personality';
-import type { ButtonProps } from './contracts';
+import type { ButtonPublicProps } from './contracts';
 import { ButtonGroup, ButtonIcon } from './compound';
 
 // Export types
 export type {
-  ButtonProps,
+  ButtonPublicProps as ButtonProps,
   ButtonSize,
   ButtonVariant,
   ButtonShape,
@@ -119,7 +119,7 @@ export type { ButtonGroupProps, ButtonIconProps } from './compound';
  * Keeping the engine selection isolated here makes it easier to layer tenant
  * personality on top without leaking that resolution into each engine file.
  */
-const ButtonBase = createEngineComponent<ButtonProps>('Button', {
+const ButtonBase = createEngineComponent<ButtonPublicProps>('Button', {
     classic: () => import('./engines/classic'),
     modern: () => import('./engines/modern'),
     rustic: () => import('./engines/rustic'),
@@ -131,7 +131,7 @@ const ButtonBase = createEngineComponent<ButtonProps>('Button', {
  * This is the seam where global token context can tune hover behavior or
  * motion without each engine needing direct access to the full token object.
  */
-const ButtonComponent = forwardRef<any, ButtonProps>((props, ref) => {
+const ButtonComponent = forwardRef<any, ButtonPublicProps>((props, ref) => {
   const tokens = useOptionalTokens();
   const { style, ...rest } = props;
 

@@ -15,7 +15,7 @@ vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () =>
       size,
       variant,
       disabled,
-      loading,
+      pending,
       danger,
       block,
       shape,
@@ -29,15 +29,15 @@ vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () =>
         data-size={size}
         data-variant={variant}
         data-shape={shape}
-        data-loading={loading}
+        data-pending={pending}
         data-danger={danger}
         data-block={block}
-        disabled={disabled || loading}
+        disabled={disabled || pending}
         type={htmlType}
         onClick={onClick}
         {...props}
       >
-        {loading && <span data-testid="loading-spinner">Loading...</span>}
+        {pending && <span data-testid="pending-spinner">Saving...</span>}
         {icon && <span data-testid="button-icon">{icon}</span>}
         {children}
       </button>
@@ -86,11 +86,11 @@ describe('Button', () => {
     expect(screen.getByTestId('button')).toHaveAttribute('data-shape', shape);
   });
 
-  it('renders loading state', () => {
-    render(<Button loading>Loading</Button>);
-    expect(screen.getByTestId('button')).toHaveAttribute('data-loading', 'true');
+  it('renders pending state', () => {
+    render(<Button pending>Saving</Button>);
+    expect(screen.getByTestId('button')).toHaveAttribute('data-pending', 'true');
     expect(screen.getByTestId('button')).toBeDisabled();
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(screen.getByTestId('pending-spinner')).toBeInTheDocument();
   });
 
   it('renders disabled state', () => {

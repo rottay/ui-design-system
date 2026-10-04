@@ -12,7 +12,7 @@
  * - Square aspect ratio (width equals height)
  * - Required aria-label for accessibility
  * - Optional tooltip for sighted users
- * - All standard button states (hover, active, disabled, loading)
+ * - All standard button states (hover, active, disabled, pending)
  * - Size and variant customization
  *
  * **Accessibility Requirements:**
@@ -96,8 +96,8 @@ export interface ButtonIconProps {
   variant?: ButtonVariant;
   /** Whether button is disabled */
   disabled?: boolean;
-  /** Whether button is loading */
-  loading?: boolean;
+  /** Whether the button is busy: spinner, `disabled` and `aria-busy` */
+  pending?: boolean;
   /** Additional CSS class */
   className?: string;
   /** Inline styles */
@@ -122,7 +122,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
       size = 'md',
       variant = 'default',
       disabled = false,
-      loading = false,
+      pending = false,
       className = '',
       style,
       'aria-label': ariaLabel,
@@ -143,7 +143,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
         variant={variant}
         shape="default"
         icon={icon}
-        loading={loading}
+        pending={pending}
         disabled={disabled}
         onClick={onClick}
         onPointerDown={onPointerDown}

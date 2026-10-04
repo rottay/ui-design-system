@@ -336,7 +336,7 @@ function DashboardSurfaceContent({
           key={action.id}
           variant={resolveSurfaceButtonVariant(action.variant)}
           disabled={action.disabled}
-          loading={action.loading}
+          pending={action.loading}
           icon={action.icon}
           onClick={() => action.onClick?.(undefined as void)}
         >

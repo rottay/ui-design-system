@@ -303,7 +303,7 @@ function WizardSurfaceContent({ config, loading = false, error, onRetry, adapt }
           variant={resolveSurfaceButtonVariant(cancelAction.variant)}
           icon={cancelAction.icon}
           disabled={cancelAction.disabled}
-          loading={cancelAction.loading}
+          pending={cancelAction.loading}
           onClick={() => {
             if (requestDiscard('cancel')) {
               cancelAction.onClick?.(undefined as void);
@@ -319,7 +319,7 @@ function WizardSurfaceContent({ config, loading = false, error, onRetry, adapt }
           variant={resolveSurfaceButtonVariant(saveDraftAction.variant)}
           icon={saveDraftAction.icon}
           disabled={config.behavior.disabled || saveDraftAction.disabled}
-          loading={saveDraftAction.loading}
+          pending={saveDraftAction.loading}
           onClick={() => saveDraftAction.onClick?.(resolvedValues)}
         >
           {saveDraftAction.label}

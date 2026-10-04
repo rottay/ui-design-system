@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import ModernButton from '../engines/modern';
 
 describe('ModernButton advanced engine coverage', () => {
-  it('covers loading, danger override, sizing, shapes, and full-width branches', () => {
+  it('covers pending, danger override, sizing, shapes, and full-width branches', () => {
     const handleClick = vi.fn();
     const { container, rerender } = render(
       <ModernButton
@@ -15,7 +15,7 @@ describe('ModernButton advanced engine coverage', () => {
         shape="circle"
         fullWidth
         shadow
-        loading
+        pending
         icon={<span data-testid="start-icon">I</span>}
         prefix={<span data-testid="prefix">P</span>}
         suffix={<span data-testid="suffix">S</span>}
@@ -36,12 +36,8 @@ describe('ModernButton advanced engine coverage', () => {
     const spinner = container.querySelector('[data-part="spinner"]');
     expect(spinner).toHaveAttribute('data-size', 'xl');
     expect(spinner).toHaveAttribute('aria-hidden', 'true');
-    // R1 unit 1, item 3 (F10/G8): `loading` with a resting label now takes
-    // the SAME width-stable render path as `pending` (previously it did not,
-    // and collapsed to a spinner-only footprint). The resting content is
-    // reserved (`data-layer="reserve"`, `aria-hidden="true"`) rather than
-    // marked `data-state="hidden"` -- that attribute belongs to the OTHER,
-    // non-width-stable path (icon-only busy), covered separately below.
+    // The busy posture is width-stable: the resting content is reserved
+    // (`data-layer="reserve"`, `aria-hidden="true"`), never removed.
     expect(screen.getByTestId('start-icon').closest('[data-part="content"]')).toHaveAttribute(
       'data-layer',
       'reserve'
@@ -55,8 +51,8 @@ describe('ModernButton advanced engine coverage', () => {
       'data-layer',
       'reserve'
     );
-    // The button's own resting label stays visible next to the spinner
-    // (G8), since `loading` here has no explicit busy label override.
+    // The button's own resting label stays visible next to the spinner,
+    // since no `pendingLabel` overrides it.
     expect(container.querySelector('[data-part="busy-content"]')).toHaveTextContent('Save');
 
     fireEvent.click(loadingButton);
@@ -199,7 +195,7 @@ describe('ModernButton press lifecycle', () => {
     fireEvent.pointerDown(button);
     expect(button.getAttribute('data-state')).toContain('pressed');
 
-    rerender(<ModernButton loading>Save</ModernButton>);
+    rerender(<ModernButton pending>Save</ModernButton>);
     rerender(<ModernButton>Save</ModernButton>);
     expect(button.getAttribute('data-state') ?? '').not.toContain('pressed');
   });

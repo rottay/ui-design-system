@@ -169,7 +169,7 @@ function ProfileSectionCard({
                   variant={editing ? 'primary' : 'secondary'}
                   size="sm"
                   icon={editing ? <ActionSaveIcon decorative size={15} /> : <ActionEditIcon decorative size={15} />}
-                  loading={saving}
+                  pending={saving}
                   aria-label={
                     editing
                       ? tSurfaceOr('profile.section_save_aria', 'Save {section}', { section: section.label })

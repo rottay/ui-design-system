@@ -7,7 +7,7 @@
  * The Modern engine paints this button entirely from
  * `foundation/tokens/css/runtime/engines/modern/skin/button/index.css`, keyed on the `data-*` contract
  * this component stamps: `data-variant`, `data-size`, `data-shape`,
- * `data-disabled`, `data-loading`, `data-pending`, `data-icon-only`,
+ * `data-disabled`, `data-pending`, `data-icon-only`,
  * `data-size-responsive`, `data-tone` (the quiet-destructive grammar, only
  * when `danger` composes with an explicit quiet variant), the
  * `data-part` / `data-state` anatomy attributes
@@ -48,7 +48,7 @@ import React, { forwardRef, useId } from 'react';
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
 import { VisuallyHidden } from '../../../../foundation';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
-import type { ButtonProps, ButtonSize } from '../../contracts';
+import type { ButtonPublicProps, ButtonSize } from '../../contracts';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
 import {
   BUTTON_RECIPE_DEFINITION,
@@ -152,7 +152,7 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
  * @param ref   - Forwarded ref attached to the native `<button>` element.
  * @returns A premium-styled button with token-driven interaction animations.
  */
-const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>((props, ref) => {
+const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPublicProps>((props, ref) => {
   const {
     children,
     variant: variantProp,
@@ -160,8 +160,6 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     shape: shapeProp,
     htmlType = BUTTON_DEFAULTS.htmlType,
     disabled = BUTTON_DEFAULTS.disabled,
-    loading = BUTTON_DEFAULTS.loading,
-    loadingText,
     pending = false,
     pendingLabel,
     block = BUTTON_DEFAULTS.block,
@@ -179,9 +177,6 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     href,
     target,
     rel,
-    // Reserved for a future cross-engine Slot contract. It is consumed here
-    // so it can never leak as a non-standard DOM attribute.
-    asChild: _asChild,
     onClick,
     className = '',
     style,
@@ -201,21 +196,19 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     ...nativeButtonProps
   } = props;
 
-  void _asChild;
-
   // DS-S001: profile defaults apply only where the caller left the axis
   // unset; explicit props always win, then the engine default.
   const buttonProfileDefaults = useRecipeProfileDefaults('button');
   const variant =
     variantProp ??
     (typeof buttonProfileDefaults.variant === 'string'
-      ? (buttonProfileDefaults.variant as ButtonProps['variant'])
+      ? (buttonProfileDefaults.variant as ButtonPublicProps['variant'])
       : undefined) ??
     BUTTON_DEFAULTS.variant;
   const shape =
     shapeProp ??
     (typeof buttonProfileDefaults.shape === 'string'
-      ? (buttonProfileDefaults.shape as ButtonProps['shape'])
+      ? (buttonProfileDefaults.shape as ButtonPublicProps['shape'])
       : undefined) ??
     BUTTON_DEFAULTS.shape;
   const resolvedSizeProp =
@@ -225,14 +218,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       : undefined) ??
     BUTTON_DEFAULTS.size;
 
-  // Single documented resolution point for the overlapping busy props (see
-  // `resolveButtonBusyState` in Button.types.ts for the precedence rules).
-  const { busy, widthStable, label: resolvedBusyLabel } = resolveButtonBusyState({
-    pending,
-    pendingLabel,
-    loading,
-    loadingText,
-  });
+  const { busy, label: resolvedBusyLabel } = resolveButtonBusyState({ pending, pendingLabel });
 
   // The hover/press/focus triad is decided once, in the behavior core. The rustic
   // skin reads the same state, so the two cannot drift apart on what a press is.
@@ -354,7 +340,6 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       size,
       shape,
       block: isFullWidth,
-      loading,
       pending,
       disabled,
       shadow,
@@ -365,9 +350,9 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     { root: className }
   ).root;
 
-  // `busy` (pending or the deprecated loading) shares the inert interaction
-  // model (no press/hover/focus affordance) but keeps its variant colour —
-  // only true `disabled` dims to the disabled token.
+  // `busy` shares the inert interaction model (no press/hover/focus
+  // affordance) but keeps its variant colour — only true `disabled` dims to
+  // the disabled token.
   const isInert = disabled || busy;
 
   // -------------------------------------------------------------------------
@@ -417,17 +402,6 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     </>
   );
 
-  // `loading` (no explicit `pending`) used to take a different render path
-  // than `pending`: no reserved frame, and no label at all unless the caller
-  // also passed `loadingText`. On a button that HAS a resting label, that
-  // path collapsed the footprint to spinner-only width and erased the label
-  // (F10) -- two opposite busy behaviors for the same family depending on
-  // which of the two overlapping busy props was used. The width-stable path
-  // is now the only path whenever there IS a label to preserve, regardless of
-  // which busy prop requested it; `resolveButtonBusyState` itself is
-  // untouched (its `widthStable` field still means "pending" specifically for
-  // every OTHER caller of that contract) -- this is a render-only decision.
-  const useWidthStablePath = widthStable || (busy && hasLabel);
   // When busy did not supply its own label override, the width-stable path
   // keeps the button's OWN resting label visible next to the spinner instead
   // of showing nothing (G8's "conserva la etiqueta visible cuando existe").
@@ -437,7 +411,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
   // visually (icon-only busy); once `displayedBusyLabel` shows the resting
   // label itself, it already carries the accessible name.
   const accessibleBusyLabel = resolvedBusyLabel == null && !hasLabel ? children : null;
-  const content = useWidthStablePath ? (
+  const content = busy ? (
     <span data-part="content-frame">
       {/* The reserve sizes the frame, so it must reserve the WIDEST of the two
           states, not just the resting one. Reserving only the resting content
@@ -465,20 +439,9 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       )}
     </span>
   ) : (
-    <>
-      {busy && (
-        <span data-part="busy-content" aria-live="polite">
-          <LoadingSpinner size={size} />
-          {displayedBusyLabel != null && <span data-part="label">{displayedBusyLabel}</span>}
-        </span>
-      )}
-      <span data-part="content" data-state={busy ? 'hidden' : 'visible'} aria-hidden={busy || undefined}>
-        {restingContentNode}
-      </span>
-      {busy && accessibleBusyLabel != null && (
-        <VisuallyHidden>{accessibleBusyLabel}</VisuallyHidden>
-      )}
-    </>
+    <span data-part="content" data-state="visible">
+      {restingContentNode}
+    </span>
   );
 
   const chain = <Event,>(
@@ -527,11 +490,6 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     // explicit quiet variant (see the resolution above); the skin owns the
     // low-volume destructive paint for this tone.
     'data-tone': quietDangerTone,
-    // The behavioral `loading` prop is authoritative when active. A composing
-    // family may still request an explicit false stamp for a stable state
-    // contract (for example overlay actions); P-79 requires that semantic
-    // caller hook to survive when it does not contradict behavior.
-    'data-loading': loading ? 'true' : nativeButtonProps['data-loading'],
     'data-pending': pending ? 'true' : undefined,
     'data-full-width': isFullWidth ? 'true' : undefined,
     'data-focus-visible': isFocused && !isInert ? 'true' : undefined,

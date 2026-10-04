@@ -255,7 +255,7 @@ export function FormHeader({
                       variant={resolveSharedHeaderActionVariant(headerAction)}
                       icon={ActionIcon ? <ActionIcon data-part="action-icon" /> : undefined}
                       onClick={headerAction.onClick}
-                      loading={headerAction.loading}
+                      pending={headerAction.loading}
                       disabled={headerAction.disabled}
                     >
                       {headerAction.label}

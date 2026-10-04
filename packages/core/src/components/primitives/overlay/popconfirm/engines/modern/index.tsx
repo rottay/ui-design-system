@@ -350,7 +350,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
                 data-action="confirm"
                 data-ok-type={okType}
                 data-loading={loading || okButtonLoading ? 'true' : 'false'}
-                loading={loading || okButtonLoading}
+                pending={loading || okButtonLoading}
                 disabled={disabled}
                 onClick={handleConfirm}
               >

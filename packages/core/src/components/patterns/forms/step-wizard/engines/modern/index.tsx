@@ -289,7 +289,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
               variant="primary"
               size="md"
               disabled={navDisabled || completeDisabled}
-              loading={isValidating}
+              pending={isValidating}
               onClick={handleComplete}
             >
               {completeLabel}
@@ -301,7 +301,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
             variant="primary"
             size="md"
             disabled={navDisabled}
-            loading={isValidating}
+            pending={isValidating}
             onClick={handleAdvance}
           >
             {nextLabel}

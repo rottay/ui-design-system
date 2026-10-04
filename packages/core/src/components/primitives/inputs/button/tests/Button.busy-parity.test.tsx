@@ -25,11 +25,10 @@ const ENGINES = [
   { name: 'rustic', Button: RusticButton },
 ] as const;
 
-/** The three ways a button can be told it must not be activated. */
+/** The public ways a button can be told it must not be activated. */
 const INERT_POSTURES = [
   { name: 'disabled', props: { disabled: true } },
   { name: 'pending', props: { pending: true } },
-  { name: 'loading', props: { loading: true } },
 ] as const;
 
 describe.each(ENGINES)('$name engine: an inert button reports no interaction', ({ Button }) => {
@@ -52,6 +51,22 @@ describe.each(ENGINES)('$name engine: an inert button reports no interaction', (
   it.each(INERT_POSTURES)('a $name button draws no focus ring', ({ props }) => {
     render(<Button {...props}>Save</Button>);
     const button = screen.getByRole('button');
+
+    fireEvent.focus(button);
+    expect(button.getAttribute('data-state') ?? '').not.toContain('focus-visible');
+  });
+});
+
+describe('rustic engine: its engine-side `loading` is inert too', () => {
+  it('does not hover, press or draw a focus ring', () => {
+    render(<RusticButton loading>Save</RusticButton>);
+    const button = screen.getByRole('button');
+
+    fireEvent.pointerEnter(button);
+    expect(button.getAttribute('data-state') ?? '').not.toContain('hovered');
+
+    fireEvent.pointerDown(button);
+    expect(button.getAttribute('data-state') ?? '').not.toContain('pressed');
 
     fireEvent.focus(button);
     expect(button.getAttribute('data-state') ?? '').not.toContain('focus-visible');

@@ -334,7 +334,7 @@ describe('Field family data-part contract (WO-SKIN-02 checkpoint A)', () => {
       );
       expect(container.querySelectorAll('[data-part="trigger"]')).toHaveLength(1);
 
-      rerender(<Button.Icon icon={<span aria-hidden>+</span>} aria-label="Add" loading />);
+      rerender(<Button.Icon icon={<span aria-hidden>+</span>} aria-label="Add" pending />);
       expect(container.querySelectorAll('[data-part="spinner"]')).toHaveLength(1);
     });
   });

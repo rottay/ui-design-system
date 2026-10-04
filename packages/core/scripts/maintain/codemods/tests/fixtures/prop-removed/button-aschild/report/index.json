@@ -1,0 +1,34 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 15,
+    "action": "rewrite",
+    "id": "prop-removed/.#ButtonProps.asChild",
+    "reason": "attribute-deleted"
+  },
+  {
+    "file": "index.tsx",
+    "line": 17,
+    "column": 9,
+    "action": "rewrite",
+    "id": "prop-removed/.#ButtonProps.asChild",
+    "reason": "attribute-deleted"
+  },
+  {
+    "file": "index.tsx",
+    "line": 21,
+    "column": 15,
+    "action": "report",
+    "id": "prop-removed/.#ButtonProps.asChild",
+    "reason": "side-effect"
+  },
+  {
+    "file": "index.tsx",
+    "line": 24,
+    "column": 15,
+    "action": "report",
+    "id": "prop-removed/.#ButtonProps.asChild",
+    "reason": "spread"
+  }
+]

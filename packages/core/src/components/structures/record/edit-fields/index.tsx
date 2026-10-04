@@ -726,7 +726,7 @@ export function InlineEditFooter({
               size="sm"
               onClick={onSave}
               disabled={saveDisabled || isSaving}
-              loading={isSaving}
+              pending={isSaving}
             >
               {resolvedSaveLabel}
             </Button>

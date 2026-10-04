@@ -63,7 +63,7 @@ describe('Button integration', () => {
       <Button
         engine="rustic"
         href="/events"
-        loading
+        pending
         onClick={handleClick}
         icon={<span data-testid="button-icon-end">I</span>}
       >

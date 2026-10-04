@@ -126,7 +126,7 @@ export function ControlScene() {
         <Button variant="secondary" disabled>
           Disabled
         </Button>
-        <Button variant="primary" loading>
+        <Button variant="primary" pending>
           Saving
         </Button>
         <Button variant="primary" pending pendingLabel="Submitting">
@@ -135,7 +135,7 @@ export function ControlScene() {
         {/* No explicit busy label: the width-stable path (item 3, F10) must
             keep "Save" visible next to the spinner instead of collapsing to
             an icon-only footprint. */}
-        <Button variant="primary" loading data-testid="lab-loading-no-label">
+        <Button variant="primary" pending data-testid="lab-loading-no-label">
           Save
         </Button>
       </SpecimenRow>

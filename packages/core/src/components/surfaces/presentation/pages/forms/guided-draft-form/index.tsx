@@ -926,7 +926,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                 className="ds-guided-draft-form__submit-primary"
                 onClick={onSubmit}
                 disabled={submitDisabled || submitLoading}
-                loading={submitLoading}
+                pending={submitLoading}
               >
                 {submitLoading ? submittingLabel : resolvedSubmitLabel}
               </Button>
@@ -977,7 +977,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                   className="ds-guided-draft-form__submit-primary"
                   onClick={onSubmit}
                   disabled={submitDisabled || submitLoading}
-                  loading={submitLoading}
+                  pending={submitLoading}
                 >
                   {submitLoading ? submittingLabel : resolvedSubmitLabel}
                 </Button>

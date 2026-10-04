@@ -327,7 +327,7 @@ function DecisionInboxSurfaceContent<T extends object>(props: DecisionInboxSurfa
         variant={resolveDecisionButtonVariant(decision.variant)}
         onClick={wrappedInConfirm ? undefined : () => onTrigger(decision.key)}
         icon={decision.icon}
-        loading={decision.loading}
+        pending={decision.loading}
         disabled={decision.disabled}
         className={hookClass}
       >

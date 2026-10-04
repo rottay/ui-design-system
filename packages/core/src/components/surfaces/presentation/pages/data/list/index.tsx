@@ -96,7 +96,7 @@ function renderActionButton<TView>(
       variant={resolveSurfaceButtonVariant(action.variant)}
       size={options?.size ?? "sm"}
       disabled={action.disabled}
-      loading={action.loading}
+      pending={action.loading}
       icon={action.icon}
       onClick={(event) => {
         if (options?.stopPropagation) {
@@ -409,7 +409,7 @@ function ListSurfaceContent<TRaw, TView extends object>({
     <Button
       variant={resolveSurfaceButtonVariant(primaryAction.variant ?? "primary")}
       disabled={primaryAction.disabled}
-      loading={primaryAction.loading}
+      pending={primaryAction.loading}
       onClick={() => primaryAction.onClick?.(undefined as void)}
       icon={primaryAction.icon}
     >

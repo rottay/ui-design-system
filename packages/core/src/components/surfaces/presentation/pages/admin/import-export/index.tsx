@@ -339,7 +339,7 @@ function ImportPanel({
                 <Button
                   variant="primary"
                   onClick={() => { void handleConfirm(); }}
-                  loading={confirming}
+                  pending={confirming}
                   disabled={importResult.validRows === 0}
                 >
                   {tSurfaceOr('import_export.confirm_import', 'Confirm Import')}
@@ -524,7 +524,7 @@ function ExportPanel({
             <Button
               variant="primary"
               onClick={() => { void handleExport(); }}
-              loading={exporting}
+              pending={exporting}
               disabled={selectedFields.length === 0}
             >
               {tSurfaceOr('import_export.export_action', 'Export')}

@@ -3,8 +3,9 @@
  *
  * Pins three things an adversarial review found missing:
  * 1. The precedence order `resolveButtonBusyState` implements across the
- *    overlapping busy props (`pending`/`pendingLabel` vs the deprecated
- *    `loading`/`loadingText`).
+ *    busy props of the engine contract (the public `pending`/`pendingLabel`
+ *    and the `loading`/`loadingText` only the Classic and Rustic engines
+ *    read).
  * 2. That a `pending` button never fires `onClick`.
  * 3. That the modern engine's `pending` posture is UNCONDITIONALLY
  *    width-stable -- not just when `pendingLabel` happens to be short.
@@ -27,7 +28,7 @@ describe('resolveButtonBusyState (busy-prop resolution order)', () => {
     });
   });
 
-  it('is busy via the deprecated loading alone, without width stability', () => {
+  it('is busy via the engine-side loading alone, without width stability', () => {
     expect(resolveButtonBusyState({ loading: true })).toEqual({
       busy: true,
       widthStable: false,
@@ -43,7 +44,7 @@ describe('resolveButtonBusyState (busy-prop resolution order)', () => {
     });
   });
 
-  it('keeps width stability when both pending and the deprecated loading are set (pending wins the render path)', () => {
+  it('keeps width stability when both pending and the engine-side loading are set (pending wins the render path)', () => {
     expect(resolveButtonBusyState({ pending: true, loading: true })).toEqual({
       busy: true,
       widthStable: true,
@@ -51,7 +52,7 @@ describe('resolveButtonBusyState (busy-prop resolution order)', () => {
     });
   });
 
-  it('resolves pendingLabel over the deprecated loadingText when both are set', () => {
+  it('resolves pendingLabel over the engine-side loadingText when both are set', () => {
     expect(
       resolveButtonBusyState({
         pending: true,
@@ -62,7 +63,7 @@ describe('resolveButtonBusyState (busy-prop resolution order)', () => {
     ).toBe('Saving');
   });
 
-  it('falls back to the deprecated loadingText when pendingLabel is absent', () => {
+  it('falls back to the engine-side loadingText when pendingLabel is absent', () => {
     expect(resolveButtonBusyState({ loading: true, loadingText: 'Verifying...' }).label).toBe(
       'Verifying...'
     );
@@ -91,27 +92,16 @@ describe('ModernButton pending posture', () => {
     expect(handleClick).not.toHaveBeenCalled();
   });
 
-  it('renders the deprecated loadingText as the busy label when set via loading alone', () => {
+  it('renders pendingLabel as the busy label and does not leak it onto the DOM', () => {
     render(
-      <ModernButton loading loadingText="Verifying...">
+      <ModernButton pending pendingLabel="Verifying...">
         Continue
       </ModernButton>
     );
 
     const button = screen.getByRole('button');
     expect(button).toHaveTextContent('Verifying...');
-    // loadingText must never leak onto the DOM as a raw attribute.
-    expect(button).not.toHaveAttribute('loadingtext');
-  });
-
-  it('prefers pendingLabel over loadingText when both are set', () => {
-    render(
-      <ModernButton pending pendingLabel="Saving" loadingText="Legacy label">
-        Continue
-      </ModernButton>
-    );
-
-    expect(screen.getByRole('button')).toHaveTextContent('Saving');
+    expect(button).not.toHaveAttribute('pendinglabel');
   });
 });
 
@@ -147,8 +137,8 @@ describe('ModernButton pending width stability', () => {
   });
 });
 
-describe('ClassicButton legacy busy props', () => {
-  it('renders the deprecated loadingText as content while busy and does not leak it onto the DOM', () => {
+describe('ClassicButton engine-side busy props', () => {
+  it('renders the engine-side loadingText as content while busy and does not leak it onto the DOM', () => {
     render(
       <ClassicButton loading loadingText="Verifying...">
         Continue
@@ -184,8 +174,8 @@ describe('ClassicButton legacy busy props', () => {
   });
 });
 
-describe('RusticButton legacy busy props', () => {
-  it('renders the deprecated loadingText as content while busy and does not leak it onto the DOM', () => {
+describe('RusticButton engine-side busy props', () => {
+  it('renders the engine-side loadingText as content while busy and does not leak it onto the DOM', () => {
     render(
       <RusticButton loading loadingText="Verifying...">
         Continue

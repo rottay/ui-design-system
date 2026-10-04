@@ -1,0 +1,58 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 9,
+    "column": 15,
+    "action": "rewrite",
+    "id": "prop-renamed/.#ButtonProps.loading",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 9,
+    "action": "rewrite",
+    "id": "prop-renamed/.#ButtonProps.loading",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 17,
+    "column": 15,
+    "action": "report",
+    "id": "prop-renamed/.#ButtonProps.loading",
+    "reason": "conflict"
+  },
+  {
+    "file": "index.tsx",
+    "line": 19,
+    "column": 15,
+    "action": "report",
+    "id": "prop-renamed/.#ButtonProps.loading",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 13,
+    "column": 9,
+    "action": "rewrite",
+    "id": "prop-renamed/.#ButtonProps.loadingText",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 18,
+    "column": 15,
+    "action": "report",
+    "id": "prop-renamed/.#ButtonProps.loadingText",
+    "reason": "conflict"
+  },
+  {
+    "file": "index.tsx",
+    "line": 19,
+    "column": 15,
+    "action": "report",
+    "id": "prop-renamed/.#ButtonProps.loadingText",
+    "reason": "spread"
+  }
+]

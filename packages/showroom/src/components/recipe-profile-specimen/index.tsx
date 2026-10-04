@@ -181,7 +181,7 @@ function SpecimenTree({ locale, state, stress }: Omit<RecipeProfileSpecimenProps
           ref={focusRef}
           data-testid="specimen-button-primary"
           disabled={state === "disabled"}
-          loading={state === "loading"}
+          pending={state === "loading"}
         >
           {label(copy.action)}
         </Button>

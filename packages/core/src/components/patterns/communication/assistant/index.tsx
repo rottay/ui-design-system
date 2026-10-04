@@ -599,7 +599,7 @@ export function ConfirmActionCard({
               <Button
                 variant={tone === 'danger' ? 'danger' : 'primary'}
                 onClick={onConfirm}
-                loading={busy}
+                pending={busy}
                 disabled={confirmDisabled || busy}
               >
                 {resolvedConfirmLabel}

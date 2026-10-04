@@ -109,7 +109,6 @@ describe('ModernButton Pass 1 contract', () => {
         pulse
         bordered
         radius="lg"
-        asChild
       >
         Draft with AI
       </ModernButton>
@@ -126,7 +125,6 @@ describe('ModernButton Pass 1 contract', () => {
     expect(button).not.toHaveAttribute('shadow');
     expect(button).not.toHaveAttribute('pulse');
     expect(button).not.toHaveAttribute('bordered');
-    expect(button).not.toHaveAttribute('aschild');
   });
 
   it('normalizes shared semantic aliases into the Modern paint contract', () => {

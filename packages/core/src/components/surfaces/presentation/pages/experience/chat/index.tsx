@@ -250,7 +250,7 @@ function ChatSurfaceContent({
       className="ds-chat__send-button"
       variant="primary"
       onClick={() => void handleSend()}
-      loading={config.behavior.sending}
+      pending={config.behavior.sending}
       disabled={!draft.trim() || config.behavior.sending}
     >
       {config.behavior.sendLabel ?? tSurfaceOr('chat.send', 'Send')}

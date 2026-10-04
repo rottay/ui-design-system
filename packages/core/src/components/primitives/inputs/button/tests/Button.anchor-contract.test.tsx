@@ -39,7 +39,7 @@ describe('modern Button root anchor', () => {
   it('stamps data-variant on every root a caller can produce, and the caller cannot remove it', async () => {
     const cells: Array<Record<string, unknown>> = [
       {}, { variant: undefined }, { danger: true }, { danger: true, variant: 'ghost' },
-      { busy: true }, { disabled: true }, { loading: true }, { block: true },
+      { busy: true }, { disabled: true }, { pending: true }, { block: true },
       { shape: 'circle' }, { icon: <span>i</span> }, { href: '/x' },
       { href: '/x', ...HOSTILE }, { ...HOSTILE },
       ...VARIANTS.map((variant) => ({ variant })),
