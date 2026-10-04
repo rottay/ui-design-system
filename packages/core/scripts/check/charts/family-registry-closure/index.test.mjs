@@ -17,7 +17,9 @@ import test from 'node:test';
 import {
   DISPOSITIONS,
   PATHS,
+  readDoorLink,
   readExportedNames,
+  readExportedNamesFrom,
   readFamiliesBarrel,
   readRegistry,
   readShowroomSlugs,
@@ -58,6 +60,32 @@ test('the exported-name reader ignores type-only exports', () => {
   assert.deepEqual([...names].sort(), ['A', 'B']);
 });
 
+test('the per-specifier reader takes only what one module is re-exported for', () => {
+  const names = readExportedNamesFrom(
+    "export { A, type T } from './families'; export { B } from './runtime'; export type { C } from './families';",
+    'x.ts',
+    './families',
+  );
+  assert.deepEqual([...names], ['A']);
+});
+
+test('the door-link reader counts value stars and sees every way a link can bind a name itself', () => {
+  const names = new Set(['A', 'B', 'C', 'D']);
+  assert.deepEqual(readDoorLink("export * from './next';", 'x.ts', './next', names), { stars: 1, shadowed: [] });
+  assert.deepEqual(readDoorLink("export type * from './next';", 'x.ts', './next', names), { stars: 0, shadowed: [] });
+  assert.deepEqual(readDoorLink("export * from './other';", 'x.ts', './next', names), { stars: 0, shadowed: [] });
+  assert.deepEqual(
+    readDoorLink(
+      "export * from './next'; export { Z as A } from './z'; export type { B } from './z';"
+        + ' export const C = 1; export * as D from "./z"; export function E() {}',
+      'x.ts',
+      './next',
+      names,
+    ),
+    { stars: 1, shadowed: ['A', 'B', 'C', 'D'] },
+  );
+});
+
 test('the showroom reader takes chart entries and not the family groups', () => {
   const slugs = readShowroomSlugs(`
     const basic = [{ slug: 'bar-chart', name: 'BarChart', family: 'basic', description: 'd' }];
@@ -74,7 +102,7 @@ test('the showroom reader takes chart entries and not the family groups', () => 
  * A two-family tree with every input the gate reads. Small enough that a plant
  * is legible and complete enough that every enforced arm actually runs.
  */
-function buildTree({ extraFolder = null, dropRow = null } = {}) {
+function buildTree({ extraFolder = null, dropRow = null, door = "export * from './charts';\n" } = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'chart-closure-'));
   const write = (relative, contents) => {
     const target = join(dir, relative);
@@ -107,10 +135,7 @@ function buildTree({ extraFolder = null, dropRow = null } = {}) {
     'charts.ts',
     "export { BarChart, GaugeChart } from './families';\n",
   );
-  const publicFacade = write(
-    'facade.ts',
-    "export { BarChart, GaugeChart } from '../families';\n",
-  );
+  const rootDoor = [{ file: write('root.ts', door), star: './charts' }];
   write('skin/chart-bar/index.css', '.ds-chart-bar { color: red; }\n');
   write('skin/chart-gauge/index.css', '.ds-chart-gauge { color: red; }\n');
   const showroomRegistry = write(
@@ -128,7 +153,8 @@ function buildTree({ extraFolder = null, dropRow = null } = {}) {
     familiesDir: join(dir, 'families'),
     familiesBarrel,
     chartsBarrel,
-    publicFacade,
+    rootDoor,
+    familiesSpecifier: './families',
     skinDir: join(dir, 'skin'),
     showroomRegistry,
     familyCutBaseline,
@@ -157,13 +183,53 @@ test('P4: a nineteenth folder with no registry row reddens families-folder', () 
   assert.equal(verdict(arms).ok, false);
 });
 
-test('a removed row reddens the folder, barrel, facade and showroom arms together', () => {
+test('a removed row reddens the folder, barrel, root-door and showroom arms together', () => {
   const { arms } = runGate(buildTree({ dropRow: 'gauge' }));
   assert.equal(armOf(arms, 'families-folder').findings.length, 1);
   assert.equal(armOf(arms, 'families-barrel').findings.length, 1);
-  assert.equal(armOf(arms, 'public-facade').findings.length, 1);
+  assert.deepEqual(armOf(arms, 'root-door').findings, [
+    'the root door publishes "GaugeChart" from the families owner, which owns no registry row',
+  ]);
   assert.equal(armOf(arms, 'showroom-registry').findings.length, 1);
   assert.equal(verdict(arms).ok, false);
+});
+
+test('a root door that stops star-exporting the chain no longer publishes the families', () => {
+  const { arms } = runGate(buildTree({ door: "export { BarChart } from './charts';\n" }));
+  const arm = armOf(arms, 'root-door');
+  assert.equal(arm.findings.length, 2);
+  assert.match(arm.findings[0], /carries 0 value `export \*` from "\.\/charts"; the root door needs exactly one/u);
+  assert.match(arm.findings[1], /binds "BarChart" itself/u);
+  assert.equal(verdict(arms).ok, false);
+});
+
+test('a link of the root door that binds a family name itself reddens the root-door arm', () => {
+  const { arms } = runGate(
+    buildTree({ door: "export * from './charts';\nexport { GaugeChart as BarChart } from './families';\n" }),
+  );
+  assert.deepEqual(armOf(arms, 'root-door').findings.map((finding) => finding.replace(/^.*root\.ts /u, '')), [
+    'binds "BarChart" itself, which re-points the name the families owner publishes',
+  ]);
+  assert.equal(verdict(arms).ok, false);
+});
+
+test('a family the charts barrel takes from another module is not published by the root door', () => {
+  const paths = buildTree();
+  writeFileSync(paths.chartsBarrel, "export { BarChart } from './families';\nexport { GaugeChart } from './elsewhere';\n");
+  const { arms } = runGate(paths);
+  assert.deepEqual(armOf(arms, 'charts-barrel').findings, []);
+  assert.deepEqual(armOf(arms, 'root-door').findings, [
+    '"GaugeChart" is not published by the root door: the charts barrel does not take it from "./families"',
+  ]);
+});
+
+test('a missing link of the root door is a finding, never a skipped arm', () => {
+  const paths = buildTree();
+  const { arms } = runGate({ ...paths, rootDoor: [{ file: join(paths.skinDir, 'absent.ts'), star: './charts' }] });
+  const arm = armOf(arms, 'root-door');
+  assert.equal(arm.disposition, DISPOSITIONS.ENFORCED);
+  assert.equal(arm.findings.length, 1);
+  assert.match(arm.findings[0], /is not in this tree/u);
 });
 
 test('a missing showroom package is SKIPPED loudly, never a silent pass', () => {
@@ -199,6 +265,14 @@ test('the real tree closes on every enforced arm', () => {
   assert.equal(ok, true);
 });
 
+test('the real root door is four star links ending at the charts barrel', () => {
+  const { arms } = runGate(PATHS);
+  const arm = armOf(arms, 'root-door');
+  assert.equal(PATHS.rootDoor.length, 4);
+  assert.equal(arm.detail, '4 links, 18 names taken from the families owner');
+  assert.deepEqual(arm.findings, []);
+});
+
 test('the real tree measures the roster gap the WO owes, all eighteen rows', () => {
   const { arms } = runGate(PATHS);
   const arm = armOf(arms, 'family-cut-roster');
@@ -215,7 +289,7 @@ test('every enforced arm is actually measured on the real tree', () => {
       'families-folder',
       'families-barrel',
       'charts-barrel',
-      'public-facade',
+      'root-door',
       'skin-namespace',
       'showroom-registry',
     ],

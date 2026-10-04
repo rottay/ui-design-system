@@ -149,7 +149,28 @@ test('a retired subpath is re-pointed only where a changeset names the substitut
   assert.equal(targets['./dist/platform.css'], './styles/rottay');
   assert.equal(targets['./styles/platform'], './styles/rottay');
   assert.equal(targets['./effects'], null);
+  assert.equal(targets['./patterns/charts'], '.');
+  assert.equal(targets['./public-entrypoints-manifest'], null);
   assert.equal(targets['./spatial/spec'], null);
+});
+
+test('the retired chart facade moves to the package root, which publishes every name it carried', () => {
+  const entry = map.byId.get('subpath-removed/./patterns/charts#*');
+  assert.equal(entry.mode, 'rewrite');
+  assert.deepEqual(entry.replacement, { subpath: '.' });
+  const root = surface.exportsOf('.');
+  const families = ['AreaChart', 'BarChart', 'BulletChart', 'CalendarHeatMap', 'FunnelChart', 'GanttChart', 'GaugeChart', 'HeatMap',
+    'Histogram', 'LineChart', 'NetworkGraph', 'PieChart', 'RadarChart', 'SankeyChart', 'ScatterChart', 'Sparkline', 'TreeMap',
+    'WaterfallChart'];
+  assert.equal(families.length, 18);
+  for (const name of families) {
+    assert.ok(root.has(name), `the package root does not publish ${name}`);
+    assert.ok(entry.resolves.includes(name), `the entry does not name ${name}`);
+  }
+  const manifest = map.byId.get('subpath-removed/./public-entrypoints-manifest#*');
+  assert.equal(manifest.mode, 'report-only');
+  assert.equal(manifest.replacement, null);
+  assert.ok(manifest.guidance.length > 20);
 });
 
 test('the commercial channel table is authored name by name, each successor a channel this checkout declares', () => {

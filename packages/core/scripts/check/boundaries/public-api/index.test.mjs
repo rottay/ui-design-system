@@ -57,9 +57,7 @@ function runtimeFixture() {
         import: `./dist/${output}.js`,
         require: `./dist/${output}.cjs`,
       },
-      './public-entrypoints-manifest': { default: './contracts/package/entrypoints/index.json' },
     },
-    files: ['contracts/package/entrypoints/index.json'],
     releaseSync: { sourceEntrypoints: { './primitives/box': source.slice(4) } },
   }, null, 2)}\n`);
   write(root, 'vite.config.ts', `
@@ -402,52 +400,115 @@ test('TECHO — el arbol REAL esta en su ancla, techo por techo y dimension por 
   const manifest = JSON.parse(fs.readFileSync(path.join(root, 'contracts/package/entrypoints/index.json'), 'utf8'));
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
   const live = readCeilings(manifest);
-  // 77 -> 76 (WO-CAN-04): `./surfaces/oauth-transition` left the package with
-  // the surface it published; 76 -> 1 (RET-01-E, WO-RET-01 2026-10-02): every
-  // governed subpath left the export map except `./patterns/charts`, retained
-  // because the chart-facade parity machinery is CI-bound to it. Decrece-solo.
-  assert.equal(Object.keys(live).length, 1, 'el subpath gobernado retenido, medido');
+  // 77 -> 76 (WO-CAN-04), 76 -> 1 (RET-01-E), 1 -> 0 (WO-RET-01): `./patterns/charts`
+  // left the export map and the root publishes its eighteen names. Decrece-solo.
+  assert.equal(Object.keys(live).length, 0, 'no governed subpath is published');
   assert.deepEqual(evaluateCeilings(live, baseline), []);
-  // Cada techo real cubre las DOS dimensiones: ni una entrada a medias.
   for (const [subpath, anchored] of Object.entries(baseline.ceilings)) {
     assert.deepEqual(Object.keys(anchored).sort(), [...GOVERNED_BUDGET_DIMENSIONS].sort(), `${subpath} no ancla las dos dimensiones`);
   }
   // Los candidatos a consolidacion salen de su propio tag en el manifest, no de una lista a mano.
   const tagged = Object.entries(manifest.entries).filter(([, entry]) => entry.budgetNote).map(([subpath]) => subpath);
-  assert.equal(tagged.length, 1);
   assert.deepEqual(baseline.consolidationCandidates, tagged.sort());
 });
 
-test('C2/MEDIDO — el grafo MEDIDO del subpath retenido queda clavado, numero contra numero', () => {
-  /* El lote C2 clavo el techo de `./runtime/visual-authority` a su grafo medido;
-   * ese subpath se retiro con RET-01-E (WO-RET-01, 2026-10-02). El unico
-   * subpath gobernado que sobrevive es `./patterns/charts`: aqui queda clavado
-   * lo que de verdad mide el gate, para que la proxima diferencia se vea contra
-   * un numero y no contra una frase. Su presupuesto declarado (242 modulos /
-   * 2482000 bytes, anclado en revision) tiene holgura sobre la medicion; la ley
-   * de la holgura cero del lote C2 sigue siendo drillada por los TECHO
-   * sinteticos de arriba.
-   *
-   * 1216380 -> 1216267 (-113), same 180 modules, measured file by file:
-   * 9fd2fd28a +21 (theming/composition/react/provider), a3dc4c4f9 -164
-   * (charts/presentation/tooltip) and +6 in each of five chart families
-   * (bar-chart, funnel-chart, gauge, histogram, waterfall).
-   *
-   * 1216267 -> 1217767 (+1500), same 180 modules, measured file by file:
-   * src/foundation/presets/policy/experience-baselines/evnto/index.ts +102 (2f3aa983d)
-   * src/components/patterns/visualization/charts/presentation/scaffold/index.tsx -119 (22ffadf19)
-   * src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx +1477 (09ef3e34b)
-   * src/components/patterns/visualization/charts/families/sankey/index.tsx +20 (22ffadf19)
-   * src/components/patterns/visualization/charts/families/network-graph/index.tsx +20 (22ffadf19) */
-  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
-  const [report] = runPublicEntrypointGate({ root, silent: true })
-    .filter((entry) => entry.subpath === './patterns/charts');
-  assert.deepEqual(
-    { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 180, sourceBytes: 1217767 },
+/* ── the empty fence: zero governed subpaths is a measured state, not an absent gate ── */
+
+/** A root whose manifest governs nothing, with the anchor that matches it. */
+function emptyFenceFixture() {
+  const { root, manifest } = runtimeFixture();
+  manifest.entries = {};
+  manifest.coverage = { runtimeSymbols: 0, typeSymbols: 0, totalSymbols: 0 };
+  rewriteManifest(root, manifest);
+  anchorCeilings(root, manifest);
+  const packagePath = path.join(root, 'package.json');
+  const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+  packageJson.exports = { '.': { import: './dist/index.js' } };
+  packageJson.releaseSync = { sourceEntrypoints: {} };
+  const save = () => write(root, 'package.json', `${JSON.stringify(packageJson, null, 2)}\n`);
+  save();
+  return { root, manifest, packageJson, save };
+}
+
+/** The real package inputs the gate reads, copied so a drill can mutate them. */
+function realTreeCopy() {
+  const real = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'public-entrypoint-real-'));
+  for (const relative of ['package.json', 'vite.config.ts', 'contracts/package/entrypoints/index.json', CEILINGS_BASELINE_RELATIVE]) {
+    write(root, relative, fs.readFileSync(path.join(real, relative), 'utf8'));
+  }
+  return root;
+}
+
+test('EMPTY-FENCE — a manifest that governs nothing passes, and measures nothing', () => {
+  const { root } = emptyFenceFixture();
+  assert.deepEqual(runPublicEntrypointGate({ root, silent: true }), []);
+});
+
+test('EMPTY-FENCE — an undeclared subpath under each governed owner fails by name', () => {
+  for (const owner of ['contracts', 'runtime', 'primitives', 'patterns', 'structures', 'surfaces']) {
+    const { root, packageJson, save } = emptyFenceFixture();
+    packageJson.exports[`./${owner}/smuggled`] = { import: './dist/smuggled.js' };
+    save();
+    assert.throws(
+      () => runPublicEntrypointGate({ root, silent: true }),
+      new RegExp(`\\./${owner}/smuggled is public but absent from contracts/package/entrypoints/index\\.json`),
+      `./${owner}/smuggled joined the export map unreviewed`,
+    );
+  }
+});
+
+test('EMPTY-FENCE — a manifest that is missing, or declares no `entries`, is not an empty fence', () => {
+  const { root, manifest } = emptyFenceFixture();
+  delete manifest.entries;
+  rewriteManifest(root, manifest);
+  assert.throws(() => runPublicEntrypointGate({ root, silent: true }), /manifest must declare `entries` as a record/);
+  manifest.entries = [];
+  rewriteManifest(root, manifest);
+  assert.throws(() => runPublicEntrypointGate({ root, silent: true }), /manifest must declare `entries` as a record/);
+  fs.rmSync(path.join(root, 'contracts/package/entrypoints/index.json'));
+  assert.throws(() => runPublicEntrypointGate({ root, silent: true }), /ENOENT/);
+});
+
+test('EMPTY-FENCE — a declared subpath still needs its anchor: the ceilings fence is live too', () => {
+  const { root, manifest } = runtimeFixture();
+  anchorCeilings(root, manifest, {});
+  assert.throws(
+    () => runPublicEntrypointGate({ root, silent: true }),
+    /\[techo\] \.\/primitives\/box: techos maxReachableModules=3 maxSourceBytes=1000 sin anclar/,
   );
-  const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./patterns/charts'], ceiling(242, 2482000), 'el ancla del retenido es el valor revisado en HEAD, sin cambio');
+});
+
+test('EMPTY-FENCE — the REAL tree governs zero subpaths and publishes no manifest door', () => {
+  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
+  assert.deepEqual(runPublicEntrypointGate({ root, silent: true }), []);
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'contracts/package/entrypoints/index.json'), 'utf8'));
+  assert.deepEqual(manifest.entries, {});
+  assert.deepEqual(manifest.coverage, { runtimeSymbols: 0, typeSymbols: 0, totalSymbols: 0 });
+  const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+  assert.equal('./public-entrypoints-manifest' in packageJson.exports, false);
+  assert.equal(packageJson.files.includes('contracts/package/entrypoints/index.json'), false);
+  assert.deepEqual(
+    Object.keys(packageJson.exports).filter((subpath) => /^\.\/(contracts|runtime|primitives|patterns|structures|surfaces)\//.test(subpath)),
+    [],
+  );
+});
+
+test('EMPTY-FENCE — re-publishing a retired governed door on the REAL package fails until it is declared', () => {
+  const root = realTreeCopy();
+  assert.deepEqual(runPublicEntrypointGate({ root, silent: true }), []);
+  const packagePath = path.join(root, 'package.json');
+  const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+  packageJson.exports['./patterns/charts'] = {
+    types: './dist/entrypoints/public/patterns/charts/index.d.ts',
+    import: './dist/entrypoints/public/patterns/charts/index.js',
+    require: './dist/entrypoints/public/patterns/charts/index.cjs',
+  };
+  write(root, 'package.json', `${JSON.stringify(packageJson, null, 2)}\n`);
+  assert.throws(
+    () => runPublicEntrypointGate({ root, silent: true }),
+    /\.\/patterns\/charts is public but absent from contracts\/package\/entrypoints\/index\.json/,
+  );
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */
@@ -704,7 +765,7 @@ test('SCHEMA — el ancla REAL declara la version que el gate lee', () => {
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
   assert.equal(baseline.schemaVersion, CEILINGS_SCHEMA_VERSION);
-  assert.equal(Object.keys(baseline.ceilings).length, 1, 'el techo del subpath retenido, intacto');
+  assert.equal(Object.keys(baseline.ceilings).length, 0, 'no governed subpath, no ceiling');
   assert.deepEqual(Object.keys(baseline).filter((key) => !CEILINGS_ROOT_KEYS.includes(key)), [],
     'el ancla real no lleva ninguna clave de raiz que el gate no lea');
 });

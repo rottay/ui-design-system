@@ -22,7 +22,6 @@
     "./fonts/humanist-text.css",
     "./fonts/plex-mono.css",
     "./hooks-manifest",
-    "./public-entrypoints-manifest",
     "./styles.css",
     "./styles/bithire",
     "./styles/evnto",
@@ -3563,121 +3562,6 @@
         "validateTenantThemeDocument",
         "verticalEngine"
       ]
-    },
-    "./patterns/charts": {
-      "exports": [
-        "AreaChart",
-        "BarChart",
-        "BulletChart",
-        "CalendarHeatMap",
-        "FunnelChart",
-        "GanttChart",
-        "GaugeChart",
-        "HeatMap",
-        "Histogram",
-        "LineChart",
-        "NetworkGraph",
-        "PieChart",
-        "RadarChart",
-        "SankeyChart",
-        "ScatterChart",
-        "Sparkline",
-        "TreeMap",
-        "WaterfallChart"
-      ],
-      "symbols": {
-        "AreaChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "BarChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "BulletChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "CalendarHeatMap": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "FunnelChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "GanttChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "GaugeChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "HeatMap": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "Histogram": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "LineChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "NetworkGraph": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "PieChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "RadarChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "SankeyChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "ScatterChart": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "Sparkline": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "TreeMap": [
-          "antd",
-          "d3",
-          "motion"
-        ],
-        "WaterfallChart": [
-          "antd",
-          "d3",
-          "motion"
-        ]
-      },
-      "supplierFreeExports": []
     },
     "./icons": {
       "exports": [

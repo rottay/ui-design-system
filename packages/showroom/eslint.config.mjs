@@ -24,13 +24,8 @@ export default defineConfig([
           // Measured baseline of unsanctioned subpaths the probes still import.
           // Decrease-only; pinned by the design system's own rule test.
           allowSubpaths: [
-            './icons/foundation',
-            './icons/identity',
-            './icons/intelligence',
-            './icons/operations',
             './pictograms',
             './spatial',
-            './tenant-theme-canary-fixtures',
           ],
         },
       ],

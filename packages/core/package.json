@@ -24,14 +24,6 @@
       "import": "./dist/server.js",
       "require": "./dist/server.cjs"
     },
-    "./patterns/charts": {
-      "types": "./dist/entrypoints/public/patterns/charts/index.d.ts",
-      "import": "./dist/entrypoints/public/patterns/charts/index.js",
-      "require": "./dist/entrypoints/public/patterns/charts/index.cjs"
-    },
-    "./public-entrypoints-manifest": {
-      "default": "./contracts/package/entrypoints/index.json"
-    },
     "./icons": {
       "types": "./dist/icons.d.ts",
       "import": "./dist/icons.js",
@@ -218,7 +210,6 @@
     "contracts/runtime/suppliers/index.json",
     "contracts/css/hooks/index.json",
     "contracts/css/hooks/index.d.ts",
-    "contracts/package/entrypoints/index.json",
     "contracts/themes/canaries/index.json",
     "contracts/themes/canaries/index.d.ts",
     "THIRD_PARTY_NOTICES.md",
@@ -362,7 +353,6 @@
     },
     "sourceEntrypoints": {
       "./server": "entrypoints/server/index.ts",
-      "./patterns/charts": "entrypoints/public/patterns/charts/index.ts",
       "./icons": "entrypoints/icons/index.ts",
       "./icons/presets/bithire": "entrypoints/icons/presets/bithire/index.ts",
       "./icons/foundation": "entrypoints/icons/foundation/index.ts",

@@ -3,8 +3,9 @@
 The public boundary: what you may import, what it guarantees, and what stays
 unstable. `packages/core/package.json` declares the public subpaths;
 `packages/core/docs/consumer-contract/index.md` declares their guarantees.
-`packages/core/contracts/package/entrypoints/index.json` classifies governed
-entry owners and is not a second exhaustive export map.
+`packages/core/contracts/package/entrypoints/index.json` is the in-repository
+fence for governed entry owners; it is not published and is not a second
+export map.
 
 ## 1. Import policy
 
@@ -24,7 +25,7 @@ import { Button } from "@rottay/design-system/src/components/primitives/inputs/b
 
 ## 2. Subpath families
 
-Measured from the RET-01-F candidate `package.json` export map (40 keys total):
+Measured from the `package.json` export map (38 keys total):
 
 ```bash
 node -e "console.log(Object.keys(require('./packages/core/package.json').exports).length)"
@@ -33,22 +34,24 @@ node -e "console.log(Object.keys(require('./packages/core/package.json').exports
 | Family | Subpaths | Family | Subpaths |
 |---|---|---|---|
 | `./icons`, `./icons/*` | 7 | `./styles.css`, `./styles/*` | 6 |
-| `./patterns/charts` | 1 | `./fonts/*` | 7 |
-| `./marks`, `./marks/*` | 3 | `./charts`, `./charts/*` | 4 |
-| `./spatial` | 1 | | |
+| `./marks`, `./marks/*` | 3 | `./fonts/*` | 7 |
+| `./charts`, `./charts/*` | 4 | `./spatial` | 1 |
 
 The remainder are single-entry subpaths: `.` (root), `./server`, `./eslint`,
-`./motion`, `./pictograms`, `./public-entrypoints-manifest`,
+`./motion`, `./pictograms`,
 `./supplier-contract`, `./hooks-manifest`, `./supplier-honesty-cli`,
 `./dist/*.css`, `./tenant-theme-canary-fixtures`.
 
 ## 3. Entry contract
 
-`contracts/package/entrypoints/index.json` tracks 77 entries covering
-**159 public symbols: 112 runtime, 47 type-only**. Each entry records its
+`contracts/package/entrypoints/index.json` governs subpaths under
+`./contracts/*`, `./runtime/*`, `./primitives/*`, `./patterns/*`,
+`./structures/*` and `./surfaces/*`. The package publishes none today, so the
+manifest has zero entries and is kept as a fence: a subpath under one of those
+owners fails `public-entrypoints:check` until it is declared there with its
 source file, its compiled output, and a decrease-only source budget
-(`maxDirectSources`, `maxReachableModules`, `maxSourceBytes`) — an entry's
-budget may shrink, never grow, without an explicit measured review:
+(`maxDirectSources`, `maxReachableModules`, `maxSourceBytes`). The manifest is
+a repository file, not a published door:
 
 ```bash
 node -e "console.log(require('./packages/core/contracts/package/entrypoints/index.json').coverage)"
@@ -123,7 +126,10 @@ the supplier boundary; it does not restore removed public glyph exports.
 
 ## 7. Charts
 
-`./charts` exports the 18 D3-backed chart families; `./charts/spec` is the
+The package root exports the 18 D3-backed chart families (`AreaChart`,
+`BarChart`, … `WaterfallChart`); the former `./patterns/charts` door, which
+re-exported the same names, is retired. `./charts` is the supplier-independent
+chart experience kernel; `./charts/spec` is the
 server-safe visualization contract (no D3, no browser API); `./charts/access`
 is the accessible data-table companion; `./charts/renderers` isolates the
 renderer implementations. See the Showroom for a live page per chart type.

@@ -1,0 +1,58 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 1,
+    "action": "rewrite",
+    "id": "subpath-removed/./patterns/charts#*",
+    "reason": "specifier-repointed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 2,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./patterns/charts#*",
+    "reason": "not-exported-at-target"
+  },
+  {
+    "file": "index.tsx",
+    "line": 3,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./patterns/charts#*",
+    "reason": "namespace-import"
+  },
+  {
+    "file": "index.tsx",
+    "line": 4,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./public-entrypoints-manifest#*",
+    "reason": "no-target"
+  },
+  {
+    "file": "index.tsx",
+    "line": 7,
+    "column": 1,
+    "action": "rewrite",
+    "id": "subpath-removed/./patterns/charts#*",
+    "reason": "specifier-repointed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 8,
+    "column": 1,
+    "action": "report",
+    "id": "subpath-removed/./patterns/charts#*",
+    "reason": "star-reexport"
+  },
+  {
+    "file": "index.tsx",
+    "line": 10,
+    "column": 27,
+    "action": "report",
+    "id": "subpath-removed/./patterns/charts#*",
+    "reason": "dynamic-import"
+  }
+]

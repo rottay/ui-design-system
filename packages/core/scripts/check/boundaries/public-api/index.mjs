@@ -346,6 +346,9 @@ export function runPublicEntrypointGate({ root = DEFAULT_ROOT, silent = false } 
 
   if (manifest.schemaVersion !== 2) failures.push('manifest schemaVersion must be 2');
   if (manifest.package !== packageJson.name) failures.push('manifest package must match package.json name');
+  if (!isRecord(manifest.entries)) {
+    failures.push('manifest must declare `entries` as a record; an empty record fences an empty set, an absent one fences nothing');
+  }
   if (!viteSource.includes('preserveModules: true') || !viteSource.includes("preserveModulesRoot: 'src'")) {
     failures.push('vite.config.ts must preserve modules from src');
   }
@@ -459,13 +462,6 @@ export function runPublicEntrypointGate({ root = DEFAULT_ROOT, silent = false } 
       failures.push(`${subpath} is public but absent from contracts/package/entrypoints/index.json`);
     }
   }
-  if (JSON.stringify(packageJson.exports?.['./public-entrypoints-manifest'])
-    !== JSON.stringify({ default: './contracts/package/entrypoints/index.json' })) {
-    failures.push('./public-entrypoints-manifest export is missing or incorrect');
-  }
-  if (!(packageJson.files ?? []).includes('contracts/package/entrypoints/index.json')) {
-    failures.push('contracts/package/entrypoints/index.json is absent from package files');
-  }
   const coverage = { runtimeSymbols, typeSymbols, totalSymbols: runtimeSymbols + typeSymbols };
   if (JSON.stringify(manifest.coverage) !== JSON.stringify(coverage)) {
     failures.push(`manifest coverage is stale: expected ${JSON.stringify(coverage)}`);
@@ -535,7 +531,8 @@ export function writeCeilingsBaseline({ root = DEFAULT_ROOT, reason, widen = fal
       + `${unknownRootKeys.map((key) => JSON.stringify(key)).join(', ')}. Se quitan a mano y se revisan; `
       + 're-anclar encima las lavaria');
   }
-  const live = readCeilings(readJson(path.join(root, 'contracts/package/entrypoints/index.json')));
+  const manifest = readJson(path.join(root, 'contracts/package/entrypoints/index.json'));
+  const live = readCeilings(manifest);
   for (const [subpath, entry] of Object.entries(live)) {
     for (const dimension of GOVERNED_BUDGET_DIMENSIONS) {
       if (!(dimension in entry)) throw new Error(`${subpath}: el manifest no declara ${dimension}; no se ancla una dimension ausente`);
@@ -610,7 +607,10 @@ export function writeCeilingsBaseline({ root = DEFAULT_ROOT, reason, widen = fal
     law: previous.law,
     producedBy: previous.producedBy,
     why: previous.why,
-    consolidationCandidates: previous.consolidationCandidates,
+    consolidationCandidates: Object.entries(manifest.entries ?? {})
+      .filter(([, entry]) => entry?.budgetNote)
+      .map(([subpath]) => subpath)
+      .sort(),
     ceilings,
     lastMove: reason,
     lastMoveKind: widening.length > 0

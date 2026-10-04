@@ -32,7 +32,7 @@ function sandbox(mutate = () => {}) {
   mkdirSync(join(dir, dirname(MANIFEST_PATH)), { recursive: true });
   cpSync(join(ROOT, MANIFEST_PATH), join(dir, MANIFEST_PATH));
   mkdirSync(join(dir, 'src/entrypoints'), { recursive: true });
-  for (const owner of ['charts', 'eslint', 'graphics', 'icons', 'public', 'server', 'suppliers']) {
+  for (const owner of ['charts', 'eslint', 'graphics', 'icons', 'server', 'suppliers']) {
     mkdirSync(join(dir, 'src/entrypoints', owner), { recursive: true });
   }
   mutate(pkg, dir);
@@ -114,7 +114,7 @@ describe('entrypoint parity drills', () => {
   it('MUTANT: a governed entry outside the six owners would split the two gates', () => {
     const dir = sandbox();
     const manifest = JSON.parse(readFileSync(join(dir, MANIFEST_PATH), 'utf8'));
-    manifest.entries['./icons'] = manifest.entries[Object.keys(manifest.entries)[0]];
+    manifest.entries['./icons'] = { owner: 'icons', family: 'icons', boundary: 'runtime' };
     writeFileSync(join(dir, MANIFEST_PATH), JSON.stringify(manifest));
     const failures = evaluate(measure(dir));
     assert.ok(
@@ -123,9 +123,57 @@ describe('entrypoint parity drills', () => {
     );
   });
 
-  it('MUTANT: an empty package or an empty manifest is a broken reader, not a clean one', () => {
+  it('MUTANT: an empty package is a broken reader, not a clean one', () => {
     const empty = sandbox((pkg) => { pkg.exports = {}; });
     assert.ok(evaluate(measure(empty)).some((line) => line.includes('publishes no subpath')));
+  });
+
+  it('MUTANT: a missing manifest, or one with no `entries` record, is a broken reader and not an empty fence', () => {
+    const missing = sandbox();
+    rmSync(join(missing, MANIFEST_PATH));
+    assert.ok(
+      evaluate(measure(missing)).some((line) => line.startsWith(`${MANIFEST_PATH} is missing`)),
+      evaluate(measure(missing)).join(' | '),
+    );
+    for (const entries of [undefined, null, [], 'none']) {
+      const dir = sandbox();
+      writeFileSync(join(dir, MANIFEST_PATH), JSON.stringify({ schemaVersion: 2, entries }));
+      assert.ok(
+        evaluate(measure(dir)).some((line) => line.startsWith(`${MANIFEST_PATH} is missing`)),
+        `entries ${JSON.stringify(entries)} read as an empty fence`,
+      );
+    }
+  });
+
+  it('the empty fence is lawful: a manifest that governs nothing leaves no class stale', () => {
+    const dir = sandbox();
+    writeFileSync(join(dir, MANIFEST_PATH), JSON.stringify({ schemaVersion: 2, entries: {} }));
+    const result = measure(dir);
+    assert.deepEqual(result.governed, []);
+    assert.deepEqual(evaluate(result), []);
+  });
+
+  it('MUTANT: every governed owner is fenced while the manifest is empty', () => {
+    for (const owner of GOVERNED_OWNERS) {
+      const dir = sandbox((pkg) => {
+        pkg.exports[`./${owner}/smuggled`] = { import: './dist/smuggled.js' };
+      });
+      writeFileSync(join(dir, MANIFEST_PATH), JSON.stringify({ schemaVersion: 2, entries: {} }));
+      const failures = evaluate(measure(dir));
+      assert.ok(
+        failures.some((line) => line === `./${owner}/smuggled: under a governed owner and absent from ${MANIFEST_PATH}`),
+        failures.join(' | '),
+      );
+      assert.ok(
+        failures.some((line) => line.startsWith(`./${owner}/smuggled:`) && line.includes('classified by nothing')),
+        failures.join(' | '),
+      );
+    }
+  });
+
+  it('only the governed-manifest class may be empty, and only it is declared a fence', () => {
+    assert.deepEqual(CLASSES.filter((entry) => entry.fence).map((entry) => entry.id), ['governed-manifest']);
+    assert.equal(CLASSES.some((entry) => entry.id === 'manifest-self'), false);
   });
 
   it('the six governed owners are the ones public-entrypoint-boundary reverse-checks', () => {

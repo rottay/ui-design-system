@@ -1,45 +1,47 @@
-// Chart facade parity drill (Modern Rescue, Lane 5).
+// Chart facade parity drill.
 //
-// WHAT THIS PROVES. `entrypoints/public/patterns/charts/index.ts` is the public
-// chart facade. Its job is to publish exactly the 18 canonical chart family
-// components, as VALUES, under their canonical names, from the ONE owner that
-// declares them (`ui/patterns/visualization/charts/families`). This drill
-// asserts that whole shape from source on every run, so a future edit to either
-// side is caught mechanically instead of by hand-audit.
+// WHAT THIS PROVES. The eighteen chart family components have one public door:
+// the package root. `src/index.ts` reaches them through a chain of `export *`
+// links that ends at the charts barrel, and the charts barrel takes them from
+// the ONE owner that declares them (`charts/families`). This drill asserts that
+// whole shape from source on every run: the barrel publishes exactly the 18
+// canonical names, as VALUES, under their canonical names, from that owner, and
+// no link of the chain re-points one of them.
 //
-// WHY THE SHAPE AND NOT JUST THE NAME SET. The previous revision of this drill
-// compared name sets only, which made it a false green. Every one of these
-// passed it while breaking the facade:
+// WHY THE SHAPE AND NOT JUST THE NAME SET. A name-set comparison is a false
+// green for every one of these:
 //
 //   • `export { BarChart as AreaChart, AreaChart as BarChart, ... }` — the name
 //     SET is exactly right and every import resolves; the components are simply
-//     swapped. Set equality cannot see an alias, because it reads the exported
-//     name and an alias is precisely a lie about which local that name binds.
-//   • a correct name list pointed at the WRONG module — the extractor never
-//     resolved, or even looked at, the module specifier.
-//   • `export type { AreaChart, ... }` — a type-only clause publishes no value,
-//     yet its names read identically to a value clause.
-//   • `export * from "..."` alongside the good list — the extractor collected
-//     nothing from an export-star and reported no failure for it, so an
-//     unbounded surface could be bolted on invisibly.
-//   • `export const CHART_COUNT = 18` — an exported local declaration is not an
-//     `ExportDeclaration` at all, so it was not merely tolerated, it was unseen.
-//   • the same name twice — `Set` deduplicated it back to a clean 18.
+//     swapped. Set equality cannot see an alias.
+//   • a correct name list pointed at the WRONG module.
+//   • `export type { AreaChart, ... }` — a type-only clause publishes no value.
+//   • `export * from "./families"` alongside the good list — an unbounded
+//     surface with no name list to check.
+//   • `export const AreaChart = ...` — an exported local declaration is not an
+//     `ExportDeclaration` at all.
+//   • the same name twice — a `Set` deduplicates it back to a clean 18.
+//   • a named export of a chart name in a link of the chain — a named export
+//     wins over `export *`, so the door would publish something else under the
+//     canonical name while the barrel stays perfect.
 //
-// So this drill checks the shape, not a projection of it: exactly one top-level
-// non-type-only `ExportDeclaration`, exactly the expected module specifier, an
-// element list with no aliases and no type-only members, no duplicates, and no
-// other exporting construct anywhere in the file. Each of those clauses has a
-// permanent planted-negative canary below; a canary that stops failing means the
-// clause it guards has stopped being enforced.
+// So the drill checks the shape: in the charts barrel, exactly one non-type-only
+// `ExportDeclaration` carries chart families, with exactly the expected module
+// specifier, no aliases, no type-only members and no duplicates; the barrel
+// declares nothing locally and never stars the families owner; and every link
+// of the root door carries exactly one value `export *` to the next link and
+// binds none of the 18 names itself. Each clause has a permanent planted
+// negative below; a canary that stops failing means its clause stopped being
+// enforced.
 //
-// TECHNIQUE. Parser-only AST walk (`ts.createSourceFile`), the same approach as
-// `parseModule` in `libraries/taxonomy/roots`: no `ts.createProgram`, no
-// type checker, no module resolution. A regex would match today's exact file
-// shape and would say nothing about the shapes above, which is the entire point.
+// WHAT IT DOES NOT SEE. Two different `export *` of one link that both carry
+// the same name make that name ambiguous; the type checker reports that, not
+// this parser-only walk.
+//
+// TECHNIQUE. Parser-only AST walk (`ts.createSourceFile`): no program, no type
+// checker, no module resolution.
 //
 // Hermetic: every planted negative parses a synthetic in-memory source string.
-// Nothing is written to disk and no temp directory is created.
 
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -53,35 +55,51 @@ import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/ind
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(scriptDir);
 
-const FACADE_FILE = resolve(packageRoot, 'src/entrypoints/public/patterns/charts/index.ts');
+/** The root door, link by link: each file and the specifier it must star-export. */
+const DOOR_LINKS = Object.freeze([
+  Object.freeze({ file: 'src/index.ts', star: './components' }),
+  Object.freeze({ file: 'src/components/index.ts', star: './patterns' }),
+  Object.freeze({ file: 'src/components/patterns/index.ts', star: './visualization' }),
+  Object.freeze({ file: 'src/components/patterns/visualization/index.ts', star: './charts' }),
+]);
+const DOOR_FILE = resolve(packageRoot, DOOR_LINKS[0].file);
+const FACADE_FILE = resolve(packageRoot, 'src/components/patterns/visualization/charts/index.ts');
 const INVENTORY_FILE = resolve(
   packageRoot,
   'scripts/check/modern-rescue/family-inventory/index.json',
 );
 
 /**
- * The ONE module the facade may re-export from. It is the families owner's own
- * barrel, not the eighteen sibling folders below it: naming the owner once makes
- * the published family set a single fact with a single source, where eighteen
- * independent lines could each drift on their own.
+ * The ONE module the charts barrel may take the families from. It is the
+ * families owner's own barrel, not the eighteen sibling folders below it.
  */
-const EXPECTED_SPECIFIER = '../../../../components/patterns/visualization/charts/families';
+const EXPECTED_SPECIFIER = './families';
 
 const EXPECTED_EXPORT_COUNT = 18;
 
 /**
- * Inspects the facade's shape and reports every violation, in a deterministic
- * order: statement-scan findings in source order, then the declaration-count
- * check, then (only when there is exactly one candidate declaration) the module
- * specifier, the per-element checks in element order, duplicates, and finally
- * the parity of the published name set against the inventory.
+ * Inspects how the charts barrel publishes the chart families and reports every
+ * violation, in a deterministic order: statement-scan findings in source order,
+ * then the declaration-count check, then (only when there is exactly one
+ * candidate declaration) the module specifier, the per-element checks in
+ * element order, duplicates, and finally the parity of the published name set
+ * against the inventory.
  *
- * Parser-only. `problems` is empty exactly when the facade is well formed.
+ * A declaration is a candidate when it is a value export that names the
+ * families owner or carries one of the expected names. The barrel publishes the
+ * rest of the chart surface too; those declarations are not this drill's.
+ *
+ * Parser-only. `problems` is empty exactly when the publication is well formed.
  */
 function inspectChartFacade(ts, fileName, sourceText, expectedNames) {
   const source = ts.createSourceFile(fileName, sourceText, ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
   const problems = [];
   const candidates = [];
+  const fromFamilies = (statement) => Boolean(statement.moduleSpecifier
+    && ts.isStringLiteral(statement.moduleSpecifier)
+    && statement.moduleSpecifier.text === EXPECTED_SPECIFIER);
+  const carriesFamily = (clause) => clause.elements.some((element) =>
+    expectedNames.has(element.name.text) || (element.propertyName && expectedNames.has(element.propertyName.text)));
 
   for (const statement of source.statements) {
     if (ts.isExportAssignment(statement)) {
@@ -91,25 +109,27 @@ function inspectChartFacade(ts, fileName, sourceText, expectedNames) {
     if (ts.isExportDeclaration(statement)) {
       const clause = statement.exportClause;
       if (!clause) {
-        // `export * from "..."` — an unbounded surface with no name list to check.
-        problems.push('export-star declaration is forbidden');
+        // `export * from "./families"` — an unbounded surface with no name list to check.
+        if (fromFamilies(statement)) problems.push('export-star of the families owner is forbidden');
         continue;
       }
       if (ts.isNamespaceExport(clause)) {
-        problems.push('namespace re-export (export * as ns) is forbidden');
+        if (fromFamilies(statement) || expectedNames.has(clause.name.text)) {
+          problems.push('namespace re-export (export * as ns) of the families owner is forbidden');
+        }
         continue;
       }
       if (statement.isTypeOnly) {
-        // A type-only clause publishes no value, so it cannot be the facade even
-        // though its name list reads identically to a value clause.
-        problems.push('type-only export declaration is forbidden');
+        // A type-only clause publishes no value, so it cannot publish a family
+        // even though its name list reads identically to a value clause.
+        if (carriesFamily(clause)) problems.push('type-only export declaration is forbidden');
         continue;
       }
-      candidates.push(statement);
+      if (fromFamilies(statement) || carriesFamily(clause)) candidates.push(statement);
       continue;
     }
     // Anything else carrying an `export` modifier is a local declaration the
-    // facade published itself. The facade re-exports; it declares nothing.
+    // barrel published itself. The barrel re-exports; it declares nothing.
     const modifiers = ts.canHaveModifiers(statement) ? (ts.getModifiers(statement) ?? []) : [];
     if (!modifiers.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)) continue;
     for (const name of localDeclarationNames(ts, statement)) {
@@ -137,7 +157,7 @@ function inspectChartFacade(ts, fileName, sourceText, expectedNames) {
     const exportedName = element.name.text;
     if (element.propertyName) {
       // The exported name is what a consumer imports; the property name is what
-      // it actually binds. When they differ the facade is asserting something
+      // it actually binds. When they differ the barrel is asserting something
       // the owner never said, and a name-set check cannot see the difference.
       problems.push(`alias is forbidden: ${element.propertyName.text} as ${exportedName}`);
     }
@@ -167,6 +187,49 @@ function inspectChartFacade(ts, fileName, sourceText, expectedNames) {
   return { problems, names };
 }
 
+/**
+ * Inspects one link of the root door: it must carry exactly one value
+ * `export *` from the next link, and bind none of the expected names itself.
+ */
+function inspectDoorLink(ts, fileName, sourceText, star, expectedNames) {
+  const source = ts.createSourceFile(fileName, sourceText, ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
+  const problems = [];
+  let stars = 0;
+
+  for (const statement of source.statements) {
+    if (ts.isExportDeclaration(statement)) {
+      const clause = statement.exportClause;
+      const specifier = statement.moduleSpecifier && ts.isStringLiteral(statement.moduleSpecifier)
+        ? statement.moduleSpecifier.text
+        : null;
+      if (!clause) {
+        if (specifier === star && !statement.isTypeOnly) stars += 1;
+        continue;
+      }
+      if (ts.isNamespaceExport(clause)) {
+        if (expectedNames.has(clause.name.text)) {
+          problems.push(`the door binds ${clause.name.text} itself: namespace re-export`);
+        }
+        continue;
+      }
+      for (const element of clause.elements) {
+        if (!expectedNames.has(element.name.text)) continue;
+        const bound = element.propertyName ? `${element.propertyName.text} as ${element.name.text}` : element.name.text;
+        problems.push(`the door binds ${element.name.text} itself: export { ${bound} }${specifier ? ` from "${specifier}"` : ''}`);
+      }
+      continue;
+    }
+    const modifiers = ts.canHaveModifiers(statement) ? (ts.getModifiers(statement) ?? []) : [];
+    if (!modifiers.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)) continue;
+    for (const name of localDeclarationNames(ts, statement)) {
+      if (expectedNames.has(name)) problems.push(`the door binds ${name} itself: exported local declaration`);
+    }
+  }
+
+  if (stars !== 1) problems.push(`expected exactly 1 value export-star from "${star}", found ${stars}`);
+  return problems;
+}
+
 /** Names bound by an exported local declaration, for the violation message. */
 function localDeclarationNames(ts, statement) {
   if (ts.isVariableStatement(statement)) {
@@ -189,13 +252,20 @@ function loadChartFamilyNames() {
 }
 
 /**
- * Builds a synthetic facade from a list of clause element texts. Every canary
- * starts from the well-formed shape and mutates exactly one thing, so a canary
- * failure names one cause.
+ * Builds a synthetic charts barrel from a list of clause element texts. Every
+ * canary starts from the well-formed shape and mutates exactly one thing, so a
+ * canary failure names one cause. The surrounding declarations are the ones a
+ * real barrel carries beside the families; they must stay invisible.
  */
 function facadeSource(elements, { specifier = EXPECTED_SPECIFIER, typeOnly = false, extra = '' } = {}) {
   const keyword = typeOnly ? 'export type' : 'export';
-  return `"use client";\n\n${keyword} {\n${elements.map((element) => `  ${element},`).join('\n')}\n} from "${specifier}";\n${extra}`;
+  return [
+    "export type { ChartBaseProps } from './contracts';",
+    "export { useChartDimensions } from './runtime';",
+    `${keyword} {\n${elements.map((element) => `  ${element},`).join('\n')}\n} from "${specifier}";`,
+    `export type { AreaChartProps } from "${EXPECTED_SPECIFIER}";`,
+    extra,
+  ].join('\n');
 }
 
 const ts = loadTypeScript();
@@ -207,18 +277,39 @@ test('the inventory still declares exactly 18 chart-layer families', () => {
   assert.equal(CANONICAL.length, EXPECTED_EXPORT_COUNT);
 });
 
-test('the real chart facade is one aliasless value re-export of exactly the 18 canonical components', () => {
+test('the real charts barrel takes exactly the 18 canonical components from the families owner, aliasless and as values', () => {
   const sourceText = readFileSync(FACADE_FILE, 'utf8');
   const { problems, names } = inspectChartFacade(ts, FACADE_FILE, sourceText, EXPECTED_NAMES);
 
-  assert.deepEqual(problems, [], `the live facade violates its shape: ${problems.join(' | ')}`);
+  assert.deepEqual(problems, [], `the live charts barrel violates its shape: ${problems.join(' | ')}`);
   assert.deepEqual([...names].sort(), CANONICAL);
   assert.equal(names.length, EXPECTED_EXPORT_COUNT);
 });
 
-test('the real chart facade keeps its client directive', () => {
-  const sourceText = readFileSync(FACADE_FILE, 'utf8');
-  assert.match(sourceText, /^\s*["']use client["'];/, 'the facade is a client boundary and must open with the directive');
+test('the real root door reaches the charts barrel through one export-star per link and binds no family itself', () => {
+  for (const link of DOOR_LINKS) {
+    const file = resolve(packageRoot, link.file);
+    const problems = inspectDoorLink(ts, file, readFileSync(file, 'utf8'), link.star, EXPECTED_NAMES);
+    assert.deepEqual(problems, [], `${link.file}: ${problems.join(' | ')}`);
+  }
+  assert.equal(
+    resolve(dirname(resolve(packageRoot, DOOR_LINKS.at(-1).file)), DOOR_LINKS.at(-1).star, 'index.ts'),
+    FACADE_FILE,
+    'the last link of the door must be the charts barrel this drill inspects',
+  );
+  for (let index = 1; index < DOOR_LINKS.length; index += 1) {
+    const previous = DOOR_LINKS[index - 1];
+    assert.equal(
+      resolve(dirname(resolve(packageRoot, previous.file)), previous.star, 'index.ts'),
+      resolve(packageRoot, DOOR_LINKS[index].file),
+      `${previous.file} does not star-export ${DOOR_LINKS[index].file}`,
+    );
+  }
+});
+
+test('the real root door keeps its client directive', () => {
+  const sourceText = readFileSync(DOOR_FILE, 'utf8');
+  assert.match(sourceText, /^\s*["']use client["'];/, 'the door that publishes the chart families is a client boundary and must open with the directive');
 });
 
 // ---------------------------------------------------------------------------
@@ -254,7 +345,7 @@ test('planted negative: an alias swap the name set alone cannot see', () => {
 });
 
 test('planted negative: the right names re-exported from the wrong module', () => {
-  const wrong = '../../../../components/patterns/visualization/charts';
+  const wrong = './runtime';
   const { problems } = inspectChartFacade(
     ts,
     'fixture.ts',
@@ -296,22 +387,22 @@ test('planted negative: an export-star bolted onto a correct list', () => {
   const { problems } = inspectChartFacade(
     ts,
     'fixture.ts',
-    facadeSource(CANONICAL, { extra: 'export * from "./anything";\n' }),
+    facadeSource(CANONICAL, { extra: `export * from "${EXPECTED_SPECIFIER}";\n` }),
     EXPECTED_NAMES,
   );
 
-  assert.deepEqual(problems, ['export-star declaration is forbidden']);
+  assert.deepEqual(problems, ['export-star of the families owner is forbidden']);
 });
 
 test('planted negative: a namespace re-export bolted onto a correct list', () => {
   const { problems } = inspectChartFacade(
     ts,
     'fixture.ts',
-    facadeSource(CANONICAL, { extra: 'export * as charts from "./anything";\n' }),
+    facadeSource(CANONICAL, { extra: `export * as charts from "${EXPECTED_SPECIFIER}";\n` }),
     EXPECTED_NAMES,
   );
 
-  assert.deepEqual(problems, ['namespace re-export (export * as ns) is forbidden']);
+  assert.deepEqual(problems, ['namespace re-export (export * as ns) of the families owner is forbidden']);
 });
 
 test('planted negative: an exported local declaration alongside a correct list', () => {
@@ -354,8 +445,6 @@ test('planted negative: the 18 names split across two declarations', () => {
   const first = CANONICAL.slice(0, 9);
   const second = CANONICAL.slice(9);
   const sourceText = [
-    '"use client";',
-    '',
     `export { ${first.join(', ')} } from "${EXPECTED_SPECIFIER}";`,
     `export { ${second.join(', ')} } from "${EXPECTED_SPECIFIER}";`,
     '',
@@ -367,10 +456,85 @@ test('planted negative: the 18 names split across two declarations', () => {
 });
 
 test('planted negative: a local re-export with no module specifier', () => {
-  const sourceText = `"use client";\n\nexport { ${CANONICAL.join(', ')} };\n`;
+  const sourceText = `export { ${CANONICAL.join(', ')} };\n`;
   const { problems } = inspectChartFacade(ts, 'fixture.ts', sourceText, EXPECTED_NAMES);
 
   assert.deepEqual(problems, ['export declaration must re-export from a module specifier']);
+});
+
+test('planted negative: a second value declaration that takes a helper from the families owner', () => {
+  const { problems } = inspectChartFacade(
+    ts,
+    'fixture.ts',
+    facadeSource(CANONICAL, { extra: `export { makeChart } from "${EXPECTED_SPECIFIER}";\n` }),
+    EXPECTED_NAMES,
+  );
+
+  assert.deepEqual(problems, ['expected exactly 1 value export declaration, found 2']);
+});
+
+test('planted negative: a family listed again from another module', () => {
+  const { problems } = inspectChartFacade(
+    ts,
+    'fixture.ts',
+    facadeSource(CANONICAL, { extra: 'export { AreaChart } from "./runtime";\n' }),
+    EXPECTED_NAMES,
+  );
+
+  assert.deepEqual(problems, ['expected exactly 1 value export declaration, found 2']);
+});
+
+// ---------------------------------------------------------------------------
+// The door: a link of the chain is where a perfect barrel can still be undone.
+// ---------------------------------------------------------------------------
+
+const LINK = "export * from './next';\nexport * from './sibling';\nexport { useThing } from './thing';\n";
+
+test('control: a well-formed door link passes', () => {
+  assert.deepEqual(inspectDoorLink(ts, 'link.ts', LINK, './next', EXPECTED_NAMES), []);
+});
+
+test('planted negative: a door link that swaps a family behind its canonical name', () => {
+  const problems = inspectDoorLink(
+    ts,
+    'link.ts',
+    `${LINK}export { BarChart as AreaChart } from './next';\n`,
+    './next',
+    EXPECTED_NAMES,
+  );
+
+  assert.deepEqual(problems, ['the door binds AreaChart itself: export { BarChart as AreaChart } from "./next"']);
+});
+
+test('planted negative: a door link that re-publishes a family as a type, a local or a namespace', () => {
+  const problems = inspectDoorLink(
+    ts,
+    'link.ts',
+    `${LINK}export type { AreaChart } from './next';\nexport const BarChart = null;\nexport * as PieChart from './next';\n`,
+    './next',
+    EXPECTED_NAMES,
+  );
+
+  assert.deepEqual(problems, [
+    'the door binds AreaChart itself: export { AreaChart } from "./next"',
+    'the door binds BarChart itself: exported local declaration',
+    'the door binds PieChart itself: namespace re-export',
+  ]);
+});
+
+test('planted negative: a door link that drops, duplicates or type-narrows its export-star', () => {
+  const dropped = "export * from './sibling';\n";
+  const typed = "export type * from './next';\n";
+  const twice = "export * from './next';\nexport * from './next';\n";
+  const named = `export { ${CANONICAL.join(', ')} } from './next';\n`;
+
+  assert.deepEqual(inspectDoorLink(ts, 'link.ts', dropped, './next', EXPECTED_NAMES),
+    ['expected exactly 1 value export-star from "./next", found 0']);
+  assert.deepEqual(inspectDoorLink(ts, 'link.ts', typed, './next', EXPECTED_NAMES),
+    ['expected exactly 1 value export-star from "./next", found 0']);
+  assert.deepEqual(inspectDoorLink(ts, 'link.ts', twice, './next', EXPECTED_NAMES),
+    ['expected exactly 1 value export-star from "./next", found 2']);
+  assert.equal(inspectDoorLink(ts, 'link.ts', named, './next', EXPECTED_NAMES).length, EXPECTED_EXPORT_COUNT + 1);
 });
 
 test('control: the synthetic well-formed facade passes the same detector', () => {

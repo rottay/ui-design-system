@@ -1,0 +1,34 @@
+{
+  "published": [
+    ".",
+    "./charts",
+    "./charts/spec",
+    "./charts/access",
+    "./charts/renderers"
+  ],
+  "exports": {
+    ".": [
+      "AreaChart",
+      "BarChart",
+      "BulletChart",
+      "CalendarHeatMap",
+      "FunnelChart",
+      "GanttChart",
+      "GaugeChart",
+      "HeatMap",
+      "Histogram",
+      "LineChart",
+      "NetworkGraph",
+      "PieChart",
+      "RadarChart",
+      "SankeyChart",
+      "ScatterChart",
+      "Sparkline",
+      "TreeMap",
+      "WaterfallChart"
+    ],
+    "./charts": [
+      "ChartFrame"
+    ]
+  }
+}

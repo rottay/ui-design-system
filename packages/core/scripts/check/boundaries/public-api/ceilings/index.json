@@ -3,15 +3,8 @@
   "law": "Every public entrypoint budget is decrease-only in BOTH governed dimensions (maxReachableModules, maxSourceBytes). Raising a ceiling requires --write-baseline --widen with a measured reason; lowering one requires updating this anchor in the same change. Unknown root keys and unknown ceiling dimensions fail the gate; they are never ignored.",
   "producedBy": "scripts/check/boundaries/public-api/index.mjs",
   "why": "This file makes both governed entrypoint budget dimensions -- reachable modules and source bytes -- executable and reviewable instead of relying on narrative notes.",
-  "consolidationCandidates": [
-    "./patterns/charts"
-  ],
-  "ceilings": {
-    "./patterns/charts": {
-      "maxReachableModules": 242,
-      "maxSourceBytes": 2482000
-    }
-  },
-  "lastMove": "RET-01-E (WO-RET-01, 2026-10-02): 78 of the 79 retired governed public subpaths left the export map (zero consumers measured by the consumer-census gate); ./patterns/charts is retained because the chart-facade parity machinery is CI-bound to it, so its reviewed HEAD ceiling (242 modules / 2482000 bytes, unchanged) is re-anchored alone",
+  "consolidationCandidates": [],
+  "ceilings": {},
+  "lastMove": "WO-RET-01 (R31, 2026-10-04): ./patterns/charts, the last governed public subpath, left the export map with zero measured consumers (consumer-census, showroom + 3 apps); its eighteen chart names stay published by the package root. The manifest governs no subpath and the anchor is empty; the fence stays: a subpath under a governed owner fails until it is declared with a budget",
   "lastMoveKind": "decrece-solo — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 0 subido(s), 0 sin ancla valida"
 }

@@ -4,7 +4,7 @@
  *
  * The eighteen chart families are described in six places and none was
  * derived from another: the `families/` folder set, the `families/` barrel,
- * the charts barrel, the public facade, the showroom registry and the
+ * the charts barrel, the package root door, the showroom registry and the
  * `family-cut` roster. Adding a nineteenth family meant remembering six
  * edits, and forgetting one was invisible. The typed registry is the row set;
  * this gate is what makes the other lists projections of it.
@@ -50,7 +50,18 @@ export const PATHS = Object.freeze({
   familiesDir: join(CHARTS, 'families'),
   familiesBarrel: join(CHARTS, 'families/index.ts'),
   chartsBarrel: join(CHARTS, 'index.ts'),
-  publicFacade: join(root, 'src/entrypoints/public/patterns/charts/index.ts'),
+  /**
+   * The door that publishes the families: the package root, which reaches the
+   * charts barrel through one `export *` per link. Each link names the file and
+   * the specifier it must star-export.
+   */
+  rootDoor: Object.freeze([
+    Object.freeze({ file: join(root, 'src/index.ts'), star: './components' }),
+    Object.freeze({ file: join(root, 'src/components/index.ts'), star: './patterns' }),
+    Object.freeze({ file: join(root, 'src/components/patterns/index.ts'), star: './visualization' }),
+    Object.freeze({ file: join(root, 'src/components/patterns/visualization/index.ts'), star: './charts' }),
+  ]),
+  familiesSpecifier: './families',
   skinDir: join(root, 'src/foundation/tokens/css/presentation/components/skin'),
   showroomRegistry: join(root, '../showroom/src/data/registry/charts.ts'),
   familyCutBaseline: join(root, 'scripts/check/family-cut/baseline/index.json'),
@@ -154,6 +165,61 @@ export function readExportedNames(source, fileName) {
     }
   }
   return names;
+}
+
+/** Non-type-only names a barrel re-exports from one module specifier. */
+export function readExportedNamesFrom(source, fileName, specifier) {
+  const sourceFile = parse(source, fileName);
+  const names = new Set();
+  for (const statement of sourceFile.statements) {
+    if (!ts.isExportDeclaration(statement) || statement.isTypeOnly) continue;
+    if (!statement.moduleSpecifier || !ts.isStringLiteralLike(statement.moduleSpecifier)) continue;
+    if (statement.moduleSpecifier.text !== specifier) continue;
+    const clause = statement.exportClause;
+    if (!clause || !ts.isNamedExports(clause)) continue;
+    for (const element of clause.elements) {
+      if (element.isTypeOnly) continue;
+      names.add(element.name.text);
+    }
+  }
+  return names;
+}
+
+/**
+ * What one link of the root door does with a set of names: how many value
+ * `export *` it carries for the expected specifier, and which of the names it
+ * binds itself -- a named export wins over a star, so it would re-point the name.
+ */
+export function readDoorLink(source, fileName, star, names) {
+  const sourceFile = parse(source, fileName);
+  let stars = 0;
+  const shadowed = new Set();
+  for (const statement of sourceFile.statements) {
+    if (ts.isExportDeclaration(statement)) {
+      const clause = statement.exportClause;
+      if (!clause) {
+        if (!statement.isTypeOnly && statement.moduleSpecifier
+          && ts.isStringLiteralLike(statement.moduleSpecifier)
+          && statement.moduleSpecifier.text === star) stars += 1;
+        continue;
+      }
+      if (ts.isNamedExports(clause)) {
+        for (const element of clause.elements) {
+          if (names.has(element.name.text)) shadowed.add(element.name.text);
+        }
+      } else if (names.has(clause.name.text)) shadowed.add(clause.name.text);
+      continue;
+    }
+    const modifiers = ts.canHaveModifiers(statement) ? (ts.getModifiers(statement) ?? []) : [];
+    if (!modifiers.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)) continue;
+    const declared = ts.isVariableStatement(statement)
+      ? statement.declarationList.declarations.map((declaration) => declaration.name)
+      : [statement.name];
+    for (const name of declared) {
+      if (name && ts.isIdentifier(name) && names.has(name.text)) shadowed.add(name.text);
+    }
+  }
+  return { stars, shadowed: [...shadowed].sort() };
 }
 
 /** Every `.ds-chart-*` class root the skin corpus declares. */
@@ -266,18 +332,38 @@ export function runGate(paths = PATHS) {
     ),
   );
 
-  /* 4. the public facade */
-  const facadeExports = readExportedNames(readFileSync(paths.publicFacade, 'utf8'), 'facade.ts');
+  /* 4. the package root door: the chain to the charts barrel, and what that barrel takes from the families owner */
+  const doorFindings = [];
+  for (const link of paths.rootDoor) {
+    const label = link.file.startsWith(root) ? link.file.slice(root.length + 1) : link.file;
+    if (!existsSync(link.file)) {
+      doorFindings.push(`${label} is not in this tree; the root door no longer reaches the charts barrel through it`);
+      continue;
+    }
+    const { stars, shadowed } = readDoorLink(readFileSync(link.file, 'utf8'), label, link.star, symbols);
+    if (stars !== 1) {
+      doorFindings.push(`${label} carries ${stars} value \`export *\` from "${link.star}"; the root door needs exactly one`);
+    }
+    for (const symbol of shadowed) {
+      doorFindings.push(`${label} binds "${symbol}" itself, which re-points the name the families owner publishes`);
+    }
+  }
+  const doorExports = readExportedNamesFrom(
+    readFileSync(paths.chartsBarrel, 'utf8'),
+    'charts.ts',
+    paths.familiesSpecifier,
+  );
   add(
-    'public-facade',
+    'root-door',
     DISPOSITIONS.ENFORCED,
-    `${facadeExports.size} facade exports`,
+    `${paths.rootDoor.length} links, ${doorExports.size} names taken from the families owner`,
     [
-      ...difference(symbols, facadeExports).map(
-        (symbol) => `"${symbol}" is not published by the public facade`,
+      ...doorFindings,
+      ...difference(symbols, doorExports).map(
+        (symbol) => `"${symbol}" is not published by the root door: the charts barrel does not take it from "${paths.familiesSpecifier}"`,
       ),
-      ...difference(facadeExports, symbols).map(
-        (symbol) => `the public facade publishes "${symbol}", which owns no registry row`,
+      ...difference(doorExports, symbols).map(
+        (symbol) => `the root door publishes "${symbol}" from the families owner, which owns no registry row`,
       ),
     ],
   );

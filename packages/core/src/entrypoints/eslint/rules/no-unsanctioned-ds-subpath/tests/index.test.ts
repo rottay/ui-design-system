@@ -133,15 +133,15 @@ describe('consumer contract: document is the single source', () => {
     expect(parsed.published.map((row) => row.subpath)).toEqual(exportKeys);
   });
 
-  it('publishes 40 subpaths and states that count in the document', () => {
+  it('publishes 38 subpaths and states that count in the document', () => {
     // The export map, disposition table and prose carry the same live count.
-    expect(exportKeys).toHaveLength(40);
-    expect(parsed.published).toHaveLength(40);
+    expect(exportKeys).toHaveLength(38);
+    expect(parsed.published).toHaveLength(38);
     expect(documentMarkdown).toContain(
-      '| Subpaths publicados | 40 |',
+      '| Subpaths publicados | 38 |',
     );
     expect(documentMarkdown).toContain(
-      '## 1. Superficie de importación sancionada (40/40)',
+      '## 1. Superficie de importación sancionada (38/38)',
     );
   });
 
@@ -407,7 +407,7 @@ function statedTally(markdown: string): string[] {
 }
 
 describe('showroom mounts the rule with a decrease-only baseline', () => {
-  const SHOWROOM_BASELINE_CAP = 7;
+  const SHOWROOM_BASELINE_CAP = 2;
 
   function showroomAllowSubpaths(config: string): string[] {
     const block = /allowSubpaths:\s*\[([^\]]*)\]/.exec(config);
@@ -467,7 +467,7 @@ describe('no-unsanctioned-ds-subpath', () => {
       (row) => row.disposition === 'guaranteed',
     ).map((row) => row.subpath);
 
-    expect(guaranteed).toHaveLength(21);
+    expect(guaranteed).toHaveLength(26);
     for (const subpath of guaranteed) {
       const specifier =
         subpath === '.'
@@ -477,25 +477,40 @@ describe('no-unsanctioned-ds-subpath', () => {
     }
   });
 
-  it('fails on a governed subpath scheduled for retirement', () => {
+  it('fails on a published subpath scheduled for retirement', () => {
     const { created, reports } = visitors();
     created.ImportDeclaration?.({
-      source: { value: '@rottay/design-system/patterns/charts' },
+      source: { value: '@rottay/design-system/styles/modern' },
     });
 
     expect(reports).toHaveLength(1);
     expect(reports[0]?.messageId).toBe('retireBy');
     expect(reports[0]?.data).toMatchObject({
-      specifier: '@rottay/design-system/patterns/charts',
-      subpath: './patterns/charts',
-      retiredBy: 'WO-RET-01',
+      specifier: '@rottay/design-system/styles/modern',
+      subpath: './styles/modern',
+      retiredBy: 'WO-RET-06',
     });
   });
 
-  it('fails on the published test fixture', () => {
+  it('fails on a published pack door still scheduled for retirement', () => {
+    expect(importFrom('@rottay/design-system/icons/foundation')).toEqual([
+      'retireBy',
+    ]);
+  });
+
+  it('passes on the published test fixture now that it is guaranteed', () => {
     expect(
       importFrom('@rottay/design-system/tenant-theme-canary-fixtures'),
-    ).toEqual(['retireBy']);
+    ).toEqual([]);
+  });
+
+  it('reports a retired door as a subpath the package does not publish', () => {
+    for (const specifier of [
+      '@rottay/design-system/patterns/charts',
+      '@rottay/design-system/public-entrypoints-manifest',
+    ]) {
+      expect(importFrom(specifier), specifier).toEqual(['unknown']);
+    }
   });
 
   it('fails on an unpublished forbidden subpath and names no work order', () => {

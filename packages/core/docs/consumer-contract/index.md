@@ -13,7 +13,9 @@ eran 43. RET-01-F (WO-RET-01, 2026-10-02) retira tres puertas:
 metadatos siguen por `./icons`, y el preset por `./icons/presets/bithire`.
 `./marks` agrega ambas clases; `./marks/brand` y `./marks/cloud` conservan
 fronteras de recursos separadas para CommonJS y SSR síncrono, sin duplicar
-implementaciones. No se agrega una puerta de compatibilidad; quedan 40 subpaths. Este documento es la
+implementaciones. No se agrega una puerta de compatibilidad; quedan 40 subpaths. WO-RET-01 retira
+además `./patterns/charts` y `./public-entrypoints-manifest` (sin consumidor medido en
+showroom ni en las tres apps); quedan 38 subpaths. Este documento es la
 **única fuente** de la tabla de disposiciones:
 la regla de lint `@rottay/no-unsanctioned-ds-subpath` la ejecuta y un test la
 compara byte a byte contra el espejo de código.
@@ -30,7 +32,7 @@ contrato puede desaparecer (D-07) sin aviso a las apps.
 | Espejo | `packages/core/src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.ts` | copia derivada que la regla importa (sin `node:fs`, funciona publicada) |
 | Lector | `.../no-unsanctioned-ds-subpath/contract/parse/index.ts` | parser puro markdown → filas |
 | Regla | `.../no-unsanctioned-ds-subpath/index.ts`, publicada como `@rottay/design-system/eslint` → `@rottay/no-unsanctioned-ds-subpath` | falla en todo lo que no está `guaranteed` |
-| Anti-deriva | `.../no-unsanctioned-ds-subpath/tests/index.test.ts` | reparsea este archivo, exige igualdad exacta con el espejo, exige 40/40 contra `package.json` `exports` (mismo conjunto y mismo orden) |
+| Anti-deriva | `.../no-unsanctioned-ds-subpath/tests/index.test.ts` | reparsea este archivo, exige igualdad exacta con el espejo, exige 38/38 contra `package.json` `exports` (mismo conjunto y mismo orden) |
 
 La regla es **fail-closed**: un especificador `@rottay/design-system…` que no
 aparezca como `guaranteed` en §1.2 se reporta, incluso si no está en ninguna
@@ -56,7 +58,7 @@ el showroom es parte del propio paquete y sus sondas no son consumo de producto
 (mismo criterio que ya aplicaba el borrador a `./spatial` y a
 `./tenant-theme-canary-fixtures`).
 
-## 1. Superficie de importación sancionada (40/40)
+## 1. Superficie de importación sancionada (38/38)
 
 Censo: `app-bithire` y `packages/showroom` (alcance del owner, 2026-09-05).
 Se cuentan especificadores de módulo reales (`from`, `import`, `import()`,
@@ -68,34 +70,32 @@ disposición es la parte normativa y es la que no puede derivar.
 
 | Métrica | Valor |
 | --- | --- |
-| Subpaths publicados | 40 |
-| `guaranteed` | 21 |
-| `retire-by WO-RET-01` | 18 |
+| Subpaths publicados | 38 |
+| `guaranteed` | 26 |
+| `retire-by WO-RET-06` | 11 |
 | `lab` | 1 |
 | Subpaths publicados con 0 consumidores en alcance (bithire + showroom) | 14 |
 | Importaciones a superficie garantizada | bithire 2086 · showroom 325 |
 | Importaciones a superficie no garantizada (línea base, decrece) | bithire 16 · showroom 14 |
 
-### 1.2 Tabla ejecutable: los 40 subpaths publicados
+### 1.2 Tabla ejecutable: los 38 subpaths publicados
 
 <!-- consumer-contract:published:start -->
 | Subpath | Disposition | Retire-by | app-bithire | showroom |
 | --- | --- | --- | --- | --- |
 | `.` | guaranteed | — | 1179 | 259 |
 | `./server` | guaranteed | — | 9 | 10 |
-| `./patterns/charts` | retire-by | WO-RET-01 | 0 | 0 |
-| `./public-entrypoints-manifest` | retire-by | WO-RET-01 | 0 | 0 |
 | `./icons` | guaranteed | — | 864 | 53 |
-| `./icons/presets/bithire` | retire-by | WO-RET-01 | 11 | 0 |
-| `./icons/roles/*` | retire-by | WO-RET-01 | 0 | 0 |
-| `./icons/foundation` | retire-by | WO-RET-01 | 0 | 3 |
-| `./icons/identity` | retire-by | WO-RET-01 | 0 | 1 |
-| `./icons/intelligence` | retire-by | WO-RET-01 | 0 | 1 |
-| `./icons/operations` | retire-by | WO-RET-01 | 0 | 1 |
+| `./icons/presets/bithire` | guaranteed | — | 11 | 0 |
+| `./icons/roles/*` | retire-by | WO-RET-06 | 0 | 0 |
+| `./icons/foundation` | retire-by | WO-RET-06 | 0 | 0 |
+| `./icons/identity` | retire-by | WO-RET-06 | 0 | 0 |
+| `./icons/intelligence` | retire-by | WO-RET-06 | 0 | 0 |
+| `./icons/operations` | retire-by | WO-RET-06 | 0 | 0 |
 | `./marks` | guaranteed | — | 12 | 1 |
-| `./marks/brand` | retire-by | WO-RET-01 | 0 | 0 |
-| `./marks/cloud` | retire-by | WO-RET-01 | 0 | 0 |
-| `./pictograms` | retire-by | WO-RET-01 | 0 | 1 |
+| `./marks/brand` | retire-by | WO-RET-06 | 0 | 0 |
+| `./marks/cloud` | retire-by | WO-RET-06 | 0 | 0 |
+| `./pictograms` | retire-by | WO-RET-06 | 0 | 1 |
 | `./charts` | guaranteed | — | 8 | 0 |
 | `./charts/spec` | guaranteed | — | 2 | 0 |
 | `./charts/access` | guaranteed | — | 2 | 0 |
@@ -105,13 +105,13 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./styles.css` | guaranteed | — | 0 | 1 |
 | `./styles/bithire` | guaranteed | — | 2 | 0 |
 | `./styles/evnto` | guaranteed | — | 0 | 0 |
-| `./styles/rottay` | retire-by | WO-RET-01 | 0 | 0 |
-| `./styles/modern` | retire-by | WO-RET-01 | 0 | 0 |
+| `./styles/rottay` | retire-by | WO-RET-06 | 0 | 0 |
+| `./styles/modern` | retire-by | WO-RET-06 | 0 | 0 |
 | `./styles/frozen-engines` | guaranteed | — | 0 | 1 |
 | `./eslint` | guaranteed | — | 1 | 0 |
-| `./supplier-contract` | retire-by | WO-RET-01 | 0 | 0 |
-| `./hooks-manifest` | retire-by | WO-RET-01 | 1 | 0 |
-| `./supplier-honesty-cli` | retire-by | WO-RET-01 | 0 | 0 |
+| `./supplier-contract` | guaranteed | — | 0 | 0 |
+| `./hooks-manifest` | guaranteed | — | 1 | 0 |
+| `./supplier-honesty-cli` | guaranteed | — | 0 | 0 |
 | `./fonts/arabic-text.css` | guaranteed | — | 0 | 0 |
 | `./fonts/editorial-display.css` | guaranteed | — | 0 | 1 |
 | `./fonts/editorial-text.css` | guaranteed | — | 0 | 0 |
@@ -119,8 +119,8 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./fonts/humanist-text.css` | guaranteed | — | 0 | 0 |
 | `./fonts/geometric-display.css` | guaranteed | — | 0 | 0 |
 | `./fonts/plex-mono.css` | guaranteed | — | 0 | 0 |
-| `./dist/*.css` | retire-by | WO-RET-01 | 0 | 0 |
-| `./tenant-theme-canary-fixtures` | retire-by | WO-RET-01 | 2 | 3 |
+| `./dist/*.css` | retire-by | WO-RET-06 | 0 | 0 |
+| `./tenant-theme-canary-fixtures` | guaranteed | — | 2 | 3 |
 <!-- consumer-contract:published:end -->
 
 ### 1.3 Tabla ejecutable: subpaths no publicados observados en las apps

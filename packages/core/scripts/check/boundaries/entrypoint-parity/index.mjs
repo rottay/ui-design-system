@@ -4,8 +4,9 @@
  * owner on disk is reachable from one.
  *
  * WHAT ALREADY EXISTS, and is cited rather than repeated. `public-entrypoint-boundary`
- * is the entrypoint parity gate of this repository: for the 76 subpaths the
- * governed manifest names, it compares the manifest against `package.json`
+ * is the entrypoint parity gate of this repository: for every subpath the
+ * governed manifest names (none today: the manifest is an empty fence), it
+ * compares the manifest against `package.json`
  * exports, the source file, the exported symbols, `releaseSync`, the vite
  * config and the coverage totals, and it fails in both directions. Nothing here
  * re-asserts any of that.
@@ -22,9 +23,12 @@
  * one more could join them without being looked at.
  *
  * THE LAW HERE. Every published subpath matches exactly one declared CLASS,
- * each class states why it is not in the governed manifest, and each class must
- * match at least one subpath -- a class nobody uses is a stale exemption, which
- * is the shape an exemption list rots into. And every owner under
+ * each class states why it is not in the governed manifest, and each exemption
+ * class must match at least one subpath -- a class nobody uses is a stale
+ * exemption, which is the shape an exemption list rots into. The one class that
+ * is not an exemption, `governed-manifest`, is empty exactly when the manifest
+ * governs nothing; the manifest itself must exist and declare `entries`, so an
+ * empty set is a measured state and a missing reader is not. And every owner under
  * `src/entrypoints/` must be reachable from some public subpath: an entrypoint
  * folder nobody publishes is a boundary that exists only in the tree.
  *
@@ -63,6 +67,7 @@ export const GOVERNED_OWNERS = Object.freeze([
 export const CLASSES = Object.freeze([
   {
     id: 'governed-manifest',
+    fence: true,
     reason:
       'named by contracts/package/entrypoints/index.json and fully compared by public-entrypoint-boundary: '
       + 'manifest, package export, source file, symbols, releaseSync, vite config and coverage',
@@ -79,11 +84,6 @@ export const CLASSES = Object.freeze([
       'the server-only boundary (compilers and emitters). Its surface is fenced by name in F-24 and its '
       + 'single-door law by tests/architecture/theme-lowering-single-door',
     match: (subpath) => subpath === './server',
-  },
-  {
-    id: 'manifest-self',
-    reason: 'the governed manifest published as data so a consumer can read the boundary set it is held to',
-    match: (subpath) => subpath === './public-entrypoints-manifest',
   },
   {
     id: 'graphics-pack',
@@ -137,8 +137,10 @@ function readJson(path) {
 export function measure(root = DEFAULT_ROOT) {
   const pkg = readJson(join(root, 'package.json'));
   const manifestPath = join(root, MANIFEST_PATH);
-  const manifest = existsSync(manifestPath) ? readJson(manifestPath) : { entries: {} };
-  const governed = new Set(Object.keys(manifest.entries ?? {}));
+  const manifest = existsSync(manifestPath) ? readJson(manifestPath) : null;
+  const entries = manifest?.entries;
+  const manifestReadable = typeof entries === 'object' && entries !== null && !Array.isArray(entries);
+  const governed = new Set(Object.keys(manifestReadable ? entries : {}));
   const subpaths = Object.keys(pkg.exports ?? {});
 
   const classified = subpaths.map((subpath) => {
@@ -168,6 +170,7 @@ export function measure(root = DEFAULT_ROOT) {
 
   return {
     subpaths,
+    manifestReadable,
     governed: [...governed].sort(),
     classified,
     owners,
@@ -179,7 +182,12 @@ export function measure(root = DEFAULT_ROOT) {
 export function evaluate(result) {
   const failures = [];
   if (result.subpaths.length === 0) failures.push('the package publishes no subpath at all — the reader is broken');
-  if (result.governed.length === 0) failures.push('the governed manifest names no entry — the reader is broken');
+  if (!result.manifestReadable) {
+    failures.push(
+      `${MANIFEST_PATH} is missing or declares no \`entries\` record — the reader is broken. An empty record is `
+      + 'the lawful empty fence; an absent one fences nothing',
+    );
+  }
 
   for (const row of result.classified) {
     if (row.classes.length === 0) {
@@ -196,7 +204,7 @@ export function evaluate(result) {
 
   for (const entry of CLASSES) {
     const members = result.classified.filter((row) => row.classes.includes(entry.id));
-    if (members.length === 0) {
+    if (members.length === 0 && !entry.fence) {
       failures.push(`${entry.id}: a declared class no published subpath matches; a stale exemption, remove it`);
     }
     if (entry.reason.trim().length < 40) {

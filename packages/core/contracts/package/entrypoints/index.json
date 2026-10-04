@@ -1,100 +1,11 @@
 {
   "schemaVersion": 2,
   "package": "@rottay/design-system",
-  "entries": {
-    "./patterns/charts": {
-      "owner": "patterns",
-      "family": "charts",
-      "boundary": "runtime",
-      "client": true,
-      "source": "src/entrypoints/public/patterns/charts/index.ts",
-      "output": "entrypoints/public/patterns/charts/index",
-      "budget": {
-        "maxDirectSources": 10,
-        "maxReachableModules": 242,
-        "maxSourceBytes": 2482000
-      },
-      "symbols": [
-        {
-          "name": "AreaChart",
-          "kind": "value"
-        },
-        {
-          "name": "BarChart",
-          "kind": "value"
-        },
-        {
-          "name": "BulletChart",
-          "kind": "value"
-        },
-        {
-          "name": "CalendarHeatMap",
-          "kind": "value"
-        },
-        {
-          "name": "FunnelChart",
-          "kind": "value"
-        },
-        {
-          "name": "GanttChart",
-          "kind": "value"
-        },
-        {
-          "name": "GaugeChart",
-          "kind": "value"
-        },
-        {
-          "name": "HeatMap",
-          "kind": "value"
-        },
-        {
-          "name": "Histogram",
-          "kind": "value"
-        },
-        {
-          "name": "LineChart",
-          "kind": "value"
-        },
-        {
-          "name": "NetworkGraph",
-          "kind": "value"
-        },
-        {
-          "name": "PieChart",
-          "kind": "value"
-        },
-        {
-          "name": "RadarChart",
-          "kind": "value"
-        },
-        {
-          "name": "SankeyChart",
-          "kind": "value"
-        },
-        {
-          "name": "ScatterChart",
-          "kind": "value"
-        },
-        {
-          "name": "Sparkline",
-          "kind": "value"
-        },
-        {
-          "name": "TreeMap",
-          "kind": "value"
-        },
-        {
-          "name": "WaterfallChart",
-          "kind": "value"
-        }
-      ],
-      "budgetNote": "decrease-only; scheduled-for-consolidation"
-    }
-  },
+  "entries": {},
   "coverage": {
-    "runtimeSymbols": 18,
+    "runtimeSymbols": 0,
     "typeSymbols": 0,
-    "totalSymbols": 18
+    "totalSymbols": 0
   },
   "_budgetGovernance": "Public-entrypoint budgets are decrease-only in both governed dimensions -- maxReachableModules and maxSourceBytes; increases require an explicit measured review and a matching ceiling update in scripts/check/boundaries/public-api/ceilings/index.json, taken through --write-baseline --widen --reason."
 }
