@@ -250,6 +250,17 @@
   cursor: grab;
 }
 
+/* The grip is a tab stop of its own, so it wears the tenant focus signature
+   at full strength instead of its resting dim. */
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__drag-handle[data-part='drag-handle']:is([data-state~='focus-visible'], :focus-visible) {
+  border-radius: var(--ds-saved-views-focus-ring-radius, var(--ds-radius-sm));
+  opacity: 1;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
+}
+
 /* ---- unsaved dot + default star (geometry was engine inline styles). ---- */
 /* The unsaved indicator is a ringed nucleus — a SHAPE (ring + filled core),
    never hue alone: it stays legible in monochrome, on the active pill's own
@@ -539,5 +550,19 @@
     outline: 2px solid Highlight;
     outline-offset: -2px;
     box-shadow: none;
+  }
+
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__drag-handle[data-part='drag-handle']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
+  }
+
+  /* On the active pill the fill is Highlight itself. */
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__pill[data-part='pill'][data-active='true']
+    .ds-saved-views__drag-handle[data-part='drag-handle']:is([data-state~='focus-visible'], :focus-visible) {
+    outline-color: HighlightText;
   }
 }

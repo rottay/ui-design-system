@@ -1470,10 +1470,10 @@ const CHART_DATA_ACCESS = `${CHARTS_ROOT}/runtime/chart-engine/presentation/reac
  * own no state rule at all (they feed `--ds-button-focus-ring` to a composed
  * Button, whose paint is the Button's); input-compounds' compact-group seam is
  * a sibling relation over a composed Input, and a second states row is
- * refused by the single-states-row law. column-settings (3e8c3fa6b),
- * saved-views (d2ef3211b, 20e4875b5) and widget-board (6e26d5aff) move, outside
- * the instrument's reach: their ring is a composed Button's or Input's, or
- * sits on a `:has()` carrier (`STATES_NON_MOVER_NOTES`).
+ * refused by the single-states-row law. column-settings (3e8c3fa6b) and
+ * widget-board (6e26d5aff) move, outside the instrument's reach: their ring
+ * is a composed Button's, or sits on a `:has()` carrier
+ * (`STATES_NON_MOVER_NOTES`).
  */
 const STATES_REACH_ROWS = Object.freeze({
   'input-compounds': Object.freeze({
@@ -5828,11 +5828,6 @@ export const STATES_NON_MOVER_NOTES = Object.freeze([
     family: 'column-settings',
     since: '3e8c3fa6b',
     reason: 'moves, outside the instrument\'s reach: the grip is a composed Button and wears the Button\'s own ring',
-  }),
-  Object.freeze({
-    family: 'saved-views',
-    since: 'd2ef3211b, 20e4875b5',
-    reason: 'moves, outside the instrument\'s reach: its controls are composed Buttons and plain Inputs, each wearing its own ring',
   }),
   Object.freeze({
     family: 'widget-board',

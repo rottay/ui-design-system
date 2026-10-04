@@ -1035,8 +1035,12 @@ describe('axis-difference drills — every verdict is reachable', () => {
   });
 
   it('the noted non-movers are published by name with their repair and reason, and are no class', () => {
-    assert.deepEqual(STATES_NON_MOVER_NOTES.map((note) => note.family), ['column-settings', 'saved-views', 'widget-board']);
+    assert.deepEqual(STATES_NON_MOVER_NOTES.map((note) => note.family), ['column-settings', 'widget-board']);
     const states = axisPopulations(ROOT).get('states');
+    for (const credited of ['saved-views']) {
+      assert.ok(states.includes(credited), `${credited}: still declares states`);
+      assert.ok(!Object.hasOwn(UNOBSERVABLE_FAMILIES.states, credited), `${credited}: a measured family, in no non-mover pin`);
+    }
     for (const note of STATES_NON_MOVER_NOTES) {
       assert.ok(states.includes(note.family), note.family);
       assert.match(note.reason, /^moves, outside the instrument's reach: /u, note.family);
@@ -1048,8 +1052,9 @@ describe('axis-difference drills — every verdict is reachable', () => {
     const stale = noted(['button', 'widget-board']);
     assert.equal(stale.length, 1, stale.join(' | '));
     assert.ok(stale[0].startsWith('widget-board: noted as a states non-mover outside the instrument\'s reach and it moves on bithire/light'), stale[0]);
-    assert.ok(evaluate(result([cell({ scenario: 'states', axis: 'states', movedIds: ['saved-views'] })]))
-      .some((line) => line.startsWith('saved-views: noted as a states non-mover')));
+    assert.ok(evaluate(result([cell({ scenario: 'states', axis: 'states', movedIds: ['widget-board'] })]))
+      .some((line) => line.startsWith('widget-board: noted as a states non-mover')));
+    assert.deepEqual(noted(['saved-views']), [], 'a family that left the notes moves without a stale note');
   });
 
   it('a pinned unsettled family the run never mounted is not judged stale; one in a measured population is', () => {
