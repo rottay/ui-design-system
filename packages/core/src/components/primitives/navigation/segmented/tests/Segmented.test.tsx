@@ -58,9 +58,13 @@ describe('Segmented', () => {
     expect(handleChange).toHaveBeenCalledWith('Option 2');
   });
 
-  it.each(['small', 'middle', 'large'] as const)('renders size %s', (size) => {
+  it.each([
+    ['sm', 'small'],
+    ['md', 'middle'],
+    ['lg', 'large'],
+  ] as const)('renders size %s, handed to the engine as %s', (size, engineSize) => {
     render(<Segmented options={defaultOptions} size={size} />);
-    expect(screen.getByTestId('segmented')).toHaveAttribute('data-size', size);
+    expect(screen.getByTestId('segmented')).toHaveAttribute('data-size', engineSize);
   });
 
   it('renders block mode', () => {

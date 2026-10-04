@@ -20,15 +20,6 @@ import type { CSSProperties, ReactNode } from 'react';
 /** Standard size scale used across all DS components. */
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
-/**
- * @deprecated The Ant Design-style size spellings. No `*Size` contract is widened with them
- * any more; `size` props take the canonical {@link Size} step (`'sm' | 'md' | 'lg'`). `'small'`
- * is `'sm'`, `'middle'` and `'default'` are `'md'`, `'large'` is `'lg'`. Every exported `*Props`
- * size-typed field across the design system must stay assignable to `Size | LegacySizeAlias` --
- * the axis-law ratchet enforced by `scripts/check/boundaries/components/sizing/index.mjs`.
- */
-export type LegacySizeAlias = 'small' | 'middle' | 'large' | 'default';
-
 /** The `sm | md | lg` subset of {@link Size} that has an Ant Design-style counterpart. */
 type CanonicalLegacySizeStep = 'sm' | 'md' | 'lg';
 

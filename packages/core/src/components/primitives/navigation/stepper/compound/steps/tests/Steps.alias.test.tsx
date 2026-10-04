@@ -12,8 +12,8 @@ const ITEMS = [
 ];
 
 describe('Steps is the deprecated name of Stepper', () => {
-  it('renders the Stepper family anatomy and maps the legacy size', async () => {
-    const { container } = renderWithEngine(<Steps items={ITEMS} current={1} size="small" />, 'modern');
+  it('renders the Stepper family anatomy and passes the size step through', async () => {
+    const { container } = renderWithEngine(<Steps items={ITEMS} current={1} size="sm" />, 'modern');
     const root = await screen.findByRole('navigation', { name: 'Progress steps' });
     expect(root.querySelector('.ds-stepper--modern')).not.toBeNull();
     expect(container.querySelector('[class*="steps"]')).toBeNull();

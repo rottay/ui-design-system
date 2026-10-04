@@ -47,7 +47,7 @@ const meta: Meta<typeof Descriptions> = {
     },
     size: {
       control: 'select',
-      options: ['default', 'small', 'middle'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size variant affecting spacing and font sizes',
     },
     colon: {
@@ -130,17 +130,17 @@ export const VerticalLayout: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      <Descriptions title="Small Size" size="small" bordered>
+      <Descriptions title="Small Size" size="sm" bordered>
         <Descriptions.Item label="Name">Small Item</Descriptions.Item>
         <Descriptions.Item label="Value">Compact</Descriptions.Item>
       </Descriptions>
 
-      <Descriptions title="Default Size" size="default" bordered>
+      <Descriptions title="Default Size" size="lg" bordered>
         <Descriptions.Item label="Name">Default Item</Descriptions.Item>
         <Descriptions.Item label="Value">Normal</Descriptions.Item>
       </Descriptions>
 
-      <Descriptions title="Middle Size" size="middle" bordered>
+      <Descriptions title="Middle Size" size="md" bordered>
         <Descriptions.Item label="Name">Middle Item</Descriptions.Item>
         <Descriptions.Item label="Value">Medium</Descriptions.Item>
       </Descriptions>
@@ -298,7 +298,7 @@ export const VariantMatrix: Story = {
         ],
       }}
       variantProp="size"
-      variants={['small', 'default', 'middle']}
+      variants={['sm', 'lg', 'md']}
     />
   ),
 };

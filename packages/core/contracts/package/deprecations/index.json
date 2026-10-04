@@ -1285,35 +1285,6 @@
     },
     {
       "file": "src/foundation/contracts/kernel/common/index.ts",
-      "anchor": "LegacySizeAlias",
-      "class": "debt",
-      "reason": "No `*Size` contract is widened with it and it has zero importers; it stays published only because the sizing gate draws the Ant spellings of Descriptions, List, Space, Segmented and Steps from it, and it leaves when those five move to the canonical steps or the gate states that vocabulary inline.",
-      "scope": "Exported type alias, the literal union `small | middle | large | default`. Zero importers in packages/core/src, packages/showroom/src and the src roots of the three apps; its one reader is `SANCTIONED_KERNEL_SIZE_EXPORTS` in scripts/check/boundaries/components/sizing.",
-      "replacement": "`Size` (`sm | md | lg`)",
-      "canonicalOwner": null,
-      "blocker": null,
-      "receiver": "WO-RET-01",
-      "since": "2026-07-18",
-      "removeIn": "3.0",
-      "evidence": [
-        {
-          "kind": "census-receipt",
-          "path": "packages/core/scripts/check/boundaries/components/sizing/index.mjs",
-          "needle": "const SANCTIONED_KERNEL_SIZE_EXPORTS = ['Size', 'LegacySizeAlias', 'ModalSize'];",
-          "note": "Measured: the sizing gate resolves its allowed literal set from this export and throws if the kernel stops exporting it. Not measured: which of the five components still need each Ant spelling."
-        },
-        {
-          "kind": "census-receipt",
-          "path": "packages/core/src/foundation/contracts/kernel/common/index.ts",
-          "needle": "export type LegacySizeAlias = 'small' | 'middle' | 'large' | 'default';",
-          "note": "Measured: the type is a literal union of its own, no longer an alias of the removed `SizeType`, and no module under src imports it."
-        }
-      ],
-      "codemod": null,
-      "changeset": null
-    },
-    {
-      "file": "src/foundation/contracts/kernel/common/index.ts",
       "anchor": "Variant",
       "class": "compat-consumed",
       "reason": "Base union of the deprecated `BadgeVariant`, `TagVariant` and `AvatarVariant` (and of `AvatarProps.variant` through the last) only; no undeprecated contract is built on it any more, so it leaves with those three.",

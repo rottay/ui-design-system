@@ -123,9 +123,9 @@ describe('Descriptions', () => {
     expect(screen.getByTestId('descriptions')).toHaveAttribute('data-layout', 'vertical');
   });
 
-  it('passes size prop correctly', () => {
+  it('passes the size step to the engine in the spelling it reads', () => {
     render(
-      <Descriptions size="small">
+      <Descriptions size="sm">
         <Descriptions.Item label="Name">John</Descriptions.Item>
       </Descriptions>
     );
@@ -230,16 +230,20 @@ describe('Descriptions layout variations', () => {
 });
 
 describe('Descriptions size variations', () => {
-  it.each(['default', 'small', 'middle'] as const)(
-    'supports %s size',
-    (size) => {
+  it.each([
+    ['lg', 'default'],
+    ['sm', 'small'],
+    ['md', 'middle'],
+  ] as const)(
+    'supports %s size, handed to the engine as %s',
+    (size, engineSize) => {
       render(
         <Descriptions size={size}>
           <Descriptions.Item label="Name">John</Descriptions.Item>
         </Descriptions>
       );
 
-      expect(screen.getByTestId('descriptions')).toHaveAttribute('data-size', size);
+      expect(screen.getByTestId('descriptions')).toHaveAttribute('data-size', engineSize);
     }
   );
 });

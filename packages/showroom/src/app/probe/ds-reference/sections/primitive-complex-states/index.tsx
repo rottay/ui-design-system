@@ -278,13 +278,13 @@ function ListLoadingHarness() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, inlineSize: 'min(900px, 100%)' }}>
       <div data-lab-list="loading">
         <AxisCaption>loading posture</AxisCaption>
-        <List loading bordered size="small" itemLayout="vertical" grid={grid} header={header} footer={footer} />
+        <List loading bordered size="sm" itemLayout="vertical" grid={grid} header={header} footer={footer} />
       </div>
       <div data-lab-list="loaded">
         <AxisCaption>loaded posture — same frame, same tracks</AxisCaption>
         <List
           bordered
-          size="small"
+          size="sm"
           itemLayout="vertical"
           grid={grid}
           header={header}

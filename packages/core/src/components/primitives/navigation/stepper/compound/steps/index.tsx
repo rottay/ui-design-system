@@ -7,8 +7,8 @@
  * and maps its legacy props; it has no engine, skin or token namespace of its
  * own.
  *
- * @deprecated since 2026-09-15: import `Stepper`. `size` `'small' | 'default'`
- * becomes `'sm' | 'md'`, `onChange` alone makes the steps clickable, `initial`
+ * @deprecated since 2026-09-15: import `Stepper`. `size` is the `'sm' | 'md'`
+ * subset of `StepperSize`, `onChange` alone makes the steps clickable, `initial`
  * becomes `defaultCurrent`, the render-function `progressDot` receives
  * `(dot, info)`, and `type` is dropped.
  *
@@ -22,11 +22,11 @@ import type { StepsProps } from '../../contracts';
 import { Stepper } from '../..';
 
 export const Steps = forwardRef<HTMLElement, StepsProps>(
-  ({ size = 'default', onChange, initial, type: _type, progressDot, ...rest }, ref) => (
+  ({ size = 'md', onChange, initial, type: _type, progressDot, ...rest }, ref) => (
     <Stepper
       {...rest}
       ref={ref as never}
-      size={size === 'small' ? 'sm' : 'md'}
+      size={size}
       clickable={Boolean(onChange)}
       onChange={onChange}
       defaultCurrent={initial}

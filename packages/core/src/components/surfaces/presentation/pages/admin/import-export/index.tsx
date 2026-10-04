@@ -464,7 +464,7 @@ function ExportPanel({
               idiom SU12 flagged for hand-rolled button-pair switches.
             */}
             <Segmented
-              size="small"
+              size="sm"
               value={selectedFormat}
               onChange={(value) => setSelectedFormat(String(value))}
               ariaLabel={tSurfaceOr('import_export.format_group_aria', 'Export format')}

@@ -1675,7 +1675,7 @@ The parser is a **bounded** CommonMark subset, so no parser ships to the page.
     </Stack>
   ),
   'space': (
-    <Space size="middle" wrap>
+    <Space size="md" wrap>
       <Button size="sm" variant="default">Approve</Button>
       <Button size="sm" variant="primary">Publish</Button>
       <Button size="sm" variant="ghost">Archive</Button>

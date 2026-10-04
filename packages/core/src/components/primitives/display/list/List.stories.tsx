@@ -28,7 +28,7 @@ const meta: Meta<typeof List> = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'default', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the list items',
     },
     bordered: {
@@ -111,7 +111,7 @@ export const WithHeaderAndFooter: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['small', 'default', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size}>
           <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{size}</h4>
           <List size={size} bordered>
@@ -285,7 +285,7 @@ export const VariantMatrix: Story = {
         renderItem: (item: string) => <List.Item>{item}</List.Item>,
       }}
       variantProp="size"
-      variants={['small', 'default', 'large']}
+      variants={['sm', 'md', 'lg']}
     />
   ),
 };

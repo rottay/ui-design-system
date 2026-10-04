@@ -416,8 +416,8 @@ export interface ProgressDotInfo {
 /**
  * Props of the deprecated `Steps` name.
  *
- * @deprecated since 2026-09-15: import `Stepper`. `size` `'small' | 'default'`
- * becomes `'sm' | 'md'`, `onChange` alone implies `clickable`, `initial`
+ * @deprecated since 2026-09-15: import `Stepper`. `size` is the `'sm' | 'md'`
+ * subset of `StepperSize`, `onChange` alone implies `clickable`, `initial`
  * becomes `defaultCurrent`, the render-function `progressDot` receives
  * `(dot, info)`, and `type` has no Stepper equivalent.
  */
@@ -436,8 +436,8 @@ export interface StepsProps {
   progressDot?: boolean | ((info: ProgressDotInfo) => ReactNode);
   /** Responsive behavior. @default true */
   responsive?: boolean;
-  /** Legacy size scale. @default 'default' */
-  size?: 'default' | 'small';
+  /** Size step, passed to `Stepper` unchanged. @default 'md' */
+  size?: Extract<StepperSize, 'sm' | 'md'>;
   /** Overall status of the current step. @default 'process' */
   status?: StepStatus;
   /** Legacy display type; `navigation` and `inline` have no Stepper equivalent. */

@@ -231,8 +231,11 @@ test('the entries that need a decision per site are report-only, whatever their 
 test('the literal renames of the retired size and alignment spellings are authored member by member', () => {
   const entries = of('union-member-removed');
   const sizes = entries.filter((entry) => entry.prop === 'size');
-  assert.equal(sizes.length, 39);
-  for (const entry of sizes) assert.equal(entry.replacement.member, { small: 'sm', middle: 'md', large: 'lg', default: 'md' }[entry.member], entry.id);
+  assert.equal(sizes.length, 53);
+  const table = { small: 'sm', middle: 'md', large: 'lg', default: 'md' };
+  const largestDensity = 'union-member-removed/.#DescriptionsProps.default';
+  assert.equal(map.byId.get(largestDensity).replacement.member, 'lg');
+  for (const entry of sizes.filter((item) => item.id !== largestDensity)) assert.equal(entry.replacement.member, table[entry.member], entry.id);
   const sides = entries.filter((entry) => entry.prop === 'textAlign');
   assert.deepEqual(sides.map((entry) => [entry.member, entry.replacement.member, entry.directional]), [['left', 'start', true], ['right', 'end', true]]);
   assert.equal(entries.length, sizes.length + sides.length);

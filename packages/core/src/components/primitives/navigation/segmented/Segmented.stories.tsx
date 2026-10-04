@@ -28,7 +28,7 @@ The Segmented component is used to display multiple options and allows users to 
 ## Features
 - **String or object options**: Pass simple strings or objects with label/value
 - **Controlled and uncontrolled**: Works with value prop or defaultValue
-- **Sizes**: small, middle, large
+- **Sizes**: sm, md, lg
 - **Block mode**: Full width layout
 - **Icons**: Support for icons in options
 - **Disabled**: Component or individual options
@@ -50,7 +50,7 @@ import { Segmented } from '@rottay/bootstrap';
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'middle', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Size of the segmented control',
     },
     block: {
@@ -93,7 +93,7 @@ export const Default: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {(['small', 'middle', 'large'] as const).map((size) => (
+      {(['sm', 'md', 'lg'] as const).map((size) => (
         <div key={size}>
           <p style={{ margin: '0 0 8px', textTransform: 'capitalize' }}>{size}</p>
           <Segmented
@@ -224,7 +224,7 @@ export const Playground: Story = {
   args: {
     options: ['Small', 'Medium', 'Large'],
     defaultValue: 'Medium',
-    size: 'middle',
+    size: 'md',
     block: false,
     disabled: false,
   },

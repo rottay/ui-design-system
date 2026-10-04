@@ -123,9 +123,13 @@ describe('List', () => {
     expect(screen.getByText('Item C')).toBeInTheDocument();
   });
 
-  it.each(['small', 'default', 'large'] as const)('renders size %s', (size) => {
+  it.each([
+    ['sm', 'small'],
+    ['md', 'default'],
+    ['lg', 'large'],
+  ] as const)('renders size %s, handed to the engine as %s', (size, engineSize) => {
     render(<List size={size}><List.Item>Test</List.Item></List>);
-    expect(screen.getByTestId('list')).toHaveAttribute('data-size', size);
+    expect(screen.getByTestId('list')).toHaveAttribute('data-size', engineSize);
   });
 
   it('renders with bordered prop', () => {

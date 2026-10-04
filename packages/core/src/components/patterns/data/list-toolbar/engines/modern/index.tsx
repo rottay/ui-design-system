@@ -386,7 +386,7 @@ function ViewSwitch({
       <Segmented
         ariaLabel={messages.viewMode}
         className='ds-list-toolbar__segmented-control'
-        size='small'
+        size='sm'
         value={viewMode}
         onChange={(value) => onViewModeChange(value as 'list' | 'cards')}
         options={modes.map((mode) => ({
@@ -416,7 +416,7 @@ function DensitySwitch({
       <Segmented
         ariaLabel={messages.rowDensity}
         className='ds-list-toolbar__segmented-control'
-        size='small'
+        size='sm'
         value={density}
         onChange={(value) => onDensityChange(value as DensityPosture)}
         options={DENSITY_OPTIONS.map((opt) => {

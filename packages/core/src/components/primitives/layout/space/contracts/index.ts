@@ -5,7 +5,7 @@
  *
  * @remarks
  * The Space component types support:
- * - Preset sizes (small, middle, large) mapped to CSS variables
+ * - Preset sizes (sm, md, lg) mapped to CSS variables
  * - Custom numeric pixel values
  * - Asymmetric [horizontal, vertical] gap arrays
  * - Horizontal and vertical flow directions
@@ -17,7 +17,7 @@
  * import type { SpaceProps, SpaceSize, SpaceDirection } from '@rottay/design-system';
  *
  * const customSpace: SpaceProps = {
- *   size: 'middle',
+ *   size: 'md',
  *   direction: 'vertical',
  *   wrap: true,
  *   align: 'start',
@@ -48,7 +48,8 @@ export type SpaceSize = Extract<Size, "sm" | "md" | "lg">;
 
 /**
  * @deprecated Legacy antd-style spelling; use {@link SpaceSize} ('sm' | 'md' | 'lg') instead.
- * Retained for one release so existing values keep compiling.
+ * The `size` prop of `Space` no longer accepts it; it remains the key of
+ * {@link SPACE_SIZE_MAP} and a spelling the engines still read.
  */
 export type LegacySpaceSize = "small" | "middle" | "large";
 
@@ -74,13 +75,15 @@ export type SpaceDirection = "horizontal" | "vertical";
 export type SpaceAlign = "start" | "end" | "center" | "baseline";
 
 /**
- * Props for the Space component.
+ * Props every Space engine implements. The public props of the `Space`
+ * component are these with `size` narrowed to {@link SpaceSize}, a number or a
+ * tuple; they are declared next to the component.
  *
- * @interface SpaceProps
+ * @interface SpaceEngineProps
  * @example
  * ```tsx
  * <Space
- *   size="middle"
+ *   size="md"
  *   direction="horizontal"
  *   wrap={true}
  *   align="center"
@@ -91,10 +94,10 @@ export type SpaceAlign = "start" | "end" | "center" | "baseline";
  * </Space>
  * ```
  */
-export interface SpaceProps extends BaseComponentProps, EngineAwareProps {
+export interface SpaceEngineProps extends BaseComponentProps, EngineAwareProps {
   /**
    * Size of spacing between items.
-   * - Preset: 'sm' | 'md' | 'lg' (or the deprecated 'small' | 'middle' | 'large' spelling)
+   * - Preset: 'sm' | 'md' | 'lg', or the 'small' | 'middle' | 'large' spelling the engines also read
    * - Number: Custom pixel value (e.g., 16)
    * - Array: [horizontal, vertical] gaps (e.g., [8, 16])
    * @default 'small'
@@ -136,9 +139,13 @@ export interface SpaceProps extends BaseComponentProps, EngineAwareProps {
   dir?: "ltr" | "rtl" | "auto";
 }
 
+/** The props type the engines import. */
+export type SpaceProps = SpaceEngineProps;
+
 /**
  * Default values for Space component props.
- * Used when props are not explicitly provided.
+ * Used when props are not explicitly provided. `size` is the `sm` step in the
+ * spelling {@link SPACE_SIZE_MAP} is keyed by.
  */
 export const SPACE_DEFAULTS: Partial<SpaceProps> = {
   size: "small",

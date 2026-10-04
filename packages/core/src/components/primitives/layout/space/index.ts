@@ -10,7 +10,7 @@
  * @remarks
  * The Space component simplifies the common task of adding uniform spacing between
  * inline or block elements without manual margin management. It provides:
- * - Preset sizes (small, middle, large) or custom pixel values
+ * - Preset sizes (sm, md, lg) or custom pixel values
  * - Horizontal and vertical directions
  * - Flexible wrapping for responsive layouts
  * - Alignment options (start, end, center, baseline)
@@ -26,7 +26,7 @@
  * ```tsx
  * import { Space, Button } from '@rottay/design-system';
  *
- * <Space size="middle">
+ * <Space size="md">
  *   <Button>Button 1</Button>
  *   <Button>Button 2</Button>
  *   <Button>Button 3</Button>
@@ -37,7 +37,7 @@
  * ```tsx
  * import { Space, Input } from '@rottay/design-system';
  *
- * <Space direction="vertical" size="large">
+ * <Space direction="vertical" size="lg">
  *   <Input placeholder="Username" />
  *   <Input placeholder="Email" />
  *   <Input placeholder="Password" type="password" />
@@ -95,7 +95,7 @@
  * import { Space } from '@rottay/design-system';
  *
  * // Force Modern (Tailwind) implementation
- * <Space engine="modern" size="middle" direction="vertical">
+ * <Space engine="modern" size="md" direction="vertical">
  *   <span>Item 1</span>
  *   <span>Item 2</span>
  * </Space>
@@ -109,12 +109,13 @@
  * @category Layout
  * @package @rottay/design-system
  */
+import type { ComponentRef, ForwardRefExoticComponent, PropsWithoutRef, RefAttributes } from "react";
+
 import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
-import type { SpaceProps } from "./contracts";
+import type { SpaceEngineProps, SpaceSize } from "./contracts";
 
 // Export types
 export {
-  type SpaceProps,
   type SpaceSize,
   type LegacySpaceSize,
   type SpaceDirection,
@@ -125,18 +126,51 @@ export {
 } from "./contracts";
 
 /**
- * Space component with multi-engine support.
+ * Props for the Space component.
  *
- * A layout component that adds consistent spacing between child elements.
- * Supports horizontal/vertical direction, wrapping, alignment, and split separators.
- *
- * @param props - Space component props
- * @returns React element
+ * @example
+ * ```tsx
+ * <Space
+ *   size="md"
+ *   direction="horizontal"
+ *   wrap={true}
+ *   align="center"
+ *   split={<Divider orientation="vertical" />}
+ * >
+ *   <Button>Action 1</Button>
+ *   <Button>Action 2</Button>
+ * </Space>
+ * ```
  */
-export const Space = createEngineComponent<SpaceProps>("Space", {
+export interface SpaceProps extends Omit<SpaceEngineProps, "size"> {
+  /**
+   * Size of spacing between items.
+   * - Preset: 'sm' | 'md' | 'lg'
+   * - Number: Custom pixel value (e.g., 16)
+   * - Array: [horizontal, vertical] gaps (e.g., [8, 16])
+   * @default 'sm'
+   */
+  size?: SpaceSize | number | [number, number];
+}
+
+const SpaceBase = createEngineComponent<SpaceEngineProps>("Space", {
   classic: () => import("./engines/classic"),
   modern: () => import("./engines/modern"),
   rustic: () => import("./engines/rustic"),
 });
+
+/**
+ * Space component with multi-engine support.
+ *
+ * A layout component that adds consistent spacing between child elements.
+ * Supports horizontal/vertical direction, wrapping, alignment, and split separators.
+ * The three engines read the `sm | md | lg` steps as given.
+ *
+ * @param props - Space component props
+ * @returns React element
+ */
+export const Space: ForwardRefExoticComponent<
+  PropsWithoutRef<SpaceProps> & RefAttributes<ComponentRef<typeof SpaceBase>>
+> = SpaceBase;
 
 export default Space;

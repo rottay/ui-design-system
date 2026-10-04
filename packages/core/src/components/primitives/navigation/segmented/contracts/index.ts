@@ -10,7 +10,9 @@
  *
  * **Type Categories:**
  * - `SegmentedOption`: Individual option object with label, value, icon, and disabled state
- * - `SegmentedProps`: Main component props interface
+ * - `SegmentedSize`: Size steps of the public `size` prop ('sm' | 'md' | 'lg')
+ * - `SegmentedEngineSize`: The spelling the engines key their size lookups by
+ * - `SegmentedEngineProps`: Props every engine implements
  *
  * **Multi-Tenant Support:**
  * Props are designed to be compatible with tenant theming and engine switching,
@@ -56,6 +58,38 @@ import type { EngineAwareProps } from "../../../../../foundation/contracts";
 // ============================================================================
 // Type Definitions
 // ============================================================================
+
+/**
+ * Size steps of the public `size` prop.
+ *
+ * | Value | Use Case |
+ * |-------|----------|
+ * | `sm` | Compact UIs, toolbars |
+ * | `md` | Standard forms (default) |
+ * | `lg` | Touch-friendly interfaces |
+ */
+export type SegmentedSize = "sm" | "md" | "lg";
+
+/**
+ * The spelling the engines key their size lookups by: the Ant Design component
+ * of the Classic engine, the style table of the Rustic engine and the
+ * `data-size` stamp the Modern skin selects on. The facade resolves a
+ * {@link SegmentedSize} step to it before an engine is chosen.
+ */
+export type SegmentedEngineSize = "large" | "middle" | "small";
+
+/**
+ * Resolves a public size step to the spelling the engines read. A value outside
+ * the three steps is returned unchanged.
+ */
+export function toSegmentedEngineSize(
+  size: SegmentedSize | undefined,
+): SegmentedEngineSize | undefined {
+  if (size === "sm") return "small";
+  if (size === "md") return "middle";
+  if (size === "lg") return "large";
+  return size;
+}
 
 /**
  * Individual option configuration for the Segmented component.
@@ -146,9 +180,11 @@ export interface SegmentedOption {
 // ============================================================================
 
 /**
- * Props for the Segmented component.
+ * Props every Segmented engine implements. The public props of the `Segmented`
+ * component are these with `size` narrowed to {@link SegmentedSize}; they are
+ * declared next to the component.
  *
- * @interface SegmentedProps
+ * @interface SegmentedEngineProps
  *
  * @example Complete Usage
  * ```tsx
@@ -163,13 +199,13 @@ export interface SegmentedOption {
  *   onChange={(val) => setViewMode(val)}
  *   block={false}
  *   disabled={false}
- *   size="middle"
+ *   size="md"
  *   className="view-selector"
  *   style={{ marginBottom: 16 }}
  * />
  * ```
  */
-export interface SegmentedProps extends EngineAwareProps {
+export interface SegmentedEngineProps extends EngineAwareProps {
   /** Caller-owned root anatomy hook (P-79). */
   "data-part"?: string;
   // ---------------------------------------------------------------------------
@@ -237,18 +273,12 @@ export interface SegmentedProps extends EngineAwareProps {
   disabled?: boolean;
 
   /**
-   * Size preset for the segmented control.
+   * Size preset for the segmented control, in the engine spelling.
    * Affects padding, font size, and overall height.
-   *
-   * | Value | Use Case |
-   * |-------|----------|
-   * | `small` | Compact UIs, toolbars |
-   * | `middle` | Standard forms (default) |
-   * | `large` | Touch-friendly interfaces |
    *
    * @default 'middle'
    */
-  size?: "large" | "middle" | "small";
+  size?: SegmentedEngineSize;
 
   /** Accessible name for the grouped choice control. */
   ariaLabel?: string;
@@ -270,6 +300,9 @@ export interface SegmentedProps extends EngineAwareProps {
   style?: CSSProperties;
 }
 
+/** The props type the engines import. */
+export type SegmentedProps = SegmentedEngineProps;
+
 // ============================================================================
 // Default Values
 // ============================================================================
@@ -284,7 +317,7 @@ export interface SegmentedProps extends EngineAwareProps {
  * ```tsx
  * import { SEGMENTED_DEFAULTS } from '@rottay/design-system';
  *
- * const MySegmented = (props: SegmentedProps) => {
+ * const MySegmented = (props: SegmentedEngineProps) => {
  *   const size = props.size ?? SEGMENTED_DEFAULTS.size;
  *   const block = props.block ?? SEGMENTED_DEFAULTS.block;
  *   // ...
@@ -292,7 +325,7 @@ export interface SegmentedProps extends EngineAwareProps {
  * ```
  */
 export const SEGMENTED_DEFAULTS: Partial<SegmentedProps> = {
-  /** Default size is middle */
+  /** Default size is middle, in the engine spelling */
   size: "middle",
 
   /** Not block mode by default */

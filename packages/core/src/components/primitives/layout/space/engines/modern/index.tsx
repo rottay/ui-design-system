@@ -28,7 +28,7 @@
  * ```tsx
  * import { Space } from '@rottay/design-system';
  *
- * <Space engine="modern" size="middle" wrap>
+ * <Space engine="modern" size="md" wrap>
  *   <Tag>Tag 1</Tag>
  *   <Tag>Tag 2</Tag>
  * </Space>

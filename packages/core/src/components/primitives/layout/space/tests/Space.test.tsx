@@ -71,7 +71,7 @@ describe("Space", () => {
   });
 
   describe("size prop", () => {
-    it.each(["small", "middle", "large"] as const)(
+    it.each(["sm", "md", "lg"] as const)(
       "renders size preset %s",
       (size) => {
         render(<Space size={size}>Test</Space>);
@@ -156,12 +156,12 @@ describe("Space", () => {
   describe("combined props", () => {
     it("renders with multiple props", () => {
       render(
-        <Space size="middle" direction="vertical" wrap align="center">
+        <Space size="md" direction="vertical" wrap align="center">
           Content
         </Space>
       );
       const space = screen.getByTestId("space");
-      expect(space).toHaveAttribute("data-size", "middle");
+      expect(space).toHaveAttribute("data-size", "md");
       expect(space).toHaveAttribute("data-direction", "vertical");
       expect(space).toHaveAttribute("data-wrap", "true");
       expect(space).toHaveAttribute("data-align", "center");

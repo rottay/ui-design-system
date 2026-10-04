@@ -10,10 +10,11 @@
  * detail pages, profile views, and metadata displays.
  *
  * **Type Categories:**
- * - `DescriptionsProps`: Main component properties (title, bordered, column, layout, size)
+ * - `DescriptionsEngineProps`: Properties every engine implements (title, bordered, column, layout, size)
  * - `DescriptionsItemProps`: Individual item properties (label, span, styles)
  * - `DescriptionsLayout`: Layout direction ('horizontal' | 'vertical')
- * - `DescriptionsSize`: Size variants ('small' | 'default' | 'middle')
+ * - `DescriptionsSize`: Size steps of the public `size` prop ('sm' | 'md' | 'lg')
+ * - `DescriptionsEngineSize`: The spelling the engines key their size lookups by
  * - `ResponsiveColumn`: Responsive column configuration per breakpoint
  *
  * **Multi-Tenant Support:**
@@ -30,7 +31,7 @@
  *   bordered: true,
  *   column: 2,
  *   layout: 'horizontal',
- *   size: 'default',
+ *   size: 'lg',
  * };
  *
  * // Individual description item
@@ -77,12 +78,35 @@ import type { EngineAwareProps } from '../../../../../foundation/contracts/runti
 export type DescriptionsLayout = 'horizontal' | 'vertical';
 
 /**
- * Size variants for descriptions.
- * - default: Standard size with comfortable spacing
- * - small: Compact size for dense layouts
- * - middle: Medium size between default and small
+ * Size steps of the public `size` prop, smallest to largest.
+ * - sm: Compact size for dense layouts
+ * - md: Medium size between `sm` and `lg`
+ * - lg: Standard size with comfortable spacing (default)
  */
-export type DescriptionsSize = 'default' | 'small' | 'middle';
+export type DescriptionsSize = 'sm' | 'md' | 'lg';
+
+/**
+ * The spelling the engines key their size lookups by: the Ant Design component
+ * of the Classic engine, the font table of the Rustic engine and the `data-size`
+ * stamp the Modern skin selects on. The facade resolves a {@link DescriptionsSize}
+ * step to it before an engine is chosen.
+ */
+export type DescriptionsEngineSize = 'default' | 'small' | 'middle';
+
+/**
+ * Resolves a public size step to the spelling the engines read: `sm` is
+ * `small`, `md` is `middle` and `lg` is `default`, the largest of the three and
+ * the one an omitted `size` renders. A value outside the three steps is
+ * returned unchanged.
+ */
+export function toDescriptionsEngineSize(
+  size: DescriptionsSize | undefined,
+): DescriptionsEngineSize | undefined {
+  if (size === 'sm') return 'small';
+  if (size === 'md') return 'middle';
+  if (size === 'lg') return 'default';
+  return size;
+}
 
 /**
  * Responsive column configuration type.
@@ -121,10 +145,11 @@ export interface DescriptionsItemProps extends BaseComponentProps, WithChildren 
 }
 
 /**
- * Main props interface for the Descriptions component.
- * Provides configuration for displaying structured key-value data.
+ * Props every Descriptions engine implements. The public props of the
+ * `Descriptions` component are these with `size` narrowed to
+ * {@link DescriptionsSize}; they are declared next to the component.
  */
-export interface DescriptionsProps
+export interface DescriptionsEngineProps
   extends BaseComponentProps,
     EngineAwareProps,
     WithChildren,
@@ -156,10 +181,10 @@ export interface DescriptionsProps
   layout?: DescriptionsLayout;
 
   /**
-   * Size variant affecting spacing and font sizes.
+   * Size variant affecting spacing and font sizes, in the engine spelling.
    * @default 'default'
    */
-  size?: DescriptionsSize;
+  size?: DescriptionsEngineSize;
 
   /**
    * Whether to display a colon after labels.
@@ -178,6 +203,9 @@ export interface DescriptionsProps
   };
 }
 
+/** The props type the engines import. */
+export type DescriptionsProps = DescriptionsEngineProps;
+
 // ============================================================================
 // Default Values
 // ============================================================================
@@ -193,7 +221,7 @@ export interface DescriptionsProps
  * ```tsx
  * import { DESCRIPTIONS_DEFAULTS } from '@rottay/design-system';
  *
- * const MyDescriptions = (props: DescriptionsProps) => {
+ * const MyDescriptions = (props: DescriptionsEngineProps) => {
  *   const bordered = props.bordered ?? DESCRIPTIONS_DEFAULTS.bordered;
  *   const column = props.column ?? DESCRIPTIONS_DEFAULTS.column;
  *   const layout = props.layout ?? DESCRIPTIONS_DEFAULTS.layout;
@@ -211,7 +239,7 @@ export const DESCRIPTIONS_DEFAULTS = {
   /** Layout direction: 'horizontal' places labels beside values, 'vertical' stacks them. @default 'horizontal' */
   layout: 'horizontal' as const,
 
-  /** Size variant controlling font size and padding. @default 'default' */
+  /** Size variant controlling font size and padding, in the engine spelling. @default 'default' */
   size: 'default' as const,
 
   /** Whether to display a colon after each label. @default true */
@@ -224,7 +252,7 @@ export const DESCRIPTIONS_DEFAULTS = {
 
 /**
  * Font size mapping for each Descriptions size variant.
- * Maps size variant names to CSS font-size values in pixels.
+ * Maps {@link DescriptionsEngineSize} names to CSS font-size values in pixels.
  *
  * @constant
  *
@@ -238,7 +266,7 @@ export const DESCRIPTIONS_DEFAULTS = {
  * ```tsx
  * import { SIZE_MAP } from '@rottay/design-system';
  *
- * const fontSize = SIZE_MAP[props.size || 'default'];
+ * const fontSize = SIZE_MAP[DESCRIPTIONS_DEFAULTS.size];
  * // '14px'
  * ```
  */
@@ -257,7 +285,7 @@ export const SIZE_MAP: Record<string, string> = {
 
 /**
  * Padding mapping for each Descriptions size variant.
- * Maps size variant names to CSS padding values applied to cells.
+ * Maps {@link DescriptionsEngineSize} names to CSS padding values applied to cells.
  *
  * @constant
  *
@@ -271,7 +299,7 @@ export const SIZE_MAP: Record<string, string> = {
  * ```tsx
  * import { PADDING_MAP } from '@rottay/design-system';
  *
- * const cellPadding = PADDING_MAP[props.size || 'default'];
+ * const cellPadding = PADDING_MAP[DESCRIPTIONS_DEFAULTS.size];
  * // '16px'
  * ```
  */

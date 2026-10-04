@@ -169,7 +169,7 @@ export function DisplaySurfacesScene() {
                 <Statistic title="Pending" value={3} valueType="warning" />
                 <Statistic title="Rejected" value={1} valueType="negative" />
               </div>
-              <Descriptions column={1} size="small">
+              <Descriptions column={1} size="sm">
                 <Descriptions.Item label="Reviewer">Jane Doe</Descriptions.Item>
                 <Descriptions.Item label="Due">2026-08-15</Descriptions.Item>
               </Descriptions>

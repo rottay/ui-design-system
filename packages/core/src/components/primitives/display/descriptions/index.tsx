@@ -19,12 +19,15 @@
  * @category Display
  */
 
+import { createElement, forwardRef } from 'react';
+import type { ComponentRef } from 'react';
+
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { DescriptionsProps, DescriptionsItemProps } from './contracts';
+import { toDescriptionsEngineSize } from './contracts';
+import type { DescriptionsEngineProps, DescriptionsItemProps, DescriptionsSize } from './contracts';
 import { DescriptionsItem } from './compound';
 
 export type {
-  DescriptionsProps,
   DescriptionsItemProps,
   DescriptionsLayout,
   DescriptionsSize,
@@ -36,15 +39,37 @@ export { DESCRIPTIONS_DEFAULTS, SIZE_MAP, PADDING_MAP } from './contracts';
 export { DescriptionsItem };
 
 /**
+ * Main props interface for the Descriptions component.
+ * Provides configuration for displaying structured key-value data.
+ */
+export interface DescriptionsProps extends Omit<DescriptionsEngineProps, 'size'> {
+  /**
+   * Size step affecting spacing and font sizes.
+   * @default 'lg'
+   */
+  size?: DescriptionsSize;
+}
+
+/**
  * Engine-routed container component.
  * Each engine exports a named `Descriptions` (not default), so imports are
  * remapped with `.then()` to satisfy the factory's `{ default }` contract.
  */
-const DescriptionsBase = createEngineComponent<DescriptionsProps>('Descriptions', {
+const DescriptionsBase = createEngineComponent<DescriptionsEngineProps>('Descriptions', {
   classic: () => import('./engines/classic').then((m) => ({ default: m.Descriptions })),
   modern: () => import('./engines/modern').then((m) => ({ default: m.Descriptions })),
   rustic: () => import('./engines/rustic').then((m) => ({ default: m.Descriptions })),
 });
+
+/**
+ * Resolves the public `size` step to the spelling the engines read, before an
+ * engine is chosen, so the three engines receive the same value.
+ */
+const DescriptionsRoot = forwardRef<ComponentRef<typeof DescriptionsBase>, DescriptionsProps>(({ size, ...rest }, ref) =>
+  createElement(DescriptionsBase, { ref, ...rest, size: toDescriptionsEngineSize(size) }),
+);
+
+DescriptionsRoot.displayName = 'Descriptions';
 
 /**
  * Engine-routed Item component.
@@ -58,7 +83,7 @@ const Item = createEngineComponent<DescriptionsItemProps>('Descriptions.Item', {
 });
 
 /** Compound assembly: attaches Item so consumers write `Descriptions.Item`. */
-export const Descriptions = Object.assign(DescriptionsBase, {
+export const Descriptions = Object.assign(DescriptionsRoot, {
   /** A single label-value row inside the descriptions grid. Supports `span` for wide entries. */
   Item,
 });

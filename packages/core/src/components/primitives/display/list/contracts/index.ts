@@ -8,10 +8,11 @@
  * and its compound components.
  *
  * **Exported Types:**
- * - `ListProps` - Main list component properties
+ * - `ListEngineProps` - Properties every engine implements
  * - `ListItemProps` - List item container properties
  * - `ListItemMetaProps` - Item metadata properties
- * - `ListSize` - Size variants
+ * - `ListSize` - Size steps of the public `size` prop
+ * - `ListEngineSize` - The spelling the engines key their size lookups by
  * - `ListItemLayout` - Layout direction
  * - `ListGridConfig` - Grid layout configuration
  * - `ListPaginationConfig` - Pagination settings
@@ -27,7 +28,7 @@
  *
  * const listProps: ListProps = {
  *   bordered: true,
- *   size: 'default',
+ *   size: 'md',
  *   split: true,
  * };
  *
@@ -47,9 +48,28 @@ import type { BaseComponentProps, LoadableProps, WithChildren, BorderedProps } f
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 
 /**
- * Available size options for List component
+ * Size steps of the public `size` prop
  */
-export type ListSize = 'default' | 'small' | 'large';
+export type ListSize = 'sm' | 'md' | 'lg';
+
+/**
+ * The spelling the engines key their size lookups by: the Ant Design component
+ * of the Classic engine, the font table of the Rustic engine and the `data-size`
+ * stamp the Modern skin selects on. The facade resolves a {@link ListSize} step
+ * to it before an engine is chosen.
+ */
+export type ListEngineSize = 'default' | 'small' | 'large';
+
+/**
+ * Resolves a public size step to the spelling the engines read. A value outside
+ * the three steps is returned unchanged.
+ */
+export function toListEngineSize(size: ListSize | undefined): ListEngineSize | undefined {
+  if (size === 'sm') return 'small';
+  if (size === 'md') return 'default';
+  if (size === 'lg') return 'large';
+  return size;
+}
 
 /**
  * Layout direction for list items
@@ -125,10 +145,12 @@ export interface ListItemProps extends BaseComponentProps, WithChildren {
 }
 
 /**
- * Props for the List component
+ * Props every List engine implements. The public props of the `List` component
+ * are these with `size` narrowed to {@link ListSize}; they are declared next to
+ * the component.
  * @template T - Type of items in the data source
  */
-export interface ListProps<T = unknown> extends BaseComponentProps, EngineAwareProps, LoadableProps, BorderedProps, WithChildren {
+export interface ListEngineProps<T = unknown> extends BaseComponentProps, EngineAwareProps, LoadableProps, BorderedProps, WithChildren {
   /** Array of data items to render */
   dataSource?: T[];
   /** Function to render each item */
@@ -137,8 +159,8 @@ export interface ListProps<T = unknown> extends BaseComponentProps, EngineAwareP
   header?: ReactNode;
   /** Footer content for the list */
   footer?: ReactNode;
-  /** Size of the list items */
-  size?: ListSize;
+  /** Size of the list items, in the engine spelling */
+  size?: ListEngineSize;
   /** Whether to show separator between items */
   split?: boolean;
   /** Layout direction of list items */
@@ -152,6 +174,9 @@ export interface ListProps<T = unknown> extends BaseComponentProps, EngineAwareP
   /** Unique key for each item, can be a property name or function */
   rowKey?: string | ((item: T) => string);
 }
+
+/** The props type the engines import. */
+export type ListProps<T = unknown> = ListEngineProps<T>;
 
 /**
  * Default values for List component props
@@ -167,7 +192,7 @@ export const LIST_DEFAULTS = {
 /**
  * Size mapping for List styling using CSS variables
  */
-export const LIST_SIZE_MAP: Record<ListSize, { padding: string; fontSize: string }> = {
+export const LIST_SIZE_MAP: Record<ListEngineSize, { padding: string; fontSize: string }> = {
   small: { padding: 'var(--ds-list-sm-padding-vertical) var(--ds-list-sm-padding-horizontal)', fontSize: 'var(--ds-list-sm-font-size)' },
   default: { padding: 'var(--ds-list-default-padding-vertical) var(--ds-list-default-padding-horizontal)', fontSize: 'var(--ds-list-default-font-size)' },
   large: { padding: 'var(--ds-list-lg-padding-vertical) var(--ds-list-lg-padding-horizontal)', fontSize: 'var(--ds-list-lg-font-size)' },

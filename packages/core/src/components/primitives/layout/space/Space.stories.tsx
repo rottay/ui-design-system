@@ -33,7 +33,7 @@ const meta: Meta<typeof Space> = {
   argTypes: {
     size: {
       control: "select",
-      options: ["small", "middle", "large"],
+      options: ["sm", "md", "lg"],
       description: "Size of spacing between items",
     },
     direction: {
@@ -72,7 +72,7 @@ const Box = ({ children }: { children: React.ReactNode }) => (
 
 export const Default: Story = {
   args: {
-    size: "small",
+    size: "sm",
   },
   render: (args) => (
     <Space {...args}>
@@ -86,7 +86,7 @@ export const Default: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      {(["small", "middle", "large"] as const).map((size) => (
+      {(["sm", "md", "lg"] as const).map((size) => (
         <div key={size}>
           <h4 style={{ margin: "0 0 8px 0" }}>size: {size}</h4>
           <Space size={size}>
@@ -131,7 +131,7 @@ export const Directions: Story = {
       {(["horizontal", "vertical"] as const).map((direction) => (
         <div key={direction}>
           <h4 style={{ margin: "0 0 8px 0" }}>{direction}</h4>
-          <Space direction={direction} size="middle">
+          <Space direction={direction} size="md">
             <Box>Item 1</Box>
             <Box>Item 2</Box>
             <Box>Item 3</Box>
@@ -150,7 +150,7 @@ export const Alignment: Story = {
           <h4 style={{ margin: "0 0 8px 0" }}>align: {align}</h4>
           <Space
             align={align}
-            size="middle"
+            size="md"
             style={{ backgroundColor: "#f0f0f0", padding: 8 }}
           >
             <div
@@ -190,7 +190,7 @@ export const Alignment: Story = {
 export const Wrap: Story = {
   render: () => (
     <div style={{ width: 300, backgroundColor: "#f0f0f0", padding: 8 }}>
-      <Space wrap size="middle">
+      <Space wrap size="md">
         {Array.from({ length: 10 }, (_, i) => (
           <Box key={i}>Item {i + 1}</Box>
         ))}
@@ -201,7 +201,7 @@ export const Wrap: Story = {
 
 export const WithSplit: Story = {
   render: () => (
-    <Space split={<span style={{ color: "#d9d9d9" }}>|</span>} size="middle">
+    <Space split={<span style={{ color: "#d9d9d9" }}>|</span>} size="md">
       <a href="#">Link 1</a>
       <a href="#">Link 2</a>
       <a href="#">Link 3</a>
@@ -260,7 +260,7 @@ export const CompareEngines: Story = {
             <Box>Item 3</Box>
           </>
         ),
-        size: "middle",
+        size: "md",
       }}
       showDescriptions
     />
