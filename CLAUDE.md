@@ -1,6 +1,22 @@
 # Claude Code Rules - Design System
 
-## Current owner succession — 2026-10-03
+## Current owner succession — 2026-10-04
+
+Kimi is the sole active DT, coordinator, auditor and integrator of the
+current roadmap on main in `/Users/daniel/Developer/Rottay/ui-design-system`,
+by the owner's explicit instruction, replacing the Claude assignment of
+2026-10-03. Handoff checkpoint `bb663f566`; the outgoing DT's barrier
+(`READY_FOR_KIMI`, no active writers) was met and verified before any write.
+Claude Opus is the delegated writer on the owner-authorized account
+`daniel.avila@rottay.com`, model `claude-opus-5-5` — verify the effective
+account and model receipt per dispatch. The DT integrates and never approves
+its own product code — independent review uses a separate Opus session with a
+real receipt. Codex's restriction below applies in full. Apps stay read-only,
+no push, no package publication. Read the succession in `roadmap/README.md`;
+registry, DAG, acceptance criteria and proportional validation policy are
+unchanged.
+
+## Prior owner succession — 2026-10-03 (superseded by 2026-10-04)
 
 Claude is the sole active DT of the current roadmap on main in
 `/Users/daniel/Developer/Rottay/ui-design-system`, by the owner's explicit

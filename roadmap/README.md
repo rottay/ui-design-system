@@ -1,6 +1,34 @@
 # Design System Roadmap — Modern Engine Premium Uplift
 
-## Current owner succession — 2026-10-03
+## Current owner succession — 2026-10-04
+
+The owner appointed Kimi as the sole active DT, coordinator, auditor and
+integrator of the current programme, directly on main in
+`/Users/daniel/Developer/Rottay/ui-design-system`, replacing the Claude
+assignment of 2026-10-03 below. Every ownership statement in the execution
+policy (registry, shared generators, validation windows, index, functional
+commits) now reads "Kimi DT"; its execution order and product invariants
+stand verbatim.
+
+- **Handoff barrier met:** checkpoint `bb663f566` (134/165 done, 3
+  in-progress); the outgoing DT declared `READY_FOR_KIMI` with no active
+  writers or integrators, and HEAD/branch/index/worktree were verified
+  against the handoff before any write.
+- **Writer:** real Claude Opus on the owner-authorized account
+  `daniel.avila@rottay.com`, model `claude-opus-5-5`; the effective account
+  and model receipt are verified on every dispatch, never an alias.
+- **Review:** the DT never approves its own product code. Independent review
+  uses a separate Opus session with a real receipt.
+- **Codex:** the 2026-09-19 restriction applies in full. No CLI/API/MCP call,
+  message, hook or monitor targets it; only the owner asks it for independent
+  audits.
+- **Scope:** DS repo only, on main; no branches or worktrees; applications are
+  read-only consumers; **no push**, package publication or deployment.
+
+The sealed Modern Rescue programme, registry, DAG, phase controls,
+denominators and acceptance criteria are unchanged.
+
+## Prior owner succession — 2026-10-03 (superseded by 2026-10-04)
 
 The owner appointed Claude as the sole active DT, integrator and audit
 coordinator of the current programme, directly on main in
