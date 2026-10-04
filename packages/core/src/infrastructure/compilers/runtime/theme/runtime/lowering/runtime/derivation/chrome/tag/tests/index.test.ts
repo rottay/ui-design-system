@@ -218,6 +218,14 @@ describe("chrome/tag close focus ring", () => {
     }
   });
 
+  it("leaves the skin the same chain where the channel does not reach, shell and close", () => {
+    const derived = tagChromeDeriver.derive(context(MINIMAL_THEME), {});
+    const skin = SKIN.replace(/\s+/g, " ").replace(/\( /g, "(").replace(/ \)/g, ")");
+    for (const channel of [SHELL_RING, CLOSE_RING]) {
+      expect(skin, channel).toContain(`box-shadow: var(${channel}, ${derived[channel]});`);
+    }
+  });
+
   it("CAUSALITY: the three focus postures resolve to three distinct rings", () => {
     const ring = closeRingFor("ring");
     const underline = closeRingFor("underline");
