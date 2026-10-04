@@ -2083,9 +2083,32 @@ test("the pilot milestone carries the pilot instrument and the fleet threshold g
   assert.ok(!PROGRAM_MILESTONES.some((milestone) => milestone.id === "A2"));
 });
 
-test("milestone B gates the cascade, never the deferred branding pick, which still gates C", () => {
-  // The BitHire identity pick was deferred to the branding stage, so the work
-  // order that holds it cannot hold B; it must still gate the programme's end.
+const D30_REGISTER_HEADING = "## 5d. D-30 — FUTURE BRANDING OBLIGATION — NOT CHOSEN";
+const D30_MILESTONE_SENTENCE = "D-30 (the BitHire identity pick) is NOT a condition of C: it is a branding-stage obligation, NOT CHOSEN (roadmap/kit-2026-09.md §5d).";
+
+/** The D-30 pick is separated from WO-DER-07's technical acceptance; it must stay visibly unchosen. */
+function d30VisibilityErrors({ kit, milestones, der07 }) {
+  const errors = [];
+  if (!kit.split("\n").some((line) => line.startsWith(D30_REGISTER_HEADING))) {
+    errors.push("kit-2026-09.md lost the D-30 future-obligation register entry (§5d)");
+  }
+  const chosen = kit.split(/^(?=#{2,3} )/m).filter((section) => /^#{2,3} .*D-30 — chosen BitHire identity/.test(section));
+  for (const section of chosen) {
+    if (!/\b[0-9a-f]{64}\b/.test(section)) errors.push("a chosen-identity section is recorded without a sha256 digest");
+  }
+  const milestoneC = milestones.find((milestone) => milestone.id === "C");
+  if (!milestoneC?.enables.includes(D30_MILESTONE_SENTENCE)) {
+    errors.push("milestone C no longer states that D-30 is an unchosen branding-stage obligation");
+  }
+  if (der07?.status === "done" && !(der07.evidence?.includes("D-30") && der07.evidence.includes("NOT CHOSEN"))) {
+    errors.push("WO-DER-07 is done without stating in its evidence that D-30 is NOT CHOSEN");
+  }
+  return errors;
+}
+
+test("milestone B gates the cascade; the deferred branding pick gates no milestone and stays registered as not chosen", () => {
+  // Owner ruling R29 (2026-10-03) moved the BitHire identity pick out of
+  // WO-DER-07's closing acceptance, so it must stay visible outside WO status.
   const b = PROGRAM_MILESTONES.find((milestone) => milestone.id === "B");
   assert.deepEqual(b.gates, ["WO-DER-05", "WO-EVI-02", "WO-FAM-01", "WO-FAM-02", "WO-FAM-06"]);
   assert.ok(!b.gates.includes("WO-DER-07"));
@@ -2095,9 +2118,36 @@ test("milestone B gates the cascade, never the deferred branding pick, which sti
   assert.ok(der07, "WO-DER-07 must remain registered");
   assert.ok((der07.programs || []).includes("audit-2026-09-05"));
   const milestoneC = summarizeProgramMilestones(registry).find((milestone) => milestone.id === "C");
-  assert.ok(
-    milestoneC.gates.includes("WO-DER-07"),
-    "the deferred pick must keep gating milestone C",
+  assert.ok(milestoneC.gates.includes("WO-DER-07"), "WO-DER-07's technical acceptance stays in milestone C's population");
+
+  const kit = fs.readFileSync(new URL("../../../../roadmap/kit-2026-09.md", import.meta.url), "utf8");
+  assert.deepEqual(d30VisibilityErrors({ kit, milestones: PROGRAM_MILESTONES, der07 }), []);
+});
+
+test("the D-30 visibility pin fails when the obligation is hidden or a pick is invented", () => {
+  const kit = `${D30_REGISTER_HEADING} (owner ruling R29, 2026-10-03)\n\nNot chosen.\n`;
+  const milestones = [{ id: "C", enables: `Re-audit. ${D30_MILESTONE_SENTENCE}` }];
+  const open = { status: "in-progress" };
+  assert.deepEqual(d30VisibilityErrors({ kit, milestones, der07: open }), []);
+
+  assert.equal(d30VisibilityErrors({ kit: "## 5c. D-30 deferred\n", milestones, der07: open }).length, 1);
+  assert.equal(d30VisibilityErrors({ kit, milestones: [{ id: "C", enables: "Re-audit." }], der07: open }).length, 1);
+  assert.equal(
+    d30VisibilityErrors({ kit: `${kit}\n## D-30 — chosen BitHire identity\n\nproduct-dense.\n`, milestones, der07: open }).length,
+    1,
+  );
+  assert.deepEqual(
+    d30VisibilityErrors({
+      kit: `${kit}\n## D-30 — chosen BitHire identity\n\nsha256 ${"a".repeat(64)}\n`,
+      milestones,
+      der07: open,
+    }),
+    [],
+  );
+  assert.equal(d30VisibilityErrors({ kit, milestones, der07: { status: "done", evidence: "closed" } }).length, 1);
+  assert.deepEqual(
+    d30VisibilityErrors({ kit, milestones, der07: { status: "done", evidence: "D-30 IS NOT CHOSEN" } }),
+    [],
   );
 });
 

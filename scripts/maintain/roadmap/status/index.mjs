@@ -2774,7 +2774,7 @@ export const PROGRAM_MILESTONES = [
     id: "C",
     title: "116/116",
     programGate: PROGRAM_MILESTONE_PROGRAM,
-    enables: "Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target.",
+    enables: "Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. D-30 (the BitHire identity pick) is NOT a condition of C: it is a branding-stage obligation, NOT CHOSEN (roadmap/kit-2026-09.md §5d).",
   },
 ];
 

@@ -203,6 +203,147 @@ The owner approved separating **root closure**, **family adoption** and **fleet 
   No option lowers WO-EVI-02's six-axis ≥ 80 % threshold or its negative controls. No option is chosen here.
 
   **RESOLVED 2026-09-17 (owner handoff order, R17-05: "resolve Q-B-DER07 in machinery and tests, keeping the branding obligation visible") — option (2).** `WO-DER-07` is removed from milestone B's gates in `PROGRAM_MILESTONES` (`scripts/maintain/roadmap/status/index.mjs`), with a test pinning the exact five-gate set and pinning that `WO-DER-07` still gates milestone C through the `audit-2026-09-05` population, so the deferred pick cannot silently stop gating the programme's end. The README's milestone B row is brought into agreement. No threshold, population or acceptance criterion moved; the recorded owner pick with digest remains this WO's open obligation.
+- **AMENDMENT (2026-10-03, owner-authorized separation of the technical acceptance from the D-30 choice; owner ruling R29; the original acceptance above stands verbatim and no clause of it is restated as met that is not)** —
+  Authority: owner ruling R29 (2026-10-03), quoted verbatim: "Autorizo enmendar
+  WO-DER-07 para separar su aceptación técnica de la elección D-30. Cerrar la
+  parte técnica únicamente si su evidencia satisface los criterios
+  correspondientes. Registrar D-30 como obligación futura de branding, visible y
+  sin fingir que fue elegida. Actualizar coherentemente aceptación, registry y
+  documentación; no crear otra WO salvo necesidad real de la maquinaria." This is
+  option (4) of Q-B-DER07 above, which only the owner could take. Independent
+  review of this text: `claude-fable-5-1`, ADOPT WITH CORRECTIONS, all applied.
+  It supersedes the sentence of the 2026-09-10 amendment "this WO stays open with
+  exactly one remaining obligation" and the closing sentence of the 2026-09-17
+  resolution ("remains this WO's open obligation"): the obligation stays open,
+  but no longer on this work order's status. Adopting this text closes nothing.
+  ORIGINAL ACCEPTANCE LINES, verbatim, with their disposition, measured at
+  9ae086b19:
+  1. "The three candidates differ on ≥ 4 non-color axes of the by-axis probe" —
+     TECHNICAL. Kept. Criterion T1.
+  2. "every candidate passes admission as a `pro` document" — TECHNICAL. Kept.
+     Criterion T2. Read as an EDIT-seat admission: a Pro tenant may author all
+     29 decisions. It is not a capability or quality limit; the same decisions
+     are the bithire preset on the `internal` seat and every tenant of the
+     vertical inherits them whole, whatever its plan.
+  3. "the owner's pick is recorded with its digest in `roadmap/kit-2026-09.md`
+     and the WO-DER-07 `notes`" — D-30. NOT MET and NOT CHOSEN. Moved out of this
+     work order's closing acceptance by R29. It is not waived, not satisfied and
+     not transferred as resolved: see D-30 below.
+  4. "and `audit/**` is byte-unchanged" — TECHNICAL. Kept. Criterion T4. The
+     prohibition also travels with D-30: the future pick is written to
+     `roadmap/kit-2026-09.md`, never to an audit tree.
+  5. "no candidate contains a raw `--ds-*` override" — TECHNICAL. Kept.
+     Criterion T3.
+  The rendered probe-ground IS part of this acceptance although the gate
+  sentence does not say "rendered": the Outcome ("rendered side by side in the
+  probe-ground of the showroom on the same six screens … in light and dark"),
+  Step 2 ("six screens × 3 candidates × 2 modes through `mountTenantTheme`"),
+  the Files line naming `probe-ground/identity/**` and the delegation prompt
+  ("finish when the acceptance gate and every closure criterion pass") bind it,
+  and the connection lot of 2026-09-11 was registered into this work order with
+  its browser leg recorded as blocked. Criterion T6.
+  Lines that depend on the choice — Outcome "the owner picks one (or amends);
+  the chosen set becomes the bithire preset (WO-DER-06) and the reference for
+  the visual baselines (WO-EVI-03)", Step 3, and Files "deleted after the pick"
+  — are D-30 and leave with it.
+  TECHNICAL ACCEPTANCE (closes this work order; executable, each with its
+  expected output):
+  - T1. From `packages/core`,
+    `npx vitest run src/foundation/presets/candidates/bithire/tests/index.test.ts --maxWorkers=2`
+    passes 4/4, and its printed table shows every pair of candidates at
+    ≥ 4 of 7 non-colour axes (measured 7/7, 7/7, 7/7), with the colour-leak
+    control empty.
+  - T2. The same run: all three candidates pass `documentThemeAdmission` with
+    `plan: pro`, 29/29 decisions admitted, `unlit=none`, and compile through
+    `compileTenantThemeDocumentV2`; the run prints each document's sha256.
+  - T3. The same run: no candidate document contains `--ds-`, `overrides` is
+    undefined, and its decision keys equal `THEME_DECISION_IDS`.
+  - T4. `git ls-files audit` prints nothing and `git log HEAD --oneline -- audit`
+    prints nothing.
+  - T5. The connection lot registered into this work order on 2026-09-11: from
+    `packages/core`, `npx vitest run` over
+    `src/infrastructure/compilers/runtime/tenant-css/artifact-runtime/tests/index.test.ts`,
+    `src/infrastructure/runtime/theming/composition/mount/tests/tampered-runtime-block.test.ts`,
+    `src/infrastructure/runtime/theming/composition/react/tokens/tests/artifact-runtime-authority.test.tsx`
+    and
+    `src/infrastructure/runtime/bootstrap/facade/react/provider/tests/recipe-profile-artifact-authority.integration.test.tsx`
+    passes (10/10): the artifact carries its runtime half, a tampered half is
+    refused at mount, and the provider publishes the artifact's own half.
+  - T6. The probe-ground renders, proven in a browser on a BUILT showroom at a
+    named commit. (a) `packages/showroom/e2e/probe-ground/identity-runtime-connection.spec.ts`
+    is green. (b) For each of the six routes
+    `/probe-ground/identity?candidate=<editorial-quiet|product-dense|warm-humanist>&mode=<light|dark>`
+    (screen defaulted to all six): `identity-probe-stage` and
+    `identity-runtime-proof` are visible, the six screen regions are present,
+    and zero console errors contain `[design-system]`. (c) The receipt — the
+    Playwright report and the six route checks — is kept under
+    `evidence/der-07-close/` (precedent `evidence/der-08-close/`) and referenced
+    by a `progress` entry naming the built commit. An HTTP 200 proves nothing
+    here: the provider's `LoadingScreen` also returns 200. The spec as it stands
+    at 9ae086b19 drives only two candidates (`editorial-quiet`,
+    `product-dense`), `mode=light`, `screen=list`; it never touches
+    `warm-humanist`, dark mode or the other five screens. Extending it to the
+    six candidate × mode routes is therefore the content of the run packet that
+    discharges T6, not an optional extra. This is a render proof. It is not an
+    aesthetic review and carries no approval of any candidate.
+  STATE AT ADOPTION (9ae086b19): T1-T5 are met and re-run on a `git archive`
+  export of that commit. T6 is NOT verified: its static half holds (six screen
+  folders, `mountTenantTheme`, no `.css` file, no inline `style`), no browser
+  receipt exists, and the 2026-09-11 note that `packages/core/dist/index.js`
+  begins with `"use client"` and blocks the Playwright leg was never closed.
+  This work order stays `in-progress` until T6 is discharged; `done` then runs
+  at the commit that carries the receipt, which the evidence string names.
+  T1-T6 close this work order. Closing it certifies the customization
+  CAPABILITY on provisional identities. It certifies no identity.
+  D-30 — FUTURE BRANDING OBLIGATION — NOT CHOSEN. The owner has not chosen a
+  BitHire identity and none is recorded. "La personalidad definitiva de BitHire,
+  Evnto, Rottay y demás aplicaciones se diseñará después" (R29). The obligation,
+  unchanged in content: the owner picks one of the candidates (or amends); the
+  pick is recorded in `roadmap/kit-2026-09.md` under a
+  `D-30 — chosen BitHire identity` section with the chosen set's sha256 digest;
+  then, and only then, the bithire preset takes its final look (residual of
+  WO-DER-06), the showroom visual baselines are regenerated (residual of
+  WO-EVI-03, whose Do-NOT stands), and `foundation/presets/candidates/bithire/**`
+  is deleted after its consumers are re-pointed. Where it stays visible:
+  `roadmap/kit-2026-09.md` §5d (the register entry); milestone C's `enables`
+  string in `PROGRAM_MILESTONES`, which `STATUS.md` prints in the milestone
+  table for as long as the programme runs; the milestone B and C rows of
+  `roadmap/README.md`; this block; this work order's `evidence` in
+  `roadmap/registry.json`, which `STATUS.md` prints in its done ledger; and
+  `provenance.provisional` of
+  `packages/core/src/foundation/presets/verticals/bithire/manifest/index.json`,
+  pinned by `foundation/presets/verticals/tests/decisions.test.ts`. The roadmap
+  test "milestone B gates the cascade; the deferred branding pick gates no
+  milestone and stays registered as not chosen" keeps it mechanical: it fails if
+  the register entry or the milestone sentence disappears, or if a
+  chosen-identity section appears without a digest.
+  MILESTONE C, stated and not hidden: once this work order is `done`, D-30 stops
+  holding milestone C. That REVERSES the pin of the 2026-09-17 resolution above,
+  which kept the pick gating C through this work order's status "so the deferred
+  pick cannot silently stop gating the programme's end". It stops by owner
+  ruling, not silently: R29 places the definitive identities after the Design
+  System programme, so C is a technical milestone and D-30 belongs to the
+  branding stage that follows it. No work order is created for it: the registry
+  has no obligations field, no open work order is an honest receiver of an
+  aesthetic choice, and a work order whose only content is that choice would
+  hold the programme's end on exactly the decision the owner has placed after it.
+  WHAT STAYS PROVISIONAL MEANWHILE (stand-ins, none approved):
+  `foundation/presets/candidates/bithire/documents/{editorial-quiet,product-dense,warm-humanist}`
+  (the three candidates and their manifest);
+  `foundation/presets/verticals/bithire` (the `product-dense` candidate verbatim
+  on the `internal` seat); `foundation/presets/verticals/{rottay,evnto}` and
+  `foundation/presets/styles/{technical-dense,structural-neutral}`
+  (structural-neutral, no identity); the style-registry fixtures
+  `product-dense@1` and `editorial-quiet@1`; the probe-ground route
+  `packages/showroom/src/app/probe-ground/identity/**`. Presets and fixtures of
+  the Design System may be adjusted when that serves the capability proof
+  (cascade, style reuse, differentiation beyond the palette), through admitted
+  decisions only (the Do-NOT below stands); no application is edited and no
+  cycle is spent on aesthetic approval. The five-identity experimental map of
+  progress entry 2026-09-29 (including the fixture tenant "Atelier") is an owner
+  direction for the capability proof, received by WO-EVI-02 as an open
+  obligation; it was never part of this acceptance, no such fixture exists at
+  9ae086b19, and it is not counted here.
 - **Do NOT** — Do not author CSS or channel values to make a candidate look right; if a decision is missing from the kit, file it as a kit amendment (D-27), never as an override.
 - **Size** — M.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-DER-07 (BitHire reference identity: three candidate decision sets rendered for the owner to pick) exactly as specified in `roadmap/derivation.md`: read first `audit/README.md` (guide for the executor) and the kit table in `audit/50-matrices/customization-inventory` §5; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.
