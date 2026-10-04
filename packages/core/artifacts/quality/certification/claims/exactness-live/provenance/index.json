@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "7a2df26de2428c15ef86423d06f4ae118e548bba2089a94e7cec9c84da39fd36"
+    "semanticHash": "6b8c456cc3be0476d74b5b148fa04fd96d67e4672a7a8580437c2a635b312353"
   },
   "divergentInputs": [
     {
@@ -4322,6 +4322,14 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/components/primitives/display/badge/tests/Badge.variant-tone-parity.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 2091,
+        "sha256": "52ceb527d618f91ceb9aca502d50dd937a8f09b24299e14c93cee13876f5bd14"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/components/primitives/display/calendar/contracts/index.ts",
       "archive": {
         "bytes": 7302,
@@ -5347,6 +5355,14 @@
       "live": {
         "bytes": 6803,
         "sha256": "26d93e682df828198551472a76f3b3a67b1c6f4c9a8f75f1e877341b6ea6c829"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/display/tag/tests/Tag.variant-tone-parity.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1992,
+        "sha256": "d00056c4872ac73ecd3380364071ec9eca732ddefb88cc307932a5e29814649b"
       }
     },
     {

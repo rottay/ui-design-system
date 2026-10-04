@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "f4d33e38ca104ddf546a472c8b56a416a4f8dba1530fb73c805b3f9db46eac86",
+    "authorityDigest": "298ecfc53f820b0272c961d901b4921e87a6cf84acb41099693e139417e32d60",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -7811,6 +7811,14 @@
         "sha256": "03b45554f39da963f560153689317a22a0e6fb83b73bf5559dbbe46c9722403f"
       },
       {
+        "path": "ui-design-system/packages/core/src/components/primitives/display/badge/tests/Badge.variant-tone-parity.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2091,
+        "sha256": "52ceb527d618f91ceb9aca502d50dd937a8f09b24299e14c93cee13876f5bd14"
+      },
+      {
         "path": "ui-design-system/packages/core/src/components/primitives/display/calendar/Calendar.stories.tsx",
         "roles": [
           "audit-input"
@@ -9725,6 +9733,14 @@
         ],
         "bytes": 7926,
         "sha256": "a9ec067eae99134704de23946d5c7fd478e0f76447c18d1797eec6a91bb57081"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/display/tag/tests/Tag.variant-tone-parity.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1992,
+        "sha256": "d00056c4872ac73ecd3380364071ec9eca732ddefb88cc307932a5e29814649b"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/tests/Display1Batch.contract.test.tsx",
@@ -47643,7 +47659,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "f4d33e38ca104ddf546a472c8b56a416a4f8dba1530fb73c805b3f9db46eac86"
+    "digest": "298ecfc53f820b0272c961d901b4921e87a6cf84acb41099693e139417e32d60"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4223 counters; 3208 completed zeros locked exactly; 1005 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -121801,8 +121817,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "7a2df26de2428c15ef86423d06f4ae118e548bba2089a94e7cec9c84da39fd36",
-      "7a2df26de2428c15ef86423d06f4ae118e548bba2089a94e7cec9c84da39fd36"
+      "6b8c456cc3be0476d74b5b148fa04fd96d67e4672a7a8580437c2a635b312353",
+      "6b8c456cc3be0476d74b5b148fa04fd96d67e4672a7a8580437c2a635b312353"
     ],
     "agree": true
   }
