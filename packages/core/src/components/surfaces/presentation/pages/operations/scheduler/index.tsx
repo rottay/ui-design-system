@@ -16,7 +16,7 @@
 import type { SurfacePostures } from '../../../../foundation/contracts/postures';
 import { SurfacePostureScope, SurfacePostureSlot, SurfacePostureAction, useScopedSurfacePosture } from '../../../../runtime/postures/scope';
 import React, { useMemo } from 'react';
-import { Box, Card, Grid, Stack, Text } from '../../../../../primitives';
+import { Box, Button, Card, Grid, Stack, Text } from '../../../../../primitives';
 import { PatternCalendarView, type CalendarEvent } from '../../../../../patterns';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
 import type { SchedulerSurfaceConfig } from '../../../../foundation/contracts';
@@ -288,24 +288,14 @@ function SchedulerSurfaceContent({
                         return (
                           <li key={event.id} data-part="agenda-item">
                             {config.behavior.onEventClick ? (
-                              /* Native button retained on purpose: the DS
-                                 Button recipe chrome (variant paint, sizing,
-                                 inline-flex) lives in the later
-                                 `rottay-engines` layer and would override this
-                                 row's grid/paint from `rottay-components`, and
-                                 `!important` is forbidden. The pinned contract
-                                 (`data-part="agenda-event"` as click target)
-                                 is preserved verbatim. Minimal contract for
-                                 the swap: an unstyled/pressable Button
-                                 variant. */
-                              <button
-                                type="button"
+                              <Button
                                 className="ds-scheduler__agenda-event"
                                 data-part="agenda-event"
+                                variant="ghost"
                                 onClick={() => config.behavior.onEventClick?.(event)}
                               >
                                 {eventContent}
-                              </button>
+                              </Button>
                             ) : (
                               <div
                                 className="ds-scheduler__agenda-event"

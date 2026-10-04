@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "f30fcc40621fd59364185805b2f93a9f1e69308e8c8a76006e0952123774f773",
+    "authorityDigest": "157e175daf797054922dc1622f5f994b513fd74cee5a622f0b0cb3545b9e3522",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5697636,
-        "sha256": "533a2b2fecf0eb4a9a02d663fece55c9ef93ef9a54fa7251342f76d08b280663"
+        "bytes": 5699514,
+        "sha256": "ad1a9d809efcbebb1d97437765ae1ed2ca2770f01b215f2e55ab2fcc25c57c46"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5063872,
-        "sha256": "844fbff10b6581c589e4a873264f04444f6e8c78e95b168839ae86f0d577e878"
+        "bytes": 5065750,
+        "sha256": "26a609252fcd9715e5ace721d5f9a3241ecddbb3378ed0280c95ab4c117d06ae"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5024983,
-        "sha256": "482e229bbfdd5a95b64c23bb53f75e197d683e7498fa79233ddd419af057efa4"
+        "bytes": 5026861,
+        "sha256": "545194843ee5417ba1b050ac20b537ec7178bcc0b4e81353bfd0022857c256ea"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5024243,
-        "sha256": "89cc564bdbe1ad97da24ef65de4adbd24b07e17b35518f2bb48a017ef88db9e1"
+        "bytes": 5026121,
+        "sha256": "5b9ee1ee6417f522cfd80ec10ea67264cde393c3b206ae27311ca158ad3c0ed3"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -24255,16 +24255,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 17378,
-        "sha256": "67702fcc656d43e1d4d928e84742762bb0717019402e6e5a113eaf637d331f08"
+        "bytes": 16658,
+        "sha256": "19ad4da5910c4c5d267e396bc7b821d24d4ee872265fb940444dc6948937c9ba"
       },
       {
         "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/scheduler/tests/SchedulerSurface.focus-signature.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 4741,
-        "sha256": "b3aa7dacd2a9e8b49de2106281e5c9ed06da3ebf2ce8423a51faf785fd479507"
+        "bytes": 6224,
+        "sha256": "426c44a65406f7c001b15d5539b6d5b8324adf15d561d102c3fb8619444ba782"
       },
       {
         "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/scheduler/tests/SchedulerSurface.test.tsx",
@@ -24309,16 +24309,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 39281,
-        "sha256": "0f1499ab3f8103fc0c225c47dd7e883b75832ac7c210700577391050a99f7fea"
+        "bytes": 39283,
+        "sha256": "d8c1c659261f44b68439d344b2983b9ac6691fffed611ac7385273445af0115f"
       },
       {
         "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/tests/RenderDispatch.focus-signature.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 6983,
-        "sha256": "7b4e0832175afe7c4a7d5896a8a2a372026ba23a80d2a16af4050347197f3697"
+        "bytes": 8719,
+        "sha256": "c1500eed669853d6578d3399661b9ada4f123d1b755ec5a09576b00c3790cd19"
       },
       {
         "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/tests/RenderDispatch.press-stamp.test.tsx",
@@ -28274,8 +28274,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 16610,
-        "sha256": "149c3931657efdc821fa34b19cde82fca8b45ab5d45e9c6c2fd2981324d3b4c3"
+        "bytes": 17724,
+        "sha256": "8a1c41e459e9e21e0da3ac1d526eba2e9ebe8be29ecf55b4a2fcfefabf6ddd1b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
@@ -29034,8 +29034,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5377,
-        "sha256": "3fe2a0f6b6532dfdf66e0e1d0bff1c24a21819993bbbf1954b603262c31ab04d"
+        "bytes": 6141,
+        "sha256": "a8d2b4737a8294a9045a2a329e4eb16fea529ca43e64c974a7c39ef5cc11218e"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
@@ -37884,8 +37884,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 3828,
-        "sha256": "c2e2ea6d736300089be7056642c201e2c3cdbe27fdfaa7a023f3f63b08d4319e"
+        "bytes": 4288,
+        "sha256": "912fdf4909bf47b88449b655cd953b5746b2cfffb5ede4ce89c83be8f78d48af"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/tests/container-emission-budget.test.tsx",
@@ -47699,7 +47699,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "f30fcc40621fd59364185805b2f93a9f1e69308e8c8a76006e0952123774f773"
+    "digest": "157e175daf797054922dc1622f5f994b513fd74cee5a622f0b0cb3545b9e3522"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4223 counters; 3226 completed zeros locked exactly; 987 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -54553,6 +54553,10 @@
           "line": 326
         },
         {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
+          "line": 256
+        },
+        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
           "line": 55
         },
@@ -54611,6 +54615,14 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/record-workbench/index.css",
           "line": 165
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
+          "line": 92
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
+          "line": 92
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/stepper-compounds/index.css",
@@ -65784,6 +65796,10 @@
           "line": 1533
         },
         {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
+          "line": 256
+        },
+        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/mobile-header/index.css",
           "line": 267
         },
@@ -65806,6 +65822,10 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/progress-compounds/index.css",
           "line": 40
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
+          "line": 92
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/stepper-compounds/index.css",
@@ -99555,7 +99575,7 @@
           }
         ],
         "skinSelectorCorpusKey": "content",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 143
       },
       {
         "section": "FilterPanel",
@@ -103212,7 +103232,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "FormField",
@@ -104226,7 +104246,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Toggle",
@@ -104387,7 +104407,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Toggle",
@@ -104651,7 +104671,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Radio",
@@ -105070,7 +105090,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Checkbox",
@@ -105730,7 +105750,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Form",
@@ -113759,7 +113779,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Alert",
@@ -114164,7 +114184,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Spinner",
@@ -114261,7 +114281,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Rate",
@@ -116172,7 +116192,7 @@
           }
         ],
         "skinSelectorCorpusKey": "content",
-        "skinSelectorCount": 140
+        "skinSelectorCount": 143
       },
       {
         "section": "Result",
@@ -119337,7 +119357,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Breadcrumb",
@@ -120162,7 +120182,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Menu",
@@ -120625,7 +120645,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Pagination",
@@ -121107,7 +121127,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Stepper",
@@ -121531,7 +121551,7 @@
           }
         ],
         "skinSelectorCorpusKey": "label",
-        "skinSelectorCount": 123
+        "skinSelectorCount": 125
       },
       {
         "section": "Steps",
@@ -121986,8 +122006,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "fcf725180e7a4c7647a740ca6627d58d412a884c747155390a7dd34fab13c620",
-      "fcf725180e7a4c7647a740ca6627d58d412a884c747155390a7dd34fab13c620"
+      "f33b2986e81fdacd6cf426b614256b0c9dc0d0636d82751abae7e62ce57071c3",
+      "f33b2986e81fdacd6cf426b614256b0c9dc0d0636d82751abae7e62ce57071c3"
     ],
     "agree": true
   }

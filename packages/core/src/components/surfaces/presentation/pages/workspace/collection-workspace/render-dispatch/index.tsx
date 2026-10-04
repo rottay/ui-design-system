@@ -988,10 +988,10 @@ export function CollectionRenderDispatch<T extends object>(
                     {activationLabel}
                   </NavLink>
                 ) : (
-                  <button
-                    type="button"
+                  <Button
                     className="ds-collection-render-dispatch__card-activation"
                     data-part="card-activation"
+                    variant="ghost"
                     aria-label={activationLabel}
                     onClick={(event) => {
                       event.stopPropagation();
@@ -999,7 +999,7 @@ export function CollectionRenderDispatch<T extends object>(
                     }}
                   >
                     {activationLabel}
-                  </button>
+                  </Button>
                 )
               ) : null}
               {cardRenderer

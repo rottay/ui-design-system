@@ -92020,7 +92020,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /**
  * CollectionRenderDispatch skin (long-tail skin ownership, SU32 pass 2026-07-30).
  *
- * LAYER: imported by the facade entrypoints into `layer(rottay-components)`
+ * LAYER: imported by the facade entrypoints into `layer(rottay-surfaces)`
  * (sibling of collection-workspace.css).
  *
  * SCOPE: paints ONLY what the dispatch owns — the cards grid (the one view
@@ -92198,8 +92198,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-top: 1px solid var(--ds-color-border-subtle, var(--ds-color-border-secondary));
 }
 
-/* Screen-reader activation overlay on activatable cards (anchor or button;
-   the button variant is test-pinned and stays a native element for now). */
+/* Screen-reader activation overlay on activatable cards (Link or Button). */
 .ds-surface.ds-collection-render-dispatch
   .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
@@ -92238,6 +92237,46 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   white-space: nowrap;
   border: 0;
   pointer-events: none;
+}
+
+/* The button overlay is a Button for behaviour only: this layer sorts above
+   the Button skin, so its chrome is withdrawn and its wrappers unboxed. */
+.ds-surface.ds-collection-render-dispatch
+  .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"] {
+  display: inline-block;
+  min-block-size: 0;
+  max-inline-size: none;
+  gap: normal;
+  align-items: normal;
+  justify-content: normal;
+  isolation: auto;
+  appearance: button;
+  font: inherit;
+  letter-spacing: normal;
+  color: inherit;
+  cursor: default;
+  user-select: auto;
+  touch-action: auto;
+  -webkit-tap-highlight-color: inherit;
+  background: transparent;
+  border-radius: 0;
+  outline: revert;
+  outline-offset: revert;
+  box-shadow: none;
+  transition: none;
+  transition-property: all;
+}
+
+.ds-surface.ds-collection-render-dispatch
+  .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"]::before {
+  display: unset;
+}
+
+.ds-surface.ds-collection-render-dispatch
+  .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"]
+  :is([data-part="content"], [data-part="label"]) {
+  display: contents;
+  font-variant-numeric: inherit;
 }
 
 /* Quiet activation feedback on activatable fallback cards: a one-pixel lift
@@ -94858,12 +94897,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /**
  * SchedulerSurface skin (wave KIMI Modern Surfaces 2026-07-30, SU31).
  *
- * LAYER: registered in `facade/entrypoints/base.css:608` and `styles.css`
- * into `layer(rottay-components)` — same wiring as skin/list.css. Engine
- * chrome (button.css, card.css) sorts after this file in `rottay-engines`,
- * which is exactly why the agenda row below is a NATIVE <button>: the DS
- * Button recipe paint (variant background, sizing, inline-flex) would win
- * the layer race over this row's grid/paint, and `!important` is forbidden.
+ * LAYER: registered in `facade/entrypoints/base` into `layer(rottay-surfaces)`,
+ * which sorts above the engine chrome in `rottay-engines`. The actionable
+ * agenda row is a DS Button for behaviour only: the declarations this file
+ * makes win by layer, and the Button chrome it does not otherwise restate is
+ * withdrawn on the row below.
  *
  * SCOPE: the surface composes PageShell, Card, PatternCalendarView and the
  * state kits — each owns its chrome, states and forced-colors treatment, so
@@ -94921,7 +94959,41 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 .ds-surface.ds-scheduler
   button.ds-scheduler__agenda-event[data-part='agenda-event'] {
+  position: static;
+  inset: auto;
+  max-inline-size: none;
+  justify-content: normal;
+  overflow: visible;
+  isolation: auto;
+  appearance: button;
+  letter-spacing: normal;
+  white-space: normal;
   cursor: pointer;
+  user-select: auto;
+  touch-action: auto;
+  -webkit-tap-highlight-color: inherit;
+  box-shadow: none;
+  filter: none;
+  transform: none;
+}
+
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event']::before {
+  display: unset;
+  opacity: 1;
+}
+
+/* Button's wrappers are unboxed so the time and the content stay the row's
+   two grid items. */
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event']
+  > [data-part='content'],
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event']
+  > [data-part='content']
+  > [data-part='label'] {
+  display: contents;
+  font-variant-numeric: inherit;
 }
 
 /* Hover is pointer-fine only; `:active` below is the touch equivalent. */

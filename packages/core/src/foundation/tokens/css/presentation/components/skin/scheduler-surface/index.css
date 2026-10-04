@@ -1,12 +1,11 @@
 /**
  * SchedulerSurface skin (wave KIMI Modern Surfaces 2026-07-30, SU31).
  *
- * LAYER: registered in `facade/entrypoints/base.css:608` and `styles.css`
- * into `layer(rottay-components)` — same wiring as skin/list.css. Engine
- * chrome (button.css, card.css) sorts after this file in `rottay-engines`,
- * which is exactly why the agenda row below is a NATIVE <button>: the DS
- * Button recipe paint (variant background, sizing, inline-flex) would win
- * the layer race over this row's grid/paint, and `!important` is forbidden.
+ * LAYER: registered in `facade/entrypoints/base` into `layer(rottay-surfaces)`,
+ * which sorts above the engine chrome in `rottay-engines`. The actionable
+ * agenda row is a DS Button for behaviour only: the declarations this file
+ * makes win by layer, and the Button chrome it does not otherwise restate is
+ * withdrawn on the row below.
  *
  * SCOPE: the surface composes PageShell, Card, PatternCalendarView and the
  * state kits — each owns its chrome, states and forced-colors treatment, so
@@ -64,7 +63,41 @@
 
 .ds-surface.ds-scheduler
   button.ds-scheduler__agenda-event[data-part='agenda-event'] {
+  position: static;
+  inset: auto;
+  max-inline-size: none;
+  justify-content: normal;
+  overflow: visible;
+  isolation: auto;
+  appearance: button;
+  letter-spacing: normal;
+  white-space: normal;
   cursor: pointer;
+  user-select: auto;
+  touch-action: auto;
+  -webkit-tap-highlight-color: inherit;
+  box-shadow: none;
+  filter: none;
+  transform: none;
+}
+
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event']::before {
+  display: unset;
+  opacity: 1;
+}
+
+/* Button's wrappers are unboxed so the time and the content stay the row's
+   two grid items. */
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event']
+  > [data-part='content'],
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event']
+  > [data-part='content']
+  > [data-part='label'] {
+  display: contents;
+  font-variant-numeric: inherit;
 }
 
 /* Hover is pointer-fine only; `:active` below is the touch equivalent. */

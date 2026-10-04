@@ -1,7 +1,7 @@
 import React from 'react';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { SchedulerSurface } from '..';
@@ -58,8 +58,9 @@ const paintsSolidOutline = (rule: Rule) =>
       /^outline\s*:/.test(declaration) && /solid/.test(declaration) && !/transparent/.test(declaration),
   );
 
-const AGENDA_EVENT_FOCUS =
-  ".ds-surface.ds-scheduler button.ds-scheduler__agenda-event[data-part='agenda-event']:focus-visible";
+const AGENDA_EVENT =
+  ".ds-surface.ds-scheduler button.ds-scheduler__agenda-event[data-part='agenda-event']";
+const AGENDA_EVENT_FOCUS = `${AGENDA_EVENT}:focus-visible`;
 
 function buildConfig(onEventClick?: () => void): SchedulerSurfaceConfig {
   return {
@@ -82,19 +83,55 @@ function buildConfig(onEventClick?: () => void): SchedulerSurfaceConfig {
 }
 
 describe('SchedulerSurface — the agenda row wears the tenant focus signature', () => {
-  it('renders an actionable agenda row as a native tab stop the skin selects', async () => {
-    const { container } = renderSurface(<SchedulerSurface config={buildConfig(vi.fn())} />, {
+  it('renders an actionable agenda row as a DS Button tab stop the skin selects', async () => {
+    const onEventClick = vi.fn();
+    const { container } = renderSurface(<SchedulerSurface config={buildConfig(onEventClick)} />, {
       engine: 'modern',
       responsiveContext: RESOLVED_PHONE_TEST_CONTEXT,
     });
     await screen.findByText('Schedule');
+    await waitFor(() =>
+      expect(container.querySelector('button[data-part="agenda-event"]')).not.toBeNull(),
+    );
 
     const row = container.querySelector<HTMLElement>('[data-part="agenda-event"]');
     expect(row?.tagName).toBe('BUTTON');
     expect(row).toHaveClass('ds-scheduler__agenda-event');
-    expect(row).not.toHaveClass('ds-button');
+    expect(row).toHaveClass('ds-button');
+    expect(row).toHaveAttribute('type', 'button');
     expect(row).not.toHaveAttribute('tabindex', '-1');
     expect(row?.closest('.ds-surface.ds-scheduler')).not.toBeNull();
+    expect(row?.querySelector('time')).not.toBeNull();
+    expect(row?.querySelector('[data-part="agenda-event-content"]')).toHaveTextContent('Launch planning');
+
+    fireEvent.click(row as HTMLElement);
+    expect(onEventClick).toHaveBeenCalledTimes(1);
+    expect(onEventClick).toHaveBeenCalledWith(expect.objectContaining({ id: 'evt-1' }));
+  });
+
+  it('withdraws the Button chrome on the row and unboxes its wrappers', () => {
+    const row = AUTHORED.find(
+      (rule) =>
+        rule.selector === AGENDA_EVENT && declarations(rule.body).includes('cursor: pointer'),
+    );
+    expect(declarations(row?.body ?? '')).toEqual(
+      expect.arrayContaining([
+        'position: static',
+        'overflow: visible',
+        'white-space: normal',
+        'box-shadow: none',
+        'filter: none',
+        'transform: none',
+      ]),
+    );
+
+    const wrappers = AUTHORED.find((rule) =>
+      rule.selector.endsWith(`> [data-part='content'] > [data-part='label']`),
+    );
+    expect(wrappers?.selector).toBe(
+      `${AGENDA_EVENT} > [data-part='content'], ${AGENDA_EVENT} > [data-part='content'] > [data-part='label']`,
+    );
+    expect(declarations(wrappers?.body ?? '')).toContain('display: contents');
   });
 
   it('leaves a read-only agenda row out of the tab order', async () => {

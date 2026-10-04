@@ -1,7 +1,7 @@
 import React from 'react';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { waitFor } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { CollectionRenderDispatch } from '..';
@@ -62,6 +62,8 @@ const focusRulesOf = (rules: Rule[]) =>
 
 const ROOT = '.ds-surface.ds-collection-render-dispatch';
 const CARD_HOST = `${ROOT} .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible)`;
+const ACTIVATION = `${ROOT} .ds-collection-render-dispatch__card-activation[data-part="card-activation"]`;
+const BUTTON_ACTIVATION = `${ROOT} .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"]`;
 const OPEN_LINK = `${ROOT} a.ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is( [data-state~="focus-visible"], :focus-visible )`;
 
 interface Row {
@@ -77,13 +79,14 @@ const columns: ColumnDef<Row>[] = [{ key: 'name', header: 'Name', accessorKey: '
 
 describe('CollectionRenderDispatch — card and open link wear the tenant focus signature', () => {
   it('hosts the hidden activation control inside the positioned card item the skin selects', async () => {
+    const onRowClick = vi.fn();
     const { container } = renderSurface(
       <CollectionRenderDispatch<Row>
         viewMode="cards"
         data={rows}
         columns={columns}
         rowKey="id"
-        onRowClick={vi.fn()}
+        onRowClick={onRowClick}
         viewModes={{ cards: { renderCard: (row) => <div>{row.name}</div> } }}
       />,
       { engine: 'modern' },
@@ -94,6 +97,9 @@ describe('CollectionRenderDispatch — card and open link wear the tenant focus 
 
     const activation = container.querySelector<HTMLElement>('[data-part="card-activation"]');
     expect(activation?.tagName).toBe('BUTTON');
+    expect(activation).toHaveClass('ds-button');
+    expect(activation).toHaveAttribute('type', 'button');
+    expect(activation).toHaveAccessibleName('Open item 1');
     expect(activation).toHaveClass('ds-collection-render-dispatch__card-activation');
     expect(activation).not.toHaveAttribute('tabindex', '-1');
     expect(activation?.parentElement).toHaveAttribute('data-part', 'card-item');
@@ -104,6 +110,38 @@ describe('CollectionRenderDispatch — card and open link wear the tenant focus 
       (rule) => rule.selector === `${ROOT} .ds-collection-render-dispatch__card-item[data-part="card-item"]`,
     );
     expect(declarations(item?.body ?? '')).toContain('position: relative');
+
+    fireEvent.click(activation as HTMLElement);
+    expect(onRowClick).toHaveBeenCalledTimes(1);
+    expect(onRowClick).toHaveBeenCalledWith(rows[0], 0);
+  });
+
+  it('keeps the Button overlay out of flow, without the Button chrome or boxed wrappers', () => {
+    const hidden = AUTHORED.find((rule) => rule.selector === ACTIVATION);
+    expect(declarations(hidden?.body ?? '')).toEqual(
+      expect.arrayContaining([
+        'position: absolute',
+        'inline-size: 1px',
+        'block-size: 1px',
+        'overflow: hidden',
+        'clip-path: inset(50%)',
+        'pointer-events: none',
+      ]),
+    );
+
+    const button = AUTHORED.find((rule) => rule.selector === BUTTON_ACTIVATION);
+    expect(declarations(button?.body ?? '')).toEqual(
+      expect.arrayContaining(['min-block-size: 0', 'box-shadow: none', 'transition: none']),
+    );
+    for (const property of ['position', 'overflow', 'inline-size', 'block-size', 'clip-path']) {
+      expect(declarations(button?.body ?? '').some((d) => d.startsWith(`${property}:`))).toBe(false);
+    }
+
+    const wrappers = AUTHORED.find(
+      (rule) =>
+        rule.selector === `${BUTTON_ACTIVATION} :is([data-part="content"], [data-part="label"])`,
+    );
+    expect(declarations(wrappers?.body ?? '')).toContain('display: contents');
   });
 
   it('renders the open affordance as a composed Button when there is no destination', async () => {
