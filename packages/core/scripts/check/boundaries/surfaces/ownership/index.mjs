@@ -25,11 +25,20 @@
  * adding another copy or moving debt to a different owner is red. The allowlist
  * is for legitimate permanent ownership only and requires a written reason.
  *
+ * The debt is reported as two named counters (`./counters`): `productive`
+ * (Modern engine + shared core) and `frozen-transferred` (Classic + Rustic,
+ * receiver WO-RET-06). Owner class is derived from the path with the engine
+ * freeze law and is never stored. Each counter is decrease-only and exact: a
+ * row above its pin is a regression, a row below its pin is a stale ceiling,
+ * and both fail. The counters are never netted against each other.
+ *
+ * `--update-baseline` is tighten-only: it lowers pins and drops rows whose
+ * finding left the source, and refuses any increase and any new row.
+ *
  * Usage:
  *   node scripts/check/boundaries/surfaces/ownership/index.mjs --check
  *   node scripts/check/boundaries/surfaces/ownership/index.mjs --report --details=100
- *   node scripts/check/boundaries/surfaces/ownership/index.mjs --write-baseline
- *   node scripts/check/boundaries/surfaces/ownership/index.mjs --write-baseline --allow-increase
+ *   node scripts/check/boundaries/surfaces/ownership/index.mjs --update-baseline
  */
 
 import { createHash } from 'node:crypto';
@@ -44,6 +53,17 @@ import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import {
+  BASELINE_SCHEMA,
+  BASELINE_SCOPE,
+  COUNTERS,
+  counterOf,
+  f86Line,
+  ledgerRows,
+  ownerClass,
+  tallyCounters,
+  totalOf,
+} from './counters/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPT_DIR = dirname(SCRIPT_PATH);
@@ -243,9 +263,15 @@ function collectStaticClassText(node, out = []) {
   }
   if (ts.isTemplateExpression(expression)) {
     out.push(expression.head.text);
+    let before = expression.head.text;
     for (const span of expression.templateSpans) {
-      collectStaticClassText(span.expression, out);
-      out.push(span.literal.text);
+      const after = span.literal.text;
+      // Text with no whitespace across a `${}` boundary is one class name.
+      const lead = /\S+$/u.exec(before)?.[0] ?? '';
+      const trail = /^\S+/u.exec(after)?.[0] ?? '';
+      for (const text of collectStaticClassText(span.expression)) out.push(`${lead}${text}${trail}`);
+      out.push(after);
+      before = after;
     }
     return out;
   }
@@ -456,6 +482,59 @@ export function analyzeOwnershipSource(source, path = 'src/components/patterns/e
   }
   collectVariables(sourceFile);
 
+  // A local component that spreads its props onto a non-interactive intrinsic
+  // still renders that element: a handler passed to it lands on the intrinsic.
+  const wrappers = new Map();
+  function spreadIntrinsic(fn) {
+    const param = fn.parameters[0];
+    if (!param) return null;
+    let restName = null;
+    if (ts.isObjectBindingPattern(param.name)) {
+      const rest = param.name.elements.find((element) => element.dotDotDotToken);
+      if (rest && ts.isIdentifier(rest.name)) restName = rest.name.text;
+    } else if (ts.isIdentifier(param.name)) restName = param.name.text;
+    if (!restName) return null;
+    let found = null;
+    function walk(node) {
+      if (found) return;
+      if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node)) {
+        const opening = ts.isJsxElement(node) ? node.openingElement : node;
+        const tag = jsxTagName(opening.tagName);
+        if (
+          /^[a-z]/u.test(tag)
+          && !NATIVE_INTERACTIVE_TAGS.has(tag)
+          && opening.attributes.properties.some((attribute) => (
+            ts.isJsxSpreadAttribute(attribute)
+            && ts.isIdentifier(unwrap(attribute.expression))
+            && unwrap(attribute.expression).text === restName
+          ))
+        ) {
+          found = tag;
+          return;
+        }
+      }
+      ts.forEachChild(node, walk);
+    }
+    walk(fn);
+    return found;
+  }
+  function collectWrappers(node) {
+    if (ts.isFunctionDeclaration(node) && node.name) {
+      const tag = spreadIntrinsic(node);
+      if (tag) wrappers.set(node.name.text, tag);
+    }
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+      let init = unwrap(node.initializer);
+      if (ts.isCallExpression(init) && init.arguments[0]) init = unwrap(init.arguments[0]);
+      if (ts.isArrowFunction(init) || ts.isFunctionExpression(init)) {
+        const tag = spreadIntrinsic(init);
+        if (tag) wrappers.set(node.name.text, tag);
+      }
+    }
+    ts.forEachChild(node, collectWrappers);
+  }
+  collectWrappers(sourceFile);
+
   function inspectOpening(node) {
     const nameNode = ts.isJsxElement(node) ? node.openingElement.tagName : node.tagName;
     const attributes = ts.isJsxElement(node) ? node.openingElement.attributes : node.attributes;
@@ -516,6 +595,20 @@ export function analyzeOwnershipSource(source, path = 'src/components/patterns/e
         'clickable-noninteractive',
         `${tag}:onClick`,
         `<${tag} onClick={…}>`,
+      );
+    }
+
+    if (!intrinsic && wrappers.has(tag) && clickAttribute && !isEventPlumbingOnlyClick(clickAttribute)) {
+      const inner = wrappers.get(tag);
+      addFinding(
+        findings,
+        sourceFile,
+        path,
+        clickAttribute,
+        'primitive-reconstruction',
+        'clickable-noninteractive',
+        `${inner}:onClick`,
+        `<${inner} onClick={…}> via <${tag}>`,
       );
     }
 
@@ -666,12 +759,14 @@ export function applyAllowlist(findings, allowlist) {
   return { active, allowed, unusedEntries };
 }
 
-export function buildBaseline(findings) {
-  const entries = new Map();
+const BASELINE_ROW_FIELDS = Object.freeze(['path', 'category', 'rule', 'count']);
+
+function groupFindings(findings) {
+  const rows = new Map();
   for (const finding of findings) {
-    const current = entries.get(finding.id);
+    const current = rows.get(finding.id);
     if (current) current.count += 1;
-    else entries.set(finding.id, {
+    else rows.set(finding.id, {
       id: finding.id,
       path: finding.path,
       category: finding.category,
@@ -679,45 +774,149 @@ export function buildBaseline(findings) {
       count: 1,
     });
   }
+  return rows;
+}
+
+function baselineDocument(rows) {
+  const sorted = [...rows].sort((left, right) => (
+    left.path.localeCompare(right.path)
+    || left.category.localeCompare(right.category)
+    || left.rule.localeCompare(right.rule)
+    || left.id.localeCompare(right.id)
+  ));
   return {
-    schemaVersion: 1,
-    scope: ['src/components/patterns', 'src/components/surfaces'],
-    entries: [...entries.values()].sort((left, right) => (
-      left.path.localeCompare(right.path)
-      || left.category.localeCompare(right.category)
-      || left.rule.localeCompare(right.rule)
-      || left.id.localeCompare(right.id)
-    )),
+    schema: BASELINE_SCHEMA,
+    scope: BASELINE_SCOPE,
+    entries: Object.fromEntries(sorted.map(({ id, path, category, rule, count }) => (
+      [id, { path, category, rule, count }]
+    ))),
   };
 }
 
+/**
+ * Every numeric leaf of the document is one row's pinned occurrence count, so a
+ * generic walk over the ledger reads rows and occurrences and nothing else.
+ */
+export function buildBaseline(findings) {
+  return baselineDocument(groupFindings(findings).values());
+}
+
 export function evaluateBaseline(findings, baseline) {
-  const ceiling = new Map((baseline?.entries ?? []).map((entry) => [entry.id, entry.count]));
+  const pinnedRows = ledgerRows(baseline);
+  const ceiling = new Map(pinnedRows.map((row) => [row.id, row.count]));
+  const liveRows = groupFindings(findings);
   const seen = new Map();
   const regressions = [];
   for (const finding of findings) {
     const occurrence = (seen.get(finding.id) ?? 0) + 1;
     seen.set(finding.id, occurrence);
     if (occurrence > (ceiling.get(finding.id) ?? 0)) {
-      regressions.push({ ...finding, occurrence, ceiling: ceiling.get(finding.id) ?? 0 });
+      regressions.push({
+        ...finding,
+        occurrence,
+        ceiling: ceiling.get(finding.id) ?? 0,
+        counter: counterOf(finding.path),
+        ownerClass: ownerClass(finding.path),
+      });
     }
+  }
+  const stale = [];
+  const misattributed = [];
+  for (const row of pinnedRows) {
+    const live = liveRows.get(row.id);
+    if ((live?.count ?? 0) < row.count) {
+      stale.push({ ...row, live: live?.count ?? 0, counter: counterOf(row.path) });
+    }
+    if (live && (live.path !== row.path || live.category !== row.category || live.rule !== row.rule)) {
+      misattributed.push({ id: row.id, recorded: row.path, measured: live.path, counter: counterOf(live.path) });
+    }
+  }
+  const counters = {};
+  const liveCounters = tallyCounters(liveRows.values());
+  const pinnedCounters = tallyCounters(pinnedRows);
+  for (const name of Object.keys(COUNTERS)) {
+    counters[name] = {
+      live: liveCounters[name],
+      pinned: pinnedCounters[name],
+      regressions: regressions.filter((finding) => finding.counter === name).length,
+      stale: stale.filter((row) => row.counter === name).length,
+    };
   }
   const currentCount = findings.length;
   const baselineCount = [...ceiling.values()].reduce((sum, count) => sum + count, 0);
-  return { ok: regressions.length === 0, regressions, currentCount, baselineCount };
+  return {
+    ok: regressions.length === 0 && stale.length === 0 && misattributed.length === 0,
+    regressions,
+    stale,
+    misattributed,
+    counters,
+    total: { live: totalOf(liveCounters), pinned: totalOf(pinnedCounters) },
+    currentCount,
+    baselineCount,
+  };
+}
+
+/**
+ * The only producer. Pins move down and rows whose finding left the source are
+ * dropped; a row that would rise and a row that does not exist yet are refused
+ * by name, so no counter can grow under cover of another one falling.
+ */
+export function tightenBaseline(findings, baseline) {
+  const pinned = new Map(ledgerRows(baseline).map((row) => [row.id, row]));
+  const refusals = [];
+  for (const row of groupFindings(findings).values()) {
+    const pin = pinned.get(row.id);
+    if (pin && row.count <= pin.count) continue;
+    refusals.push({
+      ...row,
+      pinned: pin?.count ?? 0,
+      counter: counterOf(row.path),
+      kind: pin ? 'increase' : 'new-row',
+    });
+  }
+  return { ok: refusals.length === 0, refusals, next: refusals.length ? null : buildBaseline(findings) };
+}
+
+/** Schema 1 stored `entries` as a list under a numeric `schemaVersion`. */
+export function upgradeLegacyBaseline(baseline) {
+  if (baseline?.schemaVersion !== 1 || !Array.isArray(baseline.entries)) return baseline;
+  return baselineDocument(baseline.entries);
 }
 
 export function validateBaseline(baseline) {
   const issues = [];
-  if (!baseline || baseline.schemaVersion !== 1 || !Array.isArray(baseline.entries)) {
-    return ['baseline must have schemaVersion 1 and an entries array'];
+  if (baseline?.schemaVersion === 1 && Array.isArray(baseline.entries)) {
+    return [`baseline is schema 1; rewrite it as '${BASELINE_SCHEMA}' with --update-baseline`];
   }
-  const ids = new Set();
-  for (const [index, entry] of baseline.entries.entries()) {
-    const prefix = `baseline.entries[${index}]`;
-    if (typeof entry.id !== 'string' || !/^[a-f0-9]{20}$/u.test(entry.id)) issues.push(`${prefix}.id is invalid`);
-    else if (ids.has(entry.id)) issues.push(`${prefix}.id duplicates ${entry.id}; counts belong in one multiset row`);
-    else ids.add(entry.id);
+  if (
+    !baseline
+    || baseline.schema !== BASELINE_SCHEMA
+    || !baseline.entries
+    || typeof baseline.entries !== 'object'
+    || Array.isArray(baseline.entries)
+  ) {
+    return [`baseline must declare schema '${BASELINE_SCHEMA}' and an entries map keyed by finding id`];
+  }
+  for (const field of Object.keys(baseline)) {
+    if (!['schema', 'scope', 'entries'].includes(field)) {
+      issues.push(`baseline.${field} is not a ledger field; counters and owner classes are derived, never stored`);
+    }
+  }
+  for (const [id, entry] of Object.entries(baseline.entries)) {
+    const prefix = `baseline.entries.${id}`;
+    if (!/^[a-f0-9]{20}$/u.test(id)) issues.push(`${prefix} is not a finding id`);
+    if (!entry || typeof entry !== 'object') {
+      issues.push(`${prefix} must be a row`);
+      continue;
+    }
+    for (const field of Object.keys(entry)) {
+      if (!BASELINE_ROW_FIELDS.includes(field)) {
+        issues.push(
+          `${prefix}.${field} is not a row field; a row stores ${BASELINE_ROW_FIELDS.join(', ')} `
+          + 'and its owner class is derived from the path',
+        );
+      }
+    }
     if (typeof entry.path !== 'string' || !entry.path.startsWith('src/components/')) issues.push(`${prefix}.path is invalid`);
     if (!OWNERSHIP_CATEGORIES.has(entry.category)) issues.push(`${prefix}.category is invalid`);
     if (typeof entry.rule !== 'string' || entry.rule.length === 0) issues.push(`${prefix}.rule is invalid`);
@@ -741,6 +940,7 @@ export function runOwnershipGate({
   sourceRoot = DEFAULT_SOURCE_ROOT,
   baselinePath = DEFAULT_BASELINE_PATH,
   allowlistPath = DEFAULT_ALLOWLIST_PATH,
+  acceptLegacyBaseline = false,
 } = {}) {
   const allowlist = readJson(allowlistPath, { schemaVersion: 1, entries: [] });
   const allowlistIssues = validateAllowlist(allowlist);
@@ -759,7 +959,8 @@ export function runOwnershipGate({
     tokenOwnedChrome += result.tokenOwnedChrome;
   }
   const { active, allowed, unusedEntries } = applyAllowlist(allFindings, allowlist);
-  const baseline = readJson(baselinePath, { schemaVersion: 1, entries: [] });
+  const stored = readJson(baselinePath, buildBaseline([]));
+  const baseline = acceptLegacyBaseline ? upgradeLegacyBaseline(stored) : stored;
   const baselineIssues = validateBaseline(baseline);
   const staleAllowlistIssues = unusedEntries.map((entry) => (
     `unused allowlist entry '${entry.id ?? entry.path}' no longer owns a finding; remove the stale exception`
@@ -802,26 +1003,57 @@ function printFinding(finding, stream = console.error) {
   stream(`  ${finding.remediation}`);
 }
 
-function printSummary(result, stream = console.log) {
-  stream(`DS-A002 ownership census: ${result.findings.length} active finding(s) across ${result.files.length} productive file(s).`);
-  for (const [category, count] of Object.entries(result.counts).sort()) stream(`  ${category}: ${count}`);
-  stream(`  allowlisted: ${result.allowed.length}`);
-  stream(`  dynamic geometry exempted: ${result.dynamicGeometryExemptions}`);
-  stream(`  token-owned inline chrome observed: ${result.tokenOwnedChrome}`);
-  stream(`  ratchet: ${result.currentCount}/${result.baselineCount}`);
+function figure(counter) {
+  return `${counter.occurrences} occurrence(s) in ${counter.rows} row(s)`;
 }
 
-function writeBaseline(path, result, allowIncrease) {
-  const next = buildBaseline(result.findings);
-  const previousCount = result.baselineCount;
-  const nextCount = result.findings.length;
-  if (existsSync(path) && nextCount > previousCount && !allowIncrease) {
-    throw new Error(
-      `Refusing to raise the ownership baseline from ${previousCount} to ${nextCount}. `
-      + 'Review the growth, then pass --allow-increase explicitly.',
+/** The census report. Exported so the F-86 line is testable at its threshold. */
+export function summaryLines(result) {
+  const lines = [
+    `DS-A002 ownership census: ${result.findings.length} active finding(s) across ${result.files.length} productive file(s).`,
+  ];
+  for (const [category, count] of Object.entries(result.counts).sort()) lines.push(`  ${category}: ${count}`);
+  lines.push(`  allowlisted: ${result.allowed.length}`);
+  lines.push(`  dynamic geometry exempted: ${result.dynamicGeometryExemptions}`);
+  lines.push(`  token-owned inline chrome observed: ${result.tokenOwnedChrome}`);
+  for (const [name, counter] of Object.entries(COUNTERS)) {
+    const { live, pinned, regressions, stale } = result.counters[name];
+    const verdict = regressions || stale
+      ? `RED (${regressions} above the pin, ${stale} stale pin(s))`
+      : 'exact';
+    lines.push(
+      `  ${counter.label}: ${figure(live)} — pin ${pinned.occurrences}/${pinned.rows} — ${verdict} — `
+      + `receiver ${counter.receiver}, ${counter.standing}`,
     );
+    lines.push(`    ${counter.classes.map((owner) => (
+      `${owner} ${live.classes[owner].occurrences}/${live.classes[owner].rows}`
+    )).join(' · ')} · id set sha256 ${live.idSetDigest.slice(0, 16)}`);
   }
-  writeFileSync(path, `${JSON.stringify(next, null, 2)}\n`);
+  lines.push(
+    `  total ${result.total.live.occurrences} occurrence(s) / ${result.total.live.rows} row(s) — `
+    + 'published for the F-86 clause only; the two counters are never netted',
+  );
+  const f86 = f86Line(result.total.live.occurrences >= result.total.pinned.occurrences
+    ? result.total.live
+    : result.total.pinned);
+  if (f86) lines.push(`  ${f86}`);
+  return lines;
+}
+
+function printRefusals(refusals) {
+  console.error(
+    `Refusing to update the ownership baseline: ${refusals.length} row(s) would rise. `
+    + 'The producer only tightens; remove the finding from the source.',
+  );
+  for (const name of Object.keys(COUNTERS)) {
+    const rows = refusals.filter((row) => row.counter === name);
+    if (!rows.length) continue;
+    console.error(`  ${name}: ${rows.length} row(s)`);
+    for (const row of rows.slice(0, 20)) {
+      console.error(`    ${row.kind} ${row.id} ${row.path} [${row.category}/${row.rule}] ${row.pinned} → ${row.count}`);
+    }
+    if (rows.length > 20) console.error(`    … ${rows.length - 20} more`);
+  }
 }
 
 async function main() {
@@ -830,34 +1062,73 @@ async function main() {
   const allowlistPath = resolve(argumentValue('--allowlist') ?? DEFAULT_ALLOWLIST_PATH);
   const check = process.argv.includes('--check');
   const report = process.argv.includes('--report');
-  const write = process.argv.includes('--write-baseline');
+  const update = process.argv.includes('--update-baseline');
   const quiet = process.argv.includes('--quiet');
   const details = Number(argumentValue('--details') ?? (report ? 100 : 30));
-  const result = runOwnershipGate({ sourceRoot, baselinePath, allowlistPath });
+
+  for (const removed of ['--write-baseline', '--allow-increase']) {
+    if (process.argv.includes(removed)) {
+      console.error(`DS-A002: ${removed} was removed; the only producer is the tighten-only --update-baseline.`);
+      process.exitCode = 1;
+      return;
+    }
+  }
+
+  const result = runOwnershipGate({ sourceRoot, baselinePath, allowlistPath, acceptLegacyBaseline: update });
 
   if (result.configurationIssues.length) {
     for (const issue of result.configurationIssues) console.error(`DS-A002 configuration: ${issue}`);
     process.exitCode = 1;
     return;
   }
-  if (!quiet) printSummary(result);
+  if (!quiet) for (const line of summaryLines(result)) console.log(line);
 
-  if (write) {
-    try {
-      writeBaseline(baselinePath, result, process.argv.includes('--allow-increase'));
-      if (!quiet) console.log(`Wrote ${relative(DEFAULT_PACKAGE_ROOT, baselinePath)}.`);
-    } catch (error) {
-      console.error(error.message);
+  if (update) {
+    const tightened = tightenBaseline(result.findings, result.baseline);
+    if (!tightened.ok) {
+      printRefusals(tightened.refusals);
       process.exitCode = 1;
       return;
     }
+    writeFileSync(baselinePath, `${JSON.stringify(tightened.next, null, 2)}\n`);
+    if (!quiet) {
+      console.log(
+        `Tightened ${relative(DEFAULT_PACKAGE_ROOT, baselinePath)}: `
+        + `${result.total.pinned.occurrences}/${result.total.pinned.rows} → `
+        + `${result.total.live.occurrences}/${result.total.live.rows} (occurrences/rows).`,
+      );
+    }
+    return;
   }
 
-  const shown = report ? result.findings : result.regressions;
-  if (!quiet && shown.length) {
-    console.log(report ? '\nCurrent ownership findings:' : '\nNew ownership findings:');
-    for (const finding of shown.slice(0, Math.max(0, details))) printFinding(finding, console.log);
-    if (shown.length > details) console.log(`  … ${shown.length - details} more; use --details=<n>.`);
+  if (!quiet && report && result.findings.length) {
+    console.log('\nCurrent ownership findings:');
+    for (const finding of result.findings.slice(0, Math.max(0, details))) printFinding(finding, console.log);
+    if (result.findings.length > details) console.log(`  … ${result.findings.length - details} more; use --details=<n>.`);
+  }
+  if (!quiet && !report) {
+    for (const name of Object.keys(COUNTERS)) {
+      const grown = result.regressions.filter((finding) => finding.counter === name);
+      if (grown.length) {
+        console.log(`\nNew ownership findings — ${name} may not grow:`);
+        for (const finding of grown.slice(0, Math.max(0, details))) printFinding(finding, console.log);
+        if (grown.length > details) console.log(`  … ${grown.length - details} more; use --details=<n>.`);
+      }
+      const stale = result.stale.filter((row) => row.counter === name);
+      if (stale.length) {
+        console.log(`\nStale pins — ${name} is below its ceiling; lower it with --update-baseline:`);
+        for (const row of stale.slice(0, Math.max(0, details))) {
+          console.log(`  ${row.id} ${row.path} [${row.category}/${row.rule}] pinned ${row.count}, live ${row.live}`);
+        }
+        if (stale.length > details) console.log(`  … ${stale.length - details} more; use --details=<n>.`);
+      }
+    }
+    if (result.misattributed.length) {
+      console.log('\nRows whose recorded owner differs from the source (owner class is derived, never edited):');
+      for (const row of result.misattributed) {
+        console.log(`  ${row.id} recorded ${row.recorded}, measured ${row.measured}`);
+      }
+    }
   }
   if (check && !result.ok) process.exitCode = 1;
 }
