@@ -167,13 +167,12 @@ describe('Record (WO-FAM-10 cut)', () => {
     await waitFor(() => expect(linkBody.getAttribute('data-state')).toContain('focus-visible'), {
       timeout: WAIT_TIMEOUT,
     });
-    // The ring's declarations resolve ON the wrapper. The `outline` shorthand
-    // carries `var()`, which this runner does not expand into its longhands,
-    // so the two ring declarations it does resolve are the read: an unreached
-    // rule leaves both empty, as the pre-correction wrapper rule did.
-    const ring = getComputedStyle(linkBody);
-    expect(ring.outlineOffset).toBe('2px');
-    expect(ring.borderRadius).toBe('4px');
+    // The ring's declarations resolve ON the wrapper. The signature and its
+    // geometry are `var()` reads with no fallback, which this runner leaves
+    // empty, so the corner the rule also declares is the read: an unreached
+    // rule leaves it empty, as the pre-correction wrapper rule did.
+    expect(style.textContent).toContain('box-shadow: var(--ds-focus-ring)');
+    expect(getComputedStyle(linkBody).borderRadius).toBe('4px');
     unmount();
     style.remove();
   });

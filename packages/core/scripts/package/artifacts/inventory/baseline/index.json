@@ -4,7 +4,7 @@
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
   "entryCount": 7660,
-  "unpackedSize": 43323725,
+  "unpackedSize": 43326689,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -28,7 +28,7 @@
     },
     {
       "path": "dist/bithire.css",
-      "size": 5056155
+      "size": 5056896
     },
     {
       "path": "dist/chart-access.cjs",
@@ -13228,7 +13228,7 @@
     },
     {
       "path": "dist/evnto.css",
-      "size": 5017266
+      "size": 5018007
     },
     {
       "path": "dist/fonts/arabic-text.css",
@@ -30592,7 +30592,7 @@
     },
     {
       "path": "dist/rottay.css",
-      "size": 5016526
+      "size": 5017267
     },
     {
       "path": "dist/server.cjs",
@@ -30620,7 +30620,7 @@
     },
     {
       "path": "dist/styles.css",
-      "size": 5691015
+      "size": 5691756
     },
     {
       "path": "governance/graphics/licenses/phosphor-icons-react/index.md",

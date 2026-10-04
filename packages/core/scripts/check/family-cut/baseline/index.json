@@ -1743,7 +1743,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 36,
+        "channelsRead": 37,
         "classTokens": 3,
         "partsStamped": 37,
         "partsConsumed": 37
@@ -2069,7 +2069,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 8,
-        "channelsRead": 35,
+        "channelsRead": 36,
         "classTokens": 1,
         "partsStamped": 87,
         "partsConsumed": 24

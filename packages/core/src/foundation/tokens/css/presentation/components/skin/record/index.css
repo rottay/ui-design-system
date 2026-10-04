@@ -121,7 +121,8 @@
  * seams, which is the opposite of depth and the reason nothing here casts a
  * shadow. The two `box-shadow` declarations in this file are INSET keylines
  * (focus-within, per-field error) — state cues drawn as rules, never lift —
- * plus one `box-shadow: none` reset in the forced-colors ledger block.
+ * plus one `box-shadow: none` reset in the forced-colors ledger block. The
+ * linked value's `box-shadow` is the tenant focus signature, not depth.
  *
  * That makes this family the one that already answers a rule-led tenant
  * correctly, and it answers on the EDGE axis rather than the depth axis:
@@ -555,9 +556,10 @@
    platform twin (the wrapper is not itself focusable, so `:focus-within` is
    the pseudo that stands for the anchor's `:focus-visible` here). */
 .ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
   border-radius: var(--ds-radius-sm, 4px);
+  box-shadow: var(--ds-focus-ring);
 }
 
 /* --- RecordActionBar ------------------------------------------------------- */

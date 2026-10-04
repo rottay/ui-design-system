@@ -1252,7 +1252,7 @@ describe('axis-difference drills — every verdict is reachable', () => {
       }
     }
     const byFamily = [...new Set(carriers.map((entry) => entry.family))].sort();
-    assert.deepEqual(byFamily, ['anchor', 'app-shell', 'bottom-tab-bar', 'collection-workspace-render-dispatch', 'column-menu', 'menu',
+    assert.deepEqual(byFamily, ['anchor', 'app-shell', 'bottom-tab-bar', 'code-block', 'collection-workspace-render-dispatch', 'column-menu', 'menu',
       'operational-ledger', 'shift-matrix', 'table', 'tabs', 'tree', 'widget-board'], 'the families whose corner follows the ring, by name');
     for (const family of byFamily) {
       // The corner is never the family's only ring paint: some rule of the same family writes the signature on an overlay.
@@ -1273,7 +1273,17 @@ describe('axis-difference drills — every verdict is reachable', () => {
       };
       const key = (read) => `${subject(read.host)}\u0000${read.pseudo}`;
       const shadowRead = new Set(reads.filter((read) => read.axis === 'depth' || read.property === 'box-shadow').map(key));
-      const focusCorner = reads.filter((read) => read.axis === 'shape' && /focus-visible/u.test(read.host));
+      // A focus overlay gated by a native :focus-visible pseudo is normalised out of the read's host; admit it
+      // through the carrier the skin scan above already proved for this family.
+      const stripFocus = (selector) => selector
+        .replace(/:not\(:focus-within:not\(:focus\)\)/u, '')
+        .replace(/:is\(\[data-state~='focus-visible'\],\s*:focus-visible\)/u, '')
+        .replace(/:focus-visible/gu, '');
+      const carrierKeys = new Set(carriers.filter((entry) => entry.family === family).map((entry) => key({
+        host: stripFocus(entry.selector.replace(/::(?:before|after)/u, '')),
+        pseudo: entry.selector.match(/::(?:before|after)/u)?.[0] ?? '',
+      })));
+      const focusCorner = reads.filter((read) => read.axis === 'shape' && (/focus-visible/u.test(read.host) || carrierKeys.has(key(read))));
       assert.ok(focusCorner.length > 0, `${family}: no corner read on a focus overlay`);
       for (const read of focusCorner) assert.ok(shadowRead.has(key(read)), `${family}: ${read.host}${read.pseudo} is read for its corner and not for its shadow`);
     }

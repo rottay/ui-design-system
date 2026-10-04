@@ -72,8 +72,9 @@
 }
 
 .ds-structure.ds-saved-views-menu[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: none;
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 
 .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open='true'] {
@@ -263,7 +264,9 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:is([data-state~='focus-visible'], :focus-visible) {
-  box-shadow: inset 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item'][data-active='true'] {
@@ -437,8 +440,9 @@
   }
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: none;
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 60%, var(--ds-surface-card));
@@ -447,8 +451,8 @@
   background: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
 }
 
-/* view items: the whole card lifts on hover; the select button keeps the
-   inset focus ring it already owns */
+/* view items: the whole card lifts on hover; the select button wears the
+   tenant focus signature it already owns */
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item'] {
   transition:
     background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
@@ -485,8 +489,9 @@
   }
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='delete']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: none;
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-danger) 50%, transparent));
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
 }
 
 /* Coarse pointers: the trigger, the action buttons and the delete affordance

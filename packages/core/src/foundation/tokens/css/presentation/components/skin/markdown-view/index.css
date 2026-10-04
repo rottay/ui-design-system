@@ -58,12 +58,9 @@
 }
 
 .ds-markdown-view[data-part='root'] a[data-part='link']:focus-visible {
-  outline: none;
+  outline: var(--ds-focus-ring-width) solid transparent;
   border-radius: var(--ds-radius-sm);
-  box-shadow: var(
-    --ds-markdown-focus-ring,
-    0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
-  );
+  box-shadow: var(--ds-markdown-focus-ring, var(--ds-focus-ring));
 }
 
 /* W10: markers inherit the body ink by default, which makes list structure
@@ -149,15 +146,12 @@
 
 /* Keyboard-reachable scroll regions (Phase B): the table wrapper and the
    default code fence became focusable in the engine (scrollable-region law);
-   their ring shares the family's governed focus grammar. `outline`-free like
-   the link ring -- the box-shadow does not move geometry. */
+   like the link they wear the tenant focus signature, which paints as a
+   box-shadow and does not move geometry. */
 .ds-markdown-view[data-part='root'] [data-part='table-wrapper']:focus-visible,
 .ds-markdown-view[data-part='root'] [data-part='code-block-pre']:focus-visible {
-  outline: none;
-  box-shadow: var(
-    --ds-markdown-focus-ring,
-    0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
-  );
+  outline: var(--ds-focus-ring-width) solid transparent;
+  box-shadow: var(--ds-markdown-focus-ring, var(--ds-focus-ring));
 }
 
 /* Reading frame additions (Pass 2): the document keeps an opt-in measure
