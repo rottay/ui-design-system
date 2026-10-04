@@ -151,3 +151,73 @@ describe('ModernWorkspaceSwitcher — composed controls wear the Button focus si
     expect(reveal && declarations(reveal.body)).toEqual(['opacity: 1']);
   });
 });
+
+describe('ModernWorkspaceSwitcher — the row control rides the Button primitive', () => {
+  const ROW = ".ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item']";
+
+  const openMenu = async (onSwitch = vi.fn()) => {
+    const view = render(
+      <ModernWorkspaceSwitcher
+        workspaces={[
+          { id: 'ws-1', name: 'Acme Corp', role: 'Admin', plan: 'pro', unreadCount: 3 },
+          { id: 'ws-2', name: 'Beta Inc', role: 'Member', plan: 'free' },
+        ]}
+        activeWorkspaceId="ws-1"
+        onSwitch={onSwitch}
+        onSettings={vi.fn()}
+      />,
+    );
+    fireEvent.click(await screen.findByTestId('workspace-trigger'));
+    await screen.findByTestId('workspace-settings-ws-1');
+    return { ...view, onSwitch };
+  };
+
+  it('renders each row as a non-submitting DS Button that keeps the menu semantics', async () => {
+    const { container } = await openMenu();
+    const rows = [...container.querySelectorAll('[data-part="item"]')];
+
+    expect(rows.length).toBe(2);
+    for (const row of rows) {
+      expect(row.tagName).toBe('BUTTON');
+      expect(row).toHaveClass('ds-button', 'ds-button--modern');
+      expect(row).toHaveAttribute('type', 'button');
+      expect(row).toHaveAttribute('role', 'menuitemradio');
+      for (const part of ['avatar-frame', 'item-copy', 'item-controls']) {
+        expect(row.querySelector(`[data-part="${part}"]`), part).not.toBeNull();
+      }
+    }
+    expect(rows.map((row) => row.getAttribute('aria-checked'))).toEqual(['true', 'false']);
+    expect(rows.map((row) => row.getAttribute('tabindex'))).toEqual(['0', '-1']);
+  });
+
+  it.each(['click', 'Enter', ' '])('switches exactly once on %s', async (drive) => {
+    const { onSwitch } = await openMenu();
+    const row = screen.getByTestId('workspace-item-ws-2');
+
+    if (drive === 'click') fireEvent.click(row);
+    else fireEvent.keyDown(row, { key: drive });
+
+    expect(onSwitch).toHaveBeenCalledTimes(1);
+    expect(onSwitch).toHaveBeenCalledWith('ws-2');
+  });
+
+  it('withdraws the Button chrome in the skin and leaves the focus signature to the row', () => {
+    const chrome = AUTHORED.filter((rule) => rule.selector === ROW);
+    expect(chrome.length).toBe(1);
+    const declared = declarations(chrome[0].body);
+
+    for (const channel of ['hover-transform', 'hover-filter', 'active-transform', 'active-filter']) {
+      expect(declared).toContain(`--ds-button-${channel}: none`);
+    }
+    for (const property of ['background', 'border', 'border-radius', 'box-shadow', 'color', 'font', 'padding-inline', 'transition']) {
+      expect(declared, property).toContain(`${property}: unset`);
+    }
+    for (const reset of ['box-sizing: inherit', 'border-style: inherit', 'border-width: 0']) {
+      expect(declared, reset).toContain(reset);
+    }
+    expect(paintsFocusIndicator(chrome[0])).toBe(false);
+
+    const wrappers = AUTHORED.find((rule) => rule.selector.startsWith(`${ROW} > [data-part='content']`));
+    expect(wrappers && declarations(wrappers.body)).toContain('display: contents');
+  });
+});

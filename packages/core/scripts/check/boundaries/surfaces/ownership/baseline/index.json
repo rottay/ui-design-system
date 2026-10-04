@@ -5967,12 +5967,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "16c02272e7ecc1d4c4c8": {
-      "path": "src/components/patterns/navigation/workspace-switcher/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "clickable-noninteractive",
-      "count": 1
-    },
     "c58cf60654dc77fecca1": {
       "path": "src/components/patterns/navigation/workspace-switcher/engines/rustic/index.tsx",
       "category": "native-interactive",

@@ -308,13 +308,68 @@
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'] {
+  position: static;
   display: flex;
   flex: 1 1 auto;
   min-inline-size: 0;
+  min-block-size: auto;
   align-items: center;
-  gap: var(--ds-workspace-switcher-item-gap, 12px);
   padding-block: 8px;
   cursor: pointer;
+}
+
+/* The row control is a Button for behaviour only: its chrome is unset and its
+   wrappers unboxed, so the row frame and this module stay the painters. */
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item'] {
+  --ds-button-hover-transform: none;
+  --ds-button-hover-filter: none;
+  --ds-button-active-transform: none;
+  --ds-button-active-filter: none;
+  isolation: unset;
+  box-sizing: inherit;
+  justify-content: unset;
+  max-inline-size: unset;
+  gap: var(--ds-workspace-switcher-item-gap, 12px);
+  padding-inline: unset;
+  overflow: unset;
+  user-select: unset;
+  touch-action: unset;
+  -webkit-tap-highlight-color: unset;
+  unicode-bidi: isolate;
+  font: unset;
+  letter-spacing: unset;
+  word-spacing: unset;
+  text-align: unset;
+  text-indent: unset;
+  text-rendering: unset;
+  text-shadow: unset;
+  text-transform: unset;
+  white-space: unset;
+  color: unset;
+  background: unset;
+  border: unset;
+  border-style: inherit;
+  border-width: 0;
+  border-radius: unset;
+  box-shadow: unset;
+  transition: unset;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item'] > [data-part='content'],
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item'] > [data-part='content'] > [data-part='label'] {
+  display: contents;
+  font-variant-numeric: unset;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item']::before {
+  display: unset;
+  opacity: unset;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item'] [data-part='badge'] :is([data-part='content'], [data-part='label']) {
+  z-index: unset;
+  translate: unset;
+  font-variant-numeric: unset;
 }
 
 /* Hover reveals only where hovering is a real input mode (hover law); touch

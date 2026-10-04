@@ -5,10 +5,11 @@
  * Renders a workspace picker: a Button trigger and a menu panel with rich
  * rows (avatar, name + active check, metadata, unread Badge, settings gear).
  *
- * COMPOSITION LAW (Lote 2; PT28 uplift): the trigger, the per-row settings
- * gear and the create action are the public Button primitive; the unread
- * counter is the public Badge primitive (caller `data-part` wins the root
- * anatomy hook per P-79, so `workspace-switcher.css` owns their paint);
+ * COMPOSITION LAW (Lote 2; PT28 uplift): the trigger, the row control, the
+ * per-row settings gear and the create action are the public Button
+ * primitive; the unread counter is the public Badge primitive (caller
+ * `data-part` wins the root anatomy hook per P-79, so
+ * `workspace-switcher.css` owns their paint);
  * workspace/user AVATARS are the public Avatar primitive (the hand-rolled
  * initials helper and the `avatar-fallback` paint are retired, and with
  * them the `--ds-workspace-switcher-avatar-font-size/-font-weight`
@@ -35,6 +36,7 @@
 import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import type { WorkspaceSwitcherProps } from '../../contracts';
 import { Button } from '../../../../../primitives/inputs/button';
+import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import { Badge } from '../../../../../primitives/display/badge';
 import ModernAvatar from '../../../../../primitives/display/avatar/engines/modern';
 import ModernInput from '../../../../../primitives/inputs/input/engines/modern';
@@ -221,7 +223,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   // Row column: Up/Down and Home/End rove real focus over the rows; the
   // inline-END arrow crosses to that row's own gear (mirrored under RTL).
   const handleItemKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>, index: number, workspaceId: string) => {
+    (e: React.KeyboardEvent<HTMLButtonElement>, index: number, workspaceId: string) => {
       const toTrailing = direction === 'rtl' ? 'ArrowLeft' : 'ArrowRight';
       switch (e.key) {
         case 'ArrowDown':
@@ -433,7 +435,8 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   data-active={isActive}
                   data-focused={isFocused}
                 >
-                  <div
+                  <ModernButton
+                    variant="ghost"
                     id={itemId(ws.id)}
                     role="menuitemradio"
                     aria-checked={isActive}
@@ -486,7 +489,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                         />
                       )}
                     </span>
-                  </div>
+                  </ModernButton>
                   {/* Settings is revealed on row hover/focus (skin-owned). */}
                   {onSettings && (
                     <Button
