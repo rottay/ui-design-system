@@ -457,3 +457,68 @@ describe('a keyboard activation is not a touch', () => {
     expect(trigger().getAttribute('data-state')).toContain('hovered');
   });
 });
+
+describe('a part tracks only the states its skin reads', () => {
+  const FOCUS_RING_ONLY = ['focusVisible'] as const;
+  let renders = 0;
+
+  function FocusOnlyProbe() {
+    renders += 1;
+    const { state, handlers } = useInteractionState({ tracks: FOCUS_RING_ONLY });
+    return (
+      <button type="button" {...partAttributes('trigger', state)} {...handlers}>
+        probe
+      </button>
+    );
+  }
+
+  it('does not re-render for a state it does not track', () => {
+    render(<FocusOnlyProbe />);
+    renders = 0;
+
+    fireEvent.pointerEnter(trigger());
+    fireEvent.pointerDown(trigger());
+    fireEvent.pointerUp(trigger());
+    fireEvent.pointerLeave(trigger());
+
+    expect(renders).toBe(0);
+    expect(trigger()).not.toHaveAttribute('data-state');
+  });
+
+  it('does not re-render when an untracked state ends, even right after a tracked one changed', () => {
+    render(<FocusOnlyProbe />);
+    fireEvent.focus(trigger());
+    renders = 0;
+
+    fireEvent.pointerEnter(trigger());
+    fireEvent.pointerDown(trigger());
+    fireEvent.pointerUp(trigger());
+    fireEvent.pointerLeave(trigger());
+
+    expect(renders).toBe(0);
+    expect(trigger()).toHaveAttribute('data-state', 'focus-visible');
+  });
+
+  it('stamps the tracked state alone', () => {
+    render(<FocusOnlyProbe />);
+    fireEvent.focus(trigger());
+    expect(trigger()).toHaveAttribute('data-state', 'focus-visible');
+    fireEvent.blur(trigger());
+    expect(trigger()).not.toHaveAttribute('data-state');
+  });
+
+  it('still remembers an untracked press: a pointer focus does not ring', () => {
+    render(<FocusOnlyProbe />);
+    renders = 0;
+
+    fireEvent.pointerDown(trigger());
+    fireEvent.focus(trigger());
+    expect(trigger()).not.toHaveAttribute('data-state');
+    expect(renders).toBe(0);
+
+    fireEvent.pointerUp(trigger());
+    fireEvent.blur(trigger());
+    fireEvent.focus(trigger());
+    expect(trigger()).toHaveAttribute('data-state', 'focus-visible');
+  });
+});

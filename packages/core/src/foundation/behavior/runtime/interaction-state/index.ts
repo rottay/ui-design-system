@@ -53,6 +53,19 @@ function platformShowsFocus(target: Element | null | undefined): boolean {
 export interface UseInteractionStateOptions {
   /** A disabled part reports no hover, no press and no focus ring. */
   disabled?: boolean;
+  /**
+   * The states the part's skin reads off the stamp; every state when omitted.
+   *
+   * A state left out never enters React state: it reports `false`, and the
+   * event that would have raised it re-renders nothing. A part whose skin only
+   * paints a focus ring has no reason to re-render its owner on every pointer
+   * enter, press, release and leave. The press is still remembered, so a focus
+   * that a pointer press brought still does not ring.
+   *
+   * Keep the list fixed for the life of the part: a state dropped from it
+   * while raised is never cleared.
+   */
+  tracks?: readonly Exclude<keyof InteractionState, 'disabled'>[];
 }
 
 export interface UseInteractionStateResult {
@@ -76,7 +89,11 @@ export interface UseInteractionStateResult {
 export function useInteractionState(
   options: UseInteractionStateOptions = {}
 ): UseInteractionStateResult {
-  const { disabled = false } = options;
+  const { disabled = false, tracks } = options;
+  const tracksHover = !tracks || tracks.includes('hovered');
+  const tracksPress = !tracks || tracks.includes('pressed');
+  const tracksFocus = !tracks || tracks.includes('focused');
+  const tracksFocusVisible = !tracks || tracks.includes('focusVisible');
 
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
@@ -95,17 +112,17 @@ export function useInteractionState(
     (event?: React.PointerEvent) => {
       if (disabled) return;
       if (modalityOf(event) === 'touch') return;
-      setHovered(true);
+      if (tracksHover) setHovered(true);
     },
-    [disabled]
+    [disabled, tracksHover]
   );
 
   /** Every way a press ends with no click: leave, cancel, blur, disable. */
   const cancelPress = useCallback(() => {
     pointerDownRef.current = false;
     pressModalityRef.current = null;
-    setPressed(false);
-  }, []);
+    if (tracksPress) setPressed(false);
+  }, [tracksPress]);
 
   // A part disabled mid-press never sees the pointerup or keyup that ends the
   // gesture, so cancel it rather than latch a press until the part returns.
@@ -116,18 +133,18 @@ export function useInteractionState(
   }
 
   const onPointerLeave = useCallback(() => {
-    setHovered(false);
+    if (tracksHover) setHovered(false);
     cancelPress();
-  }, [cancelPress]);
+  }, [cancelPress, tracksHover]);
 
   const onPointerDown = useCallback(
     (event?: React.PointerEvent) => {
       if (disabled) return;
       pointerDownRef.current = true;
       pressModalityRef.current = modalityOf(event);
-      setPressed(true);
+      if (tracksPress) setPressed(true);
     },
-    [disabled]
+    [disabled, tracksPress]
   );
 
   // Release, and the pointercancel callers wire here too. A touch release ends
@@ -137,29 +154,31 @@ export function useInteractionState(
       const touchRelease =
         pressModalityRef.current === 'touch' || modalityOf(event) === 'touch';
       cancelPress();
-      if (touchRelease) setHovered(false);
+      if (touchRelease && tracksHover) setHovered(false);
     },
-    [cancelPress]
+    [cancelPress, tracksHover]
   );
 
   const onFocus = useCallback(
     (event?: React.FocusEvent) => {
       if (disabled) return;
-      setFocused(true);
+      if (tracksFocus) setFocused(true);
       // A focus that script moved or a label forwarded lands on a part nobody
       // pressed: the platform's answer for the focused element decides its ring.
-      setFocusVisible(!pointerDownRef.current && platformShowsFocus(event?.target));
+      if (tracksFocusVisible) {
+        setFocusVisible(!pointerDownRef.current && platformShowsFocus(event?.target));
+      }
     },
-    [disabled]
+    [disabled, tracksFocus, tracksFocusVisible]
   );
 
   const onBlur = useCallback(() => {
-    setFocused(false);
-    setFocusVisible(false);
+    if (tracksFocus) setFocused(false);
+    if (tracksFocusVisible) setFocusVisible(false);
     // Focus is gone, so the keyup that would end a keyboard press lands on
     // whatever took it and never here.
     cancelPress();
-  }, [cancelPress]);
+  }, [cancelPress, tracksFocus, tracksFocusVisible]);
 
   const state = useMemo<InteractionState>(
     () => ({

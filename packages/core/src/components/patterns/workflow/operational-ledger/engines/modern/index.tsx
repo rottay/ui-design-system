@@ -25,6 +25,8 @@
  * />
  */
 
+import type { ReactNode } from 'react';
+
 import type { OperationalLedgerProps, LedgerEntry, LedgerFilter } from '../../contracts';
 import ModernSelect from '../../../../../primitives/inputs/select/engines/modern';
 import { ModernEmptyState } from '../../../../facade';
@@ -70,6 +72,30 @@ const COLUMN_FLOOR: Record<string, string> = {
   reference: 'Reference',
 };
 
+/** The one state the skin paints on the region: its keyboard focus signature. */
+const REGION_STATES = ['focusVisible'] as const;
+
+/**
+ * The focusable scroll region. It owns its interaction state so a focus ring
+ * re-renders this one element and never the ledger: the table arrives as
+ * `children`, an element the ledger already rendered, which React reuses as is.
+ * Hover and press are not tracked — no rule paints them here.
+ */
+function LedgerTableRegion({ label, children }: { label: string; children: ReactNode }) {
+  const region = useInteractionState({ tracks: REGION_STATES });
+  return (
+    <div
+      {...partAttributes('table-region', region.state)}
+      {...region.handlers}
+      role="region"
+      tabIndex={0}
+      aria-label={label}
+    >
+      {children}
+    </div>
+  );
+}
+
 /**
  * Modern engine for the OperationalLedger pattern (see the module docblock).
  *
@@ -86,7 +112,6 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
      which one is exposed, so a narrow ledger inside a wide viewport folds too.
      `display: none` keeps exactly one copy in the accessibility tree. */
   const columns = COLUMNS;
-  const region = useInteractionState();
 
   const {
     entries,
@@ -162,13 +187,7 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
       ) : (
         /* The region owns its scroll and the table holds no focusable cell:
            without a tab stop the overflowing columns are keyboard-unreachable. */
-        <div
-          {...partAttributes('table-region', region.state)}
-          {...region.handlers}
-          role="region"
-          tabIndex={0}
-          aria-label={t('operationalLedger.tableRegion', 'Ledger entries')}
-        >
+        <LedgerTableRegion label={t('operationalLedger.tableRegion', 'Ledger entries')}>
           <table data-part="table">
             <thead data-part="table-head">
               <tr>
@@ -238,7 +257,7 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
               ))}
             </tbody>
           </table>
-        </div>
+        </LedgerTableRegion>
       )}
     </div>
   );
