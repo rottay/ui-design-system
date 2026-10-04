@@ -48,6 +48,7 @@ const SKIPPED_ANYWHERE = new Set(['node_modules', '.git']);
 const SKIPPED_AT_OPERAND_ROOT = new Set(['.next', 'dist', 'coverage', '.turbo', 'build', 'out']);
 const SUBPATH = /^\.(\/[A-Za-z0-9._*-]+)*$/;
 const ID = /^([a-z][a-z-]*)\/(\.(?:\/[A-Za-z0-9._*-]+)*)#([A-Za-z_$*][\w$]*|\*)(?:\.([\w$-]+))?$/;
+const MEMBER_NAME = /^[A-Za-z_$][\w$]*$/;
 const MAX_PASSES = 6;
 
 /** The shape every map id has: `<class>/<subpath>#<symbol>` with an optional `.<member>`. */
@@ -69,6 +70,28 @@ function requireComponents(entry) {
   if (!Array.isArray(entry.components) || entry.components.length === 0) fail(entry.id, '`components` must name at least one component');
 }
 
+/**
+ * The two proofs a member-changed entry may state. `memberProof: "spelling"` needs the members it is about;
+ * `maxArguments` is about a call's parameters, so it names no member. Each silences a site, so each is
+ * refused wherever it would be read by a transform that does not implement it.
+ */
+function requireMemberProof(entry) {
+  const members = entry.members ?? (entry.member ? [entry.member] : []);
+  if (entry.members !== undefined && (!Array.isArray(entry.members) || entry.members.length === 0
+    || entry.members.some((member) => typeof member !== 'string' || !MEMBER_NAME.test(member)))) {
+    fail(entry.id, '`members` must be a non-empty list of member names');
+  }
+  if (entry.memberProof !== undefined) {
+    if (entry.memberProof !== 'spelling') fail(entry.id, '`memberProof` is `spelling` or absent');
+    if (members.length === 0) fail(entry.id, '`memberProof` needs the `member` or `members` it proves absent');
+    if (entry.maxArguments !== undefined) fail(entry.id, 'state one proof: `memberProof` or `maxArguments`');
+  }
+  if (entry.maxArguments !== undefined) {
+    if (!Number.isInteger(entry.maxArguments) || entry.maxArguments < 0) fail(entry.id, '`maxArguments` must be a non-negative integer');
+    if (members.length > 0) fail(entry.id, '`maxArguments` is about a call, not a member; the entry names no member');
+  }
+}
+
 function validateEntry(entry) {
   const parsed = parseEntryId(entry.id ?? '');
   if (!parsed) fail(String(entry.id), 'id is not `<class>/<subpath>#<symbol>[.<member>]`');
@@ -76,6 +99,9 @@ function validateEntry(entry) {
   if (parsed.class !== entry.class || parsed.subpath !== entry.subpath || parsed.symbol !== entry.symbol
     || parsed.member !== (entry.member ?? null)) fail(entry.id, 'id does not restate class, subpath, symbol and member');
   for (const field of ['changeset', 'census']) requireText(entry, field);
+  if (entry.class !== 'member-changed' && (entry.memberProof !== undefined || entry.maxArguments !== undefined)) {
+    fail(entry.id, '`memberProof` and `maxArguments` are proofs of a member-changed entry only');
+  }
   const hasResolves = typeof entry.resolves === 'string';
   const hasImpossible = typeof entry.impossible === 'string';
   if (hasResolves === hasImpossible) fail(entry.id, 'state exactly one of `resolves` or `impossible`');
@@ -128,6 +154,7 @@ function validateEntry(entry) {
       if (entry.replacement) fail(entry.id, 'a member-changed entry states no replacement; say it in `guidance`');
       requireText(entry, 'change');
       requireText(entry, 'guidance');
+      requireMemberProof(entry);
       break;
     default:
   }

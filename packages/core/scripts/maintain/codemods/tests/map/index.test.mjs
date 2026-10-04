@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import ts from 'typescript';
 import { packageRoot, repoRoot } from '../../../../libraries/repo-root/index.mjs';
 import { CLASSES, DEFAULT_MAP, hasEntry, loadMap, parseEntryId } from '../../index.mjs';
 import { createPackageSurface } from '../../resolve/surface/index.mjs';
@@ -57,7 +58,7 @@ test('every entry cites a pending changeset that names what it retires', () => {
     const file = path.join(REPO_ROOT, entry.changeset);
     assert.ok(fs.existsSync(file), `${entry.id}: ${entry.changeset} does not exist`);
     const text = fs.readFileSync(file, 'utf8');
-    let needles = entry.member ? [entry.symbol, entry.member] : [entry.symbol];
+    let needles = [entry.symbol, ...(entry.member ? [entry.member] : []), ...(entry.members ?? [])];
     if (entry.class === 'subpath-removed') needles = [entry.subpath.replace(/^\.\/dist\//, 'dist/')];
     else if (entry.class === 'css-class-renamed') needles = Object.keys(entry.classes).slice(0, 1);
     else if (entry.symbol === '*') needles = ['--ds-commercial-'];
@@ -218,6 +219,50 @@ test('member-level breaks name an export the package still publishes, what chang
   assert.deepEqual(map.byId.get('member-changed/.#TenantConfig').members, ['brandTheme', 'tokenOverrides', 'personality', 'appearance', 'engine']);
 });
 
+function declarationIn(file, name) {
+  const source = ts.createSourceFile(file, fs.readFileSync(path.join(CORE_ROOT, file), 'utf8'), ts.ScriptTarget.Latest, true);
+  const found = source.statements.find((statement) => (ts.isInterfaceDeclaration(statement) || ts.isFunctionDeclaration(statement))
+    && statement.name?.text === name);
+  assert.ok(found, `${file} does not declare ${name}`);
+  return found;
+}
+
+test('a proof that silences a site is stated only where the published declaration makes it true', () => {
+  const entries = of('member-changed');
+  assert.deepEqual(entries.filter((entry) => entry.memberProof !== undefined).map((entry) => [entry.id, entry.memberProof]),
+    [['member-changed/.#TenantConfig', 'spelling']]);
+  assert.deepEqual(entries.filter((entry) => entry.maxArguments !== undefined).map((entry) => [entry.id, entry.maxArguments]),
+    [['member-changed/.#baselineFor', 2]]);
+
+  // `spelling` is sound only for members that are gone: a member the type newly REQUIRES is broken by its absence.
+  const config = map.byId.get('member-changed/.#TenantConfig');
+  const declared = declarationIn('src/foundation/contracts/composition/tenants/index.ts', 'TenantConfig')
+    .members.map((member) => member.name.getText());
+  assert.ok(declared.includes('slug') && declared.includes('branding'));
+  for (const member of config.members) {
+    assert.equal(declared.includes(member), false, `TenantConfig still declares ${member}`);
+    assert.ok(config.change.includes(`\`${member}\``), `the change does not name ${member}`);
+  }
+  assert.match(config.change, /^REMOVED fields/);
+
+  // `maxArguments` is sound only while the published function takes exactly that many parameters.
+  const baseline = map.byId.get('member-changed/.#baselineFor');
+  const signature = declarationIn(
+    'src/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/presentation/admission/index.ts', 'baselineFor');
+  assert.equal(signature.parameters.length, baseline.maxArguments);
+  assert.equal(signature.parameters.some((parameter) => parameter.dotDotDotToken), false);
+  assert.match(baseline.change, /^loses the third parameter/);
+
+  for (const entry of [config, baseline]) assert.match(entry.impossible, /is not reported/, entry.id);
+
+  // The accepted file-local limit is disclosed where the proof is stated, in the three shapes the kit stays silent on.
+  const notFollowed = config.impossible.slice(config.impossible.indexOf('Not followed:'));
+  for (const shape of ['`const config: TenantConfig = legacy`', '`return legacy`', '`mount(legacy)`', "`P['config']`", 'JSX spread attribute']) {
+    assert.ok(notFollowed.includes(shape), `the TenantConfig entry does not disclose ${shape}`);
+  }
+  assert.doesNotMatch(config.impossible, /without an assertion or a spread/);
+});
+
 test('the commercial component with no root successor is an explicit report-only entry', () => {
   const entry = map.byId.get('symbol-removed-no-replacement/./commercial#ProductWindow');
   assert.equal(entry.replacement, null);
@@ -292,6 +337,17 @@ test('the loader refuses a malformed map', () => {
   assert.throws(() => mutant((raw) => { first(raw, 'prop-renamed').resolves = undefined; }), /exactly one of/);
   assert.throws(() => mutant((raw) => { first(raw, 'member-changed').replacement = { member: 'guessed' }; }), /states no replacement/);
   assert.throws(() => mutant((raw) => { first(raw, 'member-changed').change = ''; }), /`change` must be/);
+  const byId = (raw, id) => raw.entries.find((entry) => entry.id === id);
+  assert.throws(() => mutant((raw) => { byId(raw, 'member-changed/.#TenantConfig').memberProof = 'import'; }), /`memberProof` is `spelling` or absent/);
+  assert.throws(() => mutant((raw) => { byId(raw, 'member-changed/.#TenantConfig').members = []; }), /`members` must be a non-empty list/);
+  assert.throws(() => mutant((raw) => { byId(raw, 'member-changed/.#TenantConfig').members = ['engine', 'not a name']; }), /`members` must be a non-empty list/);
+  assert.throws(() => mutant((raw) => { byId(raw, 'member-changed/.#TenantConfig').members = undefined; }), /`memberProof` needs the `member` or `members`/);
+  assert.throws(() => mutant((raw) => { byId(raw, 'member-changed/.#TenantConfig').maxArguments = 2; }), /state one proof/);
+  assert.throws(() => mutant((raw) => { byId(raw, 'member-changed/.#baselineFor').maxArguments = -1; }), /`maxArguments` must be a non-negative integer/);
+  assert.throws(() => mutant((raw) => { byId(raw, 'member-changed/.#baselineFor').maxArguments = '2'; }), /`maxArguments` must be a non-negative integer/);
+  assert.throws(() => mutant((raw) => { byId(raw, 'member-changed/.#baselineFor').members = ['source']; }), /`maxArguments` is about a call/);
+  assert.throws(() => mutant((raw) => { first(raw, 'prop-removed').memberProof = 'spelling'; }), /proofs of a member-changed entry only/);
+  assert.throws(() => mutant((raw) => { first(raw, 'symbol-removed').maxArguments = 1; }), /proofs of a member-changed entry only/);
   assert.throws(() => mutant((raw) => {
     const entry = first(raw, 'css-custom-property-renamed');
     entry.properties = {};

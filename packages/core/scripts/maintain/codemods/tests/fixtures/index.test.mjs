@@ -242,6 +242,114 @@ test('a literal spread that states the successor of a renamed prop is reported w
   });
 });
 
+function messagesOf(name) {
+  const fixture = CASES.find((item) => item.name === name);
+  const work = workingCopy(fixture);
+  try {
+    const { result } = runCase(fixture, work);
+    return Object.fromEntries(result.findings.map((item) => [path.relative(work, path.dirname(item.file)), item.message]));
+  } finally {
+    fs.rmSync(work, { recursive: true, force: true });
+  }
+}
+
+function casesOf(name) {
+  const fixture = CASES.find((item) => item.name === name);
+  return fs.readdirSync(fixture.input).sort();
+}
+
+test('a removed member is reported wherever a file spells it and nowhere else: the import alone is not a use', () => {
+  const name = 'member-changed/member-spelling';
+  const reported = reportOf(name).map((row) => path.dirname(row.file));
+  assert.ok(reportOf(name).every((row) => row.id === 'member-changed/.#TenantConfig'));
+  assert.deepEqual(casesOf(name).filter((item) => !reported.includes(item)), ['annotation-relay', 'foreign', 'homonym', 'imported-key', 'silent',
+    'silent-jsx', 'silent-namespace', 'silent-written']);
+  assert.deepEqual(reported, ['alias', 'annotated', 'asserted-alias', 'asserted-default', 'asserted-foreign', 'asserted-jsx',
+    'asserted-parsed', 'asserted', 'assigned-first', 'assigned-spread', 'assigned', 'destructured', 'element', 'extended',
+    'homograph', 'key-table', 'local-export', 'namespace', 'read', 'reexport', 'satisfied-foreign', 'satisfied', 'spread-foreign',
+    'spread-relay', 'template']);
+  const messages = messagesOf(name);
+  // The case no typecheck sees: `as` suppresses the excess-property check, so the kit is the only reader of it.
+  assert.match(messages.asserted, /`engine` L7 written in an object asserted as `TenantConfig` \(an assertion hides the excess property/);
+  assert.match(messages.annotated, /`appearance` L6 written in an object stated as `TenantConfig` by annotation/);
+  assert.match(messages.satisfied, /`personality` L5 written in an object stated as `TenantConfig` by satisfies/);
+  assert.match(messages.read, /`brandTheme` L4 read as a property/);
+  assert.match(messages.element, /`tokenOverrides` L4 read by element access/);
+  assert.match(messages.template, /`appearance` L4 read by element access/);
+  assert.match(messages.destructured, /`engine` L4 destructured/);
+  assert.match(messages['key-table'], /`personality` L3 named/);
+  assert.match(messages.homograph, /`engine` L4 named/);
+  // No spelling, still reported: the uses of a binding that leaves the file are not in the file.
+  assert.match(messages.alias, /spells none of the changed members, but the type alias `ProbeConfig` \(L3\) is built from it/);
+  assert.match(messages.extended, /spells none of the changed members, but a declaration extends it \(L3\)/);
+  assert.match(messages['local-export'], /spells none of the changed members, but the file exports it \(L3\)/);
+  assert.match(messages.reexport, /the kit does not follow this kind of site/);
+});
+
+test('a removed member that can arrive unspelled is reported: a value the file does not write, asserted or spread', () => {
+  const name = 'member-changed/member-spelling';
+  const messages = messagesOf(name);
+  const carried = (line, how) => new RegExp(`spells none of the changed members, but L${line} ${how} a value this file does not write, `
+    + 'so a removed member can arrive unspelled and unseen by the typecheck\\.$');
+  // Neither form runs the excess-property check, and the runtime provider refuses no legacy key.
+  assert.match(messages['spread-foreign'], carried(5, 'spreads'));
+  assert.match(messages['spread-relay'], carried(4, 'spreads'));
+  assert.match(messages['asserted-foreign'], carried(4, 'asserts'));
+  assert.match(messages['asserted-alias'], carried(4, 'asserts'));
+  assert.match(messages['asserted-parsed'], carried(3, 'asserts'));
+  assert.match(messages['asserted-default'], carried(4, 'asserts'));
+  assert.match(messages['asserted-jsx'], carried(4, 'asserts'));
+  assert.match(messages['satisfied-foreign'], carried(4, 'checks'));
+  assert.match(messages.assigned, carried(4, 'assigns'));
+  assert.match(messages['assigned-first'], carried(5, 'assigns'));
+  assert.match(messages['assigned-spread'], carried(5, 'assigns'));
+  // Stated limit, pinned as silence: a member name spelled only in another file is not followed.
+  assert.equal(messages['imported-key'], undefined);
+  assert.match(fs.readFileSync(path.join(CASES.find((item) => item.name === name).input, 'foreign/index.ts'), 'utf8'), /KEY = 'engine'/);
+  // Every key written in the file, under the same assertion, satisfies and Object.assign forms: nothing to carry.
+  assert.equal(messages['silent-written'], undefined);
+  assert.equal(messages.silent, undefined);
+});
+
+test('accepted file-local limit: an annotation relay of a value the file does not write is not reported', () => {
+  const name = 'member-changed/member-spelling';
+  const input = CASES.find((item) => item.name === name).input;
+  // No assertion, no spread, no spelling: the kit stays silent although the typecheck does too.
+  assert.match(fs.readFileSync(path.join(input, 'annotation-relay/index.ts'), 'utf8'), /^const config: TenantConfig = legacy;$/m);
+  assert.match(fs.readFileSync(path.join(input, 'foreign/index.ts'), 'utf8'), /^export const legacy = .*\bengine: /m);
+  assert.equal(messagesOf(name)['annotation-relay'], undefined);
+  assert.equal(reportOf(name).some((row) => row.file.startsWith('annotation-relay/')), false);
+});
+
+test('a lost parameter is reported unless every reference is a direct call that cannot pass it', () => {
+  const name = 'member-changed/call-arity';
+  const reported = reportOf(name).map((row) => path.dirname(row.file));
+  assert.ok(reportOf(name).every((row) => row.id === 'member-changed/.#baselineFor'));
+  assert.deepEqual(casesOf(name).filter((item) => !reported.includes(item)), ['homonym', 'namespace-two', 'two', 'unused']);
+  assert.deepEqual(reported, ['aliased', 'import-type', 'local-export', 'namespace-three', 'passed', 'reexport', 'spread-only', 'spread',
+    'three', 'type-query']);
+  const messages = messagesOf(name);
+  assert.match(messages.three, /not a direct call with at most 2 argument\(s\) and no spread at L4, L5\.$/);
+  assert.match(messages['spread-only'], /no spread at L5\.$/);
+  assert.match(messages['local-export'], /no spread at L5\.$/);
+  assert.match(messages['type-query'], /no spread at L3\.$/);
+  assert.match(messages['import-type'], /no spread at L4\.$/);
+  assert.match(messages.passed, /no spread at L6\.$/);
+  assert.match(messages.reexport, /the kit does not follow this kind of site/);
+});
+
+test('an entry that states no proof is reported at every design-system-resolved use, spelled or not', () => {
+  const source = "import type { CompileThemeIntentOptions, ResolveThemeOptions } from '@rottay/design-system';\n\n"
+    + 'export const options: ResolveThemeOptions = {} as ResolveThemeOptions;\nexport type Options = CompileThemeIntentOptions;\n';
+  withTree({ 'index.ts': source }, (run) => {
+    // `ResolveThemeOptions.baseline` became REQUIRED: the file that does not spell it is the broken one.
+    assert.deepEqual(run().rows.map((row) => [row.line, row.id]), [
+      [1, 'member-changed/.#CompileThemeIntentOptions.baselineSource'],
+      [1, 'member-changed/.#ResolveThemeOptions.baseline'],
+    ]);
+  });
+});
+
 test('a name retired on a removed door moves to its recorded successor under its local name, never to a root homonym', () => {
   const fixture = CASES.find((item) => item.name === 'subpath-removed/cross-door');
   const expected = snapshot(fixture.expected);

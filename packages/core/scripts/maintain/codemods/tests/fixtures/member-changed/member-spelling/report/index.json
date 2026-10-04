@@ -1,0 +1,202 @@
+[
+  {
+    "file": "alias/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "annotated/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "asserted-alias/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "asserted-default/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "asserted-foreign/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "asserted-jsx/index.tsx",
+    "line": 1,
+    "column": 26,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "asserted-parsed/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "asserted/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "assigned-first/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "assigned-spread/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "assigned/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "destructured/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "element/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "extended/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "homograph/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "key-table/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "local-export/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "namespace/index.ts",
+    "line": 3,
+    "column": 34,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "read/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "reexport/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "satisfied-foreign/index.ts",
+    "line": 4,
+    "column": 48,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "satisfied/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "spread-foreign/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "spread-relay/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  },
+  {
+    "file": "template/index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#TenantConfig",
+    "reason": "member-changed"
+  }
+]

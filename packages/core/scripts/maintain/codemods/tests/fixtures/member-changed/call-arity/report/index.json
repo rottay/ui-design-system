@@ -1,0 +1,82 @@
+[
+  {
+    "file": "aliased/index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "member-changed/.#baselineFor",
+    "reason": "member-changed"
+  },
+  {
+    "file": "import-type/index.ts",
+    "line": 4,
+    "column": 45,
+    "action": "report",
+    "id": "member-changed/.#baselineFor",
+    "reason": "member-changed"
+  },
+  {
+    "file": "local-export/index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "member-changed/.#baselineFor",
+    "reason": "member-changed"
+  },
+  {
+    "file": "namespace-three/index.ts",
+    "line": 3,
+    "column": 23,
+    "action": "report",
+    "id": "member-changed/.#baselineFor",
+    "reason": "member-changed"
+  },
+  {
+    "file": "passed/index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "member-changed/.#baselineFor",
+    "reason": "member-changed"
+  },
+  {
+    "file": "reexport/index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "member-changed/.#baselineFor",
+    "reason": "member-changed"
+  },
+  {
+    "file": "spread-only/index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "member-changed/.#baselineFor",
+    "reason": "member-changed"
+  },
+  {
+    "file": "spread/index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "member-changed/.#baselineFor",
+    "reason": "member-changed"
+  },
+  {
+    "file": "three/index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "member-changed/.#baselineFor",
+    "reason": "member-changed"
+  },
+  {
+    "file": "type-query/index.ts",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "member-changed/.#baselineFor",
+    "reason": "member-changed"
+  }
+]

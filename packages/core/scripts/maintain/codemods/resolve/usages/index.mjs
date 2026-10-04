@@ -100,6 +100,22 @@ export function referencesOf(analysis, specifier) {
   return references;
 }
 
+/**
+ * Every place the file spells one of the names where a property can be named: an identifier (object-literal
+ * key, shorthand, property access, binding, JSX attribute, or a local that merely shares the spelling) or a
+ * string literal or substitution-free template equal to it (element access, `Pick<T, 'name'>`, a key table).
+ * Comments and JSX text name no property and are not read. Nothing is resolved to a type: a spelling is a
+ * reason to report, and only the absence of every spelling proves anything.
+ */
+export function memberSpellings(analysis, names) {
+  const wanted = new Set(names);
+  const spellings = [];
+  analysis.walk((node) => {
+    if ((ts.isIdentifier(node) || ts.isStringLiteralLike(node)) && wanted.has(node.text)) spellings.push(node);
+  });
+  return spellings;
+}
+
 function isComponentTag(tagName) {
   if (ts.isIdentifier(tagName)) return /^[A-Z_$]/.test(tagName.text);
   return ts.isPropertyAccessExpression(tagName);
