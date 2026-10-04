@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "298ecfc53f820b0272c961d901b4921e87a6cf84acb41099693e139417e32d60",
+    "authorityDigest": "3d91ed631df5c95e6527854013be0f47f501434b47260dd5313cae9d4f13733f",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -239,8 +239,8 @@
           "claim-census",
           "documentation-seal"
         ],
-        "bytes": 22829,
-        "sha256": "bd1b01a616e7c8131a467811f81fc92f0f98586d5a96805916097df2acfe63c9"
+        "bytes": 23808,
+        "sha256": "6a1b90c28acc6bbec75f2c3ea742481c8fb7f03d0c5bcb5b5d03d678941736c0"
       },
       {
         "path": "ui-design-system/package.json",
@@ -931,8 +931,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 17421,
-        "sha256": "19fb707040474f60acb65435176c0737b316cafc8ea4d05ecb0d11b86a156bda"
+        "bytes": 17332,
+        "sha256": "200cb5a55c53284bd0ab518fe91731f494c46541e9a9bd8abf99f6c36993039e"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/customization/brand-studio/contracts/index.ts",
@@ -47659,7 +47659,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "298ecfc53f820b0272c961d901b4921e87a6cf84acb41099693e139417e32d60"
+    "digest": "3d91ed631df5c95e6527854013be0f47f501434b47260dd5313cae9d4f13733f"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4223 counters; 3208 completed zeros locked exactly; 1005 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -48943,16 +48943,16 @@
           "claims": [
             "surface-profile-overrides"
           ],
-          "sha256": "bd1b01a616e7c8131a467811f81fc92f0f98586d5a96805916097df2acfe63c9",
+          "sha256": "6a1b90c28acc6bbec75f2c3ea742481c8fb7f03d0c5bcb5b5d03d678941736c0",
           "blocks": [
             {
               "claimId": "surface-profile-overrides",
-              "line": 225,
+              "line": 241,
               "sha256": "1d9f7f72afb78b9f32a880ed0682034c1b1a8f8d44cac0fe9761a325e54960df"
             },
             {
               "claimId": "surface-profile-overrides",
-              "line": 223,
+              "line": 239,
               "sha256": "e17d652eb1f683e087cb8f1feb30a91c8c7d2d7024fd76ea85ccb999946a9aef"
             }
           ]
@@ -121817,8 +121817,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "6b8c456cc3be0476d74b5b148fa04fd96d67e4672a7a8580437c2a635b312353",
-      "6b8c456cc3be0476d74b5b148fa04fd96d67e4672a7a8580437c2a635b312353"
+      "766e7cd9680ada728e0310b268253916fe4e42004edbe0d0da3ba9389d8bddfc",
+      "766e7cd9680ada728e0310b268253916fe4e42004edbe0d0da3ba9389d8bddfc"
     ],
     "agree": true
   }

@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "6b8c456cc3be0476d74b5b148fa04fd96d67e4672a7a8580437c2a635b312353"
+    "semanticHash": "766e7cd9680ada728e0310b268253916fe4e42004edbe0d0da3ba9389d8bddfc"
   },
   "divergentInputs": [
     {
@@ -154,8 +154,8 @@
         "sha256": "458fb44b7ebaa4ecfaf2905ef4da4c72d499540b90101392217e1615b3ea0f7a"
       },
       "live": {
-        "bytes": 22829,
-        "sha256": "bd1b01a616e7c8131a467811f81fc92f0f98586d5a96805916097df2acfe63c9"
+        "bytes": 23808,
+        "sha256": "6a1b90c28acc6bbec75f2c3ea742481c8fb7f03d0c5bcb5b5d03d678941736c0"
       }
     },
     {
@@ -479,8 +479,8 @@
         "sha256": "9fb113a606a5b4f47672055b07ba0acfa70aff8e668ffe2e5685119b06bd05fc"
       },
       "live": {
-        "bytes": 17421,
-        "sha256": "19fb707040474f60acb65435176c0737b316cafc8ea4d05ecb0d11b86a156bda"
+        "bytes": 17332,
+        "sha256": "200cb5a55c53284bd0ab518fe91731f494c46541e9a9bd8abf99f6c36993039e"
       }
     },
     {
