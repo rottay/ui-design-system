@@ -21,7 +21,6 @@ import { AlertSurface } from '../../runtime/surface';
 /** The Callout contract as the alert surface reads it. */
 export interface ModernCalloutProps {
   tone?: 'info' | 'warning' | 'danger' | 'success';
-  variant?: AlertType;
   title?: React.ReactNode;
   children: React.ReactNode;
   icon?: React.ReactNode;
@@ -34,7 +33,6 @@ export interface ModernCalloutProps {
 
 export default function ModernCallout({
   tone,
-  variant: variantProp = 'info',
   title,
   children,
   icon,
@@ -45,7 +43,7 @@ export default function ModernCallout({
   style,
 }: ModernCalloutProps): React.ReactElement | null {
   const i18n = useOptionalTranslation('common');
-  const variant: AlertType = tone ? TONE_TO_VARIANT[tone] : variantProp;
+  const variant: AlertType = tone ? TONE_TO_VARIANT[tone] : 'info';
 
   return (
     <AlertSurface

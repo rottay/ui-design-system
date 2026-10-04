@@ -7,7 +7,7 @@
  *
  * @example
  * ```tsx
- * <Alert type="warning" message="Unsaved Changes" closable onClose={() => setVisible(false)}>
+ * <Alert tone="warning" message="Unsaved Changes" closable onClose={() => setVisible(false)}>
  *   <Alert.Description>You have unsaved changes that will be lost.</Alert.Description>
  * </Alert>
  * ```
@@ -17,10 +17,10 @@
  */
 
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { AlertProps } from './contracts';
+import type { AlertPublicProps } from './contracts';
 import { AlertDescription } from './compound';
 
-export { type AlertProps, type AlertType, ALERT_DEFAULTS } from './contracts';
+export { type AlertPublicProps as AlertProps, type AlertType, ALERT_DEFAULTS } from './contracts';
 export { AlertDescription };
 /** Callout is folded into Alert: its Modern engine is the alert surface, loaded on demand. */
 export const loadModernCallout = () => import('./presentation/callout');
@@ -28,12 +28,12 @@ export type { AlertDescriptionProps } from './compound';
 
 /**
  * Alert component with multi-engine support.
- * Four semantic types (info, success, warning, error), built-in icons,
+ * Four semantic tones (info, success, warning, danger), built-in icons,
  * optional dismiss, and ARIA-compliant markup.
  */
 export const Alert = Object.assign(
   // Create the engine-switchable base component
-  createEngineComponent<AlertProps>('Alert', {
+  createEngineComponent<AlertPublicProps>('Alert', {
     classic: () => import('./engines/classic'),  // Ant Design
     modern: () => import('./engines/modern'),     // Token skin (no DaisyUI)
     rustic: () => import('./engines/rustic'),      // Vanilla HTML/CSS

@@ -9,7 +9,8 @@
  * Modern, Rustic) while providing a consistent API for developers.
  *
  * **Type Categories:**
- * - `AlertType`: Semantic variants (info, success, warning, error)
+ * - `AlertTone`: Semantic tones (info, success, warning, danger)
+ * - `AlertType`: The internal color key each tone resolves to
  * - `AlertProps`: Main component props interface
  *
  * **Multi-Tenant Support:**
@@ -18,18 +19,11 @@
  *
  * @example Type Usage
  * ```tsx
- * import type { AlertProps, AlertType } from '@rottay/design-system';
- *
- * // Custom alert wrapper with typed props
- * interface CustomAlertProps extends AlertProps {
- *   customIcon?: React.ReactNode;
- *   autoClose?: boolean;
- * }
+ * import type { AlertProps } from '@rottay/design-system';
  *
  * // Type-safe alert configuration
- * const alertType: AlertType = 'success';
  * const alertConfig: AlertProps = {
- *   type: alertType,
+ *   tone: 'success',
  *   message: 'Operation completed',
  *   showIcon: true,
  * };
@@ -40,7 +34,6 @@
  * import { ALERT_DEFAULTS } from '@rottay/design-system';
  *
  * // Access default configuration
- * console.log(ALERT_DEFAULTS.type);      // 'info'
  * console.log(ALERT_DEFAULTS.showIcon);  // true
  * console.log(ALERT_DEFAULTS.closable);  // false
  * ```
@@ -96,13 +89,12 @@ export type AlertType = 'info' | 'success' | 'warning' | 'error';
 
 /**
  * The {@link Tone} values Alert accepts through the `tone` prop ('neutral' and 'primary' have no
- * Alert rendering and remain excluded, matching the deprecated `type`'s vocabulary -- the same
- * curated subset Callout's `CalloutTone` already uses).
+ * Alert rendering and remain excluded -- the same curated subset Callout's `CalloutTone` uses).
  */
 export type AlertTone = 'info' | 'warning' | 'danger' | 'success';
 
 /**
- * Every {@link AlertTone} value mapped to the internal color-token key `type` has always used
+ * Every {@link AlertTone} value mapped to the internal color-token key the engines paint with
  * ('danger' is the canonical Tone spelling; Alert's internal key has always been 'error').
  * Resolves through the kernel {@link TONE_TO_VARIANT} map (single authority): Alert's own
  * `AlertType` vocabulary ('info' | 'warning' | 'error' | 'success') is a subset of the literal
@@ -152,22 +144,14 @@ interface AlertSharedProps extends BaseComponentProps, EngineAwareProps {
   // ---------------------------------------------------------------------------
 
   /**
-   * Alert semantic color. Takes precedence over the deprecated `type` prop when both
-   * are given.
+   * Alert semantic color. Determines the color scheme and the default icon.
    * @default 'info'
    */
   tone?: AlertTone;
 
   /**
-   * @deprecated Use `tone` instead. The alert type/variant.
-   * Determines color scheme and default icon.
-   * @default 'info'
-   */
-  type?: AlertType;
-
-  /**
    * Custom icon element.
-   * Overrides the default type-based icon when provided.
+   * Overrides the default tone icon when provided.
    * @example <InfoIcon />
    * @example <CustomSvg />
    */
@@ -175,7 +159,7 @@ interface AlertSharedProps extends BaseComponentProps, EngineAwareProps {
 
   /**
    * Whether to display the alert icon.
-   * When true, shows either the custom icon or the default type icon.
+   * When true, shows either the custom icon or the default tone icon.
    * @default true
    */
   showIcon?: boolean;
@@ -207,7 +191,7 @@ interface AlertSharedProps extends BaseComponentProps, EngineAwareProps {
    * Used with `<Alert.Description>` for structured content.
    * @example
    * ```tsx
-   * <Alert type="error" message="Upload Failed">
+   * <Alert tone="danger" message="Upload Failed">
    *   <Alert.Description>File size exceeds limit.</Alert.Description>
    * </Alert>
    * ```
@@ -251,7 +235,7 @@ interface AlertSharedProps extends BaseComponentProps, EngineAwareProps {
 }
 
 /**
- * Props for the Alert component.
+ * Props for the Alert component: the contract the family publishes as `AlertProps`.
  *
  * An alert always says something: `message` is required unless `description`
  * is given, so an alert with neither does not type-check.
@@ -263,7 +247,7 @@ interface AlertSharedProps extends BaseComponentProps, EngineAwareProps {
  * @example Complete Usage
  * ```tsx
  * <Alert
- *   type="warning"
+ *   tone="warning"
  *   message="Session Expiring Soon"
  *   description="Your session will expire in 5 minutes. Save your work."
  *   icon={<ClockIcon />}
@@ -275,7 +259,14 @@ interface AlertSharedProps extends BaseComponentProps, EngineAwareProps {
  * />
  * ```
  */
-export type AlertProps = AlertSharedProps & (AlertTitledContent | AlertBodyOnlyContent);
+export type AlertPublicProps = AlertSharedProps & (AlertTitledContent | AlertBodyOnlyContent);
+
+/**
+ * Props the engines receive. Family-internal and not published: it adds to the public contract
+ * the `type` member the Classic and Rustic engines read when `tone` is absent; the family entry
+ * publishes {@link AlertPublicProps} as `AlertProps`.
+ */
+export type AlertProps = AlertPublicProps & { type?: AlertType };
 
 // ============================================================================
 // Default Values
@@ -292,24 +283,13 @@ export type AlertProps = AlertSharedProps & (AlertTitledContent | AlertBodyOnlyC
  * import { ALERT_DEFAULTS } from '@rottay/design-system';
  *
  * const MyAlert = (props: AlertProps) => {
- *   const type = props.type ?? ALERT_DEFAULTS.type;
  *   const showIcon = props.showIcon ?? ALERT_DEFAULTS.showIcon;
  *   // ...
  * };
  * ```
- *
- * @example Using in Custom Components
- * ```tsx
- * import { ALERT_DEFAULTS } from '@rottay/design-system';
- *
- * function StatusBanner({ type = ALERT_DEFAULTS.type, ...props }) {
- *   // type defaults to 'info' if not provided
- *   return <Alert type={type} {...props} />;
- * }
- * ```
  */
 export const ALERT_DEFAULTS: Partial<AlertProps> = {
-  /** Default to info type for general messages */
+  /** The color key the Classic and Rustic engines fall back to when `tone` is absent */
   type: 'info',
 
   /** Show icons by default for visual context */

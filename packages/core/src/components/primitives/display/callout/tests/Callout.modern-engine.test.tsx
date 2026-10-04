@@ -43,7 +43,7 @@ describe('Callout modern engine (folded into Alert)', () => {
   it('keeps the dismiss control reachable with overlong title and body', () => {
     renderWithEngine(
       <ModernCallout
-        variant="error"
+        tone="danger"
         closable
         title="Payment method declined by the issuing bank during the automated monthly renewal"
       >

@@ -35,16 +35,16 @@ export const Default: Story = {
 export const Variants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <Callout variant="info" title="Info">
+      <Callout tone="info" title="Info">
         This is an informational message.
       </Callout>
-      <Callout variant="success" title="Success">
+      <Callout tone="success" title="Success">
         The operation completed successfully.
       </Callout>
-      <Callout variant="warning" title="Warning">
+      <Callout tone="warning" title="Warning">
         Please review the changes before proceeding.
       </Callout>
-      <Callout variant="error" title="Error">
+      <Callout tone="danger" title="Error">
         Something went wrong. Please try again.
       </Callout>
     </div>
@@ -53,7 +53,7 @@ export const Variants: Story = {
 
 export const Closable: Story = {
   args: {
-    variant: 'warning',
+    tone: 'warning',
     title: 'Dismissable',
     children: 'You can close this callout.',
     closable: true,
@@ -62,7 +62,7 @@ export const Closable: Story = {
 
 export const WithAction: Story = {
   args: {
-    variant: 'info',
+    tone: 'info',
     title: 'New Update Available',
     children: 'Version 2.0 is ready. Update now for new features.',
     action: <button style={{ fontSize: 13, padding: '4px 12px', cursor: 'pointer' }}>Update Now</button>,
@@ -71,7 +71,7 @@ export const WithAction: Story = {
 
 export const WithoutTitle: Story = {
   args: {
-    variant: 'success',
+    tone: 'success',
     children: 'File uploaded successfully. It will be processed shortly.',
   },
 };
@@ -90,7 +90,7 @@ export const ModernHierarchy: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <Callout
         engine="modern"
-        variant="warning"
+        tone="warning"
         closable
         title="Certificate expiring in 14 days"
         action={<button style={{ fontSize: 13, padding: '4px 12px', cursor: 'pointer' }}>Renew now</button>}
@@ -100,7 +100,7 @@ export const ModernHierarchy: Story = {
       </Callout>
       <Callout
         engine="modern"
-        variant="error"
+        tone="danger"
         closable
         title="Payment method declined by the issuing bank during the automated monthly renewal"
         action={<button style={{ fontSize: 13, padding: '4px 12px', cursor: 'pointer' }}>Update billing</button>}
@@ -119,10 +119,10 @@ export const ModernRTL: Story = {
   name: '🔄 Modern RTL',
   render: () => (
     <div dir="rtl" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <Callout engine="modern" variant="info" closable title="تحديث متاح">
+      <Callout engine="modern" tone="info" closable title="تحديث متاح">
         يتوفر إصدار جديد من لوحة التحكم مع تحسينات على سرعة التحميل ودقة التقارير.
       </Callout>
-      <Callout engine="modern" variant="success" title="تم الحفظ">
+      <Callout engine="modern" tone="success" title="تم الحفظ">
         تم حفظ جميع التغييرات ومشاركتها مع فريق المراجعة.
       </Callout>
     </div>

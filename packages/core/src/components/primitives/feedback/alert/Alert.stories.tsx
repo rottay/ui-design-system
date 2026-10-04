@@ -14,10 +14,10 @@ const meta: Meta<typeof Alert> = {
     layout: 'padded',
   },
   argTypes: {
-    type: {
+    tone: {
       control: 'select',
-      options: ['info', 'success', 'warning', 'error'],
-      description: 'The type of alert',
+      options: ['info', 'success', 'warning', 'danger'],
+      description: 'The semantic tone of the alert',
     },
     engine: {
       control: 'select',
@@ -42,24 +42,24 @@ type Story = StoryObj<typeof Alert>;
 export const Default: Story = {
   args: {
     message: 'This is an informational message',
-    type: 'info',
+    tone: 'info',
   },
 };
 
 export const Types: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <Alert type="info" message="Info Alert" description="This is an info alert" />
-      <Alert type="success" message="Success Alert" description="This is a success alert" />
-      <Alert type="warning" message="Warning Alert" description="This is a warning alert" />
-      <Alert type="error" message="Error Alert" description="This is an error alert" />
+      <Alert tone="info" message="Info Alert" description="This is an info alert" />
+      <Alert tone="success" message="Success Alert" description="This is a success alert" />
+      <Alert tone="warning" message="Warning Alert" description="This is a warning alert" />
+      <Alert tone="danger" message="Error Alert" description="This is an error alert" />
     </div>
   ),
 };
 
 export const WithDescription: Story = {
   args: {
-    type: 'success',
+    tone: 'success',
     message: 'Success!',
     description: 'Your operation was completed successfully. You can now proceed with the next step.',
   },
@@ -67,7 +67,7 @@ export const WithDescription: Story = {
 
 export const Closable: Story = {
   args: {
-    type: 'warning',
+    tone: 'warning',
     message: 'This alert can be closed',
     description: 'Click the X button to dismiss this alert.',
     closable: true,
@@ -76,7 +76,7 @@ export const Closable: Story = {
 
 export const WithoutIcon: Story = {
   args: {
-    type: 'info',
+    tone: 'info',
     message: 'Alert without icon',
     showIcon: false,
   },
@@ -84,7 +84,7 @@ export const WithoutIcon: Story = {
 
 export const CustomIcon: Story = {
   args: {
-    type: 'info',
+    tone: 'info',
     message: 'Custom icon alert',
     icon: <span>🎉</span>,
   },
@@ -109,14 +109,14 @@ export const CompareEngines: Story = {
   render: () => (
     <EngineComparisonHelper
       component={Alert}
-      props={{ type: 'success', message: 'Success Alert', description: 'This is a success alert message.', closable: true }}
+      props={{ tone: 'success', message: 'Success Alert', description: 'This is a success alert message.', closable: true }}
       showDescriptions
     />
   ),
 };
 
 /**
- * Matrix showing all types across all engines.
+ * Matrix showing all tones across all engines.
  */
 export const VariantMatrix: Story = {
   name: '📊 Variant × Engine Matrix',
@@ -124,8 +124,8 @@ export const VariantMatrix: Story = {
     <VariantEngineMatrix
       component={Alert}
       baseProps={{ message: 'Alert Message', description: 'This is an alert description.' }}
-      variantProp="type"
-      variants={['info', 'success', 'warning', 'error']}
+      variantProp="tone"
+      variants={['info', 'success', 'warning', 'danger']}
     />
   ),
 };
@@ -141,8 +141,8 @@ export const ModernDensity: Story = {
   name: '🧱 Modern Density',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <Alert engine="modern" compact type="success" closable message="Compact success" description="Reduced padding and type for dense toolbars." />
-      <Alert engine="modern" type="warning" closable message="Spacious warning" description="Default posture with the full icon well, governed tint surface and relaxed line-height for long-form guidance copy that wraps across multiple lines without crowding the dismiss control." />
+      <Alert engine="modern" compact tone="success" closable message="Compact success" description="Reduced padding and type for dense toolbars." />
+      <Alert engine="modern" tone="warning" closable message="Spacious warning" description="Default posture with the full icon well, governed tint surface and relaxed line-height for long-form guidance copy that wraps across multiple lines without crowding the dismiss control." />
     </div>
   ),
 };
@@ -156,7 +156,7 @@ export const ModernLongContent: Story = {
   render: () => (
     <Alert
       engine="modern"
-      type="error"
+      tone="danger"
       closable
       message="Synchronization failed for the quarterly compliance evidence package after three automatic retries"
       description="The remote archive rejected the transfer because the session certificate expired while the payload was streaming. Renew the certificate from the security console, then resume the synchronization from the operations dashboard — no local changes will be lost in the meantime."
@@ -171,8 +171,8 @@ export const ModernRTL: Story = {
   name: '🔄 Modern RTL',
   render: () => (
     <div dir="rtl" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <Alert engine="modern" type="info" closable message="اكتملت المراجعة" description="تم حفظ جميع التغييرات في مساحة العمل المشتركة ويمكن للفريق الاطلاع عليها الآن." />
-      <Alert engine="modern" type="success" message="تم الرفع بنجاح" description="تم رفع حزمة الأدلة الفصلية وأصبحت جاهزة للمراجعة النهائية من قبل مدير الامتثال." />
+      <Alert engine="modern" tone="info" closable message="اكتملت المراجعة" description="تم حفظ جميع التغييرات في مساحة العمل المشتركة ويمكن للفريق الاطلاع عليها الآن." />
+      <Alert engine="modern" tone="success" message="تم الرفع بنجاح" description="تم رفع حزمة الأدلة الفصلية وأصبحت جاهزة للمراجعة النهائية من قبل مدير الامتثال." />
     </div>
   ),
 };

@@ -10,7 +10,7 @@ import { Callout } from '..';
 vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () => ({
   createEngineComponent: () => {
     const MockCallout = ({
-      variant = 'info',
+      tone = 'info',
       title,
       children,
       icon,
@@ -25,7 +25,7 @@ vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () =>
       return (
         <div
           data-testid="callout"
-          data-variant={variant}
+          data-tone={tone}
           role="alert"
           {...props}
         >
@@ -68,17 +68,17 @@ describe('Callout', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
-  it.each(['info', 'warning', 'error', 'success'] as const)(
-    'renders variant %s',
-    (variant) => {
-      render(<Callout variant={variant}>Message</Callout>);
-      expect(screen.getByTestId('callout')).toHaveAttribute('data-variant', variant);
+  it.each(['info', 'warning', 'danger', 'success'] as const)(
+    'renders tone %s',
+    (tone) => {
+      render(<Callout tone={tone}>Message</Callout>);
+      expect(screen.getByTestId('callout')).toHaveAttribute('data-tone', tone);
     }
   );
 
-  it('defaults to info variant', () => {
+  it('defaults to info tone', () => {
     render(<Callout>Message</Callout>);
-    expect(screen.getByTestId('callout')).toHaveAttribute('data-variant', 'info');
+    expect(screen.getByTestId('callout')).toHaveAttribute('data-tone', 'info');
   });
 
   it('renders closable and handles close', () => {

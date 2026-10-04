@@ -6,7 +6,7 @@ import ModernAlert from '../engines/modern';
 
 describe('Modern Alert dismiss control identity', () => {
   it('describes the close button with the message it dismisses', () => {
-    render(<ModernAlert type="warning" message="Low disk space" closable />);
+    render(<ModernAlert tone="warning" message="Low disk space" closable />);
 
     const close = screen.getByRole('button', { name: 'Close' });
     const describedBy = close.getAttribute('aria-describedby');
@@ -18,8 +18,8 @@ describe('Modern Alert dismiss control identity', () => {
   it('gives a stack of alerts distinguishable close buttons', () => {
     render(
       <>
-        <ModernAlert type="error" message="Payment declined" closable />
-        <ModernAlert type="info" message="Trial ends Friday" closable />
+        <ModernAlert tone="danger" message="Payment declined" closable />
+        <ModernAlert tone="info" message="Trial ends Friday" closable />
       </>
     );
 
@@ -35,7 +35,7 @@ describe('Modern Alert dismiss control identity', () => {
   });
 
   it('keeps the title element addressable even without a close button', () => {
-    render(<ModernAlert type="info" message="All good" />);
+    render(<ModernAlert tone="info" message="All good" />);
 
     const label = document.querySelector('[data-part="title"]') as HTMLElement;
     expect(label.id).toBeTruthy();

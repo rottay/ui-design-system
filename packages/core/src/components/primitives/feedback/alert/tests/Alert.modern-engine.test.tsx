@@ -17,7 +17,7 @@ describe('Alert modern engine', () => {
   it('renders premium anatomy keyed on data-part/data-tone', () => {
     const { container } = renderWithEngine(
       <ModernAlert
-        type="warning"
+        tone="warning"
         message="Review pending"
         description="Two approvals are still outstanding."
         closable
@@ -44,8 +44,8 @@ describe('Alert modern engine', () => {
     expect(root.className).toBe('ds-alert ds-alert--modern');
   });
 
-  it('honours tone precedence over the deprecated type prop', () => {
-    renderWithEngine(<ModernAlert message="m" tone="danger" type="info" />, 'modern');
+  it('stamps the color key the tone resolves to', () => {
+    renderWithEngine(<ModernAlert message="m" tone="danger" />, 'modern');
     expect(screen.getByRole('alert')).toHaveAttribute('data-tone', 'error');
   });
 
@@ -73,7 +73,7 @@ describe('Alert modern engine', () => {
   it('renders long content without losing the dismiss control', () => {
     renderWithEngine(
       <ModernAlert
-        type="error"
+        tone="danger"
         closable
         message="Synchronization failed for the quarterly compliance evidence package after three automatic retries"
         description="The remote archive rejected the transfer because the session certificate expired while the payload was streaming. Renew the certificate from the security console, then resume the synchronization from the operations dashboard."

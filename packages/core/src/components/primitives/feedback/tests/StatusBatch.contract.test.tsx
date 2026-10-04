@@ -43,7 +43,7 @@ describe('Status-family data-part contract (WO-SKIN-03 checkpoint S)', () => {
       'stamps root(data-tone)/icon/label/description/action when all optional parts are present under the %s engine',
       async (engine) => {
         const { container } = renderWithEngine(
-          <Alert type="warning" message="Heads up" description="Details" showIcon closable onClose={vi.fn()} />,
+          <Alert tone="warning" message="Heads up" description="Details" showIcon closable onClose={vi.fn()} />,
           engine,
         );
 
@@ -60,7 +60,7 @@ describe('Status-family data-part contract (WO-SKIN-03 checkpoint S)', () => {
     it.each(ENGINES)(
       'omits description/action/icon parts that the JSX branches skip under the %s engine',
       async (engine) => {
-        const { container } = renderWithEngine(<Alert type="info" message="Simple" showIcon={false} />, engine);
+        const { container } = renderWithEngine(<Alert tone="info" message="Simple" showIcon={false} />, engine);
 
         await waitForPart(container, 'root');
         expect(container.querySelectorAll('[data-part="icon"]')).toHaveLength(0);

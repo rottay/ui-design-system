@@ -1,0 +1,66 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 9,
+    "column": 14,
+    "action": "rewrite",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 10,
+    "column": 14,
+    "action": "rewrite",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 9,
+    "action": "rewrite",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 16,
+    "column": 14,
+    "action": "rewrite",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 17,
+    "column": 14,
+    "action": "report",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "non-literal-value"
+  },
+  {
+    "file": "index.tsx",
+    "line": 18,
+    "column": 14,
+    "action": "report",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "non-literal-value"
+  },
+  {
+    "file": "index.tsx",
+    "line": 19,
+    "column": 28,
+    "action": "report",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "conflict"
+  },
+  {
+    "file": "index.tsx",
+    "line": 20,
+    "column": 14,
+    "action": "report",
+    "id": "prop-renamed/.#AlertProps.type",
+    "reason": "spread"
+  }
+]

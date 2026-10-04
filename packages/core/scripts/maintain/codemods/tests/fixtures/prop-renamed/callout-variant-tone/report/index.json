@@ -1,0 +1,66 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 16,
+    "action": "rewrite",
+    "id": "prop-renamed/.#CalloutProps.variant",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 13,
+    "column": 16,
+    "action": "rewrite",
+    "id": "prop-renamed/.#CalloutProps.variant",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 17,
+    "column": 9,
+    "action": "rewrite",
+    "id": "prop-renamed/.#CalloutProps.variant",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 22,
+    "column": 16,
+    "action": "rewrite",
+    "id": "prop-renamed/.#CalloutProps.variant",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 23,
+    "column": 16,
+    "action": "report",
+    "id": "prop-renamed/.#CalloutProps.variant",
+    "reason": "non-literal-value"
+  },
+  {
+    "file": "index.tsx",
+    "line": 24,
+    "column": 30,
+    "action": "report",
+    "id": "prop-renamed/.#CalloutProps.variant",
+    "reason": "conflict"
+  },
+  {
+    "file": "index.tsx",
+    "line": 25,
+    "column": 16,
+    "action": "report",
+    "id": "prop-renamed/.#CalloutProps.variant",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 10,
+    "action": "report",
+    "id": "member-changed/.#Callout",
+    "reason": "member-changed"
+  }
+]

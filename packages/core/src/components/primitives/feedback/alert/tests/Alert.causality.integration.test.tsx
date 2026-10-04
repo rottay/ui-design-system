@@ -13,7 +13,7 @@ import { readAnatomyBones } from '@/components/primitives/feedback/skeleton/runt
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import ModernAlert from '../engines/modern';
 import ModernCallout from '../presentation/callout';
-import type { AlertProps } from '../contracts';
+import type { AlertProps } from '..';
 import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
@@ -26,14 +26,14 @@ import {
 function alertMarkup(props: Partial<AlertProps> = {}, dir: 'ltr' | 'rtl' = 'ltr'): string {
   return renderToStaticMarkup(
     <div dir={dir}>
-      <ModernAlert type="warning" message="Review pending" description="Two approvals are outstanding." closable {...props} />
+      <ModernAlert tone="warning" message="Review pending" description="Two approvals are outstanding." closable {...props} />
     </div>,
   );
 }
 
 const markup = [
   `<div id="alert">${alertMarkup()}</div>`,
-  `<div id="success">${alertMarkup({ type: 'success', message: 'Published', closable: false })}</div>`,
+  `<div id="success">${alertMarkup({ tone: 'success', message: 'Published', closable: false })}</div>`,
   `<div id="callout">${renderToStaticMarkup(
     <ModernCallout tone="info" title="Decision ready" action={<button type="button">Review</button>}>
       Evidence is complete.
@@ -112,7 +112,7 @@ describe('alert direction, callout fold, language, loading and accessibility', (
     ).join('');
     const surfaces = CALLOUT_TONES.map(
       ({ alert, callout }) =>
-        `<div id="a-${alert}">${alertMarkup({ type: alert, closable: false })}</div>` +
+        `<div id="a-${alert}">${alertMarkup({ tone: callout, closable: false })}</div>` +
         `<div id="c-${alert}">${renderToStaticMarkup(
           <ModernCallout tone={callout} title="Review pending">
             Two approvals are outstanding.
@@ -153,7 +153,7 @@ describe('alert direction, callout fold, language, loading and accessibility', (
   it('names its dismiss from the active catalog and describes it with the message', () => {
     render(
       <I18nProvider locale="es" fallbackLocale="en">
-        <ModernAlert type="error" message="Pago rechazado" closable />
+        <ModernAlert tone="danger" message="Pago rechazado" closable />
       </I18nProvider>,
     );
     const close = screen.getByRole('button', { name: 'Cerrar' });
@@ -161,7 +161,7 @@ describe('alert direction, callout fold, language, loading and accessibility', (
   });
 
   it('builds its loading state from its own anatomy', () => {
-    const { container } = render(<ModernAlert type="info" message="Synced" description="All good" closable />);
+    const { container } = render(<ModernAlert tone="info" message="Synced" description="All good" closable />);
     const bones = readAnatomyBones(container.querySelector<HTMLElement>('.ds-alert')!);
     expect(bones.map((bone) => `${bone.part}:${bone.role}`)).toEqual(
       expect.arrayContaining(['icon:round', 'title:line', 'description:line', 'close-button:round']),

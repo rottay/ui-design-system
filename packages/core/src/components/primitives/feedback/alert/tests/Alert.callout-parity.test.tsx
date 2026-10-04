@@ -82,22 +82,6 @@ describe('Alert renders what the folded Callout renders', () => {
     },
   );
 
-  it.each(['info', 'success', 'warning', 'error'] as const)(
-    'maps the deprecated variant=%s onto the deprecated type',
-    (variant) => {
-      const callout = markup(
-        <ModernCallout variant={variant} title="Heads up">
-          Body copy
-        </ModernCallout>,
-      );
-      const alert = markup(
-        <ModernAlert type={variant} message="Heads up" description="Body copy" emphasis="subtle" announce="tone" />,
-      );
-
-      expect(alert).toBe(callout);
-    },
-  );
-
   it('carries className, style and a composed body through unchanged', () => {
     const body = (
       <>

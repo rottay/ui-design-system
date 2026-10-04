@@ -21,7 +21,7 @@
  * ```tsx
  * import { Alert } from '@rottay/design-system';
  *
- * <Alert type="error" message="Connection Failed" closable onClose={retry}>
+ * <Alert tone="danger" message="Connection Failed" closable onClose={retry}>
  *   <Alert.Description>
  *     Unable to connect to the server. Please check your network
  *     connection and try again.

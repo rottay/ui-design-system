@@ -13,7 +13,7 @@
  * </Callout>
  * // After
  * <Alert tone="warning" message="Attention" description="Your subscription expires in 3 days."
- *   action={<Button>Renew</Button>} closable />
+ *   action={<Button>Renew</Button>} emphasis="subtle" announce="tone" closable />
  * ```
  *
  * @module Callout
@@ -21,19 +21,18 @@
  */
 
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
-import type { CalloutProps } from './contracts';
+import type { CalloutPublicProps } from './contracts';
 import { loadModernCallout } from '../../feedback/alert';
 
 export {
-  type CalloutProps,
-  type CalloutVariant,
+  type CalloutPublicProps as CalloutProps,
   type CalloutTone,
   CALLOUT_DEFAULTS,
   CALLOUT_COLORS,
 } from './contracts';
 
-/** @deprecated Callout is folded into Alert: use `<Alert message description action />`. */
-export const Callout = createEngineComponent<CalloutProps>('Callout', {
+/** @deprecated Kept until 4.0. On the Modern engine `<Alert tone message description action emphasis="subtle" announce="tone" />` renders the same markup; the Classic and Rustic engines have no replacement. */
+export const Callout = createEngineComponent<CalloutPublicProps>('Callout', {
   classic: () => import('./engines/classic'),
   modern: loadModernCallout,
   rustic: () => import('./engines/rustic'),

@@ -22,7 +22,7 @@
  * ```tsx
  * import { Alert } from '@rottay/design-system';
  *
- * <Alert type="warning" message="Storage Almost Full">
+ * <Alert tone="warning" message="Storage Almost Full">
  *   <Alert.Description>
  *     You have used 95% of your storage quota. Consider removing
  *     unused files or upgrading your plan.
@@ -34,7 +34,7 @@
  * ```tsx
  * import { Alert } from '@rottay/design-system';
  *
- * <Alert type="info" message="Tip">
+ * <Alert tone="info" message="Tip">
  *   <Alert.Description
  *     className="custom-description"
  *     style={{ fontStyle: 'italic' }}

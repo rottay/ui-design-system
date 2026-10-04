@@ -134,7 +134,7 @@ Deprecated in source, still published, removal recorded for the 3.0 line in
 the deprecation ledger (`packages/core/contracts/package/deprecations`):
 
 - `Steps`, `StepsProps` — use `Stepper`, `StepperProps`.
-- `Callout` — use `Alert` (`<Alert message description action />`).
+- `Callout` — removal recorded for the 4.0 line, not 3.0: it is the frozen sole implementer of the action tray on Classic and Rustic (`.changeset/ret-01-alert-type-callout-variant.md`). On the Modern engine `<Alert tone message description action emphasis="subtle" announce="tone" />` renders the same markup.
 - `PatternApprovalInbox` — succeeded by `DecisionInboxSurface`.
 
 Still published with no deprecation marker; the canonical owner is named so

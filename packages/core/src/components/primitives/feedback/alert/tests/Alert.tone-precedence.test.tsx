@@ -3,8 +3,10 @@
  *
  * Renders the actual classic/modern/rustic engines directly (no factory mock,
  * unlike Alert.test.tsx) so the assertions exercise the real
- * `tone ? TONE_TO_ALERT_TYPE[tone] : type` resolution inside each engine, not
- * a synthetic stand-in. Per-engine DOM targets:
+ * tone resolution inside each engine, not a synthetic stand-in. Classic and
+ * Rustic resolve `tone ? TONE_TO_ALERT_TYPE[tone] : type` from the
+ * family-internal engine props; Modern reads `tone` alone. Per-engine DOM
+ * targets:
  * - classic: forwards the resolved type straight to AntD's `type` prop,
  *   which renders the stable `ant-alert-{type}` class AntD has used across
  *   major versions for exactly this kind of external CSS/test targeting.
@@ -26,13 +28,13 @@ describe('Alert tone precedence (real engines)', () => {
     expect(container.querySelector('.ant-alert-error')).not.toBeNull();
   });
 
-  it('classic: tone overrides the deprecated type prop when both are given', () => {
+  it('classic: tone overrides the engine-internal type when both are given', () => {
     const { container } = render(<ClassicAlert message="m" tone="danger" type="info" />);
     expect(container.querySelector('.ant-alert-error')).not.toBeNull();
     expect(container.querySelector('.ant-alert-info')).toBeNull();
   });
 
-  it('classic: falls back to type when tone is not given', () => {
+  it('classic: falls back to the engine-internal type when tone is not given', () => {
     const { container } = render(<ClassicAlert message="m" type="warning" />);
     expect(container.querySelector('.ant-alert-warning')).not.toBeNull();
   });
@@ -42,17 +44,16 @@ describe('Alert tone precedence (real engines)', () => {
     expect(container.querySelector('[data-tone="error"]')).not.toBeNull();
   });
 
-  it('modern: tone overrides the deprecated type prop when both are given', () => {
-    const { container } = renderWithEngine(
-      <ModernAlert message="m" tone="danger" type="info" />,
-      'modern',
-    );
-    expect(container.querySelector('[data-tone="error"]')).not.toBeNull();
+  it('modern: no tone renders the info surface', () => {
+    const { container } = renderWithEngine(<ModernAlert message="m" />, 'modern');
+    expect(container.querySelector('[data-tone="info"]')).not.toBeNull();
   });
 
-  it('modern: falls back to type when tone is not given', () => {
-    const { container } = renderWithEngine(<ModernAlert message="m" type="warning" />, 'modern');
-    expect(container.querySelector('[data-tone="warning"]')).not.toBeNull();
+  it('modern: a type that arrives untyped is not read', () => {
+    const untyped = { type: 'warning' };
+    const { container } = renderWithEngine(<ModernAlert message="m" {...untyped} />, 'modern');
+    expect(container.querySelector('[data-tone="info"]')).not.toBeNull();
+    expect(container.querySelector('[data-tone="warning"]')).toBeNull();
   });
 
   it('modern: exposes premium anatomy, semantic icons, and localized close control', () => {
@@ -77,12 +78,12 @@ describe('Alert tone precedence (real engines)', () => {
     expect(container.querySelector('[data-tone="error"]')).not.toBeNull();
   });
 
-  it('rustic: tone overrides the deprecated type prop when both are given', () => {
+  it('rustic: tone overrides the engine-internal type when both are given', () => {
     const { container } = render(<RusticAlert message="m" tone="danger" type="info" />);
     expect(container.querySelector('[data-tone="error"]')).not.toBeNull();
   });
 
-  it('rustic: falls back to type when tone is not given', () => {
+  it('rustic: falls back to the engine-internal type when tone is not given', () => {
     const { container } = render(<RusticAlert message="m" type="warning" />);
     expect(container.querySelector('[data-tone="warning"]')).not.toBeNull();
   });

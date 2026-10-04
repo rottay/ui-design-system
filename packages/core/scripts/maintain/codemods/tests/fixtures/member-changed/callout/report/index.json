@@ -1,0 +1,10 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 17,
+    "action": "report",
+    "id": "member-changed/.#Callout",
+    "reason": "member-changed"
+  }
+]

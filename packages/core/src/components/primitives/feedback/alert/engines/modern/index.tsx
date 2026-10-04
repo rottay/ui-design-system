@@ -12,16 +12,15 @@
  */
 
 import React from 'react';
-import type { AlertProps, AlertType } from '../../contracts';
+import type { AlertPublicProps, AlertType } from '../../contracts';
 import { ALERT_DEFAULTS, TONE_TO_ALERT_TYPE } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { AlertSurface } from '../../runtime/surface';
 
-export default function ModernAlert(props: AlertProps): React.ReactElement | null {
+export default function ModernAlert(props: AlertPublicProps): React.ReactElement | null {
   const i18n = useOptionalTranslation('common');
   const {
     tone,
-    type = ALERT_DEFAULTS.type as AlertType,
     icon,
     showIcon = ALERT_DEFAULTS.showIcon,
     message,
@@ -37,7 +36,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
     style,
   } = props;
 
-  const surfaceTone = tone ? TONE_TO_ALERT_TYPE[tone] : type;
+  const surfaceTone: AlertType = tone ? TONE_TO_ALERT_TYPE[tone] : 'info';
   const urgent = surfaceTone === 'warning' || surfaceTone === 'error';
   const identity = [message, description].map((part) =>
     typeof part === 'string' || typeof part === 'number' ? String(part) : null,

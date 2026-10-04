@@ -33,11 +33,11 @@ export function StatusFbStates() {
           <Text size="xs" color="secondary">
             Alert
           </Text>
-          <Alert type="info" message="Info alert" description="Informational description text." />
-          <Alert type="success" message="Success alert" description="Everything worked." />
-          <Alert type="warning" message="Warning alert" description="Something needs attention." />
-          <Alert type="error" message="Error alert" description="Something went wrong." />
-          <Alert type="info" message="Closable alert" closable onClose={() => undefined} />
+          <Alert tone="info" message="Info alert" description="Informational description text." />
+          <Alert tone="success" message="Success alert" description="Everything worked." />
+          <Alert tone="warning" message="Warning alert" description="Something needs attention." />
+          <Alert tone="danger" message="Error alert" description="Something went wrong." />
+          <Alert tone="info" message="Closable alert" closable onClose={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-statusfb-progress">

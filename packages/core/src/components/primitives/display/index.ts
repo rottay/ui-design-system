@@ -86,7 +86,7 @@ export { KBD_DEFAULTS } from './kbd';
 
 // Callout
 export { Callout } from './callout';
-export type { CalloutProps, CalloutVariant, CalloutTone } from './callout';
+export type { CalloutProps, CalloutTone } from './callout';
 export { CALLOUT_DEFAULTS, CALLOUT_COLORS } from './callout';
 
 // CodeBlock

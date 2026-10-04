@@ -14,7 +14,7 @@ vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () =>
     const MockAlert = React.forwardRef<HTMLDivElement, any>(({
       message,
       description,
-      type = 'info',
+      tone = 'info',
       icon,
       showIcon = true,
       closable = false,
@@ -27,7 +27,7 @@ vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () =>
       <div
         ref={ref}
         role="alert"
-        className={`rottay-alert rottay-alert--${type} ${className}`}
+        className={`rottay-alert rottay-alert--${tone} ${className}`}
         style={style}
         {...props}
       >
@@ -89,16 +89,16 @@ describe('Alert', () => {
     });
   });
 
-  describe('Alert Types', () => {
-    it.each(['info', 'success', 'warning', 'error'] as const)(
-      'renders %s type correctly',
-      (type) => {
-        const { container } = render(<Alert message="Test" type={type} />);
-        expect(container.querySelector(`[class*="${type}"]`)).toBeInTheDocument();
+  describe('Alert Tones', () => {
+    it.each(['info', 'success', 'warning', 'danger'] as const)(
+      'renders %s tone correctly',
+      (tone) => {
+        const { container } = render(<Alert message="Test" tone={tone} />);
+        expect(container.querySelector(`[class*="${tone}"]`)).toBeInTheDocument();
       }
     );
 
-    it('defaults to info type', () => {
+    it('defaults to info tone', () => {
       const { container } = render(<Alert message="Test" />);
       expect(container.querySelector('[class*="info"]')).toBeInTheDocument();
     });

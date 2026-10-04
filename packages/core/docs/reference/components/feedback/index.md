@@ -29,7 +29,7 @@ import { Alert, Spinner, Progress } from '@rottay/design-system';
 function App() {
   return (
     <div>
-      <Alert type="info" message="Welcome!" />
+      <Alert tone="info" message="Welcome!" />
       <Spinner size="lg" label="Loading..." />
       <Progress percent={75} />
     </div>
@@ -47,21 +47,21 @@ Display contextual feedback messages with different severity levels.
 
 ```tsx
 // Basic info alert
-<Alert type="info" message="This is an information message" />
+<Alert tone="info" message="This is an information message" />
 
 // Success alert
-<Alert type="success" message="Operation completed successfully!" />
+<Alert tone="success" message="Operation completed successfully!" />
 
 // Warning with description
 <Alert 
-  type="warning"
+  tone="warning"
   message="Warning"
   description="This action cannot be undone"
 />
 
 // Closable error alert
 <Alert 
-  type="error"
+  tone="danger"
   message="Error occurred"
   description="Please try again later"
   closable
@@ -73,7 +73,7 @@ Display contextual feedback messages with different severity levels.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `type` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | Alert severity type |
+| `tone` | `'info' \| 'success' \| 'warning' \| 'danger'` | `'info'` | Alert semantic tone |
 | `message` | `ReactNode` | required | Main alert message |
 | `description` | `ReactNode` | - | Optional detailed description |
 | `icon` | `ReactNode` | - | Custom icon (overrides default) |
@@ -162,7 +162,7 @@ Visualize the progress of an operation.
 import { EngineProvider } from '@rottay/design-system';
 
 <EngineProvider engine="classic">
-  <Alert type="success" message="Using Ant Design" />
+  <Alert tone="success" message="Using Ant Design" />
 </EngineProvider>
 ```
 
@@ -180,7 +180,7 @@ import { EngineProvider } from '@rottay/design-system';
 import { EngineProvider } from '@rottay/design-system';
 
 <EngineProvider engine="modern">
-  <Alert type="success" message="Using the modern engine" />
+  <Alert tone="success" message="Using the modern engine" />
 </EngineProvider>
 ```
 
@@ -198,7 +198,7 @@ import { EngineProvider } from '@rottay/design-system';
 import { EngineProvider } from '@rottay/design-system';
 
 <EngineProvider engine="rustic">
-  <Alert type="success" message="Using Pure CSS" />
+  <Alert tone="success" message="Using Pure CSS" />
 </EngineProvider>
 ```
 
@@ -250,7 +250,7 @@ function LoginForm() {
     <div>
       {error && (
         <Alert 
-          type="error"
+          tone="danger"
           message="Login Failed"
           description={error}
           closable
@@ -323,7 +323,6 @@ All components are fully typed:
 ```typescript
 import type { 
   AlertProps, 
-  AlertType,
   SpinnerProps, 
   SpinnerSize,
   ProgressProps, 
@@ -331,7 +330,7 @@ import type {
   ProgressStatus 
 } from '@rottay/design-system';
 
-const alertType: AlertType = 'success';
+const alertTone: AlertProps['tone'] = 'success';
 const spinnerSize: SpinnerSize = 'lg';
 const progressStatus: ProgressStatus = 'active';
 ```
@@ -342,7 +341,7 @@ All components accept `className` and `style` props for customization:
 
 ```tsx
 <Alert 
-  type="info"
+  tone="info"
   message="Custom styled"
   className="my-custom-alert"
   style={{ borderRadius: '8px', fontWeight: 'bold' }}
@@ -368,11 +367,11 @@ All feedback components support:
 2. **Provide meaningful messages**
    ```tsx
    // ❌ Bad
-   <Alert type="error" message="Error" />
+   <Alert tone="danger" message="Error" />
    
    // ✅ Good
    <Alert 
-     type="error" 
+     tone="danger" 
      message="Failed to save changes"
      description="Please check your internet connection and try again"
    />
@@ -390,7 +389,7 @@ All feedback components support:
 4. **Make non-critical alerts dismissible**
    ```tsx
    <Alert 
-     type="info"
+     tone="info"
      message="New features available"
      closable
    />
@@ -404,8 +403,8 @@ All feedback components support:
      const [error, setError] = useState(null);
 
      if (loading) return <Spinner label="Processing..." />;
-     if (error) return <Alert type="error" message={error} />;
-     if (success) return <Alert type="success" message="Complete!" />;
+     if (error) return <Alert tone="danger" message={error} />;
+     if (success) return <Alert tone="success" message="Complete!" />;
      
      return <ActionButton onClick={handleAction} />;
    }

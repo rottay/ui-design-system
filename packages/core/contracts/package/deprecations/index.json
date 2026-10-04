@@ -234,72 +234,50 @@
       "changeset": null
     },
     {
-      "file": "src/components/primitives/display/callout/contracts/index.ts",
-      "anchor": "CalloutVariant",
-      "class": "compat-consumed",
-      "reason": "Type of the `variant` prop of `Callout`, which app-evnto still authors on eight call sites; it leaves with the component once `Alert` parity is shown.",
-      "scope": "Exported type alias. No direct import of the name was found in the four consumer roots; it is reached through `CalloutProps.variant`.",
-      "replacement": "`Tone` through the `tone` prop of `Alert`",
-      "canonicalOwner": "src/components/primitives/feedback/alert/index.tsx",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
-      "since": "2026-07-10",
-      "removeIn": "3.0",
-      "evidence": [
-        {
-          "kind": "consumer",
-          "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
-          "needle": "<Callout variant=\"warning\" title=\"Offline\"",
-          "note": "Callout is imported from @rottay/design-system at :14 of the same file."
-        }
-      ],
-      "codemod": null,
-      "changeset": null
-    },
-    {
-      "file": "src/components/primitives/display/callout/contracts/index.ts",
-      "anchor": "CalloutProps.variant",
-      "class": "compat-consumed",
-      "reason": "app-evnto authors `variant` on `Callout`; the `tone` vocabulary renames `error` to `danger`, so the value mapping needs a codemod and a parity verdict before removal.",
-      "scope": "One optional prop of `CalloutProps`; read by the Classic and Rustic Callout engines when `tone` is absent.",
-      "replacement": "`tone`",
-      "canonicalOwner": "src/components/primitives/feedback/alert/index.tsx",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
-      "since": "2026-07-10",
-      "removeIn": "3.0",
-      "evidence": [
-        {
-          "kind": "consumer",
-          "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
-          "needle": "<Callout variant=\"warning\" title=\"Offline\"",
-          "note": "Callout is imported from @rottay/design-system at :14 of the same file."
-        }
-      ],
-      "codemod": null,
-      "changeset": null
-    },
-    {
       "file": "src/components/primitives/display/callout/index.tsx",
       "anchor": "Callout",
-      "class": "compat-consumed",
-      "reason": "Single canon is `Alert` (`message`, `description`, `action`); app-evnto still renders `Callout`, and equivalence of `title`, `icon` and `closable` on `Alert` has no parity verdict yet.",
-      "scope": "Exported component with Classic and Rustic engines of its own and the Modern path loaded from `Alert`. Showroom call sites are being migrated by hand.",
-      "replacement": "`<Alert message description action />`",
-      "canonicalOwner": "src/components/primitives/feedback/alert/index.tsx",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
+      "class": "compat-frozen-sole-implementer",
+      "reason": "The frozen Classic and Rustic Callout engines are the only implementers, on those engines, of the action tray, the callout tint set and the title-above-body layout: the frozen Alert engines ignore `action`, `emphasis` and `announce`. On Modern the component already renders Alert's callout presentation and `<Alert emphasis=\"subtle\" announce=\"tone\">` is markup-identical, so retiring it loses behaviour only under Classic and Rustic.",
+      "scope": "Exported component with Classic and Rustic engines of its own and the Modern path loaded from `Alert`. Kit dry-run of 2026-10-03 over the showroom and the src roots of app-bithire, app-evnto and app-platform: app-evnto imports it in one file (8 sites); the showroom imports it in four probe and torture files (13 sites, all on `tone`) that exercise the component itself; design-system src uses it in its own stories and tests only.",
+      "replacement": "`<Alert tone message description action emphasis=\"subtle\" announce=\"tone\" />` on Modern; none on Classic and Rustic",
+      "canonicalOwner": "src/components/primitives/feedback/alert/engines/modern/index.tsx",
+      "blocker": "frozen-equivalence-absent",
+      "receiver": "WO-RET-06",
       "since": "2026-09-14",
-      "removeIn": "3.0",
+      "removeIn": "4.0",
       "evidence": [
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/callout/engines/classic/index.tsx",
+          "needle": "{action && (",
+          "absentNeedle": "Alert"
+        },
+        {
+          "kind": "frozen-implementer",
+          "path": "packages/core/src/components/primitives/display/callout/engines/rustic/index.tsx",
+          "needle": "{action && (",
+          "absentNeedle": "Alert"
+        },
+        {
+          "kind": "census-receipt",
+          "path": "packages/core/src/components/primitives/feedback/alert/tests/Alert.callout-parity.test.tsx",
+          "needle": "describe('Alert renders what the folded Callout renders', () => {",
+          "note": "Measured: Modern equality over 64 combinations and the dismiss-identity delta. Not measured here: any equivalence on Classic or Rustic, where the changeset records the loss."
+        },
+        {
+          "kind": "consumer",
+          "path": "packages/showroom/src/components/torture-sections/data-display-states/index.tsx",
+          "needle": "<Callout tone=\"danger\" title=\"Error\" action={<Button size=\"xs\">Retry</Button>}>",
+          "note": "One of the 13 showroom sites; this one renders the action tray the frozen Alert engines drop."
+        },
         {
           "kind": "consumer",
           "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
           "needle": "<Callout variant=\"warning\" title=\"Offline\"",
-          "note": "Callout is imported from @rottay/design-system at :14 of the same file."
+          "note": "Callout is imported from @rottay/design-system at :14 of the same file. The needle changes when the application migrates `variant` to `tone`; the receipt is re-minted then."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#Callout",
       "changeset": null
     },
     {
@@ -608,33 +586,6 @@
           "path": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx",
           "needle": "placement.startsWith(\"right\")",
           "absentNeedle": "inline-end"
-        }
-      ],
-      "codemod": null,
-      "changeset": null
-    },
-    {
-      "file": "src/components/primitives/feedback/alert/contracts/index.ts",
-      "anchor": "AlertSharedProps.type",
-      "class": "compat-consumed",
-      "reason": "Authored on `Alert` in the showroom and in the three apps (app-platform and app-evnto heavily); `tone` renames `error` to `danger`, so removal needs the value-mapping codemod and a parity verdict.",
-      "scope": "One optional prop of `AlertSharedProps`, the shared half of the `AlertProps` union. Per-root use counts were not re-measured here.",
-      "replacement": "`tone`",
-      "canonicalOwner": "src/components/primitives/feedback/alert/contracts/index.ts",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
-      "since": "2026-07-18",
-      "removeIn": "3.0",
-      "evidence": [
-        {
-          "kind": "consumer",
-          "path": "packages/showroom/src/components/torture-sections/status-feedback/index.tsx",
-          "needle": "<Alert type=\"info\" message=\"Info alert\""
-        },
-        {
-          "kind": "consumer",
-          "path": "../app-evnto/src/features/identity/auth/surface/screens/login/index.tsx",
-          "needle": "<Alert type=\"error\" message={error} showIcon />"
         }
       ],
       "codemod": null,
