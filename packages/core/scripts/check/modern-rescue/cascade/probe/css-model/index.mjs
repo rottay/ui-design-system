@@ -62,6 +62,9 @@ export const ENTRYPOINTS = {
   evnto: join(CORE_ROOT, "artifacts/generated/css/verticals/evnto/index.css"),
 };
 
+export const ARTIFACT_DIR = join(CSS_ROOT, "facade/artifacts");
+export const MASK_TENANTS = ["rottay", "bithire", "evnto"];
+
 const ROOT_EQUIVALENT = new Set([":root", "html", ":host", ":host(*)"]);
 
 /**
@@ -264,8 +267,8 @@ export function buildRootEnvironment(decls) {
  */
 export function artifactMask(
   channels,
-  tenants = ["rottay", "bithire", "evnto"],
-  { artifactDir = join(CSS_ROOT, "facade/artifacts") } = {},
+  tenants = MASK_TENANTS,
+  { artifactDir = ARTIFACT_DIR } = {},
 ) {
   const mask = new Map();
   for (const tenant of tenants) {

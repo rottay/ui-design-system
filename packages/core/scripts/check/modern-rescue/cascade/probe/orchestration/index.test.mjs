@@ -12,10 +12,12 @@
  * is not a control.
  */
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   parseStylesheet,
@@ -44,9 +46,11 @@ import {
   exitCodeFor,
   familyChannels,
   findTreeDeclarations,
+  missingProbeTargets,
   parseArgs,
   reclassifyOutOfGraph,
   resolveEntry,
+  run,
 } from "./index.mjs";
 
 /* ───────────────────────────────── fixtures ───────────────────────────────── */
@@ -853,4 +857,95 @@ test("root font-size detection refuses descendant selectors", () => {
   );
   assert.equal(side.rootFontSize, null);
   assert.equal(evalIn("1rem", side.env, null, side.rootFontSize).value.px, 16);
+});
+
+/* ─────────── control 8: a path the probe cannot read stops the run ─────────── */
+
+const PROBE_CLI = fileURLToPath(new URL("./index.mjs", import.meta.url));
+const LIVE_CHANNEL = "--ds-button-md-padding-x";
+
+function artifactDirWith(tenants) {
+  const dir = mkdtempSync(join(tmpdir(), "cp-targets-"));
+  for (const tenant of tenants) {
+    mkdirSync(join(dir, tenant), { recursive: true });
+    writeFileSync(join(dir, tenant, "index.css"), `:root { --ds-unrelated: 1px; }\n`);
+  }
+  return dir;
+}
+
+const READ_SIDE = { sheet: { files: [{ rel: "entry.css" }], unresolved: [] } };
+const EMPTY_SIDE = {
+  sheet: { files: [], unresolved: [{ file: "/gone/entry.css", reason: "not readable at this revision" }] },
+};
+
+function targets(overrides = {}) {
+  return missingProbeTargets({
+    before: READ_SIDE,
+    after: READ_SIDE,
+    entry: "fixture",
+    baseline: "fixture-rev",
+    tenants: ["acme", "globex"],
+    artifactDir: artifactDirWith(["acme", "globex"]),
+    ...overrides,
+  });
+}
+
+test("NEGATIVE 8 — positive control: every target readable reports nothing missing", () => {
+  assert.deepEqual(targets(), []);
+});
+
+test("NEGATIVE 8a — an entry unreadable in the working tree is missing, by name", () => {
+  const missing = targets({ after: EMPTY_SIDE });
+  assert.equal(missing.length, 1);
+  assert.match(missing[0], /entry "fixture" is not readable in the working tree/);
+});
+
+test("NEGATIVE 8b — an entry unreadable at the baseline is missing, and names the revision", () => {
+  const missing = targets({ before: EMPTY_SIDE });
+  assert.equal(missing.length, 1);
+  assert.match(missing[0], /entry "fixture" is not readable at baseline fixture-rev/);
+});
+
+test("NEGATIVE 8c — an unresolved @import of the working tree is missing; one of the baseline is not", () => {
+  const gap = { from: "entry.css", spec: "./gone.css", line: 3, reason: "not readable" };
+  const holed = { sheet: { files: [{ rel: "entry.css" }], unresolved: [gap] } };
+  const missing = targets({ after: holed });
+  assert.equal(missing.length, 1);
+  assert.match(missing[0], /@import "\.\/gone\.css" at entry\.css:3/);
+  assert.deepEqual(targets({ before: holed }), [], "git cannot read node_modules at a revision; that gap stays a report");
+});
+
+test("NEGATIVE 8d — an absent tenant artifact is missing: a mask taken from nothing is a PASS", () => {
+  const missing = targets({ artifactDir: artifactDirWith(["acme"]) });
+  assert.equal(missing.length, 1);
+  assert.match(missing[0], /tenant artifact .*globex\/index\.css/);
+});
+
+test("NEGATIVE 8e — run() refuses an entry that does not exist instead of grading it", () => {
+  assert.throws(
+    () => run(["--channel", LIVE_CHANNEL, "--entry", "not-an-entrypoint", "--baseline", "HEAD"]),
+    /probe target missing, nothing was measured:[\s\S]*entry "not-an-entrypoint" is not readable in the working tree/,
+  );
+});
+
+test("NEGATIVE 8f — run() refuses a baseline that holds no entry instead of comparing against nothing", () => {
+  assert.throws(
+    () => run(["--channel", LIVE_CHANNEL, "--baseline", "0000000000000000000000000000000000000000"]),
+    /entry "base" is not readable at baseline 0000000000000000000000000000000000000000/,
+  );
+});
+
+test("NEGATIVE 8g — the CLI exits 3 on a missing entry and does not exit 3 when every target is read", () => {
+  const cli = (...args) =>
+    spawnSync(process.execPath, [PROBE_CLI, "--channel", LIVE_CHANNEL, "--quiet", ...args], { encoding: "utf8" });
+
+  const absent = cli("--entry", "not-an-entrypoint", "--baseline", "HEAD");
+  assert.equal(absent.status, 3, "a missing entry is 'the probe could not run', never a coverage hole");
+  assert.match(absent.stderr, /probe target missing, nothing was measured/);
+  assert.doesNotMatch(absent.stdout, /PASS|OUT-OF-GRAPH/, "no verdict is printed for a run that read nothing");
+
+  const present = cli("--baseline", "HEAD");
+  assert.notEqual(present.status, 3, present.stderr);
+  assert.doesNotMatch(present.stderr, /probe target missing/);
+  assert.match(present.stdout, /channels probed 1/);
 });

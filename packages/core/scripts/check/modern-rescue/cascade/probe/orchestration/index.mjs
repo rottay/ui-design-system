@@ -66,7 +66,9 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 
 import {
+  ARTIFACT_DIR,
   CSS_ROOT,
+  MASK_TENANTS,
   REPO_ROOT,
   buildSheet,
   isConditional,
@@ -140,6 +142,35 @@ export function resolveEntry(entry, { dir = ENTRYPOINT_DIR } = {}) {
     }
   }
   return entry;
+}
+
+/**
+ * Every path this run reads and cannot: the entry on either side, an @import
+ * of the working tree, a tenant artifact the mask is taken from. An empty side
+ * compares against nothing and an absent artifact cannot mask, so each one
+ * turns into a PASS that measured nothing unless the run stops here.
+ */
+export function missingProbeTargets({
+  before,
+  after,
+  entry,
+  baseline,
+  tenants = MASK_TENANTS,
+  artifactDir = ARTIFACT_DIR,
+}) {
+  const missing = [];
+  if (after.sheet.files.length === 0)
+    missing.push(`entry "${entry}" is not readable in the working tree`);
+  if (before.sheet.files.length === 0)
+    missing.push(`entry "${entry}" is not readable at baseline ${baseline}`);
+  for (const u of after.sheet.unresolved) {
+    if (u.spec) missing.push(`@import "${u.spec}" at ${u.from}:${u.line} (${u.reason})`);
+  }
+  for (const tenant of tenants) {
+    const abs = join(artifactDir, tenant, "index.css");
+    if (!existsSync(abs)) missing.push(`tenant artifact ${relative(REPO_ROOT, abs)}`);
+  }
+  return missing;
 }
 
 /** Every custom property declared by a family's component stylesheet. */
@@ -682,6 +713,10 @@ export function run(argv) {
   const entryTarget = resolveEntry(opts.entry);
   const before = loadSide({ rev: opts.baseline, entry: entryTarget });
   const after = loadSide({ entry: entryTarget });
+  const missing = missingProbeTargets({ before, after, entry: opts.entry, baseline: opts.baseline });
+  if (missing.length) {
+    throw new Error(`probe target missing, nothing was measured:\n  - ${missing.join("\n  - ")}`);
+  }
   const leg1 = analyse({ channels: list, before, after });
   // Separate the two things leg 1 cannot tell apart — a channel declared
   // nowhere, and a channel declared outside this entrypoint's import graph —
