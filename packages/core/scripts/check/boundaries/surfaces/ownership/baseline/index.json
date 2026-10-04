@@ -6381,12 +6381,6 @@
       "rule": "stable-typography",
       "count": 2
     },
-    "1389ffc3ef85e07149ef": {
-      "path": "src/components/patterns/shell/cockpit-header/engines/modern/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-a",
-      "count": 1
-    },
     "856f2315aecfcf67c901": {
       "path": "src/components/patterns/shell/page-shell/engines/classic/index.tsx",
       "category": "native-interactive",
@@ -7029,12 +7023,6 @@
       "rule": "stable-geometry",
       "count": 1
     },
-    "7e5c36baea1f37535948": {
-      "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 4
-    },
     "93acf8908679750c4cb9": {
       "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
       "category": "shared-chrome-literal",
@@ -7046,12 +7034,6 @@
       "category": "shared-chrome-literal",
       "rule": "stable-geometry",
       "count": 1
-    },
-    "ac2644a3172dcbbded24": {
-      "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 4
     },
     "b2a4ccf69272a1ca6640": {
       "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
@@ -7070,12 +7052,6 @@
       "category": "shared-chrome-literal",
       "rule": "stable-spacing",
       "count": 1
-    },
-    "8ed6b7d8ef8c01c1eafe": {
-      "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 4
     },
     "c3e774f4723bada70f63": {
       "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",

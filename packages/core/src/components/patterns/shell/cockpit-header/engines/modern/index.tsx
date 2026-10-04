@@ -28,6 +28,7 @@
 import { useState, useEffect } from 'react';
 import type { CockpitHeaderProps, CockpitStatus } from '../../contracts';
 import Button from '../../../../../primitives/inputs/button/engines/modern';
+import Link from '../../../../../primitives/navigation/link/engines/modern';
 import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
@@ -68,21 +69,19 @@ function BreadcrumbLink({
   href?: string;
   isLast: boolean;
 }) {
-  const interaction = useInteractionState();
-
   if (href && !isLast) {
     return (
-      <a
+      <Link
         href={href}
-        {...interaction.handlers}
-        {...partAttributes('crumb', interaction.state)}
+        underline={false}
+        data-part="crumb"
         data-interactive="true"
         data-last="false"
       >
         {/* Caller labels are bidi-isolated: a Hebrew crumb must not reorder
             the chevrons or the Latin crumbs around it. */}
         <bdi>{label}</bdi>
-      </a>
+      </Link>
     );
   }
 
