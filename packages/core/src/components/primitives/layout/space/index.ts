@@ -117,7 +117,6 @@ import type { SpaceEngineProps, SpaceSize } from "./contracts";
 // Export types
 export {
   type SpaceSize,
-  type LegacySpaceSize,
   type SpaceDirection,
   type SpaceAlign,
   SPACE_DEFAULTS,

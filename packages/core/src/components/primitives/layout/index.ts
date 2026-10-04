@@ -97,7 +97,7 @@ export type { FlexProps, FlexDirection, FlexWrap, FlexJustify, FlexAlign } from 
 export { FLEX_DEFAULTS, FLEX_JUSTIFY_MAP, FLEX_ALIGN_MAP } from './flex';
 
 export { Space } from './space';
-export type { SpaceProps, SpaceSize, LegacySpaceSize, SpaceDirection, SpaceAlign } from './space';
+export type { SpaceProps, SpaceSize, SpaceDirection, SpaceAlign } from './space';
 export { SPACE_DEFAULTS, SPACE_SIZE_MAP, SPACE_ALIGN_MAP } from './space';
 
 export { Layout } from './system';

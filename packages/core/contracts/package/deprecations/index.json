@@ -895,28 +895,6 @@
       "changeset": null
     },
     {
-      "file": "src/components/primitives/layout/space/contracts/index.ts",
-      "anchor": "LegacySpaceSize",
-      "class": "compat-consumed",
-      "reason": "Ant-style `small | middle | large` spacing that app-platform passes to `Space` on many screens; `SpaceSize` spells the same steps `sm | md | lg`, pending the value codemod.",
-      "scope": "Exported type alias, unioned into `SpaceProps.size` and the key of `SPACE_SIZE_MAP`. Per-root use counts were not re-measured here.",
-      "replacement": "`SpaceSize` (`sm | md | lg`)",
-      "canonicalOwner": "src/components/primitives/layout/space/contracts/index.ts",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
-      "since": "2026-07-10",
-      "removeIn": "3.0",
-      "evidence": [
-        {
-          "kind": "consumer",
-          "path": "../app-platform/src/features/security/authentication/surface/components/session-table/index.tsx",
-          "needle": "<Space direction=\"vertical\" style={{ width: '100%' }} size=\"middle\">"
-        }
-      ],
-      "codemod": null,
-      "changeset": null
-    },
-    {
       "file": "src/components/primitives/overlay/hover-card/contracts/index.ts",
       "anchor": "HoverCardSide.'left'",
       "class": "compat-frozen-sole-implementer",

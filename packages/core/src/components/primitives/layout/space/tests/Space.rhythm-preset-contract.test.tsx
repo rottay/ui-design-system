@@ -4,7 +4,7 @@
  *
  * SPACE'S SHAPE DIFFERS FROM ITS SISTERS IN ONE STRUCTURAL WAY: there is no
  * `Space/runtime/responsive/` folder, and `SpaceProps.size` is typed
- * `SpaceSize | LegacySpaceSize | number | [number, number]` -- NOT wrapped in
+ * `SpaceSize | number | [number, number]` -- NOT wrapped in
  * `ResponsiveValue<>` the way every other layout primitive's spacing prop is.
  * Space has no responsive path to test; leg 4 proves that structurally rather
  * than silently skipping the "scalar vs responsive" requirement.

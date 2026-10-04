@@ -47,11 +47,11 @@ import type {
 export type SpaceSize = Extract<Size, "sm" | "md" | "lg">;
 
 /**
- * @deprecated Legacy antd-style spelling; use {@link SpaceSize} ('sm' | 'md' | 'lg') instead.
- * The `size` prop of `Space` no longer accepts it; it remains the key of
- * {@link SPACE_SIZE_MAP} and a spelling the engines still read.
+ * The spelling the engines key their lookups by: the key of {@link SPACE_SIZE_MAP}
+ * (frozen Rustic reads it through `toLegacySize`) and the Ant Design `size` of the
+ * frozen Classic engine. The public `SpaceProps.size` takes {@link SpaceSize}.
  */
-export type LegacySpaceSize = "small" | "middle" | "large";
+export type SpaceEngineSize = "small" | "middle" | "large";
 
 /**
  * Flow direction for Space component.
@@ -102,7 +102,7 @@ export interface SpaceEngineProps extends BaseComponentProps, EngineAwareProps {
    * - Array: [horizontal, vertical] gaps (e.g., [8, 16])
    * @default 'small'
    */
-  size?: SpaceSize | LegacySpaceSize | number | [number, number];
+  size?: SpaceSize | SpaceEngineSize | number | [number, number];
 
   /**
    * Direction of item flow.
@@ -164,7 +164,7 @@ export const SPACE_DEFAULTS: Partial<SpaceProps> = {
  * - `--ds-space-middle-size`: Default 16px
  * - `--ds-space-large-size`: Default 24px
  */
-export const SPACE_SIZE_MAP: Record<LegacySpaceSize, string> = {
+export const SPACE_SIZE_MAP: Record<SpaceEngineSize, string> = {
   small: "var(--ds-space-small-size)",
   middle: "var(--ds-space-middle-size)",
   large: "var(--ds-space-large-size)",

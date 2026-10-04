@@ -14,6 +14,9 @@ import ClassicSpace from '../engines/classic';
 import ModernSpace from '../engines/modern';
 import RusticSpace from '../engines/rustic';
 
+// @ts-expect-error the package root publishes no `LegacySpaceSize`
+import type { LegacySpaceSize as RetiredSpaceSize } from '@/index';
+
 type AntSpelling = keyof typeof SPACE_SIZE_MAP;
 
 const STEPS: ReadonlyArray<readonly [SpaceSize, AntSpelling]> = [
@@ -111,5 +114,14 @@ describe('Space takes the canonical steps and renders them as the spellings they
     }
     expect(new Set(painted.values()).size).toBe(3);
     expect(await rusticStatic(<Space>{ITEMS}</Space>)).toBe(painted.get('sm'));
+  });
+});
+
+describe('the engine spelling is not a public size', () => {
+  it('refuses the Ant Design spelling on the public component and keeps it as the key of the engine table', () => {
+    // @ts-expect-error `size` takes `sm | md | lg`, a number or a tuple
+    const refused = <Space size="middle">{ITEMS}</Space>;
+    expect(refused.props.size).toBe('middle');
+    expect(Object.keys(SPACE_SIZE_MAP)).toEqual(['small', 'middle', 'large']);
   });
 });

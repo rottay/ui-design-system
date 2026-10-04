@@ -162,24 +162,6 @@
       "auditedAt": "2026-10-03",
       "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03-b/index.json",
       "integrity": "sha256:1ef6566b1de2f482cca29b160cebc690fa2301b84b1e3296bd5287621c0dc676"
-    },
-    {
-      "file": "src/components/primitives/layout/space/contracts/index.ts",
-      "anchor": "LegacySpaceSize",
-      "kind": "consumer",
-      "path": "../app-platform/src/features/security/authentication/surface/components/session-table/index.tsx",
-      "needle": "<Space direction=\"vertical\" style={{ width: '100%' }} size=\"middle\">",
-      "repository": "https://github.com/rottay/app-platform.git",
-      "commit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
-      "fileDigest": "sha256:153bcfa5fc3e2d76726d9b73d1adf960d4bb226b62583859f9d6d6a53bd52d95",
-      "matchLine": 279,
-      "matchDigest": "sha256:467eb26246f914791085ea1b7a4c6d423a8e8379866273a6838ed91b028eadea",
-      "rowDigest": "sha256:85a3842a161fd766fc83a7c37479ff00f55b7ed9986d3a35ba9e3b6a8c3def64",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:49046c17fec9ab34efeb0a902530a02ccf4b82138df8c73494ba47a5028c2c34"
     }
   ]
 }
