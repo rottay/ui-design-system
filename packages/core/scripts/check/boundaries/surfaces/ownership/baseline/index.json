@@ -4917,12 +4917,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "9bdd5041bb6711e7ef61": {
-      "path": "src/components/patterns/navigation/command-palette/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "aria-role-reconstruction",
-      "count": 1
-    },
     "fc7819c40ee30645ca1d": {
       "path": "src/components/patterns/navigation/command-palette/engines/modern/index.tsx",
       "category": "primitive-reconstruction",

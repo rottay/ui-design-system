@@ -46,6 +46,7 @@ import type { CommandPaletteProps, CommandItem } from '../../contracts';
 import { useCommandArgumentMode } from '../../runtime/argument-mode';
 import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import Modal from '../../../../../primitives/feedback/modal/engines/modern';
+import { useComboboxFoundation, type ComboboxItemProps } from '../../../../../primitives/runtime/collection/combobox';
 import Input from '../../../../../primitives/inputs/input/engines/modern';
 import Empty from '../../../../../primitives/display/empty/engines/modern';
 import Tag from '../../../../../primitives/display/tag/engines/modern';
@@ -69,23 +70,18 @@ function useCommandPaletteTranslation() {
  */
 function CommandPaletteRow({
   item,
-  id,
-  active,
+  optionProps,
   onSelect,
 }: {
   item: CommandItem;
-  id: string;
-  active: boolean;
+  optionProps: ComboboxItemProps;
   onSelect: (item: CommandItem) => void;
 }) {
   const { state, handlers } = useInteractionState({ disabled: Boolean(item.disabled) });
   return (
     <div
-      id={id}
-      role="option"
-      aria-selected={active}
-      aria-disabled={item.disabled || undefined}
-      data-active={active}
+      {...optionProps}
+      data-active={Boolean(optionProps['data-active'])}
       onClick={() => onSelect(item)}
       {...handlers}
       {...partAttributes('item', state)}
@@ -139,13 +135,11 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   const recentLabel = tOr('commandPalette.recent', 'Recent');
 
   const [query, setQuery] = useState('');
-  const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   // Instance-scoped APG ids: two palettes on one page must not collide, or the
   // input's aria-activedescendant resolves into the OTHER palette's listbox.
   const instanceId = useId();
   const listboxId = `${instanceId}-listbox`;
-  const optionId = (idx: number) => `${instanceId}-option-${idx}`;
   const argumentPromptId = `${instanceId}-argument-prompt`;
   const argumentErrorId = `${instanceId}-argument-error`;
   const {
@@ -206,14 +200,24 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     return rows;
   }, [showRecent, visibleRecent, grouped]);
 
+  // Option identity, ARIA and the active descendant belong to the combobox
+  // kernel the selection primitives share.
+  const { activeIndex, setActiveIndex, getOptionId, getItemProps } = useComboboxFoundation({
+    open: open && mode === 'search',
+    itemCount: navigableItems.length,
+    listboxId,
+    optionIdPrefix: instanceId,
+  });
+
+  // Hold the cursor on a real row when the navigable set changes with no query
+  // change: the first row once rows arrive, the last one when the set shrinks.
+  // Declared before the query reset so the reset wins a shared commit.
+  useEffect(() => {
+    setActiveIndex(Math.min(Math.max(activeIndex, 0), navigableItems.length - 1));
+  }, [navigableItems]);
+
   // Reset the keyboard cursor to the first item whenever the query changes.
   useEffect(() => { setActiveIndex(0); }, [query]);
-
-  // Clamp the cursor when the navigable set shrinks with no query change: a stale
-  // activeIndex past the end leaves aria-activedescendant undefined and Enter inert.
-  useEffect(() => {
-    setActiveIndex((i) => Math.min(i, Math.max(0, navigableItems.length - 1)));
-  }, [navigableItems]);
 
   // Reset search and route INITIAL focus to the search box on open. Focus
   // RESTORE on close is deliberately absent: the composed Modal opens a native
@@ -274,10 +278,10 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     }
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setActiveIndex((i) => Math.min(i + 1, navigableItems.length - 1));
+      setActiveIndex(Math.min(activeIndex + 1, navigableItems.length - 1), 'keyboard');
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setActiveIndex((i) => Math.max(i - 1, 0));
+      setActiveIndex(Math.max(activeIndex - 1, 0), 'keyboard');
     } else if (e.key === 'Enter') {
       e.preventDefault();
       const item = activeIndex >= 0 ? arrayValueAt(navigableItems, activeIndex) : undefined;
@@ -301,8 +305,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     <CommandPaletteRow
       key={item.id}
       item={item}
-      id={optionId(idx)}
-      active={activeIndex === idx}
+      optionProps={getItemProps(idx, { selected: activeIndex === idx, disabled: item.disabled })}
       onSelect={handleSelect}
     />
   );
@@ -374,7 +377,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
             aria-controls={mode === 'search' ? listboxId : undefined}
             aria-activedescendant={
               mode === 'search' && activeIndex >= 0 && activeIndex < navigableItems.length
-                ? optionId(activeIndex)
+                ? getOptionId(activeIndex)
                 : undefined
             }
             // Argument mode swaps the listbox for a prompt, which a screen reader user would
