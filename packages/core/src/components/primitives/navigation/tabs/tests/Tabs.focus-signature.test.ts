@@ -2,7 +2,9 @@
  * The Tabs focus indicator, read from the skin: every tab, selected or not,
  * wears the tenant focus signature on an overlay the list cannot clip, the
  * selected paint stays on the tab beneath it, and forced colors keep a
- * system-colour outline.
+ * system-colour outline. The panel wears it on an inset overlay and the
+ * overflow controls compose it with their own elevation, each only while it
+ * holds focus itself.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -47,6 +49,33 @@ function splitForcedColors(css: string): { forced: string; rest: string } {
   return { forced, rest: rest + css.slice(cursor) };
 }
 
+interface ScopedRule extends Rule {
+  readonly conditions: readonly string[];
+}
+
+/** Every innermost rule of `css` with the at-rule preludes that enclose it, outermost first. */
+function scopedRules(css: string): ScopedRule[] {
+  const found: ScopedRule[] = [];
+  const stack: string[] = [];
+  let start = 0;
+  for (let at = 0; at < css.length; at += 1) {
+    if (css[at] === "{") {
+      stack.push(css.slice(start, at).replace(/\s+/g, " ").trim());
+      start = at + 1;
+    } else if (css[at] === "}") {
+      const prelude = stack.pop() ?? "";
+      const body = css.slice(start, at);
+      if (!prelude.startsWith("@") && !body.includes("{")) {
+        for (const selector of prelude.split(/,(?![^(]*\))/)) {
+          found.push({ selector: selector.trim(), body, conditions: stack.filter((entry) => entry.startsWith("@")) });
+        }
+      }
+      start = at + 1;
+    }
+  }
+  return found;
+}
+
 function declaration(body: string, property: string): string | undefined {
   let found: string | undefined;
   for (const statement of body.split(";")) {
@@ -65,6 +94,16 @@ const { forced, rest } = splitForcedColors(SKIN);
 const SIGNATURE = "var(--ds-tabs-focus-ring, var(--ds-focus-ring))";
 const WIDTH = "var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))";
 const TAB = "[data-part='tab-button']";
+
+const PANEL = "[data-part='tab-panel']";
+const PANEL_SIGNATURE = "var(--ds-tabs-panel-focus-ring, var(--ds-focus-ring))";
+const CONTROLS = ":is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more'])";
+const HOVER = ":is([data-state~='hovered'], :hover)";
+const FORCED = "@media (forced-colors: active)";
+const not = (channel: string): string => `@container not style(${channel}: none)`;
+
+const scopedFocusRules = (part: string): ScopedRule[] =>
+  scopedRules(SKIN).filter((rule) => rule.selector.includes(part) && rule.selector.includes(FOCUS));
 
 const focusRules = (css: string): Rule[] =>
   rules(css).filter((rule) => rule.selector.includes(TAB) && rule.selector.includes(FOCUS));
@@ -114,5 +153,84 @@ describe("tabs focus signature", () => {
     const selected = overlay.find((rule) => rule.selector.includes("[data-selected='true']"));
     expect(declaration(plain!.body, "box-shadow")).toBe("none");
     expect(declaration(selected!.body, "box-shadow")).toBe(`inset 0 0 0 max(2px, ${WIDTH}) HighlightText`);
+  });
+
+  it("paints the panel signature on an inset overlay, only while the panel itself holds focus", () => {
+    const panel = scopedFocusRules(PANEL);
+    expect(panel.length).toBeGreaterThan(0);
+    for (const rule of panel) expect(rule.selector).toContain(`${PANEL}${FOCUS}${SELF}`);
+
+    const overlay = panel.filter((rule) => rule.conditions.length === 0);
+    for (const rule of overlay) expect(rule.selector.endsWith(`${PANEL}${FOCUS}${SELF}::after`)).toBe(true);
+    const base = overlay.find((rule) => !rule.selector.includes("data-panel-variant"));
+    expect(declaration(base!.body, "box-shadow")).toBe(PANEL_SIGNATURE);
+    expect(declaration(base!.body, "inset")).toBe(`calc(var(--ds-focus-ring-offset) + ${WIDTH})`);
+    expect(declaration(base!.body, "position")).toBe("absolute");
+    expect(declaration(base!.body, "pointer-events")).toBe("none");
+    expect(declaration(base!.body, "content")).toBe("''");
+
+    const contained = overlay.find((rule) => rule.selector.includes("[data-panel-variant='contained']"));
+    expect(declaration(contained!.body, "border-radius")).toBe(
+      `max(0px, calc(var(--ds-tabs-panel-radius, var(--ds-radius-lg)) - var(--ds-edge-standard-width) - var(--ds-focus-ring-offset) - ${WIDTH}))`
+    );
+  });
+
+  it("anchors the overlay to the panel and leaves the panel's own shadow to its elevation", () => {
+    const rest = scopedRules(SKIN).filter((rule) => rule.selector.endsWith(PANEL));
+    const base = rest.find((rule) => rule.conditions.length === 0 && !rule.selector.includes("data-panel-variant"));
+    expect(declaration(base!.body, "position")).toBe("relative");
+
+    const hosts = scopedFocusRules(PANEL).filter((rule) => !rule.selector.endsWith("::after"));
+    for (const rule of hosts) {
+      expect(rule.conditions).toContain(FORCED);
+      expect(declaration(rule.body, "box-shadow")).toBeUndefined();
+    }
+  });
+
+  it("keeps a system-colour outline inside the focused panel in forced colors", () => {
+    const panel = scopedFocusRules(PANEL).filter((rule) => rule.conditions.includes(FORCED));
+    const plain = panel.find((rule) => rule.selector.endsWith(`${SELF}`) && !rule.selector.includes("data-panel-variant"));
+    const contained = panel.find((rule) => rule.selector.includes("[data-panel-variant='contained']"));
+    expect(declaration(plain!.body, "outline")).toBe(`max(2px, ${WIDTH}) solid Highlight`);
+    expect(declaration(plain!.body, "outline-offset")).toBe(`calc(-1 * max(2px, ${WIDTH}))`);
+    expect(declaration(contained!.body, "outline-offset")).toBe(
+      `calc(-1 * max(2px, ${WIDTH}) - var(--ds-edge-standard-width))`
+    );
+    const overlay = panel.find((rule) => rule.selector.endsWith("::after"));
+    expect(declaration(overlay!.body, "box-shadow")).toBe("none");
+  });
+
+  it("composes the overflow controls' elevation under the signature at rest and on hover", () => {
+    const controls = scopedFocusRules(CONTROLS).filter((rule) => !rule.conditions.includes(FORCED));
+    for (const rule of controls) expect(rule.selector.endsWith(`${FOCUS}${SELF}`)).toBe(true);
+
+    const base = controls.filter((rule) => rule.conditions.length === 0);
+    expect(base).toHaveLength(1);
+    expect(declaration(base[0]!.body, "box-shadow")).toBe(SIGNATURE);
+
+    const rest = controls.filter((rule) => rule.conditions.length > 0 && !rule.selector.includes(HOVER));
+    expect(rest).toHaveLength(1);
+    expect(rest[0]!.conditions).toEqual([not("--ds-tabs-overflow-control-shadow"), not("--ds-elevation-1")]);
+    expect(declaration(rest[0]!.body, "box-shadow")).toBe(
+      `${SIGNATURE}, var(--ds-tabs-overflow-control-shadow, var(--ds-elevation-1))`
+    );
+
+    const hovered = controls.filter((rule) => rule.selector.includes(HOVER));
+    expect(hovered).toHaveLength(1);
+    expect(hovered[0]!.conditions).toEqual([
+      "@media (hover: hover)",
+      not("--ds-tabs-overflow-control-shadow-hover"),
+      not("--ds-elevation-2"),
+    ]);
+    expect(declaration(hovered[0]!.body, "box-shadow")).toBe(
+      `${SIGNATURE}, var(--ds-tabs-overflow-control-shadow-hover, var(--ds-elevation-2))`
+    );
+  });
+
+  it("floors the overflow controls' forced-colors outline at 2px", () => {
+    const controls = scopedFocusRules(CONTROLS).filter((rule) => rule.conditions.includes(FORCED));
+    expect(controls).toHaveLength(1);
+    expect(controls[0]!.selector.endsWith(`${CONTROLS}${FOCUS}${SELF}`)).toBe(true);
+    expect(declaration(controls[0]!.body, "outline")).toBe(`max(2px, ${WIDTH}) solid Highlight`);
   });
 });
