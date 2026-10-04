@@ -814,7 +814,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       //      --ds-tooltip-focus-color, the overlay focus frame retired.
       // The count read 2964 after d5250c385 and 2962 again after 5e92f1b89: the
       // same number as today and as the old pin, over different key sets.
-      rottay: 2964,
+      // Shortcuts-overlay on Modal (2026-10-04): rottay 2964 -> 2957, -7, the frame
+      // channels the Modal chamber now owns: --ds-shortcuts-overlay-z-index,
+      // -inset-block-start, -narrow-inset-block-start, -scrim, -scrim-tint,
+      // -scrim-filter and -dialog-radius.
+      rottay: 2957,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -893,7 +897,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // Same wave (measured 2026-10-04): bithire 3098 -> 3100, added 7, removed 5,
       // the same six commits and byte-for-byte the same twelve keys as rottay; its
       // offset over rottay stays 136.
-      bithire: 3100,
+      // Shortcuts-overlay on Modal (2026-10-04): bithire 3100 -> 3093, the same
+      // seven keys as rottay.
+      bithire: 3093,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -964,7 +970,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // the vertical's own radius dial position the normalized alias divides by.
       // Same wave (measured 2026-10-04): evnto 2962 -> 2964, added 7, removed 5,
       // byte-for-byte rottay's keys on all six commits.
-      evnto: 2964,
+      // Shortcuts-overlay on Modal (2026-10-04): evnto 2964 -> 2957, the same
+      // seven keys as rottay.
+      evnto: 2957,
     };
     for (const vertical of VERTICALS) {
       expect(

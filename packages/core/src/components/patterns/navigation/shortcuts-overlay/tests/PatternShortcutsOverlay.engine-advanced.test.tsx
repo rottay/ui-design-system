@@ -43,6 +43,15 @@ for (const engineName of ['modern', 'rustic'] as const) {
         <Component {...createProps({ open: false })} />,
         engineName
       );
+      if (engineName === 'modern') {
+        // The composed Modal keeps only its lineage anchor in place; the
+        // chamber and every part of the overlay are absent from the document.
+        expect(container.querySelectorAll('*')).toHaveLength(1);
+        expect(container.querySelector('[data-part="anchor"]')).not.toBeNull();
+        expect(screen.queryByRole('dialog')).toBeNull();
+        expect(document.querySelector('.ds-pattern-shortcuts-overlay')).toBeNull();
+        return;
+      }
       expect(container.innerHTML).toBe('');
     });
 

@@ -5613,18 +5613,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "dcf6cc37c5da778412c7": {
-      "path": "src/components/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "aria-role-reconstruction",
-      "count": 1
-    },
-    "7e9e3e6c29a90ba1b31f": {
-      "path": "src/components/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "clickable-noninteractive",
-      "count": 1
-    },
     "e49d6f100e819a874d48": {
       "path": "src/components/patterns/navigation/shortcuts-overlay/engines/rustic/index.tsx",
       "category": "native-interactive",

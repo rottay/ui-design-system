@@ -2420,10 +2420,10 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 70,
+        "channelsRead": 57,
         "classTokens": 0,
-        "partsStamped": 17,
-        "partsConsumed": 17
+        "partsStamped": 15,
+        "partsConsumed": 15
       },
       "readWithoutProducer": 0,
       "classVocabularies": 0,
@@ -2436,7 +2436,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-11 sub-lot A admission. 24 channels read, every one produced; no class vocabulary, anatomy-only, 17 parts stamped and 17 consumed. Its cut is the skeleton vocabulary, a chrome deriver for the namespace it does not yet own, and one of the cut's 3 internal global `keydown` listeners (in `engines/modern`)."
+      "cutNote": "WO-FAM-11 sub-lot A admission. 24 channels read, every one produced; no class vocabulary, anatomy-only, 17 parts stamped and 17 consumed. Its cut is the skeleton vocabulary, a chrome deriver for the namespace it does not yet own, and one of the cut's 3 internal global `keydown` listeners (in `engines/modern`). Re-read in W23-OWNSO (the chamber is the Modal primitive): channelsRead 70 -> 57 with the frame, scrim, container and reduced-motion rules retired from the skin; partsStamped and partsConsumed 17 -> 15 = -root, -backdrop, -dialog, +content. No debt counter moved."
     },
     "action-dock": {
       "cut": "WO-FAM-11",

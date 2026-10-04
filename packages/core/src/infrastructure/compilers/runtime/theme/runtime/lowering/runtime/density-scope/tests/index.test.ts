@@ -204,8 +204,8 @@ describe("density-scope roster", () => {
     expect(census[2]).toEqual(census[0]);
     // What is unclaimed is exactly what the two registries name, family for family and channel for channel.
     expect(census[0]).toEqual({
-      density: [50, 351],
-      direct: 350,
+      density: [50, 350],
+      direct: 349,
       arabic: [13, 23],
       unclaimed: census[0].named,
       named: census[0].named,

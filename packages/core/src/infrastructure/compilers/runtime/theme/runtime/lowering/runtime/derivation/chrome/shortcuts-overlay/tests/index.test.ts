@@ -85,17 +85,12 @@ describe("chrome/shortcuts-overlay", () => {
     }
   });
 
-  it("stacks the frame on the sanctioned modal rung, never on a hand-picked z", () => {
-    const derived = shortcutsOverlayChromeDeriver.derive(context(), {});
-    expect(derived["--ds-shortcuts-overlay-z-index"]).toBe("var(--ds-z-modal, 1500)");
-  });
-
-  it("leaves WHICH motion the overlay performs to the motion vocabulary", () => {
-    // A tenant may retime the entrance; it may not name a different keyframe.
-    expect(SKIN).toContain("animation: ds-foundation-fade-in-down");
+  it("restates nothing the Modal chamber owns: layer, top offset, scrim, radius rung, keyframes", () => {
     for (const channel of shortcutsOverlayChromeDeriver.produces) {
-      expect(channel).not.toContain("keyframes");
+      expect(channel).not.toMatch(/z-index|inset-block-start|scrim|dialog-radius|keyframes/);
     }
+    expect(SKIN).not.toMatch(/\banimation(-name)?\s*:/);
+    expect(SKIN).not.toMatch(/z-index\s*:/);
   });
 
   it("yields every channel to a vertical or tenant statement of it", () => {

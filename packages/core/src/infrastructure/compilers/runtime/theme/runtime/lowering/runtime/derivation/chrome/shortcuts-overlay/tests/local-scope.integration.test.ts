@@ -7,6 +7,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { measureArms, type ProbeReadings, type ProbeTarget } from "@tests/support/family-causality";
+import { bundleRealMount, measureRealMount, type RealMountScene } from "@tests/support/family-causality/real-mount";
 import { compileThemeIntent, emitThemeCss, firstPartyScope, staticThemeIntent } from "@/entrypoints/server";
 import { themeChannelDelta } from "@/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits";
 import { emitTenantArtifactCss } from "@/infrastructure/compilers/runtime/theme/runtime/emission";
@@ -50,7 +51,6 @@ const readsAny = (value: string, names: Set<string>) =>
 
 /** One read site per channel: the part, the declaration its oracle paints, the computed properties read at both. */
 const SITES = {
-  "--ds-shortcuts-overlay-padding-inline": { part: "root", declaration: "padding-inline", properties: ["padding-left", "padding-right"] },
   "--ds-shortcuts-overlay-header-gap": { part: "header", declaration: "gap", properties: ["column-gap"] },
   "--ds-shortcuts-overlay-header-padding-block": { part: "header", declaration: "padding-block", properties: ["padding-top", "padding-bottom"] },
   "--ds-shortcuts-overlay-header-padding-inline": { part: "header", declaration: "padding-inline", properties: ["padding-left"] },
@@ -72,10 +72,11 @@ const SITES = {
 type Channel = keyof typeof SITES;
 const CHANNELS = Object.keys(SITES) as Channel[];
 
-/** The top offset lives on the dialog (B45: the root establishes `@container ds-shortcuts-overlay`, and a
- *  container query never matches its own container), so the narrow rule reaches it. */
-const NARROW_INSET = "--ds-shortcuts-overlay-narrow-inset-block-start";
-const WIDE_INSET = "--ds-shortcuts-overlay-inset-block-start";
+/** The inline gutter has no box of its own: the skin folds it into the measure it hands Modal's surface,
+ *  so its read site is that Modal channel and its oracle states the same expression in place. */
+const GUTTER = "--ds-shortcuts-overlay-padding-inline";
+const MEASURE = "--ds-modal-max-inline-size";
+const tokens = (value: string) => value.replace(/\s+/g, " ").replace(/\( /g, "(").replace(/ \)/g, ")").trim();
 
 /** Named pin, never an (a) cell: `:lang(ar) { letter-spacing: normal }` in the last layer masks the
  *  frozen tracking channel at the category label, its only read site. */
@@ -99,23 +100,35 @@ type Scope = keyof typeof SCOPES;
 const SCOPE_NAMES = Object.keys(SCOPES) as Scope[];
 const BOUNDED: readonly Scope[] = ["compact", "comfortable", "spacious", "nested", "reverseNested"];
 const UNBOUNDED: readonly Scope[] = ["rest", "arabic"];
+/** The nearest density stamp `usePortalScope` re-stamps on the portaled dialog. */
+const NEAREST_DENSITY: Readonly<Record<Scope, string>> = {
+  rest: "<absent>",
+  compact: "compact",
+  comfortable: "comfortable",
+  spacious: "spacious",
+  nested: "compact",
+  reverseNested: "spacious",
+  arabic: "<absent>",
+};
 
 const oracleOf = (channel: Channel) =>
   `<div data-oracle="${channel}" style="${SITES[channel].declaration}: ${PRODUCED[channel]}"></div>`;
 
-const pinOracles = [
-  `<div data-oracle="${NARROW_INSET}" style="padding-block-start: ${PRODUCED[NARROW_INSET]}"></div>`,
-  `<div data-oracle="${WIDE_INSET}" style="padding-block-start: ${PRODUCED[WIDE_INSET]}"></div>`,
-  `<div data-oracle="${MASKED}" style="letter-spacing: ${PRODUCED[MASKED]}; font-size: ${PRODUCED["--ds-shortcuts-overlay-category-font-size"]}"></div>`,
-].join("");
+const gutterOracle = () =>
+  `<div data-oracle="${GUTTER}" style="${MEASURE}: min(var(--ds-shortcuts-overlay-dialog-max-inline-size, 40rem), calc(100dvw - 2 * ${PRODUCED[GUTTER]}))"></div>`;
 
-/** The anatomy the Modern engine renders and the skin selects -- a populated group, the empty state and
+const pinOracles = () =>
+  [
+    gutterOracle(),
+    `<div data-oracle="${MASKED}" style="letter-spacing: ${PRODUCED[MASKED]}; font-size: ${PRODUCED["--ds-shortcuts-overlay-category-font-size"]}"></div>`,
+  ].join("");
+
+/** The anatomy the Modern skin selects on Modal's surface -- a populated group, the empty state and
  *  the footer at once -- plus one oracle per channel painting its expression in place. */
 function overlay(rootStyle = ""): string {
   return [
-    `<div class="ds-pattern-shortcuts-overlay ds-engine-modern" data-part="root" role="dialog" style="${rootStyle}">`,
-    `<div data-part="backdrop"></div>`,
-    `<div data-part="dialog">`,
+    `<div class="ds-pattern-shortcuts-overlay ds-engine-modern" data-part="surface" style="${rootStyle}">`,
+    `<div data-part="content">`,
     `<div data-part="header"><h2 data-part="title">Keyboard Shortcuts</h2><button data-part="close">x</button></div>`,
     `<div data-part="search"><input aria-label="Search shortcuts" /></div>`,
     `<div data-part="list">`,
@@ -127,17 +140,14 @@ function overlay(rootStyle = ""): string {
     `<div data-part="footer">Press ? to toggle</div>`,
     `</div>`,
     CHANNELS.map(oracleOf).join(""),
-    pinOracles,
+    pinOracles(),
     `</div>`,
   ].join("");
 }
 
 const hostId = (scope: Scope) => `scope-${scope}`;
 
-/** A transformed, narrow host is the fixed root's containing block, so the root's own container is narrow. */
-const NARROW_HOST = `<div id="narrow" style="transform: translateZ(0); inline-size: 400px; block-size: 600px">${overlay()}</div>`;
-
-/** The tracking channel stated on the overlay root, at rest and under an Arabic subtree. */
+/** The tracking channel stated on the overlay surface, at rest and under an Arabic subtree. */
 const TRACKING_STATED = "3px";
 const TRACKING_HOSTS = [
   `<div id="tracking-stated">${overlay(`${MASKED}: ${TRACKING_STATED}`)}</div>`,
@@ -173,32 +183,25 @@ const MASK_TARGETS: ProbeTarget[] = SCOPE_NAMES.flatMap((scope) => {
   { id: "mask-stated-arabic", selector: "#tracking-stated-arabic [data-part='category-label']", property: "letter-spacing" },
 ]);
 
-/** The inset pin reads the root, both dialogs' offset and width, and both inset oracles. */
-const NARROW_TARGETS: ProbeTarget[] = [
-  { id: "narrow-root", selector: "#narrow [data-part='root']", property: "padding-top" },
-  { id: "narrow-dialog-offset", selector: "#narrow [data-part='dialog']", property: "margin-top" },
-  { id: "wide-dialog-offset", selector: `#${hostId("rest")} [data-part='dialog']`, property: "margin-top" },
-  { id: "narrow-root-width", selector: "#narrow [data-part='root']", property: "@rect.width" },
-  { id: "narrow-dialog", selector: "#narrow [data-part='dialog']", property: "max-width" },
-  { id: "wide-dialog", selector: `#${hostId("rest")} [data-part='dialog']`, property: "max-width" },
-  { id: "narrow-oracle", selector: `#narrow [data-oracle='${NARROW_INSET}']`, property: "padding-top" },
-  { id: "wide-oracle", selector: `#narrow [data-oracle='${WIDE_INSET}']`, property: "padding-top" },
-];
+/** The gutter pin reads the measure the surface declares and the oracle's statement of it. */
+const GUTTER_TARGETS: ProbeTarget[] = SCOPE_NAMES.flatMap((scope) => [
+  { id: `gutter-site|${scope}`, selector: `#${hostId(scope)} [data-part='surface']`, property: MEASURE },
+  { id: `gutter-oracle|${scope}`, selector: `#${hostId(scope)} [data-oracle='${GUTTER}']`, property: MEASURE },
+]);
 
 const HEADER_GAP: readonly Channel[] = ["--ds-shortcuts-overlay-header-gap"];
 
 /** b2: a raw statement at the artifact's own root scope, one attribute more specific than the artifact. */
 const ROOT_STATED = "50px";
-const ROOT_STYLE = `<style>html[data-tenant][data-tenant] { --ds-shortcuts-overlay-header-gap: ${ROOT_STATED}; }</style>`;
+const ROOT_CSS = `html[data-tenant][data-tenant] { --ds-shortcuts-overlay-header-gap: ${ROOT_STATED}; }`;
+const ROOT_STYLE = `<style>${ROOT_CSS}</style>`;
 
-/** b1: a statement below the boundary (on the overlay root) and one ON the boundary (inline). */
+/** b1: a statement below the boundary (on the overlay surface) and one ON the boundary (inline). */
 const OVERLAY_STATED = "52px";
 const BOUNDARY_STATED = "53px";
-const ON_BOUNDARY = [
-  `<div id="on-boundary"><div data-density="compact" style="--ds-shortcuts-overlay-header-gap: ${BOUNDARY_STATED}">`,
-  overlay(),
-  `</div></div>`,
-].join("");
+const onBoundary = (inner: string) =>
+  `<div data-density="compact" style="--ds-shortcuts-overlay-header-gap: ${BOUNDARY_STATED}">${inner}</div>`;
+const ON_BOUNDARY = `<div id="on-boundary">${onBoundary(overlay())}</div>`;
 
 /** The consumer-override contract on the boundary element: layer and weight decide. */
 const OVERRIDE = "60px";
@@ -244,8 +247,65 @@ const dbCss = (withBoundary: boolean) =>
     variables: carriedDelta.variables,
     ...(withBoundary ? { densityScopeVariables: carriedDelta.densityScopeVariables } : {}),
   });
-const dbRoot = (css: string) =>
-  `<style>${css}</style><div data-ds-root data-vertical="bithire" data-tenant="acme">${markup()}</div>`;
+const dbLineage = (inner: string) => `<div data-ds-root data-vertical="bithire" data-tenant="acme">${inner}</div>`;
+const dbRoot = (css: string) => `<style>${css}</style>${dbLineage(markup())}`;
+
+/** The real overlay: Modal portals its dialog out of the anchor's lineage and `usePortalScope` carries
+ *  that lineage across -- the nearest scope stamps plus the anchor's computed `--ds-*` values, inline. */
+const REAL_PROPS = `({ open: true, onOpenChange() {}, footer: "Press ? to toggle",
+  shortcuts: [{ key: "ctrl+s", description: "Save", category: "File" }] })`;
+const READY = "dialog [data-part='search']";
+
+/** The empty state renders only without shortcuts, in its own scene; the populated list renders the rest. */
+const EMPTY_CHANNELS = CHANNELS.filter((channel) => SITES[channel].part === "empty");
+const LIST_CHANNELS = CHANNELS.filter((channel) => SITES[channel].part !== "empty");
+const EMPTY_PROPS = { shortcuts: [] };
+const emptyScene = (scope: Scope) => `${scope}|empty`;
+const sceneOf = (scope: Scope, channel: Channel) => (SITES[channel].part === "empty" ? emptyScene(scope) : scope);
+
+const STAMPS = [
+  { id: "density", selector: "dialog", property: "@attr.data-density" },
+  { id: "tenant", selector: "dialog", property: "@attr.data-tenant" },
+  { id: "copied", selector: "dialog", property: "@inline.--ds-shortcuts-overlay-header-gap" },
+  { id: "inAnchorLineage", selector: "[data-real-mount-host] dialog", property: "display" },
+  { id: "scoped", selector: "dialog .ds-pattern-shortcuts-overlay.ds-engine-modern", property: "@attr.data-part" },
+];
+
+/** One scene per scope: the mount point and one oracle per channel sit in the anchor's lineage. */
+function realScenes(
+  lineage = (inner: string) => inner,
+  channels: readonly Channel[] = LIST_CHANNELS,
+  variant?: { id: (scope: Scope) => string; props: Readonly<Record<string, unknown>> }
+): RealMountScene[] {
+  return SCOPE_NAMES.map((scope) => ({
+    id: variant ? variant.id(scope) : scope,
+    ...(variant ? { props: variant.props } : {}),
+    markup: lineage(SCOPES[scope](`<div data-real-mount></div>${channels.map(oracleOf).join("")}${gutterOracle()}`)),
+    ready: READY,
+    targets: [
+      ...STAMPS,
+      { id: "gutter-site", selector: "dialog .ds-pattern-shortcuts-overlay", property: MEASURE },
+      { id: "gutter-oracle", selector: `[data-oracle='${GUTTER}']`, property: MEASURE },
+      ...channels.flatMap((channel) =>
+        SITES[channel].properties.flatMap((property) => [
+          { id: `site|${channel}|${property}`, selector: `dialog [data-part='${SITES[channel].part}']`, property },
+          { id: `oracle|${channel}|${property}`, selector: `[data-oracle='${channel}']`, property },
+        ])
+      ),
+    ],
+  }));
+}
+
+const GAP_SITE = "site|--ds-shortcuts-overlay-header-gap|column-gap";
+const GAP_ORACLE = "oracle|--ds-shortcuts-overlay-header-gap|column-gap";
+
+/** b1 on the real mount: the inline statement on the boundary is part of the lineage the portal copies. */
+const REAL_ON_BOUNDARY: RealMountScene = {
+  id: "onBoundary",
+  markup: onBoundary(`<div data-real-mount></div>`),
+  ready: READY,
+  targets: [{ id: GAP_SITE, selector: "dialog [data-part='header']", property: "column-gap" }],
+};
 
 let readings: ProbeReadings;
 let rootStated: ProbeReadings;
@@ -254,6 +314,10 @@ let carried: ProbeReadings;
 let dbCarried: ProbeReadings;
 let dbUncarried: ProbeReadings;
 const drills: Record<string, ProbeReadings> = {};
+let real: ProbeReadings;
+let realRootStated: ProbeReadings;
+let realCarried: ProbeReadings;
+let realDbCarried: ProbeReadings;
 
 const site = (from: ProbeReadings, scope: Scope, channel: Channel, property: string) =>
   from.base[`site|${scope}|${channel}|${property}`];
@@ -267,10 +331,10 @@ describe("chrome/shortcuts-overlay channels under a local scope", () => {
   beforeAll(async () => {
     const probe = (markupText: string, probeTargets: ProbeTarget[]) =>
       measureArms({ vertical: "bithire", markup: markupText, arms: { base: {} }, targets: probeTargets });
-    readings = await probe(markup() + ON_BOUNDARY + NARROW_HOST + TRACKING_HOSTS, [
+    readings = await probe(markup() + ON_BOUNDARY + TRACKING_HOSTS, [
       ...targets(),
       ...MASK_TARGETS,
-      ...NARROW_TARGETS,
+      ...GUTTER_TARGETS,
       { id: "onBoundary", selector: "#on-boundary [data-part='header']", property: "column-gap" },
     ]);
     rootStated = await probe(markup(ROOT_STYLE), targets(HEADER_GAP));
@@ -281,18 +345,34 @@ describe("chrome/shortcuts-overlay channels under a local scope", () => {
     for (const [name, css] of Object.entries(LAYER_DRILLS)) {
       drills[name] = await probe(markup(`<style>${css}</style>`), targets(HEADER_GAP));
     }
+
+    const bundle = await bundleRealMount({
+      module: "src/components/patterns/navigation/shortcuts-overlay/engines/modern",
+      props: REAL_PROPS,
+    });
+    const mountReal = (scenes: RealMountScene[], css: string[] = []) =>
+      measureRealMount({ vertical: "bithire", bundle, css, scenes });
+    real = await mountReal([
+      ...realScenes(),
+      ...realScenes(undefined, EMPTY_CHANNELS, { id: emptyScene, props: EMPTY_PROPS }),
+      REAL_ON_BOUNDARY,
+    ]);
+    realRootStated = await mountReal(realScenes(undefined, HEADER_GAP), [ROOT_CSS]);
+    realCarried = await mountReal(realScenes(undefined, HEADER_GAP), [CARRIED_CSS]);
+    realDbCarried = await mountReal(realScenes(dbLineage, HEADER_GAP), [dbCss(true)]);
   }, 180_000);
 
-  it("probes the parts and scope classes the engine stamps, on an overlay that renders in place", () => {
+  it("probes the parts the engine stamps, on the certified Modal it composes", () => {
     const parts = [
-      "root", "backdrop", "dialog", "header", "title", "close", "search", "list", "group",
+      "content", "header", "title", "close", "search", "list", "group",
       "category-row", "category-label", "item", "description", "chord", "kbd", "empty", "footer",
     ];
     for (const part of parts) {
       expect(ENGINE).toContain(`data-part="${part}"`);
     }
-    expect(ENGINE).toContain(`className="ds-pattern-shortcuts-overlay ds-engine-modern"`);
-    expect(ENGINE).not.toMatch(/createPortal|usePortalScope|data-portal-scope/);
+    expect(ENGINE).toContain("'ds-pattern-shortcuts-overlay', 'ds-engine-modern'");
+    expect(ENGINE).toMatch(/<Modal\b/);
+    expect(ENGINE).not.toMatch(/data-part="(root|backdrop|dialog)"/);
   });
 
   it("measures a real read site and a real oracle for every channel in every scope", () => {
@@ -324,15 +404,18 @@ describe("chrome/shortcuts-overlay channels under a local scope", () => {
     expect(drift).toEqual([]);
   });
 
-  it("pin: the narrow inset reaches the dialog, and the wide inset still offsets it on a wide overlay", () => {
-    // B45 moved the offset from the root's padding to the dialog's margin: narrow 72px (10vh) -> 23.97px at rest; wide unchanged.
-    expect(parseFloat(readings.base["narrow-root-width"])).toBeLessThan(640);
-    expect(readings.base["narrow-dialog"]).toBe("100%");
-    expect(readings.base["wide-dialog"]).not.toBe("100%");
-    expect(readings.base["narrow-oracle"]).not.toBe(readings.base["wide-oracle"]);
-    expect(readings.base["narrow-root"]).toBe("0px");
-    expect(readings.base["narrow-dialog-offset"]).toBe(readings.base["narrow-oracle"]);
-    expect(readings.base["wide-dialog-offset"]).toBe(readings.base["wide-oracle"]);
+  it("pin: the gutter reaches the surface through Modal's measure, at the local scope's answer", () => {
+    for (const scope of SCOPE_NAMES) {
+      expect({ scope, measure: tokens(readings.base[`gutter-site|${scope}`]) }).toEqual({
+        scope,
+        measure: tokens(readings.base[`gutter-oracle|${scope}`]),
+      });
+    }
+    const rest = tokens(readings.base["gutter-oracle|rest"]);
+    expect(rest).toContain("100dvw");
+    for (const scope of ["compact", "spacious"] as const) {
+      expect({ scope, measure: tokens(readings.base[`gutter-oracle|${scope}`]) }).not.toEqual({ scope, measure: rest });
+    }
   });
 
   it("pin: the category label's tracking paints its channel at rest and is masked under :lang(ar), stated or not", () => {
@@ -401,13 +484,71 @@ describe("chrome/shortcuts-overlay channels under a local scope", () => {
     expect(headerGap(drills.unlayeredHeavier, "compact")).toBe(OVERRIDE);
   });
 
+  it("real mount: the dialog leaves the anchor's lineage, re-stamps its nearest scope and carries its values inline", () => {
+    for (const scope of SCOPE_NAMES) {
+      const at = real[scope];
+      expect({ scope, inAnchorLineage: at.inAnchorLineage }).toEqual({ scope, inAnchorLineage: expect.stringMatching(/^<no match/) });
+      expect({ scope, density: at.density, tenant: at.tenant }).toEqual({ scope, density: NEAREST_DENSITY[scope], tenant: "bithire" });
+      expect({ scope, copied: at.copied }).not.toEqual({ scope, copied: "" });
+      expect({ scope, scoped: at.scoped }).toEqual({ scope, scoped: "surface" });
+    }
+  });
+
+  it("(a) real mount: every channel on the portaled dialog paints the anchor's local answer", () => {
+    expect(EMPTY_CHANNELS).toEqual(["--ds-shortcuts-overlay-empty-padding-block"]);
+    expect(LIST_CHANNELS.length).toBe(CHANNELS.length - 1);
+    const drift: string[] = [];
+    for (const scope of SCOPE_NAMES) {
+      for (const channel of CHANNELS) {
+        for (const property of SITES[channel].properties) {
+          const painted = real[sceneOf(scope, channel)][`site|${channel}|${property}`];
+          const expected = real[sceneOf(scope, channel)][`oracle|${channel}|${property}`];
+          expect({ scope, channel, painted }).not.toEqual({ scope, channel, painted: expect.stringMatching(/^<no match|^$/) });
+          if (painted !== expected) drift.push(`${scope} ${channel} ${property}: painted ${painted}, local answer ${expected}`);
+        }
+      }
+      const measure = tokens(real[scope]["gutter-site"]);
+      if (measure !== tokens(real[scope]["gutter-oracle"])) {
+        drift.push(`${scope} ${GUTTER}: measure ${measure}, local answer ${tokens(real[scope]["gutter-oracle"])}`);
+      }
+    }
+    expect(drift).toEqual([]);
+    for (const scope of ["compact", "spacious"] as const) {
+      expect({ scope, gap: real[scope][GAP_ORACLE] }).not.toEqual({ scope, gap: real.rest[GAP_ORACLE] });
+      expect({ scope, measure: tokens(real[scope]["gutter-oracle"]) }).not.toEqual({
+        scope,
+        measure: tokens(real.rest["gutter-oracle"]),
+      });
+    }
+  });
+
+  it("(b1) real mount: an inline statement on the boundary travels with the lineage onto the dialog", () => {
+    expect(real.onBoundary[GAP_SITE]).toBe(BOUNDARY_STATED);
+  });
+
+  it("(b2) real mount: the dialog paints the raw root statement where no boundary intervenes, the local answer inside one", () => {
+    for (const scope of UNBOUNDED) {
+      expect({ scope, painted: realRootStated[scope][GAP_SITE] }).toEqual({ scope, painted: ROOT_STATED });
+    }
+    for (const scope of BOUNDED) {
+      expect({ scope, painted: realRootStated[scope][GAP_SITE] }).toEqual({ scope, painted: realRootStated[scope][GAP_ORACLE] });
+    }
+  });
+
+  it("(b3) real mount: a compiler-rank statement paints on the dialog in every scope, first-party and at the DB door", () => {
+    for (const scope of SCOPE_NAMES) {
+      expect({ scope, painted: realCarried[scope][GAP_SITE] }).toEqual({ scope, painted: CARRIED });
+      expect({ scope, painted: realDbCarried[scope][GAP_SITE] }).toEqual({ scope, painted: CARRIED });
+    }
+  });
+
   it("(c) the compiler projects exactly the shortcuts-overlay channels whose value reads a density-scope name", () => {
     expect(DENSITY_AXIS.has("--ds-spacing-2")).toBe(true);
     const densityExposed = Object.entries(PRODUCED)
       .filter(([, value]) => readsAny(value, DENSITY_AXIS))
       .map(([channel]) => channel)
       .sort();
-    expect(densityExposed).toEqual([...CHANNELS, NARROW_INSET].sort());
+    expect(densityExposed).toEqual([...CHANNELS, GUTTER].sort());
     const arabicExposed = Object.entries(PRODUCED)
       .filter(([, value]) => readsAny(value, ARABIC_AXIS))
       .map(([channel]) => channel);

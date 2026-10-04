@@ -4,12 +4,11 @@
  * @fileoverview Modern engine for the ShortcutsOverlay pattern.
  *
  * A modal reference panel listing the registered keyboard shortcuts grouped
- * by category with a search filter. Custom fixed-position overlay (not a
- * framework modal) for control over backdrop click, auto-focus, focus
- * return and the focus trap: focus lands on the search input at open,
- * Tab/Shift+Tab cycle inside the dialog, and Escape or backdrop close
- * returns focus to the element that opened the overlay. Escape is handled by
- * the chamber's own key handler, never by a global listener.
+ * by category with a search filter, inside the certified Modal primitive. The
+ * blocking chamber, backdrop click-to-close, Escape, the native top-layer
+ * focus trap, sibling inerting and focus restore all belong to Modal — this
+ * pattern hand-rolls none of them and adds no key listener of its own. It
+ * only routes initial focus to the search input.
  *
  * COMPOSITION LAW: the close control is the certified Button, the search
  * box the certified Input, each key cap the certified Kbd (inside its
@@ -32,9 +31,10 @@
  * />
  */
 
-import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { formatShortcutKey } from '../../../../../../infrastructure/runtime/application/interaction/shortcuts';
 import type { ShortcutsOverlayProps, ShortcutDisplayItem } from '../../contracts';
+import Modal from '../../../../../primitives/feedback/modal/engines/modern';
 import Button from '../../../../../primitives/inputs/button/engines/modern';
 import Input from '../../../../../primitives/inputs/input/engines/modern';
 import Empty from '../../../../../primitives/display/empty/engines/modern';
@@ -59,11 +59,11 @@ function useShortcutsOverlayTranslation() {
 
 /**
  * Modern (token-driven) implementation of the ShortcutsOverlay pattern.
- * Renders a fixed-position dialog with search input, categorized shortcut
+ * Renders the governed Modal chamber with search input, categorized shortcut
  * list, and certified Kbd elements for key combinations.
  *
  * @param props - See {@link ShortcutsOverlayProps} for the full prop contract.
- * @returns The rendered shortcuts overlay, or null when closed.
+ * @returns The governed Modal chamber carrying the shortcuts reference.
  */
 export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
   const { tOr } = useShortcutsOverlayTranslation();
@@ -88,30 +88,18 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
 
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<Element | null>(null);
 
-  /* Reset search, remember the trigger and auto-focus the input when the
-     overlay opens; on close, focus returns to the trigger. The short delay
-     ensures the DOM has rendered before focusing. */
+  /* Reset search and route INITIAL focus to the search box on open. Focus
+     RESTORE on close is deliberately absent: the composed Modal opens a native
+     <dialog> with showModal(), and the dialog's close steps return focus to the
+     previously-focused element. The short delay is needed because the Modal
+     portals its content, so the input exists a commit later. */
   useEffect(() => {
-    if (open) {
-      triggerRef.current = document.activeElement;
-      setQuery('');
-      setTimeout(() => inputRef.current?.focus(), 50);
-    } else {
-      if (triggerRef.current && triggerRef.current instanceof HTMLElement) {
-        triggerRef.current.focus();
-      }
-      triggerRef.current = null;
-    }
+    if (!open) return;
+    setQuery('');
+    const focusTimer = setTimeout(() => inputRef.current?.focus(), 50);
+    return () => clearTimeout(focusTimer);
   }, [open]);
-
-  /* Escape is a CHAMBER decision, not a global one. It used to be a document
-     `keydown` listener -- a third keyboard authority beside the shortcut
-     registry and the command registry, and one that fired for a dialog the
-     user was not focused in. The dialog traps focus and focuses its search box
-     on open, so the chamber's own handler sees every key the overlay owns. */
 
   /* Filter shortcuts by query matching description, key combo, or category */
   const filtered = useMemo(() => {
@@ -142,60 +130,32 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
     setQuery('');
   };
 
-  // The chamber's own key handler: Escape dismisses, Tab/Shift+Tab cycle
-  // focus inside the dialog. One place decides both.
-  const handleChamberKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      e.stopPropagation();
-      onOpenChange(false);
-      return;
-    }
-    if (e.key !== 'Tab' || !dialogRef.current) return;
-    const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-      'input, button, [tabindex]:not([tabindex="-1"]), a[href]'
-    );
-    if (focusable.length === 0) return;
-    const first = focusable.item(0);
-    const last = focusable.item(focusable.length - 1);
-    if (!first || !last) return;
-    if (e.shiftKey) {
-      if (document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      }
-    } else {
-      if (document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  }, [onOpenChange]);
-
-  /* Early-return prevents DOM rendering when the overlay is closed */
-  if (!open) return null;
-
   return (
-    /* Fixed overlay with a top offset so the dialog sits comfortably below
-       the page header rather than dead-center, which feels more natural for
-       reference panels (geometry is skin-owned). */
-    <div
-      ref={dialogRef}
-      onKeyDown={handleChamberKeyDown}
-      className="ds-pattern-shortcuts-overlay ds-engine-modern"
-      data-part="root"
-      style={style}
-      role="dialog"
-      aria-modal="true"
+    /* The blocking chamber IS the certified Modal. `placement='top'` keeps the
+       reference panel below the page header rather than dead-center;
+       `padding='none'` because the pattern owns its own section rhythm;
+       `closable`/`hideFooter` off because the header row and the footer slot
+       are this pattern's own anatomy inside Modal's body. The caller's
+       className/style join the pattern scope on the surface. */
+    <Modal
+      open={open}
+      onClose={handleClose}
       aria-label={titleText}
+      placement="top"
+      size="full"
+      padding="none"
+      radius="xl"
+      hideFooter
+      closable={false}
+      blurBackdrop
+      className={['ds-pattern-shortcuts-overlay', 'ds-engine-modern', className]
+        .filter(Boolean)
+        .join(' ')}
+      style={style}
     >
-      {/* Semi-transparent backdrop closes the dialog on click */}
-      <div data-part="backdrop" onClick={handleClose} />
-      {/* Dialog card */}
-      <div
-        className={className}
-        data-part="dialog"
-      >
+      {/* Overlay content wrapper: the pattern's own anatomy root inside
+          Modal's body. */}
+      <div data-part="content">
         {/* Header */}
         <div data-part="header">
           <h2 data-part="title">{titleText}</h2>
@@ -268,6 +228,6 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
           </div>
         )}
       </div>
-    </div>
+    </Modal>
   );
 }

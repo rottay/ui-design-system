@@ -269,6 +269,18 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     if (stranded) target.focus();
   }, []);
 
+  // The native close steps run while the page is still inert, so their focus
+  // restore misses an invoker outside the dialog. Once the chamber is gone and
+  // the siblings are released, a stranded focus goes back to the invoker.
+  useEffect(() => {
+    if (shouldRender) return;
+    const target = restoreTargetRef.current;
+    restoreTargetRef.current = null;
+    if (!target?.isConnected) return;
+    const active = document.activeElement;
+    if (!active || active === document.body) target.focus();
+  }, [shouldRender]);
+
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === e.currentTarget && backdropClosable) {
       handleCancel();

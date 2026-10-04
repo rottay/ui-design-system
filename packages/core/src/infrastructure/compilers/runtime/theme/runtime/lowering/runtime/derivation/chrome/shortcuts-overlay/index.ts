@@ -1,19 +1,19 @@
 /**
- * @fileoverview The shortcuts-overlay family: the fixed top-anchored frame,
- * its scrim, the reference dialog, and the header / search / category / row /
- * footer rhythm inside it. Its ground rests on the card surface, its scrim on
- * the overlay roots and the sanctioned glass layer, its rhythm on the spacing
- * ramp, its hairlines on the border root and its entrance on the motion dial.
+ * @fileoverview The shortcuts-overlay family: the measure, ground, ink and
+ * entrance timing it hands the Modal chamber it composes, and the header /
+ * search / category / row / footer rhythm inside it. Its ground rests on the
+ * card surface, its rhythm on the spacing ramp, its hairlines on the border
+ * root and its entrance on the motion dial.
  *
  * @remarks
  * Each produced value is the single chained fallback its Modern skin reads it
  * with, so producing the name cannot move a pixel -- it changes WHO can reach
  * the value, not what it rests at.
  *
- * The keyframe NAME stays in the skin. A tenant may retime the entrance
- * (duration, easing) and may silence it through the reduced-motion arm, but it
- * does not get to choose which motion an overlay performs: that is the motion
- * vocabulary's decision, not a chrome channel.
+ * The chamber is the Modal primitive's: its layer, top offset, scrim, radius
+ * rung, phone posture and keyframes are Modal's own channels and are not
+ * restated here. A tenant may retime the entrance (duration, easing); which
+ * motion an overlay performs is the motion vocabulary's decision.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/shortcuts-overlay
  * @category Compilers
@@ -31,18 +31,9 @@ export const shortcutsOverlayChromeDeriver: FamilyDeriver = {
   scopes: ["density"],
   consumes: ["surfaces.*", "palette.*", "shape.*", "density", "motion"],
   produces: [
-    // The frame
-    "--ds-shortcuts-overlay-z-index",
-    "--ds-shortcuts-overlay-inset-block-start",
+    // The chamber, delivered through Modal's channels
     "--ds-shortcuts-overlay-padding-inline",
-    "--ds-shortcuts-overlay-narrow-inset-block-start",
-    // The scrim
-    "--ds-shortcuts-overlay-scrim",
-    "--ds-shortcuts-overlay-scrim-tint",
-    "--ds-shortcuts-overlay-scrim-filter",
-    // The dialog
     "--ds-shortcuts-overlay-dialog-max-inline-size",
-    "--ds-shortcuts-overlay-dialog-radius",
     "--ds-shortcuts-overlay-dialog-bg",
     "--ds-shortcuts-overlay-dialog-shadow",
     "--ds-shortcuts-overlay-dialog-color",
@@ -89,22 +80,10 @@ export const shortcutsOverlayChromeDeriver: FamilyDeriver = {
 export function deriveShortcutsOverlayChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
 
-  // The frame stacks on the modal rung: a reference panel over a modal is
-  // still an overlay, never a layer below one.
-  vars["--ds-shortcuts-overlay-z-index"] = "var(--ds-z-modal, 1500)";
-  vars["--ds-shortcuts-overlay-inset-block-start"] = "10vh";
+  // The chamber is a lifted card inside an inline gutter; the entrance rides
+  // the motion dial.
   vars["--ds-shortcuts-overlay-padding-inline"] = "var(--ds-spacing-3, 12px)";
-  vars["--ds-shortcuts-overlay-narrow-inset-block-start"] = "var(--ds-spacing-8, 32px)";
-
-  // The scrim is the overlay root plus the sanctioned glass layer, which
-  // collapses to a plain scrim when the effect dial is at 0.
-  vars["--ds-shortcuts-overlay-scrim"] = "var(--ds-overlay-scrim, var(--ds-color-bg-overlay))";
-  vars["--ds-shortcuts-overlay-scrim-tint"] = "var(--ds-glass-scrim-tint)";
-  vars["--ds-shortcuts-overlay-scrim-filter"] = "var(--ds-glass-backdrop-filter)";
-
-  // The dialog is a lifted card; the entrance rides the motion dial.
   vars["--ds-shortcuts-overlay-dialog-max-inline-size"] = "40rem";
-  vars["--ds-shortcuts-overlay-dialog-radius"] = "var(--ds-radius-xl)";
   vars["--ds-shortcuts-overlay-dialog-bg"] = "var(--ds-surface-card)";
   vars["--ds-shortcuts-overlay-dialog-shadow"] = "var(--ds-elevation-3)";
   vars["--ds-shortcuts-overlay-dialog-color"] = "var(--ds-color-text-primary)";

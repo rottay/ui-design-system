@@ -355,26 +355,37 @@ describe('shortcuts-overlay -- data-part contract (navigation-pattern anatomy)',
       engine,
     );
     await partsOf(container);
+    // shortcuts-overlay/modern composes the governed Modal, so its content
+    // lands in the portal root rather than under `container`.
+    const scope = (engine === 'modern' ? container.ownerDocument.body : container) as HTMLElement;
     if (engine === 'modern') {
       await waitFor(() => {
-        expect(container.querySelector('[data-part="category-label"]')).not.toBeNull();
+        expect(scope.querySelector('[data-part="category-label"]')).not.toBeNull();
       });
     }
     const parts = new Set(
-      Array.from(container.querySelectorAll('[data-part]')).map((el) => el.getAttribute('data-part') as string),
+      Array.from(scope.querySelectorAll('[data-part]')).map((el) => el.getAttribute('data-part') as string),
     );
 
-    const expectedParts = ['root', 'backdrop', 'dialog', 'header', 'close', 'search', 'category-label', 'item', 'kbd', 'footer'];
-    if (engine === 'rustic') expectedParts.push('input');
+    // The chamber is Modal's anatomy on modern (root/backdrop/surface/body, then
+    // the pattern's own content root) and
+    // the hand-rolled frame on the frozen rustic engine (root/backdrop/dialog).
+    const expectedParts = ['root', 'backdrop', 'header', 'close', 'search', 'category-label', 'item', 'kbd', 'footer'];
+    if (engine === 'rustic') expectedParts.push('dialog', 'input');
+    if (engine === 'modern') expectedParts.push('surface', 'body', 'content');
     for (const part of expectedParts) {
       expect(parts, `shortcuts-overlay/${engine} must stamp data-part="${part}"`).toContain(part);
     }
     if (engine === 'modern') {
-      expect(container.querySelector('[data-part="search"] input[data-part="root"]')).not.toBeNull();
+      expect(parts).not.toContain('dialog');
+      expect(
+        scope.querySelector('dialog.ds-modal[data-part="root"] > .ds-pattern-shortcuts-overlay[data-part="surface"]'),
+      ).not.toBeNull();
+      expect(scope.querySelector('[data-part="search"] input[data-part="root"]')).not.toBeNull();
     }
     // Two categories -> two labels; two shortcut rows.
-    expect(partCount(container, 'category-label')).toBe(2);
-    expect(partCount(container, 'item')).toBe(2);
+    expect(partCount(scope, 'category-label')).toBe(2);
+    expect(partCount(scope, 'item')).toBe(2);
 
     // rustic paints title + row description via inline colour tokens; modern via
     // Tailwind (no stamp). Pinned as a preserved asymmetry.
