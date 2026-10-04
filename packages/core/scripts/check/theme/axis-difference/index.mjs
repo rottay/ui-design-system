@@ -1448,11 +1448,13 @@ const DROPDOWN_ENGINE = 'src/components/primitives/overlay/dropdown/engines/mode
 const DROPDOWN_CONTRACT = 'src/components/primitives/overlay/dropdown/contracts/index.ts';
 
 const TEXT_AREA_ENGINE = 'src/components/primitives/inputs/input/compound/text-area/index.tsx';
+const INPUT_ENGINE = 'src/components/primitives/inputs/input/engines/modern/index.tsx';
+const INPUT_CONTRACT = 'src/components/primitives/inputs/input/contracts/index.ts';
 const STEPPER_STEP_ENGINE = 'src/components/primitives/navigation/stepper/compound/step/index.tsx';
 const CHART_DATA_ACCESS = `${CHARTS_ROOT}/runtime/chart-engine/presentation/react/access/index.tsx`;
 
 /**
- * THE STATES REACH ROWS (2026-10-03, WO-EVI-02). Three families whose skin
+ * THE STATES REACH ROWS (2026-10-03, WO-EVI-02; input 2026-10-04). Four families whose skin
  * already reads a states dial on a node the default scene does not hold, each
  * mounted as the public render that carries it and declaring states alone, so
  * every resting axis reads as before. Law 3 still decides each cell in the
@@ -1574,6 +1576,53 @@ const STATES_REACH_ROWS = Object.freeze({
         token: 'attr:data-state=closed',
         stamp: "data-state={open ? 'open' : 'closed'}",
         resolves: Object.freeze([Object.freeze({ source: CHART_DATA_ACCESS, text: 'const [open, setOpen] = useState(false);' })]),
+      }),
+    ]),
+  }),
+  // RESIDUAL, unpinned: a default given to `prefix` or `suffix` in the engine's destructuring would take the addon
+  // branch with this door green -- the bare `prefix,` / `suffix,` lines are indentation-fragile and match elsewhere.
+  input: Object.freeze({
+    state: Object.freeze({
+      name: 'a default Input (outline, md) with no addon -- the shell IS the input element and is kernel-stamped; it wears the tenant '
+        + 'focus signature under the `focused` stamp (`box-shadow: var(--ds-input-focus-ring, var(--ds-focus-ring))`). '
+        + 'The mounted family root is the `.ds-input-field` wrapper, which no state rule of the skin is headed by',
+      source: INPUT_ENGINE,
+      anchors: Object.freeze([
+        '// Simple input without prefix/suffix -- the shell IS the input element',
+        'style={{ ...responsive.channels }}\n        className={shellClassName}',
+        'if (prefix || suffix || showClearButton || loading) {',
+      ]),
+      resolves: Object.freeze([
+        Object.freeze({ source: INPUT_ENGINE, text: 'loading = INPUT_DEFAULTS.loading,' }),
+        Object.freeze({ source: INPUT_CONTRACT, text: 'loading: false,' }),
+        Object.freeze({ source: INPUT_ENGINE, text: 'clearable = INPUT_DEFAULTS.clearable,' }),
+        Object.freeze({ source: INPUT_CONTRACT, text: 'clearable: false,' }),
+        Object.freeze({ source: INPUT_ENGINE, text: 'const showClearButton = Boolean(clearable && isFilled && !disabled && !readOnly && !loading);' }),
+      ]),
+    }),
+    axes: Object.freeze(['states']),
+    markup: '<div class="ds-input-field" data-part="field"><input class="ds-input-shell ds-input-shell--modern" '
+      + 'data-part="root" data-variant="outline" data-size="md"></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'attr:data-part=root',
+        stamp: "{...partAttributes(dataPart ?? 'root', interaction)}\n        {...skinAttributes}\n      />",
+      }),
+      Object.freeze({
+        token: 'attr:data-variant=outline',
+        stamp: "'data-variant': variant,",
+        resolves: Object.freeze([
+          Object.freeze({ source: INPUT_ENGINE, text: 'variant = INPUT_DEFAULTS.variant,' }),
+          Object.freeze({ source: INPUT_CONTRACT, text: "variant: 'outline' as const," }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-size=md',
+        stamp: "'data-size': size,",
+        resolves: Object.freeze([
+          Object.freeze({ source: INPUT_ENGINE, text: 'const size = scalarOrUndefined(sizeProp) ?? INPUT_DEFAULTS.size;' }),
+          Object.freeze({ source: INPUT_CONTRACT, text: "size: 'md' as const," }),
+        ]),
       }),
     ]),
   }),

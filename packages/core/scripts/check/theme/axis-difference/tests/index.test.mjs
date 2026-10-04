@@ -3453,6 +3453,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'image',
       'image-compounds',
       'image-radius',
+      'input',
       'input-compounds',
       'layout',
       'list',
@@ -5424,7 +5425,7 @@ describe('axis-difference CR-2 BROWSER drill — the chromatic reading is always
 });
 
 /**
- * THE STATES REACH ROWS (2026-10-03). Three rows mount a public render whose
+ * THE STATES REACH ROWS (2026-10-03; input 2026-10-04). Four rows mount a public render whose
  * skin already reads a states dial on a node the default scene does not hold.
  * Each drill below is a way the lot could have made the number friendlier:
  * a row for a render that does not exist, a row credited for a palette move,
@@ -5435,6 +5436,7 @@ describe('axis-difference — the states reach rows: real public renders, and on
     'input-compounds': { family: 'input-compounds', stamped: ['root'] },
     'stepper-compounds': { family: 'stepper-compounds', stamped: [] },
     'chart-foundation': { family: 'chart-foundation', stamped: [] },
+    input: { family: 'input', stamped: ['root'] },
   };
   const skin = (family) => skinFamilies(ROOT).get(family).map((file) => readFileSync(file, 'utf8')).join('\n');
 
@@ -5460,6 +5462,76 @@ describe('axis-difference — the states reach rows: real public renders, and on
     assert.match(stepper, /\.ds-stepper-step\[data-clickable='true'\]:is\(\[data-state~='focus-visible'\], :focus-visible\) \{\s*outline: none;\s*box-shadow: var\(--ds-stepper-focus-ring, var\(--ds-focus-ring\)\);/u);
     assert.match(stepper, /\.ds-stepper-step\[data-clickable='true'\]:is\(\[data-state~='pressed'\], :active\) \[data-part='icon'\] \{[^}]*transform: var\(--ds-stepper-pressed-transform\);/u);
     assert.match(skin('chart-foundation'), /\[data-part='data-trigger'\]:focus-visible,[^{]*\{\s*outline: var\(--ds-focus-ring-width\) solid transparent;\s*outline-offset: var\(--ds-focus-ring-offset\);\s*box-shadow: var\(--ds-focus-ring\);/u);
+    assert.match(skin('input'), /\.ds-input-shell\.ds-input-shell--modern\[data-state~='focused'\]:not\(\[data-disabled='true'\]\) \{\s*box-shadow: var\(--ds-input-focus-ring, var\(--ds-focus-ring\)\);/u);
+    assert.match(skin('input'), /\.ds-input-shell\.ds-input-shell--modern\[data-disabled='true'\] \{[^}]*opacity: var\(--ds-input-disabled-opacity\);/u);
+  });
+
+  it('the input row is the DEFAULT render: its gates sit once in the engine, on the plain branch, and no state rule of the skin is headed by the mounted wrapper', () => {
+    const entry = REAL_RENDER_MOUNTS.input;
+    const engine = readFileSync(join(ROOT, entry.state.source), 'utf8');
+    for (const anchor of entry.state.anchors) assert.equal(engine.split(anchor).length - 1, 1, anchor);
+    const plain = engine.slice(engine.indexOf(entry.state.anchors[0]));
+    assert.ok(plain.includes(entry.state.anchors[1]), 'the shell gate is not on the plain branch');
+    assert.ok(!plain.includes('data-part="control"'), 'the plain branch renders a separate control: the shell is no longer the input element');
+    assert.deepEqual(markupTokens(entry.markup), [
+      'attr:data-part=field', 'attr:data-part=root', 'attr:data-size=md', 'attr:data-variant=outline',
+      'class:ds-input-field', 'class:ds-input-shell', 'class:ds-input-shell--modern', 'tag:div', 'tag:input',
+    ]);
+    const root = familyElements(ROOT, ['input'], { asRendered: true }).get('input');
+    assert.deepEqual([root.classes, root.attributes['data-part']], [['ds-input-field'], 'field']);
+    const rules = stateRuleProbes(skin('input'));
+    assert.ok(rules.length > 0);
+    for (const rule of rules) assert.ok(rule.selector.startsWith('.ds-input-shell.ds-input-shell--modern'), rule.selector);
+    // The TextArea row is input-compounds' own; a second states row for input is refused like any other.
+    const twice = realRenderRosterFailures(ROOT, { input: entry, 'input-addon': { ...entry, family: 'input' } });
+    assert.ok(twice.some((line) => line.startsWith('input: 2 rows declare states (input, input-addon) -- at most one row per family may')), twice.join(' | '));
+  });
+
+  it('MUTANT: the input row carrying a token the default render does not write at rest -- a state stamp, a disabled field -- or a default that moved, is RED', () => {
+    const entry = REAL_RENDER_MOUNTS.input;
+    const stamped = realRenderRosterFailures(ROOT, { input: { ...entry, markup: entry.markup.replace('data-part="root"', 'data-part="root" data-state="focused"') } });
+    assert.ok(stamped.some((line) => line.startsWith('input: `attr:data-state=focused` is not written by')), stamped.join(' | '));
+    const disabled = realRenderRosterFailures(ROOT, { input: { ...entry, markup: entry.markup.replace('data-part="root"', 'data-part="root" data-disabled="true"') } });
+    assert.ok(disabled.some((line) => line.startsWith('input: `attr:data-disabled=true` is not written by')), disabled.join(' | '));
+    const drifted = realRenderRosterFailures(ROOT, { input: entry }, {
+      readSource: (file) => {
+        const text = readFileSync(file, 'utf8');
+        return file.endsWith('input/contracts/index.ts') ? text.replace("variant: 'outline' as const,", "variant: 'filled' as const,") : text;
+      },
+    });
+    assert.deepEqual(drifted, ["input/attr:data-variant=outline: src/components/primitives/inputs/input/contracts/index.ts no longer carries the resolves `variant: 'outline' as const,`"]);
+    // The row pins the PLAIN branch: an engine or a default that sends the default render elsewhere, or unstamps that branch alone, is RED.
+    const [, , gate] = entry.state.anchors;
+    const plainStamp = entry.stamps.find((row) => row.token === 'attr:data-part=root').stamp;
+    assert.equal(readFileSync(join(ROOT, entry.state.source), 'utf8').split(plainStamp).length - 1, 1, 'the root stamp text no longer sits on one branch alone');
+    const mutated = (suffix, from, to) => realRenderRosterFailures(ROOT, { input: entry }, {
+      readSource: (file) => {
+        const text = readFileSync(file, 'utf8');
+        assert.ok(!file.endsWith(suffix) || text.includes(from), `${suffix} no longer carries \`${from}\` -- this drill proves nothing`);
+        return file.endsWith(suffix) ? text.replace(from, to) : text;
+      },
+    });
+    const ENGINE = 'input/engines/modern/index.tsx';
+    const CONTRACT = 'input/contracts/index.ts';
+    const stampGone = `input/attr:data-part=root: ${entry.state.source} no longer carries the stamp \`${plainStamp}\``;
+    assert.deepEqual(mutated(ENGINE, gate, gate.replace('loading) {', 'loading || !prefix) {')),
+      [`input: ${entry.state.source} no longer carries the gate \`${gate}\``]);
+    assert.deepEqual(mutated(ENGINE, plainStamp, '{...skinAttributes}\n      />'), [stampGone]);
+    assert.deepEqual(mutated(ENGINE, plainStamp, "{...partAttributes(dataPart ?? 'root', interaction)}\n      />"), [stampGone]);
+    assert.deepEqual(mutated(CONTRACT, 'clearable: false,', 'clearable: true,'),
+      ['input/state: src/components/primitives/inputs/input/contracts/index.ts no longer carries the resolves `clearable: false,`']);
+    assert.deepEqual(mutated(CONTRACT, 'loading: false,', 'loading: true,'),
+      ['input/state: src/components/primitives/inputs/input/contracts/index.ts no longer carries the resolves `loading: false,`']);
+    // The engine must still READ those defaults, and the clear button must still be gated on a filled, clearable field.
+    const clearGate = 'const showClearButton = Boolean(clearable && isFilled && !disabled && !readOnly && !loading);';
+    for (const [from, to] of [
+      ['loading = INPUT_DEFAULTS.loading,', 'loading = true,'],
+      ['clearable = INPUT_DEFAULTS.clearable,', 'clearable = true,'],
+      [clearGate, 'const showClearButton = true;'],
+    ]) {
+      assert.equal(readFileSync(join(ROOT, entry.state.source), 'utf8').split(from).length - 1, 1, from);
+      assert.deepEqual(mutated(ENGINE, from, to), [`input/state: ${entry.state.source} no longer carries the resolves \`${from}\``]);
+    }
   });
 
   it('MUTANT: a row whose mounted render does not exist is RED -- a missing engine file, a retired gate, a fabricated node', () => {
@@ -5655,6 +5727,54 @@ describe('axis-difference BROWSER drill — the states reach rows move states th
     }
     assert.deepEqual(on.populations, off.populations);
     assert.deepEqual(evaluate(on), []);
+  }, 360_000);
+
+  it('the input row moves states through the shell and not without it: on the focus signature too, never on a width, a pseudo or a colour alone', async () => {
+    const options = { verticals: ['bithire'], themes: ['light'], families: ['input'], scenarios };
+    const on = await run(options);
+    const off = await run({ ...options, realRenderMounts: false });
+    const states = cellOf(on, 'states');
+    assert.deepEqual(states.realRender, { credited: ['input'], rescued: ['input'], refused: [], undecided: [] });
+    assert.deepEqual(states.movedIds, ['input']);
+    assert.deepEqual(cellOf(off, 'states').movedIds, [], 'input moved on states without its mount');
+    assert.deepEqual(states.widthOnly, []);
+    assert.equal(states.pseudoOnly, undefined);
+    assert.deepEqual([states.movedStamped, states.movedNative], [1, 0]);
+    assert.deepEqual(on.realRender.map.input.stampedParts, ['root']);
+    assert.equal(on.realRender.map.input.statesReach.stamped > 0, true);
+    assert.equal(off.realRender.map.input, undefined);
+    const control = cellOf(on, 'palette-only');
+    assert.equal(control.evidential, true, control.nonEvidentialReason);
+    assert.deepEqual(control.realRender.credited, ['input'], 'the control did not read the mount its positive credited');
+    assert.equal(control.moved, 0, JSON.stringify(control.movedFamilies));
+    for (const entry of on.cells.filter((item) => item.kind === 'negative')) assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+    assert.deepEqual(on.populations, off.populations, 'a mount may move a numerator, never a denominator');
+    assert.deepEqual(evaluate(on), []);
+    // With the disabled stamp withheld the dimming is unread, and the shell still moves: on the signature the `focused` stamp paints.
+    const focus = cellOf(await run({ ...options, statesDisabled: false }), 'states');
+    assert.deepEqual(focus.movedFamilies, [{ family: 'input', property: 'box-shadow' }]);
+    assert.deepEqual(focus.widthOnly, []);
+  }, 360_000);
+
+  it('MUTANT: the input row mounted as the wrapper alone, or as a shell without the Modern class its state rules are headed by, is REFUSED and fails the run', async () => {
+    const entry = REAL_RENDER_MOUNTS.input;
+    const mutants = {
+      wrapper: { ...entry, markup: '<div class="ds-input-field" data-part="field"></div>', stamps: [] },
+      unskinned: { ...entry, markup: entry.markup.replace('ds-input-shell ds-input-shell--modern', 'ds-input-shell') },
+    };
+    for (const [name, mutant] of Object.entries(mutants)) {
+      assert.deepEqual(realRenderRosterFailures(ROOT, { input: mutant }), [], `${name}: the mutant omits, it does not fabricate`);
+      const measurement = await run({
+        verticals: ['bithire'], themes: ['light'], families: ['input'], scenarios,
+        realRenderRoster: { ...REAL_RENDER_MOUNTS, input: mutant },
+      });
+      const states = cellOf(measurement, 'states');
+      const refusal = states.realRender.refused.find((item) => item.family === 'input');
+      assert.ok(refusal, `${name}: ${JSON.stringify(states.realRender)}`);
+      assert.match(refusal.reason, /the real render does not move on states under either half/u, name);
+      assert.deepEqual(states.movedIds, [], name);
+      assert.ok(evaluate(measurement).some((line) => line.startsWith('input: its real-render mount was REFUSED on states in bithire/light states')), name);
+    }
   }, 360_000);
 
   it('MUTANT: a row mounted WITHOUT the node that reads the dial is REFUSED by law 3 and fails the run -- never a quieter number', async () => {
