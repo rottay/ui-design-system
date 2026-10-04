@@ -1,0 +1,130 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 17,
+    "action": "rewrite",
+    "id": "symbol-removed/.#Switch",
+    "reason": "import-binding"
+  },
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 25,
+    "action": "rewrite",
+    "id": "symbol-removed/.#SwitchProps",
+    "reason": "import-binding"
+  },
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 43,
+    "action": "rewrite",
+    "id": "symbol-removed/.#SwitchSize",
+    "reason": "import-binding"
+  },
+  {
+    "file": "index.tsx",
+    "line": 10,
+    "column": 45,
+    "action": "rewrite",
+    "id": "prop-renamed/.#SwitchProps.checkedChildren",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 18,
+    "column": 15,
+    "action": "report",
+    "id": "prop-renamed/.#SwitchProps.checkedChildren",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 10,
+    "column": 66,
+    "action": "rewrite",
+    "id": "prop-renamed/.#SwitchProps.unCheckedChildren",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 18,
+    "column": 15,
+    "action": "report",
+    "id": "prop-renamed/.#SwitchProps.unCheckedChildren",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 13,
+    "column": 9,
+    "action": "rewrite",
+    "id": "prop-renamed/.#SwitchProps.onClick",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 15,
+    "column": 45,
+    "action": "report",
+    "id": "prop-renamed/.#SwitchProps.onClick",
+    "reason": "conflict"
+  },
+  {
+    "file": "index.tsx",
+    "line": 18,
+    "column": 15,
+    "action": "report",
+    "id": "prop-renamed/.#SwitchProps.onClick",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 17,
+    "column": 20,
+    "action": "report",
+    "id": "union-member-removed/.#SwitchProps.small",
+    "reason": "report-only"
+  },
+  {
+    "file": "index.tsx",
+    "line": 18,
+    "column": 15,
+    "action": "report",
+    "id": "union-member-removed/.#SwitchProps.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 16,
+    "column": 20,
+    "action": "rewrite",
+    "id": "union-member-removed/.#SwitchProps.middle",
+    "reason": "literal-rewritten"
+  },
+  {
+    "file": "index.tsx",
+    "line": 18,
+    "column": 15,
+    "action": "report",
+    "id": "union-member-removed/.#SwitchProps.middle",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 18,
+    "column": 15,
+    "action": "report",
+    "id": "union-member-removed/.#SwitchProps.large",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 18,
+    "column": 15,
+    "action": "report",
+    "id": "union-member-removed/.#SwitchProps.default",
+    "reason": "spread"
+  }
+]

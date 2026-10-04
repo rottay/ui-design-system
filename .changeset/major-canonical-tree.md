@@ -133,8 +133,6 @@ until a changeset declares it.
 Deprecated in source, still published, removal recorded for the 3.0 line in
 the deprecation ledger (`packages/core/contracts/package/deprecations`):
 
-- `Switch`, `SwitchProps`, `SwitchSize` — use `Toggle`, `ToggleProps`,
-  `ToggleSize`.
 - `Steps`, `StepsProps` — use `Stepper`, `StepperProps`.
 - `Callout` — use `Alert` (`<Alert message description action />`).
 - `PatternApprovalInbox` — succeeded by `DecisionInboxSurface`.

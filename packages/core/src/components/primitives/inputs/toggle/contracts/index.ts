@@ -36,8 +36,7 @@
  */
 
 import type { EngineAwareProps } from '../../../../../foundation/contracts';
-import type { Size } from '../../../../../foundation/contracts/kernel/common';
-import type { ReactNode, CSSProperties, ChangeEvent, MouseEvent } from 'react';
+import type { ReactNode, CSSProperties, ChangeEvent } from 'react';
 
 // Size types
 export type ToggleSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -146,33 +145,3 @@ export const TOGGLE_DEFAULTS = {
   error: false,
   labelPlacement: 'end' as ToggleLabelPlacement,
 };
-
-/**
- * Size of the deprecated `Switch` alias.
- * @deprecated since 2026-09-12 (D-16): use `ToggleSize`; `Switch` resolves to `Toggle`.
- */
-export type SwitchSize = Extract<Size, 'sm' | 'md' | 'lg'>;
-
-/**
- * Props of the deprecated `Switch` alias.
- * @deprecated since 2026-09-12 (D-16): use `ToggleProps`; `checkedChildren` and
- * `unCheckedChildren` are `checkedLabel` and `uncheckedLabel` there.
- */
-export interface SwitchProps {
-  checked?: boolean;
-  defaultChecked?: boolean;
-  disabled?: boolean;
-  loading?: boolean;
-  size?: SwitchSize;
-  checkedChildren?: ReactNode;
-  unCheckedChildren?: ReactNode;
-  onChange?: (checked: boolean) => void;
-  onClick?: (checked: boolean, event: MouseEvent) => void;
-  className?: string;
-  style?: CSSProperties;
-  autoFocus?: boolean;
-  tabIndex?: number;
-  id?: string;
-  name?: string;
-  'aria-label'?: string;
-}

@@ -134,7 +134,7 @@ export const RESPONSIVE_SPECS: FlagshipSpec[] = [
   },
   {
     slug: 'switch',
-    name: 'Switch',
+    name: 'Toggle',
     groups: [
       {
         label: 'States',

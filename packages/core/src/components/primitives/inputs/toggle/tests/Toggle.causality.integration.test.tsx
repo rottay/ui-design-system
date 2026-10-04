@@ -1,5 +1,5 @@
 /**
- * The toggle family (and Switch, its deprecated name) in a real browser: every
+ * The toggle family in a real browser: every
  * decision it consumes moves its paint with a negative control, and its travel,
  * direction, floors and accessibility hold in each first-party vertical.
  */

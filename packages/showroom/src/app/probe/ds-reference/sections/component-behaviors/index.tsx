@@ -50,7 +50,6 @@ import {
   Stack,
   Splitter,
   Stepper,
-  Switch,
   Tabs,
   Textarea,
   TimePicker,
@@ -373,7 +372,7 @@ function SwitchClickValueHarness() {
   const [reported, setReported] = React.useState('none');
   return (
     <div>
-      <Switch onClick={(checked) => setReported(String(checked))} />
+      <Toggle onChange={(checked) => setReported(String(checked))} />
       <div data-testid="lab-switch-reported">Reported: {reported}</div>
     </div>
   );
@@ -907,7 +906,7 @@ export function ComponentBehaviorScene({ only }: { only: ComponentBehaviorCase }
       )}
 
       {only === 'switch' && (
-        <SpecimenRow axis="SWITCH - onClick reports the value the activation produced">
+        <SpecimenRow axis="TOGGLE - onChange reports the value the activation produced">
           <div data-testid="lab-switch" style={{ inlineSize: 320 }}>
             <SwitchClickValueHarness />
           </div>

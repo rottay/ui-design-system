@@ -69,7 +69,6 @@
  * />
  * ```
  *
- * @see {@link Switch} for the deprecated name of this component
  * @see {@link Checkbox} for multi-select boolean inputs
  * @module Toggle
  * @category Inputs
@@ -84,15 +83,10 @@ export {
   type ToggleSize,
   type ToggleVariant,
   type ToggleLabelPlacement,
-  type SwitchProps,
-  type SwitchSize,
   TOGGLE_DEFAULTS,
   SIZE_MAP,
   COLOR_MAP,
 } from './contracts';
-
-export { Switch } from './compound';
-
 
 export const Toggle = createEngineComponent<ToggleProps>('Toggle', {
   classic: () => import('./engines/classic'),

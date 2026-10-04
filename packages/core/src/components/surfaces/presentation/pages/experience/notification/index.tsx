@@ -10,7 +10,7 @@
  *
  * @remarks
  * Composition: PageShellSurface chrome + canonical primitives (Card, Tag,
- * Switch, Tabs, Badge, Pagination, Heading) + the shared surface state kits
+ * Toggle, Tabs, Badge, Pagination, Heading) + the shared surface state kits
  * (SurfaceEmptyState, SurfaceErrorState). The PT05 notification-center
  * PATTERN is deliberately NOT composed: it is a dropdown popover (trigger +
  * click-outside panel) while this surface is a full page with sections/tabs,
@@ -44,10 +44,10 @@ import {
   Heading,
   Pagination,
   Stack,
-  Switch,
   Tabs,
   Tag,
   Text,
+  Toggle,
 } from '../../../../../primitives';
 import type {
   SurfaceNotificationItem,
@@ -314,7 +314,7 @@ function PreferencesPanel({
                 {category}
               </Heading>
               {prefs.map((pref) => {
-                // Native label association gives the Switch its accessible
+                // Native label association gives the Toggle its accessible
                 // name (the primitive forwards `id` to the input) and makes
                 // the whole label text clickable. Whitespace is normalized so
                 // app-provided ids stay valid HTML id tokens.
@@ -343,7 +343,7 @@ function PreferencesPanel({
                         </Text>
                       )}
                     </Stack>
-                    <Switch
+                    <Toggle
                       id={switchId}
                       checked={pref.enabled}
                       onChange={(checked) => onPreferenceChange?.(pref.id, checked)}

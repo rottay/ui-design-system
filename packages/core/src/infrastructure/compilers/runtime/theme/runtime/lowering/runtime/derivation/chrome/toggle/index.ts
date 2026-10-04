@@ -1,5 +1,5 @@
 /**
- * @fileoverview The toggle family (Switch is its deprecated name): its track on
+ * @fileoverview The toggle family: its track on
  * the palette and state decisions, its thumb on the elevation decision, its
  * supporting text on the caption type role, and the corner of both track and
  * thumb on the silhouette decision -- a pill until a tenant states otherwise.

@@ -111,13 +111,18 @@ test('what the map calls retired is retired: symbols are unpublished, subpaths a
   }
 });
 
-test('prop entries name components and props types the package publishes', () => {
+test('prop entries name components and props types the package publishes, or ones the map itself retires with a successor', () => {
+  const retired = [];
   for (const entry of [...of('prop-removed'), ...of('prop-renamed'), ...of('union-member-removed')]) {
     const names = surface.exportsOf(entry.subpath);
     for (const name of [...entry.components, ...(entry.propsTypes ?? [])]) {
-      assert.ok(names.has(name), `${entry.id}: ${entry.subpath} does not publish ${name}`);
+      if (names.has(name)) continue;
+      const successor = map.byId.get(`symbol-removed/${entry.subpath}#${name}`);
+      assert.ok(successor?.replacement?.symbol, `${entry.id}: ${entry.subpath} does not publish ${name} and no symbol-removed entry moves it`);
+      retired.push(name);
     }
   }
+  assert.deepEqual([...new Set(retired)].sort(), ['Switch', 'SwitchProps']);
 });
 
 test('the two report-only classes of the review stay report-only, with the reason stated', () => {

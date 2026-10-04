@@ -3,8 +3,8 @@
 /**
  * K1 Lane B probe (showroom): text & boolean control families.
  *
- * One identical component tree for the eight Lane-B families (Input,
- * Textarea, PasswordInput, FormField, Checkbox, Radio, Switch, Toggle)
+ * One identical component tree for the seven Lane-B families (Input,
+ * Textarea, PasswordInput, FormField, Checkbox, Radio, Toggle)
  * rendered under two opposing governed sources:
  *  - `bithire-static`: the bundled BitHire vertical, code-owned;
  *  - `themanagement-db`: a published customer document, compiled and proven.
@@ -28,7 +28,6 @@ import {
   PasswordInput,
   Radio,
   Stack,
-  Switch,
   Text,
   Textarea,
   Toggle,
@@ -264,13 +263,13 @@ function SpecimenTree({
 
       <Stack direction="horizontal" spacing="xl" wrap data-testid="lb-switch-toggle-row">
         <div data-testid="lb-switch" style={{ flexShrink: 0 }}>
-          <Switch
+          <Toggle
             aria-label={copy.notificationsLegend}
             defaultChecked
             disabled={disabled}
             loading={loading}
-            checkedChildren={copy.on}
-            unCheckedChildren={copy.off}
+            checkedLabel={copy.on}
+            uncheckedLabel={copy.off}
           />
         </div>
         <div data-testid="lb-toggle" style={{ flexShrink: 0 }}>

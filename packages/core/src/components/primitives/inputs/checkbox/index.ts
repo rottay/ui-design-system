@@ -80,7 +80,7 @@
  *
  * @see {@link CheckboxGroup} for grouping checkboxes
  * @see {@link Radio} for single-selection from options
- * @see {@link Switch} for toggle-style boolean input
+ * @see {@link Toggle} for toggle-style boolean input
  * @module Checkbox
  * @category Inputs
  * @package @rottay/design-system

@@ -14,7 +14,7 @@
  * that fight anyway, so the primitive channel is the only durable path.
  *
  * SCOPE: the surface composes public primitives and helpers (PageShell,
- * Card, Tag, Switch, Tabs, Badge, Pagination, Heading, the surface state
+ * Card, Tag, Toggle, Tabs, Badge, Pagination, Heading, the surface state
  * kits) — each owns its chrome, interaction states and forced-colors
  * treatment, so this file paints ONLY what the surface itself owns:
  *   - the read/unread recession of feed items (opacity on the pinned

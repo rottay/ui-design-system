@@ -12,7 +12,6 @@ import { TagInput } from '../tag-input';
 import { Checkbox } from '../checkbox';
 import { Form } from '../form';
 import { Toggle } from '../toggle';
-import { Switch } from '../toggle';
 import { OTPInput } from '../otp-input';
 import { Textarea } from '../textarea';
 import { FormField } from '../form-field';
@@ -271,12 +270,10 @@ describe('Field family data-part contract (WO-SKIN-02 checkpoint A)', () => {
       expect(container.querySelectorAll('[data-part="thumb"]')).toHaveLength(1);
       expect(container.querySelectorAll('[data-part="label"]')).toHaveLength(1);
     });
-  });
 
-  describe('Switch (the deprecated name of Toggle)', () => {
-    it.each(ENGINES)('stamps the toggle root/track/thumb parts and its state label under the %s engine', async (engine) => {
+    it.each(ENGINES)('stamps root/track/thumb parts and its state label under the %s engine', async (engine) => {
       const { container } = renderWithEngine(
-        <Switch checked onChange={vi.fn()} checkedChildren="On" unCheckedChildren="Off" />,
+        <Toggle checked onChange={vi.fn()} checkedLabel="On" uncheckedLabel="Off" />,
         engine,
       );
       await waitForPart(container, 'root');

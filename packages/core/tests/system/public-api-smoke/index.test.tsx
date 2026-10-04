@@ -104,7 +104,6 @@ const SMOKE_CASES: SmokeCase[] = [
   { name: 'Mentions', render: () => <DS.Mentions options={[{ value: 'daniel', label: 'Daniel' }]} /> },
   { name: 'Radio', render: () => <DS.Radio checked>Primary</DS.Radio> },
   { name: 'Slider', render: () => <DS.Slider defaultValue={45} /> },
-  { name: 'Switch', render: () => <DS.Switch checked /> },
   { name: 'Textarea', render: () => <DS.Textarea defaultValue="Hello world" /> },
   { name: 'TimePicker', render: () => <DS.TimePicker /> },
   { name: 'Toggle', render: () => <DS.Toggle checked /> },

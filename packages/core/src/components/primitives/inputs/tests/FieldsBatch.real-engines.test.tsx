@@ -8,7 +8,7 @@ import { waitFor } from '@testing-library/react';
 
 import { Radio } from '../radio';
 import { Checkbox } from '../checkbox';
-import { Switch } from '../toggle';
+import { Toggle } from '../toggle';
 import { Slider } from '../slider';
 import { OTPInput } from '../otp-input';
 import { Button } from '../button';
@@ -207,7 +207,7 @@ describe('fields skins -- per-component interaction + keyframe pins', () => {
 
 // ---------------------------------------------------------------------------
 // The DOM carries the data-part contract, not the paint. Representative subset,
-// both engines: Radio, Checkbox, Switch, Slider, OTPInput, Button.Icon.
+// both engines: Radio, Checkbox, Toggle, Slider, OTPInput, Button.Icon.
 // ---------------------------------------------------------------------------
 
 const ENGINES = ['modern', 'rustic'] as const;
@@ -241,10 +241,10 @@ describe.each(ENGINES)('fields DOM carries the contract, not the paint -- %s eng
     expectNoPaint(await firstPart(container, 'label'), `checkbox ${engine} label`);
   });
 
-  it('Switch track/thumb/label paint nothing inline', async () => {
-    const { container } = renderWithEngine(<Switch checked checkedChildren="On" />, engine);
-    expectNoPaint(await firstPart(container, 'track'), `switch ${engine} track`);
-    expectNoPaint(await firstPart(container, 'thumb'), `switch ${engine} thumb`);
+  it('Toggle track/thumb/label paint nothing inline', async () => {
+    const { container } = renderWithEngine(<Toggle checked checkedLabel="On" />, engine);
+    expectNoPaint(await firstPart(container, 'track'), `toggle ${engine} track`);
+    expectNoPaint(await firstPart(container, 'thumb'), `toggle ${engine} thumb`);
   });
 
   it('Slider rail/track/handle paint nothing inline', async () => {
