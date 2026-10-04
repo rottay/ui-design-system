@@ -156,10 +156,10 @@ Support: `shell/contracts/`.
 ### foundation/ (support owner)
 
 - `foundation/active-filter-state-glyph/`
+- `foundation/contract-builders/`
 - `foundation/engine-styles/`
 - `foundation/header-actions/`
 - `foundation/motion/`
-- `foundation/recipes/`
 
 ### identity/
 
@@ -177,11 +177,11 @@ Support: `shell/contracts/`.
 
 - `runtime/adaptive-layout/`
 - `runtime/cell-renderers/`
+- `runtime/component-factories/`
 - `runtime/filtering/`
 - `runtime/forms/`
 - `runtime/kanban/`
 - `runtime/pulse/`
-- `runtime/recipes/`
 - `runtime/virtualization/`
 
 ### shell/

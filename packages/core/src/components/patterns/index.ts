@@ -1,7 +1,7 @@
 /**
  * @fileoverview Pattern Components barrel — Tier 2 of the design system.
  * Engine-agnostic, composable task-level components organized by product
- * capability. Shared pure recipes live in `foundation/`; stateful composition
+ * capability. Shared pure builders live in `foundation/`; stateful composition
  * helpers live in `runtime/`. Private engine styles and Storybook catalogs
  * also have explicit owners instead of catch-all `misc` or `_internal` trees.
  */
@@ -19,7 +19,7 @@ export * from './feedback';
 export * from './identity';
 export * from './shell';
 
-// === Shared contracts, pure recipes, and stateful composition ===
+// === Shared contracts, pure builders, and stateful composition ===
 export * from '../../foundation/contracts/runtime/components/patterns/core';
 export * from './foundation';
 export * from './runtime';

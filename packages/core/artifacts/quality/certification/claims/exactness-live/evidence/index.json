@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "b14e1f044e9a9615e620edf75c03b27769c2ac624fb8a3c4d27c1da6a186a891",
+    "authorityDigest": "f30fcc40621fd59364185805b2f93a9f1e69308e8c8a76006e0952123774f773",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -3745,6 +3745,34 @@
         "sha256": "57acd6950c7bf1e47c9a77a049638380e5d80123d7162fabbdcd59ed5f589ee4"
       },
       {
+        "path": "ui-design-system/packages/core/src/components/patterns/foundation/contract-builders/columns/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 3170,
+        "sha256": "3fe592dfb9b8945df80bd603e43a5bb86fb0ab338b4cc492a947f4c41a2172ec"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/foundation/contract-builders/columns/tests/columns.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1147,
+        "sha256": "57f9c3e4fa900b8ab690591a7305e1f32e1cfada4a76c4807fdebd8d4eb995bf"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/foundation/contract-builders/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 85,
+        "sha256": "1e2ebb2b55100e183f9be87c7d2d71b6d15dc5ec1c76d9af4db8888071afb615"
+      },
+      {
         "path": "ui-design-system/packages/core/src/components/patterns/foundation/engine-styles/modern/index.ts",
         "roles": [
           "audit-input",
@@ -3771,8 +3799,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 127,
-        "sha256": "83084e3dce77e9dd013085510dd66f8a86ac70429e042a78fa8d3ccc7bfcfa8b"
+        "bytes": 137,
+        "sha256": "db288557df210bb84301ea3d6448d6156428d5778b1124da18fed6b59412a595"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/foundation/motion/collection-stagger/index.ts",
@@ -3811,34 +3839,6 @@
         ],
         "bytes": 322,
         "sha256": "401c796e7b3597d317f6e3e978d822ac80b4d21840da5882fd6b682b358cac64"
-      },
-      {
-        "path": "ui-design-system/packages/core/src/components/patterns/foundation/recipes/columns/index.ts",
-        "roles": [
-          "audit-input",
-          "claim-census",
-          "stale-claim-corpus"
-        ],
-        "bytes": 3170,
-        "sha256": "3fe592dfb9b8945df80bd603e43a5bb86fb0ab338b4cc492a947f4c41a2172ec"
-      },
-      {
-        "path": "ui-design-system/packages/core/src/components/patterns/foundation/recipes/columns/tests/columns.test.ts",
-        "roles": [
-          "audit-input"
-        ],
-        "bytes": 1147,
-        "sha256": "57f9c3e4fa900b8ab690591a7305e1f32e1cfada4a76c4807fdebd8d4eb995bf"
-      },
-      {
-        "path": "ui-design-system/packages/core/src/components/patterns/foundation/recipes/index.ts",
-        "roles": [
-          "audit-input",
-          "claim-census",
-          "stale-claim-corpus"
-        ],
-        "bytes": 85,
-        "sha256": "1e2ebb2b55100e183f9be87c7d2d71b6d15dc5ec1c76d9af4db8888071afb615"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/identity/index.ts",
@@ -3949,8 +3949,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 929,
-        "sha256": "33fa428b5c0fe98496729bfd685aa5782def820eb8cb721860b58fb8e4d90374"
+        "bytes": 931,
+        "sha256": "7329e47f028fa410c68967da1092d9d2627ddc100365ddb18a9ad7f3e7abedb5"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/navigation/command-palette/contracts/index.ts",
@@ -4493,6 +4493,26 @@
         "sha256": "31d819348640b70d49d1fe4f3b5b3e7e17529a05233adabfac7ae73002b0afb7"
       },
       {
+        "path": "ui-design-system/packages/core/src/components/patterns/runtime/component-factories/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 69,
+        "sha256": "94ce68f2ee086b6335b34fbf03b7597cbd67bac02101b3312ec9a5594ac59211"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/runtime/component-factories/variants/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 3371,
+        "sha256": "f5691d79c6175c52b08c7c7abd934719fe8807afca269ba1c9c387413fa69518"
+      },
+      {
         "path": "ui-design-system/packages/core/src/components/patterns/runtime/filtering/index.ts",
         "roles": [
           "audit-input",
@@ -4547,8 +4567,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 243,
-        "sha256": "80eb907f1c2c7198f0a51a0b02faad41a94aaa9f08d7caf5de0027a3e0cdb318"
+        "bytes": 255,
+        "sha256": "3ed834dcec5f5d2bcdba3a6f4a22e77ee4a3c27ab7ceabcf0734f2747038e14b"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/runtime/kanban/board-state/index.ts",
@@ -4597,26 +4617,6 @@
         ],
         "bytes": 3137,
         "sha256": "ad7ba567752bc3870d49bb3e24fac44dc3e06638c4ca164acb29fe9527644868"
-      },
-      {
-        "path": "ui-design-system/packages/core/src/components/patterns/runtime/recipes/index.ts",
-        "roles": [
-          "audit-input",
-          "claim-census",
-          "stale-claim-corpus"
-        ],
-        "bytes": 69,
-        "sha256": "94ce68f2ee086b6335b34fbf03b7597cbd67bac02101b3312ec9a5594ac59211"
-      },
-      {
-        "path": "ui-design-system/packages/core/src/components/patterns/runtime/recipes/variants/index.ts",
-        "roles": [
-          "audit-input",
-          "claim-census",
-          "stale-claim-corpus"
-        ],
-        "bytes": 3371,
-        "sha256": "f5691d79c6175c52b08c7c7abd934719fe8807afca269ba1c9c387413fa69518"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/runtime/tests/composition-hooks.test.tsx",
@@ -47699,13 +47699,13 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "b14e1f044e9a9615e620edf75c03b27769c2ac624fb8a3c4d27c1da6a186a891"
+    "digest": "f30fcc40621fd59364185805b2f93a9f1e69308e8c8a76006e0952123774f773"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4223 counters; 3226 completed zeros locked exactly; 987 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
     "baseline": {
       "path": "ui-design-system/packages/core/scripts/check/engine/tokens/audit/baseline/index.json",
-      "sha256": "709db8e7f01bfd7365bf7fa1e8b95abd11f3f382a6079bfaf82be8e52663dc23",
+      "sha256": "2a3522bf096499355f0194292b19945dc95dbc1f5bd622fbcab3242f68e8315a",
       "ok": true,
       "errors": [],
       "counters": 4223,
@@ -121986,8 +121986,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "3cd15672810028089464a375516e06390837eeaf48ffc6ea94011f51f59f56d6",
-      "3cd15672810028089464a375516e06390837eeaf48ffc6ea94011f51f59f56d6"
+      "fcf725180e7a4c7647a740ca6627d58d412a884c747155390a7dd34fab13c620",
+      "fcf725180e7a4c7647a740ca6627d58d412a884c747155390a7dd34fab13c620"
     ],
     "agree": true
   }

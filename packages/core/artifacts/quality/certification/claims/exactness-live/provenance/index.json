@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "3cd15672810028089464a375516e06390837eeaf48ffc6ea94011f51f59f56d6"
+    "semanticHash": "fcf725180e7a4c7647a740ca6627d58d412a884c747155390a7dd34fab13c620"
   },
   "divergentInputs": [
     {
@@ -2281,6 +2281,65 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/components/patterns/foundation/contract-builders/columns/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 3170,
+        "sha256": "3fe592dfb9b8945df80bd603e43a5bb86fb0ab338b4cc492a947f4c41a2172ec"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/foundation/contract-builders/columns/tests/columns.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 1147,
+        "sha256": "57f9c3e4fa900b8ab690591a7305e1f32e1cfada4a76c4807fdebd8d4eb995bf"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/foundation/contract-builders/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 85,
+        "sha256": "1e2ebb2b55100e183f9be87c7d2d71b6d15dc5ec1c76d9af4db8888071afb615"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/foundation/index.ts",
+      "archive": {
+        "bytes": 127,
+        "sha256": "83084e3dce77e9dd013085510dd66f8a86ac70429e042a78fa8d3ccc7bfcfa8b"
+      },
+      "live": {
+        "bytes": 137,
+        "sha256": "db288557df210bb84301ea3d6448d6156428d5778b1124da18fed6b59412a595"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/foundation/recipes/columns/index.ts",
+      "archive": {
+        "bytes": 3170,
+        "sha256": "3fe592dfb9b8945df80bd603e43a5bb86fb0ab338b4cc492a947f4c41a2172ec"
+      },
+      "live": null
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/foundation/recipes/columns/tests/columns.test.ts",
+      "archive": {
+        "bytes": 1147,
+        "sha256": "57f9c3e4fa900b8ab690591a7305e1f32e1cfada4a76c4807fdebd8d4eb995bf"
+      },
+      "live": null
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/foundation/recipes/index.ts",
+      "archive": {
+        "bytes": 85,
+        "sha256": "1e2ebb2b55100e183f9be87c7d2d71b6d15dc5ec1c76d9af4db8888071afb615"
+      },
+      "live": null
+    },
+    {
       "path": "ui-design-system/packages/core/src/components/patterns/identity/profile/user-profile-card/engines/modern/index.tsx",
       "archive": {
         "bytes": 9477,
@@ -2308,6 +2367,17 @@
       "live": {
         "bytes": 963,
         "sha256": "978a006233adbc8c2303b6a862def8d84bb8974ef96ba875d745eb1999e14942"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/index.ts",
+      "archive": {
+        "bytes": 929,
+        "sha256": "33fa428b5c0fe98496729bfd685aa5782def820eb8cb721860b58fb8e4d90374"
+      },
+      "live": {
+        "bytes": 931,
+        "sha256": "7329e47f028fa410c68967da1092d9d2627ddc100365ddb18a9ad7f3e7abedb5"
       }
     },
     {
@@ -2547,6 +2617,49 @@
         "bytes": 18007,
         "sha256": "32a26cfadb9706243045de9df713c1f2d2f11f264476372d7fb26040b4dcc8da"
       }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/runtime/component-factories/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 69,
+        "sha256": "94ce68f2ee086b6335b34fbf03b7597cbd67bac02101b3312ec9a5594ac59211"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/runtime/component-factories/variants/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 3371,
+        "sha256": "f5691d79c6175c52b08c7c7abd934719fe8807afca269ba1c9c387413fa69518"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/runtime/index.ts",
+      "archive": {
+        "bytes": 243,
+        "sha256": "80eb907f1c2c7198f0a51a0b02faad41a94aaa9f08d7caf5de0027a3e0cdb318"
+      },
+      "live": {
+        "bytes": 255,
+        "sha256": "3ed834dcec5f5d2bcdba3a6f4a22e77ee4a3c27ab7ceabcf0734f2747038e14b"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/runtime/recipes/index.ts",
+      "archive": {
+        "bytes": 69,
+        "sha256": "94ce68f2ee086b6335b34fbf03b7597cbd67bac02101b3312ec9a5594ac59211"
+      },
+      "live": null
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/runtime/recipes/variants/index.ts",
+      "archive": {
+        "bytes": 3371,
+        "sha256": "f5691d79c6175c52b08c7c7abd934719fe8807afca269ba1c9c387413fa69518"
+      },
+      "live": null
     },
     {
       "path": "ui-design-system/packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx",

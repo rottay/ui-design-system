@@ -938,12 +938,12 @@ test('UI aggregate support flows to capabilities without adding a vague shared w
   const { packageRoot, sourceRoot } = fixture();
   try {
     write(
-      resolve(sourceRoot, 'components/patterns/foundation/recipes/index.ts'),
+      resolve(sourceRoot, 'components/patterns/foundation/contract-builders/index.ts'),
       'export const recipe = true;\n',
     );
     write(
       resolve(sourceRoot, 'components/patterns/data/table/index.ts'),
-      "import { recipe } from '../../foundation/recipes';\nexport const table = recipe;\n",
+      "import { recipe } from '../../foundation/contract-builders';\nexport const table = recipe;\n",
     );
     write(
       resolve(sourceRoot, 'components/patterns/runtime/registry/index.ts'),
@@ -951,7 +951,7 @@ test('UI aggregate support flows to capabilities without adding a vague shared w
     );
     write(
       resolve(sourceRoot, 'components/patterns/visualization/charts/families/line/index.ts'),
-      "import { recipe } from '../../../../foundation/recipes';\nexport const line = recipe;\n",
+      "import { recipe } from '../../../../foundation/contract-builders';\nexport const line = recipe;\n",
     );
     write(
       resolve(sourceRoot, 'components/patterns/visualization/charts/contracts/index.ts'),
@@ -962,7 +962,7 @@ test('UI aggregate support flows to capabilities without adding a vague shared w
     const ids = new Set(result.findings.map(({ id }) => id));
 
     assert(!ids.has(
-      'sibling-owner-dependency:components/patterns/data/table/index.ts->components/patterns/foundation/recipes/index.ts',
+      'sibling-owner-dependency:components/patterns/data/table/index.ts->components/patterns/foundation/contract-builders/index.ts',
     ));
     assert(ids.has(
       'local-layer-inversion:components/patterns/runtime/registry/index.ts->components/patterns/data/table/index.ts',
