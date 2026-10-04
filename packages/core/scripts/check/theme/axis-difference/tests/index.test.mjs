@@ -143,7 +143,7 @@ import {
 } from '../../population/index.mjs';
 import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
-import { REPRODUCTION_FLAGS } from '../indicator/index.mjs';
+import { REPRODUCTION_FLAGS, buildIndicator, indicatorRefusal } from '../indicator/index.mjs';
 // S1's symbols are read off the namespace, so a drill against a tree without
 // them fails as a drill rather than as a module that will not link.
 import * as probe from '../index.mjs';
@@ -1131,31 +1131,138 @@ describe('axis-difference drills — every verdict is reachable', () => {
     assert.match(cli, /writeRefusal: refusal,\n  \}\) \?\? provenanceRefusal\(readPublicationProvenance\(result\)\);/u);
   });
 
-  it('the verdict line states both bases: an axis at the bar on the effective denominator and below it on the declared one is named', () => {
-    const positive = (axis, moved, denominator) => cell({ scenario: axis, axis, moved, denominator, percent: (moved / denominator) * 100 });
-    const declared = { shape: 100, typography: 100, rhythm: 100, depth: 204, states: 100, motion: 100 };
-    const measured = result(AXIS_IDS.map((axis) => (axis === 'depth' ? positive(axis, 162, 198) : positive(axis, 90, 100))), {
-      verticals: ['bithire'],
-      themes: ['light'],
-      denominatorReconciliation: Object.fromEntries(AXIS_IDS.map((axis) => [axis, { declared: declared[axis] }])),
-    });
-    // The run's own threshold passes: depth is 81.8 % on its effective denominator.
-    assert.deepEqual(evaluate(measured, { threshold: 80 }).filter((line) => line.includes('%')), []);
-    assert.equal(probe.verdictLine(measured, { threshold: 80 }),
-      'axis-difference OK — every evidential negative-control cell at 0 %, every axis at or above 80 % on the effective denominator '
-      + '(declared-basis status: 5/6 at threshold; depth below at 79.4 % — the indicator reads the declared basis)');
-    const met = result(AXIS_IDS.map((axis) => positive(axis, 90, 100)), {
+  const positive = (axis, moved, denominator, over = {}) => cell({ scenario: axis, axis, moved, denominator, percent: (moved / denominator) * 100, ...over });
+  const controlsAtZero = (themes = ['light'], verticals = ['bithire'], over = () => ({})) => SCENARIOS
+    .filter((scenario) => scenario.kind === 'negative')
+    .flatMap((scenario) => verticals.flatMap((vertical) => themes.flatMap((theme) => scenario.expectZeroOn.map((axis) => cell({
+      kind: 'negative', scenario: scenario.id, axis, vertical, theme, moved: 0, percent: 0, ...over(scenario.id),
+    })))));
+  const fleet = (cellOf, declared, over = {}) => result([...AXIS_IDS.map(cellOf), ...controlsAtZero()], {
+    verticals: ['bithire'],
+    themes: ['light'],
+    denominatorReconciliation: Object.fromEntries(AXIS_IDS.map((axis) => [axis, { declared: declared[axis] ?? 100 }])),
+    ...over,
+  });
+  const thresholdFailures = (run) => {
+    const without = evaluate(run);
+    return evaluate(run, { threshold: 80 }).filter((line) => !without.includes(line));
+  };
+  const indicatorOf = (run) => buildIndicator(run, { negativeControls: [], producedAt: '2026-10-03T00:00:00.000Z' });
+  const depthShort = () => fleet((axis) => (axis === 'depth' ? positive(axis, 162, 198) : positive(axis, 90, 100)), { depth: 204 });
+
+  it('MUTANT: an axis at the bar on the effective denominator and below it on the DECLARED one fails the threshold, by name', () => {
+    const run = depthShort();
+    const depth = indicatorOf(run).axes.depth;
+    assert.deepEqual(
+      { status: depth.status, declared: depth.worstPercentDeclared, effective: depth.worstPercentEffective, effectiveAt: depth.effectiveAtThreshold },
+      { status: 'below-threshold', declared: 79.4, effective: 81.8, effectiveAt: true },
+    );
+    assert.deepEqual(thresholdFailures(run), [
+      'depth: 79.4 % < 80 % on the declared basis on bithire/light (162/204 declaring families; 162/198 = 81.8 % effective is reported, never the status)',
+    ]);
+    assert.deepEqual(probe.declaredBasisFailures(run, 80), thresholdFailures(run));
+    assert.deepEqual(evaluate(run).filter((line) => line.startsWith('depth:')), [], 'no threshold asked for, none judged');
+  });
+
+  it('MUTANT: no passing verdict line exists for a run the declared basis leaves short, whatever evaluate said', () => {
+    assert.throws(
+      () => probe.verdictLine(depthShort(), { threshold: 80 }),
+      /no passing verdict exists while the declared basis is short of 80 % \(depth below at 79\.4 %\)/u,
+    );
+    const partial = result([positive('shape', 90, 100)], { verticals: ['bithire'], themes: ['light'], denominatorReconciliation: { shape: { declared: 100 } } });
+    assert.throws(() => probe.verdictLine(partial, { threshold: 80 }), /typography not measured on every cell, /u);
+    assert.equal(probe.verdictLine(depthShort()),
+      'axis-difference OK — every evidential negative-control cell at 0 %; no threshold applied (the fleet bar is WO-EVI-02 acceptance, not this run)');
+  });
+
+  it('a run at the bar on both bases passes the threshold, and the verdict line names the declared basis', () => {
+    const run = fleet((axis) => positive(axis, 90, 100), {});
+    assert.deepEqual(thresholdFailures(run), []);
+    assert.deepEqual(AXIS_IDS.map((axis) => indicatorOf(run).axes[axis].status), AXIS_IDS.map(() => 'at-threshold'));
+    assert.equal(probe.verdictLine(run, { threshold: 80 }),
+      'axis-difference OK — every evidential negative-control cell at 0 %, every axis at or above 80 % on the declared basis '
+      + '(6/6 at threshold; effective-denominator reading 6/6, reported, never the status; '
+      + '1 vertical(s) x 1 mode(s) — NOT the fleet, no indicator is published from it)');
+    const verticals = ['bithire', 'evnto', 'rottay'];
+    const themes = ['light', 'dark'];
+    const whole = result([
+      ...AXIS_IDS.flatMap((axis) => verticals.flatMap((vertical) => themes.map((theme) => positive(axis, 90, 100, { vertical, theme })))),
+      ...controlsAtZero(themes, verticals),
+    ], { verticals, themes, denominatorReconciliation: Object.fromEntries(AXIS_IDS.map((axis) => [axis, { declared: 100 }])) });
+    assert.deepEqual(thresholdFailures(whole), []);
+    assert.equal(indicatorRefusal(whole), null);
+    assert.equal(probe.verdictLine(whole, { threshold: 80 }),
+      'axis-difference OK — every evidential negative-control cell at 0 %, every axis at or above 80 % on the declared basis the indicator reads '
+      + '(6/6 at threshold; effective-denominator reading 6/6, reported, never the status)');
+    assert.equal(indicatorRefusal(run), "verticals bithire are not the fleet's");
+  });
+
+  it('MUTANT: a control the indicator reads NOT MEASURED fails the threshold, though its vacuity is permitted without one', () => {
+    const vacuous = (id) => (id === STATES_DEPENDENT_CONTROL ? { evidential: false, nonEvidentialReason: 'planted: the states positive moved nothing' } : {});
+    const run = result([...AXIS_IDS.map((axis) => positive(axis, 90, 100)), ...controlsAtZero(['light'], ['bithire'], vacuous)], {
       verticals: ['bithire'],
       themes: ['light'],
       denominatorReconciliation: Object.fromEntries(AXIS_IDS.map((axis) => [axis, { declared: 100 }])),
     });
-    assert.match(probe.verdictLine(met, { threshold: 80 }), /\(declared-basis status: 6\/6 at threshold — the indicator reads the declared basis\)$/u);
-    const partial = result([positive('shape', 90, 100)], { verticals: ['bithire'], themes: ['light'], denominatorReconciliation: { shape: { declared: 100 } } });
-    assert.match(probe.verdictLine(partial, { threshold: 80 }), /declared-basis status: 1\/6 at threshold; typography not measured on every cell, /u);
-    assert.equal(probe.verdictLine(measured),
-      'axis-difference OK — every evidential negative-control cell at 0 %; no threshold applied (the fleet bar is WO-EVI-02 acceptance, not this run)');
+    assert.ok(VACUITY_PERMITTED_CONTROLS.includes(STATES_DEPENDENT_CONTROL));
+    assert.deepEqual(evaluate(run).filter((line) => /negative/iu.test(line)), []);
+    const expected = SCENARIOS.find((scenario) => scenario.id === STATES_DEPENDENT_CONTROL).expectZeroOn.length;
+    assert.deepEqual(thresholdFailures(run), [
+      `negative test NOT-MEASURED on the basis the indicator reads: ${STATES_DEPENDENT_CONTROL} not-measured (${expected}/${expected} cell(s) not at a measured zero)`,
+    ]);
+    const controls = SCENARIOS.filter((scenario) => scenario.kind === 'negative').map((scenario) => ({ id: scenario.id, expectZeroOn: [...scenario.expectZeroOn] }));
+    const indicator = buildIndicator(run, { negativeControls: controls, producedAt: '2026-10-03T00:00:00.000Z' });
+    assert.deepEqual([indicator.met, indicator.negativeTest.status], [false, 'not-measured']);
+  });
+
+  it('a run at the bar on the declared basis with FEWER effective rows passes: the effective reading is reported, never the status', () => {
+    // 164/204 declared = 80.4 %; six families unmountable leave 198 effective, 82.8 %.
+    const run = fleet((axis) => (axis === 'depth' ? positive(axis, 164, 198) : positive(axis, 90, 100)), { depth: 204 });
+    const depth = indicatorOf(run).axes.depth;
+    assert.deepEqual([depth.status, depth.worstPercentDeclared, depth.worstPercentEffective], ['at-threshold', 80.4, 82.8]);
+    assert.deepEqual(thresholdFailures(run), []);
+    assert.match(probe.verdictLine(run, { threshold: 80 }), /on the declared basis \(6\/6 at threshold; /u);
+  });
+
+  it('MUTANT: an axis one (vertical, mode) cell did not measure is not at the threshold, as the indicator reads it', () => {
+    const cells = AXIS_IDS.flatMap((axis) => ['light', 'dark'].map((theme) => positive(axis, 90, 100, {
+      theme,
+      ...(axis === 'motion' && theme === 'dark' ? { evidential: false, nonEvidentialReason: 'planted: the arms resolve to one paint' } : {}),
+    })));
+    const run = result([...cells, ...controlsAtZero(['light', 'dark'])], {
+      verticals: ['bithire'],
+      themes: ['light', 'dark'],
+      denominatorReconciliation: Object.fromEntries(AXIS_IDS.map((axis) => [axis, { declared: 100 }])),
+    });
+    assert.equal(indicatorOf(run).axes.motion.status, 'not-measured');
+    assert.deepEqual(thresholdFailures(run), [
+      'motion: not measured on 1 of 2 (vertical, mode) cell(s) — bithire/dark: planted: the arms resolve to one paint; '
+      + 'the declared-basis status needs every cell evidential',
+    ]);
+  });
+
+  it('MUTANT: a run that publishes no declared population cannot pass a threshold; a --families subset is not judged on it and says so', () => {
+    const bare = result(AXIS_IDS.map((axis) => positive(axis, 90, 100)));
+    assert.deepEqual(thresholdFailures(bare), [
+      'declared basis: the run publishes no declared population (denominatorReconciliation, verticals, themes), so the '
+      + '80 % threshold cannot be read on the basis the indicator reads',
+    ]);
+    const undeclared = fleet((axis) => positive(axis, 90, 100), { depth: 0 });
+    assert.deepEqual(thresholdFailures(undeclared), ['depth: the run publishes no declared population for it, so it is not measured on the declared basis']);
+    const subset = { ...depthShort(), familiesFiltered: true };
+    assert.deepEqual(probe.declaredBasisFailures(subset, 80), []);
+    assert.equal(indicatorRefusal(subset), 'a --families run measures a subset, not the fleet');
+    assert.equal(probe.verdictLine(subset, { threshold: 80 }),
+      'axis-difference OK — every evidential negative-control cell at 0 %, every measured axis at or above 80 % on the effective denominator '
+      + 'of the --families subset (declared basis NOT judged: a subset is not the fleet, and no indicator is published from it)');
+  });
+
+  it('the CLI exits on the same verdict: the threshold reaches evaluate, a failure exits 1, and the passing line is verdictLine', () => {
     const cli = readFileSync(join(HERE, '../index.mjs'), 'utf8');
+    assert.match(cli, /const failures = evaluate\(result, \{\n    threshold: thresholdArgument === undefined \? null : Number\(thresholdArgument\),\n  \}\);\n  if \(failures\.length > 0\) \{\n    for \(const failure of failures\) console\.error\(`axis-difference FAIL — \$\{failure\}`\);\n    process\.exit\(1\);\n  \}/u);
+    assert.match(cli, /    failures\.push\(\.\.\.declaredBasisFailures\(result, threshold\)\);\n    if \(result\.familiesFiltered !== true && result\.verticals\?\.length > 0 && result\.themes\?\.length > 0\) \{\n      const negative = negativeTest\(result, negativeControlsOf\(SCENARIOS\)\);\n      if \(negative\.status !== 'green'\) \{/u);
     assert.ok(!/every axis at or above \$\{thresholdArgument\} %`/u.test(cli), 'the CLI must print the verdict through verdictLine');
+    assert.match(cli, /console\.log\(verdictLine\(result, \{ threshold: thresholdArgument === undefined \? null : Number\(thresholdArgument\) \}\)\);\n\}\n$/u);
   });
 
   it('MUTANT: an axis under the threshold is named, and only when a threshold is asked for', () => {

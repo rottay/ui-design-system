@@ -143,7 +143,7 @@
  *   node scripts/check/theme/axis-difference/index.mjs                  measure and publish indicator 7
  *   node scripts/check/theme/axis-difference/index.mjs --json           the full measurement
  *   node scripts/check/theme/axis-difference/index.mjs --vertical=evnto one vertical
- *   node scripts/check/theme/axis-difference/index.mjs --threshold=80   fail below 80 % per axis
+ *   node scripts/check/theme/axis-difference/index.mjs --threshold=80   fail below 80 % per axis, on the declared basis
  *   node scripts/check/theme/axis-difference/index.mjs --families=button,card
  *   node scripts/check/theme/axis-difference/index.mjs --no-part-mounts   the pre-lot reading
  *   node scripts/check/theme/axis-difference/index.mjs --collapsed-roots  the pre-repair root
@@ -192,6 +192,8 @@ import {
 } from '../population/index.mjs';
 import {
   CHROMATIC_FORBIDDEN_KEYS,
+  FLEET_THEMES,
+  FLEET_VERTICALS,
   INDICATOR_PATH,
   buildIndicator,
   chromaticStatesReading,
@@ -8174,6 +8176,55 @@ export function evaluate(result, {
         );
       }
     }
+    failures.push(...declaredBasisFailures(result, threshold));
+    if (result.familiesFiltered !== true && result.verticals?.length > 0 && result.themes?.length > 0) {
+      const negative = negativeTest(result, negativeControlsOf(SCENARIOS));
+      if (negative.status !== 'green') {
+        failures.push(`negative test ${negative.status.toUpperCase()} on the basis the indicator reads: ${Object.entries(negative.controls)
+          .filter(([, control]) => control.status !== 'green')
+          .map(([id, control]) => `${id} ${control.status} (${control.unmeasured.length + control.moved.length}/${control.expected} cell(s) not at a measured zero)`).join('; ')}`);
+      }
+    }
+  }
+  return failures;
+}
+
+/**
+ * The threshold on the basis the indicator's status reads: an axis is at the
+ * bar only when every (vertical, mode) cell is evidential and at it on the
+ * DECLARED population. A `--families` run measures a subset and is not judged.
+ */
+export function declaredBasisFailures(result, threshold) {
+  if (result.familiesFiltered === true) return [];
+  if (result.denominatorReconciliation === undefined || !(result.verticals?.length > 0) || !(result.themes?.length > 0)) {
+    return [
+      'declared basis: the run publishes no declared population (denominatorReconciliation, verticals, themes), so the '
+      + `${threshold} % threshold cannot be read on the basis the indicator reads`,
+    ];
+  }
+  const failures = [];
+  const readings = axisReadings(result, { threshold });
+  for (const axis of AXIS_IDS) {
+    const reading = readings[axis];
+    if (reading.status === 'at-threshold') continue;
+    const measured = reading.cells.filter((cell) => cell.measured);
+    if (reading.declared === 0) {
+      failures.push(`${axis}: the run publishes no declared population for it, so it is not measured on the declared basis`);
+    } else if (reading.status === 'below-threshold') {
+      const worst = measured.reduce((low, cell) => (cell.percentDeclared < low.percentDeclared ? cell : low));
+      failures.push(
+        `${axis}: ${worst.percentDeclared.toFixed(1)} % < ${threshold} % on the declared basis on ${worst.vertical}/${worst.theme} `
+        + `(${worst.moved}/${worst.declared} declaring families; ${worst.moved}/${worst.effective} = `
+        + `${worst.percentEffective.toFixed(1)} % effective is reported, never the status)`,
+      );
+    } else if (measured.length > 0) {
+      const unmeasured = reading.cells.filter((cell) => !cell.measured);
+      failures.push(
+        `${axis}: not measured on ${unmeasured.length} of ${reading.cells.length} (vertical, mode) cell(s) — `
+        + `${unmeasured.map((cell) => `${cell.vertical}/${cell.theme}: ${cell.reason}`).join('; ')}; the declared-basis `
+        + 'status needs every cell evidential',
+      );
+    }
   }
   return failures;
 }
@@ -8335,22 +8386,32 @@ export function readPublicationProvenance(result, { root = CORE_ROOT } = {}) {
 }
 
 /**
- * The verdict a passing run prints. `evaluate` judges the threshold on each
- * cell's EFFECTIVE denominator; the indicator's status reads the DECLARED one,
- * so the line states both and names every axis the declared basis leaves
- * short. It never says more than the indicator does.
+ * The verdict a passing run prints. The threshold is judged on the DECLARED
+ * basis the indicator's status reads, so no passing line exists while an axis
+ * is short there: asked for one, this throws. A `--families` run says it was
+ * judged on its subset alone.
  */
 export function verdictLine(result, { threshold = null } = {}) {
   const head = 'axis-difference OK — every evidential negative-control cell at 0 %';
   if (threshold === null) return `${head}; no threshold applied (the fleet bar is WO-EVI-02 acceptance, not this run)`;
+  if (result.familiesFiltered === true) {
+    return `${head}, every measured axis at or above ${threshold} % on the effective denominator of the --families subset `
+      + '(declared basis NOT judged: a subset is not the fleet, and no indicator is published from it)';
+  }
   const readings = axisReadings(result, { threshold });
   const short = AXIS_IDS.filter((axis) => readings[axis].status !== 'at-threshold').map((axis) => (
     readings[axis].status === 'below-threshold'
       ? `${axis} below at ${readings[axis].worstPercentDeclared} %`
       : `${axis} not measured on every cell`));
-  return `${head}, every axis at or above ${threshold} % on the effective denominator `
-    + `(declared-basis status: ${AXIS_IDS.length - short.length}/${AXIS_IDS.length} at threshold`
-    + `${short.length === 0 ? '' : `; ${short.join(', ')}`} — the indicator reads the declared basis)`;
+  if (short.length > 0) {
+    throw new Error(`axis-difference: no passing verdict exists while the declared basis is short of ${threshold} % (${short.join(', ')})`);
+  }
+  const effective = AXIS_IDS.filter((axis) => readings[axis].effectiveAtThreshold).length;
+  const same = (left, right) => left.length === right.length && left.every((entry) => right.includes(entry));
+  const fleet = same(result.verticals ?? [], FLEET_VERTICALS) && same(result.themes ?? [], FLEET_THEMES);
+  return `${head}, every axis at or above ${threshold} % on the declared basis${fleet ? ' the indicator reads' : ''} `
+    + `(${AXIS_IDS.length}/${AXIS_IDS.length} at threshold; effective-denominator reading ${effective}/${AXIS_IDS.length}, reported, never the status`
+    + `${fleet ? '' : `; ${result.verticals.length} vertical(s) x ${result.themes.length} mode(s) — NOT the fleet, no indicator is published from it`})`;
 }
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
