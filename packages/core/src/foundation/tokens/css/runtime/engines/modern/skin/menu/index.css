@@ -299,11 +299,56 @@
   transform: rotate(90deg);
 }
 
-/* Keyboard focus paints: the ring is the one affordance a keyboard user gets. */
-.ds-menu--modern[data-part='root'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible),
-.ds-menu--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: none;
+/* Keyboard focus wears the tenant focus signature. In the stacked modes it
+   is stated first and composed with the hovered or selected shadow it
+   follows; a `none` shadow would void the list, so each composition is guarded. */
+.ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+.ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+  outline: var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width)) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-menu-focus-ring, var(--ds-focus-ring));
+}
+
+@container not style(--ds-menu-item-shadow-active: none) {
+  @container not style(--ds-elevation-2: none) {
+    @container not style(--ds-menu-item-keyline: none) {
+      .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item'][data-selected='true']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+        box-shadow: var(--ds-menu-focus-ring, var(--ds-focus-ring)), var(--ds-menu-item-shadow-active, var(--ds-elevation-2)), var(--ds-menu-item-keyline);
+      }
+    }
+  }
+}
+
+@media (hover: hover) {
+  @container not style(--ds-menu-item-shadow-hover: none) {
+    @container not style(--ds-elevation-1: none) {
+      .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item']:not([data-state~='disabled']):not([data-selected='true']):not(:is([data-state~='pressed'], :active)):is([data-state~='hovered'], :hover):is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+      .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='trigger']:not([data-state~='disabled']):not(:is([data-state~='pressed'], :active)):is([data-state~='hovered'], :hover):is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+        box-shadow: var(--ds-menu-focus-ring, var(--ds-focus-ring)), var(--ds-menu-item-shadow-hover, var(--ds-elevation-1));
+      }
+    }
+  }
+}
+
+/* The menubar is a scroller and clips an outward shadow, so there the
+   signature rides an overlay inset by its own reach, under the row's content. */
+.ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+.ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+  outline: var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width)) solid transparent;
+  outline-offset: calc(-1 * var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width)));
+}
+
+.ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after,
+.ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width)));
+  inline-size: auto;
+  border-radius: max(0px, calc(var(--ds-menu-item-radius, var(--ds-radius-lg)) - var(--ds-focus-ring-offset) - var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width))));
+  background: none;
+  box-shadow: var(--ds-menu-focus-ring, var(--ds-focus-ring));
+  pointer-events: none;
 }
 
 /* ---- panels, groups, dividers ---------------------------------------- */
@@ -458,10 +503,29 @@
     border-color: ButtonText;
   }
 
-  /* The ring is a box-shadow, which forced colors strip: an outline stands in. */
-  .ds-menu--modern[data-part='root'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-menu--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width)) solid Highlight;
+  /* The signature is a box-shadow, which forced colors strip: an outline stands
+     in, inside the row wherever the list or the selected fill would hide it. */
+  .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+  .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline: max(2px, var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: 0;
+  }
+
+  .ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+  .ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+  .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item'][data-selected='true']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline: max(2px, var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width))) - var(--ds-edge-standard-width));
+  }
+
+  .ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='item'][data-selected='true']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+  .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item'][data-selected='true']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline-color: HighlightText;
+  }
+
+  .ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after,
+  .ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+    box-shadow: none;
   }
 
   /* Disabled reads as GrayText; danger keeps a SHAPE signal, a dashed frame. */

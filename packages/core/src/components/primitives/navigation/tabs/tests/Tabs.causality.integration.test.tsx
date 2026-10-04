@@ -50,7 +50,7 @@ describeCausality({
   markup,
   targets: [
     { id: 'pillInk', selector: PILL, property: 'background-color' },
-    { id: 'focusRing', selector: IDLE, property: 'box-shadow', attributes: { 'data-state': 'focused focus-visible' } },
+    { id: 'focusRing', selector: IDLE, property: 'box-shadow', pseudo: '::before', attributes: { 'data-state': 'focused focus-visible' } },
     { id: 'tabSize', selector: IDLE, property: 'font-size' },
     { id: 'tabRadius', selector: IDLE, property: 'border-top-left-radius' },
     { id: 'tabHeight', selector: IDLE, property: 'height' },
@@ -103,8 +103,8 @@ describe('tabs direction, state governance and accessibility', () => {
       targets: [
         { id: 'restInk', selector: IDLE, property: 'color' },
         { id: 'hoverInk', selector: IDLE, property: 'color', attributes: { 'data-state': 'hovered' } },
-        { id: 'restRing', selector: IDLE, property: 'box-shadow' },
-        { id: 'focusRing', selector: IDLE, property: 'box-shadow', attributes: { 'data-state': 'focused focus-visible' } },
+        { id: 'restRing', selector: IDLE, property: 'box-shadow', pseudo: '::before' },
+        { id: 'focusRing', selector: IDLE, property: 'box-shadow', pseudo: '::before', attributes: { 'data-state': 'focused focus-visible' } },
         { id: 'disabledCursor', selector: "#line [data-part='tab-button'][data-state~='disabled']", property: 'cursor' },
         { id: 'pressedTransform', selector: IDLE, property: 'transform', attributes: { 'data-state': 'pressed' } },
       ],

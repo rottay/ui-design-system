@@ -99,7 +99,7 @@ describe("chrome/menu", () => {
     for (const [channel, literal, bareReads] of [
       ["--ds-menu-item-lift", "calc(-1px * var(--ds-motion-intensity))", 1],
       ["--ds-menu-icon-scale", "calc(1 + 0.04 * var(--ds-motion-intensity))", 2],
-      ["--ds-menu-item-keyline", "inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) calc(52% * var(--ds-effect-intensity)), transparent)", 1],
+      ["--ds-menu-item-keyline", "inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) calc(52% * var(--ds-effect-intensity)), transparent)", 2],
       ["--ds-menu-icon-plate-bg", "color-mix(in srgb, currentColor 6%, transparent)", 1],
       ["--ds-menu-icon-opacity", "0.7", 1],
       ["--ds-menu-arrow-opacity", "0.4", 1],
