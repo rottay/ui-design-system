@@ -31,7 +31,9 @@ describe('Dropdown menu rhythm rides the density scale', () => {
   });
 
   it('pads the surface and the submenu through the Modern channel, not the Classic token', () => {
-    expect(SKIN.match(/padding: var\(--ds-dropdown-surface-padding\);/g)).toHaveLength(2);
+    const wiredRead = `padding: var(--ds-dropdown-surface-padding, ${declaration(TOKENS, '--ds-dropdown-surface-padding')});`;
+    expect(SKIN.split(wiredRead)).toHaveLength(3);
+    expect(SKIN.match(/var\(--ds-dropdown-surface-padding\b/g)).toHaveLength(2);
     expect(SKIN).not.toContain('var(--ds-dropdown-padding)');
   });
 });

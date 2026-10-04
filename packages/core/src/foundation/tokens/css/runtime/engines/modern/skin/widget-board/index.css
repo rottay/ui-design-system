@@ -144,8 +144,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  inline-size: var(--ds-widget-board-ghost-width);
-  block-size: var(--ds-widget-board-ghost-height);
+  inline-size: var(--ds-widget-board-ghost-width, var(--ds-spacing-0));
+  block-size: var(--ds-widget-board-ghost-height, var(--ds-spacing-0));
   translate: var(--ds-widget-board-ghost-x) var(--ds-widget-board-ghost-y);
   border: 2px solid color-mix(in srgb, var(--ds-color-primary) 56%, transparent);
   border-radius: var(--ds-radius-xl);
