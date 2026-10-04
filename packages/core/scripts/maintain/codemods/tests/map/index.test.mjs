@@ -217,7 +217,7 @@ test('the entries that need a decision per site are report-only, whatever their 
     && ['prop-renamed', 'prop-removed', 'union-member-removed', 'symbol-removed', 'subpath-removed'].includes(entry.class)
     && entry.replacement !== null);
   assert.deepEqual(decided.map((entry) => entry.id).sort(), [
-    'prop-removed/.#ChartScaffoldProps.loading',
+    'prop-removed/.#ChartScaffoldProps.loading', 'prop-removed/.#DataTablePatternProps.mobileBreakpoint',
     'prop-renamed/.#BaseMotionProps.delay', 'prop-renamed/.#BaseMotionProps.duration',
     'prop-renamed/.#CountUpProps.delay', 'prop-renamed/.#CountUpProps.duration',
     'prop-renamed/.#StaggerChildrenProps.delayChildren', 'prop-renamed/.#StaggerChildrenProps.staggerDelay',

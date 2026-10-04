@@ -158,12 +158,6 @@ export interface BadgeBaseProps
   max?: number;
 
   /**
-   * @deprecated Use max instead. Maximum number before showing "+".
-   * @default 99
-   */
-  overflowCount?: number;
-
-  /**
    * Status indicator for dot badges.
    */
   status?: BadgeStatus;

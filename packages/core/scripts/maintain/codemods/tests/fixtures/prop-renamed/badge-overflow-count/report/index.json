@@ -1,0 +1,34 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 9,
+    "column": 28,
+    "action": "rewrite",
+    "id": "prop-renamed/.#BadgeProps.overflowCount",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 12,
+    "column": 9,
+    "action": "rewrite",
+    "id": "prop-renamed/.#BadgeProps.overflowCount",
+    "reason": "attribute-renamed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 16,
+    "column": 36,
+    "action": "report",
+    "id": "prop-renamed/.#BadgeProps.overflowCount",
+    "reason": "conflict"
+  },
+  {
+    "file": "index.tsx",
+    "line": 17,
+    "column": 14,
+    "action": "report",
+    "id": "prop-renamed/.#BadgeProps.overflowCount",
+    "reason": "spread"
+  }
+]

@@ -215,7 +215,7 @@ export function filterSurfaceTabbedViews<TView extends SurfaceTabbedView>(
 
     return resolveSurfacePermission(access, {
       kind: 'tab',
-      id: view.capabilityId ?? view.permissionId ?? view.key,
+      id: view.capabilityId ?? view.key,
     });
   });
 
@@ -226,7 +226,7 @@ export function filterSurfaceTabbedViews<TView extends SurfaceTabbedView>(
   return visibleViews.map((view) => {
     const capability = resolveSurfaceCapability(access, {
       kind: 'tab',
-      id: view.capabilityId ?? view.permissionId ?? view.key,
+      id: view.capabilityId ?? view.key,
     });
 
     return capability?.disabled && !view.disabled

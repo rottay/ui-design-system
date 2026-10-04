@@ -1,0 +1,10 @@
+[
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "member-changed/.#SurfaceTabbedView.permissionId",
+    "reason": "member-changed"
+  }
+]

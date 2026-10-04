@@ -153,27 +153,12 @@ describe('normalizeSurfaceError', () => {
     ).toEqual([{ kind: 'action', id: 'edit', label: 'Edit', disabled: true }]);
   });
 
-  it('prefers the presentation-native tab capabilityId over the legacy alias', () => {
-    const access = {
-      mode: 'resolved' as const,
-      capabilities: [{ kind: 'tab' as const, id: 'workspace.audit', visible: true }],
-    };
-    const tab = {
-      key: 'audit',
-      label: 'Audit',
-      content: null,
-      capabilityId: 'workspace.audit',
-      permissionId: 'legacy.audit',
-    };
-
-    expect(filterSurfaceTabbedViews([tab], access)).toEqual([tab]);
-  });
-
-  it('keeps resolving tabbed views through permissionId when capabilityId is absent', () => {
+  it('resolves tabbed views through capabilityId or key only', () => {
     const views = [
-      { key: 'billing', label: 'Billing', content: null, permissionId: 'settings.billing' },
-      { key: 'security', label: 'Security', content: null, permissionId: 'settings.security' },
-      { key: 'audit', label: 'Audit', content: null, permissionId: 'settings.audit' },
+      { key: 'billing', label: 'Billing', content: null, capabilityId: 'settings.billing' },
+      { key: 'security', label: 'Security', content: null, capabilityId: 'settings.security' },
+      { key: 'audit', label: 'Audit', content: null, capabilityId: 'settings.audit' },
+      { key: 'members', label: 'Members', content: null },
     ];
     const access = {
       mode: 'resolved' as const,
@@ -182,14 +167,33 @@ describe('normalizeSurfaceError', () => {
         { kind: 'tab' as const, id: 'settings.security', visible: false },
         { kind: 'tab' as const, id: 'settings.audit', visible: true, disabled: true },
         { kind: 'tab' as const, id: 'security', visible: true },
+        { kind: 'tab' as const, id: 'members', visible: true },
       ],
     };
 
     expect(filterSurfaceTabbedViews(views, access)).toEqual([
       views[0],
       { ...views[2], disabled: true },
+      views[3],
     ]);
     expect(filterSurfaceTabbedViews(views, { mode: 'all' })).toEqual(views);
+  });
+
+  it('does not read permissionId on a tabbed view: the access id falls back to key', () => {
+    const views = [
+      { key: 'billing', label: 'Billing', content: null, permissionId: 'settings.billing' },
+      { key: 'audit', label: 'Audit', content: null, permissionId: 'settings.audit' },
+    ];
+    const access = {
+      mode: 'resolved' as const,
+      capabilities: [
+        { kind: 'tab' as const, id: 'settings.billing', visible: true },
+        { kind: 'tab' as const, id: 'settings.audit', visible: false },
+        { kind: 'tab' as const, id: 'audit', visible: true },
+      ],
+    };
+
+    expect(filterSurfaceTabbedViews(views, access)).toEqual([views[1]]);
   });
 
   it('resolves detail tabs through capabilityId or key only', () => {

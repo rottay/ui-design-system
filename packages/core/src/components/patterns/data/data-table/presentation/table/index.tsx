@@ -3,13 +3,11 @@
 import { densityScopeAttributes } from "@/infrastructure/runtime/foundation/density";
 import React, {
   useCallback,
-  useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
 import { createEngineComponent } from "../../../../../../infrastructure/runtime/engines/presentation/component-factory";
-import { RESPONSIVE_BREAKPOINTS } from "@/foundation/contracts/kernel/responsive/breakpoints";
 import {
   DATA_TABLE_ADAPTATION_BASE,
   DATA_TABLE_ADAPT_DEFAULTS,
@@ -18,7 +16,6 @@ import {
 } from "@/foundation/contracts/kernel/adaptation";
 import { useAdaptation } from "@/infrastructure/runtime/adaptation";
 import { useOptionalFormatter, useOptionalTranslation } from "@/infrastructure/runtime/i18n";
-import { useResponsive } from "@/infrastructure/runtime/responsive";
 import { AnatomySkeleton } from "@/components/primitives/feedback/skeleton";
 import { Box } from "@/components/primitives/layout/box";
 import { Button } from "@/components/primitives/inputs/button";
@@ -222,7 +219,6 @@ export function PatternDataTable<T extends object>(
     messages,
     loading = false,
     mobileCard,
-    mobileBreakpoint,
     autoMobileCards = true,
     actions,
     onRowClick,
@@ -237,55 +233,17 @@ export function PatternDataTable<T extends object>(
   );
   const responsiveRootRef = useRef<HTMLDivElement | null>(null);
 
-  // The deprecated pixel threshold keeps its own measurement, and only while
-  // it is set; everything else adapts on the shared postures.
-  const legacyThreshold = mobileBreakpoint;
-  const { activeBreakpoint } = useResponsive();
-  const [legacyWidth, setLegacyWidth] = useState<number | null>(null);
-  useEffect(() => {
-    const node = responsiveRootRef.current;
-    if (legacyThreshold === undefined) return undefined;
-    if (!node || typeof ResizeObserver === "undefined") return undefined;
-    const observer = new ResizeObserver((entries) => {
-      const width = entries[0]?.contentRect.width;
-      if (typeof width === "number") setLegacyWidth(width);
-    });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [legacyThreshold]);
-  const legacyCompact =
-    legacyThreshold !== undefined &&
-    (legacyWidth === null
-      ? RESPONSIVE_BREAKPOINTS[activeBreakpoint] < legacyThreshold
-      : legacyWidth < legacyThreshold);
-
-  const adaptationBase = useMemo<ResolvedDataTableAdaptation>(
-    () =>
-      legacyThreshold !== undefined && autoMobileCards && legacyCompact
-        ? { ...DATA_TABLE_ADAPTATION_BASE, presentation: "cards" }
-        : DATA_TABLE_ADAPTATION_BASE,
-    [autoMobileCards, legacyCompact, legacyThreshold]
-  );
   const {
     posture,
     adaptation,
     postureAttribute,
   } = useAdaptation<ResolvedDataTableAdaptation>(adapt, {
-    base: adaptationBase,
-    defaults:
-      autoMobileCards && legacyThreshold === undefined
-        ? DATA_TABLE_ADAPT_DEFAULTS
-        : undefined,
+    base: DATA_TABLE_ADAPTATION_BASE,
+    defaults: autoMobileCards ? DATA_TABLE_ADAPT_DEFAULTS : undefined,
     containerRef: responsiveRootRef,
   });
   const responsiveDeviceKey: ViewportPosture =
-    legacyThreshold !== undefined
-      ? legacyCompact
-        ? "phone"
-        : posture.viewport
-      : posture.container === "compact"
-      ? "phone"
-      : posture.viewport;
+    posture.container === "compact" ? "phone" : posture.viewport;
 
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
   const handleSelectionChange = useCallback(

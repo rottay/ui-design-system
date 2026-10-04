@@ -195,7 +195,7 @@ describe('VisualizationSurface', () => {
           {
             key: 'table',
             label: 'Table',
-            permissionId: 'analytics.table',
+            capabilityId: 'analytics.table',
             content: <div>Table visualization</div>,
           },
         ],

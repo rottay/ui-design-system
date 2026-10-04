@@ -2,24 +2,6 @@
   "schema": 1,
   "receipts": [
     {
-      "file": "src/components/patterns/data/data-table/contracts/index.ts",
-      "anchor": "DataTablePatternProps.mobileBreakpoint",
-      "kind": "consumer",
-      "path": "../app-bithire/src/ui/tables/data-table/index.tsx",
-      "needle": "mobileBreakpoint={mobileBreakpoint}",
-      "repository": "https://github.com/rottay/app-bithire.git",
-      "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
-      "fileDigest": "sha256:964bddda086627f1056c1d5fca713264cd9da395e980ebbfc7b206528b7a9d52",
-      "matchLine": 1330,
-      "matchDigest": "sha256:4e612bb0b6483cc83dc07c8a4b179aace6d92879fbbb76a91e5015200284b672",
-      "rowDigest": "sha256:7b8b5311d2461728b6f81a81c1bad956276c1b7aa9c2f5a547f09e2706fd17eb",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:f0219382d19b7074ea659d94ea91f3788cf2863e68dfde6d0b00ef1d9a2a3ef6"
-    },
-    {
       "file": "src/components/primitives/display/badge/contracts/index.ts",
       "anchor": "BadgeVariant",
       "kind": "consumer",
@@ -54,24 +36,6 @@
       "auditedAt": "2026-10-03",
       "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
       "integrity": "sha256:b1a4d399d86934b6e4446b9ed82c3f933de600b8d40226b14612b720148e27f0"
-    },
-    {
-      "file": "src/components/primitives/display/badge/contracts/index.ts",
-      "anchor": "BadgeBaseProps.overflowCount",
-      "kind": "consumer",
-      "path": "../app-platform/src/features/organization/admin/surface/screens/sessions/overview/index.tsx",
-      "needle": "<Badge count={anomalies.length} overflowCount={99}>",
-      "repository": "https://github.com/rottay/app-platform.git",
-      "commit": "e02e91b73e7679071563ab8872b2d4d89ee6a1f7",
-      "fileDigest": "sha256:00fc916f558614e9b04941c735290b6735e441898daaaab08463eac1383689da",
-      "matchLine": 815,
-      "matchDigest": "sha256:94296269cd94c44ed37c8df4c5aa699c270f6881f45df013dd8c69184cc729ec",
-      "rowDigest": "sha256:9cd852a068f53a84d0cdbcca89b5daf2fb48511c2d421b87ca78366ae37f0c44",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:7bbf04dd15c2504cb7a38ebab72e00d4276af849c06ba74bc236569e8d0ab793"
     },
     {
       "file": "src/components/primitives/display/callout/contracts/index.ts",
@@ -468,24 +432,6 @@
       "auditedAt": "2026-10-03",
       "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
       "integrity": "sha256:1c76eebd6215f6ca30e7c6b53cba864ad28e816d53dcc7330af3933f3a6c1dec"
-    },
-    {
-      "file": "src/components/structures/foundation/chrome/contracts/index.ts",
-      "anchor": "SurfaceTabbedView.permissionId",
-      "kind": "consumer",
-      "path": "../app-evnto/src/features/admin/settings/surface/screens/general/index.tsx",
-      "needle": "permissionId: \"billing\",",
-      "repository": "https://github.com/rottay/app-evnto.git",
-      "commit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
-      "fileDigest": "sha256:55f5e660c7bc3201102a4956444ee03b566c34249e05c7855ff7a86b51c879e3",
-      "matchLine": 191,
-      "matchDigest": "sha256:ab32bd42e66a8c0edf0875fe1f370568125f39ca79ee7eedca94d0d556f17929",
-      "rowDigest": "sha256:d373958789f506a5d2754724766b0e9c95793635c2733a3249d56ce49d4a81a7",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:e48c0200e6c3f1e2f14b39eaa36e10edcfa494dd41e109cbf75f0e4f70e39f53"
     }
   ]
 }

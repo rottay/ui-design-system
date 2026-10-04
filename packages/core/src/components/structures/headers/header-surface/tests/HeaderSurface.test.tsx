@@ -88,7 +88,7 @@ describe('HeaderSurface', () => {
           {
             key: 'activity',
             label: 'Activity',
-            permissionId: 'workspace.activity',
+            capabilityId: 'workspace.activity',
             content: <div>Activity panel</div>,
           },
         ],

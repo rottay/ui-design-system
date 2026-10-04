@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest";
 
 import { mockMatchMedia } from "@tests/support/browser/match-media";
 import { DesignSystemProvider } from "@/infrastructure/runtime/bootstrap";
@@ -136,6 +136,29 @@ describe("PatternDataTable adapt — container posture", () => {
     await resizeBox(box, 1200);
     expect(box).toHaveAttribute("data-posture", "desktop expanded");
     expect(box).toHaveAttribute("data-presentation", "table");
+  });
+
+  it("presents cards on a compact box with no adapt declared", async () => {
+    mockMatchMedia(1440);
+    const { container } = render(<Table />);
+    const box = await waitFor(() => {
+      const root = container.querySelector('[data-part="responsive-root"]');
+      expect(root).not.toBeNull();
+      return root as Element;
+    });
+    expect(box).toHaveAttribute("data-presentation", "table");
+
+    await resizeBox(box, 320);
+    expect(box).toHaveAttribute("data-posture", "desktop compact");
+    expect(box).toHaveAttribute("data-presentation", "cards");
+
+    await resizeBox(box, 1200);
+    expect(box).toHaveAttribute("data-presentation", "table");
+  });
+
+  it("declares no pixel threshold prop", () => {
+    expectTypeOf<DataTablePatternProps<Role>>().toHaveProperty("adapt");
+    expectTypeOf<DataTablePatternProps<Role>>().not.toHaveProperty("mobileBreakpoint");
   });
 
   it("keeps the table on a compact box when the standalone defaults are off", async () => {

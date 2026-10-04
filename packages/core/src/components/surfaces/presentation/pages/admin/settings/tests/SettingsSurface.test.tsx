@@ -253,7 +253,7 @@ describe('SettingsSurface', () => {
       {
         key: 'security',
         label: 'Security',
-        permissionId: 'settings.security',
+        capabilityId: 'settings.security',
         content: <div>Security settings panel</div>,
       },
     ];

@@ -173,8 +173,6 @@ export interface SurfaceTabbedView {
   visible?: boolean | (() => boolean);
   /** Stable capability ID used by final app-resolved presentation access. Defaults to `key`. */
   capabilityId?: string;
-  /** @deprecated Use `capabilityId`; retained as a type-only migration alias. */
-  permissionId?: string;
 }
 
 /**

@@ -376,15 +376,6 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   ) => ReactNode;
 
   /**
-   * Container width (in pixels) below which the table presents cards.
-   *
-   * @deprecated A pixel threshold owned by one family. Declare
-   * `adapt={{ compact: { presentation: "cards" } }}` instead, which follows the
-   * shared container ladder. When set, it replaces the posture defaults.
-   */
-  mobileBreakpoint?: number;
-
-  /**
    * Whether a standalone table applies its own posture defaults (cards on a
    * phone request or a compact box). Collection workspaces disable this
    * because their declared posture is the single authority for the active

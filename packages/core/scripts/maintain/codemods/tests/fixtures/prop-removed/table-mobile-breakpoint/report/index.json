@@ -1,0 +1,18 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 10,
+    "column": 62,
+    "action": "report",
+    "id": "prop-removed/.#DataTablePatternProps.mobileBreakpoint",
+    "reason": "report-only"
+  },
+  {
+    "file": "index.tsx",
+    "line": 15,
+    "column": 9,
+    "action": "report",
+    "id": "prop-removed/.#DataTablePatternProps.mobileBreakpoint",
+    "reason": "report-only"
+  }
+]

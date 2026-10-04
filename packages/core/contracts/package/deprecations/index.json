@@ -12,29 +12,6 @@
   ],
   "rows": [
     {
-      "file": "src/components/patterns/data/data-table/contracts/index.ts",
-      "anchor": "DataTablePatternProps.mobileBreakpoint",
-      "class": "compat-consumed",
-      "reason": "app-bithire forwards a pixel `mobileBreakpoint` to `PatternDataTable` from its table wrapper; the replacement is a posture declaration, not a number, so no mechanical rewrite exists and each site needs a decision.",
-      "scope": "One optional prop of `PatternDataTable`; when set it replaces the posture defaults.",
-      "replacement": "`adapt={{ compact: { presentation: \"cards\" } }}`",
-      "canonicalOwner": "src/components/patterns/data/data-table/contracts/index.ts",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
-      "since": "2026-09-12",
-      "removeIn": "3.0",
-      "evidence": [
-        {
-          "kind": "consumer",
-          "path": "../app-bithire/src/ui/tables/data-table/index.tsx",
-          "needle": "mobileBreakpoint={mobileBreakpoint}",
-          "note": "The wrapper imports PatternDataTable from @rottay/design-system at :58-72."
-        }
-      ],
-      "codemod": null,
-      "changeset": null
-    },
-    {
       "file": "src/components/patterns/workflow/approval-inbox/index.ts",
       "anchor": "PatternApprovalInbox",
       "class": "debt",
@@ -162,28 +139,6 @@
           "kind": "consumer",
           "path": "../app-bithire/src/vertical/showcase/applications/ai-recommendation-variants/index.tsx",
           "needle": "<Badge variant=\"secondary\" className=\"rt-showcase-ai-rec-c__ai-badge\">"
-        }
-      ],
-      "codemod": null,
-      "changeset": null
-    },
-    {
-      "file": "src/components/primitives/display/badge/contracts/index.ts",
-      "anchor": "BadgeBaseProps.overflowCount",
-      "class": "compat-consumed",
-      "reason": "app-platform still passes `overflowCount` to `Badge`; `max` is the same number under the canonical name, pending the rename codemod.",
-      "scope": "One optional prop of `Badge`; the Modern engine resolves it after `max`.",
-      "replacement": "`max`",
-      "canonicalOwner": "src/components/primitives/display/badge/contracts/index.ts",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
-      "since": "2026-03-16",
-      "removeIn": "3.0",
-      "evidence": [
-        {
-          "kind": "consumer",
-          "path": "../app-platform/src/features/organization/admin/surface/screens/sessions/overview/index.tsx",
-          "needle": "<Badge count={anomalies.length} overflowCount={99}>"
         }
       ],
       "codemod": null,
@@ -1267,29 +1222,6 @@
           "path": "packages/core/src/components/primitives/overlay/hover-card/engines/classic/index.tsx",
           "needle": "right: 'right',",
           "absentNeedle": "inline-end"
-        }
-      ],
-      "codemod": null,
-      "changeset": null
-    },
-    {
-      "file": "src/components/structures/foundation/chrome/contracts/index.ts",
-      "anchor": "SurfaceTabbedView.permissionId",
-      "class": "compat-consumed",
-      "reason": "app-evnto authors `permissionId` on views typed `SurfaceTabbedView`; `capabilityId` is the same string under the canonical name, pending the rename codemod.",
-      "scope": "One optional field of `SurfaceTabbedView`, read after `capabilityId` by the chrome access runtime.",
-      "replacement": "`capabilityId`",
-      "canonicalOwner": "src/components/structures/foundation/chrome/contracts/index.ts",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
-      "since": "2026-08-14",
-      "removeIn": "3.0",
-      "evidence": [
-        {
-          "kind": "consumer",
-          "path": "../app-evnto/src/features/admin/settings/surface/screens/general/index.tsx",
-          "needle": "permissionId: \"billing\",",
-          "note": "The file imports the SurfaceTabbedView type from @rottay/design-system at :30."
         }
       ],
       "codemod": null,

@@ -127,7 +127,6 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     dot = BADGE_DEFAULTS.dot,
     showZero = BADGE_DEFAULTS.showZero,
     max = BADGE_DEFAULTS.overflowCount,
-    overflowCount,
     tone,
     variant: variantProp,
     status,
@@ -176,7 +175,6 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   const busyAriaLabel = loading
     ? (loadingText ?? ariaLabel ?? i18n?.tOr('common.loading', 'Loading') ?? 'Loading')
     : ariaLabel;
-  const effectiveMax = max ?? overflowCount ?? BADGE_DEFAULTS.overflowCount;
   const statusVariant = status ? STATUS_VARIANT[status] : undefined;
   const variant = tone
     ? TONE_TO_VARIANT[tone]
@@ -188,7 +186,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   const overlayValue = content !== undefined
     ? content
     : count !== undefined
-      ? formatCount(count, effectiveMax)
+      ? formatCount(count, max)
       : undefined;
   const shouldShowOverlay = visible && (
     dot ||
@@ -254,7 +252,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   };
 
   const label = (loading && loadingText ? loadingText : undefined) ?? children ?? content ?? text ?? (
-    count !== undefined ? formatCount(count, effectiveMax) : undefined
+    count !== undefined ? formatCount(count, max) : undefined
   );
   const showAccessoryCount = isFamilyLabel && count !== undefined && (
     children !== undefined || content !== undefined || text !== undefined
@@ -287,7 +285,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
         </span>
       )}
       {showAccessoryCount && (
-        <span data-part="count">{formatCount(count!, effectiveMax)}</span>
+        <span data-part="count">{formatCount(count!, max)}</span>
       )}
     </>
   );
