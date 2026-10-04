@@ -3223,6 +3223,7 @@
   --ds-button-warning-border-hover: var(--ds-color-warning-700);
   --ds-card-bordered-bg: var(--ds-card-bg);
   --ds-card-default-bg: var(--ds-card-bg);
+  --ds-card-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-card-elevated-bg: var(--ds-card-bg);
   --ds-card-error-bg: var(--ds-color-error-50);
   --ds-card-error-border-color: var(--ds-color-error-200);

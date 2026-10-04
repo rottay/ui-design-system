@@ -8348,7 +8348,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      DISABLED STATE
      Appearance when disabled
      ======================================================================== */
-  --ds-card-disabled-opacity: 0.5;
+  --ds-card-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-card-disabled-cursor: not-allowed;
 }
 
@@ -61590,6 +61590,7 @@ html[data-ds-motion='reduced']
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-1);
   overflow: hidden;
+  position: relative;
 }
 
 .ds-pattern-operational-ledger.ds-engine-modern[data-part='root'][data-loading] {
@@ -61619,6 +61620,25 @@ html[data-ds-motion='reduced']
 .ds-pattern-operational-ledger.ds-engine-modern [data-part='table-region'] {
   overflow: auto;
   max-block-size: var(--_ds-operational-ledger-region-max-block, none);
+}
+
+/* The region is the tab stop that reaches the overflowing columns. The root
+   clips it and the rows cover it, so the tenant focus signature rides an
+   overlay inset by its own reach. The overlay hangs from the root: it frames
+   the card and stays still while the region scrolls. */
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='table-region']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='table-region']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::before {
+  position: absolute;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
+  z-index: var(--ds-z-index-relative-top, 10);
+  content: '';
+  border-radius: max(0px, calc(var(--ds-radius-lg) - var(--ds-edge-hairline-width, 1px) - var(--ds-focus-ring-offset) - var(--ds-focus-ring-width)));
+  box-shadow: var(--ds-focus-ring);
+  pointer-events: none;
 }
 
 .ds-pattern-operational-ledger.ds-engine-modern [data-part='table'] {
@@ -61821,6 +61841,16 @@ html[data-ds-motion='reduced']
   .ds-pattern-operational-ledger.ds-engine-modern[data-part='root']
     [data-part='table-body'] [data-part='entry'] [data-part='cell'] {
     border-block-end: 1px solid ButtonText;
+  }
+
+  .ds-pattern-operational-ledger.ds-engine-modern [data-part='table-region']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: none;
+  }
+
+  .ds-pattern-operational-ledger.ds-engine-modern [data-part='table-region']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::before {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width) - max(2px, var(--ds-focus-ring-width)));
+    box-shadow: none;
   }
 }
 
@@ -82821,6 +82851,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   cursor: grab;
 }
 
+/* The grip is a tab stop of its own, so it wears the tenant focus signature
+   at full strength instead of its resting dim. */
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__drag-handle[data-part='drag-handle']:is([data-state~='focus-visible'], :focus-visible) {
+  border-radius: var(--ds-saved-views-focus-ring-radius, var(--ds-radius-sm));
+  opacity: 1;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
+  box-shadow: var(--ds-focus-ring);
+}
+
 /* ---- unsaved dot + default star (geometry was engine inline styles). ---- */
 /* The unsaved indicator is a ringed nucleus — a SHAPE (ring + filled core),
    never hue alone: it stays legible in monochrome, on the active pill's own
@@ -83110,6 +83151,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     outline: 2px solid Highlight;
     outline-offset: -2px;
     box-shadow: none;
+  }
+
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__drag-handle[data-part='drag-handle']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
+  }
+
+  /* On the active pill the fill is Highlight itself. */
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__pill[data-part='pill'][data-active='true']
+    .ds-saved-views__drag-handle[data-part='drag-handle']:is([data-state~='focus-visible'], :focus-visible) {
+    outline-color: HighlightText;
   }
 }
 
@@ -89182,7 +89237,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='disabled'], :disabled) {
   cursor: default;
-  opacity: 0.3;
+  opacity: calc(0.5 * var(--ds-state-disabled-opacity));
 }
 
 /* ---- label: visibility state by ink, ellipsis-safe ---- */
@@ -109746,6 +109801,7 @@ html[lang]:lang(ar) {
   --ds-button-icon-active-transform: scale(var(--ds-state-press-scale));
   --ds-button-spinner-duration: var(--ds-motion-attention);
   --ds-button-text-transform: var(--ds-type-label-text-transform, none);
+  --ds-card-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-card-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-card-focus-ring-width: var(--ds-focus-ring-width);
   --ds-card-image-loading-duration: var(--ds-motion-glacial);
@@ -114207,6 +114263,7 @@ html[lang]:lang(ar) {
   --ds-button-warning-border-hover: var(--ds-color-warning-700);
   --ds-card-bordered-bg: var(--ds-card-bg);
   --ds-card-default-bg: var(--ds-card-bg);
+  --ds-card-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-card-elevated-bg: var(--ds-card-bg);
   --ds-card-error-bg: var(--ds-color-error-50);
   --ds-card-error-border-color: var(--ds-color-error-200);
@@ -118858,6 +118915,7 @@ html[lang]:lang(ar) {
   --ds-button-icon-active-transform: scale(var(--ds-state-press-scale));
   --ds-button-spinner-duration: var(--ds-motion-attention);
   --ds-button-text-transform: var(--ds-type-label-text-transform, none);
+  --ds-card-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-card-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-card-focus-ring-width: var(--ds-focus-ring-width);
   --ds-card-image-loading-duration: var(--ds-motion-glacial);

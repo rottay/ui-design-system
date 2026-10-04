@@ -1359,7 +1359,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 49,
+        "channelsRead": 52,
         "classTokens": 1,
         "partsStamped": 12,
         "partsConsumed": 13
@@ -1375,14 +1375,14 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-08: the saved-views bar measured at HEAD b8b8fc6ef, unfixed debt pinned as measured; colorLiteralsInSkin is 0 because the 8 #000 stops of the inline-end scroll fade live in mask-image / -webkit-mask-image and a mask reads only alpha (the gate reads them as maskAlphaStops); the decision-causality suite is PatternSavedViewsBar.causality.integration.test.tsx. WO-FAM-08 (F-69, 2026-09-17): the DnD admission arm is new, so its two counters seed at what the gate measures today -- INSTRUMENT COVERAGE, newly visible debt for a corpus never scanned before, with no ceiling raised for source that changed. dndTransportOwners=1 / dndDropZoneOwners=0. Both are decrease-only and the F-69 consolidation criterion closes only when every row reaches 0. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. 2026-09-17: transport adopted the shared sortable kernel (WO-FAM-08 lot 1, commit 907da3148) — dndTransportOwners 1 -> 0 measured by the F-69 arm. Re-pin 2026-09-20 (DT, wave window): channelsRead 51 -> 52 = the 8e6b7e57b motion swap net 0 and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. | denominator re-read 2026-10-04: channelsRead 52 -> 49; no blocking arm and no ratchet moved, measured by the gate."
+      "cutNote": "WO-FAM-08: the saved-views bar measured at HEAD b8b8fc6ef, unfixed debt pinned as measured; colorLiteralsInSkin is 0 because the 8 #000 stops of the inline-end scroll fade live in mask-image / -webkit-mask-image and a mask reads only alpha (the gate reads them as maskAlphaStops); the decision-causality suite is PatternSavedViewsBar.causality.integration.test.tsx. WO-FAM-08 (F-69, 2026-09-17): the DnD admission arm is new, so its two counters seed at what the gate measures today -- INSTRUMENT COVERAGE, newly visible debt for a corpus never scanned before, with no ceiling raised for source that changed. dndTransportOwners=1 / dndDropZoneOwners=0. Both are decrease-only and the F-69 consolidation criterion closes only when every row reaches 0. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. 2026-09-17: transport adopted the shared sortable kernel (WO-FAM-08 lot 1, commit 907da3148) — dndTransportOwners 1 -> 0 measured by the F-69 arm. Re-pin 2026-09-20 (DT, wave window): channelsRead 51 -> 52 = the 8e6b7e57b motion swap net 0 and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. | denominator re-read 2026-10-04: channelsRead 52 -> 49; no blocking arm and no ratchet moved, measured by the gate. | denominator re-read 2026-10-04: channelsRead 49 -> 52; no blocking arm and no ratchet moved, measured by the gate."
     },
     "column-settings": {
       "cut": "WO-FAM-08",
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 39,
+        "channelsRead": 40,
         "classTokens": 2,
         "partsStamped": 14,
         "partsConsumed": 13
@@ -1398,7 +1398,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-08: the column-settings panel measured at HEAD b8b8fc6ef, unfixed debt pinned as measured; the decision-causality suite is ColumnSettings.causality.integration.test.tsx. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. Re-pin 2026-09-20 (DT): channelsRead 38 -> 42 = +--ds-edge-hairline-width (7ef3c96b7 depth keyline, +1; the ccb6b784d motion swap is net 0) and the FAM-08/FAM-10 contrast drain lot +3 (Fable ACCEPT): --ds-column-settings-quiet-ink +--ds-color-bg-primary +--ds-surface-canvas (--ds-color-text-primary was already read) — the family's own quiet-ink channel stated in its deriver as color-mix(72% primary into the part's actual ground). | denominator re-read 2026-10-04: channelsRead 42 -> 39; no blocking arm and no ratchet moved, measured by the gate."
+      "cutNote": "WO-FAM-08: the column-settings panel measured at HEAD b8b8fc6ef, unfixed debt pinned as measured; the decision-causality suite is ColumnSettings.causality.integration.test.tsx. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. Re-pin 2026-09-20 (DT): channelsRead 38 -> 42 = +--ds-edge-hairline-width (7ef3c96b7 depth keyline, +1; the ccb6b784d motion swap is net 0) and the FAM-08/FAM-10 contrast drain lot +3 (Fable ACCEPT): --ds-column-settings-quiet-ink +--ds-color-bg-primary +--ds-surface-canvas (--ds-color-text-primary was already read) — the family's own quiet-ink channel stated in its deriver as color-mix(72% primary into the part's actual ground). | denominator re-read 2026-10-04: channelsRead 42 -> 39; no blocking arm and no ratchet moved, measured by the gate. | denominator re-read 2026-10-04: channelsRead 39 -> 40; no blocking arm and no ratchet moved, measured by the gate."
     },
     "filter-panel": {
       "cut": "WO-FAM-08",

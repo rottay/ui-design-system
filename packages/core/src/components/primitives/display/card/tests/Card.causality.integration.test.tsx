@@ -19,7 +19,9 @@ import {
   auditAxe,
   describeCausality,
   measureArms,
+  measureMountedArms,
   mountArm,
+  mountFlatThemeArm,
   resolvedBaseCss,
   seriousFindings,
 } from '@tests/support/family-causality';
@@ -83,6 +85,7 @@ function pointerChromium(): { launch(): Promise<{ newPage(): Promise<PointerPage
 
 const PLAIN = "#plain [data-part='root']";
 const ACTION = "#action [data-part='root']";
+const DISABLED = "#disabled [data-part='root']";
 
 describeCausality({
   family: 'card',
@@ -97,10 +100,13 @@ describeCausality({
     { id: 'underlineEdge', selector: "#underline [data-part='root']", property: 'border-bottom-width' },
     { id: 'iconShadow', selector: "#compound [data-part='icon']", property: 'box-shadow' },
     { id: 'duration', selector: "#compound [data-part='icon']", property: 'transition-duration' },
+    { id: 'disabledOpacity', selector: DISABLED, property: 'opacity' },
   ],
   decisions: {
     'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['toneBorder'], holds: 'radius', in: SEED_VERTICALS },
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: VERTICALS },
+    // `subtle` is stated by no preset (bithire decides `strong`, the others rest on `medium`).
+    'states.emphasis': { value: 'subtle', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['titleSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'titleSize', in: RADIUS_VERTICALS },
     'spacing.rhythm': { value: 'airy', moves: ['bodyPad'], holds: 'radius', in: VERTICALS },
@@ -153,8 +159,8 @@ describe('card direction, state governance, toned inks and accessibility', () =>
         { id: 'focusRing', selector: ACTION, property: 'box-shadow', attributes: { 'data-state': 'focused focus-visible' } },
         { id: 'focusOutline', selector: ACTION, property: 'outline-color', attributes: { 'data-state': 'focused focus-visible' } },
         { id: 'pressedTransform', selector: ACTION, property: 'transform', attributes: { 'data-state': 'pressed' } },
-        { id: 'disabledCursor', selector: "#disabled [data-part='root']", property: 'cursor' },
-        { id: 'disabledEvents', selector: "#disabled [data-part='root']", property: 'pointer-events' },
+        { id: 'disabledCursor', selector: DISABLED, property: 'cursor' },
+        { id: 'disabledEvents', selector: DISABLED, property: 'pointer-events' },
       ],
     });
     const r = result.base!;
@@ -165,6 +171,51 @@ describe('card direction, state governance, toned inks and accessibility', () =>
     expect(r.pressedTransform).not.toBe('none');
     expect(r.disabledCursor).toBe('not-allowed');
     expect(r.disabledEvents).toBe('none');
+  }, 60_000);
+
+  it('dims the unavailable card at the disabled opacity its scope decides', async () => {
+    const targets = [
+      { id: 'opacity', selector: DISABLED, property: 'opacity' },
+      { id: 'dial', selector: DISABLED, property: '--ds-state-disabled-opacity' },
+    ];
+    for (const vertical of VERTICALS) {
+      const result = await measureArms({
+        vertical,
+        markup,
+        arms: {
+          base: {},
+          subtle: { 'states.emphasis': 'subtle' },
+          medium: { 'states.emphasis': 'medium' },
+          strong: { 'states.emphasis': 'strong' },
+        },
+        targets,
+      });
+      expect(result.subtle!.opacity, vertical).toBe('0.68');
+      expect(result.medium!.opacity, vertical).toBe('0.6');
+      expect(result.strong!.opacity, vertical).toBe('0.5');
+      expect(result.base!.opacity, vertical).toBe(result.base!.dial!.trim());
+    }
+  }, 180_000);
+
+  it('keeps an authored card disabled opacity over the dial', async () => {
+    const result = await measureMountedArms({
+      markup,
+      targets: [
+        { id: 'opacity', selector: DISABLED, property: 'opacity' },
+        { id: 'dial', selector: DISABLED, property: '--ds-state-disabled-opacity' },
+      ],
+      arms: {
+        authored: () =>
+          mountFlatThemeArm('evnto', {
+            id: 'card-disabled-opacity',
+            name: 'Card disabled opacity',
+            surfaces: { stateEmphasis: 'subtle' },
+            chrome: { cardComponent: { disabledOpacity: 0.3 } },
+          }),
+      },
+    });
+    expect(result.authored!.dial!.trim()).toBe('0.68');
+    expect(result.authored!.opacity).toBe('0.3');
   }, 60_000);
 
   it('paints the press posture when hover and press stamp together', async () => {

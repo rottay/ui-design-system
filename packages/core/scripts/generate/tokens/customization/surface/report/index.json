@@ -3,12 +3,12 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "76a9227dcd19426da8c7bdf9463d4a4ef71ae4946b984ebf73033dd5ce3881b1",
+    "inputsDigest": "d1304596b1bea116b32d8167c87c690a677f538d52a21ce163f1d532ca2a3389",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 500,
-      "productionTsFiles": 2171,
-      "testFiles": 1987,
+      "productionTsFiles": 2172,
+      "testFiles": 1991,
       "artifactFiles": 3,
       "showroomReaderFiles": 388
     }
@@ -26,7 +26,7 @@
     "modernConsumedUnique": 4795,
     "tsReadNames": 3114,
     "tsWriteNames": 3920,
-    "tsMetadataNames": 5848,
+    "tsMetadataNames": 5849,
     "showroomReadNames": 121,
     "unclassified": 0,
     "prototypeLedgerRows": 80
@@ -20124,12 +20124,12 @@
         "css": 1,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-card-divider-color": {
       "category": "canonical-authority",
@@ -52805,7 +52805,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 382,
+        "css": 383,
         "ts": 28,
         "showroom": 0,
         "tests": true,
@@ -55989,7 +55989,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 247,
+        "css": 249,
         "ts": 68,
         "showroom": 0,
         "tests": true,
@@ -56021,7 +56021,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 194,
+        "css": 199,
         "ts": 16,
         "showroom": 0,
         "tests": true,
@@ -56037,7 +56037,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 303,
+        "css": 312,
         "ts": 24,
         "showroom": 0,
         "tests": true,
@@ -91973,7 +91973,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 271,
+        "css": 272,
         "ts": 69,
         "showroom": 3,
         "tests": true,
@@ -92165,7 +92165,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 203,
+        "css": 204,
         "ts": 52,
         "showroom": 3,
         "tests": true,
@@ -94008,7 +94008,7 @@
         "css": 1,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -94021,7 +94021,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -110005,8 +110005,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 84,
-        "ts": 30,
+        "css": 86,
+        "ts": 31,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -140861,10 +140861,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },

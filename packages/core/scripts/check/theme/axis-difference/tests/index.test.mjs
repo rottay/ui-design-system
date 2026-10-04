@@ -5360,21 +5360,20 @@ describe('axis-difference CR-2 — the chromatic states reading stays apart', ()
   const chromaticFailures = (measurement, options) => evaluate(measurement, options)
     .filter((line) => /chromatic|CHROMATIC_ONLY_STATES|outside the six/u.test(line));
 
-  it('P4: the chromatic-only set is pinned by name -- card alone since data-table left it, in every states cell, both directions', () => {
-    // Re-pinned ['data-table'] -> [] on 2026-10-03: its focus overlays paint
-    // the tenant signature, so it moves on the axis itself. card entered the
-    // same day, back in the measured population and moving by colour alone.
-    assert.deepEqual([...probe.CHROMATIC_ONLY_STATES], ['card']);
+  it('P4: the chromatic-only set is pinned by name -- empty, in every states cell, both directions', () => {
+    // data-table and card each left when their state paint reached an axis
+    // property: the focus signature, and the disabled dial on `opacity`.
+    assert.deepEqual([...probe.CHROMATIC_ONLY_STATES], []);
     assert.deepEqual(chromaticFailures(chromaticResult()), []);
-    const settled = chromaticFailures(chromaticResult({ chromaticOnly: [] }));
+    const settled = chromaticFailures(chromaticResult({ chromaticOnly: [] }), { chromaticOnlyStates: ['card'] });
     assert.equal(settled.length, 6, settled.join(' | '));
     assert.match(settled[0], /^bithire\/light card: pinned chromatic-only on states and it is not/u);
     // DIRECTION 1, on the shipped pin: a family that moves by colour ALONE is
-    // refused, cell by cell -- data-table itself if it stops moving on the axis.
-    const back = chromaticFailures(chromaticResult({ chromaticOnly: ['card', 'data-table'] }));
+    // refused, cell by cell -- card or data-table itself if it stops moving on the axis.
+    const back = chromaticFailures(chromaticResult({ chromaticOnly: ['card'] }));
     assert.equal(back.length, 6, back.join(' | '));
-    assert.match(back[0], /^bithire\/light data-table: moves on states by colour ALONE and is not in CHROMATIC_ONLY_STATES/u);
-    const entered = chromaticFailures(chromaticResult({ chromaticOnly: ['card', 'tree'] }));
+    assert.match(back[0], /^bithire\/light card: moves on states by colour ALONE and is not in CHROMATIC_ONLY_STATES/u);
+    const entered = chromaticFailures(chromaticResult({ chromaticOnly: ['tree'] }));
     assert.equal(entered.length, 6);
     assert.match(entered[0], /tree: moves on states by colour ALONE and is not in CHROMATIC_ONLY_STATES/u);
     // DIRECTION 2, THE LEAK FINGERPRINT: a pinned family a merge counted on

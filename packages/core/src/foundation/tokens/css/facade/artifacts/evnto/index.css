@@ -3012,6 +3012,7 @@
   --ds-button-icon-active-transform: scale(var(--ds-state-press-scale));
   --ds-button-spinner-duration: var(--ds-motion-attention);
   --ds-button-text-transform: var(--ds-type-label-text-transform, none);
+  --ds-card-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-card-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-card-focus-ring-width: var(--ds-focus-ring-width);
   --ds-card-image-loading-duration: var(--ds-motion-glacial);

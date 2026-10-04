@@ -5,7 +5,7 @@
   "vertical": "bithire",
   "mode": "light",
   "channelCount": 4257,
-  "digest": "b8d9a29441d4087b8dedc078b5f0af280ad7a2841ef8fd2e95f31f5b46fcafbe",
+  "digest": "f48af723e8c24b07d1c2279143697811df5fe399e44af969d1ec0e43f1232dfc",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -670,7 +670,7 @@
     "--ds-card-default-border-color": "var(--ds-card-border-color)",
     "--ds-card-default-padding": "var(--ds-card-md-padding)",
     "--ds-card-disabled-cursor": "not-allowed",
-    "--ds-card-disabled-opacity": "0.5",
+    "--ds-card-disabled-opacity": "var(--ds-state-disabled-opacity)",
     "--ds-card-divider-color": "var(--ds-color-neutral-200)",
     "--ds-card-divider-margin-y": "var(--ds-spacing-3, 0.75rem)",
     "--ds-card-divider-width": "1px",

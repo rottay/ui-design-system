@@ -600,7 +600,7 @@
      DISABLED STATE
      Appearance when disabled
      ======================================================================== */
-  --ds-card-disabled-opacity: 0.5;
+  --ds-card-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-card-disabled-cursor: not-allowed;
 }
 

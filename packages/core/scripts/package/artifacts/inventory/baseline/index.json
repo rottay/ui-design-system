@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7657,
-  "unpackedSize": 43281020,
+  "entryCount": 7660,
+  "unpackedSize": 43322606,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -16,7 +16,7 @@
     },
     {
       "path": "contracts/runtime/suppliers/index.json",
-      "size": 138135
+      "size": 138371
     },
     {
       "path": "contracts/themes/canaries/index.d.ts",
@@ -28,7 +28,7 @@
     },
     {
       "path": "dist/bithire.css",
-      "size": 5053273
+      "size": 5056155
     },
     {
       "path": "dist/chart-access.cjs",
@@ -4028,7 +4028,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/engines/modern/index.cjs",
-      "size": 4670
+      "size": 4890
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/engines/modern/index.d.ts",
@@ -4036,7 +4036,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/engines/modern/index.js",
-      "size": 7100
+      "size": 7354
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/index.cjs",
@@ -13208,7 +13208,7 @@
     },
     {
       "path": "dist/entrypoints/server/index.d.ts",
-      "size": 21273
+      "size": 21972
     },
     {
       "path": "dist/entrypoints/suppliers/cli/index.js",
@@ -13228,7 +13228,7 @@
     },
     {
       "path": "dist/evnto.css",
-      "size": 5014384
+      "size": 5017266
     },
     {
       "path": "dist/fonts/arabic-text.css",
@@ -19772,7 +19772,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.cjs",
-      "size": 34804
+      "size": 34899
     },
     {
       "path": "dist/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.d.ts",
@@ -19780,7 +19780,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.js",
-      "size": 50319
+      "size": 50416
     },
     {
       "path": "dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.cjs",
@@ -20060,7 +20060,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.cjs",
-      "size": 275638
+      "size": 275704
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.d.ts",
@@ -20068,7 +20068,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.js",
-      "size": 293630
+      "size": 293700
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/index.cjs",
@@ -20297,6 +20297,18 @@
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/runtime/style/index.js",
       "size": 5524
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/raw-override-migration/index.cjs",
+      "size": 10286
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/raw-override-migration/index.d.ts",
+      "size": 3901
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/raw-override-migration/index.js",
+      "size": 13362
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.cjs",
@@ -30580,11 +30592,11 @@
     },
     {
       "path": "dist/rottay.css",
-      "size": 5013644
+      "size": 5016526
     },
     {
       "path": "dist/server.cjs",
-      "size": 12060
+      "size": 12371
     },
     {
       "path": "dist/server.d.ts",
@@ -30592,7 +30604,7 @@
     },
     {
       "path": "dist/server.js",
-      "size": 12930
+      "size": 13263
     },
     {
       "path": "dist/spatial.cjs",
@@ -30608,7 +30620,7 @@
     },
     {
       "path": "dist/styles.css",
-      "size": 5688005
+      "size": 5691015
     },
     {
       "path": "governance/graphics/licenses/phosphor-icons-react/index.md",

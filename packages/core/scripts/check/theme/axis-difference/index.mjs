@@ -6676,18 +6676,18 @@ export const CHROMATIC_SCENE = 'the non-chromatic scene: root plus states-tagged
  * would add to the numerator, and the pin is what turns that leak into a
  * failure. Re-pinned only with the measurement, like `UNOBSERVABLE_FAMILIES`.
  *
- * Empty since 2026-10-03. data-table was the one entry while its focus paint
+ * Empty since 2026-10-04. data-table left on 2026-10-03: its focus paint
  * was read as a background tint alone. Its row and sortable header cell now
  * paint the tenant focus signature (`--ds-focus-ring`) on an `::after`
  * overlay, which the default scene reads: it moves on `box-shadow` by
  * geometry and stays at 0 under palette-only (`PSEUDO_ONLY_CREDITS.states`).
  *
- * card enters (2026-10-03) with the measurement that emptied
- * `UNSETTLED_FAMILIES`: back in the measured population, its default mount
- * moves `background-color` under disabled, hover and active and nothing the
- * six axes read, in all six cells.
+ * card was the one entry from 2026-10-03 while `--ds-card-disabled-opacity`
+ * was a `:root` literal: its default mount moved `background-color` alone. The
+ * channel is a root alias of `--ds-state-disabled-opacity` now, so the disabled
+ * root moves on `opacity`, an axis property, in all six cells.
  */
-export const CHROMATIC_ONLY_STATES = Object.freeze(['card']);
+export const CHROMATIC_ONLY_STATES = Object.freeze([]);
 
 /** The read set the chromatic reading adds to the run: what the six axes do not already read. */
 export function chromaticReadProperties() {
