@@ -315,7 +315,7 @@ test('the literal renames of the retired size and alignment spellings are author
 
 const LEDGER = 'contracts/package/deprecations/index.json';
 /** Rows that name an existing entry which states no notice yet; the list only shrinks, and is empty once their notices land. */
-const NOTICE_OWED = ['member-changed/.#Callout', 'member-changed/.#BrandMotion.entranceDuration'];
+const NOTICE_OWED = [];
 
 test('a notice is admitted on a report-only member-changed entry only, and its shape is checked', () => {
   const ID = 'member-changed/.#Callout';
@@ -366,6 +366,7 @@ test('notice entries and the ledger rows that survive 3.0 correspond in both dir
     named.set(entry.id, row.anchor);
   }
   const notices = map.entries.filter((entry) => entry.notice !== undefined);
+  assert.equal(notices.length, 33, 'the 31 entries of the RET-01 ledger lot plus the Callout and BrandMotion precedents');
   for (const entry of notices) {
     assert.ok(named.has(entry.id), `${entry.id}: a notice no surviving row of ${LEDGER} names`);
     assert.ok(surface.exportsOf(entry.subpath).has(entry.symbol), `${entry.id}: a notice is about an export that stays published`);

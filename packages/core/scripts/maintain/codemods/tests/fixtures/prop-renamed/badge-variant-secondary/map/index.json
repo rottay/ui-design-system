@@ -15,9 +15,9 @@
       "changeset": "fixture",
       "census": "fixture",
       "mode": "rewrite",
-      "resolves": "fixture: the value map `tone` can honour for Badge; `secondary` is absent because no tone reproduces it on any engine (parity verdict B, W10-RET01-PARITY row 3)",
+      "resolves": "fixture: the value map `tone` can honour for Badge; `secondary` is absent because no tone reproduces it on any engine (parity verdict B, W10-RET01-PARITY row 3; the kernel `Variant` answers through the identity alias `export type BadgeVariant = Variant` and leaves last — TagVariant and AvatarVariant still build on it)",
       "parity": {
-        "anchors": ["BadgeBaseProps.variant", "BadgeVariant"],
+        "anchors": ["BadgeBaseProps.variant", "BadgeVariant", "Variant"],
         "failing": { "member": "variant", "value": "secondary" },
         "test": "src/components/primitives/display/badge/tests/Badge.variant-tone-parity.test.tsx"
       }

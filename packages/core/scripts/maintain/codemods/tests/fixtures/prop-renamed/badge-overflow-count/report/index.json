@@ -30,5 +30,21 @@
     "action": "report",
     "id": "prop-renamed/.#BadgeProps.overflowCount",
     "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 17,
+    "action": "report",
+    "id": "member-changed/.#BadgeProps.variant",
+    "reason": "member-changed"
+  },
+  {
+    "file": "index.tsx",
+    "line": 1,
+    "column": 17,
+    "action": "report",
+    "id": "member-changed/.#BadgeProps.closable",
+    "reason": "member-changed"
   }
 ]

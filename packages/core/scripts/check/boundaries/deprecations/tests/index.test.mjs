@@ -620,6 +620,10 @@ describe('deprecations — negatives', () => {
       assert.equal(fixtureVerdict(REAL_PACKAGE, fixture), null, fixture);
       assert.equal(parityVerdict(REAL_PACKAGE, fixture, { anchor }), null, `${fixture} for ${anchor}`);
     }
+    // The kernel `Variant` answers through the identity alias `export type BadgeVariant = Variant` — the Badge
+    // fixture only; the Tag fixture must keep refusing it.
+    assert.equal(parityVerdict(REAL_PACKAGE, 'prop-renamed/badge-variant-secondary', { anchor: 'Variant' }), null, 'Variant through the alias');
+    assert.match(parityVerdict(REAL_PACKAGE, 'prop-renamed/tag-variant-secondary', { anchor: 'Variant' }), /NO SYMBOL: `parity\.anchors` names/);
     assert.match(parityVerdict(REAL_PACKAGE, 'prop-renamed/badge-variant-secondary', { anchor: 'TagProps.variant' }), /NO SYMBOL: `parity\.anchors` names/);
     for (const fixture of ['prop-renamed/value-map', 'prop-renamed/callout-variant-tone']) {
       assert.equal(fixtureVerdict(REAL_PACKAGE, fixture), null, `${fixture} satisfied the verdict law`);

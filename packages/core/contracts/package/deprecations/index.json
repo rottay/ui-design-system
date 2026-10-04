@@ -53,7 +53,7 @@
           "note": "A value `tone` cannot express; the probe cannot migrate without changing what it renders."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#AvatarVariant",
       "changeset": null
     },
     {
@@ -82,21 +82,21 @@
           "note": "A value `tone` cannot express; the probe cannot migrate without changing what it renders."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#AvatarProps.variant",
       "changeset": null
     },
     {
       "file": "src/components/primitives/display/badge/contracts/index.ts",
       "anchor": "BadgeVariant",
       "class": "compat-consumed",
-      "reason": "app-bithire imports the `BadgeVariant` type by name to type its status tables, and the design system itself still authors `variant` on `Badge`; the tone mapping needs a codemod and a parity verdict.",
+      "reason": "app-bithire imports the `BadgeVariant` type by name to type its status tables, and the design system itself still authors `variant` on `Badge`; the tone mapping needs a codemod and a parity verdict. Transferred to WO-RET-06 at the RET-01 closure (E11): parity failed with a fixture (prop-renamed/badge-variant-secondary), removal recorded for the 4.0 line.",
       "scope": "Exported type alias, the type of `BadgeBaseProps.variant`.",
       "replacement": "`Tone` through the `tone` prop",
       "canonicalOwner": "src/components/primitives/display/badge/contracts/index.ts",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
+      "blocker": "parity-failed:prop-renamed/badge-variant-secondary",
+      "receiver": "WO-RET-06",
       "since": "2026-07-10",
-      "removeIn": "3.0",
+      "removeIn": "4.0",
       "evidence": [
         {
           "kind": "consumer",
@@ -109,21 +109,21 @@
           "needle": "<Badge variant=\"error\" badgeStyle=\"soft\" size=\"xs\">"
         }
       ],
-      "codemod": null,
-      "changeset": null
+      "codemod": "member-changed/.#BadgeVariant",
+      "changeset": ".changeset/ret-01-compat-rows-receiver-4-0.md"
     },
     {
       "file": "src/components/primitives/display/badge/contracts/index.ts",
       "anchor": "BadgeBaseProps.variant",
       "class": "compat-consumed",
-      "reason": "Authored on `Badge` across design-system surfaces, the showroom and all three apps; `tone` renames `error` to `danger` and drops `gradient`, so removal needs the value-mapping codemod and a parity verdict.",
+      "reason": "Authored on `Badge` across design-system surfaces, the showroom and all three apps; `tone` renames `error` to `danger` and drops `gradient`, so removal needs the value-mapping codemod and a parity verdict. Transferred to WO-RET-06 at the RET-01 closure (E11): parity failed with a fixture (prop-renamed/badge-variant-secondary), removal recorded for the 4.0 line.",
       "scope": "One optional prop of `Badge`. Per-root use counts were not re-measured here; they are in the closure debrief and the review.",
       "replacement": "`tone`",
       "canonicalOwner": "src/components/primitives/display/badge/contracts/index.ts",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
+      "blocker": "parity-failed:prop-renamed/badge-variant-secondary",
+      "receiver": "WO-RET-06",
       "since": "2026-07-10",
-      "removeIn": "3.0",
+      "removeIn": "4.0",
       "evidence": [
         {
           "kind": "consumer",
@@ -141,8 +141,8 @@
           "needle": "<Badge variant=\"secondary\" className=\"rt-showcase-ai-rec-c__ai-badge\">"
         }
       ],
-      "codemod": null,
-      "changeset": null
+      "codemod": "member-changed/.#BadgeProps.variant",
+      "changeset": ".changeset/ret-01-compat-rows-receiver-4-0.md"
     },
     {
       "file": "src/components/primitives/display/badge/contracts/index.ts",
@@ -182,7 +182,7 @@
           "note": "The only call site found in the four consumer roots."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BadgeProps.closable",
       "changeset": null
     },
     {
@@ -206,7 +206,7 @@
           "note": "The needle is case-sensitive: the legacy names carry `CellRender`, never `cellRender`."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#CalendarProps.dateCellRender",
       "changeset": null
     },
     {
@@ -230,7 +230,7 @@
           "note": "The needle is case-sensitive: the legacy names carry `CellRender`, never `cellRender`."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#CalendarProps.monthCellRender",
       "changeset": null
     },
     {
@@ -306,7 +306,7 @@
           "note": "Measured: Classic destructures the prop into an unused binding, and Modern does the same. Not measured: rendered parity between the Rustic prop and a scoped `--ds-card-bg`."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#CardProps.backgroundColor",
       "changeset": null
     },
     {
@@ -336,21 +336,21 @@
           "note": "Measured: the member keeps its Ant type and is marked deprecated in the contract. Not measured: call sites that pass `pagination.size` in the showroom or the three apps."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#TablePaginationConfig.size",
       "changeset": ".changeset/ret-01-size-type-and-legacy-size-values.md"
     },
     {
       "file": "src/components/primitives/display/tag/contracts/index.ts",
       "anchor": "TagVariant",
       "class": "compat-consumed",
-      "reason": "Type of the `variant` prop of `Tag`, still authored in the showroom and in app-bithire; it leaves with the prop once the tone mapping has a parity verdict.",
+      "reason": "Type of the `variant` prop of `Tag`, still authored in the showroom and in app-bithire; it leaves with the prop once the tone mapping has a parity verdict. Transferred to WO-RET-06 at the RET-01 closure (E11): parity failed with a fixture (prop-renamed/tag-variant-secondary), removal recorded for the 4.0 line.",
       "scope": "Exported type alias. No direct import of the name was found in the four consumer roots; it is reached through `TagProps.variant`.",
       "replacement": "`Tone` through the `tone` prop",
       "canonicalOwner": "src/components/primitives/display/tag/contracts/index.ts",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
+      "blocker": "parity-failed:prop-renamed/tag-variant-secondary",
+      "receiver": "WO-RET-06",
       "since": "2026-07-10",
-      "removeIn": "3.0",
+      "removeIn": "4.0",
       "evidence": [
         {
           "kind": "consumer",
@@ -363,21 +363,21 @@
           "needle": "<Tag size=\"sm\" variant=\"success\" outlined>"
         }
       ],
-      "codemod": null,
-      "changeset": null
+      "codemod": "member-changed/.#TagVariant",
+      "changeset": ".changeset/ret-01-compat-rows-receiver-4-0.md"
     },
     {
       "file": "src/components/primitives/display/tag/contracts/index.ts",
       "anchor": "TagProps.variant",
       "class": "compat-consumed",
-      "reason": "Authored on `Tag` in the showroom and in app-bithire; `tone` renames `error` to `danger`, so removal needs the value-mapping codemod and a parity verdict.",
+      "reason": "Authored on `Tag` in the showroom and in app-bithire; `tone` renames `error` to `danger`, so removal needs the value-mapping codemod and a parity verdict. Transferred to WO-RET-06 at the RET-01 closure (E11): parity failed with a fixture (prop-renamed/tag-variant-secondary), removal recorded for the 4.0 line.",
       "scope": "One optional prop of `Tag`.",
       "replacement": "`tone`",
       "canonicalOwner": "src/components/primitives/display/tag/contracts/index.ts",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
+      "blocker": "parity-failed:prop-renamed/tag-variant-secondary",
+      "receiver": "WO-RET-06",
       "since": "2026-07-10",
-      "removeIn": "3.0",
+      "removeIn": "4.0",
       "evidence": [
         {
           "kind": "consumer",
@@ -390,8 +390,8 @@
           "needle": "<Tag size=\"sm\" variant=\"success\" outlined>"
         }
       ],
-      "codemod": null,
-      "changeset": null
+      "codemod": "member-changed/.#TagProps.variant",
+      "changeset": ".changeset/ret-01-compat-rows-receiver-4-0.md"
     },
     {
       "file": "src/components/primitives/display/tooltip/contracts/index.ts",
@@ -431,7 +431,7 @@
           "note": "Indirect: MaybeTooltip (app-bithire/src/ui/primitives/tag-tooltip/index.tsx:4-11,221) forwards `placement` to the design-system Tooltip."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#TooltipPlacement.left",
       "changeset": null
     },
     {
@@ -460,7 +460,7 @@
           "absentNeedle": "inline-start"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#TooltipPlacement.left-start",
       "changeset": null
     },
     {
@@ -489,7 +489,7 @@
           "absentNeedle": "inline-start"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#TooltipPlacement.left-end",
       "changeset": null
     },
     {
@@ -530,7 +530,7 @@
           "note": "Second site of the same file, at :304."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#TooltipPlacement.right",
       "changeset": null
     },
     {
@@ -559,7 +559,7 @@
           "absentNeedle": "inline-end"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#TooltipPlacement.right-start",
       "changeset": null
     },
     {
@@ -588,7 +588,7 @@
           "absentNeedle": "inline-end"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#TooltipPlacement.right-end",
       "changeset": null
     },
     {
@@ -611,7 +611,7 @@
           "absentNeedle": "closeOnBackdropClick"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#ModalProps.closeOnOverlayClick",
       "changeset": null
     },
     {
@@ -635,7 +635,7 @@
           "note": "The engine has no placement code of its own: the needle is the pass-through of the `tooltip` object."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#SliderProps.tooltip",
       "changeset": null
     },
     {
@@ -659,7 +659,7 @@
           "note": "The engine has no placement code of its own: the needle is the pass-through of the `tooltip` object."
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#SliderProps.tooltip",
       "changeset": null
     },
     {
@@ -688,7 +688,7 @@
           "absentNeedle": "paddingInlineEnd"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BoxProps.paddingRight",
       "changeset": null
     },
     {
@@ -717,7 +717,7 @@
           "absentNeedle": "props.pe"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BoxProps.pr",
       "changeset": null
     },
     {
@@ -746,7 +746,7 @@
           "absentNeedle": "paddingInlineStart"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BoxProps.paddingLeft",
       "changeset": null
     },
     {
@@ -775,7 +775,7 @@
           "absentNeedle": "props.ps"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BoxProps.pl",
       "changeset": null
     },
     {
@@ -804,7 +804,7 @@
           "absentNeedle": "marginInlineEnd"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BoxProps.marginRight",
       "changeset": null
     },
     {
@@ -833,7 +833,7 @@
           "absentNeedle": "props.me"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BoxProps.mr",
       "changeset": null
     },
     {
@@ -862,7 +862,7 @@
           "absentNeedle": "marginInlineStart"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BoxProps.marginLeft",
       "changeset": null
     },
     {
@@ -891,7 +891,7 @@
           "absentNeedle": "props.ms"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BoxProps.ml",
       "changeset": null
     },
     {
@@ -914,7 +914,7 @@
           "absentNeedle": "inline-start"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#HoverCardSide.left",
       "changeset": null
     },
     {
@@ -937,7 +937,7 @@
           "absentNeedle": "inline-end"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#HoverCardSide.right",
       "changeset": null
     },
     {
@@ -964,7 +964,7 @@
           "needle": "su.surfaceRoles ?? su.materials"
         }
       ],
-      "codemod": null,
+      "codemod": "member-changed/.#BrandSurfaces.materials",
       "changeset": null
     },
     {
@@ -1000,14 +1000,14 @@
       "file": "src/foundation/contracts/kernel/common/index.ts",
       "anchor": "Variant",
       "class": "compat-consumed",
-      "reason": "Base union of the deprecated `BadgeVariant`, `TagVariant` and `AvatarVariant` (and of `AvatarProps.variant` through the last) only; no undeprecated contract is built on it any more, so it leaves with those three.",
+      "reason": "Base union of the deprecated `BadgeVariant`, `TagVariant` and `AvatarVariant` (and of `AvatarProps.variant` through the last) only; no undeprecated contract is built on it any more, so it leaves with those three. Transferred to WO-RET-06 at the RET-01 closure (E11): parity failed with a fixture (prop-renamed/badge-variant-secondary), removal recorded for the 4.0 line. `Variant` answers through the alias `export type BadgeVariant = Variant` (the row keeps that consumer needle); it has three dependents — BadgeVariant, TagVariant and AvatarVariant — and leaves last: repairing Badge parity does not release it while Tag or Avatar still build on it.",
       "scope": "Exported type alias. Inside the package only the badge, tag and avatar contracts import it. No direct import of the name was found in the three apps; it is reached through the three component variant types.",
       "replacement": "`Tone` for semantic colour, plus the component's own structural variant",
       "canonicalOwner": "src/foundation/contracts/kernel/common/index.ts",
-      "blocker": "parity-unproven",
-      "receiver": "WO-RET-01",
+      "blocker": "parity-failed:prop-renamed/badge-variant-secondary",
+      "receiver": "WO-RET-06",
       "since": "2026-07-10",
-      "removeIn": "3.0",
+      "removeIn": "4.0",
       "evidence": [
         {
           "kind": "consumer",
@@ -1025,8 +1025,8 @@
           "needle": "export type AvatarVariant = Variant;"
         }
       ],
-      "codemod": null,
-      "changeset": null
+      "codemod": "member-changed/.#Variant",
+      "changeset": ".changeset/ret-01-compat-rows-receiver-4-0.md"
     },
     {
       "file": "src/foundation/contracts/kernel/tokens/extensions/index.ts",
