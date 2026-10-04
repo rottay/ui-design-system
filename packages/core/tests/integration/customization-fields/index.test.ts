@@ -116,6 +116,12 @@ function authoredBrandingDocument(): Record<string, unknown> {
           accent: '#0F6F5C',
           background: '#FFFFFF',
           backgroundMode: 'light',
+          status: {
+            success: '#1B6E3C',
+            warning: '#8A5A00',
+            error: '#A32020',
+            info: '#1D5FA8',
+          },
           foreground: {
             primary: '#101418',
             secondary: '#3A4450',
@@ -130,10 +136,6 @@ function authoredBrandingDocument(): Record<string, unknown> {
       },
       advanced: {
         tokenOverrides: {
-          '--ds-color-success': '#1B6E3C',
-          '--ds-color-warning': '#8A5A00',
-          '--ds-color-error': '#A32020',
-          '--ds-color-info': '#1D5FA8',
           '--ds-font-family-mono': '"Coverage Mono", ui-monospace, monospace',
         },
       },
@@ -243,8 +245,8 @@ describe('the provider paints no branding channel', () => {
 describe('authored branding fields reach a compiled channel', () => {
   /**
    * Field -> channel -> authored value, as measured through the compiler. The
-   * palette trio rides the general tier; the semantic quartet and the mono
-   * family ride the bounded token-override allowlist.
+   * palette trio and the semantic quartet ride the general tier; the mono
+   * family rides the bounded token-override allowlist.
    */
   const FIELD_CHANNELS: ReadonlyArray<readonly [string, string, string]> = [
     ['primaryColor', '--ds-color-primary', '#1F5896'],

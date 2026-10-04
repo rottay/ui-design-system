@@ -199,7 +199,7 @@ export const THE_MANAGEMENT_MIAMI_ROW: TenantThemeAdvancedDocument = {
  * overrides, which the kit has not opened yet) and the three raw tokens that
  * are not a decision (`--ds-density-scale`, `--ds-line-height-body`,
  * `--ds-letter-spacing-body`; D-03 retires raw authorship). `--ds-effect-intensity`
- * stays: it IS a decision, and the migration carries it as one.
+ * IS a decision, so its value is authored as `surfaces.effectIntensity`.
  */
 export const THE_MANAGEMENT_MIAMI_REMEDIATED: TenantThemeAdvancedDocument = {
   ...THE_MANAGEMENT_MIAMI_ROW,
@@ -213,10 +213,10 @@ export const THE_MANAGEMENT_MIAMI_REMEDIATED: TenantThemeAdvancedDocument = {
         accent: "#B44F3C",
         backgroundMode: "auto",
       },
+      surfaces: { elevation: "elevated", effectIntensity: 0.45 },
     },
     advanced: {
-      ...THE_MANAGEMENT_MIAMI_ROW.visualFoundation.advanced,
-      tokenOverrides: { "--ds-effect-intensity": 0.45 },
+      chrome: THE_MANAGEMENT_MIAMI_ROW.visualFoundation.advanced?.chrome,
     },
   },
 } as TenantThemeAdvancedDocument;
