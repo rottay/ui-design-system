@@ -799,7 +799,22 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // (--ds-elevation-0..6, the dark-ground ladder its dark base now states).
       // D2 radius channel (2026-10-01): rottay 2961 -> 2962, +1 --ds-radius-scale-rest,
       // the vertical's own radius dial position the normalized alias divides by.
-      rottay: 2962,
+      // AXE-NAV -> focus-signature wave (measured 2026-10-04 commit by commit over
+      // isolated archives, parent and child of every row; every gap between rows
+      // is an empty key diff): rottay 2962 -> 2964, added 7, removed 5.
+      //   +2 d5250c385 (AXE-NAV, WO-FAM-11): --ds-app-shell-navigation-color and
+      //      --ds-app-shell-navigation-footer-color, the navigation region's inks.
+      //   -2 5e92f1b89 (RET-01-CH, WO-RET-01): --ds-text-body-letter-spacing and
+      //      --ds-text-emphasis-letter-spacing, zero readers.
+      //   +1 c949b9975 (WO-EVI-02): --ds-column-menu-panel-focus-ring.
+      //   +4 1fc5d7ef2 (WO-EVI-02): --ds-input-focus-ring and its
+      //      -error / -warning / -success status rings.
+      //   -1 5055d9172 (WO-EVI-02): --ds-toolbar-focus-ring, the shell ring retired.
+      //   -2 6f8bc10e8 (WO-EVI-02): --ds-hover-card-focus-color and
+      //      --ds-tooltip-focus-color, the overlay focus frame retired.
+      // The count read 2964 after d5250c385 and 2962 again after 5e92f1b89: the
+      // same number as today and as the old pin, over different key sets.
+      rottay: 2964,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -875,7 +890,10 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // overlay states the foundation --ds-elevation-0..6 ladder.
       // D2 radius channel (2026-10-01): bithire 3097 -> 3098, +1 --ds-radius-scale-rest,
       // the vertical's own radius dial position the normalized alias divides by.
-      bithire: 3098,
+      // Same wave (measured 2026-10-04): bithire 3098 -> 3100, added 7, removed 5,
+      // the same six commits and byte-for-byte the same twelve keys as rottay; its
+      // offset over rottay stays 136.
+      bithire: 3100,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -944,7 +962,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // Mode-delta ruling: evnto 2954 -> 2961, the same seven ladder roles.
       // D2 radius channel (2026-10-01): evnto 2961 -> 2962, +1 --ds-radius-scale-rest,
       // the vertical's own radius dial position the normalized alias divides by.
-      evnto: 2962,
+      // Same wave (measured 2026-10-04): evnto 2962 -> 2964, added 7, removed 5,
+      // byte-for-byte rottay's keys on all six commits.
+      evnto: 2964,
     };
     for (const vertical of VERTICALS) {
       expect(
