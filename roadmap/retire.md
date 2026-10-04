@@ -464,6 +464,32 @@ Lane-wide rules (binding on every WO):
   preparation, not evidence of productive adoption: no productive caller was
   found. RET-01 must finish first; do not claim this packet or widen a baseline
   while that prerequisite remains open.
+- **AMENDMENT (2026-10-04, owner ruling R32 Q4; prerequisite ruled by the independent audit of the ownership gate lot 355a947c1; the acceptance above stands, this is added to it)** —
+  The ownership gate (`packages/core/scripts/check/boundaries/surfaces/ownership/`)
+  no longer has `--write-baseline` or `--allow-increase`: its only producer is
+  the tighten-only `--update-baseline`, which refuses any new row and any
+  increase. Its row ids are path-keyed, so a move or split of a file that holds
+  rows (this work order's `collection-workspace` split is one) is refused as new
+  rows plus stale rows, and no existing mode can express it. The flag stays
+  removed. PREREQUISITE, verbatim from the audit (`audit-w17-ownership-gate.md`
+  §3, independent session on `claude-opus-5-5`, owner ruling R30): "Before any
+  move under `src/components/{patterns,surfaces}`: the ownership gate has a
+  count-neutral `--relocate-paths` mode (dry-run default, `--write` explicit)
+  that re-keys rows from the reviewed Git rename inventory, conserves the count
+  per (category, rule, anchor) across the old path and the sum of its new paths,
+  refuses any change of counter or owner class, refuses any new or raised row,
+  and leaves the frozen id-set digest unchanged." The baseline does not store
+  the anchor, so the mode re-runs the detector on the old blob at the old path
+  and on the new files and pairs the findings. Precedent:
+  `engine-audit:relocate-paths`
+  (`packages/core/scripts/maintain/engine/baseline-relocation/index.mjs`): Git
+  rename inventory, values never change, dry-run by default. The mode does not
+  exist today; until it does, this work order moves nothing in that gate's
+  scope. Drain packet OWN-7 of WO-EVI-02 (`scheduler`, `collection-workspace`)
+  lands before that move and never concurrently with it. The frozen id-set
+  digest the mode must conserve is
+  `61df609c1c1c1d3cb4fb4367ef4e7e041fd11c657d91b11e8d36ec0f0f33b2f5`
+  (1311 rows / 2005 occurrences at 355a947c1).
 - **Do NOT** — Do not perform the global move before the derivation lane lands (it would move code that is about to be rewritten).
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-04 (Physical tree normalization: D-21 grammar applied to what remains, monoliths split, repeated path words removed) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-44, F-96, F-98, F-99, F-101, F-116, F-82 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.
@@ -521,5 +547,28 @@ Lane-wide rules (binding on every WO):
   `MarkdownDensity` (`components/primitives/display/markdown-view/contracts/index.ts`: compact, comfortable) — decide whether it is the posture axis restricted to two steps or its own axis.
   F-84 remainder, (b) the `recipes` word under `src/components/patterns` once WO-RET-01 has renamed the two pattern-owned folders: the matches that name the recipe engine's import path, the theme-draft family key and prose — acceptance: the fiche's grep is 0, or a dated owner disposition names the surviving concept. (c) `buildRecipeManifest`, public with no consumer — acceptance: a censused consumer, or a retirement with changeset and codemod. Dependency for (a)-(c): WO-RET-01 item I1 complete.
   F-88 remainder: the Rustic colour-picker default `#1677ff` — acceptance: replaced under an owner authorization naming the file, or a dated owner disposition that the frozen default stays. Dependency: that answer.
+- **AMENDMENT (owner ruling R32 Q4, 2026-10-04; the acceptance above stands, this is added to it)** —
+  Authority: owner ruling R32 Q4 (2026-10-04), quoted verbatim: "Ownership:
+  Separar y atribuir la deuda. Drenar Modern y core compartido; transferir
+  exclusivamente la deuda comprobada de engines congelados a un receptor abierto
+  con aceptación propia. Enmendar explícitamente F-86: no afirmar que el total
+  bajó de 1.000 si no ocurrió. No borrar entradas ni tocar engines congelados
+  solo para mejorar el contador. La deuda transferida sigue visible en el cierre
+  global." Independent review of this text: a separate session on
+  `claude-opus-5-5` (owner ruling R30), ADOPT WITH CORRECTIONS, all applied.
+  Nothing above is rewritten: each line below states what the named field of
+  this block gains. The transfer commit is 355a947c1; the figures and the digest
+  were re-read on it with
+  `node packages/core/scripts/check/boundaries/surfaces/ownership/index.mjs --check`
+  (exit 0; the gate prints the first 16 hex of the digest, `61df609c1c1c1d3c`).
+  Adopting this text closes nothing.
+  This work order receives the frozen-engine remainder of F-86 and nothing else of that finding.
+  **Closes** gains: F-86 (frozen-engine clause).
+  **Steps** gains: *8. F-86 frozen remainder: obtain the dated owner disposition (a) or (b) of the acceptance below; do not edit a frozen file to lower the counter.*
+  **Files** gains: `packages/core/scripts/check/boundaries/surfaces/ownership/counters/**` (receiver string only, under disposition (b)).
+  **Scope (closed list)** gains: *F-86 frozen remainder: the rows of `packages/core/scripts/check/boundaries/surfaces/ownership/baseline/index.json` whose path lies under `engines/classic/` or `engines/rustic/`, fixed by id and by count at the transfer commit: 1311 rows / 2005 occurrences (Classic 648 / 911, Rustic 663 / 1094), id-set sha256 `61df609c1c1c1d3cb4fb4367ef4e7e041fd11c657d91b11e8d36ec0f0f33b2f5` as printed by the gate on that commit. A row enters only under the five-point "proven frozen" standard: (1) path under the freeze law read from the freeze gate's export; (2) `engine-freeze-gate --check` OK on the same commit; (3) the finding is live in that file on that commit; (4) the engine is not productively selectable, cited from `node --test packages/core/scripts/libraries/engine/roster/index.test.mjs` on that commit; (5) the row was not created by moving code into a frozen path, proven by the id set. No row under `engines/modern/` or outside an `engines/` folder may enter. The `noDebtReceivers` rule of the deprecations ledger is unaffected: these are ownership-census rows, not ledger rows.*
+  **Acceptance** gains: *`node packages/core/scripts/check/boundaries/surfaces/ownership/index.mjs --check` exits 0 and prints the counter `frozen-transferred (Classic + Rustic) → WO-RET-06`, and either (a) the counter reads 0 because the frozen engine files left the package under a dated owner decision, each frozen file edit carrying one engine-freeze `--authorize` entry per file per lot; or (b) a dated owner disposition, recorded in this block as an AMENDMENT, states that the frozen engines keep this debt for as long as they ship, in which case the counter stays published and decrease-only, the rows stop naming this work order, and the disposition names the final authority. No frozen file is edited to lower the counter. The counter is never merged into, or subtracted from, the productive counter. Evidence: the gate output and the id-set digest under `evidence/ret-06-closure/`, sha256 quoted in `done --evidence`.*
+  **Do NOT** gains: *Do not treat this transfer as closure of F-86. Do not delete, allowlist or re-key a frozen row to lower the counter. Do not accept a row whose path is not under a frozen engine.*
+  **Delegation prompt** gains F-86 in its list of fiches.
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-06 (Transitional compatibility and transferred closures of the 3.0 line) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-42, F-109, F-111, F-113, F-115, F-84, F-88 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.
