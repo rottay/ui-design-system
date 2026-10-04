@@ -53,7 +53,9 @@ const SKIN_HASHES = {
   // `--ds-table-resize-bar-*-active` while the skin has read
   // `--ds-data-table-resize-bar-*-active` since that cut). Verified with
   // `shasum -a 256` against the tree today.
-  'data-table-interactions': '575b5c832dac85e1c050fb3b93f058db7463680923cb92edbb9f1d414f46fa19',
+  // EVI-02 re-pin: 9caaa5439 moved the row, header and handle focus onto the
+  // tenant signature.
+  'data-table-interactions': '48e7d2fb0d89b2743edc3b0494dc08be6e639b59b29caf8171179b1544a59280',
   // CI-1 re-pin: same commit as the paint-count and rule-content re-pins
   // below (4afa74b353, 2026-08-11) -- the file's whole content changed when
   // the Input placeholder rule and its header comment moved out. Verified
@@ -247,7 +249,7 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
       // 0%/100% and 50% stops); the census is otherwise declaration-identical,
       // property by property, against the pre-cut file. Nothing was relocated,
       // so there is no new owner to re-point this count at.
-      dataTable: 32,
+      dataTable: 27,
       primitiveMotion: 8,
       toast: 20,
       // L6 / STOP-3: 18 -> 0. The decomposition was measured before the move and
@@ -285,7 +287,37 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
       'transparent',
       'var(--ds-scroll-area-thumb-bg, color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent))',
     ]);
-    expect(paintCount(RELOCATED.scrollAreaModern) - phaseBPaint.length).toBe(15);
+
+    // EVI-02 re-pin: a8f594ab4 moved the root's keyboard focus onto the tenant
+    // signature. The outline went transparent in place and three declarations
+    // entered: the signature shadow, and the forced-colors arm's own offset
+    // and shadow reset. The recovered floor stays 15.
+    const focusRoot = `${MODERN_SCROLL_AREA}:is([data-state~='focus-visible'], :focus-visible)`;
+    const focusRule = ruleContract(RELOCATED.scrollAreaModern, focusRoot);
+    const forcedColorsFocusRule = ruleContractInMedia(
+      RELOCATED.scrollAreaModern,
+      focusRoot,
+      '(forced-colors: active)',
+    );
+    expect(focusRule).toEqual({
+      outline: 'var(--ds-focus-ring-width) solid transparent',
+      'outline-offset': 'var(--ds-scroll-area-focus-ring-offset, var(--ds-focus-ring-offset))',
+      'border-radius': 'var(--ds-scroll-area-focus-ring-radius, var(--ds-radius-sm))',
+      'box-shadow': 'var(--ds-focus-ring)',
+    });
+    expect(forcedColorsFocusRule).toEqual({
+      outline: 'max(2px, var(--ds-focus-ring-width)) solid Highlight',
+      'outline-offset': 'var(--ds-scroll-area-focus-ring-offset, var(--ds-focus-ring-offset))',
+      'box-shadow': 'none',
+    });
+    const focusSignaturePaint = [
+      focusRule['box-shadow'],
+      forcedColorsFocusRule['outline-offset'],
+      forcedColorsFocusRule['box-shadow'],
+    ];
+    expect(
+      paintCount(RELOCATED.scrollAreaModern) - phaseBPaint.length - focusSignaturePaint.length,
+    ).toBe(15);
   });
 
   it('pins every DataTable interaction selector and animation body', () => {
@@ -318,8 +350,7 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
         '.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible)'
       )
     ).toEqual({
-      outline: '2px solid var(--ds-color-primary)',
-      'outline-offset': '-2px',
+      outline: 'none',
       'border-radius': 'var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem))',
     });
     expect(
@@ -332,35 +363,9 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
       'background-color':
         'var(--ds-table-header-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent))',
     });
-    expect(
-      ruleContract(
-        SKINS.dataTable,
-        '.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key][data-sortable="true"]:is( [data-state~="focus-visible"], :focus-visible )'
-      )
-    ).toEqual({
-      outline: '2px solid var(--ds-color-primary)',
-      'outline-offset': '-2px',
-      'border-radius': 'var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem))',
-    });
-    // CI-1 re-pin: 6c9f6ccf1e (2026-08-05) dropped the `box-shadow` from this
-    // rule -- it is dead paint under `border-collapse`: a box-shadow on a
-    // `<tr>` does not render there (verified against the tree today, the
-    // rule's own trailing comment at data-table-interactions.css:67 names
-    // this exactly). "The ring itself paints per cell" instead -- the very
-    // next rule in this same file,
-    // `tr[data-row-index]:focus-visible > td { box-shadow: ... }`. Removed,
-    // not relocated onto THIS selector: there is nothing to re-point this
-    // particular contract at without asserting a different selector.
-    expect(
-      ruleContract(
-        SKINS.dataTable,
-        '.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible)'
-      )
-    ).toEqual({
-      outline: 'none',
-      'background-color':
-        'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 6%, transparent))',
-    });
+    // EVI-02: 9caaa5439 retired the sortable-header and body-row focus rules
+    // from this sheet; their successors are the `::after` carriers in the
+    // Modern data-table skin, which this suite does not read.
     expect(
       ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]')
     ).toEqual({
@@ -497,9 +502,10 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
 
     // The Tabs half moved to the engine-scoped owner, which re-expressed the
     // former `[data-tabs-id]` instance hook as the engine class pair plus
-    // `data-part`. Same two rules, anchored to a scope class instead of a
-    // generated per-mount identifier; the focus rule pairs the kernel's
-    // state with the platform pseudo-class and paints the family's ring.
+    // `data-part`. EVI-02 re-pin: the focus signature left the host for an
+    // inset `::before` overlay the scrolling list cannot clip; the host keeps
+    // only a transparent outline (forced-colors re-keys it) and its own
+    // selected shadow.
     expect(
       ruleContract(RELOCATED.tabsModern, `${MODERN_TABS} [data-part='tab-list']::-webkit-scrollbar`)
     ).toEqual({
@@ -508,11 +514,26 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     expect(
       ruleContract(
         RELOCATED.tabsModern,
-        `${MODERN_TABS} [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)`,
+        `${MODERN_TABS} [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))`,
       )
     ).toEqual({
-      outline: 'none',
+      outline: 'var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width)) solid transparent',
+      'outline-offset': 'calc(-1 * var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width)))',
+    });
+    expect(
+      ruleContract(
+        RELOCATED.tabsModern,
+        `${MODERN_TABS} [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::before`,
+      )
+    ).toEqual({
+      position: 'absolute',
+      'z-index': 'var(--ds-z-index-relative-above)',
+      inset: 'calc(var(--ds-focus-ring-offset) + var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width)))',
+      'border-radius':
+        'max(0px, calc(var(--ds-tabs-item-radius, var(--ds-radius-md)) - var(--ds-focus-ring-offset) - var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))))',
       'box-shadow': 'var(--ds-tabs-focus-ring, var(--ds-focus-ring))',
+      content: "''",
+      'pointer-events': 'none',
     });
 
     // `ds-tabs-fade-in` now lives in the foundation keyframes owner and is
