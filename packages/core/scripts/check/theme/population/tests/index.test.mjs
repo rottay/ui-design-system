@@ -887,9 +887,11 @@ describe('theme population — per-rule state evidence and the unobservable coun
     // scope-switcher leave with the population; edit-fields, table-toolbar
     // (colour-only) and form-builder (cursor) enter with it. 9 -> 8 (OVM
     // 2026-10-02): overlay-modal-compounds leaves with its retired orphan rules.
+    // The denominator 154 -> 152 (2026-10-04) moves nothing here: hover-card
+    // and tooltip were observable.
     const report = populationReport();
     const states = report.axes.find((entry) => entry.axis === 'states');
-    assert.equal(states.denominator, 154);
+    assert.equal(states.denominator, 152);
     assert.equal(states.unobservableCount, 8);
     assert.deepEqual(states.unobservable.map((entry) => `${entry.family}:${entry.class}`), [
       'button-group:no-vocabulary', 'edit-fields:colour-only', 'form-builder:no-vocabulary', 'list:colour-only',
@@ -913,7 +915,8 @@ describe('theme population — per-rule state evidence and the unobservable coun
     assert.deepEqual(after.find((entry) => entry.family === 'drill-colour-state'),
       { family: 'drill-colour-state', class: 'colour-only', properties: ['background-color'] });
     const states = populationReport(dir, catalogIn(dir)).axes.find((entry) => entry.axis === 'states');
-    assert.equal(states.denominator, 155, 'unobservable is reported, never subtracted');
+    // The tree's 152 plus the planted entrant.
+    assert.equal(states.denominator, 153, 'unobservable is reported, never subtracted');
   });
 
   it('a state declaration is one in a K1 rule; a state-suffixed channel name, a domain value and an at-rule prelude are not', () => {
@@ -938,6 +941,8 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
   // The states mover set of indicator 15 (fleet run d7b25dfd7, 2026-10-01T08:42Z): the families whose
   // computed style moved on the states positive cell, identical in all six cells (bithire/evnto/rottay x
   // light/dark), re-derived by Fable (ST-A review 2026-10-01). Every one must be a member after STATES-K.
+  // Two names left this list on 2026-10-04 with the paint that made them movers (RETIRED_MOVERS below):
+  // a product retirement under owner ruling R32 Q6, not a definition change.
   const MOVERS = Object.freeze([
     'activity-cards', 'activity-compact', 'activity-log', 'activity-ticker', 'activity-timeline', 'alert', 'anchor',
     'app-shell', 'approval-inbox', 'approval-workflow', 'ascii-diagram', 'auto-complete', 'avatar', 'back-top', 'badge',
@@ -946,17 +951,23 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     'column-menu', 'column-settings', 'command-palette', 'context-menu', 'dashboard-header', 'data-table-interactions',
     'data-table-mobile', 'data-terminal-card', 'date-picker', 'detail-panel', 'drawer', 'drawer-compounds', 'dropdown',
     'edit-header', 'file-manager', 'float-button', 'form', 'form-field', 'form-sections', 'gallery-view',
-    'header-hero-shared', 'hover-card', 'image', 'input-number', 'invoice-template', 'layout', 'link', 'list-toolbar',
+    'header-hero-shared', 'image', 'input-number', 'invoice-template', 'layout', 'link', 'list-toolbar',
     'live-feed', 'locale-switcher', 'markdown-view', 'mentions', 'menu', 'menu-compounds', 'modal', 'modal-compounds',
     'moderation-gallery', 'notifier', 'otp-input', 'page-shell', 'pagination', 'password-input',
     'pattern-calendar-view', 'pattern-kanban-board', 'pattern-map-view', 'pattern-timeline', 'popover', 'pricing-table',
     'qrcode', 'radio', 'radio-group', 'rate', 'record', 'saved-views', 'saved-views-menu', 'scheduler-surface',
     'scroll-area', 'search', 'segmented', 'select', 'select-compounds', 'sheet', 'shift-matrix', 'slider', 'splitter',
     'stats-grid', 'stats-header', 'status-filter-pills', 'stepper', 'table', 'tabs', 'tag', 'tag-input',
-    'tenant-preview', 'textarea', 'time-picker', 'toggle', 'tooltip', 'tour', 'transfer', 'tree', 'tree-select',
+    'tenant-preview', 'textarea', 'time-picker', 'toggle', 'tour', 'transfer', 'tree', 'tree-select',
     'tree-view-connector', 'typography', 'upload', 'user-profile-card', 'virtual-list', 'voice-input-button',
     'workbench-header', 'workspace-switcher',
   ]);
+  // hover-card and tooltip moved on the width and offset of a transparent outline stated on a node that is
+  // never a tab stop. Owner ruling R32 Q6 (2026-10-04): "No inventar interactividad para conservar
+  // créditos: cuando una familia no deba pintar foco propio, corregir autoridad/medición según su comportamiento
+  // real y publicar el resultado, aunque baje el numerador." The rule, its forced-colors twin, the hook and the
+  // stamp retire; neither skin keeps a kernel-gated rule or a states head-channel read.
+  const RETIRED_MOVERS = Object.freeze(['hover-card', 'tooltip']);
   const LEAVERS = ['active-filters-bar', 'branding-preview-sandbox', 'detail', 'record-facts', 'scope-switcher'];
   const ENTRANTS = ['edit-fields', 'form-builder', 'surface-states', 'table-toolbar'];
   const gatesOf = (selector) => population.stateRuleGates(selector);
@@ -1081,18 +1092,41 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     assert.deepEqual(hovered.states.stateGates, hovered.expected);
   });
 
-  it('D6: on this tree the states population is 154 -- five leavers, four entrants, every indicator-15 mover a member, the other axes unmoved', () => {
+  it('D6: on this tree the states population is 152 -- five leavers, four entrants, every indicator-15 mover that still paints a state a member, the two retired movers out by name, the other axes unmoved', () => {
     const report = populationReport();
     const byAxis = Object.fromEntries(report.axes.map((entry) => [entry.axis, entry]));
     const states = byAxis.states.families;
     // 277 -> 278 (GLASS-1): the glass-card skin enters the corpus, shape and depth.
     assert.equal(report.skinFamilies, 278);
     // 155 -> 154 (OVM 2026-10-02): overlay-modal-compounds leaves states, shape and depth with its orphan rules.
-    assert.equal(byAxis.states.denominator, 154);
+    // 154 -> 152 (2026-10-04, owner ruling R32 Q6): hover-card and tooltip retire their only kernel-gated rule.
+    assert.equal(byAxis.states.denominator, 152);
     for (const family of LEAVERS) assert.ok(!states.includes(family), `${family} must leave states`);
     for (const family of ENTRANTS) assert.ok(states.includes(family), `${family} must enter states`);
-    assert.equal(MOVERS.length, 118);
+    assert.equal(MOVERS.length, 116);
     assert.deepEqual(MOVERS.filter((family) => !states.includes(family)), [], 'a mover may never leave the population');
+    // The two retired movers leave by the law itself, never by a list: no kernel-gated rule, no states head channel,
+    // every other axis they declared kept, and the pin names both with the owner's reason.
+    const declarations = familyAxisDeclarations();
+    const headChannels = population.axisChannels().get('states');
+    for (const family of RETIRED_MOVERS) {
+      assert.ok(!MOVERS.includes(family) && !states.includes(family), `${family}: retired with its state paint`);
+      const record = declarations.get(family);
+      assert.equal(record.axes.states, undefined, `${family}: declares states`);
+      const css = record.files.map((file) => readFileSync(join(ROOT, file), 'utf8')).join('\n');
+      assert.deepEqual(population.stateRuleEvidence(record.files.map((file) => ({ file, rules: cssRules(readFileSync(join(ROOT, file), 'utf8')) }))), [], `${family}: K1`);
+      assert.deepEqual([...population.readChannels(css)].filter((channel) => headChannels.has(channel)), [], `${family}: K2`);
+    }
+    assert.deepEqual(Object.keys(declarations.get('tooltip').axes), ['shape', 'typography', 'rhythm', 'depth', 'motion']);
+    assert.deepEqual(Object.keys(declarations.get('hover-card').axes), ['shape', 'rhythm', 'depth', 'motion']);
+    const retirement = JSON.parse(readFileSync(FLOOR, 'utf8')).provenance.membershipMoves.overlayFocusRetirement;
+    assert.deepEqual([retirement.statesFloorLowering.pinned, retirement.statesFloorLowering.repinned], [154, 152]);
+    assert.deepEqual(Object.keys(retirement.statesFloorLowering.leavers), RETIRED_MOVERS);
+    assert.deepEqual(retirement.statesFloorLowering.entrants, []);
+    assert.deepEqual(retirement.byAxis.states, { added: [], removed: RETIRED_MOVERS });
+    for (const axis of AXIS_IDS.filter((id) => id !== 'states')) assert.deepEqual(retirement.byAxis[axis], { added: [], removed: [] }, axis);
+    assert.match(retirement.statesFloorLowering.ownerFacingNote, /R32 Q6.*No inventar interactividad para conservar cr\u00e9ditos.*aunque baje el numerador/u);
+    assert.match(retirement.law, /^STATES-K, text unchanged/u);
     assert.deepEqual(Object.fromEntries(['shape', 'typography', 'rhythm', 'depth', 'motion'].map((axis) => [axis, byAxis[axis].denominator])),
       // depth 199 -> 204 -> 199 (2026-10-03): the focus-signature sweep's five entrants, and the law that reads them out (D9, FS drills).
       { shape: 214, typography: 182, rhythm: 224, depth: 199, motion: 204 });
@@ -1118,10 +1152,10 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     assert.deepEqual([...keptOutBy.negation], []);
   });
 
-  it('D7: the floor holds at 154; the pre-amendment pin (156) is refused BELOW, a pin at 153 ABOVE', () => {
+  it('D7: the floor holds at 152; the pre-amendment pin (156) and the pre-retirement pin (154) are refused BELOW, a pin at 151 ABOVE', () => {
     assert.deepEqual(checkPopulationFloor().failures, []);
     const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
-    assert.equal(floor.axes.states, 154);
+    assert.equal(floor.axes.states, 152);
     const dir = mkdtempSync(join(tmpdir(), 'evi02-states-k-'));
     sandboxes.push(dir);
     const at = (states) => {
@@ -1129,11 +1163,12 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
       writeFileSync(path, JSON.stringify({ ...floor, axes: { ...floor.axes, states } }));
       return checkPopulationFloor(ROOT, undefined, path).failures;
     };
-    assert.ok(at(156).some((line) => line.startsWith('states: denominator 154 is BELOW its floor 156')), at(156).join(' | '));
-    assert.ok(at(153).some((line) => line.startsWith('states: denominator 154 is ABOVE its pin 153')), at(153).join(' | '));
+    assert.ok(at(156).some((line) => line.startsWith('states: denominator 152 is BELOW its floor 156')), at(156).join(' | '));
+    assert.ok(at(154).some((line) => line.startsWith('states: denominator 152 is BELOW its floor 154')), at(154).join(' | '));
+    assert.ok(at(151).some((line) => line.startsWith('states: denominator 152 is ABOVE its pin 151')), at(151).join(' | '));
   });
 
-  it('D9: depth is 199 under the focus-signature law -- five leave by name, the unproven alias stays, states keeps 154, the floor refuses both directions', () => {
+  it('D9: depth is 199 under the focus-signature law -- five leave by name, the unproven alias stays, the depth law moves no states member, the floor refuses both directions', () => {
     const report = populationReport();
     const byAxis = Object.fromEntries(report.axes.map((entry) => [entry.axis, entry]));
     const LEFT = ['link', 'scroll-area', 'search', 'typography', 'virtual-list'];
@@ -1148,8 +1183,9 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
       /^--ds-breadcrumb-focus-ring: unprovable to this reader: \d+ compiler site\(s\) write `vars\[<non-literal key>\]` .*its literal producer\(s\): .*chrome\/breadcrumb\/index\.ts:\d+ = var\(--ds-focus-ring\)$/u);
     // tooltip-compounds: an elevation alias, read as one -- never an unproven focus alias.
     assert.match(byAxis.depth.unprovenShadowAliases[1].reasons[0], /^--ds-tooltip-shadow: .* writes `var\(--ds-shadow-md\)`: --ds-shadow-md: /u);
-    // States keeps its own law: 154, and every family the depth law touched is still a member.
-    assert.equal(byAxis.states.denominator, 154);
+    // States keeps its own law (152 since the overlay focus retirement of 2026-10-04, which is not the depth
+    // law's doing), and every family the depth law touched is still a member.
+    assert.equal(byAxis.states.denominator, 152);
     for (const family of [...LEFT, 'breadcrumb-compounds']) assert.ok(byAxis.states.families.includes(family), `${family} is a states member`);
     // The law is depth's alone: it withdraws nothing and publishes nothing on any other axis.
     for (const axis of AXIS_IDS.filter((id) => id !== 'depth')) {

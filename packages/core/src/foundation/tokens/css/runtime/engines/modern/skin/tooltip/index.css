@@ -200,14 +200,6 @@
   }
 }
 
-/* The bubble is never a focus target: the control the keyboard holds inside
-   it wears its own indicator. The outline is transparent until a tenant
-   states a focus colour. */
-.ds-tooltip-bubble[data-part='bubble'][data-interactive='true']:is([data-state~='focus-visible'], :has(:focus-visible)) {
-  outline: var(--ds-focus-ring-width) var(--ds-edge-standard-style) var(--ds-tooltip-focus-color, var(--ds-border-color-transparent));
-  outline-offset: var(--ds-focus-ring-offset);
-}
-
 /* Semantic tones retune the local material; the arrow shares it. */
 .ds-tooltip-bubble[data-part='bubble'][data-tone='primary'] {
   --ds-tooltip-surface-current: var(--ds-tooltip-primary-bg, var(--ds-color-primary));
@@ -424,11 +416,5 @@
   .ds-tooltip-bubble[data-part='bubble'] > [data-part='arrow'] {
     border-color: CanvasText;
     background: Canvas;
-  }
-
-  /* Forced colors repaint a transparent outline: the focused control inside
-     keeps the only one. */
-  .ds-tooltip-bubble[data-part='bubble'][data-interactive='true']:is([data-state~='focus-visible'], :has(:focus-visible)) {
-    outline: none;
   }
 }

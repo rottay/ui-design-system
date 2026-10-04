@@ -44,7 +44,6 @@ import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { toPhysicalPlacementAttribute } from '../../../../runtime/overlay/positioning';
 import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { usePresence } from '@/graphics/motion/react/runtime';
-import { partAttributes } from '@/foundation/behavior';
 
 /**
  * HoverCard implementation positioned by the shared overlay runtime.
@@ -228,16 +227,6 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     layerProps,
   } = overlay;
 
-  // Keyboard focus held by a control inside the card, read from the platform on
-  // the control that took it; a card destroyed with focus inside never blurs.
-  const [surfaceFocus, setSurfaceFocus] = useState({ focused: false, focusVisible: false });
-  useEffect(() => {
-    if (isOpen) return;
-    setSurfaceFocus((current) =>
-      current.focused ? { focused: false, focusVisible: false } : current,
-    );
-  }, [isOpen]);
-
   // A hover card is supplementary content, not a disclosure: the open card
   // describes the trigger, which stays valid on a role-less child.
   const surfaceId = useId();
@@ -281,7 +270,7 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
           ref={setSurfaceRef}
           id={surfaceId}
           dir={directionIsRtl ? 'rtl' : 'ltr'}
-          {...partAttributes('surface', surfaceFocus)}
+          data-part="surface"
           data-open={dataState === 'open' ? 'true' : 'false'}
           data-placement={toPhysicalPlacementAttribute(
             logicalPlacement,
@@ -292,10 +281,6 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
           style={surfaceStyle}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          onFocus={(event) =>
-            setSurfaceFocus({ focused: true, focusVisible: event.target.matches(':focus-visible') })
-          }
-          onBlur={() => setSurfaceFocus({ focused: false, focusVisible: false })}
         >
           {content}
         </div>

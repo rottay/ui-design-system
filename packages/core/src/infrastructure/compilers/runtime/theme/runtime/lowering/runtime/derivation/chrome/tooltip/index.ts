@@ -1,9 +1,9 @@
 /**
  * @fileoverview The tooltip family: its four material recipes on the overlay
  * and raised materials, the palette inks and the elevation scale; its tone
- * bubbles on the palette seeds; and its shortcut keys and focus frame on
- * currentColor and the focus decisions. An authored unqualified `bg`/`color`
- * pair paints the two overlay recipes; unauthored, they keep the overlay material.
+ * bubbles on the palette seeds; and its shortcut keys on currentColor. An
+ * authored unqualified `bg`/`color` pair paints the two overlay recipes;
+ * unauthored, they keep the overlay material.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/tooltip
  * @category Compilers
@@ -24,7 +24,6 @@ export const tooltipChromeDeriver: FamilyDeriver = {
     "palette.*",
     "surfaces.materials",
     "surfaces.elevation",
-    "states.focus",
     "chrome.tooltip.bg",
     "chrome.tooltip.color",
   ],
@@ -68,7 +67,6 @@ export const tooltipChromeDeriver: FamilyDeriver = {
     "--ds-tooltip-shortcut-key-background",
     "--ds-tooltip-shortcut-key-border",
     "--ds-tooltip-shortcut-key-shadow",
-    "--ds-tooltip-focus-color",
   ],
   derive: (context) => deriveTooltipChannels(context.theme),
 };
@@ -114,9 +112,6 @@ export function deriveTooltipChannels(theme?: FlatTheme): Record<string, string>
   vars["--ds-tooltip-shortcut-key-background"] = "color-mix(in srgb, currentColor 10%, transparent)";
   vars["--ds-tooltip-shortcut-key-border"] = "color-mix(in srgb, currentColor 28%, transparent)";
   vars["--ds-tooltip-shortcut-key-shadow"] = "inset 0 1px 0 color-mix(in srgb, currentColor 10%, transparent)";
-  // The bubble's frame rests on the tenant's focus signature; this outline colour
-  // stays transparent until a tenant states one.
-  vars["--ds-tooltip-focus-color"] = "var(--ds-border-color-transparent)";
   applyAuthoredPair(vars, theme?.chrome?.tooltip);
   return vars;
 }

@@ -1,8 +1,10 @@
 /**
- * The hover-card family under the shared contract battery, and its focus
- * colour: transparent by default, so the card's frame rests on the tenant's
- * focus signature, and outranked by a tenant statement.
+ * The hover-card family under the shared contract battery; it produces no
+ * focus colour, because the card is never a focus target.
  */
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
@@ -12,8 +14,7 @@ import {
   type FamilyFixture,
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
-import type { FamilyDeriver } from "../../../../../foundation/contract";
-import { buildLoweringContext, runDerivation } from "../../../../pipeline";
+import { buildLoweringContext } from "../../../../pipeline";
 import { hoverCardChromeDeriver } from "..";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
@@ -33,30 +34,21 @@ const FIXTURES: readonly FamilyFixture[] = [
 describeFamilyContract(hoverCardChromeDeriver, FIXTURES);
 
 describe("chrome/hover-card focus colour", () => {
-  it("stays transparent on every theme, so the card's frame rests on the tenant's focus signature", () => {
+  it("is not produced: the card is never a focus target and no skin reads the channel", () => {
+    expect(hoverCardChromeDeriver.produces).not.toContain("--ds-hover-card-focus-color");
+    expect(hoverCardChromeDeriver.consumes).not.toContain("states.focus");
     for (const fixture of FIXTURES) {
       const derived = hoverCardChromeDeriver.derive(
         buildLoweringContext({ theme: fixture.theme, tenant: fixture.tenant }),
         {}
       );
-      expect(derived["--ds-hover-card-focus-color"], fixture.label).toBe("var(--ds-border-color-transparent)");
+      expect(Object.keys(derived).filter((channel) => channel.includes("focus")), fixture.label).toEqual([]);
     }
-    expect(hoverCardChromeDeriver.produces).toContain("--ds-hover-card-focus-color");
-  });
-
-  it("lets a tenant statement of the colour outrank the transparent default", () => {
-    const tenant: FamilyDeriver = {
-      family: "stated-tenant-hover-card-focus",
-      rank: "tenant",
-      consumes: ["chrome.*"],
-      produces: ["--ds-hover-card-focus-color"],
-      derive: () => ({ "--ds-hover-card-focus-color": "currentColor" }),
-    };
-    const result = runDerivation(buildLoweringContext({ theme: firstPartyFixture("bithire") }), [
-      hoverCardChromeDeriver,
-      tenant,
-    ]);
-    expect(result.channels["--ds-hover-card-focus-color"]).toBe("currentColor");
-    expect(result.provenance.get("--ds-hover-card-focus-color")?.rank).toBe("tenant");
+    expect(
+      readFileSync(
+        resolve(process.cwd(), "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"),
+        "utf8"
+      )
+    ).not.toContain("--ds-hover-card-focus-color");
   });
 });

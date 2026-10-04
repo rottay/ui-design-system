@@ -27,8 +27,7 @@ import {
 } from "@tests/support/family-contract";
 import { compileVerticalThroughDoor } from "@tests/support/theme-door";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
-import type { FamilyDeriver } from "../../../../../foundation/contract";
-import { buildLoweringContext, runDerivation } from "../../../../pipeline";
+import { buildLoweringContext } from "../../../../pipeline";
 import { tooltipChromeDeriver } from "..";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
@@ -212,30 +211,21 @@ describe("the frozen engines keep the legacy pair", () => {
 });
 
 describe("the bubble's focus colour", () => {
-  it("stays transparent on every theme, so the bubble's frame rests on the tenant's focus signature", () => {
+  it("is not produced: the bubble is never a tab stop and no skin reads the channel", () => {
+    expect(tooltipChromeDeriver.produces).not.toContain("--ds-tooltip-focus-color");
+    expect(tooltipChromeDeriver.consumes).not.toContain("states.focus");
     for (const fixture of FIXTURES) {
       const derived = tooltipChromeDeriver.derive(
         buildLoweringContext({ theme: fixture.theme, tenant: fixture.tenant }),
         {}
       );
-      expect(derived["--ds-tooltip-focus-color"], fixture.label).toBe("var(--ds-border-color-transparent)");
+      expect(Object.keys(derived).filter((channel) => channel.includes("focus")), fixture.label).toEqual([]);
     }
-    expect(tooltipChromeDeriver.produces).toContain("--ds-tooltip-focus-color");
-  });
-
-  it("lets a tenant statement of the colour outrank the transparent default", () => {
-    const tenant: FamilyDeriver = {
-      family: "stated-tenant-tooltip-focus",
-      rank: "tenant",
-      consumes: ["chrome.*"],
-      produces: ["--ds-tooltip-focus-color"],
-      derive: () => ({ "--ds-tooltip-focus-color": "currentColor" }),
-    };
-    const result = runDerivation(buildLoweringContext({ theme: firstPartyFixture("bithire") }), [
-      tooltipChromeDeriver,
-      tenant,
-    ]);
-    expect(result.channels["--ds-tooltip-focus-color"]).toBe("currentColor");
-    expect(result.provenance.get("--ds-tooltip-focus-color")?.rank).toBe("tenant");
+    expect(
+      readFileSync(
+        resolve(process.cwd(), "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"),
+        "utf8"
+      )
+    ).not.toContain("--ds-tooltip-focus-color");
   });
 });

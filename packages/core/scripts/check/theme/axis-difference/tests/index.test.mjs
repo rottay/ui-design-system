@@ -55,6 +55,7 @@ import {
   publicationRefusal,
   UNMOUNTABLE_FAMILIES,
   UNSETTLED_FAMILIES,
+  STATES_WIDTH_ONLY_DEFECT,
   STATES_WIDTH_ONLY_MOVERS,
   STATES_WIDTH_PROPERTIES,
   STATES_NON_MOVER_NOTES,
@@ -998,25 +999,39 @@ describe('axis-difference drills — every verdict is reachable', () => {
     assert.ok(failures.every((line) => !/container query/u.test(line)), failures.join(' | '));
   });
 
-  it('the width-only class is pinned by name: every entry states its properties, the open defect and the receiver; hover-card is one', () => {
-    const entry = STATES_WIDTH_ONLY_MOVERS.find((candidate) => candidate.family === 'hover-card');
-    assert.ok(entry, 'hover-card must be published by name');
-    assert.deepEqual([...entry.properties], ['outline-width', 'outline-offset']);
-    assert.deepEqual(STATES_WIDTH_ONLY_MOVERS.map((candidate) => candidate.family),
-      ['hover-card', 'tooltip']);
+  it('the width-only class is EMPTY and stays closed: no family is named, the four that were are accounted for, and an entry keeps its shape', () => {
+    assert.deepEqual(STATES_WIDTH_ONLY_MOVERS.map((candidate) => candidate.family), []);
+    const states = axisPopulations(ROOT).get('states');
+    // Every entry, today none: named once and in order, on width properties alone, a states member in no non-mover pin.
     const names = STATES_WIDTH_ONLY_MOVERS.map((candidate) => candidate.family);
     assert.deepEqual(names, [...new Set(names)].sort(), 'named once each, in order');
-    const states = axisPopulations(ROOT).get('states');
     for (const candidate of STATES_WIDTH_ONLY_MOVERS) {
-      assert.equal(candidate.defect, 'focus signature not honoured (solid outline)', candidate.family);
-      assert.equal(candidate.defectStatus, 'open', candidate.family);
-      assert.equal(candidate.receiver, 'WO-EVI-02 (focus-signature programme)', candidate.family);
+      assert.equal(candidate.defect, STATES_WIDTH_ONLY_DEFECT.defect, candidate.family);
+      assert.equal(candidate.defectStatus, STATES_WIDTH_ONLY_DEFECT.defectStatus, candidate.family);
+      assert.equal(candidate.receiver, STATES_WIDTH_ONLY_DEFECT.receiver, candidate.family);
       assert.ok(candidate.properties.length > 0 && candidate.properties.every((name) => STATES_WIDTH_PROPERTIES.includes(name)), candidate.family);
       assert.ok(states.includes(candidate.family), `${candidate.family}: a named states mover declares the axis`);
       for (const pin of [UNSETTLED_FAMILIES, UNMOUNTABLE_FAMILIES, probe.CHROMATIC_ONLY_STATES, Object.keys(UNOBSERVABLE_FAMILIES.states)]) {
         assert.ok(!pin.includes(candidate.family), `${candidate.family}: a mover is in no non-mover pin`);
       }
     }
+    // hover-card and tooltip left the pin with the paint that put them in it (owner ruling R32 Q6, 2026-10-04):
+    // neither declares states any more, so neither can be a states mover of any class.
+    for (const retired of ['hover-card', 'tooltip']) assert.ok(!states.includes(retired), `${retired}: left the states population`);
+    // ascii-diagram and tree-view-connector keep a real focus rule (K1) at the kit's fixed width (0bad85580): declared,
+    // measured, not moving -- and in no pin that would take them out of the measured non-movers.
+    for (const kit of ['ascii-diagram', 'tree-view-connector']) {
+      assert.ok(states.includes(kit), `${kit}: still declares states`);
+      for (const pin of [UNSETTLED_FAMILIES, UNMOUNTABLE_FAMILIES, probe.CHROMATIC_ONLY_STATES, Object.keys(UNOBSERVABLE_FAMILIES.states),
+        STATES_NON_MOVER_NOTES.map((note) => note.family)]) {
+        assert.ok(!pin.includes(kit), `${kit}: a measured non-mover is excused by no pin`);
+      }
+    }
+    // The shape a future entry must take: the defect, its status and its receiver ride on every entry.
+    assert.deepEqual({ ...STATES_WIDTH_ONLY_DEFECT }, {
+      defect: 'focus signature not honoured (solid outline)', defectStatus: 'open', receiver: 'WO-EVI-02 (focus-signature programme)',
+    });
+    assert.deepEqual([...STATES_WIDTH_PROPERTIES], ['outline-width', 'outline-offset']);
   });
 
   it('the noted non-movers are published by name with their repair and reason, and are no class', () => {
@@ -1100,10 +1115,15 @@ describe('axis-difference drills — every verdict is reachable', () => {
       + 're-pin STATES_WIDTH_ONLY_MOVERS with the measurement']);
   });
 
-  it('the width-only pin is read through the run\'s own door, and a cell that published no reading is not judged', () => {
-    const measured = { effectiveFamilies: { states: STATES_WIDTH_ONLY_MOVERS.map((entry) => entry.family) } };
-    const stale = evaluate(result([statesCell({ movedIds: STATES_WIDTH_ONLY_MOVERS.map((entry) => entry.family) })], measured));
-    assert.ok(stale.some((line) => line.startsWith('hover-card: named a width-only states mover and it moves on more than a width')), stale.join(' | '));
+  it('the EMPTY width-only pin is read through the run\'s own door: an unnamed width-only mover is refused on a full run, and a cell that published no reading is not judged', () => {
+    const observed = [{ family: 'ring', properties: ['outline-width'] }];
+    const refused = evaluate(result([statesCell({ widthOnly: observed })], measuredStates));
+    assert.ok(refused.some((line) => line.startsWith('ring: moves on states through outline-width ALONE on bithire/light and is not named in STATES_WIDTH_ONLY_MOVERS')), refused.join(' | '));
+    // A --families run measures a subset: it never refuses an unnamed mover.
+    assert.ok(!evaluate(result([statesCell({ widthOnly: observed })], { ...measuredStates, familiesFiltered: true }))
+      .some((line) => /is not named in STATES_WIDTH_ONLY_MOVERS/u.test(line)));
+    // No width-only mover, no finding: the empty pin is not itself a failure.
+    assert.ok(!evaluate(result([statesCell()], measuredStates)).some((line) => /STATES_WIDTH_ONLY_MOVERS/u.test(line)));
     assert.deepEqual(widthOnlyDrift(result([cell({ scenario: 'states', axis: 'states' })], measuredStates), RING), []);
   });
 
@@ -3455,7 +3475,6 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'table',
       'time-picker',
       'tooltip',
-      'tooltip-interactive',
       'tree',
       'tree-view-connector',
       'typography',
@@ -3537,7 +3556,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
     const mounts = realRenderMountList(elements);
     assert.deepEqual(mounts.map((mount) => mount.row).sort(), Object.keys(REAL_RENDER_MOUNTS).sort());
     // A row keyed apart is a real render OF the family it names.
-    assert.equal(mounts.find((mount) => mount.row === 'tooltip-interactive').family, 'tooltip');
+    assert.equal(mounts.find((mount) => mount.row === 'stats-grid-interactive').family, 'stats-grid');
     assert.match(mounts.find((mount) => mount.family === 'skeleton-anatomy').markup, /^<table data-axis-real-host=""><tbody data-axis-real-host=""><tr /u);
     assert.deepEqual(realRenderMountList(elements, { applied: false }), []);
     const on = sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements, realRenders: mounts });
@@ -3771,7 +3790,7 @@ describe('axis-difference — S1: law 5 over a reading, the stamp contract, and 
 
   it('every S1 row declares states only, on a family in the states population', () => {
     const states = axisPopulations(ROOT).get('states');
-    for (const row of ['stats-grid-interactive', 'tooltip-interactive', 'pattern-timeline', 'activity-log', 'avatar',
+    for (const row of ['stats-grid-interactive', 'pattern-timeline', 'activity-log', 'avatar',
       'record', 'anchor', 'breadcrumb-compounds', 'typography']) {
       const entry = REAL_RENDER_MOUNTS[row];
       assert.deepEqual([...entry.axes], ['states'], row);
@@ -3957,8 +3976,8 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
 
   it('LAW: at most one roster row per family declares states; the shipped roster passes, its resting+states pairs included', () => {
     assert.deepEqual(realRenderRosterFailures(ROOT), []);
-    // tooltip and stats-grid each carry one resting row and one states row.
-    for (const [resting, states] of [['tooltip', 'tooltip-interactive'], ['stats-grid', 'stats-grid-interactive']]) {
+    // stats-grid carries one resting row and one states row.
+    for (const [resting, states] of [['stats-grid', 'stats-grid-interactive']]) {
       assert.ok(!REAL_RENDER_MOUNTS[resting].axes.includes('states'), resting);
       assert.ok(REAL_RENDER_MOUNTS[states].axes.includes('states'), states);
       assert.deepEqual(realRenderRosterFailures(ROOT, {
@@ -3969,10 +3988,10 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
 
   it('MUTANT: a second states row for the same family is refused by the roster door, by name', () => {
     const failures = realRenderRosterFailures(ROOT, {
-      tooltip: statesRow('tooltip'),
-      'tooltip-interactive': REAL_RENDER_MOUNTS['tooltip-interactive'],
+      'stats-grid': statesRow('stats-grid'),
+      'stats-grid-interactive': REAL_RENDER_MOUNTS['stats-grid-interactive'],
     });
-    assert.ok(failures.some((line) => line.startsWith('tooltip: 2 rows declare states (tooltip, tooltip-interactive)')), failures.join(' | '));
+    assert.ok(failures.some((line) => line.startsWith('stats-grid: 2 rows declare states (stats-grid, stats-grid-interactive)')), failures.join(' | '));
   });
 
   it('PIN: the measured states refusals are command-palette and tree-view-connector, rows of states families that do not declare states', () => {

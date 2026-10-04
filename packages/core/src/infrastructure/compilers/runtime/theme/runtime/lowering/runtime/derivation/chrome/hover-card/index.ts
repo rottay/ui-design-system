@@ -1,7 +1,6 @@
 /**
  * @fileoverview The hover-card family: its card on the overlay material, the
- * elevation scale and a primary-tinted edge, and its focus frame on the focus
- * decisions.
+ * elevation scale and a primary-tinted edge.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/hover-card
  * @category Compilers
@@ -14,14 +13,13 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const hoverCardChromeDeriver: FamilyDeriver = {
   family: "hover-card",
   rank: "derived",
-  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "states.focus"],
+  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation"],
   produces: [
     "--ds-hover-card-bg",
     "--ds-hover-card-surface-lift",
     "--ds-hover-card-texture",
     "--ds-hover-card-border-color",
     "--ds-hover-card-shadow",
-    "--ds-hover-card-focus-color",
   ],
   derive: () => deriveHoverCardChannels(),
 };
@@ -33,8 +31,5 @@ export function deriveHoverCardChannels(): Record<string, string> {
   vars["--ds-hover-card-texture"] = "none";
   vars["--ds-hover-card-border-color"] = "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)";
   vars["--ds-hover-card-shadow"] = "var(--ds-elevation-3)";
-  // The card's frame rests on the tenant's focus signature; this outline colour
-  // stays transparent until a tenant states one.
-  vars["--ds-hover-card-focus-color"] = "var(--ds-border-color-transparent)";
   return vars;
 }

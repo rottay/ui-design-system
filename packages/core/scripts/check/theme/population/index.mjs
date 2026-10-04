@@ -248,7 +248,11 @@ export const AXIS_POPULATION_LAWS = Object.freeze({
     rule: 'K1 kernel-gated paint (:hover, :active, :focus, :focus-within, :focus-visible, [data-state] on a kernel token, '
       + "[data-disabled] / [data-disabled='true']; :not() arguments stripped; the twin clause) or K2 a states head channel",
     move: 'declared 156 -> 155 at d073e2693 (leave: active-filters-bar, branding-preview-sandbox, detail, record-facts, '
-      + 'scope-switcher; enter: edit-fields, form-builder, surface-states, table-toolbar); no mover leaves',
+      + 'scope-switcher; enter: edit-fields, form-builder, surface-states, table-toolbar); no mover leaves. Product '
+      + 'exits since, the law text unchanged: declared 155 -> 154 on 2026-10-02 (overlay-modal-compounds retires its '
+      + 'orphan rules; not a mover) and 154 -> 152 on 2026-10-04 (owner ruling R32 Q6) -- hover-card and '
+      + 'tooltip retire the focus rule that was their only kernel-gated paint and their only head-channel read; both '
+      + 'were movers on a width alone',
   }),
 });
 

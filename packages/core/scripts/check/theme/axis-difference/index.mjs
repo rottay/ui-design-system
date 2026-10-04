@@ -1104,7 +1104,7 @@ export function asRenderedReport(elements, { applied = true, roster = AS_RENDERE
  *     ones to the node.
  *
  * A FAMILY MAY CARRY MORE THAN ONE ROW when its engine renders two static
- * configurations one mount cannot hold at once (a tooltip is interactive or it
+ * configurations one mount cannot hold at once (a stats tile is clickable or it
  * is not): a row keyed apart names its `family`, both mounts are read as that
  * family's real render, and law 3 is decided over their union.
  *
@@ -1112,8 +1112,8 @@ export function asRenderedReport(elements, { applied = true, roster = AS_RENDERE
  * Law 3 over a union is sound for the resting axes, but the states halves are
  * published per family (`movedStamped`, `movedNative`): two states rows moving
  * on different halves would be two configurations conflated into one split.
- * Today the two-row families (tooltip, stats-grid) carry one resting row and
- * one states row, read on disjoint axes; a second states row is refused by the
+ * Today the one two-row family (stats-grid) carries one resting row and one
+ * states row, read on disjoint axes; a second states row is refused by the
  * roster door until per-row halves exist.
  *
  * `--no-real-render-mounts` reproduces the pre-lot reading on the same tree.
@@ -1688,7 +1688,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
         stamp: 'data-trigger={Array.from(triggers).join(" ")}',
         resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'trigger: "hover" as const,' })]),
       }),
-      Object.freeze({ token: 'attr:data-part=bubble', stamp: '{...partAttributes("bubble", bubbleFocus)}' }),
+      Object.freeze({ token: 'attr:data-part=bubble', stamp: 'data-part="bubble"' }),
       Object.freeze({ token: 'attr:role=tooltip', stamp: 'role={interactive ? "dialog" : "tooltip"}' }),
       Object.freeze({
         token: 'attr:data-tone=default',
@@ -2601,88 +2601,6 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       Object.freeze({ token: 'attr:data-interactive=true', stamp: 'data-interactive={onClick ? "true" : "false"}' }),
       Object.freeze({ token: 'attr:role=button', stamp: 'role={onClick ? "button" : undefined}' }),
       Object.freeze({ token: 'attr:tabindex=0', stamp: 'tabIndex={onClick ? 0 : undefined}' }),
-    ]),
-  }),
-  'tooltip-interactive': Object.freeze({
-    family: 'tooltip',
-    state: Object.freeze({
-      name: 'the present bubble of an `interactive` tooltip (anchor-css branch: inline under its root) -- a non-modal dialog, `data-interactive="true"`, whose bubble states a transparent outline of `--ds-focus-ring-width` '
-        + 'while a control inside holds the keyboard and paints no ring of its own',
-      source: TOOLTIP_ENGINE,
-      anchors: Object.freeze([
-        'hasRenderableContent &&\n      present &&\n      mounted ? (',
-        'strategy === "anchor-css" ? (\n          bubbleNode',
-        'data-interactive={interactive}',
-      ]),
-      resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'interactive?: boolean;' })]),
-    }),
-    axes: Object.freeze(['states']),
-    markup: '<div class="ds-tooltip ds-tooltip--modern" data-part="root" data-disabled="false" data-open="true" '
-      + 'data-trigger="hover focus"><div role="dialog" tabindex="-1" class="ds-tooltip-bubble" data-part="bubble" data-tone="default" '
-      + 'data-variant="bordered" data-placement="top" data-preferred-placement="top" data-radius="md" '
-      + 'data-interactive="true" data-has-shortcut="false" data-has-arrow="true" data-arrow-tracked="false" '
-      + 'data-touch-behavior="long-press" data-open="true" data-layer-kind="tooltip">'
-      + '<div data-part="content">Tooltip</div><span data-part="arrow" aria-hidden="true"></span></div></div>',
-    stamps: Object.freeze([
-      Object.freeze({
-        token: 'attr:data-disabled=false',
-        stamp: 'data-disabled={disabled ? "true" : "false"}',
-        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'disabled: false,' })]),
-      }),
-      Object.freeze({
-        token: 'attr:data-open=true',
-        stamp: 'data-open={isVisible ? "true" : "false"}',
-        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_ENGINE, text: 'const isVisible = isControlled ? visible : internalVisible;' })]),
-      }),
-      Object.freeze({
-        token: 'attr:data-trigger=hover focus',
-        stamp: 'data-trigger={Array.from(triggers).join(" ")}',
-        resolves: Object.freeze([
-          Object.freeze({ source: TOOLTIP_CONTRACT, text: 'trigger: "hover" as const,' }),
-          Object.freeze({ source: TOOLTIP_ENGINE, text: 'if (requested.has("hover")) requested.add("focus");' }),
-        ]),
-      }),
-      Object.freeze({ token: 'attr:data-part=bubble', stamp: '{...partAttributes("bubble", bubbleFocus)}' }),
-      Object.freeze({ token: 'attr:role=dialog', stamp: 'role={interactive ? "dialog" : "tooltip"}' }),
-      Object.freeze({ token: 'attr:tabindex=-1', stamp: 'tabIndex={interactive ? -1 : undefined}' }),
-      Object.freeze({
-        token: 'attr:data-tone=default',
-        stamp: 'data-tone={color}',
-        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'color: "default" as const,' })]),
-      }),
-      Object.freeze({
-        token: 'attr:data-variant=bordered',
-        stamp: 'data-variant={recipe}',
-        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'recipe: "bordered" as const,' })]),
-      }),
-      Object.freeze({
-        token: 'attr:data-placement=top',
-        stamp: 'data-placement={placementAttribute}',
-        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'placement: "top" as const,' })]),
-      }),
-      Object.freeze({
-        token: 'attr:data-preferred-placement=top',
-        stamp: 'data-preferred-placement={preferredPlacementAttribute}',
-        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'placement: "top" as const,' })]),
-      }),
-      Object.freeze({
-        token: 'attr:data-radius=md',
-        stamp: 'data-radius={radius}',
-        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'radius: "md" as const,' })]),
-      }),
-      Object.freeze({ token: 'attr:data-interactive=true', stamp: 'data-interactive={interactive}' }),
-      Object.freeze({ token: 'attr:data-has-shortcut=false', stamp: 'data-has-shortcut={Boolean(shortcut)}' }),
-      Object.freeze({
-        token: 'attr:data-has-arrow=true',
-        stamp: 'data-has-arrow={Boolean(arrow)}',
-        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'arrow: true,' })]),
-      }),
-      Object.freeze({ token: 'attr:data-arrow-tracked=false', stamp: 'data-arrow-tracked={arrowOffset ? "true" : "false"}' }),
-      Object.freeze({
-        token: 'attr:data-touch-behavior=long-press',
-        stamp: 'data-touch-behavior={touchBehavior}',
-        resolves: Object.freeze([Object.freeze({ source: TOOLTIP_CONTRACT, text: 'touchBehavior: "long-press" as const,' })]),
-      }),
     ]),
   }),
   'stats-header': Object.freeze({
@@ -5832,12 +5750,14 @@ export const STATES_WIDTH_PROPERTIES = Object.freeze(['outline-width', 'outline-
  * outline does not paint the tenant focus signature (`--ds-focus-ring`), and a
  * pair that keeps the width (ring -> underline) would drop each of them.
  * Published with every run at `limits.states.widthOnly`.
+ *
+ * THE CLASS IS EMPTY AND CLOSED since the Q6 resolutions (the kit lot
+ * 0bad85580 and the overlay focus retirement). `widthOnlyDrift` still refuses
+ * an unnamed width-only mover on a full run. A new entry is lawful only with
+ * its measurement and an owner-visible defect record
+ * (`STATES_WIDTH_ONLY_DEFECT`).
  */
-const WIDTH_AND_OFFSET = Object.freeze(['outline-width', 'outline-offset']);
-const WIDTH_ONLY_FAMILIES = Object.freeze({
-  'hover-card': WIDTH_AND_OFFSET,
-  tooltip: WIDTH_AND_OFFSET,
-});
+const WIDTH_ONLY_FAMILIES = Object.freeze({});
 export const STATES_WIDTH_ONLY_DEFECT = Object.freeze({
   defect: 'focus signature not honoured (solid outline)',
   defectStatus: 'open',
@@ -8653,7 +8573,7 @@ if (isMain) {
   console.log(
     `  states movers on a WIDTH ALONE (pinned by name, ${STATES_WIDTH_ONLY_DEFECT.defect}, `
     + `${STATES_WIDTH_ONLY_DEFECT.defectStatus.toUpperCase()}, receiver ${STATES_WIDTH_ONLY_DEFECT.receiver}): `
-    + `${result.limits.states.widthOnly.length} -- ${result.limits.states.widthOnly.map((entry) => entry.family).join(', ')}`,
+    + `${result.limits.states.widthOnly.length} -- ${result.limits.states.widthOnly.map((entry) => entry.family).join(', ') || 'none'}`,
   );
   for (const note of result.limits.states.nonMoverNotes) {
     console.log(`  states non-mover, noted: ${note.family} (${note.since}) -- ${note.reason}`);

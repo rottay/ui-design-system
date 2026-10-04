@@ -1,6 +1,6 @@
 /**
- * The Modern HoverCard surface is not a focus target; it stamps the kernel
- * focus state while a control inside it holds focus, and clears it on blur.
+ * The Modern HoverCard surface is not a focus target and stamps no focus state:
+ * a control inside it holds focus and the surface stays unstamped.
  */
 import React from "react";
 import { act, render, screen } from "@testing-library/react";
@@ -8,8 +8,8 @@ import { describe, expect, it } from "vitest";
 
 import ModernHoverCard from "../engines/modern";
 
-describe("HoverCard modern engine -- the surface stamps focus held inside it", () => {
-  it("is not focusable itself and follows the control that takes focus", async () => {
+describe("HoverCard modern engine -- the surface stamps no focus state", () => {
+  it("is not focusable itself and stays unstamped while a control inside it holds focus", async () => {
     render(
       <ModernHoverCard
         open
@@ -25,9 +25,8 @@ describe("HoverCard modern engine -- the surface stamps focus held inside it", (
     expect(surface.hasAttribute("data-state")).toBe(false);
 
     act(() => link.focus());
-    expect(surface.getAttribute("data-state")).toBe(
-      link.matches(":focus-visible") ? "focused focus-visible" : "focused"
-    );
+    expect(document.activeElement).toBe(link);
+    expect(surface.hasAttribute("data-state")).toBe(false);
 
     act(() => link.blur());
     expect(surface.hasAttribute("data-state")).toBe(false);
