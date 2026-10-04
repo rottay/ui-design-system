@@ -74,16 +74,16 @@ describe('radio -- the circle wears the tenant focus signature', () => {
     }
   });
 
-  it('paints the outline only for an authored family colour or a signature without an offset', () => {
+  it('paints the outline only for an authored family colour or a signature whose offset is not its width', () => {
     const coloured = FOCUS_RULES.filter((rule) => /outline-color:/.test(rule.body));
     expect(coloured.map((rule) => [rule.container, rule.selector, rule.body.trim()])).toEqual([
       [
         '@container not style(--ds-radio-focus-ring-color: var(--ds-focus-ring-color))',
         KEYBOARD,
-        'outline-color: var(--ds-radio-focus-ring-color, transparent);',
+        'outline-color: var(--ds-radio-focus-ring-color, var(--ds-focus-ring-color));',
       ],
       [
-        '@container style(--ds-focus-ring-offset: 0px)',
+        '@container not style(--ds-focus-ring-offset: var(--ds-focus-ring-width))',
         KEYBOARD,
         'outline-color: var(--ds-radio-focus-ring-color, var(--ds-focus-ring-color));',
       ],

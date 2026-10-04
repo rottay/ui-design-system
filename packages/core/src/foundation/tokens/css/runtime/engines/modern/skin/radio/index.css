@@ -190,11 +190,11 @@
 @container not style(--ds-radio-focus-ring-color: var(--ds-focus-ring-color)) {
   .ds-radio.ds-radio--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='circle'],
   .ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
-    outline-color: var(--ds-radio-focus-ring-color, transparent);
+    outline-color: var(--ds-radio-focus-ring-color, var(--ds-focus-ring-color));
   }
 }
-/* A signature without an offset draws inside a control this small, on its state glyph: the outline keeps the focus colour around it. */
-@container style(--ds-focus-ring-offset: 0px) {
+/* A signature whose offset is not its width draws inside a control this small, on its state glyph: the outline keeps the focus colour around it. */
+@container not style(--ds-focus-ring-offset: var(--ds-focus-ring-width)) {
   .ds-radio.ds-radio--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='circle'],
   .ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
     outline-color: var(--ds-radio-focus-ring-color, var(--ds-focus-ring-color));
