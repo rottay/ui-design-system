@@ -141,7 +141,7 @@
   padding-inline: var(--ds-spacing-4, 1rem);
   padding-block: var(--ds-spacing-2, 0.5rem);
   font-size: var(--ds-font-size-xs, 0.75rem);
-  box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+  --_ds-timeline-card-focus-layer: initial;
 }
 
 /* ---- marker tone. `--_ds-timeline-marker-color` is the family-private
@@ -253,14 +253,19 @@
   border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-bg-tertiary));
 }
 
-/* The signature shares box-shadow with the card's own shadow and leads the
-   list; a `none` hover elevation would void it, so that arm is guarded. */
+/* The card's own shadow is stated once, for rest and for keyboard focus. The
+   signature shares box-shadow with it and leads the list through
+   `--_ds-timeline-card-focus-layer`, which is empty until the card holds
+   focus; a `none` hover elevation would void the list, so that arm is guarded. */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'],
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
+  box-shadow: var(--_ds-timeline-card-focus-layer,) 0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
+  --_ds-timeline-card-focus-layer: var(--ds-focus-ring),;
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
-  box-shadow:
-    var(--ds-focus-ring),
-    0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
 
 @media (hover: hover) {

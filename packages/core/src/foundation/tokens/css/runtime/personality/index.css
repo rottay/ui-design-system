@@ -345,24 +345,17 @@ h6,
 
 .ant-input:focus-visible,
 .ant-select-focused .ant-select-selector,
-input:is(
-    [data-engine='classic'] *,
-    [data-engine='rustic'] *,
-    [class*='-rustic'],
-    [class*='-rustic'] *,
-    [class^='ant-'],
-    [class*=' ant-']
-  ):focus-visible {
+input:is([class*='-rustic'], [class*='-rustic'] *, [class^='ant-'], [class*=' ant-']):focus-visible,
+input:where([data-engine]:not([data-engine='modern']) *):focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),
     0 0 0 4px var(--ds-color-primary-400, #818cf8);
 }
 
-/* A raw input wears the tenant focus signature. An input the design system
-   stamps is painted by its own skin, so nothing is added to it here. */
+/* Outside any other engine's scope a raw input wears the tenant focus
+   signature. An input the design system stamps is painted by its own skin, so
+   nothing is added to it here. */
 input:focus-visible:not(
-    [data-engine='classic'] *,
-    [data-engine='rustic'] *,
     [class*='-rustic'],
     [class*='-rustic'] *,
     [class^='ant-'],
@@ -370,7 +363,7 @@ input:focus-visible:not(
     [class^='ds-'],
     [class*=' ds-'],
     [data-part]
-  ) {
+  ):where(:not([data-engine]:not([data-engine='modern']) *)) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
@@ -378,8 +371,6 @@ input:focus-visible:not(
 
 @media (forced-colors: active) {
   input:focus-visible:not(
-      [data-engine='classic'] *,
-      [data-engine='rustic'] *,
       [class*='-rustic'],
       [class*='-rustic'] *,
       [class^='ant-'],
@@ -387,7 +378,7 @@ input:focus-visible:not(
       [class^='ds-'],
       [class*=' ds-'],
       [data-part]
-    ) {
+    ):where(:not([data-engine]:not([data-engine='modern']) *)) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
   }

@@ -70,6 +70,6 @@ export function deriveTourChannels(): Record<string, string> {
   vars["--ds-tour-action-font-size"] = "var(--ds-type-label-font-size)";
   // The surface and its controls rest on the tenant's focus signature; this
   // outline colour stays transparent until a tenant states one.
-  vars["--ds-tour-focus-ring"] = "transparent";
+  vars["--ds-tour-focus-ring"] = "var(--ds-border-color-transparent)";
   return vars;
 }

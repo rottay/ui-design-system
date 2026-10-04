@@ -81,7 +81,7 @@
    and a `none` elevation would void the list. The outline is transparent until
    a tenant states a focus colour. */
 .ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, transparent);
+  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, var(--ds-border-color-transparent));
   outline-offset: var(--ds-tour-focus-ring-offset, var(--ds-focus-ring-offset));
   box-shadow: var(--ds-focus-ring);
 }
@@ -223,7 +223,7 @@
 /* Stated after hover and press, and one part heavier, so a focused control
    keeps the signature while it is hovered or pressed. */
 .ds-tour.ds-tour--modern[data-part='root'] :is([data-part='action'], [data-part='close-button'])[data-part]:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, transparent);
+  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, var(--ds-border-color-transparent));
   outline-offset: var(--ds-tour-focus-ring-offset, var(--ds-focus-ring-offset));
   box-shadow: var(--ds-focus-ring);
 }

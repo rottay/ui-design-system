@@ -161,23 +161,29 @@ describe('CollectionWorkspace — own focus targets wear the tenant focus signat
     ]);
     // A `none` elevation would void the whole shadow list, signature included.
     expect(SKIN.replace(/\s+/g, ' ')).toContain(
-      `@container (not style(--ds-popover-shadow: none)) and (not style(--ds-elevation-3: none)) { ${SURFACE_FOCUS} { box-shadow: var(--ds-focus-ring), var(--ds-popover-shadow, var(--ds-elevation-3)); } }`,
+      `@container not (style(--ds-popover-shadow: none) or style(--ds-elevation-3: none)) { ${SURFACE_FOCUS} { box-shadow: var(--ds-focus-ring), var(--ds-popover-shadow, var(--ds-elevation-3)); } }`,
     );
   });
 
   it('dresses the page-size pill in the signature for its hidden select, ahead of its lift', () => {
     expect(rulesFor(AUTHORED, PAGE_SIZE_FOCUS)).toEqual([
       [
+        '--_ds-collection-page-size-focus-layer: var(--ds-focus-ring),',
         'outline: var(--ds-focus-ring-width) solid transparent',
         'outline-offset: var(--ds-focus-ring-offset)',
-        `box-shadow: var(--ds-focus-ring), ${PAGE_SIZE_LIFT}`,
       ],
     ]);
 
+    // The lift is stated once; the signature leads it through a layer that is
+    // empty until the select holds keyboard focus.
     const resting = rulesFor(AUTHORED, '.ds-collection-page-size-control:focus-within');
     expect(resting).toHaveLength(1);
-    expect(resting[0]).toContain(`box-shadow: ${PAGE_SIZE_LIFT}`);
+    expect(resting[0]).toContain(
+      `box-shadow: var(--_ds-collection-page-size-focus-layer,) ${PAGE_SIZE_LIFT}`,
+    );
     expect(resting[0].join(' ')).not.toMatch(/0 0 0 3px/);
+    expect(SKIN.split(PAGE_SIZE_LIFT)).toHaveLength(2);
+    expect(SKIN.match(/--_ds-collection-page-size-focus-layer\s*:/g)).toHaveLength(1);
   });
 
   it('keeps a system-colour outline on both in forced colors, where the signature is dropped', () => {

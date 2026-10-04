@@ -39,7 +39,7 @@ describe("chrome/hover-card focus colour", () => {
         buildLoweringContext({ theme: fixture.theme, tenant: fixture.tenant }),
         {}
       );
-      expect(derived["--ds-hover-card-focus-color"], fixture.label).toBe("transparent");
+      expect(derived["--ds-hover-card-focus-color"], fixture.label).toBe("var(--ds-border-color-transparent)");
     }
     expect(hoverCardChromeDeriver.produces).toContain("--ds-hover-card-focus-color");
   });

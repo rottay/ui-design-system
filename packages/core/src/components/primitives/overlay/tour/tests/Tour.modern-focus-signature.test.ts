@@ -72,8 +72,11 @@ describe('tour -- the surface, the step actions and the close control wears the 
     );
     expect(outlines.length).toBeGreaterThan(0);
     for (const outline of outlines) {
-      expect(outline).toMatch(/\btransparent\)?$/);
+      expect(outline).toMatch(/(?:\btransparent|, var\(--ds-border-color-transparent\)\))$/);
     }
+    expect(
+      readFileSync(resolve(process.cwd(), 'src/foundation/tokens/css/foundation/base/borders/index.css'), 'utf8'),
+    ).toMatch(/--ds-border-color-transparent:\s*transparent;/);
     for (const rule of FOCUS_RULES) {
       expect(rule.body, rule.selector).not.toMatch(/--ds-focus-ring-color|--ds-color-primary/);
     }

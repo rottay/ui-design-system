@@ -35,6 +35,6 @@ export function deriveHoverCardChannels(): Record<string, string> {
   vars["--ds-hover-card-shadow"] = "var(--ds-elevation-3)";
   // The card's frame rests on the tenant's focus signature; this outline colour
   // stays transparent until a tenant states one.
-  vars["--ds-hover-card-focus-color"] = "transparent";
+  vars["--ds-hover-card-focus-color"] = "var(--ds-border-color-transparent)";
   return vars;
 }

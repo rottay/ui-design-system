@@ -127,8 +127,11 @@ describe("DataTable pass 2 craft contract", () => {
         undefined,
       ],
     ])("hosts one overlay on %s, and a system-colour outline in forced colors", (_label, node, shadow, zIndex) => {
-      const [overlay, forced, ...extra] = bodies(`${node}${SELF}::after`);
+      const stated = bodies(`${node}${SELF}::after`);
+      // A row overlay takes its stacking tier from the rule it shares with the pinned cells.
+      const [tier, overlay, forced, ...extra] = zIndex === undefined ? [undefined, ...stated] : stated;
       expect(extra).toEqual([]);
+      expect(tier?.trim()).toBe(zIndex === undefined ? undefined : `z-index: ${zIndex};`);
       expect(declaration(overlay ?? "", "content")).toBe('""');
       expect(declaration(overlay ?? "", "position")).toBe("absolute");
       expect(declaration(overlay ?? "", "inset")).toBe(
@@ -136,7 +139,7 @@ describe("DataTable pass 2 craft contract", () => {
       );
       expect(declaration(overlay ?? "", "pointer-events")).toBe("none");
       expect(declaration(overlay ?? "", "box-shadow")).toBe(shadow);
-      expect(declaration(overlay ?? "", "z-index")).toBe(zIndex);
+      expect(declaration(overlay ?? "", "z-index")).toBeUndefined();
       expect(overlay).not.toContain("outline");
 
       expect(declaration(forced ?? "", "outline")).toBe(
@@ -152,7 +155,8 @@ describe("DataTable pass 2 craft contract", () => {
 
     it("shows an overlay only while its host holds focus itself, never for a focused descendant", () => {
       const overlays = [...skin.matchAll(/:focus-visible\)([^\s,{]*)::after/g)].map(([, tail]) => tail);
-      expect(overlays).toHaveLength(6);
+      // Six overlay rules, and the two row overlays named again by the tier rule.
+      expect(overlays).toHaveLength(8);
       for (const tail of overlays) {
         expect(tail).toBe(":not(:focus-within:not(:focus))");
       }
@@ -167,6 +171,14 @@ describe("DataTable pass 2 craft contract", () => {
       )?.[1];
       expect(pinned).toBe("2");
       expect(Number(stickyHead)).toBeGreaterThan(2);
+      const tiers = [...skin.matchAll(/([^{}]*)\{\s*z-index:\s*2;\s*\}/g)]
+        .map(([, selectors]) => selectors ?? "")
+        .filter((selectors) => selectors.includes("::after"));
+      expect(tiers).toHaveLength(1);
+      expect(tiers[0]).toMatch(new RegExp(`${ROW}${SELF}::after`));
+      expect(tiers[0]).toMatch(new RegExp(`${GROUP_ROW}${SELF}::after`));
+      expect(tiers[0]).toContain('[data-part="header-cell"][data-pinned="true"]');
+      expect(tiers[0]).toContain('[data-part="data-cell"][data-pinned="true"]');
     });
 
     it("never pins a sticky header cell back to relative while it holds focus", () => {
@@ -267,7 +279,7 @@ describe("DataTable pass 2 craft contract", () => {
       );
       expect(painted.length).toBeGreaterThan(0);
       for (const [selector, body] of painted) {
-        expect(body, selector).toMatch(/box-shadow:\s*var\(--ds-card-focus-ring\)[,;]/);
+        expect(body, selector).toMatch(/box-shadow:\s*var\(--ds-card-focus-ring, var\(--ds-focus-ring\)\)[,;]/);
       }
     });
   });

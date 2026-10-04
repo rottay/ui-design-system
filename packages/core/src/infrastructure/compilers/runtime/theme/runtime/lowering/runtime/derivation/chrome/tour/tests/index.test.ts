@@ -39,7 +39,7 @@ describe("chrome/tour focus colour", () => {
         buildLoweringContext({ theme: fixture.theme, tenant: fixture.tenant }),
         {}
       );
-      expect(derived["--ds-tour-focus-ring"], fixture.label).toBe("transparent");
+      expect(derived["--ds-tour-focus-ring"], fixture.label).toBe("var(--ds-border-color-transparent)");
     }
     expect(tourChromeDeriver.produces).toContain("--ds-tour-focus-ring");
   });

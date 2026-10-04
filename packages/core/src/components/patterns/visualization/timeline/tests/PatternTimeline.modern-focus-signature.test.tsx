@@ -59,6 +59,8 @@ const focusRulesOf = (rules: Rule[]) =>
     .filter((rule) => /focus/.test(rule.selector))
     .map((rule): [string, string[]] => [rule.selector, declarations(rule.body)]);
 
+const CARD =
+  ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']";
 const CARD_FOCUS =
   ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible)";
 const CARD_HOVER_FOCUS =
@@ -93,12 +95,13 @@ describe('Modern PatternTimeline — the clickable card wears the tenant focus s
     expect(focusRules.filter(paintsSolidOutline)).toEqual([]);
     expect(SKIN).not.toContain('--ds-focus-ring-color');
     expect(focusRulesOf(AUTHORED)).toEqual([
+      [`${CARD}, ${CARD_FOCUS}`, [`box-shadow: var(--_ds-timeline-card-focus-layer,) ${RESTING_SHADOW}`]],
       [
         CARD_FOCUS,
         [
+          '--_ds-timeline-card-focus-layer: var(--ds-focus-ring),',
           'outline: var(--ds-focus-ring-width) solid transparent',
           'outline-offset: var(--ds-focus-ring-offset)',
-          `box-shadow: var(--ds-focus-ring), ${RESTING_SHADOW}`,
         ],
       ],
       [CARD_HOVER_FOCUS, [`box-shadow: var(--ds-focus-ring), var(--ds-shadow-md, ${HOVER_SHADOW})`]],
@@ -110,12 +113,14 @@ describe('Modern PatternTimeline — the clickable card wears the tenant focus s
   });
 
   it('composes with the literal resting shadow of the card, which can never be none', () => {
-    const resting = AUTHORED.find(
-      (rule) =>
-        rule.selector ===
-        ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
-    );
-    expect(declarations(resting?.body ?? '')).toContain(`box-shadow: ${RESTING_SHADOW}`);
+    // Stated once, for rest and for focus; the layer in front of it is empty on
+    // every card that does not hold focus, a focused ancestor card included.
+    expect(SKIN.split(RESTING_SHADOW)).toHaveLength(2);
+    const resting = AUTHORED.find((rule) => rule.selector === CARD);
+    expect(declarations(resting?.body ?? '')).toContain('--_ds-timeline-card-focus-layer: initial');
+    expect(declarations(resting?.body ?? '').some((declaration) => /^box-shadow\s*:/.test(declaration))).toBe(false);
+    const stated = AUTHORED.filter((rule) => declarations(rule.body).some((declaration) => declaration.includes(RESTING_SHADOW)));
+    expect(stated.map((rule) => rule.selector)).toEqual([`${CARD}, ${CARD_FOCUS}`]);
   });
 
   it('keeps a system-colour outline for forced colors, where the signature is dropped', () => {

@@ -189,7 +189,7 @@
   outline-offset: calc(-1 * var(--ds-card-selected-outline-width, var(--ds-card-border-width)));
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled']):not([data-shadowed='false']) {
-  box-shadow: var(--ds-card-shadow-selected);
+  box-shadow: var(--ds-card-shadow-selected, var(--ds-material-card-shadow-selected));
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled'])::after {
   opacity: var(--ds-card-state-overlay-selected-opacity);
@@ -197,7 +197,7 @@
 
 /* The outline stays transparent until a tenant states its colour. */
 .ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  outline: var(--ds-card-focus-ring-width) solid var(--ds-card-focus-ring-color);
+  outline: var(--ds-card-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-card-focus-ring-color, var(--ds-border-color-transparent));
   outline-offset: var(--ds-card-focus-ring-offset);
 }
 
@@ -260,7 +260,7 @@
   outline-offset: calc(-1 * var(--ds-card-selected-outline-width, var(--ds-card-border-width)));
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-state~='disabled']):not([data-shadowed='false']) {
-  box-shadow: var(--ds-card-shadow-selected);
+  box-shadow: var(--ds-card-shadow-selected, var(--ds-material-card-shadow-selected));
 }
 
 /* ---- loading: the reserved anatomy under a frosted spinner scrim; the cover
@@ -539,107 +539,107 @@
    the shadow of the resting, hovered, pressed or selected rule it follows. A
    `none` shadow would void the whole list, so each composition is guarded. */
 .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-elevated-shadow: none) {
   .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
     box-shadow:
-      var(--ds-card-focus-ring),
+      var(--ds-card-focus-ring, var(--ds-focus-ring)),
       inset 0 var(--ds-edge-hairline-width) 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent),
       var(--ds-card-elevated-shadow, var(--ds-card-shadow));
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='outlined'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-bordered-shadow: none) {
   .ds-card.ds-card--modern[data-part='root'][data-variant='outlined'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-bordered-shadow);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-bordered-shadow);
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='filled'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-flat-shadow: none) {
   .ds-card.ds-card--modern[data-part='root'][data-variant='filled'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-flat-shadow);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-flat-shadow);
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='ghost'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-ghost-shadow: none) {
   .ds-card.ds-card--modern[data-part='root'][data-variant='ghost'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-ghost-shadow);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-ghost-shadow);
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-shadowed='true'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-shadow: none) {
   .ds-card.ds-card--modern[data-part='root'][data-shadowed='true'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-shadow);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-shadow);
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-shadowed='false'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @media (hover: hover) {
   .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='pressed']):not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-    box-shadow: var(--ds-card-focus-ring);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
   }
 }
 @media (hover: hover) {
   @container not style(--ds-card-elevated-shadow-hover: none) {
     .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='pressed']):not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-      box-shadow: var(--ds-card-focus-ring), var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover));
+      box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover));
     }
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-shadow-active: none) {
   .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-shadow-active, var(--ds-card-shadow));
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-shadow-active, var(--ds-card-shadow));
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-shadow-selected: none) {
   .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-shadow-selected);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-shadow-selected, var(--ds-material-card-shadow-selected));
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-shadow-selected: none) {
   .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-shadow-selected);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-shadow-selected, var(--ds-material-card-shadow-selected));
   }
 }
 [data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-shadow: none) {
   [data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-shadow, var(--ds-elevation-1));
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-shadow, var(--ds-elevation-1));
   }
 }
 [data-anatomy-card='underline'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 .ds-card.ds-card--modern [data-part='body'] .ds-card.ds-card--modern[data-part='root'][data-size][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-nested-shadow: none) {
   .ds-card.ds-card--modern [data-part='body'] .ds-card.ds-card--modern[data-part='root'][data-size][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-nested-shadow);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-nested-shadow);
   }
 }
 

@@ -407,7 +407,7 @@ describe('Card keyboard focus wears the tenant focus signature', () => {
   it('states the signature first in every shadow a focused card paints', () => {
     expect(focusRules.length).toBeGreaterThan(0);
     for (const rule of focusRules) {
-      expect(shadowOf(rule.body), rule.selector).toMatch(/^var\(--ds-card-focus-ring\)(,|$)/);
+      expect(shadowOf(rule.body), rule.selector).toMatch(/^var\(--ds-card-focus-ring, var\(--ds-focus-ring\)\)(,|$)/);
       expect(rule.selector, rule.selector).toContain(":not([data-state~='disabled'])");
     }
   });
@@ -425,7 +425,7 @@ describe('Card keyboard focus wears the tenant focus signature', () => {
     for (const rule of focusRules) {
       const shadow = shadowOf(rule.body);
       const guard = rule.conditions.find((condition) => condition.startsWith('@container not style('));
-      if (shadow === 'var(--ds-card-focus-ring)') {
+      if (shadow === 'var(--ds-card-focus-ring, var(--ds-focus-ring))') {
         expect(guard, rule.selector).toBeUndefined();
         continue;
       }
@@ -439,7 +439,9 @@ describe('Card keyboard focus wears the tenant focus signature', () => {
   it('paints no solid outline from the width and colour operands', () => {
     const outlines = rules.filter((rule) => rule.selector.includes(FOCUS) && /outline:/.test(rule.body));
     expect(outlines).toHaveLength(1);
-    expect(outlines[0]?.body).toMatch(/outline:\s*var\(--ds-card-focus-ring-width\) solid var\(--ds-card-focus-ring-color\);/);
+    expect(outlines[0]?.body).toMatch(
+      /outline:\s*var\(--ds-card-focus-ring-width, var\(--ds-focus-ring-width\)\) solid var\(--ds-card-focus-ring-color, var\(--ds-border-color-transparent\)\);/,
+    );
     expect(outlines[0]?.body).toMatch(/outline-offset:\s*var\(--ds-card-focus-ring-offset\);/);
     expect(normal).not.toMatch(/outline:[^;]*var\(--ds-focus-ring-color/);
     expect(tokens).toMatch(/--ds-card-focus-ring-color:\s*transparent;/);
@@ -462,9 +464,14 @@ describe('Card keyboard focus wears the tenant focus signature', () => {
     expect(authored['--ds-card-focus-ring-width']).toBe('3px');
     expect(authored['--ds-card-focus-ring-offset']).toBe('4px');
     const unauthored = chromeToVariables({ cardComponent: { radius: '12px' } });
-    for (const hook of ['--ds-card-focus-ring', '--ds-card-focus-ring-color', '--ds-card-focus-ring-width', '--ds-card-focus-ring-offset']) {
+    for (const [hook, read] of [
+      ['--ds-card-focus-ring', 'var(--ds-card-focus-ring, var(--ds-focus-ring))'],
+      ['--ds-card-focus-ring-color', 'var(--ds-card-focus-ring-color, var(--ds-border-color-transparent))'],
+      ['--ds-card-focus-ring-width', 'var(--ds-card-focus-ring-width, var(--ds-focus-ring-width))'],
+      ['--ds-card-focus-ring-offset', 'var(--ds-card-focus-ring-offset)'],
+    ] as const) {
       expect(unauthored[hook], hook).toBeUndefined();
-      expect(normal, hook).toContain(`var(${hook})`);
+      expect(normal, hook).toContain(read);
     }
   });
 
@@ -485,7 +492,7 @@ describe('Card keyboard focus wears the tenant focus signature', () => {
   it('never lets a selected card fall back to the focus ring', () => {
     const selected = restingRules.filter((rule) => rule.selector.includes("[data-selected='true']"));
     expect(selected).toHaveLength(2);
-    for (const rule of selected) expect(shadowOf(rule.body), rule.selector).toBe('var(--ds-card-shadow-selected)');
+    for (const rule of selected) expect(shadowOf(rule.body), rule.selector).toBe('var(--ds-card-shadow-selected, var(--ds-material-card-shadow-selected))');
     for (const rule of focusRules.filter((rule) => rule.selector.includes("[data-selected='true']"))) {
       expect(shadowOf(rule.body).match(/--ds-card-focus-ring/g), rule.selector).toHaveLength(1);
     }

@@ -162,9 +162,15 @@
   cursor: progress;
 }
 
+/* One tier: the toolbar and the scrollport focus overlay, which is drawn
+   after it and so sits above every column. */
+.ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]::after,
+.ds-pattern-decision-comparison .ds-decision-comparison__toolbar {
+  z-index: 2;
+}
+
 .ds-pattern-decision-comparison .ds-decision-comparison__toolbar {
   position: relative;
-  z-index: 2;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
@@ -887,7 +893,6 @@
   )::after {
   position: absolute;
   inset: 0;
-  z-index: 3;
   content: "";
   box-shadow: var(--ds-focus-ring);
   pointer-events: none;

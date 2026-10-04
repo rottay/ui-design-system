@@ -85,7 +85,7 @@
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
 }
-@container (not style(--ds-app-shell-skip-link-shadow: none)) and (not style(--ds-elevation-2: none)) {
+@container not (style(--ds-app-shell-skip-link-shadow: none) or style(--ds-elevation-2: none)) {
   .ds-app-shell [data-part="skip-link"]:is([data-state~="focus-visible"], :focus-visible) {
     box-shadow: var(--ds-focus-ring), var(--ds-app-shell-skip-link-shadow, var(--ds-elevation-2, none));
   }

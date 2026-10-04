@@ -131,7 +131,7 @@ describe("AppShell focus signature (skin contract)", () => {
 
   it("composes the skip-link signature with its lift only where the lift is not `none`", () => {
     expect(SKIN).toContain(
-      "@container (not style(--ds-app-shell-skip-link-shadow: none)) and (not style(--ds-elevation-2: none))"
+      "@container not (style(--ds-app-shell-skip-link-shadow: none) or style(--ds-elevation-2: none))"
     );
     const composed = rules(rest).filter((rule) =>
       /box-shadow:\s*var\(--ds-focus-ring\),\s*var\(--ds-app-shell-skip-link-shadow/.test(rule.body)

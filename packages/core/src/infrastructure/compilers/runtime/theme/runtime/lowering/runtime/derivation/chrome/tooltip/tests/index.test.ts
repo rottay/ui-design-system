@@ -218,7 +218,7 @@ describe("the bubble's focus colour", () => {
         buildLoweringContext({ theme: fixture.theme, tenant: fixture.tenant }),
         {}
       );
-      expect(derived["--ds-tooltip-focus-color"], fixture.label).toBe("transparent");
+      expect(derived["--ds-tooltip-focus-color"], fixture.label).toBe("var(--ds-border-color-transparent)");
     }
     expect(tooltipChromeDeriver.produces).toContain("--ds-tooltip-focus-color");
   });

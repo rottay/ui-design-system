@@ -517,6 +517,17 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="data-cell"][data-pinned="true"] {
   position: sticky;
+}
+
+/* One tier: the pinned cells and the row focus overlay that has to clear them. */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after,
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="group-header-row"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after,
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-pinned="true"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-pinned="true"] {
   z-index: 2;
 }
 
@@ -1289,7 +1300,6 @@
   content: "";
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
-  z-index: 2;
   box-shadow: var(--ds-table-row-focus-shadow, var(--ds-focus-ring));
   pointer-events: none;
 }
