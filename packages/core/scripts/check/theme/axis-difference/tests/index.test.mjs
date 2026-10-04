@@ -138,7 +138,7 @@ import {
   unobservableDrift,
 } from '../index.mjs';
 import {
-  AXIS_IDS, AXES, axisControls, axisPopulations, axisUnobservable, cssRules, groupControls, skinFamilies,
+  AXIS_IDS, AXES, FLOOR_PATH, axisControls, axisPopulations, axisUnobservable, cssRules, familyAxisDeclarations, focusSignatureProof, groupControls, skinFamilies,
   KERNEL_STATE_TOKENS as POPULATION_KERNEL_STATE_TOKENS, STATE_STAMP_ATTRIBUTES as POPULATION_STAMP_ATTRIBUTES,
 } from '../../population/index.mjs';
 import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
@@ -4769,6 +4769,196 @@ describe('axis-difference BROWSER drill — the pseudo-element read law reads pa
     assert.deepEqual(recoloured.chromatic.families.drill.channels, ['box-shadow(colour)']);
     assert.equal(resized.moved, 'box-shadow', 'the red arm: the same pseudo moving by geometry is a states mover');
     assert.deepEqual(resized.chromatic.movedIds, []);
+  }, 120_000);
+});
+
+/**
+ * THE FOCUS-SIGNATURE READ. A shadow the population withdrew from depth as
+ * exclusively the focus signature stays read, for `box-shadow` alone, as a
+ * STATES read on the box that paints it -- and that is all it does.
+ */
+describe('axis-difference — the focus-signature read: a shadow that left depth as the signature is still read, as a states read', () => {
+  const ROOT = ".ds-drill.ds-drill--modern[data-part='root']";
+  const HOST = `${ROOT} [data-part='row']`;
+  const OVERLAY = `${HOST}:focus-visible::after`;
+  const SIGNATURE = 'var(--ds-focus-ring)';
+  const CSS = [
+    `${HOST}:focus-visible { outline: var(--ds-focus-ring-width) solid transparent; }`,
+    `${OVERLAY} { content: ''; box-shadow: ${SIGNATURE}; }`,
+    `@media (forced-colors: active) { ${OVERLAY} { box-shadow: none; } }`,
+  ].join('\n');
+  const SOURCE = Object.freeze({ selector: OVERLAY, value: SIGNATURE });
+  const READ = { axis: 'states', host: HOST, pseudo: '::after', property: 'box-shadow', source: probe.FOCUS_SIGNATURE_SOURCE };
+  let proof = null;
+  const proves = (value) => (proof ??= focusSignatureProof()).judgeValue(value) === null;
+
+  it('reads the cited rule on its host for box-shadow as a STATES read, mounts nothing, and reconciles', () => {
+    const without = familyParts(CSS, DRILL_ELEMENT, ['states'], { nativePseudos: true });
+    assert.deepEqual(without.pseudoReads.reads, []);
+    const withRead = familyParts(CSS, DRILL_ELEMENT, ['states'], { nativePseudos: true, signature: [SOURCE] });
+    assert.deepEqual(withRead.pseudoReads.reads, [READ]);
+    assert.deepEqual(withRead.parts, without.parts);
+    assert.equal(withRead.rejected['pseudo-element'], 1, 'one refusal per cited rule: the forced-colors reset twin at the same selector is not a source');
+    assert.equal(withRead.rejected['pseudo-element'], withRead.pseudoReads.entries.length);
+    assert.equal(withRead.pseudoReads.reads.some((read) => read.axis === 'depth'), false);
+    const census = probe.pseudoReadCensus(new Map([['drill', withRead]]), new Map(), { nodeRefusals: 1 });
+    assert.deepEqual(census.entries, [
+      { family: 'drill', axis: 'states', selector: OVERLAY, outcome: 'host-absent', property: 'box-shadow', source: probe.FOCUS_SIGNATURE_SOURCE },
+    ]);
+    assert.equal(census.reconciliation.equal, true);
+  });
+
+  it('is derived from the population citation alone: states declared, depth left through the signature', () => {
+    const declaration = { family: 'drill', focusSignatureOnly: { depth: [SOURCE, { selector: OVERLAY, value: 'none' }] } };
+    assert.deepEqual(probe.focusSignatureReads(declaration, ['shape', 'states'], proves), [SOURCE]);
+    assert.deepEqual(probe.focusSignatureReads(declaration, ['shape', 'depth', 'states'], proves), []);
+    assert.deepEqual(probe.focusSignatureReads(declaration, ['shape'], proves), []);
+    assert.deepEqual(probe.focusSignatureReads({ focusSignatureOnly: {} }, ['states'], proves), []);
+    assert.deepEqual(probe.focusSignatureReads(undefined, ['states'], proves), []);
+  });
+
+  it('NEGATIVE: a family whose shadow left depth any other way regains no read', () => {
+    const excluded = {
+      family: 'drill',
+      focusSignatureOnly: {},
+      notApplicable: { depth: { reason: 'reviewed', excludedDeclarations: [{ selector: OVERLAY, value: 'var(--ds-elevation-2)' }] } },
+    };
+    assert.deepEqual(probe.focusSignatureReads(excluded, ['states'], proves), [], 'a reviewed N/A exclusion is not a focus-signature citation');
+    const elevation = CSS.replace(`box-shadow: ${SIGNATURE}`, 'box-shadow: var(--ds-elevation-2)');
+    const record = familyParts(elevation, DRILL_ELEMENT, ['states'], { nativePseudos: true, signature: [SOURCE] });
+    assert.deepEqual(record.pseudoReads.reads, [], 'the rule no longer carries the cited value');
+    assert.equal(record.rejected['pseudo-element'], undefined);
+    const mixed = CSS.replace(`box-shadow: ${SIGNATURE}`, `box-shadow: ${SIGNATURE}, var(--ds-elevation-2)`);
+    assert.deepEqual(familyParts(mixed, DRILL_ELEMENT, ['states'], { nativePseudos: true, signature: [SOURCE] }).pseudoReads.reads, [],
+      'a mixture is not the signature');
+  });
+
+  it('NEGATIVE: a family that does not declare states, or that declares depth, gains nothing even when handed a source', () => {
+    for (const axes of [['shape'], ['shape', 'motion'], []]) {
+      const plain = familyParts(CSS, DRILL_ELEMENT, axes, { nativePseudos: true });
+      assert.deepEqual(familyParts(CSS, DRILL_ELEMENT, axes, { nativePseudos: true, signature: [SOURCE] }), plain);
+    }
+    const depth = familyParts(CSS, DRILL_ELEMENT, ['depth', 'states'], { nativePseudos: true });
+    assert.deepEqual(familyParts(CSS, DRILL_ELEMENT, ['depth', 'states'], { nativePseudos: true, signature: [SOURCE] }), depth);
+    assert.equal(depth.pseudoReads.reads.some((read) => read.source !== undefined), false);
+  });
+
+  it('NEGATIVE: a mutated focusSignatureOnly is refused', () => {
+    const forged = (value) => ({ family: 'drill', focusSignatureOnly: { depth: [{ selector: OVERLAY, value }] } });
+    for (const value of ['var(--ds-elevation-2)', `${SIGNATURE}, var(--ds-elevation-2)`, '0 0 0 2px red', 'var(--ds-not-a-channel)']) {
+      assert.throws(() => probe.focusSignatureReads(forged(value), ['states'], proves), /producer-side proof does not back it/u, value);
+    }
+    assert.deepEqual(probe.focusSignatureReads({ focusSignatureOnly: { states: [SOURCE], shape: [SOURCE] } }, ['states'], proves), [],
+      'a citation under another axis key is not read');
+    assert.deepEqual(probe.focusSignatureReads(forged('var(--ds-elevation-2)'), ['depth', 'states'], proves), []);
+    const stray = familyParts(CSS, DRILL_ELEMENT, ['states'], { nativePseudos: true, signature: [{ selector: `${HOST}::after`, value: SIGNATURE }] });
+    assert.deepEqual(stray.pseudoReads.reads, [], 'a source naming a selector the stylesheet does not write reads nothing');
+  });
+
+  it('NEGATIVE: the signature on a part NODE mounts nothing and tags no axis; it is counted by name', () => {
+    const node = `${HOST}[data-state~='focus-visible']`;
+    const css = `${node} { box-shadow: ${SIGNATURE}; }`;
+    for (const nativePseudos of [false, true]) {
+      const plain = familyParts(css, DRILL_ELEMENT, ['states'], { nativePseudos });
+      const read = familyParts(css, DRILL_ELEMENT, ['states'], { nativePseudos, signature: [{ selector: node, value: SIGNATURE }] });
+      assert.deepEqual(read.parts, plain.parts);
+      assert.deepEqual(read.pseudoReads, plain.pseudoReads);
+      assert.equal(read.rejected['signature-node'], 1);
+    }
+    const root = `${ROOT}:focus-visible`;
+    const onRoot = familyParts(`${root} { box-shadow: ${SIGNATURE}; }`, DRILL_ELEMENT, ['states'], {
+      nativePseudos: true, signature: [{ selector: root, value: SIGNATURE }],
+    });
+    assert.equal(onRoot.rejected['signature-node'], undefined, 'the root is read on every axis: not a refusal');
+    assert.deepEqual(onRoot.parts, []);
+  });
+
+  it('on the tree: the read set is exactly the families the law derives, and no depth read is added to any family', () => {
+    const declarations = familyAxisDeclarations();
+    const populations = axisPopulations();
+    for (const nativePseudos of [false, true]) {
+      const parts = familyAxisParts(undefined, null, null, { nativePseudos });
+      const report = partMountReport(parts);
+      const signed = [...parts].filter(([, record]) => record.pseudoReads.reads.some((read) => read.source === probe.FOCUS_SIGNATURE_SOURCE))
+        .map(([family]) => family);
+      assert.deepEqual(signed, ['search']);
+      assert.deepEqual(report.pseudoReads.search.states, ['.ds-surface.ds-search [data-part="result-custom"]::after [box-shadow, focus-signature]']);
+      assert.equal(report.pseudoReads.search.depth, undefined);
+      assert.equal(report.refused['signature-node'], undefined);
+      for (const [family, record] of parts) {
+        const inDepth = populations.get('depth').includes(family);
+        if (!inDepth) {
+          assert.equal(record.pseudoReads.reads.some((read) => read.axis === 'depth'), false, family);
+          assert.equal(record.parts.some((part) => part.axes.includes('depth')), false, family);
+        }
+        if (signed.includes(family)) {
+          assert.equal(populations.get('states').includes(family) && !inDepth, true, family);
+          assert.notEqual(declarations.get(family).focusSignatureOnly.depth, undefined, family);
+        }
+      }
+    }
+    const pinned = JSON.parse(readFileSync(FLOOR_PATH, 'utf8')).axes;
+    for (const axis of ['states', 'depth']) {
+      assert.equal(populations.get(axis).length, pinned[axis], `${axis}: the read moves no denominator off the population baseline`);
+    }
+  });
+});
+
+/**
+ * THE PROPERTY BINDING IN A BROWSER. One box carries an ordinary states read
+ * (its rule writes `opacity`) and the signature read: each is taken for its
+ * own properties and for no other, and the red arm is the same read with the
+ * binding stripped.
+ */
+describe('axis-difference BROWSER drill — the focus-signature read is taken for box-shadow and for nothing else', { skip: browserReason }, () => {
+  const ROOT = ".ds-drill.ds-drill--modern[data-part='root']";
+  const GATED = `${ROOT}[data-state~='focus-visible']`;
+  const SIGNATURE = 'var(--ds-focus-ring)';
+  const CSS = `${DRILL_ROOT_CSS}\n${GATED}::after { content: ''; box-shadow: ${SIGNATURE}; opacity: var(--ds-drill-op); }`;
+  const RING = { '--ds-focus-ring': '0 0 0 2px black', '--ds-drill-op': '0.5' };
+  const GLOW = { '--ds-focus-ring': '0 0 6px 1px black', '--ds-drill-op': '0.5' };
+  const properties = allProperties();
+  const axisOf = axisByProperty();
+
+  const measure = async (context, record, plan) => {
+    const byFamily = new Map([['drill', record]]);
+    const page = await context.newPage();
+    await page.setContent(sceneHtml({
+      css: CSS, vertical: 'bithire', theme: 'light', elements: new Map([['drill', DRILL_ELEMENT]]), partMounts: byFamily,
+    }), { waitUntil: 'load' });
+    const before = await measureCell({ page, variables: RING, properties, axisOf, pseudoReads: plan });
+    const after = await measureCell({ page, variables: GLOW, properties, axisOf, pseudoReads: plan });
+    await page.close();
+    return { moved: differsOnAxis('states', before, after, 'drill'), boxes: plan === null ? null : before.states['focus-visible']['drill#pseudo'] };
+  };
+
+  it('the ordinary read takes opacity, the signature read takes box-shadow, and a read without the binding takes the wrong one', async () => {
+    const plain = familyParts(CSS, DRILL_ELEMENT, ['states'], { family: 'drill' });
+    const signed = familyParts(CSS, DRILL_ELEMENT, ['states'], { family: 'drill', signature: [{ selector: `${GATED}::after`, value: SIGNATURE }] });
+    assert.deepEqual(signed.pseudoReads.reads, [
+      { axis: 'states', host: GATED, pseudo: '::after' },
+      { axis: 'states', host: GATED, pseudo: '::after', property: 'box-shadow', source: probe.FOCUS_SIGNATURE_SOURCE },
+    ]);
+    const unbound = { drill: signed.pseudoReads.reads.map(({ axis, host, pseudo }) => ({ axis, host, pseudo })) };
+    const { browser, close } = await launchBrowser();
+    let blind;
+    let seeing;
+    let red;
+    try {
+      const context = await browser.newContext();
+      blind = await measure(context, plain, probe.pseudoReadPlan(new Map([['drill', plain]])));
+      seeing = await measure(context, signed, probe.pseudoReadPlan(new Map([['drill', signed]])));
+      red = await measure(context, signed, unbound);
+    } finally {
+      await close();
+    }
+    assert.equal(blind.moved, null, 'without the read the signature is not seen: the artefact this law repairs');
+    assert.equal(blind.boxes['box-shadow'], '');
+    assert.equal(seeing.moved, 'box-shadow');
+    assert.equal(seeing.boxes['box-shadow'], '::after=rgb(0, 0, 0) 0px 0px 0px 2px', 'one entry: the signature read alone');
+    assert.equal(seeing.boxes.opacity, '::after=0.5', 'one entry: the ordinary states read alone');
+    assert.equal(red.moved, null, 'the red arm: a states read without the binding never reaches box-shadow');
+    assert.equal(red.boxes.opacity, '::after=0.5 | ::after=0.5', 'and it is taken a second time for a states property');
   }, 120_000);
 });
 

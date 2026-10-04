@@ -127,6 +127,19 @@
  * fleet improvement. The law is at `pseudoReadEntry`; `--no-pseudo-reads`
  * reproduces the pre-lot reading on the same tree.
  *
+ * AND A SHADOW THAT LEFT DEPTH AS THE FOCUS SIGNATURE IS STILL READ, AS A
+ * STATES READ. A pseudo-element box is read for a property only when a rule
+ * of the family is a read source for it, and `box-shadow` belongs to depth;
+ * a family the population withdraws from depth because its every shadow is
+ * the states-produced signature would lose the read of the one thing the
+ * states decision paints on it. Each rule the population cites that way stays
+ * a source for `box-shadow` alone on its `::before`/`::after` box, published
+ * as a states read marked `source: focus-signature`: re-proven against the
+ * producer-side proof, matched by selector and value, mounting nothing and
+ * adding no member to any population. A cited rule that paints a part NODE is
+ * counted (`signature-node`) and left unread. The law is at
+ * `focusSignatureReads`.
+ *
  * THE DENOMINATOR IS NOT THIS FILE'S. It comes from `check/theme/population`,
  * read at a recorded catalog revision and published with every run, because
  * "a percentage whose denominator moved between runs is not comparable"
@@ -176,6 +189,7 @@ import {
   AXES,
   AXIS_IDS,
   EXCLUDED_GROUP,
+  FOCUS_SIGNATURE_RESETS,
   KERNEL_STATE_TOKENS,
   STAMP_TOKEN,
   STATE_STAMP_ATTRIBUTES,
@@ -185,7 +199,10 @@ import {
   axisUnobservable,
   catalogRevision,
   cssRules,
+  familyAxisDeclarations,
+  focusSignatureProof,
   groupControls,
+  normalizeCssText,
   skinFamilies,
   stampWrites,
   stripCssComments,
@@ -4498,6 +4515,65 @@ export function familyForcedPseudoHazards(css) {
 }
 
 /**
+ * THE FOCUS-SIGNATURE READ (states axis). The states reading credits a move on
+ * ANY property under a state, `box-shadow` included, but a pseudo-element box
+ * is read for a property only when one of the family's own rules is a read
+ * source for it, and until this law the only source for `box-shadow` was
+ * membership of the depth population. `check/theme/population` withdraws a
+ * family from depth when its every shadow is exclusively the states-produced
+ * focus signature (`focusSignatureOnly.depth`, owner authorization
+ * 2026-10-03); that withdrawal is a statement about the DEPTH denominator and
+ * must not unread the signature the STATES decision paints. So, for a family
+ * that declares states and does not declare depth, each rule the population
+ * cites there stays a read source for that ONE property on that rule's
+ * `::before`/`::after` box, published as a STATES read
+ * (`source: 'focus-signature'`), never as a depth one.
+ *
+ * The bounds are the law:
+ *  1. derived from the population's citation alone -- no family is named, no
+ *     population gains a member, no denominator moves;
+ *  2. nothing for a family that declares depth (its shadows are depth sources
+ *     already) or that does not declare states;
+ *  3. every citation is RE-PROVEN here against the producer-side proof and
+ *     matched to a rule by selector AND value: a citation the proof does not
+ *     back throws -- the instrument does not read a shadow on the word of a
+ *     record it cannot check;
+ *  4. it MOUNTS NOTHING and adds no axis to any node: the box is read on a
+ *     host the scene already holds, under the pseudo-element read law. A cited
+ *     rule that paints the signature on a part NODE (no pseudo-element) is
+ *     counted as `signature-node` and left unread -- the family root is read
+ *     for every property already, and a part node tagged for an axis the
+ *     family does not declare is what the part law forbids.
+ */
+export const FOCUS_SIGNATURE_PROPERTY = 'box-shadow';
+export const FOCUS_SIGNATURE_SOURCE = 'focus-signature';
+/** The axis whose population the signature shadow was withdrawn from: the owner of the property. */
+export const FOCUS_SIGNATURE_WITHDRAWN_AXIS = AXIS_IDS.find((axis) => AXES[axis].computed.includes(FOCUS_SIGNATURE_PROPERTY));
+
+/**
+ * One family's focus-signature read sources: `{ selector, value }` per cited
+ * rule, or none when the family declares the withdrawn axis or does not
+ * declare states. `proves(value)` is the producer-side proof
+ * (`focusSignatureProof(root).judgeValue(value) === null`).
+ */
+export function focusSignatureReads(declaration, declared, proves) {
+  if (!declared.includes('states') || declared.includes(FOCUS_SIGNATURE_WITHDRAWN_AXIS)) return [];
+  const sources = [];
+  for (const cited of declaration?.focusSignatureOnly?.[FOCUS_SIGNATURE_WITHDRAWN_AXIS] ?? []) {
+    const value = normalizeCssText(String(cited.value).replace(/!important\s*$/u, ''));
+    if (FOCUS_SIGNATURE_RESETS.includes(value)) continue;
+    if (proves(value) !== true) {
+      throw new Error(
+        `focus-signature read: ${declaration.family ?? 'a family'} cites \`${cited.selector} { ${FOCUS_SIGNATURE_PROPERTY}: ${value} }\` as `
+        + 'exclusively the focus signature and the producer-side proof does not back it; the instrument reads no shadow on an unproven citation',
+      );
+    }
+    sources.push({ selector: normalizeCssText(cited.selector), value });
+  }
+  return sources;
+}
+
+/**
  * One family's parts, read off the rules of ONE stylesheet.
  *
  * `axes` is the set the family is in the population of: a part may only be
@@ -4506,7 +4582,7 @@ export function familyForcedPseudoHazards(css) {
  * refusals, so a selector refused for four axes is counted four times -- the
  * unit is the reading that was refused, not the string.
  */
-export function familyParts(css, rootElement, axes, { family = null, partReach = true, nativePseudos = false } = {}) {
+export function familyParts(css, rootElement, axes, { family = null, partReach = true, nativePseudos = false, signature = [] } = {}) {
   const rules = cssRules(css);
   const parts = new Map();
   const rejected = {};
@@ -4554,6 +4630,34 @@ export function familyParts(css, rootElement, axes, { family = null, partReach =
             continue;
           }
           admit(projection.chain, authoredSelector, axis);
+        }
+      }
+    }
+  }
+  // THE FOCUS-SIGNATURE READ: a cited rule's `::before`/`::after` box, for
+  // `box-shadow` alone, as a STATES read. It never calls `admit`.
+  if (signature.length > 0 && axes.includes('states') && !axes.includes(FOCUS_SIGNATURE_WITHDRAWN_AXIS)) {
+    for (const rule of rules) {
+      const selectorText = normalizeCssText(rule.selector);
+      const cited = rule.declarations.some((declaration) => declaration.property === FOCUS_SIGNATURE_PROPERTY
+        && signature.some((source) => source.selector === selectorText
+          && source.value === normalizeCssText(declaration.value.replace(/!important\s*$/u, ''))));
+      if (!cited) continue;
+      for (const listed of selectorList(rule.selector)) {
+        for (const authoredSelector of expandAlternatives(listed)) {
+          if (!authoredSelector.includes('::')) {
+            // The root is read on every axis already; a part node is not mounted for an axis the family does not declare.
+            if (projectPartChain(nativePseudos ? withoutForcedPseudos(authoredSelector) : authoredSelector, rootElement).rejected !== 'root-level') {
+              rejected['signature-node'] = (rejected['signature-node'] ?? 0) + 1;
+            }
+            continue;
+          }
+          rejected['pseudo-element'] = (rejected['pseudo-element'] ?? 0) + 1;
+          pseudoEntries.push({
+            ...pseudoReadEntry(authoredSelector, 'states'),
+            property: FOCUS_SIGNATURE_PROPERTY,
+            source: FOCUS_SIGNATURE_SOURCE,
+          });
         }
       }
     }
@@ -4650,13 +4754,16 @@ export function pseudoReadEntry(selector, axis) {
 export function pseudoReadsOf(entries) {
   const reads = [];
   const rows = entries.map((entry) => {
-    if (entry.refused !== undefined) return { axis: entry.axis, selector: entry.selector, read: null, refused: entry.refused };
-    let at = reads.findIndex((read) => read.axis === entry.axis && read.host === entry.host && read.pseudo === entry.pseudo);
+    // A focus-signature entry is a read of ONE property, published with its source; every other entry is unchanged.
+    const bound = entry.source === undefined ? {} : { property: entry.property, source: entry.source };
+    if (entry.refused !== undefined) return { axis: entry.axis, selector: entry.selector, read: null, refused: entry.refused, ...bound };
+    let at = reads.findIndex((read) => read.axis === entry.axis && read.host === entry.host && read.pseudo === entry.pseudo
+      && read.source === entry.source);
     if (at < 0) {
       at = reads.length;
-      reads.push({ axis: entry.axis, host: entry.host, pseudo: entry.pseudo });
+      reads.push({ axis: entry.axis, host: entry.host, pseudo: entry.pseudo, ...bound });
     }
-    return { axis: entry.axis, selector: entry.selector, read: at, refused: null };
+    return { axis: entry.axis, selector: entry.selector, read: at, refused: null, ...bound };
   });
   return { reads, entries: rows };
 }
@@ -4731,7 +4838,7 @@ export function pseudoReadPlan(byFamily, { applied = true } = {}) {
   return Object.keys(plan).length === 0 ? null : plan;
 }
 
-const pseudoReadKey = (family, read) => `${family}\u0000${read.axis}\u0000${read.host}\u0000${read.pseudo}`;
+const pseudoReadKey = (family, read) => `${family}\u0000${read.axis}\u0000${read.host}\u0000${read.pseudo}${read.source === undefined ? '' : `\u0000${read.source}`}`;
 
 /** In the page: what every read of this page saw over all its readings, `family -> read index -> 1 | 2`. */
 const takePseudoSeen = () => window.__axisPseudoSeen ?? {};
@@ -4769,7 +4876,9 @@ export function pseudoReadCensus(byFamily, seen, { applied = true, nodeRefusals 
         const mark = seen.get(pseudoReadKey(family, reads[row.read])) ?? 0;
         outcome = mark >= PSEUDO_SEEN_READ ? 'read' : mark >= PSEUDO_SEEN_UNGENERATED ? 'ungenerated' : 'host-absent';
       }
-      entries.push({ family, axis: row.axis, selector: row.selector, outcome });
+      entries.push({
+        family, axis: row.axis, selector: row.selector, outcome, ...(row.source === undefined ? {} : { property: row.property, source: row.source }),
+      });
     }
   }
   const census = Object.fromEntries([...PSEUDO_READ_OUTCOMES, ...(applied ? [] : ['not-read'])].map((outcome) => [outcome, 0]));
@@ -4841,6 +4950,9 @@ export const pseudoPinChannels = (pins = PSEUDO_ONLY_CREDITS) => [...new Set(Obj
 export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, { partReach = true, nativePseudos = false } = {}) {
   const resolved = elements ?? familyElements(root, only);
   const populations = axisPopulations(root);
+  const declarations = familyAxisDeclarations(root);
+  let proof = null;
+  const proves = (value) => (proof ??= focusSignatureProof(root)).judgeValue(value) === null;
   const byFamily = new Map();
   for (const [family, files] of skinFamilies(root)) {
     if (only && !only.includes(family)) continue;
@@ -4848,7 +4960,8 @@ export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, 
     if (!rootElement) continue;
     const declared = AXIS_IDS.filter((axis) => populations.get(axis).includes(family));
     const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
-    const record = familyParts(css, rootElement, declared, { family, partReach, nativePseudos });
+    const signature = focusSignatureReads(declarations.get(family), declared, proves);
+    const record = familyParts(css, rootElement, declared, { family, partReach, nativePseudos, signature });
     if (record.parts.length === 0 && Object.keys(record.rejected).length === 0) continue;
     byFamily.set(family, record);
   }
@@ -4886,7 +4999,7 @@ export function partMountReport(byFamily, { applied = true, partReach = true, un
     // The hosts the pseudo-element read law derived for this family, beside
     // its parts: `axis -> host::pseudo`, the reads a run may take.
     for (const read of record.pseudoReads?.reads ?? []) {
-      ((pseudoReads[family] ??= {})[read.axis] ??= []).push(`${read.host}${read.pseudo}`);
+      ((pseudoReads[family] ??= {})[read.axis] ??= []).push(`${read.host}${read.pseudo}${read.source === undefined ? '' : ` [${read.property}, ${read.source}]`}`);
     }
     if (record.parts.length === 0) continue;
     const byAxis = {};
@@ -5470,7 +5583,8 @@ const readComputed = ({
         const axis = axisOf[property];
         const taken = [];
         reads.forEach((read, index) => {
-          if (read.axis !== axis) return;
+          // A read bound to one property (the focus-signature read) is taken for that property and no other.
+          if (read.property === undefined ? read.axis !== axis : read.property !== property) return;
           for (const host of matched[index]) {
             if (depth !== null && Number(host.getAttribute('data-axis-depth')) !== depth) {
               taken.push(null);
@@ -7675,7 +7789,9 @@ export async function run({
     applied: pseudoReads,
     scope: 'the default scene only: ::before/::after at the end of a selector, on a host the root, a part mount or a '
       + 'block-element part already put in the scene, for the axis whose own rule wrote the property, credited only '
-      + 'where content computes generated; a real-render mount reads only the boxes its row declares (`pseudoReads`), under a state',
+      + 'where content computes generated; a real-render mount reads only the boxes its row declares (`pseudoReads`), under a state; '
+      + 'a read marked `source: focus-signature` is a STATES read of box-shadow alone, on a rule the population withdrew from depth as '
+      + 'exclusively the focus signature (never a depth read, never a population member)',
     families: Object.keys(partMountsReport.pseudoReads).length,
     reads: Object.values(partMountsReport.pseudoReads).reduce((total, byAxis) =>
       total + Object.values(byAxis).reduce((sum, list) => sum + list.length, 0), 0),
