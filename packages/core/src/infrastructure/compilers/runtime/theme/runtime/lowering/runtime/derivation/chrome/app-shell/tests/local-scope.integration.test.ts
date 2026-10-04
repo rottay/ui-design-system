@@ -159,8 +159,8 @@ function shell(rootStyle = ""): string {
     `<div data-part="navigation-drawer-header">Menu</div>`,
     navigation("false"),
     navigation("true"),
-    `<div data-part="header"><button data-part="navigation-trigger" type="button">Nav</button>`,
-    `<div data-part="header-right"><span>A</span><span>B</span></div></div>`,
+    `<div data-part="main-area"><div data-part="header"><button data-part="navigation-trigger" type="button">Nav</button>`,
+    `<div data-part="header-right"><span>A</span><span>B</span></div></div></div>`,
     `<div data-reader="${SKIP_LINK}" style="padding: var(${SKIP_LINK})"></div>`,
     CHANNELS.map(oracleOf).join(""),
     `</div>`,
@@ -402,6 +402,8 @@ describe("chrome/app-shell channels under a local scope", () => {
       "navigation-logo",
       "navigation-body",
       "navigation-footer",
+      "main-area",
+      "header",
       "header-right",
     ]) {
       expect(ENGINE).toContain(`data-part="${part}"`);

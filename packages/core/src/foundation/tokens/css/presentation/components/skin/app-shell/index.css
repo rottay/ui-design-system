@@ -147,7 +147,7 @@
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-inline: contain;
-  padding: var(--ds-shell-navigation-body-padding, var(--ds-app-shell-navigation-body-padding, 0 var(--ds-spacing-3, 12px)));
+  padding: 0 var(--ds-spacing-3, 12px);
 }
 
 /* A logo slotted into the bar keeps the bar's rhythm instead of the track's
