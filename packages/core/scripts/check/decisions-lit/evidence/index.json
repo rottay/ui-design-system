@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-20T14:36:08.757Z",
+  "producedAt": "2026-10-04T05:11:20.675Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
   "measuredHeadline": "measured on the 4-family sample: 15/22 move at least one sampled family",
   "denominators": {
@@ -18,7 +18,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-20T14:34:42.540Z"
+      "builtAt": "2026-10-04T05:10:45.141Z"
     },
     "sources": {
       "door": {
@@ -26,13 +26,13 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 911,
-        "digest": "9c19151e879b07e6427a40f558041f4bdcf2e371e83a84aaf56abc4e162d17e5"
+        "fileCount": 930,
+        "digest": "cc42d4f9b919d551f3133d75b19312041e25c3bdb580e0356f46c7f4de3daff7"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
-        "fileCount": 17,
-        "digest": "d18ff3ac590181ad5ed8a38b8877728cda5a05fcc1725c9a1ced1c22849627d5"
+        "fileCount": 18,
+        "digest": "4d5316c7311c6a4cb65582f4fb01834aea5cb43932c2f3034eea73870acd292f"
       }
     },
     "browser": {
@@ -48,10 +48,15 @@
           "button-modern-md",
           "input-modern-md",
           "skeleton-card-line",
-          "skeleton-form-action",
           "token-readout"
         ],
         "unmatched": [
+          {
+            "id": "skeleton-form-action",
+            "missing": [
+              "calc(6px * var(--ds-radius-scale, 1))"
+            ]
+          },
           {
             "id": "flex-modern-preset-gap",
             "missing": [
@@ -100,11 +105,12 @@
           {
             "id": "space-modern-numeric-gap",
             "missing": [
-              "gap: var(--ds-space-gap);"
+              "gap: var(--ds-space-gap);",
+              "--ds-space-gap: var(--ds-space-gap-sm);"
             ]
           }
         ],
-        "bundleSha": "007046bb9d480b8c59a010a9c508ee2ec5050dafb16c7038618468b511c67a0c",
+        "bundleSha": "86bb41c5234b5200c14c3d0254619840d1d6d6b735205a1aa88c482d23ff2691",
         "bundleMode": "fresh",
         "theme": "dark"
       },
@@ -114,10 +120,15 @@
           "button-modern-md",
           "input-modern-md",
           "skeleton-card-line",
-          "skeleton-form-action",
           "token-readout"
         ],
         "unmatched": [
+          {
+            "id": "skeleton-form-action",
+            "missing": [
+              "calc(6px * var(--ds-radius-scale, 1))"
+            ]
+          },
           {
             "id": "flex-modern-preset-gap",
             "missing": [
@@ -166,11 +177,12 @@
           {
             "id": "space-modern-numeric-gap",
             "missing": [
-              "gap: var(--ds-space-gap);"
+              "gap: var(--ds-space-gap);",
+              "--ds-space-gap: var(--ds-space-gap-sm);"
             ]
           }
         ],
-        "bundleSha": "044ec0ff907ef3b57d3ff1bf07344166803ca0f43f755daa63d01d3074d5fc12",
+        "bundleSha": "a4f15313e83f22c3d92e4b70b675d7e4718ffcea7632c43bfc27cc89a578828d",
         "bundleMode": "fresh",
         "theme": "light"
       },
@@ -180,10 +192,15 @@
           "button-modern-md",
           "input-modern-md",
           "skeleton-card-line",
-          "skeleton-form-action",
           "token-readout"
         ],
         "unmatched": [
+          {
+            "id": "skeleton-form-action",
+            "missing": [
+              "calc(6px * var(--ds-radius-scale, 1))"
+            ]
+          },
           {
             "id": "flex-modern-preset-gap",
             "missing": [
@@ -232,11 +249,12 @@
           {
             "id": "space-modern-numeric-gap",
             "missing": [
-              "gap: var(--ds-space-gap);"
+              "gap: var(--ds-space-gap);",
+              "--ds-space-gap: var(--ds-space-gap-sm);"
             ]
           }
         ],
-        "bundleSha": "3a1aa91b40f5380f928230d39c46804a2f190f60a0974f6ccfdc4c33d434d311",
+        "bundleSha": "200b95c7ca656982b2aedd08f639edb2863d0c290c1e2f4c6efc95da9c4e5cb9",
         "bundleMode": "fresh",
         "theme": "light"
       }
@@ -265,7 +283,7 @@
       {
         "id": "shape.radius-scale",
         "kind": "recorded-none-moved",
-        "detail": "button-modern-md, card-modern-md, input-modern-md, skeleton-card-line, skeleton-form-action"
+        "detail": "button-modern-md, card-modern-md, input-modern-md, skeleton-card-line"
       },
       {
         "id": "navigation.sidebar-tone",
@@ -391,8 +409,7 @@
           "button-modern-md",
           "card-modern-md",
           "input-modern-md",
-          "skeleton-card-line",
-          "skeleton-form-action"
+          "skeleton-card-line"
         ],
         "movedChannelCount": 11,
         "excludedIn": []
@@ -468,6 +485,7 @@
         "artifactBytesDiffer": true,
         "movedFamilies": [
           "button-modern-md",
+          "card-modern-md",
           "input-modern-md"
         ],
         "movedChannelCount": 2,
@@ -538,8 +556,7 @@
           "button-modern-md",
           "card-modern-md",
           "input-modern-md",
-          "skeleton-card-line",
-          "skeleton-form-action"
+          "skeleton-card-line"
         ],
         "movedChannelCount": 30,
         "excludedIn": []
@@ -579,7 +596,7 @@
         "id": "responsive.posture",
         "tier": "pro",
         "recordedClass": "none",
-        "artifactBytesDiffer": true,
+        "artifactBytesDiffer": false,
         "movedFamilies": [],
         "movedChannelCount": 0,
         "excludedIn": []
@@ -839,8 +856,7 @@
         "button-modern-md",
         "card-modern-md",
         "input-modern-md",
-        "skeleton-card-line",
-        "skeleton-form-action"
+        "skeleton-card-line"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -858,9 +874,6 @@
           "border-top-left-radius"
         ],
         "skeleton-card-line/line": [
-          "border-top-left-radius"
-        ],
-        "skeleton-form-action/action": [
           "border-top-left-radius"
         ],
         "token-readout/tokens": [
@@ -1029,9 +1042,13 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
+        "card-modern-md",
         "input-modern-md"
       ],
       "movedTargets": {
+        "card-modern-md/root": [
+          "box-shadow"
+        ],
         "button-modern-md/root": [
           "border-top-width"
         ],
@@ -1061,6 +1078,7 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
+          "box-shadow",
           "background-image"
         ],
         "token-readout/tokens": [
@@ -1161,8 +1179,7 @@
         "button-modern-md",
         "card-modern-md",
         "input-modern-md",
-        "skeleton-card-line",
-        "skeleton-form-action"
+        "skeleton-card-line"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -1197,9 +1214,6 @@
           "font-family"
         ],
         "skeleton-card-line/line": [
-          "border-top-left-radius"
-        ],
-        "skeleton-form-action/action": [
           "border-top-left-radius"
         ],
         "token-readout/tokens": [
@@ -1336,7 +1350,7 @@
     {
       "id": "responsive.posture",
       "vertical": "rottay",
-      "artifactBytesDiffer": true,
+      "artifactBytesDiffer": false,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -1581,8 +1595,7 @@
         "button-modern-md",
         "card-modern-md",
         "input-modern-md",
-        "skeleton-card-line",
-        "skeleton-form-action"
+        "skeleton-card-line"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -1600,9 +1613,6 @@
           "border-top-left-radius"
         ],
         "skeleton-card-line/line": [
-          "border-top-left-radius"
-        ],
-        "skeleton-form-action/action": [
           "border-top-left-radius"
         ],
         "token-readout/tokens": [
@@ -1680,8 +1690,16 @@
       "id": "shape.control-height",
       "vertical": "bithire",
       "artifactBytesDiffer": true,
-      "movedFamilies": [],
+      "movedFamilies": [
+        "button-modern-md"
+      ],
       "movedTargets": {
+        "button-modern-md/hitbox": [
+          "block-size",
+          "height",
+          "min-block-size",
+          "min-height"
+        ],
         "token-readout/tokens": [
           "--ds-control-height-scale"
         ]
@@ -1763,9 +1781,13 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
+        "card-modern-md",
         "input-modern-md"
       ],
       "movedTargets": {
+        "card-modern-md/root": [
+          "box-shadow"
+        ],
         "button-modern-md/root": [
           "border-top-width"
         ],
@@ -1795,6 +1817,7 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
+          "box-shadow",
           "background-image"
         ],
         "token-readout/tokens": [
@@ -1897,8 +1920,7 @@
         "button-modern-md",
         "card-modern-md",
         "input-modern-md",
-        "skeleton-card-line",
-        "skeleton-form-action"
+        "skeleton-card-line"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -1932,9 +1954,6 @@
           "font-family"
         ],
         "skeleton-card-line/line": [
-          "border-top-left-radius"
-        ],
-        "skeleton-form-action/action": [
           "border-top-left-radius"
         ],
         "token-readout/tokens": [
@@ -2051,7 +2070,7 @@
     {
       "id": "responsive.posture",
       "vertical": "bithire",
-      "artifactBytesDiffer": true,
+      "artifactBytesDiffer": false,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
@@ -2308,8 +2327,7 @@
         "button-modern-md",
         "card-modern-md",
         "input-modern-md",
-        "skeleton-card-line",
-        "skeleton-form-action"
+        "skeleton-card-line"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -2327,9 +2345,6 @@
           "border-top-left-radius"
         ],
         "skeleton-card-line/line": [
-          "border-top-left-radius"
-        ],
-        "skeleton-form-action/action": [
           "border-top-left-radius"
         ],
         "token-readout/tokens": [
@@ -2498,9 +2513,13 @@
       "artifactBytesDiffer": true,
       "movedFamilies": [
         "button-modern-md",
+        "card-modern-md",
         "input-modern-md"
       ],
       "movedTargets": {
+        "card-modern-md/root": [
+          "box-shadow"
+        ],
         "button-modern-md/root": [
           "border-top-width"
         ],
@@ -2530,6 +2549,7 @@
       ],
       "movedTargets": {
         "card-modern-md/root": [
+          "box-shadow",
           "background-image"
         ],
         "token-readout/tokens": [
@@ -2630,8 +2650,7 @@
         "button-modern-md",
         "card-modern-md",
         "input-modern-md",
-        "skeleton-card-line",
-        "skeleton-form-action"
+        "skeleton-card-line"
       ],
       "movedTargets": {
         "card-modern-md/root": [
@@ -2666,9 +2685,6 @@
           "font-family"
         ],
         "skeleton-card-line/line": [
-          "border-top-left-radius"
-        ],
-        "skeleton-form-action/action": [
           "border-top-left-radius"
         ],
         "token-readout/tokens": [
@@ -2805,7 +2821,7 @@
     {
       "id": "responsive.posture",
       "vertical": "evnto",
-      "artifactBytesDiffer": true,
+      "artifactBytesDiffer": false,
       "movedFamilies": [],
       "movedTargets": {},
       "movedChannels": []
