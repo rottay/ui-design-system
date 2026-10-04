@@ -410,8 +410,6 @@
         "profiles.expressive",
         "shape.button-style",
         "shape.radius-scale",
-        "states.emphasis",
-        "states.focus-style",
         "typography.pairing",
         "typography.scale"
       ],
@@ -5774,8 +5772,6 @@
         "profiles.expressive",
         "shape.button-style",
         "shape.radius-scale",
-        "states.emphasis",
-        "states.focus-style",
         "typography.pairing",
         "typography.scale"
       ],

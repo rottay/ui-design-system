@@ -44,17 +44,17 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2672,
-    "channels": 9274,
-    "channelsDs": 8584,
+    "filesScanned": 2671,
+    "channels": 9272,
+    "channelsDs": 8582,
     "channelsBridge": 690,
     "channelsWithoutReaders": 198,
     "channelsPaintsFalse": 943,
     "channelsPaintsInModernFalse": 2017,
-    "readers": 46152,
+    "readers": 46140,
     "readersByPlane": {
-      "modern-skin-css": 16596,
-      "presentation-css": 12410,
+      "modern-skin-css": 16590,
+      "presentation-css": 12406,
       "foundation-css": 1727,
       "runtime-css": 197,
       "engines-shared-css": 23,
@@ -66,10 +66,10 @@
       "infrastructure-tsx": 20,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 8112
+      "ts-other": 8110
     },
     "channelsByPlane": {
-      "modern-skin-css": 4915,
+      "modern-skin-css": 4913,
       "presentation-css": 2513,
       "foundation-css": 778,
       "runtime-css": 80,
@@ -21282,13 +21282,6 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 150,
-          "prop": "padding",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
           "line": 273,
           "prop": "padding",
           "decl": "padding: var( --ds-shell-navigation-body-padding, var( --ds-app-shell-navigation-body-padding, var( --ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px) ) ) )",
@@ -35420,20 +35413,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
-          "line": 97,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 207,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tour/index.css",
           "line": 84,
           "prop": "outline",
@@ -35451,20 +35430,6 @@
           "file": "src/foundation/tokens/ts/foundation/base/borders/index.ts",
           "line": 69,
           "prop": "transparent",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/hover-card/index.ts",
-          "line": 38,
-          "prop": "inline-expr",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 119,
-          "prop": "inline-expr",
           "scalars": []
         },
         {
@@ -88103,7 +88068,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 28,
+          "line": 29,
           "prop": "--ds-color-mono-0",
           "scalars": []
         },
@@ -91712,7 +91677,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/hover-card/index.ts",
-          "line": 34,
+          "line": 32,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -92552,14 +92517,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 251,
+          "line": 243,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 293,
+          "line": 285,
           "prop": "border",
           "scalars": []
         },
@@ -93861,7 +93826,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 80,
+          "line": 78,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -96098,7 +96063,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 98,
+          "line": 96,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -100421,7 +100386,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 243,
+          "line": 235,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -102654,7 +102619,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 110,
+          "line": 108,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -104987,35 +104952,35 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 72,
+          "line": 73,
           "prop": "--ds-color-border",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 73,
+          "line": 74,
           "prop": "--ds-color-border-primary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 74,
+          "line": 75,
           "prop": "--ds-color-border-secondary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 75,
+          "line": 76,
           "prop": "--ds-color-border-subtle",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 76,
+          "line": 77,
           "prop": "--ds-color-border-tertiary",
           "scalars": []
         },
@@ -107247,84 +107212,84 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 32,
+          "line": 33,
           "prop": "--ds-color-mono-100",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 33,
+          "line": 34,
           "prop": "--ds-color-mono-200",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 34,
+          "line": 35,
           "prop": "--ds-color-mono-300",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 35,
+          "line": 36,
           "prop": "--ds-color-mono-400",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 36,
+          "line": 37,
           "prop": "--ds-color-mono-500",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 37,
+          "line": 38,
           "prop": "--ds-color-mono-600",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 38,
+          "line": 39,
           "prop": "--ds-color-mono-700",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 39,
+          "line": 40,
           "prop": "--ds-color-mono-800",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 40,
+          "line": 41,
           "prop": "--ds-color-mono-900",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 44,
+          "line": 45,
           "prop": "--ds-color-surface-ink",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 52,
+          "line": 53,
           "prop": "--ds-texture-backdrop-paper",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 88,
+          "line": 89,
           "prop": "--ds-surface-fg",
           "scalars": []
         },
@@ -107442,91 +107407,91 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 32,
+          "line": 33,
           "prop": "--ds-color-mono-100",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 33,
+          "line": 34,
           "prop": "--ds-color-mono-200",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 34,
+          "line": 35,
           "prop": "--ds-color-mono-300",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 35,
+          "line": 36,
           "prop": "--ds-color-mono-400",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 36,
+          "line": 37,
           "prop": "--ds-color-mono-500",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 37,
+          "line": 38,
           "prop": "--ds-color-mono-600",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 38,
+          "line": 39,
           "prop": "--ds-color-mono-700",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 39,
+          "line": 40,
           "prop": "--ds-color-mono-800",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 40,
+          "line": 41,
           "prop": "--ds-color-mono-900",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 44,
+          "line": 45,
           "prop": "--ds-color-surface-ink",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 45,
+          "line": 46,
           "prop": "--ds-color-surface-paper",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 51,
+          "line": 52,
           "prop": "--ds-texture-backdrop-ink",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 63,
+          "line": 64,
           "prop": "--ds-surface-fg",
           "scalars": []
         },
@@ -107657,7 +107622,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 46,
+          "line": 47,
           "prop": "--ds-color-hairline",
           "scalars": []
         },
@@ -107686,21 +107651,21 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 91,
+          "line": 92,
           "prop": "--ds-color-text-secondary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 92,
+          "line": 93,
           "prop": "--ds-color-text-tertiary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 93,
+          "line": 94,
           "prop": "--ds-color-text-muted",
           "scalars": []
         },
@@ -107744,14 +107709,14 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 47,
+          "line": 48,
           "prop": "--ds-color-hairline-strong",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 71,
+          "line": 72,
           "prop": "--ds-color-text-disabled",
           "scalars": []
         },
@@ -107794,21 +107759,21 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 67,
+          "line": 68,
           "prop": "--ds-color-text-secondary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 68,
+          "line": 69,
           "prop": "--ds-color-text-tertiary",
           "scalars": []
         },
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 69,
+          "line": 70,
           "prop": "--ds-color-text-muted",
           "scalars": []
         },
@@ -113428,7 +113393,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 28,
+          "line": 29,
           "prop": "--ds-color-mono-0",
           "scalars": []
         },
@@ -113455,7 +113420,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 29,
+          "line": 30,
           "prop": "--ds-color-mono-1000",
           "scalars": []
         },
@@ -113542,7 +113507,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 244,
+          "line": 236,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
@@ -113633,7 +113598,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 113,
+          "line": 111,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -113766,7 +113731,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 232,
+          "line": 224,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
@@ -113815,7 +113780,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 111,
+          "line": 109,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -113860,7 +113825,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 238,
+          "line": 230,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
@@ -113930,7 +113895,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 112,
+          "line": 110,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -118338,7 +118303,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 213,
+          "line": 205,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -125373,7 +125338,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/hover-card/index.ts",
-          "line": 34,
+          "line": 32,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -126199,7 +126164,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 104,
+          "line": 102,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -130947,7 +130912,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 219,
+          "line": 211,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -131276,7 +131241,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 106,
+          "line": 104,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -132605,7 +132570,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 231,
+          "line": 223,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -134180,7 +134145,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 108,
+          "line": 106,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -136020,7 +135985,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 64,
+          "line": 65,
           "prop": "--ds-surface-bg",
           "scalars": []
         },
@@ -136092,7 +136057,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 89,
+          "line": 90,
           "prop": "--ds-surface-bg",
           "scalars": []
         },
@@ -137331,14 +137296,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 91,
+          "line": 89,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 92,
+          "line": 90,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -141183,14 +141148,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 214,
+          "line": 206,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 220,
+          "line": 212,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
@@ -142061,14 +142026,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 105,
+          "line": 103,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 107,
+          "line": 105,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -148917,28 +148882,28 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 79,
+          "line": 77,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 85,
+          "line": 83,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 90,
+          "line": 88,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 97,
+          "line": 95,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -154904,7 +154869,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 237,
+          "line": 229,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -156129,7 +156094,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 109,
+          "line": 107,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -157765,7 +157730,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 29,
+          "line": 30,
           "prop": "--ds-color-mono-1000",
           "scalars": []
         },
@@ -175843,6 +175808,26 @@
         },
         {
           "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown/index.css",
+          "line": 74,
+          "prop": "padding",
+          "decl": "padding: var(--ds-dropdown-surface-padding, calc(0.375rem * var(--ds-density-effective-scale)))",
+          "scalars": [
+            "--ds-density-effective-scale"
+          ]
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown/index.css",
+          "line": 385,
+          "prop": "padding",
+          "decl": "padding: var(--ds-dropdown-surface-padding, calc(0.375rem * var(--ds-density-effective-scale)))",
+          "scalars": [
+            "--ds-density-effective-scale"
+          ]
+        },
+        {
+          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "line": 121,
           "prop": "inline-size",
@@ -189868,14 +189853,20 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown/index.css",
           "line": 74,
           "prop": "padding",
-          "scalars": []
+          "decl": "padding: var(--ds-dropdown-surface-padding, calc(0.375rem * var(--ds-density-effective-scale)))",
+          "scalars": [
+            "--ds-density-effective-scale"
+          ]
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown/index.css",
           "line": 385,
           "prop": "padding",
-          "scalars": []
+          "decl": "padding: var(--ds-dropdown-surface-padding, calc(0.375rem * var(--ds-density-effective-scale)))",
+          "scalars": [
+            "--ds-density-effective-scale"
+          ]
         }
       ]
     },
@@ -190606,14 +190597,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css",
-          "line": 122,
+          "line": 128,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css",
-          "line": 123,
+          "line": 129,
           "prop": "transition",
           "scalars": []
         }
@@ -190666,14 +190657,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css",
-          "line": 122,
+          "line": 128,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css",
-          "line": 123,
+          "line": 129,
           "prop": "transition",
           "scalars": []
         },
@@ -194043,13 +194034,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
-          "line": 97,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "line": 34,
           "prop": "border",
@@ -194352,28 +194336,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 207,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 251,
+          "line": 243,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 277,
+          "line": 269,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 293,
+          "line": 285,
           "prop": "border",
           "scalars": []
         },
@@ -195159,14 +195136,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 251,
+          "line": 243,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 293,
+          "line": 285,
           "prop": "border",
           "scalars": []
         },
@@ -198599,7 +198576,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/hover-card/index.ts",
-          "line": 35,
+          "line": 33,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -198655,7 +198632,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 81,
+          "line": 79,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -199307,7 +199284,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/hover-card/index.ts",
-          "line": 32,
+          "line": 30,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -206284,13 +206261,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
-          "line": 98,
-          "prop": "outline-offset",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/image/index.css",
           "line": 218,
           "prop": "outline-offset",
@@ -206831,13 +206801,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/toggle/index.css",
           "line": 445,
-          "prop": "outline-offset",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 208,
           "prop": "outline-offset",
           "scalars": []
         },
@@ -207960,13 +207923,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
-          "line": 97,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/image/index.css",
           "line": 217,
           "prop": "outline",
@@ -208872,13 +208828,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 207,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tour/index.css",
           "line": 84,
           "prop": "outline",
@@ -209308,13 +209257,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css",
-          "line": 93,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css",
           "line": 190,
           "prop": "outline",
@@ -209736,13 +209678,6 @@
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/stepper-compounds/index.css",
           "line": 345,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css",
-          "line": 83,
           "prop": "outline",
           "scalars": []
         },
@@ -229682,25 +229617,6 @@
       ]
     },
     {
-      "channel": "--ds-hover-card-focus-color",
-      "kind": "ds",
-      "declaredIn": [],
-      "planes": [
-        "modern-skin-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
-          "line": 97,
-          "prop": "outline",
-          "scalars": []
-        }
-      ]
-    },
-    {
       "channel": "--ds-hover-card-layer",
       "kind": "ds",
       "declaredIn": [
@@ -229998,7 +229914,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
-          "line": 103,
+          "line": 95,
           "prop": "min-block-size",
           "scalars": []
         }
@@ -262429,7 +262345,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 294,
+          "line": 286,
           "prop": "background",
           "scalars": []
         },
@@ -262576,7 +262492,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/hover-card/index.ts",
-          "line": 31,
+          "line": 29,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -262660,14 +262576,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 78,
+          "line": 76,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 84,
+          "line": 82,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -263226,7 +263142,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 410,
+          "line": 402,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -263240,7 +263156,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 102,
+          "line": 100,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -264683,7 +264599,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 96,
+          "line": 94,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -283091,42 +283007,42 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 298,
+          "line": 290,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 299,
+          "line": 291,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 300,
+          "line": 292,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 301,
+          "line": 293,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 302,
+          "line": 294,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 303,
+          "line": 295,
           "prop": "transition",
           "scalars": []
         },
@@ -292676,42 +292592,42 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 298,
+          "line": 290,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 299,
+          "line": 291,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 300,
+          "line": 292,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 301,
+          "line": 293,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 302,
+          "line": 294,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 303,
+          "line": 295,
           "prop": "transition",
           "scalars": []
         },
@@ -328978,7 +328894,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 279,
+          "line": 271,
           "prop": "border-radius",
           "scalars": []
         },
@@ -350821,7 +350737,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 93,
+          "line": 91,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -351807,7 +351723,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 87,
+          "line": 85,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -352409,7 +352325,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 99,
+          "line": 97,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -354520,13 +354436,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-          "line": 150,
-          "prop": "padding",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
@@ -361819,6 +361728,20 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
           "line": 518,
           "prop": "padding-inline-start",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/widget-board/index.css",
+          "line": 147,
+          "prop": "inline-size",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/widget-board/index.css",
+          "line": 148,
+          "prop": "block-size",
           "scalars": []
         },
         {
@@ -385408,7 +385331,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 258,
+          "line": 250,
           "prop": "gap",
           "scalars": []
         },
@@ -394705,7 +394628,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 70,
+          "line": 71,
           "prop": "--ds-color-text-inverse",
           "scalars": []
         },
@@ -400582,7 +400505,7 @@
         {
           "plane": "foundation-css",
           "file": "src/foundation/tokens/css/foundation/monochrome/index.css",
-          "line": 66,
+          "line": 67,
           "prop": "--ds-color-text-primary",
           "scalars": []
         },
@@ -429383,7 +429306,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 368,
+          "line": 360,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429391,7 +429314,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 377,
+          "line": 369,
           "prop": "inset-block-start",
           "decl": "inset-block-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429413,42 +429336,42 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 298,
+          "line": 290,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 299,
+          "line": 291,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 300,
+          "line": 292,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 301,
+          "line": 293,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 302,
+          "line": 294,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 303,
+          "line": 295,
           "prop": "transition",
           "scalars": []
         }
@@ -429469,35 +429392,35 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 348,
+          "line": 340,
           "prop": "inset-inline-start",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 352,
+          "line": 344,
           "prop": "inset-inline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 356,
+          "line": 348,
           "prop": "inset-block-start",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 360,
+          "line": 352,
           "prop": "inset-block",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 367,
+          "line": 359,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429505,7 +429428,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 369,
+          "line": 361,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429513,7 +429436,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 376,
+          "line": 368,
           "prop": "inset-block-start",
           "decl": "inset-block-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429521,7 +429444,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 378,
+          "line": 370,
           "prop": "inset-block-start",
           "decl": "inset-block-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429544,7 +429467,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 321,
+          "line": 313,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)))",
           "scalars": []
@@ -429552,7 +429475,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 328,
+          "line": 320,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)))",
           "scalars": []
@@ -429560,7 +429483,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 334,
+          "line": 326,
           "prop": "inset-block-start",
           "decl": "inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)))",
           "scalars": []
@@ -429568,7 +429491,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 341,
+          "line": 333,
           "prop": "inset-block-start",
           "decl": "inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)))",
           "scalars": []
@@ -429576,7 +429499,15 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 368,
+          "line": 360,
+          "prop": "inset-inline-start",
+          "decl": "inset-inline-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "line": 361,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429585,14 +429516,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "line": 369,
-          "prop": "inset-inline-start",
-          "decl": "inset-inline-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 377,
           "prop": "inset-block-start",
           "decl": "inset-block-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429600,7 +429523,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 378,
+          "line": 370,
           "prop": "inset-block-start",
           "decl": "inset-block-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429654,7 +429577,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 320,
+          "line": 312,
           "prop": "inset-block-end",
           "decl": "inset-block-end: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)))",
           "scalars": []
@@ -429662,7 +429585,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 327,
+          "line": 319,
           "prop": "inset-block-start",
           "decl": "inset-block-start: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)))",
           "scalars": []
@@ -429670,7 +429593,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 335,
+          "line": 327,
           "prop": "right",
           "decl": "right: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)))",
           "scalars": []
@@ -429678,7 +429601,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 342,
+          "line": 334,
           "prop": "left",
           "decl": "left: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)))",
           "scalars": []
@@ -429700,7 +429623,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 307,
+          "line": 299,
           "prop": "min-inline-size",
           "scalars": []
         }
@@ -429724,21 +429647,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 291,
+          "line": 283,
           "prop": "inline-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 292,
+          "line": 284,
           "prop": "block-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 321,
+          "line": 313,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)))",
           "scalars": []
@@ -429746,7 +429669,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 328,
+          "line": 320,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)))",
           "scalars": []
@@ -429754,7 +429677,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 334,
+          "line": 326,
           "prop": "inset-block-start",
           "decl": "inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)))",
           "scalars": []
@@ -429762,7 +429685,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 341,
+          "line": 333,
           "prop": "inset-block-start",
           "decl": "inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)))",
           "scalars": []
@@ -429770,7 +429693,15 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 368,
+          "line": 360,
+          "prop": "inset-inline-start",
+          "decl": "inset-inline-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "line": 361,
           "prop": "inset-inline-start",
           "decl": "inset-inline-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429779,14 +429710,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "line": 369,
-          "prop": "inset-inline-start",
-          "decl": "inset-inline-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 377,
           "prop": "inset-block-start",
           "decl": "inset-block-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429794,7 +429717,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 378,
+          "line": 370,
           "prop": "inset-block-start",
           "decl": "inset-block-start: clamp( var(--ds-tooltip-arrow-edge-offset), calc(var(--ds-tooltip-arrow-anchor-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))), calc(100% - var(--ds-tooltip-arrow-edge-offset) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)) - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2))) )",
           "scalars": []
@@ -429942,7 +429865,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 320,
+          "line": 312,
           "prop": "inset-block-end",
           "decl": "inset-block-end: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)))",
           "scalars": []
@@ -429950,7 +429873,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 327,
+          "line": 319,
           "prop": "inset-block-start",
           "decl": "inset-block-start: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)))",
           "scalars": []
@@ -429958,7 +429881,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 335,
+          "line": 327,
           "prop": "right",
           "decl": "right: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)))",
           "scalars": []
@@ -429966,7 +429889,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 342,
+          "line": 334,
           "prop": "left",
           "decl": "left: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)))",
           "scalars": []
@@ -430140,7 +430063,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 141,
+          "line": 136,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -430173,7 +430096,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 294,
+          "line": 286,
           "prop": "background",
           "scalars": []
         }
@@ -430206,14 +430129,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 251,
+          "line": 243,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 293,
+          "line": 285,
           "prop": "border",
           "scalars": []
         }
@@ -430248,14 +430171,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 251,
+          "line": 243,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 293,
+          "line": 285,
           "prop": "border",
           "scalars": []
         }
@@ -430559,7 +430482,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.ts",
-          "line": 135,
+          "line": 130,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -430829,14 +430752,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 251,
+          "line": 243,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 293,
+          "line": 285,
           "prop": "border",
           "scalars": []
         }
@@ -430864,14 +430787,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 251,
+          "line": 243,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 293,
+          "line": 285,
           "prop": "border",
           "scalars": []
         }
@@ -430950,7 +430873,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 243,
+          "line": 235,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -430993,7 +430916,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 244,
+          "line": 236,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
@@ -431058,25 +430981,6 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "line": 65,
           "prop": "transition",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--ds-tooltip-focus-color",
-      "kind": "ds",
-      "declaredIn": [],
-      "planes": [
-        "modern-skin-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 207,
-          "prop": "outline",
           "scalars": []
         }
       ]
@@ -431927,7 +431831,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 410,
+          "line": 402,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         }
@@ -432029,7 +431933,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 213,
+          "line": 205,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -432072,7 +431976,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 214,
+          "line": 206,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
@@ -432428,7 +432332,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 219,
+          "line": 211,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -432471,7 +432375,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 220,
+          "line": 212,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
@@ -432564,7 +432468,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 270,
+          "line": 262,
           "prop": "gap",
           "scalars": []
         }
@@ -432585,7 +432489,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 258,
+          "line": 250,
           "prop": "gap",
           "scalars": []
         }
@@ -432604,7 +432508,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 280,
+          "line": 272,
           "prop": "background",
           "scalars": []
         }
@@ -432623,7 +432527,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 278,
+          "line": 270,
           "prop": "border",
           "scalars": []
         }
@@ -432644,7 +432548,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 277,
+          "line": 269,
           "prop": "border",
           "scalars": []
         }
@@ -432665,7 +432569,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 274,
+          "line": 266,
           "prop": "min-inline-size",
           "scalars": []
         }
@@ -432686,7 +432590,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 275,
+          "line": 267,
           "prop": "padding-block",
           "scalars": []
         }
@@ -432707,7 +432611,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 276,
+          "line": 268,
           "prop": "padding-inline",
           "scalars": []
         }
@@ -432728,7 +432632,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 279,
+          "line": 271,
           "prop": "border-radius",
           "scalars": []
         }
@@ -432747,7 +432651,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 281,
+          "line": 273,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -432768,7 +432672,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 283,
+          "line": 275,
           "prop": "font",
           "scalars": []
         }
@@ -432854,7 +432758,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 231,
+          "line": 223,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -432897,7 +432801,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 232,
+          "line": 224,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
@@ -432932,14 +432836,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 226,
+          "line": 218,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 294,
+          "line": 286,
           "prop": "background",
           "scalars": []
         }
@@ -432967,7 +432871,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 295,
+          "line": 287,
           "prop": "background-image",
           "scalars": []
         }
@@ -433007,35 +432911,35 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 215,
+          "line": 207,
           "prop": "--ds-tooltip-edge-current",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 221,
+          "line": 213,
           "prop": "--ds-tooltip-edge-current",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 233,
+          "line": 225,
           "prop": "--ds-tooltip-edge-current",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 239,
+          "line": 231,
           "prop": "--ds-tooltip-edge-current",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 245,
+          "line": 237,
           "prop": "--ds-tooltip-edge-current",
           "scalars": []
         }
@@ -433056,7 +432960,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 384,
+          "line": 376,
           "prop": "min-block-size",
           "scalars": []
         }
@@ -433166,7 +433070,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 237,
+          "line": 229,
           "prop": "--ds-tooltip-surface-current",
           "scalars": []
         },
@@ -433209,7 +433113,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 238,
+          "line": 230,
           "prop": "--ds-tooltip-ink-current",
           "scalars": []
         },
@@ -433657,7 +433561,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
-          "line": 103,
+          "line": 95,
           "prop": "min-block-size",
           "scalars": []
         },
@@ -434248,7 +434152,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 384,
+          "line": 376,
           "prop": "min-block-size",
           "scalars": []
         },
@@ -443833,7 +443737,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-          "line": 283,
+          "line": 275,
           "prop": "font",
           "scalars": []
         },

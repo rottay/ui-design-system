@@ -14,10 +14,10 @@
   "stats": {
     "verticals": 3,
     "scopes": 6,
-    "channels": 18068,
-    "unresolved": 9433,
+    "channels": 18056,
+    "unresolved": 9421,
     "unresolvedByReason": {
-      "missing": 9403,
+      "missing": 9391,
       "guaranteed-invalid": 24,
       "cascade-keyword": 6
     }
@@ -4961,13 +4961,6 @@
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-hover-card-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "base",
       "channel": "--ds-dropdown-bg",
       "reason": "missing",
       "cause": "--ds-material-overlay-background"
@@ -10256,13 +10249,6 @@
       "channel": "--ds-tooltip-error-color",
       "reason": "missing",
       "cause": "--ds-color-on-error"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "base",
-      "channel": "--ds-tooltip-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "rottay",
@@ -16791,13 +16777,6 @@
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-hover-card-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "light",
       "channel": "--ds-dropdown-bg",
       "reason": "missing",
       "cause": "--ds-material-overlay-background"
@@ -22314,13 +22293,6 @@
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-tooltip-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "light",
       "channel": "--ds-tour-surface-bg",
       "reason": "missing",
       "cause": "--ds-material-card-background"
@@ -27571,13 +27543,6 @@
     {
       "vertical": "bithire",
       "scope": "base",
-      "channel": "--ds-hover-card-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "base",
       "channel": "--ds-dropdown-bg",
       "reason": "missing",
       "cause": "--ds-material-overlay-background"
@@ -32124,13 +32089,6 @@
       "channel": "--ds-tooltip-opaque-background",
       "reason": "missing",
       "cause": "--ds-material-overlay-opaque"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "base",
-      "channel": "--ds-tooltip-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "bithire",
@@ -36846,13 +36804,6 @@
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-hover-card-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
       "channel": "--ds-dropdown-bg",
       "reason": "missing",
       "cause": "--ds-material-overlay-background"
@@ -41175,13 +41126,6 @@
       "channel": "--ds-tooltip-opaque-background",
       "reason": "missing",
       "cause": "--ds-material-overlay-opaque"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
-      "channel": "--ds-tooltip-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "bithire",
@@ -47332,13 +47276,6 @@
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-hover-card-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "base",
       "channel": "--ds-dropdown-bg",
       "reason": "missing",
       "cause": "--ds-material-overlay-background"
@@ -52851,13 +52788,6 @@
       "channel": "--ds-tooltip-error-color",
       "reason": "missing",
       "cause": "--ds-color-on-error"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "base",
-      "channel": "--ds-tooltip-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "evnto",
@@ -59323,13 +59253,6 @@
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-hover-card-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "dark",
       "channel": "--ds-dropdown-bg",
       "reason": "missing",
       "cause": "--ds-material-overlay-background"
@@ -64622,13 +64545,6 @@
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-tooltip-focus-color",
-      "reason": "missing",
-      "cause": "--ds-border-color-transparent"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "dark",
       "channel": "--ds-tour-surface-bg",
       "reason": "missing",
       "cause": "--ds-material-card-background"
@@ -67301,7 +67217,6 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -68795,7 +68710,6 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "var(--ds-color-error)",
         "--ds-tooltip-error-color": "var(--ds-color-on-error)",
-        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -70269,7 +70183,6 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "var(--ds-elevation-3)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -71763,7 +71676,6 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "var(--ds-color-error)",
         "--ds-tooltip-error-color": "var(--ds-color-on-error)",
-        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -73359,7 +73271,6 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, #B45309 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "var(--ds-elevation-3)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -74869,7 +74780,6 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "#C62828",
         "--ds-tooltip-error-color": "#ffffff",
-        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -76463,7 +76373,6 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, #B45309 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -77973,7 +77882,6 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "#C62828",
         "--ds-tooltip-error-color": "#ffffff",
-        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -79449,7 +79357,6 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "var(--ds-elevation-3)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -80943,7 +80850,6 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "var(--ds-color-error)",
         "--ds-tooltip-error-color": "var(--ds-color-on-error)",
-        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -82417,7 +82323,6 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -83911,7 +83816,6 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "var(--ds-color-error)",
         "--ds-tooltip-error-color": "var(--ds-color-on-error)",
-        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -84143,5 +84047,5 @@
       }
     }
   },
-  "digest": "40e5b676b8c686b4d5890a5edfbae89dbf0019797350130f57fcc89246e24068"
+  "digest": "c4a026daa88519660b462a4d25556e9d6bef23c5c21806f8ef49346a428d77c3"
 }

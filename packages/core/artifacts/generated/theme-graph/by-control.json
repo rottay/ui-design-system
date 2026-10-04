@@ -1015,8 +1015,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2531,
-      "channelsThroughAliases": 4107,
+      "channels": 2529,
+      "channelsThroughAliases": 4105,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1370,8 +1370,8 @@
       "tier": "pro"
     },
     {
-      "channels": 2531,
-      "channelsThroughAliases": 4107,
+      "channels": 2529,
+      "channelsThroughAliases": 4105,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1717,8 +1717,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2629,
-      "channelsThroughAliases": 4310,
+      "channels": 2627,
+      "channelsThroughAliases": 4308,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -2068,8 +2068,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2617,
-      "channelsThroughAliases": 4286,
+      "channels": 2615,
+      "channelsThroughAliases": 4284,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -3538,7 +3538,6 @@
         "app-shell",
         "approval-inbox",
         "approval-workflow",
-        "ascii-diagram",
         "assistant",
         "auth-surface",
         "auto-complete",
@@ -3722,7 +3721,6 @@
         "tree",
         "tree-select",
         "tree-view",
-        "tree-view-connector",
         "typography",
         "upload",
         "user-profile-card",
@@ -3778,7 +3776,6 @@
         "app-shell",
         "approval-inbox",
         "approval-workflow",
-        "ascii-diagram",
         "assistant",
         "auth-surface",
         "auto-complete",
@@ -3963,7 +3960,6 @@
         "tree",
         "tree-select",
         "tree-view",
-        "tree-view-connector",
         "typography",
         "upload",
         "user-profile-card",
@@ -4240,8 +4236,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1717,
-      "channelsThroughAliases": 2066,
+      "channels": 1715,
+      "channelsThroughAliases": 2064,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "action-dock",

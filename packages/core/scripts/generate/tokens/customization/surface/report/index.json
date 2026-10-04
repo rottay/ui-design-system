@@ -3,30 +3,30 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "f486e80ee703e9477d7f833cb3329364fab98c3aa0e561f70cc015edbdc05296",
+    "inputsDigest": "76a9227dcd19426da8c7bdf9463d4a4ef71ae4946b984ebf73033dd5ce3881b1",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 500,
-      "productionTsFiles": 2172,
-      "testFiles": 1985,
+      "productionTsFiles": 2171,
+      "testFiles": 1987,
       "artifactFiles": 3,
       "showroomReaderFiles": 388
     }
   },
   "counts": {
-    "universe": 8755,
-    "writers": 7532,
+    "universe": 8753,
+    "writers": 7530,
     "foundationTokens": 4185,
     "componentTokens": 725,
-    "tenantChannels": 4517,
+    "tenantChannels": 4515,
     "publicHooks": 107,
     "unadjudicatedReads": 1204,
     "deadWriters": 269,
     "frontierReserved": 0,
-    "modernConsumedUnique": 4797,
+    "modernConsumedUnique": 4795,
     "tsReadNames": 3114,
-    "tsWriteNames": 3922,
-    "tsMetadataNames": 5850,
+    "tsWriteNames": 3920,
+    "tsMetadataNames": 5848,
     "showroomReadNames": 121,
     "unclassified": 0,
     "prototypeLedgerRows": 80
@@ -4165,7 +4165,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -12373,8 +12373,8 @@
       },
       "writer": true,
       "reads": {
-        "css": 5,
-        "ts": 4,
+        "css": 3,
+        "ts": 2,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -46761,7 +46761,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 369,
+        "css": 371,
         "ts": 145,
         "showroom": 1,
         "tests": true,
@@ -47720,7 +47720,7 @@
         "css": 0,
         "ts": 2,
         "showroom": 0,
-        "tests": true,
+        "tests": false,
         "modern": false,
         "artifact": false
       },
@@ -52821,7 +52821,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 101,
+        "css": 99,
         "ts": 4,
         "showroom": 0,
         "tests": true,
@@ -56021,7 +56021,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 196,
+        "css": 194,
         "ts": 16,
         "showroom": 0,
         "tests": true,
@@ -56037,7 +56037,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 307,
+        "css": 303,
         "ts": 24,
         "showroom": 0,
         "tests": true,
@@ -59869,22 +59869,6 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 1
-    },
-    "--ds-hover-card-focus-color": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
       "tsMetadataMentions": 1
     },
     "--ds-hover-card-layer": {
@@ -104213,7 +104197,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -108069,7 +108053,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 46,
+        "css": 48,
         "ts": 29,
         "showroom": 0,
         "tests": true,
@@ -113976,7 +113960,7 @@
         "css": 17,
         "ts": 0,
         "showroom": 3,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": false
       },
@@ -130261,22 +130245,6 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 1
-    },
-    "--ds-tooltip-focus-color": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
       "tsMetadataMentions": 1
     },
     "--ds-tooltip-font-size": {

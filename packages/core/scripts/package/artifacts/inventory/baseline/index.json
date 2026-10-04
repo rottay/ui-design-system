@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7676,
-  "unpackedSize": 43034022,
+  "entryCount": 7657,
+  "unpackedSize": 43281020,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -12,15 +12,11 @@
     },
     {
       "path": "contracts/css/hooks/index.json",
-      "size": 481195
-    },
-    {
-      "path": "contracts/package/entrypoints/index.json",
-      "size": 2410
+      "size": 481512
     },
     {
       "path": "contracts/runtime/suppliers/index.json",
-      "size": 140906
+      "size": 138135
     },
     {
       "path": "contracts/themes/canaries/index.d.ts",
@@ -32,7 +28,7 @@
     },
     {
       "path": "dist/bithire.css",
-      "size": 4981907
+      "size": 5053273
     },
     {
       "path": "dist/chart-access.cjs",
@@ -616,7 +612,7 @@
     },
     {
       "path": "dist/components/patterns/data/data-table/contracts/index.d.ts",
-      "size": 21959
+      "size": 21607
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/classic/index.cjs",
@@ -632,19 +628,19 @@
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/modern/cell-editor/index.cjs",
-      "size": 3085
+      "size": 3264
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/modern/cell-editor/index.d.ts",
-      "size": 1509
+      "size": 1637
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/modern/cell-editor/index.js",
-      "size": 4506
+      "size": 4738
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/modern/index.cjs",
-      "size": 33833
+      "size": 34410
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/modern/index.d.ts",
@@ -652,7 +648,7 @@
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/modern/index.js",
-      "size": 82673
+      "size": 83771
     },
     {
       "path": "dist/components/patterns/data/data-table/engines/rustic/index.cjs",
@@ -672,7 +668,7 @@
     },
     {
       "path": "dist/components/patterns/data/data-table/presentation/table/index.cjs",
-      "size": 10698
+      "size": 9971
     },
     {
       "path": "dist/components/patterns/data/data-table/presentation/table/index.d.ts",
@@ -680,7 +676,7 @@
     },
     {
       "path": "dist/components/patterns/data/data-table/presentation/table/index.js",
-      "size": 15777
+      "size": 14903
     },
     {
       "path": "dist/components/patterns/data/data-table/presentation/table/mobile-cards/index.cjs",
@@ -784,7 +780,7 @@
     },
     {
       "path": "dist/components/patterns/data/decision-comparison/engines/foundation/index.cjs",
-      "size": 4130
+      "size": 4141
     },
     {
       "path": "dist/components/patterns/data/decision-comparison/engines/foundation/index.d.ts",
@@ -792,7 +788,7 @@
     },
     {
       "path": "dist/components/patterns/data/decision-comparison/engines/foundation/index.js",
-      "size": 5909
+      "size": 5934
     },
     {
       "path": "dist/components/patterns/data/decision-comparison/engines/modern/index.cjs",
@@ -1000,7 +996,7 @@
     },
     {
       "path": "dist/components/patterns/data/gallery-view/contracts/index.d.ts",
-      "size": 6609
+      "size": 6188
     },
     {
       "path": "dist/components/patterns/data/gallery-view/index.d.ts",
@@ -1044,7 +1040,7 @@
     },
     {
       "path": "dist/components/patterns/data/grid-view/contracts/index.d.ts",
-      "size": 4986
+      "size": 4565
     },
     {
       "path": "dist/components/patterns/data/grid-view/index.d.ts",
@@ -1080,7 +1076,7 @@
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/contracts/index.d.ts",
-      "size": 4918
+      "size": 5089
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/engines/classic/index.cjs",
@@ -1096,7 +1092,7 @@
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/engines/modern/index.cjs",
-      "size": 15888
+      "size": 15882
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/engines/modern/index.d.ts",
@@ -1104,19 +1100,19 @@
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/engines/modern/index.js",
-      "size": 32808
+      "size": 32802
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/foundation/tokens/index.cjs",
-      "size": 4205
+      "size": 4155
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/foundation/tokens/index.d.ts",
-      "size": 5289
+      "size": 5239
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/foundation/tokens/index.js",
-      "size": 4263
+      "size": 4213
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/index.cjs",
@@ -1124,7 +1120,7 @@
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/index.d.ts",
-      "size": 607
+      "size": 595
     },
     {
       "path": "dist/components/patterns/data/list-toolbar/index.js",
@@ -2800,7 +2796,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/bar-chart/index.cjs",
-      "size": 5761
+      "size": 5767
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/bar-chart/index.d.ts",
@@ -2808,7 +2804,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/bar-chart/index.js",
-      "size": 7801
+      "size": 7807
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/bullet/index.cjs",
@@ -2836,7 +2832,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/funnel-chart/index.cjs",
-      "size": 3750
+      "size": 3756
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/funnel-chart/index.d.ts",
@@ -2844,7 +2840,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/funnel-chart/index.js",
-      "size": 5475
+      "size": 5481
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/gantt-chart/index.cjs",
@@ -2860,7 +2856,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/gauge/index.cjs",
-      "size": 5037
+      "size": 5043
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/gauge/index.d.ts",
@@ -2868,7 +2864,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/gauge/index.js",
-      "size": 7376
+      "size": 7382
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/heat-map/index.cjs",
@@ -2884,7 +2880,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/histogram/index.cjs",
-      "size": 4529
+      "size": 4535
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/histogram/index.d.ts",
@@ -2892,7 +2888,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/histogram/index.js",
-      "size": 6029
+      "size": 6035
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/index.d.ts",
@@ -2912,7 +2908,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/network-graph/index.cjs",
-      "size": 7117
+      "size": 7129
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/network-graph/index.d.ts",
@@ -2920,7 +2916,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/network-graph/index.js",
-      "size": 9467
+      "size": 9477
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/pie-chart/index.cjs",
@@ -2948,7 +2944,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/sankey/index.cjs",
-      "size": 11318
+      "size": 11330
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/sankey/index.d.ts",
@@ -2956,7 +2952,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/sankey/index.js",
-      "size": 15197
+      "size": 15207
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/scatter/index.cjs",
@@ -2996,7 +2992,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/waterfall/index.cjs",
-      "size": 4144
+      "size": 4150
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/waterfall/index.d.ts",
@@ -3004,7 +3000,7 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/families/waterfall/index.js",
-      "size": 5423
+      "size": 5429
     },
     {
       "path": "dist/components/patterns/visualization/charts/foundation/geometry/index.cjs",
@@ -3048,27 +3044,27 @@
     },
     {
       "path": "dist/components/patterns/visualization/charts/presentation/scaffold/index.cjs",
-      "size": 5287
+      "size": 5260
     },
     {
       "path": "dist/components/patterns/visualization/charts/presentation/scaffold/index.d.ts",
-      "size": 5785
+      "size": 5696
     },
     {
       "path": "dist/components/patterns/visualization/charts/presentation/scaffold/index.js",
-      "size": 8426
+      "size": 8387
     },
     {
       "path": "dist/components/patterns/visualization/charts/presentation/tooltip/index.cjs",
-      "size": 1888
+      "size": 1867
     },
     {
       "path": "dist/components/patterns/visualization/charts/presentation/tooltip/index.d.ts",
-      "size": 2420
+      "size": 2322
     },
     {
       "path": "dist/components/patterns/visualization/charts/presentation/tooltip/index.js",
-      "size": 2593
+      "size": 2561
     },
     {
       "path": "dist/components/patterns/visualization/charts/runtime/chart-engine/foundation/access/csv/index.cjs",
@@ -4136,19 +4132,19 @@
     },
     {
       "path": "dist/components/primitives/display/avatar/contracts/index.cjs",
-      "size": 357
+      "size": 231
     },
     {
       "path": "dist/components/primitives/display/avatar/contracts/index.d.ts",
-      "size": 6613
+      "size": 6044
     },
     {
       "path": "dist/components/primitives/display/avatar/contracts/index.js",
-      "size": 663
+      "size": 526
     },
     {
       "path": "dist/components/primitives/display/avatar/engines/classic/index.cjs",
-      "size": 1164
+      "size": 1233
     },
     {
       "path": "dist/components/primitives/display/avatar/engines/classic/index.d.ts",
@@ -4156,11 +4152,11 @@
     },
     {
       "path": "dist/components/primitives/display/avatar/engines/classic/index.js",
-      "size": 1626
+      "size": 1699
     },
     {
       "path": "dist/components/primitives/display/avatar/engines/modern/index.cjs",
-      "size": 3183
+      "size": 3254
     },
     {
       "path": "dist/components/primitives/display/avatar/engines/modern/index.d.ts",
@@ -4168,11 +4164,11 @@
     },
     {
       "path": "dist/components/primitives/display/avatar/engines/modern/index.js",
-      "size": 5135
+      "size": 5208
     },
     {
       "path": "dist/components/primitives/display/avatar/engines/rustic/index.cjs",
-      "size": 1893
+      "size": 1962
     },
     {
       "path": "dist/components/primitives/display/avatar/engines/rustic/index.d.ts",
@@ -4180,7 +4176,7 @@
     },
     {
       "path": "dist/components/primitives/display/avatar/engines/rustic/index.js",
-      "size": 2914
+      "size": 2987
     },
     {
       "path": "dist/components/primitives/display/avatar/index.cjs",
@@ -4188,7 +4184,7 @@
     },
     {
       "path": "dist/components/primitives/display/avatar/index.d.ts",
-      "size": 1235
+      "size": 1211
     },
     {
       "path": "dist/components/primitives/display/avatar/index.js",
@@ -4196,19 +4192,19 @@
     },
     {
       "path": "dist/components/primitives/display/badge/contracts/index.cjs",
-      "size": 2421
+      "size": 2296
     },
     {
       "path": "dist/components/primitives/display/badge/contracts/index.d.ts",
-      "size": 10828
+      "size": 9987
     },
     {
       "path": "dist/components/primitives/display/badge/contracts/index.js",
-      "size": 3693
+      "size": 3557
     },
     {
       "path": "dist/components/primitives/display/badge/engines/classic/index.cjs",
-      "size": 3208
+      "size": 3278
     },
     {
       "path": "dist/components/primitives/display/badge/engines/classic/index.d.ts",
@@ -4216,11 +4212,11 @@
     },
     {
       "path": "dist/components/primitives/display/badge/engines/classic/index.js",
-      "size": 4310
+      "size": 4384
     },
     {
       "path": "dist/components/primitives/display/badge/engines/modern/index.cjs",
-      "size": 7189
+      "size": 7201
     },
     {
       "path": "dist/components/primitives/display/badge/engines/modern/index.d.ts",
@@ -4228,11 +4224,11 @@
     },
     {
       "path": "dist/components/primitives/display/badge/engines/modern/index.js",
-      "size": 10503
+      "size": 10519
     },
     {
       "path": "dist/components/primitives/display/badge/engines/rustic/index.cjs",
-      "size": 4447
+      "size": 4517
     },
     {
       "path": "dist/components/primitives/display/badge/engines/rustic/index.d.ts",
@@ -4240,7 +4236,7 @@
     },
     {
       "path": "dist/components/primitives/display/badge/engines/rustic/index.js",
-      "size": 5752
+      "size": 5826
     },
     {
       "path": "dist/components/primitives/display/badge/index.cjs",
@@ -4248,7 +4244,7 @@
     },
     {
       "path": "dist/components/primitives/display/badge/index.d.ts",
-      "size": 789
+      "size": 766
     },
     {
       "path": "dist/components/primitives/display/badge/index.js",
@@ -4256,11 +4252,11 @@
     },
     {
       "path": "dist/components/primitives/display/calendar/contracts/index.d.ts",
-      "size": 6368
+      "size": 6673
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/classic/index.cjs",
-      "size": 1461
+      "size": 1418
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/classic/index.d.ts",
@@ -4268,11 +4264,11 @@
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/classic/index.js",
-      "size": 1920
+      "size": 1865
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/modern/index.cjs",
-      "size": 8481
+      "size": 8626
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/modern/index.d.ts",
@@ -4280,7 +4276,7 @@
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/modern/index.js",
-      "size": 13190
+      "size": 13290
     },
     {
       "path": "dist/components/primitives/display/calendar/engines/rustic/index.cjs",
@@ -4312,7 +4308,7 @@
     },
     {
       "path": "dist/components/primitives/display/callout/contracts/index.d.ts",
-      "size": 2640
+      "size": 2720
     },
     {
       "path": "dist/components/primitives/display/callout/contracts/index.js",
@@ -4348,7 +4344,7 @@
     },
     {
       "path": "dist/components/primitives/display/callout/index.d.ts",
-      "size": 498
+      "size": 604
     },
     {
       "path": "dist/components/primitives/display/callout/index.js",
@@ -4604,15 +4600,15 @@
     },
     {
       "path": "dist/components/primitives/display/descriptions/contracts/index.cjs",
-      "size": 188
+      "size": 300
     },
     {
       "path": "dist/components/primitives/display/descriptions/contracts/index.d.ts",
-      "size": 5331
+      "size": 6371
     },
     {
       "path": "dist/components/primitives/display/descriptions/contracts/index.js",
-      "size": 520
+      "size": 679
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/classic/index.cjs",
@@ -4620,7 +4616,7 @@
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/classic/index.d.ts",
-      "size": 1430
+      "size": 1443
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/classic/index.js",
@@ -4632,7 +4628,7 @@
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/modern/index.d.ts",
-      "size": 1596
+      "size": 1609
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/modern/index.js",
@@ -4644,7 +4640,7 @@
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/rustic/index.d.ts",
-      "size": 1649
+      "size": 1662
     },
     {
       "path": "dist/components/primitives/display/descriptions/engines/rustic/index.js",
@@ -4652,15 +4648,15 @@
     },
     {
       "path": "dist/components/primitives/display/descriptions/index.cjs",
-      "size": 1000
+      "size": 1245
     },
     {
       "path": "dist/components/primitives/display/descriptions/index.d.ts",
-      "size": 970
+      "size": 1256
     },
     {
       "path": "dist/components/primitives/display/descriptions/index.js",
-      "size": 931
+      "size": 1270
     },
     {
       "path": "dist/components/primitives/display/empty/contracts/index.cjs",
@@ -4812,7 +4808,7 @@
     },
     {
       "path": "dist/components/primitives/display/index.d.ts",
-      "size": 4041
+      "size": 3855
     },
     {
       "path": "dist/components/primitives/display/kbd/contracts/index.cjs",
@@ -4876,15 +4872,15 @@
     },
     {
       "path": "dist/components/primitives/display/list/contracts/index.cjs",
-      "size": 175
+      "size": 278
     },
     {
       "path": "dist/components/primitives/display/list/contracts/index.d.ts",
-      "size": 3666
+      "size": 4515
     },
     {
       "path": "dist/components/primitives/display/list/contracts/index.js",
-      "size": 123
+      "size": 249
     },
     {
       "path": "dist/components/primitives/display/list/engines/classic/index.cjs",
@@ -4892,7 +4888,7 @@
     },
     {
       "path": "dist/components/primitives/display/list/engines/classic/index.d.ts",
-      "size": 990
+      "size": 981
     },
     {
       "path": "dist/components/primitives/display/list/engines/classic/index.js",
@@ -4904,7 +4900,7 @@
     },
     {
       "path": "dist/components/primitives/display/list/engines/modern/index.d.ts",
-      "size": 973
+      "size": 964
     },
     {
       "path": "dist/components/primitives/display/list/engines/modern/index.js",
@@ -4916,7 +4912,7 @@
     },
     {
       "path": "dist/components/primitives/display/list/engines/rustic/index.d.ts",
-      "size": 1026
+      "size": 1017
     },
     {
       "path": "dist/components/primitives/display/list/engines/rustic/index.js",
@@ -4924,15 +4920,15 @@
     },
     {
       "path": "dist/components/primitives/display/list/index.cjs",
-      "size": 1339
+      "size": 1552
     },
     {
       "path": "dist/components/primitives/display/list/index.d.ts",
-      "size": 964
+      "size": 1174
     },
     {
       "path": "dist/components/primitives/display/list/index.js",
-      "size": 1108
+      "size": 1415
     },
     {
       "path": "dist/components/primitives/display/markdown-view/contracts/index.d.ts",
@@ -5116,7 +5112,7 @@
     },
     {
       "path": "dist/components/primitives/display/table/contracts/index.d.ts",
-      "size": 14776
+      "size": 14708
     },
     {
       "path": "dist/components/primitives/display/table/engines/classic/index.cjs",
@@ -5308,19 +5304,19 @@
     },
     {
       "path": "dist/components/primitives/display/tag/contracts/index.cjs",
-      "size": 904
+      "size": 781
     },
     {
       "path": "dist/components/primitives/display/tag/contracts/index.d.ts",
-      "size": 8607
+      "size": 8151
     },
     {
       "path": "dist/components/primitives/display/tag/contracts/index.js",
-      "size": 1132
+      "size": 998
     },
     {
       "path": "dist/components/primitives/display/tag/engines/classic/index.cjs",
-      "size": 1121
+      "size": 1193
     },
     {
       "path": "dist/components/primitives/display/tag/engines/classic/index.d.ts",
@@ -5328,11 +5324,11 @@
     },
     {
       "path": "dist/components/primitives/display/tag/engines/classic/index.js",
-      "size": 1503
+      "size": 1579
     },
     {
       "path": "dist/components/primitives/display/tag/engines/modern/index.cjs",
-      "size": 3998
+      "size": 4072
     },
     {
       "path": "dist/components/primitives/display/tag/engines/modern/index.d.ts",
@@ -5340,11 +5336,11 @@
     },
     {
       "path": "dist/components/primitives/display/tag/engines/modern/index.js",
-      "size": 4892
+      "size": 4968
     },
     {
       "path": "dist/components/primitives/display/tag/engines/rustic/index.cjs",
-      "size": 2258
+      "size": 2330
     },
     {
       "path": "dist/components/primitives/display/tag/engines/rustic/index.d.ts",
@@ -5352,7 +5348,7 @@
     },
     {
       "path": "dist/components/primitives/display/tag/engines/rustic/index.js",
-      "size": 3117
+      "size": 3193
     },
     {
       "path": "dist/components/primitives/display/tag/index.cjs",
@@ -5360,7 +5356,7 @@
     },
     {
       "path": "dist/components/primitives/display/tag/index.d.ts",
-      "size": 775
+      "size": 754
     },
     {
       "path": "dist/components/primitives/display/tag/index.js",
@@ -5804,19 +5800,19 @@
     },
     {
       "path": "dist/components/primitives/feedback/alert/compound/index.d.ts",
-      "size": 1504
+      "size": 1505
     },
     {
       "path": "dist/components/primitives/feedback/alert/contracts/index.cjs",
-      "size": 285
+      "size": 322
     },
     {
       "path": "dist/components/primitives/feedback/alert/contracts/index.d.ts",
-      "size": 6009
+      "size": 6814
     },
     {
       "path": "dist/components/primitives/feedback/alert/contracts/index.js",
-      "size": 452
+      "size": 638
     },
     {
       "path": "dist/components/primitives/feedback/alert/engines/classic/index.cjs",
@@ -5832,15 +5828,15 @@
     },
     {
       "path": "dist/components/primitives/feedback/alert/engines/modern/index.cjs",
-      "size": 1050
+      "size": 1292
     },
     {
       "path": "dist/components/primitives/feedback/alert/engines/modern/index.d.ts",
-      "size": 291
+      "size": 303
     },
     {
       "path": "dist/components/primitives/feedback/alert/engines/modern/index.js",
-      "size": 1316
+      "size": 1630
     },
     {
       "path": "dist/components/primitives/feedback/alert/engines/rustic/index.cjs",
@@ -5860,7 +5856,7 @@
     },
     {
       "path": "dist/components/primitives/feedback/alert/index.d.ts",
-      "size": 1056
+      "size": 1089
     },
     {
       "path": "dist/components/primitives/feedback/alert/index.js",
@@ -5868,15 +5864,15 @@
     },
     {
       "path": "dist/components/primitives/feedback/alert/presentation/callout/index.cjs",
-      "size": 985
+      "size": 973
     },
     {
       "path": "dist/components/primitives/feedback/alert/presentation/callout/index.d.ts",
-      "size": 801
+      "size": 709
     },
     {
       "path": "dist/components/primitives/feedback/alert/presentation/callout/index.js",
-      "size": 1240
+      "size": 1222
     },
     {
       "path": "dist/components/primitives/feedback/alert/runtime/surface/index.cjs",
@@ -6552,7 +6548,7 @@
     },
     {
       "path": "dist/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.cjs",
-      "size": 23282
+      "size": 23313
     },
     {
       "path": "dist/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.d.ts",
@@ -6560,7 +6556,7 @@
     },
     {
       "path": "dist/components/primitives/feedback/skeleton/runtime/anatomy-renderer/index.js",
-      "size": 37072
+      "size": 37107
     },
     {
       "path": "dist/components/primitives/feedback/spinner/contracts/index.cjs",
@@ -6668,7 +6664,7 @@
     },
     {
       "path": "dist/components/primitives/feedback/toast/contracts/index.d.ts",
-      "size": 14844
+      "size": 14868
     },
     {
       "path": "dist/components/primitives/feedback/toast/contracts/index.js",
@@ -6924,15 +6920,15 @@
     },
     {
       "path": "dist/components/primitives/inputs/auto-complete/contracts/index.cjs",
-      "size": 217
+      "size": 213
     },
     {
       "path": "dist/components/primitives/inputs/auto-complete/contracts/index.d.ts",
-      "size": 4658
+      "size": 4393
     },
     {
       "path": "dist/components/primitives/inputs/auto-complete/contracts/index.js",
-      "size": 384
+      "size": 380
     },
     {
       "path": "dist/components/primitives/inputs/auto-complete/engines/classic/index.cjs",
@@ -6976,7 +6972,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/auto-complete/index.d.ts",
-      "size": 876
+      "size": 847
     },
     {
       "path": "dist/components/primitives/inputs/auto-complete/index.js",
@@ -7000,7 +6996,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/button/compound/icon/index.d.ts",
-      "size": 1453
+      "size": 1491
     },
     {
       "path": "dist/components/primitives/inputs/button/compound/icon/index.js",
@@ -7016,7 +7012,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/button/contracts/index.d.ts",
-      "size": 14970
+      "size": 13204
     },
     {
       "path": "dist/components/primitives/inputs/button/contracts/index.js",
@@ -7036,15 +7032,15 @@
     },
     {
       "path": "dist/components/primitives/inputs/button/engines/modern/index.cjs",
-      "size": 7245
+      "size": 6864
     },
     {
       "path": "dist/components/primitives/inputs/button/engines/modern/index.d.ts",
-      "size": 2152
+      "size": 2164
     },
     {
       "path": "dist/components/primitives/inputs/button/engines/modern/index.js",
-      "size": 10680
+      "size": 9706
     },
     {
       "path": "dist/components/primitives/inputs/button/engines/rustic/index.cjs",
@@ -7064,7 +7060,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/button/index.d.ts",
-      "size": 952
+      "size": 985
     },
     {
       "path": "dist/components/primitives/inputs/button/index.js",
@@ -7072,15 +7068,15 @@
     },
     {
       "path": "dist/components/primitives/inputs/cascader/contracts/index.cjs",
-      "size": 235
+      "size": 231
     },
     {
       "path": "dist/components/primitives/inputs/cascader/contracts/index.d.ts",
-      "size": 5192
+      "size": 4939
     },
     {
       "path": "dist/components/primitives/inputs/cascader/contracts/index.js",
-      "size": 427
+      "size": 423
     },
     {
       "path": "dist/components/primitives/inputs/cascader/engines/classic/index.cjs",
@@ -7124,7 +7120,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/cascader/index.d.ts",
-      "size": 880
+      "size": 855
     },
     {
       "path": "dist/components/primitives/inputs/cascader/index.js",
@@ -7216,15 +7212,15 @@
     },
     {
       "path": "dist/components/primitives/inputs/color-picker/contracts/index.cjs",
-      "size": 243
+      "size": 239
     },
     {
       "path": "dist/components/primitives/inputs/color-picker/contracts/index.d.ts",
-      "size": 4372
+      "size": 4110
     },
     {
       "path": "dist/components/primitives/inputs/color-picker/contracts/index.js",
-      "size": 482
+      "size": 478
     },
     {
       "path": "dist/components/primitives/inputs/color-picker/engines/classic/index.cjs",
@@ -7268,7 +7264,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/color-picker/index.d.ts",
-      "size": 565
+      "size": 537
     },
     {
       "path": "dist/components/primitives/inputs/color-picker/index.js",
@@ -7276,7 +7272,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/date-picker/contracts/index.d.ts",
-      "size": 6581
+      "size": 6313
     },
     {
       "path": "dist/components/primitives/inputs/date-picker/engines/classic/index.cjs",
@@ -7396,7 +7392,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/form/contracts/index.d.ts",
-      "size": 14006
+      "size": 13733
     },
     {
       "path": "dist/components/primitives/inputs/form/contracts/index.js",
@@ -7488,11 +7484,11 @@
     },
     {
       "path": "dist/components/primitives/inputs/index.d.ts",
-      "size": 4547
+      "size": 4366
     },
     {
       "path": "dist/components/primitives/inputs/input-number/contracts/index.d.ts",
-      "size": 5261
+      "size": 4993
     },
     {
       "path": "dist/components/primitives/inputs/input-number/engines/classic/index.cjs",
@@ -8224,7 +8220,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/time-picker/contracts/index.d.ts",
-      "size": 5687
+      "size": 5416
     },
     {
       "path": "dist/components/primitives/inputs/time-picker/engines/classic/index.cjs",
@@ -8275,28 +8271,12 @@
       "size": 996
     },
     {
-      "path": "dist/components/primitives/inputs/toggle/compound/index.d.ts",
-      "size": 206
-    },
-    {
-      "path": "dist/components/primitives/inputs/toggle/compound/switch/index.cjs",
-      "size": 438
-    },
-    {
-      "path": "dist/components/primitives/inputs/toggle/compound/switch/index.d.ts",
-      "size": 240
-    },
-    {
-      "path": "dist/components/primitives/inputs/toggle/compound/switch/index.js",
-      "size": 534
-    },
-    {
       "path": "dist/components/primitives/inputs/toggle/contracts/index.cjs",
       "size": 1681
     },
     {
       "path": "dist/components/primitives/inputs/toggle/contracts/index.d.ts",
-      "size": 4004
+      "size": 2992
     },
     {
       "path": "dist/components/primitives/inputs/toggle/contracts/index.js",
@@ -8344,7 +8324,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/toggle/index.d.ts",
-      "size": 477
+      "size": 405
     },
     {
       "path": "dist/components/primitives/inputs/toggle/index.js",
@@ -8412,15 +8392,15 @@
     },
     {
       "path": "dist/components/primitives/inputs/tree-select/contracts/index.cjs",
-      "size": 289
+      "size": 285
     },
     {
       "path": "dist/components/primitives/inputs/tree-select/contracts/index.d.ts",
-      "size": 8042
+      "size": 7783
     },
     {
       "path": "dist/components/primitives/inputs/tree-select/contracts/index.js",
-      "size": 616
+      "size": 612
     },
     {
       "path": "dist/components/primitives/inputs/tree-select/engines/classic/index.cjs",
@@ -8464,7 +8444,7 @@
     },
     {
       "path": "dist/components/primitives/inputs/tree-select/index.d.ts",
-      "size": 874
+      "size": 847
     },
     {
       "path": "dist/components/primitives/inputs/tree-select/index.js",
@@ -8544,15 +8524,15 @@
     },
     {
       "path": "dist/components/primitives/inputs/voice-input-button/index.cjs",
-      "size": 2890
+      "size": 3022
     },
     {
       "path": "dist/components/primitives/inputs/voice-input-button/index.d.ts",
-      "size": 1375
+      "size": 1510
     },
     {
       "path": "dist/components/primitives/inputs/voice-input-button/index.js",
-      "size": 3781
+      "size": 3970
     },
     {
       "path": "dist/components/primitives/layout/ascii-frame/contracts/index.d.ts",
@@ -8632,15 +8612,15 @@
     },
     {
       "path": "dist/components/primitives/layout/box/contracts/index.cjs",
-      "size": 1194
+      "size": 1050
     },
     {
       "path": "dist/components/primitives/layout/box/contracts/index.d.ts",
-      "size": 18675
+      "size": 17274
     },
     {
       "path": "dist/components/primitives/layout/box/contracts/index.js",
-      "size": 1465
+      "size": 1304
     },
     {
       "path": "dist/components/primitives/layout/box/engines/classic/index.cjs",
@@ -8656,7 +8636,7 @@
     },
     {
       "path": "dist/components/primitives/layout/box/engines/modern/index.cjs",
-      "size": 7291
+      "size": 7266
     },
     {
       "path": "dist/components/primitives/layout/box/engines/modern/index.d.ts",
@@ -8664,7 +8644,7 @@
     },
     {
       "path": "dist/components/primitives/layout/box/engines/modern/index.js",
-      "size": 8418
+      "size": 8385
     },
     {
       "path": "dist/components/primitives/layout/box/engines/rustic/index.cjs",
@@ -8684,7 +8664,7 @@
     },
     {
       "path": "dist/components/primitives/layout/box/index.d.ts",
-      "size": 1594
+      "size": 1547
     },
     {
       "path": "dist/components/primitives/layout/box/index.js",
@@ -8704,15 +8684,15 @@
     },
     {
       "path": "dist/components/primitives/layout/collapse/contracts/index.cjs",
-      "size": 185
+      "size": 181
     },
     {
       "path": "dist/components/primitives/layout/collapse/contracts/index.d.ts",
-      "size": 2426
+      "size": 2169
     },
     {
       "path": "dist/components/primitives/layout/collapse/contracts/index.js",
-      "size": 133
+      "size": 129
     },
     {
       "path": "dist/components/primitives/layout/collapse/engines/classic/index.cjs",
@@ -8728,15 +8708,15 @@
     },
     {
       "path": "dist/components/primitives/layout/collapse/engines/modern/index.cjs",
-      "size": 3733
+      "size": 3709
     },
     {
       "path": "dist/components/primitives/layout/collapse/engines/modern/index.d.ts",
-      "size": 1531
+      "size": 1525
     },
     {
       "path": "dist/components/primitives/layout/collapse/engines/modern/index.js",
-      "size": 5844
+      "size": 5808
     },
     {
       "path": "dist/components/primitives/layout/collapse/engines/rustic/index.cjs",
@@ -8756,7 +8736,7 @@
     },
     {
       "path": "dist/components/primitives/layout/collapse/index.d.ts",
-      "size": 768
+      "size": 743
     },
     {
       "path": "dist/components/primitives/layout/collapse/index.js",
@@ -8840,7 +8820,7 @@
     },
     {
       "path": "dist/components/primitives/layout/divider/contracts/index.d.ts",
-      "size": 5727
+      "size": 5404
     },
     {
       "path": "dist/components/primitives/layout/divider/contracts/index.js",
@@ -8848,7 +8828,7 @@
     },
     {
       "path": "dist/components/primitives/layout/divider/engines/classic/index.cjs",
-      "size": 2337
+      "size": 2302
     },
     {
       "path": "dist/components/primitives/layout/divider/engines/classic/index.d.ts",
@@ -8856,11 +8836,11 @@
     },
     {
       "path": "dist/components/primitives/layout/divider/engines/classic/index.js",
-      "size": 3341
+      "size": 3286
     },
     {
       "path": "dist/components/primitives/layout/divider/engines/modern/index.cjs",
-      "size": 1758
+      "size": 1723
     },
     {
       "path": "dist/components/primitives/layout/divider/engines/modern/index.d.ts",
@@ -8868,11 +8848,11 @@
     },
     {
       "path": "dist/components/primitives/layout/divider/engines/modern/index.js",
-      "size": 2382
+      "size": 2331
     },
     {
       "path": "dist/components/primitives/layout/divider/engines/rustic/index.cjs",
-      "size": 2471
+      "size": 2436
     },
     {
       "path": "dist/components/primitives/layout/divider/engines/rustic/index.d.ts",
@@ -8880,7 +8860,7 @@
     },
     {
       "path": "dist/components/primitives/layout/divider/engines/rustic/index.js",
-      "size": 3354
+      "size": 3303
     },
     {
       "path": "dist/components/primitives/layout/divider/index.cjs",
@@ -9076,7 +9056,7 @@
     },
     {
       "path": "dist/components/primitives/layout/index.d.ts",
-      "size": 3677
+      "size": 3593
     },
     {
       "path": "dist/components/primitives/layout/invert-section/contracts/index.d.ts",
@@ -9236,7 +9216,7 @@
     },
     {
       "path": "dist/components/primitives/layout/space/contracts/index.d.ts",
-      "size": 3608
+      "size": 4049
     },
     {
       "path": "dist/components/primitives/layout/space/contracts/index.js",
@@ -9248,7 +9228,7 @@
     },
     {
       "path": "dist/components/primitives/layout/space/engines/classic/index.d.ts",
-      "size": 597
+      "size": 583
     },
     {
       "path": "dist/components/primitives/layout/space/engines/classic/index.js",
@@ -9260,7 +9240,7 @@
     },
     {
       "path": "dist/components/primitives/layout/space/engines/modern/index.d.ts",
-      "size": 742
+      "size": 728
     },
     {
       "path": "dist/components/primitives/layout/space/engines/modern/index.js",
@@ -9272,7 +9252,7 @@
     },
     {
       "path": "dist/components/primitives/layout/space/engines/rustic/index.d.ts",
-      "size": 651
+      "size": 637
     },
     {
       "path": "dist/components/primitives/layout/space/engines/rustic/index.js",
@@ -9280,15 +9260,15 @@
     },
     {
       "path": "dist/components/primitives/layout/space/index.cjs",
-      "size": 484
+      "size": 488
     },
     {
       "path": "dist/components/primitives/layout/space/index.d.ts",
-      "size": 733
+      "size": 1602
     },
     {
       "path": "dist/components/primitives/layout/space/index.js",
-      "size": 355
+      "size": 362
     },
     {
       "path": "dist/components/primitives/layout/splitter/contracts/index.cjs",
@@ -9816,7 +9796,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/index.d.ts",
-      "size": 2299
+      "size": 2235
     },
     {
       "path": "dist/components/primitives/navigation/link/contracts/index.cjs",
@@ -10052,15 +10032,15 @@
     },
     {
       "path": "dist/components/primitives/navigation/segmented/contracts/index.cjs",
-      "size": 155
+      "size": 262
     },
     {
       "path": "dist/components/primitives/navigation/segmented/contracts/index.d.ts",
-      "size": 5220
+      "size": 6163
     },
     {
       "path": "dist/components/primitives/navigation/segmented/contracts/index.js",
-      "size": 199
+      "size": 353
     },
     {
       "path": "dist/components/primitives/navigation/segmented/engines/classic/index.cjs",
@@ -10068,7 +10048,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/segmented/engines/classic/index.d.ts",
-      "size": 1278
+      "size": 1260
     },
     {
       "path": "dist/components/primitives/navigation/segmented/engines/classic/index.js",
@@ -10080,7 +10060,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/segmented/engines/modern/index.d.ts",
-      "size": 1137
+      "size": 1119
     },
     {
       "path": "dist/components/primitives/navigation/segmented/engines/modern/index.js",
@@ -10092,7 +10072,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/segmented/engines/rustic/index.d.ts",
-      "size": 1415
+      "size": 1397
     },
     {
       "path": "dist/components/primitives/navigation/segmented/engines/rustic/index.js",
@@ -10100,15 +10080,15 @@
     },
     {
       "path": "dist/components/primitives/navigation/segmented/index.cjs",
-      "size": 492
+      "size": 719
     },
     {
       "path": "dist/components/primitives/navigation/segmented/index.d.ts",
-      "size": 453
+      "size": 1033
     },
     {
       "path": "dist/components/primitives/navigation/segmented/index.js",
-      "size": 566
+      "size": 887
     },
     {
       "path": "dist/components/primitives/navigation/segmented/runtime/reveal/index.cjs",
@@ -10136,7 +10116,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/stepper/compound/index.d.ts",
-      "size": 1542
+      "size": 1509
     },
     {
       "path": "dist/components/primitives/navigation/stepper/compound/step/index.cjs",
@@ -10151,24 +10131,12 @@
       "size": 3481
     },
     {
-      "path": "dist/components/primitives/navigation/stepper/compound/steps/index.cjs",
-      "size": 451
-    },
-    {
-      "path": "dist/components/primitives/navigation/stepper/compound/steps/index.d.ts",
-      "size": 232
-    },
-    {
-      "path": "dist/components/primitives/navigation/stepper/compound/steps/index.js",
-      "size": 542
-    },
-    {
       "path": "dist/components/primitives/navigation/stepper/contracts/index.cjs",
       "size": 412
     },
     {
       "path": "dist/components/primitives/navigation/stepper/contracts/index.d.ts",
-      "size": 11485
+      "size": 9118
     },
     {
       "path": "dist/components/primitives/navigation/stepper/contracts/index.js",
@@ -10188,7 +10156,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/stepper/engines/modern/index.cjs",
-      "size": 3642
+      "size": 3632
     },
     {
       "path": "dist/components/primitives/navigation/stepper/engines/modern/index.d.ts",
@@ -10196,7 +10164,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/stepper/engines/modern/index.js",
-      "size": 5795
+      "size": 5724
     },
     {
       "path": "dist/components/primitives/navigation/stepper/engines/rustic/index.cjs",
@@ -10216,7 +10184,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/stepper/index.d.ts",
-      "size": 876
+      "size": 805
     },
     {
       "path": "dist/components/primitives/navigation/stepper/index.js",
@@ -10700,7 +10668,7 @@
     },
     {
       "path": "dist/components/primitives/overlay/popover/engines/modern/index.cjs",
-      "size": 10994
+      "size": 11943
     },
     {
       "path": "dist/components/primitives/overlay/popover/engines/modern/index.d.ts",
@@ -10708,7 +10676,7 @@
     },
     {
       "path": "dist/components/primitives/overlay/popover/engines/modern/index.js",
-      "size": 15376
+      "size": 16718
     },
     {
       "path": "dist/components/primitives/overlay/popover/engines/rustic/index.cjs",
@@ -11412,7 +11380,7 @@
     },
     {
       "path": "dist/components/structures/feedback/surface-lifecycle/states/index.cjs",
-      "size": 3470
+      "size": 3471
     },
     {
       "path": "dist/components/structures/feedback/surface-lifecycle/states/index.d.ts",
@@ -11420,7 +11388,7 @@
     },
     {
       "path": "dist/components/structures/feedback/surface-lifecycle/states/index.js",
-      "size": 4305
+      "size": 4306
     },
     {
       "path": "dist/components/structures/feedback/surface-lifecycle/use-surface-state/index.cjs",
@@ -11440,7 +11408,7 @@
     },
     {
       "path": "dist/components/structures/foundation/chrome/contracts/index.d.ts",
-      "size": 12400
+      "size": 12289
     },
     {
       "path": "dist/components/structures/foundation/chrome/contracts/index.js",
@@ -11448,7 +11416,7 @@
     },
     {
       "path": "dist/components/structures/foundation/chrome/runtime/access/index.cjs",
-      "size": 1715
+      "size": 1683
     },
     {
       "path": "dist/components/structures/foundation/chrome/runtime/access/index.d.ts",
@@ -11456,7 +11424,7 @@
     },
     {
       "path": "dist/components/structures/foundation/chrome/runtime/access/index.js",
-      "size": 2173
+      "size": 2137
     },
     {
       "path": "dist/components/structures/foundation/chrome/runtime/errors/index.cjs",
@@ -11532,15 +11500,15 @@
     },
     {
       "path": "dist/components/structures/foundation/chrome/runtime/profile-defaults/personality/index.cjs",
-      "size": 455
+      "size": 327
     },
     {
       "path": "dist/components/structures/foundation/chrome/runtime/profile-defaults/personality/index.d.ts",
-      "size": 964
+      "size": 613
     },
     {
       "path": "dist/components/structures/foundation/chrome/runtime/profile-defaults/personality/index.js",
-      "size": 507
+      "size": 332
     },
     {
       "path": "dist/components/structures/headers/collection/index.cjs",
@@ -12072,7 +12040,7 @@
     },
     {
       "path": "dist/components/structures/workspace/column-menu/index.cjs",
-      "size": 16017
+      "size": 16027
     },
     {
       "path": "dist/components/structures/workspace/column-menu/index.d.ts",
@@ -12080,7 +12048,7 @@
     },
     {
       "path": "dist/components/structures/workspace/column-menu/index.js",
-      "size": 34404
+      "size": 34430
     },
     {
       "path": "dist/components/structures/workspace/connected-command-palette/index.cjs",
@@ -12240,7 +12208,7 @@
     },
     {
       "path": "dist/components/surfaces/foundation/contracts/index.d.ts",
-      "size": 105260
+      "size": 101990
     },
     {
       "path": "dist/components/surfaces/foundation/contracts/postures/index.cjs",
@@ -12256,7 +12224,7 @@
     },
     {
       "path": "dist/components/surfaces/index.d.ts",
-      "size": 3564
+      "size": 3529
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/audit/index.cjs",
@@ -12284,7 +12252,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/file-browser/index.cjs",
-      "size": 5617
+      "size": 5562
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/file-browser/index.d.ts",
@@ -12292,11 +12260,11 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/file-browser/index.js",
-      "size": 8442
+      "size": 8363
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/import-export/index.cjs",
-      "size": 13685
+      "size": 13682
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/import-export/index.d.ts",
@@ -12304,7 +12272,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/import-export/index.js",
-      "size": 19351
+      "size": 19348
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/index.d.ts",
@@ -12336,7 +12304,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/settings/index.cjs",
-      "size": 5587
+      "size": 5532
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/settings/index.d.ts",
@@ -12344,7 +12312,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/settings/index.js",
-      "size": 7341
+      "size": 7260
     },
     {
       "path": "dist/components/surfaces/presentation/pages/admin/team/index.cjs",
@@ -12360,7 +12328,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/compare/index.cjs",
-      "size": 6143
+      "size": 6135
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/compare/index.d.ts",
@@ -12368,11 +12336,11 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/compare/index.js",
-      "size": 10048
+      "size": 10040
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/dashboard/index.cjs",
-      "size": 7929
+      "size": 7874
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/dashboard/index.d.ts",
@@ -12380,11 +12348,11 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/dashboard/index.js",
-      "size": 12711
+      "size": 12630
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/detail/index.cjs",
-      "size": 6220
+      "size": 6204
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/detail/index.d.ts",
@@ -12392,7 +12360,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/detail/index.js",
-      "size": 8960
+      "size": 8942
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/index.d.ts",
@@ -12400,7 +12368,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/list/index.cjs",
-      "size": 10923
+      "size": 10868
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/list/index.d.ts",
@@ -12408,7 +12376,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/list/index.js",
-      "size": 16063
+      "size": 15982
     },
     {
       "path": "dist/components/surfaces/presentation/pages/data/report/index.cjs",
@@ -12460,7 +12428,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/chat/index.cjs",
-      "size": 8910
+      "size": 8855
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/chat/index.d.ts",
@@ -12468,11 +12436,11 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/chat/index.js",
-      "size": 13241
+      "size": 13160
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/editor/index.cjs",
-      "size": 6791
+      "size": 6736
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/editor/index.d.ts",
@@ -12480,7 +12448,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/editor/index.js",
-      "size": 9834
+      "size": 9753
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/empty-state/index.cjs",
@@ -12512,7 +12480,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/media/index.cjs",
-      "size": 8950
+      "size": 8895
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/media/index.d.ts",
@@ -12520,11 +12488,11 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/media/index.js",
-      "size": 13345
+      "size": 13264
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/notification/index.cjs",
-      "size": 9658
+      "size": 9587
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/notification/index.d.ts",
@@ -12532,7 +12500,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/notification/index.js",
-      "size": 14124
+      "size": 14027
     },
     {
       "path": "dist/components/surfaces/presentation/pages/experience/pricing/index.cjs",
@@ -12548,7 +12516,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/detail-form/index.cjs",
-      "size": 6071
+      "size": 6016
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/detail-form/index.d.ts",
@@ -12556,11 +12524,11 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/detail-form/index.js",
-      "size": 8734
+      "size": 8653
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/form/index.cjs",
-      "size": 6675
+      "size": 6620
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/form/index.d.ts",
@@ -12568,11 +12536,11 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/form/index.js",
-      "size": 9107
+      "size": 9026
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/guided-draft-form/index.cjs",
-      "size": 18923
+      "size": 18868
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/guided-draft-form/index.d.ts",
@@ -12580,7 +12548,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/guided-draft-form/index.js",
-      "size": 28854
+      "size": 28773
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/index.d.ts",
@@ -12588,7 +12556,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/wizard/index.cjs",
-      "size": 9148
+      "size": 9093
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/wizard/index.d.ts",
@@ -12596,7 +12564,7 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/forms/wizard/index.js",
-      "size": 12733
+      "size": 12652
     },
     {
       "path": "dist/components/surfaces/presentation/pages/index.d.ts",
@@ -12680,15 +12648,15 @@
     },
     {
       "path": "dist/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.cjs",
-      "size": 17590
+      "size": 17406
     },
     {
       "path": "dist/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.d.ts",
-      "size": 3443
+      "size": 3459
     },
     {
       "path": "dist/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.js",
-      "size": 26721
+      "size": 26485
     },
     {
       "path": "dist/components/surfaces/presentation/pages/workspace/command-center/index.cjs",
@@ -12756,7 +12724,7 @@
     },
     {
       "path": "dist/components/surfaces/runtime/helpers/index.cjs",
-      "size": 2648
+      "size": 2616
     },
     {
       "path": "dist/components/surfaces/runtime/helpers/index.d.ts",
@@ -12764,7 +12732,7 @@
     },
     {
       "path": "dist/components/surfaces/runtime/helpers/index.js",
-      "size": 2830
+      "size": 2794
     },
     {
       "path": "dist/components/surfaces/runtime/postures/index.d.ts",
@@ -12772,7 +12740,7 @@
     },
     {
       "path": "dist/components/surfaces/runtime/postures/region/index.cjs",
-      "size": 1083
+      "size": 900
     },
     {
       "path": "dist/components/surfaces/runtime/postures/region/index.d.ts",
@@ -12780,7 +12748,7 @@
     },
     {
       "path": "dist/components/surfaces/runtime/postures/region/index.js",
-      "size": 1298
+      "size": 1058
     },
     {
       "path": "dist/components/surfaces/runtime/postures/scope/index.cjs",
@@ -12832,15 +12800,15 @@
     },
     {
       "path": "dist/contracts/theme/runtime/catalog/index.cjs",
-      "size": 21678
+      "size": 21641
     },
     {
       "path": "dist/contracts/theme/runtime/catalog/index.d.ts",
-      "size": 40807
+      "size": 40769
     },
     {
       "path": "dist/contracts/theme/runtime/catalog/index.js",
-      "size": 33686
+      "size": 33640
     },
     {
       "path": "dist/contracts/theme/runtime/compilation/index.cjs",
@@ -13072,23 +13040,23 @@
     },
     {
       "path": "dist/entrypoints/eslint/index.d.ts",
-      "size": 3876
+      "size": 3524
     },
     {
       "path": "dist/entrypoints/eslint/plugin/index.cjs",
-      "size": 1269
+      "size": 1104
     },
     {
       "path": "dist/entrypoints/eslint/plugin/index.d.ts",
-      "size": 3612
+      "size": 3296
     },
     {
       "path": "dist/entrypoints/eslint/plugin/index.js",
-      "size": 2065
+      "size": 1878
     },
     {
       "path": "dist/entrypoints/eslint/rules/index.d.ts",
-      "size": 480
+      "size": 405
     },
     {
       "path": "dist/entrypoints/eslint/rules/no-db-in-components/index.cjs",
@@ -13163,44 +13131,32 @@
       "size": 1898
     },
     {
-      "path": "dist/entrypoints/eslint/rules/no-size-type-outside-classic/index.cjs",
-      "size": 1639
-    },
-    {
-      "path": "dist/entrypoints/eslint/rules/no-size-type-outside-classic/index.d.ts",
-      "size": 129
-    },
-    {
-      "path": "dist/entrypoints/eslint/rules/no-size-type-outside-classic/index.js",
-      "size": 2076
-    },
-    {
       "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.cjs",
-      "size": 3853
+      "size": 3699
     },
     {
       "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.d.ts",
-      "size": 1876
+      "size": 2092
     },
     {
       "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.js",
-      "size": 4313
+      "size": 4146
     },
     {
       "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/parse/index.d.ts",
-      "size": 951
+      "size": 1916
     },
     {
       "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/index.cjs",
-      "size": 2395
+      "size": 2895
     },
     {
       "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/index.d.ts",
-      "size": 128
+      "size": 282
     },
     {
       "path": "dist/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/index.js",
-      "size": 2963
+      "size": 3597
     },
     {
       "path": "dist/entrypoints/graphics/marks/brand/index.d.ts",
@@ -13251,20 +13207,8 @@
       "size": 1274
     },
     {
-      "path": "dist/entrypoints/public/patterns/charts/index.cjs",
-      "size": 2398
-    },
-    {
-      "path": "dist/entrypoints/public/patterns/charts/index.d.ts",
-      "size": 1355
-    },
-    {
-      "path": "dist/entrypoints/public/patterns/charts/index.js",
-      "size": 2466
-    },
-    {
       "path": "dist/entrypoints/server/index.d.ts",
-      "size": 21189
+      "size": 21273
     },
     {
       "path": "dist/entrypoints/suppliers/cli/index.js",
@@ -13284,7 +13228,7 @@
     },
     {
       "path": "dist/evnto.css",
-      "size": 4942960
+      "size": 5014384
     },
     {
       "path": "dist/fonts/arabic-text.css",
@@ -13388,7 +13332,7 @@
     },
     {
       "path": "dist/foundation/behavior/runtime/interaction-state/index.cjs",
-      "size": 1084
+      "size": 1281
     },
     {
       "path": "dist/foundation/behavior/runtime/interaction-state/index.d.ts",
@@ -13396,7 +13340,7 @@
     },
     {
       "path": "dist/foundation/behavior/runtime/interaction-state/index.js",
-      "size": 1316
+      "size": 1588
     },
     {
       "path": "dist/foundation/behavior/runtime/submit-intent/index.cjs",
@@ -13448,7 +13392,7 @@
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/themes/index.d.ts",
-      "size": 122547
+      "size": 123335
     },
     {
       "path": "dist/foundation/contracts/composition/tenants/themes/intent/index.cjs",
@@ -13668,7 +13612,7 @@
     },
     {
       "path": "dist/foundation/contracts/kernel/common/index.d.ts",
-      "size": 12715
+      "size": 11285
     },
     {
       "path": "dist/foundation/contracts/kernel/common/index.js",
@@ -13704,15 +13648,15 @@
     },
     {
       "path": "dist/foundation/contracts/kernel/responsive/channels/index.cjs",
-      "size": 2445
+      "size": 2444
     },
     {
       "path": "dist/foundation/contracts/kernel/responsive/channels/index.d.ts",
-      "size": 5099
+      "size": 5098
     },
     {
       "path": "dist/foundation/contracts/kernel/responsive/channels/index.js",
-      "size": 2806
+      "size": 2805
     },
     {
       "path": "dist/foundation/contracts/kernel/responsive/values/index.cjs",
@@ -13816,7 +13760,7 @@
     },
     {
       "path": "dist/foundation/contracts/runtime/components/patterns/data/index.d.ts",
-      "size": 2623
+      "size": 2558
     },
     {
       "path": "dist/foundation/contracts/runtime/components/patterns/forms/index.d.ts",
@@ -14732,7 +14676,7 @@
     },
     {
       "path": "dist/foundation/tokens/ts/foundation/base/declared-defaults/index.cjs",
-      "size": 9987
+      "size": 10086
     },
     {
       "path": "dist/foundation/tokens/ts/foundation/base/declared-defaults/index.d.ts",
@@ -14740,7 +14684,7 @@
     },
     {
       "path": "dist/foundation/tokens/ts/foundation/base/declared-defaults/index.js",
-      "size": 10816
+      "size": 10927
     },
     {
       "path": "dist/foundation/tokens/ts/foundation/base/density/index.cjs",
@@ -18868,7 +18812,7 @@
     },
     {
       "path": "dist/graphics/motion/foundation/contracts/index.d.ts",
-      "size": 13212
+      "size": 12067
     },
     {
       "path": "dist/graphics/motion/foundation/index.d.ts",
@@ -18900,15 +18844,15 @@
     },
     {
       "path": "dist/graphics/motion/foundation/timing/index.cjs",
-      "size": 621
+      "size": 421
     },
     {
       "path": "dist/graphics/motion/foundation/timing/index.d.ts",
-      "size": 1491
+      "size": 973
     },
     {
       "path": "dist/graphics/motion/foundation/timing/index.js",
-      "size": 660
+      "size": 408
     },
     {
       "path": "dist/graphics/motion/foundation/transform/index.cjs",
@@ -19080,7 +19024,7 @@
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/count-up/index.cjs",
-      "size": 2019
+      "size": 1982
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/count-up/index.d.ts",
@@ -19088,11 +19032,11 @@
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/count-up/index.js",
-      "size": 2845
+      "size": 2788
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/fade-in/index.cjs",
-      "size": 1982
+      "size": 1925
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/fade-in/index.d.ts",
@@ -19100,7 +19044,7 @@
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/fade-in/index.js",
-      "size": 3033
+      "size": 2943
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/index.d.ts",
@@ -19160,7 +19104,7 @@
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/scale-in/index.cjs",
-      "size": 1765
+      "size": 1708
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/scale-in/index.d.ts",
@@ -19168,7 +19112,7 @@
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/scale-in/index.js",
-      "size": 2330
+      "size": 2240
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/scroll-reveal/index.cjs",
@@ -19184,7 +19128,7 @@
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/slide-in/index.cjs",
-      "size": 1981
+      "size": 1924
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/slide-in/index.d.ts",
@@ -19192,11 +19136,11 @@
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/slide-in/index.js",
-      "size": 2756
+      "size": 2666
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/stagger-children/index.cjs",
-      "size": 2453
+      "size": 2267
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/stagger-children/index.d.ts",
@@ -19204,11 +19148,11 @@
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/stagger-children/index.js",
-      "size": 3426
+      "size": 3279
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/text-reveal/index.cjs",
-      "size": 2057
+      "size": 2000
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/text-reveal/index.d.ts",
@@ -19216,7 +19160,7 @@
     },
     {
       "path": "dist/graphics/motion/react/presentation/primitives/text-reveal/index.js",
-      "size": 2772
+      "size": 2690
     },
     {
       "path": "dist/graphics/motion/react/runtime/foundation/reduced-motion/index.cjs",
@@ -19620,7 +19564,7 @@
     },
     {
       "path": "dist/index.cjs",
-      "size": 92594
+      "size": 91628
     },
     {
       "path": "dist/index.d.ts",
@@ -19628,7 +19572,7 @@
     },
     {
       "path": "dist/index.js",
-      "size": 99605
+      "size": 98573
     },
     {
       "path": "dist/infrastructure/compilers/composition/tenant-theme/document-v2/index.cjs",
@@ -19696,7 +19640,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.cjs",
-      "size": 88531
+      "size": 88886
     },
     {
       "path": "dist/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.d.ts",
@@ -19704,7 +19648,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.js",
-      "size": 98448
+      "size": 98848
     },
     {
       "path": "dist/infrastructure/compilers/kernel/foundation/css/color-math/index.cjs",
@@ -20116,7 +20060,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.cjs",
-      "size": 275935
+      "size": 275638
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.d.ts",
@@ -20124,7 +20068,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.js",
-      "size": 293955
+      "size": 293630
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/index.cjs",
@@ -20704,15 +20648,15 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/auto-complete/index.cjs",
-      "size": 3337
+      "size": 3545
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/auto-complete/index.d.ts",
-      "size": 324
+      "size": 448
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/auto-complete/index.js",
-      "size": 3516
+      "size": 3777
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/avatar/index.cjs",
@@ -20872,7 +20816,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/column-menu/index.cjs",
-      "size": 5699
+      "size": 5775
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/column-menu/index.d.ts",
@@ -20880,7 +20824,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/column-menu/index.js",
-      "size": 6002
+      "size": 6086
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/column-settings/index.cjs",
@@ -20944,7 +20888,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/data-table/index.cjs",
-      "size": 15405
+      "size": 15143
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/data-table/index.d.ts",
@@ -20952,7 +20896,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/data-table/index.js",
-      "size": 16335
+      "size": 16073
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/date-picker/index.cjs",
@@ -21208,7 +21152,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/hover-card/index.cjs",
-      "size": 888
+      "size": 781
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/hover-card/index.d.ts",
@@ -21216,7 +21160,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/hover-card/index.js",
-      "size": 906
+      "size": 790
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/index.cjs",
@@ -21232,7 +21176,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/input-number/index.cjs",
-      "size": 3874
+      "size": 3934
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/input-number/index.d.ts",
@@ -21240,19 +21184,19 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/input-number/index.js",
-      "size": 4123
+      "size": 4183
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/input/index.cjs",
-      "size": 1055
+      "size": 1783
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/input/index.d.ts",
-      "size": 302
+      "size": 426
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/input/index.js",
-      "size": 1109
+      "size": 1922
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/kanban-board/index.cjs",
@@ -21280,7 +21224,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/mentions/index.cjs",
-      "size": 3737
+      "size": 3731
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/mentions/index.d.ts",
@@ -21288,11 +21232,11 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/mentions/index.js",
-      "size": 3948
+      "size": 3942
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/index.cjs",
-      "size": 9930
+      "size": 10066
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/index.d.ts",
@@ -21300,7 +21244,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/index.js",
-      "size": 10698
+      "size": 10834
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/mobile-header/index.cjs",
@@ -21352,7 +21296,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/otp-input/index.cjs",
-      "size": 1909
+      "size": 1905
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/otp-input/index.d.ts",
@@ -21360,7 +21304,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/otp-input/index.js",
-      "size": 1981
+      "size": 1977
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/page-shell/index.cjs",
@@ -21460,7 +21404,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/search-command-bar/index.cjs",
-      "size": 18621
+      "size": 18515
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/search-command-bar/index.d.ts",
@@ -21468,7 +21412,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/search-command-bar/index.js",
-      "size": 20421
+      "size": 20315
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/section-frame/index.cjs",
@@ -21652,7 +21596,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag-input/index.cjs",
-      "size": 2169
+      "size": 2162
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag-input/index.d.ts",
@@ -21660,7 +21604,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag-input/index.js",
-      "size": 2300
+      "size": 2293
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.cjs",
@@ -21676,7 +21620,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/textarea/index.cjs",
-      "size": 4320
+      "size": 4312
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/textarea/index.d.ts",
@@ -21684,7 +21628,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/textarea/index.js",
-      "size": 4549
+      "size": 4541
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/time-picker/index.cjs",
@@ -21712,7 +21656,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/toolbar/index.cjs",
-      "size": 7168
+      "size": 7111
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/toolbar/index.d.ts",
@@ -21720,11 +21664,11 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/toolbar/index.js",
-      "size": 7626
+      "size": 7561
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.cjs",
-      "size": 4765
+      "size": 4664
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.d.ts",
@@ -21732,11 +21676,11 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tooltip/index.js",
-      "size": 5171
+      "size": 5057
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tour/index.cjs",
-      "size": 2488
+      "size": 2496
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tour/index.d.ts",
@@ -21744,11 +21688,11 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tour/index.js",
-      "size": 2643
+      "size": 2651
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/transfer/index.cjs",
-      "size": 2128
+      "size": 2126
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/transfer/index.d.ts",
@@ -21756,19 +21700,19 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/transfer/index.js",
-      "size": 2242
+      "size": 2240
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tree-select/index.cjs",
-      "size": 3445
+      "size": 3651
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tree-select/index.d.ts",
-      "size": 238
+      "size": 362
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tree-select/index.js",
-      "size": 3648
+      "size": 3907
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tree/index.cjs",
@@ -21940,7 +21884,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/materials/index.cjs",
-      "size": 9361
+      "size": 9331
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/materials/index.d.ts",
@@ -21948,7 +21892,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/materials/index.js",
-      "size": 9675
+      "size": 9645
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/modes/index.cjs",
@@ -22168,7 +22112,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/states/index.cjs",
-      "size": 1759
+      "size": 1887
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/states/index.d.ts",
@@ -22176,7 +22120,7 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/states/index.js",
-      "size": 2040
+      "size": 2168
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/surfaces/index.cjs",
@@ -22312,15 +22256,15 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/resolution/index.cjs",
-      "size": 4075
+      "size": 4209
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/resolution/index.d.ts",
-      "size": 1129
+      "size": 1382
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/resolution/index.js",
-      "size": 4716
+      "size": 4854
     },
     {
       "path": "dist/infrastructure/runtime/adaptation/composition/react/index.cjs",
@@ -22812,7 +22756,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.cjs",
-      "size": 1811
+      "size": 2467
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.d.ts",
@@ -22820,7 +22764,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.js",
-      "size": 2484
+      "size": 2951
     },
     {
       "path": "dist/infrastructure/runtime/engines/presentation/component-factory/index.cjs",
@@ -23021,10 +22965,6 @@
     {
       "path": "dist/infrastructure/runtime/foundation/icons/active-profile/foundation/read/index.js",
       "size": 452
-    },
-    {
-      "path": "dist/infrastructure/runtime/foundation/icons/active-profile/index.d.ts",
-      "size": 282
     },
     {
       "path": "dist/infrastructure/runtime/foundation/icons/active-profile/runtime/provider/index.cjs",
@@ -23719,18 +23659,6 @@
       "size": 2832
     },
     {
-      "path": "dist/infrastructure/runtime/tenant/composition/react/authoring/use-create-tenant/index.cjs",
-      "size": 3876
-    },
-    {
-      "path": "dist/infrastructure/runtime/tenant/composition/react/authoring/use-create-tenant/index.d.ts",
-      "size": 1605
-    },
-    {
-      "path": "dist/infrastructure/runtime/tenant/composition/react/authoring/use-create-tenant/index.js",
-      "size": 4806
-    },
-    {
       "path": "dist/infrastructure/runtime/tenant/composition/react/provider/index.cjs",
       "size": 2278
     },
@@ -23744,7 +23672,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/tenant/facade/index.d.ts",
-      "size": 2986
+      "size": 2829
     },
     {
       "path": "dist/infrastructure/runtime/tenant/foundation/configuration/defaults/index.cjs",
@@ -23936,7 +23864,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/mount/index.d.ts",
-      "size": 8429
+      "size": 8450
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/mount/index.js",
@@ -23948,7 +23876,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/react/provider/index.d.ts",
-      "size": 2399
+      "size": 2420
     },
     {
       "path": "dist/infrastructure/runtime/theming/composition/react/provider/index.js",
@@ -23992,7 +23920,7 @@
     },
     {
       "path": "dist/infrastructure/runtime/theming/facade/index.d.ts",
-      "size": 2364
+      "size": 2546
     },
     {
       "path": "dist/infrastructure/runtime/theming/foundation/cascade-layers/index.d.ts",
@@ -24009,10 +23937,6 @@
     {
       "path": "dist/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission/index.js",
       "size": 17505
-    },
-    {
-      "path": "dist/infrastructure/runtime/theming/foundation/visual-authority/index.d.ts",
-      "size": 1924
     },
     {
       "path": "dist/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention/index.cjs",
@@ -30656,7 +30580,7 @@
     },
     {
       "path": "dist/rottay.css",
-      "size": 4942220
+      "size": 5013644
     },
     {
       "path": "dist/server.cjs",
@@ -30668,7 +30592,7 @@
     },
     {
       "path": "dist/server.js",
-      "size": 12932
+      "size": 12930
     },
     {
       "path": "dist/spatial.cjs",
@@ -30684,7 +30608,7 @@
     },
     {
       "path": "dist/styles.css",
-      "size": 5616193
+      "size": 5688005
     },
     {
       "path": "governance/graphics/licenses/phosphor-icons-react/index.md",
@@ -30700,7 +30624,7 @@
     },
     {
       "path": "package.json",
-      "size": 25623
+      "size": 25402
     },
     {
       "path": "README.md",

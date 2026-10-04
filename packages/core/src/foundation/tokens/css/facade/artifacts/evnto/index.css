@@ -1256,7 +1256,6 @@
   --ds-header-tone-warning-fg: color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%);
   --ds-hover-card-bg: var(--ds-material-overlay-background);
   --ds-hover-card-border-color: color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%);
-  --ds-hover-card-focus-color: var(--ds-border-color-transparent);
   --ds-hover-card-shadow: var(--ds-elevation-3);
   --ds-hover-card-surface-lift: var(--ds-elevation-surface-3);
   --ds-hover-card-texture: none;
@@ -2750,7 +2749,6 @@
   --ds-tooltip-bordered-texture: none;
   --ds-tooltip-error-bg: var(--ds-color-error);
   --ds-tooltip-error-color: var(--ds-color-on-error);
-  --ds-tooltip-focus-color: var(--ds-border-color-transparent);
   --ds-tooltip-inverse-background: var(--ds-color-text-primary);
   --ds-tooltip-inverse-border: color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent);
   --ds-tooltip-inverse-foreground: var(--ds-color-text-inverse);
