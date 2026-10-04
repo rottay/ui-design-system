@@ -4118,7 +4118,7 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.ok(failures.some((line) => line.includes('witness moved 13 and published 13 id(s) / 12 famil(ies)')), failures.join(' | '));
   });
 
-  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 8 on states, 0 elsewhere', () => {
+  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 7 on states, 0 elsewhere', () => {
     const live = axisUnobservable(ROOT);
     const asRun = Object.fromEntries(AXIS_IDS.map((axis) => [axis, live.get(axis)]));
     assert.deepEqual(unobservableDrift(asRun), []);
@@ -4127,16 +4127,20 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     // 9 -> 8 (OVM 2026-10-02): overlay-modal-compounds leaves with its retired orphan rules.
     // 8 -> 9 (2026-10-03): approval-inbox enters colour-only -- 0c9b89be0 retired its one non-chromatic state paint.
     // 9 -> 8 (2026-10-03): approval-inbox leaves -- 083423044 writes `box-shadow` on its root `::after` under focus.
-    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 8);
+    // 8 -> 7 (2026-10-04): operational-ledger leaves -- its scroll region writes `box-shadow` on `::before` under focus.
+    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 7);
     assert.deepEqual(Object.entries(UNOBSERVABLE_FAMILIES.states).filter(([, kind]) => kind === 'colour-only').map(([family]) => family),
-      ['edit-fields', 'list', 'metrics-chart', 'operational-ledger', 'table-toolbar']);
+      ['edit-fields', 'list', 'metrics-chart', 'table-toolbar']);
     assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'approval-inbox'), false);
     assert.ok(!live.get('states').some((entry) => entry.family === 'approval-inbox'));
     assert.ok(axisPopulations(ROOT).get('states').includes('approval-inbox'), 'it stays in the declared denominator');
     // moderation-gallery had the same repair and is NOT here: its card rules still write read properties under a state.
     assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'moderation-gallery'), false);
     assert.ok(!live.get('states').some((entry) => entry.family === 'moderation-gallery'));
-    assert.deepEqual(live.get('states').find((entry) => entry.family === 'operational-ledger').properties, ['background']);
+    assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'operational-ledger'), false);
+    assert.ok(!live.get('states').some((entry) => entry.family === 'operational-ledger'));
+    assert.ok(axisPopulations(ROOT).get('states').includes('operational-ledger'), 'it stays in the declared denominator');
+    assert.deepEqual(live.get('states').find((entry) => entry.family === 'metrics-chart').properties, ['color']);
     assert.deepEqual(Object.entries(UNOBSERVABLE_FAMILIES.states).filter(([, kind]) => kind === 'no-vocabulary').map(([family]) => family),
       ['button-group', 'form-builder', 'metrics-rows']);
     assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'surface-states'), false, 'its disabled opacity is read');
@@ -4160,27 +4164,27 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.ok(!evaluate(result([cell()], { unobservable: entered, familiesFiltered: true })).some((line) => line.includes('UNOBSERVABLE')));
   });
 
-  it('MUTANT: operational-ledger dropped from the pin while the TREE still derives it unobservable is RED -- reported, never subtracted', () => {
+  it('MUTANT: metrics-chart dropped from the pin while the TREE still derives it unobservable is RED -- reported, never subtracted', () => {
     const live = axisUnobservable(ROOT);
     const asRun = Object.fromEntries(AXIS_IDS.map((axis) => [axis, live.get(axis)]));
-    const { 'operational-ledger': dropped, ...rest } = UNOBSERVABLE_FAMILIES.states;
+    const { 'metrics-chart': dropped, ...rest } = UNOBSERVABLE_FAMILIES.states;
     assert.equal(dropped, 'colour-only');
     const shrunk = { ...UNOBSERVABLE_FAMILIES, states: rest };
     assert.deepEqual(unobservableDrift(asRun, shrunk), [
-      'states: operational-ledger is unobservable (colour-only) and not in UNOBSERVABLE_FAMILIES -- re-pin it; it is reported, never subtracted',
+      'states: metrics-chart is unobservable (colour-only) and not in UNOBSERVABLE_FAMILIES -- re-pin it; it is reported, never subtracted',
     ]);
     // The same drift through the run's own door, on the shipped pin: a record that still names it is green, one that lost it is red.
     assert.deepEqual(evaluate(result([cell()], { unobservable: asRun })).filter((line) => line.includes('UNOBSERVABLE')), []);
-    const lost = { ...asRun, states: asRun.states.filter((entry) => entry.family !== 'operational-ledger') };
+    const lost = { ...asRun, states: asRun.states.filter((entry) => entry.family !== 'metrics-chart') };
     assert.deepEqual(evaluate(result([cell()], { unobservable: lost })).filter((line) => line.includes('UNOBSERVABLE')), [
-      'states: operational-ledger is pinned unobservable (colour-only) and the probe can now observe it -- re-pin UNOBSERVABLE_FAMILIES',
+      'states: metrics-chart is pinned unobservable (colour-only) and the probe can now observe it -- re-pin UNOBSERVABLE_FAMILIES',
     ]);
     // A pin entry of the wrong class is a third drift, named as such.
-    assert.deepEqual(unobservableDrift(asRun, { ...UNOBSERVABLE_FAMILIES, states: { ...rest, 'operational-ledger': 'no-vocabulary' } }), [
-      'states: operational-ledger is unobservable as colour-only, pinned as no-vocabulary',
+    assert.deepEqual(unobservableDrift(asRun, { ...UNOBSERVABLE_FAMILIES, states: { ...rest, 'metrics-chart': 'no-vocabulary' } }), [
+      'states: metrics-chart is unobservable as colour-only, pinned as no-vocabulary',
     ]);
     // Pinned or not, it stays in the declared denominator.
-    assert.ok(axisPopulations(ROOT).get('states').includes('operational-ledger'));
+    assert.ok(axisPopulations(ROOT).get('states').includes('metrics-chart'));
   });
 });
 

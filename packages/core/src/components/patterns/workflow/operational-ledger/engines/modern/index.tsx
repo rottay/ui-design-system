@@ -31,6 +31,7 @@ import { ModernEmptyState } from '../../../../facade';
 import { VisuallyHidden } from '../../../../../primitives/foundation/visually-hidden';
 import { useOptionalFormatter, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { UseFormatterResult } from '@/infrastructure/runtime/i18n';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 
 /** Formats an ISO timestamp to a compact, locale-aware date/time string. */
 function formatTimestamp(format: UseFormatterResult, ts: string): string {
@@ -85,6 +86,7 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
      which one is exposed, so a narrow ledger inside a wide viewport folds too.
      `display: none` keeps exactly one copy in the accessibility tree. */
   const columns = COLUMNS;
+  const region = useInteractionState();
 
   const {
     entries,
@@ -161,7 +163,8 @@ export default function ModernOperationalLedger(props: OperationalLedgerProps) {
         /* The region owns its scroll and the table holds no focusable cell:
            without a tab stop the overflowing columns are keyboard-unreachable. */
         <div
-          data-part="table-region"
+          {...partAttributes('table-region', region.state)}
+          {...region.handlers}
           role="region"
           tabIndex={0}
           aria-label={t('operationalLedger.tableRegion', 'Ledger entries')}

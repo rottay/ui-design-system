@@ -3545,6 +3545,10 @@ export function realRenderRefusedRowFailures(root = CORE_ROOT, {
  * Re-pinned 9 -> 8 (2026-10-03): approval-inbox leaves. 083423044 gave its
  * root a hand-off focus rule that writes `box-shadow` on `::after`, a read
  * property under a state.
+ *
+ * Re-pinned 8 -> 7 (2026-10-04): operational-ledger leaves. Its scroll region
+ * gained a focus rule that writes `box-shadow` on `::before`, a read property
+ * under a state; the row-hover `background` is no longer its only state paint.
  */
 export const UNOBSERVABLE_FAMILIES = Object.freeze({
   shape: Object.freeze({}),
@@ -3558,7 +3562,6 @@ export const UNOBSERVABLE_FAMILIES = Object.freeze({
     list: 'colour-only',
     'metrics-chart': 'colour-only',
     'metrics-rows': 'no-vocabulary',
-    'operational-ledger': 'colour-only',
     'table-toolbar': 'colour-only',
   }),
   motion: Object.freeze({}),
