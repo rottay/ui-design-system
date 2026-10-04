@@ -12,7 +12,6 @@ import { MarketingHero } from '@/components/landing/sections/hero';
 import ValueProofSection from '@/components/landing/sections/value-proof';
 import { BrandShiftSection } from '@/components/landing/sections/brand-shift';
 import { Icon } from '@rottay/design-system/icons';
-import { ActionOpenExternalIcon } from '@rottay/design-system/icons/foundation';
 
 export const metadata: Metadata = {
   title: 'Rottay Design System',
@@ -106,7 +105,7 @@ function NavLink({
   return (
     <Link className="landing-nav-link" href={href}>
       <span>{label}</span>
-      <ActionOpenExternalIcon decorative size={14} />
+      <Icon name="action.open-external" decorative size={14} />
     </Link>
   );
 }
@@ -138,7 +137,7 @@ function InlineLink({
   return (
     <Link className="landing-inline-link" href={href}>
       <span>{label}</span>
-      <ActionOpenExternalIcon decorative size={14} />
+      <Icon name="action.open-external" decorative size={14} />
     </Link>
   );
 }

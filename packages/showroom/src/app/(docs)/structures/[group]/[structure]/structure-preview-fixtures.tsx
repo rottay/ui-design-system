@@ -75,40 +75,14 @@ import {
   type SelectionPreviewRailColumn,
   WorkspaceShell,
 } from '@rottay/design-system';
-import {
-  ActionRefreshIcon as ActionRefreshSemanticIcon,
-  ActionUploadIcon as ActionUploadSemanticIcon,
-  CommunicationMessageIcon as CommunicationMessageSemanticIcon,
-  ContentDocumentIcon as ContentDocumentSemanticIcon,
-  EntityGroupIcon as EntityGroupSemanticIcon,
-  LocationGlobalIcon as LocationGlobalSemanticIcon,
-  LocationPlaceIcon as LocationPlaceSemanticIcon,
-  TimeDateIcon as TimeDateSemanticIcon,
-  type SemanticIconComponent,
-} from '@rottay/design-system/icons/foundation';
-import {
-  AccessAdminIcon as AccessAdminSemanticIcon,
-  IdentityProvisioningIcon as IdentityProvisioningSemanticIcon,
-  SecurityProtectionIcon as SecurityProtectionSemanticIcon,
-} from '@rottay/design-system/icons/identity';
-import {
-  AnalyticsActivityIcon as AnalyticsActivitySemanticIcon,
-  AnalyticsBarIcon as AnalyticsBarSemanticIcon,
-} from '@rottay/design-system/icons/intelligence';
-import {
-  BillingCreditCardIcon as BillingCreditCardSemanticIcon,
-  OperationsSupportIcon as OperationsSupportSemanticIcon,
-} from '@rottay/design-system/icons/operations';
+import { Icon, type IconName } from '@rottay/design-system/icons';
 
 type FixtureIconProps = Omit<SVGProps<SVGSVGElement>, 'ref'> & {
   size?: string | number;
   'data-testid'?: string;
 };
 
-function createDecorativeFixtureIcon(
-  SemanticIcon: SemanticIconComponent,
-  displayName: string,
-) {
+function createDecorativeFixtureIcon(name: IconName, displayName: string) {
   const FixtureIcon = forwardRef<SVGSVGElement, FixtureIconProps>(
     function DecorativeFixtureIcon(
       {
@@ -122,7 +96,8 @@ function createDecorativeFixtureIcon(
       ref,
     ) {
       return (
-        <SemanticIcon
+        <Icon
+          name={name}
           ref={ref}
           decorative
           size={typeof size === 'number' ? size : 'md'}
@@ -141,60 +116,60 @@ function createDecorativeFixtureIcon(
 }
 
 const ActionRefreshIcon = createDecorativeFixtureIcon(
-  ActionRefreshSemanticIcon,
+  'action.refresh',
   'ActionRefreshFixtureIcon',
 );
 const ActionUploadIcon = createDecorativeFixtureIcon(
-  ActionUploadSemanticIcon,
+  'action.upload',
   'ActionUploadFixtureIcon',
 );
 const CommunicationMessageIcon = createDecorativeFixtureIcon(
-  CommunicationMessageSemanticIcon,
+  'communication.message',
   'CommunicationMessageFixtureIcon',
 );
 const ContentDocumentIcon = createDecorativeFixtureIcon(
-  ContentDocumentSemanticIcon,
+  'content.document',
   'ContentDocumentFixtureIcon',
 );
 const EntityGroupIcon = createDecorativeFixtureIcon(
-  EntityGroupSemanticIcon,
+  'entity.group',
   'EntityGroupFixtureIcon',
 );
 const LocationGlobalIcon = createDecorativeFixtureIcon(
-  LocationGlobalSemanticIcon,
+  'location.global',
   'LocationGlobalFixtureIcon',
 );
 const LocationPlaceIcon = createDecorativeFixtureIcon(
-  LocationPlaceSemanticIcon,
+  'location.place',
   'LocationPlaceFixtureIcon',
 );
-const TimeDateIcon = createDecorativeFixtureIcon(TimeDateSemanticIcon, 'TimeDateFixtureIcon');
+const TimeDateIcon = createDecorativeFixtureIcon('time.date', 'TimeDateFixtureIcon');
 const AccessAdminIcon = createDecorativeFixtureIcon(
-  AccessAdminSemanticIcon,
+  'access.admin',
   'AccessAdminFixtureIcon',
 );
 const IdentityProvisioningIcon = createDecorativeFixtureIcon(
-  IdentityProvisioningSemanticIcon,
+  'identity.provisioning',
   'IdentityProvisioningFixtureIcon',
 );
 const SecurityProtectionIcon = createDecorativeFixtureIcon(
-  SecurityProtectionSemanticIcon,
+  'security.protection',
   'SecurityProtectionFixtureIcon',
 );
 const AnalyticsActivityIcon = createDecorativeFixtureIcon(
-  AnalyticsActivitySemanticIcon,
+  'analytics.activity',
   'AnalyticsActivityFixtureIcon',
 );
 const AnalyticsBarIcon = createDecorativeFixtureIcon(
-  AnalyticsBarSemanticIcon,
+  'analytics.bar',
   'AnalyticsBarFixtureIcon',
 );
 const BillingCreditCardIcon = createDecorativeFixtureIcon(
-  BillingCreditCardSemanticIcon,
+  'billing.credit-card',
   'BillingCreditCardFixtureIcon',
 );
 const OperationsSupportIcon = createDecorativeFixtureIcon(
-  OperationsSupportSemanticIcon,
+  'operations.support',
   'OperationsSupportFixtureIcon',
 );
 

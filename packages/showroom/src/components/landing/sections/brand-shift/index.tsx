@@ -1,4 +1,4 @@
-import { ActionOpenExternalIcon } from '@rottay/design-system/icons/foundation';
+import { Icon } from '@rottay/design-system/icons';
 import { ShowroomLink as Link } from '@/components/navigation/link';
 
 const SHIFT_DIMENSIONS = [
@@ -1173,7 +1173,7 @@ function BrandShiftLink({
   return (
     <Link className="brand-shift__link" href={href}>
       <span>{label}</span>
-      <ActionOpenExternalIcon decorative size={14} />
+      <Icon name="action.open-external" decorative size={14} />
     </Link>
   );
 }
