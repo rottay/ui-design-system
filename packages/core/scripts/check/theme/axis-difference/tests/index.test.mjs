@@ -1003,7 +1003,7 @@ describe('axis-difference drills — every verdict is reachable', () => {
     assert.ok(entry, 'hover-card must be published by name');
     assert.deepEqual([...entry.properties], ['outline-width', 'outline-offset']);
     assert.deepEqual(STATES_WIDTH_ONLY_MOVERS.map((candidate) => candidate.family),
-      ['ascii-diagram', 'hover-card', 'tooltip', 'tree-view-connector']);
+      ['hover-card', 'tooltip']);
     const names = STATES_WIDTH_ONLY_MOVERS.map((candidate) => candidate.family);
     assert.deepEqual(names, [...new Set(names)].sort(), 'named once each, in order');
     const states = axisPopulations(ROOT).get('states');
@@ -3463,8 +3463,10 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'visual-excellence-preview',
     ]);
     assert.deepEqual(realRenderRosterFailures(ROOT), []);
-    for (const entry of Object.values(REAL_RENDER_MOUNTS)) {
-      assert.ok(entry.axes.length > 0 && entry.axes.every((axis) => REAL_RENDER_AXES.includes(axis)));
+    for (const [row, entry] of Object.entries(REAL_RENDER_MOUNTS)) {
+      assert.ok(entry.axes.every((axis) => REAL_RENDER_AXES.includes(axis)), row);
+      assert.equal(entry.axes.length === 0, REAL_RENDER_STATES_REFUSALS[row] !== undefined && row === 'tree-view-connector',
+        `${row}: only tree-view-connector, a pinned measured states refusal, declares no axis`);
     }
   });
 
@@ -3770,7 +3772,7 @@ describe('axis-difference — S1: law 5 over a reading, the stamp contract, and 
   it('every S1 row declares states only, on a family in the states population', () => {
     const states = axisPopulations(ROOT).get('states');
     for (const row of ['stats-grid-interactive', 'tooltip-interactive', 'pattern-timeline', 'activity-log', 'avatar',
-      'record', 'anchor', 'tree-view-connector', 'breadcrumb-compounds', 'typography']) {
+      'record', 'anchor', 'breadcrumb-compounds', 'typography']) {
       const entry = REAL_RENDER_MOUNTS[row];
       assert.deepEqual([...entry.axes], ['states'], row);
       assert.ok(states.includes(entry.family ?? row), row);
@@ -3973,8 +3975,8 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.ok(failures.some((line) => line.startsWith('tooltip: 2 rows declare states (tooltip, tooltip-interactive)')), failures.join(' | '));
   });
 
-  it('PIN: the measured states refusal is command-palette, a row of a states family that does not declare states', () => {
-    assert.deepEqual(Object.keys(REAL_RENDER_STATES_REFUSALS).sort(), ['command-palette']);
+  it('PIN: the measured states refusals are command-palette and tree-view-connector, rows of states families that do not declare states', () => {
+    assert.deepEqual(Object.keys(REAL_RENDER_STATES_REFUSALS).sort(), ['command-palette', 'tree-view-connector']);
     const states = axisPopulations(ROOT).get('states');
     for (const row of Object.keys(REAL_RENDER_STATES_REFUSALS)) {
       assert.ok(!REAL_RENDER_MOUNTS[row].axes.includes('states'), row);
@@ -3995,7 +3997,7 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
       .map((row) => [REAL_RENDER_MOUNTS[row].family ?? row, { classes: ['x'], attributes: {} }])));
     const reach = { stamped: 0, native: 2, declared: false };
     const report = realRenderReport(mounts, { statesReach: { 'command-palette': reach } });
-    assert.deepEqual(report.statesRefused.map((entry) => entry.row), ['command-palette']);
+    assert.deepEqual(report.statesRefused.map((entry) => entry.row), ['command-palette', 'tree-view-connector']);
     assert.deepEqual(report.statesRefused[0], {
       row: 'command-palette', family: 'command-palette', reason: REAL_RENDER_STATES_REFUSALS['command-palette'], statesReach: reach,
     });

@@ -17,10 +17,11 @@
  * literals, now reachable. The steps stay deliberately distinct from `--ds-color-neutral-*`,
  * which is a 10-step hue-tinted UI scale.
  *
- * Motion, mono type and focus width are NOT re-declared here: those roles already have
- * canonical DS channels (`--ds-duration-*`, `--ds-ease-out`, `--ds-font-mono`,
- * `--ds-focus-ring-width`) and consumers read them directly rather than through a
- * second name for the same value.
+ * Motion and mono type are NOT re-declared here: those roles already have canonical DS
+ * channels (`--ds-duration-*`, `--ds-ease-out`, `--ds-font-mono`) and consumers read them
+ * directly rather than through a second name for the same value. Focus width is not a
+ * channel: the kit ring is a fixed 2px (spec section 2), and `--ds-focus-ring-width` is
+ * the tenant's signature, never read on a kit surface.
  */
 
 :root {

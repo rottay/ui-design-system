@@ -2964,7 +2964,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       anchors: Object.freeze(['{node.href ? (']),
       resolves: Object.freeze([]),
     }),
-    axes: Object.freeze(['states']),
+    axes: Object.freeze([]),
     markup: '<ul class="rt-tree-view" data-part="root" role="list"><li class="rt-tree-view__item" data-part="item" role="listitem">'
       + '<span class="rt-tree-view__row" data-part="row"><span class="rt-tree-view__label" data-part="label">'
       + '<a class="rt-tree-view__link" data-part="link">Docs</a></span></span></li></ul>',
@@ -3495,6 +3495,7 @@ export const REAL_RENDER_STATES_REFUSALS = Object.freeze({
   // is credited on states in all four bithire/evnto cells.
   'command-palette': 'measured 2026-09-30 (S7): the real render moves (opacity, the disabled item rule under the stamp) but the '
     + 'default mount already moves on the stamp half since 8be7fd02e -- law 3 refuses the restatement; the family is a states mover on its default mount',
+  'tree-view-connector': 'measured 2026-10-04 (R32 Q6): the real render reaches the link and moves on neither half -- its focus ring is a fixed 2px inversion outline by the commercial-surfaces kit law, not the tenant signature; the family is a states non-mover by law',
 });
 
 /**
@@ -5833,12 +5834,9 @@ export const STATES_WIDTH_PROPERTIES = Object.freeze(['outline-width', 'outline-
  * Published with every run at `limits.states.widthOnly`.
  */
 const WIDTH_AND_OFFSET = Object.freeze(['outline-width', 'outline-offset']);
-const WIDTH_ALONE = Object.freeze(['outline-width']);
 const WIDTH_ONLY_FAMILIES = Object.freeze({
-  'ascii-diagram': WIDTH_ALONE,
   'hover-card': WIDTH_AND_OFFSET,
   tooltip: WIDTH_AND_OFFSET,
-  'tree-view-connector': WIDTH_ALONE,
 });
 export const STATES_WIDTH_ONLY_DEFECT = Object.freeze({
   defect: 'focus signature not honoured (solid outline)',

@@ -90,8 +90,14 @@
 .rt-ascii-diagram__grid:focus-visible {
   /* Pure inversion, per the kit's focus law: the ring is the surface's own foreground, so it
      stays visible on ink and on paper without a second colour decision. */
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-surface-fg, currentColor);
+  outline: 2px solid var(--ds-surface-fg, currentColor);
   outline-offset: 2px;
+}
+
+@media (prefers-contrast: more) {
+  .rt-ascii-diagram__grid:focus-visible {
+    outline-width: 3px;
+  }
 }
 
 /* forced-colors drops gradients; a system-ink edge keeps the signal. */

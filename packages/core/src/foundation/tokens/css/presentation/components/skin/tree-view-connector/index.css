@@ -80,9 +80,15 @@
 .rt-tree-view__link:focus-visible {
   /* An unresolvable var() invalidates the whole `outline` shorthand at computed-value time,
      dropping the focus ring to `none` -- these fallbacks are load-bearing, not cosmetic. */
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-surface-fg, currentColor);
+  outline: 2px solid var(--ds-surface-fg, currentColor);
   outline-offset: 2px;
   border-block-end-color: transparent;
+}
+
+@media (prefers-contrast: more) {
+  .rt-tree-view__link:focus-visible {
+    outline-width: 3px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
