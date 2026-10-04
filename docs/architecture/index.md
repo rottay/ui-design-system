@@ -294,14 +294,42 @@ and enter **one lowering** under
 `emitThemeCss`. There is deliberately no second compiler, and the structural gate
 `tests/architecture/theme-lowering-single-door/` fails if one reappears.
 
-The resolver's arity law was amended on 2026-09-15 (WO-DER-06, double ACCEPT): `resolveTheme`
-takes one argument at every productive call site except the compile door
-(`facade/runtime/compile`), which alone may pass options, and only `{ baseline }` produced by
-`baselineFor` from the closed `THEME_BASELINE_SOURCES`. The retired shape,
-`resolveTheme(baseline, intent?)`, returned before the intent was validated; the admitted shape
-validates the intent first and the baseline through `assertThemeBaseline`. The gate pins the
-exception by exact equality, the option surface at its declaration, and the order on the
-resolver's own AST.
+The resolver's arity law was amended on 2026-09-15 (WO-DER-06, double ACCEPT) and again on
+2026-10-04 (owner ruling R32 Q1, WO-EVI-02). `resolveTheme` takes one argument at every
+productive call site except the compile door (`facade/runtime/compile`), which alone may pass
+options, and only the two it is admitted by name:
+
+- `baseline` — the EFFECTIVE baseline the intent's patch composes over: the intent's own
+  carried `baseline`, or, absent one, the vertical's.
+- `vertical` — the vertical's ORIGINAL baseline, un-patched. It is recorded on the resolution
+  as `verticalBaseline` and never merged. The lowering reads one fact off it, the radius dial
+  position every authored corner is normalized against; nothing else may read it.
+
+Both are derived by the door through `baselineFor(intent.vertical, intent.slug)` — the neutral
+foundation with the preset of a first-party vertical from the closed
+`FIRST_PARTY_VERTICAL_SLUGS` — and `vertical` may be nothing but that derivation: no carried
+arm, no caller-supplied theme, no request option. Keeping the two apart is not a second
+compiler: one intent still enters one resolution and one lowering; the second theme is a
+yardstick, not a source. `vertical` is not a customization door. A tenant, a draft, a preview
+and a style can change `baseline`; none of them can change `vertical`.
+
+Each fact has one owner: the option is declared by the resolution owner
+(`runtime/resolution`), passed only by the compile door, produced only by `baselineFor` (the
+ingress owner), written to the resolution only by the resolver, and read only by the
+lowering's radius divisor.
+
+The retired shape, `resolveTheme(baseline, intent?)`, returned before the intent was validated.
+The admitted shape validates the intent first and each supplied theme through
+`assertThemeBaseline`, `vertical` under its own name. The gate pins the exception by exact
+equality of the caller and of the option surface at its declaration and at the call, the
+producer and the arguments of each option, the single binder of `resolveTheme`, the single
+writer and single reader of `verticalBaseline`, the door's own option surface, and the order
+on the resolver's own AST. A third option, an unvalidated value, a hard-coded or foreign
+vertical, a derivation or an intent touched between its binding and the call, or a second
+source that binds `resolveTheme` each turn it red. Three things the gate does not hold
+structurally are held by behaviour tests instead: the resolver's internal data flow, a
+resolution copied by spread or written through a computed key, and what the radius divisor
+does with the theme it reads.
 
 The theme contracts under `src/foundation/contracts/composition/tenants/themes/` are a
 directed ladder rather than a bag of peers: `iso`, `provenance`, `tenant-theme`, `intent`,

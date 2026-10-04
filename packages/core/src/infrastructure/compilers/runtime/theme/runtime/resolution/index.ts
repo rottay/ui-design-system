@@ -242,12 +242,22 @@ export interface ResolveThemeOptions {
    */
   readonly baseline: Theme;
   /**
-   * The vertical's own baseline when `baseline` is something else -- a draft
-   * opened on a customized theme. Defaults to `baseline`, which is the
-   * vertical's whenever the intent carries none. Recorded on the resolution as
-   * `verticalBaseline`; never merged.
+   * The vertical's ORIGINAL baseline, un-patched, when `baseline` is something
+   * else -- a draft opened on a customized theme. Only the compile door passes
+   * it, and only as `baselineFor(intent.vertical, intent.slug)`: the neutral
+   * foundation with the preset of a first-party vertical. It is not a
+   * customization input: no intent, request or document carries it. Validated
+   * and labelled like `baseline`; defaults to `baseline`. Recorded on the
+   * resolution as `verticalBaseline`; never merged.
    */
   readonly vertical?: Theme;
+}
+
+/** A private copy of a supplied theme, labelled with the slug it resolves for. */
+function ownedBaseline(supplied: Theme, slug: string): Theme {
+  return supplied.id === slug
+    ? cloneThemeValue(supplied)
+    : { ...cloneThemeValue(supplied), id: slug };
 }
 
 /**
@@ -281,14 +291,16 @@ export function resolveTheme(
         "neutral foundation and the vertical's preset"
     );
   }
-  const baseline =
-    supplied.id === intent.slug
-      ? cloneThemeValue(supplied)
-      : { ...cloneThemeValue(supplied), id: intent.slug };
+  const baseline = ownedBaseline(supplied, intent.slug);
   assertThemeBaseline(baseline, "resolveTheme");
+  let verticalBaseline = baseline;
+  if (options.vertical !== undefined) {
+    assertThemeBaseline(options.vertical, "resolveTheme: options.vertical");
+    verticalBaseline = ownedBaseline(options.vertical, intent.slug);
+  }
   return {
     theme: mergeThemePatches(baseline, intent.patch),
-    verticalBaseline: options.vertical ?? baseline,
+    verticalBaseline,
     provenance: isTenantAuthoredOrigin(intent.origin)
       ? tenantProvenance(intent.patch, snapshotLedger(intent.ledger))
       : EMPTY_PROVENANCE,

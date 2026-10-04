@@ -71,3 +71,61 @@ describe("resolveTheme over a baseline the caller supplies", () => {
     ).toThrow(/baseline declares no visual family/u);
   });
 });
+
+describe("resolveTheme over the vertical baseline the door supplies", () => {
+  const intent = staticThemeIntent("bithire", "acme");
+  const baseline = () => baselineFor("bithire", "acme");
+
+  for (const [name, vertical] of [
+    ["an empty object", {}],
+    ["null", null],
+    ["an id with no visual family", { id: "x" }],
+    ["an array", []],
+  ] as const) {
+    it(`refuses ${name} as the vertical baseline, by the option's name`, () => {
+      expect(() =>
+        resolveTheme(intent, { baseline: baseline(), vertical: vertical as never })
+      ).toThrow(/^resolveTheme: options\.vertical: /u);
+    });
+  }
+
+  it("refuses a vertical baseline carrying a key no Theme declares", () => {
+    const vertical = { ...baseline(), skipAdmission: true };
+    expect(() => resolveTheme(intent, { baseline: baseline(), vertical })).toThrow(
+      /^resolveTheme: options\.vertical: baseline carries unknown key\(s\) "skipAdmission"/u
+    );
+  });
+
+  it("validates the intent before the vertical baseline", () => {
+    const unknown = { ...intent, vertical: "platform" as never };
+    expect(() =>
+      resolveTheme(unknown, { baseline: baseline(), vertical: null as never })
+    ).toThrow(/unknown intent vertical "platform"/u);
+  });
+
+  it("records a private copy labelled with the intent's slug", () => {
+    const vertical = baselineFor("bithire", "another-tenant");
+    const expected = { ...baselineFor("bithire", "another-tenant"), id: "acme" };
+    const resolution = resolveTheme(intent, { baseline: baseline(), vertical });
+    expect(resolution.verticalBaseline).not.toBe(vertical);
+    expect(resolution.verticalBaseline?.id).toBe("acme");
+    expect(resolution.verticalBaseline?.surfaces).not.toBe(vertical.surfaces);
+    vertical.surfaces.radiusScale = 9;
+    expect(resolution.verticalBaseline).toEqual(expected);
+  });
+
+  it("never merges the vertical baseline into the resolved theme", () => {
+    const resolution = resolveTheme(staticThemeIntent("rottay", "acme"), {
+      baseline: baselineFor("rottay", "acme"),
+      vertical: baselineFor("bithire", "acme"),
+    });
+    expect(resolution.theme).toEqual(baselineFor("rottay", "acme"));
+    expect(resolution.verticalBaseline).toEqual(baselineFor("bithire", "acme"));
+  });
+
+  it("falls back to the resolved baseline when the door supplies none", () => {
+    const resolution = resolveTheme(intent, { baseline: baseline() });
+    expect(resolution.verticalBaseline).toEqual(baseline());
+    expect(resolution.verticalBaseline).toEqual(resolution.theme);
+  });
+});
