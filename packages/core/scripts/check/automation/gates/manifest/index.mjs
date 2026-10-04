@@ -523,28 +523,6 @@ export const CI_GATES = Object.freeze([
       + 'away the suite exits 0 with 21 passing assertions and the browser case skipped by written reason '
       + '(2026-09-11). The indicator-7 suite beside it reads no dist/ output.', },
   {
-    id: 'axis-difference',
-    run: ['node', 'scripts/check/theme/axis-difference/index.mjs'],
-    blocking: false,
-    phase: 'post-build',
-    prerequisites: ['fresh-dist', 'showroom-workspace', 'playwright-chromium'],
-    drillId: 'axis-difference-drill',
-    excluded: {
-      reason:
-        'NOT a softened law and not a widened baseline: the gate is green on this tree today (palette-only '
-        + 'control at 0 % on 36 of 36 evidential cells and emphasis-only control at 0 % on 12 of 12 evidential '
-        + 'cells, 3 verticals x 2 modes, run 2026-09-13, with the states-axis limits published in the run '
-        + 'artifact) and its drill stays '
-        + 'BLOCKING. What is missing is CI wiring this lot may not do: the `core` job ("Core Library"), whose two '
-        + '"Quality gates (manifest-driven, ...)" steps run this inventory, installs no browser, and only the '
-        + '`a11y` and `visual` jobs run `playwright install chromium`, so a blocking entry here would be '
-        + 'PREREQ-MISSING on every CI run -- which is exactly how a gate gets downgraded (F-76). '
-        + 'Run it by hand with `node scripts/check/theme/axis-difference/index.mjs` after a build.',
-      owner: 'WO-EVI-02 fleet acceptance (browser install in the gates job of .github/workflows/ci.yml)',
-      trackedSince: '2026-09-11',
-    },
-  },
-  {
     id: 'style-reuse-differentiation',
     run: ['node', '--test', 'scripts/check/theme/style-registry/tests/reuse-differentiation/index.test.mjs'],
     blocking: false,
@@ -557,10 +535,11 @@ export const CI_GATES = Object.freeze([
     excluded: {
       reason:
         'WO-DER-09 step 4\'s acceptance proof, registered 2026-09-24 so CI does not treat it as optional '
-        + 'by absence: its offline half runs wherever dist exists; its browser half carries the same '
-        + 'browser-skip-with-written-reason standing as axis-difference, and it goes blocking with the '
-        + 'same EVI-02 browser wiring, never by hand.',
-      owner: 'WO-EVI-02 fleet acceptance (browser install in the gates job of .github/workflows/ci.yml)',
+        + 'by absence: its offline half runs wherever dist exists; its browser half skips with a written '
+        + 'reason where no Chromium resolves. The `core` job installs one since 2026-10-04 (owner ruling R33, '
+        + 'which rules axis-difference only); this row is green (7/7, ~11 min, 2026-10-04) and its return to '
+        + 'blocking is owed a ruling on that cost, never a flip by hand.',
+      owner: 'WO-EVI-02 fleet acceptance (ruling on a second ~11 min browser run in the core job)',
       trackedSince: '2026-09-24',
     },
   },
@@ -1452,6 +1431,23 @@ export const CI_GATES = Object.freeze([
   // declarations, which is why this pair is post-build.
   { id: 'consumer-proof-drill', run: ['node', '--test', 'scripts/check/consumer-proof/tests/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['consumer-proof'], prerequisites: ['fresh-dist'], },
   { id: 'consumer-proof', run: ['node', 'scripts/check/consumer-proof/index.mjs'], blocking: true, phase: 'post-build', drillId: 'consumer-proof-drill', prerequisites: ['fresh-dist'], },
+
+  // THE BY-AXIS GATE, BLOCKING on the declared population by owner ruling R33
+  // (2026-10-04); red until states reaches 122/152 (120/152 = 78.9 % at
+  // 492a52c0e). The effective percentage is reported, never the verdict, and
+  // `--no-write` publishes nothing: the exit code is the gate. It is a full
+  // fleet re-measurement in Chromium (3 verticals x 2 modes, ~13 min measured
+  // locally), so by the ordering law at the top of this list it runs LAST: a
+  // fail-fast runner would otherwise stop at it and reach no gate behind it.
+  // Its drill (`axis-difference-drill`, pre-build) is declared beside the probe's law above.
+  {
+    id: 'axis-difference',
+    run: ['node', 'scripts/check/theme/axis-difference/index.mjs', '--threshold=80', '--no-write'],
+    blocking: true,
+    phase: 'post-build',
+    prerequisites: ['fresh-dist', 'showroom-workspace', 'playwright-chromium'],
+    drillId: 'axis-difference-drill',
+  },
 ]);
 
 /**

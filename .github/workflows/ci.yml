@@ -90,7 +90,9 @@ jobs:
     needs: detect
     if: needs.detect.outputs.core == 'true'
     runs-on: self-hosted
-    timeout-minutes: 30
+    # 30 before the by-axis gate joined the post-build inventory; that gate is a
+    # full fleet re-measurement in Chromium (~13 min measured locally, 2026-10-04).
+    timeout-minutes: 50
     permissions:
       contents: read
       packages: read
@@ -196,6 +198,12 @@ jobs:
       # Build first so they verify this checkout, never ambient runner state.
       - name: Build + ParticleField quarantine gate
         run: pnpm --filter @rottay/design-system run build
+
+      # Owner ruling R33: the post-build inventory carries the by-axis probe
+      # (`axis-difference`, blocking on the declared population), which reads
+      # computed style in a real Chromium, so THIS job installs one.
+      - name: Install Playwright browser (by-axis gate)
+        run: pnpm --filter @rottay/showroom exec playwright install chromium
 
       # The post-build half of the SAME inventory. Everything that needs
       # `dist/` -- the controls table, the four cascade gates whose module

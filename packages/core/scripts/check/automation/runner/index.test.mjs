@@ -102,25 +102,19 @@ test('every excluded gate names its reason and its owner', () => {
   // pass yet. Its DRILL is blocking and green, which is what keeps the
   // exclusion from becoming an unmeasured hole.
   //
-  // `axis-difference` joined on 2026-09-11 (WO-EVI-02) and is a THIRD kind of
-  // exclusion, adjudicated here so it is not read as either of the first two:
-  // the gate is GREEN on this tree -- the palette-only control of kit rule 4
-  // at 0 % across three verticals and two modes, with the emphasis-only
-  // control NON-EVIDENTIAL while the states positive reads 0 (its limits are
-  // published in the run artifact) -- and its drill is blocking. What
-  // it lacks is an input CI does not provide: the `core` job ("Core Library"),
-  // which runs this inventory, installs no browser, and only the `a11y` and
-  // `visual` jobs run `playwright install chromium`, so a blocking entry would
-  // be PREREQ-MISSING on every run, which is precisely how F-76 says a gate gets
-  // downgraded. It returns to blocking when that job installs a browser, not
-  // when anything about the gate changes. `channel-liveness-reconcile` joined on 2026-09-25: a post-build naming of the
+  // `axis-difference` joined on 2026-09-11 (WO-EVI-02) for want of a browser in
+  // the `core` job and LEFT on 2026-10-04 by owner ruling R33: that job now
+  // installs Chromium and the gate blocks on the declared population with
+  // `--threshold=80 --no-write`. It is red while an axis is below threshold
+  // (states 120/152 at 492a52c0e); that is the ruling, not a reason to return it here.
+  // `channel-liveness-reconcile` joined on 2026-09-25: a post-build naming of the
   // universe against a real compile, every forward gap owned; it blocks when the source resolver reads those shapes.
   // `style-reuse-differentiation` joined on 2026-09-24 (WO-DER-09's acceptance proof):
-  // the same browser-wiring class as axis-difference -- its browser half skips with a
-  // written reason where no Chromium is reachable, and it goes blocking with the same
-  // EVI-02 browser wiring, never by hand.
+  // its browser half skips with a written reason where no Chromium is reachable. The
+  // browser wiring it waited on landed with R33; its own return to blocking is not
+  // ruled by R33 and is still owed an adjudication.
   // `consumer-census` joined on 2026-10-02 (WO-RET-01 step 1, the retirement
-  // anchor): a corpus class like axis-difference, not a debt class -- the gate
+  // anchor): a corpus class, not a debt class -- the gate
   // requires all four consumer roots and is GREEN on the workspace that
   // carries them, its drill is blocking and green, and what the CI gates job
   // does not provide is three of the four checkouts (only app-bithire is
@@ -130,7 +124,7 @@ test('every excluded gate names its reason and its owner', () => {
   // softening the missing-root law.
   assert.deepEqual(
     excluded.map((g) => g.id).sort(),
-    ['axis-difference', 'channel-liveness', 'channel-liveness-reconcile', 'consumer-census', 'style-reuse-differentiation', 'theme-keypath-coverage'],
+    ['channel-liveness', 'channel-liveness-reconcile', 'consumer-census', 'style-reuse-differentiation', 'theme-keypath-coverage'],
     'la lista de exclusiones cambio; adjudicala antes de moverla',
   );
   for (const gate of excluded) {

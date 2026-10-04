@@ -7930,6 +7930,8 @@ export function pseudoOnlyDrift(result, pins = PSEUDO_ONLY_CREDITS) {
 
 /** The opt-out a measurement takes when it must not touch a published artifact. */
 export const NO_WRITE_FLAG = '--no-write';
+/** The flag the gate manifest passes; named so the inventory's flag drill can find it. */
+export const THRESHOLD_FLAG = '--threshold';
 export const NO_WRITE_ENV = 'AXIS_DIFFERENCE_NO_WRITE';
 
 /**
@@ -8454,7 +8456,7 @@ const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.arg
 if (isMain) {
   const argument = (name) =>
     process.argv.find((entry) => entry.startsWith(`--${name}=`))?.slice(`--${name}=`.length);
-  const thresholdArgument = argument('threshold');
+  const thresholdArgument = argument(THRESHOLD_FLAG.slice(2));
   const result = await run({
     verticals: argument('vertical')?.split(',') ?? ['bithire', 'evnto', 'rottay'],
     themes: argument('theme')?.split(',') ?? ['light', 'dark'],

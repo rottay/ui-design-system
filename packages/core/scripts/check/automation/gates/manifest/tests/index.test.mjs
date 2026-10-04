@@ -552,3 +552,38 @@ test('DRILL: a retirement without a written reason is a deletion wearing a ledge
   assert.ok(withPlaceholder.every((entry) => typeof entry.retiredOn === 'string' && entry.retiredOn.length >= 10),
     'every retirement states the date it happened');
 });
+
+test('PIN (owner ruling R33): axis-difference blocks on the declared population, last in post-build, and every softening is red', () => {
+  const ARGV = ['node', 'scripts/check/theme/axis-difference/index.mjs', '--threshold=80', '--no-write'];
+  const problemsOf = (gates) => {
+    const problems = [];
+    const entries = gates.filter((gate) => gate.id === 'axis-difference');
+    if (entries.length !== 1) return [`${entries.length} axis-difference entries; exactly one is the gate`];
+    const [gate] = entries;
+    if (gate.blocking !== true) problems.push('not blocking');
+    if (Object.hasOwn(gate, 'excluded')) problems.push('carries an exclusion record');
+    if (gate.phase !== 'post-build') problems.push(`phase ${gate.phase}`);
+    if (JSON.stringify(gate.run) !== JSON.stringify(ARGV)) problems.push(`argv ${JSON.stringify(gate.run)}`);
+    const lastBlocking = gates.filter((entry) => entry.phase === 'post-build' && entry.blocking === true).at(-1);
+    if (lastBlocking?.id !== 'axis-difference') problems.push(`last blocking post-build entry is ${lastBlocking?.id}`);
+    return problems;
+  };
+  assert.deepEqual(problemsOf(CI_GATES), []);
+
+  const mutate = (change) => CI_GATES.map((gate) => (gate.id === 'axis-difference' ? change({ ...gate }) : gate));
+  const mutants = {
+    'threshold dropped': mutate((gate) => ({ ...gate, run: gate.run.filter((token) => !token.startsWith('--threshold')) })),
+    'threshold lowered': mutate((gate) => ({ ...gate, run: gate.run.map((token) => (token === '--threshold=80' ? '--threshold=78' : token)) })),
+    'exclusion re-added': mutate((gate) => ({ ...gate, excluded: { reason: 'red on states', owner: 'someone' } })),
+    'made non-blocking': mutate((gate) => ({ ...gate, blocking: false })),
+    'moved earlier': [
+      ...CI_GATES.filter((gate) => gate.id === 'axis-difference'),
+      ...CI_GATES.filter((gate) => gate.id !== 'axis-difference'),
+    ],
+  };
+  for (const [name, gates] of Object.entries(mutants)) {
+    assert.notDeepEqual(problemsOf(gates), [], `MUTANT ${name} must be red`);
+  }
+  assert.deepEqual(problemsOf(mutants['threshold dropped']), [`argv ${JSON.stringify(ARGV.filter((token) => token !== '--threshold=80'))}`]);
+  assert.deepEqual(problemsOf(mutants['moved earlier']), ['last blocking post-build entry is consumer-proof']);
+});
