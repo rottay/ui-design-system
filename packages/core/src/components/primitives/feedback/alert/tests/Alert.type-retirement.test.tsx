@@ -1,7 +1,9 @@
 import React, { type ComponentProps } from 'react';
 import { cleanup, render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import type { AlertProps as PublishedAlertProps } from '@/index';
+import type { AlertProps as PublishedAlertProps, AlertTone as PublishedAlertTone } from '@/index';
+// @ts-expect-error the package root does not publish `AlertType`; `AlertTone` types the `tone` prop
+import type { AlertType as RetiredAlertType } from '@/index';
 
 import { Alert, type AlertProps } from '..';
 import type { AlertProps as EngineAlertProps, AlertTone, AlertType } from '../contracts';
@@ -11,6 +13,7 @@ import RusticAlert from '../engines/rustic';
 import { renderWithEngine } from '@tests/support/engine';
 
 type Declares<Props, Key extends string> = Key extends keyof Props ? true : false;
+type Same<Left, Right> = [Left] extends [Right] ? ([Right] extends [Left] ? true : false) : false;
 
 const RENAMES: ReadonlyArray<readonly [AlertType, AlertTone]> = [
   ['info', 'info'],
@@ -65,6 +68,20 @@ describe('Alert public tone contract', () => {
 
     expect([throughRoot, throughFacade, throughModern, oldValue].every(Boolean)).toBe(true);
     expect(engineProps.type).toBe('error');
+  });
+
+  it('publishes AlertTone as the exact type of the tone prop, and no AlertType', () => {
+    const exact: [
+      Same<PublishedAlertTone, NonNullable<PublishedAlertProps['tone']>>,
+      Same<PublishedAlertTone, AlertTone>,
+      Same<PublishedAlertTone, Exclude<AlertType, 'error'> | 'danger'>,
+    ] = [true, true, true];
+    const retiredName: RetiredAlertType | undefined = undefined;
+    const tones: readonly PublishedAlertTone[] = RENAMES.map(([, tone]) => tone);
+
+    expect(exact.every((same) => same === true)).toBe(true);
+    expect(retiredName).toBeUndefined();
+    expect(tones).toEqual(['info', 'success', 'warning', 'danger']);
   });
 });
 

@@ -20,7 +20,7 @@ import { createEngineComponent } from '../../../../infrastructure/runtime/engine
 import type { AlertPublicProps } from './contracts';
 import { AlertDescription } from './compound';
 
-export { type AlertPublicProps as AlertProps, type AlertType, ALERT_DEFAULTS } from './contracts';
+export { type AlertPublicProps as AlertProps, type AlertTone, ALERT_DEFAULTS } from './contracts';
 export { AlertDescription };
 /** Callout is folded into Alert: its Modern engine is the alert surface, loaded on demand. */
 export const loadModernCallout = () => import('./presentation/callout');

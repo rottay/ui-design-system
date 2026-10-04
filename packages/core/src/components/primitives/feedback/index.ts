@@ -4,7 +4,7 @@
  */
 
 export { Alert } from './alert';
-export type { AlertProps, AlertType } from './alert';
+export type { AlertProps, AlertTone } from './alert';
 
 export { Spinner } from './spinner';
 export type { SpinnerProps, SpinnerSize } from './spinner';

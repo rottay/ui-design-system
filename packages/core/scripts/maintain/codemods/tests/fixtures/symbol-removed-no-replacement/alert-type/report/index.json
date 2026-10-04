@@ -1,0 +1,10 @@
+[
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 27,
+    "action": "report",
+    "id": "symbol-removed-no-replacement/.#AlertType",
+    "reason": "no-public-replacement"
+  }
+]

@@ -10,7 +10,7 @@
  *
  * **Type Categories:**
  * - `AlertTone`: Semantic tones (info, success, warning, danger)
- * - `AlertType`: The internal color key each tone resolves to
+ * - `AlertType`: The internal color key each tone resolves to (not published)
  * - `AlertProps`: Main component props interface
  *
  * **Multi-Tenant Support:**
@@ -56,40 +56,22 @@ import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/v
 // ============================================================================
 
 /**
- * Alert type variants for different message contexts.
- *
- * @description
- * Defines the semantic types available for alerts, each with its own
- * color scheme and iconography across all engines.
- *
- * @type {string}
- *
- * | Value | Icon | Color | Use Case |
- * |-------|------|-------|----------|
- * | `info` | i | Blue | General information, tips |
- * | `success` | checkmark | Green | Successful operations |
- * | `warning` | ! | Yellow/Orange | Caution, potential issues |
- * | `error` | x | Red | Errors, failures |
- *
- * @example
- * ```tsx
- * import type { AlertType } from '@rottay/design-system';
- *
- * const getAlertType = (status: string): AlertType => {
- *   switch (status) {
- *     case 'ok': return 'success';
- *     case 'pending': return 'warning';
- *     case 'failed': return 'error';
- *     default: return 'info';
- *   }
- * };
- * ```
+ * The internal color-token key the Alert engines paint with. Family-internal and not published:
+ * the `tone` prop, typed by {@link AlertTone}, is the public vocabulary and spells `danger`
+ * where this key spells `error`.
  */
 export type AlertType = 'info' | 'success' | 'warning' | 'error';
 
 /**
  * The {@link Tone} values Alert accepts through the `tone` prop ('neutral' and 'primary' have no
  * Alert rendering and remain excluded -- the same curated subset Callout's `CalloutTone` uses).
+ *
+ * @example
+ * ```tsx
+ * import type { AlertTone } from '@rottay/design-system';
+ *
+ * const toneOf = (status: string): AlertTone => (status === 'failed' ? 'danger' : 'info');
+ * ```
  */
 export type AlertTone = 'info' | 'warning' | 'danger' | 'success';
 
