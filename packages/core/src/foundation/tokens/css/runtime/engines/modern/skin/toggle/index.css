@@ -170,11 +170,26 @@
   opacity: var(--ds-toggle-disabled-opacity);
 }
 
-/* focus ring: the kernel's keyboard focus, with the hidden input's own :focus-visible as fallback. */
-.ds-toggle.ds-toggle--modern[data-state~='focus-visible'] [data-part='track'],
+/* Keyboard focus wears the tenant focus signature on the track. A press on the
+   label focuses the input after release, so the input's own :focus-visible outranks the kernel stamp. */
+.ds-toggle.ds-toggle--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='track'],
 .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
-  outline: var(--ds-toggle-focus-ring-width) solid var(--ds-toggle-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-toggle-focus-ring-offset);
+  outline: var(--ds-toggle-focus-ring-width, var(--ds-focus-ring-width)) solid transparent;
+  outline-offset: var(--ds-toggle-focus-ring-offset, var(--ds-focus-ring-offset));
+  box-shadow: var(--ds-focus-ring);
+}
+@container not style(--ds-toggle-focus-ring-color: var(--ds-focus-ring-color)) {
+  .ds-toggle.ds-toggle--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='track'],
+  .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
+    outline-color: var(--ds-toggle-focus-ring-color, transparent);
+  }
+}
+/* A signature without an offset draws inside a control this small, on its state glyph: the outline keeps the focus colour around it. */
+@container style(--ds-focus-ring-offset: 0px) {
+  .ds-toggle.ds-toggle--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='track'],
+  .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
+    outline-color: var(--ds-toggle-focus-ring-color, var(--ds-focus-ring-color));
+  }
 }
 
 /* Thumb ---------------------------------------------------------------- */
@@ -424,8 +439,10 @@
     border-color: ButtonText;
     border-top-color: Highlight;
   }
-  .ds-toggle.ds-toggle--modern[data-state~='focus-visible'] [data-part='track'],
+  .ds-toggle.ds-toggle--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='track'],
   .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
-    outline-color: Highlight;
+    outline: max(2px, var(--ds-toggle-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: max(2px, var(--ds-toggle-focus-ring-offset, var(--ds-focus-ring-offset)));
+    box-shadow: none;
   }
 }

@@ -231,11 +231,26 @@
   background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
 }
 
-/* focus ring: the kernel's keyboard focus, with the hidden input's own :focus-visible as fallback. */
-.ds-checkbox.ds-checkbox--modern[data-state~='focus-visible'] [data-part='box'],
+/* Keyboard focus wears the tenant focus signature on the box. A press on the
+   label focuses the input after release, so the input's own :focus-visible outranks the kernel stamp. */
+.ds-checkbox.ds-checkbox--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='box'],
 .ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
-  outline: var(--ds-checkbox-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-checkbox-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
+  outline: var(--ds-checkbox-focus-ring-width, var(--ds-focus-ring-width)) solid transparent;
   outline-offset: var(--ds-checkbox-focus-ring-offset, var(--ds-focus-ring-offset));
+  box-shadow: var(--ds-focus-ring);
+}
+@container not style(--ds-checkbox-focus-ring-color: var(--ds-focus-ring-color)) {
+  .ds-checkbox.ds-checkbox--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='box'],
+  .ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
+    outline-color: var(--ds-checkbox-focus-ring-color, transparent);
+  }
+}
+/* A signature without an offset draws inside a control this small, on its state glyph: the outline keeps the focus colour around it. */
+@container style(--ds-focus-ring-offset: 0px) {
+  .ds-checkbox.ds-checkbox--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='box'],
+  .ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
+    outline-color: var(--ds-checkbox-focus-ring-color, var(--ds-focus-ring-color));
+  }
 }
 
 /* disabled: the whole row quiets, semantics stay on the input. */
@@ -351,5 +366,11 @@
   }
   .ds-checkbox.ds-checkbox--modern[data-disabled='true'] [data-part='box'] {
     border-color: GrayText;
+  }
+  .ds-checkbox.ds-checkbox--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='box'],
+  .ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
+    outline: max(2px, var(--ds-checkbox-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: max(2px, var(--ds-checkbox-focus-ring-offset, var(--ds-focus-ring-offset)));
+    box-shadow: none;
   }
 }

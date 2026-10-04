@@ -44,7 +44,7 @@ describeCausality({
     { id: 'edge', selector: `${PLAIN} [data-part='circle']`, property: 'border-top-width' },
     { id: 'labelSize', selector: `${CHECKED} [data-part='label']`, property: 'font-size' },
     { id: 'press', selector: `${PLAIN} [data-part='circle']`, property: 'transform', attributes: { 'data-state': 'pressed' }, attributesOn: PLAIN },
-    { id: 'focusRing', selector: `${PLAIN} [data-part='circle']`, property: 'outline-width', attributes: { 'data-state': 'focus-visible' }, attributesOn: PLAIN },
+    { id: 'focusRing', selector: `${PLAIN} [data-part='circle']`, property: 'box-shadow', attributes: { 'data-state': 'focus-visible' }, attributesOn: PLAIN },
     { id: 'duration', selector: `${CHECKED} [data-part='circle']`, property: 'transition-duration' },
   ],
   decisions: {

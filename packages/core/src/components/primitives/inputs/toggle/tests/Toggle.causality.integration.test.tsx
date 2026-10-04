@@ -40,7 +40,7 @@ describeCausality({
     { id: 'errorFill', selector: `${ERROR} [data-part='track']`, property: 'background-color' },
     { id: 'hoverFill', selector: `${ON} [data-part='track']`, property: 'background-color', attributes: { 'data-state': 'hovered' }, attributesOn: ON },
     { id: 'press', selector: `${OFF} [data-part='thumb']`, property: 'transform', attributes: { 'data-state': 'pressed' }, attributesOn: OFF },
-    { id: 'ring', selector: `${OFF} [data-part='track']`, property: 'outline-width', attributes: { 'data-state': 'focus-visible' }, attributesOn: OFF },
+    { id: 'ring', selector: `${OFF} [data-part='track']`, property: 'box-shadow', attributes: { 'data-state': 'focus-visible' }, attributesOn: OFF },
     { id: 'trackRadius', selector: `${ON} [data-part='track']`, property: 'border-top-left-radius' },
     { id: 'thumbRadius', selector: `${ON} [data-part='thumb']`, property: 'border-top-left-radius' },
     { id: 'width', selector: `${ON} [data-part='track']`, property: 'inline-size' },
