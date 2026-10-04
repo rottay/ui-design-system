@@ -12,12 +12,12 @@
       "fileDigest": "sha256:0d5c94185435a0e1d8e04fc3857d37c0f5108381f2c4fa44eaf0fc32fc2a8fc6",
       "matchLine": 1,
       "matchDigest": "sha256:d48103b2adc94afa308cbb3e03318edd95fd2956db525f15bb109ccfb1a6f7c6",
-      "rowDigest": "sha256:b09251def9a6268aa3778e0a2127ecc4e983a1caf726a635a3ca9d7fc1f6319a",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:51aed779813eb731fd34da552c2f1ddc27e4e91d0730ec7874b214618501e950"
+      "rowDigest": "sha256:58b10752fe3b7961e509b9f2a27a05fb3f7365634f64302a136184f98d6396ba",
+      "date": "2026-10-04",
+      "auditedBy": "claude-opus-5-5 (independent session 9bb43849",
+      "auditedAt": "2026-10-04",
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json",
+      "integrity": "sha256:f8727ed7d53e79f76953c296c4eaeb322f4be64fc354b6b06391a17b63e6e3d1"
     },
     {
       "file": "src/components/primitives/display/badge/contracts/index.ts",
@@ -30,12 +30,12 @@
       "fileDigest": "sha256:46886c161e9bcdfd1ef00443c7c9498f5c7ff8bc797f9b146e70ff2e2df118d3",
       "matchLine": 269,
       "matchDigest": "sha256:b5dd2cc4e1ba69ece3fb5d3c433c23b24f6d144fc06a18c9387826fd352bb3a6",
-      "rowDigest": "sha256:3dfa478f9addefe774f53776124d611d56677c6ceb5a5c4f5458ce20acd4b9fb",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:b1a4d399d86934b6e4446b9ed82c3f933de600b8d40226b14612b720148e27f0"
+      "rowDigest": "sha256:9edf5f17d55bb95d7898d406546ac035fcd53b1a3ccf00b9b5c20a5dfcaf742c",
+      "date": "2026-10-04",
+      "auditedBy": "claude-opus-5-5 (independent session 9bb43849",
+      "auditedAt": "2026-10-04",
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json",
+      "integrity": "sha256:ca03e50a922de7cc7e899cdd33442a43e280dc76f2b2458bb3c5facb0846ce1f"
     },
     {
       "file": "src/components/primitives/display/callout/index.tsx",
@@ -48,12 +48,12 @@
       "fileDigest": "sha256:6dcc2b7ed349f9c2cbf787144a9dea77a86c1fd65bd6713198bc78ae1c24fe77",
       "matchLine": 779,
       "matchDigest": "sha256:38da4ff3b7b22c404a64382c351a5d9af4e9fb60539ff5e72e4f193359dcca6d",
-      "rowDigest": "sha256:075059296bda904c6b26fccac26f6aad4cfe48200d878af48aebb194eaa8d38c",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:61d36e12455c811c04fa4ee2e8acc306ce68de27a6a9f8bc6538a489ae899530"
+      "rowDigest": "sha256:c38e063f4e8f6e19c8884b2f88fcce55d94d80b2096df4fa98b398bc72f273cc",
+      "date": "2026-10-04",
+      "auditedBy": "claude-opus-5-5 (independent session 9bb43849",
+      "auditedAt": "2026-10-04",
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json",
+      "integrity": "sha256:9402fe4ae01b5a0632d31af40a59ac6e6be5287956ddfaa6cd699380196a38e9"
     },
     {
       "file": "src/components/primitives/display/tag/contracts/index.ts",
@@ -66,12 +66,12 @@
       "fileDigest": "sha256:cacb520e954379a770de0223f793331638368bb27dac450d67c448933899c558",
       "matchLine": 541,
       "matchDigest": "sha256:251624312b07d9cc222dfbbed5d1f58806cbbf228f380daa629de89e38527e4a",
-      "rowDigest": "sha256:81d97a408712773530f0df36a96e9066e4c9173ce50046015f9a2eb35502e334",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:2b9ac23ccd538f610ee6ed90db3cd26e4eb67cbaa441536dedcbdc8a9d078b9d"
+      "rowDigest": "sha256:21c55047ea75bab28b398c26a175898a69d59b6c93d3656345d61bf598a38dcb",
+      "date": "2026-10-04",
+      "auditedBy": "claude-opus-5-5 (independent session 9bb43849",
+      "auditedAt": "2026-10-04",
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json",
+      "integrity": "sha256:b7d4aeb7400d337f1b8ed1123f6ef3c987b1a8ee0cf3f6a881814d4b62b8c397"
     },
     {
       "file": "src/components/primitives/display/tag/contracts/index.ts",
@@ -84,12 +84,12 @@
       "fileDigest": "sha256:cacb520e954379a770de0223f793331638368bb27dac450d67c448933899c558",
       "matchLine": 541,
       "matchDigest": "sha256:251624312b07d9cc222dfbbed5d1f58806cbbf228f380daa629de89e38527e4a",
-      "rowDigest": "sha256:fa2813d94ab917b70fd75e7fbf4801c8e9c6c80f65937bf0138ce97d262c9648",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03/index.json",
-      "integrity": "sha256:86e763e62130041e72b2557f43a3b8c0c010bb2875293cb1defe02a5ba1da086"
+      "rowDigest": "sha256:8e8d1a087e0f6edb9b657b1b51651eca05c7415befc2007b9b9927d00e04a7a3",
+      "date": "2026-10-04",
+      "auditedBy": "claude-opus-5-5 (independent session 9bb43849",
+      "auditedAt": "2026-10-04",
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json",
+      "integrity": "sha256:8d204f6d754135d45dde43323da3ea3dd6e42e8142070b86b8a8397fd3eb5f04"
     },
     {
       "file": "src/components/primitives/display/tooltip/contracts/index.ts",
@@ -102,12 +102,12 @@
       "fileDigest": "sha256:3b2b991fd8608a5e82d94c98624f88725a92b115148ec854270c1b3f31e93be8",
       "matchLine": 295,
       "matchDigest": "sha256:fda8603805c8d87aad53038cd99a2b6f0e582309cae18ffa4e307cf8e55c6810",
-      "rowDigest": "sha256:57f7418a0254ac5c30d4d00566c3b90ef5864a116c155d0ff1831c1449197d82",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03-b/index.json",
-      "integrity": "sha256:bc0ae4c3bef10e5356abc2c6ce2f36dcb3605b8351bb1b3ce83a0cf3eb3deeae"
+      "rowDigest": "sha256:248460f833fe325e7c1cf6205cb2513479d4606df937fddf7a5c2987949077f4",
+      "date": "2026-10-04",
+      "auditedBy": "claude-opus-5-5 (independent session 9bb43849",
+      "auditedAt": "2026-10-04",
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json",
+      "integrity": "sha256:2f10a0d1b8af81cc6812be7686a1bc0f367a350bfcfb3d72a28264651f0236ae"
     },
     {
       "file": "src/components/primitives/display/tooltip/contracts/index.ts",
@@ -120,12 +120,12 @@
       "fileDigest": "sha256:7d852d5b3e3d23d9f7e2702f61ebd49f5f47749b98feff96b15b2142b534828e",
       "matchLine": 447,
       "matchDigest": "sha256:0017ae7de9996188a5ffb69f34d8642212e6ec451ee5fa31c0130abfddf1d3e5",
-      "rowDigest": "sha256:57f7418a0254ac5c30d4d00566c3b90ef5864a116c155d0ff1831c1449197d82",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03-b/index.json",
-      "integrity": "sha256:06b128164a0864a228a4fbab844ecd49eb3b933578f6d9149f959c79758b269f"
+      "rowDigest": "sha256:248460f833fe325e7c1cf6205cb2513479d4606df937fddf7a5c2987949077f4",
+      "date": "2026-10-04",
+      "auditedBy": "claude-opus-5-5 (independent session 9bb43849",
+      "auditedAt": "2026-10-04",
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json",
+      "integrity": "sha256:b4b575bdaa1067c3af6849f1bfa6c9733c4115640fdebed1c3285c8082ff86c8"
     },
     {
       "file": "src/components/primitives/display/tooltip/contracts/index.ts",
@@ -138,12 +138,12 @@
       "fileDigest": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
       "matchLine": 271,
       "matchDigest": "sha256:98951eaeb91dbcf795c7e8ecbaee17fab89b629a176c243830ec04433cb43609",
-      "rowDigest": "sha256:d93342a1fde220622e27026cffb046ef0a257f42678137801388109e7c3f1fe1",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03-b/index.json",
-      "integrity": "sha256:2133e450890c1676c82d7cc2417a1f6ca7d66f61710bb421069ec815a05d2973"
+      "rowDigest": "sha256:b340f3437c83a138561cc24eea1d8fcdaab9a094e9c7dfd167298f197ae4793d",
+      "date": "2026-10-04",
+      "auditedBy": "claude-opus-5-5 (independent session 9bb43849",
+      "auditedAt": "2026-10-04",
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json",
+      "integrity": "sha256:78f8dce07e3c7791153c9a5af411f824169d15fbb28f3cb3a543643dd7a46731"
     },
     {
       "file": "src/components/primitives/display/tooltip/contracts/index.ts",
@@ -156,12 +156,12 @@
       "fileDigest": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
       "matchLine": 304,
       "matchDigest": "sha256:9e59bb171fa0f28bc1272d01828aad4d95b264c8a1b8cb0e124e043da2ddb73f",
-      "rowDigest": "sha256:d93342a1fde220622e27026cffb046ef0a257f42678137801388109e7c3f1fe1",
-      "date": "2026-10-03",
-      "auditedBy": "claude-fable-5-1",
-      "auditedAt": "2026-10-03",
-      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-03-b/index.json",
-      "integrity": "sha256:1ef6566b1de2f482cca29b160cebc690fa2301b84b1e3296bd5287621c0dc676"
+      "rowDigest": "sha256:b340f3437c83a138561cc24eea1d8fcdaab9a094e9c7dfd167298f197ae4793d",
+      "date": "2026-10-04",
+      "auditedBy": "claude-opus-5-5 (independent session 9bb43849",
+      "auditedAt": "2026-10-04",
+      "auditRecord": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json",
+      "integrity": "sha256:b4ef61f5428d46d403542af53a0edaeca0f78497598744b6d0b691b82c218d14"
     }
   ]
 }

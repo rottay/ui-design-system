@@ -1,0 +1,378 @@
+{
+ "schema": 1,
+ "audit": {
+  "date": "2026-10-04",
+  "auditor": "claude-opus-5-5 (independent session 9bb43849-f1e0-4fdf-ae7e-a8fbe61d0649, not the minter)",
+  "scope": "one-time independent verification of the nine receipts re-minted on 2026-10-04 after the WO-RET-01 ledger lot 76eefe5d8 changed their row digests (every receipt of receipts/index.json: all nine carry date 2026-10-04 and no audited mark; none was kept from an earlier mint, so there is no keptReceiptsRecheck)",
+  "method": "read-only re-derivation against the sibling checkouts at the recorded commit: `git -C <app> show <commit>:<path> | shasum -a 256` = fileDigest; first line containing the needle and sha256 of that line = matchLine/matchDigest (cross-checked against gate matchOf); canonical-JSON digest of the CURRENT ledger row = rowDigest (cross-checked against gate rowDigestOf); canonical-JSON digest of the receipt body without integrity and without audit keys = integrity at minting (cross-checked against gate mintIntegrityOf); `git merge-base --is-ancestor <commit> origin/main`; `git remote get-url origin`; needle presence at the sibling HEAD. Each receipt was also confirmed to name exactly one ledger row that cites its kind, path and needle. `index` is the 0-based position in receipts/index.json. No fetch was run; origin/main is the local tracking ref. The auditor wrote nothing in any repository.",
+  "dsCommit": "e35dcd22c90a139227ccfc2aacb8d8be11ecdf1a",
+  "dsTree": "HEAD plus the uncommitted re-mint of receipts/index.json (the only tracked modification; the ledger is the committed one)",
+  "receiptsFile": "packages/core/contracts/package/deprecations/receipts/index.json",
+  "receiptsFileDigest": "sha256:b1ec70d2f9134ce78a9dc1746c660c65cf237909e9182e99fc9ba81800351b97",
+  "ledger": "packages/core/contracts/package/deprecations/index.json",
+  "ledgerDigest": "sha256:3d7f598a55b53fb3d1064ab348328252fce0fde826a70004aad77aa82a596db4",
+  "apps": {
+   "app-bithire": {
+    "origin": "https://github.com/rottay/app-bithire.git",
+    "head": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+    "originMain": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "app-evnto": {
+    "origin": "https://github.com/rottay/app-evnto.git",
+    "head": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+    "originMain": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f"
+   }
+  },
+  "verified": 9,
+  "failed": 0,
+  "gateClosureCheck": {
+   "command": "node packages/core/scripts/check/boundaries/deprecations/index.mjs --check --assume-done=WO-RET-01",
+   "exit": 1,
+   "failures": 17,
+   "unauditedReceipts": 9,
+   "debtRowFailures": 8,
+   "debtRows": [
+    "src/components/patterns/workflow/approval-inbox/index.ts#PatternApprovalInbox",
+    "src/foundation/contracts/kernel/tokens/extensions/index.ts#ComponentExtensions",
+    "src/foundation/contracts/kernel/tokens/extensions/index.ts#ExtensionHelpers",
+    "src/foundation/contracts/runtime/engine/index.ts#EngineAwareProps.extensions"
+   ],
+   "note": "run before the audited mark: the nine UNAUDITED failures are the receipts of this record; each of the four debt rows (receiver WO-RET-01) fails twice (receiver assumed done; debt cannot cross a closure) and is outside this audit. The gate reported all nine sibling evidence entries verified live and re-proven."
+  }
+ },
+ "receipts": [
+  {
+   "index": 0,
+   "row": "src/components/primitives/display/badge/contracts/index.ts#BadgeVariant",
+   "kind": "consumer",
+   "path": "../app-bithire/src/features/interviews/model/domain/workflows/feedback/listing/index.ts",
+   "needle": "import type { BadgeVariant } from \"@rottay/design-system\";",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:0d5c94185435a0e1d8e04fc3857d37c0f5108381f2c4fa44eaf0fc32fc2a8fc6",
+    "matchLine": 1,
+    "matchDigest": "sha256:d48103b2adc94afa308cbb3e03318edd95fd2956db525f15bb109ccfb1a6f7c6",
+    "rowDigest": "sha256:58b10752fe3b7961e509b9f2a27a05fb3f7365634f64302a136184f98d6396ba",
+    "integrity": "sha256:66587a2086ba38ec930c28609c353157f80c97a48e8d26706c4c99c73ce9a2c9",
+    "date": "2026-10-04"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:0d5c94185435a0e1d8e04fc3857d37c0f5108381f2c4fa44eaf0fc32fc2a8fc6",
+    "matchLine": 1,
+    "matchDigest": "sha256:d48103b2adc94afa308cbb3e03318edd95fd2956db525f15bb109ccfb1a6f7c6",
+    "rowDigest": "sha256:58b10752fe3b7961e509b9f2a27a05fb3f7365634f64302a136184f98d6396ba",
+    "integrity": "sha256:66587a2086ba38ec930c28609c353157f80c97a48e8d26706c4c99c73ce9a2c9",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 1,
+   "row": "src/components/primitives/display/badge/contracts/index.ts#BadgeBaseProps.variant",
+   "kind": "consumer",
+   "path": "../app-bithire/src/vertical/showcase/applications/ai-recommendation-variants/index.tsx",
+   "needle": "<Badge variant=\"secondary\" className=\"rt-showcase-ai-rec-c__ai-badge\">",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:46886c161e9bcdfd1ef00443c7c9498f5c7ff8bc797f9b146e70ff2e2df118d3",
+    "matchLine": 269,
+    "matchDigest": "sha256:b5dd2cc4e1ba69ece3fb5d3c433c23b24f6d144fc06a18c9387826fd352bb3a6",
+    "rowDigest": "sha256:9edf5f17d55bb95d7898d406546ac035fcd53b1a3ccf00b9b5c20a5dfcaf742c",
+    "integrity": "sha256:c6cb4e7547582e28e2e0b0588ed5a3aad718b49d83ba214d4a72c614dbc17d0c",
+    "date": "2026-10-04"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:46886c161e9bcdfd1ef00443c7c9498f5c7ff8bc797f9b146e70ff2e2df118d3",
+    "matchLine": 269,
+    "matchDigest": "sha256:b5dd2cc4e1ba69ece3fb5d3c433c23b24f6d144fc06a18c9387826fd352bb3a6",
+    "rowDigest": "sha256:9edf5f17d55bb95d7898d406546ac035fcd53b1a3ccf00b9b5c20a5dfcaf742c",
+    "integrity": "sha256:c6cb4e7547582e28e2e0b0588ed5a3aad718b49d83ba214d4a72c614dbc17d0c",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 2,
+   "row": "src/components/primitives/display/callout/index.tsx#Callout",
+   "kind": "consumer",
+   "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+   "needle": "<Callout variant=\"warning\" title=\"Offline\"",
+   "repository": "https://github.com/rottay/app-evnto.git",
+   "commit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+   "recorded": {
+    "fileDigest": "sha256:6dcc2b7ed349f9c2cbf787144a9dea77a86c1fd65bd6713198bc78ae1c24fe77",
+    "matchLine": 779,
+    "matchDigest": "sha256:38da4ff3b7b22c404a64382c351a5d9af4e9fb60539ff5e72e4f193359dcca6d",
+    "rowDigest": "sha256:c38e063f4e8f6e19c8884b2f88fcce55d94d80b2096df4fa98b398bc72f273cc",
+    "integrity": "sha256:859ef5f0100b211e908f51972946436c48a3b42db6231dec526b6f30c62d83a6",
+    "date": "2026-10-04"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:6dcc2b7ed349f9c2cbf787144a9dea77a86c1fd65bd6713198bc78ae1c24fe77",
+    "matchLine": 779,
+    "matchDigest": "sha256:38da4ff3b7b22c404a64382c351a5d9af4e9fb60539ff5e72e4f193359dcca6d",
+    "rowDigest": "sha256:c38e063f4e8f6e19c8884b2f88fcce55d94d80b2096df4fa98b398bc72f273cc",
+    "integrity": "sha256:859ef5f0100b211e908f51972946436c48a3b42db6231dec526b6f30c62d83a6",
+    "appHeadAtAudit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 3,
+   "row": "src/components/primitives/display/tag/contracts/index.ts#TagVariant",
+   "kind": "consumer",
+   "path": "../app-bithire/src/vertical/surface/shell/header/index.tsx",
+   "needle": "<Tag size=\"sm\" variant=\"success\" outlined>",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:cacb520e954379a770de0223f793331638368bb27dac450d67c448933899c558",
+    "matchLine": 541,
+    "matchDigest": "sha256:251624312b07d9cc222dfbbed5d1f58806cbbf228f380daa629de89e38527e4a",
+    "rowDigest": "sha256:21c55047ea75bab28b398c26a175898a69d59b6c93d3656345d61bf598a38dcb",
+    "integrity": "sha256:9a7d110fa5c99707a08abd8447dd0b5aefe1c164c15fd05a0e1ed87f4b08744b",
+    "date": "2026-10-04"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:cacb520e954379a770de0223f793331638368bb27dac450d67c448933899c558",
+    "matchLine": 541,
+    "matchDigest": "sha256:251624312b07d9cc222dfbbed5d1f58806cbbf228f380daa629de89e38527e4a",
+    "rowDigest": "sha256:21c55047ea75bab28b398c26a175898a69d59b6c93d3656345d61bf598a38dcb",
+    "integrity": "sha256:9a7d110fa5c99707a08abd8447dd0b5aefe1c164c15fd05a0e1ed87f4b08744b",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 4,
+   "row": "src/components/primitives/display/tag/contracts/index.ts#TagProps.variant",
+   "kind": "consumer",
+   "path": "../app-bithire/src/vertical/surface/shell/header/index.tsx",
+   "needle": "<Tag size=\"sm\" variant=\"success\" outlined>",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:cacb520e954379a770de0223f793331638368bb27dac450d67c448933899c558",
+    "matchLine": 541,
+    "matchDigest": "sha256:251624312b07d9cc222dfbbed5d1f58806cbbf228f380daa629de89e38527e4a",
+    "rowDigest": "sha256:8e8d1a087e0f6edb9b657b1b51651eca05c7415befc2007b9b9927d00e04a7a3",
+    "integrity": "sha256:22ae70b16253d12b2c688a8cf2b04888e785dc68e8120d244c0f7d773c683a9e",
+    "date": "2026-10-04"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:cacb520e954379a770de0223f793331638368bb27dac450d67c448933899c558",
+    "matchLine": 541,
+    "matchDigest": "sha256:251624312b07d9cc222dfbbed5d1f58806cbbf228f380daa629de89e38527e4a",
+    "rowDigest": "sha256:8e8d1a087e0f6edb9b657b1b51651eca05c7415befc2007b9b9927d00e04a7a3",
+    "integrity": "sha256:22ae70b16253d12b2c688a8cf2b04888e785dc68e8120d244c0f7d773c683a9e",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 5,
+   "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'left'",
+   "kind": "consumer",
+   "path": "../app-bithire/src/ui/forms/create/page-shell/components/index.tsx",
+   "needle": "placement=\"left\"",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:3b2b991fd8608a5e82d94c98624f88725a92b115148ec854270c1b3f31e93be8",
+    "matchLine": 295,
+    "matchDigest": "sha256:fda8603805c8d87aad53038cd99a2b6f0e582309cae18ffa4e307cf8e55c6810",
+    "rowDigest": "sha256:248460f833fe325e7c1cf6205cb2513479d4606df937fddf7a5c2987949077f4",
+    "integrity": "sha256:b4bcd036302e988f0479484a56513700e4367833e5ad088d11d5c23d2e87ff3a",
+    "date": "2026-10-04"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:3b2b991fd8608a5e82d94c98624f88725a92b115148ec854270c1b3f31e93be8",
+    "matchLine": 295,
+    "matchDigest": "sha256:fda8603805c8d87aad53038cd99a2b6f0e582309cae18ffa4e307cf8e55c6810",
+    "rowDigest": "sha256:248460f833fe325e7c1cf6205cb2513479d4606df937fddf7a5c2987949077f4",
+    "integrity": "sha256:b4bcd036302e988f0479484a56513700e4367833e5ad088d11d5c23d2e87ff3a",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 6,
+   "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'left'",
+   "kind": "consumer",
+   "path": "../app-bithire/src/ui/tables/collection/preview/index.tsx",
+   "needle": "<MaybeTooltip content={tooltip ?? \"Close this preview panel.\"} placement=\"left\">",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:7d852d5b3e3d23d9f7e2702f61ebd49f5f47749b98feff96b15b2142b534828e",
+    "matchLine": 447,
+    "matchDigest": "sha256:0017ae7de9996188a5ffb69f34d8642212e6ec451ee5fa31c0130abfddf1d3e5",
+    "rowDigest": "sha256:248460f833fe325e7c1cf6205cb2513479d4606df937fddf7a5c2987949077f4",
+    "integrity": "sha256:974a276cd9471b198395b864dd320a957040d4122b8bdd715a1d02f48246448b",
+    "date": "2026-10-04"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:7d852d5b3e3d23d9f7e2702f61ebd49f5f47749b98feff96b15b2142b534828e",
+    "matchLine": 447,
+    "matchDigest": "sha256:0017ae7de9996188a5ffb69f34d8642212e6ec451ee5fa31c0130abfddf1d3e5",
+    "rowDigest": "sha256:248460f833fe325e7c1cf6205cb2513479d4606df937fddf7a5c2987949077f4",
+    "integrity": "sha256:974a276cd9471b198395b864dd320a957040d4122b8bdd715a1d02f48246448b",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 7,
+   "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'right'",
+   "kind": "consumer",
+   "path": "../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx",
+   "needle": "placement=\"right\" color=\"primary\">",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+    "matchLine": 271,
+    "matchDigest": "sha256:98951eaeb91dbcf795c7e8ecbaee17fab89b629a176c243830ec04433cb43609",
+    "rowDigest": "sha256:b340f3437c83a138561cc24eea1d8fcdaab9a094e9c7dfd167298f197ae4793d",
+    "integrity": "sha256:d362865e96f6cc11f279ed42d6ca3b40972c22e1dd4ee4eb547045fd46d01b66",
+    "date": "2026-10-04"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+    "matchLine": 271,
+    "matchDigest": "sha256:98951eaeb91dbcf795c7e8ecbaee17fab89b629a176c243830ec04433cb43609",
+    "rowDigest": "sha256:b340f3437c83a138561cc24eea1d8fcdaab9a094e9c7dfd167298f197ae4793d",
+    "integrity": "sha256:d362865e96f6cc11f279ed42d6ca3b40972c22e1dd4ee4eb547045fd46d01b66",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  },
+  {
+   "index": 8,
+   "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'right'",
+   "kind": "consumer",
+   "path": "../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx",
+   "needle": "placement=\"right\" color={isActive ? 'primary' : 'secondary'}>",
+   "repository": "https://github.com/rottay/app-bithire.git",
+   "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+   "recorded": {
+    "fileDigest": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+    "matchLine": 304,
+    "matchDigest": "sha256:9e59bb171fa0f28bc1272d01828aad4d95b264c8a1b8cb0e124e043da2ddb73f",
+    "rowDigest": "sha256:b340f3437c83a138561cc24eea1d8fcdaab9a094e9c7dfd167298f197ae4793d",
+    "integrity": "sha256:2538696be3e6519fc4707e5cd782fbeeb8d3ed4fcb03fe72f0913c678a02a600",
+    "date": "2026-10-04"
+   },
+   "recomputed": {
+    "fileSha256": "sha256:4bfe31d6be21e1182ac1e385c0545dd3e467e834ea6db4aec8ed2bf61afcb3e2",
+    "matchLine": 304,
+    "matchDigest": "sha256:9e59bb171fa0f28bc1272d01828aad4d95b264c8a1b8cb0e124e043da2ddb73f",
+    "rowDigest": "sha256:b340f3437c83a138561cc24eea1d8fcdaab9a094e9c7dfd167298f197ae4793d",
+    "integrity": "sha256:2538696be3e6519fc4707e5cd782fbeeb8d3ed4fcb03fe72f0913c678a02a600",
+    "appHeadAtAudit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f"
+   },
+   "checks": {
+    "fileDigestMatches": true,
+    "needlePresentAtCommit": true,
+    "matchLineMatches": true,
+    "matchDigestMatches": true,
+    "rowDigestMatches": true,
+    "integrityMatches": true,
+    "commitReachableFromOriginMain": true,
+    "repositoryMatchesOrigin": true,
+    "needleStillAtHead": true
+   },
+   "verdict": "VERIFIED"
+  }
+ ]
+}
