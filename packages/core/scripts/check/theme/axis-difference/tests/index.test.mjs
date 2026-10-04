@@ -4014,13 +4014,31 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     const popover = readFileSync(join(ROOT, 'src/components/primitives/overlay/popover/engines/modern/index.tsx'), 'utf8');
     assert.ok(popover.includes("{...partAttributes('surface', surfaceFocus)}"));
     // The configuration the row reads under a state is the engine's own: the
-    // panel is focused on open, and its ring rule carries both halves.
+    // panel is focused when it mounts, and its ring rule carries both halves.
     const engine = readFileSync(join(ROOT, 'src/components/structures/workspace/column-menu/index.tsx'), 'utf8');
-    assert.ok(engine.includes('window.requestAnimationFrame(() => panelRef.current?.focus());'));
+    for (const gate of ['if (!isOpen || !panelEl) return undefined;', 'panelEl.focus({ preventScroll: true })']) {
+      assert.ok(entry.state.anchors.includes(gate), gate);
+      assert.equal(engine.split(gate).length - 1, 1, `${gate}: named once in the engine, so its published line is the gate's`);
+    }
     const skin = readFileSync(join(ROOT, 'src/foundation/tokens/css/presentation/components/skin/column-menu/index.css'), 'utf8');
     assert.match(skin, /\.ds-column-menu-panel\[data-part="surface"\]:is\(\[data-state~="focus-visible"\], :focus-visible\) \{[^}]*box-shadow: var\(--ds-column-menu-panel-focus-ring, var\(--ds-focus-ring\)\);/u);
     assert.match(skin, /\[data-part="panel"\][^{]*focus-visible[^{]*::after \{/u);
     assert.deepEqual(realRenderRosterFailures(ROOT, { 'column-menu': entry }), []);
+  });
+
+  it('STALE GATE: a column menu that focuses its panel one frame after open, mounted or not, is refused by the roster door', () => {
+    const file = 'src/components/structures/workspace/column-menu/index.tsx';
+    const source = readFileSync(join(ROOT, file), 'utf8');
+    const drifted = (from, to) => (path) => (path.endsWith(file) ? source.replace(from, to) : readFileSync(path, 'utf8'));
+    const row = { 'column-menu': REAL_RENDER_MOUNTS['column-menu'] };
+    assert.deepEqual(
+      realRenderRosterFailures(ROOT, row, { readSource: drifted('if (!isOpen || !panelEl) return undefined;', 'if (!isOpen) return undefined;') }),
+      [`column-menu: ${file} no longer carries the gate \`if (!isOpen || !panelEl) return undefined;\``],
+    );
+    assert.deepEqual(
+      realRenderRosterFailures(ROOT, row, { readSource: drifted('panelEl.focus({ preventScroll: true })', 'panelRef.current?.focus()') }),
+      [`column-menu: ${file} no longer carries the gate \`panelEl.focus({ preventScroll: true })\``],
+    );
   });
 
   it('S7 STALE PIN: a row that credits on states and is still pinned as a refusal is refused by the roster door', () => {

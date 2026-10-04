@@ -1769,13 +1769,15 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   'column-menu': Object.freeze({
     state: Object.freeze({
       name: 'the open panel of a default column menu (Popover surface carrying the family overlay class) with one visible and one hidden column -- the surface, count pill and rows carry radius, keyline and elevation; '
-        + 'the Popover surface holds focus when the menu opens from the keyboard and wears the tenant signature (`--ds-focus-ring`) '
-        + 'itself, kernel-stamped; a script that parks focus on the panel paints the same signature on the panel\'s `::after` overlay (S7)',
+        + 'the engine focuses the panel on every open, one frame after the panel mounts -- requested from a layout effect so that, by the engine\'s own '
+        + 'source, it precedes the Popover\'s initial-focus pass -- and the panel wears the tenant signature (`--ds-focus-ring`) on its `::after` overlay '
+        + 'while that focus is focus-visible; the Popover surface, kernel-stamped, wears the same signature itself only while it holds focus-visible focus itself (S7)',
       source: 'src/components/structures/workspace/column-menu/index.tsx',
       anchors: Object.freeze([
         'open={isOpen}',
         'overlayClassName="ds-structure ds-column-menu-panel"',
-        'window.requestAnimationFrame(() => panelRef.current?.focus());',
+        'if (!isOpen || !panelEl) return undefined;',
+        'panelEl.focus({ preventScroll: true })',
       ]),
       resolves: Object.freeze([
         Object.freeze({
