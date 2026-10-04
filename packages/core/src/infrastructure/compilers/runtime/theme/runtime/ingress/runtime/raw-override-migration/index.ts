@@ -146,16 +146,17 @@ function expandMembers(keypath: string): readonly string[] {
     : [keypath];
 }
 
-function soleLeaf(patch: unknown): string | undefined {
-  const path: string[] = [];
-  let node = patch;
-  while (isPlainObject(node)) {
-    const keys = Object.keys(node);
-    if (keys.length !== 1) return undefined;
-    path.push(keys[0]);
-    node = node[keys[0]];
+function soleLeaf(
+  patch: unknown,
+  path: readonly string[] = []
+): string | undefined {
+  if (!isPlainObject(patch)) {
+    return path.length > 0 ? path.join(".") : undefined;
   }
-  return path.length > 0 ? path.join(".") : undefined;
+  const entries = Object.entries(patch);
+  if (entries.length !== 1) return undefined;
+  const [[key, child]] = entries;
+  return soleLeaf(child, [...path, key]);
 }
 
 const DOCUMENT_GENERAL_PREFIX = "appearance.general.";
@@ -239,18 +240,24 @@ function issueText(issues: readonly TenantThemeValidationIssue[]): string {
   return issues.map((issue) => `${issue.path}: ${issue.message}`).join("; ");
 }
 
-function readAt(root: unknown, path: readonly string[], label: string): unknown {
-  let node = root;
-  for (let index = 0; index < path.length; index += 1) {
-    if (node === undefined) return undefined;
-    if (!isPlainObject(node)) {
-      throw new ThemePatchMigrationError(
-        `unsupported ${[label, ...path.slice(0, index)].join(".")}; expected an object`
-      );
-    }
-    node = node[path[index]];
+function readAt(
+  root: unknown,
+  path: readonly string[],
+  label: string,
+  depth = 0
+): unknown {
+  if (depth === path.length || root === undefined) return root;
+  if (!isPlainObject(root)) {
+    throw new ThemePatchMigrationError(
+      `unsupported ${[label, ...path.slice(0, depth)].join(".")}; expected an object`
+    );
   }
-  return node;
+  return readAt(
+    Object.entries(root).find(([key]) => key === path[depth])?.[1],
+    path,
+    label,
+    depth + 1
+  );
 }
 
 /** Writes `value` at `path`; returns false when a non-object stands in the way. */
@@ -465,6 +472,7 @@ export function foldRawTokenOverrides(input: {
   if (!isPlainObject(raw)) {
     throw new ThemePatchMigrationError(`unsupported ${RAW_PATH}; expected an object`);
   }
+  const rawValues = new Map<string, unknown>(Object.entries(raw));
   const general = readAt(source, ["visualFoundation", "general"], "$");
   if (general !== undefined && !isPlainObject(general)) {
     throw new ThemePatchMigrationError(
@@ -496,8 +504,8 @@ export function foldRawTokenOverrides(input: {
     leaves: readonly (readonly [readonly string[], unknown])[];
   }[] = [];
 
-  for (const token of Object.keys(raw).sort()) {
-    const value = cloneJson(raw[token]);
+  for (const token of [...rawValues.keys()].sort()) {
+    const value = cloneJson(rawValues.get(token));
     const block = (
       outcome: RawOverrideBlockingOutcome,
       reason: string
@@ -528,7 +536,7 @@ export function foldRawTokenOverrides(input: {
       block("off-allowlist", "not one of the tokens the v1 contract ever admitted");
       continue;
     }
-    const issues = tenantThemeTokenOverrideIssues({ [token]: raw[token] }, RAW_PATH);
+    const issues = tenantThemeTokenOverrideIssues(Object.fromEntries([[token, rawValues.get(token)]]), RAW_PATH);
     if (issues.length > 0) {
       block("invalid-value", issueText(issues));
       continue;
@@ -546,12 +554,12 @@ export function foldRawTokenOverrides(input: {
   const groups: FoldGroup[] = [];
   for (const { fold, tokens } of candidates.values()) {
     const to = `${GENERAL_PATH}.${fold.field.join(".")}`;
-    const distinct = new Set(tokens.map((token) => canonical(raw[token])));
+    const distinct = new Set(tokens.map((token) => canonical(rawValues.get(token))));
     if (distinct.size > 1) {
       for (const token of tokens) {
         entries.set(token, {
           token,
-          value: cloneJson(raw[token]),
+          value: cloneJson(rawValues.get(token)),
           outcome: "ambiguous",
           decision: fold.decision,
           to,
@@ -562,7 +570,7 @@ export function foldRawTokenOverrides(input: {
       }
       continue;
     }
-    const value = raw[tokens[0]];
+    const value = rawValues.get(tokens[0]);
     const issues: TenantThemeValidationIssue[] = [];
     validateTenantThemeNode(
       nested(fold.field, value),
@@ -659,13 +667,13 @@ export function foldRawTokenOverrides(input: {
       conflicts.length > 0
         ? {
             token,
-            value: cloneJson(raw[token]),
+            value: cloneJson(rawValues.get(token)),
             outcome: "invalid-resolution",
             reason: `the replacement would overwrite an authored value: ${conflicts.join("; ")}`,
           }
         : {
             token,
-            value: cloneJson(raw[token]),
+            value: cloneJson(rawValues.get(token)),
             outcome: "resolved",
             action: resolution.action,
             note: resolution.note,
