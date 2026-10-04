@@ -14,7 +14,6 @@ import {
   Checkbox,
   Form,
   Toggle,
-  Switch,
   OTPInput,
   Textarea,
   FormField,
@@ -160,10 +159,10 @@ export function FieldsStates() {
           <Text size="xs" color="secondary">
             Switch
           </Text>
-          <Switch checked={false} onChange={() => undefined} checkedChildren="On" unCheckedChildren="Off" />
-          <Switch checked onChange={() => undefined} checkedChildren="On" unCheckedChildren="Off" />
-          <Switch disabled />
-          <Switch loading checked onChange={() => undefined} />
+          <Toggle checked={false} onChange={() => undefined} checkedLabel="On" uncheckedLabel="Off" />
+          <Toggle checked onChange={() => undefined} checkedLabel="On" uncheckedLabel="Off" />
+          <Toggle disabled />
+          <Toggle loading checked onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-otpinput">

@@ -226,7 +226,7 @@ export function SurfaceErrorState({
           </Text>
           <Alert
             className="ds-error-state__alert"
-            type="error"
+            tone="danger"
             showIcon
             message={description ?? normalized.message}
           />
@@ -304,7 +304,7 @@ export function SurfaceOfflineBanner({
   return (
     <Alert
       className="ds-surface ds-offline-banner"
-      type="warning"
+      tone="warning"
       showIcon
       message={message ?? tSurface('states.offline_message')}
       description={
