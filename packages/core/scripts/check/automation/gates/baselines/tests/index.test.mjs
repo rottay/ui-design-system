@@ -18,6 +18,7 @@ import { after, describe, it } from 'node:test';
 import {
   ANONYMOUS_LEDGERS,
   EXTRA_LEDGERS,
+  NAMED_COUNTER_LEDGERS,
   PINNED_APCA_PAIRS,
   WIDENINGS,
   apcaKeys,
@@ -86,6 +87,66 @@ describe('baseline discipline — the measurement', () => {
 
   it('the pinned APCA set is exactly what the ledger ships today', () => {
     assert.deepEqual([...apcaKeys()].sort(), [...PINNED_APCA_PAIRS].sort());
+  });
+});
+
+describe('the runner debt line — named counters stay visible beside their gate (R32 Q4)', () => {
+  const OWNERSHIP_GATE = 'pattern-surface-ownership';
+  const ownershipRatchet = CI_GATES.find((entry) => entry.id === OWNERSHIP_GATE)?.ratchet;
+
+  it('every named-counter key is the ratchet of a gate in the manifest, and ownership is one of them', () => {
+    assert.equal(typeof ownershipRatchet, 'string', `${OWNERSHIP_GATE} must be a ratcheted gate in the manifest`);
+    const ratchets = CI_GATES.map((entry) => entry.ratchet).filter(Boolean);
+    for (const key of Object.keys(NAMED_COUNTER_LEDGERS)) {
+      assert.ok(ratchets.includes(key), `${key} is keyed in NAMED_COUNTER_LEDGERS and is no gate's ratchet`);
+    }
+    assert.equal(
+      typeof NAMED_COUNTER_LEDGERS[ownershipRatchet],
+      'function',
+      `the map must be keyed by the ratchet of ${OWNERSHIP_GATE} (${ownershipRatchet}); a moved ledger or a `
+      + 'removed entry would drop the two named counters from the runner line without any gate going red',
+    );
+  });
+
+  it('the real line names both counters with their own figures and never claims F-86 below 1,000', () => {
+    const document = debtOf(join(ROOT, ownershipRatchet)).document;
+    const figures = { productive: [0, 0], frozen: [0, 0] };
+    for (const row of Object.values(document.entries)) {
+      const figure = /(^|\/)engines\/(classic|rustic)\//u.test(row.path) ? figures.frozen : figures.productive;
+      figure[0] += row.count;
+      figure[1] += 1;
+    }
+    const line = describeDebt(ownershipRatchet);
+    const [productive, frozen] = [figures.productive, figures.frozen];
+    assert.match(line, /^debtRatio /u);
+    assert.ok(
+      line.includes(`; productive ${productive[0]} occurrence(s) / ${productive[1]} row(s) → WO-EVI-02`),
+      `the productive counter is not named with its own figures: ${line}`,
+    );
+    assert.ok(
+      line.includes(`; frozen-transferred ${frozen[0]} occurrence(s) / ${frozen[1]} row(s) → WO-RET-06 (OPEN, transferred, not resolved)`),
+      `the transferred frozen debt is not visible with its own figures: ${line}`,
+    );
+    const total = productive[0] + frozen[0];
+    assert.equal(line.includes('F-86 < 1.000: NOT MET'), total >= 1000, line);
+    assert.ok(!/F-86[^;]*\bMET\b/u.test(line.replaceAll('NOT MET', '')), `the line may not declare F-86 met: ${line}`);
+  });
+
+  it('MUTANT: a ledger with no named-counter entry gets the generic size only', () => {
+    const document = debtOf(join(ROOT, ownershipRatchet)).document;
+    const dir = sandbox({ [LEDGER]: document });
+    const line = describeDebt(LEDGER, dir);
+    assert.match(line, /^debtRatio 100\.0%/u);
+    assert.ok(!line.includes('frozen-transferred'), 'the same document under an unkeyed path prints no named counter');
+    // The same document under the keyed path does: the entry is what carries it.
+    const keyed = sandbox({ [ownershipRatchet]: document });
+    assert.ok(describeDebt(ownershipRatchet, keyed).includes('frozen-transferred'));
+  });
+
+  it('ownership left ANONYMOUS_LEDGERS when its ledger started stating its purpose', () => {
+    assert.ok(!ANONYMOUS_LEDGERS.includes(OWNERSHIP_GATE));
+    const row = measure({ gates: CI_GATES }).find((entry) => entry.id === OWNERSHIP_GATE);
+    assert.equal(row.purposeField, 'purpose');
   });
 });
 

@@ -1,5 +1,6 @@
 {
   "schema": "ds-a002-ownership-baseline/2",
+  "purpose": "DS-A002 ownership census: presentation ownership leaked into patterns and surfaces, one row per finding id with its pinned occurrence count. Two counters derived from the path, never stored: productive (Modern engine + shared core) and frozen-transferred (Classic + Rustic, receiver WO-RET-06). Exact and decrease-only; lowered only by --update-baseline.",
   "scope": "src/components/patterns + src/components/surfaces",
   "entries": {
     "6cb8e00fcd6a3473c389": {

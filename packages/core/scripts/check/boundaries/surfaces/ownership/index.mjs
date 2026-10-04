@@ -54,6 +54,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 import {
+  BASELINE_PURPOSE,
   BASELINE_SCHEMA,
   BASELINE_SCOPE,
   COUNTERS,
@@ -786,6 +787,7 @@ function baselineDocument(rows) {
   ));
   return {
     schema: BASELINE_SCHEMA,
+    purpose: BASELINE_PURPOSE,
     scope: BASELINE_SCOPE,
     entries: Object.fromEntries(sorted.map(({ id, path, category, rule, count }) => (
       [id, { path, category, rule, count }]
@@ -898,7 +900,7 @@ export function validateBaseline(baseline) {
     return [`baseline must declare schema '${BASELINE_SCHEMA}' and an entries map keyed by finding id`];
   }
   for (const field of Object.keys(baseline)) {
-    if (!['schema', 'scope', 'entries'].includes(field)) {
+    if (!['schema', 'purpose', 'scope', 'entries'].includes(field)) {
       issues.push(`baseline.${field} is not a ledger field; counters and owner classes are derived, never stored`);
     }
   }
@@ -962,6 +964,12 @@ export function runOwnershipGate({
   const stored = readJson(baselinePath, buildBaseline([]));
   const baseline = acceptLegacyBaseline ? upgradeLegacyBaseline(stored) : stored;
   const baselineIssues = validateBaseline(baseline);
+  // The producer is exempt from this one check or it could never stamp the field.
+  if (!acceptLegacyBaseline && baselineIssues.length === 0 && baseline.purpose !== BASELINE_PURPOSE) {
+    baselineIssues.push(
+      'baseline.purpose must be the written subject the gate stamps; rewrite the header with --update-baseline',
+    );
+  }
   const staleAllowlistIssues = unusedEntries.map((entry) => (
     `unused allowlist entry '${entry.id ?? entry.path}' no longer owns a finding; remove the stale exception`
   ));

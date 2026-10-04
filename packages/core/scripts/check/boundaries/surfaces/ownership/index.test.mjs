@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { FROZEN } from '../../../engine/lifecycle/freeze/index.mjs';
 import { debtOf } from '../../../automation/gates/baselines/index.mjs';
 import {
+  BASELINE_PURPOSE,
   BASELINE_SCHEMA,
   F86_THRESHOLD,
   FROZEN_TRANSFERRED,
@@ -557,6 +558,39 @@ test('a schema 1 ledger is refused by the check and upgraded only through the pr
   assert.deepEqual(validateBaseline(upgraded), []);
   assert.equal(upgraded.entries[finding.id].count, 3);
   assert.equal(tightenBaseline([finding, finding, finding, finding], upgraded).ok, false);
+});
+
+test('the ledger states the gate\'s written subject: only the producer stamps it', () => {
+  assert.equal(JSON.parse(readFileSync(REAL_BASELINE, 'utf8')).purpose, BASELINE_PURPOSE);
+  assert.equal(buildBaseline([]).purpose, BASELINE_PURPOSE);
+
+  withTree((tree) => {
+    const pristine = tree.readBaseline();
+    assert.equal(pristine.purpose, BASELINE_PURPOSE);
+    const rows = JSON.stringify(pristine.entries);
+
+    for (const mutate of [
+      (document) => { delete document.purpose; },
+      (document) => { document.purpose = `${BASELINE_PURPOSE} The frozen debt is resolved.`; },
+    ]) {
+      const edited = structuredClone(pristine);
+      mutate(edited);
+      tree.writeBaseline(edited);
+      const result = tree.run();
+      assert.equal(result.ok, false);
+      assert.match(result.configurationIssues.join('\n'), /baseline\.purpose must be the written subject/u);
+      const check = tree.cli('--check');
+      assert.equal(check.status, 1);
+      assert.match(check.stderr, /baseline\.purpose must be the written subject/u);
+
+      // The producer is exempt from the equality check, restamps the header and leaves the rows alone.
+      assert.equal(tree.cli('--update-baseline').status, 0);
+      const restamped = tree.readBaseline();
+      assert.equal(restamped.purpose, BASELINE_PURPOSE);
+      assert.equal(JSON.stringify(restamped.entries), rows);
+      assert.equal(tree.cli('--check').status, 0);
+    }
+  });
 });
 
 test('the ledger on disk exposes its real debt to the generic walk the runner prints', () => {

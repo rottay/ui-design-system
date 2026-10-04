@@ -24,6 +24,13 @@ export const BASELINE_SCHEMA = 'ds-a002-ownership-baseline/2';
 export const BASELINE_SCOPE = 'src/components/patterns + src/components/surfaces';
 export const F86_THRESHOLD = 1000;
 
+/** The written subject the producer stamps on the ledger; the gate refuses any other. */
+export const BASELINE_PURPOSE =
+  'DS-A002 ownership census: presentation ownership leaked into patterns and surfaces, one row per '
+  + 'finding id with its pinned occurrence count. Two counters derived from the path, never stored: '
+  + 'productive (Modern engine + shared core) and frozen-transferred (Classic + Rustic, receiver '
+  + 'WO-RET-06). Exact and decrease-only; lowered only by --update-baseline.';
+
 export const PRODUCTIVE = 'productive';
 export const FROZEN_TRANSFERRED = 'frozen-transferred';
 

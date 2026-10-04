@@ -40,6 +40,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import { describeLedgerCounters } from '../../../boundaries/surfaces/ownership/counters/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_ROOT = findPackageRoot(HERE);
@@ -155,6 +156,20 @@ export function debtOf(path) {
   };
 }
 
+/**
+ * Ledgers whose gate states its debt as NAMED counters; the gate owns the
+ * sentence and this file only prints it after the generic size.
+ *
+ * The key is the gate's `ratchet` path in the manifest (the drill refuses a key
+ * that is not one). Owner ruling R32 Q4: the ownership census has two counters,
+ * `productive` and `frozen-transferred → WO-RET-06`, that are never netted; the
+ * transferred frozen debt stays visible beside the gate until its receiver
+ * disposes of it, so the generic total alone is not a lawful line for it.
+ */
+export const NAMED_COUNTER_LEDGERS = Object.freeze({
+  'scripts/check/boundaries/surfaces/ownership/baseline/index.json': describeLedgerCounters,
+});
+
 /** The one sentence the runner prints beside a ratcheted gate. */
 export function describeDebt(relativePath, root = DEFAULT_ROOT) {
   if (!relativePath) return null;
@@ -164,8 +179,10 @@ export function describeDebt(relativePath, root = DEFAULT_ROOT) {
   // and module ceilings side by side, so their sum has no single unit.
   // `debtRatio` is the figure that means the same thing everywhere -- how much
   // of a ledger is still standing on debt rather than on zero.
-  return `debtRatio ${(debt.ratio * 100).toFixed(1)}% — ${debt.counters - debt.atZero} of `
+  const generic = `debtRatio ${(debt.ratio * 100).toFixed(1)}% — ${debt.counters - debt.atZero} of `
     + `${debt.counters} pinned ceilings are above zero (ceiling sum ${debt.frozen}, mixed units)`;
+  const named = NAMED_COUNTER_LEDGERS[relativePath];
+  return named ? `${generic}; ${named(debt.document)}` : generic;
 }
 
 function statedPurpose(document) {
@@ -272,7 +289,6 @@ export const ANONYMOUS_LEDGERS = Object.freeze([
   'containerquery',
   'engine-token-audit',
   'application-boundary-gate',
-  'pattern-surface-ownership',
   'theme-channel-parity',
   'tenant-reachability',
   'i18n-key-parity',
