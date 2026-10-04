@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "line": "fixture",
+  "package": "@rottay/design-system",
+  "entries": [
+    {
+      "id": "prop-renamed/.#BadgeProps.variant",
+      "class": "prop-renamed",
+      "subpath": ".",
+      "symbol": "BadgeProps",
+      "member": "variant",
+      "components": ["Badge"],
+      "propsTypes": ["BadgeProps"],
+      "replacement": { "member": "tone", "values": { "default": "neutral", "primary": "primary", "success": "success", "warning": "warning", "error": "danger", "info": "info" } },
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "rewrite",
+      "resolves": "fixture: the value map `tone` can honour for Badge; `secondary` is absent because no tone reproduces it on any engine (parity verdict B, W10-RET01-PARITY row 3)"
+    }
+  ]
+}

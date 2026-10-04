@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "line": "fixture",
+  "package": "@rottay/design-system",
+  "entries": [
+    {
+      "id": "prop-renamed/.#TagProps.variant",
+      "class": "prop-renamed",
+      "subpath": ".",
+      "symbol": "TagProps",
+      "member": "variant",
+      "components": ["Tag"],
+      "propsTypes": ["TagProps"],
+      "replacement": { "member": "tone", "values": { "default": "neutral", "primary": "primary", "success": "success", "warning": "warning", "error": "danger" } },
+      "changeset": "fixture",
+      "census": "fixture",
+      "mode": "rewrite",
+      "resolves": "fixture: the value map `tone` can honour for Tag; `secondary` is absent because no tone reproduces it on any engine (parity verdict B, W10-RET01-PARITY row 9)"
+    }
+  ]
+}
