@@ -20,3 +20,15 @@ html[data-tenant] a,
 html[data-tenant] .ant-typography a {
   transition: var(--ds-transition-fast);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-tenant] a,
+  html[data-tenant] .ant-typography a {
+    transition: none;
+  }
+}
+
+html[data-tenant][data-ds-motion='reduced'] a,
+html[data-tenant][data-ds-motion='reduced'] .ant-typography a {
+  transition: none;
+}
