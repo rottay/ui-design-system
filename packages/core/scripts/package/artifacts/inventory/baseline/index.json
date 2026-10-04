@@ -4,7 +4,7 @@
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
   "entryCount": 7660,
-  "unpackedSize": 43322606,
+  "unpackedSize": 43323725,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -4028,7 +4028,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/engines/modern/index.cjs",
-      "size": 4890
+      "size": 4995
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/engines/modern/index.d.ts",
@@ -4036,7 +4036,7 @@
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/engines/modern/index.js",
-      "size": 7354
+      "size": 7305
     },
     {
       "path": "dist/components/patterns/workflow/operational-ledger/index.cjs",
@@ -13332,15 +13332,15 @@
     },
     {
       "path": "dist/foundation/behavior/runtime/interaction-state/index.cjs",
-      "size": 1281
+      "size": 1451
     },
     {
       "path": "dist/foundation/behavior/runtime/interaction-state/index.d.ts",
-      "size": 1074
+      "size": 1749
     },
     {
       "path": "dist/foundation/behavior/runtime/interaction-state/index.js",
-      "size": 1588
+      "size": 1806
     },
     {
       "path": "dist/foundation/behavior/runtime/submit-intent/index.cjs",
