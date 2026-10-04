@@ -5,8 +5,8 @@
   "cut": "WO-FAM-01",
   "catalogRevision": "41af5c3698f85c48",
   "decisionRows": 29,
-  "exclusionsRevision": "4b2d422333c2d1b9",
-  "exclusionsReview": "WO-EVI-05 core review 2026-09-14 | re-published 2026-10-02 under registry revision 4b2d422333c2d1b9 (FAM09-CL re-extends chart-line/shape to the skeleton-bar dome, the INEFFECTIVE publication discharges; no pilot membership move)",
+  "exclusionsRevision": "bd0afa4ee4baf3db",
+  "exclusionsReview": "WO-EVI-05 core review 2026-09-14 | re-published 2026-10-02 under registry revision 4b2d422333c2d1b9 (FAM09-CL re-extends chart-line/shape to the skeleton-bar dome, the INEFFECTIVE publication discharges; no pilot membership move) | re-published 2026-10-03 under registry revision bd0afa4ee4baf3db (FAM09-CL reason-text rule applied: the chart-line/shape `reason` and `review` text rewritten, no declaration, membership or count move; no pilot membership move)",
   "families": {
     "button": [
       "shape",

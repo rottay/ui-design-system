@@ -18,9 +18,13 @@ dock (`actionPosture="sticky-bottom"`) now stamps
 `ds-action-dock` / `ds-action-dock__actions`, and the collection-workspace
 sticky-bar skin selector reads the canonical name.
 
-Paint was never on the class: the skins key on the anatomy
-(`data-part` / state attributes) and the class is only a scope. That is why
-the migration is a rename and nothing else.
+The skins select nine of these classes by name: the two roots
+(`ds-app-shell`, `ds-action-dock`) and the seven nodes that carry no
+`data-part` (marked "class is the only hook" in the table below). Everywhere
+else they key on the anatomy (`data-part` / state attributes). The skins
+renamed in the same lot as the stamps, one class for one class at equal
+specificity, so paint follows the rename. That is why the migration is a
+rename and nothing else.
 
 ## Who is affected
 
