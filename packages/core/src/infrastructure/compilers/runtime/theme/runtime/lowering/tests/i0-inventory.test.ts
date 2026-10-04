@@ -73,9 +73,17 @@ describe("public CSS export surface (from package.json)", () => {
     }
   }
 
-  it("package.json has exactly 8 style subpath exports", () => {
-    expect(styleExports.length).toBe(8);
-    expect(styleExports.map(({ subpath }) => subpath)).toContain("./styles/frozen-engines");
+  // `./styles` and `./styles/default` retired with the 3.0 export trim
+  // (d2edce40d, WO-RET-01): zero consumers in the census.
+  it("package.json publishes exactly the six style subpaths", () => {
+    expect(styleExports.map(({ subpath }) => subpath).sort()).toEqual([
+      "./styles.css",
+      "./styles/bithire",
+      "./styles/evnto",
+      "./styles/frozen-engines",
+      "./styles/modern",
+      "./styles/rottay",
+    ]);
   });
 
   // Validate every condition key resolves to a real dist file
@@ -98,21 +106,19 @@ describe("public CSS export surface (from package.json)", () => {
     }
   );
 
-  it("./styles and ./styles.css both resolve to dist/styles.css", () => {
-    const styles = styleExports.find((e) => e.subpath === "./styles");
+  it("./styles.css resolves to dist/styles.css and the bare ./styles alias stays retired", () => {
     const stylesCss = styleExports.find((e) => e.subpath === "./styles.css");
-    expect(styles?.style).toBe("./dist/styles.css");
     expect(stylesCss?.style).toBe("./dist/styles.css");
+    expect(styleExports.find((e) => e.subpath === "./styles")).toBeUndefined();
   });
 
   it("publishes no retired style alias or retired bundle name", () => {
     const retiredIdentity = ["plat", "form"].join("");
     const retiredStyleEntry = `./styles/${retiredIdentity}`;
 
-    // The alias is gone rather than deprecated. `./styles/rottay` is the
-    // vertical bundle; `./styles/default` is the neutral-baseline name for
-    // consumers that do not want to spell a vertical at all. Both resolve to
-    // dist/rottay.css, which is ONE file, not two names for two files.
+    // The aliases are gone rather than deprecated. `./styles/rottay` is the
+    // vertical bundle and the only name for dist/rottay.css; the
+    // neutral-baseline alias `./styles/default` retired with the export trim.
     expect(
       styleExports.find((e) => e.subpath === retiredStyleEntry),
     ).toBeUndefined();
@@ -125,9 +131,8 @@ describe("public CSS export surface (from package.json)", () => {
     }
 
     const rottay = styleExports.find((e) => e.subpath === "./styles/rottay");
-    const neutral = styleExports.find((e) => e.subpath === "./styles/default");
     expect(rottay?.style).toBe("./dist/rottay.css");
-    expect(neutral?.style).toBe("./dist/rottay.css");
+    expect(styleExports.find((e) => e.subpath === "./styles/default")).toBeUndefined();
   });
 
   it("each style export has style + import + default condition keys", () => {

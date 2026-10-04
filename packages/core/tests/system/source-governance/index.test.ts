@@ -319,8 +319,10 @@ describe('folder structure', () => {
     expect(existsSync(join(SRC_ROOT, 'tooling'))).toBe(false);
   });
 
-  it('infrastructure/runtime/ should have an index.ts barrel export', () => {
-    expect(existsSync(join(INFRASTRUCTURE_RUNTIME_ROOT, 'index.ts'))).toBe(true);
+  it('infrastructure/runtime/ should not reintroduce its retired root barrel', () => {
+    // Retired with the census-proven dead code (11175802a, WO-RET-01): each
+    // runtime owner is imported at its own folder.
+    expect(existsSync(join(INFRASTRUCTURE_RUNTIME_ROOT, 'index.ts'))).toBe(false);
   });
 
   it('should not reintroduce a private compatibility barrel', () => {

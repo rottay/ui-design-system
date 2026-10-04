@@ -118,6 +118,8 @@ describe('design token contract', () => {
   it('exposes the canonical token groups from the public tokens entry', () => {
     expect(runtimeTokens).toHaveProperty('base');
     expect(runtimeTokens).toHaveProperty('components');
-    expect(runtimeTokens).toHaveProperty('tenants');
+    expect(runtimeTokens).toHaveProperty('tenantMirrors');
+    // The deprecated `tenants` key retired with ba9bb1cd3 (WO-RET-01).
+    expect(Object.keys(runtimeTokens).sort()).toEqual(['base', 'components', 'tenantMirrors']);
   });
 });

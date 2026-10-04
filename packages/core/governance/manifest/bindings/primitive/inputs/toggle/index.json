@@ -1,7 +1,6 @@
 {
   "familyId": "primitive/inputs/toggle",
   "sourceBindings": [
-    "packages/core/src/components/primitives/inputs/toggle/compound/index.ts",
     "packages/core/src/components/primitives/inputs/toggle/contracts/index.ts",
     "packages/core/src/components/primitives/inputs/toggle/engines/classic/index.tsx",
     "packages/core/src/components/primitives/inputs/toggle/engines/modern/index.tsx",

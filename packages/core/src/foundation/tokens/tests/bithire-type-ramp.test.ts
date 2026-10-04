@@ -3,9 +3,9 @@
  *
  * The brand compiler must emit the closed composite type ramp
  * --ds-text-{detail,body,emphasis,title,display} plus the --ds-text-eyebrow
- * variant, each as a `font`-shorthand token AND the four addressable facets
- * (size, weight, line-height, letter-spacing). Values are the design-language.md
- * §2.1 table verbatim; the weight set is 400/600/700 only and eyebrow is the sole
+ * variant, each as a `font`-shorthand token AND its addressable facets (size,
+ * weight, line-height, and letter-spacing where the entry tracks). Values are
+ * the design-language.md §2.1 table verbatim; the weight set is 400/600/700 only and eyebrow is the sole
  * uppercase. This is what lets app code bind numeric fontSize/fontWeight literals
  * onto a single named ramp entry instead of hand-picking a size/weight/tracking
  * triple.
@@ -16,6 +16,9 @@
  * `var(--ds-type-scale, 1)`, so the ramp -- the one type surface a tenant's own
  * `typography.scale` could not move -- finally answers to it. At the default
  * scale of 1 every value below computes exactly as it always did.
+ *
+ * The body and emphasis letter-spacing facets are not emitted: they restated
+ * the browser default and had no reader (5e92f1b89, WO-RET-01).
  */
 import { describe, expect, it } from 'vitest';
 
@@ -27,8 +30,8 @@ const bithireFlatTheme = firstPartyFixture('bithire');
 /** design-language §2.1 table — size / line-height / weight / tracking, per entry. */
 const RAMP = [
   { name: 'detail', size: '0.75rem', line: '1rem', weight: '400', tracking: '0' },
-  { name: 'body', size: '0.875rem', line: '1.25rem', weight: '400', tracking: '0' },
-  { name: 'emphasis', size: '1rem', line: '1.5rem', weight: '600', tracking: '0' },
+  { name: 'body', size: '0.875rem', line: '1.25rem', weight: '400', tracking: undefined },
+  { name: 'emphasis', size: '1rem', line: '1.5rem', weight: '600', tracking: undefined },
   { name: 'title', size: '1.25rem', line: '1.75rem', weight: '600', tracking: '-0.01em' },
   { name: 'display', size: '2rem', line: '2.25rem', weight: '700', tracking: '-0.02em' },
 ] as const;
@@ -53,7 +56,7 @@ describe('bithire brand compiler emits the composite type ramp', () => {
     }
   });
 
-  it('emits the four addressable facets with the §2.1 values, on the type dial', () => {
+  it('emits the addressable facets with the §2.1 values, on the type dial', () => {
     for (const { name, size, line, weight, tracking } of RAMP) {
       expect(cssVariables[`--ds-text-${name}-size`]).toBe(dialed(size));
       expect(cssVariables[`--ds-text-${name}-weight`]).toBe(weight);

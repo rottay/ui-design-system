@@ -2137,12 +2137,11 @@
       "layerProfileSignal": "static display primitive",
       "divergenceProfile": "atomic-static",
       "publicExports": [
-        "CalloutProps",
-        "CalloutVariant",
         "CalloutTone",
         "CALLOUT_DEFAULTS",
         "CALLOUT_COLORS",
-        "Callout"
+        "Callout",
+        "CalloutProps"
       ],
       "declaredComponentsPublic": [
         "Callout"
@@ -2274,10 +2273,10 @@
       "layerProfileSignal": "renders a label/value data region",
       "divergenceProfile": "interactive-control-layout",
       "publicExports": [
-        "DescriptionsProps",
         "DescriptionsItemProps",
         "DescriptionsLayout",
         "DescriptionsSize",
+        "DescriptionsProps",
         "Descriptions"
       ],
       "declaredComponentsPublic": [
@@ -2384,9 +2383,9 @@
       "layerProfileSignal": "renders a collection with item interaction",
       "divergenceProfile": "interactive-control-layout",
       "publicExports": [
-        "ListProps",
         "ListItemProps",
         "ListItemMetaProps",
+        "ListProps",
         "List"
       ],
       "declaredComponentsPublic": [
@@ -2727,9 +2726,9 @@
       "layerProfileSignal": "primitive category feedback",
       "divergenceProfile": "interactive-control-layout",
       "publicExports": [
-        "AlertProps",
-        "AlertType",
-        "Alert"
+        "AlertTone",
+        "Alert",
+        "AlertProps"
       ],
       "declaredComponentsPublic": [
         "Alert"
@@ -3223,10 +3222,10 @@
       "layerProfileSignal": "primitive category inputs",
       "divergenceProfile": "interactive-control-layout",
       "publicExports": [
-        "ButtonProps",
         "ButtonSize",
         "ButtonVariant",
-        "Button"
+        "Button",
+        "ButtonProps"
       ],
       "declaredComponentsPublic": [
         "Button"
@@ -3730,8 +3729,7 @@
       "category": "inputs",
       "family": "Toggle",
       "components": [
-        "Toggle",
-        "Switch"
+        "Toggle"
       ],
       "sourceRoot": "packages/core/src/components/primitives",
       "sourceOwner": "packages/core/src/components/primitives/inputs/toggle",
@@ -3744,14 +3742,10 @@
         "ToggleSize",
         "ToggleVariant",
         "ToggleLabelPlacement",
-        "SwitchProps",
-        "SwitchSize",
-        "Switch",
         "Toggle"
       ],
       "declaredComponentsPublic": [
-        "Toggle",
-        "Switch"
+        "Toggle"
       ],
       "declaredComponentsNotPubliclyNamed": [],
       "sourceResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT"
@@ -4321,14 +4315,13 @@
       "layerProfileSignal": "static layout primitive",
       "divergenceProfile": "atomic-static",
       "publicExports": [
-        "SpaceProps",
         "SpaceSize",
-        "LegacySpaceSize",
         "SpaceDirection",
         "SpaceAlign",
         "SPACE_DEFAULTS",
         "SPACE_SIZE_MAP",
         "SPACE_ALIGN_MAP",
+        "SpaceProps",
         "Space"
       ],
       "declaredComponentsPublic": [
@@ -4630,9 +4623,9 @@
       "layerProfileSignal": "primitive category navigation",
       "divergenceProfile": "interactive-control-layout",
       "publicExports": [
-        "SegmentedProps",
         "SegmentedOption",
         "SEGMENTED_DEFAULTS",
+        "SegmentedProps",
         "Segmented"
       ],
       "declaredComponentsPublic": [
@@ -4647,8 +4640,7 @@
       "category": "navigation",
       "family": "Stepper",
       "components": [
-        "Stepper",
-        "Steps"
+        "Stepper"
       ],
       "sourceRoot": "packages/core/src/components/primitives",
       "sourceOwner": "packages/core/src/components/primitives/navigation/stepper",
@@ -4668,19 +4660,15 @@
         "LabelPlacement",
         "StepProps",
         "StepContentProps",
-        "StepsProps",
-        "ProgressDotInfo",
         "STEPPER_DEFAULTS",
         "STEPPER_SIZE_MAP",
         "STEPPER_FONT_SIZE_MAP",
         "StepperStep",
         "StepperContent",
-        "Steps",
         "Stepper"
       ],
       "declaredComponentsPublic": [
-        "Stepper",
-        "Steps"
+        "Stepper"
       ],
       "declaredComponentsNotPubliclyNamed": [],
       "sourceResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT"

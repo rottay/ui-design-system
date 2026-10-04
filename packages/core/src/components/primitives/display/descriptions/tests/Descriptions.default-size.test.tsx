@@ -83,6 +83,11 @@ async function rusticStatic(node: React.ReactElement) {
   return stable(markup.replace(/<!--.*?-->/g, ''));
 }
 
+/** The size the root paints at rest: the fallback of the first inline `font-size` read, which is the root's. */
+function rootRestingFontSize(markup: string | undefined) {
+  return markup?.match(/^<[^>]*\bfont-size:var\(--[\w-]+,\s*([^)]+)\)/)?.[1];
+}
+
 const ROWS = (
   <>
     <Descriptions.Item label="Name">Ada Lovelace</Descriptions.Item>
@@ -146,8 +151,8 @@ describe('Descriptions size steps reach every engine in the spelling it reads', 
     const byDefault = await rusticStatic(<Descriptions title="Account">{ROWS}</Descriptions>);
     expect(byDefault).toBe(await rusticStatic(<RusticDescriptions title="Account">{ROWS}</RusticDescriptions>));
     expect(byDefault).toBe(painted.get('lg'));
-    expect(painted.get('sm')).toContain('font-size:var(--ds-descriptions-font-size-small, 12px)');
-    expect(painted.get('lg')).toContain('font-size:var(--ds-descriptions-font-size-default, 14px)');
+    expect(rootRestingFontSize(painted.get('sm'))).toBe('12px');
+    expect(rootRestingFontSize(painted.get('lg'))).toBe('14px');
     expect(painted.get('md')).toBe(painted.get('lg'));
     expect(painted.get('sm')).not.toBe(painted.get('lg'));
   });

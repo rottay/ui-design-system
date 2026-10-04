@@ -96,14 +96,15 @@ describe('ChartFamilyFrame -- the owner is gone', () => {
   it('leaves its sibling presentation owners untouched', () => {
     // The retirement is the adapter, not the tier. `scaffold` is the path every
     // family actually takes, and it is the proof that `charts/presentation` was
-    // narrowed rather than emptied by accident.
+    // narrowed rather than emptied by accident. `crosshair` left separately,
+    // with the census-proven dead code (11175802a, WO-RET-01).
     for (const survivor of [
       `${CHARTS_ROOT}/presentation/scaffold`,
       `${CHARTS_ROOT}/presentation/tooltip`,
-      `${CHARTS_ROOT}/presentation/crosshair`,
     ]) {
       expect(existsSync(join(PACKAGE_ROOT, survivor)), survivor).toBe(true);
     }
+    expect(existsSync(join(PACKAGE_ROOT, `${CHARTS_ROOT}/presentation/crosshair`))).toBe(false);
   });
 });
 
