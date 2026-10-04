@@ -10173,7 +10173,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 /**
  * Toggle Component Tokens - Rottay Design System
  *
- * Design tokens of the one binary switch family (Toggle; Switch is its deprecated name).
+ * Design tokens of the one binary switch family (Toggle).
  * Includes sizes, colors, variants, and interactive properties.
  */
 
@@ -15069,9 +15069,15 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   cursor: progress;
 }
 
+/* One tier: the toolbar and the scrollport focus overlay, which is drawn
+   after it and so sits above every column. */
+.ds-pattern-decision-comparison.ds-engine-modern[data-part="root"]::after,
+.ds-pattern-decision-comparison .ds-decision-comparison__toolbar {
+  z-index: 2;
+}
+
 .ds-pattern-decision-comparison .ds-decision-comparison__toolbar {
   position: relative;
-  z-index: 2;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
@@ -15794,7 +15800,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   )::after {
   position: absolute;
   inset: 0;
-  z-index: 3;
   content: "";
   box-shadow: var(--ds-focus-ring);
   pointer-events: none;
@@ -20063,12 +20068,6 @@ html[data-tenant] .ant-typography a {
   visibility: hidden;
 }
 
-.ds-button.ds-button--modern [data-part='content'][data-state='hidden'] {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
 .ds-button.ds-button--modern [data-part='content-frame'] > [data-part='busy-content'] {
   position: absolute;
   inset: 0;
@@ -21350,7 +21349,7 @@ html[data-tenant] .ant-typography a {
   outline-offset: calc(-1 * var(--ds-card-selected-outline-width, var(--ds-card-border-width)));
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled']):not([data-shadowed='false']) {
-  box-shadow: var(--ds-card-shadow-selected);
+  box-shadow: var(--ds-card-shadow-selected, var(--ds-material-card-shadow-selected));
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled'])::after {
   opacity: var(--ds-card-state-overlay-selected-opacity);
@@ -21358,7 +21357,7 @@ html[data-tenant] .ant-typography a {
 
 /* The outline stays transparent until a tenant states its colour. */
 .ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  outline: var(--ds-card-focus-ring-width) solid var(--ds-card-focus-ring-color);
+  outline: var(--ds-card-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-card-focus-ring-color, var(--ds-border-color-transparent));
   outline-offset: var(--ds-card-focus-ring-offset);
 }
 
@@ -21421,7 +21420,7 @@ html[data-tenant] .ant-typography a {
   outline-offset: calc(-1 * var(--ds-card-selected-outline-width, var(--ds-card-border-width)));
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-state~='disabled']):not([data-shadowed='false']) {
-  box-shadow: var(--ds-card-shadow-selected);
+  box-shadow: var(--ds-card-shadow-selected, var(--ds-material-card-shadow-selected));
 }
 
 /* ---- loading: the reserved anatomy under a frosted spinner scrim; the cover
@@ -21700,107 +21699,107 @@ html[data-tenant] .ant-typography a {
    the shadow of the resting, hovered, pressed or selected rule it follows. A
    `none` shadow would void the whole list, so each composition is guarded. */
 .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-elevated-shadow: none) {
   .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
     box-shadow:
-      var(--ds-card-focus-ring),
+      var(--ds-card-focus-ring, var(--ds-focus-ring)),
       inset 0 var(--ds-edge-hairline-width) 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent),
       var(--ds-card-elevated-shadow, var(--ds-card-shadow));
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='outlined'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-bordered-shadow: none) {
   .ds-card.ds-card--modern[data-part='root'][data-variant='outlined'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-bordered-shadow);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-bordered-shadow);
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='filled'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-flat-shadow: none) {
   .ds-card.ds-card--modern[data-part='root'][data-variant='filled'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-flat-shadow);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-flat-shadow);
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='ghost'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-ghost-shadow: none) {
   .ds-card.ds-card--modern[data-part='root'][data-variant='ghost'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-ghost-shadow);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-ghost-shadow);
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-shadowed='true'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-shadow: none) {
   .ds-card.ds-card--modern[data-part='root'][data-shadowed='true'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-shadow);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-shadow);
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-shadowed='false'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @media (hover: hover) {
   .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='pressed']):not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-    box-shadow: var(--ds-card-focus-ring);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
   }
 }
 @media (hover: hover) {
   @container not style(--ds-card-elevated-shadow-hover: none) {
     .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='pressed']):not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-      box-shadow: var(--ds-card-focus-ring), var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover));
+      box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover));
     }
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-shadow-active: none) {
   .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-shadow-active, var(--ds-card-shadow));
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-shadow-active, var(--ds-card-shadow));
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-shadow-selected: none) {
   .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-shadow-selected);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-shadow-selected, var(--ds-material-card-shadow-selected));
   }
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-shadow-selected: none) {
   .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-state~='disabled']):not([data-shadowed='false'])[data-actionable='true'][data-state~='focus-visible'] {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-shadow-selected);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-shadow-selected, var(--ds-material-card-shadow-selected));
   }
 }
 [data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-shadow: none) {
   [data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-shadow, var(--ds-elevation-1));
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-shadow, var(--ds-elevation-1));
   }
 }
 [data-anatomy-card='underline'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 .ds-card.ds-card--modern [data-part='body'] .ds-card.ds-card--modern[data-part='root'][data-size][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-  box-shadow: var(--ds-card-focus-ring);
+  box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring));
 }
 @container not style(--ds-card-nested-shadow: none) {
   .ds-card.ds-card--modern [data-part='body'] .ds-card.ds-card--modern[data-part='root'][data-size][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
-    box-shadow: var(--ds-card-focus-ring), var(--ds-card-nested-shadow);
+    box-shadow: var(--ds-card-focus-ring, var(--ds-focus-ring)), var(--ds-card-nested-shadow);
   }
 }
 
@@ -26437,6 +26436,17 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-engine-modern
   [data-part="data-cell"][data-pinned="true"] {
   position: sticky;
+}
+
+/* One tier: the pinned cells and the row focus overlay that has to clear them. */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after,
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="group-header-row"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after,
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-pinned="true"],
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="data-cell"][data-pinned="true"] {
   z-index: 2;
 }
 
@@ -27209,7 +27219,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   content: "";
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
-  z-index: 2;
   box-shadow: var(--ds-table-row-focus-shadow, var(--ds-focus-ring));
   pointer-events: none;
 }
@@ -30872,11 +30881,26 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   opacity: var(--ds-toggle-disabled-opacity);
 }
 
-/* focus ring: the kernel's keyboard focus, with the hidden input's own :focus-visible as fallback. */
-.ds-toggle.ds-toggle--modern[data-state~='focus-visible'] [data-part='track'],
+/* Keyboard focus wears the tenant focus signature on the track. A press on the
+   label focuses the input after release, so the input's own :focus-visible outranks the kernel stamp. */
+.ds-toggle.ds-toggle--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='track'],
 .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
-  outline: var(--ds-toggle-focus-ring-width) solid var(--ds-toggle-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-toggle-focus-ring-offset);
+  outline: var(--ds-toggle-focus-ring-width, var(--ds-focus-ring-width)) solid transparent;
+  outline-offset: var(--ds-toggle-focus-ring-offset, var(--ds-focus-ring-offset));
+  box-shadow: var(--ds-focus-ring);
+}
+@container not style(--ds-toggle-focus-ring-color: var(--ds-focus-ring-color)) {
+  .ds-toggle.ds-toggle--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='track'],
+  .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
+    outline-color: var(--ds-toggle-focus-ring-color, var(--ds-focus-ring-color));
+  }
+}
+/* A signature whose offset is not its width draws inside a control this small, on its state glyph: the outline keeps the focus colour around it. */
+@container not style(--ds-focus-ring-offset: var(--ds-focus-ring-width)) {
+  .ds-toggle.ds-toggle--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='track'],
+  .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
+    outline-color: var(--ds-toggle-focus-ring-color, var(--ds-focus-ring-color));
+  }
 }
 
 /* Thumb ---------------------------------------------------------------- */
@@ -31126,9 +31150,11 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
     border-color: ButtonText;
     border-top-color: Highlight;
   }
-  .ds-toggle.ds-toggle--modern[data-state~='focus-visible'] [data-part='track'],
+  .ds-toggle.ds-toggle--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='track'],
   .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
-    outline-color: Highlight;
+    outline: max(2px, var(--ds-toggle-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: max(2px, var(--ds-toggle-focus-ring-offset, var(--ds-focus-ring-offset)));
+    box-shadow: none;
   }
 }
 
@@ -31315,11 +31341,26 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
 }
 
-/* focus ring: the kernel's keyboard focus, with the hidden input's own :focus-visible as fallback. */
-.ds-radio.ds-radio--modern[data-state~='focus-visible'] [data-part='circle'],
+/* Keyboard focus wears the tenant focus signature on the circle. A press on the
+   label focuses the input after release, so the input's own :focus-visible outranks the kernel stamp. */
+.ds-radio.ds-radio--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='circle'],
 .ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
-  outline: var(--ds-radio-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-radio-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
+  outline: var(--ds-radio-focus-ring-width, var(--ds-focus-ring-width)) solid transparent;
   outline-offset: var(--ds-radio-focus-ring-offset, var(--ds-focus-ring-offset));
+  box-shadow: var(--ds-focus-ring);
+}
+@container not style(--ds-radio-focus-ring-color: var(--ds-focus-ring-color)) {
+  .ds-radio.ds-radio--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='circle'],
+  .ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
+    outline-color: var(--ds-radio-focus-ring-color, var(--ds-focus-ring-color));
+  }
+}
+/* A signature whose offset is not its width draws inside a control this small, on its state glyph: the outline keeps the focus colour around it. */
+@container not style(--ds-focus-ring-offset: var(--ds-focus-ring-width)) {
+  .ds-radio.ds-radio--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='circle'],
+  .ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
+    outline-color: var(--ds-radio-focus-ring-color, var(--ds-focus-ring-color));
+  }
 }
 
 /* disabled: the indicator quiets, semantics stay on the input. */
@@ -31438,6 +31479,12 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   }
   .ds-radio.ds-radio--modern[data-disabled='true'] [data-part='circle'] {
     border-color: GrayText;
+  }
+  .ds-radio.ds-radio--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='circle'],
+  .ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
+    outline: max(2px, var(--ds-radio-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: max(2px, var(--ds-radio-focus-ring-offset, var(--ds-focus-ring-offset)));
+    box-shadow: none;
   }
 }
 
@@ -31676,11 +31723,26 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
 }
 
-/* focus ring: the kernel's keyboard focus, with the hidden input's own :focus-visible as fallback. */
-.ds-checkbox.ds-checkbox--modern[data-state~='focus-visible'] [data-part='box'],
+/* Keyboard focus wears the tenant focus signature on the box. A press on the
+   label focuses the input after release, so the input's own :focus-visible outranks the kernel stamp. */
+.ds-checkbox.ds-checkbox--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='box'],
 .ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
-  outline: var(--ds-checkbox-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-checkbox-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
+  outline: var(--ds-checkbox-focus-ring-width, var(--ds-focus-ring-width)) solid transparent;
   outline-offset: var(--ds-checkbox-focus-ring-offset, var(--ds-focus-ring-offset));
+  box-shadow: var(--ds-focus-ring);
+}
+@container not style(--ds-checkbox-focus-ring-color: var(--ds-focus-ring-color)) {
+  .ds-checkbox.ds-checkbox--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='box'],
+  .ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
+    outline-color: var(--ds-checkbox-focus-ring-color, var(--ds-focus-ring-color));
+  }
+}
+/* A signature whose offset is not its width draws inside a control this small, on its state glyph: the outline keeps the focus colour around it. */
+@container not style(--ds-focus-ring-offset: var(--ds-focus-ring-width)) {
+  .ds-checkbox.ds-checkbox--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='box'],
+  .ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
+    outline-color: var(--ds-checkbox-focus-ring-color, var(--ds-focus-ring-color));
+  }
 }
 
 /* disabled: the whole row quiets, semantics stay on the input. */
@@ -31796,6 +31858,12 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   }
   .ds-checkbox.ds-checkbox--modern[data-disabled='true'] [data-part='box'] {
     border-color: GrayText;
+  }
+  .ds-checkbox.ds-checkbox--modern[data-state~='focus-visible']:not(:has(input:focus:not(:focus-visible))) [data-part='box'],
+  .ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
+    outline: max(2px, var(--ds-checkbox-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: max(2px, var(--ds-checkbox-focus-ring-offset, var(--ds-focus-ring-offset)));
+    box-shadow: none;
   }
 }
 
@@ -45251,7 +45319,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
    wears its own indicator. The outline is transparent until a tenant states a
    focus colour. */
 .ds-hover-card.ds-hover-card--modern[data-part='trigger'] > [data-part='surface']:is([data-state~='focus-visible'], :has(:focus-visible)) {
-  outline: var(--ds-focus-ring-width) var(--ds-edge-standard-style) var(--ds-hover-card-focus-color, transparent);
+  outline: var(--ds-focus-ring-width) var(--ds-edge-standard-style) var(--ds-hover-card-focus-color, var(--ds-border-color-transparent));
   outline-offset: var(--ds-focus-ring-offset);
 }
 
@@ -45787,11 +45855,56 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   transform: rotate(90deg);
 }
 
-/* Keyboard focus paints: the ring is the one affordance a keyboard user gets. */
-.ds-menu--modern[data-part='root'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible),
-.ds-menu--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: none;
+/* Keyboard focus wears the tenant focus signature. In the stacked modes it
+   is stated first and composed with the hovered or selected shadow it
+   follows; a `none` shadow would void the list, so each composition is guarded. */
+.ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+.ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+  outline: var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width)) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-menu-focus-ring, var(--ds-focus-ring));
+}
+
+@container not style(--ds-menu-item-shadow-active: none) {
+  @container not style(--ds-elevation-2: none) {
+    @container not style(--ds-menu-item-keyline: none) {
+      .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item'][data-selected='true']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+        box-shadow: var(--ds-menu-focus-ring, var(--ds-focus-ring)), var(--ds-menu-item-shadow-active, var(--ds-elevation-2)), var(--ds-menu-item-keyline);
+      }
+    }
+  }
+}
+
+@media (hover: hover) {
+  @container not style(--ds-menu-item-shadow-hover: none) {
+    @container not style(--ds-elevation-1: none) {
+      .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item']:not([data-state~='disabled']):not([data-selected='true']):not(:is([data-state~='pressed'], :active)):is([data-state~='hovered'], :hover):is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+      .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='trigger']:not([data-state~='disabled']):not(:is([data-state~='pressed'], :active)):is([data-state~='hovered'], :hover):is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+        box-shadow: var(--ds-menu-focus-ring, var(--ds-focus-ring)), var(--ds-menu-item-shadow-hover, var(--ds-elevation-1));
+      }
+    }
+  }
+}
+
+/* The menubar is a scroller and clips an outward shadow, so there the
+   signature rides an overlay inset by its own reach, under the row's content. */
+.ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+.ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+  outline: var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width)) solid transparent;
+  outline-offset: calc(-1 * var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width)));
+}
+
+.ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after,
+.ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width)));
+  inline-size: auto;
+  border-radius: max(0px, calc(var(--ds-menu-item-radius, var(--ds-radius-lg)) - var(--ds-focus-ring-offset) - var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width))));
+  background: none;
+  box-shadow: var(--ds-menu-focus-ring, var(--ds-focus-ring));
+  pointer-events: none;
 }
 
 /* ---- panels, groups, dividers ---------------------------------------- */
@@ -45946,10 +46059,29 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
     border-color: ButtonText;
   }
 
-  /* The ring is a box-shadow, which forced colors strip: an outline stands in. */
-  .ds-menu--modern[data-part='root'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-menu--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width)) solid Highlight;
+  /* The signature is a box-shadow, which forced colors strip: an outline stands
+     in, inside the row wherever the list or the selected fill would hide it. */
+  .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+  .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline: max(2px, var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: 0;
+  }
+
+  .ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+  .ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+  .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item'][data-selected='true']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline: max(2px, var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-menu-focus-ring-width, var(--ds-focus-ring-width))) - var(--ds-edge-standard-width));
+  }
+
+  .ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='item'][data-selected='true']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)),
+  .ds-menu--modern[data-part='root']:not([data-mode='horizontal']) [data-part='item'][data-selected='true']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline-color: HighlightText;
+  }
+
+  .ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='item']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after,
+  .ds-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+    box-shadow: none;
   }
 
   /* Disabled reads as GrayText; danger keeps a SHAPE signal, a dashed frame. */
@@ -48074,7 +48206,9 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
    ring is the exact class W8 already retired from Button
    (`Button.contrast-focus-ring.test.tsx`). No per-family focus channel
    survives; both controls read `--ds-focus-ring` directly. */
-.ds-segmented--modern[role='radiogroup'] [data-part='option'][data-state~='focus-visible'] {
+.ds-segmented--modern[role='radiogroup'] [data-part='option']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
 }
 
@@ -48111,6 +48245,12 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
 
   .ds-segmented--modern[role='radiogroup'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
+  }
+
+  .ds-segmented--modern[role='radiogroup'] [data-part='option']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 }
 
@@ -49365,10 +49505,29 @@ html[data-ds-motion='reduced'] .ds-stepper--modern[data-part='root'] [data-part=
   animation: ds-tabs-loading-spin var(--ds-tabs-loading-duration, var(--ds-motion-deliberate)) linear infinite;
 }
 
-/* Keyboard focus rides the derived ring; forced colors re-key it below. */
-.ds-tabs--modern[data-part='root'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: none;
+/* The list is a scroller and clips an outward shadow, so the tenant focus
+   signature rides an overlay inset by its own reach, above the selected paint. */
+.ds-tabs--modern[data-part='root'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+  outline: var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width)) solid transparent;
+  outline-offset: calc(-1 * var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width)));
+}
+
+.ds-tabs--modern[data-part='root'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::before {
+  position: absolute;
+  z-index: var(--ds-z-index-relative-above);
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width)));
+  border-radius: max(0px, calc(var(--ds-tabs-item-radius, var(--ds-radius-md)) - var(--ds-focus-ring-offset) - var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))));
   box-shadow: var(--ds-tabs-focus-ring, var(--ds-focus-ring));
+  content: '';
+  pointer-events: none;
+}
+
+.ds-tabs--modern[data-part='root']:is([data-variant='underline'], [data-variant='line']) [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::before {
+  border-radius: max(0px, calc(var(--ds-tabs-line-item-radius, var(--ds-tabs-item-radius, var(--ds-radius-md))) - var(--ds-focus-ring-offset) - var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))));
+}
+
+.ds-tabs--modern[data-part='root'][data-variant='pills'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::before {
+  border-radius: max(0px, calc(var(--ds-tabs-pills-item-radius, var(--ds-radius-full)) - var(--ds-focus-ring-offset) - var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))));
 }
 
 .ds-tabs--modern[data-part='root']:is([data-variant='underline'], [data-variant='line']) [data-part='tab-button'][data-selected='true']:not([data-state~='disabled']) {
@@ -49504,9 +49663,29 @@ html[data-ds-motion='reduced'] .ds-stepper--modern[data-part='root'] [data-part=
   transform: translateY(0) scale(0.96);
 }
 
-.ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']):is([data-state~='focus-visible'], :focus-visible) {
+/* The signature is stated first and composed with the control's own elevation;
+   each composition applies only where the composed shadow is not `none`. */
+.ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']):is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
   outline: none;
   box-shadow: var(--ds-tabs-focus-ring, var(--ds-focus-ring));
+}
+
+@container not style(--ds-tabs-overflow-control-shadow: none) {
+  @container not style(--ds-elevation-1: none) {
+    .ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']):is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+      box-shadow: var(--ds-tabs-focus-ring, var(--ds-focus-ring)), var(--ds-tabs-overflow-control-shadow, var(--ds-elevation-1));
+    }
+  }
+}
+
+@media (hover: hover) {
+  @container not style(--ds-tabs-overflow-control-shadow-hover: none) {
+    @container not style(--ds-elevation-2: none) {
+      .ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']):not([data-state~='disabled']):is([data-state~='hovered'], :hover):is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+        box-shadow: var(--ds-tabs-focus-ring, var(--ds-focus-ring)), var(--ds-tabs-overflow-control-shadow-hover, var(--ds-elevation-2));
+      }
+    }
+  }
 }
 
 .ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more'])[data-state~='disabled'] {
@@ -49517,6 +49696,7 @@ html[data-ds-motion='reduced'] .ds-stepper--modern[data-part='root'] [data-part=
 /* ---- panel: plain by default; contained is an opt-in, fully tokenized ---- */
 
 .ds-tabs--modern[data-part='root'] [data-part='tab-panel'] {
+  position: relative;
   padding: var(--ds-tabs-panel-padding, var(--ds-spacing-4, 16px) 0 0);
   outline: none;
   animation: ds-tabs-panel-reveal var(--ds-tabs-panel-motion-duration, var(--ds-motion-reveal)) var(--ds-tabs-panel-motion-easing, var(--ds-motion-ease-enter));
@@ -49544,8 +49724,19 @@ html[data-ds-motion='reduced'] .ds-stepper--modern[data-part='root'] [data-part=
   pointer-events: none;
 }
 
-.ds-tabs--modern[data-part='root'] [data-part='tab-panel']:is([data-state~='focus-visible'], :focus-visible) {
+/* A scrolling host clips an outward shadow, so the signature rides an overlay
+   inset by its own reach, only while the panel itself holds focus. */
+.ds-tabs--modern[data-part='root'] [data-part='tab-panel']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+  position: absolute;
+  z-index: var(--ds-z-index-relative-above);
+  inset: calc(var(--ds-focus-ring-offset) + var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width)));
   box-shadow: var(--ds-tabs-panel-focus-ring, var(--ds-focus-ring));
+  content: '';
+  pointer-events: none;
+}
+
+.ds-tabs--modern[data-part='root'][data-panel-variant='contained'] [data-part='tab-panel']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+  border-radius: max(0px, calc(var(--ds-tabs-panel-radius, var(--ds-radius-lg)) - var(--ds-edge-standard-width) - var(--ds-focus-ring-offset) - var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))));
 }
 
 /* ---- motion: the recipe's final state, reduced motion, transparency ---- */
@@ -49715,10 +49906,40 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
     box-shadow: none;
   }
 
-  /* The ring is a box-shadow, which forced colors strip: an outline stands in. */
-  .ds-tabs--modern[data-part='root'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']):is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width)) solid Highlight;
+  /* The signature is a box-shadow, which forced colors strip: an outline stands
+     in, inside the tab so the list cannot clip it. The selected tab opts out of
+     forced adjustment, so its overlay adds the paired system colour inside. */
+  .ds-tabs--modern[data-part='root'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline: max(2px, var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))) - var(--ds-edge-standard-width));
+  }
+
+  .ds-tabs--modern[data-part='root'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::before {
+    box-shadow: none;
+  }
+
+  .ds-tabs--modern[data-part='root'] [data-part='tab-button'][data-selected='true']:not([data-state~='disabled']):is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::before {
+    inset: max(2px, var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width)));
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 max(2px, var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))) HighlightText;
+  }
+
+  .ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']):is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline: max(2px, var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+  }
+
+  /* The panel is a tab stop of its own: its outline sits inside its box, where no scrolling host can clip it. */
+  .ds-tabs--modern[data-part='root'] [data-part='tab-panel']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline: max(2px, var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))) solid Highlight;
+    outline-offset: calc(-1 * max(2px, var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))));
+  }
+
+  .ds-tabs--modern[data-part='root'][data-panel-variant='contained'] [data-part='tab-panel']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus)) {
+    outline-offset: calc(-1 * max(2px, var(--ds-tabs-focus-ring-width, var(--ds-focus-ring-width))) - var(--ds-edge-standard-width));
+  }
+
+  .ds-tabs--modern[data-part='root'] [data-part='tab-panel']:is([data-state~='focus-visible'], :focus-visible):not(:focus-within:not(:focus))::after {
+    box-shadow: none;
   }
 
   /* The loading arc re-expresses track vs leading edge so progress stays perceivable. */
@@ -49813,7 +50034,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    and a `none` elevation would void the list. The outline is transparent until
    a tenant states a focus colour. */
 .ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, transparent);
+  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, var(--ds-border-color-transparent));
   outline-offset: var(--ds-tour-focus-ring-offset, var(--ds-focus-ring-offset));
   box-shadow: var(--ds-focus-ring);
 }
@@ -49955,7 +50176,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 /* Stated after hover and press, and one part heavier, so a focused control
    keeps the signature while it is hovered or pressed. */
 .ds-tour.ds-tour--modern[data-part='root'] :is([data-part='action'], [data-part='close-button'])[data-part]:is([data-state~='focus-visible'], :focus-visible) {
-  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, transparent);
+  outline: var(--ds-tour-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-tour-focus-ring, var(--ds-border-color-transparent));
   outline-offset: var(--ds-tour-focus-ring-offset, var(--ds-focus-ring-offset));
   box-shadow: var(--ds-focus-ring);
 }
@@ -51526,7 +51747,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
 }
-@container (not style(--ds-app-shell-skip-link-shadow: none)) and (not style(--ds-elevation-2: none)) {
+@container not (style(--ds-app-shell-skip-link-shadow: none) or style(--ds-elevation-2: none)) {
   .ds-app-shell [data-part="skip-link"]:is([data-state~="focus-visible"], :focus-visible) {
     box-shadow: var(--ds-focus-ring), var(--ds-app-shell-skip-link-shadow, var(--ds-elevation-2, none));
   }
@@ -57939,7 +58160,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(
     --ds-tag-close-focus-ring,
-    0 0 0 2px color-mix(in srgb, currentColor 26%, transparent)
+    var(--ds-focus-ring, 0 0 0 2px color-mix(in srgb, currentColor 26%, transparent))
   );
   opacity: 1;
 }
@@ -57985,7 +58206,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   }
   .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible),
   .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline: max(2px, var(--ds-focus-ring-width, 2px)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset, 2px);
     box-shadow: none;
   }
@@ -58559,7 +58780,7 @@ html[data-ds-motion='reduced']
    it wears its own indicator. The outline is transparent until a tenant
    states a focus colour. */
 .ds-tooltip-bubble[data-part='bubble'][data-interactive='true']:is([data-state~='focus-visible'], :has(:focus-visible)) {
-  outline: var(--ds-focus-ring-width) var(--ds-edge-standard-style) var(--ds-tooltip-focus-color, transparent);
+  outline: var(--ds-focus-ring-width) var(--ds-edge-standard-style) var(--ds-tooltip-focus-color, var(--ds-border-color-transparent));
   outline-offset: var(--ds-focus-ring-offset);
 }
 
@@ -80962,13 +81183,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     --ds-toolbar-focus-border,
     var(--ds-material-panel-border-hover, var(--ds-color-primary))
   );
-  box-shadow: var(
-    --ds-toolbar-focus-ring,
-    var(
-      --ds-material-panel-focus-ring,
-      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent)
-    )
-  );
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern[data-part='root']::before {
@@ -81115,13 +81329,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     .ds-list-toolbar__primary-action[data-part='primary-action'],
     .ds-list-toolbar__primary-action-mobile
   ).ds-button[data-variant]:is([data-state~='focus-visible'], :focus-visible) {
-  outline: none;
+  outline: var(--ds-focus-ring-width) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(
     --ds-toolbar-control-focus-ring,
-    var(
-      --ds-material-control-focus-ring,
-      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)
-    )
+    var(--ds-material-control-focus-ring, var(--ds-focus-ring))
   );
 }
 
@@ -81220,6 +81432,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-list-toolbar__density-options {
   padding-block: var(--ds-spacing-2, 0.5rem);
+  /* Room for a focused option's ring inside the scrolling settings panel. */
+  padding-inline: var(
+    --ds-toolbar-rail-focus-clearance,
+    max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))))
+  );
 }
 
 .ds-list-toolbar__settings-empty[data-part='settings-empty'].ds-list-toolbar__settings-empty {
@@ -81331,10 +81548,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:is([data-state~='focus-visible'], :focus-visible) {
-  box-shadow: var(
-    --ds-filter-pill-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
-  );
+  box-shadow: var(--ds-filter-pill-focus-ring, var(--ds-focus-ring));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -81663,11 +81877,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   gap: var(--ds-toolbar-control-gap, var(--ds-spacing-1, 0.25rem));
   scrollbar-width: thin;
   scrollbar-color: var(--ds-toolbar-border, var(--ds-color-border)) transparent;
-  /* Block clearance so a focused trigger's 3px ring is not clipped by the
-     rail's overflow; the rail is transparent, so the extra block size is
-     invisible in the row. */
-  padding-block: var(--ds-toolbar-rail-focus-clearance, 0.25rem);
-  margin-block: calc(var(--ds-toolbar-rail-focus-clearance, 0.25rem) * -1);
+  /* Clearance so a focused trigger's ring is not clipped by the rail's
+     overflow; the rail is transparent and the margin gives the room back. */
+  padding: var(
+    --ds-toolbar-rail-focus-clearance,
+    max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))))
+  );
+  margin: calc(
+    var(
+      --ds-toolbar-rail-focus-clearance,
+      max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))))
+    ) * -1
+  );
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -82036,7 +82257,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     margin-inline: calc(-1rem * var(--ds-density-effective-scale, 1));
     padding-block: var(
       --ds-toolbar-mobile-rail-padding,
-      var(--ds-toolbar-rail-focus-clearance, 0.25rem)
+      var(
+        --ds-toolbar-rail-focus-clearance,
+        max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))))
+      )
     );
     padding-inline: calc(1rem * var(--ds-density-effective-scale, 1));
     border: 1px solid var(--ds-toolbar-mobile-rail-border, transparent);
@@ -82287,6 +82511,22 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value {
     color: CanvasText;
     text-decoration-color: CanvasText;
+  }
+
+  .ds-pattern-list-toolbar.ds-engine-modern
+    :is(
+      .ds-list-toolbar__icon-button[data-part='icon-button'],
+      .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+      .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
+      .ds-list-toolbar__density-option[data-part='density-option'],
+      .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
+      .ds-list-toolbar__clear-all[data-part='clear-all'],
+      .ds-list-toolbar__primary-action[data-part='primary-action'],
+      .ds-list-toolbar__primary-action-mobile
+    ).ds-button[data-variant]:is([data-state~='focus-visible'], :focus-visible) {
+    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+    box-shadow: none;
   }
 
   /* The busy hairline's gradient is stripped; a solid system-highlight rule
@@ -90746,16 +90986,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     var(--ds-color-primary) 42%,
     var(--ds-color-border-secondary)
   );
-  box-shadow: 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  box-shadow: var(--_ds-collection-page-size-focus-layer,) 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
 }
 /* The native select is an invisible overlay, so the pill wears the tenant
-   focus signature for it, ahead of its own lift. */
+   focus signature for it: `--_ds-collection-page-size-focus-layer` leads the
+   lift stated above and is empty until the select holds keyboard focus. */
 .ds-collection-page-size-control:has(.ds-collection-page-size-control__select:focus-visible) {
+  --_ds-collection-page-size-focus-layer: var(--ds-focus-ring),;
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
-  box-shadow:
-    var(--ds-focus-ring),
-    0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
 }
 .ds-collection-page-size-control__picker {
   transition: border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
@@ -91607,7 +91846,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   box-shadow: var(--ds-focus-ring);
 }
 
-@container (not style(--ds-popover-shadow: none)) and (not style(--ds-elevation-3: none)) {
+@container not (style(--ds-popover-shadow: none) or style(--ds-elevation-3: none)) {
   .ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"]:focus-visible {
     box-shadow: var(--ds-focus-ring), var(--ds-popover-shadow, var(--ds-elevation-3));
   }
@@ -95059,7 +95298,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * that fight anyway, so the primitive channel is the only durable path.
  *
  * SCOPE: the surface composes public primitives and helpers (PageShell,
- * Card, Tag, Switch, Tabs, Badge, Pagination, Heading, the surface state
+ * Card, Tag, Toggle, Tabs, Badge, Pagination, Heading, the surface state
  * kits) — each owns its chrome, interaction states and forced-colors
  * treatment, so this file paints ONLY what the surface itself owns:
  *   - the read/unread recession of feed items (opacity on the pinned
@@ -102305,7 +102544,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   padding-inline: var(--ds-spacing-4, 1rem);
   padding-block: var(--ds-spacing-2, 0.5rem);
   font-size: var(--ds-font-size-xs, 0.75rem);
-  box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+  --_ds-timeline-card-focus-layer: initial;
 }
 
 /* ---- marker tone. `--_ds-timeline-marker-color` is the family-private
@@ -102417,14 +102656,19 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-bg-tertiary));
 }
 
-/* The signature shares box-shadow with the card's own shadow and leads the
-   list; a `none` hover elevation would void it, so that arm is guarded. */
+/* The card's own shadow is stated once, for rest and for keyboard focus. The
+   signature shares box-shadow with it and leads the list through
+   `--_ds-timeline-card-focus-layer`, which is empty until the card holds
+   focus; a `none` hover elevation would void the list, so that arm is guarded. */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'],
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
+  box-shadow: var(--_ds-timeline-card-focus-layer,) 0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
+  --_ds-timeline-card-focus-layer: var(--ds-focus-ring),;
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
-  box-shadow:
-    var(--ds-focus-ring),
-    0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
 
 @media (hover: hover) {
@@ -102988,24 +103232,17 @@ h6,
 
 .ant-input:focus-visible,
 .ant-select-focused .ant-select-selector,
-input:is(
-    [data-engine='classic'] *,
-    [data-engine='rustic'] *,
-    [class*='-rustic'],
-    [class*='-rustic'] *,
-    [class^='ant-'],
-    [class*=' ant-']
-  ):focus-visible {
+input:is([class*='-rustic'], [class*='-rustic'] *, [class^='ant-'], [class*=' ant-']):focus-visible,
+input:where([data-engine]:not([data-engine='modern']) *):focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),
     0 0 0 4px var(--ds-color-primary-400, #818cf8);
 }
 
-/* A raw input wears the tenant focus signature. An input the design system
-   stamps is painted by its own skin, so nothing is added to it here. */
+/* Outside any other engine's scope a raw input wears the tenant focus
+   signature. An input the design system stamps is painted by its own skin, so
+   nothing is added to it here. */
 input:focus-visible:not(
-    [data-engine='classic'] *,
-    [data-engine='rustic'] *,
     [class*='-rustic'],
     [class*='-rustic'] *,
     [class^='ant-'],
@@ -103013,7 +103250,7 @@ input:focus-visible:not(
     [class^='ds-'],
     [class*=' ds-'],
     [data-part]
-  ) {
+  ):where(:not([data-engine]:not([data-engine='modern']) *)) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
@@ -103021,8 +103258,6 @@ input:focus-visible:not(
 
 @media (forced-colors: active) {
   input:focus-visible:not(
-      [data-engine='classic'] *,
-      [data-engine='rustic'] *,
       [class*='-rustic'],
       [class*='-rustic'] *,
       [class^='ant-'],
@@ -103030,7 +103265,7 @@ input:focus-visible:not(
       [class^='ds-'],
       [class*=' ds-'],
       [data-part]
-    ) {
+    ):where(:not([data-engine]:not([data-engine='modern']) *)) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
   }
@@ -107844,7 +108079,7 @@ html[lang]:lang(ar) {
   --ds-header-tone-warning-fg: color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%);
   --ds-hover-card-bg: var(--ds-material-overlay-background);
   --ds-hover-card-border-color: color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%);
-  --ds-hover-card-focus-color: transparent;
+  --ds-hover-card-focus-color: var(--ds-border-color-transparent);
   --ds-hover-card-shadow: var(--ds-elevation-3);
   --ds-hover-card-surface-lift: var(--ds-elevation-surface-3);
   --ds-hover-card-texture: none;
@@ -109290,7 +109525,7 @@ html[lang]:lang(ar) {
   --ds-toggle-track-bg-hover: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-hover-shift));
   --ds-toggle-track-border-radius: var(--ds-radius-button, var(--ds-radius-full));
   --ds-toolbar-compact-padding: calc(0.75rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1));
-  --ds-toolbar-control-focus-ring: var(--ds-material-control-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent));
+  --ds-toolbar-control-focus-ring: var(--ds-material-control-focus-ring, var(--ds-focus-ring));
   --ds-toolbar-control-gap: var(--ds-spacing-1, 0.25rem);
   --ds-toolbar-control-pressed-scale: 0.975;
   --ds-toolbar-control-radius: var(--ds-button-sm-radius, var(--ds-radius-sm, 6px));
@@ -109306,7 +109541,6 @@ html[lang]:lang(ar) {
   --ds-toolbar-entry-animation: none;
   --ds-toolbar-filter-strip-padding: calc(0.5rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1));
   --ds-toolbar-focus-border: var(--ds-material-panel-border-hover, var(--ds-color-primary));
-  --ds-toolbar-focus-ring: var(--ds-material-panel-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent));
   --ds-toolbar-header-gradient: linear-gradient(118deg, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 96%, var(--ds-color-primary) 4%) 0%, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 48%, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 94%, var(--ds-surface-inset, var(--ds-color-bg-secondary)) 6%) 100%);
   --ds-toolbar-icon-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card));
   --ds-toolbar-icon-border: var(--ds-toolbar-control-border, var(--ds-color-border));
@@ -109320,13 +109554,13 @@ html[lang]:lang(ar) {
   --ds-toolbar-mobile-actions-radius: max(calc(var(--ds-toolbar-radius, var(--ds-radius-lg, 12px)) - 4px), var(--ds-button-sm-radius, var(--ds-radius-sm, 6px)));
   --ds-toolbar-mobile-rail-bg: transparent;
   --ds-toolbar-mobile-rail-border: transparent;
-  --ds-toolbar-mobile-rail-padding: var(--ds-toolbar-rail-focus-clearance, 0.25rem);
+  --ds-toolbar-mobile-rail-padding: var(--ds-toolbar-rail-focus-clearance, max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width)))));
   --ds-toolbar-mobile-rail-radius: max(calc(var(--ds-toolbar-radius, var(--ds-radius-lg, 12px)) - 4px), var(--ds-button-sm-radius, var(--ds-radius-sm, 6px)));
   --ds-toolbar-phone-filter-strip-padding: calc(0.625rem * var(--ds-density-effective-scale, 1)) calc(0.75rem * var(--ds-density-effective-scale, 1));
   --ds-toolbar-phone-padding: calc(0.625rem * var(--ds-density-effective-scale, 1)) calc(0.75rem * var(--ds-density-effective-scale, 1));
   --ds-toolbar-popover-radius: var(--ds-radius-md, 0.5rem);
   --ds-toolbar-primary-action-max-width: 18rem;
-  --ds-toolbar-rail-focus-clearance: 0.25rem;
+  --ds-toolbar-rail-focus-clearance: max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))));
   --ds-toolbar-saved-views-bg: color-mix(in srgb, var(--ds-surface-inset) 45%, transparent);
   --ds-toolbar-saved-views-border: transparent;
   --ds-toolbar-saved-views-radius: max(calc(var(--ds-toolbar-radius, var(--ds-radius-lg, 12px)) - 4px), var(--ds-button-sm-radius, var(--ds-radius-sm, 6px)));
@@ -109355,7 +109589,7 @@ html[lang]:lang(ar) {
   --ds-tooltip-bordered-texture: none;
   --ds-tooltip-error-bg: var(--ds-color-error);
   --ds-tooltip-error-color: var(--ds-color-on-error);
-  --ds-tooltip-focus-color: transparent;
+  --ds-tooltip-focus-color: var(--ds-border-color-transparent);
   --ds-tooltip-inverse-background: var(--ds-color-text-primary);
   --ds-tooltip-inverse-border: color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent);
   --ds-tooltip-inverse-foreground: var(--ds-color-text-inverse);
@@ -109398,7 +109632,7 @@ html[lang]:lang(ar) {
   --ds-tour-close-ink: var(--ds-material-card-foreground-muted);
   --ds-tour-close-ink-hover: var(--ds-material-card-foreground);
   --ds-tour-description-ink: var(--ds-color-text-secondary);
-  --ds-tour-focus-ring: transparent;
+  --ds-tour-focus-ring: var(--ds-border-color-transparent);
   --ds-tour-font-family: var(--ds-type-body-font-family);
   --ds-tour-indicator-bg: var(--ds-surface-panel);
   --ds-tour-indicator-bg-current: var(--ds-color-primary);

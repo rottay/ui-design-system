@@ -1256,7 +1256,7 @@
   --ds-header-tone-warning-fg: color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%);
   --ds-hover-card-bg: var(--ds-material-overlay-background);
   --ds-hover-card-border-color: color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%);
-  --ds-hover-card-focus-color: transparent;
+  --ds-hover-card-focus-color: var(--ds-border-color-transparent);
   --ds-hover-card-shadow: var(--ds-elevation-3);
   --ds-hover-card-surface-lift: var(--ds-elevation-surface-3);
   --ds-hover-card-texture: none;
@@ -2686,7 +2686,7 @@
   --ds-toggle-track-bg-hover: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-hover-shift));
   --ds-toggle-track-border-radius: var(--ds-radius-button, var(--ds-radius-full));
   --ds-toolbar-compact-padding: calc(0.75rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1));
-  --ds-toolbar-control-focus-ring: var(--ds-material-control-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent));
+  --ds-toolbar-control-focus-ring: var(--ds-material-control-focus-ring, var(--ds-focus-ring));
   --ds-toolbar-control-gap: var(--ds-spacing-1, 0.25rem);
   --ds-toolbar-control-pressed-scale: 0.975;
   --ds-toolbar-control-radius: var(--ds-button-sm-radius, var(--ds-radius-sm, 6px));
@@ -2702,7 +2702,6 @@
   --ds-toolbar-entry-animation: none;
   --ds-toolbar-filter-strip-padding: calc(0.5rem * var(--ds-density-effective-scale, 1)) calc(1rem * var(--ds-density-effective-scale, 1));
   --ds-toolbar-focus-border: var(--ds-material-panel-border-hover, var(--ds-color-primary));
-  --ds-toolbar-focus-ring: var(--ds-material-panel-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent));
   --ds-toolbar-header-gradient: linear-gradient(118deg, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 96%, var(--ds-color-primary) 4%) 0%, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 48%, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 94%, var(--ds-surface-inset, var(--ds-color-bg-secondary)) 6%) 100%);
   --ds-toolbar-icon-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card));
   --ds-toolbar-icon-border: var(--ds-toolbar-control-border, var(--ds-color-border));
@@ -2716,13 +2715,13 @@
   --ds-toolbar-mobile-actions-radius: max(calc(var(--ds-toolbar-radius, var(--ds-radius-lg, 12px)) - 4px), var(--ds-button-sm-radius, var(--ds-radius-sm, 6px)));
   --ds-toolbar-mobile-rail-bg: transparent;
   --ds-toolbar-mobile-rail-border: transparent;
-  --ds-toolbar-mobile-rail-padding: var(--ds-toolbar-rail-focus-clearance, 0.25rem);
+  --ds-toolbar-mobile-rail-padding: var(--ds-toolbar-rail-focus-clearance, max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width)))));
   --ds-toolbar-mobile-rail-radius: max(calc(var(--ds-toolbar-radius, var(--ds-radius-lg, 12px)) - 4px), var(--ds-button-sm-radius, var(--ds-radius-sm, 6px)));
   --ds-toolbar-phone-filter-strip-padding: calc(0.625rem * var(--ds-density-effective-scale, 1)) calc(0.75rem * var(--ds-density-effective-scale, 1));
   --ds-toolbar-phone-padding: calc(0.625rem * var(--ds-density-effective-scale, 1)) calc(0.75rem * var(--ds-density-effective-scale, 1));
   --ds-toolbar-popover-radius: var(--ds-radius-md, 0.5rem);
   --ds-toolbar-primary-action-max-width: 18rem;
-  --ds-toolbar-rail-focus-clearance: 0.25rem;
+  --ds-toolbar-rail-focus-clearance: max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width))));
   --ds-toolbar-saved-views-bg: color-mix(in srgb, var(--ds-surface-inset) 45%, transparent);
   --ds-toolbar-saved-views-border: transparent;
   --ds-toolbar-saved-views-radius: max(calc(var(--ds-toolbar-radius, var(--ds-radius-lg, 12px)) - 4px), var(--ds-button-sm-radius, var(--ds-radius-sm, 6px)));
@@ -2751,7 +2750,7 @@
   --ds-tooltip-bordered-texture: none;
   --ds-tooltip-error-bg: var(--ds-color-error);
   --ds-tooltip-error-color: var(--ds-color-on-error);
-  --ds-tooltip-focus-color: transparent;
+  --ds-tooltip-focus-color: var(--ds-border-color-transparent);
   --ds-tooltip-inverse-background: var(--ds-color-text-primary);
   --ds-tooltip-inverse-border: color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent);
   --ds-tooltip-inverse-foreground: var(--ds-color-text-inverse);
@@ -2794,7 +2793,7 @@
   --ds-tour-close-ink: var(--ds-material-card-foreground-muted);
   --ds-tour-close-ink-hover: var(--ds-material-card-foreground);
   --ds-tour-description-ink: var(--ds-color-text-secondary);
-  --ds-tour-focus-ring: transparent;
+  --ds-tour-focus-ring: var(--ds-border-color-transparent);
   --ds-tour-font-family: var(--ds-type-body-font-family);
   --ds-tour-indicator-bg: var(--ds-surface-panel);
   --ds-tour-indicator-bg-current: var(--ds-color-primary);

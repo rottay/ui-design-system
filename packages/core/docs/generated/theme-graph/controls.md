@@ -8,7 +8,7 @@
 > `produced` counts the channels the decision's derivers emit; `via aliases` counts what those
 > channels can still reach through the measured alias chain.
 
-digest: 7d2f5a006762464ee37e830932077ccb45beb71f8dedc8acbcf65b65668f72ba
+digest: f9871ef7a9db3314ccce47c762a6a751f6af8f80bb12370e3ed1bb2aa931c18a
 
 | decision | tier | derivers | produced | via aliases | families reached |
 |---|---|---|---|---|---|
@@ -18,21 +18,21 @@ digest: 7d2f5a006762464ee37e830932077ccb45beb71f8dedc8acbcf65b65668f72ba
 | `motion.character` | pro | 30 | 1059 | 1319 | 203 |
 | `motion.dial` | standard | 30 | 1059 | 1319 | 203 |
 | `navigation.sidebar-tone` | standard | 1 | 6 | 15 | 3 |
-| `palette.contrast-posture` | pro | 85 | 2532 | 4106 | 252 |
+| `palette.contrast-posture` | pro | 85 | 2531 | 4107 | 252 |
 | `palette.dark-mode` | pro | — | 0 | 0 | **none** |
-| `palette.neutral-temperature` | standard | 85 | 2532 | 4106 | 252 |
-| `palette.seeds` | standard | 89 | 2630 | 4309 | 252 |
-| `palette.status-seeds` | standard | 88 | 2618 | 4285 | 252 |
+| `palette.neutral-temperature` | standard | 85 | 2531 | 4107 | 252 |
+| `palette.seeds` | standard | 89 | 2629 | 4310 | 252 |
+| `palette.status-seeds` | standard | 88 | 2617 | 4286 | 252 |
 | `profiles.expressive` | pro | 8 | 223 | 1900 | 249 |
 | `recipe-profile` | pro | — | 0 | 0 | **none** |
 | `responsive.posture` | pro | 2 | 27 | 28 | 1 |
 | `shape.button-style` | standard | 13 | 368 | 1062 | 223 |
 | `shape.control-height` | standard | 14 | 506 | 649 | 84 |
 | `shape.nesting` | pro | 11 | 347 | 462 | 69 |
-| `shape.radius-scale` | standard | 37 | 1300 | 1932 | 225 |
+| `shape.radius-scale` | standard | 37 | 1299 | 1931 | 225 |
 | `spacing.rhythm` | standard | 11 | 338 | 535 | 62 |
-| `states.emphasis` | standard | 13 | 395 | 1218 | 209 |
-| `states.focus-style` | standard | 21 | 682 | 1489 | 210 |
+| `states.emphasis` | standard | 13 | 395 | 1222 | 209 |
+| `states.focus-style` | standard | 21 | 681 | 1490 | 210 |
 | `surfaces.border-style` | standard | 17 | 494 | 892 | 177 |
 | `surfaces.effect-intensity` | standard | 10 | 337 | 410 | 38 |
 | `surfaces.elevation-posture` | standard | 45 | 1717 | 2066 | 183 |

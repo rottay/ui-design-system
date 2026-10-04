@@ -431,13 +431,20 @@ test('C2/MEDIDO — el grafo MEDIDO del subpath retenido queda clavado, numero c
    * 1216380 -> 1216267 (-113), same 180 modules, measured file by file:
    * 9fd2fd28a +21 (theming/composition/react/provider), a3dc4c4f9 -164
    * (charts/presentation/tooltip) and +6 in each of five chart families
-   * (bar-chart, funnel-chart, gauge, histogram, waterfall). */
+   * (bar-chart, funnel-chart, gauge, histogram, waterfall).
+   *
+   * 1216267 -> 1217767 (+1500), same 180 modules, measured file by file:
+   * src/foundation/presets/policy/experience-baselines/evnto/index.ts +102 (2f3aa983d)
+   * src/components/patterns/visualization/charts/presentation/scaffold/index.tsx -119 (22ffadf19)
+   * src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx +1477 (09ef3e34b)
+   * src/components/patterns/visualization/charts/families/sankey/index.tsx +20 (22ffadf19)
+   * src/components/patterns/visualization/charts/families/network-graph/index.tsx +20 (22ffadf19) */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './patterns/charts');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 180, sourceBytes: 1216267 },
+    { reachableModules: 180, sourceBytes: 1217767 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
   assert.deepEqual(baseline.ceilings['./patterns/charts'], ceiling(242, 2482000), 'el ancla del retenido es el valor revisado en HEAD, sin cambio');

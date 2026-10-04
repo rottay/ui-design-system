@@ -139,20 +139,37 @@
     }
   },
   "lastMove": {
-    "date": "2026-10-03",
-    "kind": "line move only: 1 site re-anchored to the same declaration at its new line; count 67 unchanged, byKind unchanged",
+    "date": "2026-10-04",
+    "kind": "line move only: 38 site(s) re-anchored to the same declaration at its new line; count 67 unchanged, byKind unchanged",
     "movers": [
-      "e71cab066 (WO-FAM-11, FAM-11 L2): retiring the dual-class window collapsed the app-shell skin's `:is(.ds-*, .rottay-*)` selector pairs to the canonical spelling (56 insertions, 65 deletions, 9 lines net above the site) and moved `transition: width var(--ds-shell-collapse-transition, ...)` on the navigation track 110 -> 101. The declaration is byte-identical at 620a0525c:110 and at e71cab066:101; d5250c385, c9629834a and 2146fa3ca touched the sheet afterwards and left the site at 101"
+      "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css: 101 -> 107 (7e3dc3e1e, 97d3ac6b3); each declaration byte-identical at d1dd7d3e0 and at HEAD",
+      "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css: 451/486/566/606/692/759 -> 457/492/572/612/698/765 (7e3dc3e1e, 89a7e056d); each declaration byte-identical at d1dd7d3e0 and at HEAD",
+      "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css: 116 -> 129 (925226684, b6e0e68f0, 9caaa5439); each declaration byte-identical at d1dd7d3e0 and at HEAD",
+      "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css: 370 -> 375 (237a4bf8f); each declaration byte-identical at d1dd7d3e0 and at HEAD",
+      "src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css: 450/462 -> 455/467 (a8f594ab4, d849ce7e3); each declaration byte-identical at d1dd7d3e0 and at HEAD",
+      "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css: 675 -> 686 (7e3dc3e1e, b6e0e68f0, 9caaa5439); each declaration byte-identical at d1dd7d3e0 and at HEAD",
+      "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css: 271 -> 301 (ce741616f); each declaration byte-identical at d1dd7d3e0 and at HEAD",
+      "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css: 294 -> 297 (7e3dc3e1e, 1edcec81d); each declaration byte-identical at d1dd7d3e0 and at HEAD",
+      "src/foundation/tokens/css/runtime/engines/modern/skin/tour/index.css: 142 -> 152 (7e3dc3e1e, a8f594ab4); each declaration byte-identical at d1dd7d3e0 and at HEAD",
+      "src/foundation/tokens/css/runtime/personality/index.css: 535/617/637/767 -> 568/650/670/800 (7e3dc3e1e, 925226684, 1fc5d7ef2); each declaration byte-identical at d1dd7d3e0 and at HEAD"
     ],
     "notMoved": "none pending",
     "previous": {
-      "date": "2026-09-29",
-      "kind": "line moves plus one drain: 10 sites re-anchored to the same declaration at its new line; the framework-bridge transitionAll:all site drained with the bridge shrink; count 68 -> 67",
+      "date": "2026-10-03",
+      "kind": "line move only: 1 site re-anchored to the same declaration at its new line; count 67 unchanged, byKind unchanged",
       "movers": [
-        "7a79c1b89 (WO-RET-02 packet 1): the bridge shrink 462 -> 195 deleted the direct `transition: all` at framework-bridge:63 (the roster transitionAll count goes 1 -> 0 -- a drain, the lawful direction) and the 47 dead personality list entries moved the six personality sites 556 -> 535, 647 -> 617, 669 -> 637, 811 -> 767",
-        "730666676 (WO-FAM-12 packet 1): the auto-fit grid rules moved --ds-transition-rearrange 116 -> 155",
-        "ffd812104 (WO-FAM-12 packet 4a): the catalog auto-fit rule moved the widget-board rearrange triple 423 -> 424"
-      ]
+        "e71cab066 (WO-FAM-11, FAM-11 L2): retiring the dual-class window collapsed the app-shell skin's `:is(.ds-*, .rottay-*)` selector pairs to the canonical spelling (56 insertions, 65 deletions, 9 lines net above the site) and moved `transition: width var(--ds-shell-collapse-transition, ...)` on the navigation track 110 -> 101. The declaration is byte-identical at 620a0525c:110 and at e71cab066:101; d5250c385, c9629834a and 2146fa3ca touched the sheet afterwards and left the site at 101"
+      ],
+      "notMoved": "none pending",
+      "previous": {
+        "date": "2026-09-29",
+        "kind": "line moves plus one drain: 10 sites re-anchored to the same declaration at its new line; the framework-bridge transitionAll:all site drained with the bridge shrink; count 68 -> 67",
+        "movers": [
+          "7a79c1b89 (WO-RET-02 packet 1): the bridge shrink 462 -> 195 deleted the direct `transition: all` at framework-bridge:63 (the roster transitionAll count goes 1 -> 0 -- a drain, the lawful direction) and the 47 dead personality list entries moved the six personality sites 556 -> 535, 647 -> 617, 669 -> 637, 811 -> 767",
+          "730666676 (WO-FAM-12 packet 1): the auto-fit grid rules moved --ds-transition-rearrange 116 -> 155",
+          "ffd812104 (WO-FAM-12 packet 4a): the catalog auto-fit rule moved the widget-board rearrange triple 423 -> 424"
+        ]
+      }
     }
   },
   "sites": [
@@ -176,7 +193,7 @@
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
-      "line": 101,
+      "line": 107,
       "kind": "layoutProperty",
       "property": "width"
     },
@@ -188,79 +205,79 @@
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 451,
+      "line": 457,
       "kind": "layoutProperty",
       "property": "flex-basis"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 451,
+      "line": 457,
       "kind": "layoutProperty",
       "property": "max-width"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 451,
+      "line": 457,
       "kind": "layoutProperty",
       "property": "min-width"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 451,
+      "line": 457,
       "kind": "layoutProperty",
       "property": "width"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 486,
+      "line": 492,
       "kind": "layoutProperty",
       "property": "inline-size"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 486,
+      "line": 492,
       "kind": "layoutProperty",
       "property": "inset-inline-start"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 566,
+      "line": 572,
       "kind": "layoutProperty",
       "property": "max-height"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 566,
+      "line": 572,
       "kind": "layoutProperty",
       "property": "padding"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 606,
+      "line": 612,
       "kind": "layoutProperty",
       "property": "max-height"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 606,
+      "line": 612,
       "kind": "layoutProperty",
       "property": "padding"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 692,
+      "line": 698,
       "kind": "layoutProperty",
       "property": "max-height"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-      "line": 759,
+      "line": 765,
       "kind": "layoutProperty",
       "property": "max-height"
     },
     {
       "file": "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-      "line": 116,
+      "line": 129,
       "kind": "layoutAlias",
       "property": "--ds-transition-rearrange"
     },
@@ -326,19 +343,19 @@
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
-      "line": 370,
+      "line": 375,
       "kind": "layoutProperty",
       "property": "font-size"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
-      "line": 450,
+      "line": 455,
       "kind": "layoutProperty",
       "property": "grid-template-rows"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
-      "line": 462,
+      "line": 467,
       "kind": "layoutProperty",
       "property": "padding"
     },
@@ -362,13 +379,13 @@
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-      "line": 675,
+      "line": 686,
       "kind": "layoutProperty",
       "property": "height"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-      "line": 675,
+      "line": 686,
       "kind": "layoutProperty",
       "property": "width"
     },
@@ -428,37 +445,37 @@
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-      "line": 271,
+      "line": 301,
       "kind": "layoutProperty",
       "property": "inset-block-end"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-      "line": 271,
+      "line": 301,
       "kind": "layoutProperty",
       "property": "inset-block-start"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-      "line": 271,
+      "line": 301,
       "kind": "layoutProperty",
       "property": "inset-inline-end"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-      "line": 271,
+      "line": 301,
       "kind": "layoutProperty",
       "property": "inset-inline-start"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-      "line": 271,
+      "line": 301,
       "kind": "layoutProperty",
       "property": "left"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-      "line": 271,
+      "line": 301,
       "kind": "layoutProperty",
       "property": "right"
     },
@@ -482,79 +499,79 @@
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 294,
+      "line": 297,
       "kind": "layoutProperty",
       "property": "inset-block-end"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 294,
+      "line": 297,
       "kind": "layoutProperty",
       "property": "inset-block-start"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 294,
+      "line": 297,
       "kind": "layoutProperty",
       "property": "inset-inline-end"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 294,
+      "line": 297,
       "kind": "layoutProperty",
       "property": "inset-inline-start"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 294,
+      "line": 297,
       "kind": "layoutProperty",
       "property": "left"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
-      "line": 294,
+      "line": 297,
       "kind": "layoutProperty",
       "property": "right"
     },
     {
       "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tour/index.css",
-      "line": 142,
+      "line": 152,
       "kind": "layoutProperty",
       "property": "inline-size"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 535,
+      "line": 568,
       "kind": "layoutProperty",
       "property": "height"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 535,
+      "line": 568,
       "kind": "layoutProperty",
       "property": "width"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 617,
+      "line": 650,
       "kind": "layoutProperty",
       "property": "left"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 617,
+      "line": 650,
       "kind": "layoutProperty",
       "property": "width"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 637,
+      "line": 670,
       "kind": "layoutProperty",
       "property": "width"
     },
     {
       "file": "src/foundation/tokens/css/runtime/personality/index.css",
-      "line": 767,
+      "line": 800,
       "kind": "layoutProperty",
       "property": "max-height"
     }

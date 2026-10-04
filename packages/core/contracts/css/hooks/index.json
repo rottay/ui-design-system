@@ -52,8 +52,8 @@
     "valueConstraint": "an assignment to a promoted hook must chain through DS/tenant tokens; a raw colour literal would pin brand paint an application user cannot re-theme"
   },
   "counts": {
-    "tenantChannel": 4518,
-    "compilerConcreteEmissions": 5056,
+    "tenantChannel": 4517,
+    "compilerConcreteEmissions": 5055,
     "compilerEmissionPatterns": 13,
     "themeContractFiles": 71,
     "ambiguousThemeContractTypes": 0,
@@ -68,7 +68,7 @@
     "unadjudicatedReads": 1204,
     "promoted": 107,
     "styleFiles": 500,
-    "componentFiles": 1308
+    "componentFiles": 1305
   },
   "declaredSlots": {
     "--ds-command-grid-opacity": {
@@ -11670,7 +11670,6 @@
     "--ds-toolbar-entry-animation",
     "--ds-toolbar-filter-strip-padding",
     "--ds-toolbar-focus-border",
-    "--ds-toolbar-focus-ring",
     "--ds-toolbar-gap",
     "--ds-toolbar-header-gradient",
     "--ds-toolbar-icon-bg",

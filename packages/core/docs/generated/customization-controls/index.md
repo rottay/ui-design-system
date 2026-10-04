@@ -6,7 +6,7 @@
 > Rollback: every control is an INPUT — removing the authored value restores the vertical's baseline.
 > `effect today` is MEASURED, not intended: `not-yet-derived` means the row has no producer anywhere yet.
 
-digest: a403c0ff3afec8a67845d1d752899ae662876b7cc027f0fad4daf38933eaac7d
+digest: b1acc62a7a8963924c876df8a9c837895d262586ecba625e3d222de32c2cfa22
 
 ## STANDARD — 19 controls
 
@@ -27,7 +27,7 @@ digest: a403c0ff3afec8a67845d1d752899ae662876b7cc027f0fad4daf38933eaac7d
 | `surfaces.border-style` | 18 | Border style | `none` \| `hairline` \| `strong` | `appearance.general.surfaces.borderStyle` | 3 channels | declared fan-out: card, input, table, panel, page-shell | open | css-channels |
 | `surfaces.effect-intensity` | 19 | Decoration intensity | [0 – 1] | `appearance.general.surfaces.effectIntensity` | 1 channel | declared fan-out: glass, blur, glow | open | css-channels |
 | `states.emphasis` | 20 | Interaction-state emphasis | `subtle` \| `medium` \| `strong` | `appearance.general.states.emphasis` | 18 channels | 20/25 (declared fan-out) | open | css-channels |
-| `states.focus-style` | 21 | Focus signature | `ring` \| `underline` \| `glow` | `appearance.general.states.focusStyle` | 10 channels | 20/25 (declared fan-out) | never-lockable | css-channels |
+| `states.focus-style` | 21 | Focus signature | `ring` \| `underline` \| `glow` | `appearance.general.states.focusStyle` | 9 channels | 20/25 (declared fan-out) | never-lockable | css-channels |
 | `motion.dial` | 22 | Motion intensity and duration | 3 keys (intensity, durationScale, ambient) | `appearance.general.motion.{intensity,durationScale,ambient}` | 2 channels | 25/25 (declared fan-out) | open | css-channels |
 | `navigation.sidebar-tone` | 24 | Sidebar tone | `subtle` \| `strong` \| `inverse` | `appearance.general.navigation.sidebarTone` | 6 channels | 2/25 (declared fan-out) | open | css-channels |
 | `experience.profile` | 25 | Experience profile | registered ids (`EXPERIENCE_PROFILE_REGISTRY`) | `appearance.general.experienceProfile` | 4 channels | declared fan-out (the row names no separate family list) | locked-by-default | css-channels |

@@ -3,30 +3,30 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "01842286dc4e1c466247be4ded6be73a170f81e8f53705539bcef637775b453b",
+    "inputsDigest": "f486e80ee703e9477d7f833cb3329364fab98c3aa0e561f70cc015edbdc05296",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 500,
-      "productionTsFiles": 2175,
-      "testFiles": 1968,
+      "productionTsFiles": 2172,
+      "testFiles": 1985,
       "artifactFiles": 3,
       "showroomReaderFiles": 388
     }
   },
   "counts": {
-    "universe": 8756,
-    "writers": 7533,
+    "universe": 8755,
+    "writers": 7532,
     "foundationTokens": 4185,
     "componentTokens": 725,
-    "tenantChannels": 4518,
+    "tenantChannels": 4517,
     "publicHooks": 107,
     "unadjudicatedReads": 1204,
     "deadWriters": 269,
     "frontierReserved": 0,
     "modernConsumedUnique": 4797,
     "tsReadNames": 3114,
-    "tsWriteNames": 3923,
-    "tsMetadataNames": 5851,
+    "tsWriteNames": 3922,
+    "tsMetadataNames": 5850,
     "showroomReadNames": 121,
     "unclassified": 0,
     "prototypeLedgerRows": 80
@@ -12373,12 +12373,12 @@
       },
       "writer": true,
       "reads": {
-        "css": 0,
-        "ts": 1,
+        "css": 5,
+        "ts": 4,
         "showroom": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": false
+        "tests": true,
+        "modern": true,
+        "artifact": true
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
@@ -26985,10 +26985,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -27001,10 +27001,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -27017,10 +27017,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -33258,7 +33258,7 @@
       "writer": true,
       "reads": {
         "css": 227,
-        "ts": 70,
+        "ts": 72,
         "showroom": 114,
         "tests": true,
         "modern": true,
@@ -35289,8 +35289,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1224,
-        "ts": 466,
+        "css": 1217,
+        "ts": 463,
         "showroom": 184,
         "tests": true,
         "modern": true,
@@ -36185,7 +36185,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 779,
+        "css": 778,
         "ts": 263,
         "showroom": 125,
         "tests": true,
@@ -47720,7 +47720,7 @@
         "css": 0,
         "ts": 2,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": false
       },
@@ -52837,7 +52837,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 134,
+        "css": 138,
         "ts": 41,
         "showroom": 0,
         "tests": true,
@@ -53173,7 +53173,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 74,
+        "css": 76,
         "ts": 37,
         "showroom": 1,
         "tests": true,
@@ -53189,7 +53189,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 57,
+        "css": 59,
         "ts": 24,
         "showroom": 0,
         "tests": true,
@@ -55989,8 +55989,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 211,
-        "ts": 66,
+        "css": 247,
+        "ts": 68,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -56005,7 +56005,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 19,
+        "css": 23,
         "ts": 10,
         "showroom": 0,
         "tests": true,
@@ -56021,8 +56021,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 175,
-        "ts": 14,
+        "css": 196,
+        "ts": 16,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -56037,8 +56037,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 272,
-        "ts": 21,
+        "css": 307,
+        "ts": 24,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -70181,11 +70181,11 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 7,
         "ts": 2,
         "showroom": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 1,
@@ -71413,11 +71413,11 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
-        "ts": 4,
+        "css": 3,
+        "ts": 3,
         "showroom": 0,
         "tests": true,
-        "modern": true,
+        "modern": false,
         "artifact": true
       },
       "tsWriteSites": 1,
@@ -73573,10 +73573,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 5,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -73605,10 +73605,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 9,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -74341,7 +74341,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -74421,7 +74421,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -74469,10 +74469,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -74485,10 +74485,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -91109,10 +91109,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -91125,10 +91125,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -91141,10 +91141,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -91957,7 +91957,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 175,
+        "css": 176,
         "ts": 46,
         "showroom": 2,
         "tests": true,
@@ -91989,7 +91989,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 269,
+        "css": 271,
         "ts": 69,
         "showroom": 3,
         "tests": true,
@@ -92021,7 +92021,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 380,
+        "css": 382,
         "ts": 104,
         "showroom": 22,
         "tests": true,
@@ -94664,7 +94664,7 @@
         "css": 2,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -94680,7 +94680,7 @@
         "css": 1,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -116149,7 +116149,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -116165,10 +116165,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 16,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -116565,7 +116565,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 8,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -116677,7 +116677,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -117173,10 +117173,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -117189,10 +117189,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -117288,7 +117288,7 @@
         "css": 1,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -117397,7 +117397,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -117509,7 +117509,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -127101,10 +127101,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 2,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -127117,10 +127117,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -127133,10 +127133,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 2,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -128919,22 +128919,6 @@
       "tsWriteSites": 1,
       "tsMetadataMentions": 1
     },
-    "--ds-toolbar-focus-ring": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 1
-    },
     "--ds-toolbar-gap": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
@@ -129168,7 +129152,7 @@
         "css": 1,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -129293,10 +129277,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -140861,7 +140845,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 32,
+        "css": 34,
         "ts": 5,
         "showroom": 0,
         "tests": true,

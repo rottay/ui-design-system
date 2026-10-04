@@ -14,10 +14,10 @@
   "stats": {
     "verticals": 3,
     "scopes": 6,
-    "channels": 18044,
-    "unresolved": 9426,
+    "channels": 18068,
+    "unresolved": 9433,
     "unresolvedByReason": {
-      "missing": 9396,
+      "missing": 9403,
       "guaranteed-invalid": 24,
       "cascade-keyword": 6
     }
@@ -481,13 +481,6 @@
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-material-card-shadow-selected",
-      "reason": "missing",
-      "cause": "--ds-material-card-focus-ring"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "base",
       "channel": "--ds-material-inset-background",
       "reason": "missing",
       "cause": "--ds-surface-inset"
@@ -1447,6 +1440,34 @@
     {
       "vertical": "rottay",
       "scope": "base",
+      "channel": "--ds-input-focus-ring",
+      "reason": "missing",
+      "cause": "--ds-focus-ring"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
+      "channel": "--ds-input-focus-ring-error",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
+      "channel": "--ds-input-focus-ring-warning",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
+      "channel": "--ds-input-focus-ring-success",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
       "channel": "--ds-input-color-placeholder",
       "reason": "missing",
       "cause": "--ds-type-color-muted"
@@ -1869,7 +1890,7 @@
       "scope": "base",
       "channel": "--ds-tag-input-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-shadow-focus-ring"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -2058,7 +2079,7 @@
       "scope": "base",
       "channel": "--ds-input-number-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -2079,7 +2100,7 @@
       "scope": "base",
       "channel": "--ds-input-number-error-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-error-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -2100,7 +2121,7 @@
       "scope": "base",
       "channel": "--ds-input-number-warning-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-warning-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -4942,7 +4963,7 @@
       "scope": "base",
       "channel": "--ds-hover-card-focus-color",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "rottay",
@@ -8785,7 +8806,7 @@
       "scope": "base",
       "channel": "--ds-data-table-header-focus-shadow",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -8932,7 +8953,7 @@
       "scope": "base",
       "channel": "--ds-data-table-mobile-card-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -9616,9 +9637,9 @@
     {
       "vertical": "rottay",
       "scope": "base",
-      "channel": "--ds-column-menu-panel-focus-outline",
+      "channel": "--ds-column-menu-panel-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-border-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -9828,19 +9849,12 @@
       "scope": "base",
       "channel": "--ds-toolbar-control-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
       "scope": "base",
       "channel": "--ds-toolbar-focus-border",
-      "reason": "missing",
-      "cause": "--ds-color-primary"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "base",
-      "channel": "--ds-toolbar-focus-ring",
       "reason": "missing",
       "cause": "--ds-color-primary"
     },
@@ -10248,7 +10262,7 @@
       "scope": "base",
       "channel": "--ds-tooltip-focus-color",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "rottay",
@@ -10353,7 +10367,7 @@
       "scope": "base",
       "channel": "--ds-tour-focus-ring",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "rottay",
@@ -12178,13 +12192,6 @@
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-material-card-shadow-selected",
-      "reason": "missing",
-      "cause": "--ds-material-card-focus-ring"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "light",
       "channel": "--ds-material-inset-background",
       "reason": "missing",
       "cause": "--ds-surface-inset"
@@ -13151,6 +13158,34 @@
     {
       "vertical": "rottay",
       "scope": "light",
+      "channel": "--ds-input-focus-ring",
+      "reason": "missing",
+      "cause": "--ds-focus-ring"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-input-focus-ring-error",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-input-focus-ring-warning",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-input-focus-ring-success",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
       "channel": "--ds-input-color-placeholder",
       "reason": "missing",
       "cause": "--ds-type-color-muted"
@@ -13573,7 +13608,7 @@
       "scope": "light",
       "channel": "--ds-tag-input-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-shadow-focus-ring"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -13762,7 +13797,7 @@
       "scope": "light",
       "channel": "--ds-input-number-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -13783,7 +13818,7 @@
       "scope": "light",
       "channel": "--ds-input-number-error-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-error-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -13804,7 +13839,7 @@
       "scope": "light",
       "channel": "--ds-input-number-warning-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-warning-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -16758,7 +16793,7 @@
       "scope": "light",
       "channel": "--ds-hover-card-focus-color",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "rottay",
@@ -20776,7 +20811,7 @@
       "scope": "light",
       "channel": "--ds-data-table-header-focus-shadow",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -20923,7 +20958,7 @@
       "scope": "light",
       "channel": "--ds-data-table-mobile-card-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -21628,9 +21663,9 @@
     {
       "vertical": "rottay",
       "scope": "light",
-      "channel": "--ds-column-menu-panel-focus-outline",
+      "channel": "--ds-column-menu-panel-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-border-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
@@ -21840,19 +21875,12 @@
       "scope": "light",
       "channel": "--ds-toolbar-control-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "rottay",
       "scope": "light",
       "channel": "--ds-toolbar-focus-border",
-      "reason": "missing",
-      "cause": "--ds-color-primary"
-    },
-    {
-      "vertical": "rottay",
-      "scope": "light",
-      "channel": "--ds-toolbar-focus-ring",
       "reason": "missing",
       "cause": "--ds-color-primary"
     },
@@ -22288,7 +22316,7 @@
       "scope": "light",
       "channel": "--ds-tooltip-focus-color",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "rottay",
@@ -22407,7 +22435,7 @@
       "scope": "light",
       "channel": "--ds-tour-focus-ring",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "rottay",
@@ -25219,13 +25247,6 @@
     {
       "vertical": "bithire",
       "scope": "base",
-      "channel": "--ds-tag-input-shadow-focus",
-      "reason": "missing",
-      "cause": "--ds-shadow-focus-ring"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "base",
       "channel": "--ds-tag-input-rejected-ink",
       "reason": "missing",
       "cause": "--ds-color-warning-ink"
@@ -25380,13 +25401,6 @@
     {
       "vertical": "bithire",
       "scope": "base",
-      "channel": "--ds-input-number-error-shadow-focus",
-      "reason": "missing",
-      "cause": "--ds-input-error-shadow-focus"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "base",
       "channel": "--ds-input-number-warning-border",
       "reason": "missing",
       "cause": "--ds-input-warning-border"
@@ -25397,13 +25411,6 @@
       "channel": "--ds-input-number-warning-bg",
       "reason": "missing",
       "cause": "--ds-input-warning-bg"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "base",
-      "channel": "--ds-input-number-warning-shadow-focus",
-      "reason": "missing",
-      "cause": "--ds-input-warning-shadow-focus"
     },
     {
       "vertical": "bithire",
@@ -27560,6 +27567,13 @@
       "channel": "--ds-hover-card-shadow",
       "reason": "missing",
       "cause": "--ds-elevation-3"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "base",
+      "channel": "--ds-hover-card-focus-color",
+      "reason": "missing",
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "bithire",
@@ -30994,13 +31008,6 @@
     {
       "vertical": "bithire",
       "scope": "base",
-      "channel": "--ds-data-table-mobile-card-focus-ring",
-      "reason": "missing",
-      "cause": "--ds-elevation-2"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "base",
       "channel": "--ds-data-table-mobile-state-radius",
       "reason": "missing",
       "cause": "--ds-radius-lg"
@@ -32121,6 +32128,13 @@
     {
       "vertical": "bithire",
       "scope": "base",
+      "channel": "--ds-tooltip-focus-color",
+      "reason": "missing",
+      "cause": "--ds-border-color-transparent"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "base",
       "channel": "--ds-tour-surface-bg",
       "reason": "missing",
       "cause": "--ds-material-card-background"
@@ -32201,6 +32215,13 @@
       "channel": "--ds-tour-action-next-shadow-hover",
       "reason": "missing",
       "cause": "--ds-elevation-1"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "base",
+      "channel": "--ds-tour-focus-ring",
+      "reason": "missing",
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "bithire",
@@ -34613,13 +34634,6 @@
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-tag-input-shadow-focus",
-      "reason": "missing",
-      "cause": "--ds-shadow-focus-ring"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
       "channel": "--ds-tag-input-rejected-ink",
       "reason": "missing",
       "cause": "--ds-color-warning-ink"
@@ -34774,13 +34788,6 @@
     {
       "vertical": "bithire",
       "scope": "dark",
-      "channel": "--ds-input-number-error-shadow-focus",
-      "reason": "missing",
-      "cause": "--ds-input-error-shadow-focus"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
       "channel": "--ds-input-number-warning-border",
       "reason": "missing",
       "cause": "--ds-input-warning-border"
@@ -34791,13 +34798,6 @@
       "channel": "--ds-input-number-warning-bg",
       "reason": "missing",
       "cause": "--ds-input-warning-bg"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
-      "channel": "--ds-input-number-warning-shadow-focus",
-      "reason": "missing",
-      "cause": "--ds-input-warning-shadow-focus"
     },
     {
       "vertical": "bithire",
@@ -36842,6 +36842,13 @@
       "channel": "--ds-hover-card-border-color",
       "reason": "missing",
       "cause": "--ds-color-border"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "dark",
+      "channel": "--ds-hover-card-focus-color",
+      "reason": "missing",
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "bithire",
@@ -41172,6 +41179,13 @@
     {
       "vertical": "bithire",
       "scope": "dark",
+      "channel": "--ds-tooltip-focus-color",
+      "reason": "missing",
+      "cause": "--ds-border-color-transparent"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "dark",
       "channel": "--ds-tour-surface-bg",
       "reason": "missing",
       "cause": "--ds-material-card-background"
@@ -41238,6 +41252,13 @@
       "channel": "--ds-tour-action-prev-ink",
       "reason": "missing",
       "cause": "--ds-color-text-primary"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "dark",
+      "channel": "--ds-tour-focus-ring",
+      "reason": "missing",
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "bithire",
@@ -42712,13 +42733,6 @@
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-material-card-shadow-selected",
-      "reason": "missing",
-      "cause": "--ds-material-card-focus-ring"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "base",
       "channel": "--ds-material-inset-background",
       "reason": "missing",
       "cause": "--ds-surface-inset"
@@ -43685,6 +43699,34 @@
     {
       "vertical": "evnto",
       "scope": "base",
+      "channel": "--ds-input-focus-ring",
+      "reason": "missing",
+      "cause": "--ds-focus-ring"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
+      "channel": "--ds-input-focus-ring-error",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
+      "channel": "--ds-input-focus-ring-warning",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
+      "channel": "--ds-input-focus-ring-success",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
       "channel": "--ds-input-color-placeholder",
       "reason": "missing",
       "cause": "--ds-type-color-muted"
@@ -44107,7 +44149,7 @@
       "scope": "base",
       "channel": "--ds-tag-input-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-shadow-focus-ring"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -44296,7 +44338,7 @@
       "scope": "base",
       "channel": "--ds-input-number-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -44317,7 +44359,7 @@
       "scope": "base",
       "channel": "--ds-input-number-error-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-error-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -44338,7 +44380,7 @@
       "scope": "base",
       "channel": "--ds-input-number-warning-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-warning-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -47292,7 +47334,7 @@
       "scope": "base",
       "channel": "--ds-hover-card-focus-color",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "evnto",
@@ -51310,7 +51352,7 @@
       "scope": "base",
       "channel": "--ds-data-table-header-focus-shadow",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -51457,7 +51499,7 @@
       "scope": "base",
       "channel": "--ds-data-table-mobile-card-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -52162,9 +52204,9 @@
     {
       "vertical": "evnto",
       "scope": "base",
-      "channel": "--ds-column-menu-panel-focus-outline",
+      "channel": "--ds-column-menu-panel-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-border-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -52374,19 +52416,12 @@
       "scope": "base",
       "channel": "--ds-toolbar-control-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
       "scope": "base",
       "channel": "--ds-toolbar-focus-border",
-      "reason": "missing",
-      "cause": "--ds-color-primary"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "base",
-      "channel": "--ds-toolbar-focus-ring",
       "reason": "missing",
       "cause": "--ds-color-primary"
     },
@@ -52822,7 +52857,7 @@
       "scope": "base",
       "channel": "--ds-tooltip-focus-color",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "evnto",
@@ -52941,7 +52976,7 @@
       "scope": "base",
       "channel": "--ds-tour-focus-ring",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "evnto",
@@ -54808,13 +54843,6 @@
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-material-card-shadow-selected",
-      "reason": "missing",
-      "cause": "--ds-material-card-focus-ring"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "dark",
       "channel": "--ds-material-inset-background",
       "reason": "missing",
       "cause": "--ds-surface-inset"
@@ -55774,6 +55802,34 @@
     {
       "vertical": "evnto",
       "scope": "dark",
+      "channel": "--ds-input-focus-ring",
+      "reason": "missing",
+      "cause": "--ds-focus-ring"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
+      "channel": "--ds-input-focus-ring-error",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
+      "channel": "--ds-input-focus-ring-warning",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
+      "channel": "--ds-input-focus-ring-success",
+      "reason": "missing",
+      "cause": "--ds-input-focus-ring"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
       "channel": "--ds-input-color-placeholder",
       "reason": "missing",
       "cause": "--ds-type-color-muted"
@@ -56196,7 +56252,7 @@
       "scope": "dark",
       "channel": "--ds-tag-input-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-shadow-focus-ring"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -56385,7 +56441,7 @@
       "scope": "dark",
       "channel": "--ds-input-number-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -56406,7 +56462,7 @@
       "scope": "dark",
       "channel": "--ds-input-number-error-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-error-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -56427,7 +56483,7 @@
       "scope": "dark",
       "channel": "--ds-input-number-warning-shadow-focus",
       "reason": "missing",
-      "cause": "--ds-input-warning-shadow-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -59269,7 +59325,7 @@
       "scope": "dark",
       "channel": "--ds-hover-card-focus-color",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "evnto",
@@ -63112,7 +63168,7 @@
       "scope": "dark",
       "channel": "--ds-data-table-header-focus-shadow",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -63259,7 +63315,7 @@
       "scope": "dark",
       "channel": "--ds-data-table-mobile-card-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -63943,9 +63999,9 @@
     {
       "vertical": "evnto",
       "scope": "dark",
-      "channel": "--ds-column-menu-panel-focus-outline",
+      "channel": "--ds-column-menu-panel-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-border-focus"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
@@ -64155,19 +64211,12 @@
       "scope": "dark",
       "channel": "--ds-toolbar-control-focus-ring",
       "reason": "missing",
-      "cause": "--ds-color-primary"
+      "cause": "--ds-focus-ring"
     },
     {
       "vertical": "evnto",
       "scope": "dark",
       "channel": "--ds-toolbar-focus-border",
-      "reason": "missing",
-      "cause": "--ds-color-primary"
-    },
-    {
-      "vertical": "evnto",
-      "scope": "dark",
-      "channel": "--ds-toolbar-focus-ring",
       "reason": "missing",
       "cause": "--ds-color-primary"
     },
@@ -64575,7 +64624,7 @@
       "scope": "dark",
       "channel": "--ds-tooltip-focus-color",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "evnto",
@@ -64680,7 +64729,7 @@
       "scope": "dark",
       "channel": "--ds-tour-focus-ring",
       "reason": "missing",
-      "cause": "--ds-focus-ring-color"
+      "cause": "--ds-border-color-transparent"
     },
     {
       "vertical": "evnto",
@@ -66638,8 +66687,9 @@
         "--ds-column-menu-panel-backdrop": "none",
         "--ds-column-menu-panel-background": "linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))",
         "--ds-column-menu-panel-border": "1px solid color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)",
-        "--ds-column-menu-panel-focus-outline": "2px solid var(--ds-color-border-focus)",
+        "--ds-column-menu-panel-focus-outline": "2px solid transparent",
         "--ds-column-menu-panel-focus-outline-offset": "-2px",
+        "--ds-column-menu-panel-focus-ring": "var(--ds-focus-ring)",
         "--ds-column-menu-panel-inline-size": "432px",
         "--ds-column-menu-panel-radius": "20px",
         "--ds-column-menu-panel-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 24px rgba(0, 0, 0, 0.50), 0 20px 44px rgba(0, 0, 0, 0.44), 0 0 24px color-mix(in srgb, #ffffff 8%, transparent)",
@@ -66857,7 +66907,7 @@
         "--ds-data-table-group-header-font-size": "var(--ds-font-size-sm)",
         "--ds-data-table-group-header-font-weight": "600",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
-        "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)",
+        "--ds-data-table-header-focus-shadow": "var(--ds-focus-ring)",
         "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
@@ -66869,7 +66919,7 @@
         "--ds-data-table-mobile-bulk-bar-bg": "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))",
         "--ds-data-table-mobile-bulk-bar-ink": "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-data-table-mobile-bulk-bar-bg))",
         "--ds-data-table-mobile-bulk-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
-        "--ds-data-table-mobile-card-focus-ring": "0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 42%, transparent), var(--ds-collection-card-shadow-hover, var(--ds-premium-card-shadow-hover, var(--ds-elevation-2)))",
+        "--ds-data-table-mobile-card-focus-ring": "var(--ds-focus-ring)",
         "--ds-data-table-mobile-card-hover-lift": "-1px",
         "--ds-data-table-mobile-control-size": "2.25rem",
         "--ds-data-table-mobile-pagination-bg": "var(--ds-surface-panel)",
@@ -67251,7 +67301,7 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "var(--ds-focus-ring-color)",
+        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -67260,6 +67310,10 @@
         "--ds-input-count-color": "var(--ds-type-color-muted)",
         "--ds-input-count-limit-font-weight": "600",
         "--ds-input-filled-border": "transparent",
+        "--ds-input-focus-ring": "var(--ds-focus-ring)",
+        "--ds-input-focus-ring-error": "var(--ds-input-focus-ring)",
+        "--ds-input-focus-ring-success": "var(--ds-input-focus-ring)",
+        "--ds-input-focus-ring-warning": "var(--ds-input-focus-ring)",
         "--ds-input-loading-color": "var(--ds-color-primary)",
         "--ds-input-number-addon-bg": "var(--ds-input-addon-bg)",
         "--ds-input-number-addon-border": "var(--ds-input-addon-border)",
@@ -67276,7 +67330,7 @@
         "--ds-input-number-color-disabled": "var(--ds-input-color-disabled)",
         "--ds-input-number-error-bg": "var(--ds-input-error-bg)",
         "--ds-input-number-error-border": "var(--ds-input-error-border)",
-        "--ds-input-number-error-shadow-focus": "var(--ds-input-error-shadow-focus)",
+        "--ds-input-number-error-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-number-font-family": "var(--ds-input-font-family)",
         "--ds-input-number-font-weight": "var(--ds-input-font-weight)",
         "--ds-input-number-letter-spacing": "var(--ds-input-letter-spacing)",
@@ -67287,7 +67341,7 @@
         "--ds-input-number-readonly-color": "var(--ds-input-readonly-color)",
         "--ds-input-number-selection-bg": "var(--ds-input-selection-bg)",
         "--ds-input-number-selection-color": "var(--ds-input-selection-color)",
-        "--ds-input-number-shadow-focus": "var(--ds-input-shadow-focus)",
+        "--ds-input-number-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-number-stepper-bg-hover": "var(--ds-material-control-background-hover)",
         "--ds-input-number-stepper-color": "var(--ds-color-text-secondary)",
         "--ds-input-number-stepper-color-disabled": "var(--ds-color-text-disabled)",
@@ -67295,7 +67349,7 @@
         "--ds-input-number-stepper-separator": "var(--ds-color-border-subtle)",
         "--ds-input-number-warning-bg": "var(--ds-input-warning-bg)",
         "--ds-input-number-warning-border": "var(--ds-input-warning-border)",
-        "--ds-input-number-warning-shadow-focus": "var(--ds-input-warning-shadow-focus)",
+        "--ds-input-number-warning-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-selection-bg": "color-mix(in srgb, var(--ds-color-primary) 20%, transparent)",
         "--ds-input-shadow-rest": "none",
         "--ds-kanban-board-column-accent": "transparent",
@@ -67325,7 +67379,7 @@
         "--ds-material-card-shadow": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-active": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-hover": "var(--ds-shadow-md)",
-        "--ds-material-card-shadow-selected": "var(--ds-material-card-focus-ring)",
+        "--ds-material-card-shadow-selected": "none",
         "--ds-material-control-background": "var(--ds-surface-control)",
         "--ds-material-control-background-active": "color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-control))",
         "--ds-material-control-background-disabled": "color-mix(in srgb, var(--ds-surface-control) var(--ds-state-disabled-mix, 82%), var(--ds-surface-panel))",
@@ -68519,7 +68573,7 @@
         "--ds-tag-input-placeholder-opacity": "var(--ds-input-placeholder-opacity)",
         "--ds-tag-input-radius": "var(--ds-radius-md)",
         "--ds-tag-input-rejected-ink": "var(--ds-color-warning-ink)",
-        "--ds-tag-input-shadow-focus": "var(--ds-shadow-focus-ring)",
+        "--ds-tag-input-shadow-focus": "var(--ds-focus-ring)",
         "--ds-tag-input-sm-font-size": "var(--ds-input-sm-font-size)",
         "--ds-tag-lg-padding-inline": "var(--ds-spacing-3)",
         "--ds-tag-max-inline-size": "calc(var(--ds-spacing-4) * 16)",
@@ -68677,7 +68731,7 @@
         "--ds-toggle-track-bg-hover": "color-mix(in srgb, var(--ds-color-border-secondary), var(--ds-color-text-primary) var(--ds-state-hover-shift))",
         "--ds-toggle-track-border-radius": "8px",
         "--ds-toolbar-compact-padding": "calc(0.75rem * 1) calc(1rem * 1)",
-        "--ds-toolbar-control-focus-ring": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)",
+        "--ds-toolbar-control-focus-ring": "var(--ds-focus-ring)",
         "--ds-toolbar-control-gap": "0.25rem",
         "--ds-toolbar-control-pressed-scale": "0.975",
         "--ds-toolbar-control-radius": "8px",
@@ -68693,7 +68747,6 @@
         "--ds-toolbar-entry-animation": "none",
         "--ds-toolbar-filter-strip-padding": "calc(0.5rem * 1) calc(1rem * 1)",
         "--ds-toolbar-focus-border": "var(--ds-color-primary)",
-        "--ds-toolbar-focus-ring": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent)",
         "--ds-toolbar-header-gradient": "linear-gradient(118deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%) 0%, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 48%, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 94%, var(--ds-surface-inset, var(--ds-color-bg-secondary)) 6%) 100%)",
         "--ds-toolbar-icon-bg": "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card))",
         "--ds-toolbar-icon-border": "var(--ds-color-border)",
@@ -68707,13 +68760,13 @@
         "--ds-toolbar-mobile-actions-radius": "max(calc(12px - 4px), 8px)",
         "--ds-toolbar-mobile-rail-bg": "transparent",
         "--ds-toolbar-mobile-rail-border": "transparent",
-        "--ds-toolbar-mobile-rail-padding": "0.25rem",
+        "--ds-toolbar-mobile-rail-padding": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-mobile-rail-radius": "max(calc(12px - 4px), 8px)",
         "--ds-toolbar-phone-filter-strip-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-phone-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-popover-radius": "0.5rem",
         "--ds-toolbar-primary-action-max-width": "18rem",
-        "--ds-toolbar-rail-focus-clearance": "0.25rem",
+        "--ds-toolbar-rail-focus-clearance": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-saved-views-bg": "color-mix(in srgb, var(--ds-surface-inset) 45%, transparent)",
         "--ds-toolbar-saved-views-border": "transparent",
         "--ds-toolbar-saved-views-radius": "max(calc(12px - 4px), 8px)",
@@ -68742,7 +68795,7 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "var(--ds-color-error)",
         "--ds-tooltip-error-color": "var(--ds-color-on-error)",
-        "--ds-tooltip-focus-color": "var(--ds-focus-ring-color)",
+        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -68785,7 +68838,7 @@
         "--ds-tour-close-ink": "var(--ds-material-card-foreground-muted)",
         "--ds-tour-close-ink-hover": "var(--ds-material-card-foreground)",
         "--ds-tour-description-ink": "var(--ds-color-text-secondary)",
-        "--ds-tour-focus-ring": "var(--ds-focus-ring-color)",
+        "--ds-tour-focus-ring": "var(--ds-border-color-transparent)",
         "--ds-tour-font-family": "var(--ds-type-body-font-family)",
         "--ds-tour-indicator-bg": "var(--ds-surface-panel)",
         "--ds-tour-indicator-bg-current": "var(--ds-color-primary)",
@@ -69602,8 +69655,9 @@
         "--ds-column-menu-panel-backdrop": "none",
         "--ds-column-menu-panel-background": "linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))",
         "--ds-column-menu-panel-border": "1px solid color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)",
-        "--ds-column-menu-panel-focus-outline": "2px solid var(--ds-color-border-focus)",
+        "--ds-column-menu-panel-focus-outline": "2px solid transparent",
         "--ds-column-menu-panel-focus-outline-offset": "-2px",
+        "--ds-column-menu-panel-focus-ring": "var(--ds-focus-ring)",
         "--ds-column-menu-panel-inline-size": "432px",
         "--ds-column-menu-panel-radius": "20px",
         "--ds-column-menu-panel-shadow": "0 24px 64px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)",
@@ -69821,7 +69875,7 @@
         "--ds-data-table-group-header-font-size": "var(--ds-font-size-sm)",
         "--ds-data-table-group-header-font-weight": "600",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
-        "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)",
+        "--ds-data-table-header-focus-shadow": "var(--ds-focus-ring)",
         "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
@@ -69833,7 +69887,7 @@
         "--ds-data-table-mobile-bulk-bar-bg": "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))",
         "--ds-data-table-mobile-bulk-bar-ink": "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-data-table-mobile-bulk-bar-bg))",
         "--ds-data-table-mobile-bulk-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
-        "--ds-data-table-mobile-card-focus-ring": "0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 42%, transparent), var(--ds-collection-card-shadow-hover, var(--ds-premium-card-shadow-hover, var(--ds-elevation-2)))",
+        "--ds-data-table-mobile-card-focus-ring": "var(--ds-focus-ring)",
         "--ds-data-table-mobile-card-hover-lift": "-1px",
         "--ds-data-table-mobile-control-size": "2.25rem",
         "--ds-data-table-mobile-pagination-bg": "var(--ds-surface-panel)",
@@ -70215,7 +70269,7 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "var(--ds-focus-ring-color)",
+        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "var(--ds-elevation-3)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -70224,6 +70278,10 @@
         "--ds-input-count-color": "var(--ds-type-color-muted)",
         "--ds-input-count-limit-font-weight": "600",
         "--ds-input-filled-border": "transparent",
+        "--ds-input-focus-ring": "var(--ds-focus-ring)",
+        "--ds-input-focus-ring-error": "var(--ds-input-focus-ring)",
+        "--ds-input-focus-ring-success": "var(--ds-input-focus-ring)",
+        "--ds-input-focus-ring-warning": "var(--ds-input-focus-ring)",
         "--ds-input-loading-color": "var(--ds-color-primary)",
         "--ds-input-number-addon-bg": "var(--ds-input-addon-bg)",
         "--ds-input-number-addon-border": "var(--ds-input-addon-border)",
@@ -70240,7 +70298,7 @@
         "--ds-input-number-color-disabled": "var(--ds-input-color-disabled)",
         "--ds-input-number-error-bg": "var(--ds-input-error-bg)",
         "--ds-input-number-error-border": "var(--ds-input-error-border)",
-        "--ds-input-number-error-shadow-focus": "var(--ds-input-error-shadow-focus)",
+        "--ds-input-number-error-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-number-font-family": "var(--ds-input-font-family)",
         "--ds-input-number-font-weight": "var(--ds-input-font-weight)",
         "--ds-input-number-letter-spacing": "var(--ds-input-letter-spacing)",
@@ -70251,7 +70309,7 @@
         "--ds-input-number-readonly-color": "var(--ds-input-readonly-color)",
         "--ds-input-number-selection-bg": "var(--ds-input-selection-bg)",
         "--ds-input-number-selection-color": "var(--ds-input-selection-color)",
-        "--ds-input-number-shadow-focus": "var(--ds-input-shadow-focus)",
+        "--ds-input-number-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-number-stepper-bg-hover": "var(--ds-material-control-background-hover)",
         "--ds-input-number-stepper-color": "var(--ds-color-text-secondary)",
         "--ds-input-number-stepper-color-disabled": "var(--ds-color-text-disabled)",
@@ -70259,7 +70317,7 @@
         "--ds-input-number-stepper-separator": "var(--ds-color-border-subtle)",
         "--ds-input-number-warning-bg": "var(--ds-input-warning-bg)",
         "--ds-input-number-warning-border": "var(--ds-input-warning-border)",
-        "--ds-input-number-warning-shadow-focus": "var(--ds-input-warning-shadow-focus)",
+        "--ds-input-number-warning-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-selection-bg": "color-mix(in srgb, var(--ds-color-primary) 20%, transparent)",
         "--ds-input-shadow-rest": "none",
         "--ds-kanban-board-column-accent": "transparent",
@@ -70289,7 +70347,7 @@
         "--ds-material-card-shadow": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-active": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-hover": "var(--ds-shadow-md)",
-        "--ds-material-card-shadow-selected": "var(--ds-material-card-focus-ring)",
+        "--ds-material-card-shadow-selected": "none",
         "--ds-material-control-background": "var(--ds-surface-control)",
         "--ds-material-control-background-active": "color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-control))",
         "--ds-material-control-background-disabled": "color-mix(in srgb, var(--ds-surface-control) var(--ds-state-disabled-mix, 82%), var(--ds-surface-panel))",
@@ -71483,7 +71541,7 @@
         "--ds-tag-input-placeholder-opacity": "var(--ds-input-placeholder-opacity)",
         "--ds-tag-input-radius": "var(--ds-radius-md)",
         "--ds-tag-input-rejected-ink": "var(--ds-color-warning-ink)",
-        "--ds-tag-input-shadow-focus": "var(--ds-shadow-focus-ring)",
+        "--ds-tag-input-shadow-focus": "var(--ds-focus-ring)",
         "--ds-tag-input-sm-font-size": "var(--ds-input-sm-font-size)",
         "--ds-tag-lg-padding-inline": "var(--ds-spacing-3)",
         "--ds-tag-max-inline-size": "calc(var(--ds-spacing-4) * 16)",
@@ -71641,7 +71699,7 @@
         "--ds-toggle-track-bg-hover": "color-mix(in srgb, var(--ds-color-border-secondary), var(--ds-color-text-primary) var(--ds-state-hover-shift))",
         "--ds-toggle-track-border-radius": "8px",
         "--ds-toolbar-compact-padding": "calc(0.75rem * 1) calc(1rem * 1)",
-        "--ds-toolbar-control-focus-ring": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)",
+        "--ds-toolbar-control-focus-ring": "var(--ds-focus-ring)",
         "--ds-toolbar-control-gap": "0.25rem",
         "--ds-toolbar-control-pressed-scale": "0.975",
         "--ds-toolbar-control-radius": "8px",
@@ -71657,7 +71715,6 @@
         "--ds-toolbar-entry-animation": "none",
         "--ds-toolbar-filter-strip-padding": "calc(0.5rem * 1) calc(1rem * 1)",
         "--ds-toolbar-focus-border": "var(--ds-color-primary)",
-        "--ds-toolbar-focus-ring": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent)",
         "--ds-toolbar-header-gradient": "linear-gradient(118deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%) 0%, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 48%, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 94%, var(--ds-surface-inset, var(--ds-color-bg-secondary)) 6%) 100%)",
         "--ds-toolbar-icon-bg": "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card))",
         "--ds-toolbar-icon-border": "var(--ds-color-border)",
@@ -71671,13 +71728,13 @@
         "--ds-toolbar-mobile-actions-radius": "max(calc(12px - 4px), 8px)",
         "--ds-toolbar-mobile-rail-bg": "transparent",
         "--ds-toolbar-mobile-rail-border": "transparent",
-        "--ds-toolbar-mobile-rail-padding": "0.25rem",
+        "--ds-toolbar-mobile-rail-padding": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-mobile-rail-radius": "max(calc(12px - 4px), 8px)",
         "--ds-toolbar-phone-filter-strip-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-phone-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-popover-radius": "0.5rem",
         "--ds-toolbar-primary-action-max-width": "18rem",
-        "--ds-toolbar-rail-focus-clearance": "0.25rem",
+        "--ds-toolbar-rail-focus-clearance": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-saved-views-bg": "color-mix(in srgb, var(--ds-surface-inset) 45%, transparent)",
         "--ds-toolbar-saved-views-border": "transparent",
         "--ds-toolbar-saved-views-radius": "max(calc(12px - 4px), 8px)",
@@ -71706,7 +71763,7 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "var(--ds-color-error)",
         "--ds-tooltip-error-color": "var(--ds-color-on-error)",
-        "--ds-tooltip-focus-color": "var(--ds-focus-ring-color)",
+        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -71749,7 +71806,7 @@
         "--ds-tour-close-ink": "var(--ds-material-card-foreground-muted)",
         "--ds-tour-close-ink-hover": "var(--ds-material-card-foreground)",
         "--ds-tour-description-ink": "var(--ds-color-text-secondary)",
-        "--ds-tour-focus-ring": "var(--ds-focus-ring-color)",
+        "--ds-tour-focus-ring": "var(--ds-border-color-transparent)",
         "--ds-tour-font-family": "var(--ds-type-body-font-family)",
         "--ds-tour-indicator-bg": "var(--ds-surface-panel)",
         "--ds-tour-indicator-bg-current": "var(--ds-color-primary)",
@@ -72682,8 +72739,9 @@
         "--ds-column-menu-panel-backdrop": "none",
         "--ds-column-menu-panel-background": "linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))",
         "--ds-column-menu-panel-border": "1px solid color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)",
-        "--ds-column-menu-panel-focus-outline": "2px solid #2F5BE8",
+        "--ds-column-menu-panel-focus-outline": "2px solid transparent",
         "--ds-column-menu-panel-focus-outline-offset": "-2px",
+        "--ds-column-menu-panel-focus-ring": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-column-menu-panel-inline-size": "432px",
         "--ds-column-menu-panel-radius": "20px",
         "--ds-column-menu-panel-shadow": "0 24px 64px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)",
@@ -72901,7 +72959,7 @@
         "--ds-data-table-group-header-font-size": "var(--ds-font-size-sm)",
         "--ds-data-table-group-header-font-weight": "700",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
-        "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, #2F5BE8 48%, transparent)",
+        "--ds-data-table-header-focus-shadow": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
@@ -72913,7 +72971,7 @@
         "--ds-data-table-mobile-bulk-bar-bg": "color-mix(in srgb, #2F5BE8 7%, var(--ds-surface-card))",
         "--ds-data-table-mobile-bulk-bar-ink": "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-data-table-mobile-bulk-bar-bg))",
         "--ds-data-table-mobile-bulk-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
-        "--ds-data-table-mobile-card-focus-ring": "0 0 0 2px color-mix(in srgb, #2F5BE8 42%, transparent), var(--ds-elevation-2)",
+        "--ds-data-table-mobile-card-focus-ring": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-data-table-mobile-card-hover-lift": "-1px",
         "--ds-data-table-mobile-control-size": "2.25rem",
         "--ds-data-table-mobile-pagination-bg": "var(--ds-surface-panel)",
@@ -73301,7 +73359,7 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, #B45309 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "#2F5BE8",
+        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "var(--ds-elevation-3)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -73312,6 +73370,10 @@
         "--ds-input-count-color": "var(--ds-type-color-muted)",
         "--ds-input-count-limit-font-weight": "700",
         "--ds-input-filled-border": "transparent",
+        "--ds-input-focus-ring": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
+        "--ds-input-focus-ring-error": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
+        "--ds-input-focus-ring-success": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
+        "--ds-input-focus-ring-warning": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-input-loading-color": "#2F5BE8",
         "--ds-input-number-addon-bg": "var(--ds-input-addon-bg)",
         "--ds-input-number-addon-border": "var(--ds-input-addon-border)",
@@ -73328,7 +73390,7 @@
         "--ds-input-number-color-disabled": "var(--ds-input-color-disabled)",
         "--ds-input-number-error-bg": "var(--ds-input-error-bg)",
         "--ds-input-number-error-border": "var(--ds-input-error-border)",
-        "--ds-input-number-error-shadow-focus": "var(--ds-input-error-shadow-focus)",
+        "--ds-input-number-error-shadow-focus": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-input-number-font-family": "var(--ds-input-font-family)",
         "--ds-input-number-font-weight": "var(--ds-input-font-weight)",
         "--ds-input-number-letter-spacing": "var(--ds-input-letter-spacing)",
@@ -73339,7 +73401,7 @@
         "--ds-input-number-readonly-color": "var(--ds-input-readonly-color)",
         "--ds-input-number-selection-bg": "color-mix(in srgb, #2F5BE8 20%, transparent)",
         "--ds-input-number-selection-color": "var(--ds-input-selection-color)",
-        "--ds-input-number-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
+        "--ds-input-number-shadow-focus": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-input-number-stepper-bg-hover": "var(--ds-material-control-background-hover)",
         "--ds-input-number-stepper-color": "var(--ds-color-text-secondary)",
         "--ds-input-number-stepper-color-disabled": "var(--ds-color-text-disabled)",
@@ -73347,7 +73409,7 @@
         "--ds-input-number-stepper-separator": "var(--ds-color-border-subtle)",
         "--ds-input-number-warning-bg": "var(--ds-input-warning-bg)",
         "--ds-input-number-warning-border": "var(--ds-input-warning-border)",
-        "--ds-input-number-warning-shadow-focus": "var(--ds-input-warning-shadow-focus)",
+        "--ds-input-number-warning-shadow-focus": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-input-selection-bg": "color-mix(in srgb, #2F5BE8 20%, transparent)",
         "--ds-input-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
         "--ds-input-shadow-rest": "none",
@@ -73382,7 +73444,7 @@
         "--ds-material-card-shadow": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-active": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-hover": "var(--ds-shadow-md)",
-        "--ds-material-card-shadow-selected": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
+        "--ds-material-card-shadow-selected": "none",
         "--ds-material-card-texture": "none",
         "--ds-material-control-background": "var(--ds-surface-control)",
         "--ds-material-control-background-active": "color-mix(in srgb, #2F5BE8 13%, var(--ds-surface-control))",
@@ -73491,7 +73553,7 @@
         "--ds-mentions-option-ink": "var(--ds-color-text-primary)",
         "--ds-mentions-placeholder-color": "var(--ds-type-color-muted)",
         "--ds-mentions-scrollbar-thumb": "var(--ds-color-border-secondary)",
-        "--ds-mentions-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
+        "--ds-mentions-shadow-focus": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-mentions-spinner-ink": "#2F5BE8",
         "--ds-mentions-spinner-track": "var(--ds-color-border)",
         "--ds-mentions-trigger-accent": "color-mix(in srgb, #2F5BE8 30%, var(--ds-color-border-subtle))",
@@ -73782,7 +73844,7 @@
         "--ds-otp-input-slot-border-focus": "#2F5BE8",
         "--ds-otp-input-slot-border-hover": "var(--ds-material-control-border-hover)",
         "--ds-otp-input-slot-color": "var(--ds-color-text-primary)",
-        "--ds-otp-input-slot-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
+        "--ds-otp-input-slot-shadow-focus": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-otp-input-slot-shadow-focus-error": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-page-header-eyebrow-text-transform": "uppercase",
         "--ds-page-shell-actions-backdrop": "none",
@@ -74585,7 +74647,7 @@
         "--ds-tag-input-placeholder-opacity": "var(--ds-input-placeholder-opacity)",
         "--ds-tag-input-radius": "var(--ds-radius-md)",
         "--ds-tag-input-rejected-ink": "var(--ds-color-warning-ink)",
-        "--ds-tag-input-shadow-focus": "var(--ds-shadow-focus-ring)",
+        "--ds-tag-input-shadow-focus": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-tag-input-sm-font-size": "var(--ds-input-sm-font-size)",
         "--ds-tag-lg-padding-inline": "var(--ds-spacing-3)",
         "--ds-tag-max-inline-size": "calc(var(--ds-spacing-4) * 16)",
@@ -74664,7 +74726,7 @@
         "--ds-textarea-lg-padding": "var(--ds-spacing-3) var(--ds-spacing-4)",
         "--ds-textarea-md-padding": "var(--ds-spacing-2) var(--ds-spacing-3)",
         "--ds-textarea-readonly-bg": "var(--ds-material-control-background-disabled)",
-        "--ds-textarea-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
+        "--ds-textarea-shadow-focus": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-textarea-sm-padding": "calc(var(--ds-spacing-1) * 1.5) var(--ds-spacing-2)",
         "--ds-textarea-success-bg": "var(--ds-material-control-background)",
         "--ds-textarea-success-border": "#16794A",
@@ -74759,7 +74821,6 @@
         "--ds-toolbar-entry-animation": "none",
         "--ds-toolbar-filter-strip-padding": "calc(0.5rem * 1) calc(1rem * 1)",
         "--ds-toolbar-focus-border": "#2F5BE8",
-        "--ds-toolbar-focus-ring": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-toolbar-header-gradient": "linear-gradient(118deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%) 0%, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 48%, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 94%, var(--ds-surface-inset, var(--ds-color-bg-secondary)) 6%) 100%)",
         "--ds-toolbar-icon-bg": "color-mix(in srgb, #2F5BE8 8%, var(--ds-surface-card))",
         "--ds-toolbar-icon-border": "var(--ds-color-border)",
@@ -74773,13 +74834,13 @@
         "--ds-toolbar-mobile-actions-radius": "max(calc(12px - 4px), calc(2px / 0.8 * 0.8))",
         "--ds-toolbar-mobile-rail-bg": "transparent",
         "--ds-toolbar-mobile-rail-border": "transparent",
-        "--ds-toolbar-mobile-rail-padding": "0.25rem",
+        "--ds-toolbar-mobile-rail-padding": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-mobile-rail-radius": "max(calc(12px - 4px), calc(2px / 0.8 * 0.8))",
         "--ds-toolbar-phone-filter-strip-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-phone-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-popover-radius": "0.5rem",
         "--ds-toolbar-primary-action-max-width": "18rem",
-        "--ds-toolbar-rail-focus-clearance": "0.25rem",
+        "--ds-toolbar-rail-focus-clearance": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-saved-views-bg": "color-mix(in srgb, var(--ds-surface-inset) 45%, transparent)",
         "--ds-toolbar-saved-views-border": "transparent",
         "--ds-toolbar-saved-views-radius": "max(calc(12px - 4px), calc(2px / 0.8 * 0.8))",
@@ -74808,7 +74869,7 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "#C62828",
         "--ds-tooltip-error-color": "#ffffff",
-        "--ds-tooltip-focus-color": "#2F5BE8",
+        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -74851,7 +74912,7 @@
         "--ds-tour-close-ink": "var(--ds-material-card-foreground-muted)",
         "--ds-tour-close-ink-hover": "var(--ds-material-card-foreground)",
         "--ds-tour-description-ink": "var(--ds-color-text-secondary)",
-        "--ds-tour-focus-ring": "#2F5BE8",
+        "--ds-tour-focus-ring": "var(--ds-border-color-transparent)",
         "--ds-tour-font-family": "var(--ds-type-body-font-family)",
         "--ds-tour-indicator-bg": "var(--ds-surface-panel)",
         "--ds-tour-indicator-bg-current": "#2F5BE8",
@@ -74880,7 +74941,7 @@
         "--ds-transfer-search-border": "var(--ds-color-border)",
         "--ds-transfer-search-border-focus": "#2F5BE8",
         "--ds-transfer-search-placeholder-color": "var(--ds-type-color-muted)",
-        "--ds-transfer-search-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
+        "--ds-transfer-search-shadow-focus": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-tree-checkbox-size": "var(--ds-spacing-4)",
         "--ds-tree-connector-elbow": "var(--ds-spacing-3)",
         "--ds-tree-connector-inset": "0",
@@ -75782,8 +75843,9 @@
         "--ds-column-menu-panel-backdrop": "none",
         "--ds-column-menu-panel-background": "linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))",
         "--ds-column-menu-panel-border": "1px solid color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)",
-        "--ds-column-menu-panel-focus-outline": "2px solid #2F5BE8",
+        "--ds-column-menu-panel-focus-outline": "2px solid transparent",
         "--ds-column-menu-panel-focus-outline-offset": "-2px",
+        "--ds-column-menu-panel-focus-ring": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-column-menu-panel-inline-size": "432px",
         "--ds-column-menu-panel-radius": "20px",
         "--ds-column-menu-panel-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 24px rgba(0, 0, 0, 0.50), 0 20px 44px rgba(0, 0, 0, 0.44), 0 0 24px color-mix(in srgb, #2F5BE8 8%, transparent)",
@@ -76001,7 +76063,7 @@
         "--ds-data-table-group-header-font-size": "var(--ds-font-size-sm)",
         "--ds-data-table-group-header-font-weight": "700",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
-        "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, #2F5BE8 48%, transparent)",
+        "--ds-data-table-header-focus-shadow": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
@@ -76013,7 +76075,7 @@
         "--ds-data-table-mobile-bulk-bar-bg": "color-mix(in srgb, #2F5BE8 7%, var(--ds-surface-card))",
         "--ds-data-table-mobile-bulk-bar-ink": "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-data-table-mobile-bulk-bar-bg))",
         "--ds-data-table-mobile-bulk-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
-        "--ds-data-table-mobile-card-focus-ring": "0 0 0 2px color-mix(in srgb, #2F5BE8 42%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.44), 0 6px 16px rgba(0, 0, 0, 0.34)",
+        "--ds-data-table-mobile-card-focus-ring": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-data-table-mobile-card-hover-lift": "-1px",
         "--ds-data-table-mobile-control-size": "2.25rem",
         "--ds-data-table-mobile-pagination-bg": "var(--ds-surface-panel)",
@@ -76401,7 +76463,7 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, #B45309 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "#2A55E0",
+        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -76412,6 +76474,10 @@
         "--ds-input-count-color": "var(--ds-type-color-muted)",
         "--ds-input-count-limit-font-weight": "700",
         "--ds-input-filled-border": "transparent",
+        "--ds-input-focus-ring": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
+        "--ds-input-focus-ring-error": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
+        "--ds-input-focus-ring-success": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
+        "--ds-input-focus-ring-warning": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-input-loading-color": "#2F5BE8",
         "--ds-input-number-addon-bg": "var(--ds-input-addon-bg)",
         "--ds-input-number-addon-border": "var(--ds-input-addon-border)",
@@ -76428,7 +76494,7 @@
         "--ds-input-number-color-disabled": "var(--ds-input-color-disabled)",
         "--ds-input-number-error-bg": "var(--ds-input-error-bg)",
         "--ds-input-number-error-border": "var(--ds-input-error-border)",
-        "--ds-input-number-error-shadow-focus": "var(--ds-input-error-shadow-focus)",
+        "--ds-input-number-error-shadow-focus": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-input-number-font-family": "var(--ds-input-font-family)",
         "--ds-input-number-font-weight": "var(--ds-input-font-weight)",
         "--ds-input-number-letter-spacing": "var(--ds-input-letter-spacing)",
@@ -76439,7 +76505,7 @@
         "--ds-input-number-readonly-color": "var(--ds-input-readonly-color)",
         "--ds-input-number-selection-bg": "color-mix(in srgb, #2F5BE8 20%, transparent)",
         "--ds-input-number-selection-color": "var(--ds-input-selection-color)",
-        "--ds-input-number-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
+        "--ds-input-number-shadow-focus": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-input-number-stepper-bg-hover": "var(--ds-material-control-background-hover)",
         "--ds-input-number-stepper-color": "var(--ds-color-text-secondary)",
         "--ds-input-number-stepper-color-disabled": "var(--ds-color-text-disabled)",
@@ -76447,7 +76513,7 @@
         "--ds-input-number-stepper-separator": "var(--ds-color-border-subtle)",
         "--ds-input-number-warning-bg": "var(--ds-input-warning-bg)",
         "--ds-input-number-warning-border": "var(--ds-input-warning-border)",
-        "--ds-input-number-warning-shadow-focus": "var(--ds-input-warning-shadow-focus)",
+        "--ds-input-number-warning-shadow-focus": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-input-selection-bg": "color-mix(in srgb, #2F5BE8 20%, transparent)",
         "--ds-input-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
         "--ds-input-shadow-rest": "none",
@@ -76482,7 +76548,7 @@
         "--ds-material-card-shadow": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-active": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-hover": "var(--ds-shadow-md)",
-        "--ds-material-card-shadow-selected": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
+        "--ds-material-card-shadow-selected": "none",
         "--ds-material-card-texture": "none",
         "--ds-material-control-background": "var(--ds-surface-control)",
         "--ds-material-control-background-active": "color-mix(in srgb, #2F5BE8 13%, var(--ds-surface-control))",
@@ -76591,7 +76657,7 @@
         "--ds-mentions-option-ink": "var(--ds-color-text-primary)",
         "--ds-mentions-placeholder-color": "var(--ds-type-color-muted)",
         "--ds-mentions-scrollbar-thumb": "var(--ds-color-border-secondary)",
-        "--ds-mentions-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
+        "--ds-mentions-shadow-focus": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-mentions-spinner-ink": "#2F5BE8",
         "--ds-mentions-spinner-track": "var(--ds-color-border)",
         "--ds-mentions-trigger-accent": "color-mix(in srgb, #2F5BE8 30%, var(--ds-color-border-subtle))",
@@ -76882,7 +76948,7 @@
         "--ds-otp-input-slot-border-focus": "#2F5BE8",
         "--ds-otp-input-slot-border-hover": "var(--ds-material-control-border-hover)",
         "--ds-otp-input-slot-color": "var(--ds-color-text-primary)",
-        "--ds-otp-input-slot-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
+        "--ds-otp-input-slot-shadow-focus": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-otp-input-slot-shadow-focus-error": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-page-header-eyebrow-text-transform": "uppercase",
         "--ds-page-shell-actions-backdrop": "none",
@@ -77685,7 +77751,7 @@
         "--ds-tag-input-placeholder-opacity": "var(--ds-input-placeholder-opacity)",
         "--ds-tag-input-radius": "var(--ds-radius-md)",
         "--ds-tag-input-rejected-ink": "var(--ds-color-warning-ink)",
-        "--ds-tag-input-shadow-focus": "var(--ds-shadow-focus-ring)",
+        "--ds-tag-input-shadow-focus": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-tag-input-sm-font-size": "var(--ds-input-sm-font-size)",
         "--ds-tag-lg-padding-inline": "var(--ds-spacing-3)",
         "--ds-tag-max-inline-size": "calc(var(--ds-spacing-4) * 16)",
@@ -77764,7 +77830,7 @@
         "--ds-textarea-lg-padding": "var(--ds-spacing-3) var(--ds-spacing-4)",
         "--ds-textarea-md-padding": "var(--ds-spacing-2) var(--ds-spacing-3)",
         "--ds-textarea-readonly-bg": "var(--ds-material-control-background-disabled)",
-        "--ds-textarea-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
+        "--ds-textarea-shadow-focus": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-textarea-sm-padding": "calc(var(--ds-spacing-1) * 1.5) var(--ds-spacing-2)",
         "--ds-textarea-success-bg": "var(--ds-material-control-background)",
         "--ds-textarea-success-border": "#16794A",
@@ -77859,7 +77925,6 @@
         "--ds-toolbar-entry-animation": "none",
         "--ds-toolbar-filter-strip-padding": "calc(0.5rem * 1) calc(1rem * 1)",
         "--ds-toolbar-focus-border": "#2F5BE8",
-        "--ds-toolbar-focus-ring": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-toolbar-header-gradient": "linear-gradient(118deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%) 0%, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 48%, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 94%, var(--ds-surface-inset, var(--ds-color-bg-secondary)) 6%) 100%)",
         "--ds-toolbar-icon-bg": "color-mix(in srgb, #2F5BE8 8%, var(--ds-surface-card))",
         "--ds-toolbar-icon-border": "var(--ds-color-border)",
@@ -77873,13 +77938,13 @@
         "--ds-toolbar-mobile-actions-radius": "max(calc(12px - 4px), calc(2px / 0.8 * 0.8))",
         "--ds-toolbar-mobile-rail-bg": "transparent",
         "--ds-toolbar-mobile-rail-border": "transparent",
-        "--ds-toolbar-mobile-rail-padding": "0.25rem",
+        "--ds-toolbar-mobile-rail-padding": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-mobile-rail-radius": "max(calc(12px - 4px), calc(2px / 0.8 * 0.8))",
         "--ds-toolbar-phone-filter-strip-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-phone-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-popover-radius": "0.5rem",
         "--ds-toolbar-primary-action-max-width": "18rem",
-        "--ds-toolbar-rail-focus-clearance": "0.25rem",
+        "--ds-toolbar-rail-focus-clearance": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-saved-views-bg": "color-mix(in srgb, var(--ds-surface-inset) 45%, transparent)",
         "--ds-toolbar-saved-views-border": "transparent",
         "--ds-toolbar-saved-views-radius": "max(calc(12px - 4px), calc(2px / 0.8 * 0.8))",
@@ -77908,7 +77973,7 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "#C62828",
         "--ds-tooltip-error-color": "#ffffff",
-        "--ds-tooltip-focus-color": "#2A55E0",
+        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -77951,7 +78016,7 @@
         "--ds-tour-close-ink": "var(--ds-material-card-foreground-muted)",
         "--ds-tour-close-ink-hover": "var(--ds-material-card-foreground)",
         "--ds-tour-description-ink": "var(--ds-color-text-secondary)",
-        "--ds-tour-focus-ring": "#2A55E0",
+        "--ds-tour-focus-ring": "var(--ds-border-color-transparent)",
         "--ds-tour-font-family": "var(--ds-type-body-font-family)",
         "--ds-tour-indicator-bg": "var(--ds-surface-panel)",
         "--ds-tour-indicator-bg-current": "#2F5BE8",
@@ -77980,7 +78045,7 @@
         "--ds-transfer-search-border": "var(--ds-color-border)",
         "--ds-transfer-search-border-focus": "#2F5BE8",
         "--ds-transfer-search-placeholder-color": "var(--ds-type-color-muted)",
-        "--ds-transfer-search-shadow-focus": "0 0 0 3px color-mix(in srgb, #2F5BE8 20%, transparent)",
+        "--ds-transfer-search-shadow-focus": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-tree-checkbox-size": "var(--ds-spacing-4)",
         "--ds-tree-connector-elbow": "var(--ds-spacing-3)",
         "--ds-tree-connector-inset": "0",
@@ -78770,8 +78835,9 @@
         "--ds-column-menu-panel-backdrop": "none",
         "--ds-column-menu-panel-background": "linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))",
         "--ds-column-menu-panel-border": "1px solid color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)",
-        "--ds-column-menu-panel-focus-outline": "2px solid var(--ds-color-border-focus)",
+        "--ds-column-menu-panel-focus-outline": "2px solid transparent",
         "--ds-column-menu-panel-focus-outline-offset": "-2px",
+        "--ds-column-menu-panel-focus-ring": "var(--ds-focus-ring)",
         "--ds-column-menu-panel-inline-size": "432px",
         "--ds-column-menu-panel-radius": "20px",
         "--ds-column-menu-panel-shadow": "0 24px 64px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)",
@@ -78989,7 +79055,7 @@
         "--ds-data-table-group-header-font-size": "var(--ds-font-size-sm)",
         "--ds-data-table-group-header-font-weight": "600",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
-        "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)",
+        "--ds-data-table-header-focus-shadow": "var(--ds-focus-ring)",
         "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
@@ -79001,7 +79067,7 @@
         "--ds-data-table-mobile-bulk-bar-bg": "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))",
         "--ds-data-table-mobile-bulk-bar-ink": "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-data-table-mobile-bulk-bar-bg))",
         "--ds-data-table-mobile-bulk-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
-        "--ds-data-table-mobile-card-focus-ring": "0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 42%, transparent), var(--ds-collection-card-shadow-hover, var(--ds-premium-card-shadow-hover, var(--ds-elevation-2)))",
+        "--ds-data-table-mobile-card-focus-ring": "var(--ds-focus-ring)",
         "--ds-data-table-mobile-card-hover-lift": "-1px",
         "--ds-data-table-mobile-control-size": "2.25rem",
         "--ds-data-table-mobile-pagination-bg": "var(--ds-surface-panel)",
@@ -79383,7 +79449,7 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "var(--ds-focus-ring-color)",
+        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "var(--ds-elevation-3)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -79392,6 +79458,10 @@
         "--ds-input-count-color": "var(--ds-type-color-muted)",
         "--ds-input-count-limit-font-weight": "600",
         "--ds-input-filled-border": "transparent",
+        "--ds-input-focus-ring": "var(--ds-focus-ring)",
+        "--ds-input-focus-ring-error": "var(--ds-input-focus-ring)",
+        "--ds-input-focus-ring-success": "var(--ds-input-focus-ring)",
+        "--ds-input-focus-ring-warning": "var(--ds-input-focus-ring)",
         "--ds-input-loading-color": "var(--ds-color-primary)",
         "--ds-input-number-addon-bg": "var(--ds-input-addon-bg)",
         "--ds-input-number-addon-border": "var(--ds-input-addon-border)",
@@ -79408,7 +79478,7 @@
         "--ds-input-number-color-disabled": "var(--ds-input-color-disabled)",
         "--ds-input-number-error-bg": "var(--ds-input-error-bg)",
         "--ds-input-number-error-border": "var(--ds-input-error-border)",
-        "--ds-input-number-error-shadow-focus": "var(--ds-input-error-shadow-focus)",
+        "--ds-input-number-error-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-number-font-family": "var(--ds-input-font-family)",
         "--ds-input-number-font-weight": "var(--ds-input-font-weight)",
         "--ds-input-number-letter-spacing": "var(--ds-input-letter-spacing)",
@@ -79419,7 +79489,7 @@
         "--ds-input-number-readonly-color": "var(--ds-input-readonly-color)",
         "--ds-input-number-selection-bg": "var(--ds-input-selection-bg)",
         "--ds-input-number-selection-color": "var(--ds-input-selection-color)",
-        "--ds-input-number-shadow-focus": "var(--ds-input-shadow-focus)",
+        "--ds-input-number-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-number-stepper-bg-hover": "var(--ds-material-control-background-hover)",
         "--ds-input-number-stepper-color": "var(--ds-color-text-secondary)",
         "--ds-input-number-stepper-color-disabled": "var(--ds-color-text-disabled)",
@@ -79427,7 +79497,7 @@
         "--ds-input-number-stepper-separator": "var(--ds-color-border-subtle)",
         "--ds-input-number-warning-bg": "var(--ds-input-warning-bg)",
         "--ds-input-number-warning-border": "var(--ds-input-warning-border)",
-        "--ds-input-number-warning-shadow-focus": "var(--ds-input-warning-shadow-focus)",
+        "--ds-input-number-warning-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-selection-bg": "color-mix(in srgb, var(--ds-color-primary) 20%, transparent)",
         "--ds-input-shadow-rest": "none",
         "--ds-kanban-board-column-accent": "transparent",
@@ -79457,7 +79527,7 @@
         "--ds-material-card-shadow": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-active": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-hover": "var(--ds-shadow-md)",
-        "--ds-material-card-shadow-selected": "var(--ds-material-card-focus-ring)",
+        "--ds-material-card-shadow-selected": "none",
         "--ds-material-control-background": "var(--ds-surface-control)",
         "--ds-material-control-background-active": "color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-control))",
         "--ds-material-control-background-disabled": "color-mix(in srgb, var(--ds-surface-control) var(--ds-state-disabled-mix, 82%), var(--ds-surface-panel))",
@@ -80651,7 +80721,7 @@
         "--ds-tag-input-placeholder-opacity": "var(--ds-input-placeholder-opacity)",
         "--ds-tag-input-radius": "var(--ds-radius-md)",
         "--ds-tag-input-rejected-ink": "var(--ds-color-warning-ink)",
-        "--ds-tag-input-shadow-focus": "var(--ds-shadow-focus-ring)",
+        "--ds-tag-input-shadow-focus": "var(--ds-focus-ring)",
         "--ds-tag-input-sm-font-size": "var(--ds-input-sm-font-size)",
         "--ds-tag-lg-padding-inline": "var(--ds-spacing-3)",
         "--ds-tag-max-inline-size": "calc(var(--ds-spacing-4) * 16)",
@@ -80809,7 +80879,7 @@
         "--ds-toggle-track-bg-hover": "color-mix(in srgb, var(--ds-color-border-secondary), var(--ds-color-text-primary) var(--ds-state-hover-shift))",
         "--ds-toggle-track-border-radius": "8px",
         "--ds-toolbar-compact-padding": "calc(0.75rem * 1) calc(1rem * 1)",
-        "--ds-toolbar-control-focus-ring": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)",
+        "--ds-toolbar-control-focus-ring": "var(--ds-focus-ring)",
         "--ds-toolbar-control-gap": "0.25rem",
         "--ds-toolbar-control-pressed-scale": "0.975",
         "--ds-toolbar-control-radius": "8px",
@@ -80825,7 +80895,6 @@
         "--ds-toolbar-entry-animation": "none",
         "--ds-toolbar-filter-strip-padding": "calc(0.5rem * 1) calc(1rem * 1)",
         "--ds-toolbar-focus-border": "var(--ds-color-primary)",
-        "--ds-toolbar-focus-ring": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent)",
         "--ds-toolbar-header-gradient": "linear-gradient(118deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%) 0%, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 48%, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 94%, var(--ds-surface-inset, var(--ds-color-bg-secondary)) 6%) 100%)",
         "--ds-toolbar-icon-bg": "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card))",
         "--ds-toolbar-icon-border": "var(--ds-color-border)",
@@ -80839,13 +80908,13 @@
         "--ds-toolbar-mobile-actions-radius": "max(calc(12px - 4px), 8px)",
         "--ds-toolbar-mobile-rail-bg": "transparent",
         "--ds-toolbar-mobile-rail-border": "transparent",
-        "--ds-toolbar-mobile-rail-padding": "0.25rem",
+        "--ds-toolbar-mobile-rail-padding": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-mobile-rail-radius": "max(calc(12px - 4px), 8px)",
         "--ds-toolbar-phone-filter-strip-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-phone-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-popover-radius": "0.5rem",
         "--ds-toolbar-primary-action-max-width": "18rem",
-        "--ds-toolbar-rail-focus-clearance": "0.25rem",
+        "--ds-toolbar-rail-focus-clearance": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-saved-views-bg": "color-mix(in srgb, var(--ds-surface-inset) 45%, transparent)",
         "--ds-toolbar-saved-views-border": "transparent",
         "--ds-toolbar-saved-views-radius": "max(calc(12px - 4px), 8px)",
@@ -80874,7 +80943,7 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "var(--ds-color-error)",
         "--ds-tooltip-error-color": "var(--ds-color-on-error)",
-        "--ds-tooltip-focus-color": "var(--ds-focus-ring-color)",
+        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -80917,7 +80986,7 @@
         "--ds-tour-close-ink": "var(--ds-material-card-foreground-muted)",
         "--ds-tour-close-ink-hover": "var(--ds-material-card-foreground)",
         "--ds-tour-description-ink": "var(--ds-color-text-secondary)",
-        "--ds-tour-focus-ring": "var(--ds-focus-ring-color)",
+        "--ds-tour-focus-ring": "var(--ds-border-color-transparent)",
         "--ds-tour-font-family": "var(--ds-type-body-font-family)",
         "--ds-tour-indicator-bg": "var(--ds-surface-panel)",
         "--ds-tour-indicator-bg-current": "var(--ds-color-primary)",
@@ -81734,8 +81803,9 @@
         "--ds-column-menu-panel-backdrop": "none",
         "--ds-column-menu-panel-background": "linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))",
         "--ds-column-menu-panel-border": "1px solid color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)",
-        "--ds-column-menu-panel-focus-outline": "2px solid var(--ds-color-border-focus)",
+        "--ds-column-menu-panel-focus-outline": "2px solid transparent",
         "--ds-column-menu-panel-focus-outline-offset": "-2px",
+        "--ds-column-menu-panel-focus-ring": "var(--ds-focus-ring)",
         "--ds-column-menu-panel-inline-size": "432px",
         "--ds-column-menu-panel-radius": "20px",
         "--ds-column-menu-panel-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 24px rgba(0, 0, 0, 0.50), 0 20px 44px rgba(0, 0, 0, 0.44), 0 0 24px color-mix(in srgb, #ffffff 8%, transparent)",
@@ -81953,7 +82023,7 @@
         "--ds-data-table-group-header-font-size": "var(--ds-font-size-sm)",
         "--ds-data-table-group-header-font-weight": "600",
         "--ds-data-table-header-content-gap": "calc(0.375rem * 1)",
-        "--ds-data-table-header-focus-shadow": "inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)",
+        "--ds-data-table-header-focus-shadow": "var(--ds-focus-ring)",
         "--ds-data-table-header-font-family": "var(--ds-type-label-font-family)",
         "--ds-data-table-header-pinned-bg": "var(--ds-surface-inset)",
         "--ds-data-table-leading-cell-padding-comfortable": "0.75rem 1rem 0.75rem 0.1875rem",
@@ -81965,7 +82035,7 @@
         "--ds-data-table-mobile-bulk-bar-bg": "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))",
         "--ds-data-table-mobile-bulk-bar-ink": "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-data-table-mobile-bulk-bar-bg))",
         "--ds-data-table-mobile-bulk-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
-        "--ds-data-table-mobile-card-focus-ring": "0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 42%, transparent), var(--ds-collection-card-shadow-hover, var(--ds-premium-card-shadow-hover, var(--ds-elevation-2)))",
+        "--ds-data-table-mobile-card-focus-ring": "var(--ds-focus-ring)",
         "--ds-data-table-mobile-card-hover-lift": "-1px",
         "--ds-data-table-mobile-control-size": "2.25rem",
         "--ds-data-table-mobile-pagination-bg": "var(--ds-surface-panel)",
@@ -82347,7 +82417,7 @@
         "--ds-header-tone-warning-fg": "color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%)",
         "--ds-hover-card-bg": "var(--ds-material-overlay-background)",
         "--ds-hover-card-border-color": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
-        "--ds-hover-card-focus-color": "var(--ds-focus-ring-color)",
+        "--ds-hover-card-focus-color": "var(--ds-border-color-transparent)",
         "--ds-hover-card-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)",
         "--ds-hover-card-surface-lift": "var(--ds-elevation-surface-3)",
         "--ds-hover-card-texture": "none",
@@ -82356,6 +82426,10 @@
         "--ds-input-count-color": "var(--ds-type-color-muted)",
         "--ds-input-count-limit-font-weight": "600",
         "--ds-input-filled-border": "transparent",
+        "--ds-input-focus-ring": "var(--ds-focus-ring)",
+        "--ds-input-focus-ring-error": "var(--ds-input-focus-ring)",
+        "--ds-input-focus-ring-success": "var(--ds-input-focus-ring)",
+        "--ds-input-focus-ring-warning": "var(--ds-input-focus-ring)",
         "--ds-input-loading-color": "var(--ds-color-primary)",
         "--ds-input-number-addon-bg": "var(--ds-input-addon-bg)",
         "--ds-input-number-addon-border": "var(--ds-input-addon-border)",
@@ -82372,7 +82446,7 @@
         "--ds-input-number-color-disabled": "var(--ds-input-color-disabled)",
         "--ds-input-number-error-bg": "var(--ds-input-error-bg)",
         "--ds-input-number-error-border": "var(--ds-input-error-border)",
-        "--ds-input-number-error-shadow-focus": "var(--ds-input-error-shadow-focus)",
+        "--ds-input-number-error-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-number-font-family": "var(--ds-input-font-family)",
         "--ds-input-number-font-weight": "var(--ds-input-font-weight)",
         "--ds-input-number-letter-spacing": "var(--ds-input-letter-spacing)",
@@ -82383,7 +82457,7 @@
         "--ds-input-number-readonly-color": "var(--ds-input-readonly-color)",
         "--ds-input-number-selection-bg": "var(--ds-input-selection-bg)",
         "--ds-input-number-selection-color": "var(--ds-input-selection-color)",
-        "--ds-input-number-shadow-focus": "var(--ds-input-shadow-focus)",
+        "--ds-input-number-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-number-stepper-bg-hover": "var(--ds-material-control-background-hover)",
         "--ds-input-number-stepper-color": "var(--ds-color-text-secondary)",
         "--ds-input-number-stepper-color-disabled": "var(--ds-color-text-disabled)",
@@ -82391,7 +82465,7 @@
         "--ds-input-number-stepper-separator": "var(--ds-color-border-subtle)",
         "--ds-input-number-warning-bg": "var(--ds-input-warning-bg)",
         "--ds-input-number-warning-border": "var(--ds-input-warning-border)",
-        "--ds-input-number-warning-shadow-focus": "var(--ds-input-warning-shadow-focus)",
+        "--ds-input-number-warning-shadow-focus": "var(--ds-focus-ring)",
         "--ds-input-selection-bg": "color-mix(in srgb, var(--ds-color-primary) 20%, transparent)",
         "--ds-input-shadow-rest": "none",
         "--ds-kanban-board-column-accent": "transparent",
@@ -82421,7 +82495,7 @@
         "--ds-material-card-shadow": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-active": "var(--ds-shadow-sm)",
         "--ds-material-card-shadow-hover": "var(--ds-shadow-md)",
-        "--ds-material-card-shadow-selected": "var(--ds-material-card-focus-ring)",
+        "--ds-material-card-shadow-selected": "none",
         "--ds-material-control-background": "var(--ds-surface-control)",
         "--ds-material-control-background-active": "color-mix(in srgb, var(--ds-color-primary) var(--ds-state-active-shift, 7%), var(--ds-surface-control))",
         "--ds-material-control-background-disabled": "color-mix(in srgb, var(--ds-surface-control) var(--ds-state-disabled-mix, 82%), var(--ds-surface-panel))",
@@ -83615,7 +83689,7 @@
         "--ds-tag-input-placeholder-opacity": "var(--ds-input-placeholder-opacity)",
         "--ds-tag-input-radius": "var(--ds-radius-md)",
         "--ds-tag-input-rejected-ink": "var(--ds-color-warning-ink)",
-        "--ds-tag-input-shadow-focus": "var(--ds-shadow-focus-ring)",
+        "--ds-tag-input-shadow-focus": "var(--ds-focus-ring)",
         "--ds-tag-input-sm-font-size": "var(--ds-input-sm-font-size)",
         "--ds-tag-lg-padding-inline": "var(--ds-spacing-3)",
         "--ds-tag-max-inline-size": "calc(var(--ds-spacing-4) * 16)",
@@ -83773,7 +83847,7 @@
         "--ds-toggle-track-bg-hover": "color-mix(in srgb, var(--ds-color-border-secondary), var(--ds-color-text-primary) var(--ds-state-hover-shift))",
         "--ds-toggle-track-border-radius": "8px",
         "--ds-toolbar-compact-padding": "calc(0.75rem * 1) calc(1rem * 1)",
-        "--ds-toolbar-control-focus-ring": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)",
+        "--ds-toolbar-control-focus-ring": "var(--ds-focus-ring)",
         "--ds-toolbar-control-gap": "0.25rem",
         "--ds-toolbar-control-pressed-scale": "0.975",
         "--ds-toolbar-control-radius": "8px",
@@ -83789,7 +83863,6 @@
         "--ds-toolbar-entry-animation": "none",
         "--ds-toolbar-filter-strip-padding": "calc(0.5rem * 1) calc(1rem * 1)",
         "--ds-toolbar-focus-border": "var(--ds-color-primary)",
-        "--ds-toolbar-focus-ring": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent)",
         "--ds-toolbar-header-gradient": "linear-gradient(118deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%) 0%, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 48%, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 94%, var(--ds-surface-inset, var(--ds-color-bg-secondary)) 6%) 100%)",
         "--ds-toolbar-icon-bg": "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card))",
         "--ds-toolbar-icon-border": "var(--ds-color-border)",
@@ -83803,13 +83876,13 @@
         "--ds-toolbar-mobile-actions-radius": "max(calc(12px - 4px), 8px)",
         "--ds-toolbar-mobile-rail-bg": "transparent",
         "--ds-toolbar-mobile-rail-border": "transparent",
-        "--ds-toolbar-mobile-rail-padding": "0.25rem",
+        "--ds-toolbar-mobile-rail-padding": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-mobile-rail-radius": "max(calc(12px - 4px), 8px)",
         "--ds-toolbar-phone-filter-strip-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-phone-padding": "calc(0.625rem * 1) calc(0.75rem * 1)",
         "--ds-toolbar-popover-radius": "0.5rem",
         "--ds-toolbar-primary-action-max-width": "18rem",
-        "--ds-toolbar-rail-focus-clearance": "0.25rem",
+        "--ds-toolbar-rail-focus-clearance": "max(0.25rem, calc(2px + max(2px, 2px)))",
         "--ds-toolbar-saved-views-bg": "color-mix(in srgb, var(--ds-surface-inset) 45%, transparent)",
         "--ds-toolbar-saved-views-border": "transparent",
         "--ds-toolbar-saved-views-radius": "max(calc(12px - 4px), 8px)",
@@ -83838,7 +83911,7 @@
         "--ds-tooltip-bordered-texture": "none",
         "--ds-tooltip-error-bg": "var(--ds-color-error)",
         "--ds-tooltip-error-color": "var(--ds-color-on-error)",
-        "--ds-tooltip-focus-color": "var(--ds-focus-ring-color)",
+        "--ds-tooltip-focus-color": "var(--ds-border-color-transparent)",
         "--ds-tooltip-inverse-background": "var(--ds-color-text-primary)",
         "--ds-tooltip-inverse-border": "color-mix(in srgb, var(--ds-color-text-inverse) 18%, transparent)",
         "--ds-tooltip-inverse-foreground": "var(--ds-color-text-inverse)",
@@ -83881,7 +83954,7 @@
         "--ds-tour-close-ink": "var(--ds-material-card-foreground-muted)",
         "--ds-tour-close-ink-hover": "var(--ds-material-card-foreground)",
         "--ds-tour-description-ink": "var(--ds-color-text-secondary)",
-        "--ds-tour-focus-ring": "var(--ds-focus-ring-color)",
+        "--ds-tour-focus-ring": "var(--ds-border-color-transparent)",
         "--ds-tour-font-family": "var(--ds-type-body-font-family)",
         "--ds-tour-indicator-bg": "var(--ds-surface-panel)",
         "--ds-tour-indicator-bg-current": "var(--ds-color-primary)",
@@ -84070,5 +84143,5 @@
       }
     }
   },
-  "digest": "b1684d18e3dbb35b9815a5adc8153f9e2fe5b269731226652474fc0e42f6f083"
+  "digest": "40e5b676b8c686b4d5890a5edfbae89dbf0019797350130f57fcc89246e24068"
 }

@@ -509,7 +509,6 @@
         "Stepper",
         "StepperContent",
         "StepperStep",
-        "Steps",
         "StreamingText",
         "SurfaceActionBar",
         "SurfaceCapabilityAnatomy",
@@ -2294,10 +2293,6 @@
         ],
         "StepperStep": [
           "@phosphor-icons/react"
-        ],
-        "Steps": [
-          "@phosphor-icons/react",
-          "antd"
         ],
         "StreamingText": [
           "@phosphor-icons/react",
