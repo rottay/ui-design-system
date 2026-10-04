@@ -6861,166 +6861,10 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "2079424eda75ff5e1fec": {
-      "path": "src/components/patterns/visualization/charts/families/area-chart/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 1
-    },
-    "9edda0408e2b295342ae": {
-      "path": "src/components/patterns/visualization/charts/families/bullet/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 1
-    },
-    "0cf7b48844e2ae0f5948": {
-      "path": "src/components/patterns/visualization/charts/families/funnel-chart/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "9da6c041aa7471cfed0a": {
-      "path": "src/components/patterns/visualization/charts/families/funnel-chart/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "e17da240be8b95e54787": {
-      "path": "src/components/patterns/visualization/charts/families/gauge/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "ed3f53a2a4f02bdae54a": {
-      "path": "src/components/patterns/visualization/charts/families/gauge/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "269cc4e1b481fcf96c94": {
-      "path": "src/components/patterns/visualization/charts/families/histogram/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "3d0470144c9524783fde": {
-      "path": "src/components/patterns/visualization/charts/families/histogram/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 2
-    },
-    "e88d4b591566bd70cc96": {
-      "path": "src/components/patterns/visualization/charts/families/histogram/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "13fa760188c8be53db0b": {
-      "path": "src/components/patterns/visualization/charts/families/network-graph/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 2
-    },
-    "cde883d48c7bcc8f1029": {
-      "path": "src/components/patterns/visualization/charts/families/network-graph/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 1
-    },
-    "12ae17550480672e38bc": {
-      "path": "src/components/patterns/visualization/charts/families/pie-chart/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 1
-    },
-    "7959ab44a5013d7c37b8": {
-      "path": "src/components/patterns/visualization/charts/families/radar-chart/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 1
-    },
-    "392205cf778b4968c9cd": {
-      "path": "src/components/patterns/visualization/charts/families/sankey/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "d843a51d83bcb4fcde7d": {
-      "path": "src/components/patterns/visualization/charts/families/sankey/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "3458c0eb0967eee4869a": {
-      "path": "src/components/patterns/visualization/charts/families/sankey/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 1
-    },
-    "c1d3ba8681e190c81af3": {
-      "path": "src/components/patterns/visualization/charts/families/sankey/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 1
-    },
-    "418dc79cbde807b8dca8": {
-      "path": "src/components/patterns/visualization/charts/families/waterfall/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "55a1e8910dc9eb7fc4a3": {
-      "path": "src/components/patterns/visualization/charts/families/waterfall/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "93acf8908679750c4cb9": {
-      "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "a9caf9bf3cbbde7db116": {
-      "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "b2a4ccf69272a1ca6640": {
-      "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "d50cc0f65da7186d0892": {
-      "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "0e537c1038a972c41445": {
-      "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 1
-    },
-    "c3e774f4723bada70f63": {
-      "path": "src/components/patterns/visualization/charts/presentation/scaffold/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 1
-    },
     "5671265a51112b78459c": {
       "path": "src/components/patterns/visualization/charts/presentation/tooltip/index.tsx",
       "category": "primitive-reconstruction",
       "rule": "aria-role-reconstruction",
-      "count": 1
-    },
-    "983e7634269c5c4e15fa": {
-      "path": "src/components/patterns/visualization/charts/presentation/tooltip/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-paint",
       "count": 1
     },
     "15f8faa6469ad447e532": {
@@ -7035,112 +6879,16 @@
       "rule": "native-button",
       "count": 5
     },
-    "29c054b3f475e7cc63d8": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/projection/metric-trend/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-geometry",
-      "count": 1
-    },
-    "2ef35484a4730d9e8272": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/projection/metric-trend/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 1
-    },
-    "289be319b20d42dc6f98": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/projection/metric-trend/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 1
-    },
-    "567376310b42f3f3a6b1": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/projection/metric-trend/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 1
-    },
-    "968567b1d46dd87456f2": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/projection/metric-trend/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 2
-    },
-    "ccd825fd866bd4fa0178": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/projection/ranked-rows/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-spacing",
-      "count": 2
-    },
-    "b5d8f0d597a157915223": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/projection/ranked-rows/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 1
-    },
-    "3997ffa4704223331a20": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/bullet/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 1
-    },
-    "b090536033fc0b06a11e": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/bullet/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 1
-    },
-    "ccd442f111ae0f21d0bb": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/bullet/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 1
-    },
     "7f748ca33c7cf9c0a5c6": {
       "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/calendar-heat-map/index.tsx",
       "category": "primitive-reconstruction",
       "rule": "clickable-noninteractive",
       "count": 1
     },
-    "7e4002c5ef59bb88ec89": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/calendar-heat-map/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 2
-    },
-    "ccee5cc49582ed0073d2": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/gauge/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 1
-    },
     "696e8f4332ce6ed623a3": {
       "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/index.tsx",
       "category": "primitive-reconstruction",
       "rule": "aria-role-reconstruction",
-      "count": 1
-    },
-    "70807cc775824c3d3147": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/radar/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 1
-    },
-    "096b547e9944e122ee0a": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/treemap/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 1
-    },
-    "88343eac94273745e5b1": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/treemap/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
-      "count": 1
-    },
-    "ea3bccd8d205e851105a": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/treemap/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-typography",
       "count": 1
     },
     "9ff39d2a101f5503a844": {

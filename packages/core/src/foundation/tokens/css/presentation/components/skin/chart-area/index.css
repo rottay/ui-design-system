@@ -59,6 +59,14 @@
  * copy on the metadata role so it reads as feedback, not data. */
 
 .ds-chart-area [data-part='data-fallback'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 24px);
+  text-align: center;
+  pointer-events: none;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-sm);
 }

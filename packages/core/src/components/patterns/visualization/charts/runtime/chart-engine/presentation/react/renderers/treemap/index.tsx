@@ -142,7 +142,7 @@ export function SvgTreeMapRenderer({
                   data-part="tile-label"
                   x={4}
                   y={14}
-                  style={{ fontSize: '11px', fontWeight: 500, pointerEvents: 'none' }}
+                  style={{ pointerEvents: 'none' }}
                   aria-hidden="true"
                 >
                   {tile.name}
@@ -153,7 +153,7 @@ export function SvgTreeMapRenderer({
                   data-part="tile-value"
                   x={4}
                   y={26}
-                  style={{ fontSize: '10px', pointerEvents: 'none' }}
+                  style={{ pointerEvents: 'none' }}
                   aria-hidden="true"
                 >
                   {tile.value}

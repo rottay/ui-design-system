@@ -259,12 +259,7 @@ export const GaugeChart = memo(function GaugeChart({
               data-part="legend-swatch"
               data-color-source={usesDefaultSegments ? 'default' : 'custom'}
               data-tone={tone}
-              style={{
-                width: 12,
-                height: 12,
-                backgroundColor: tone === 'custom' ? segment.color : tones.toneFor(tone),
-                display: 'inline-block',
-              }}
+              style={{ backgroundColor: tone === 'custom' ? segment.color : tones.toneFor(tone) }}
             />
             <span data-part="legend-label">
               {segment.label ?? `${segment.from}-${segment.to}`}

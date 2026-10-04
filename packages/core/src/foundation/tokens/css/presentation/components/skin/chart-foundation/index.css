@@ -113,6 +113,10 @@
   max-width: 280px;
 }
 
+.ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-state='hidden'] {
+  opacity: 0;
+}
+
 .ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='minimal'] {
   padding: 4px 8px;
   max-width: 220px;
@@ -1468,11 +1472,38 @@
 }
 
 .ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--ds-spacing-2, 8px);
+  box-sizing: border-box;
+  block-size: 100%;
+  padding: var(--ds-spacing-4, 16px);
   background: linear-gradient(
       to top,
       var(--ds-chart-axis-color, var(--ds-color-border)) 0 1px,
       transparent 1px
     ) content-box;
+}
+
+/* Four uneven bars so the placeholder reads as a chart, not a progress row. */
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] > [data-part='skeleton-bar'] {
+  flex: 1;
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] > [data-part='skeleton-bar']:nth-child(1) {
+  block-size: 40%;
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] > [data-part='skeleton-bar']:nth-child(2) {
+  block-size: 70%;
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] > [data-part='skeleton-bar']:nth-child(3) {
+  block-size: 55%;
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] > [data-part='skeleton-bar']:nth-child(4) {
+  block-size: 30%;
 }
 
 @media (forced-colors: active) {
@@ -1493,12 +1524,32 @@
  * canonical categorical paint bridge inherited from the owning chart frame;
  * standalone use falls back to the primary color. Delta tones are
  * meaning-bearing status, exempt from the category/status separation law. */
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-1, 4px);
+}
+
 .ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='label'] {
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 0.8125rem);
 }
 
 .ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='value'] {
   color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-3xl, 1.5rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  font-variant-numeric: var(--ds-numeric-tabular);
+}
+
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='delta'] {
+  font-size: var(--ds-font-size-sm, 0.8125rem);
+}
+
+/* The trend stretches to the tile and keeps the height of its viewBox. */
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='trend'] {
+  inline-size: 100%;
+  block-size: var(--ds-spacing-8, 32px);
 }
 
 .ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='delta'][data-tone='neutral'] {
@@ -1519,11 +1570,29 @@
 }
 
 /* Generic ranked-rows phone projection. */
+.ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2, 8px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] > [data-part='row'] {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ds-spacing-2, 8px);
+}
+
 .ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] > [data-part='row'] > [data-part='rank'] {
   color: var(--ds-color-text-tertiary, var(--ds-color-text-secondary));
+  font-size: var(--ds-font-size-sm, 0.8125rem);
 }
 
 .ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] > [data-part='row'] > [data-part='row-label'] {
+  flex: 1;
+  min-inline-size: 0;
   color: var(--ds-color-text-primary);
 }
 

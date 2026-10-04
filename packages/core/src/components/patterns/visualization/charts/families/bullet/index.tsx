@@ -275,16 +275,6 @@ export const BulletChart = memo(function BulletChart({
         <div
           data-part="data-fallback"
           role="status"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 24,
-            textAlign: 'center',
-            pointerEvents: 'none',
-          }}
         >
           {fallbackMessage}
         </div>

@@ -23,6 +23,14 @@
  * copy on the metadata role so it reads as feedback, not data. */
 
 .ds-chart-pie [data-part='data-fallback'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 24px);
+  text-align: center;
+  pointer-events: none;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-sm);
 }
@@ -48,8 +56,8 @@
 /* Loading skeleton -----------------------------------------------------------
  * The bar placeholders bow out for a donut ring that keeps the chart
  * footprint: same box, recognizably radial. The scaffold container keeps its
- * inline flex posture, so the ring centers itself as a flex item with auto
- * margins instead of fighting the inline layout. */
+ * foundation flex posture, so the ring centers itself as a flex item with auto
+ * margins instead of fighting the foundation layout. */
 
 @keyframes ds-chart-pie-skeleton-pulse {
   from {

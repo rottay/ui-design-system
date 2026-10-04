@@ -14,6 +14,11 @@
   border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
+/* The cumulative series is a line, so its swatch is a 2px rule. */
+.ds-chart-histogram [data-part='legend-item'][data-series='cumulative'] [data-part='legend-swatch'] {
+  block-size: var(--ds-border-width-medium, 2px);
+}
+
 .ds-chart-histogram [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
 }
@@ -79,7 +84,7 @@
 }
 
 /* Loading skeleton: the bar placeholders bow out for a dotted cloud that
- * keeps the scatter footprint. The scaffold container keeps its inline flex
+ * keeps the scatter footprint. The scaffold container keeps its foundation flex
  * posture, so the cloud centers itself as a flex item with auto margins. */
 
 @keyframes ds-chart-scatter-skeleton-pulse {
@@ -202,6 +207,10 @@
   fill: var(--ds-color-text-primary);
 }
 
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-gauge[data-part='chart-renderer'] [data-part='value-label'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+
 .ds-chart-gauge [data-part='label'] {
   fill: var(--ds-color-text-secondary);
 }
@@ -214,6 +223,17 @@
 
 .ds-chart-sankey [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
+}
+
+/* Only the INVALID-DATA fallback is inset; the empty copy sits flush. */
+.ds-chart-sankey [data-part='chart-fallback'][data-state='error'] {
+  padding: var(--ds-spacing-4, 16px);
+  text-align: center;
+}
+
+.ds-chart-sankey [data-part='chart-fallback'] > [data-part='fallback-message'] {
+  display: block;
+  margin-block-start: var(--ds-spacing-1, 4px);
 }
 
 .ds-chart-sankey [data-part='link-label'],
@@ -380,6 +400,16 @@
 
 .ds-chart-network-graph [data-part='legend-swatch'] {
   border-radius: 50%;
+}
+
+.ds-chart-network-graph [data-part='chart-fallback'] {
+  padding: var(--ds-spacing-4, 16px);
+  text-align: center;
+}
+
+.ds-chart-network-graph [data-part='chart-fallback'] > [data-part='fallback-message'] {
+  display: block;
+  margin-block-start: var(--ds-spacing-1, 4px);
 }
 
 .ds-chart-network-graph [data-part='node-label'] {

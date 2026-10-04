@@ -326,7 +326,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
 
     const line = populationLine();
     assert.match(line, /shape 214 \(4 N\/A\)/);
-    assert.match(line, /typography 182 \(0 N\/A\)/);
+    assert.match(line, /typography 184 \(0 N\/A\)/);
     assert.match(line, /exclusions [0-9a-f]{16} \(4 reviewed\)/);
 
     const pilot = pilotPopulation();
@@ -1130,7 +1130,9 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     assert.match(retirement.law, /^STATES-K, text unchanged/u);
     assert.deepEqual(Object.fromEntries(['shape', 'typography', 'rhythm', 'depth', 'motion'].map((axis) => [axis, byAxis[axis].denominator])),
       // depth 199 -> 204 -> 199 (2026-10-03): the focus-signature sweep's five entrants, and the law that reads them out (D9, FS drills).
-      { shape: 214, typography: 182, rhythm: 224, depth: 199, motion: 204 });
+      // typography 182 -> 184, rhythm 224 -> 226 (2026-10-04, OWN-8 chart chrome): chart-bullet, chart-treemap,
+      // chart-area enter on the scale-token reads their drained skins gained; no leaver, no corpus move.
+      { shape: 214, typography: 184, rhythm: 226, depth: 199, motion: 204 });
     assert.deepEqual(Object.fromEntries(report.axes.map((entry) => [entry.axis, entry.notApplicableCount])),
       { shape: 4, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
     // The two ruled-out alternatives, measured: the twin clause keeps out

@@ -223,7 +223,7 @@ export function SvgBulletRenderer({
                     y={item.labelAnchor.y}
                     textAnchor={geometry.orientation === 'horizontal' ? 'end' : 'middle'}
                     dominantBaseline="middle"
-                    style={{ fontSize: '12px', fontWeight: 500, pointerEvents: 'none' }}
+                    style={{ pointerEvents: 'none' }}
                     aria-hidden="true"
                   >
                     {item.label}
@@ -236,7 +236,7 @@ export function SvgBulletRenderer({
                     y={item.valueAnchor.y}
                     textAnchor={geometry.orientation === 'horizontal' ? 'start' : 'middle'}
                     dominantBaseline="middle"
-                    style={{ fontSize: '11px', pointerEvents: 'none' }}
+                    style={{ pointerEvents: 'none' }}
                     aria-hidden="true"
                   >
                     {formatVal(item.value)}

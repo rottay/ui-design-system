@@ -247,7 +247,6 @@ export const AreaChart = memo(function AreaChart({
               data-part="data-fallback"
               data-error-code="NUMERIC_OVERFLOW"
               role="status"
-              style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', padding: 24, textAlign: 'center', pointerEvents: 'none' }}
             >
               Stacked values exceed the finite numeric range.
             </div>

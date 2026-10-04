@@ -126,7 +126,6 @@ export function ChartTooltip({
         ...TOOLTIP_STYLE,
         left: adjusted.left,
         top: adjusted.top,
-        opacity: visible ? 1 : 0,
         visibility: visible ? 'visible' : 'hidden',
       }}
       role="tooltip"

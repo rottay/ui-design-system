@@ -505,17 +505,15 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
       data-part="chart-fallback"
       data-state="error"
       data-error-code={validation.code}
-      style={{ padding: 16, textAlign: 'center' }}
     >
-      <strong>{validation.code}</strong>
-      <span style={{ display: 'block', marginTop: 4 }}>{validation.message}</span>
+      <strong data-part="fallback-code">{validation.code}</strong>
+      <span data-part="fallback-message">{validation.message}</span>
     </div>
   ) : graphNodes.length === 0 ? (
     <div
       role="status"
       data-part="chart-fallback"
       data-state="empty"
-      style={{ padding: 16, textAlign: 'center' }}
     >
       {resolvedEmptyLabel}
     </div>

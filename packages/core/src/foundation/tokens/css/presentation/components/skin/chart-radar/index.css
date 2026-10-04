@@ -54,6 +54,11 @@
   fill: var(--ds-chart-label-color, var(--ds-color-text-secondary));
 }
 
+/* The spoke captions sit one step under the foundation's axis-caption size. */
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-radar[data-part='chart-renderer'] [data-part='axis-label'] {
+  font-size: var(--ds-font-size-2xs, 11px);
+}
+
 .ds-chart-radar [data-part='series-point'] {
   stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
 }
@@ -63,6 +68,14 @@
  * the metadata role so it reads as feedback, not data. */
 
 .ds-chart-radar [data-part='data-fallback'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 24px);
+  text-align: center;
+  pointer-events: none;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-sm);
 }
@@ -87,7 +100,7 @@
 
 /* Loading skeleton -----------------------------------------------------------
  * The bar placeholders bow out for a pentagon web outline that keeps the
- * radar footprint. The scaffold container keeps its inline flex posture, so
+ * radar footprint. The scaffold container keeps its foundation flex posture, so
  * the web centers itself as a flex item with auto margins. */
 
 @keyframes ds-chart-radar-skeleton-pulse {

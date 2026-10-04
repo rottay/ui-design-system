@@ -164,12 +164,7 @@ export const FunnelChart = memo(function FunnelChart({
           <span
             data-part="legend-swatch"
             data-color-source={segment.colorSource}
-            style={{
-              width: 12,
-              height: 12,
-              backgroundColor: segment.color,
-              display: 'inline-block',
-            }}
+            style={{ backgroundColor: segment.color }}
           />
           <span data-part="legend-label">{segment.label}</span>
         </div>

@@ -883,12 +883,7 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
         <div key={n.id} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
           <span
             data-part="legend-swatch"
-            style={{
-              width: 12,
-              height: 12,
-              backgroundColor: n.color ?? palette[i % palette.length],
-              display: 'inline-block',
-            }}
+            style={{ backgroundColor: n.color ?? palette[i % palette.length] }}
           />
           <span data-part="legend-label">{n.label}</span>
         </div>
@@ -905,10 +900,9 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
       data-part="chart-fallback"
       data-state="error"
       data-error-code={validation.code}
-      style={{ padding: 16, textAlign: 'center' }}
     >
-      <strong>{validation.code}</strong>
-      <span style={{ display: 'block', marginTop: 4 }}>{validation.message}</span>
+      <strong data-part="fallback-code">{validation.code}</strong>
+      <span data-part="fallback-message">{validation.message}</span>
     </div>
   ) : validation.nodes.length === 0 ? (
     <div

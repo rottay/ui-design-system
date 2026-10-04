@@ -187,7 +187,6 @@ export function SvgCalendarHeatMapRenderer({
               y={label.y}
               dy="0.35em"
               textAnchor="end"
-              style={{ fontSize: '10px' }}
             >
               {label.label}
             </text>
@@ -204,7 +203,6 @@ export function SvgCalendarHeatMapRenderer({
               x={label.x}
               y={label.y}
               textAnchor="start"
-              style={{ fontSize: '10px' }}
             >
               {label.label}
             </text>

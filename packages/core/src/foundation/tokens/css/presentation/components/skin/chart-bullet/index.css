@@ -17,8 +17,30 @@
   color: var(--ds-color-text-secondary);
 }
 
+.ds-chart-bullet [data-part='data-fallback'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 24px);
+  text-align: center;
+  pointer-events: none;
+}
+
 .ds-chart-bullet [data-part='item-label'] {
   fill: var(--ds-color-text-primary);
+}
+
+/* The renderer scope outranks the foundation's shared value-label size, so
+ * the value reads one rung under its item label. */
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-bullet[data-part='chart-renderer'] [data-part='item-label'] {
+  font-size: var(--ds-font-size-xs, 12px);
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-bullet[data-part='chart-renderer'] [data-part='value-label'] {
+  font-size: var(--ds-font-size-2xs, 11px);
 }
 
 .ds-chart-bullet [data-part='value-label'] {

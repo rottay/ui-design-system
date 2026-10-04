@@ -102,21 +102,12 @@ export function ChartMetricTrendView({
       data-metric-id={view?.metricId}
       role="group"
       aria-label={ariaLabel}
-      style={{ display: 'flex', flexDirection: 'column', gap: 4, ...style }}
+      style={style}
     >
-      <div data-part="label" style={{ fontSize: 13 }}>{label}</div>
-      <div
-        data-part="value"
-        style={{
-          fontSize: 24,
-          fontWeight: 600,
-          fontVariantNumeric: 'var(--ds-numeric-tabular)' as CSSProperties['fontVariantNumeric'],
-        }}
-      >
-        {value}
-      </div>
+      <div data-part="label">{label}</div>
+      <div data-part="value">{value}</div>
       {delta ? (
-        <div data-part="delta" data-tone={deltaTone} style={{ fontSize: 13 }}>
+        <div data-part="delta" data-tone={deltaTone}>
           {delta}
         </div>
       ) : null}
@@ -128,7 +119,6 @@ export function ChartMetricTrendView({
           preserveAspectRatio="none"
           aria-hidden="true"
           focusable="false"
-          style={{ width: '100%', height: TREND_VIEWBOX_HEIGHT }}
         >
           <polyline
             data-part="trend-line"

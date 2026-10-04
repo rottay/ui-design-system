@@ -329,7 +329,7 @@ export function SvgGaugeRenderer({
               y={geometry.valueY}
               textAnchor="middle"
               dominantBaseline="middle"
-              style={{ fontSize: `${geometry.valueFontSize}px`, fontWeight: 600 }}
+              style={{ fontSize: `${geometry.valueFontSize}px` }}
               aria-hidden="true"
             >
               {shouldAnimate ? (

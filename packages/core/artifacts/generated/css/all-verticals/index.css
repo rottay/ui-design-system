@@ -97580,6 +97580,10 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   max-width: 280px;
 }
 
+.ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-state='hidden'] {
+  opacity: 0;
+}
+
 .ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-variant='minimal'] {
   padding: 4px 8px;
   max-width: 220px;
@@ -98935,11 +98939,38 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--ds-spacing-2, 8px);
+  box-sizing: border-box;
+  block-size: 100%;
+  padding: var(--ds-spacing-4, 16px);
   background: linear-gradient(
       to top,
       var(--ds-chart-axis-color, var(--ds-color-border)) 0 1px,
       transparent 1px
     ) content-box;
+}
+
+/* Four uneven bars so the placeholder reads as a chart, not a progress row. */
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] > [data-part='skeleton-bar'] {
+  flex: 1;
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] > [data-part='skeleton-bar']:nth-child(1) {
+  block-size: 40%;
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] > [data-part='skeleton-bar']:nth-child(2) {
+  block-size: 70%;
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] > [data-part='skeleton-bar']:nth-child(3) {
+  block-size: 55%;
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'][data-skeleton='true'] > [data-part='skeleton'] > [data-part='skeleton-bar']:nth-child(4) {
+  block-size: 30%;
 }
 
 @media (forced-colors: active) {
@@ -98960,12 +98991,32 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * canonical categorical paint bridge inherited from the owning chart frame;
  * standalone use falls back to the primary color. Delta tones are
  * meaning-bearing status, exempt from the category/status separation law. */
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-1, 4px);
+}
+
 .ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='label'] {
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 0.8125rem);
 }
 
 .ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='value'] {
   color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-3xl, 1.5rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  font-variant-numeric: var(--ds-numeric-tabular);
+}
+
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='delta'] {
+  font-size: var(--ds-font-size-sm, 0.8125rem);
+}
+
+/* The trend stretches to the tile and keeps the height of its viewBox. */
+.ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='trend'] {
+  inline-size: 100%;
+  block-size: var(--ds-spacing-8, 32px);
 }
 
 .ds-chart-metric-trend.ds-chart-metric-trend[data-part='root'] > [data-part='delta'][data-tone='neutral'] {
@@ -98986,11 +99037,29 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* Generic ranked-rows phone projection. */
+.ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2, 8px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] > [data-part='row'] {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ds-spacing-2, 8px);
+}
+
 .ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] > [data-part='row'] > [data-part='rank'] {
   color: var(--ds-color-text-tertiary, var(--ds-color-text-secondary));
+  font-size: var(--ds-font-size-sm, 0.8125rem);
 }
 
 .ds-chart-ranked-rows.ds-chart-ranked-rows[data-part='root'] > [data-part='row'] > [data-part='row-label'] {
+  flex: 1;
+  min-inline-size: 0;
   color: var(--ds-color-text-primary);
 }
 
@@ -99062,6 +99131,14 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * copy on the metadata role so it reads as feedback, not data. */
 
 .ds-chart-area [data-part='data-fallback'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 24px);
+  text-align: center;
+  pointer-events: none;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-sm);
 }
@@ -99236,8 +99313,30 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   color: var(--ds-color-text-secondary);
 }
 
+.ds-chart-bullet [data-part='data-fallback'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 24px);
+  text-align: center;
+  pointer-events: none;
+}
+
 .ds-chart-bullet [data-part='item-label'] {
   fill: var(--ds-color-text-primary);
+}
+
+/* The renderer scope outranks the foundation's shared value-label size, so
+ * the value reads one rung under its item label. */
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-bullet[data-part='chart-renderer'] [data-part='item-label'] {
+  font-size: var(--ds-font-size-xs, 12px);
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-bullet[data-part='chart-renderer'] [data-part='value-label'] {
+  font-size: var(--ds-font-size-2xs, 11px);
 }
 
 .ds-chart-bullet [data-part='value-label'] {
@@ -99294,6 +99393,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-chart-calendar-heatmap [data-part='day-label'],
 .ds-chart-calendar-heatmap [data-part='month-label'] {
   fill: var(--ds-color-text-secondary);
+}
+
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-calendar-heatmap[data-part='chart-renderer'] [data-part='day-label'],
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-calendar-heatmap[data-part='chart-renderer'] [data-part='month-label'] {
+  font-size: var(--ds-font-size-2xs, 10px);
 }
 
 /* Threshold-labelled ramp legend (opt-in `legend` prop). The ramp reads the
@@ -99599,6 +99703,14 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * copy on the metadata role so it reads as feedback, not data. */
 
 .ds-chart-pie [data-part='data-fallback'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 24px);
+  text-align: center;
+  pointer-events: none;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-sm);
 }
@@ -99624,8 +99736,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Loading skeleton -----------------------------------------------------------
  * The bar placeholders bow out for a donut ring that keeps the chart
  * footprint: same box, recognizably radial. The scaffold container keeps its
- * inline flex posture, so the ring centers itself as a flex item with auto
- * margins instead of fighting the inline layout. */
+ * foundation flex posture, so the ring centers itself as a flex item with auto
+ * margins instead of fighting the foundation layout. */
 
 @keyframes ds-chart-pie-skeleton-pulse {
   from {
@@ -99730,6 +99842,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   fill: var(--ds-chart-label-color, var(--ds-color-text-secondary));
 }
 
+/* The spoke captions sit one step under the foundation's axis-caption size. */
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-radar[data-part='chart-renderer'] [data-part='axis-label'] {
+  font-size: var(--ds-font-size-2xs, 11px);
+}
+
 .ds-chart-radar [data-part='series-point'] {
   stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
 }
@@ -99739,6 +99856,14 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * the metadata role so it reads as feedback, not data. */
 
 .ds-chart-radar [data-part='data-fallback'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 24px);
+  text-align: center;
+  pointer-events: none;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-sm);
 }
@@ -99763,7 +99888,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 /* Loading skeleton -----------------------------------------------------------
  * The bar placeholders bow out for a pentagon web outline that keeps the
- * radar footprint. The scaffold container keeps its inline flex posture, so
+ * radar footprint. The scaffold container keeps its foundation flex posture, so
  * the web centers itself as a flex item with auto margins. */
 
 @keyframes ds-chart-radar-skeleton-pulse {
@@ -99833,6 +99958,15 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-chart-treemap [data-part='tile-value'] {
   fill: color-mix(in srgb, var(--ds-color-text-on-primary, var(--ds-color-white)) 70%, transparent);
   font-variant-numeric: var(--ds-numeric-tabular);
+}
+
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-treemap[data-part='chart-renderer'] [data-part='tile-label'] {
+  font-size: var(--ds-font-size-2xs, 11px);
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-treemap[data-part='chart-renderer'] [data-part='tile-value'] {
+  font-size: var(--ds-font-size-2xs, 10px);
 }
 
 /* Tile text sits at x=4 from the tile's left edge; under rtl its start is the
@@ -99958,6 +100092,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   border-radius: calc(2px * var(--ds-radius-scale-normalized, 1));
 }
 
+/* The cumulative series is a line, so its swatch is a 2px rule. */
+.ds-chart-histogram [data-part='legend-item'][data-series='cumulative'] [data-part='legend-swatch'] {
+  block-size: var(--ds-border-width-medium, 2px);
+}
+
 .ds-chart-histogram [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
 }
@@ -100023,7 +100162,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* Loading skeleton: the bar placeholders bow out for a dotted cloud that
- * keeps the scatter footprint. The scaffold container keeps its inline flex
+ * keeps the scatter footprint. The scaffold container keeps its foundation flex
  * posture, so the cloud centers itself as a flex item with auto margins. */
 
 @keyframes ds-chart-scatter-skeleton-pulse {
@@ -100146,6 +100285,10 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   fill: var(--ds-color-text-primary);
 }
 
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-gauge[data-part='chart-renderer'] [data-part='value-label'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+
 .ds-chart-gauge [data-part='label'] {
   fill: var(--ds-color-text-secondary);
 }
@@ -100158,6 +100301,17 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 .ds-chart-sankey [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
+}
+
+/* Only the INVALID-DATA fallback is inset; the empty copy sits flush. */
+.ds-chart-sankey [data-part='chart-fallback'][data-state='error'] {
+  padding: var(--ds-spacing-4, 16px);
+  text-align: center;
+}
+
+.ds-chart-sankey [data-part='chart-fallback'] > [data-part='fallback-message'] {
+  display: block;
+  margin-block-start: var(--ds-spacing-1, 4px);
 }
 
 .ds-chart-sankey [data-part='link-label'],
@@ -100324,6 +100478,16 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 .ds-chart-network-graph [data-part='legend-swatch'] {
   border-radius: 50%;
+}
+
+.ds-chart-network-graph [data-part='chart-fallback'] {
+  padding: var(--ds-spacing-4, 16px);
+  text-align: center;
+}
+
+.ds-chart-network-graph [data-part='chart-fallback'] > [data-part='fallback-message'] {
+  display: block;
+  margin-block-start: var(--ds-spacing-1, 4px);
 }
 
 .ds-chart-network-graph [data-part='node-label'] {

@@ -159,7 +159,7 @@ export const WaterfallChart = memo(function WaterfallChart({
         { label: 'Total', color: totalPaint },
       ].map((item) => (
         <div key={item.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
-          <span data-part="legend-swatch" data-status={item.label.toLowerCase()} style={{ width: 12, height: 12, backgroundColor: item.color, display: 'inline-block' }} />
+          <span data-part="legend-swatch" data-status={item.label.toLowerCase()} style={{ backgroundColor: item.color }} />
           <span data-part="legend-label">{item.label}</span>
         </div>
       ))}

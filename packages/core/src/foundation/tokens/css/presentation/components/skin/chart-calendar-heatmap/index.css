@@ -5,6 +5,11 @@
   fill: var(--ds-color-text-secondary);
 }
 
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-calendar-heatmap[data-part='chart-renderer'] [data-part='day-label'],
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-calendar-heatmap[data-part='chart-renderer'] [data-part='month-label'] {
+  font-size: var(--ds-font-size-2xs, 10px);
+}
+
 /* Threshold-labelled ramp legend (opt-in `legend` prop). The ramp reads the
  * private runtime stops the family bridges from the governed color range;
  * fallbacks mirror the family defaults so the hook never ships unstyled. The

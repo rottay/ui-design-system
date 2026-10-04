@@ -21,6 +21,15 @@
   font-variant-numeric: var(--ds-numeric-tabular);
 }
 
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-treemap[data-part='chart-renderer'] [data-part='tile-label'] {
+  font-size: var(--ds-font-size-2xs, 11px);
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
+.ds-chart-renderer.ds-chart-renderer.ds-chart-renderer-treemap[data-part='chart-renderer'] [data-part='tile-value'] {
+  font-size: var(--ds-font-size-2xs, 10px);
+}
+
 /* Tile text sits at x=4 from the tile's left edge; under rtl its start is the
  * right end, so the end anchors there and the text runs into the tile. */
 :where([dir='rtl']) .ds-chart-treemap [data-part='tile-label'],

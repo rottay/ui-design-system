@@ -238,7 +238,6 @@ export function SvgRadarRenderer({
                 y={axis.labelY}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                style={{ fontSize: '11px' }}
               >
                 {axis.axis}
               </text>

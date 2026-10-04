@@ -278,19 +278,11 @@ export function ChartScaffold({
             <div
               data-part="skeleton"
               aria-hidden="true"
-              style={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                gap: 8,
-                height: '100%',
-                padding: 16,
-                boxSizing: 'border-box',
-              }}
             >
-              <div data-part="skeleton-bar" style={{ flex: 1, height: '40%' }} />
-              <div data-part="skeleton-bar" style={{ flex: 1, height: '70%' }} />
-              <div data-part="skeleton-bar" style={{ flex: 1, height: '55%' }} />
-              <div data-part="skeleton-bar" style={{ flex: 1, height: '30%' }} />
+              <div data-part="skeleton-bar" />
+              <div data-part="skeleton-bar" />
+              <div data-part="skeleton-bar" />
+              <div data-part="skeleton-bar" />
             </div>
             <VisuallyHidden data-part="loading" role="status">
               {loadingLabel}

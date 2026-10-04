@@ -98,25 +98,16 @@ export function ChartRankedRowsView({
       data-part="root"
       data-renderer-id={view.rendererId}
       aria-label={ariaLabel}
-      style={{
-        listStyle: 'none',
-        margin: 0,
-        padding: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 8,
-        ...style,
-      }}
+      style={style}
     >
       {rows.map((cells, rowIndex) => (
         <li
           key={rowIndex}
           data-part="row"
-          style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}
         >
           {/* The ordered list already conveys position; the visible rank is a
               duplicate for sighted users only. */}
-          <span data-part="rank" aria-hidden="true" style={{ fontSize: 13 }}>
+          <span data-part="rank" aria-hidden="true">
             {rowIndex + 1}
           </span>
           {cells.map((cell, cellIndex) => (
@@ -124,7 +115,6 @@ export function ChartRankedRowsView({
               key={projection.columns[cellIndex].fieldId}
               data-part={cellIndex === 0 ? 'row-label' : 'row-value'}
               data-field={projection.columns[cellIndex].fieldId}
-              style={cellIndex === 0 ? { flex: 1, minWidth: 0 } : undefined}
             >
               {String(cell)}
             </span>
