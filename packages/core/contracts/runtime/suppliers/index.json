@@ -521,7 +521,6 @@
         "SurfaceSectionCard",
         "SurfaceStaleBanner",
         "SurfaceTabbedLabel",
-        "Switch",
         "TAB_PANEL_TRANSITION_CLASS",
         "TAGINPUT_DEFAULTS",
         "TENANT_CAPABILITY_REGISTRY",
@@ -2355,10 +2354,6 @@
           "@phosphor-icons/react",
           "antd",
           "motion"
-        ],
-        "Switch": [
-          "@phosphor-icons/react",
-          "antd"
         ],
         "TAB_PANEL_TRANSITION_CLASS": [
           "motion"

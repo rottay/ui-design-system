@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import test, { describe } from 'node:test';
@@ -14,6 +14,7 @@ import {
 } from '../../hardcodes/index.mjs';
 
 const AUDIT = join(dirname(fileURLToPath(import.meta.url)), '../../index.mjs');
+const BASELINE = join(dirname(AUDIT), 'baseline/index.json');
 const SKIN_ANCHOR = 'runtime/engines/modern/skin/button/index.css';
 const SOURCE_ANCHOR = 'patterns/customization/token-inspector/index.tsx';
 
@@ -120,6 +121,37 @@ describe('root duplicate declarations', () => {
       ['b.css', ['--ds-x']],
     ]);
     assert.deepEqual([...duplicates], [['--ds-x', ['a.css', 'b.css']]]);
+  });
+});
+
+const HEADROOM_KEYS = [
+  /^skinLiterals\.[^.]+\.total$/,
+  /^inlineGeometry\.total$/,
+  /^color\.component[A-Za-z]*Literals$/,
+  /^scale\.fallbackParity[A-Za-z]*Violations$/,
+  /^scale\.duplicateRoot[A-Za-z]*$/,
+];
+
+describe('ratchet headroom', () => {
+  test('META: every aggregate hardcode ratchet sits exactly on its baseline', () => {
+    const result = spawnSync(process.execPath, [AUDIT, '--current-json', '--quiet'], {
+      encoding: 'utf8',
+      maxBuffer: 256 * 1024 * 1024,
+    });
+    assert.equal(result.status, 0, result.stderr);
+    const current = JSON.parse(result.stdout);
+    const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    const keys = [...new Set([...Object.keys(baseline), ...Object.keys(current)])]
+      .filter((key) => HEADROOM_KEYS.some((pattern) => pattern.test(key)));
+    for (const pattern of HEADROOM_KEYS) {
+      assert.ok(keys.some((key) => pattern.test(key)), `no counter matches ${pattern}`);
+    }
+    const findings = keys
+      .filter((key) => current[key] !== baseline[key])
+      .map((key) => (current[key] < baseline[key]
+        ? `${key} drained to ${current[key]}, baseline ${baseline[key]}: tighten`
+        : `${key} measures ${current[key]}, baseline ${baseline[key]}`));
+    assert.deepEqual(findings, []);
   });
 });
 
