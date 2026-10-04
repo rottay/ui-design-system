@@ -142,7 +142,7 @@
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='disabled'], :disabled) {
   cursor: default;
-  opacity: 0.3;
+  opacity: calc(0.5 * var(--ds-state-disabled-opacity));
 }
 
 /* ---- label: visibility state by ink, ellipsis-safe ---- */
