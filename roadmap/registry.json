@@ -6380,6 +6380,11 @@
      "at": "2026-10-04 12:22",
      "by": "claude-dt",
      "note": "2026-10-04 kimi-dt: Active coordinator reassigned from claude-dt to kimi-dt (owner succession order 2026-10-04; barrier READY_FOR_KIMI verified at bb663f566). Claude Opus is the delegated writer; independent Opus-session review required per lot; Codex outside the loop. State carried unchanged: R1 NOT MET (backdrop module-class, owner Q4), R2/R4/R6 MET, R3 NOT MET (closure view 56; ledger not yet edited; prop-renamed vs member-changed id reconciliation owed), R5 NOT MET (kit --check 32; 22 with HOLD A+B applied). The weak parity-failed gate law stays an open obligation of this WO: fixtureVerdict must require the row's symbol, a report row of the failing value and an existing backing component test; this WO is never closed on that gate being green."
+    },
+    {
+     "at": "2026-10-04 13:16",
+     "by": "claude-dt",
+     "note": "2026-10-04 kimi-dt: kit member-proofs landed 06032f1a3 after the full HOLD loop (independent audit HOLD on patch A for the H1 carrier hole; corrected A2 ACCEPT; A3 applies the review's three landing items with the reviewed guard byte-identical). kit --check src+showroom: 52 -> 32 (w21) -> 26 (this lot). R5 still NOT MET (26 > 0) but the remaining reports are the honest standing set the audit cleared by name; the R5 restatement stays with the owner. Coordinator ruling recorded (mine, review-disclosed): the annotation-relay shapes stay a file-local disclosed limit, pinned by the annotation-relay fixture. Fourth TenantConfig site fixed (6354d6a13, see EVI-02 entry 190). Kit holes measured by w23-tc4 and still open for the kit lane: H1-kit in-package '@/…' origins never resolve as ds (map-entry proposal with sourceOwner/inPackageScope recorded in .tmp/ds-kimi-2026-10-04/w23-tc4/report.md), H2-kit inline import() type. Next: patch B audit (showroom typecheck+eslint) with the B2 decision, then the ledger lot + parity-failed hardening + receipts re-mint."
     }
    ]
   },
