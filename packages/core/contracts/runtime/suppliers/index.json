@@ -1976,7 +1976,8 @@
         ],
         "PatternShortcutsOverlay": [
           "@phosphor-icons/react",
-          "antd"
+          "antd",
+          "motion"
         ],
         "PatternStatsGrid": [
           "@ant-design/icons",
@@ -2002,6 +2003,7 @@
         ],
         "PatternUserProfileCard": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternWidgetBoard": [

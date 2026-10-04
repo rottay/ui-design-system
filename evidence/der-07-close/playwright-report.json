@@ -1,0 +1,405 @@
+{
+  "config": {
+    "argv": [
+      "/Users/daniel/.nvm/versions/node/v22.17.0/bin/node",
+      "/Users/daniel/Developer/Rottay/ui-design-system/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/cli.js",
+      "test",
+      "e2e/probe-ground/identity-runtime-connection.spec.ts",
+      "--config",
+      "playwright.visual.config.ts",
+      "--reporter=json"
+    ],
+    "configFile": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/playwright.visual.config.ts",
+    "rootDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/e2e/setup/build-identity/index.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/e2e",
+        "testIgnore": [
+          "/\\.mobile\\.spec\\.ts$/"
+        ],
+        "testMatch": [
+          "visual/**/*.spec.ts",
+          "whitelabel/**/*.spec.ts",
+          "responsive/**/*.spec.ts",
+          "diagnostics/**/*.spec.ts",
+          "first-paint/**/*.spec.ts",
+          "a11y/axe.spec.ts",
+          "probe-ground/**/*.spec.ts",
+          "liveness/**/*.spec.ts"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile-chromium",
+        "name": "mobile-chromium",
+        "testDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/\\.mobile\\.spec\\.ts$/"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @rottay/showroom run start",
+      "url": "http://localhost:7001",
+      "reuseExistingServer": true,
+      "timeout": 180000,
+      "stdout": "pipe",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "probe-ground/identity-runtime-connection.spec.ts",
+      "file": "probe-ground/identity-runtime-connection.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "identity probe-ground: the mounted artifact reaches the runtime",
+          "file": "probe-ground/identity-runtime-connection.spec.ts",
+          "line": 127,
+          "column": 6,
+          "specs": [
+            {
+              "title": "two candidates differ on readings that are not in the CSS",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2935,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T23:08:40.804Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0259572884d8028dc123-ab99eee6621df74c0ec8",
+              "file": "probe-ground/identity-runtime-connection.spec.ts",
+              "line": 128,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "identity probe-ground: every candidate renders six screens in both modes",
+          "file": "probe-ground/identity-runtime-connection.spec.ts",
+          "line": 168,
+          "column": 6,
+          "specs": [
+            {
+              "title": "editorial-quiet / light renders the stage, the runtime proof and six screens",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6654,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T23:08:43.857Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "route-check",
+                          "contentType": "application/json",
+                          "body": "ewogICJyb3V0ZSI6ICIvcHJvYmUtZ3JvdW5kL2lkZW50aXR5P2NhbmRpZGF0ZT1lZGl0b3JpYWwtcXVpZXQmbW9kZT1saWdodCIsCiAgInN0YXR1cyI6IDIwMCwKICAiY2FuZGlkYXRlIjogImVkaXRvcmlhbC1xdWlldCIsCiAgIm1vZGUiOiAibGlnaHQiLAogICJzY3JlZW5zIjogWwogICAgImxpc3QiLAogICAgInJlY29yZCIsCiAgICAiZm9ybSIsCiAgICAiZGFzaGJvYXJkIiwKICAgICJtb2RhbCIsCiAgICAicGhvbmUiCiAgXSwKICAicGFpbnQiOiB7CiAgICAiZ3JvdW5kIjogInJnYigyNTAsIDI0OCwgMjQ0KSIsCiAgICAiaW5rIjogInJnYigyMywgMjMsIDIzKSIsCiAgICAiZ3JvdW5kTHVtaW5hbmNlIjogMC45NzMwODM5MjE1Njg2Mjc0LAogICAgImlua0x1bWluYW5jZSI6IDAuMDkwMTk2MDc4NDMxMzcyNTUsCiAgICAiY29sb3JTY2hlbWUiOiAibGlnaHQiCiAgfSwKICAiZGlnZXN0IjogImRlY2lzaW9uIGRpZ2VzdCBzaGEyNTYtNmJhMWFlMWE4NWRhYTQ3NWI4ODNlYjVkNWVlYTRmMWZkYjNiYjFjNmU2OGM2OTYyMWVmNTA1M2ZiNmVjYjgzMSIsCiAgImNvbnNvbGVFcnJvcnMiOiBbXSwKICAiYXV0aG9yaXR5RXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXQp9"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0259572884d8028dc123-4a7b8e69a06e8676327e",
+              "file": "probe-ground/identity-runtime-connection.spec.ts",
+              "line": 173,
+              "column": 7
+            },
+            {
+              "title": "editorial-quiet / dark renders the stage, the runtime proof and six screens",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5984,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T23:08:50.516Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "route-check",
+                          "contentType": "application/json",
+                          "body": "ewogICJyb3V0ZSI6ICIvcHJvYmUtZ3JvdW5kL2lkZW50aXR5P2NhbmRpZGF0ZT1lZGl0b3JpYWwtcXVpZXQmbW9kZT1kYXJrIiwKICAic3RhdHVzIjogMjAwLAogICJjYW5kaWRhdGUiOiAiZWRpdG9yaWFsLXF1aWV0IiwKICAibW9kZSI6ICJkYXJrIiwKICAic2NyZWVucyI6IFsKICAgICJsaXN0IiwKICAgICJyZWNvcmQiLAogICAgImZvcm0iLAogICAgImRhc2hib2FyZCIsCiAgICAibW9kYWwiLAogICAgInBob25lIgogIF0sCiAgInBhaW50IjogewogICAgImdyb3VuZCI6ICJyZ2IoMTAsIDEwLCAxMCkiLAogICAgImluayI6ICJyZ2IoMjQzLCAyNDQsIDI0NikiLAogICAgImdyb3VuZEx1bWluYW5jZSI6IDAuMDM5MjE1Njg2Mjc0NTA5Nzk2LAogICAgImlua0x1bWluYW5jZSI6IDAuOTU2NTk1Mjk0MTE3NjQ3LAogICAgImNvbG9yU2NoZW1lIjogImRhcmsiCiAgfSwKICAiZGlnZXN0IjogImRlY2lzaW9uIGRpZ2VzdCBzaGEyNTYtNmJhMWFlMWE4NWRhYTQ3NWI4ODNlYjVkNWVlYTRmMWZkYjNiYjFjNmU2OGM2OTYyMWVmNTA1M2ZiNmVjYjgzMSIsCiAgImNvbnNvbGVFcnJvcnMiOiBbXSwKICAiYXV0aG9yaXR5RXJyb3JzIjogW10sCiAgInBhZ2VFcnJvcnMiOiBbXQp9"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0259572884d8028dc123-d70d2dcf034d31eb625f",
+              "file": "probe-ground/identity-runtime-connection.spec.ts",
+              "line": 173,
+              "column": 7
+            },
+            {
+              "title": "product-dense / light renders the stage, the runtime proof and six screens",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7100,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T23:08:56.505Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "route-check",
+                          "contentType": "application/json",
+                          "body": "ewogICJyb3V0ZSI6ICIvcHJvYmUtZ3JvdW5kL2lkZW50aXR5P2NhbmRpZGF0ZT1wcm9kdWN0LWRlbnNlJm1vZGU9bGlnaHQiLAogICJzdGF0dXMiOiAyMDAsCiAgImNhbmRpZGF0ZSI6ICJwcm9kdWN0LWRlbnNlIiwKICAibW9kZSI6ICJsaWdodCIsCiAgInNjcmVlbnMiOiBbCiAgICAibGlzdCIsCiAgICAicmVjb3JkIiwKICAgICJmb3JtIiwKICAgICJkYXNoYm9hcmQiLAogICAgIm1vZGFsIiwKICAgICJwaG9uZSIKICBdLAogICJwYWludCI6IHsKICAgICJncm91bmQiOiAicmdiKDI1NSwgMjU1LCAyNTUpIiwKICAgICJpbmsiOiAicmdiKDIzLCAyMywgMjMpIiwKICAgICJncm91bmRMdW1pbmFuY2UiOiAwLjk5OTk5OTk5OTk5OTk5OTksCiAgICAiaW5rTHVtaW5hbmNlIjogMC4wOTAxOTYwNzg0MzEzNzI1NSwKICAgICJjb2xvclNjaGVtZSI6ICJsaWdodCIKICB9LAogICJkaWdlc3QiOiAiZGVjaXNpb24gZGlnZXN0IHNoYTI1Ni00YmIyMzY1NjVjZTNjY2VjZTBiNTU1YzhjYzlmZDg5NGVlMWQzMzhjZmJkYjRlOWVjMmY4MDkwNTBkMzkyN2Q2IiwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJhdXRob3JpdHlFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdCn0="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0259572884d8028dc123-102b12f5d1bcc7c00336",
+              "file": "probe-ground/identity-runtime-connection.spec.ts",
+              "line": 173,
+              "column": 7
+            },
+            {
+              "title": "product-dense / dark renders the stage, the runtime proof and six screens",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6687,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T23:09:03.610Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "route-check",
+                          "contentType": "application/json",
+                          "body": "ewogICJyb3V0ZSI6ICIvcHJvYmUtZ3JvdW5kL2lkZW50aXR5P2NhbmRpZGF0ZT1wcm9kdWN0LWRlbnNlJm1vZGU9ZGFyayIsCiAgInN0YXR1cyI6IDIwMCwKICAiY2FuZGlkYXRlIjogInByb2R1Y3QtZGVuc2UiLAogICJtb2RlIjogImRhcmsiLAogICJzY3JlZW5zIjogWwogICAgImxpc3QiLAogICAgInJlY29yZCIsCiAgICAiZm9ybSIsCiAgICAiZGFzaGJvYXJkIiwKICAgICJtb2RhbCIsCiAgICAicGhvbmUiCiAgXSwKICAicGFpbnQiOiB7CiAgICAiZ3JvdW5kIjogInJnYigxMCwgMTAsIDEwKSIsCiAgICAiaW5rIjogInJnYigyNDMsIDI0NCwgMjQ2KSIsCiAgICAiZ3JvdW5kTHVtaW5hbmNlIjogMC4wMzkyMTU2ODYyNzQ1MDk3OTYsCiAgICAiaW5rTHVtaW5hbmNlIjogMC45NTY1OTUyOTQxMTc2NDcsCiAgICAiY29sb3JTY2hlbWUiOiAiZGFyayIKICB9LAogICJkaWdlc3QiOiAiZGVjaXNpb24gZGlnZXN0IHNoYTI1Ni00YmIyMzY1NjVjZTNjY2VjZTBiNTU1YzhjYzlmZDg5NGVlMWQzMzhjZmJkYjRlOWVjMmY4MDkwNTBkMzkyN2Q2IiwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJhdXRob3JpdHlFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdCn0="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0259572884d8028dc123-d424f66bb3d5ece4cc65",
+              "file": "probe-ground/identity-runtime-connection.spec.ts",
+              "line": 173,
+              "column": 7
+            },
+            {
+              "title": "warm-humanist / light renders the stage, the runtime proof and six screens",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6200,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T23:09:10.302Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "route-check",
+                          "contentType": "application/json",
+                          "body": "ewogICJyb3V0ZSI6ICIvcHJvYmUtZ3JvdW5kL2lkZW50aXR5P2NhbmRpZGF0ZT13YXJtLWh1bWFuaXN0Jm1vZGU9bGlnaHQiLAogICJzdGF0dXMiOiAyMDAsCiAgImNhbmRpZGF0ZSI6ICJ3YXJtLWh1bWFuaXN0IiwKICAibW9kZSI6ICJsaWdodCIsCiAgInNjcmVlbnMiOiBbCiAgICAibGlzdCIsCiAgICAicmVjb3JkIiwKICAgICJmb3JtIiwKICAgICJkYXNoYm9hcmQiLAogICAgIm1vZGFsIiwKICAgICJwaG9uZSIKICBdLAogICJwYWludCI6IHsKICAgICJncm91bmQiOiAicmdiKDI1MiwgMjUwLCAyNDcpIiwKICAgICJpbmsiOiAicmdiKDIzLCAyMywgMjMpIiwKICAgICJncm91bmRMdW1pbmFuY2UiOiAwLjk4MTIxMDE5NjA3ODQzMTMsCiAgICAiaW5rTHVtaW5hbmNlIjogMC4wOTAxOTYwNzg0MzEzNzI1NSwKICAgICJjb2xvclNjaGVtZSI6ICJsaWdodCIKICB9LAogICJkaWdlc3QiOiAiZGVjaXNpb24gZGlnZXN0IHNoYTI1Ni05N2VjN2I4OWUzM2QyYjY0MjRmOWFmMjE2NTY2M2M2MjMxNzIwZmJlMDIzYTg2MzllODU0NGU4MTNjZjRjNTJhIiwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJhdXRob3JpdHlFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdCn0="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0259572884d8028dc123-155e3dfdcbc85be5feb1",
+              "file": "probe-ground/identity-runtime-connection.spec.ts",
+              "line": 173,
+              "column": 7
+            },
+            {
+              "title": "warm-humanist / dark renders the stage, the runtime proof and six screens",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2162,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-04T23:09:16.508Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "route-check",
+                          "contentType": "application/json",
+                          "body": "ewogICJyb3V0ZSI6ICIvcHJvYmUtZ3JvdW5kL2lkZW50aXR5P2NhbmRpZGF0ZT13YXJtLWh1bWFuaXN0Jm1vZGU9ZGFyayIsCiAgInN0YXR1cyI6IDIwMCwKICAiY2FuZGlkYXRlIjogIndhcm0taHVtYW5pc3QiLAogICJtb2RlIjogImRhcmsiLAogICJzY3JlZW5zIjogWwogICAgImxpc3QiLAogICAgInJlY29yZCIsCiAgICAiZm9ybSIsCiAgICAiZGFzaGJvYXJkIiwKICAgICJtb2RhbCIsCiAgICAicGhvbmUiCiAgXSwKICAicGFpbnQiOiB7CiAgICAiZ3JvdW5kIjogInJnYigxMCwgMTAsIDEwKSIsCiAgICAiaW5rIjogInJnYigyNDMsIDI0NCwgMjQ2KSIsCiAgICAiZ3JvdW5kTHVtaW5hbmNlIjogMC4wMzkyMTU2ODYyNzQ1MDk3OTYsCiAgICAiaW5rTHVtaW5hbmNlIjogMC45NTY1OTUyOTQxMTc2NDcsCiAgICAiY29sb3JTY2hlbWUiOiAiZGFyayIKICB9LAogICJkaWdlc3QiOiAiZGVjaXNpb24gZGlnZXN0IHNoYTI1Ni05N2VjN2I4OWUzM2QyYjY0MjRmOWFmMjE2NTY2M2M2MjMxNzIwZmJlMDIzYTg2MzllODU0NGU4MTNjZjRjNTJhIiwKICAiY29uc29sZUVycm9ycyI6IFtdLAogICJhdXRob3JpdHlFcnJvcnMiOiBbXSwKICAicGFnZUVycm9ycyI6IFtdCn0="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "0259572884d8028dc123-657dce4dbaaaafb5b448",
+              "file": "probe-ground/identity-runtime-connection.spec.ts",
+              "line": 173,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-04T23:08:38.535Z",
+    "duration": 40211.363999999994,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

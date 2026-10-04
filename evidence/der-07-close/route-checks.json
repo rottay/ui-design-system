@@ -1,0 +1,170 @@
+[
+  {
+    "spec": "editorial-quiet / light renders the stage, the runtime proof and six screens",
+    "check": {
+      "route": "/probe-ground/identity?candidate=editorial-quiet&mode=light",
+      "status": 200,
+      "candidate": "editorial-quiet",
+      "mode": "light",
+      "screens": [
+        "list",
+        "record",
+        "form",
+        "dashboard",
+        "modal",
+        "phone"
+      ],
+      "paint": {
+        "ground": "rgb(250, 248, 244)",
+        "ink": "rgb(23, 23, 23)",
+        "groundLuminance": 0.9730839215686274,
+        "inkLuminance": 0.09019607843137255,
+        "colorScheme": "light"
+      },
+      "digest": "decision digest sha256-6ba1ae1a85daa475b883eb5d5eea4f1fdb3bb1c6e68c69621ef5053fb6ecb831",
+      "consoleErrors": [],
+      "authorityErrors": [],
+      "pageErrors": []
+    }
+  },
+  {
+    "spec": "editorial-quiet / dark renders the stage, the runtime proof and six screens",
+    "check": {
+      "route": "/probe-ground/identity?candidate=editorial-quiet&mode=dark",
+      "status": 200,
+      "candidate": "editorial-quiet",
+      "mode": "dark",
+      "screens": [
+        "list",
+        "record",
+        "form",
+        "dashboard",
+        "modal",
+        "phone"
+      ],
+      "paint": {
+        "ground": "rgb(10, 10, 10)",
+        "ink": "rgb(243, 244, 246)",
+        "groundLuminance": 0.039215686274509796,
+        "inkLuminance": 0.956595294117647,
+        "colorScheme": "dark"
+      },
+      "digest": "decision digest sha256-6ba1ae1a85daa475b883eb5d5eea4f1fdb3bb1c6e68c69621ef5053fb6ecb831",
+      "consoleErrors": [],
+      "authorityErrors": [],
+      "pageErrors": []
+    }
+  },
+  {
+    "spec": "product-dense / light renders the stage, the runtime proof and six screens",
+    "check": {
+      "route": "/probe-ground/identity?candidate=product-dense&mode=light",
+      "status": 200,
+      "candidate": "product-dense",
+      "mode": "light",
+      "screens": [
+        "list",
+        "record",
+        "form",
+        "dashboard",
+        "modal",
+        "phone"
+      ],
+      "paint": {
+        "ground": "rgb(255, 255, 255)",
+        "ink": "rgb(23, 23, 23)",
+        "groundLuminance": 0.9999999999999999,
+        "inkLuminance": 0.09019607843137255,
+        "colorScheme": "light"
+      },
+      "digest": "decision digest sha256-4bb236565ce3ccece0b555c8cc9fd894ee1d338cfbdb4e9ec2f809050d3927d6",
+      "consoleErrors": [],
+      "authorityErrors": [],
+      "pageErrors": []
+    }
+  },
+  {
+    "spec": "product-dense / dark renders the stage, the runtime proof and six screens",
+    "check": {
+      "route": "/probe-ground/identity?candidate=product-dense&mode=dark",
+      "status": 200,
+      "candidate": "product-dense",
+      "mode": "dark",
+      "screens": [
+        "list",
+        "record",
+        "form",
+        "dashboard",
+        "modal",
+        "phone"
+      ],
+      "paint": {
+        "ground": "rgb(10, 10, 10)",
+        "ink": "rgb(243, 244, 246)",
+        "groundLuminance": 0.039215686274509796,
+        "inkLuminance": 0.956595294117647,
+        "colorScheme": "dark"
+      },
+      "digest": "decision digest sha256-4bb236565ce3ccece0b555c8cc9fd894ee1d338cfbdb4e9ec2f809050d3927d6",
+      "consoleErrors": [],
+      "authorityErrors": [],
+      "pageErrors": []
+    }
+  },
+  {
+    "spec": "warm-humanist / light renders the stage, the runtime proof and six screens",
+    "check": {
+      "route": "/probe-ground/identity?candidate=warm-humanist&mode=light",
+      "status": 200,
+      "candidate": "warm-humanist",
+      "mode": "light",
+      "screens": [
+        "list",
+        "record",
+        "form",
+        "dashboard",
+        "modal",
+        "phone"
+      ],
+      "paint": {
+        "ground": "rgb(252, 250, 247)",
+        "ink": "rgb(23, 23, 23)",
+        "groundLuminance": 0.9812101960784313,
+        "inkLuminance": 0.09019607843137255,
+        "colorScheme": "light"
+      },
+      "digest": "decision digest sha256-97ec7b89e33d2b6424f9af2165663c6231720fbe023a8639e8544e813cf4c52a",
+      "consoleErrors": [],
+      "authorityErrors": [],
+      "pageErrors": []
+    }
+  },
+  {
+    "spec": "warm-humanist / dark renders the stage, the runtime proof and six screens",
+    "check": {
+      "route": "/probe-ground/identity?candidate=warm-humanist&mode=dark",
+      "status": 200,
+      "candidate": "warm-humanist",
+      "mode": "dark",
+      "screens": [
+        "list",
+        "record",
+        "form",
+        "dashboard",
+        "modal",
+        "phone"
+      ],
+      "paint": {
+        "ground": "rgb(10, 10, 10)",
+        "ink": "rgb(243, 244, 246)",
+        "groundLuminance": 0.039215686274509796,
+        "inkLuminance": 0.956595294117647,
+        "colorScheme": "dark"
+      },
+      "digest": "decision digest sha256-97ec7b89e33d2b6424f9af2165663c6231720fbe023a8639e8544e813cf4c52a",
+      "consoleErrors": [],
+      "authorityErrors": [],
+      "pageErrors": []
+    }
+  }
+]
