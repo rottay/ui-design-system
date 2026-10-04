@@ -28,7 +28,7 @@ export const transform = {
       if (!analysis.text.includes(entry.member)) continue;
       const next = entry.replacement.member;
       const label = `\`${entry.member}\` -> \`${next}\` on ${entry.components.map((name) => `\`${name}\``).join(' / ')}`;
-      const sites = propSites(context, analysis, entry);
+      const sites = propSites(context, analysis, entry, next);
       for (const site of sites) {
         if (site.kind !== 'direct' || !site.attribute) continue;
         const attribute = site.attribute;

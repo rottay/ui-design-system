@@ -146,17 +146,41 @@ function attributeName(attribute) {
 }
 
 /**
- * JSX elements carrying the entry's prop (or a spread that could): `direct` when proven to be the
- * design-system component, `indirect` when they only reach it through a consumer wrapper.
+ * True when a JSX spread is proven not to carry any of the names: its operand is an object literal written
+ * in place (through parentheses, `as` and `satisfies`) whose every key is a static name other than them.
+ * A computed key, a nested spread, or any operand that is not a literal (identifier, call, conditional)
+ * proves nothing. A literal that states a name is not proven either: an object is not an attribute list.
  */
-export function propSites(context, analysis, entry) {
+function spreadOmitsProps(spread, names) {
+  let operand = spread.expression;
+  while (ts.isParenthesizedExpression(operand) || ts.isAsExpression(operand) || ts.isSatisfiesExpression(operand)) {
+    operand = operand.expression;
+  }
+  if (!ts.isObjectLiteralExpression(operand)) return false;
+  return operand.properties.every((property) => {
+    const name = property.name;
+    if (ts.isSpreadAssignment(property) || !name) return false;
+    if (!ts.isIdentifier(name) && !ts.isStringLiteralLike(name) && !ts.isNumericLiteral(name)) return false;
+    return !names.includes(name.text);
+  });
+}
+
+/**
+ * JSX elements carrying the entry's prop (or a spread that could): `direct` when proven to be the
+ * design-system component, `indirect` when they only reach it through a consumer wrapper. A spread of an
+ * inline object literal that cannot carry the prop is not a use of it and is left out. `successor` is the
+ * name a rename gives the prop: on an element that states the prop, a literal that states the successor
+ * decides which value survives the rename, so it is kept as a spread.
+ */
+export function propSites(context, analysis, entry, successor = null) {
   const sites = [];
   analysis.walk((node) => {
     if (!ts.isJsxOpeningElement(node) && !ts.isJsxSelfClosingElement(node)) return;
     if (!isComponentTag(node.tagName)) return;
     const properties = node.attributes.properties;
     const attribute = properties.find((item) => ts.isJsxAttribute(item) && attributeName(item) === entry.member);
-    const spreads = properties.filter((item) => ts.isJsxSpreadAttribute(item));
+    const names = attribute && successor ? [entry.member, successor] : [entry.member];
+    const spreads = properties.filter((item) => ts.isJsxSpreadAttribute(item) && !spreadOmitsProps(item, names));
     if (!attribute && spreads.length === 0) return;
     const origin = analysis.originOfExpression(node.tagName);
     if (matchesComponent(origin, entry)) {

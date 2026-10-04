@@ -209,6 +209,39 @@ test('the 3.0 entries that need a decision per site are reported at the attribut
   });
 });
 
+test('an inline object-literal spread that cannot carry the prop is silent in every prop class; one that can is reported', () => {
+  const source = "import { PatternGridView, TooltipValue } from '@rottay/design-system';\n\n"
+    + 'export const nodes = (props: { color: string }) => (\n  <>\n'
+    + "    <PatternGridView {...({ id: 'a' } as any)} />\n    <PatternGridView {...{ columns: 2 }} />\n"
+    + "    <TooltipValue {...{ label: 'a', value: '1' }} />\n    <TooltipValue {...({ color: 'red' })} label=\"b\" value=\"2\" />\n"
+    + '    <TooltipValue {...props} label="c" value="3" />\n  </>\n);\n';
+  withTree({ 'index.tsx': source }, (run, read) => {
+    const { rows } = run({ write: true });
+    assert.deepEqual(rows.map((row) => [row.line, row.action, row.id, row.reason]), [
+      [6, 'report', 'prop-removed/.#GridViewProps.columns', 'spread'],
+      [8, 'report', 'prop-renamed/.#TooltipValue.color', 'spread'],
+      [9, 'report', 'prop-renamed/.#TooltipValue.color', 'spread'],
+    ]);
+    assert.equal(read()['index.tsx'], source);
+  });
+});
+
+test('a literal spread that states the successor of a renamed prop is reported where the prop is renamed, and silent elsewhere', () => {
+  const source = "import { TooltipValue } from '@rottay/design-system';\n\n"
+    + 'export const nodes = (\n  <>\n'
+    + "    <TooltipValue {...{ swatchColor: 'blue' }} color=\"red\" label=\"a\" value=\"1\" />\n"
+    + "    <TooltipValue {...{ swatchColor: 'blue' }} label=\"b\" value=\"2\" />\n"
+    + "    <TooltipValue {...{ label: 'c' }} color=\"red\" value=\"3\" />\n  </>\n);\n";
+  withTree({ 'index.tsx': source }, (run) => {
+    const { rows } = run();
+    assert.deepEqual(rows.map((row) => [row.line, row.action, row.id, row.reason]), [
+      [5, 'rewrite', 'prop-renamed/.#TooltipValue.color', 'attribute-renamed'],
+      [7, 'rewrite', 'prop-renamed/.#TooltipValue.color', 'attribute-renamed'],
+      [5, 'report', 'prop-renamed/.#TooltipValue.color', 'spread'],
+    ]);
+  });
+});
+
 test('a name retired on a removed door moves to its recorded successor under its local name, never to a root homonym', () => {
   const fixture = CASES.find((item) => item.name === 'subpath-removed/cross-door');
   const expected = snapshot(fixture.expected);

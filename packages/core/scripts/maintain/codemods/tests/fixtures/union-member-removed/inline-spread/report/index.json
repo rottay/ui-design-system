@@ -1,0 +1,170 @@
+[
+  {
+    "file": "index.tsx",
+    "line": 22,
+    "column": 19,
+    "action": "rewrite",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "literal-rewritten"
+  },
+  {
+    "file": "index.tsx",
+    "line": 31,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 32,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 33,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 34,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 35,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 44,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 45,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 46,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 47,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 48,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.small",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 31,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 32,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 33,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 34,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 35,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 44,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 45,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 46,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 47,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  },
+  {
+    "file": "index.tsx",
+    "line": 48,
+    "column": 14,
+    "action": "report",
+    "id": "union-member-removed/.#LegacySpaceSize.large",
+    "reason": "spread"
+  }
+]
