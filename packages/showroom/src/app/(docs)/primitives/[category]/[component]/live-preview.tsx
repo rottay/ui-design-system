@@ -22,7 +22,6 @@ import {
   Breadcrumb,
   Button,
   Calendar,
-  Callout,
   Card,
   Carousel,
   Cascader,
@@ -1279,13 +1278,14 @@ The parser is a **bounded** CommonMark subset, so no parser ships to the page.
   ),
   'calendar': <Calendar style={{ maxWidth: 320 }} />,
   'callout': (
-    <Callout
-      variant="warning"
-      title="Approval needed"
+    <Alert
+      tone="warning"
+      message="Approval needed"
+      description="Finance overrides require a second approver before they can publish."
       action={<Button size="sm" variant="primary">Review now</Button>}
-    >
-      Finance overrides require a second approver before they can publish.
-    </Callout>
+      emphasis="subtle"
+      announce="tone"
+    />
   ),
   'card': (
     <Card title="Card title" style={{ maxWidth: 300 }}>
@@ -1755,10 +1755,10 @@ The parser is a **bounded** CommonMark subset, so no parser ships to the page.
   // -- Feedback --
   'alert': (
     <Stack spacing="sm" style={{ maxWidth: 400 }}>
-      <Alert type="info" message="Info alert" />
-      <Alert type="success" message="Success alert" />
-      <Alert type="warning" message="Warning alert" />
-      <Alert type="error" message="Error alert" />
+      <Alert tone="info" message="Info alert" />
+      <Alert tone="success" message="Success alert" />
+      <Alert tone="warning" message="Warning alert" />
+      <Alert tone="danger" message="Error alert" />
     </Stack>
   ),
   'drawer': <DrawerPreview />,
