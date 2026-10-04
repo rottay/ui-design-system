@@ -59,7 +59,9 @@ type EmphasisPosture = keyof typeof EMPHASIS_DELTAS;
  * `ring` is the double ring the interaction contract already specifies and is
  * emitted verbatim, so a theme that states nothing keeps the exact shadow it
  * had. The other two are the same two operands arranged differently: nobody
- * re-picks a colour to change the signature.
+ * re-picks a colour to change the signature. Their ground layer is the ring's
+ * gap carried inside the host, 1px, so the signature reads on a host filled
+ * with the focus colour.
  */
 const FOCUS_SIGNATURES = {
   ring: {
@@ -71,13 +73,14 @@ const FOCUS_SIGNATURES = {
   underline: {
     width: "2px",
     offset: "0px",
-    shadow: "inset 0 calc(-1 * var(--ds-focus-ring-width)) 0 0 var(--ds-focus-ring-color)",
+    shadow:
+      "inset 0 calc(-1 * var(--ds-focus-ring-width)) 0 0 var(--ds-focus-ring-color), inset 0 calc(-1 * var(--ds-focus-ring-width) - 1px) 0 0 var(--ds-color-bg-primary)",
   },
   glow: {
     width: "1px",
     offset: "0px",
     shadow:
-      "0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color), 0 0 12px 2px color-mix(in srgb, var(--ds-focus-ring-color) 45%, transparent)",
+      "0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color), inset 0 0 0 1px var(--ds-color-bg-primary), 0 0 12px 2px color-mix(in srgb, var(--ds-focus-ring-color) 45%, transparent)",
   },
 } as const;
 

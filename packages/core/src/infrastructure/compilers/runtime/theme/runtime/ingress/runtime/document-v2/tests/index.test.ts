@@ -225,7 +225,7 @@ describe("accepted but not lit", () => {
       },
     ]);
     expect(css("bithire", v2({ "states.focus-style": "underline" }))).toContain(
-      "--ds-focus-ring: inset 0 calc(-1 * var(--ds-focus-ring-width)) 0 0 var(--ds-focus-ring-color)"
+      "--ds-focus-ring: inset 0 calc(-1 * var(--ds-focus-ring-width)) 0 0 var(--ds-focus-ring-color), inset 0 calc(-1 * var(--ds-focus-ring-width) - 1px) 0 0 var(--ds-color-bg-primary);"
     );
   });
 

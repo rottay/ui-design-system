@@ -363,8 +363,20 @@ describe('saved-views composed fields', () => {
 
     const signatures = [readings.ring.create.boxShadow, readings.underline.create.boxShadow, readings.glow.create.boxShadow];
     expect(new Set(signatures).size, 'the three signatures differ').toBe(3);
-    expect(readings.underline.create.boxShadow).toContain('inset');
-    expect(readings.glow.create.boxShadow).toContain('12px');
+    const colours = (shadow: string) => shadow.match(/(?:rgba?|color)\([^)]*\)/g) ?? [];
+    const geometry = (shadow: string) => shadow.replace(/(?:rgba?|color)\([^)]*\)/g, '<colour>');
+    expect(geometry(readings.underline.create.boxShadow)).toBe(
+      '<colour> 0px -2px 0px 0px inset, <colour> 0px -3px 0px 0px inset',
+    );
+    expect(geometry(readings.glow.create.boxShadow)).toBe(
+      '<colour> 0px 0px 0px 1px, <colour> 0px 0px 0px 1px inset, <colour> 0px 0px 12px 2px',
+    );
+    // The inner layer is the ground, never a second stroke of the focus colour.
+    const [line, band] = colours(readings.underline.create.boxShadow);
+    const [glowRing, hairline] = colours(readings.glow.create.boxShadow);
+    expect(band).not.toBe(line);
+    expect(hairline).toBe(band);
+    expect(glowRing).toBe(line);
 
     // The Input's own tenant channel outranks the signature on the composed fields too.
     expect(readings.tenant.rename.boxShadow).toBe('rgb(200, 0, 100) 0px 0px 0px 3px');

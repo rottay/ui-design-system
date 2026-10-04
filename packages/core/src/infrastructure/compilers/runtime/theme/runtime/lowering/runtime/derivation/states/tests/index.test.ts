@@ -146,6 +146,144 @@ describe("the Button focus offset follows the signature of its own scope", () =>
   });
 });
 
+describe("the focus signatures", () => {
+  const RING = "--ds-focus-ring";
+  const WIDTH = "--ds-focus-ring-width";
+  const OFFSET = "--ds-focus-ring-offset";
+  const COLOUR = "var(--ds-focus-ring-color)";
+  const GROUND = "var(--ds-color-bg-primary)";
+  const HALO = `0 0 12px 2px color-mix(in srgb, ${COLOUR} 45%, transparent)`;
+  const EMITTED = {
+    ring: {
+      width: "2px",
+      offset: "2px",
+      layers: [`0 0 0 var(${OFFSET}) ${GROUND}`, `0 0 0 calc(var(${OFFSET}) + var(${WIDTH})) ${COLOUR}`],
+    },
+    underline: {
+      width: "2px",
+      offset: "0px",
+      layers: [
+        `inset 0 calc(-1 * var(${WIDTH})) 0 0 ${COLOUR}`,
+        `inset 0 calc(-1 * var(${WIDTH}) - 1px) 0 0 ${GROUND}`,
+      ],
+    },
+    glow: {
+      width: "1px",
+      offset: "0px",
+      layers: [`0 0 0 var(${WIDTH}) ${COLOUR}`, `inset 0 0 0 1px ${GROUND}`, HALO],
+    },
+  } as const;
+  type Signature = keyof typeof EMITTED;
+  const SIGNATURES: readonly Signature[] = ["ring", "underline", "glow"];
+  const AUTHORED = "0 0 0 3px #C80064";
+
+  const flat = (focusStyle: Signature): FlatTheme => ({
+    id: "focus-probe",
+    name: "Focus probe",
+    surfaces: { focusStyle },
+  });
+  const signed = (focusStyle: Signature) => deriveStateChannels(flat(focusStyle));
+
+  /** The layers of a shadow list: commas inside a function do not separate layers. */
+  function layersOf(shadow: string): string[] {
+    const layers: string[] = [];
+    let depth = 0;
+    let current = "";
+    for (const char of shadow) {
+      if (char === "(") depth += 1;
+      if (char === ")") depth -= 1;
+      if (char === "," && depth === 0) {
+        layers.push(current.trim());
+        current = "";
+      } else {
+        current += char;
+      }
+    }
+    layers.push(current.trim());
+    return layers;
+  }
+
+  /** A layer with its colour operand removed: what is left is geometry. */
+  const geometryOf = (layer: string): string =>
+    layer.replace(HALO.slice("0 0 12px 2px ".length), "").replace(COLOUR, "").replace(GROUND, "").trim();
+
+  for (const signature of SIGNATURES) {
+    it(`${signature}: emits its exact width, offset and shadow`, () => {
+      const channels = signed(signature);
+      expect(channels[WIDTH]).toBe(EMITTED[signature].width);
+      expect(channels[OFFSET]).toBe(EMITTED[signature].offset);
+      expect(channels[RING]).toBe(EMITTED[signature].layers.join(", "));
+      expect(layersOf(channels[RING] as string)).toEqual([...EMITTED[signature].layers]);
+    });
+  }
+
+  it("an unauthored theme wears the ring", () => {
+    expect(deriveStateChannels({ id: "plain", name: "Plain" })[RING]).toBe(EMITTED.ring.layers.join(", "));
+  });
+
+  it("underline is the focus line with a 1px ground band inside it, both inset", () => {
+    const [line, band] = layersOf(signed("underline")[RING] as string);
+    expect(line).toBe(`inset 0 calc(-1 * var(${WIDTH})) 0 0 ${COLOUR}`);
+    expect(band).toBe(`inset 0 calc(-1 * var(${WIDTH}) - 1px) 0 0 ${GROUND}`);
+  });
+
+  it("glow is its ring, a literal 1px inner ground hairline the contrast floor cannot widen, and the halo", () => {
+    const [ring, hairline, halo] = layersOf(signed("glow")[RING] as string);
+    expect(ring).toBe(`0 0 0 var(${WIDTH}) ${COLOUR}`);
+    expect(hairline).toBe(`inset 0 0 0 1px ${GROUND}`);
+    expect(hairline).not.toContain(WIDTH);
+    expect(halo).toBe(HALO);
+  });
+
+  it("every signature carries the ground the ring's gap reads, and no other colour operand", () => {
+    for (const signature of SIGNATURES) {
+      const shadow = signed(signature)[RING] as string;
+      expect(shadow, signature).toContain(GROUND);
+      const operands = [...shadow.matchAll(/var\((--ds-[a-z-]*(?:color|bg)[a-z-]*)\)/g)].map((match) => match[1]);
+      expect(new Set(operands), signature).toEqual(new Set(["--ds-focus-ring-color", "--ds-color-bg-primary"]));
+    }
+  });
+
+  it("the three signatures differ on geometry alone, with the colours taken out", () => {
+    const geometries = SIGNATURES.map((signature) =>
+      layersOf(signed(signature)[RING] as string).map(geometryOf).join(" | ")
+    );
+    expect(geometries).toEqual([
+      `0 0 0 var(${OFFSET}) | 0 0 0 calc(var(${OFFSET}) + var(${WIDTH}))`,
+      `inset 0 calc(-1 * var(${WIDTH})) 0 0 | inset 0 calc(-1 * var(${WIDTH}) - 1px) 0 0`,
+      `0 0 0 var(${WIDTH}) | inset 0 0 0 1px | 0 0 12px 2px`,
+    ]);
+    expect(new Set(geometries).size).toBe(3);
+  });
+
+  for (const signature of SIGNATURES) {
+    it(`${signature}: a tenant scope restates the signature beside its operands`, () => {
+      const css = tenantDelta(signed(signature));
+      expect(declarationsOf(css, RING)).toEqual([EMITTED[signature].layers.join(", ")]);
+      expect(declarationsOf(css, WIDTH)).toEqual([EMITTED[signature].width]);
+      expect(declarationsOf(css, OFFSET)).toEqual([EMITTED[signature].offset]);
+    });
+
+    it(`${signature}: the container door restates the signature in the scope's base rule`, () => {
+      const { compiled } = compileThemeIntent(flatThemeIntent({ flatTheme: flat(signature) }));
+      const css = emitThemeCss(compiled, containerScope("[data-states-probe]"), { container: {} });
+      const base = css.slice(0, css.indexOf("}"));
+      expect(base.startsWith("[data-states-probe] {")).toBe(true);
+      expect(declarationsOf(base, RING)).toEqual([EMITTED[signature].layers.join(", ")]);
+    });
+
+    it(`${signature}: an authored ${RING} replaces the whole signature in the tenant scope and in the container door`, () => {
+      expect(declarationsOf(tenantDelta({ ...signed(signature), [RING]: AUTHORED }), RING)).toEqual([AUTHORED]);
+      const lines = emitDeclarations({ ...signed(signature), [RING]: AUTHORED });
+      expect(lines.filter((line) => line.startsWith(`  ${RING}:`))).toEqual([`  ${RING}: ${AUTHORED};`]);
+      const { compiled } = compileThemeIntent(flatThemeIntent({ flatTheme: flat(signature) }));
+      const authored = { ...compiled, cssVariables: { ...compiled.cssVariables, [RING]: AUTHORED } };
+      const css = emitThemeCss(authored, containerScope("[data-states-probe]"), { container: {} });
+      expect(declarationsOf(css, RING)).toEqual([AUTHORED]);
+    });
+  }
+});
+
 describe("precedence", () => {
   it("an authored control opacity wins over the dial in the compile and in the emitted scope", () => {
     const { cssVariables, cssString } = compileFlatThemeThroughDoor({

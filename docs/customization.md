@@ -159,3 +159,23 @@ Two consequences worth knowing before you author a theme:
 
 Motion follows the same principle: a theme may set motion personality, and a viewer's
 reduced-motion preference still wins.
+
+### The focus signature
+
+`states.focus-style` picks how keyboard focus is drawn everywhere, from one definition
+in the states derivation: `ring` (a ground-coloured gap, then a ring in the focus colour,
+outside the control), `underline` (a line in the focus colour along the inside bottom
+edge) or `glow` (a 1px ring with a soft halo). No component restates it; each one wears
+`--ds-focus-ring`.
+
+All three carry the same two colours, the focus colour and the canvas
+(`--ds-color-bg-primary`), because a control filled with the focus colour itself (a
+primary Button, a filled Tag, the current page of a pagination) would otherwise swallow
+the indicator. `ring` keeps the canvas as its outer gap. `underline` and `glow` carry it
+inside the control as a 1px layer: a band just above the line, and a hairline just
+inside the ring. On a control whose fill is the canvas that layer cannot be seen; on a
+tinted or raised surface it is a faint 1px strip.
+
+A tenant moves the signature by choosing the style and by moving its primary seed. An
+authored `--ds-focus-ring` replaces the whole list. Under forced colours the shadow is
+dropped and a system-colour outline stands in, so the signature never depends on it.

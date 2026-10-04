@@ -223,8 +223,12 @@ describe("chrome/tag close focus ring", () => {
     const underline = closeRingFor("underline");
     const glow = closeRingFor("glow");
     expect(new Set([ring, underline, glow]).size).toBe(3);
-    expect(glow).toContain("0 0 12px 2px");
-    expect(underline).toContain("inset");
+    expect(glow).toBe(
+      "0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color), inset 0 0 0 1px var(--ds-color-bg-primary), 0 0 12px 2px color-mix(in srgb, var(--ds-focus-ring-color) 45%, transparent)"
+    );
+    expect(underline).toBe(
+      "inset 0 calc(-1 * var(--ds-focus-ring-width)) 0 0 var(--ds-focus-ring-color), inset 0 calc(-1 * var(--ds-focus-ring-width) - 1px) 0 0 var(--ds-color-bg-primary)"
+    );
   });
 
   it("MUTATION DRILL: unwiring the close ring stops the posture reaching it", () => {
