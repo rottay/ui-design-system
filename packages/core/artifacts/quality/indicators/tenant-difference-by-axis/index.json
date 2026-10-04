@@ -1,11 +1,11 @@
 {
   "id": "tenant-difference-by-axis",
   "gate": "axis-difference (`capability-propagation` by axis, WO-EVI-02)",
-  "producedAt": "2026-10-03T21:35:21.699Z",
-  "value": "5/6 axes at >= 80 % of declaring families (shape, typography, rhythm, states, motion; effective-denominator reading 6/6, never the status); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
+  "producedAt": "2026-10-04T11:36:44.307Z",
+  "value": "5/6 axes at >= 80 % of declaring families (shape, typography, rhythm, depth, motion; effective-denominator reading 6/6, never the status); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
   "target": "6/6 axes at >= 80 % and the negative test green",
   "met": false,
-  "commit": "e7140350ffd4016ddd701b30f7d095939f9eaa6d",
+  "commit": "492a52c0e760a9f486d607bac257637e10d8be39",
   "catalogRevision": "41af5c3698f85c48",
   "browser": "149.0.7827.55",
   "bundleMode": "fresh",
@@ -922,9 +922,9 @@
       ]
     },
     "depth": {
-      "status": "below-threshold",
-      "declared": 204,
-      "effective": 198,
+      "status": "at-threshold",
+      "declared": 199,
+      "effective": 193,
       "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
       "populationLaw": null,
       "excludedUnmountable": 6,
@@ -932,8 +932,8 @@
       "notApplicable": 0,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 79.4,
-      "worstPercentEffective": 81.8,
+      "worstPercentDeclared": 81.4,
+      "worstPercentEffective": 83.9,
       "effectiveAtThreshold": true,
       "nonMovers": [
         "affix",
@@ -960,7 +960,6 @@
         "image-compounds",
         "input",
         "layout",
-        "link",
         "markdown-view",
         "menu-compounds",
         "mobile-header",
@@ -968,15 +967,11 @@
         "progress",
         "record-workbench",
         "scheduler-surface",
-        "scroll-area",
-        "search",
         "spinner",
         "splitter",
         "stepper-compounds",
         "timeline",
         "token-inspector",
-        "typography",
-        "virtual-list",
         "voice-input-button"
       ],
       "nonMoversByClass": {
@@ -1011,22 +1006,17 @@
           "image-compounds",
           "input",
           "layout",
-          "link",
           "markdown-view",
           "menu-compounds",
           "mobile-header",
           "mono-stat",
           "progress",
           "scheduler-surface",
-          "scroll-area",
-          "search",
           "spinner",
           "splitter",
           "stepper-compounds",
           "timeline",
           "token-inspector",
-          "typography",
-          "virtual-list",
           "voice-input-button"
         ]
       },
@@ -1036,10 +1026,10 @@
           "theme": "light",
           "measured": true,
           "moved": 162,
-          "declared": 204,
-          "effective": 198,
-          "percentDeclared": 79.4,
-          "percentEffective": 81.8,
+          "declared": 199,
+          "effective": 193,
+          "percentDeclared": 81.4,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "affix",
             "anchor",
@@ -1065,7 +1055,6 @@
             "image-compounds",
             "input",
             "layout",
-            "link",
             "markdown-view",
             "menu-compounds",
             "mobile-header",
@@ -1073,15 +1062,11 @@
             "progress",
             "record-workbench",
             "scheduler-surface",
-            "scroll-area",
-            "search",
             "spinner",
             "splitter",
             "stepper-compounds",
             "timeline",
             "token-inspector",
-            "typography",
-            "virtual-list",
             "voice-input-button"
           ]
         },
@@ -1090,10 +1075,10 @@
           "theme": "dark",
           "measured": true,
           "moved": 162,
-          "declared": 204,
-          "effective": 198,
-          "percentDeclared": 79.4,
-          "percentEffective": 81.8,
+          "declared": 199,
+          "effective": 193,
+          "percentDeclared": 81.4,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "affix",
             "anchor",
@@ -1119,7 +1104,6 @@
             "image-compounds",
             "input",
             "layout",
-            "link",
             "markdown-view",
             "menu-compounds",
             "mobile-header",
@@ -1127,15 +1111,11 @@
             "progress",
             "record-workbench",
             "scheduler-surface",
-            "scroll-area",
-            "search",
             "spinner",
             "splitter",
             "stepper-compounds",
             "timeline",
             "token-inspector",
-            "typography",
-            "virtual-list",
             "voice-input-button"
           ]
         },
@@ -1144,10 +1124,10 @@
           "theme": "light",
           "measured": true,
           "moved": 162,
-          "declared": 204,
-          "effective": 198,
-          "percentDeclared": 79.4,
-          "percentEffective": 81.8,
+          "declared": 199,
+          "effective": 193,
+          "percentDeclared": 81.4,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "affix",
             "anchor",
@@ -1173,7 +1153,6 @@
             "image-compounds",
             "input",
             "layout",
-            "link",
             "markdown-view",
             "menu-compounds",
             "mobile-header",
@@ -1181,15 +1160,11 @@
             "progress",
             "record-workbench",
             "scheduler-surface",
-            "scroll-area",
-            "search",
             "spinner",
             "splitter",
             "stepper-compounds",
             "timeline",
             "token-inspector",
-            "typography",
-            "virtual-list",
             "voice-input-button"
           ]
         },
@@ -1198,10 +1173,10 @@
           "theme": "dark",
           "measured": true,
           "moved": 162,
-          "declared": 204,
-          "effective": 198,
-          "percentDeclared": 79.4,
-          "percentEffective": 81.8,
+          "declared": 199,
+          "effective": 193,
+          "percentDeclared": 81.4,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "affix",
             "anchor",
@@ -1227,7 +1202,6 @@
             "image-compounds",
             "input",
             "layout",
-            "link",
             "markdown-view",
             "menu-compounds",
             "mobile-header",
@@ -1235,15 +1209,11 @@
             "progress",
             "record-workbench",
             "scheduler-surface",
-            "scroll-area",
-            "search",
             "spinner",
             "splitter",
             "stepper-compounds",
             "timeline",
             "token-inspector",
-            "typography",
-            "virtual-list",
             "voice-input-button"
           ]
         },
@@ -1252,10 +1222,10 @@
           "theme": "light",
           "measured": true,
           "moved": 162,
-          "declared": 204,
-          "effective": 198,
-          "percentDeclared": 79.4,
-          "percentEffective": 81.8,
+          "declared": 199,
+          "effective": 193,
+          "percentDeclared": 81.4,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "affix",
             "anchor",
@@ -1281,7 +1251,6 @@
             "image-compounds",
             "input",
             "layout",
-            "link",
             "markdown-view",
             "menu-compounds",
             "mobile-header",
@@ -1289,15 +1258,11 @@
             "progress",
             "record-workbench",
             "scheduler-surface",
-            "scroll-area",
-            "search",
             "spinner",
             "splitter",
             "stepper-compounds",
             "timeline",
             "token-inspector",
-            "typography",
-            "virtual-list",
             "voice-input-button"
           ]
         },
@@ -1306,10 +1271,10 @@
           "theme": "dark",
           "measured": true,
           "moved": 162,
-          "declared": 204,
-          "effective": 198,
-          "percentDeclared": 79.4,
-          "percentEffective": 81.8,
+          "declared": 199,
+          "effective": 193,
+          "percentDeclared": 81.4,
+          "percentEffective": 83.9,
           "nonMoverIds": [
             "affix",
             "anchor",
@@ -1335,7 +1300,6 @@
             "image-compounds",
             "input",
             "layout",
-            "link",
             "markdown-view",
             "menu-compounds",
             "mobile-header",
@@ -1343,31 +1307,27 @@
             "progress",
             "record-workbench",
             "scheduler-surface",
-            "scroll-area",
-            "search",
             "spinner",
             "splitter",
             "stepper-compounds",
             "timeline",
             "token-inspector",
-            "typography",
-            "virtual-list",
             "voice-input-button"
           ]
         }
       ]
     },
     "states": {
-      "status": "at-threshold",
-      "declared": 154,
-      "effective": 151,
+      "status": "below-threshold",
+      "declared": 152,
+      "effective": 149,
       "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
       "populationLaw": {
         "law": "STATES-K",
         "ruled": "2026-10-01",
         "by": "owner directive 2026-10-01; Fable review 2026-10-01 (ACCEPT-WITH-CHANGES)",
         "rule": "K1 kernel-gated paint (:hover, :active, :focus, :focus-within, :focus-visible, [data-state] on a kernel token, [data-disabled] / [data-disabled='true']; :not() arguments stripped; the twin clause) or K2 a states head channel",
-        "move": "declared 156 -> 155 at d073e2693 (leave: active-filters-bar, branding-preview-sandbox, detail, record-facts, scope-switcher; enter: edit-fields, form-builder, surface-states, table-toolbar); no mover leaves"
+        "move": "declared 156 -> 155 at d073e2693 (leave: active-filters-bar, branding-preview-sandbox, detail, record-facts, scope-switcher; enter: edit-fields, form-builder, surface-states, table-toolbar); no mover leaves. Product exits since, the law text unchanged: declared 155 -> 154 on 2026-10-02 (overlay-modal-compounds retires its orphan rules; not a mover) and 154 -> 152 on 2026-10-04 (owner ruling R32 Q6) -- hover-card and tooltip retire the focus rule that was their only kernel-gated paint and their only head-channel read; both were movers on a width alone"
       },
       "excludedUnmountable": 3,
       "excludedUnsettled": 0,
@@ -1407,10 +1367,11 @@
           "class": "colour-only"
         }
       ],
-      "worstPercentDeclared": 80.5,
-      "worstPercentEffective": 82.1,
+      "worstPercentDeclared": 78.9,
+      "worstPercentEffective": 80.5,
       "effectiveAtThreshold": true,
       "nonMovers": [
+        "ascii-diagram",
         "button-group",
         "card",
         "card-compounds",
@@ -1439,6 +1400,7 @@
         "statistic",
         "surface-states",
         "table-toolbar",
+        "tree-view-connector",
         "visual-excellence-preview",
         "widget-board"
       ],
@@ -1468,9 +1430,11 @@
           "search-command-bar",
           "statistic",
           "surface-states",
+          "tree-view-connector",
           "visual-excellence-preview"
         ],
         "measuredNotMoving": [
+          "ascii-diagram",
           "card",
           "collection-header",
           "column-settings",
@@ -1488,12 +1452,13 @@
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 124,
-          "declared": 154,
-          "effective": 151,
-          "percentDeclared": 80.5,
-          "percentEffective": 82.1,
+          "moved": 120,
+          "declared": 152,
+          "effective": 149,
+          "percentDeclared": 78.9,
+          "percentEffective": 80.5,
           "nonMoverIds": [
+            "ascii-diagram",
             "button-group",
             "card",
             "card-compounds",
@@ -1522,6 +1487,7 @@
             "statistic",
             "surface-states",
             "table-toolbar",
+            "tree-view-connector",
             "visual-excellence-preview",
             "widget-board"
           ]
@@ -1530,12 +1496,13 @@
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 124,
-          "declared": 154,
-          "effective": 151,
-          "percentDeclared": 80.5,
-          "percentEffective": 82.1,
+          "moved": 120,
+          "declared": 152,
+          "effective": 149,
+          "percentDeclared": 78.9,
+          "percentEffective": 80.5,
           "nonMoverIds": [
+            "ascii-diagram",
             "button-group",
             "card",
             "card-compounds",
@@ -1564,6 +1531,7 @@
             "statistic",
             "surface-states",
             "table-toolbar",
+            "tree-view-connector",
             "visual-excellence-preview",
             "widget-board"
           ]
@@ -1572,12 +1540,13 @@
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 124,
-          "declared": 154,
-          "effective": 151,
-          "percentDeclared": 80.5,
-          "percentEffective": 82.1,
+          "moved": 120,
+          "declared": 152,
+          "effective": 149,
+          "percentDeclared": 78.9,
+          "percentEffective": 80.5,
           "nonMoverIds": [
+            "ascii-diagram",
             "button-group",
             "card",
             "card-compounds",
@@ -1606,6 +1575,7 @@
             "statistic",
             "surface-states",
             "table-toolbar",
+            "tree-view-connector",
             "visual-excellence-preview",
             "widget-board"
           ]
@@ -1614,12 +1584,13 @@
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 124,
-          "declared": 154,
-          "effective": 151,
-          "percentDeclared": 80.5,
-          "percentEffective": 82.1,
+          "moved": 120,
+          "declared": 152,
+          "effective": 149,
+          "percentDeclared": 78.9,
+          "percentEffective": 80.5,
           "nonMoverIds": [
+            "ascii-diagram",
             "button-group",
             "card",
             "card-compounds",
@@ -1648,6 +1619,7 @@
             "statistic",
             "surface-states",
             "table-toolbar",
+            "tree-view-connector",
             "visual-excellence-preview",
             "widget-board"
           ]
@@ -1656,12 +1628,13 @@
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 124,
-          "declared": 154,
-          "effective": 151,
-          "percentDeclared": 80.5,
-          "percentEffective": 82.1,
+          "moved": 120,
+          "declared": 152,
+          "effective": 149,
+          "percentDeclared": 78.9,
+          "percentEffective": 80.5,
           "nonMoverIds": [
+            "ascii-diagram",
             "button-group",
             "card",
             "card-compounds",
@@ -1690,6 +1663,7 @@
             "statistic",
             "surface-states",
             "table-toolbar",
+            "tree-view-connector",
             "visual-excellence-preview",
             "widget-board"
           ]
@@ -1698,12 +1672,13 @@
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 124,
-          "declared": 154,
-          "effective": 151,
-          "percentDeclared": 80.5,
-          "percentEffective": 82.1,
+          "moved": 120,
+          "declared": 152,
+          "effective": 149,
+          "percentDeclared": 78.9,
+          "percentEffective": 80.5,
           "nonMoverIds": [
+            "ascii-diagram",
             "button-group",
             "card",
             "card-compounds",
@@ -1732,6 +1707,7 @@
             "statistic",
             "surface-states",
             "table-toolbar",
+            "tree-view-connector",
             "visual-excellence-preview",
             "widget-board"
           ]
@@ -2112,28 +2088,29 @@
       "background-image"
     ],
     "scene": "the non-chromatic scene: root plus states-tagged parts; a colour-only state rule mounts no part, so this is a lower bound",
-    "declared": 154,
-    "effective": 151,
+    "declared": 152,
+    "effective": 149,
     "cells": [
       {
         "vertical": "bithire",
         "theme": "light",
         "measured": true,
-        "moved": 102,
-        "restIsolated": 101,
-        "percentDeclared": 66.2,
-        "percentEffective": 67.5,
+        "moved": 105,
+        "restIsolated": 104,
+        "percentDeclared": 69.1,
+        "percentEffective": 70.5,
         "chromaticOnly": [
           "card"
         ],
-        "nonChromatic": 124,
+        "nonChromatic": 120,
         "byChannel": {
           "background-color": 23,
-          "box-shadow(colour)": 98
+          "box-shadow(colour)": 100,
+          "outline-color": 1
         },
         "halves": {
-          "stamped": 87,
-          "native": 93
+          "stamped": 90,
+          "native": 94
         },
         "movedIds": [
           "activity-cards",
@@ -2156,6 +2133,7 @@
           "card",
           "cascader",
           "chart-foundation",
+          "checkbox",
           "cockpit-header",
           "code-block",
           "collapse",
@@ -2209,6 +2187,7 @@
           "popover",
           "pricing-table",
           "qrcode",
+          "radio",
           "radio-group",
           "scheduler-surface",
           "scroll-area",
@@ -2229,6 +2208,7 @@
           "tenant-preview",
           "textarea",
           "time-picker",
+          "toggle",
           "tour",
           "transfer",
           "tree",
@@ -2244,21 +2224,22 @@
         "vertical": "bithire",
         "theme": "dark",
         "measured": true,
-        "moved": 102,
-        "restIsolated": 101,
-        "percentDeclared": 66.2,
-        "percentEffective": 67.5,
+        "moved": 105,
+        "restIsolated": 104,
+        "percentDeclared": 69.1,
+        "percentEffective": 70.5,
         "chromaticOnly": [
           "card"
         ],
-        "nonChromatic": 124,
+        "nonChromatic": 120,
         "byChannel": {
           "background-color": 23,
-          "box-shadow(colour)": 98
+          "box-shadow(colour)": 100,
+          "outline-color": 1
         },
         "halves": {
-          "stamped": 87,
-          "native": 93
+          "stamped": 90,
+          "native": 94
         },
         "movedIds": [
           "activity-cards",
@@ -2281,6 +2262,7 @@
           "card",
           "cascader",
           "chart-foundation",
+          "checkbox",
           "cockpit-header",
           "code-block",
           "collapse",
@@ -2334,6 +2316,7 @@
           "popover",
           "pricing-table",
           "qrcode",
+          "radio",
           "radio-group",
           "scheduler-surface",
           "scroll-area",
@@ -2354,6 +2337,7 @@
           "tenant-preview",
           "textarea",
           "time-picker",
+          "toggle",
           "tour",
           "transfer",
           "tree",
@@ -2369,21 +2353,22 @@
         "vertical": "evnto",
         "theme": "light",
         "measured": true,
-        "moved": 102,
-        "restIsolated": 101,
-        "percentDeclared": 66.2,
-        "percentEffective": 67.5,
+        "moved": 105,
+        "restIsolated": 104,
+        "percentDeclared": 69.1,
+        "percentEffective": 70.5,
         "chromaticOnly": [
           "card"
         ],
-        "nonChromatic": 124,
+        "nonChromatic": 120,
         "byChannel": {
           "background-color": 23,
-          "box-shadow(colour)": 98
+          "box-shadow(colour)": 100,
+          "outline-color": 1
         },
         "halves": {
-          "stamped": 87,
-          "native": 93
+          "stamped": 90,
+          "native": 94
         },
         "movedIds": [
           "activity-cards",
@@ -2406,6 +2391,7 @@
           "card",
           "cascader",
           "chart-foundation",
+          "checkbox",
           "cockpit-header",
           "code-block",
           "collapse",
@@ -2459,6 +2445,7 @@
           "popover",
           "pricing-table",
           "qrcode",
+          "radio",
           "radio-group",
           "scheduler-surface",
           "scroll-area",
@@ -2479,6 +2466,7 @@
           "tenant-preview",
           "textarea",
           "time-picker",
+          "toggle",
           "tour",
           "transfer",
           "tree",
@@ -2494,21 +2482,22 @@
         "vertical": "evnto",
         "theme": "dark",
         "measured": true,
-        "moved": 102,
-        "restIsolated": 101,
-        "percentDeclared": 66.2,
-        "percentEffective": 67.5,
+        "moved": 105,
+        "restIsolated": 104,
+        "percentDeclared": 69.1,
+        "percentEffective": 70.5,
         "chromaticOnly": [
           "card"
         ],
-        "nonChromatic": 124,
+        "nonChromatic": 120,
         "byChannel": {
           "background-color": 23,
-          "box-shadow(colour)": 98
+          "box-shadow(colour)": 100,
+          "outline-color": 1
         },
         "halves": {
-          "stamped": 87,
-          "native": 93
+          "stamped": 90,
+          "native": 94
         },
         "movedIds": [
           "activity-cards",
@@ -2531,6 +2520,7 @@
           "card",
           "cascader",
           "chart-foundation",
+          "checkbox",
           "cockpit-header",
           "code-block",
           "collapse",
@@ -2584,6 +2574,7 @@
           "popover",
           "pricing-table",
           "qrcode",
+          "radio",
           "radio-group",
           "scheduler-surface",
           "scroll-area",
@@ -2604,6 +2595,7 @@
           "tenant-preview",
           "textarea",
           "time-picker",
+          "toggle",
           "tour",
           "transfer",
           "tree",
@@ -2619,21 +2611,22 @@
         "vertical": "rottay",
         "theme": "light",
         "measured": true,
-        "moved": 102,
-        "restIsolated": 101,
-        "percentDeclared": 66.2,
-        "percentEffective": 67.5,
+        "moved": 105,
+        "restIsolated": 104,
+        "percentDeclared": 69.1,
+        "percentEffective": 70.5,
         "chromaticOnly": [
           "card"
         ],
-        "nonChromatic": 124,
+        "nonChromatic": 120,
         "byChannel": {
           "background-color": 23,
-          "box-shadow(colour)": 98
+          "box-shadow(colour)": 100,
+          "outline-color": 1
         },
         "halves": {
-          "stamped": 87,
-          "native": 93
+          "stamped": 90,
+          "native": 94
         },
         "movedIds": [
           "activity-cards",
@@ -2656,6 +2649,7 @@
           "card",
           "cascader",
           "chart-foundation",
+          "checkbox",
           "cockpit-header",
           "code-block",
           "collapse",
@@ -2709,6 +2703,7 @@
           "popover",
           "pricing-table",
           "qrcode",
+          "radio",
           "radio-group",
           "scheduler-surface",
           "scroll-area",
@@ -2729,6 +2724,7 @@
           "tenant-preview",
           "textarea",
           "time-picker",
+          "toggle",
           "tour",
           "transfer",
           "tree",
@@ -2744,21 +2740,22 @@
         "vertical": "rottay",
         "theme": "dark",
         "measured": true,
-        "moved": 102,
-        "restIsolated": 101,
-        "percentDeclared": 66.2,
-        "percentEffective": 67.5,
+        "moved": 105,
+        "restIsolated": 104,
+        "percentDeclared": 69.1,
+        "percentEffective": 70.5,
         "chromaticOnly": [
           "card"
         ],
-        "nonChromatic": 124,
+        "nonChromatic": 120,
         "byChannel": {
           "background-color": 23,
-          "box-shadow(colour)": 98
+          "box-shadow(colour)": 100,
+          "outline-color": 1
         },
         "halves": {
-          "stamped": 87,
-          "native": 93
+          "stamped": 90,
+          "native": 94
         },
         "movedIds": [
           "activity-cards",
@@ -2781,6 +2778,7 @@
           "card",
           "cascader",
           "chart-foundation",
+          "checkbox",
           "cockpit-header",
           "code-block",
           "collapse",
@@ -2834,6 +2832,7 @@
           "popover",
           "pricing-table",
           "qrcode",
+          "radio",
           "radio-group",
           "scheduler-surface",
           "scroll-area",
@@ -2854,6 +2853,7 @@
           "tenant-preview",
           "textarea",
           "time-picker",
+          "toggle",
           "tour",
           "transfer",
           "tree",
@@ -2866,8 +2866,8 @@
         ]
       }
     ],
-    "worstPercentDeclared": 66.2,
-    "worstPercentEffective": 67.5,
+    "worstPercentDeclared": 69.1,
+    "worstPercentEffective": 70.5,
     "chromaticOnly": [
       "card"
     ],
@@ -2876,11 +2876,12 @@
     ],
     "byChannel": {
       "background-color": 23,
-      "box-shadow(colour)": 98
+      "box-shadow(colour)": 100,
+      "outline-color": 1
     },
     "halves": {
-      "stamped": 87,
-      "native": 93
+      "stamped": 90,
+      "native": 94
     },
     "unreached": [
       "edit-fields",
@@ -2892,31 +2893,31 @@
     "controls": {
       "palette-only": {
         "nonChromatic": "0 on 36/36 (the law)",
-        "chromatic": 121,
+        "chromatic": 120,
         "chromaticByCell": [
           {
             "where": "bithire/light",
-            "moved": 121
+            "moved": 120
           },
           {
             "where": "bithire/dark",
-            "moved": 121
+            "moved": 120
           },
           {
             "where": "evnto/light",
-            "moved": 121
+            "moved": 120
           },
           {
             "where": "evnto/dark",
-            "moved": 121
+            "moved": 120
           },
           {
             "where": "rottay/light",
-            "moved": 121
+            "moved": 120
           },
           {
             "where": "rottay/dark",
-            "moved": 121
+            "moved": 120
           }
         ],
         "channels": [
@@ -2970,7 +2971,7 @@
         "reads": "reference, not a zero: a chromatic reading has no 0 % law"
       }
     },
-    "line": "chromatic-states (reported apart, never a status): 102/154 declared (66.2 %), 102/151 effective (67.5 %), every cell; rest-isolated 101; chromatic-only: card; unreached: 5 colour-only families; palette-only non-chromatic 0 on 36/36 | chromatic 121 (reference)"
+    "line": "chromatic-states (reported apart, never a status): 105/152 declared (69.1 %), 105/149 effective (70.5 %), every cell; rest-isolated 104; chromatic-only: card; unreached: 5 colour-only families; palette-only non-chromatic 0 on 36/36 | chromatic 120 (reference)"
   },
   "negativeTest": {
     "status": "green",
@@ -3050,8 +3051,8 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 43,
-            "denominator": 151,
+            "moved": 41,
+            "denominator": 149,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -3078,7 +3079,6 @@
               "pagination",
               "password-input",
               "qrcode",
-              "radio",
               "radio-group",
               "rate",
               "segmented",
@@ -3091,7 +3091,6 @@
               "tag-input",
               "textarea",
               "time-picker",
-              "toggle",
               "transfer",
               "tree-select",
               "upload",
@@ -3103,8 +3102,8 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 43,
-            "denominator": 151,
+            "moved": 41,
+            "denominator": 149,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -3131,7 +3130,6 @@
               "pagination",
               "password-input",
               "qrcode",
-              "radio",
               "radio-group",
               "rate",
               "segmented",
@@ -3144,7 +3142,6 @@
               "tag-input",
               "textarea",
               "time-picker",
-              "toggle",
               "transfer",
               "tree-select",
               "upload",
@@ -3156,8 +3153,8 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 43,
-            "denominator": 151,
+            "moved": 41,
+            "denominator": 149,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -3184,7 +3181,6 @@
               "pagination",
               "password-input",
               "qrcode",
-              "radio",
               "radio-group",
               "rate",
               "segmented",
@@ -3197,7 +3193,6 @@
               "tag-input",
               "textarea",
               "time-picker",
-              "toggle",
               "transfer",
               "tree-select",
               "upload",
@@ -3209,8 +3204,8 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 43,
-            "denominator": 151,
+            "moved": 41,
+            "denominator": 149,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -3237,7 +3232,6 @@
               "pagination",
               "password-input",
               "qrcode",
-              "radio",
               "radio-group",
               "rate",
               "segmented",
@@ -3250,7 +3244,6 @@
               "tag-input",
               "textarea",
               "time-picker",
-              "toggle",
               "transfer",
               "tree-select",
               "upload",
@@ -3262,8 +3255,8 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 43,
-            "denominator": 151,
+            "moved": 41,
+            "denominator": 149,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -3290,7 +3283,6 @@
               "pagination",
               "password-input",
               "qrcode",
-              "radio",
               "radio-group",
               "rate",
               "segmented",
@@ -3303,7 +3295,6 @@
               "tag-input",
               "textarea",
               "time-picker",
-              "toggle",
               "transfer",
               "tree-select",
               "upload",
@@ -3315,8 +3306,8 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 43,
-            "denominator": 151,
+            "moved": 41,
+            "denominator": 149,
             "movedIds": [
               "alert",
               "approval-workflow",
@@ -3343,7 +3334,6 @@
               "pagination",
               "password-input",
               "qrcode",
-              "radio",
               "radio-group",
               "rate",
               "segmented",
@@ -3356,7 +3346,6 @@
               "tag-input",
               "textarea",
               "time-picker",
-              "toggle",
               "transfer",
               "tree-select",
               "upload",
@@ -3378,55 +3367,21 @@
           "stamped": 1,
           "native": 0
         }
+      },
+      {
+        "row": "tree-view-connector",
+        "family": "tree-view-connector",
+        "reason": "measured 2026-10-04 (R32 Q6): the real render reaches the link and moves on neither half -- its focus ring is a fixed 2px inversion outline by the commercial-surfaces kit law, not the tenant signature; the family is a states non-mover by law",
+        "statesReach": {
+          "declared": false,
+          "stamped": 0,
+          "native": 2
+        }
       }
     ]
   },
-  "statesWidthOnly": [
-    {
-      "family": "ascii-diagram",
-      "properties": [
-        "outline-width"
-      ],
-      "defect": "focus signature not honoured (solid outline)",
-      "defectStatus": "open",
-      "receiver": "WO-EVI-02 (focus-signature programme)"
-    },
-    {
-      "family": "hover-card",
-      "properties": [
-        "outline-width",
-        "outline-offset"
-      ],
-      "defect": "focus signature not honoured (solid outline)",
-      "defectStatus": "open",
-      "receiver": "WO-EVI-02 (focus-signature programme)"
-    },
-    {
-      "family": "tooltip",
-      "properties": [
-        "outline-width",
-        "outline-offset"
-      ],
-      "defect": "focus signature not honoured (solid outline)",
-      "defectStatus": "open",
-      "receiver": "WO-EVI-02 (focus-signature programme)"
-    },
-    {
-      "family": "tree-view-connector",
-      "properties": [
-        "outline-width"
-      ],
-      "defect": "focus signature not honoured (solid outline)",
-      "defectStatus": "open",
-      "receiver": "WO-EVI-02 (focus-signature programme)"
-    }
-  ],
-  "statesWidthOnlyObserved": [
-    "ascii-diagram",
-    "hover-card",
-    "tooltip",
-    "tree-view-connector"
-  ],
+  "statesWidthOnly": [],
+  "statesWidthOnlyObserved": [],
   "statesNonMoverNotes": [
     {
       "family": "column-settings",
