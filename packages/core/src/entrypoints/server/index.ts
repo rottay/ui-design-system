@@ -302,6 +302,24 @@ export type {
   PreviewThemeIntentInput,
   UnlitReason,
 } from '../../infrastructure/compilers/runtime/theme';
+/**
+ * The v1 raw-override fold an application runs over its stored rows: it moves
+ * every `advanced.tokenOverrides` entry that is a catalog decision into the
+ * `general` field that owns it, and reports every entry it cannot carry.
+ */
+export {
+  RAW_OVERRIDE_BLOCKING_OUTCOMES,
+  RAW_OVERRIDE_RESOLUTION_ACTIONS,
+  foldRawTokenOverrides,
+} from '../../infrastructure/compilers/runtime/theme/runtime/ingress/runtime/raw-override-migration';
+export type {
+  RawOverrideBlockingOutcome,
+  RawOverrideMigration,
+  RawOverrideOutcome,
+  RawOverrideReportEntry,
+  RawOverrideResolution,
+  RawOverrideResolutionAction,
+} from '../../infrastructure/compilers/runtime/theme/runtime/ingress/runtime/raw-override-migration';
 export type {
   Theme,
   ThemeLayerPatch,
