@@ -14,9 +14,10 @@
  * `border` and avatar-initials `color` (both `ringColor = user.color ||
  * DEFAULT_COLOR`), the size-variant pixel geometry (inline-size/block-size,
  * initials font-size), the negative overlap offset and the stacking order;
- * LiveCursor's `cursor-badge` `background` (caller per-user color), coordinate
- * custom-property hatches and visibility `opacity`. The skin consumes those
- * hatches into the transform; everything else is static and owned HERE.
+ * LiveCursor's `cursor-badge` `background` (caller per-user color) and
+ * coordinate custom-property hatches. The skin consumes those hatches into
+ * the transform; everything else is static and owned HERE, including the
+ * LiveCursor visibility fade, keyed on the stamped `data-visible='false'`.
  *
  * RUNTIME HATCH: `--ds-presence-badge-ring` carries the overflow badge's ring
  * WIDTH, which tracks the `size` prop (`sm`: 2px, `md`: 2.5px) and has no
@@ -182,6 +183,9 @@
   transition: transform var(--ds-motion-feedback) linear,
     opacity var(--ds-motion-reveal) var(--ds-motion-ease-out);
   will-change: transform;
+}
+.ds-presence-live-cursor[data-part='root'][data-visible='false'] {
+  opacity: 0;
 }
 .ds-presence-live-cursor[data-part='root'] svg {
   display: block;

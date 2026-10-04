@@ -346,6 +346,7 @@ export function LiveCursor({
     <Box
       className="ds-presence-live-cursor"
       data-part="root"
+      data-visible={visible ? undefined : 'false'}
       aria-hidden="true"
       style={{
         // Runtime-only hatches: pointer coordinates are data, while the skin
@@ -353,7 +354,6 @@ export function LiveCursor({
         // pointer coordinates live in physical space, not writing direction.
         '--ds-presence-cursor-x': `${position.x}px`,
         '--ds-presence-cursor-y': `${position.y}px`,
-        opacity: visible ? 1 : 0,
       } as React.CSSProperties}
     >
       {/* Cursor arrow glyph. ICON GAP (registered, owner: graphics): the

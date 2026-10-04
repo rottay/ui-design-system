@@ -1203,12 +1203,6 @@
       "rule": "local-svg-root",
       "count": 1
     },
-    "cf9179aa7dce69cf9593": {
-      "path": "src/components/patterns/communication/presence/index.tsx",
-      "category": "shared-chrome-literal",
-      "rule": "stable-paint",
-      "count": 1
-    },
     "d8939b5d2a5965751f6e": {
       "path": "src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
       "category": "native-interactive",
