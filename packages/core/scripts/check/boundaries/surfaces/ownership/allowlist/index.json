@@ -6,6 +6,42 @@
       "category": "native-interactive",
       "rule": "native-button",
       "reason": "Pin-toggle and hide-column are 12px icon-slot affordances nested inside the sort-plumbed header cell (th carries the sort onClick/onKeyDown). Composing the DS Button primitive here would drag its chrome and focus-ring skin into the slot and fight the header's own interaction plumbing; the parts are skin-owned (data-table.css reset), keyboard-native, and mirror the grandfathered Carousel arrow/dot idiom."
+    },
+    {
+      "id": "71ab919ba4e693ea1e5f",
+      "reason": "ChartDataAccess (the isolated ./charts/access entrypoint) pins native buttons by contract: the tab-stop test asserts no .ds-button ancestor and the tab-order parts, and the entrypoint carries a 2800-byte gzip budget that the engine-switched Button cannot fit. The paint is skin-owned (chart-foundation data-trigger/data-action/data-pagination rules)."
+    },
+    {
+      "id": "15f8faa6469ad447e532",
+      "reason": "ChartDataAccess downloads the CSV through a detached anchor: a programmatic download is not presentation and has no primitive to move to."
+    },
+    {
+      "id": "696e8f4332ce6ed623a3",
+      "reason": "The chart engine's tooltip div is a datum annotation positioned by chart geometry, not an interactive disclosure; role=\"tooltip\" on a non-interactive element is the correct ARIA and there is no primitive host for it."
+    },
+    {
+      "id": "5671265a51112b78459c",
+      "reason": "The chart tooltip is a datum annotation positioned by chart geometry, not an interactive disclosure; role=\"tooltip\" on a non-interactive element is the correct ARIA and there is no primitive host for it."
+    },
+    {
+      "id": "9ff39d2a101f5503a844",
+      "reason": "Chart export downloads the file through a detached anchor: a programmatic download is not presentation and has no primitive to move to."
+    },
+    {
+      "id": "685bd490c929ebb4218b",
+      "reason": "The stats-grid sparkline is an owned data visualization (inline SVG by design, painted by the family skin); the graphics/icon facade covers semantic icons, not measured data ink."
+    },
+    {
+      "id": "f746bf83874afa8d0b32",
+      "reason": "The presence live-cursor glyph is a two-tone pattern-owned marker (per-user fill plus a surface-coloured outline the single-currentColor icon contract cannot express); no governed icon role fits it."
+    },
+    {
+      "id": "516bb532d6b74e2ac3cd",
+      "reason": "Sort activation lives on the th itself (sortable column header semantics: the sort button pattern keys aria-sort on the cell); nesting a DS Button in the header would fight the sort plumbing, mirroring the grandfathered icon-slot row of this same file."
+    },
+    {
+      "id": "4ea20ab8a5e06e924467",
+      "reason": "TreeViewConnector is documented provider-free and server-safe, and the measured swap to NavLink breaks that contract (the engine-routed Link throws without a provider; 4 integration tests red when trialled). A static connector anchor is the correct element here."
     }
   ]
 }

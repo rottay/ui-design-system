@@ -1185,12 +1185,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "f746bf83874afa8d0b32": {
-      "path": "src/components/patterns/communication/presence/index.tsx",
-      "category": "local-svg",
-      "rule": "local-svg-root",
-      "count": 1
-    },
     "d8939b5d2a5965751f6e": {
       "path": "src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
       "category": "native-interactive",
@@ -1921,12 +1915,6 @@
       "path": "src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
       "category": "native-interactive",
       "rule": "native-select",
-      "count": 1
-    },
-    "516bb532d6b74e2ac3cd": {
-      "path": "src/components/patterns/data/data-table/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "clickable-noninteractive",
       "count": 1
     },
     "a90fdec434a832b3d3ca": {
@@ -3038,12 +3026,6 @@
       "category": "shared-chrome-literal",
       "rule": "stable-typography",
       "count": 2
-    },
-    "685bd490c929ebb4218b": {
-      "path": "src/components/patterns/data/stats-grid/engines/modern/index.tsx",
-      "category": "local-svg",
-      "rule": "local-svg-root",
-      "count": 1
     },
     "6ff21bec4909c5bb67d3": {
       "path": "src/components/patterns/data/stats-grid/engines/modern/index.tsx",
@@ -6855,40 +6837,10 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "5671265a51112b78459c": {
-      "path": "src/components/patterns/visualization/charts/presentation/tooltip/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "aria-role-reconstruction",
-      "count": 1
-    },
-    "15f8faa6469ad447e532": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/access/index.tsx",
-      "category": "native-interactive",
-      "rule": "create-element-a",
-      "count": 1
-    },
-    "71ab919ba4e693ea1e5f": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/access/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-button",
-      "count": 5
-    },
     "7f748ca33c7cf9c0a5c6": {
       "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/calendar-heat-map/index.tsx",
       "category": "primitive-reconstruction",
       "rule": "clickable-noninteractive",
-      "count": 1
-    },
-    "696e8f4332ce6ed623a3": {
-      "path": "src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "aria-role-reconstruction",
-      "count": 1
-    },
-    "9ff39d2a101f5503a844": {
-      "path": "src/components/patterns/visualization/charts/runtime/exporting/foundation/file/index.ts",
-      "category": "native-interactive",
-      "rule": "create-element-a",
       "count": 1
     },
     "0db487f706ba6a5d19df": {
@@ -7381,12 +7333,6 @@
       "path": "src/components/patterns/visualization/tree-view/engines/rustic/index.tsx",
       "category": "shared-chrome-literal",
       "rule": "stable-spacing",
-      "count": 1
-    },
-    "4ea20ab8a5e06e924467": {
-      "path": "src/components/patterns/visualization/tree-view/presentation/connector/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-a",
       "count": 1
     },
     "1234115e3e6fdd8d1cf2": {
