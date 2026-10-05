@@ -21,11 +21,12 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
  * a place a decision can land.
  *
  * WHAT IS DELIBERATELY NOT HERE: `--ds-material-overlay-border`,
- * `--ds-material-overlay-shadow` and `--ds-material-raised-shadow-selected`,
- * which three of the values below chain THROUGH. They are the materials
- * vocabulary, owned by `derivation/materials`, and a column-menu deriver that
- * produced them would be a second owner of another family's channels. They stay
- * the cut's named residue, pinned by category in the roster.
+ * `--ds-material-overlay-opaque`, `--ds-material-overlay-shadow` and
+ * `--ds-material-raised-shadow-selected`, which four of the values below chain
+ * THROUGH. They are the materials vocabulary, owned by `derivation/materials`,
+ * and a column-menu deriver that produced them would be a second owner of
+ * another family's channels. They stay the cut's named residue, pinned by
+ * category in the roster.
  *
  * CONSUMES, and each one is discharged by a probe in
  * `ColumnMenu.causality.integration.test.tsx`: `palette.*` paints the panel
@@ -107,8 +108,9 @@ export function deriveColumnMenuChannels(): Record<string, string> {
   vars["--ds-column-menu-panel-radius"] = "var(--ds-radius-xl, 20px)";
   vars["--ds-column-menu-panel-border"] =
     "1px solid var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent))";
+  // The sheen washes an opaque ground: the panel is portaled over live controls.
   vars["--ds-column-menu-panel-background"] =
-    "var(--ds-gradient-surface, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%)))";
+    "var(--ds-gradient-surface, none), linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%)) var(--ds-material-overlay-opaque, var(--ds-surface-card))";
   vars["--ds-column-menu-panel-shadow"] =
     "var(--ds-material-overlay-shadow, var(--ds-elevation-4, 0 24px 64px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)))";
   vars["--ds-column-menu-panel-backdrop"] = "none";

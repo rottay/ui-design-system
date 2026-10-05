@@ -64,11 +64,11 @@
         color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)
       )
   );
+  /* The sheen washes an opaque ground: the panel is portaled over live controls. */
   background: var(
     --ds-column-menu-panel-background,
-    var(
-      --ds-gradient-surface,
-      linear-gradient(
+    var(--ds-gradient-surface, none),
+    linear-gradient(
         180deg,
         color-mix(
           in srgb,
@@ -81,7 +81,7 @@
           var(--ds-color-bg-primary) 10%
         )
       )
-    )
+      var(--ds-material-overlay-opaque, var(--ds-surface-card))
   );
   box-shadow: var(
     --ds-column-menu-panel-shadow,

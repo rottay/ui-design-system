@@ -83915,11 +83915,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)
       )
   );
+  /* The sheen washes an opaque ground: the panel is portaled over live controls. */
   background: var(
     --ds-column-menu-panel-background,
-    var(
-      --ds-gradient-surface,
-      linear-gradient(
+    var(--ds-gradient-surface, none),
+    linear-gradient(
         180deg,
         color-mix(
           in srgb,
@@ -83932,7 +83932,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
           var(--ds-color-bg-primary) 10%
         )
       )
-    )
+      var(--ds-material-overlay-opaque, var(--ds-surface-card))
   );
   box-shadow: var(
     --ds-column-menu-panel-shadow,
@@ -107714,7 +107714,7 @@ html[lang]:lang(ar) {
   --ds-column-menu-header-background: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
   --ds-column-menu-header-padding: calc(18px * var(--ds-density-effective-scale, 1)) calc(20px * var(--ds-density-effective-scale, 1)) calc(16px * var(--ds-density-effective-scale, 1));
   --ds-column-menu-panel-backdrop: none;
-  --ds-column-menu-panel-background: var(--ds-gradient-surface, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%)));
+  --ds-column-menu-panel-background: var(--ds-gradient-surface, none), linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%)) var(--ds-material-overlay-opaque, var(--ds-surface-card));
   --ds-column-menu-panel-border: 1px solid var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent));
   --ds-column-menu-panel-focus-outline: var(--ds-focus-ring-width) solid transparent;
   --ds-column-menu-panel-focus-outline-offset: -2px;
