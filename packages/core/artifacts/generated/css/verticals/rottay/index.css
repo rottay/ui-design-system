@@ -38091,7 +38091,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 }
 
 /* Per-size geometry follows the input field grammar so a Select beside an Input reads as one family. */
-.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xs'] [data-part='trigger'] {
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xs'] :is([data-part='trigger'], [data-part='native-arrow']) {
   --ds-select-trigger-height: var(--ds-select-trigger-xs-height, var(--ds-input-xs-height));
   --ds-select-trigger-padding-x: var(--ds-select-trigger-xs-padding-x, var(--ds-input-xs-padding-x));
   --ds-select-trigger-font-size: var(--ds-select-trigger-xs-font-size, var(--ds-input-xs-font-size));
@@ -38099,7 +38099,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='sm'] [data-part='trigger'] {
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='sm'] :is([data-part='trigger'], [data-part='native-arrow']) {
   --ds-select-trigger-height: var(--ds-select-trigger-sm-height, var(--ds-input-sm-height));
   --ds-select-trigger-padding-x: var(--ds-select-trigger-sm-padding-x, var(--ds-input-sm-padding-x));
   --ds-select-trigger-font-size: var(--ds-select-trigger-sm-font-size, var(--ds-input-sm-font-size));
@@ -38107,7 +38107,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='md'] [data-part='trigger'] {
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='md'] :is([data-part='trigger'], [data-part='native-arrow']) {
   --ds-select-trigger-height: var(--ds-select-trigger-md-height, var(--ds-input-md-height));
   --ds-select-trigger-padding-x: var(--ds-select-trigger-md-padding-x, var(--ds-input-md-padding-x));
   --ds-select-trigger-font-size: var(--ds-select-trigger-md-font-size, var(--ds-input-md-font-size));
@@ -38115,7 +38115,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='lg'] [data-part='trigger'] {
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='lg'] :is([data-part='trigger'], [data-part='native-arrow']) {
   --ds-select-trigger-height: var(--ds-select-trigger-lg-height, var(--ds-input-lg-height));
   --ds-select-trigger-padding-x: var(--ds-select-trigger-lg-padding-x, var(--ds-input-lg-padding-x));
   --ds-select-trigger-font-size: var(--ds-select-trigger-lg-font-size, var(--ds-input-lg-font-size));
@@ -38123,7 +38123,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
 }
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xl'] [data-part='trigger'] {
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xl'] :is([data-part='trigger'], [data-part='native-arrow']) {
   --ds-select-trigger-height: var(--ds-select-trigger-xl-height, var(--ds-input-xl-height));
   --ds-select-trigger-padding-x: var(--ds-select-trigger-xl-padding-x, var(--ds-input-xl-padding-x));
   --ds-select-trigger-font-size: var(--ds-select-trigger-xl-font-size, var(--ds-input-xl-font-size));

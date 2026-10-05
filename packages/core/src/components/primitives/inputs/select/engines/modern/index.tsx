@@ -764,7 +764,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         data-size={size}
         data-loading={loading || undefined}
         data-disabled={disabled || undefined}
-        style={style}
+        {...responsiveCSS.attrs}
+        style={{ ...responsiveCSS.channels, ...style }}
       >
         <select
           ref={nativeSelectRef}
