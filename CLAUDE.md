@@ -8,10 +8,12 @@ by the owner's explicit instruction, replacing the Claude assignment of
 2026-10-03. Handoff checkpoint `bb663f566`; the outgoing DT's barrier
 (`READY_FOR_KIMI`, no active writers) was met and verified before any write.
 Claude Opus is the delegated writer on the owner-authorized account
-`daniel.avila@rottay.com`, model `claude-opus-5-5` — verify the effective
-account and model receipt per dispatch. The DT integrates and never approves
-its own product code — independent review uses a separate Opus session with a
-real receipt. Codex's restriction below applies in full. Apps stay read-only,
+`admin@rottay.com` (the `claude-admin` profile), model `claude-opus-5-5` —
+verify the effective account and model receipt per dispatch. (Earlier on
+2026-10-04 the writer used `daniel.avila@rottay.com`; its weekly quota
+exhausted and the owner ordered claude-admin.) The DT integrates and never
+approves its own product code — independent review uses a separate Opus
+session with a real receipt. Codex's restriction below applies in full. Apps stay read-only,
 no push, no package publication. Read the succession in `roadmap/README.md`;
 registry, DAG, acceptance criteria and proportional validation policy are
 unchanged.

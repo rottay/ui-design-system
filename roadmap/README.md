@@ -15,8 +15,10 @@ stand verbatim.
   writers or integrators, and HEAD/branch/index/worktree were verified
   against the handoff before any write.
 - **Writer:** real Claude Opus on the owner-authorized account
-  `daniel.avila@rottay.com`, model `claude-opus-5-5`; the effective account
-  and model receipt are verified on every dispatch, never an alias.
+  `admin@rottay.com` (profile `claude-admin`), model `claude-opus-5-5`; the
+  effective account and model receipt are verified on every dispatch, never an
+  alias. (Until 2026-10-04 evening the writer used `daniel.avila@rottay.com`;
+  its weekly quota exhausted and the owner ordered claude-admin.)
 - **Review:** the DT never approves its own product code. Independent review
   uses a separate Opus session with a real receipt.
 - **Codex:** the 2026-09-19 restriction applies in full. No CLI/API/MCP call,

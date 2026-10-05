@@ -7615,6 +7615,11 @@
      "at": "2026-10-04 21:09",
      "by": "claude-dt",
      "note": "2026-10-04 kimi-dt: F-1..F-13 verification (read-only, built showroom + full visual suite, 426 passed/44 failed-on-stale-baselines): ALL THIRTEEN still live at HEAD. Law used: a cell that does not fail renders identical to the broken baseline; the two failing cells were eyeballed (F-1 reduced but present, F-3 panel still mode-blind). Verification table: .tmp/ds-kimi-2026-10-04/f-findings-verification.md. The repair wave waits on the Opus quota (Oct 10) — repair is writer work. The baselines stay red on purpose: the ledger does not move over broken paint."
+    },
+    {
+     "at": "2026-10-04 21:16",
+     "by": "claude-dt",
+     "note": "2026-10-04 kimi-dt: ACCOUNT SUCCESSION for the writer seat (owner order): dispatches now use the claude-admin profile, account admin@rottay.com (Max), verified by auth status and a probe receipt (session 77b4ff37, modelUsage claude-opus-5-5, is_error false). The previous account (daniel.avila@rottay.com) is preserved in the trail; its quota event stands. All reviews validly produced under it stay valid (no repeat). Pending review collection is unchanged: f7772bf1d first."
     }
    ]
   },
