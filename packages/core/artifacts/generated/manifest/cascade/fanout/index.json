@@ -198131,7 +198131,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 377,
+          "line": 383,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -204392,7 +204392,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 240,
+          "line": 246,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -206619,7 +206619,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 238,
+          "line": 244,
           "prop": "inset",
           "decl": "inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width))",
           "scalars": []
@@ -208370,14 +208370,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 232,
+          "line": 238,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 233,
+          "line": 239,
           "prop": "outline-offset",
           "decl": "outline-offset: calc(-1 * var(--ds-focus-ring-width))",
           "scalars": []
@@ -208385,7 +208385,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 238,
+          "line": 244,
           "prop": "inset",
           "decl": "inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width))",
           "scalars": []
@@ -208393,14 +208393,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 301,
+          "line": 307,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 302,
+          "line": 308,
           "prop": "outline-offset",
           "decl": "outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)))",
           "scalars": []
@@ -217193,7 +217193,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 209,
+          "line": 215,
           "prop": "font-size",
           "scalars": []
         },
@@ -248986,7 +248986,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 314,
+          "line": 320,
           "prop": "padding",
           "decl": "padding: var(--ds-layout-content-padding, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -249088,7 +249088,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 322,
+          "line": 328,
           "prop": "padding-block",
           "decl": "padding-block: var(--ds-layout-footer-padding-block, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -249110,7 +249110,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 321,
+          "line": 327,
           "prop": "padding-inline",
           "decl": "padding-inline: var(--ds-layout-footer-padding-inline, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -249339,7 +249339,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 174,
+          "line": 180,
           "prop": "padding-inline",
           "decl": "padding-inline: var(--ds-layout-header-padding-inline, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -249448,7 +249448,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 185,
+          "line": 191,
           "prop": "transition",
           "scalars": []
         }
@@ -249467,7 +249467,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 186,
+          "line": 192,
           "prop": "transition",
           "scalars": []
         }
@@ -249610,14 +249610,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 220,
+          "line": 226,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 225,
+          "line": 231,
           "prop": "background",
           "scalars": []
         }
@@ -249636,7 +249636,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 206,
+          "line": 212,
           "prop": "block-size",
           "scalars": []
         }
@@ -249655,7 +249655,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 209,
+          "line": 215,
           "prop": "font-size",
           "scalars": []
         }
@@ -285219,21 +285219,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 186,
+          "line": 192,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 212,
+          "line": 218,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 213,
+          "line": 219,
           "prop": "transition",
           "scalars": []
         },
@@ -291821,14 +291821,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 212,
+          "line": 218,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 213,
+          "line": 219,
           "prop": "transition",
           "scalars": []
         },
@@ -297110,7 +297110,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 185,
+          "line": 191,
           "prop": "transition",
           "scalars": []
         },
@@ -322734,7 +322734,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 376,
+          "line": 382,
           "prop": "border-radius",
           "scalars": []
         },
@@ -334411,7 +334411,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 174,
+          "line": 180,
           "prop": "padding-inline",
           "decl": "padding-inline: var(--ds-layout-header-padding-inline, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -334421,7 +334421,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 314,
+          "line": 320,
           "prop": "padding",
           "decl": "padding: var(--ds-layout-content-padding, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -334431,7 +334431,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 321,
+          "line": 327,
           "prop": "padding-inline",
           "decl": "padding-inline: var(--ds-layout-footer-padding-inline, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -334441,7 +334441,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 322,
+          "line": 328,
           "prop": "padding-block",
           "decl": "padding-block: var(--ds-layout-footer-padding-block, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -356833,7 +356833,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 362,
+          "line": 368,
           "prop": "inline-size",
           "scalars": []
         },
@@ -357429,7 +357429,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 361,
+          "line": 367,
           "prop": "padding-inline",
           "scalars": []
         },
@@ -357482,7 +357482,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 352,
+          "line": 358,
           "prop": "padding-inline",
           "scalars": []
         },
@@ -363227,14 +363227,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 358,
+          "line": 364,
           "prop": "--ds-sidebar-item-gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 361,
+          "line": 367,
           "prop": "padding-inline",
           "scalars": []
         },
@@ -368646,14 +368646,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 208,
+          "line": 214,
           "prop": "margin-block-start",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 322,
+          "line": 328,
           "prop": "padding-block",
           "decl": "padding-block: var(--ds-layout-footer-padding-block, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -368663,21 +368663,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 351,
+          "line": 357,
           "prop": "--ds-sidebar-item-gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 352,
+          "line": 358,
           "prop": "padding-inline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 378,
+          "line": 384,
           "prop": "margin",
           "scalars": []
         },
@@ -373733,14 +373733,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 207,
+          "line": 213,
           "prop": "padding-inline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 350,
+          "line": 356,
           "prop": "--ds-sidebar-item-padding-inline",
           "scalars": []
         },
@@ -377961,7 +377961,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 174,
+          "line": 180,
           "prop": "padding-inline",
           "decl": "padding-inline: var(--ds-layout-header-padding-inline, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -377971,7 +377971,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 314,
+          "line": 320,
           "prop": "padding",
           "decl": "padding: var(--ds-layout-content-padding, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -377981,7 +377981,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 321,
+          "line": 327,
           "prop": "padding-inline",
           "decl": "padding-inline: var(--ds-layout-footer-padding-inline, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -401341,14 +401341,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 220,
+          "line": 226,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 225,
+          "line": 231,
           "prop": "background",
           "scalars": []
         },
@@ -434229,7 +434229,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 386,
+          "line": 392,
           "prop": "min-block-size",
           "scalars": []
         },

@@ -56272,6 +56272,12 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   flex: 1 1 var(--ds-layout-content-min-basis, 480px);
   min-inline-size: 0;
 }
+/* A nested Layout beside the sider is a region, not a collapsing content pane:
+   a zero basis keeps it on the sider's row and its own Content scrolls. */
+.rottay-layout.rottay-layout--modern[data-part='root'][data-has-sider='true']
+  > .rottay-layout.rottay-layout--modern[data-part='root'] {
+  flex: 1 1 0%;
+}
 
 /* ---- header: horizontal bar, centered items, no shrink, spacing rhythm. ---- */
 .rottay-layout-header.rottay-layout-header--modern[data-part='header'] {

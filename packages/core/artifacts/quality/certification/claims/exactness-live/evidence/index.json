@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "a67be666e2ce2068b56011d271246fa821c2896d64af63be5391b5f8d75f4288",
+    "authorityDigest": "c45ce15088337df8b39d64b82cebe4b83a3156449bc59a98c60fddb26d05c102",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5703084,
-        "sha256": "f49f3edf10c204e2b2cd11114bafd743f70d351462e1eec4e620aa3dc67e1170"
+        "bytes": 5703397,
+        "sha256": "daac4aada25a3eaeda686dcb5ed39fe02bcfbd91410bcf5fe628d0b8da581998"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5069060,
-        "sha256": "599b5c0c9b71e568ea9b461d431779f8af9e6d79349a18eaf482f4d124901844"
+        "bytes": 5069373,
+        "sha256": "2d0ca6fc24e44a5374c48131b9033788fd10dbe7d79275796831a1a85a469726"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5030295,
-        "sha256": "f5162746f083aa5fdbd5b72504b14044a4917f6e322b813d98f7158084f167ba"
+        "bytes": 5030608,
+        "sha256": "01bcea277b6a23b08d5b8bf78393cdc812f1973dd81eec5e09c4fcb52da58385"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5029555,
-        "sha256": "10b1eb09661f0fc61547d895fe3c8fa15275d62f329102ca8cd1bdfb748baaa5"
+        "bytes": 5029868,
+        "sha256": "5ab1141a440a64a583104e53a7f67a56d95cce74367321d8234899e454faa90d"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -30150,8 +30150,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 20191,
-        "sha256": "404a229192b0b28012908233b218aa853d3efd95da06e786a436adb93f020b18"
+        "bytes": 20504,
+        "sha256": "9e862a9b53fb90ec4527e034d269ecd98c252bbc73043c7a60697f4c310dd149"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/link/index.css",
@@ -32011,7 +32011,7 @@
           "audit-input"
         ],
         "bytes": 704199,
-        "sha256": "a84a5d289f31e435adc61d5ae45535a70ff7c61b77c537b869eedade16e6d409"
+        "sha256": "5fd6574e07c08ee1da310be60fe94520852be7ec650a383fd5eaa1e10de91b01"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/data/decisions/writers/unused/cards/index.json",
@@ -37867,7 +37867,7 @@
           "stale-claim-corpus"
         ],
         "bytes": 302702,
-        "sha256": "cbaed2a25d8b101df931471f29f7dccf5ae00d913ec76e30f107f8863cdda798"
+        "sha256": "a2d19a3ffc53bf4d782049a57a8f9f346a5f50aa851e2181afccf29174ff6be1"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/index.ts",
@@ -47699,7 +47699,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "a67be666e2ce2068b56011d271246fa821c2896d64af63be5391b5f8d75f4288"
+    "digest": "c45ce15088337df8b39d64b82cebe4b83a3156449bc59a98c60fddb26d05c102"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -54810,7 +54810,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 311
+          "line": 317
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notifier/index.css",
@@ -60333,11 +60333,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 292
+          "line": 298
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 319
+          "line": 325
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css",
@@ -62273,19 +62273,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 165
+          "line": 171
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 288
+          "line": 294
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 367
+          "line": 373
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 374
+          "line": 380
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css",
@@ -78486,6 +78486,14 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "line": 156
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "line": 165
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "line": 165
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/link/index.css",
@@ -95873,15 +95881,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 201
+          "line": 207
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 219
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 224
+          "line": 225
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
@@ -95893,27 +95897,31 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 256
+          "line": 242
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 263
+          "line": 262
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 296
+          "line": 269
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 300
+          "line": 302
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 305
+          "line": 306
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
-          "line": 385
+          "line": 311
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "line": 391
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
@@ -98958,7 +98966,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "FieldFiltersPanel",
@@ -99400,7 +99408,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "FilterPanel",
@@ -100133,7 +100141,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "SelectionPreviewRail",
@@ -100793,7 +100801,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "DetailPanel",
@@ -101486,7 +101494,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "DataTable",
@@ -103209,7 +103217,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "FormField",
@@ -103409,7 +103417,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Textarea",
@@ -103492,7 +103500,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "TagInput",
@@ -103683,7 +103691,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "InputNumber",
@@ -103940,7 +103948,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "PasswordInput",
@@ -104145,7 +104153,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Switch",
@@ -104306,7 +104314,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Toggle",
@@ -104570,7 +104578,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Radio",
@@ -104784,7 +104792,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Radio",
@@ -104963,7 +104971,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Checkbox",
@@ -105164,7 +105172,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Checkbox",
@@ -105293,7 +105301,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Slider",
@@ -105566,7 +105574,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "OTPInput",
@@ -105688,7 +105696,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Form",
@@ -106095,7 +106103,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Select",
@@ -107256,7 +107264,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "AutoComplete",
@@ -107539,7 +107547,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Mentions",
@@ -107725,7 +107733,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "TreeSelect",
@@ -108434,7 +108442,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Cascader",
@@ -109094,7 +109102,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Transfer",
@@ -109712,7 +109720,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Upload",
@@ -110438,7 +110446,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "DatePicker",
@@ -111526,7 +111534,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "TimePicker",
@@ -111966,7 +111974,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "ColorPicker",
@@ -112483,7 +112491,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Input",
@@ -112871,7 +112879,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Input",
@@ -112992,7 +113000,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Input",
@@ -113490,7 +113498,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Skeleton",
@@ -113575,7 +113583,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Skeleton",
@@ -113731,7 +113739,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Alert",
@@ -113964,7 +113972,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Progress",
@@ -114247,7 +114255,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Spinner",
@@ -114336,7 +114344,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Rate",
@@ -114414,7 +114422,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Modal",
@@ -115241,7 +115249,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Toast",
@@ -115430,7 +115438,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Toast",
@@ -115556,7 +115564,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Message",
@@ -115707,7 +115715,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Notification",
@@ -115909,7 +115917,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Result",
@@ -116286,7 +116294,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Modal (overlay)",
@@ -116703,7 +116711,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Tour",
@@ -117397,7 +117405,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "AlertDialog",
@@ -117984,7 +117992,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Sheet",
@@ -118953,7 +118961,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Watermark",
@@ -119022,7 +119030,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Affix",
@@ -119101,7 +119109,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Anchor",
@@ -119140,7 +119148,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Anchor",
@@ -119253,7 +119261,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "BottomTabBar",
@@ -119412,7 +119420,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Breadcrumb",
@@ -119641,7 +119649,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "FloatButton",
@@ -119906,7 +119914,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Menu",
@@ -119948,7 +119956,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Menu",
@@ -120601,7 +120609,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "MobileHeader",
@@ -120700,7 +120708,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Pagination",
@@ -120926,7 +120934,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Segmented",
@@ -121037,7 +121045,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Stepper",
@@ -121408,7 +121416,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Steps",
@@ -121751,7 +121759,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4550
+        "skinSelectorCount": 4552
       },
       {
         "section": "Tabs",
@@ -122022,8 +122030,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "71580c3ae5a9efa76805627bad1189c4d244ee9396ae9581c71941ab6ab87ded",
-      "71580c3ae5a9efa76805627bad1189c4d244ee9396ae9581c71941ab6ab87ded"
+      "2c89e5fa78f76fe0b65fde55d1443542b0f3c07ef7a0ee5a1998fd7bcc6db1b1",
+      "2c89e5fa78f76fe0b65fde55d1443542b0f3c07ef7a0ee5a1998fd7bcc6db1b1"
     ],
     "agree": true
   }
