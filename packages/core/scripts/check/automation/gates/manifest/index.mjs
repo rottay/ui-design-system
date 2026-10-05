@@ -1437,14 +1437,15 @@ export const CI_GATES = Object.freeze([
   // 492a52c0e). The effective percentage is reported, never the verdict, and
   // `--no-write` publishes nothing: the exit code is the gate. It is a full
   // fleet re-measurement in Chromium (3 verticals x 2 modes, ~13 min measured
-  // locally), so by the ordering law at the top of this list it runs LAST: a
-  // fail-fast runner would otherwise stop at it and reach no gate behind it.
+  // locally), so it runs in the `acceptance` phase, LAST in it: a fail-fast
+  // run stops at it, and in `post-build` that starved every CI step behind
+  // the post-build one of its signal while the gate is red.
   // Its drill (`axis-difference-drill`, pre-build) is declared beside the probe's law above.
   {
     id: 'axis-difference',
     run: ['node', 'scripts/check/theme/axis-difference/index.mjs', '--threshold=80', '--no-write'],
     blocking: true,
-    phase: 'post-build',
+    phase: 'acceptance',
     prerequisites: ['fresh-dist', 'showroom-workspace', 'playwright-chromium'],
     drillId: 'axis-difference-drill',
   },
@@ -1546,8 +1547,12 @@ export const RETIRED_GATES = Object.freeze([
 
 const MANIFEST_PACKAGE_ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 
-/** The two phases of the run, in order. */
-export const PHASES = Object.freeze(['pre-build', 'post-build']);
+/**
+ * The three phases of the run, in order. `acceptance` reads the same build as
+ * `post-build` and carries the browser measurements, so CI runs it as its own
+ * named step after everything else in the job.
+ */
+export const PHASES = Object.freeze(['pre-build', 'post-build', 'acceptance']);
 
 /**
  * The inputs a gate may declare that CI must provide, each with a probe that

@@ -506,6 +506,11 @@ test('every phase is declared and every post-build gate says why it needs the bu
     assert.ok(PHASES.includes(gate.phase), `${gate.id}: undeclared phase`);
   }
   assert.ok(CI_GATES.some((gate) => gate.phase === 'post-build'), 'the split must not be decorative');
+  // Order is the run order of `--phase=all`, and `acceptance` reads the build.
+  assert.deepEqual([...PHASES], ['pre-build', 'post-build', 'acceptance']);
+  for (const gate of CI_GATES.filter((entry) => entry.phase === 'acceptance')) {
+    assert.ok(gate.prerequisites?.includes('fresh-dist'), `${gate.id}: an acceptance gate measures the built tree`);
+  }
 });
 
 /**
@@ -553,7 +558,7 @@ test('DRILL: a retirement without a written reason is a deletion wearing a ledge
     'every retirement states the date it happened');
 });
 
-test('PIN (owner ruling R33): axis-difference blocks on the declared population, last in post-build, and every softening is red', () => {
+test('PIN (owner ruling R33): axis-difference blocks on the declared population, last in the acceptance phase, and every softening is red', () => {
   const ARGV = ['node', 'scripts/check/theme/axis-difference/index.mjs', '--threshold=80', '--no-write'];
   const problemsOf = (gates) => {
     const problems = [];
@@ -562,10 +567,10 @@ test('PIN (owner ruling R33): axis-difference blocks on the declared population,
     const [gate] = entries;
     if (gate.blocking !== true) problems.push('not blocking');
     if (Object.hasOwn(gate, 'excluded')) problems.push('carries an exclusion record');
-    if (gate.phase !== 'post-build') problems.push(`phase ${gate.phase}`);
+    if (gate.phase !== 'acceptance') problems.push(`phase ${gate.phase}`);
     if (JSON.stringify(gate.run) !== JSON.stringify(ARGV)) problems.push(`argv ${JSON.stringify(gate.run)}`);
-    const lastBlocking = gates.filter((entry) => entry.phase === 'post-build' && entry.blocking === true).at(-1);
-    if (lastBlocking?.id !== 'axis-difference') problems.push(`last blocking post-build entry is ${lastBlocking?.id}`);
+    const lastBlocking = gates.filter((entry) => entry.phase === 'acceptance' && entry.blocking === true).at(-1);
+    if (lastBlocking?.id !== 'axis-difference') problems.push(`last blocking acceptance entry is ${lastBlocking?.id}`);
     return problems;
   };
   assert.deepEqual(problemsOf(CI_GATES), []);
@@ -576,14 +581,15 @@ test('PIN (owner ruling R33): axis-difference blocks on the declared population,
     'threshold lowered': mutate((gate) => ({ ...gate, run: gate.run.map((token) => (token === '--threshold=80' ? '--threshold=78' : token)) })),
     'exclusion re-added': mutate((gate) => ({ ...gate, excluded: { reason: 'red on states', owner: 'someone' } })),
     'made non-blocking': mutate((gate) => ({ ...gate, blocking: false })),
-    'moved earlier': [
-      ...CI_GATES.filter((gate) => gate.id === 'axis-difference'),
-      ...CI_GATES.filter((gate) => gate.id !== 'axis-difference'),
-    ],
+    'returned to post-build': mutate((gate) => ({ ...gate, phase: 'post-build' })),
+    'duplicated': [...CI_GATES, ...CI_GATES.filter((gate) => gate.id === 'axis-difference')],
+    'followed in its phase': [...CI_GATES, wellFormedEntry({ id: 'a-later-acceptance-gate', phase: 'acceptance' })],
   };
   for (const [name, gates] of Object.entries(mutants)) {
     assert.notDeepEqual(problemsOf(gates), [], `MUTANT ${name} must be red`);
   }
   assert.deepEqual(problemsOf(mutants['threshold dropped']), [`argv ${JSON.stringify(ARGV.filter((token) => token !== '--threshold=80'))}`]);
-  assert.deepEqual(problemsOf(mutants['moved earlier']), ['last blocking post-build entry is consumer-proof']);
+  assert.deepEqual(problemsOf(mutants['returned to post-build']), ['phase post-build', 'last blocking acceptance entry is undefined']);
+  assert.deepEqual(problemsOf(mutants['duplicated']), ['2 axis-difference entries; exactly one is the gate']);
+  assert.deepEqual(problemsOf(mutants['followed in its phase']), ['last blocking acceptance entry is a-later-acceptance-gate']);
 });

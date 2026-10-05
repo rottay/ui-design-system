@@ -223,6 +223,25 @@ test('the runner --list plan matches the manifest and runs nothing', () => {
   for (const gate of blockingGates('post-build')) {
     assert.ok(!result.stdout.includes(`[blocking] ${gate.id}:`), `${gate.id} leaked into the pre-build plan`);
   }
+
+  // The acceptance plan is the third projection of the same inventory: the
+  // browser measurement is a named run of its own, in no other plan.
+  const acceptance = spawnSync(process.execPath, [runner, '--phase=acceptance', '--list'], {
+    cwd: findPackageRoot(scriptsDir),
+    encoding: 'utf8',
+  });
+  assert.equal(acceptance.status, 0);
+  assert.equal(
+    acceptance.stdout.split('[blocking]').length - 1,
+    blockingGates('acceptance').length,
+    'the acceptance plan does not carry exactly one [blocking] marker per acceptance gate',
+  );
+  assert.ok(acceptance.stdout.includes('[blocking] axis-difference:'), 'the acceptance plan omitted axis-difference');
+  for (const gate of blockingGates('acceptance')) {
+    for (const [name, plan] of [['pre-build', result.stdout], ['post-build', post.stdout]]) {
+      assert.ok(!plan.includes(`[blocking] ${gate.id}:`), `${gate.id} leaked into the ${name} plan`);
+    }
+  }
 });
 
 test('the taxonomy chain is enforced, and the retired freshness gate stays retired', () => {
@@ -425,7 +444,7 @@ function plantRunnerFixture(gates) {
     [
       `export const CI_GATES = Object.freeze(${JSON.stringify(gates)});`,
       'export function validateManifest() { return []; }',
-      "export const PHASES = Object.freeze(['pre-build', 'post-build']);",
+      "export const PHASES = Object.freeze(['pre-build', 'post-build', 'acceptance']);",
       "export const MANIFEST_VALIDATION_SCOPE = 'structural only, in the fixture as in the real manifest';",
       'export const PREREQUISITES = Object.freeze({',
       "  'planted-input': { describe: 'an input the fixture never provides', satisfied: () => false },",

@@ -90,8 +90,9 @@ jobs:
     needs: detect
     if: needs.detect.outputs.core == 'true'
     runs-on: self-hosted
-    # 30 before the by-axis gate joined the post-build inventory; that gate is a
-    # full fleet re-measurement in Chromium (~13 min measured locally, 2026-10-04).
+    # 30 before the by-axis gate joined the inventory; that gate is a full fleet
+    # re-measurement in Chromium (~13 min measured locally, 2026-10-04) and runs
+    # as the job's last step.
     timeout-minutes: 50
     permissions:
       contents: read
@@ -199,9 +200,9 @@ jobs:
       - name: Build + ParticleField quarantine gate
         run: pnpm --filter @rottay/design-system run build
 
-      # Owner ruling R33: the post-build inventory carries the by-axis probe
-      # (`axis-difference`, blocking on the declared population), which reads
-      # computed style in a real Chromium, so THIS job installs one.
+      # Owner ruling R33: `test:scripts` (the by-axis browser drills), the
+      # Storybook tenant-mount acceptance and the `acceptance` phase (the
+      # by-axis probe) launch a real Chromium, so THIS job installs one first.
       - name: Install Playwright browser (by-axis gate)
         run: pnpm --filter @rottay/showroom exec playwright install chromium
 
@@ -286,6 +287,12 @@ jobs:
 
       - name: Security audit
         run: pnpm audit --audit-level=high || true
+
+      # Owner ruling R33: the by-axis probe (`axis-difference`, blocking on the
+      # declared population) is the `acceptance` phase of the SAME inventory and
+      # runs last: while it is red, every step above still reports.
+      - name: Quality gates (manifest-driven, acceptance)
+        run: pnpm --filter @rottay/design-system run gates:ci:acceptance
 
   # ─────────────────────────────────────────────────────
   #  Showroom App (typecheck, lint, build)

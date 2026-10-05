@@ -333,6 +333,7 @@
     "runtime-hardening:final": "node scripts/check/evidence/certification/runtime-hardening/index.mjs --check",
     "gates:ci": "node scripts/check/automation/runner/index.mjs",
     "gates:ci:post-build": "node scripts/check/automation/runner/index.mjs --phase=post-build",
+    "gates:ci:acceptance": "node scripts/check/automation/runner/index.mjs --phase=acceptance",
     "gates:ci:list": "node scripts/check/automation/runner/index.mjs --list",
     "motion-contracts:check": "node scripts/check/contracts/motion/index.mjs",
     "tokens:catalog:write": "node scripts/generate/tokens/customization/catalog/index.mjs --write",
