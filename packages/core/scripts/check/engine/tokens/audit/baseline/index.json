@@ -4105,7 +4105,7 @@
   "inlineGeometry.surfaces/presentation/pages/workspace/collection-workspace/index.tsx": 1,
   "inlineGeometry.total": 1996,
   "scale.fallbackParityColorViolations": 392,
-  "scale.fallbackParityChannelViolations": 23,
+  "scale.fallbackParityChannelViolations": 25,
   "fallbackParity.color.components/patterns/commerce/pricing-table/engines/classic/index.tsx": 9,
   "fallbackParity.color.components/patterns/communication/comment-thread/engines/classic/index.tsx": 5,
   "fallbackParity.color.components/patterns/communication/notification-center/engines/classic/index.tsx": 1,
@@ -4221,5 +4221,6 @@
   "fallbackParity.color.infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/action-dock/index.ts": 1,
   "fallbackParity.color.infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/elevation/ladder/index.ts": 3,
   "scale.duplicateRootDeclarations": 3,
-  "scale.duplicateRootRosterDrift": 0
+  "scale.duplicateRootRosterDrift": 0,
+  "fallbackParity.channel.foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css": 2
 }

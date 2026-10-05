@@ -119,7 +119,7 @@
      DROPDOWN - Dropdown Panel Styling
      Settings for the dropdown panel
      ======================================================================== */
-  --ds-select-dropdown-bg: var(--ds-color-white);
+  --ds-select-dropdown-bg: var(--ds-material-overlay-background);
   --ds-select-dropdown-border-color: var(--ds-color-neutral-200);
   --ds-select-dropdown-border-radius: var(--ds-radius-md);
   --ds-select-dropdown-shadow: var(--ds-shadow-lg);

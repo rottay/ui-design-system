@@ -45,7 +45,7 @@
      COLORS - List background and text colors
      ======================================================================== */
 
-  --ds-list-background-color: var(--ds-color-white, #ffffff);
+  --ds-list-background-color: var(--ds-color-bg-elevated);
   --ds-list-item-background-color: transparent;
   --ds-list-item-hover-background-color: var(--ds-material-card-background-hover);
 

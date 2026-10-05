@@ -1583,7 +1583,8 @@
   --ds-upload-preview-backdrop: var(--ds-color-alpha-black-60);
   --ds-upload-preview-close-bg: var(--ds-color-error);
   --ds-upload-preview-close-color: var(--ds-color-text-on-primary);
-  --ds-upload-overlay-action-color: var(--ds-color-text-on-primary);
+  /* Over the black preview scrim, not the primary fill: white in both modes. */
+  --ds-upload-overlay-action-color: var(--ds-color-white);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      AUTOCOMPLETE
@@ -2072,7 +2073,7 @@ html.dark {
   --ds-color-text-secondary: var(--ds-color-neutral-700);
   --ds-color-text-tertiary: var(--ds-color-neutral-600);
   --ds-color-text-muted: var(--ds-color-neutral-600);
-  --ds-color-text-on-primary: #ffffff;
+  --ds-color-text-on-primary: #171717;
   --ds-color-text-inverse: var(--ds-color-neutral-0);
 
   --ds-color-border-primary: var(--ds-color-neutral-300);
@@ -2083,15 +2084,42 @@ html.dark {
      ring from this same preference, ground-checked (D6-FAM-01). */
   --ds-focus-ring-color: var(--ds-color-primary-400);
 
-  /* A link is body-adjacent TEXT, so it owes the 4.5:1 floor on the canvas it
-     is painted on. `:root` states the seed itself, and the foundation's own
-     near-black primary measures 1.04:1 here. Step 400 is that same seed at the
-     lightness this canvas carries (7.4:1) -- the stop the focus ring above
-     already prefers on dark -- and 300 is the lighter hover the dark idiom
-     wants. A SEEDED tenant never reaches these lines: its compiled block emits
-     its own ground-checked link ink and outranks the sheet. */
+  /* Link text owes 4.5:1 on this canvas: 400 (#a3a3a3, 7.4:1), hover on the
+     lighter role stop 500. A seeded tenant emits its own ground-checked link. */
   --ds-color-link: var(--ds-color-primary-400);
-  --ds-color-link-hover: var(--ds-color-primary-300);
+  --ds-color-link-hover: var(--ds-color-primary-500);
+
+  /* Inverted like the neutral and error ramps: 50-300 dark washes, 500-900 inks
+     >=4.5:1 on #0b1220, 400 kept; the role is step 500 under the dark ink. */
+  --ds-color-primary-50: #171717;
+  --ds-color-primary-100: #262626;
+  --ds-color-primary-200: #404040;
+  --ds-color-primary-300: #525252;
+  --ds-color-primary-500: #e5e5e5;
+  --ds-color-primary-600: #f5f5f5;
+  --ds-color-primary-700: #fafafa;
+  --ds-color-primary-800: #ffffff;
+  --ds-color-primary-900: #ffffff;
+  --ds-color-primary: #e5e5e5;
+  --ds-color-primary-rgb: 229, 229, 229;
+  --ds-color-primary-foreground: #171717;
+
+  /* Inks painted on the now-light primary fill follow the role's dark ink. */
+  --ds-checkbox-checked-color: var(--ds-color-text-on-primary);
+  --ds-steps-item-color-active: var(--ds-color-text-on-primary);
+  --ds-pagination-active-color: var(--ds-color-text-on-primary);
+  --ds-popconfirm-primary-color: var(--ds-color-text-on-primary);
+  --ds-calendar-selected-color: var(--ds-color-text-on-primary);
+  /* The selected segment keeps its light chip here, so its primary ink can't. */
+  --ds-segmented-active-color: var(--ds-color-text-inverse);
+  --ds-sidebar-footer-bg: var(--ds-sidebar-bg);
+  /* The QR overlay stays white, so its ink can't follow the light primary. */
+  --ds-qrcode-button-color: var(--ds-color-text-inverse);
+  --ds-qrcode-spinner-color: var(--ds-color-text-inverse);
+  /* Carousel chrome floats over slide art (light or primary): the canvas ground
+     clears 3:1 on both, where the white chip and #d9d9d9 dot do not. */
+  --ds-carousel-arrow-bg: var(--ds-color-bg-primary);
+  --ds-carousel-dot-bg: var(--ds-color-bg-primary);
 
   --ds-color-neutral-0: #020617;
   --ds-color-neutral-50: #0b1220;
@@ -2178,6 +2206,11 @@ html.dark {
   --ds-list-border-color: var(--ds-color-border-secondary);
   --ds-list-text-color: var(--ds-color-text-primary);
   --ds-list-secondary-text-color: var(--ds-color-text-secondary);
+
+  --ds-popover-bg: var(--ds-surface-overlay);
+  --ds-popover-border: var(--ds-color-border-secondary);
+  --ds-popover-title-color: var(--ds-color-text-primary);
+  --ds-popover-content-color: var(--ds-color-text-secondary);
 
   --ds-modal-title-color: var(--ds-color-text-primary);
   --ds-modal-body-color: var(--ds-color-text-secondary);

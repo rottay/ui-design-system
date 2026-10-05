@@ -3190,6 +3190,8 @@
   --ds-button-primary-bg-active: var(--ds-color-primary-700);
   --ds-button-primary-border-active: var(--ds-color-primary-800);
   --ds-button-primary-border-hover: var(--ds-color-primary-700);
+  --ds-button-primary-color-active: var(--ds-button-primary-color);
+  --ds-button-primary-color-hover: var(--ds-button-primary-color);
   --ds-button-pulse-ring-color: color-mix(in srgb, var(--ds-color-primary-500) 36%, transparent);
   --ds-button-secondary-bg: var(--ds-color-secondary-500);
   --ds-button-secondary-bg-active: var(--ds-color-secondary-700);
@@ -3526,7 +3528,6 @@
   --ds-sheet-layer: var(--ds-z-index-drawer);
   --ds-sheet-transition-duration: var(--ds-motion-feedback);
   --ds-sheet-transition-timing: var(--ds-motion-ease-out);
-  --ds-sidebar-footer-bg: var(--ds-color-primary-800);
   --ds-signal-card-accent: var(--ds-color-primary);
   --ds-spinner-color: var(--ds-color-primary, #171717);
   --ds-spinner-default-color: var(--ds-color-primary-500);
@@ -3631,7 +3632,6 @@
   --ds-type-motion-duration: var(--ds-motion-reveal, var(--ds-duration-normal, 200ms));
   --ds-type-motion-easing: var(--ds-motion-ease-enter, cubic-bezier(0.22, 1, 0.36, 1));
   --ds-upload-button-bg: var(--ds-color-bg-input);
-  --ds-upload-overlay-action-color: var(--ds-color-text-on-primary);
   --ds-upload-preview-close-color: var(--ds-color-text-on-primary);
   --ds-upload-progress-bar: var(--ds-color-primary);
   --ds-wash-band: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
@@ -3706,8 +3706,6 @@
   --ds-button-md-border-radius: var(--ds-radius-md);
   --ds-button-md-font-size: var(--ds-font-size-sm);
   --ds-button-primary-border-color: var(--ds-button-primary-border);
-  --ds-button-primary-color-active: var(--ds-button-primary-color);
-  --ds-button-primary-color-hover: var(--ds-button-primary-color);
   --ds-button-pulse-shadow-start: 0 0 0 0 var(--ds-button-pulse-ring-color);
   --ds-button-shape-rounded: var(--ds-radius-md);
   --ds-button-sm-border-radius: var(--ds-radius-md);
@@ -4386,6 +4384,7 @@
   --ds-rich-card-ring-selected: var(--ds-premium-card-selected-ring);
   --ds-rich-card-section-alt-bg: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel-bg));
   --ds-rich-card-section-bg: var(--ds-surface-card-bg);
+  --ds-select-dropdown-bg: var(--ds-material-overlay-background);
   --ds-shell-active-gradient: linear-gradient(90deg, var(--ds-shell-active-bg), transparent);
   --ds-shell-dropdown-shadow: var(--ds-shadow-dropdown, var(--ds-shadow-lg));
   --ds-signal-card-bg: var(--ds-premium-card-bg);

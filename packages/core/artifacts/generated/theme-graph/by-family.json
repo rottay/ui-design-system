@@ -990,6 +990,7 @@
     },
     {
       "decisions": [
+        "density.mode",
         "experience.profile",
         "motion.character",
         "motion.dial",
@@ -1030,6 +1031,7 @@
     },
     {
       "decisions": [
+        "density.mode",
         "experience.profile",
         "palette.contrast-posture",
         "palette.neutral-temperature",
@@ -1040,7 +1042,10 @@
         "shape.control-height",
         "shape.nesting",
         "shape.radius-scale",
+        "typography.families",
+        "typography.numeric",
         "typography.pairing",
+        "typography.role-weights",
         "typography.scale"
       ],
       "family": "chart-bullet"
@@ -1161,6 +1166,7 @@
     },
     {
       "decisions": [
+        "density.mode",
         "experience.profile",
         "motion.character",
         "motion.dial",
@@ -1178,6 +1184,7 @@
     },
     {
       "decisions": [
+        "density.mode",
         "experience.profile",
         "motion.character",
         "motion.dial",
@@ -1211,7 +1218,10 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "typography.families",
+        "typography.numeric",
         "typography.pairing",
+        "typography.role-weights",
         "typography.scale"
       ],
       "family": "chart-treemap"
@@ -3629,10 +3639,14 @@
         "palette.status-seeds",
         "profiles.expressive",
         "shape.button-style",
+        "shape.control-height",
+        "shape.nesting",
         "shape.radius-scale",
+        "spacing.rhythm",
         "states.emphasis",
         "states.focus-style",
         "surfaces.border-style",
+        "surfaces.effect-intensity",
         "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",

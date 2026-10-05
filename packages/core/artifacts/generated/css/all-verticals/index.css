@@ -2905,7 +2905,8 @@
   --ds-upload-preview-backdrop: var(--ds-color-alpha-black-60);
   --ds-upload-preview-close-bg: var(--ds-color-error);
   --ds-upload-preview-close-color: var(--ds-color-text-on-primary);
-  --ds-upload-overlay-action-color: var(--ds-color-text-on-primary);
+  /* Over the black preview scrim, not the primary fill: white in both modes. */
+  --ds-upload-overlay-action-color: var(--ds-color-white);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      AUTOCOMPLETE
@@ -3394,7 +3395,7 @@ html.dark {
   --ds-color-text-secondary: var(--ds-color-neutral-700);
   --ds-color-text-tertiary: var(--ds-color-neutral-600);
   --ds-color-text-muted: var(--ds-color-neutral-600);
-  --ds-color-text-on-primary: #ffffff;
+  --ds-color-text-on-primary: #171717;
   --ds-color-text-inverse: var(--ds-color-neutral-0);
 
   --ds-color-border-primary: var(--ds-color-neutral-300);
@@ -3405,15 +3406,42 @@ html.dark {
      ring from this same preference, ground-checked (D6-FAM-01). */
   --ds-focus-ring-color: var(--ds-color-primary-400);
 
-  /* A link is body-adjacent TEXT, so it owes the 4.5:1 floor on the canvas it
-     is painted on. `:root` states the seed itself, and the foundation's own
-     near-black primary measures 1.04:1 here. Step 400 is that same seed at the
-     lightness this canvas carries (7.4:1) -- the stop the focus ring above
-     already prefers on dark -- and 300 is the lighter hover the dark idiom
-     wants. A SEEDED tenant never reaches these lines: its compiled block emits
-     its own ground-checked link ink and outranks the sheet. */
+  /* Link text owes 4.5:1 on this canvas: 400 (#a3a3a3, 7.4:1), hover on the
+     lighter role stop 500. A seeded tenant emits its own ground-checked link. */
   --ds-color-link: var(--ds-color-primary-400);
-  --ds-color-link-hover: var(--ds-color-primary-300);
+  --ds-color-link-hover: var(--ds-color-primary-500);
+
+  /* Inverted like the neutral and error ramps: 50-300 dark washes, 500-900 inks
+     >=4.5:1 on #0b1220, 400 kept; the role is step 500 under the dark ink. */
+  --ds-color-primary-50: #171717;
+  --ds-color-primary-100: #262626;
+  --ds-color-primary-200: #404040;
+  --ds-color-primary-300: #525252;
+  --ds-color-primary-500: #e5e5e5;
+  --ds-color-primary-600: #f5f5f5;
+  --ds-color-primary-700: #fafafa;
+  --ds-color-primary-800: #ffffff;
+  --ds-color-primary-900: #ffffff;
+  --ds-color-primary: #e5e5e5;
+  --ds-color-primary-rgb: 229, 229, 229;
+  --ds-color-primary-foreground: #171717;
+
+  /* Inks painted on the now-light primary fill follow the role's dark ink. */
+  --ds-checkbox-checked-color: var(--ds-color-text-on-primary);
+  --ds-steps-item-color-active: var(--ds-color-text-on-primary);
+  --ds-pagination-active-color: var(--ds-color-text-on-primary);
+  --ds-popconfirm-primary-color: var(--ds-color-text-on-primary);
+  --ds-calendar-selected-color: var(--ds-color-text-on-primary);
+  /* The selected segment keeps its light chip here, so its primary ink can't. */
+  --ds-segmented-active-color: var(--ds-color-text-inverse);
+  --ds-sidebar-footer-bg: var(--ds-sidebar-bg);
+  /* The QR overlay stays white, so its ink can't follow the light primary. */
+  --ds-qrcode-button-color: var(--ds-color-text-inverse);
+  --ds-qrcode-spinner-color: var(--ds-color-text-inverse);
+  /* Carousel chrome floats over slide art (light or primary): the canvas ground
+     clears 3:1 on both, where the white chip and #d9d9d9 dot do not. */
+  --ds-carousel-arrow-bg: var(--ds-color-bg-primary);
+  --ds-carousel-dot-bg: var(--ds-color-bg-primary);
 
   --ds-color-neutral-0: #020617;
   --ds-color-neutral-50: #0b1220;
@@ -3500,6 +3528,11 @@ html.dark {
   --ds-list-border-color: var(--ds-color-border-secondary);
   --ds-list-text-color: var(--ds-color-text-primary);
   --ds-list-secondary-text-color: var(--ds-color-text-secondary);
+
+  --ds-popover-bg: var(--ds-surface-overlay);
+  --ds-popover-border: var(--ds-color-border-secondary);
+  --ds-popover-title-color: var(--ds-color-text-primary);
+  --ds-popover-content-color: var(--ds-color-text-secondary);
 
   --ds-modal-title-color: var(--ds-color-text-primary);
   --ds-modal-body-color: var(--ds-color-text-secondary);
@@ -7184,6 +7217,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 :where(:root, [data-ds-root]):is([data-theme='dark'], .dark) {
   --ds-button-error-bg-hover: var(--ds-color-error-400);
   --ds-button-error-bg-active: var(--ds-color-error-300);
+  /* The primary ramp inverts too: its label follows the role's dark ink. */
+  --ds-button-primary-color: var(--ds-color-text-on-primary);
 }
 
 }
@@ -9664,7 +9699,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      DROPDOWN - Dropdown Panel Styling
      Settings for the dropdown panel
      ======================================================================== */
-  --ds-select-dropdown-bg: var(--ds-color-white);
+  --ds-select-dropdown-bg: var(--ds-material-overlay-background);
   --ds-select-dropdown-border-color: var(--ds-color-neutral-200);
   --ds-select-dropdown-border-radius: var(--ds-radius-md);
   --ds-select-dropdown-shadow: var(--ds-shadow-lg);
@@ -10924,6 +10959,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-qrcode-transition-timing: ease-in-out;
 }
 
+/* The primary ramp inverts on a dark canvas, so the chip's ink follows the role. */
+:where(:root, [data-ds-root]):is([data-theme='dark'], .dark) {
+  --ds-qrcode-refresh-button-color: var(--ds-color-text-on-primary);
+}
+
 }
 @layer rottay-components {
 /**
@@ -10973,7 +11013,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      COLORS - List background and text colors
      ======================================================================== */
 
-  --ds-list-background-color: var(--ds-color-white, #ffffff);
+  --ds-list-background-color: var(--ds-color-bg-elevated);
   --ds-list-item-background-color: transparent;
   --ds-list-item-hover-background-color: var(--ds-material-card-background-hover);
 
@@ -53566,7 +53606,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
      clears AA on BOTH raw tenant primaries (5.15:1 bithire #3A6FB0, 5.47:1
      TMM #0F766E), so the raw fill stays un-deepened. Escape hatch stays raw;
      --ds-color-white falls back to literal white when undeclared. */
-  color: var(--ds-color-white);
+  color: var(--ds-calendar-selected-color, var(--ds-color-white));
 }
 
 /* The year control is a composition of two governed semantic navigation
@@ -53671,7 +53711,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
      primaries (5.15:1 bithire, 5.47:1 TMM #0F766E); the raw fill is
      preserved. Escape hatch stays raw; --ds-color-white falls back to literal
      white when undeclared. */
-  color: var(--ds-color-white);
+  color: var(--ds-calendar-selected-color, var(--ds-color-white));
   /* W10: the selected day reads as the grid's focal point -- semibold on the
      primary fill (the year-view month cells inherit the same weight). */
   font-weight: var(--ds-font-weight-semibold);
@@ -92311,7 +92351,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   outline-offset: revert;
   box-shadow: none;
   transition: none;
-  transition-property: all;
 }
 
 .ds-surface.ds-collection-render-dispatch
@@ -110953,6 +110992,7 @@ html[lang]:lang(ar) {
   --ds-rich-card-ring-selected: var(--ds-premium-card-selected-ring);
   --ds-rich-card-section-alt-bg: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel-bg));
   --ds-rich-card-section-bg: var(--ds-surface-card-bg);
+  --ds-select-dropdown-bg: var(--ds-material-overlay-background);
   --ds-shell-active-gradient: linear-gradient(90deg, var(--ds-shell-active-bg), transparent);
   --ds-shell-dropdown-shadow: var(--ds-shadow-dropdown, var(--ds-shadow-lg));
   --ds-signal-card-bg: var(--ds-premium-card-bg);
@@ -114531,6 +114571,8 @@ html[lang]:lang(ar) {
   --ds-button-primary-bg-active: var(--ds-color-primary-700);
   --ds-button-primary-border-active: var(--ds-color-primary-800);
   --ds-button-primary-border-hover: var(--ds-color-primary-700);
+  --ds-button-primary-color-active: var(--ds-button-primary-color);
+  --ds-button-primary-color-hover: var(--ds-button-primary-color);
   --ds-button-pulse-ring-color: color-mix(in srgb, var(--ds-color-primary-500) 36%, transparent);
   --ds-button-secondary-bg: var(--ds-color-secondary-500);
   --ds-button-secondary-bg-active: var(--ds-color-secondary-700);
@@ -114867,7 +114909,6 @@ html[lang]:lang(ar) {
   --ds-sheet-layer: var(--ds-z-index-drawer);
   --ds-sheet-transition-duration: var(--ds-motion-feedback);
   --ds-sheet-transition-timing: var(--ds-motion-ease-out);
-  --ds-sidebar-footer-bg: var(--ds-color-primary-800);
   --ds-signal-card-accent: var(--ds-color-primary);
   --ds-spinner-color: var(--ds-color-primary, #171717);
   --ds-spinner-default-color: var(--ds-color-primary-500);
@@ -114972,7 +115013,6 @@ html[lang]:lang(ar) {
   --ds-type-motion-duration: var(--ds-motion-reveal, var(--ds-duration-normal, 200ms));
   --ds-type-motion-easing: var(--ds-motion-ease-enter, cubic-bezier(0.22, 1, 0.36, 1));
   --ds-upload-button-bg: var(--ds-color-bg-input);
-  --ds-upload-overlay-action-color: var(--ds-color-text-on-primary);
   --ds-upload-preview-close-color: var(--ds-color-text-on-primary);
   --ds-upload-progress-bar: var(--ds-color-primary);
   --ds-wash-band: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
@@ -115047,8 +115087,6 @@ html[lang]:lang(ar) {
   --ds-button-md-border-radius: var(--ds-radius-md);
   --ds-button-md-font-size: var(--ds-font-size-sm);
   --ds-button-primary-border-color: var(--ds-button-primary-border);
-  --ds-button-primary-color-active: var(--ds-button-primary-color);
-  --ds-button-primary-color-hover: var(--ds-button-primary-color);
   --ds-button-pulse-shadow-start: 0 0 0 0 var(--ds-button-pulse-ring-color);
   --ds-button-shape-rounded: var(--ds-radius-md);
   --ds-button-sm-border-radius: var(--ds-radius-md);
@@ -115727,6 +115765,7 @@ html[lang]:lang(ar) {
   --ds-rich-card-ring-selected: var(--ds-premium-card-selected-ring);
   --ds-rich-card-section-alt-bg: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel-bg));
   --ds-rich-card-section-bg: var(--ds-surface-card-bg);
+  --ds-select-dropdown-bg: var(--ds-material-overlay-background);
   --ds-shell-active-gradient: linear-gradient(90deg, var(--ds-shell-active-bg), transparent);
   --ds-shell-dropdown-shadow: var(--ds-shadow-dropdown, var(--ds-shadow-lg));
   --ds-signal-card-bg: var(--ds-premium-card-bg);
@@ -120051,6 +120090,7 @@ html[lang]:lang(ar) {
   --ds-rich-card-ring-selected: var(--ds-premium-card-selected-ring);
   --ds-rich-card-section-alt-bg: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel-bg));
   --ds-rich-card-section-bg: var(--ds-surface-card-bg);
+  --ds-select-dropdown-bg: var(--ds-material-overlay-background);
   --ds-shell-active-gradient: linear-gradient(90deg, var(--ds-shell-active-bg), transparent);
   --ds-shell-dropdown-shadow: var(--ds-shadow-dropdown, var(--ds-shadow-lg));
   --ds-signal-card-bg: var(--ds-premium-card-bg);

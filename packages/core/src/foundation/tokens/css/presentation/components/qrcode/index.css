@@ -121,3 +121,8 @@
   --ds-qrcode-transition-duration: 0.2s;
   --ds-qrcode-transition-timing: ease-in-out;
 }
+
+/* The primary ramp inverts on a dark canvas, so the chip's ink follows the role. */
+:where(:root, [data-ds-root]):is([data-theme='dark'], .dark) {
+  --ds-qrcode-refresh-button-color: var(--ds-color-text-on-primary);
+}

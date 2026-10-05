@@ -265,10 +265,10 @@ describe('Modern Calendar remediation (K4-B)', () => {
     expect(skin).not.toMatch(/color:\s*var\(--ds-color-text-inverse/);
     expect(skin).not.toMatch(/color:\s*var\(--ds-color-text-on-primary/);
     expect(skin).toMatch(
-      /\[data-part='cell'\]\[data-selected='true'\] \{[^}]*\bcolor:\s*var\(--ds-color-white\);/,
+      /\[data-part='cell'\]\[data-selected='true'\] \{[^}]*\bcolor:\s*var\(--ds-calendar-selected-color, var\(--ds-color-white\)\);/,
     );
     expect(skin).toMatch(
-      /\[data-part='mode-toggle'\]\[data-active='true'\] \{[^}]*\bcolor:\s*var\(--ds-color-white\);/,
+      /\[data-part='mode-toggle'\]\[data-active='true'\] \{[^}]*\bcolor:\s*var\(--ds-calendar-selected-color, var\(--ds-color-white\)\);/,
     );
 
     // Measured on the compiled FlatThemes (same method as the CodeBlock

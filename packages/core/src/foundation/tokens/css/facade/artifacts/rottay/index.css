@@ -3855,6 +3855,7 @@
   --ds-rich-card-ring-selected: var(--ds-premium-card-selected-ring);
   --ds-rich-card-section-alt-bg: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel-bg));
   --ds-rich-card-section-bg: var(--ds-surface-card-bg);
+  --ds-select-dropdown-bg: var(--ds-material-overlay-background);
   --ds-shell-active-gradient: linear-gradient(90deg, var(--ds-shell-active-bg), transparent);
   --ds-shell-dropdown-shadow: var(--ds-shadow-dropdown, var(--ds-shadow-lg));
   --ds-signal-card-bg: var(--ds-premium-card-bg);

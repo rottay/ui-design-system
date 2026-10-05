@@ -245,7 +245,6 @@
   outline-offset: revert;
   box-shadow: none;
   transition: none;
-  transition-property: all;
 }
 
 .ds-surface.ds-collection-render-dispatch

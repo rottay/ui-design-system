@@ -416,4 +416,6 @@
 :where(:root, [data-ds-root]):is([data-theme='dark'], .dark) {
   --ds-button-error-bg-hover: var(--ds-color-error-400);
   --ds-button-error-bg-active: var(--ds-color-error-300);
+  /* The primary ramp inverts too: its label follows the role's dark ink. */
+  --ds-button-primary-color: var(--ds-color-text-on-primary);
 }

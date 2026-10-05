@@ -423,14 +423,14 @@ describe("the DS root's own mode channels (CONTAINER_MODE_TEXTS)", () => {
   const row = (name: string) => CONTAINER_MODE_TEXTS.find((entry) => entry.name === name);
 
   it("tables every name the base stylesheets declare under a root-state mode rule, none stopped", () => {
-    expect(CONTAINER_MODE_TEXTS.length).toBe(161);
+    expect(CONTAINER_MODE_TEXTS.length).toBe(190);
     expect(derived.modeTexts.stopped).toEqual({});
     const tabled = new Set([
       ...ROOT_ALIASES.map(([name]) => name),
       ...CONTAINER_ALIASES.map((alias) => alias.name),
       ...CONTAINER_ALIAS_CONTEXTS.map((context) => context.name),
     ]);
-    expect(CONTAINER_MODE_TEXTS.filter((entry) => !tabled.has(entry.name)).length).toBe(116);
+    expect(CONTAINER_MODE_TEXTS.filter((entry) => !tabled.has(entry.name)).length).toBe(143);
   });
 
   it("carries the cascade-winning text per mode, read from its site", () => {
@@ -439,7 +439,7 @@ describe("the DS root's own mode channels (CONTAINER_MODE_TEXTS)", () => {
       base: "#171717",
       light: "#171717",
       dark: "#f8fafc",
-      sites: { base: "foundation/themes/default/index.css:62", dark: "foundation/themes/default/index.css:2106" },
+      sites: { base: "foundation/themes/default/index.css:62", dark: "foundation/themes/default/index.css:2134" },
     });
     expect(row("--ds-table-bg")).toMatchObject({ base: "#ffffff", dark: "var(--ds-surface-card)" });
     // The components layer's bare :root rule outranks the token layer's dark block.
@@ -499,8 +499,8 @@ describe("the mode table and the context table never contest a name (M4)", () =>
 
   it("every dark context is a mode-table name carrying the table's dark text", () => {
     const dark = CONTAINER_ALIAS_CONTEXTS.filter((context) => isDarkContext(context.selector));
-    expect(dark.length).toBe(32);
-    expect(shared.length).toBe(32);
+    expect(dark.length).toBe(34);
+    expect(shared.length).toBe(34);
     const drift = dark.filter((context) => modeRow.get(context.name)?.dark !== context.value);
     expect(drift.map((context) => `${context.name}: ${context.value} vs ${modeRow.get(context.name)?.dark}`)).toEqual([]);
   });

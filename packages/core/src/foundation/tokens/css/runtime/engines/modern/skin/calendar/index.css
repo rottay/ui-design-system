@@ -287,7 +287,7 @@
      clears AA on BOTH raw tenant primaries (5.15:1 bithire #3A6FB0, 5.47:1
      TMM #0F766E), so the raw fill stays un-deepened. Escape hatch stays raw;
      --ds-color-white falls back to literal white when undeclared. */
-  color: var(--ds-color-white);
+  color: var(--ds-calendar-selected-color, var(--ds-color-white));
 }
 
 /* The year control is a composition of two governed semantic navigation
@@ -392,7 +392,7 @@
      primaries (5.15:1 bithire, 5.47:1 TMM #0F766E); the raw fill is
      preserved. Escape hatch stays raw; --ds-color-white falls back to literal
      white when undeclared. */
-  color: var(--ds-color-white);
+  color: var(--ds-calendar-selected-color, var(--ds-color-white));
   /* W10: the selected day reads as the grid's focal point -- semibold on the
      primary fill (the year-view month cells inherit the same weight). */
   font-weight: var(--ds-font-weight-semibold);
