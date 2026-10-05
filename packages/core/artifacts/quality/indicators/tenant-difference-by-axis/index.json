@@ -1,20 +1,20 @@
 {
   "id": "tenant-difference-by-axis",
   "gate": "axis-difference (`capability-propagation` by axis, WO-EVI-02)",
-  "producedAt": "2026-10-05T03:35:50.398Z",
+  "producedAt": "2026-10-05T23:24:45.497Z",
   "value": "6/6 axes at >= 80 % of declaring families (shape, typography, rhythm, depth, states, motion; effective-denominator reading 6/6, never the status); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
   "target": "6/6 axes at >= 80 % and the negative test green",
   "met": true,
-  "commit": "2cc901cdd7892bedfc45465ae0abfec5fa99eee5",
+  "commit": "99a867a3a3c9a968678138d413e291c4c8f9a1d8",
   "catalogRevision": "41af5c3698f85c48",
   "browser": "149.0.7827.55",
   "bundleMode": "fresh",
   "inputDigest": {
     "algorithm": "sha256",
-    "digest": "7da1001b780c55f270950a43de67dd821e84563e141ddd04c2e1e9b5b4b5dcd7",
+    "digest": "3b7845dc77e2876246c16ed973ab3943280303100932581bb956a76d535e395d",
     "parts": {
-      "sourceHash": "d89920b778c6e49611639298b864ac11fb4247cd80fdde72d179b0040aca25c5",
-      "buildInputFingerprint": "5902b21c36bd6a399bed6726f9089f63486f06164b5d608445952336a74f9310",
+      "sourceHash": "9222a665e49a55676339da7315c49832afc4b1e6efcc5c7f2015c382bd85ae81",
+      "buildInputFingerprint": "ef3fa64b217ab35762a6c38f54a302e889569b00f1c9c3de4c7e8a4239193184",
       "instrument": "556252b273abfe91c31521131c46de589a598d30999d975367a0651467700c0c"
     }
   },
