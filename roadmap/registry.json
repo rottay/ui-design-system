@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-04",
+ "updated": "2026-10-05",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -7640,6 +7640,11 @@
      "at": "2026-10-04 23:43",
      "by": "claude-dt",
      "note": "2026-10-05 kimi-dt (post-midnight ET): the instrument follow-ups are LANDED. P1: the acceptance phase (44447e668; review HOLD on the Chromium position caught a real break, corrected, ACCEPT). P3: --verify-indicator read-only fast path with its three review conditions discharged (digest before+after with drift refusal, exact browser equality, near-miss refusal before measurement) — c419b042f, then the indicator REPUBLISHED at 2cc901cdd by a full measured run on the committed quiet tree (the first attempt was refused by the uncommitted-tree law; the second ran clean) and committed df5070d1d after the independent measurement review (RECORD). The published reading: 6/6 on the declared basis, states 125/152, both controls 0%, N/A 5. PARITY2-C landed 76ca8c60f (real parity evidence: code-level relatedness + asserting + executed lastRun; review HOLD->ACCEPT). POPX landed 2cc901cdd (delegated exclusion; shape 213 + N/A 5; the floor red is resolved by law, not by lowering). The D-1 core review is ADOPT WITH CONDITIONS (C1-C6); the W24-D1 writer is implementing them now."
+    },
+    {
+     "at": "2026-10-05 08:58",
+     "by": "kimi-dt",
+     "note": "2026-10-05 F-wave execution day (all lots reviewed, claude-opus-5-5 on claude-admin; independent reviews per lot): LANDED 67f6fe5a0 (F-7a divider + F-8 datepicker + 20 re-recorded cells, tile review review-r15-tiles 28/32), 666cf5620 (cascade producers re-anchor — drift red since 239dd6306), c2662b477 (rwp debt 421->420 + produced 4362->4364, the re-pin D-1 owed), a3cb65d4b (F-5 select chevron), 0287a02b0 (F-13 card nest radii), d5c9c823e (D1E: R15-1 dark-block --ds-command-palette-focus-line — the tile review caught the frozen rustic palette focus line at 1.5:1; repaired via the D-1-D channel route, 12.64:1/14.86:1 measured; reads ledger drained 1204->1196), dcef14389 (F-12b suffix reserve via new governed channel --ds-input-number-suffix-space + F-6 page-shell header-row scoping; rwp denominator 4784->4785 named), 826cb2822 (F-7b nested Layout flex-basis), 58fbf681c (W24-SCENE+B: one blocking overlay per load + 4 new shortcuts-overlay cells — the owner correction holding BOTH overlays' coverage; nav note 9->13), 5a0d40ca4 (PT spec-only: F-9 deterministic sticky-bar capture, F-10b real-input focus + assertions, F-10a OTP ring frame). tests-through-the-door 33 -> 30 findings (healed: matrix, pickers, navigation). PENDING: the wave's final re-record lot over the full suite (D-1 deferred cells + PT's 11 + F-7b's 2 rottay + F-6's 4 admin/data AFTER the F6H spec-hardening — the cards-to-table determinism finding), then the candidate measurement. tests-through-the-door remainder is that lot's scope."
     }
    ]
   },
