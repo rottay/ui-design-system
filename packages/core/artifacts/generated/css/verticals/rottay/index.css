@@ -80842,11 +80842,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* ============================================================================
  * MessageBubble -- alignment + bubble geometry drained from the engine's
- * inline styles: the root is a flex row whose justification follows
- * `data-align` (logical start/end -- RTL mirrors the conversation for free);
- * the composed Card carries a merged scope class (Card forces
+ * inline styles: the root is a block whose end-aligned card is pushed by
+ * `margin-inline-start: auto` (logical -- RTL mirrors the conversation for
+ * free); the composed Card carries a merged scope class (Card forces
  * `data-part='root'` internally, so the class is the hook) for the max-inline
- * measure and fit-content sizing. The measure rides the
+ * measure. The card fills up to its measure rather than sizing to content:
+ * the Modern card root is an inline-size container, so a content-sized card
+ * resolves to 0px and clips the message. The measure rides the
  * private `--_ds-assistant-bubble-measure` channel
  * with the historical 80% as the exact fallback -- an editorial profile can
  * narrow the conversation column (article-like measure) while an operational
@@ -80858,16 +80860,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * ==========================================================================*/
 
 .ds-assistant-message-bubble[data-part='root'] {
-  display: flex;
-  justify-content: flex-start;
+  display: block;
   container: ds-assistant-bubble / inline-size;
 }
-.ds-assistant-message-bubble[data-part='root'][data-align='end'] {
-  justify-content: flex-end;
+.ds-assistant-message-bubble[data-part='root'][data-align='end'] > .ds-assistant-message-bubble-card[data-part='root'] {
+  margin-inline-start: auto;
 }
 .ds-assistant-message-bubble .ds-assistant-message-bubble-card[data-part='root'] {
   max-inline-size: var(--_ds-assistant-bubble-measure, 80%);
-  inline-size: fit-content;
+  inline-size: auto;
   overflow-wrap: break-word;
 }
 @container ds-assistant-bubble (inline-size < 30rem) {

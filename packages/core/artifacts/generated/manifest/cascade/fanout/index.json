@@ -667,7 +667,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 342,
+          "line": 343,
           "prop": "max-inline-size",
           "scalars": []
         }
@@ -138661,7 +138661,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 364,
+          "line": 365,
           "prop": "color",
           "scalars": []
         },

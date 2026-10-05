@@ -626,4 +626,43 @@ test.describe('ds-reference responsive overflow', () => {
         'rather than clip. There is no baseline to widen and no tolerance to loosen.',
     ).toEqual([]);
   });
+
+  // The sweep above cannot see a box its own `overflow: hidden` collapses to 0px
+  // inside the viewport; a size-contained card sized `fit-content` does exactly that.
+  test('chat message cards keep a non-zero inline size at every width', async ({ page }) => {
+    test.setTimeout(600_000);
+
+    const cells = enumerateMatrix().cells.filter((cell) => cell.scene === 'surfaces' && cell.onlyCase === 'chat');
+    expect(cells.length, 'surfaces?only=chat cells enumerated').toBeGreaterThanOrEqual(MIN_TENANT_ROOTS);
+
+    const findings: string[] = [];
+    for (const cell of cells) {
+      for (const width of cell.root.widths) {
+        await page.setViewportSize({ width, height: VIEWPORT_HEIGHT });
+        const label = cellLabel(cell, width);
+        await gotoCell(page, cell);
+        const cards = await page.evaluate(() =>
+          [...document.querySelectorAll('.ds-assistant-message-bubble-card')].map((card) => ({
+            width: card.getBoundingClientRect().width,
+            clipped: card.scrollWidth - card.clientWidth,
+          })),
+        );
+        if (cards.length === 0) {
+          findings.push(`${label} — no message card rendered`);
+          continue;
+        }
+        const collapsed = cards.filter(
+          (card) => card.width <= EDGE_TOLERANCE_PX || card.clipped > EDGE_TOLERANCE_PX,
+        );
+        if (collapsed.length > 0) {
+          findings.push(
+            `${label} — ${collapsed.length} of ${cards.length} message cards collapsed or clipping their text ` +
+              `(widths ${collapsed.map((card) => Math.round(card.width)).join('/')}px)`,
+          );
+        }
+      }
+    }
+
+    expect(findings, 'chat message cards collapsed: the transcript paints no message text').toEqual([]);
+  });
 });
