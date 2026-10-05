@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "01157f86e3f311432dd2e4a840a563be006af7ea652d33f98d024962136d87f1",
+    "authorityDigest": "a111b7540d3f777b6afe405acf1b1c28d9fc902cdd6e9e70bc0eb0e81840a9aa",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5703584,
-        "sha256": "21dceac48dea1a6ad1db8e96f53dbe6899fa9d8c2612c79e4dcec6823be7e45d"
+        "bytes": 5703680,
+        "sha256": "9a29432c773c98ab087b67917fca524eaeb88719b847593a341fe298d48cc949"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5069560,
-        "sha256": "42abaa7dc74d8af5d91b8be58fe225e1b087d97798dbc5e1c9e0d778e130e91d"
+        "bytes": 5069656,
+        "sha256": "c114ff49b885bad033318e7f4e97fc769efc55bf5c8d528028ad1dd8464a7bca"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5030795,
-        "sha256": "583a30d4d400366873d64e75b63b831c158a9c5bccc963eeca1f20d09c27ba6e"
+        "bytes": 5030891,
+        "sha256": "e2ec8f1640d3697abc84caa42caf1065fb823fdb79ac4a03e51657e6aec01c9b"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5030055,
-        "sha256": "c1361bc65c00fee9b3b96d135819032ea1f0827a9afaed62d12992aac4989005"
+        "bytes": 5030151,
+        "sha256": "8ad185600e6a1d3c3b0cd85d1d965eba1829de8945c00f10833aa1fa9cb6b84b"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -1605,8 +1605,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 17359,
-        "sha256": "e35fa4e3671fca2da52710fc34c4ff73c6ab3af1636268c9dae759ab7c37b2d0"
+        "bytes": 18161,
+        "sha256": "8b7de1f43174ebfe5fc330fac943e7102fc679466cb0d52bbdff4d07d1c2624e"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.provider-locale.test.tsx",
@@ -29599,8 +29599,8 @@
           "audit-input",
           "stale-claim-corpus"
         ],
-        "bytes": 5705,
-        "sha256": "1785db7803ec26876d5d9c2c2011df9546d78fa8c72791c864a4c623386f8e82"
+        "bytes": 5801,
+        "sha256": "85b3bd973b1e75035372a2b663ab2faec8b9b6cbfc9524ddea702e2e875c632f"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/interpolate-size/index.css",
@@ -46662,8 +46662,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 40468,
-        "sha256": "dd716c3ffc97636d42bb0aad3432d8f4fd17562cf97af9c8f8fa582340d0e680"
+        "bytes": 40467,
+        "sha256": "0737cf616a757b2c3cca8be614a27809962f2d5ab1f5e487f3dccf17ae85be01"
       },
       {
         "path": "ui-design-system/packages/showroom/src/components/landing/sections/brand-shift/index.tsx",
@@ -47707,7 +47707,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "01157f86e3f311432dd2e4a840a563be006af7ea652d33f98d024962136d87f1"
+    "digest": "a111b7540d3f777b6afe405acf1b1c28d9fc902cdd6e9e70bc0eb0e81840a9aa"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -122042,8 +122042,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "111286b58b70776c7011f40e473de3e39f045a9a719aec0ffc5d9079acda355b",
-      "111286b58b70776c7011f40e473de3e39f045a9a719aec0ffc5d9079acda355b"
+      "5ceab92ccb122911fd80d1ef98ebeec25fb436833d5838e33d9289a40e527bab",
+      "5ceab92ccb122911fd80d1ef98ebeec25fb436833d5838e33d9289a40e527bab"
     ],
     "agree": true
   }

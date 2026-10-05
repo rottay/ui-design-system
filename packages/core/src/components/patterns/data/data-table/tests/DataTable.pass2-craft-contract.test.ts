@@ -327,6 +327,21 @@ describe("DataTable pass 2 craft contract", () => {
       expect(focusSelectors).toEqual(["[data-engine='modern'] select:not([data-part='editor-input']):focus"]);
     });
 
+    it("is not painted by any engine bridge select rule, so the mobile skin paints it and the native arrow is the only chevron", () => {
+      const bridge = readFileSync(
+        join(here, "../../../../../foundation/tokens/css/runtime/engines/modern/framework-bridge/index.css"),
+        "utf8"
+      ).replace(/\/\*[\s\S]*?\*\//g, "");
+      const selectSelectors = [...bridge.matchAll(/([^{}]*)\{[^{}]*\}/g)]
+        .flatMap(([, selector]) => (selector ?? "").split(","))
+        .map((selector) => selector.replace(/\s+/g, " ").trim())
+        .filter((selector) => /\bselect\b/.test(selector));
+      expect(selectSelectors.length).toBeGreaterThan(0);
+      for (const selector of selectSelectors) {
+        expect(selector).toContain("select:not([data-part='editor-input'])");
+      }
+    });
+
     it("keeps the editing cell unclipped, so the ring is whole inside the cell padding", () => {
       const editing = modernSkin.match(/\[data-part="data-cell"\]\[data-editing="true"\]\s*\{([^}]*)\}/)?.[1] ?? "";
       expect(editing).toMatch(/overflow:\s*visible;/);
