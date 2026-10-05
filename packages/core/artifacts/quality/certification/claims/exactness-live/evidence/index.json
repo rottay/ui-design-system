@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "7606cbf5601db3e42365946c9447ae90804dc7b71481f3bc80c23b5260054c4e",
+    "authorityDigest": "f06daa0f6451b7cfe7363392ee5a8d3b896a191b650b66bfc0c02f9f415b59a8",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5702408,
-        "sha256": "eb901d255b3588645f426263defebad199cf3b3afa615e08516b417fbbb3b95f"
+        "bytes": 5702528,
+        "sha256": "4ee33b27c38347fe29c8a8fd22014f12d93a1661fd8fecd9345c9a0bab083863"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5068384,
-        "sha256": "aec9d11b699e1398823c32d9257f5ce5f3d8b85fcebbb83c645464a5a15325b8"
+        "bytes": 5068504,
+        "sha256": "c907ddd66ac11fc4ad2cd7ab2f0dcce3af5cad56519829f9e0575dd229a10730"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5029619,
-        "sha256": "6e0adc2e7f16689ebee80d65c3a94c1465e60a813e169842e937981c23051798"
+        "bytes": 5029739,
+        "sha256": "c0f085bef32c784d43f82f67c293203b4ec7880ff94e9edac6b343481a9e3830"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5028879,
-        "sha256": "b84f0845ad87d68219b8bf6d181151a6f8a1741547e2f6b75c4482ec8c697d33"
+        "bytes": 5028999,
+        "sha256": "abe96d227b3f2b723d8d8b64d8f3f415d682b356ff5ad7979497c17f686d5cfa"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -29770,8 +29770,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 40709,
-        "sha256": "3e78e826f8602031f51120b25e577821c3e61f2d665b1ea3c75af34fb476893c"
+        "bytes": 40829,
+        "sha256": "240d7ccc2f9ada7ddb08370b818ff8b7eefeee70a86c74806802fdc700ccf1c7"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
@@ -37867,7 +37867,7 @@
           "stale-claim-corpus"
         ],
         "bytes": 302476,
-        "sha256": "2ceb8aac94fc679fe64c9e476cbcb47c401d7aaef8e11a73c33cd505f49ff8bb"
+        "sha256": "1d9dec225971f51be96aa9b1fe9d61537fc8044ca5e3c94877a5f7b9585ad646"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/index.ts",
@@ -47699,7 +47699,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "7606cbf5601db3e42365946c9447ae90804dc7b71481f3bc80c23b5260054c4e"
+    "digest": "f06daa0f6451b7cfe7363392ee5a8d3b896a191b650b66bfc0c02f9f415b59a8"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -51556,31 +51556,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 414
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 419
+          "line": 421
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 423
+          "line": 425
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 434
+          "line": 436
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 442
+          "line": 444
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 447
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 460
+          "line": 449
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -51588,31 +51584,31 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 473
+          "line": 468
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 478
+          "line": 477
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 490
+          "line": 482
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 519
+          "line": 494
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 522
+          "line": 523
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 533
+          "line": 526
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 637
+          "line": 537
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -51620,11 +51616,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 707
+          "line": 645
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 707
+          "line": 711
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
+          "line": 711
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
@@ -55764,15 +55764,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 434
+          "line": 436
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 442
+          "line": 444
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 729
+          "line": 733
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
@@ -58440,11 +58440,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 414
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 478
+          "line": 482
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
@@ -62001,39 +62001,39 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 414
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 419
+          "line": 421
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 423
+          "line": 425
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 434
+          "line": 436
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 442
+          "line": 444
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 473
+          "line": 477
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 478
+          "line": 482
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 519
+          "line": 523
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 707
+          "line": 711
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
@@ -66549,11 +66549,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 690
+          "line": 694
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 737
+          "line": 741
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table/index.css",
@@ -75693,31 +75693,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 414
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 419
+          "line": 421
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 423
+          "line": 425
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 434
+          "line": 436
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 442
+          "line": 444
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 447
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 460
+          "line": 449
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -75725,7 +75721,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 469
+          "line": 468
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -75733,27 +75729,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 478
+          "line": 477
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 483
+          "line": 482
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 483
+          "line": 487
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 490
+          "line": 487
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 498
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 498
+          "line": 494
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -75773,19 +75765,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 513
+          "line": 510
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 513
+          "line": 510
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 519
+          "line": 517
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 522
+          "line": 517
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
+          "line": 523
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -75793,15 +75789,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 526
+          "line": 530
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 533
+          "line": 530
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 541
+          "line": 537
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -75809,7 +75805,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 552
+          "line": 549
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -75849,11 +75845,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 594
+          "line": 592
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 599
+          "line": 598
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -75881,10 +75877,6 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 623
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
           "line": 627
         },
         {
@@ -75901,15 +75893,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 634
+          "line": 635
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 634
+          "line": 635
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 637
+          "line": 638
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
+          "line": 638
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -75917,87 +75913,91 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 648
+          "line": 645
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 651
+          "line": 652
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 654
+          "line": 655
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 665
+          "line": 658
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 674
+          "line": 669
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 674
+          "line": 678
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 674
+          "line": 678
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 682
+          "line": 678
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 690
+          "line": 686
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 698
+          "line": 694
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 707
+          "line": 702
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 707
+          "line": 711
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 712
+          "line": 711
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 721
+          "line": 716
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 721
+          "line": 725
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 729
+          "line": 725
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 729
+          "line": 733
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 729
+          "line": 733
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 737
+          "line": 733
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 743
+          "line": 741
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 748
+          "line": 747
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
+          "line": 752
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
@@ -89673,7 +89673,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 743
+          "line": 747
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state/index.css",
@@ -94443,11 +94443,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 423
+          "line": 425
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
-          "line": 729
+          "line": 733
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
@@ -122006,8 +122006,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "82f58447885875a2443adf2ecb53d754fcf82aaf7c6208cc0d1178a63c097a35",
-      "82f58447885875a2443adf2ecb53d754fcf82aaf7c6208cc0d1178a63c097a35"
+      "8900085a23a91e997bbbc98c6a124a2b55a4b833f45d9bbe55e2e3f5aa816088",
+      "8900085a23a91e997bbbc98c6a124a2b55a4b833f45d9bbe55e2e3f5aa816088"
     ],
     "agree": true
   }

@@ -15,7 +15,7 @@
     "failClosed": "every expression the scanner cannot resolve is ONE ROW in unknownProvenance. Under STRICT a missing producer ADMITS a fallback branch and can LOWER debt, so under-counting producers can buy a false green: it is not a safe approximation and is never treated as one."
   },
   "inputsDigest": {
-    "cssEdges": "19371be881c8c130c3b0b23a2b9921b5deedb0a7dcda2d5e42df8bf4bcf698ed",
+    "cssEdges": "e73ae18f48870ad54f59a4a406d80952a3a543cea685d9825318f6c500053b01",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
     "srcTsx": "d837c763e1e97e9e72101767ce6cdb940cb661eaac92bd2063405be9afaa802f",
@@ -2305,9 +2305,9 @@
     {"rootId":"typography.scale","to":"--ds-font-size-*","reason":"wildcard-shape"}
   ],
   "digests": {
-    "producerSites": "70d9393dbbf68d238b4345bd2a888d148270199553fba9846aecf4284b969b46",
-    "channelEmissions": "4e37c60f97a46bebf0303d6e3a40cd109328b562585a4a473c5094e3990a34fd",
-    "byChannel": "fe2372dd05444c075aa6f1e34913999e8653d7bc745c6d5e9799c82e1b6a129c",
+    "producerSites": "5e1ec7f48c596209cf58cc18d84c3a0d3fae21948312dfb92919efc3c728536b",
+    "channelEmissions": "cce4300f2c397a4f8186299b2ab2f72c0449e12e347b63c578222298968c85fc",
+    "byChannel": "dd0532f9325469ba251e9b79243054dd37226550ea97b4473221b37e739250ec",
     "unknownProvenance": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     "closedNonObject": "8a58c734d26ced94b4fa90a53dd5719ab303ce37fbbd738be83d22a2a604170c",
     "closedZeroGoverned": "c06fcee9eb356b60b54de17cb03d774577f4caf0aa1a57d88b6a7b2f01a6cecc",
@@ -6872,6 +6872,7 @@
     {"producerSiteId":"b7f4909bd9c3e3e5d55145f1be7207e0ca4dc353ba30f6ea7104b8714f2bb489","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/list/index.css","line":38,"symbol":"--ds-list-split-color","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/list/index.css:38 declares --ds-list-split-color"},
     {"producerSiteId":"b7fc514e6892c1382b9d40866fa2668461bf97ac9bddad6153b1d4155aa487a6","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/timeline/index.css","line":22,"symbol":"--ds-timeline-dot-offset","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/timeline/index.css:22 declares --ds-timeline-dot-offset"},
     {"producerSiteId":"b80094c7307d1d5a1f4d034429c366a08193f30d12bfba0c01bca9a30afed797","plane":"css","file":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css","line":183,"symbol":"--ds-descriptions-column-count","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:183 declares --ds-descriptions-column-count"},
+    {"producerSiteId":"b80e829c9f81faaaca4ec03a6a8ff2fb729a7e2dd4f570e6fb484d49b56ad1ac","plane":"css","file":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css","line":726,"symbol":"--ds-card-focus-ring","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css:726 declares --ds-card-focus-ring"},
     {"producerSiteId":"b82823368c286132aad57e8c4b3e4a55a264d164d61494f62719fdbe7af19b8a","plane":"tsx-inline-stamp","file":"packages/core/src/components/primitives/display/table/engines/modern/index.tsx","line":351,"symbol":"renderHeaderRow","ordinal":13157,"ownerId":"tsx-stamp:renderHeaderRow","ownerEvidence":"packages/core/src/components/primitives/display/table/engines/modern/index.tsx:351 stamps the custom property onto the element's inline style attribute"},
     {"producerSiteId":"b8313a2b13be0ee051a3334a1d3fefa88864cffda49de1f31a2b7dfb0b157e0b","plane":"css","file":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css","line":156,"symbol":"--ds-modern-table-cell-padding","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:156 declares --ds-modern-table-cell-padding"},
     {"producerSiteId":"b834135795e46edc51cb6eb61c615958a851fb6133dd534e2c11433f0bcc777a","plane":"css","file":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css","line":53,"symbol":"--ds-popover-edge-width-current","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:53 declares --ds-popover-edge-width-current"},
@@ -6882,7 +6883,6 @@
     {"producerSiteId":"b8595f0a10db0ec52b386d4391aea183f96579f6cd8a934e0422cf02a53d7642","plane":"css","file":"packages/core/src/foundation/tokens/css/foundation/themes/default/index.css","line":525,"symbol":"--ds-type-page-title-font-size","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:525 declares --ds-type-page-title-font-size"},
     {"producerSiteId":"b8659a1660c3d7dad8fb29f53439d04625c9b466eb5253abc9ccb5b41590d887","plane":"css","file":"packages/core/src/foundation/tokens/css/foundation/themes/default/index.css","line":346,"symbol":"--ds-material-card-background-active","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:346 declares --ds-material-card-background-active"},
     {"producerSiteId":"b879ea777a8c3e1294bbcdab828824823f4e02db27279f48bd1e899680b7673f","plane":"css","file":"packages/core/src/foundation/tokens/css/foundation/base/density/index.css","line":136,"symbol":"--ds-spacing-component-padding","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/foundation/base/density/index.css:136 declares --ds-spacing-component-padding"},
-    {"producerSiteId":"b87e220c52e6fcfe17f85888acff3b316d9ee5e103a9ed5605ad2f912e8f630e","plane":"css","file":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css","line":722,"symbol":"--ds-card-focus-ring","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css:722 declares --ds-card-focus-ring"},
     {"producerSiteId":"b8895e2344da901d5e81bb828373ecf177fa3203683cc3664778c5c17f5cecbd","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/tag/index.css","line":22,"symbol":"--ds-tag-sm-height","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/tag/index.css:22 declares --ds-tag-sm-height"},
     {"producerSiteId":"b895e9d0a975e4913f6023bf9de7aae76cc09ee5d83c119b3edb962c8e2d85ef","plane":"css","file":"packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css","line":15,"symbol":"--ds-qrcode-xs-size","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css:15 declares --ds-qrcode-xs-size"},
     {"producerSiteId":"b89877b697a2c54f1f2b90bf78a059b843140a966e078e54adf84254ee42bb41","plane":"css","file":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/container/index.css","line":40,"symbol":"--ds-container-measure","ordinal":0,"ownerId":"css-declaration","ownerEvidence":"packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/container/index.css:40 declares --ds-container-measure"},
@@ -20002,6 +20002,7 @@
     {"channelEmissionId":"42b09be417b6bf6e52dee8e73b17e29f429a321a4c7e27cb4886b468d1c34195","producerSiteId":"b7f4909bd9c3e3e5d55145f1be7207e0ca4dc353ba30f6ea7104b8714f2bb489","channel":"--ds-list-split-color","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"33562603e9f5a349f17f0daa15a56fc8192d8a70293da1b2404f0ddc0b65fe39","producerSiteId":"b7fc514e6892c1382b9d40866fa2668461bf97ac9bddad6153b1d4155aa487a6","channel":"--ds-timeline-dot-offset","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"f43ba848952c45cf3d68326fea6eb6837acb305daa634eff361303a2d5e7a8e8","producerSiteId":"b80094c7307d1d5a1f4d034429c366a08193f30d12bfba0c01bca9a30afed797","channel":"--ds-descriptions-column-count","engineScope":["modern"],"applicabilityEvidence":"css-edges.json scopeTable[7] (path modern INTERSECT selector modern)","causalRootIds":[]},
+    {"channelEmissionId":"c85c14494f98dd162d845ab0d881d2d0d51ee8d0d5b2fc414012e5ffd269e376","producerSiteId":"b80e829c9f81faaaca4ec03a6a8ff2fb729a7e2dd4f570e6fb484d49b56ad1ac","channel":"--ds-card-focus-ring","engineScope":["modern"],"applicabilityEvidence":"css-edges.json scopeTable[7] (path modern INTERSECT selector modern)","causalRootIds":[]},
     {"channelEmissionId":"8318b99a0906bede288591c72ce53a0c14fe2b3aabd967748751350df3f4fac2","producerSiteId":"b82823368c286132aad57e8c4b3e4a55a264d164d61494f62719fdbe7af19b8a","channel":"--ds-table-col-width","engineScope":["modern"],"applicabilityEvidence":"path segment /engines/modern/: this owner ships only in the modern engine","causalRootIds":[]},
     {"channelEmissionId":"05ef7abb966c227e3dc21b2249d52ff78aabb5193f9183eb8ff9a31df4df6ad8","producerSiteId":"b8313a2b13be0ee051a3334a1d3fefa88864cffda49de1f31a2b7dfb0b157e0b","channel":"--ds-modern-table-cell-padding","engineScope":["modern"],"applicabilityEvidence":"css-edges.json scopeTable[7] (path modern INTERSECT selector modern)","causalRootIds":[]},
     {"channelEmissionId":"3fd208eba8869707b3dbb55836271ab0708a69503f23a6b7aba2e2512cd0af89","producerSiteId":"b834135795e46edc51cb6eb61c615958a851fb6133dd534e2c11433f0bcc777a","channel":"--ds-popover-edge-width-current","engineScope":["modern"],"applicabilityEvidence":"css-edges.json scopeTable[7] (path modern INTERSECT selector modern)","causalRootIds":[]},
@@ -20012,7 +20013,6 @@
     {"channelEmissionId":"16cd719bf468fd177fb71e5b4ce0e42b07d9612b7d5b3cd954ebe9580687542a","producerSiteId":"b8595f0a10db0ec52b386d4391aea183f96579f6cd8a934e0422cf02a53d7642","channel":"--ds-type-page-title-font-size","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"185df7fea993f67570e9554dc583c9200a25f1e809de6373a2525cc634d5d65a","producerSiteId":"b8659a1660c3d7dad8fb29f53439d04625c9b466eb5253abc9ccb5b41590d887","channel":"--ds-material-card-background-active","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"80f961bc28bbd366e4bd31ea8f9851561411a2d94610396b13bfefb128514cbb","producerSiteId":"b879ea777a8c3e1294bbcdab828824823f4e02db27279f48bd1e899680b7673f","channel":"--ds-spacing-component-padding","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
-    {"channelEmissionId":"58edea9a043944935650175a3fd246be8926b811eae0e9bb731eb9e7d09e4b04","producerSiteId":"b87e220c52e6fcfe17f85888acff3b316d9ee5e103a9ed5605ad2f912e8f630e","channel":"--ds-card-focus-ring","engineScope":["modern"],"applicabilityEvidence":"css-edges.json scopeTable[7] (path modern INTERSECT selector modern)","causalRootIds":[]},
     {"channelEmissionId":"84cb2da3a1c501045760130ffa587215ae0cba498f995651eb87e604844eb787","producerSiteId":"b8895e2344da901d5e81bb828373ecf177fa3203683cc3664778c5c17f5cecbd","channel":"--ds-tag-sm-height","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"997d8466876a4f12f9beb7ac0e829d823b31ebb28b76465d3285a93bc52693a5","producerSiteId":"b895e9d0a975e4913f6023bf9de7aae76cc09ee5d83c119b3edb962c8e2d85ef","channel":"--ds-qrcode-xs-size","engineScope":["modern","rustic","classic"],"applicabilityEvidence":"css-edges.json scopeTable[0] (path modern+rustic+classic INTERSECT selector modern+rustic+classic)","causalRootIds":[]},
     {"channelEmissionId":"97ad5e84fb6d06f4bfbe492dc3f7db238359e8420be02dd9f442cbf453262d2e","producerSiteId":"b89877b697a2c54f1f2b90bf78a059b843140a966e078e54adf84254ee42bb41","channel":"--ds-container-measure","engineScope":["modern"],"applicabilityEvidence":"css-edges.json scopeTable[7] (path modern INTERSECT selector modern)","causalRootIds":[]},
@@ -35415,7 +35415,7 @@
       "ad7e825813ccabc7e18691405b187c86da563dea5e929d7217b96e6ac199463c",
       "0b572351d3b4c0ca82df3b77a35108b070e8208cc3d24558ea57b1fb4ebec942",
       "54d82746236204e8152a6e44eee17d92605b449b2ff155a27d2208472ecca07a",
-      "58edea9a043944935650175a3fd246be8926b811eae0e9bb731eb9e7d09e4b04",
+      "c85c14494f98dd162d845ab0d881d2d0d51ee8d0d5b2fc414012e5ffd269e376",
       "7f104cc1e6549154c71866df421f118312d65956d3da0dd0d8c542717d364e3a",
       "dbe1f564ed395e0db977c18ee66332a60c31681738952f45d77c3278d99b44b4"
     ],
@@ -73883,6 +73883,6 @@
   "provenance": {
     "producedBy": "cascade:producers --write",
     "writtenOn": "2026-10-05",
-    "contentDigest": "8b872b65200b9b6d8fa240f588a73d2df1cff2d796e0fb392859298993a29fa9"
+    "contentDigest": "fe83148f11c1bd7a534695675df34e57d0a3bdf065cb1180f456734574712692"
   }
 }

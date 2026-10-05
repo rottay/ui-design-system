@@ -21633,6 +21633,8 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   padding-block-end: var(--ds-card-header-padding-bottom);
   margin-block-end: var(--ds-card-header-padding-bottom);
   border-block-end: var(--ds-card-header-border-width) var(--ds-edge-standard-style) var(--ds-card-header-border, var(--ds-color-border));
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='extra'] {
   flex: 0 0 auto;
@@ -21674,6 +21676,8 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   justify-content: var(--_ds-card-actions-justify, flex-end);
   border-block-start: var(--ds-card-footer-border-width) var(--ds-edge-standard-style) var(--ds-card-footer-border, var(--ds-premium-card-footer-border, var(--ds-color-border)));
   border-radius: var(--_ds-card-nest-radius);
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
   background: var(--_ds-card-actions-zone-bg, var(--ds-card-footer-bg, transparent));
   gap: var(--ds-card-actions-gap, var(--ds-spacing-2));
   margin-block-start: var(--ds-card-actions-margin-top, var(--ds-spacing-4));
