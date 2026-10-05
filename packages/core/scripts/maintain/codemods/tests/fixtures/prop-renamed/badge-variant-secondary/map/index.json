@@ -19,7 +19,8 @@
       "parity": {
         "anchors": ["BadgeBaseProps.variant", "BadgeVariant", "Variant"],
         "failing": { "member": "variant", "value": "secondary" },
-        "test": "src/components/primitives/display/badge/tests/Badge.variant-tone-parity.test.tsx"
+        "test": "src/components/primitives/display/badge/tests/Badge.variant-tone-parity.test.tsx",
+        "lastRun": { "at": "2026-10-05T01:28:12Z", "command": "pnpm exec vitest run src/components/primitives/display/badge/tests/Badge.variant-tone-parity.test.tsx", "result": "passed" }
       }
     }
   ]

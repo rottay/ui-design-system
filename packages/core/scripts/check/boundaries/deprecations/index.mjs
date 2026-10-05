@@ -40,8 +40,13 @@
  *     failure for this row: an entry of the fixture's own `map/index.json` must
  *     declare `parity` and list the row's anchor, the fixture's
  *     `report/index.json` must carry a `report` row of that entry at the failing
- *     member and value in `input/`, and the component test it names must exist.
- *     Missing, ambiguous or malformed metadata refuses the row;
+ *     member and value in `input/`, and the component test it names must be a
+ *     file inside the package (not under `node_modules/` or `dist/`, not a
+ *     symlink out), non-empty, related (a runtime import resolves into the
+ *     owner directory of the entry's component, as `src/index.ts` exports it)
+ *     and asserting (a test case and an assertion of its runner, read with
+ *     comments and literals blanked); its `lastRun` must record a passing run of that
+ *     file. Missing, ambiguous or malformed metadata refuses the row;
  *   - a non-`debt` row without a blocker, without a canonical owner, or without
  *     evidence that verifies: a frozen-engine implementer that still reads the
  *     legacy name and not the replacement, a persisted-data reader, a consumer;
@@ -190,11 +195,18 @@ const FIXTURE_BLOCKERS = new Set(['direction-semantics:', 'parity-failed:']);
  * object of one entry of its own map. `anchors` are the ledger anchors it
  * answers for, `failing` the member (and the value, when one value failed) the
  * replacement cannot reproduce, `test` the package-relative component test that
- * measured it. The lists are closed.
+ * measured it, `lastRun` the last verified run of that test: `at` (UTC ISO
+ * instant, not in the future), `command` (naming `test`) and `result`. The gate
+ * never runs the test; whoever re-runs it rewrites `lastRun`. The lists are
+ * closed.
  */
-export const PARITY_KEYS = Object.freeze(['anchors', 'failing', 'test']);
+export const PARITY_KEYS = Object.freeze(['anchors', 'failing', 'test', 'lastRun']);
 export const PARITY_FAILING_KEYS = Object.freeze(['member', 'value']);
+export const PARITY_LAST_RUN_KEYS = Object.freeze(['at', 'command', 'result']);
+export const PARITY_RUN_RESULTS = Object.freeze(['passed', 'failed']);
 const PARITY_TEST_FILE = /\.test\.(?:tsx?|mjs)$/;
+const PARITY_TEST_EXCLUDED_ROOTS = new Set(['node_modules', 'dist']);
+const UTC_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
 
 const BLOCKERS_BY_CLASS = Object.freeze({
   'compat-consumed': ['parity-unproven', 'parity-failed:', 'direction-semantics:', 'replacement-capability-absent:'],
@@ -1113,7 +1125,7 @@ function parityShapeProblem(entry) {
   if (!isRecord(parity)) return `\`parity\` of ${entry.id} is not an object`;
   const unknown = Object.keys(parity).filter((key) => !PARITY_KEYS.includes(key));
   if (unknown.length > 0) return `\`parity\` of ${entry.id} has unknown key(s) ${unknown.join(', ')}`;
-  const missing = PARITY_KEYS.filter((key) => !(key in parity));
+  const missing = PARITY_KEYS.filter((key) => key !== 'lastRun' && !(key in parity));
   if (missing.length > 0) return `\`parity\` of ${entry.id} lacks ${missing.join(', ')}`;
   if (!Array.isArray(parity.anchors) || parity.anchors.length === 0 || !parity.anchors.every(isText)
     || new Set(parity.anchors).size !== parity.anchors.length) {
@@ -1128,8 +1140,227 @@ function parityShapeProblem(entry) {
   if ('value' in parity.failing && !isText(parity.failing.value)) {
     return `\`parity.failing.value\` of ${entry.id} is not a non-empty string`;
   }
-  if (!isRelativeFile(parity.test) || !PARITY_TEST_FILE.test(parity.test)) {
+  if (!isRelativeFile(parity.test) || !PARITY_TEST_FILE.test(parity.test)
+    || PARITY_TEST_EXCLUDED_ROOTS.has(parity.test.split('/')[0])) {
     return `\`parity.test\` of ${entry.id} is not one package-relative test file`;
+  }
+  return 'lastRun' in parity ? lastRunShapeProblem(entry.id, parity) : null;
+}
+
+/** Why a declared `parity.lastRun` is unreadable, or null. Its absence is a verdict, not a shape. */
+function lastRunShapeProblem(id, { lastRun, test }) {
+  if (!isRecord(lastRun)) return `\`parity.lastRun\` of ${id} is not an object`;
+  const stray = Object.keys(lastRun).filter((key) => !PARITY_LAST_RUN_KEYS.includes(key));
+  if (stray.length > 0) return `\`parity.lastRun\` of ${id} has unknown key(s) ${stray.join(', ')}`;
+  const missing = PARITY_LAST_RUN_KEYS.filter((key) => !(key in lastRun));
+  if (missing.length > 0) return `\`parity.lastRun\` of ${id} lacks ${missing.join(', ')}`;
+  const at = isText(lastRun.at) && UTC_INSTANT.test(lastRun.at) ? Date.parse(lastRun.at) : Number.NaN;
+  if (Number.isNaN(at) || new Date(at).toISOString().slice(0, 19) !== lastRun.at.slice(0, 19)) {
+    return `\`parity.lastRun.at\` of ${id} is not a UTC ISO instant`;
+  }
+  if (at > Date.now()) return `\`parity.lastRun.at\` of ${id} is in the future`;
+  if (!isText(lastRun.command) || !lastRun.command.split(/\s+/).includes(test)) {
+    return `\`parity.lastRun.command\` of ${id} does not run ${test}`;
+  }
+  if (!PARITY_RUN_RESULTS.includes(lastRun.result)) {
+    return `\`parity.lastRun.result\` of ${id} is not one of ${PARITY_RUN_RESULTS.join(', ')}`;
+  }
+  return null;
+}
+
+const SCRIPT_KIND_BY_EXTENSION = Object.freeze({ '.tsx': ts.ScriptKind.TSX, '.jsx': ts.ScriptKind.JSX, '.mjs': ts.ScriptKind.JS, '.js': ts.ScriptKind.JS });
+const MODULE_EXTENSIONS = Object.freeze(['.ts', '.tsx', '.mts', '.mjs', '.js', '.jsx']);
+export const PACKAGE_ENTRY = 'src/index.ts';
+const DS_PACKAGE_NAME = '@rottay/design-system';
+const PROSE_TOKENS = new Set([
+  ts.SyntaxKind.StringLiteral, ts.SyntaxKind.NoSubstitutionTemplateLiteral, ts.SyntaxKind.TemplateHead,
+  ts.SyntaxKind.TemplateMiddle, ts.SyntaxKind.TemplateTail, ts.SyntaxKind.JsxText, ts.SyntaxKind.RegularExpressionLiteral,
+]);
+
+function parseSource(file, text = readFileSync(file, 'utf8')) {
+  const kind = SCRIPT_KIND_BY_EXTENSION[file.slice(file.lastIndexOf('.'))] ?? ts.ScriptKind.TS;
+  return ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, kind);
+}
+
+/**
+ * Source text with comments and the contents of string, template and JSX text literals blanked (template `${…}`
+ * code stays), so neither prose nor a quoted call can stand in for code.
+ */
+function codeOf(sourceFile) {
+  const blanked = [...sourceFile.text];
+  const blank = (pos, end) => { for (let index = pos; index < end; index += 1) if (blanked[index] !== '\n') blanked[index] = ' '; };
+  const { ranges, tokens } = commentRangesOf(sourceFile);
+  for (const { pos, end } of ranges) blank(pos, end);
+  for (const token of tokens) if (PROSE_TOKENS.has(token.kind)) blank(token.getStart(sourceFile), token.getEnd());
+  return blanked.join('');
+}
+
+/** The `paths` aliases of the package's tsconfig as `[prefix, targetDirectory]`; single-star patterns only. */
+function pathAliasesOf(packageRoot) {
+  const config = join(packageRoot, 'tsconfig.json');
+  if (!existsSync(config)) return [];
+  const { config: json } = ts.parseConfigFileTextToJson(config, readFileSync(config, 'utf8'));
+  return Object.entries(json?.compilerOptions?.paths ?? {})
+    .filter(([pattern, targets]) => pattern.endsWith('/*') && Array.isArray(targets) && isText(targets[0]) && targets[0].endsWith('/*'))
+    .map(([pattern, [target]]) => [pattern.slice(0, -1), resolve(packageRoot, json.compilerOptions.baseUrl ?? '.', target.slice(0, -1))]);
+}
+
+/** The package file a relative or aliased specifier resolves to, or null; a bare package name resolves to nothing. */
+function resolveModule(context, from, specifier) {
+  let base = null;
+  if (specifier.startsWith('./') || specifier.startsWith('../')) base = resolve(dirname(from), specifier);
+  else {
+    const alias = context.aliases.find(([prefix]) => specifier.startsWith(prefix));
+    if (alias) base = join(alias[1], specifier.slice(alias[0].length));
+  }
+  if (base === null) return null;
+  const candidates = [base, ...MODULE_EXTENSIONS.map((ext) => `${base}${ext}`), ...MODULE_EXTENSIONS.map((ext) => join(base, `index${ext}`))];
+  const found = candidates.find((candidate) => existsSync(candidate) && statSync(candidate).isFile());
+  if (!found) return null;
+  const real = realpathSync(found);
+  return relative(context.root, real).startsWith('..') ? null : real;
+}
+
+function sourceOf(context, file) {
+  if (!context.sources.has(file)) context.sources.set(file, parseSource(file));
+  return context.sources.get(file);
+}
+
+const DECLARATION_KINDS = new Set([
+  ts.SyntaxKind.FunctionDeclaration, ts.SyntaxKind.ClassDeclaration, ts.SyntaxKind.InterfaceDeclaration,
+  ts.SyntaxKind.TypeAliasDeclaration, ts.SyntaxKind.EnumDeclaration,
+]);
+
+function declaresLocally(statement, name) {
+  if (DECLARATION_KINDS.has(statement.kind)) return statement.name?.text === name;
+  return ts.isVariableStatement(statement)
+    && statement.declarationList.declarations.some((declaration) => ts.isIdentifier(declaration.name) && declaration.name.text === name);
+}
+
+const isExported = (statement) => (ts.getCombinedModifierFlags(statement) & ts.ModifierFlags.Export) !== 0;
+
+/** The file that declares the export `name` of `file`, following re-exports and `export *`, or null. */
+function declaringFileOf(context, file, name, seen = new Set()) {
+  const key = `${file}#${name}`;
+  if (seen.has(key)) return null;
+  seen.add(key);
+  const { statements } = sourceOf(context, file);
+  const follow = (specifier, imported) => {
+    const target = resolveModule(context, file, specifier);
+    return target ? declaringFileOf(context, target, imported, seen) : null;
+  };
+  const local = (binding) => {
+    if (statements.some((statement) => declaresLocally(statement, binding))) return file;
+    for (const statement of statements) {
+      if (!ts.isImportDeclaration(statement) || !ts.isStringLiteral(statement.moduleSpecifier)) continue;
+      const named = statement.importClause?.namedBindings;
+      if (!named || !ts.isNamedImports(named)) continue;
+      const element = named.elements.find((item) => item.name.text === binding);
+      if (element) return follow(statement.moduleSpecifier.text, element.propertyName?.text ?? binding);
+    }
+    return null;
+  };
+  for (const statement of statements) {
+    if (isExported(statement) && declaresLocally(statement, name)) return file;
+    if (!ts.isExportDeclaration(statement) || !statement.exportClause || !ts.isNamedExports(statement.exportClause)) continue;
+    const element = statement.exportClause.elements.find((item) => item.name.text === name);
+    if (!element) continue;
+    const source = element.propertyName?.text ?? name;
+    return statement.moduleSpecifier && ts.isStringLiteral(statement.moduleSpecifier)
+      ? follow(statement.moduleSpecifier.text, source)
+      : local(source);
+  }
+  for (const statement of statements) {
+    if (ts.isExportDeclaration(statement) && !statement.exportClause && statement.moduleSpecifier
+      && ts.isStringLiteral(statement.moduleSpecifier)) {
+      const found = follow(statement.moduleSpecifier.text, name);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+/**
+ * The runtime imports of a test: every value-binding static import and every `import('…')` with a literal
+ * specifier, each with the names it binds. Type-only and side-effect-only imports bind nothing at runtime.
+ */
+function runtimeImportsOf(sourceFile) {
+  const imports = [];
+  const visit = (node) => {
+    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier) && node.importClause && !node.importClause.isTypeOnly) {
+      const { name, namedBindings } = node.importClause;
+      const names = namedBindings && ts.isNamedImports(namedBindings)
+        ? namedBindings.elements.filter((element) => !element.isTypeOnly).map((element) => (element.propertyName ?? element.name).text)
+        : [];
+      if (name || (namedBindings && ts.isNamespaceImport(namedBindings)) || names.length > 0) {
+        imports.push({ specifier: node.moduleSpecifier.text, names });
+      }
+    } else if (ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword
+      && node.arguments.length === 1 && ts.isStringLiteralLike(node.arguments[0])) {
+      imports.push({ specifier: node.arguments[0].text, names: [] });
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return imports;
+}
+
+const isInside = (directory, file) => {
+  const path = relative(directory, file);
+  return path.length > 0 && !path.startsWith('..') && !path.split(sep).includes('tests');
+};
+
+/**
+ * Whether the test reaches the entry's component in code: one of its runtime imports resolves to a package file
+ * inside the owner directory of a name the package entry exports (`components`, else `symbol`) — the directory
+ * of the file declaring it — and outside any `tests/` folder; or it imports that name from the package itself.
+ */
+function relatedImportProblem(context, test, sourceFile, names) {
+  const entry = join(context.root, PACKAGE_ENTRY);
+  if (!existsSync(entry)) return `the package entry ${PACKAGE_ENTRY} is absent, so ${names.join(' or ')} has no owner`;
+  const owners = names
+    .map((name) => [name, declaringFileOf(context, realpathSync(entry), name)])
+    .filter(([, declaring]) => declaring !== null);
+  if (owners.length === 0) return `${PACKAGE_ENTRY} exports no ${names.join(' or ')}, so the entry names no owner`;
+  const imports = runtimeImportsOf(sourceFile);
+  const reaches = imports.some(({ specifier, names: bound }) => {
+    if (specifier === DS_PACKAGE_NAME) return bound.some((name) => owners.some(([owned]) => owned === name));
+    const target = resolveModule(context, sourceFile.fileName, specifier);
+    return target !== null && owners.some(([, declaring]) => isInside(dirname(declaring), target));
+  });
+  if (reaches) return null;
+  const at = owners.map(([name, declaring]) => `${name} (${relative(context.root, dirname(declaring)).split(sep).join('/')}/)`).join(' or ');
+  return `${test} imports nothing at runtime from the owner of ${at}`;
+}
+
+const TEST_CASE = /(?<![\w$.])(?:it|test)(?:\.(?:each|only|concurrent))?\s*\(/;
+const ASSERTION_BY_RUNNER = Object.freeze({
+  vitest: /(?<![\w$.])expect(?:\.\w+)?\s*\(/,
+  node: /(?<![\w$.])(?:assert(?:\.\w+)?|expect)\s*\(/,
+});
+
+/**
+ * Why a backing test cannot stand behind the entry, or null: it must be a non-empty file that imports the entry's
+ * component from its owner (`relatedImportProblem`), registers a test case and asserts with its runner's idiom.
+ * Matching runs on code with comments and literal contents blanked; naming the component as a whole identifier
+ * is reported, never sufficient.
+ */
+export function backingTestProblem(packageRoot, backing, text, entry, test) {
+  if (text.trim().length === 0) return `EMPTY BACKING TEST: ${test} is empty`;
+  const sourceFile = parseSource(backing, text);
+  const code = codeOf(sourceFile);
+  const components = (Array.isArray(entry.components) ? entry.components : []).filter(isText);
+  const names = components.length > 0 ? components : [entry.symbol].filter(isText);
+  if (names.length === 0) return `UNRELATED BACKING TEST: the entry names no \`components\` or \`symbol\` for ${test} to reference`;
+  const context = { root: realpathSync(packageRoot), aliases: pathAliasesOf(packageRoot), sources: new Map() };
+  const unrelated = relatedImportProblem(context, test, sourceFile, names);
+  if (unrelated) {
+    const named = names.some((name) => new RegExp(`(?<![\\w$])${escapeRegExp(name)}(?![\\w$])`).test(code));
+    return `UNRELATED BACKING TEST: ${unrelated}${named ? '; naming it in code is not enough' : ''}`;
+  }
+  const runner = test.endsWith('.mjs') ? 'node' : 'vitest';
+  if (!TEST_CASE.test(code) || !ASSERTION_BY_RUNNER[runner].test(code)) {
+    return `UNASSERTED BACKING TEST: ${test} registers no test case with an assertion of its ${runner} runner`;
   }
   return null;
 }
@@ -1147,8 +1378,11 @@ function siteNamesFailure(site, failing) {
  * Whether a fixture proves a failed parity for one ledger row, beyond carrying
  * a verdict: null, or the first thing it lacks. The fixture must name the row
  * (`NO SYMBOL`), carry a `report` row at the failing member and value
- * (`NO REPORT ROW`) and name a component test that exists (`NO BACKING TEST`);
- * metadata that cannot be read is `MALFORMED` and refuses the row.
+ * (`NO REPORT ROW`), name a component test inside the package that exists
+ * (`NO BACKING TEST`), is non-empty (`EMPTY BACKING TEST`), imports the entry's
+ * component from its owner (`UNRELATED BACKING TEST`) and asserts (`UNASSERTED BACKING TEST`),
+ * and record a passing run of it (`NO VERIFIED RUN`, `FAILING RUN`); metadata
+ * that cannot be read is `MALFORMED` and refuses the row.
  */
 export function parityVerdict(packageRoot, fixture, row) {
   const at = `${CODEMOD_FIXTURES_PATH}/${fixture}`;
@@ -1181,7 +1415,8 @@ export function parityVerdict(packageRoot, fixture, row) {
   if (naming.length > 1) {
     return refuse(`MALFORMED: ${naming.map((entry) => entry.id).join(' and ')} both name this row; one entry answers for a row`);
   }
-  const [{ id, parity }] = naming;
+  const [entry] = naming;
+  const { id, parity } = entry;
   const failing = parity.failing.value === undefined
     ? `\`${parity.failing.member}\``
     : `\`${parity.failing.member}\` = \`${parity.failing.value}\``;
@@ -1212,6 +1447,20 @@ export function parityVerdict(packageRoot, fixture, row) {
   const backing = join(packageRoot, parity.test);
   if (!existsSync(backing) || !statSync(backing).isFile()) {
     return refuse(`NO BACKING TEST: the component test it names, ${parity.test}, does not exist`);
+  }
+  const root = realpathSync(packageRoot);
+  const real = realpathSync(backing);
+  const inside = relative(root, real);
+  if (inside.startsWith('..') || resolve(root, inside) !== real || PARITY_TEST_EXCLUDED_ROOTS.has(inside.split(sep)[0])) {
+    return refuse(`NO BACKING TEST: the component test it names, ${parity.test}, resolves outside the package`);
+  }
+  const unfit = backingTestProblem(packageRoot, real, readFileSync(backing, 'utf8'), entry, parity.test);
+  if (unfit) return refuse(unfit);
+  if (!('lastRun' in parity)) {
+    return refuse(`NO VERIFIED RUN: \`parity.lastRun\` of ${id} records no run of ${parity.test}`);
+  }
+  if (parity.lastRun.result !== 'passed') {
+    return refuse(`FAILING RUN: the last recorded run of ${parity.test} (${parity.lastRun.at}) is \`${parity.lastRun.result}\``);
   }
   return null;
 }

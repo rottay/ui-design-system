@@ -13,7 +13,7 @@
  */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -21,7 +21,7 @@ import { after, describe, it } from 'node:test';
 
 import {
   BLOCKERS, CLASSES, CODEMOD_FIXTURES_PATH, CODEMOD_MAP_PATH, CODEMOD_TESTS_PATH, GATES_MANIFEST_PATH, HEADER_KEYS,
-  LEDGER_PATH, RECEIPTS_PATH, RECEIPT_AUDIT_KEYS, RECEIPT_KEYS, REGISTRY_PATH, ROW_KEYS, codemodIdProblem, digestOf, evaluate,
+  LEDGER_PATH, PACKAGE_ENTRY, RECEIPTS_PATH, RECEIPT_AUDIT_KEYS, RECEIPT_KEYS, REGISTRY_PATH, ROW_KEYS, backingTestProblem, codemodIdProblem, digestOf, evaluate,
   fixtureVerdict, identifierResolves, loadCodemodLookup, matchOf, measure, mintIntegrityOf, parityVerdict, parseArgs,
   reasonProblem, receiptIntegrityOf, rowDigestOf, run, scanMarkers,
 } from '../index.mjs';
@@ -253,16 +253,34 @@ const WITH_NEW_MARKER = [NEW_MARKER_SOURCE, '  /** @deprecated Use `label`. */',
 const PARITY_ID = 'prop-renamed/.#WidgetProps.variant';
 const PARITY_TEST = 'src/widget/tests/Widget.variant-tone-parity.test.tsx';
 const PARITY_INPUT = ['export const Page = () => (', '  <Widget variant="primary" />', '  <Widget variant="secondary" />', ');', ''].join('\n');
+const PARITY_TEST_SOURCE = [
+  "import { expect, it } from 'vitest';",
+  "import Widget from '../index';",
+  "it('no tone renders what variant=\"secondary\" renders', () => {",
+  "  expect(render(<Widget variant=\"secondary\" />)).not.toBe(render(<Widget tone=\"neutral\" />));",
+  '});',
+  '',
+].join('\n');
+const PARITY_OWNER = 'src/widget/index.tsx';
+const PARITY_PACKAGE_ENTRY = "export * from './widget';\n";
+const PARITY_OWNER_SOURCE = "export type { WidgetProps } from './contracts';\nexport const Widget = (props: object) => null;\nexport default Widget;\n";
+const lastRunOf = (test) => ({ at: '2026-10-04T12:00:00Z', command: `pnpm exec vitest run ${test}`, result: 'passed' });
 const fixtureFile = (name, fixture = FIXTURE) => `packages/core/${CODEMOD_FIXTURES_PATH}/${fixture}/${name}`;
 
 /**
  * What a fixture owes a `parity-failed` row: an entry that names the row's anchor and the failing value, a
- * `report` row at that value in `input/`, and the component test it names. `alter` receives the parts before
- * they are written, as `{ parity, report, input }`.
+ * `report` row at that value in `input/`, the component test it names (related to the entry's component, asserting)
+ * and a passing `lastRun` of it. `alter` receives the parts before they are written, as
+ * `{ components, symbol, parity, testSource, report, input }`.
  */
 function plantParity(parts, alter = () => {}, fixture = FIXTURE) {
   const planted = {
-    parity: { anchors: ['WidgetProps.variant'], failing: { member: 'variant', value: 'secondary' }, test: PARITY_TEST },
+    components: ['Widget'],
+    symbol: 'WidgetProps',
+    parity: {
+      anchors: ['WidgetProps.variant'], failing: { member: 'variant', value: 'secondary' }, test: PARITY_TEST, lastRun: lastRunOf(PARITY_TEST),
+    },
+    testSource: PARITY_TEST_SOURCE,
     report: [
       { file: 'index.tsx', line: 2, column: 11, action: 'rewrite', id: PARITY_ID, reason: 'attribute-renamed' },
       { file: 'index.tsx', line: 3, column: 11, action: 'report', id: PARITY_ID, reason: 'unmapped-value' },
@@ -270,11 +288,18 @@ function plantParity(parts, alter = () => {}, fixture = FIXTURE) {
     input: PARITY_INPUT,
   };
   alter(planted);
-  const entry = { id: PARITY_ID, ...(planted.parity === undefined ? {} : { parity: planted.parity }) };
+  const entry = {
+    id: PARITY_ID,
+    ...(planted.symbol === undefined ? {} : { symbol: planted.symbol }),
+    ...(planted.components === undefined ? {} : { components: planted.components }),
+    ...(planted.parity === undefined ? {} : { parity: planted.parity }),
+  };
   parts.files[fixtureFile('map/index.json', fixture)] = JSON.stringify({ schemaVersion: 1, entries: [entry] });
   parts.files[fixtureFile('report/index.json', fixture)] = JSON.stringify(planted.report);
   parts.files[fixtureFile('input/index.tsx', fixture)] = planted.input;
-  parts.files[`packages/core/${PARITY_TEST}`] = "test('secondary has no tone', () => {});\n";
+  parts.files[`packages/core/${PARITY_TEST}`] = planted.testSource;
+  parts.files[`packages/core/${PACKAGE_ENTRY}`] ??= PARITY_PACKAGE_ENTRY;
+  parts.files[`packages/core/${PARITY_OWNER}`] ??= PARITY_OWNER_SOURCE;
 }
 
 /** Every row re-homed to the successor for the later line, with a verdict fixture and a notice id; the debt row is retired. */
@@ -526,7 +551,7 @@ describe('deprecations — negatives', () => {
     assert.match(fixtureVerdict(file.packageRoot, '../fixtures/a-file'), /is not a fixture path/);
   });
 
-  it('H1.5: a parity-failed fixture names the row, reports the failing value and names a test that exists', () => {
+  it('H1.5: a parity-failed fixture names the row, reports the failing value, names a related asserting test inside the package and a passing run of it', () => {
     const codemods = wiredFor(ALL_IDS);
     const views = [{ codemods }, { codemods, assumeDone: [OWNER] }];
     const mutant = (alter, after = () => {}) => (parts) => { rehome(parts); plantParity(parts, alter); after(parts); };
@@ -571,10 +596,136 @@ describe('deprecations — negatives', () => {
       assertGreen(check(mutant((planted) => { delete planted.parity.failing.value; }), options));
     }
 
-    refused('test path absent', mutant((planted) => { planted.parity.test = 'src/widget/tests/Nowhere.test.tsx'; }),
+    refused('test path absent', mutant((planted) => {
+      planted.parity.test = 'src/widget/tests/Nowhere.test.tsx';
+      planted.parity.lastRun = lastRunOf(planted.parity.test);
+    }),
       /NO BACKING TEST: the component test it names, src\/widget\/tests\/Nowhere\.test\.tsx, does not exist/);
     refused('test file deleted', mutant(() => {}, (parts) => { delete parts.files[`packages/core/${PARITY_TEST}`]; }),
       /NO BACKING TEST: .*Widget\.variant-tone-parity\.test\.tsx, does not exist/);
+
+    // Existing is not enough: the test must be non-empty, about the entry's component, and assert.
+    refused('test file empty', mutant((planted) => { planted.testSource = ''; }), /EMPTY BACKING TEST: src\/widget\/tests\/Widget\.variant-tone-parity\.test\.tsx is empty/);
+    refused('test file blank', mutant((planted) => { planted.testSource = '\n  \n'; }), /EMPTY BACKING TEST/);
+    const unrelated = /UNRELATED BACKING TEST: src\/widget\/tests\/Widget\.variant-tone-parity\.test\.tsx imports nothing at runtime from the owner of Widget \(src\/widget\/\)/;
+    const elsewhere = (source) => source.replace("'../index'", "'../../gadget'");
+    const gadget = (parts) => { parts.files['packages/core/src/gadget/index.tsx'] = 'export default () => null;\n'; };
+    refused('test of another component', mutant((planted) => { planted.testSource = elsewhere(PARITY_TEST_SOURCE).replaceAll('Widget', 'Gadget'); }, gadget), unrelated);
+    refused('component named in a comment only', mutant((planted) => {
+      planted.testSource = `/** Widget parity. */\n// Widget\n${elsewhere(PARITY_TEST_SOURCE).replaceAll('Widget', 'Gadget')}`;
+    }, gadget), unrelated);
+    refused('component named as a word fragment only', mutant((planted) => {
+      planted.testSource = elsewhere(PARITY_TEST_SOURCE).replaceAll('Widget', 'WidgetLike');
+    }, gadget), unrelated);
+    refused('entry names no component', mutant((planted) => { planted.components = undefined; planted.symbol = undefined; }),
+      /UNRELATED BACKING TEST: the entry names no `components` or `symbol`/);
+
+    // Relatedness is code-level: a runtime import that resolves into the owner of the entry's component. A name in a
+    // title, a quoted call, a type-only or side-effect import, or a whole identifier on its own does not relate.
+    const CASE = "it('renders', () => { expect(render(<Shown />)).toBeTruthy(); });\n";
+    refused('component named only in a title', mutant((planted) => {
+      planted.testSource = `import { expect, it } from 'vitest';\ndescribe.each([1])('Widget variant and tone on %s', () => {\n  ${CASE}});\n`;
+    }), unrelated);
+    refused('component named only in a template literal', mutant((planted) => {
+      planted.testSource = `import { expect, it } from 'vitest';\nconst title = \`Widget \${1}\`;\n${CASE}`;
+    }), unrelated);
+    refused('component named only in JSX text', mutant((planted) => {
+      planted.testSource = `import { expect, it } from 'vitest';\nit('x', () => { expect(<p>Widget</p>).toBeTruthy(); });\n`;
+    }), unrelated);
+    refused('a file importing nothing from the DS', mutant((planted) => {
+      planted.testSource = "import { expect, it } from 'vitest';\nconst Widget = () => null;\nit('x', () => { expect(<Widget />).toBeTruthy(); });\n";
+    }), /UNRELATED BACKING TEST: .* imports nothing at runtime from the owner of Widget \(src\/widget\/\); naming it in code is not enough/);
+    refused('import from the test folder of the owner', mutant((planted) => {
+      planted.testSource = `import { expect, it } from 'vitest';\nimport Shown from './helper';\n${CASE}`;
+    }, (parts) => { parts.files['packages/core/src/widget/tests/helper.tsx'] = 'export default () => null;\n'; }), unrelated);
+    refused('type-only import of the owner', mutant((planted) => {
+      planted.testSource = `import { expect, it } from 'vitest';\nimport type { Widget } from '../index';\n${CASE}`;
+    }), unrelated);
+    refused('side-effect import of the owner', mutant((planted) => {
+      planted.testSource = `import { expect, it } from 'vitest';\nimport '../index';\n${CASE}`;
+    }), unrelated);
+    refused('import that does not resolve', mutant((planted) => {
+      planted.testSource = `import { expect, it } from 'vitest';\nimport Shown from '../nowhere';\n${CASE}`;
+    }), unrelated);
+    refused('another component of the package', mutant((planted) => {
+      planted.testSource = `import { expect, it } from 'vitest';\nimport Shown from '../../gadget';\n${CASE}`;
+    }, (parts) => { parts.files['packages/core/src/gadget/index.tsx'] = 'export default () => null;\n'; }), unrelated);
+    refused('package entry exports no component', mutant(() => {}, (parts) => { parts.files[`packages/core/${PACKAGE_ENTRY}`] = 'export {};\n'; }),
+      /UNRELATED BACKING TEST: src\/index\.ts exports no Widget, so the entry names no owner/);
+    for (const options of views) {
+      const engine = (source) => mutant((planted) => { planted.testSource = source; });
+      assertGreen(check(engine(`import { expect, it } from 'vitest';\nimport { ClassicWidget as Shown } from '../engines/classic';\n${CASE}`), options));
+      assertGreen(check(engine(`import { expect, it } from 'vitest';\nit('x', async () => { const { ClassicWidget: Shown } = await import('../engines/classic'); expect(<Shown />).toBeTruthy(); });\n`), options));
+      assertGreen(check(mutant((planted) => {
+        planted.testSource = `import { expect, it } from 'vitest';\nimport { Widget as Shown } from '@rottay/design-system';\n${CASE}`;
+      }), options));
+      assertGreen(check(mutant((planted) => {
+        planted.testSource = `import { expect, it } from 'vitest';\nimport { Widget as Shown } from '../../widget';\n${CASE}`;
+      }), options));
+    }
+    refused('another name from the package', mutant((planted) => {
+      planted.testSource = `import { expect, it } from 'vitest';\nimport { Gadget as Shown } from '@rottay/design-system';\n${CASE}`;
+    }), unrelated);
+    const unasserted = /UNASSERTED BACKING TEST: .* registers no test case with an assertion of its vitest runner/;
+    refused('no assertion', mutant((planted) => { planted.testSource = "import Widget from '../index';\nit('renders', () => { Widget; });\n"; }), unasserted);
+    refused('assertion inside a string only', mutant((planted) => {
+      planted.testSource = "import Widget from '../index';\nit('renders', () => { const s = 'expect(Widget).toBeDefined()'; Widget; });\n";
+    }), unasserted);
+    refused('assertion inside a template literal only', mutant((planted) => {
+      planted.testSource = "import Widget from '../index';\nit('renders', () => { const s = `expect(${Widget})`; });\n";
+    }), unasserted);
+    refused('test case inside a string only', mutant((planted) => {
+      planted.testSource = "import Widget from '../index';\nconst s = \"it('x', () => {})\";\nexpect(Widget).toBeDefined();\n";
+    }), unasserted);
+    refused('assertion in a line comment after a colon', mutant((planted) => {
+      planted.testSource = "import Widget from '../index';\nit('renders', () => { switch (1) { default:// expect(Widget).toBe(1)\n } });\n";
+    }), unasserted);
+    refused('assertion in a comment only', mutant((planted) => {
+      planted.testSource = "import Widget from '../index';\nit('renders', () => {\n  // expect(Widget).toBeDefined();\n});\n";
+    }), unasserted);
+    refused('no test case', mutant((planted) => { planted.testSource = "import Widget from '../index';\nexpect(Widget).toBeDefined();\n"; }), unasserted);
+    refused('node assertion in a vitest file', mutant((planted) => {
+      planted.testSource = "import Widget from '../index';\nit('renders', () => { assert.ok(Widget); });\n";
+    }), unasserted);
+
+    // Outside the package by resolution: a symlink inside `packages/core` that points out of it.
+    for (const options of views) {
+      const built = tree(mutant(() => {}));
+      const backing = join(built.packageRoot, PARITY_TEST);
+      const outside = join(built.repoRoot, 'elsewhere/Widget.variant-tone-parity.test.tsx');
+      mkdirSync(dirname(outside), { recursive: true });
+      writeFileSync(outside, PARITY_TEST_SOURCE);
+      unlinkSync(backing);
+      symlinkSync(outside, backing);
+      const result = evaluate(measure(built), options);
+      assertRedOnlyFor(result, /NO BACKING TEST: the component test it names, .*, resolves outside the package/, 1);
+    }
+
+    // The run: absent, or recorded as failing, refuses the row; the gate never runs the test itself.
+    refused('no recorded run', mutant((planted) => { delete planted.parity.lastRun; }),
+      /NO VERIFIED RUN: `parity\.lastRun` of prop-renamed\/\.#WidgetProps\.variant records no run of src\/widget\/tests\/Widget\.variant-tone-parity\.test\.tsx/);
+    refused('failing run', mutant((planted) => { planted.parity.lastRun.result = 'failed'; }),
+      /FAILING RUN: the last recorded run of src\/widget\/tests\/Widget\.variant-tone-parity\.test\.tsx \(2026-10-04T12:00:00Z\) is `failed`/);
+
+    // Any tests location inside the package counts, and each runner speaks its own idiom.
+    const INTEGRATION_TEST = 'tests/integration/widget/Widget.variant-tone-parity.test.tsx';
+    const NODE_TEST = 'scripts/widget/tests/Widget.parity.test.mjs';
+    const relocated = (test, source) => mutant((planted) => {
+      planted.parity.test = test;
+      planted.parity.lastRun = lastRunOf(test);
+    }, (parts) => {
+      delete parts.files[`packages/core/${PARITY_TEST}`];
+      parts.files[`packages/core/${test}`] = source;
+    });
+    for (const options of views) {
+      assertGreen(check(relocated(INTEGRATION_TEST, PARITY_TEST_SOURCE.replace("'../index'", "'../../../src/widget'")), options));
+      assertGreen(check(relocated(NODE_TEST, "import assert from 'node:assert/strict';\nimport { it } from 'node:test';\nimport { Widget } from '../../../src/widget';\nit('renders', () => { assert.equal(typeof Widget, 'function'); });\n"), options));
+      assertGreen(check(mutant((planted) => { planted.testSource = PARITY_TEST_SOURCE.replace("it('", "it.each([1])('%s "); }), options));
+      assertGreen(check(mutant((planted) => {
+        planted.components = undefined;
+        planted.testSource = PARITY_TEST_SOURCE.replace("import Widget from '../index';", "import * as contracts from '../contracts';");
+      }), options));
+    }
 
     const malformed = [
       ['parity is a string', (planted) => { planted.parity = PARITY_TEST; }, /MALFORMED: `parity` of .* is not an object/],
@@ -590,6 +741,19 @@ describe('deprecations — negatives', () => {
       ['test escapes the package', (planted) => { planted.parity.test = '../core/src/widget/tests/Widget.variant-tone-parity.test.tsx'; }, /MALFORMED: `parity\.test` of/],
       ['test is a glob', (planted) => { planted.parity.test = 'src/widget/tests/*.test.tsx'; }, /MALFORMED: `parity\.test` of/],
       ['test is not a test file', (planted) => { planted.parity.test = CONTRACTS; }, /MALFORMED: `parity\.test` of/],
+      ['test is absolute', (planted) => { planted.parity.test = '/tmp/Widget.variant-tone-parity.test.tsx'; }, /MALFORMED: `parity\.test` of/],
+      ['test under node_modules', (planted) => { planted.parity.test = 'node_modules/widget/Widget.test.tsx'; }, /MALFORMED: `parity\.test` of/],
+      ['test under dist', (planted) => { planted.parity.test = 'dist/widget/Widget.test.tsx'; }, /MALFORMED: `parity\.test` of/],
+      ['lastRun is a string', (planted) => { planted.parity.lastRun = 'passed'; }, /MALFORMED: `parity\.lastRun` of .* is not an object/],
+      ['lastRun unknown key', (planted) => { planted.parity.lastRun.tests = 21; }, /MALFORMED: `parity\.lastRun` of .* has unknown key\(s\) tests/],
+      ['lastRun without command', (planted) => { delete planted.parity.lastRun.command; }, /MALFORMED: `parity\.lastRun` of .* lacks command/],
+      ['lastRun at a date only', (planted) => { planted.parity.lastRun.at = '2026-10-04'; }, /MALFORMED: `parity\.lastRun\.at` of .* is not a UTC ISO instant/],
+      ['lastRun at an impossible instant', (planted) => { planted.parity.lastRun.at = '2026-02-30T12:00:00Z'; }, /MALFORMED: `parity\.lastRun\.at` of .* is not a UTC ISO instant/],
+      ['lastRun at a local instant', (planted) => { planted.parity.lastRun.at = '2026-10-04T12:00:00'; }, /MALFORMED: `parity\.lastRun\.at` of .* is not a UTC ISO instant/],
+      ['lastRun in the future', (planted) => { planted.parity.lastRun.at = '2999-01-01T00:00:00Z'; }, /MALFORMED: `parity\.lastRun\.at` of .* is in the future/],
+      ['lastRun ran another test', (planted) => { planted.parity.lastRun.command = 'pnpm exec vitest run src/other/tests/Other.test.tsx'; }, /MALFORMED: `parity\.lastRun\.command` of .* does not run src\/widget\/tests\/Widget\.variant-tone-parity\.test\.tsx/],
+      ['lastRun ran a prefix of the test', (planted) => { planted.parity.lastRun.command = `pnpm exec vitest run ${PARITY_TEST}x`; }, /MALFORMED: `parity\.lastRun\.command` of/],
+      ['lastRun result is free text', (planted) => { planted.parity.lastRun.result = 'ok'; }, /MALFORMED: `parity\.lastRun\.result` of .* is not one of passed, failed/],
       ['report is not a list', (planted) => { planted.report = { rows: [] }; }, /MALFORMED: report\/index\.json is not a list of rows/],
     ];
     for (const [name, alter, pattern] of malformed) refused(name, mutant(alter), pattern);
@@ -610,6 +774,22 @@ describe('deprecations — negatives', () => {
   });
 
   it('H1.6: the shipped Badge and Tag fixtures prove their rows, and an undeclared shipped fixture proves none', () => {
+    for (const fixture of ['prop-renamed/badge-variant-secondary', 'prop-renamed/tag-variant-secondary']) {
+      const map = JSON.parse(readFileSync(join(REAL_PACKAGE, CODEMOD_FIXTURES_PATH, fixture, 'map/index.json'), 'utf8'));
+      const { parity } = map.entries.find((entry) => 'parity' in entry);
+      assert.equal(parity.lastRun.result, 'passed', `${fixture} records a passing run`);
+      assert.ok(parity.lastRun.command.split(/\s+/).includes(parity.test), `${fixture} records a run of its own test`);
+      // The test relates by its engine imports alone: redirected, it is refused, and no title string rescues it.
+      const entry = map.entries.find((item) => 'parity' in item);
+      const backing = join(REAL_PACKAGE, parity.test);
+      const source = readFileSync(backing, 'utf8');
+      assert.equal(backingTestProblem(REAL_PACKAGE, backing, source, entry, parity.test), null, fixture);
+      const redirected = source.replaceAll("from '../engines/", "from '../../avatar/engines/");
+      assert.notEqual(redirected, source, `${fixture} imports its engines`);
+      const refusal = backingTestProblem(REAL_PACKAGE, backing, redirected, entry, parity.test);
+      assert.match(refusal, new RegExp(`UNRELATED BACKING TEST: .* imports nothing at runtime from the owner of ${entry.components[0]} `));
+      assert.doesNotMatch(refusal, /naming it in code/, `${fixture} names its component in code only inside strings`);
+    }
     const proven = [
       ['prop-renamed/badge-variant-secondary', 'BadgeBaseProps.variant'],
       ['prop-renamed/badge-variant-secondary', 'BadgeVariant'],

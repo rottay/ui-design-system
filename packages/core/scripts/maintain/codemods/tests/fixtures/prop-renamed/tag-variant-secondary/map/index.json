@@ -19,7 +19,8 @@
       "parity": {
         "anchors": ["TagProps.variant", "TagVariant"],
         "failing": { "member": "variant", "value": "secondary" },
-        "test": "src/components/primitives/display/tag/tests/Tag.variant-tone-parity.test.tsx"
+        "test": "src/components/primitives/display/tag/tests/Tag.variant-tone-parity.test.tsx",
+        "lastRun": { "at": "2026-10-05T01:28:25Z", "command": "pnpm exec vitest run src/components/primitives/display/tag/tests/Tag.variant-tone-parity.test.tsx", "result": "passed" }
       }
     }
   ]
