@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -7,19 +7,28 @@ import { describe, it } from 'node:test';
 
 import { readProgramIndicatorMeasurement } from '../../../../../../../../scripts/maintain/roadmap/status/index.mjs';
 import { AXIS_IDS, AXIS_POPULATION_LAWS } from '../../../population/index.mjs';
-import { NO_WRITE_FLAG, SCENARIOS, UNOBSERVABLE_FAMILIES, publicationRefusal } from '../../index.mjs';
+import {
+  GATE_REFUSAL_HEAD, NO_WRITE_FLAG, SCENARIOS, UNOBSERVABLE_FAMILIES, VERIFY_INDICATOR_FLAG, publicationRefusal, verifyIndicator,
+} from '../../index.mjs';
 import * as indicatorModule from '../index.mjs';
 import {
   FLEET_THEMES,
   FLEET_VERTICALS,
+  INDICATOR_FIELDS,
   INDICATOR_ID,
+  INDICATOR_OPTIONAL_FIELDS,
   INDICATOR_PATH,
+  INPUT_DIGEST_PARTS,
   EFFECTIVE_DEFINITION,
   REPRODUCTION_FLAGS,
   NON_MOVER_CLASSES,
   axisReadings,
   buildIndicator,
+  indicatorDeclaredBasisVerdict,
+  indicatorFreshnessRefusals,
   indicatorRefusal,
+  inputDigestOf,
+  inputDigestShapeFailure,
   gateProvenanceRefusal,
   provenanceRefusal,
   negativeControlsOf,
@@ -537,5 +546,321 @@ describe('tenant-difference-by-axis indicator — the non-movers are published b
     assert.deepEqual(nonMoversByClass(result, 'shape', ['kbd']).unreached, []);
     assert.deepEqual(nonMoversByClass(result, 'shape', ['kbd']).measuredNotMoving, ['kbd']);
     assert.deepEqual(nonMoversByClass(result, 'states', ['kbd']).unreached, ['kbd']);
+  });
+});
+
+describe('tenant-difference-by-axis — the input digest and --verify-indicator (audit W19-R33 P3)', () => {
+  const hex = (seed) => seed.repeat(64).slice(0, 64);
+  const DIGEST = inputDigestOf({ sourceHash: hex('a'), buildInputFingerprint: hex('b'), instrument: hex('c') });
+  const CURRENT = Object.freeze({ catalogRevision: 'fixture', browser: 'fixture', inputDigest: DIGEST });
+  const publish = (result = fleetResult(), options = {}) => buildIndicator(result, {
+    negativeControls: CONTROLS, producedAt: '2026-10-04T00:00:00.000Z', commit: 'c0ffee', inputDigest: DIGEST, ...options,
+  });
+  const fresh = (indicator, current = {}) => indicatorFreshnessRefusals(indicator, { ...CURRENT, threshold: 80, ...current });
+  /** Runs the mode on a throwaway root holding `content` as the published file (or nothing). */
+  const verify = (content, { threshold = 80, facts = { ...CURRENT, reasons: {} } } = {}) => {
+    const root = mkdtempSync(join(tmpdir(), 'indicator-7-verify-'));
+    try {
+      if (content !== undefined) {
+        mkdirSync(dirname(join(root, INDICATOR_PATH)), { recursive: true });
+        writeFileSync(join(root, INDICATOR_PATH), typeof content === 'string' ? content : `${JSON.stringify(content, null, 2)}\n`);
+      }
+      return verifyIndicator({ root, threshold, facts });
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  };
+  const refusedWith = (outcome, pattern) => {
+    assert.equal(outcome.exitCode, 1);
+    assert.equal(outcome.verdict, null, 'a refusal carries no verdict');
+    assert.ok(outcome.errors.some((line) => line.startsWith(`${GATE_REFUSAL_HEAD} — ${VERIFY_INDICATOR_FLAG}: `) && pattern.test(line)),
+      `expected a refusal matching ${pattern} in:\n${outcome.errors.join('\n')}`);
+    assert.ok(!outcome.errors.some((line) => line.includes('axis-difference FAIL')), 'a refused reading is never judged');
+  };
+
+  it('PUBLICATION records the input digest, and the field list is exactly what the writer writes', () => {
+    const indicator = publish();
+    assert.deepEqual(indicator.inputDigest, DIGEST);
+    assert.deepEqual(Object.keys(DIGEST), ['algorithm', 'digest', 'parts']);
+    assert.deepEqual(Object.keys(DIGEST.parts), [...INPUT_DIGEST_PARTS]);
+    assert.deepEqual(Object.keys(indicator), [...INDICATOR_FIELDS], 'no chromatic reading in this run');
+    assert.deepEqual(INDICATOR_OPTIONAL_FIELDS, ['chromaticStates']);
+    assert.deepEqual(fresh({ ...indicator, chromaticStates: { kind: 'reported-apart' } }), [], 'the chromatic sibling is a field the writer writes');
+    // A writer that is not told the digest records its absence, and that never verifies.
+    assert.equal(build(fleetResult()).inputDigest, null);
+    assert.match(fresh(build(fleetResult()))[0], /^input digest: the indicator records no input digest$/u);
+  });
+
+  it('the digest is its parts and nothing else: one moved part moves it, a part that is no sha256 throws', () => {
+    for (const name of INPUT_DIGEST_PARTS) {
+      assert.notEqual(inputDigestOf({ ...DIGEST.parts, [name]: hex('d') }).digest, DIGEST.digest, name);
+      assert.throws(() => inputDigestOf({ ...DIGEST.parts, [name]: 'short' }), new RegExp(`part \`${name}\` is not a sha256`, 'u'));
+    }
+    assert.equal(inputDigestShapeFailure(DIGEST), null);
+    assert.match(inputDigestShapeFailure({ ...DIGEST, digest: hex('e') }), /its own parts do not reproduce/u);
+    assert.match(inputDigestShapeFailure({ ...DIGEST, extra: 1 }), /with the keys algorithm, digest, extra, parts/u);
+    assert.match(inputDigestShapeFailure({ ...DIGEST, algorithm: 'md5' }), /under `md5`/u);
+    assert.match(inputDigestShapeFailure({ ...DIGEST, parts: { sourceHash: hex('a') } }), /parts are not exactly/u);
+    assert.match(inputDigestShapeFailure(DIGEST.digest), /not an object/u);
+  });
+
+  it('GREEN: a fresh indicator at the bar is VERIFIED, and the effective reading is printed, never the verdict', () => {
+    const outcome = verify(publish());
+    assert.deepEqual(outcome.errors, []);
+    assert.equal(outcome.exitCode, 0);
+    assert.match(outcome.verdict, /^axis-difference VERIFIED — .* every axis is at or above 80 % on the declared basis \(6\/6 at threshold; /u);
+    assert.match(outcome.verdict, /effective-denominator reading 6\/6, reported, never the status\); a reading of the indicator, not a measurement$/u);
+    assert.equal(outcome.stdout.at(-1), outcome.verdict, 'the VERIFIED line is the last thing printed');
+    assert.deepEqual(outcome.stdout.slice(0, -1), outcome.lines);
+    assert.match(outcome.lines[0], /no browser launched, nothing measured$/u);
+    assert.match(outcome.lines[1], /fresh: threshold 80, catalog fixture, 3 vertical\(s\) x 2 mode\(s\), chromium fixture, input digest /u);
+    for (const axis of AXIS_IDS) {
+      assert.ok(outcome.lines.some((line) => line.trimStart().startsWith(axis) && /effective .* reported, never the status$/u.test(line)), axis);
+    }
+  });
+
+  it('RED: a fresh indicator with an axis below the bar on the DECLARED basis exits 1, though its effective reading is at it', () => {
+    // 118/155 = 76.1 % declared, 118/147 = 80.3 % effective: the crossing the effective reading alone would make.
+    const indicator = publish(fleetResult({ states: 118 }));
+    assert.equal(indicator.axes.states.effectiveAtThreshold, true);
+    assert.deepEqual(fresh(indicator), [], 'the reading is fresh; it is short');
+    const outcome = verify(indicator);
+    assert.equal(outcome.exitCode, 1);
+    assert.equal(outcome.verdict, null);
+    assert.equal(outcome.errors.length, 1);
+    assert.match(outcome.errors[0], /^axis-difference FAIL — states: 76\.1 % < 80 % on the declared basis on bithire\/light \(118\/155 declaring families/u);
+    assert.deepEqual(outcome.stdout, outcome.lines, 'a failed reading prints its readings and no passing line');
+    assert.ok(outcome.lines.some((line) => /states\s+below-threshold\s+declared 118\/155 = 76\.1 % .*effective 80\.3 %/u.test(line)));
+  });
+
+  it('REFUSED missing indicator: no file is exit 1, never a skip', () => {
+    refusedWith(verify(undefined), /missing indicator: artifacts\/quality\/indicators\/tenant-difference-by-axis\/index\.json does not exist/u);
+    refusedWith(verify('{ not json'), /unreadable indicator: .* is not JSON/u);
+    refusedWith(verify('[]'), /shape: the indicator is not a JSON object/u);
+  });
+
+  it('REFUSED unknown fields: a field the writer does not write, or a missing one', () => {
+    refusedWith(verify({ ...publish(), waiver: true }), /unknown fields: waiver — not written by the indicator's writer/u);
+    const { browser: _browser, ...withoutBrowser } = publish();
+    refusedWith(verify(withoutBrowser), /missing fields: browser$/u);
+    refusedWith(verify({ ...publish(), id: 'decisions-lit' }), /id: the file is "decisions-lit", not tenant-difference-by-axis/u);
+  });
+
+  it('REFUSED no input digest: a reading published before the field existed is not verifiable', () => {
+    const { inputDigest: _digest, ...legacy } = publish();
+    refusedWith(verify(legacy), /missing fields: inputDigest — a reading published before the input digest existed cannot be verified; republish it/u);
+    refusedWith(verify({ ...publish(), inputDigest: null }), /input digest: the indicator records no input digest/u);
+    refusedWith(verify({ ...publish(), inputDigest: { ...DIGEST, digest: hex('f') } }), /input digest: the indicator records an input digest its own parts do not reproduce/u);
+  });
+
+  it('REFUSED stale digest: a skin, a build input or the instrument moved since publication, named by part', () => {
+    for (const name of INPUT_DIGEST_PARTS) {
+      const moved = inputDigestOf({ ...DIGEST.parts, [name]: hex('9') });
+      refusedWith(verify(publish(), { facts: { ...CURRENT, inputDigest: moved, reasons: {} } }),
+        new RegExp(`stale input digest: the indicator was read from ${DIGEST.digest.slice(0, 16)} and the inputs are now `
+          + `${moved.digest.slice(0, 16)} \\(moved: ${name}\\)`, 'u'));
+    }
+    refusedWith(verify(publish(), { facts: { ...CURRENT, inputDigest: null, reasons: { 'input digest': 'ENOENT src' } } }),
+      /input digest: the current inputs could not be digested/u);
+  });
+
+  it('REFUSED threshold mismatch: the indicator was published at another bar, or none was requested', () => {
+    refusedWith(verify(publish(), { threshold: 70 }), /threshold mismatch: the indicator was published at 80 and 70 was requested/u);
+    refusedWith(verify(publish(fleetResult(), { threshold: 70 })), /threshold mismatch: the indicator was published at 70 and 80 was requested/u);
+    refusedWith(verify(publish(), { threshold: null }), /threshold: no threshold was requested/u);
+    refusedWith(verify(publish(), { threshold: Number.NaN }), /threshold: no threshold was requested/u);
+  });
+
+  it('REFUSED old browser: the reading was taken in a Chromium the locked Playwright no longer pins', () => {
+    refusedWith(verify(publish(), { facts: { ...CURRENT, browser: '150.0.0.1', reasons: {} } }),
+      /old browser: the indicator was read in Chromium "fixture" and the locked Playwright pins 150\.0\.0\.1/u);
+    const unread = verify(publish(), { facts: { ...CURRENT, browser: null, reasons: { browser: 'no Playwright install is reachable' } } });
+    refusedWith(unread, /browser: the Chromium version the locked Playwright pins could not be read/u);
+    assert.ok(unread.lines.includes('  browser: no Playwright install is reachable'), 'the reason is printed beside the refusal');
+  });
+
+  it('REFUSED stale catalog: the populations were read at another catalog revision', () => {
+    refusedWith(verify(publish(), { facts: { ...CURRENT, catalogRevision: 'moved', reasons: {} } }),
+      /stale catalog: the indicator was read at "fixture" and the catalog is now moved/u);
+    refusedWith(verify(publish(), { facts: { ...CURRENT, catalogRevision: null, reasons: {} } }), /catalog: the current catalog digest could not be read/u);
+  });
+
+  it('REFUSED not the fleet: a vertical or a mode short, extra or repeated', () => {
+    refusedWith(verify({ ...publish(), verticals: ['bithire', 'evnto'] }), /verticals: \["bithire","evnto"\] are not the fleet's \(bithire, evnto, rottay\)/u);
+    refusedWith(verify({ ...publish(), verticals: ['bithire', 'evnto', 'evnto'] }), /verticals: .* are not the fleet's/u);
+    refusedWith(verify({ ...publish(), themes: ['light'] }), /themes: \["light"\] are not the fleet's \(light, dark\)/u);
+    refusedWith(verify({ ...publish(), themes: 'light,dark' }), /themes: "light,dark" are not the fleet's/u);
+  });
+
+  it('every refusal is named at once, and none of them reads a status', () => {
+    const { inputDigest: _digest, ...legacy } = publish(fleetResult({ states: 118 }));
+    const refusals = fresh({ ...legacy, verticals: ['rottay'], waiver: 1 }, { threshold: 70, catalogRevision: 'moved', browser: 'new' });
+    assert.deepEqual(refusals.map((line) => line.split(':')[0]),
+      ['unknown fields', 'missing fields', 'threshold mismatch', 'stale catalog', 'verticals', 'old browser']);
+    refusedWith(verify({ ...legacy, waiver: 1 }), /unknown fields: waiver/u);
+  });
+
+  it('MUTANT: a hand-edited status or cell does not buy a verdict; the status is re-derived from the cells', () => {
+    const short = publish(fleetResult({ states: 118 }));
+    const edited = structuredClone(short);
+    edited.axes.states.status = 'at-threshold';
+    edited.met = true;
+    const lied = verify(edited);
+    assert.equal(lied.exitCode, 1);
+    assert.match(lied.errors[0], /^axis-difference FAIL — states: the indicator records status "at-threshold" and its own cells read below-threshold/u);
+    // A cell dropped, unmeasured or duplicated is NOT MEASURED, whatever the status says.
+    for (const mutate of [
+      (cells) => cells.pop(),
+      (cells) => { cells[0].measured = false; },
+      (cells) => { cells[1] = structuredClone(cells[0]); },
+      (cells) => { cells[0].moved = cells[0].declared + 1; },
+    ]) {
+      const broken = structuredClone(publish());
+      mutate(broken.axes.motion.cells);
+      const verdict = indicatorDeclaredBasisVerdict(broken, 80);
+      assert.match(verdict.failures[0], /^motion: the indicator records status "at-threshold" and its own cells read not-measured/u);
+    }
+    const seventh = structuredClone(publish());
+    seventh.axes.chromatic = seventh.axes.states;
+    assert.match(indicatorDeclaredBasisVerdict(seventh, 80).failures[0], /a verdict needs the six axes .* and nothing else/u);
+    // The bar is read as the writer rounds it, so a fresh reading reproduces its own status exactly at the bar.
+    const atBar = publish(fleetResult({ states: 124 }));
+    assert.equal(atBar.axes.states.worstPercentDeclared, 80);
+    assert.deepEqual(indicatorDeclaredBasisVerdict(atBar, 80).failures, []);
+  });
+
+  it('a negative test that is not green fails a fresh reading, exactly as it fails the measuring run', () => {
+    const moved = fleetResult();
+    cellOf(moved, 'palette-only', 'depth').moved = 3;
+    const red = verify(publish(moved));
+    assert.equal(red.exitCode, 1);
+    assert.match(red.errors[0], /^axis-difference FAIL — negative test RED in the published reading/u);
+    const unmeasured = fleetResult();
+    cellOf(unmeasured, 'palette-only', 'depth').evidential = false;
+    assert.match(verify(publish(unmeasured)).errors[0], /negative test NOT-MEASURED in the published reading/u);
+  });
+});
+
+describe('tenant-difference-by-axis — the review conditions on --verify-indicator (review W23-P3 F1, F2)', () => {
+  const hex = (seed) => seed.repeat(64).slice(0, 64);
+  const DIGEST = inputDigestOf({ sourceHash: hex('a'), buildInputFingerprint: hex('b'), instrument: hex('c') });
+  const publish = () => buildIndicator(fleetResult(), {
+    negativeControls: CONTROLS, producedAt: '2026-10-04T00:00:00.000Z', commit: 'c0ffee', inputDigest: DIGEST,
+  });
+  const current = (browser) => ({ catalogRevision: 'fixture', browser, inputDigest: DIGEST, threshold: 80 });
+
+  it('REFUSED old browser by EXACT equality: a prefix, an extension or an empty string is another Chromium', () => {
+    const PINNED = '149.0.7827.55';
+    for (const [recorded, pinned] of [
+      ['149.0.7827.5', PINNED],
+      [PINNED, '149.0.7827.5'],
+      ['149.0.7827', PINNED],
+      ['', PINNED],
+      [` ${PINNED}`, PINNED],
+    ]) {
+      const refusals = indicatorFreshnessRefusals({ ...publish(), browser: recorded }, current(pinned));
+      assert.deepEqual(refusals.map((line) => line.split(':')[0]), ['old browser'], `${JSON.stringify(recorded)} against ${pinned}`);
+    }
+    // An empty pin is no pin: it is never equal to anything, an empty recording included.
+    for (const recorded of ['', PINNED]) {
+      const refusals = indicatorFreshnessRefusals({ ...publish(), browser: recorded }, current(''));
+      assert.deepEqual(refusals, ['browser: the Chromium version the locked Playwright pins could not be read'], JSON.stringify(recorded));
+    }
+    assert.deepEqual(indicatorFreshnessRefusals({ ...publish(), browser: PINNED }, current(PINNED)), [], 'the control: the same version');
+  });
+
+  it('the inputs did not move under the run: the digest taken before the measurement must be the one at publication', () => {
+    const { inputDigestDriftRefusal } = indicatorModule;
+    assert.equal(typeof inputDigestDriftRefusal, 'function');
+    assert.equal(inputDigestDriftRefusal(DIGEST, inputDigestOf({ ...DIGEST.parts })), null);
+    for (const name of INPUT_DIGEST_PARTS) {
+      const moved = inputDigestOf({ ...DIGEST.parts, [name]: hex('9') });
+      assert.equal(inputDigestDriftRefusal(DIGEST, moved),
+        `the inputs moved during the measurement: it began on ${DIGEST.digest.slice(0, 16)} and they are ${moved.digest.slice(0, 16)} `
+        + `at publication (moved: ${name}); the reading is of neither`);
+    }
+    assert.match(inputDigestDriftRefusal(null, DIGEST), /^the input digest taken before the measurement records no input digest; /u);
+    assert.match(inputDigestDriftRefusal(DIGEST, null), /^the input digest taken at publication records no input digest; /u);
+    assert.match(inputDigestDriftRefusal({ ...DIGEST, digest: hex('f') }, DIGEST), /before the measurement records an input digest its own parts do not reproduce/u);
+  });
+
+  describe('PUBLICATION RACE: an input moved between the two reads is never published', () => {
+    const fixture = () => {
+      const root = mkdtempSync(join(tmpdir(), 'indicator-publication-race-'));
+      const write = (path, text) => {
+        mkdirSync(dirname(join(root, path)), { recursive: true });
+        writeFileSync(join(root, path), text);
+      };
+      write('package.json', JSON.stringify({ name: 'fixture', version: '1.0.0', scripts: {} }));
+      write('src/skin/button.css', '.rottay-button { border-radius: var(--ds-radius-md); }\n');
+      write('scripts/probe/index.mjs', "import './law/index.mjs';\n");
+      write('scripts/probe/law/index.mjs', 'export const LAW = 1;\n');
+      return { root, write, entry: join(root, 'scripts/probe/index.mjs') };
+    };
+    const publishAt = async ({ root, entry }, before, readDigest) => {
+      const { publishIndicator, readInputDigest } = await import('../../index.mjs');
+      return publishIndicator(fleetResult(), {
+        root,
+        before,
+        readDigest: readDigest ?? (() => readInputDigest({ root, entry })),
+        negativeControls: CONTROLS,
+        producedAt: '2026-10-04T00:00:00.000Z',
+        commit: 'c0ffee',
+      });
+    };
+    const target = (root) => join(root, INDICATOR_PATH);
+
+    for (const [part, path, text] of [
+      ['sourceHash', 'src/skin/button.css', '.rottay-button { border-radius: 4px; }\n'],
+      ['instrument', 'scripts/probe/law/index.mjs', 'export const LAW = 2;\n'],
+    ]) {
+      it(`REFUSED: ${path} moved after the first read; exit 1, nothing written, the moved part named`, async () => {
+        const { readInputDigest } = await import('../../index.mjs');
+        const site = fixture();
+        try {
+          const before = readInputDigest({ root: site.root, entry: site.entry });
+          site.write(path, text);
+          const outcome = await publishAt(site, before);
+          assert.equal(outcome.exitCode, 1);
+          assert.equal(outcome.indicator, null);
+          assert.match(outcome.refusal, new RegExp(`^the inputs moved during the measurement: .*\\(moved: [^)]*${part}[^)]*\\); the reading is of neither$`, 'u'));
+          assert.equal(existsSync(target(site.root)), false, 'nothing was written');
+        } finally {
+          rmSync(site.root, { recursive: true, force: true });
+        }
+      });
+    }
+
+    it('REFUSED: no digest before the measurement, or none at publication; nothing written', async () => {
+      const { readInputDigest } = await import('../../index.mjs');
+      const site = fixture();
+      try {
+        const unread = await publishAt(site, null);
+        assert.equal(unread.exitCode, 1);
+        assert.match(unread.refusal, /^the input digest taken before the measurement records no input digest/u);
+        const before = readInputDigest({ root: site.root, entry: site.entry });
+        const thrown = await publishAt(site, before, () => { throw new Error('ENOENT src'); });
+        assert.equal(thrown.exitCode, 1);
+        assert.match(thrown.refusal, /^the input digest taken at publication records no input digest; .*\(ENOENT src\)$/u);
+        assert.equal(existsSync(target(site.root)), false, 'nothing was written');
+      } finally {
+        rmSync(site.root, { recursive: true, force: true });
+      }
+    });
+
+    it('the control: inputs unmoved, the indicator is written and carries the digest both reads agree on', async () => {
+      const { readInputDigest } = await import('../../index.mjs');
+      const site = fixture();
+      try {
+        const before = readInputDigest({ root: site.root, entry: site.entry });
+        const outcome = await publishAt(site, before);
+        assert.equal(outcome.exitCode, 0);
+        assert.equal(outcome.refusal, null);
+        assert.deepEqual(outcome.indicator.inputDigest, before);
+        assert.deepEqual(JSON.parse(readFileSync(target(site.root), 'utf8')).inputDigest, before);
+      } finally {
+        rmSync(site.root, { recursive: true, force: true });
+      }
+    });
   });
 });

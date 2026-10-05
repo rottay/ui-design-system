@@ -172,14 +172,25 @@
  *   node scripts/check/theme/axis-difference/index.mjs --no-real-render-mounts  the default mounts alone
  *   node scripts/check/theme/axis-difference/index.mjs --no-focused-stamp  the pre-S1 set (four states)
  *   node scripts/check/theme/axis-difference/index.mjs --no-pseudo-reads  no ::before/::after read on any host
+ *   node scripts/check/theme/axis-difference/index.mjs --verify-indicator --threshold=80
+ *                                                                       reads the PUBLISHED indicator 7 and launches no browser:
+ *                                                                       exit 1 (never a skip) unless it was published at this
+ *                                                                       threshold, on the current catalog, on the fleet, in the
+ *                                                                       Chromium the locked Playwright pins and from the inputs
+ *                                                                       on disk (its input digest); when fresh, the verdict is
+ *                                                                       its declared-basis status. An ADDITION, never a
+ *                                                                       replacement: the full measurement above stays the CI
+ *                                                                       entry, and this mode takes no other flag
  */
 
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import { computeBuildInputHash } from '../../../libraries/build/input-hash/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 import { assertDistFresh } from '../../../package/artifacts/freshness/index.mjs';
 import { launchBrowser } from '../../tokens/cascade/probe/runtime/browser/index.mjs';
@@ -219,7 +230,11 @@ import {
   chromaticStatesReading,
   axisReadings,
   gateProvenanceRefusal,
+  indicatorDeclaredBasisVerdict,
+  indicatorFreshnessRefusals,
   indicatorRefusal,
+  inputDigestDriftRefusal,
+  inputDigestOf,
   provenanceRefusal,
   negativeControlsOf,
   negativeTest,
@@ -8623,6 +8638,275 @@ export function verdictLine(result, { threshold = null } = {}) {
     + `${fleet ? '' : `; ${result.verticals.length} vertical(s) x ${result.themes.length} mode(s) — NOT the fleet, no indicator is published from it`})`;
 }
 
+/**
+ * PUBLICATION, refused unless the inputs at publication are the ones the
+ * measurement began on (review W23-P3 F1). `before` is the digest read ahead
+ * of the measurement; on any difference nothing is written and the run exits 1.
+ *
+ * @returns {{ exitCode: 0 | 1, indicator: object | null, refusal: string | null }}
+ */
+export function publishIndicator(result, {
+  before,
+  root = CORE_ROOT,
+  readDigest = () => readInputDigest({ root }),
+  negativeControls = negativeControlsOf(SCENARIOS),
+  producedAt = new Date().toISOString(),
+  commit = headCommit(),
+} = {}) {
+  let after = null;
+  let unread = '';
+  try {
+    after = readDigest();
+  } catch (error) {
+    unread = ` (${error instanceof Error ? error.message : String(error)})`;
+  }
+  const drift = inputDigestDriftRefusal(before, after);
+  if (drift !== null) return { exitCode: 1, indicator: null, refusal: `${drift}${unread}` };
+  const indicator = buildIndicator(result, { negativeControls, producedAt, commit, inputDigest: after });
+  writeIndicator(indicator, root);
+  return { exitCode: 0, indicator, refusal: null };
+}
+
+/** The flag of the reading-only mode; named so a manifest row and a drill find the same words. */
+export const VERIFY_INDICATOR_FLAG = '--verify-indicator';
+export const VERIFY_REFUSAL_TAIL = 'nothing was measured and no browser was launched; no verdict exists for this run';
+
+const IMPORT_PATTERNS = [
+  /\b(?:import|export)\s+(?:[^'"]*?\s+from\s+)?['"]([^'"]+)['"]/gu,
+  /\bimport\(\s*['"]([^'"]+)['"]\s*\)/gu,
+];
+const NOT_INSTRUMENT = new Set(['tests', '__tests__', 'node_modules']);
+
+/**
+ * THE INSTRUMENT, as files: the module graph `entry` reaches through relative
+ * imports, plus every `.json` under a reached module's own folder (exclusions,
+ * pins, vocabularies -- data a module reads beside itself and never imports).
+ * Tests are not the instrument. Over-inclusion is the safe direction: a
+ * superfluous file can only read a fresh indicator as stale.
+ *
+ * @returns {string[]} absolute paths, sorted
+ */
+export function instrumentFiles(entry = fileURLToPath(import.meta.url)) {
+  const modules = new Set();
+  const pending = [resolve(entry)];
+  while (pending.length > 0) {
+    const path = pending.pop();
+    if (modules.has(path)) continue;
+    modules.add(path);
+    const source = readFileSync(path, 'utf8');
+    for (const pattern of IMPORT_PATTERNS) {
+      for (const match of source.matchAll(pattern)) {
+        if (!match[1].startsWith('.')) continue;
+        const base = resolve(dirname(path), match[1]);
+        const found = [base, `${base}.mjs`, `${base}.js`, resolve(base, 'index.mjs'), resolve(base, 'index.js')]
+          .find((candidate) => statSync(candidate, { throwIfNoEntry: false })?.isFile() === true);
+        if (found !== undefined && !modules.has(found)) pending.push(found);
+      }
+    }
+  }
+  const files = new Set(modules);
+  const walk = (dir) => {
+    for (const entryOf of readdirSync(dir, { withFileTypes: true })) {
+      if (entryOf.isDirectory()) {
+        if (!NOT_INSTRUMENT.has(entryOf.name)) walk(resolve(dir, entryOf.name));
+      } else if (entryOf.isFile() && entryOf.name.endsWith('.json')) {
+        files.add(resolve(dir, entryOf.name));
+      }
+    }
+  };
+  for (const directory of new Set([...modules].map((path) => dirname(path)))) walk(directory);
+  return [...files].sort();
+}
+
+/**
+ * WHAT A READING IS TAKEN FROM, digested off this checkout: the build stamp's
+ * own content proof of `src/` and of the build inputs (`computeBuildInputHash`,
+ * the function `assertDistFresh` judges `dist` with), and the instrument's
+ * files by package-relative path. At publication `dist` is proven built from
+ * exactly these sources, so the digest names what the browser was shown; at
+ * verification it is recomputed and needs no `dist` at all.
+ */
+export function readInputDigest({ root = CORE_ROOT, entry = fileURLToPath(import.meta.url) } = {}) {
+  const { sourceHash, buildInputFingerprint } = computeBuildInputHash(root);
+  const instrument = createHash('sha256');
+  for (const path of instrumentFiles(entry)) {
+    instrument.update(`${relative(root, path).split('\\').join('/')}\0${createHash('sha256').update(readFileSync(path)).digest('hex')}\n`);
+  }
+  return inputDigestOf({ sourceHash, buildInputFingerprint, instrument: instrument.digest('hex') });
+}
+
+/**
+ * THE CHROMIUM THE LOCKED PLAYWRIGHT PINS, read without loading Playwright and
+ * without launching anything: the install the launcher would resolve (same
+ * roots, same order), its `playwright-core`'s `browsers.json`, and the
+ * lockfile, which must name that `playwright-core` version -- an install the
+ * lock does not carry is not the locked one, and its Chromium proves nothing.
+ *
+ * @returns {{ version: string | null, reason: string | null }}
+ */
+export function lockedChromiumVersion({ root = CORE_ROOT } = {}) {
+  const roots = [resolve(root, 'package.json'), resolve(root, '../../package.json'), resolve(root, '../showroom/package.json')];
+  let core = null;
+  for (const from of roots) {
+    for (const specifier of ['playwright', '@playwright/test']) {
+      try {
+        const entry = createRequire(from).resolve(specifier);
+        core = createRequire(entry).resolve('playwright-core/package.json');
+      } catch {
+        core = null;
+      }
+      if (core !== null) break;
+    }
+    if (core !== null) break;
+  }
+  if (core === null) return { version: null, reason: 'no Playwright install is reachable from the package, the workspace root or the showroom' };
+  let installed;
+  let pinned;
+  try {
+    installed = JSON.parse(readFileSync(core, 'utf8')).version;
+    pinned = JSON.parse(readFileSync(resolve(dirname(core), 'browsers.json'), 'utf8')).browsers
+      .find((browser) => browser.name === 'chromium')?.browserVersion;
+  } catch (error) {
+    return { version: null, reason: `the installed playwright-core could not be read (${error instanceof Error ? error.message : String(error)})` };
+  }
+  if (typeof installed !== 'string' || typeof pinned !== 'string' || pinned === '') {
+    return { version: null, reason: 'the installed playwright-core names no chromium browserVersion' };
+  }
+  let lock = null;
+  for (let cursor = resolve(root); ; cursor = dirname(cursor)) {
+    const candidate = resolve(cursor, 'pnpm-lock.yaml');
+    if (existsSync(candidate)) {
+      lock = readFileSync(candidate, 'utf8');
+      break;
+    }
+    if (dirname(cursor) === cursor) break;
+  }
+  if (lock === null) return { version: null, reason: 'no pnpm-lock.yaml was found above the package' };
+  const locked = new RegExp(`^\\s+'?playwright-core@${installed.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}'?:`, 'mu');
+  if (!locked.test(lock)) {
+    return { version: null, reason: `the installed playwright-core ${installed} is not the one pnpm-lock.yaml carries; run pnpm install` };
+  }
+  return { version: pinned, reason: null };
+}
+
+/** The current facts a published reading is held to; each `null` when it could not be established, with its reason. */
+export function readVerificationFacts({ root = CORE_ROOT } = {}) {
+  const reasons = {};
+  const attempt = (name, read) => {
+    try {
+      return read();
+    } catch (error) {
+      reasons[name] = error instanceof Error ? error.message : String(error);
+      return null;
+    }
+  };
+  const chromium = attempt('browser', () => lockedChromiumVersion({ root })) ?? { version: null, reason: reasons.browser };
+  if (chromium.reason !== null && chromium.reason !== undefined) reasons.browser = chromium.reason;
+  return {
+    catalogRevision: attempt('catalog', () => catalogRevision().digest),
+    browser: chromium.version,
+    inputDigest: attempt('input digest', () => readInputDigest({ root })),
+    reasons,
+  };
+}
+
+/**
+ * `--verify-indicator` takes the threshold and nothing else. Every other flag
+ * of this CLI shapes a MEASUREMENT (a subset, an older reading, a vertical);
+ * beside a mode that measures nothing it would be read and ignored, which is
+ * the spelling defect `thresholdSpellingRefusal` exists for. `--no-write` is
+ * admitted because it is true of this mode by construction.
+ */
+export function verifyArgumentRefusal(args = []) {
+  const stray = args.filter((entry) => entry !== VERIFY_INDICATOR_FLAG && entry !== NO_WRITE_FLAG
+    && !entry.startsWith(`${THRESHOLD_FLAG}=`));
+  if (stray.length > 0) return `${stray.join(' ')} is not read by ${VERIFY_INDICATOR_FLAG}; it takes ${THRESHOLD_FLAG}=<number> and nothing else`;
+  if (!args.some((entry) => entry.startsWith(`${THRESHOLD_FLAG}=`))) {
+    return `${VERIFY_INDICATOR_FLAG} needs ${THRESHOLD_FLAG}=<number>; a reading is verified against the threshold it was asked for`;
+  }
+  if (args.filter((entry) => entry.startsWith(`${THRESHOLD_FLAG}=`)).length > 1) return `${THRESHOLD_FLAG} was passed more than once`;
+  return null;
+}
+
+/**
+ * A NEAR MISS of the flag (review W23-P3 F3): `--verify-indicator=1` or
+ * `--verify-indicator-fresh` is not the mode, and unrefused it would fall into
+ * the measuring run, which may publish. Read from argv before anything else.
+ */
+export function verifyFlagSpellingRefusal(args = []) {
+  const near = args.find((entry) => entry.startsWith(VERIFY_INDICATOR_FLAG) && entry !== VERIFY_INDICATOR_FLAG);
+  return near === undefined
+    ? null
+    : `${near} is not ${VERIFY_INDICATOR_FLAG}; the reading-only mode is spelled exactly, and a near miss never falls into the measuring run`;
+}
+
+/**
+ * THE READING-ONLY MODE (audit W19-R33 P3). It reads the published indicator
+ * and launches NO browser -- this function never touches the launcher, and
+ * the drill proves it by running where none is installed. It has exactly three
+ * ends, none of them a skip:
+ *
+ *   REFUSED  the file is missing, unreadable, in a shape the writer does not
+ *            write, or not a reading of this tree at this threshold
+ *            (`indicatorFreshnessRefusals`). No status of it is read.
+ *   FAIL     the reading is fresh and an axis is short on the DECLARED basis.
+ *   VERIFIED the reading is fresh and every axis is at the bar on it.
+ *
+ * The effective reading is printed on every axis line and decides nothing.
+ * This is an ADDITION to the measuring run, never a replacement for it.
+ *
+ * @returns {{ exitCode: 0 | 1, errors: string[], lines: string[], verdict: string | null, stdout: string[] }}
+ */
+export function verifyIndicator(options = {}) {
+  const outcome = readIndicatorVerdict(options);
+  return { ...outcome, stdout: outcome.verdict === null ? outcome.lines : [...outcome.lines, outcome.verdict] };
+}
+
+function readIndicatorVerdict({ root = CORE_ROOT, threshold = null, facts = readVerificationFacts } = {}) {
+  const refused = (reasons, lines = []) => ({
+    exitCode: 1,
+    errors: [...reasons.map((reason) => `${GATE_REFUSAL_HEAD} — ${VERIFY_INDICATOR_FLAG}: ${reason}`), `  ${VERIFY_REFUSAL_TAIL}`],
+    lines,
+    verdict: null,
+  });
+  const target = resolve(root, INDICATOR_PATH);
+  if (!existsSync(target)) return refused([`missing indicator: ${INDICATOR_PATH} does not exist; the measuring run publishes it`]);
+  let indicator;
+  try {
+    indicator = JSON.parse(readFileSync(target, 'utf8'));
+  } catch (error) {
+    return refused([`unreadable indicator: ${INDICATOR_PATH} is not JSON (${error instanceof Error ? error.message : String(error)})`]);
+  }
+  const current = typeof facts === 'function' ? facts({ root }) : facts;
+  const head = [
+    `axis-difference ${VERIFY_INDICATOR_FLAG} — ${INDICATOR_PATH}, published ${String(indicator?.producedAt)} at commit `
+    + `${String(indicator?.commit)}; no browser launched, nothing measured`,
+  ];
+  const refusals = indicatorFreshnessRefusals(indicator, { ...current, threshold });
+  if (refusals.length > 0) {
+    const why = Object.entries(current.reasons ?? {}).map(([name, reason]) => `  ${name}: ${reason}`);
+    return refused(refusals, [...head, ...why]);
+  }
+  const verdict = indicatorDeclaredBasisVerdict(indicator, threshold);
+  const lines = [
+    ...head,
+    `  fresh: threshold ${threshold}, catalog ${current.catalogRevision}, ${FLEET_VERTICALS.length} vertical(s) x ${FLEET_THEMES.length} mode(s), `
+    + `chromium ${current.browser}, input digest ${current.inputDigest.digest.slice(0, 16)}`,
+    ...verdict.lines.map((line) => `  ${line}`),
+  ];
+  if (verdict.failures.length > 0) {
+    return { exitCode: 1, errors: verdict.failures.map((failure) => `axis-difference FAIL — ${failure}`), lines, verdict: null };
+  }
+  return {
+    exitCode: 0,
+    errors: [],
+    lines,
+    verdict: `axis-difference VERIFIED — the published indicator is a fresh reading of this tree and every axis is at or above ${threshold} % `
+      + `on the declared basis (${verdict.atThreshold}/${AXIS_IDS.length} at threshold; effective-denominator reading `
+      + `${verdict.effectiveAtThreshold}/${AXIS_IDS.length}, reported, never the status); a reading of the indicator, not a measurement`,
+  };
+}
+
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 if (isMain) {
   const argument = (name) =>
@@ -8635,6 +8919,26 @@ if (isMain) {
     console.error('  nothing was measured; no verdict exists for this run');
     process.exit(1);
   }
+  const nearMiss = verifyFlagSpellingRefusal(process.argv.slice(2));
+  if (nearMiss !== null) {
+    console.error(`${GATE_REFUSAL_HEAD} — ${nearMiss}`);
+    console.error(`  ${VERIFY_REFUSAL_TAIL}`);
+    process.exit(1);
+  }
+  // The reading-only mode ends here, on every path: it never reaches `run`.
+  if (process.argv.includes(VERIFY_INDICATOR_FLAG)) {
+    const stray = verifyArgumentRefusal(process.argv.slice(2));
+    if (stray !== null) {
+      console.error(`${GATE_REFUSAL_HEAD} — ${stray}`);
+      console.error(`  ${VERIFY_REFUSAL_TAIL}`);
+      process.exit(1);
+    }
+    const verification = verifyIndicator({ threshold });
+    // The VERIFIED line is the last of `stdout`; the measuring run's verdict door below stays the only one of its kind.
+    for (const line of verification.stdout) console.log(line);
+    for (const line of verification.errors) console.error(line);
+    process.exit(verification.exitCode);
+  }
   // FAIL CLOSED BEFORE MEASURING: a threshold run on a dist or a catalog that
   // cannot be proven prints no percentage a reader could take for a verdict.
   const unproven = gateRefusal({ revision: catalogRevision() }, { threshold });
@@ -8642,6 +8946,15 @@ if (isMain) {
     console.error(`${GATE_REFUSAL_HEAD} — ${THRESHOLD_FLAG} asks for a verdict and ${unproven}`);
     console.error('  nothing was measured; no verdict exists for this run');
     process.exit(1);
+  }
+  // Read before the measurement reads anything; publication must find the same inputs.
+  let inputDigestBefore = null;
+  if (publicationRefusal({ argv: process.argv, env: process.env }) === null) {
+    try {
+      inputDigestBefore = readInputDigest();
+    } catch {
+      inputDigestBefore = null;
+    }
   }
   const result = await run({
     verticals: argument('vertical')?.split(',') ?? ['bithire', 'evnto', 'rottay'],
@@ -8880,13 +9193,15 @@ if (isMain) {
     writeRefusal: refusal,
   }) ?? provenanceRefusal(readPublicationProvenance(result));
   if (indicatorBlocked === null) {
-    const indicator = buildIndicator(result, {
-      negativeControls: negativeControlsOf(SCENARIOS),
-      producedAt: new Date().toISOString(),
-      commit: headCommit(),
-    });
-    console.log(`  indicator ${INDICATOR_PATH}: ${indicator.value}`);
-    writeIndicator(indicator, CORE_ROOT);
+    // Taken after the provenance above proved `dist` built from these sources.
+    const publication = publishIndicator(result, { before: inputDigestBefore });
+    if (publication.refusal !== null) {
+      console.log(`  indicator ${INDICATOR_PATH}: NOT PUBLISHED — ${publication.refusal}`);
+      console.error(`${GATE_REFUSAL_HEAD} — publication: ${publication.refusal}`);
+      console.error('  nothing was written; no verdict exists for this run');
+      process.exit(1);
+    }
+    console.log(`  indicator ${INDICATOR_PATH}: ${publication.indicator.value}`);
   } else {
     console.log(`  indicator ${INDICATOR_PATH}: NOT PUBLISHED — ${indicatorBlocked}`);
   }

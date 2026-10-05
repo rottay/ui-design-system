@@ -34,7 +34,8 @@
  * and itself is not a control passing, it is a control with nothing to read.
  */
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -6110,4 +6111,190 @@ describe('axis-difference BROWSER drill — the states reach rows move states th
     assert.ok(!states.movedIds.includes('chart-foundation'));
     assert.ok(evaluate(measurement).some((line) => line.startsWith('chart-foundation: its real-render mount was REFUSED on states in bithire/light states')));
   }, 240_000);
+});
+
+describe('axis-difference --verify-indicator — the reading-only mode reads a file and launches nothing (audit W19-R33 P3)', () => {
+  const HERE_DIR = dirname(fileURLToPath(import.meta.url));
+  const CLI = join(HERE_DIR, '../index.mjs');
+
+  it('takes the threshold and nothing else: every other flag is refused by name, never read and ignored', async () => {
+    const { verifyArgumentRefusal, VERIFY_INDICATOR_FLAG } = await import('../index.mjs');
+    assert.equal(VERIFY_INDICATOR_FLAG, '--verify-indicator');
+    assert.equal(verifyArgumentRefusal(['--verify-indicator', '--threshold=80']), null);
+    assert.equal(verifyArgumentRefusal(['--threshold=80', '--verify-indicator', '--no-write']), null);
+    assert.match(verifyArgumentRefusal(['--verify-indicator']), /needs --threshold=<number>/u);
+    assert.match(verifyArgumentRefusal(['--verify-indicator', '--threshold=80', '--threshold=70']), /more than once/u);
+    for (const stray of ['--families=button', '--vertical=evnto', '--theme=dark', '--json', '--no-part-mounts', '--verify-indicator=1', 'index.json']) {
+      assert.ok(verifyArgumentRefusal(['--verify-indicator', '--threshold=80', stray]).startsWith(`${stray} is not read by --verify-indicator`), stray);
+    }
+  });
+
+  it('NO BROWSER: the mode ends before the measurement on every path, and its functions never name the launcher', () => {
+    const source = readFileSync(CLI, 'utf8');
+    const main = source.slice(source.indexOf('\nif (isMain) {'));
+    const branch = main.indexOf('if (process.argv.includes(VERIFY_INDICATOR_FLAG)) {');
+    const exit = main.indexOf('process.exit(verification.exitCode);');
+    const measurement = main.indexOf('await run({');
+    assert.ok(branch > 0 && exit > branch && measurement > exit, 'the branch exits unconditionally before run() is reached');
+    assert.equal(main.slice(branch, exit).split('\n').filter((line) => /^ {2}\}/u.test(line)).length, 0, 'the unconditional exit is inside the branch');
+    const own = source.slice(source.indexOf('export const VERIFY_INDICATOR_FLAG'), source.indexOf('\nconst isMain'));
+    for (const name of ['launchBrowser', 'resolvePlaywright', 'resolveBundle', 'measureCell', 'run(', 'writeIndicator', 'writeFileSync']) {
+      assert.ok(!own.includes(name), `the reading-only mode names ${name}`);
+    }
+    // The measuring run is what records the digest the mode reads, through the one publication door.
+    assert.match(main.slice(measurement), /publishIndicator\(result, \{ before: inputDigestBefore \}\);/u);
+    assert.match(source, /buildIndicator\(result, \{ negativeControls, producedAt, commit, inputDigest: after \}\);\n\s*writeIndicator\(indicator, root\);/u);
+    // The usage text says what the mode is not.
+    assert.match(source.slice(0, source.indexOf('\nimport ')), /--verify-indicator --threshold=80[\s\S]*An ADDITION, never a[\s\S]*replacement: the full measurement above stays the CI/u);
+  });
+
+  it('THE CLI, end to end on this checkout: exit 0 only on a VERIFIED line, exit 1 on a named refusal or failure, never a measurement', () => {
+    const spawn = (...args) => spawnSync(process.execPath, [CLI, ...args], { encoding: 'utf8', timeout: 60_000 });
+    const real = spawn('--verify-indicator', '--threshold=80');
+    assert.ok(real.status === 0 || real.status === 1, `exit ${real.status}: ${real.stderr}`);
+    if (real.status === 0) assert.match(real.stdout, /\naxis-difference VERIFIED — /u);
+    else assert.match(real.stderr, /^axis-difference (?:REFUSED — --verify-indicator: |FAIL — )/mu);
+    assert.ok(!/denominators \(effective\)|chromium \d+\.\d+\.\d+\.\d+\n {2}denominators/u.test(real.stdout), 'no measurement was printed');
+    // A threshold the indicator was not published at is refused whatever else is true of it.
+    const other = spawn('--verify-indicator', '--threshold=79');
+    assert.equal(other.status, 1);
+    assert.match(other.stderr, /axis-difference REFUSED — --verify-indicator: threshold mismatch: the indicator was published at 80 and 79 was requested/u);
+    assert.match(other.stderr, /nothing was measured and no browser was launched; no verdict exists for this run/u);
+    assert.ok(!other.stdout.includes('VERIFIED'));
+    const missing = spawn('--verify-indicator');
+    assert.equal(missing.status, 1);
+    assert.match(missing.stderr, /axis-difference REFUSED — --verify-indicator needs --threshold=<number>/u);
+    const stray = spawn('--verify-indicator', '--threshold=80', '--families=button');
+    assert.equal(stray.status, 1);
+    assert.match(stray.stderr, /axis-difference REFUSED — --families=button is not read by --verify-indicator/u);
+    const misspelt = spawn('--verify-indicator', '--threshold', '80');
+    assert.equal(misspelt.status, 1);
+    assert.match(misspelt.stderr, /axis-difference REFUSED — --threshold is not --threshold=<number>/u);
+  });
+
+  it('the instrument is its module graph and the data beside it: the probe, the indicator, the population and its pins; no test', async () => {
+    const { instrumentFiles } = await import('../index.mjs');
+    const files = instrumentFiles().map((path) => path.split('\\').join('/').split('/scripts/')[1]);
+    for (const owed of [
+      'check/theme/axis-difference/index.mjs',
+      'check/theme/axis-difference/indicator/index.mjs',
+      'check/theme/population/index.mjs',
+      'check/theme/population/exclusions/index.json',
+      'check/tokens/cascade/probe/runtime/browser/index.mjs',
+      'check/tokens/cascade/probe/runtime/bundle/index.mjs',
+    ]) assert.ok(files.includes(owed), owed);
+    assert.deepEqual(files.filter((path) => /(?:^|\/)tests\//u.test(path)), []);
+    assert.deepEqual(files, [...files].sort());
+    assert.ok(files.length >= 21, `the instrument shrank to ${files.length} file(s)`);
+  });
+
+  it('the input digest moves with a source file and with an instrument file, and with nothing else', async () => {
+    const { readInputDigest } = await import('../index.mjs');
+    const root = mkdtempSync(join(tmpdir(), 'axis-input-digest-'));
+    const write = (path, text) => {
+      mkdirSync(dirname(join(root, path)), { recursive: true });
+      writeFileSync(join(root, path), text);
+    };
+    try {
+      write('package.json', JSON.stringify({ name: 'fixture', version: '1.0.0', scripts: {} }));
+      write('src/skin/button.css', '.rottay-button { border-radius: var(--ds-radius-md); }\n');
+      write('scripts/probe/index.mjs', "import './law/index.mjs';\n");
+      write('scripts/probe/law/index.mjs', 'export const LAW = 1;\n');
+      write('scripts/probe/law/pins/index.json', '{}\n');
+      write('scripts/probe/tests/index.test.mjs', '// a drill\n');
+      const entry = join(root, 'scripts/probe/index.mjs');
+      const read = () => readInputDigest({ root, entry });
+      const first = read();
+      assert.deepEqual(read(), first, 'the digest is a function of the bytes on disk');
+      write('scripts/probe/tests/index.test.mjs', '// another drill\n');
+      assert.deepEqual(read(), first, 'a test is not the instrument');
+      const moved = (path, text) => {
+        write(path, text);
+        const next = read();
+        return Object.keys(first.parts).filter((name) => next.parts[name] !== first.parts[name]);
+      };
+      assert.deepEqual(moved('src/skin/button.css', '.rottay-button { border-radius: 4px; }\n'), ['sourceHash', 'buildInputFingerprint']);
+      write('src/skin/button.css', '.rottay-button { border-radius: var(--ds-radius-md); }\n');
+      assert.deepEqual(read(), first, 'the same bytes are the same digest');
+      assert.deepEqual(moved('scripts/probe/law/index.mjs', 'export const LAW = 2;\n'), ['instrument']);
+      write('scripts/probe/law/index.mjs', 'export const LAW = 1;\n');
+      assert.deepEqual(moved('scripts/probe/law/pins/index.json', '{"pin":1}\n'), ['instrument']);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it('the Chromium is the one the LOCKED Playwright pins: read from browsers.json, refused when the install is not the lock\'s', async () => {
+    const { lockedChromiumVersion } = await import('../index.mjs');
+    const workspace = mkdtempSync(join(tmpdir(), 'axis-locked-chromium-'));
+    const root = join(workspace, 'packages/core');
+    const write = (path, text) => {
+      mkdirSync(dirname(join(workspace, path)), { recursive: true });
+      writeFileSync(join(workspace, path), text);
+    };
+    try {
+      write('packages/core/package.json', '{"name":"fixture"}');
+      assert.match(lockedChromiumVersion({ root }).reason, /no Playwright install is reachable/u);
+      write('node_modules/playwright/package.json', '{"name":"playwright","version":"9.9.9","main":"index.js"}');
+      write('node_modules/playwright/index.js', 'throw new Error("the reading-only mode loaded Playwright");\n');
+      write('node_modules/playwright-core/package.json', '{"name":"playwright-core","version":"9.9.9"}');
+      write('node_modules/playwright-core/browsers.json', JSON.stringify({ browsers: [
+        { name: 'chromium-headless-shell', browserVersion: '1.0.0.0' },
+        { name: 'chromium', browserVersion: '200.0.1.2' },
+      ] }));
+      assert.match(lockedChromiumVersion({ root }).reason, /no pnpm-lock\.yaml was found above the package/u);
+      write('pnpm-lock.yaml', "packages:\n\n  playwright-core@9.9.8:\n    resolution: {}\n");
+      assert.deepEqual(lockedChromiumVersion({ root }),
+        { version: null, reason: 'the installed playwright-core 9.9.9 is not the one pnpm-lock.yaml carries; run pnpm install' });
+      write('pnpm-lock.yaml', "packages:\n\n  playwright-core@9.9.9:\n    resolution: {}\n");
+      assert.deepEqual(lockedChromiumVersion({ root }), { version: '200.0.1.2', reason: null });
+      write('node_modules/playwright-core/browsers.json', JSON.stringify({ browsers: [{ name: 'firefox', browserVersion: '1' }] }));
+      assert.match(lockedChromiumVersion({ root }).reason, /names no chromium browserVersion/u);
+    } finally {
+      rmSync(workspace, { recursive: true, force: true });
+    }
+    // This checkout: the pin is the version the committed indicator was read in, or the indicator is stale.
+    const here = lockedChromiumVersion();
+    assert.equal(here.reason, null);
+    assert.match(here.version, /^\d+\.\d+\.\d+\.\d+$/u);
+  });
+});
+
+describe('axis-difference --verify-indicator — the review conditions on the CLI (review W23-P3 F1, F3)', () => {
+  const HERE_DIR = dirname(fileURLToPath(import.meta.url));
+  const CLI = join(HERE_DIR, '../index.mjs');
+
+  it('a near-miss of --verify-indicator is refused by name, from argv alone', async () => {
+    const { verifyFlagSpellingRefusal } = await import('../index.mjs');
+    assert.equal(typeof verifyFlagSpellingRefusal, 'function');
+    assert.equal(verifyFlagSpellingRefusal(['--verify-indicator', '--threshold=80']), null);
+    assert.equal(verifyFlagSpellingRefusal(['--threshold=80']), null, 'the measuring run is not this refusal\'s business');
+    for (const near of ['--verify-indicator=1', '--verify-indicator=', '--verify-indicator-fresh', '--verify-indicators', '--verify-indicator ']) {
+      assert.equal(verifyFlagSpellingRefusal(['--threshold=80', near]),
+        `${near} is not --verify-indicator; the reading-only mode is spelled exactly, and a near miss never falls into the measuring run`, near);
+    }
+  });
+
+  it('THE CLI: a near miss exits 1 with the named refusal before anything is measured, threshold or not', () => {
+    for (const args of [['--verify-indicator=1', '--threshold=80'], ['--verify-indicator-fresh'], ['--threshold=80', '--verify-indicators', '--no-write']]) {
+      const near = args.find((entry) => entry.startsWith('--verify-indicator'));
+      const outcome = spawnSync(process.execPath, [CLI, ...args], { encoding: 'utf8', timeout: 30_000 });
+      assert.equal(outcome.status, 1, `${args.join(' ')}: exit ${outcome.status} ${outcome.signal ?? ''}\n${outcome.stderr}`);
+      assert.match(outcome.stderr, new RegExp(`^axis-difference REFUSED — ${near} is not --verify-indicator; `, 'mu'));
+      assert.match(outcome.stderr, /nothing was measured and no browser was launched; no verdict exists for this run/u);
+      assert.equal(outcome.stdout, '', 'nothing was printed: no measurement, no verdict');
+    }
+  });
+
+  it('PUBLICATION RACE, at the call site: the digest is read before run() and compared at publication, and a drift exits 1', () => {
+    const source = readFileSync(CLI, 'utf8');
+    const main = source.slice(source.indexOf('\nif (isMain) {'));
+    const before = main.indexOf('inputDigestBefore = readInputDigest();');
+    const measurement = main.indexOf('await run({');
+    assert.ok(before > 0 && before < measurement, 'the first read precedes the measurement');
+    const publication = main.indexOf('publishIndicator(result, { before: inputDigestBefore })');
+    assert.ok(publication > measurement, 'publication compares against the first read');
+    assert.ok(!/\bwriteIndicator\(/u.test(main), 'the CLI writes only through publishIndicator');
+    assert.match(main.slice(publication), /^[^\n]*\n\s*if \(publication\.refusal !== null\) \{[\s\S]*?process\.exit\(1\);\n\s*\}/u);
+  });
 });

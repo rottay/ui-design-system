@@ -3,6 +3,7 @@
  * `readProgramIndicatorMeasurement` looks. Percentages use the DECLARED population (kit rule 4).
  */
 
+import { createHash } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
@@ -476,6 +477,7 @@ export function buildIndicator(result, {
   producedAt,
   commit = null,
   threshold = INDICATOR_THRESHOLD,
+  inputDigest = null,
 }) {
   const axes = axisReadings(result, { threshold });
   const negative = negativeTest(result, negativeControls);
@@ -492,6 +494,9 @@ export function buildIndicator(result, {
     catalogRevision: result.revision?.digest ?? null,
     browser: result.browser?.browserVersion ?? null,
     bundleMode: result.bundleMode ?? null,
+    // What the reading was taken from, so `--verify-indicator` can tell a
+    // reading of this tree from a reading of another one. `null` never verifies.
+    inputDigest,
     verticals: result.verticals,
     themes: result.themes,
     threshold,
@@ -518,6 +523,242 @@ export function buildIndicator(result, {
   const failures = [...indicatorSeparationFailures(artifact), ...nonMoverFailures(axes)];
   if (failures.length > 0) throw new Error(`tenant-difference-by-axis: ${failures.join(' | ')}`);
   return artifact;
+}
+
+/**
+ * THE INPUT DIGEST (audit W19-R33 P3): the one fact a published reading lacked.
+ * A reading names its catalog, its browser and its commit, and none of the
+ * three says whether a skin, a derivator or the instrument itself moved since.
+ * The digest is taken over three named parts, recorded at publication and
+ * recomputed by `--verify-indicator`:
+ *
+ *   sourceHash             every shipped file under `src/` -- the skins, the
+ *                          compiler sources and the catalog the arms compile
+ *                          through -- by the build stamp's own hash;
+ *   buildInputFingerprint  the stamp's content proof of everything else that
+ *                          steers `dist`: lockfile, package and build config;
+ *   instrument             the probe's own module graph and the data files
+ *                          beside it.
+ *
+ * The parts are kept beside the digest so a stale reading says WHICH of them
+ * moved. The digest is derived from them and from nothing else; a recorded
+ * digest its own parts do not reproduce is refused as malformed.
+ */
+export const INPUT_DIGEST_ALGORITHM = 'sha256';
+export const INPUT_DIGEST_PARTS = Object.freeze(['sourceHash', 'buildInputFingerprint', 'instrument']);
+const HEX_64 = /^[0-9a-f]{64}$/u;
+
+/** The digest of the named parts, in `INPUT_DIGEST_PARTS` order. Throws on a part that is not a sha256. */
+export function inputDigestOf(parts) {
+  for (const name of INPUT_DIGEST_PARTS) {
+    if (typeof parts?.[name] !== 'string' || !HEX_64.test(parts[name])) {
+      throw new Error(`tenant-difference-by-axis: input digest part \`${name}\` is not a sha256 hex digest`);
+    }
+  }
+  const ordered = Object.fromEntries(INPUT_DIGEST_PARTS.map((name) => [name, parts[name]]));
+  return {
+    algorithm: INPUT_DIGEST_ALGORITHM,
+    digest: createHash(INPUT_DIGEST_ALGORITHM)
+      .update(INPUT_DIGEST_PARTS.map((name) => `${name}\0${ordered[name]}`).join('\n'))
+      .digest('hex'),
+    parts: ordered,
+  };
+}
+
+/** Why a value is not an input digest this module wrote, or `null`. */
+export function inputDigestShapeFailure(value) {
+  if (value === null || value === undefined) return 'records no input digest';
+  if (typeof value !== 'object' || Array.isArray(value)) return 'records an input digest that is not an object';
+  const keys = Object.keys(value).sort();
+  if (keys.join(',') !== 'algorithm,digest,parts') return `records an input digest with the keys ${keys.join(', ') || '(none)'}`;
+  if (value.algorithm !== INPUT_DIGEST_ALGORITHM) return `records an input digest under \`${String(value.algorithm)}\``;
+  const partKeys = typeof value.parts === 'object' && value.parts !== null && !Array.isArray(value.parts)
+    ? Object.keys(value.parts).sort()
+    : null;
+  if (partKeys === null || partKeys.join(',') !== [...INPUT_DIGEST_PARTS].sort().join(',')) {
+    return `records an input digest whose parts are not exactly ${INPUT_DIGEST_PARTS.join(', ')}`;
+  }
+  let derived;
+  try {
+    derived = inputDigestOf(value.parts);
+  } catch {
+    return 'records an input digest with a part that is not a sha256 hex digest';
+  }
+  if (derived.digest !== value.digest) return 'records an input digest its own parts do not reproduce';
+  return null;
+}
+
+/**
+ * THE INPUTS DID NOT MOVE UNDER THE RUN (review W23-P3 F1). The measurement
+ * reads its inputs minutes before publication; a digest taken only at
+ * publication would stamp a commit landed in between onto a reading of the
+ * inputs before it, and that reading would then verify as fresh. `before` is
+ * read ahead of the measurement, `after` at publication; `null` only when both
+ * are the same well-formed digest, the refusal otherwise.
+ */
+export function inputDigestDriftRefusal(before, after) {
+  for (const [when, value] of [['before the measurement', before], ['at publication', after]]) {
+    const malformed = inputDigestShapeFailure(value);
+    if (malformed !== null) return `the input digest taken ${when} ${malformed}; a published reading names the inputs it read`;
+  }
+  if (before.digest === after.digest) return null;
+  const moved = INPUT_DIGEST_PARTS.filter((name) => before.parts[name] !== after.parts[name]);
+  return `the inputs moved during the measurement: it began on ${before.digest.slice(0, 16)} and they are ${after.digest.slice(0, 16)} `
+    + `at publication (moved: ${moved.join(', ')}); the reading is of neither`;
+}
+
+/**
+ * EVERY TOP-LEVEL FIELD `buildIndicator` WRITES, and the one it writes only on
+ * a run that carries the chromatic reading. `--verify-indicator` refuses a
+ * file with a field outside the two lists or without one of the first: a
+ * reading in a shape this module did not write is not this module's reading.
+ */
+export const INDICATOR_FIELDS = Object.freeze([
+  'id', 'gate', 'producedAt', 'value', 'target', 'met', 'commit', 'catalogRevision', 'browser', 'bundleMode',
+  'inputDigest', 'verticals', 'themes', 'threshold', 'basis', 'axes', 'negativeTest', 'realRender',
+  'statesWidthOnly', 'statesWidthOnlyObserved', 'statesNonMoverNotes',
+]);
+export const INDICATOR_OPTIONAL_FIELDS = Object.freeze(['chromaticStates']);
+
+const sameSet = (left, right) => Array.isArray(left) && left.length === right.length
+  && new Set(left).size === left.length && left.every((entry) => right.includes(entry));
+const spelled = (value) => (value === undefined ? 'nothing' : JSON.stringify(value));
+
+/**
+ * MAY A PUBLISHED READING STAND IN FOR A MEASUREMENT OF THIS TREE. Every
+ * reason it may not, by name; empty only when the shape is the one this module
+ * writes AND the reading was taken at the requested threshold, on the current
+ * catalog, on the fleet, in the Chromium the locked Playwright pins and from
+ * the inputs on disk. A current fact that could not be established is `null`,
+ * and `null` refuses: nothing here is ever skipped.
+ *
+ * @param {unknown} indicator the parsed artifact
+ * @param {{ threshold: number | null, catalogRevision: string | null, browser: string | null,
+ *   inputDigest: { digest: string, parts: Record<string, string> } | null }} current
+ * @returns {string[]}
+ */
+export function indicatorFreshnessRefusals(indicator, { threshold = null, catalogRevision = null, browser = null, inputDigest = null } = {}) {
+  if (typeof indicator !== 'object' || indicator === null || Array.isArray(indicator)) {
+    return ['shape: the indicator is not a JSON object'];
+  }
+  const refusals = [];
+  const known = [...INDICATOR_FIELDS, ...INDICATOR_OPTIONAL_FIELDS];
+  const unknown = Object.keys(indicator).filter((key) => !known.includes(key));
+  if (unknown.length > 0) refusals.push(`unknown fields: ${unknown.join(', ')} — not written by the indicator's writer`);
+  const missing = INDICATOR_FIELDS.filter((key) => !Object.hasOwn(indicator, key));
+  if (missing.length > 0) {
+    refusals.push(`missing fields: ${missing.join(', ')}${missing.includes('inputDigest')
+      ? ' — a reading published before the input digest existed cannot be verified; republish it' : ''}`);
+  }
+  if (indicator.id !== INDICATOR_ID) refusals.push(`id: the file is ${spelled(indicator.id)}, not ${INDICATOR_ID}`);
+
+  if (typeof threshold !== 'number' || !Number.isFinite(threshold)) {
+    refusals.push('threshold: no threshold was requested, so there is nothing to verify the reading against');
+  } else if (indicator.threshold !== threshold) {
+    refusals.push(`threshold mismatch: the indicator was published at ${spelled(indicator.threshold)} and ${threshold} was requested`);
+  }
+
+  if (catalogRevision === null) {
+    refusals.push('catalog: the current catalog digest could not be read');
+  } else if (indicator.catalogRevision !== catalogRevision) {
+    refusals.push(`stale catalog: the indicator was read at ${spelled(indicator.catalogRevision)} and the catalog is now ${catalogRevision}`);
+  }
+
+  if (!sameSet(indicator.verticals, FLEET_VERTICALS)) {
+    refusals.push(`verticals: ${spelled(indicator.verticals)} are not the fleet's (${FLEET_VERTICALS.join(', ')})`);
+  }
+  if (!sameSet(indicator.themes, FLEET_THEMES)) {
+    refusals.push(`themes: ${spelled(indicator.themes)} are not the fleet's (${FLEET_THEMES.join(', ')})`);
+  }
+
+  // Exact equality, and an empty pin is no pin: `149.0.7827.5` is not `149.0.7827.55`, and `''` equals nothing.
+  if (typeof browser !== 'string' || browser === '') {
+    refusals.push('browser: the Chromium version the locked Playwright pins could not be read');
+  } else if (indicator.browser !== browser) {
+    refusals.push(`old browser: the indicator was read in Chromium ${spelled(indicator.browser)} and the locked Playwright pins ${browser}`);
+  }
+
+  if (Object.hasOwn(indicator, 'inputDigest')) {
+    const malformed = inputDigestShapeFailure(indicator.inputDigest);
+    if (malformed !== null) {
+      refusals.push(`input digest: the indicator ${malformed}`);
+    } else if (inputDigest === null) {
+      refusals.push('input digest: the current inputs could not be digested');
+    } else if (indicator.inputDigest.digest !== inputDigest.digest) {
+      const moved = INPUT_DIGEST_PARTS.filter((name) => indicator.inputDigest.parts[name] !== inputDigest.parts?.[name]);
+      refusals.push(
+        `stale input digest: the indicator was read from ${indicator.inputDigest.digest.slice(0, 16)} and the inputs are now `
+        + `${inputDigest.digest.slice(0, 16)} (moved: ${moved.join(', ') || 'unnamed'})`,
+      );
+    }
+  }
+  return refusals;
+}
+
+/**
+ * THE VERDICT OF A FRESH READING: its declared-basis status, axis by axis.
+ * The status is RE-DERIVED from the published cells -- every fleet
+ * (vertical, mode) cell measured, the worst `moved / declared` at the bar --
+ * and a recorded status the cells do not reproduce is a failure of its own, so
+ * a hand-edited `status` or `met` buys nothing. The effective reading is
+ * carried in `lines` to be printed and is read by nothing here. A negative
+ * test that is not green fails, exactly as it fails the measuring run.
+ *
+ * @returns {{ failures: string[], lines: string[], atThreshold: number, effectiveAtThreshold: number }}
+ */
+export function indicatorDeclaredBasisVerdict(indicator, threshold) {
+  const failures = [];
+  const lines = [];
+  const axes = typeof indicator?.axes === 'object' && indicator.axes !== null ? indicator.axes : {};
+  const keys = Object.keys(axes);
+  if (keys.length !== AXIS_IDS.length || keys.some((key, index) => key !== AXIS_IDS[index])) {
+    failures.push(`axes holds ${keys.join(', ') || 'nothing'}; a verdict needs the six axes (${AXIS_IDS.join(', ')}) and nothing else`);
+    return { failures, lines, atThreshold: 0, effectiveAtThreshold: 0 };
+  }
+  let atThreshold = 0;
+  let effectiveAtThreshold = 0;
+  for (const axis of AXIS_IDS) {
+    const reading = axes[axis] ?? {};
+    const declared = reading.declared;
+    const cells = Array.isArray(reading.cells) ? reading.cells : [];
+    const fleet = FLEET_VERTICALS.flatMap((vertical) => FLEET_THEMES.map((theme) => ({ vertical, theme })));
+    const own = fleet.map(({ vertical, theme }) => cells.filter((cell) => cell?.vertical === vertical && cell?.theme === theme));
+    const sound = Number.isInteger(declared) && declared > 0 && cells.length === fleet.length
+      && own.every((matches) => matches.length === 1 && matches[0].measured === true
+        && Number.isInteger(matches[0].moved) && matches[0].moved >= 0 && matches[0].moved <= declared
+        && matches[0].declared === declared);
+    let derived = 'not-measured';
+    let worst = null;
+    if (sound) {
+      worst = own.map((matches) => matches[0]).reduce((low, cell) => (cell.moved < low.moved ? cell : low));
+      // Rounded as the writer rounds it: the status the cells reproduce is the writer's own.
+      derived = round(percent(worst.moved, declared)) >= threshold ? 'at-threshold' : 'below-threshold';
+    }
+    if (reading.status !== derived) {
+      failures.push(`${axis}: the indicator records status ${spelled(reading.status)} and its own cells read ${derived}; the file is not one reading`);
+    } else if (derived === 'below-threshold') {
+      failures.push(
+        `${axis}: ${round(percent(worst.moved, declared)).toFixed(1)} % < ${threshold} % on the declared basis on ${worst.vertical}/${worst.theme} `
+        + `(${worst.moved}/${declared} declaring families; the effective reading is reported, never the status)`,
+      );
+    } else if (derived === 'not-measured') {
+      failures.push(`${axis}: not measured on every fleet (vertical, mode) cell; the declared-basis status needs every cell evidential`);
+    } else {
+      atThreshold += 1;
+    }
+    if (reading.effectiveAtThreshold === true) effectiveAtThreshold += 1;
+    lines.push(
+      `${axis.padEnd(11)} ${derived.padEnd(15)} declared ${worst === null ? 'n/a' : `${worst.moved}/${declared} = ${round(percent(worst.moved, declared)).toFixed(1)} %`}`
+      + ` (worst cell${worst === null ? '' : ` ${worst.vertical}/${worst.theme}`}); effective ${spelled(reading.worstPercentEffective)} % — reported, never the status`,
+    );
+  }
+  const negative = indicator?.negativeTest?.status;
+  if (negative !== 'green') {
+    failures.push(`negative test ${typeof negative === 'string' ? negative.toUpperCase() : spelled(negative)} in the published reading; `
+      + 'a threshold verdict needs it green, exactly as the measuring run does');
+  }
+  lines.push(`negative test ${typeof negative === 'string' ? negative.toUpperCase() : spelled(negative)}`);
+  return { failures, lines, atThreshold, effectiveAtThreshold };
 }
 
 export function writeIndicator(artifact, root) {
