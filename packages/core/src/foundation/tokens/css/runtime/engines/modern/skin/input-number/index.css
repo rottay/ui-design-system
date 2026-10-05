@@ -100,6 +100,12 @@
   padding-inline-end: var(--ds-input-number-trailing-space, var(--ds-spacing-16));
 }
 
+.ds-input-number.ds-input-number--modern[data-part='root'][data-has-trailing='true']:has(~ [data-part='trailing'] > [data-part='suffix']) {
+  padding-inline-end: calc(
+    var(--ds-input-number-trailing-space, var(--ds-spacing-16)) + var(--ds-input-number-suffix-space, var(--ds-spacing-3))
+  );
+}
+
 .ds-input-number.ds-input-number--modern[data-part='root'][data-readonly='true']:not([data-disabled='true']) {
   color: var(--ds-input-number-readonly-color, var(--ds-color-text-primary));
   background: var(--ds-input-number-readonly-bg, var(--ds-material-control-background));

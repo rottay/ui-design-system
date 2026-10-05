@@ -4,10 +4,10 @@
   "scope": "engines/modern unicamente. Classic y Rustic estan congelados (owner, 2026-09-05) y su pintura no es deuda que ninguna orden de trabajo vaya a bajar.",
   "producer": "declarado en el CSS autorado (src/foundation/tokens/css, src/components) o emitido por el compilador -- el registro de derivacion, el kernel (src/infrastructure/compilers/kernel) o lowering/foundation -- libraries/tokens/producers, el mismo conjunto que usa el arma transitiva de cascade-wiring",
   "corpus": "libraries/engine/skins/files/collectSkinFiles() filtrado a /engines/modern/ -- un solo walker, importado",
-  "denominator": 4784,
-  "produced": 4364,
+  "denominator": 4785,
+  "produced": 4365,
   "debt": 420,
-  "producers": 7328,
+  "producers": 7338,
   "modernSkinFiles": 124,
   "namedResidue": {
     "list-toolbar": {

@@ -4,8 +4,8 @@
   "formatVersion": 1,
   "vertical": "evnto",
   "mode": "dark",
-  "channelCount": 4271,
-  "digest": "cd81f6331855065ef7306b3ea740392534743cb058e85ae6056e6921b15f8d0e",
+  "channelCount": 4272,
+  "digest": "ddf70e388912f6a21ea5b48da87f64fb6533b29eb0927ee322ea87794f2c1ab5",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -1975,6 +1975,7 @@
     "--ds-input-number-stepper-height": "var(--ds-spacing-4)",
     "--ds-input-number-stepper-padding-x": "var(--ds-spacing-1)",
     "--ds-input-number-stepper-radius": "var(--ds-radius-sm)",
+    "--ds-input-number-suffix-space": "var(--ds-spacing-3)",
     "--ds-input-number-touch-target-min": "var(--ds-touch-target-min, 2.75rem)",
     "--ds-input-number-trailing-gap": "var(--ds-spacing-1)",
     "--ds-input-number-trailing-inset": "var(--ds-spacing-2)",

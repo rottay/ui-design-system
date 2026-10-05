@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "ca1a5c6a40f9373ae3480b0756715bebf6343c530dc72876ab113ee543e10d6c",
+    "authorityDigest": "a67be666e2ce2068b56011d271246fa821c2896d64af63be5391b5f8d75f4288",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5702684,
-        "sha256": "b99743f8eba52b6a02bf8ea5b61910dd8172795f2bf8e0bdaff70e87859ad6b6"
+        "bytes": 5703084,
+        "sha256": "f49f3edf10c204e2b2cd11114bafd743f70d351462e1eec4e620aa3dc67e1170"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5068660,
-        "sha256": "dea5fc99683e3149c17ea4fb36e36c17f62669791c82ff73712ffa7813e1a018"
+        "bytes": 5069060,
+        "sha256": "599b5c0c9b71e568ea9b461d431779f8af9e6d79349a18eaf482f4d124901844"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5029895,
-        "sha256": "bba0121171c548f3cd0dbbb5ccf38cacdec07e7c62b27741a8615ed085a394a5"
+        "bytes": 5030295,
+        "sha256": "f5162746f083aa5fdbd5b72504b14044a4917f6e322b813d98f7158084f167ba"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5029155,
-        "sha256": "8689d2f97e7f21beeb820cb9a414e04bb1f8f192330515f3d5b35103497d7258"
+        "bytes": 5029555,
+        "sha256": "10b1eb09661f0fc61547d895fe3c8fa15275d62f329102ca8cd1bdfb748baaa5"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -27634,8 +27634,8 @@
           "audit-input",
           "stale-claim-corpus"
         ],
-        "bytes": 3097,
-        "sha256": "7705f1664212e4a4ecf136c9977ca6cfae802d127849e2d4ecccc28f274bedce"
+        "bytes": 3152,
+        "sha256": "6b1a91134405bb4f730224452edf0649e1d720de09eba4405a3c64e2479aa560"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/input/index.css",
@@ -30110,8 +30110,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 21658,
-        "sha256": "4d3574cd493686eac11d17f34092776256c4c2b5792dba8a2279d803e80766f5"
+        "bytes": 21957,
+        "sha256": "5ba5d0cf0480942d72ce48d462e909ecd40837ae415810b3d28032f5e0fd6471"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
@@ -30290,8 +30290,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 39123,
-        "sha256": "64a313a6359cd57f36dcd28fada99e461ef522bef0f1752f3c575a4f7f971d69"
+        "bytes": 39169,
+        "sha256": "b23403a2a726d1dd5c24f36b7662fdd184ff8db1fa0cd08e11ae89f66426044c"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css",
@@ -32010,8 +32010,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 708363,
-        "sha256": "179c24fc40f2a1bb47bf7fa8a9a7a530c3261515f47096e3c4325b7133b95468"
+        "bytes": 704199,
+        "sha256": "a84a5d289f31e435adc61d5ae45535a70ff7c61b77c537b869eedade16e6d409"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/data/decisions/writers/unused/cards/index.json",
@@ -37866,8 +37866,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 302641,
-        "sha256": "2049b4190024f81ff6c701bd353d356fb2a8c4e6d90b56f4766eca0c2d5e5a9b"
+        "bytes": 302702,
+        "sha256": "cbaed2a25d8b101df931471f29f7dccf5ae00d913ec76e30f107f8863cdda798"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/index.ts",
@@ -43951,16 +43951,16 @@
         "roles": [
           "stale-claim-corpus"
         ],
-        "bytes": 6994,
-        "sha256": "b411888d33a04f6967dd577cd769acc7e2a3cb37d1f8ed6ff8bba6d6be7ad2d5"
+        "bytes": 7484,
+        "sha256": "596ad70c248dc5dad2818d5f5f06cb8f5ae9259645f6fdacb5cf2cf1d34b486a"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/filter-panel.spec.ts",
         "roles": [
           "stale-claim-corpus"
         ],
-        "bytes": 4624,
-        "sha256": "5436cc6d63f01f9154082ca3504e56c4e6ce3db47c4c8d01df6b0a9a57f8e84c"
+        "bytes": 4917,
+        "sha256": "dd2d9f0024d9c376cc9415d57af5cdb173cd59e1e12a51df246b2cde214e2a26"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/flagships.spec.ts",
@@ -43975,8 +43975,8 @@
         "roles": [
           "stale-claim-corpus"
         ],
-        "bytes": 7075,
-        "sha256": "07a8848abfc44e11bf86c152767269c6a3d8549fd685f436eed9f2463cac48bd"
+        "bytes": 7439,
+        "sha256": "70c6fa21cd870c5fcd197614d32f637618a84663f272889578b97fe6ab545c4e"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/graphics-packaging/index.spec.ts",
@@ -47699,7 +47699,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "ca1a5c6a40f9373ae3480b0756715bebf6343c530dc72876ab113ee543e10d6c"
+    "digest": "a67be666e2ce2068b56011d271246fa821c2896d64af63be5391b5f8d75f4288"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -50018,35 +50018,35 @@
       "addon-after": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 211
+          "line": 217
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 236
+          "line": 242
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 253
+          "line": 259
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 258
+          "line": 264
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 263
+          "line": 269
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 268
+          "line": 274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 273
+          "line": 279
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 406
+          "line": 412
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css",
@@ -50060,39 +50060,39 @@
       "addon-before": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 211
+          "line": 217
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 229
+          "line": 235
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 244
+          "line": 250
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 248
+          "line": 254
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 258
+          "line": 264
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 263
+          "line": 269
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 268
+          "line": 274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 273
+          "line": 279
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 406
+          "line": 412
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css",
@@ -58907,59 +58907,59 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 109
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "line": 115
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 123
+          "line": 121
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 244
+          "line": 129
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 248
+          "line": 250
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 253
+          "line": 254
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 258
+          "line": 259
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 258
+          "line": 264
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 263
+          "line": 264
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 263
+          "line": 269
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 268
+          "line": 269
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 268
+          "line": 274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 273
+          "line": 274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 273
+          "line": 279
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
+          "line": 279
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
@@ -61189,7 +61189,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 109
+          "line": 115
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
@@ -62410,6 +62410,14 @@
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 273
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
+          "line": 587
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
+          "line": 636
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
@@ -69291,7 +69299,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 280
+          "line": 286
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
@@ -78141,15 +78149,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 123
+          "line": 121
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 127
+          "line": 129
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 135
+          "line": 133
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -78157,111 +78165,111 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 146
+          "line": 147
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 151
+          "line": 152
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 156
+          "line": 157
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 161
+          "line": 162
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 165
+          "line": 167
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 170
+          "line": 171
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 185
+          "line": 176
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 190
+          "line": 191
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 203
+          "line": 196
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 211
+          "line": 209
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 211
+          "line": 217
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 229
+          "line": 217
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 236
+          "line": 235
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 244
+          "line": 242
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 248
+          "line": 250
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 248
+          "line": 254
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 253
+          "line": 254
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 253
+          "line": 259
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 258
+          "line": 259
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 258
+          "line": 264
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 263
+          "line": 264
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 263
+          "line": 269
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 268
+          "line": 269
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 268
+          "line": 274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 273
+          "line": 274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 273
+          "line": 279
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 280
+          "line": 279
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -78269,11 +78277,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 290
+          "line": 292
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 311
+          "line": 296
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -78285,7 +78293,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 330
+          "line": 329
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -78293,7 +78301,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 341
+          "line": 342
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -78301,7 +78309,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 351
+          "line": 353
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -78309,19 +78317,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 360
+          "line": 363
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 364
+          "line": 366
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 368
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 371
+          "line": 370
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -78333,23 +78337,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
+          "line": 380
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "line": 383
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 388
+          "line": 389
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 393
+          "line": 394
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 397
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 400
+          "line": 399
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -78361,23 +78365,31 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 406
+          "line": 409
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 415
+          "line": 412
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 415
+          "line": 412
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 419
+          "line": 421
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 419
+          "line": 421
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
+          "line": 425
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
+          "line": 425
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/invoice-template/index.css",
@@ -90301,11 +90313,7 @@
       "stepper-button": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 290
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 311
+          "line": 296
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -90317,7 +90325,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 330
+          "line": 329
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -90325,27 +90333,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 336
+          "line": 342
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 360
+          "line": 342
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 364
+          "line": 366
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 364
+          "line": 370
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 397
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 400
+          "line": 370
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -90353,7 +90357,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 415
+          "line": 406
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
+          "line": 409
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
+          "line": 421
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css",
@@ -90685,15 +90697,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 286
+          "line": 103
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 351
+          "line": 292
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
-          "line": 377
+          "line": 357
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
+          "line": 383
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
@@ -98942,7 +98958,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "FieldFiltersPanel",
@@ -99384,7 +99400,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "FilterPanel",
@@ -99423,7 +99439,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 283
+        "skinSelectorCount": 285
       },
       {
         "section": "FilterPanel",
@@ -100117,7 +100133,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "SelectionPreviewRail",
@@ -100777,7 +100793,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "DetailPanel",
@@ -101002,7 +101018,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 283
+        "skinSelectorCount": 285
       },
       {
         "section": "DetailPanel",
@@ -101470,7 +101486,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "DataTable",
@@ -103193,7 +103209,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "FormField",
@@ -103393,7 +103409,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Textarea",
@@ -103476,7 +103492,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "TagInput",
@@ -103667,7 +103683,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "InputNumber",
@@ -103823,7 +103839,7 @@
           }
         ],
         "skinSelectorCorpusKey": "suffix",
-        "skinSelectorCount": 9
+        "skinSelectorCount": 10
       },
       {
         "section": "InputNumber",
@@ -103924,7 +103940,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "PasswordInput",
@@ -104129,7 +104145,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Switch",
@@ -104290,7 +104306,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Toggle",
@@ -104554,7 +104570,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Radio",
@@ -104768,7 +104784,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Radio",
@@ -104947,7 +104963,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Checkbox",
@@ -105148,7 +105164,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Checkbox",
@@ -105277,7 +105293,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Slider",
@@ -105550,7 +105566,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "OTPInput",
@@ -105672,7 +105688,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Form",
@@ -106079,7 +106095,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Select",
@@ -107240,7 +107256,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "AutoComplete",
@@ -107523,7 +107539,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Mentions",
@@ -107709,7 +107725,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "TreeSelect",
@@ -108418,7 +108434,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Cascader",
@@ -109078,7 +109094,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Transfer",
@@ -109696,7 +109712,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Upload",
@@ -110422,7 +110438,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "DatePicker",
@@ -110845,7 +110861,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 283
+        "skinSelectorCount": 285
       },
       {
         "section": "DatePicker",
@@ -111510,7 +111526,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "TimePicker",
@@ -111788,7 +111804,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 283
+        "skinSelectorCount": 285
       },
       {
         "section": "TimePicker",
@@ -111950,7 +111966,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "ColorPicker",
@@ -112467,7 +112483,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Input",
@@ -112855,7 +112871,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Input",
@@ -112976,7 +112992,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Input",
@@ -113474,7 +113490,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Skeleton",
@@ -113559,7 +113575,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Skeleton",
@@ -113715,7 +113731,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Alert",
@@ -113948,7 +113964,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Progress",
@@ -114231,7 +114247,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Spinner",
@@ -114320,7 +114336,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Rate",
@@ -114398,7 +114414,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Modal",
@@ -114515,7 +114531,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 283
+        "skinSelectorCount": 285
       },
       {
         "section": "Modal",
@@ -114964,7 +114980,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 283
+        "skinSelectorCount": 285
       },
       {
         "section": "Drawer",
@@ -115225,7 +115241,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Toast",
@@ -115414,7 +115430,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Toast",
@@ -115540,7 +115556,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Message",
@@ -115691,7 +115707,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Notification",
@@ -115893,7 +115909,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Result",
@@ -116270,7 +116286,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Modal (overlay)",
@@ -116387,7 +116403,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 283
+        "skinSelectorCount": 285
       },
       {
         "section": "Modal (overlay)",
@@ -116687,7 +116703,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Tour",
@@ -117381,7 +117397,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "AlertDialog",
@@ -117968,7 +117984,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Sheet",
@@ -118124,7 +118140,7 @@
           }
         ],
         "skinSelectorCorpusKey": "header",
-        "skinSelectorCount": 283
+        "skinSelectorCount": 285
       },
       {
         "section": "Sheet",
@@ -118937,7 +118953,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Watermark",
@@ -119006,7 +119022,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Affix",
@@ -119085,7 +119101,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Anchor",
@@ -119124,7 +119140,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Anchor",
@@ -119237,7 +119253,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "BottomTabBar",
@@ -119396,7 +119412,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Breadcrumb",
@@ -119625,7 +119641,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "FloatButton",
@@ -119890,7 +119906,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Menu",
@@ -119932,7 +119948,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Menu",
@@ -120585,7 +120601,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "MobileHeader",
@@ -120684,7 +120700,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Pagination",
@@ -120910,7 +120926,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Segmented",
@@ -121021,7 +121037,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Stepper",
@@ -121392,7 +121408,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Steps",
@@ -121735,7 +121751,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4549
+        "skinSelectorCount": 4550
       },
       {
         "section": "Tabs",
@@ -122006,8 +122022,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "1b2d8b377f6a9c06d03ddc6288db72b64896a896590f089f28d10a90344ec3e9",
-      "1b2d8b377f6a9c06d03ddc6288db72b64896a896590f089f28d10a90344ec3e9"
+      "71580c3ae5a9efa76805627bad1189c4d244ee9396ae9581c71941ab6ab87ded",
+      "71580c3ae5a9efa76805627bad1189c4d244ee9396ae9581c71941ab6ab87ded"
     ],
     "agree": true
   }

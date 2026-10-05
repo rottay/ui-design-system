@@ -29,6 +29,7 @@
   --ds-input-number-prefix-space: var(--ds-spacing-8);
   --ds-input-number-trailing-inset: var(--ds-spacing-2);
   --ds-input-number-trailing-space: var(--ds-spacing-16);
+  --ds-input-number-suffix-space: var(--ds-spacing-3);
   --ds-input-number-trailing-gap: var(--ds-spacing-1);
   --ds-input-number-addon-padding-x: var(--ds-spacing-2);
   --ds-input-number-addon-padding-y: var(--ds-spacing-1);

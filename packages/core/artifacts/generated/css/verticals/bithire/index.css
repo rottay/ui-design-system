@@ -7671,6 +7671,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-input-number-prefix-space: var(--ds-spacing-8);
   --ds-input-number-trailing-inset: var(--ds-spacing-2);
   --ds-input-number-trailing-space: var(--ds-spacing-16);
+  --ds-input-number-suffix-space: var(--ds-spacing-3);
   --ds-input-number-trailing-gap: var(--ds-spacing-1);
   --ds-input-number-addon-padding-x: var(--ds-spacing-2);
   --ds-input-number-addon-padding-y: var(--ds-spacing-1);
@@ -30037,6 +30038,12 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-input-number.ds-input-number--modern[data-part='root'][data-has-trailing='true'] {
   padding-inline-end: var(--ds-input-number-trailing-space, var(--ds-spacing-16));
+}
+
+.ds-input-number.ds-input-number--modern[data-part='root'][data-has-trailing='true']:has(~ [data-part='trailing'] > [data-part='suffix']) {
+  padding-inline-end: calc(
+    var(--ds-input-number-trailing-space, var(--ds-spacing-16)) + var(--ds-input-number-suffix-space, var(--ds-spacing-3))
+  );
 }
 
 .ds-input-number.ds-input-number--modern[data-part='root'][data-readonly='true']:not([data-disabled='true']) {
@@ -64700,7 +64707,7 @@ html[data-ds-motion='reduced']
 }
 
 /* ---- header layout anatomy (drained from the engine's inline styles) ---- */
-.ds-pattern-page-shell.ds-engine-modern [data-part='header-row'] {
+.ds-pattern-page-shell.ds-engine-modern [data-part='header'] > [data-part='header-row'] {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -64749,7 +64756,7 @@ html[data-ds-motion='reduced']
      — instead of the desktop row collapsing verbatim. The primary action
      keeps thumb reach straight after the title block; the metadata register
      closes the hierarchy before the tab strip. */
-  .ds-pattern-page-shell.ds-engine-modern [data-part='header-row'] {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='header'] > [data-part='header-row'] {
     align-items: stretch;
     flex-direction: column;
   }

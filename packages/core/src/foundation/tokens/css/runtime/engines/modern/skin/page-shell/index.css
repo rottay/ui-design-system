@@ -584,7 +584,7 @@
 }
 
 /* ---- header layout anatomy (drained from the engine's inline styles) ---- */
-.ds-pattern-page-shell.ds-engine-modern [data-part='header-row'] {
+.ds-pattern-page-shell.ds-engine-modern [data-part='header'] > [data-part='header-row'] {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -633,7 +633,7 @@
      — instead of the desktop row collapsing verbatim. The primary action
      keeps thumb reach straight after the title block; the metadata register
      closes the hierarchy before the tab strip. */
-  .ds-pattern-page-shell.ds-engine-modern [data-part='header-row'] {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='header'] > [data-part='header-row'] {
     align-items: stretch;
     flex-direction: column;
   }
