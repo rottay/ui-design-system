@@ -24,7 +24,10 @@ import { FormsFbStates } from '@/components/torture-sections/forms';
 import { RecordFbStates } from '@/components/torture-sections/record';
 import { HeadersFbStates } from '@/components/torture-sections/headers';
 import { HeadersPatternsFbStates } from '@/components/torture-sections/headers-patterns';
-import { NavigationPatternsFbStates } from '@/components/torture-sections/navigation-patterns';
+import {
+  NavigationPatternsFbStates,
+  type NavigationPatternsOverlay,
+} from '@/components/torture-sections/navigation-patterns';
 import { DashboardWidgetsStates } from '@/components/torture-sections/dashboard';
 import { CommunicationFbStates } from '@/components/torture-sections/communication';
 import { WorkspaceChromeFbStates } from '@/components/torture-sections/workspace-chrome';
@@ -46,6 +49,7 @@ import { SkinCoverageStates } from '@/components/torture-sections/skin-coverage'
 //   ?rtl=1                                       Arabic locale + RTL proof block
 //   ?slug=button                                 capture a single flagship in isolation
 //   ?w=360|768|1280                              fixed content width for the responsive law
+//   ?navigationOverlay=shortcuts-overlay         open shortcuts-overlay instead of command-palette
 //   ?longTail=1                                  CK-I surface long-tail evidence
 //   ?skinCoverage=1                              skin parts only an opened or configured mount stamps
 //   ?tenantSource=canonical-db                   themanagementmiami from the published document
@@ -71,6 +75,10 @@ import { SkinCoverageStates } from '@/components/torture-sections/skin-coverage'
 // as their own build entries; this route stays the query-driven surface the
 // e2e specs address.
 // ---------------------------------------------------------------------------
+
+function readNavigationPatternsOverlay(raw: string | null): NavigationPatternsOverlay {
+  return raw === 'shortcuts-overlay' ? 'shortcuts-overlay' : 'command-palette';
+}
 
 export default async function WhitelabelTorturePage({ searchParams }: TortureRouteProps) {
   const query = await searchParams;
@@ -103,7 +111,11 @@ export default async function WhitelabelTorturePage({ searchParams }: TortureRou
         {active.has('record') && <RecordFbStates />}
         {active.has('headers') && <HeadersFbStates />}
         {active.has('headers-patterns') && <HeadersPatternsFbStates />}
-        {active.has('navigation') && <NavigationPatternsFbStates />}
+        {active.has('navigation') && (
+          <NavigationPatternsFbStates
+            openOverlay={readNavigationPatternsOverlay(readQueryValue(query, 'navigationOverlay'))}
+          />
+        )}
         {active.has('dashboard') && <DashboardWidgetsStates />}
         {active.has('communication') && <CommunicationFbStates />}
         {active.has('workspace') && <WorkspaceChromeFbStates />}

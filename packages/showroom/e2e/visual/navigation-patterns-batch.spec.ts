@@ -16,11 +16,12 @@ import { expectHydrated } from '../support/hydration';
 // The inert pre-step stamps the pattern-tier scope class `ds-pattern-<comp>` +
 // `ds-engine-<engine>` (matching every shipped pattern skin) plus `data-part`
 // and state attributes (data-active, data-focused, data-variant, data-position)
-// onto all ten engine files without moving any paint. The family is 100% raw
-// DOM and NOT portaled (no `createPortal` anywhere in patterns/navigation), so
-// every stamp reaches the DOM and ordinary descendant selectors from the scope
-// class reach every element. (The `rottay-*` in the screenshot names below is
-// the rottay TENANT FIXTURE, not a scope class.)
+// onto all ten engine files without moving any paint. Modern command-palette
+// and shortcuts-overlay compose the certified Modal, so their frames are
+// portaled into the top layer (see cmdDialog below); everything else renders
+// in-tree, where descendant selectors from the scope class reach every
+// element. (The `rottay-*` in the screenshot names below is the rottay TENANT
+// FIXTURE, not a scope class.)
 //
 // WHERE ALL THE RISK IS: command-palette. It holds the checkpoint's ONLY
 // imperative writes -- ten `.style.x =` mutations (modern 4, rustic 6), every
@@ -53,12 +54,18 @@ import { expectHydrated } from '../support/hydration';
 //
 // REST TRUTH NOTE: Playwright's toHaveScreenshot disables animations by default,
 // so rustic's `ds-cmd-panel-in` entrance keyframe and its rows' `transition: all`
-// both freeze to their end-state frame. The two fixed overlays are wrapped in a
-// transform'd band in the torture page so they render inside their band rather
-// than over the viewport -- their paint is unchanged. command-palette and
-// shortcuts-overlay auto-focus their input ~50ms after mount, so the rustic
-// search wrapper's inset focus line is present at rest; openProbe's settle wait
-// outlasts that so it is deterministic.
+// both freeze to their end-state frame. The scene opens ONE blocking overlay per
+// load -- command-palette by default; shortcuts-overlay renders closed -- because
+// modern's Modal-backed overlays are top-layer modal dialogs: the transform'd
+// band cannot contain them, and a second open one would cover and block the
+// palette. Rustic's overlay still renders in-tree inside its transform'd band.
+// Coverage is split across loads: the 4 default rest cells photograph the
+// palette open (shortcuts closed); the 4 `-shortcuts-overlay` cells load
+// `?navigationOverlay=shortcuts-overlay` and photograph the shortcuts overlay
+// open (palette closed).
+// command-palette auto-focuses its input ~50ms after mount, so the rustic search
+// wrapper's inset focus line is present at rest; openProbe's settle wait outlasts
+// that so it is deterministic.
 // ---------------------------------------------------------------------------
 
 type Fixture = 'rottay' | 'bithire';
@@ -93,10 +100,18 @@ async function waitForGroundPaint(page: Page, ground: 'dark' | 'light'): Promise
   );
 }
 
-async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<Locator> {
+type NavigationOverlay = 'command-palette' | 'shortcuts-overlay';
+
+async function openProbe(
+  page: Page,
+  fixture: Fixture,
+  engine: Engine,
+  options: { navigationOverlay?: NavigationOverlay } = {},
+): Promise<Locator> {
+  const navigationOverlay = options.navigationOverlay ?? 'command-palette';
   await page.setViewportSize({ width: 1280, height: 1800 });
   await page.goto(
-    `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=1280&slug=button&navigation=1`,
+    `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=1280&slug=button&navigation=1&navigationOverlay=${navigationOverlay}`,
     { waitUntil: 'domcontentloaded' },
   );
   await expectHydrated(page);
@@ -168,7 +183,7 @@ const band = (container: Locator, name: keyof typeof SCOPE): Locator =>
 
 // ---------------------------------------------------------------------------
 // 4 rest shots -- both fixtures, both engines, the full probe-navigation-patterns
-// grid. command-palette + shortcuts-overlay render open (contained); the two
+// grid. command-palette renders open and shortcuts-overlay closed; the two
 // switchers render at rest; environment-toggle shows the segmented variant with
 // its non-production banner.
 // ---------------------------------------------------------------------------
@@ -202,7 +217,7 @@ const cmdDialog = (container: Locator, engine: Engine): Locator =>
         .locator(".ds-modal--modern [data-part='surface'].ds-pattern-command-palette.ds-engine-modern")
     : band(container, 'command-palette').locator("[data-part='dialog']").first();
 
-// Both open overlays auto-focus their input after mount, so the rustic search's inset line is a race; the
+// The palette auto-focuses its input after mount, so the rustic search's inset line is timing-dependent; the
 // rest truth (the palette's focused search) is pinned and must hold half a second before the hover.
 async function pinPaletteFocus(page: Page, container: Locator): Promise<void> {
   const input = band(container, 'command-palette').locator("[data-part='input']").first();
@@ -248,6 +263,39 @@ for (const engine of ENGINES) {
 
     await expect(dialog).toHaveScreenshot(`rottay-navigation-patterns-cmdpal-${engine}-active-row-hover.png`);
   });
+}
+
+// ---------------------------------------------------------------------------
+// 4 shortcuts-overlay rest shots -- both fixtures, both engines, loaded with
+// `?navigationOverlay=shortcuts-overlay` so the shortcuts overlay is the one
+// open blocking overlay. Each cell first proves the palette is NOT open.
+// ---------------------------------------------------------------------------
+
+// Modern composes the certified Modal, so the overlay frame is the Modal's
+// `surface` in the top layer. Rustic renders its `root` in-tree in its band.
+const shortcutsFrame = (container: Locator, engine: Engine): Locator =>
+  engine === 'modern'
+    ? container
+        .page()
+        .locator(".ds-modal--modern [data-part='surface'].ds-pattern-shortcuts-overlay.ds-engine-modern")
+    : band(container, 'shortcuts-overlay');
+
+for (const fixture of FIXTURES) {
+  for (const engine of ENGINES) {
+    test(`${fixture.id} (${fixture.ground}) / navigation-patterns / ${engine}: shortcuts-overlay open @ w1280`, async ({ page }) => {
+      test.setTimeout(60_000);
+
+      const container = await openProbe(page, fixture.id, engine, { navigationOverlay: 'shortcuts-overlay' });
+      const frame = shortcutsFrame(container, engine);
+      await expect(frame).toHaveCount(1);
+      await expect(frame).toBeVisible();
+      await expect(cmdDialog(container, engine)).toHaveCount(0);
+      await expect(page.locator('.ds-pattern-command-palette')).toHaveCount(0);
+      await waitForSettled(page, frame);
+
+      await expect(frame).toHaveScreenshot(`${fixture.id}-navigation-patterns-${engine}-shortcuts-overlay.png`);
+    });
+  }
 }
 
 // rustic-only: the input focus write. onFocus sets `.style.boxShadow` on the

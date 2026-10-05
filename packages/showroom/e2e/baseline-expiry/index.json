@@ -201,11 +201,11 @@
       "spec": "e2e/visual/navigation-patterns-batch.spec.ts",
       "status": "pre-migration",
       "owner": "WO-EVI-03",
-      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "measuredAt": "2026-10-05 @ 826cb2822",
       "expiresWhen": "reference-identity-approved",
       "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
-      "baselines": 9,
-      "sha256": "523bc1b8cb62c32cb1f600305e01ef613ab39855db15319c6c817075c69f5a3c"
+      "baselines": 13,
+      "sha256": "d1a83b73b1f7a747c6e1ea734b1eee94532266ff33bd93d029f49dece5c4619d"
     },
     {
       "spec": "e2e/visual/overlay-batch.spec.ts",

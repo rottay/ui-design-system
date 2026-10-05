@@ -19,17 +19,19 @@ import {
 // probe-nav): this is the five PATTERNS (command-palette, environment-toggle,
 // workspace-switcher, shortcuts-overlay, locale-switcher).
 //
-// The two position:fixed overlays (command-palette, shortcuts-overlay) are
-// wrapped in a transform'd ancestor so their fixed position resolves to the
-// band instead of the viewport -- a CSS containing-block trick that changes
-// ONLY where they sit, never their paint, and lives here in the showroom, never
-// in a component. Both render `open`. command-palette carries recent + grouped
-// items so BOTH duplicated result sections and a group-label render, and so the
-// spec has a keyboard-active row (activeIndex 0) to hover a DIFFERENT row
-// against (the guard). The two absolute-dropdown switchers render at rest --
-// their `open` is internal state, and per the inventory both are 100%
-// STATE-SELECTED with zero imperative writes, so the imperative-write risk the
-// visual pins exist to catch lives entirely in command-palette.
+// command-palette and shortcuts-overlay are blocking overlays. Modern renders
+// both through the certified Modal, i.e. a top-layer `showModal()` dialog: the
+// top layer ignores the transform'd band, and only the last-promoted modal
+// dialog is interactive. So the scene opens ONE of them per load (`openOverlay`,
+// default command-palette) and renders the other closed. Rustic renders its
+// overlays in-tree, where the transform'd band contains the fixed position.
+// command-palette carries recent + grouped items so BOTH duplicated result
+// sections and a group-label render, and so the spec has a keyboard-active row
+// (activeIndex 0) to hover a DIFFERENT row against (the guard). The two
+// absolute-dropdown switchers render at rest -- their `open` is internal state,
+// and per the inventory both are 100% STATE-SELECTED with zero imperative
+// writes, so the imperative-write risk the visual pins exist to catch lives
+// entirely in command-palette.
 // ---------------------------------------------------------------------------
 
 const NAV_ENVIRONMENTS = [
@@ -98,7 +100,13 @@ const NAV_OVERLAY_BAND: CSSProperties = {
   border: '1px solid var(--ds-color-border)',
 };
 
-export function NavigationPatternsFbStates() {
+export type NavigationPatternsOverlay = 'command-palette' | 'shortcuts-overlay';
+
+export function NavigationPatternsFbStates({
+  openOverlay = 'command-palette',
+}: {
+  openOverlay?: NavigationPatternsOverlay;
+} = {}) {
   return (
     <Box
       data-testid="probe-navigation-patterns"
@@ -113,7 +121,7 @@ export function NavigationPatternsFbStates() {
         <Stack spacing="xs" data-testid="probe-navigation-patterns-command-palette">
           <Box style={NAV_OVERLAY_BAND}>
             <PatternCommandPalette
-              open
+              open={openOverlay === 'command-palette'}
               onOpenChange={() => undefined}
               placeholder="Jump to a surface or action"
               items={NAV_COMMAND_ITEMS}
@@ -126,7 +134,7 @@ export function NavigationPatternsFbStates() {
         <Stack spacing="xs" data-testid="probe-navigation-patterns-shortcuts-overlay">
           <Box style={NAV_OVERLAY_BAND}>
             <PatternShortcutsOverlay
-              open
+              open={openOverlay === 'shortcuts-overlay'}
               onOpenChange={() => undefined}
               title="Keyboard shortcuts"
               shortcuts={NAV_SHORTCUTS}
