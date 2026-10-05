@@ -17,11 +17,11 @@
     },
     {
       "id": "696e8f4332ce6ed623a3",
-      "reason": "The chart engine's tooltip div is a datum annotation positioned by chart geometry, not an interactive disclosure; role=\"tooltip\" on a non-interactive element is the correct ARIA and there is no primitive host for it."
+      "reason": "The chart engine's tooltip div is a datum annotation positioned by chart geometry, not an interactive disclosure; role=\"tooltip\" on a non-interactive element matches the ARIA pattern. NOT VERIFIED: an accessible linkage from the chart to this tooltip (aria-describedby / an accessible name on the trigger region) is not demonstrated today — the annotation is visual-only until the chart accessibility layer proves the link; review then."
     },
     {
       "id": "5671265a51112b78459c",
-      "reason": "The chart tooltip is a datum annotation positioned by chart geometry, not an interactive disclosure; role=\"tooltip\" on a non-interactive element is the correct ARIA and there is no primitive host for it."
+      "reason": "The chart tooltip is a datum annotation positioned by chart geometry, not an interactive disclosure; role=\"tooltip\" on a non-interactive element matches the ARIA pattern. NOT VERIFIED: an accessible linkage from the chart to this tooltip is not demonstrated today (no aria-describedby from a focusable region measured); the annotation is visual-only until the chart accessibility layer proves the link — review then."
     },
     {
       "id": "9ff39d2a101f5503a844",
@@ -33,7 +33,7 @@
     },
     {
       "id": "f746bf83874afa8d0b32",
-      "reason": "The presence live-cursor glyph is a two-tone pattern-owned marker (per-user fill plus a surface-coloured outline the single-currentColor icon contract cannot express); no governed icon role fits it."
+      "reason": "The presence live-cursor glyph is a two-tone pattern-owned marker (per-user fill plus a surface-coloured outline the single-currentColor icon contract cannot express); no governed icon role fits it today. REVIEW CONDITION: re-evaluate the moment the semantic icon corpus admits a two-tone or collaboration role — this entry is not permanent by construction."
     },
     {
       "id": "516bb532d6b74e2ac3cd",
