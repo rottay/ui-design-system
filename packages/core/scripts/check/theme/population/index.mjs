@@ -475,9 +475,17 @@ function relativeTo(root, file) {
  * entry per (family, axis, skin file), each naming the exact declarations the
  * core review read. `admitted` pins which (family, axis) pairs the registry
  * may carry at all; a new pair returns to review before it can act.
+ *
+ * A `delegated` entry excludes no declaration. It records that a family which
+ * authors NOTHING on the axis paints that axis through a composed family that
+ * declares it in its own right (`delegate`), so the family is published not
+ * applicable rather than silently absent. It acts only while the family
+ * authors no longhand, reads no head channel and (states) carries no K1 rule
+ * of the axis; the day it does, it is a member again by the ordinary
+ * derivation and the entry is published ineffective and fails the registry.
  */
 export const EXCLUSIONS_PATH = join(HERE, 'exclusions/index.json');
-export const EXCLUSION_PATHS = Object.freeze(['byProperty']);
+export const EXCLUSION_PATHS = Object.freeze(['byProperty', 'delegated']);
 
 export function readExclusions(path = EXCLUSIONS_PATH) {
   const registry = JSON.parse(readFileSync(path, 'utf8'));
@@ -514,6 +522,21 @@ function matchingExclusion(registry, family, axis, file, rule, declaration) {
     if ((entry.declarations ?? []).some((reviewed) => Array.isArray(reviewed.context) && declarationKey(reviewed) === key)) return entry;
   }
   return null;
+}
+
+/**
+ * The composition witness of a delegation, derived and never listed: the
+ * delegate's own `--ds-<delegate>-*` channels that the family's skin WRITES
+ * and the delegate's skin READS. Empty means the family's skin does not reach
+ * the delegate at all, and no delegation can be claimed.
+ */
+export function delegationWitness(familyFiles, delegate, delegateFiles) {
+  const prefix = `--ds-${delegate}-`;
+  const written = new Set(familyFiles.flatMap((file) => cssRules(readFileSync(file, 'utf8')))
+    .flatMap((rule) => rule.declarations.map((declaration) => declaration.property))
+    .filter((property) => property.startsWith(prefix)));
+  const read = readChannels(delegateFiles.map((file) => readFileSync(file, 'utf8')).join('\n'));
+  return [...written].filter((channel) => read.has(channel)).sort();
 }
 
 /**
@@ -936,7 +959,11 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
   const registry = readExclusions(exclusionsPath);
   const declarations = new Map();
   const proof = focusSignatureProof(root, sourcePath);
-  for (const [family, files] of skinFamilies(root)) {
+  const skins = skinFamilies(root);
+  const delegatedEntry = (family, axis) => registry.entries.find((entry) =>
+    entry.family === family && entry.axis === axis && entry.path === 'delegated');
+  const pendingDelegations = [];
+  for (const [family, files] of skins) {
     const sources = files.map((file) => ({ file: relativeTo(root, file), css: readFileSync(file, 'utf8') }));
     const css = sources.map((source) => source.css).join('\n');
     const rulesByFile = sources.map((source) => ({ file: source.file, rules: cssRules(source.css) }));
@@ -1003,21 +1030,38 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
             ? { stateGates: GATE_ORDER.filter((gate) => stateRules.some((rule) => rule.gates.includes(gate))), stateRules }
             : {}),
           ...(excluded.length > 0 ? { excludedDeclarations: excluded, exclusionEffective: false } : {}),
+          ...(delegatedEntry(family, axis) ? { delegationEffective: false } : {}),
           // Published where membership HINGES on the conservative arm: nothing else declares the axis.
           ...(ambiguous.length > 0 && unambiguous === 0 && byHeadChannel.length === 0 ? { onlyThroughUnprovenAliases: ambiguous } : {}),
         };
       } else if (focusOnly.length > 0) {
         focusSignatureOnly[axis] = focusOnly;
       } else if (excluded.length > 0) {
-        const entry = registry.entries.find((candidate) => candidate.family === family && candidate.axis === axis);
+        const entry = registry.entries.find((candidate) => candidate.family === family && candidate.axis === axis
+          && (candidate.path ?? 'byProperty') === 'byProperty');
         notApplicable[axis] = {
           reason: entry.reason,
           review: entry.review,
           excludedDeclarations: excluded,
         };
+      } else if (delegatedEntry(family, axis)) {
+        pendingDelegations.push({ family, axis, entry: delegatedEntry(family, axis) });
       }
     }
     declarations.set(family, { family, files: sources.map((source) => source.file), axes, notApplicable, focusSignatureOnly });
+  }
+  // A delegation holds only while the delegate declares the axis in its own right and the family's skin reaches it.
+  for (const { family, axis, entry } of pendingDelegations) {
+    if (!declarations.get(entry.delegate)?.axes[axis]) continue;
+    const witness = delegationWitness(skins.get(family), entry.delegate, skins.get(entry.delegate));
+    if (witness.length === 0) continue;
+    declarations.get(family).notApplicable[axis] = {
+      reason: entry.reason,
+      review: entry.review,
+      excludedDeclarations: [],
+      delegatedTo: entry.delegate,
+      witness,
+    };
   }
   return declarations;
 }
@@ -1106,7 +1150,10 @@ export function axisNotApplicable(root = DEFAULT_ROOT, sourcePath = CATALOG_SOUR
   const byAxis = new Map(AXIS_IDS.map((axis) => [axis, []]));
   for (const [family, record] of declarations) {
     for (const [axis, entry] of Object.entries(record.notApplicable)) {
-      byAxis.get(axis).push({ family, reason: entry.reason, review: entry.review, excludedDeclarations: entry.excludedDeclarations });
+      byAxis.get(axis).push({
+        family, reason: entry.reason, review: entry.review, excludedDeclarations: entry.excludedDeclarations,
+        ...(entry.delegatedTo ? { delegatedTo: entry.delegatedTo } : {}),
+      });
     }
   }
   for (const list of byAxis.values()) list.sort((a, b) => a.family.localeCompare(b.family));
@@ -1122,7 +1169,7 @@ export function axisNotApplicable(root = DEFAULT_ROOT, sourcePath = CATALOG_SOUR
  * and the entry must return to review rather than sit stale -- and a private
  * channel a reviewed value reads that something in `src` now produces.
  */
-export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXCLUSIONS_PATH) {
+export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXCLUSIONS_PATH, sourcePath = CATALOG_SOURCE) {
   const failures = [];
   let registry;
   try {
@@ -1133,12 +1180,14 @@ export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXC
   const families = skinFamilies(root);
   const admitted = new Set(registry.admitted.map((pair) => `${pair.family}/${pair.axis}`));
   const seenEntries = new Set();
+  let derived = null;
+  const declarationsOf = () => (derived ??= familyAxisDeclarations(root, sourcePath, exclusionsPath));
   registry.entries.forEach((entry, index) => {
     const label = `entry ${index} (${entry.family ?? '?'}/${entry.axis ?? '?'})`;
     const pair = `${entry.family}/${entry.axis}`;
     if (!admitted.has(pair)) failures.push(`${label}: ${pair} is not an admitted exclusion; a new pair returns to core review before it can act`);
     if (!AXIS_IDS.includes(entry.axis)) failures.push(`${label}: axis ${entry.axis} is not an axis of kit rule 4`);
-    if (!EXCLUSION_PATHS.includes(entry.path)) failures.push(`${label}: path ${entry.path} is not byProperty; a head-channel read is never excluded`);
+    if (!EXCLUSION_PATHS.includes(entry.path)) failures.push(`${label}: path ${entry.path} is neither byProperty nor delegated; a head-channel read is never excluded`);
     for (const field of ['reason', 'review']) {
       if (typeof entry[field] !== 'string' || entry[field].trim().length === 0) failures.push(`${label}: ${field} is empty`);
     }
@@ -1153,6 +1202,12 @@ export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXC
     const owned = files.map((file) => relativeTo(root, file));
     if (!owned.includes(entry.skin)) {
       failures.push(`${label}: ${entry.skin} is not a skin file of ${entry.family} (${owned.join(', ')})`);
+      return;
+    }
+    if (entry.path === 'delegated') {
+      const others = registry.entries.filter((other) => other !== entry && other.family === entry.family && other.axis === entry.axis);
+      if (others.length > 0) failures.push(`${label}: a delegated entry is the only entry of its pair; ${pair} carries ${others.length} more`);
+      failures.push(...checkDelegatedEntry(root, entry, label, families, declarationsOf).map((line) => `${label}: ${line}`));
       return;
     }
     const rules = cssRules(readFileSync(join(root, entry.skin), 'utf8'));
@@ -1211,6 +1266,93 @@ export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXC
   return { registry, failures };
 }
 
+const authoredKeysOf = (file) => new Set(cssRules(readFileSync(file, 'utf8')).flatMap((rule) =>
+  rule.declarations.map((declaration) => declarationKey({ selector: rule.selector, context: rule.atRules, ...declaration }))));
+
+const isReviewedDeclaration = (candidate) => candidate !== null && typeof candidate === 'object'
+  && Array.isArray(candidate.context) && ['skin', 'selector', 'property', 'value'].every((field) =>
+    typeof candidate[field] === 'string' && candidate[field].trim().length > 0);
+
+/**
+ * One `delegated` entry against the tree, fail-closed on every premise the
+ * review read: the family authors nothing on the axis (else it has re-entered),
+ * the delegate is another skin family that declares the axis in its own right
+ * and still authors the covering declarations verbatim, the family's component
+ * still composes the delegate (`composedIn.carries`, verbatim fragments of its
+ * source with comments removed: the import, and the props that pick the
+ * covering rule), and the family's skin still reaches the delegate's own
+ * channels (`delegationWitness`). `retired` records what the family painted
+ * before; it is checked for shape only, because its absence is the premise.
+ */
+function checkDelegatedEntry(root, entry, label, families, declarationsOf) {
+  const failures = [];
+  const { family, axis, delegate } = entry;
+  const authoredLonghands = AXES[axis]?.authored ?? [];
+  if ((entry.declarations ?? []).length > 0) failures.push('a delegated entry excludes no declaration; `declarations` must be absent or empty');
+  if (typeof entry.reviewedAt?.commit !== 'string' || entry.reviewedAt.commit.trim().length === 0) failures.push('reviewedAt.commit is empty');
+  const retired = entry.retired;
+  if (!isReviewedDeclaration(retired) || typeof retired.commit !== 'string' || retired.commit.trim().length === 0) {
+    failures.push('`retired` must name the commit, skin, at-rule context, selector, property and value the family painted before');
+  } else if (!authoredLonghands.includes(retired.property.toLowerCase())) {
+    failures.push(`the retired ${retired.property} is not an authored longhand of ${axis}`);
+  }
+  if (typeof delegate !== 'string' || delegate === family || !families.has(delegate)) {
+    failures.push(`delegate ${delegate} is not another skin family`);
+    return failures;
+  }
+  const record = declarationsOf().get(family);
+  if (record?.axes[axis]) {
+    const evidence = record.axes[axis];
+    failures.push(
+      `STALE — ${family} declares ${axis} again (properties [${evidence.properties.join(', ')}], head channels `
+      + `[${evidence.headChannels.join(', ')}]${evidence.stateRules?.length ? `, ${evidence.stateRules.length} K1 rule(s)` : ''}); `
+      + 'it has re-entered the axis by itself and the delegation must be re-reviewed or removed',
+    );
+  } else if (record?.focusSignatureOnly[axis]) {
+    failures.push(`STALE — ${family} authors ${axis} again (focus-signature declarations); the delegation must be re-reviewed or removed`);
+  }
+  if (!declarationsOf().get(delegate)?.axes[axis]) {
+    failures.push(`${delegate} does not declare ${axis} in its own right; nothing measured covers ${family}'s paint`);
+  }
+  const delegateFiles = families.get(delegate).map((file) => relativeTo(root, file));
+  const covers = entry.covers ?? [];
+  if (covers.length === 0) failures.push(`names no covering declaration of ${delegate}`);
+  for (const cover of covers) {
+    if (!isReviewedDeclaration(cover)) {
+      failures.push('a covering declaration must name its skin, at-rule context, selector, property and value');
+      continue;
+    }
+    if (!authoredLonghands.includes(cover.property.toLowerCase())) failures.push(`the covering ${cover.property} is not an authored longhand of ${axis}`);
+    if (!delegateFiles.includes(cover.skin)) {
+      failures.push(`${cover.skin} is not a skin file of ${delegate} (${delegateFiles.join(', ')})`);
+      continue;
+    }
+    if (!authoredKeysOf(join(root, cover.skin)).has(declarationKey(cover))) {
+      failures.push(`STALE — ${cover.skin} no longer authors the covering ${declarationKey(cover)} verbatim; the delegation must be re-reviewed`);
+    }
+  }
+  const composed = entry.composedIn;
+  const carries = Array.isArray(composed?.carries) ? composed.carries : [];
+  if (typeof composed?.source !== 'string' || carries.length === 0
+    || !carries.every((fragment) => typeof fragment === 'string' && fragment.trim().length > 0)) {
+    failures.push('`composedIn` must name the family\'s component source and the fragments that compose the delegate (its import first)');
+  } else if (!existsSync(join(root, composed.source))) {
+    failures.push(`composedIn.source ${composed.source} does not exist`);
+  } else {
+    const source = normalizeCssText(blankComments(readFileSync(join(root, composed.source), 'utf8'), true));
+    for (const fragment of carries) {
+      if (!source.includes(normalizeCssText(fragment))) {
+        failures.push(`STALE — ${composed.source} no longer carries \`${fragment}\`; the composition of ${delegate} the review read is gone`);
+      }
+    }
+  }
+  const witness = delegationWitness(families.get(family), delegate, families.get(delegate));
+  if (witness.length === 0) {
+    failures.push(`${family}'s skin writes no --ds-${delegate}-* channel that ${delegate}'s skin reads; no composition is witnessed`);
+  }
+  return failures;
+}
+
 /** The whole published population, in one object, revision and exclusions included. */
 export function populationReport(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, exclusionsPath = EXCLUSIONS_PATH) {
   const revision = catalogRevision(sourcePath);
@@ -1231,12 +1373,14 @@ export function populationReport(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURC
           family, reasons: [...new Set(evidence.onlyThroughUnprovenAliases.map((entry) => entry.reason))],
         });
       }
-      if (evidence.exclusionEffective === false) {
+      if (evidence.exclusionEffective === false || evidence.delegationEffective === false) {
         ineffective.push({ family, axis, stillDeclares: evidence.properties, headChannels: evidence.headChannels });
       }
     }
     for (const [axis, entry] of Object.entries(record.notApplicable)) {
-      notApplicable.get(axis).push({ family, reason: entry.reason, review: entry.review });
+      notApplicable.get(axis).push({
+        family, reason: entry.reason, review: entry.review, ...(entry.delegatedTo ? { delegatedTo: entry.delegatedTo } : {}),
+      });
     }
   }
   for (const list of populations.values()) list.sort();
@@ -1358,7 +1502,7 @@ export function checkPilotPopulation(
 ) {
   const live = pilotPopulation(root, sourcePath, PILOT_CUT, exclusionsPath);
   const pin = JSON.parse(readFileSync(pinPath, 'utf8'));
-  const failures = checkExclusionRegistry(root, exclusionsPath).failures.map((line) => `exclusion registry: ${line}`);
+  const failures = checkExclusionRegistry(root, exclusionsPath, sourcePath).failures.map((line) => `exclusion registry: ${line}`);
   if (Object.keys(live.families).length === 0) {
     failures.push(`${live.cut}: the family-cut roster names no family, so the pilot population is empty`);
   }
@@ -1439,7 +1583,7 @@ export const FLOOR_PATH = join(HERE, 'baseline/index.json');
 export function checkPopulationFloor(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, floorPath = FLOOR_PATH, exclusionsPath = EXCLUSIONS_PATH) {
   const report = populationReport(root, sourcePath, exclusionsPath);
   const floor = JSON.parse(readFileSync(floorPath, 'utf8'));
-  const failures = checkExclusionRegistry(root, exclusionsPath).failures.map((line) => `exclusion registry: ${line}`);
+  const failures = checkExclusionRegistry(root, exclusionsPath, sourcePath).failures.map((line) => `exclusion registry: ${line}`);
   const pinned = floor.axes ?? {};
   for (const axis of AXIS_IDS) {
     if (!Object.hasOwn(pinned, axis)) {
@@ -1517,7 +1661,9 @@ if (isMain && process.argv.includes('--pilot')) {
   console.log(`exclusion registry ${report.exclusions.revision} — ${registry?.entries.length ?? 0} entr(ies), `
     + `admitted: ${(registry?.admitted ?? []).map((pair) => `${pair.family}/${pair.axis}`).join(', ') || '(none)'}`);
   for (const entry of report.axes) {
-    for (const withdrawn of entry.notApplicable) console.log(`  N/A ${withdrawn.family}/${entry.axis} — ${withdrawn.review}`);
+    for (const withdrawn of entry.notApplicable) {
+      console.log(`  N/A ${withdrawn.family}/${entry.axis}${withdrawn.delegatedTo ? ` (delegated to ${withdrawn.delegatedTo})` : ''} — ${withdrawn.review}`);
+    }
   }
   for (const entry of report.exclusions.ineffective) {
     console.log(`  INEFFECTIVE ${entry.family}/${entry.axis} — still declares ${entry.stillDeclares.join(', ') || '(head channel)'}`);

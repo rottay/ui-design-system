@@ -68,6 +68,12 @@ const CHART_LINE_REVIEW = `${CHART_REVIEW} | CL104 re-review 2026-10-01 (Fable):
 // No ineffective entry on this tree: the CL104 publication discharged with FAM09-CL (2026-10-02).
 const CHART_LINE_INEFFECTIVE = [];
 const TT_REVIEW = 'WO-EVI-02 table-toolbar shape exclusion review 2026-10-01 (X3 dossier; Fable ACCEPT-WITH-CHANGES, conditions consolidated by the DT; Codex outside the loop by owner restriction 2026-09-19)';
+const SO_REVIEW = 'WO-EVI-02 W23-POPX delegation dossier 2026-10-04 (writer claude-opus-5-5, patch mode; independent review owed before integration; Codex outside the loop by owner restriction 2026-09-19)';
+const SO_SKIN = `${SKIN_ROOT}/shortcuts-overlay/index.css`;
+const MODAL_SKIN = `${SKIN_ROOT}/modal/index.css`;
+const SO_SOURCE = 'src/components/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx';
+// Mover: W23-POPX 2026-10-04 -- shortcuts-overlay/shape is published N/A, delegated to modal (shape 214 -> 213, N/A 4 -> 5).
+const SHAPE_NOT_APPLICABLE = ['chart-line', 'chart-pie', 'radio', 'shortcuts-overlay', 'table-toolbar'];
 const PHYSICAL_CORNERS = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius'];
 
 const sandboxes = [];
@@ -85,6 +91,9 @@ function sandbox() {
   cpSync(join(ROOT, ROSTER), join(dir, ROSTER));
   mkdirSync(join(dir, 'src/contracts/theme/runtime/catalog'), { recursive: true });
   cpSync(join(ROOT, CATALOG), join(dir, CATALOG));
+  // A delegated entry reads the family's component source for the composition it was reviewed with.
+  mkdirSync(join(dir, dirname(SO_SOURCE)), { recursive: true });
+  cpSync(join(ROOT, SO_SOURCE), join(dir, SO_SOURCE));
   return dir;
 }
 
@@ -275,7 +284,7 @@ describe('theme population — the pilot population of WO-EVI-05', () => {
 });
 
 describe('theme population — the reviewed semantic-identity exclusion of radio/shape (WO-EVI-05)', () => {
-  it('admits exactly radio/shape, chart-line/shape, chart-pie/shape and table-toolbar/shape, on the byProperty path only, and validates green on the tree', () => {
+  it('admits exactly radio/shape, chart-line/shape, chart-pie/shape, table-toolbar/shape (byProperty) and shortcuts-overlay/shape (delegated), and validates green on the tree', () => {
     const registry = readExclusions();
     // Movers of the pin (radio only -> + chart-line, chart-pie): WO-EVI-02 X1 dossier + Fable review 2026-09-30;
     // (+ table-toolbar): WO-EVI-02 X3 dossier + Fable review 2026-10-01.
@@ -284,10 +293,11 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
       { family: 'chart-line', axis: 'shape' },
       { family: 'chart-pie', axis: 'shape' },
       { family: 'table-toolbar', axis: 'shape' },
+      { family: 'shortcuts-overlay', axis: 'shape' },
     ]);
     assert.deepEqual(registry.entries.map((entry) => [entry.family, entry.axis, entry.path, entry.review]),
       [['radio', 'shape', 'byProperty', REVIEW], ['chart-line', 'shape', 'byProperty', CHART_LINE_REVIEW], ['chart-pie', 'shape', 'byProperty', CHART_REVIEW],
-        ['table-toolbar', 'shape', 'byProperty', TT_REVIEW]]);
+        ['table-toolbar', 'shape', 'byProperty', TT_REVIEW], ['shortcuts-overlay', 'shape', 'delegated', SO_REVIEW]]);
     assert.deepEqual(checkExclusionRegistry().failures, []);
   });
 
@@ -313,8 +323,8 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const report = populationReport();
     const shape = report.axes.find((entry) => entry.axis === 'shape');
     assert.ok(!shape.families.includes('radio'));
-    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio', 'table-toolbar']);
-    assert.equal(shape.notApplicableCount, 4);
+    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), SHAPE_NOT_APPLICABLE);
+    assert.equal(shape.notApplicableCount, 5);
     for (const entry of report.axes) {
       assert.ok(entry.families.every((family) => !entry.notApplicable.some((withdrawn) => withdrawn.family === family)),
         `${entry.axis}: applicable and not-applicable sets must be disjoint`);
@@ -325,9 +335,9 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.equal(report.exclusions.revision, exclusionsRevision());
 
     const line = populationLine();
-    assert.match(line, /shape 214 \(4 N\/A\)/);
+    assert.match(line, /shape 213 \(5 N\/A\)/);
     assert.match(line, /typography 184 \(0 N\/A\)/);
-    assert.match(line, /exclusions [0-9a-f]{16} \(4 reviewed\)/);
+    assert.match(line, /exclusions [0-9a-f]{16} \(5 reviewed\)/);
 
     const pilot = pilotPopulation();
     assert.deepEqual(pilot.families.radio, ['typography', 'rhythm', 'depth', 'states', 'motion']);
@@ -353,11 +363,15 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     // Movers: CL104 re-review 2026-10-01 (Fable) -- chart-line re-enters shape (214 -> 215, N/A 4 -> 3);
     // OVM 2026-10-02 (owner ruling 4 + Fable) -- the overlay-modal-compounds orphans retire (215 -> 214);
     // GLASS-1 (owner ruling 3) -- the glass-card skin enters shape and depth (214 -> 215);
-    // FAM09-CL 2026-10-02 -- the skeleton-bar dome re-enters the chart-line exclusion (215 -> 214, N/A 3 -> 4).
-    assert.equal(floor.axes.shape, 214);
+    // FAM09-CL 2026-10-02 -- the skeleton-bar dome re-enters the chart-line exclusion (215 -> 214, N/A 3 -> 4);
+    // OWNSO 9789b3469 + W23-POPX 2026-10-04 -- shortcuts-overlay's dialog corner retires into Modal, delegated (214 -> 213, N/A 4 -> 5).
+    assert.equal(floor.axes.shape, 213);
     assert.deepEqual(floor.provenance.membershipMoves.orphanRetirement.byAxis,
       Object.fromEntries(['shape', 'depth', 'states'].map((axis) => [axis, { removed: ['overlay-modal-compounds'], added: [] }])));
-    assert.equal(floor.notApplicable.shape, 4);
+    assert.equal(floor.notApplicable.shape, 5);
+    assert.deepEqual(floor.provenance.membershipMoves.shortcutsOverlayDelegation.byAxis.shape, { added: [], removed: ['shortcuts-overlay'] });
+    assert.deepEqual([floor.provenance.membershipMoves.shortcutsOverlayDelegation.shapeFloorLowering.pinned,
+      floor.provenance.membershipMoves.shortcutsOverlayDelegation.shapeFloorLowering.repinned], [214, 213]);
     assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.removed, ['chart-line', 'chart-pie', 'table-toolbar']);
     assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape.reEntered, []);
     assert.equal(floor.exclusionsRevision, exclusionsRevision());
@@ -498,7 +512,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(checkbox.notApplicable, {});
     const report = populationReport(dir, catalogIn(dir), path);
     assert.ok(report.axes.find((entry) => entry.axis === 'shape').families.includes('checkbox'));
-    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), ['chart-line', 'chart-pie', 'radio', 'table-toolbar']);
+    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), SHAPE_NOT_APPLICABLE);
     assert.ok(report.exclusions.ineffective.some((entry) => entry.family === 'checkbox' && entry.axis === 'shape'));
     assert.deepEqual(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { exclusionsPath: path }).failures, [],
       'an ineffective entry changes no published denominator');
@@ -524,7 +538,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const headChannel = baseRegistry();
     headChannel.entries[0].path = 'byHeadChannel';
     assert.ok(checkExclusionRegistry(dir, writeRegistry(dir, headChannel, 'head.json')).failures
-      .some((line) => line.includes('is not byProperty; a head-channel read is never excluded')));
+      .some((line) => line.includes('is neither byProperty nor delegated; a head-channel read is never excluded')));
 
     const foreign = baseRegistry();
     foreign.entries[0].skin = RADIO_GROUP_SKIN;
@@ -680,8 +694,10 @@ describe('theme population — the reviewed chart-marks exclusions on shape and 
 
   it('derives the private channels from the reviewed values, and none of them is produced anywhere in src on this tree', () => {
     const reads = Object.fromEntries(readExclusions().entries.map((entry) =>
-      [entry.family, [...new Set(entry.declarations.flatMap((declaration) => privateChannelsRead(declaration.value)))]]));
-    assert.deepEqual(reads, { radio: [], 'chart-line': ['--_ds-line-marker-radius'], 'chart-pie': ['--_ds-pie-marker-radius'], 'table-toolbar': [] });
+      [entry.family, [...new Set((entry.declarations ?? []).flatMap((declaration) => privateChannelsRead(declaration.value)))]]));
+    assert.deepEqual(reads, {
+      radio: [], 'chart-line': ['--_ds-line-marker-radius'], 'chart-pie': ['--_ds-pie-marker-radius'], 'table-toolbar': [], 'shortcuts-overlay': [],
+    });
     const producers = privateChannelProducers(ROOT, ['--_ds-line-marker-radius', '--_ds-pie-marker-radius']);
     assert.deepEqual(Object.fromEntries(producers), { '--_ds-line-marker-radius': [], '--_ds-pie-marker-radius': [] });
     assert.deepEqual(checkExclusionRegistry().failures, []);
@@ -767,6 +783,178 @@ describe('theme population — the reviewed table-toolbar divider exclusion on s
       assert.ok(!variant.declarations.some((declaration) => AXES.shape.authored.includes(declaration.property) || declaration.property === 'inline-size'),
         `${variant.atRules.join(' ')}: ${premise}`);
     }
+  });
+});
+
+describe('theme population — a delegated shape surface: shortcuts-overlay paints shape through Modal (WO-EVI-02 W23-POPX)', () => {
+  const SO_RETIRED = {
+    commit: '9789b3469',
+    skin: SO_SKIN,
+    context: [],
+    selector: ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog']",
+    property: 'border-radius',
+    value: 'var(--ds-shortcuts-overlay-dialog-radius, var(--ds-radius-xl))',
+  };
+  const WITNESS = ['--ds-modal-bg', '--ds-modal-body-color', '--ds-modal-color', '--ds-modal-enter-curve',
+    '--ds-modal-enter-duration', '--ds-modal-max-inline-size', '--ds-modal-shadow'];
+  const soIndex = () => baseRegistry().entries.findIndex((entry) => entry.family === 'shortcuts-overlay');
+  const soLabel = () => `entry ${soIndex()} (shortcuts-overlay/shape): `;
+  const append = (dir, file, text) => writeFileSync(join(dir, file), `${readFileSync(join(dir, file), 'utf8')}\n${text}\n`);
+  const rewrite = (dir, file, from, to) => {
+    const source = readFileSync(join(dir, file), 'utf8');
+    const next = source.replaceAll(from, to);
+    assert.notEqual(next, source, `the mutation must reach ${file}`);
+    writeFileSync(join(dir, file), next);
+  };
+  const shapeOf = (dir, path = EXCLUSIONS) => populationReport(dir, catalogIn(dir), path).axes.find((entry) => entry.axis === 'shape');
+  const has = (failures, text) => assert.ok(failures.some((line) => line.includes(text)), `missing "${text}" in: ${failures.join(' | ')}`);
+
+  it('on this tree: the family authors no shape, is published N/A delegated to modal with a derived witness, and modal is unmoved', () => {
+    const entry = readExclusions().entries[soIndex()];
+    assert.deepEqual([entry.path, entry.delegate, entry.skin, entry.declarations], ['delegated', 'modal', SO_SKIN, undefined]);
+    assert.deepEqual(entry.retired, SO_RETIRED);
+    assert.deepEqual(radiiOf(join(ROOT, SO_SKIN)), [], 'the skin authors no shape longhand: the retired corner is gone');
+    const css = readFileSync(join(ROOT, SO_SKIN), 'utf8');
+    assert.deepEqual([...readChannels(css)].filter((channel) => axisChannels().get('shape').has(channel)), [], 'and reads no shape head channel');
+    const declared = familyAxisDeclarations();
+    const so = declared.get('shortcuts-overlay');
+    assert.deepEqual(Object.keys(so.axes), ['typography', 'rhythm', 'depth', 'motion']);
+    assert.deepEqual(so.notApplicable.shape, {
+      reason: entry.reason, review: SO_REVIEW, excludedDeclarations: [], delegatedTo: 'modal', witness: WITNESS,
+    });
+    // The exclusion is on the family's authored position only: modal keeps its own membership and evidence.
+    assert.deepEqual(declared.get('modal').axes.shape, { properties: ['border-radius'], headChannels: ['--ds-radius-md'] });
+    assert.deepEqual(declared.get('modal').notApplicable, {});
+    for (const cover of entry.covers) {
+      assert.equal(cover.skin, MODAL_SKIN);
+      assert.ok(radiiOf(join(ROOT, MODAL_SKIN)).some((radius) => radius.selector === cover.selector && radius.value === cover.value
+        && radius.context.length === 0), `${cover.selector} is authored verbatim`);
+    }
+    assert.deepEqual(entry.composedIn, { source: SO_SOURCE, carries: ["import Modal from '../../../../../primitives/feedback/modal/engines/modern';", 'radius="xl"'] });
+    const shape = shapeOf(ROOT);
+    assert.ok(shape.families.includes('modal') && !shape.families.includes('shortcuts-overlay'));
+    assert.equal(shape.notApplicable.find((withdrawn) => withdrawn.family === 'shortcuts-overlay').delegatedTo, 'modal');
+    assert.deepEqual(populationReport().exclusions.ineffective, CHART_LINE_INEFFECTIVE);
+    assert.deepEqual(checkExclusionRegistry().failures, []);
+  });
+
+  it('MUTANT (R1): a shape longhand planted in the skin re-enters shape by itself; the entry is published ineffective, fails STALE, and the floor refuses', () => {
+    const dir = sandbox();
+    append(dir, SO_SKIN, ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='content'] { border-radius: var(--ds-radius-xl); }");
+    const so = familyAxisDeclarations(dir, catalogIn(dir)).get('shortcuts-overlay');
+    assert.deepEqual(so.axes.shape, { properties: ['border-radius'], headChannels: [], delegationEffective: false });
+    assert.deepEqual(so.notApplicable, {});
+    const shape = shapeOf(dir);
+    assert.ok(shape.families.includes('shortcuts-overlay'));
+    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), SHAPE_NOT_APPLICABLE.filter((family) => family !== 'shortcuts-overlay'));
+    assert.ok(populationReport(dir, catalogIn(dir)).exclusions.ineffective.some((entry) => entry.family === 'shortcuts-overlay' && entry.axis === 'shape'));
+    has(checkExclusionRegistry(dir).failures, `${soLabel()}STALE — shortcuts-overlay declares shape again (properties [border-radius], head channels [])`);
+    const floor = checkPopulationFloor(dir, catalogIn(dir)).failures;
+    has(floor, 'shape: denominator 214 is ABOVE its pin 213');
+    has(floor, 'shape: 4 famil(ies) not applicable != pinned 5');
+  });
+
+  it('MUTANT (R2): reading a shape head channel (tuning Modal\'s corner through --ds-modal-radius) re-enters shape the same way', () => {
+    const dir = sandbox();
+    append(dir, SO_SKIN, '.ds-pattern-shortcuts-overlay.ds-engine-modern { --ds-modal-radius: var(--ds-radius-md); }');
+    const so = familyAxisDeclarations(dir, catalogIn(dir)).get('shortcuts-overlay');
+    assert.deepEqual(so.axes.shape, { properties: [], headChannels: ['--ds-radius-md'], delegationEffective: false });
+    assert.deepEqual(so.notApplicable, {});
+    has(checkExclusionRegistry(dir).failures, `${soLabel()}STALE — shortcuts-overlay declares shape again (properties [], head channels [--ds-radius-md])`);
+  });
+
+  it('MUTANT (R3): when the delegate stops declaring shape, the delegation lapses (the family is in neither set) and the registry fails', () => {
+    const dir = sandbox();
+    const skin = join(dir, MODAL_SKIN);
+    writeFileSync(skin, readFileSync(skin, 'utf8').replace(/border(-[a-z-]*)?radius\s*:/gu, 'x-drill-neutralised:').replaceAll('--ds-radius-md', '--ds-drill-md'));
+    const declared = familyAxisDeclarations(dir, catalogIn(dir));
+    assert.equal(declared.get('modal').axes.shape, undefined);
+    assert.equal(declared.get('shortcuts-overlay').axes.shape, undefined);
+    assert.deepEqual(declared.get('shortcuts-overlay').notApplicable, {});
+    const failures = checkExclusionRegistry(dir).failures;
+    has(failures, `${soLabel()}modal does not declare shape in its own right; nothing measured covers shortcuts-overlay's paint`);
+    has(failures, `${soLabel()}STALE — ${MODAL_SKIN} no longer authors the covering`);
+  });
+
+  it('MUTANT (R4): a covering declaration of the delegate that changes value fails the registry, membership unchanged', () => {
+    const dir = sandbox();
+    rewrite(dir, MODAL_SKIN, "[data-radius='xl'] {\n  border-radius: var(--ds-radius-xl);", "[data-radius='xl'] {\n  border-radius: var(--ds-radius-lg);");
+    assert.equal(familyAxisDeclarations(dir, catalogIn(dir)).get('shortcuts-overlay').notApplicable.shape.delegatedTo, 'modal');
+    const failures = checkExclusionRegistry(dir).failures;
+    assert.equal(failures.length, 1, failures.join(' | '));
+    has(failures, `${soLabel()}STALE — ${MODAL_SKIN} no longer authors the covering [] .ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='xl'] { border-radius: var(--ds-radius-xl) } verbatim`);
+  });
+
+  it('MUTANT (R5): a skin that no longer writes any --ds-modal-* channel modal reads witnesses no composition: the delegation lapses and the registry fails', () => {
+    const dir = sandbox();
+    rewrite(dir, SO_SKIN, '--ds-modal-', '--ds-drill-modal-');
+    const so = familyAxisDeclarations(dir, catalogIn(dir)).get('shortcuts-overlay');
+    assert.equal(so.axes.shape, undefined);
+    assert.deepEqual(so.notApplicable, {});
+    has(checkExclusionRegistry(dir).failures, `${soLabel()}shortcuts-overlay's skin writes no --ds-modal-* channel that modal's skin reads; no composition is witnessed`);
+  });
+
+  it('MUTANT (R6): the component no longer picking the covering rung, or importing Modal only inside a comment, fails the registry by fragment', () => {
+    const dir = sandbox();
+    rewrite(dir, SO_SOURCE, 'radius="xl"', 'radius="lg"');
+    has(checkExclusionRegistry(dir).failures, `${soLabel()}STALE — ${SO_SOURCE} no longer carries \`radius="xl"\``);
+    const commented = sandbox();
+    const IMPORT = "import Modal from '../../../../../primitives/feedback/modal/engines/modern';";
+    rewrite(commented, SO_SOURCE, IMPORT, `// ${IMPORT}`);
+    const failures = checkExclusionRegistry(commented).failures;
+    assert.equal(failures.length, 1, failures.join(' | '));
+    has(failures, `${soLabel()}STALE — ${SO_SOURCE} no longer carries \`${IMPORT}\``);
+  });
+
+  it('MUTANT (R7): a delegated entry is no blanket exemption -- on a family that declares shape it withdraws nothing, is published ineffective and fails STALE', () => {
+    const dir = sandbox();
+    const registry = baseRegistry();
+    registry.admitted.push({ family: 'checkbox', axis: 'shape' });
+    const checkboxFile = familyAxisDeclarations(dir, catalogIn(dir)).get('checkbox').files[0];
+    registry.entries.push({ ...JSON.parse(JSON.stringify(registry.entries[soIndex()])), family: 'checkbox', skin: checkboxFile });
+    const path = writeRegistry(dir, registry);
+    const checkbox = familyAxisDeclarations(dir, catalogIn(dir), path).get('checkbox');
+    assert.ok(checkbox.axes.shape, 'checkbox stays in shape');
+    assert.equal(checkbox.axes.shape.delegationEffective, false);
+    assert.deepEqual(checkbox.notApplicable, {});
+    assert.ok(shapeOf(dir, path).families.includes('checkbox'));
+    assert.ok(populationReport(dir, catalogIn(dir), path).exclusions.ineffective.some((entry) => entry.family === 'checkbox'));
+    has(checkExclusionRegistry(dir, path).failures, 'entry 5 (checkbox/shape): STALE — checkbox declares shape again');
+  });
+
+  it('MUTANT (R8): every malformed delegated entry is refused by name, on the registry and through the floor gate', () => {
+    const dir = sandbox();
+    const cases = [
+      [(entry) => { entry.declarations = [SO_RETIRED]; }, 'a delegated entry excludes no declaration'],
+      [(entry) => { entry.delegate = 'shortcuts-overlay'; }, 'delegate shortcuts-overlay is not another skin family'],
+      [(entry) => { entry.delegate = 'phantom'; }, 'delegate phantom is not another skin family'],
+      [(entry) => { delete entry.retired; }, '`retired` must name the commit'],
+      [(entry) => { entry.retired.property = 'padding'; }, 'the retired padding is not an authored longhand of shape'],
+      [(entry) => { entry.covers = []; }, 'names no covering declaration of modal'],
+      [(entry) => { entry.covers[0].skin = SO_SKIN; }, `${SO_SKIN} is not a skin file of modal`],
+      [(entry) => { delete entry.covers[0].context; }, 'a covering declaration must name its skin, at-rule context'],
+      [(entry) => { delete entry.composedIn; }, '`composedIn` must name'],
+      [(entry) => { entry.composedIn.carries = []; }, '`composedIn` must name'],
+      [(entry) => { delete entry.reviewedAt; }, 'reviewedAt.commit is empty'],
+      [(entry) => { entry.path = 'delegate'; }, 'path delegate is neither byProperty nor delegated'],
+    ];
+    cases.forEach(([mutate, expected], at) => {
+      const registry = baseRegistry();
+      mutate(registry.entries[soIndex()]);
+      const path = writeRegistry(dir, registry, `delegated-${at}.json`);
+      has(checkExclusionRegistry(dir, path).failures, `${soLabel()}${expected}`);
+      has(checkPopulationFloor(dir, catalogIn(dir), FLOOR, path).failures, `exclusion registry: ${soLabel()}${expected}`);
+    });
+
+    const unadmitted = baseRegistry();
+    unadmitted.admitted = unadmitted.admitted.filter((pair) => pair.family !== 'shortcuts-overlay');
+    has(checkExclusionRegistry(dir, writeRegistry(dir, unadmitted, 'delegated-unadmitted.json')).failures,
+      `${soLabel()}shortcuts-overlay/shape is not an admitted exclusion`);
+
+    const paired = baseRegistry();
+    paired.entries.push({ ...JSON.parse(JSON.stringify(paired.entries[0])), family: 'shortcuts-overlay', skin: SO_SKIN, declarations: [SO_RETIRED] });
+    has(checkExclusionRegistry(dir, writeRegistry(dir, paired, 'delegated-paired.json')).failures,
+      `${soLabel()}a delegated entry is the only entry of its pair; shortcuts-overlay/shape carries 1 more`);
   });
 });
 
@@ -1132,9 +1320,10 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
       // depth 199 -> 204 -> 199 (2026-10-03): the focus-signature sweep's five entrants, and the law that reads them out (D9, FS drills).
       // typography 182 -> 184, rhythm 224 -> 226 (2026-10-04, OWN-8 chart chrome): chart-bullet, chart-treemap,
       // chart-area enter on the scale-token reads their drained skins gained; no leaver, no corpus move.
-      { shape: 214, typography: 184, rhythm: 226, depth: 199, motion: 204 });
+      // shape 214 -> 213, N/A 4 -> 5 (OWNSO 9789b3469 + W23-POPX): shortcuts-overlay's shape is delegated to modal.
+      { shape: 213, typography: 184, rhythm: 226, depth: 199, motion: 204 });
     assert.deepEqual(Object.fromEntries(report.axes.map((entry) => [entry.axis, entry.notApplicableCount])),
-      { shape: 4, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
+      { shape: 5, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
     // The two ruled-out alternatives, measured: the twin clause keeps out
     // exactly filter-panel (a reviewed delegation, its selector paint-free),
     // and counting a gate inside :not() would admit nobody.

@@ -1,6 +1,6 @@
 {
-  "purpose": "The CLOSED registry of semantic-identity exclusions of the population owner: a declaration listed here does not count as that family's authored position on that axis. An entry is bound to one family, one axis, one skin file and the exact rule it was reviewed with: its at-rule context (an empty list means a top-level rule), selector, property and value, whitespace-normalized, comments removed. It acts on the byProperty derivation only; a head-channel read is never excluded. A declaration that changes value, gains a channel, is repeated under the same selector, moves under an at-rule or moves to another part no longer matches and the family re-enters the axis by itself.",
-  "review": "WO-EVI-05 core review 2026-09-14 (Codex CHANGES + Fable CHANGES, conditions consolidated by the DT; owner direction 2026-09-14) | WO-EVI-02 X1 dossier + Fable review 2026-09-30 (chart-line/shape and chart-pie/shape admitted ACCEPT-WITH-CHANGES with the producer guard C1; chart-waterfall/shape REJECTED, the family stays in shape and must move) | WO-EVI-02 X3 dossier + Fable review 2026-10-01 (table-toolbar/shape admitted ACCEPT-WITH-CHANGES with the half-box pin G1; bottom-tab-bar/shape REFUSED: its focus ring reads --ds-radius-md, a head channel, and the law never excludes a head-channel read) | WO-EVI-02 CL104 re-review 2026-10-01 (Fable): chart-line/shape narrowed to the legend-swatch declaration; chart-line re-enters shape on a shadowed declaration (declared 215, N/A 3) and is published INEFFECTIVE until the charts cut rules | WO-EVI-02 FAM09-CL re-review 2026-10-02: chart-line/shape re-extended to the skeleton-bar declaration after WO-FAM-09's owner ruling resolved the shadowing (the dome paints, measured in Chromium across the three verticals and the dial envelope); the INEFFECTIVE publication discharges (shape 215 -> 214, N/A 3 -> 4)",
+  "purpose": "The CLOSED registry of semantic-identity exclusions of the population owner: a declaration listed here does not count as that family's authored position on that axis. An entry is bound to one family, one axis, one skin file and the exact rule it was reviewed with: its at-rule context (an empty list means a top-level rule), selector, property and value, whitespace-normalized, comments removed. A byProperty entry acts on the byProperty derivation only; a head-channel read is never excluded. A declaration that changes value, gains a channel, is repeated under the same selector, moves under an at-rule or moves to another part no longer matches and the family re-enters the axis by itself. A `delegated` entry excludes no declaration: it publishes NOT APPLICABLE a family that authors no longhand, reads no head channel and (states) carries no kernel-gated rule of the axis, because it paints that axis through a composed family (`delegate`) that declares the axis in its own right. It is bound to the retired declaration the family painted before, the delegate's covering declarations verbatim, the source fragments that compose the delegate, and a derived witness (a `--ds-<delegate>-*` channel the family's skin writes and the delegate's skin reads). It never touches the delegate's membership, and it never survives the family regaining a position: a family that authors or reads the axis again is a member by the ordinary derivation and the entry fails as STALE.",
+  "review": "WO-EVI-05 core review 2026-09-14 (Codex CHANGES + Fable CHANGES, conditions consolidated by the DT; owner direction 2026-09-14) | WO-EVI-02 X1 dossier + Fable review 2026-09-30 (chart-line/shape and chart-pie/shape admitted ACCEPT-WITH-CHANGES with the producer guard C1; chart-waterfall/shape REJECTED, the family stays in shape and must move) | WO-EVI-02 X3 dossier + Fable review 2026-10-01 (table-toolbar/shape admitted ACCEPT-WITH-CHANGES with the half-box pin G1; bottom-tab-bar/shape REFUSED: its focus ring reads --ds-radius-md, a head channel, and the law never excludes a head-channel read) | WO-EVI-02 CL104 re-review 2026-10-01 (Fable): chart-line/shape narrowed to the legend-swatch declaration; chart-line re-enters shape on a shadowed declaration (declared 215, N/A 3) and is published INEFFECTIVE until the charts cut rules | WO-EVI-02 FAM09-CL re-review 2026-10-02: chart-line/shape re-extended to the skeleton-bar declaration after WO-FAM-09's owner ruling resolved the shadowing (the dome paints, measured in Chromium across the three verticals and the dial envelope); the INEFFECTIVE publication discharges (shape 215 -> 214, N/A 3 -> 4) | WO-EVI-02 W23-POPX 2026-10-04: the `delegated` entry kind (a family that authors nothing on an axis and paints it through a composed, measured family) and shortcuts-overlay/shape delegated to modal after the OWNSO retirement 9789b3469 (shape 214 -> 213 measured at that commit, N/A 4 -> 5); independent review owed",
   "admitted": [
     {
       "family": "radio",
@@ -16,6 +16,10 @@
     },
     {
       "family": "table-toolbar",
+      "axis": "shape"
+    },
+    {
+      "family": "shortcuts-overlay",
       "axis": "shape"
     }
   ],
@@ -136,6 +140,51 @@
         ]
       },
       "lawfulShapeOwner": "button and input (the composed clear-filters ghost Button and the search Input, primitives imported at structures/workspace/table-toolbar/runtime/rendering/index.tsx:60), separate population families that stay shape-applicable; the toolbar skin paints none of their corners (its search-field rules measure only, paint is relayed)"
+    },
+    {
+      "family": "shortcuts-overlay",
+      "axis": "shape",
+      "path": "delegated",
+      "skin": "src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay/index.css",
+      "delegate": "modal",
+      "retired": {
+        "commit": "9789b3469",
+        "skin": "src/foundation/tokens/css/runtime/engines/modern/skin/shortcuts-overlay/index.css",
+        "context": [],
+        "selector": ".ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog']",
+        "property": "border-radius",
+        "value": "var(--ds-shortcuts-overlay-dialog-radius, var(--ds-radius-xl))"
+      },
+      "covers": [
+        {
+          "skin": "src/foundation/tokens/css/runtime/engines/modern/skin/modal/index.css",
+          "context": [],
+          "selector": ".ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface']",
+          "property": "border-radius",
+          "value": "var(--ds-modal-radius, var(--ds-radius-xl))"
+        },
+        {
+          "skin": "src/foundation/tokens/css/runtime/engines/modern/skin/modal/index.css",
+          "context": [],
+          "selector": ".ds-modal.ds-modal--modern[data-part='root'] > [data-part='surface'][data-radius='xl']",
+          "property": "border-radius",
+          "value": "var(--ds-radius-xl)"
+        }
+      ],
+      "composedIn": {
+        "source": "src/components/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx",
+        "carries": [
+          "import Modal from '../../../../../primitives/feedback/modal/engines/modern';",
+          "radius=\"xl\""
+        ]
+      },
+      "reason": "delegated shape surface: the family's only shape position was the hand-rolled dialog card's corner (`.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] { border-radius: var(--ds-shortcuts-overlay-dialog-radius, var(--ds-radius-xl)) }`, retired at 9789b3469 when the pattern composed the certified Modal). The chamber is now Modal's surface: the component renders `<Modal radius=\"xl\">`, so the corner is painted by the modal skin's surface rules (`[data-part='surface']` and `[data-part='surface'][data-radius='xl']`, both on the --ds-radius-xl rung the retired rule rested at; fullscreen presentation squares it there too). The family's skin authors no shape longhand and reads no shape head channel (measured), and re-adding a frame radius would repaint a chamber the retirement lawfully removed. The exclusion is on this family's authored position only: modal declares shape in its own right, stays in the denominator and is measured; nothing about its membership changes. The day this skin authors a shape longhand or reads a shape head channel again, the family is a shape member by the ordinary derivation and this entry fails the registry as STALE.",
+      "review": "WO-EVI-02 W23-POPX delegation dossier 2026-10-04 (writer claude-opus-5-5, patch mode; independent review owed before integration; Codex outside the loop by owner restriction 2026-09-19)",
+      "reviewedOn": "2026-10-04",
+      "reviewedAt": {
+        "commit": "c419b042f"
+      },
+      "lawfulShapeOwner": "modal (runtime/engines/modern/skin/modal/index.css, the surface corner and its data-radius rungs, reads --ds-radius-md), a separate population family that stays shape-applicable"
     }
   ]
 }
