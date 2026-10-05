@@ -1962,30 +1962,35 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       + '</div></div>',
     stamps: Object.freeze([
       Object.freeze({
+        token: 'attr:role=option',
+        source: 'src/components/primitives/runtime/collection/combobox/index.ts',
+        stamp: "role: 'option',",
+      }),
+      Object.freeze({
         token: 'attr:data-part=item',
         stamp: '{...partAttributes(\'item\', state)}',
       }),
       Object.freeze({
         token: 'attr:data-active=true',
-        stamp: 'data-active={active}',
+        stamp: 'data-active={Boolean(optionProps[\'data-active\'])}',
         resolves: Object.freeze([
           Object.freeze({
             source: 'src/components/patterns/navigation/command-palette/engines/modern/index.tsx',
-            text: 'const [activeIndex, setActiveIndex] = useState(0);',
+            text: 'const { activeIndex, setActiveIndex, getOptionId, getItemProps } = useComboboxFoundation({',
           }),
           Object.freeze({
             source: 'src/components/patterns/navigation/command-palette/engines/modern/index.tsx',
-            text: 'active={activeIndex === idx}',
+            text: 'optionProps={getItemProps(idx, { selected: activeIndex === idx, disabled: item.disabled })}',
           }),
         ]),
       }),
       Object.freeze({
         token: 'attr:data-active=false',
-        stamp: 'data-active={active}',
+        stamp: 'data-active={Boolean(optionProps[\'data-active\'])}',
         resolves: Object.freeze([
           Object.freeze({
             source: 'src/components/patterns/navigation/command-palette/engines/modern/index.tsx',
-            text: 'active={activeIndex === idx}',
+            text: 'optionProps={getItemProps(idx, { selected: activeIndex === idx, disabled: item.disabled })}',
           }),
         ]),
       }),
