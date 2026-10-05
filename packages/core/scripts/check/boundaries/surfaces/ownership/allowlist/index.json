@@ -17,7 +17,7 @@
     },
     {
       "id": "696e8f4332ce6ed623a3",
-      "reason": "The chart engine's tooltip div is a datum annotation positioned by chart geometry, not an interactive disclosure; role=\"tooltip\" on a non-interactive element matches the ARIA pattern. NOT VERIFIED: an accessible linkage from the chart to this tooltip (aria-describedby / an accessible name on the trigger region) is not demonstrated today — the annotation is visual-only until the chart accessibility layer proves the link; review then."
+      "reason": "The chart engine's tooltip div is a datum annotation positioned by chart geometry, not an interactive disclosure; role=\"tooltip\" on a non-interactive element matches the ARIA pattern, and the accessible linkage IS wired: an active datum carries aria-describedby to the tooltip id (the per-type renderers, e.g. heat-map/index.tsx:261, line/index.tsx:343), pinned by SvgRenderers.test.tsx:521. No primitive host applies."
     },
     {
       "id": "5671265a51112b78459c",
