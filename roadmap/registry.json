@@ -7635,6 +7635,11 @@
      "at": "2026-10-04 21:54",
      "by": "claude-dt",
      "note": "2026-10-04 kimi-dt: process error registered honestly — my scratch cleanup ran against two ACTIVE writer workspaces (PARITY2-C, P3-C) and destroyed them mid-packet; both writers were stopped and redispatched fresh on claude-admin. Law going forward: cleanup runs only over a verified-zero active-actor list. Also landed: P1 acceptance phase (44447e668, review HOLD->ACCEPT on the Chromium position), allowlist review conditions (cf6106c9c, two HOLD rounds: false unlinked-ARIA claim, then wrong evidence pointer — the real datum->tooltip wiring is now cited), residue receivers made concrete (entry 197; ARC-15 receives the interactive/card/tab class, proposals E-1/E-2 opened for the two capability gaps, nothing closed by writing 'pending'). CURRENT workflow consolidated; the Oct-10 cron cancelled."
+    },
+    {
+     "at": "2026-10-04 23:43",
+     "by": "claude-dt",
+     "note": "2026-10-05 kimi-dt (post-midnight ET): the instrument follow-ups are LANDED. P1: the acceptance phase (44447e668; review HOLD on the Chromium position caught a real break, corrected, ACCEPT). P3: --verify-indicator read-only fast path with its three review conditions discharged (digest before+after with drift refusal, exact browser equality, near-miss refusal before measurement) — c419b042f, then the indicator REPUBLISHED at 2cc901cdd by a full measured run on the committed quiet tree (the first attempt was refused by the uncommitted-tree law; the second ran clean) and committed df5070d1d after the independent measurement review (RECORD). The published reading: 6/6 on the declared basis, states 125/152, both controls 0%, N/A 5. PARITY2-C landed 76ca8c60f (real parity evidence: code-level relatedness + asserting + executed lastRun; review HOLD->ACCEPT). POPX landed 2cc901cdd (delegated exclusion; shape 213 + N/A 5; the floor red is resolved by law, not by lowering). The D-1 core review is ADOPT WITH CONDITIONS (C1-C6); the W24-D1 writer is implementing them now."
     }
    ]
   },
