@@ -60,7 +60,7 @@
 .ds-markdown-view[data-part='root'] a[data-part='link']:focus-visible {
   outline: var(--ds-focus-ring-width) solid transparent;
   border-radius: var(--ds-radius-sm);
-  box-shadow: var(--ds-markdown-focus-ring, var(--ds-focus-ring));
+  box-shadow: var(--ds-focus-ring);
 }
 
 /* W10: markers inherit the body ink by default, which makes list structure
@@ -151,7 +151,7 @@
 .ds-markdown-view[data-part='root'] [data-part='table-wrapper']:focus-visible,
 .ds-markdown-view[data-part='root'] [data-part='code-block-pre']:focus-visible {
   outline: var(--ds-focus-ring-width) solid transparent;
-  box-shadow: var(--ds-markdown-focus-ring, var(--ds-focus-ring));
+  box-shadow: var(--ds-focus-ring);
 }
 
 /* Reading frame additions (Pass 2): the document keeps an opt-in measure

@@ -1,7 +1,7 @@
 /**
  * The link and the two keyboard-reachable scroll regions paint keyboard focus as
  * the tenant signature `--ds-focus-ring`, behind the family's raw escape hatch
- * `--ds-markdown-focus-ring`, and keep a system-colour outline in forced colors.
+ * and keep a system-colour outline in forced colors.
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -58,7 +58,7 @@ const ROOT = ".ds-markdown-view[data-part='root']";
 const LINK = `${ROOT} a[data-part='link']:focus-visible`;
 const TABLE = `${ROOT} [data-part='table-wrapper']:focus-visible`;
 const FENCE = `${ROOT} [data-part='code-block-pre']:focus-visible`;
-const SIGNATURE = 'box-shadow: var(--ds-markdown-focus-ring, var(--ds-focus-ring))';
+const SIGNATURE = 'box-shadow: var(--ds-focus-ring)';
 const AUTHORED = RULES.filter((rule) => !rule.forced);
 const FORCED = RULES.filter((rule) => rule.forced);
 

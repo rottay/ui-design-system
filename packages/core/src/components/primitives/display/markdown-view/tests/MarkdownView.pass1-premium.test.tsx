@@ -208,7 +208,7 @@ describe('MarkdownView remediation (K4-B)', () => {
     expect(skin).toContain("a[data-part='link']:hover");
     expect(skin).toContain('color-mix(in srgb, var(--ds-color-link) 72%, var(--ds-color-text-primary))');
     expect(skin).toContain("a[data-part='link']:focus-visible");
-    expect(skin).toContain('box-shadow: var(--ds-markdown-focus-ring, var(--ds-focus-ring))');
+    expect(skin).toContain('box-shadow: var(--ds-focus-ring)');
     expect(skin).not.toContain('color-mix(in srgb, var(--ds-color-primary) 24%, transparent)');
     expect(skin).toContain('@media (forced-colors: active)');
   });

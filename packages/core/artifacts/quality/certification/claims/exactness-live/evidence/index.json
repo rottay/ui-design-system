@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "157e175daf797054922dc1622f5f994b513fd74cee5a622f0b0cb3545b9e3522",
+    "authorityDigest": "26c597d533cafdd44b9ba360e1641408dd584ea72c8bf082dc8460660b07ecaf",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5699514,
-        "sha256": "ad1a9d809efcbebb1d97437765ae1ed2ca2770f01b215f2e55ab2fcc25c57c46"
+        "bytes": 5699452,
+        "sha256": "9178b01c0eb445bff6d6a5b42df73b0ccaf152cebfc866da7ebf08f25db410cd"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5065750,
-        "sha256": "26a609252fcd9715e5ace721d5f9a3241ecddbb3378ed0280c95ab4c117d06ae"
+        "bytes": 5065688,
+        "sha256": "b5dd4bf98bbc1de7fae996e9c9c9c2ecbefba261f58e73d7b26aa03547a79388"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5026861,
-        "sha256": "545194843ee5417ba1b050ac20b537ec7178bcc0b4e81353bfd0022857c256ea"
+        "bytes": 5026799,
+        "sha256": "03661098cfd72b33a0c12aaf5386928679865b0c19a593bb26e4529ae74a0806"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5026121,
-        "sha256": "5b9ee1ee6417f522cfd80ec10ea67264cde393c3b206ae27311ca158ad3c0ed3"
+        "bytes": 5026059,
+        "sha256": "7ad169ecbb61c2929048613c757d8507a47ae352478dac9c9fa0354ae58d20ac"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -9083,16 +9083,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 3657,
-        "sha256": "e9ce40325c87560ce6b8f3386b81ab1f1371adb02a7cf6c9b9946461f118f13b"
+        "bytes": 3598,
+        "sha256": "fadce06f536d45f81bb4db8e9b44bd5b6e165defa6a9c8da974a087c56f60b4c"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/markdown-view/tests/MarkdownView.pass1-premium.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 10551,
-        "sha256": "d43d8e68c14526f53b326a7f884f55a25a20bb852fa6a52e8dcce3018d1b8c21"
+        "bytes": 10520,
+        "sha256": "7b374de3c8638f0e69e8e305e06126bee0d4970faceb2e751e4b5e306f0e5949"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/markdown-view/tests/MarkdownView.test.tsx",
@@ -28764,8 +28764,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 9759,
-        "sha256": "cf7500fffa0ecb90c545ecd6dc8469f9ae69cf8e4edae8ce498c4df41260367b"
+        "bytes": 9697,
+        "sha256": "6cac6a3029dc675df89192f89a24a94e9d2a2550209cefe44fc74992f46ffa62"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/marketing-surface/index.css",
@@ -47699,7 +47699,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "157e175daf797054922dc1622f5f994b513fd74cee5a622f0b0cb3545b9e3522"
+    "digest": "26c597d533cafdd44b9ba360e1641408dd584ea72c8bf082dc8460660b07ecaf"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4223 counters; 3226 completed zeros locked exactly; 987 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -122006,8 +122006,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "f33b2986e81fdacd6cf426b614256b0c9dc0d0636d82751abae7e62ce57071c3",
-      "f33b2986e81fdacd6cf426b614256b0c9dc0d0636d82751abae7e62ce57071c3"
+      "d6dc4e13c8fa0ed3d978b3d41976a24bd808c95f08ae7937d71f2178f86442ff",
+      "d6dc4e13c8fa0ed3d978b3d41976a24bd808c95f08ae7937d71f2178f86442ff"
     ],
     "agree": true
   }
