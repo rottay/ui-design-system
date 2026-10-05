@@ -1539,3 +1539,23 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   whose landing node is stable across engines. Audit every primitive for `className`/`style` landing
   parity before promising it as a public skin hook.
 - **Status** — OPEN (architecture); CK-C's workaround is implemented and regression-tested.
+
+## E. Capability gaps surfaced by the Q4 ownership drain (2026-10-04), pending owner review
+
+Found by the Q4 drain wave (WO-EVI-02): several productive-ownership residue rows have no lawful
+primitive host TODAY, and no existing WO's acceptance covers creating one. These are proposals,
+not work; the rows stay pinned in the ownership counter with their receivers named until the
+owner approves 1:1.
+
+- **E-1 — Chrome-less control variants.** A variant (or composition) of Input / Select / Button
+  that carries the behaviour contract (keyboard, focus, aria) without the chrome (height floor,
+  padding, variant paint), for in-grid and in-pill embedding. Rows waiting on it: data-table
+  cell-editor input + select (3), file-manager file input (1), collection-workspace page-size
+  select (1), detail-panel onClick-only crumb (1), status-filter-pills toggle (1).
+- **E-2 — Popover/disclosure with an external anchor.** A controlled disclosure that anchors to
+  a caller-owned element and stays in-tree (tenant scope), not portalled. Row waiting on it:
+  collection-workspace filter-dropdown (1).
+
+**Status** — OPEN, pending owner review. On approval each becomes a `### WO-` block in its lane
+plus a registry entry; the residue rows' receivers move from WO-ARC-15 / the EVI-02 follow-up
+list to the new WO by dated amendment.
