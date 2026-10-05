@@ -771,7 +771,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           ref={nativeSelectRef}
           {...responsiveCSS.attrs}
           style={{ ...responsiveCSS.channels }}
-          {...partAttributes('trigger', trigger.state)}
           {...triggerHandlers}
           data-variant={variant}
           data-status={effectiveStatus !== 'default' ? effectiveStatus : undefined}
@@ -794,6 +793,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           id={id}
           autoFocus={autoFocus}
           {...htmlProps}
+          // The select IS the trigger part: a caller's data-part must not unkey it from the skin.
+          {...partAttributes('trigger', trigger.state)}
         >
           {displayPlaceholder && (
             <option value="" disabled>

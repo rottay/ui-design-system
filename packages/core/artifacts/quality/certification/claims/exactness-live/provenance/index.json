@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "2c89e5fa78f76fe0b65fde55d1443542b0f3c07ef7a0ee5a1998fd7bcc6db1b1"
+    "semanticHash": "032814568551840ba1b8d7ad78272b4180566bcc6a2e4bfdfaa0bb5fa77ddeab"
   },
   "divergentInputs": [
     {
@@ -8895,8 +8895,8 @@
         "sha256": "0257d7194f247db7ce358cf162cbaeb1a36cd6d6a9061801b5a66641f79286b0"
       },
       "live": {
-        "bytes": 39894,
-        "sha256": "5675e0e04c0c942a89fae4e15946c048a1d822ab91cac6183c3d115466638c7c"
+        "bytes": 39993,
+        "sha256": "3c5804be558dbbf26ed2e1768144437dcd69db8cc56f50b7b33adf4dadd7f585"
       }
     },
     {
@@ -8954,6 +8954,14 @@
       "live": {
         "bytes": 6151,
         "sha256": "b1cb21bc6e0267c5c543ceb7fdf6e0b8095e05a4e76ae5f3b8e6538750fc5d08"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/inputs/select/tests/Select.modern-part-ownership.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1319,
+        "sha256": "5574a8703ed20064ab52c00a2b1df977e637e21f0623a0bf7f4583d1556d81b6"
       }
     },
     {
@@ -31862,8 +31870,8 @@
         "sha256": "7303141f2fc1943f76602c539fc658712407cde5798be734dc8d7f978f9989e5"
       },
       "live": {
-        "bytes": 14432,
-        "sha256": "d126fae830552766bdb9f29ef1e1580eb0648d4fba45c019fceaa70c7dd1f5c3"
+        "bytes": 15399,
+        "sha256": "0466cca57654739577f4d811df88467a2b59d0e86f9d107dd268c8bf85eddf83"
       }
     },
     {
