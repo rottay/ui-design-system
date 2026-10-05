@@ -3395,6 +3395,8 @@ html.dark {
      clears 3:1 on both, where the white chip and #d9d9d9 dot do not. */
   --ds-carousel-arrow-bg: var(--ds-color-bg-primary);
   --ds-carousel-dot-bg: var(--ds-color-bg-primary);
+  /* The rustic palette's focus line reads step 200, a dark wash here; the role stays light. */
+  --ds-command-palette-focus-line: var(--ds-color-primary);
 
   --ds-color-neutral-0: #020617;
   --ds-color-neutral-50: #0b1220;

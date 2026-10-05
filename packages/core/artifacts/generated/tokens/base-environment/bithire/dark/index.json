@@ -4,8 +4,8 @@
   "formatVersion": 1,
   "vertical": "bithire",
   "mode": "dark",
-  "channelCount": 4270,
-  "digest": "35d339386779b522ba59c573cc4ac3d1105e726135980253314be24a1d5fdbd9",
+  "channelCount": 4271,
+  "digest": "9ec68d092f7a467f735563d503ccd21560e19c9d264f9ce55cc8efd0ebe85073",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -1365,6 +1365,7 @@
     "--ds-command-palette-bg": "var(--ds-color-bg-elevated)",
     "--ds-command-palette-border": "var(--ds-color-border)",
     "--ds-command-palette-empty-color": "var(--ds-color-text-muted)",
+    "--ds-command-palette-focus-line": "var(--ds-color-primary)",
     "--ds-command-palette-group-color": "var(--ds-color-text-muted)",
     "--ds-command-palette-item-hover-bg": "var(--ds-material-card-background-hover)",
     "--ds-command-palette-shadow": "var(--ds-shadow-dialog)",

@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "f06daa0f6451b7cfe7363392ee5a8d3b896a191b650b66bfc0c02f9f415b59a8",
+    "authorityDigest": "ca1a5c6a40f9373ae3480b0756715bebf6343c530dc72876ab113ee543e10d6c",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5702528,
-        "sha256": "4ee33b27c38347fe29c8a8fd22014f12d93a1661fd8fecd9345c9a0bab083863"
+        "bytes": 5702684,
+        "sha256": "b99743f8eba52b6a02bf8ea5b61910dd8172795f2bf8e0bdaff70e87859ad6b6"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5068504,
-        "sha256": "c907ddd66ac11fc4ad2cd7ab2f0dcce3af5cad56519829f9e0575dd229a10730"
+        "bytes": 5068660,
+        "sha256": "dea5fc99683e3149c17ea4fb36e36c17f62669791c82ff73712ffa7813e1a018"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5029739,
-        "sha256": "c0f085bef32c784d43f82f67c293203b4ec7880ff94e9edac6b343481a9e3830"
+        "bytes": 5029895,
+        "sha256": "bba0121171c548f3cd0dbbb5ccf38cacdec07e7c62b27741a8615ed085a394a5"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5028999,
-        "sha256": "abe96d227b3f2b723d8d8b64d8f3f415d682b356ff5ad7979497c17f686d5cfa"
+        "bytes": 5029155,
+        "sha256": "8689d2f97e7f21beeb820cb9a414e04bb1f8f192330515f3d5b35103497d7258"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -27263,8 +27263,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 134033,
-        "sha256": "49e4005054da79fcde3c54e9620c6b249c3a58419670e09b07196442500748ca"
+        "bytes": 134189,
+        "sha256": "86e7b675c3fcdf3e60b589a6b41c02252402b6aa3cfb251777abceca121a1e70"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/themes/tests/default-theme-dark-surfaces.integration.test.tsx",
@@ -37866,8 +37866,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 302476,
-        "sha256": "1d9dec225971f51be96aa9b1fe9d61537fc8044ca5e3c94877a5f7b9585ad646"
+        "bytes": 302641,
+        "sha256": "2049b4190024f81ff6c701bd353d356fb2a8c4e6d90b56f4766eca0c2d5e5a9b"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/index.ts",
@@ -47699,7 +47699,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "f06daa0f6451b7cfe7363392ee5a8d3b896a191b650b66bfc0c02f9f415b59a8"
+    "digest": "ca1a5c6a40f9373ae3480b0756715bebf6343c530dc72876ab113ee543e10d6c"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -122006,8 +122006,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "8900085a23a91e997bbbc98c6a124a2b55a4b833f45d9bbe55e2e3f5aa816088",
-      "8900085a23a91e997bbbc98c6a124a2b55a4b833f45d9bbe55e2e3f5aa816088"
+      "1b2d8b377f6a9c06d03ddc6288db72b64896a896590f089f28d10a90344ec3e9",
+      "1b2d8b377f6a9c06d03ddc6288db72b64896a896590f089f28d10a90344ec3e9"
     ],
     "agree": true
   }

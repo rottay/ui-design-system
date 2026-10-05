@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Drained to the CURRENT hooks contract (WO-EVI-02 reads-ledger drain, 2026-09-22). The ledger is hand-merged and had no producer, so it kept 2603 rows while the manifest — regenerated 48 times by its own producer since — fences 1272: 1331 extra, 0 missing, plus a stale digest pin. Every extra row was censused before removal and none was a lost adjudication: 962 had gained a real owner (683 tenantChannel, 216 foundationTokens, 23 componentTokens, 32 foundation+tenant, 6 component+tenant, 1 component+foundation, 1 publicHook+component) through the FAM family-cut derivers, so the debt was discharged, not hidden; 365 reads no longer exist anywhere in the tree; 4 survive only outside the contract scan roots (a compiler emission RHS, a TS token module, a test, and the generated artifacts that shadow them). ZERO rows were live in-scope reads the manifest failed to fence, so nothing is pending a fence ceremony. Per-row attribution to the 82 landed commits that moved each read: packages/core/evidence/reads-ledger-drain-census. The digest is re-pinned to the manifest at HEAD; the row set is set-equal to it (0 extra, 0 missing). 2026-09-22: row 789 (--ds-notification-center-touch-target) retired — the channel moved to adjudicated when the notification-center chrome deriver landed (643c3588b); it no longer belongs to the unadjudicated-reads ledger. basedOnManifestDigest follows the manifest regen. 2026-09-22: digest re-pinned after the skeleton-row-bar-height and skeleton-row-control-size promotions corrected whiteLabelCompat derives-from-spacing -> not-tenant-emitted (a term outside the contract vocabulary; no compiler owner writes either channel); unadjudicatedReads untouched, the row set is unchanged. 2026-09-25: 7 rows retired (--ds-code-block-copied-frame, -copied-ink, -copy-bg-hover, -motion-duration, -selection-bg, -gutter-ink, -header-bg) — no deriver or declaration ever produced them, so every read painted its fallback; WO-EVI-03 arm 2 (code-block cluster) wrote the fallbacks, built from produced channels only, as the declared paint (copy-bg-hover and motion-duration re-pointed to the live --ds-button-ghost-bg-hover and --ds-motion-feedback), the names are no longer read and the regenerated manifest no longer fences them. byClass recomputed from the rows (MODERN_PRIVATE 725→718, total 1271→1264); basedOnManifestDigest follows the manifest regen. 2026-09-25: 3 more rows retired (--ds-code-block-copy-bg-pressed, -copy-ink-hover, -focus-ring) — the code-block family's unrouted siblings with the same defect: no deriver or declaration ever produced them, so every read painted its fallback; WO-EVI-03 arm 2 (code-block siblings) wrote the fallbacks, built from produced channels only, as the declared paint (copy-ink-hover re-pointed to the live --ds-color-text-primary), the names are no longer read and the regenerated manifest no longer fences them. byClass recomputed from the rows (MODERN_PRIVATE 718→715, total 1264→1261); basedOnManifestDigest follows the manifest regen. 2026-09-25: 3 more rows retired (--ds-voice-input-focus-ring, --ds-loading-overlay-scrim-opacity, --ds-export-button-toast-duration) — the last WO-EVI-03 channels with an owner proposal besides --ds-size-touch-target: no deriver or declaration ever produced them, so every read painted its fallback; WO-EVI-03 arm 2 (voice-input and loading-overlay clusters) wrote each fallback as the declared paint (none re-pointed: no live channel paints the same value; none produced: the three families are on no family-cut roster, and the toast fade is bound to the engine's fixed 1800ms lifetime), the names are no longer read and the regenerated manifest no longer fences them. byClass recomputed from the rows (MODERN_PRIVATE 715→712, total 1261→1258); basedOnManifestDigest follows the manifest regen. 2026-09-25: 1 row retired (--ds-color-text-on-error) — the name was never declared, so the bottom-tab-bar error pill always painted its on-primary fallback; the on-primary pair lot re-pointed the pill to the declared --ds-color-on-error (the error fill's own mode-graded ink), the name is no longer read and the regenerated manifest no longer fences it. byClass recomputed from the rows (MODERN_PRIVATE 712→711, total 1258→1257); basedOnManifestDigest follows the manifest regen. | Hand-merge 2026-09-25 (DT): 45 rows leave with the EVI-03 retirement lots (275089607, 0ddb211af, d41d70c0c, a8005d64b -- every name's read retired with byte-identical paint, receipts in .tmp/dispatch-2026-09-21); digest and stats recomputed over the current contract. | Hand-merge 2026-09-26 (DT): --ds-control-size-sm's row leaves with its retirement (55feae6af, the Q-DER06-RES option-A ruling); digest and counts recomputed. | Hand-merge 2026-09-26 (DT): --ds-control-size-md's row leaves with its retirement (294eaba95, the ruling's per-row extension); digest and counts recomputed. | Hand-merge 2026-09-26 (DT): digest-only re-pin after the WO-FAM-12 + G103-02 window's hooks:generate regen -- unadjudicatedReads set-equal both ways (1211/1211, 0 missing, 0 extra); zero rows added, removed or reclassified; counts untouched | Hand-merge 2026-09-26 (DT, second of the day): --ds-color-border-hover's row leaves -- the palette deriver now produces it (91cf964ab, Q-DER06-RES N5), so the manifest no longer fences it as unadjudicated (1211 -> 1210); byClass recomputed (MODERN_PRIVATE 665 -> 664); basedOnManifestDigest follows the manifest regen. | Hand-merge 2026-09-26 (DT, third of the day): digest-only re-pin after the RET-02-wave window's hooks:generate regen -- unadjudicatedReads set-equal both ways (1210/1210, 0 missing, 0 extra; the border-color and text-tertiary retirements were never unadjudicated reads); zero rows added, removed or reclassified. | Hand-merge 2026-09-27 (DT): --ds-qrcode-border's row leaves with the 118debcb2 retirement -- the shared document-root read is gone (the phantom var() dropped at computed-value time, paint byte-identical), only the historically-inert frozen-classic read remains, and the regenerated manifest (6d06b1bac) no longer fences the name; the ledger follows the manifest per set-equality. counts recomputed (FROZEN_ENGINE_SCOPED 481 -> 480, total 1210 -> 1209); basedOnManifestDigest follows the manifest regen.",
-  "basedOnManifestDigest": "a8450ebd0f969106966f09b69ea659524afd209f3ccba405d4116e85d95186fd",
+  "basedOnManifestDigest": "9c723898568517fe15362d6e5ac169578c08ccd4e2dd99ea6a52b70716949aed",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
@@ -27,10 +27,10 @@
     "reanchor20261004b": "2026-10-04 (gate-drain packet): mechanical re-anchor. The previous anchor (9d96d243d225…) was the manifest read at d9a0c1180; pnpm hooks:generate republished contracts/css/hooks/index.json and the manifest now fences 1204 read(s). Digest-only: zero rows added, removed or reclassified. Set-equal both ways (1204/1204, 0 missing, 0 extra); basedOnManifestDigest follows the manifest (a8450ebd0f96…)."
   },
   "counts": {
-    "total": 1204,
+    "total": 1196,
     "byClass": {
-      "MODERN_PRIVATE": 660,
-      "FROZEN_ENGINE_SCOPED": 479,
+      "MODERN_PRIVATE": 658,
+      "FROZEN_ENGINE_SCOPED": 473,
       "TENANT_FACING_CANDIDATE": 55,
       "FOUNDATION_SHARED": 10
     }
@@ -2504,25 +2504,6 @@
       }
     },
     {
-      "name": "--ds-carousel-arrow-bg",
-      "family": "--ds-carousel-arrow",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "—",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1938  background: var(--ds-carousel-arrow-bg);",
-      "flag": "frozen engine reader only — do not edit",
-      "_audit": {
-        "readBuckets": {
-          "classic": 1,
-          "rustic": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
-        "bare": 1,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-carousel-arrow-bg-hover",
       "family": "--ds-carousel-arrow",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -2666,26 +2647,6 @@
         "declBuckets": {},
         "withFallback": 1,
         "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-carousel-dot-bg",
-      "family": "--ds-carousel-dot",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css",
-      "readSites": 3,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:230  background: var(--ds-carousel-dot-bg, var(--ds-surface-card));",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "classic": 1,
-          "modern": 1,
-          "rustic": 1
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 1,
         "testStoryReads": 0
       }
     },
@@ -4343,24 +4304,6 @@
         },
         "declBuckets": {},
         "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
-      "name": "--ds-command-palette-focus-line",
-      "family": "--ds-command-palette",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "—",
-      "readSites": 1,
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:62  box-shadow: inset 0 -1px 0 0 var(--ds-command-palette-focus-line, var(--ds-color-primary-200));",
-      "flag": "frozen engine reader only — do not edit",
-      "_audit": {
-        "readBuckets": {
-          "rustic": 1
-        },
-        "declBuckets": {},
-        "withFallback": 1,
         "bare": 0,
         "testStoryReads": 0
       }
@@ -11250,24 +11193,6 @@
       }
     },
     {
-      "name": "--ds-markdown-focus-ring",
-      "family": "--ds-markdown-focus",
-      "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
-      "readSites": 2,
-      "evidence": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:63  box-shadow: var(",
-      "flag": "undeclared by design: 2 read(s) carry a fallback that governs",
-      "_audit": {
-        "readBuckets": {
-          "foundation-tokens": 2
-        },
-        "declBuckets": {},
-        "withFallback": 2,
-        "bare": 0,
-        "testStoryReads": 0
-      }
-    },
-    {
       "name": "--ds-markdown-link-decoration-hover",
       "family": "--ds-markdown-link",
       "class": "MODERN_PRIVATE",
@@ -13643,16 +13568,6 @@
       "evidence": "read ONLY by frozen engines (rustic), 1 read(s); outside the modern critical path, not edited"
     },
     {
-      "name": "--ds-popconfirm-primary-color",
-      "family": "popconfirm",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "engines/rustic (frozen)",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/popconfirm.css"
-      ],
-      "evidence": "read ONLY by frozen engines (rustic), 1 read(s); outside the modern critical path, not edited"
-    },
-    {
       "name": "--ds-popconfirm-radius",
       "family": "popconfirm",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -13897,16 +13812,6 @@
       "evidence": "read ONLY by frozen engines (rustic), 1 read(s); outside the modern critical path, not edited"
     },
     {
-      "name": "--ds-qrcode-button-color",
-      "family": "qrcode",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "engines/rustic (frozen)",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css"
-      ],
-      "evidence": "read ONLY by frozen engines (rustic), 2 read(s); outside the modern critical path, not edited"
-    },
-    {
       "name": "--ds-qrcode-expired-color",
       "family": "qrcode",
       "class": "FROZEN_ENGINE_SCOPED",
@@ -13966,16 +13871,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
       ],
       "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
-    },
-    {
-      "name": "--ds-qrcode-spinner-color",
-      "family": "qrcode",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "engines/rustic (frozen)",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css"
-      ],
-      "evidence": "read ONLY by frozen engines (rustic), 1 read(s); outside the modern critical path, not edited"
     },
     {
       "name": "--ds-qrcode-spinner-track",
@@ -14511,16 +14406,6 @@
     },
     {
       "name": "--ds-segmented-active-bg",
-      "family": "segmented",
-      "class": "FROZEN_ENGINE_SCOPED",
-      "owner": "engines/rustic (frozen)",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/rustic/skin/segmented.css"
-      ],
-      "evidence": "read ONLY by frozen engines (rustic), 1 read(s); outside the modern critical path, not edited"
-    },
-    {
-      "name": "--ds-segmented-active-color",
       "family": "segmented",
       "class": "FROZEN_ENGINE_SCOPED",
       "owner": "engines/rustic (frozen)",
