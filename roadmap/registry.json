@@ -7610,6 +7610,11 @@
      "at": "2026-10-04 20:45",
      "by": "claude-dt",
      "note": "2026-10-04 kimi-dt: QUOTA EVENT (confirmed by receipt): the owner-authorized Opus account hit its weekly limit at ~19:40 (resets 2026-10-10 03:00 ET); the P1 review session returned is_error with no report. Per the quota-continuity amendment: in-flight work preserved, reviews stay EXPLICITLY PENDING, never invented. Parked, unapplied, patch preserved: W23-P1 (acceptance phase; delivered, its independent review never ran). Applied-then-reverted and parked: W23-P3 (--verify-indicator; review ACCEPT already on record, but its lot needs the full measurement + indicator republication + the measurement review — all pending). Landed under the amendment with drill-only verification: f7772bf1d (the real-render roster re-pin after OWN3; its independent review is the first pending item to collect). ALSO LANDED before the event: OWN7B 03db87aad (31/25), the markdown-focus-ring producer fix 15b0b8a59 (the 34th tests-through-the-door row), the container-emission re-anchor 74143412f, DER-07 DONE (f43520965 + b5ed7152b + 5dcfea425), recipes rename 4497460c8. COHORT REVIEW (R15) COHORT HOLD — the mass re-capture 621a6429e pinned visible regressions as baselines (F-1..F-13: near-black ink on dark, lost input focus rings, light Select/Popover panels, doubled Divider, etc.); the ledger does NOT move; verification of which findings are still live at HEAD is the next packet. No new lots land until the quota returns or the owner assigns another authorized account."
+    },
+    {
+     "at": "2026-10-04 21:09",
+     "by": "claude-dt",
+     "note": "2026-10-04 kimi-dt: F-1..F-13 verification (read-only, built showroom + full visual suite, 426 passed/44 failed-on-stale-baselines): ALL THIRTEEN still live at HEAD. Law used: a cell that does not fail renders identical to the broken baseline; the two failing cells were eyeballed (F-1 reduced but present, F-3 panel still mode-blind). Verification table: .tmp/ds-kimi-2026-10-04/f-findings-verification.md. The repair wave waits on the Opus quota (Oct 10) — repair is writer work. The baselines stay red on purpose: the ledger does not move over broken paint."
     }
    ]
   },
