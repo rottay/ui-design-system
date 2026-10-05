@@ -1571,6 +1571,10 @@ list to the new WO by dated amendment.
 - **F-B — Select's reserved end-space does not scale.** The native-arrow clearance is ~24px since
   c6b4a40e1 and does not grow with size; with long values at lg/xl the glyph's ink can sit within
   ~0.4px of the text (review-w24-f5, over-strict self-check analysis). Token decision, its own lot.
+- **F-C-bis — Rustic "Streaming" badge white-on-white (bithire long-tail experience cell).**
+  Found by the R15 tile review (round 4): pre-existing in the HEAD baseline; re-recording would
+  re-lock it, so the cell stays pinned at HEAD. Its text colour needs its own lot; if the fix
+  touches the frozen rustic engine it needs the owner's written authority. Same family as F-C.
 - **F-C — Contrast residue with named receivers (unchanged by the wave):** the rustic invoice
   "SENT" badge (1.26:1, frozen literal — needs the owner's written authority for a frozen edit);
   modern Select success glyph on the light chip (2.62:1, below the 3:1 non-text floor — D-1-D §0.4
