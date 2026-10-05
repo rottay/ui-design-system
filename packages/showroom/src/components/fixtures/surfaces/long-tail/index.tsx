@@ -313,7 +313,7 @@ function FoundationFamily() {
         <Stack spacing="sm">
           <SurfaceLoadingSkeleton rows={3} showHeader />
           <Box style={MINI_GRID_STYLE}>
-            <SurfaceEmptyState title="Nothing here" description="Lifecycle empty state" icon="\u2205" action={{ id: 'add-record', label: 'Add record', onClick: noop }} />
+            <SurfaceEmptyState title="Nothing here" description="Lifecycle empty state" icon={'∅'} action={{ id: 'add-record', label: 'Add record', onClick: noop }} />
             <SurfaceErrorState error="Lifecycle failed" onRetry={noop} />
           </Box>
           <SurfaceStaleBanner message="Data may be stale" onRefresh={noop} refreshing />

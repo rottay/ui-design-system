@@ -173,6 +173,26 @@ async function waitForSettled(page: Page, locator: Locator): Promise<void> {
   );
 }
 
+const TABLE_POSTURE_CASES = ['admin-audit', 'data-list', 'data-report'] as const;
+
+// The probe passes no `ssrViewport`, so hydration paints the phone posture (cards) and the
+// desktop correction lands in a transition seconds later; wait on that posture, not on stability.
+async function waitForDesktopPosture(root: Locator): Promise<void> {
+  await expect(
+    root.locator('[data-posture^="phone"]'),
+    'the viewport posture must be corrected from the unhinted phone snapshot',
+  ).toHaveCount(0, { timeout: 30_000 });
+
+  for (const caseId of TABLE_POSTURE_CASES) {
+    const scene = root.locator(`[data-long-tail-case="${caseId}"]`);
+    await expect(
+      scene.locator('table [data-part="header-row"]'),
+      `${caseId} must present its rows as the table`,
+    ).toHaveCount(1, { timeout: 30_000 });
+    await expect(scene.locator('[data-part="mobile-root"]'), `${caseId} must not present cards`).toHaveCount(0);
+  }
+}
+
 async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<void> {
   expect([...CASE_IDS].sort(), 'CASE_IDS must name exactly the cases the fixture declares').toEqual(
     DECLARED_CASES.map((entry) => entry.id).sort(),
@@ -191,8 +211,18 @@ async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<voi
   );
   expect(representedSources).toBe(DECLARED_SOURCE_TOTAL);
   expect(await root.locator('[data-part="section-description"]').count()).toBeGreaterThan(0);
-  expect(await root.locator('[data-part="divider"]').count()).toBeGreaterThan(0);
   expect(await root.locator('button:disabled').count()).toBeGreaterThan(0);
+
+  // Compare stamps its divider only in the stacked (phone) layout; at this desktop posture the
+  // part survives only in the modern PageShell header, and the rustic tree carries none.
+  const compare = root.locator('[data-long-tail-case="data-compare"]');
+  await expect(compare.locator('.ds-compare[data-layout="table"]')).toHaveCount(1);
+  await expect(compare.locator('.ds-compare__divider[data-part="divider"]')).toHaveCount(0);
+  if (engine === 'modern') {
+    await expect(root.locator('.ds-pattern-page-shell [data-part="header"] > [data-part="divider"]').first()).toBeVisible();
+  } else {
+    await expect(root.locator('[data-part="divider"]')).toHaveCount(0);
+  }
 
   for (const [caseId, selector] of SURFACE_ROOTS) {
     await expect(
@@ -333,6 +363,7 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
   const ground = FIXTURES.find((candidate) => candidate.id === fixture)?.ground ?? 'dark';
   await waitForGroundPaint(page, ground);
   await expect(root.locator('.ds-kanban')).toBeVisible({ timeout: 30_000 });
+  await waitForDesktopPosture(root);
   await assertFixtureCoverage(root, engine);
   await waitForSettled(page, root);
   return root;
