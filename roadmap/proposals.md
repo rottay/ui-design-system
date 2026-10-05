@@ -1559,3 +1559,22 @@ owner approves 1:1.
 **Status** — OPEN, pending owner review. On approval each becomes a `### WO-` block in its lane
 plus a registry entry; the residue rows' receivers move from WO-ARC-15 / the EVI-02 follow-up
 list to the new WO by dated amendment.
+
+## F. Findings from the F-wave execution (2026-10-05), pending owner review
+
+- **F-A — Probe first paint runs without the viewport hint.** The torture/long-tail routes omit
+  `ssrViewport`, so probes hydrate in the phone posture and switch to desktop seconds later through
+  a low-priority transition (W24-F6H mechanism, review-w24-f6h). The specs now wait for the settled
+  posture, which makes captures deterministic but does NOT prove the first paint is correct.
+  Proposal: pass `ssrViewport` on the probe routes (scene-side repair) and state the adoption rule
+  in the runtime docs. Receiver: a showroom scene lot; the finding stays open until then.
+- **F-B — Select's reserved end-space does not scale.** The native-arrow clearance is ~24px since
+  c6b4a40e1 and does not grow with size; with long values at lg/xl the glyph's ink can sit within
+  ~0.4px of the text (review-w24-f5, over-strict self-check analysis). Token decision, its own lot.
+- **F-C — Contrast residue with named receivers (unchanged by the wave):** the rustic invoice
+  "SENT" badge (1.26:1, frozen literal — needs the owner's written authority for a frozen edit);
+  modern Select success glyph on the light chip (2.62:1, below the 3:1 non-text floor — D-1-D §0.4
+  carry-over, its own modern-skin lot); modern Toggle checked thumb on the light track (1.26:1 —
+  same). None is reachable from the foundation dark block; each keeps its acceptance pending.
+
+**Status** — OPEN, pending owner review.
