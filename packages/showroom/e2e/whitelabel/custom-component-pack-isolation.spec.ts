@@ -169,16 +169,19 @@ const REALM_CLICK_MARGIN = 48;
  * one with registerCustomComponent; there is no fallback engine.` when the
  * active pack has no entry, and the factory's own `EngineErrorBoundary`
  * (`.../engines/presentation/component-factory/error-boundary/index.tsx`)
- * renders `Engine Error:` plus that message.
+ * renders that message inside its `role="alert"` fallback root.
  *
- * They are asserted as SUBSTRINGS of the refused host's text, which is the
- * strongest claim that stays honest: the boundary also renders a Retry control
- * whose label is not this file's business.
+ * The boundary is identified by its role, not its title: the title and the
+ * Retry label are catalog copy (`errors.generic`,
+ * `components.surfaces.states.retry`) that a provider may localize, so they
+ * are not this file's business. The full message is asserted as a SUBSTRING
+ * of that alert, because the alert also carries the title and the Retry
+ * control.
  */
 const REFUSED_NAMES = ["Input", "Select"] as const;
-const REFUSAL_BOUNDARY_TEXT = "Engine Error:";
 const refusalMessage = (name: string) =>
-  `No custom implementation registered for "${name}" in pack "${PACK_ID}"`;
+  `No custom implementation registered for "${name}" in pack "${PACK_ID}". ` +
+  "Register one with registerCustomComponent; there is no fallback engine.";
 
 /** The tenant-theme artifact stamp used across the whitelabel suite. */
 const ARTIFACT_SELECTOR =
@@ -424,11 +427,13 @@ async function expectPackContract(page: Page, realm: FrameLocator, startingActio
  *
  * Three separate claims per name, because they fail differently:
  *
- *   the boundary contained it   the host renders the factory's own
- *                               `EngineErrorBoundary` output, which is why one
- *                               missing entry does not take the realm down;
- *   the refusal is BY NAME      the message names the component and the pack,
- *                               so a generic failure cannot pass as one;
+ *   the boundary contained it   the host renders exactly one `role="alert"`,
+ *                               the factory's own `EngineErrorBoundary`
+ *                               fallback, which is why one missing entry does
+ *                               not take the realm down;
+ *   the refusal is BY NAME      that alert carries the registry message naming
+ *                               the component and the pack, so a generic
+ *                               failure cannot pass as one;
  *   nothing rendered instead    no `input`/`select` element and no `[data-pack]`
  *                               witness inside the host. This is the claim that
  *                               a fallback of ANY kind would break: a component
@@ -445,8 +450,9 @@ async function expectPackRefusals(realm: FrameLocator) {
     const host = hosts[name];
 
     await expect(host).toHaveAttribute("data-pack-entry", "refused");
-    await expect(host).toContainText(REFUSAL_BOUNDARY_TEXT);
-    await expect(host).toContainText(refusalMessage(name));
+    const boundary = host.getByRole("alert");
+    await expect(boundary).toHaveCount(1);
+    await expect(boundary).toContainText(refusalMessage(name));
 
     // A refused name resolved to NOTHING -- not to another engine's module.
     await expect(host.locator("input")).toHaveCount(0);

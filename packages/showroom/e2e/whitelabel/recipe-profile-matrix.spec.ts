@@ -367,10 +367,11 @@ test.describe("DS-Q001L: opposing profile sources over one tree", () => {
     await expect(page.getByTestId("specimen-button-primary")).toBeDisabled();
 
     await openCell(page, { source: "editorial-db", state: "loading" });
-    await expect(page.getByTestId("specimen-button-primary")).toHaveAttribute(
-      "data-loading",
-      "true"
-    );
+    const pendingButton = page.getByTestId("specimen-button-primary");
+    await expect(pendingButton).toHaveAttribute("aria-busy", "true");
+    await expect(pendingButton).toHaveAttribute("data-pending", "true");
+    await expect(pendingButton).toBeDisabled();
+    await expect(pendingButton).not.toHaveAttribute("data-loading");
     await expect(
       page.locator(".ds-pattern-data-table[data-loading='true']").first()
     ).toBeVisible();
