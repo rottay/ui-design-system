@@ -129,6 +129,11 @@ for (const fixture of FIXTURES) {
       test.setTimeout(60_000);
 
       const container = await openProbe(page, fixture.id, engine);
+      // Rustic's sticky action bar lands wherever the capture scroll leaves it; relative keeps
+      // its in-flow box and z-index, so it is photographed in place, never over the rating row.
+      if (engine === 'rustic') {
+        await page.addStyleTag({ content: `${CONTAINER_SELECTOR} [data-part="action-bar"] { position: relative !important; }` });
+      }
       await expect(container).toHaveScreenshot(`${fixture.id}-forms-${engine}.png`);
     });
   }

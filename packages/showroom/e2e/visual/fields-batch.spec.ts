@@ -146,7 +146,16 @@ test('rottay (dark) / fields / modern: OTP slot focused', async ({ page }) => {
   await slot.focus();
   await page.waitForTimeout(300);
 
-  await expect(slot).toHaveScreenshot('rottay-fields-otpinput-modern-focused.png');
+  // The focus ring is a 4px outset box-shadow and the slot's parents share its edges, so frame
+  // the slot plus the ring instead of photographing its own box.
+  const box = await slot.boundingBox();
+  if (!box) throw new Error('OTP slot has no layout box');
+  const margin = 4;
+  const x = Math.floor(box.x - margin);
+  const y = Math.floor(box.y - margin);
+  await expect(page).toHaveScreenshot('rottay-fields-otpinput-modern-focused.png', {
+    clip: { x, y, width: Math.ceil(box.x + box.width + margin) - x, height: Math.ceil(box.y + box.height + margin) - y },
+  });
 });
 
 test('rottay (dark) / fields / rustic: slider handle focused', async ({ page }) => {

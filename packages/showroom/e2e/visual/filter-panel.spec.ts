@@ -96,8 +96,12 @@ for (const engine of ENGINES) {
 
     const container = await openProbe(page, 'rottay', engine, 1280);
 
-    const input = container.locator('[data-part="input"]').first();
+    // Modern's `data-part="input"` is a geometry-slot DIV that cannot take focus; rustic stamps
+    // the part on the native <input>.
+    const input = container.locator('[data-part="input"] input, input[data-part="input"]').first();
     await input.focus();
+    await expect(input).toBeFocused();
+    expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('INPUT');
     await page.waitForTimeout(300);
 
     const fieldRow = container.locator('[data-part="field-row"]').first();
