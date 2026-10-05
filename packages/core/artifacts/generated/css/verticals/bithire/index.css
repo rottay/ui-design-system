@@ -37156,7 +37156,9 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   gap: var(--ds-date-picker-grid-gap, calc(var(--ds-spacing-1) / 2));
 }
 
+/* The header row is an item of the day grid, so it spans every day column. */
 .ds-date-picker-panel [data-part='weekday-row'] {
+  grid-column: 1 / -1;
   margin-block-end: var(--ds-spacing-1);
 }
 
@@ -55167,8 +55169,14 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 /*
  * With a label the two segments carry the rule. `hasChildren` requires the
  * horizontal orientation in the engine, so a vertical divider never renders
- * these parts.
+ * these parts. The root draws no edge of its own: the shared `.ds-divider`
+ * class floor would otherwise paint a second, full-width rule above the label.
  */
+.ds-divider.ds-divider--modern[data-component='divider'][data-orientation='horizontal'][data-with-text='true'] {
+  border-top: none;
+  border-inline-start: none;
+}
+
 .ds-divider.ds-divider--modern[data-component='divider'][data-orientation='horizontal'] [data-part='line-before'],
 .ds-divider.ds-divider--modern[data-component='divider'][data-orientation='horizontal'] [data-part='line-after'] {
   flex: 1;

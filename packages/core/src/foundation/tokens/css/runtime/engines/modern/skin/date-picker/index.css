@@ -285,7 +285,9 @@
   gap: var(--ds-date-picker-grid-gap, calc(var(--ds-spacing-1) / 2));
 }
 
+/* The header row is an item of the day grid, so it spans every day column. */
 .ds-date-picker-panel [data-part='weekday-row'] {
+  grid-column: 1 / -1;
   margin-block-end: var(--ds-spacing-1);
 }
 

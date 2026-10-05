@@ -231,11 +231,11 @@
       "spec": "e2e/visual/pickers-batch.spec.ts",
       "status": "pre-migration",
       "owner": "WO-EVI-03",
-      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "measuredAt": "2026-10-05 @ 239dd6306",
       "expiresWhen": "reference-identity-approved",
       "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
       "baselines": 13,
-      "sha256": "9c7ce69c0a0e4473b0eedff7c00405752a4866c9c71da647095e38a01c3e8cd3"
+      "sha256": "22586febc7b2937d2802f5239b79a71a6f0c31dcc103f01138fd471ee530d949"
     },
     {
       "spec": "e2e/visual/record-batch.spec.ts",
@@ -321,11 +321,11 @@
       "spec": "e2e/whitelabel/layout-foundations-matrix.spec.ts",
       "status": "pre-migration",
       "owner": "WO-EVI-03",
-      "measuredAt": "2026-09-25 @ 4ef14032f",
+      "measuredAt": "2026-10-05 @ 239dd6306",
       "expiresWhen": "reference-identity-approved",
       "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
       "baselines": 12,
-      "sha256": "7c803770d483e135429007acbb0ef11fcab5d30fde63ec3a57caf9019dfe2073"
+      "sha256": "e4b7061253adf5bdb1372560388e0e58df334d5375010b8b848a985216500505"
     }
   ]
 }
