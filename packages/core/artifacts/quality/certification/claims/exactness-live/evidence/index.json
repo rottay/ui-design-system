@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "d7fa206e8ea0a0c944f66fad4cd03e2b277ae8566b38f22f92eed537c5806bd2",
+    "authorityDigest": "01157f86e3f311432dd2e4a840a563be006af7ea652d33f98d024962136d87f1",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5703397,
-        "sha256": "daac4aada25a3eaeda686dcb5ed39fe02bcfbd91410bcf5fe628d0b8da581998"
+        "bytes": 5703584,
+        "sha256": "21dceac48dea1a6ad1db8e96f53dbe6899fa9d8c2612c79e4dcec6823be7e45d"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5069373,
-        "sha256": "2d0ca6fc24e44a5374c48131b9033788fd10dbe7d79275796831a1a85a469726"
+        "bytes": 5069560,
+        "sha256": "42abaa7dc74d8af5d91b8be58fe225e1b087d97798dbc5e1c9e0d778e130e91d"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5030608,
-        "sha256": "01bcea277b6a23b08d5b8bf78393cdc812f1973dd81eec5e09c4fcb52da58385"
+        "bytes": 5030795,
+        "sha256": "583a30d4d400366873d64e75b63b831c158a9c5bccc963eeca1f20d09c27ba6e"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5029868,
-        "sha256": "5ab1141a440a64a583104e53a7f67a56d95cce74367321d8234899e454faa90d"
+        "bytes": 5030055,
+        "sha256": "c1361bc65c00fee9b3b96d135819032ea1f0827a9afaed62d12992aac4989005"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -27952,8 +27952,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 18474,
-        "sha256": "41e4ab82cae9dc6b7d9b042e771f63cc51b9eb6fcf24dcff4d3990ce9f36f634"
+        "bytes": 18661,
+        "sha256": "0093355ba6986dd3622305b2232af229b29159dd0fd2c31552566be5e7d06b71"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css",
@@ -44127,8 +44127,8 @@
         "roles": [
           "stale-claim-corpus"
         ],
-        "bytes": 15399,
-        "sha256": "0466cca57654739577f4d811df88467a2b59d0e86f9d107dd268c8bf85eddf83"
+        "bytes": 15994,
+        "sha256": "f5411dfcdb2b7e09604dbc0e512ceef32e503893a559792aa0ea77d0427e51b2"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/tenant-branding/index.spec.ts",
@@ -47707,7 +47707,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "d7fa206e8ea0a0c944f66fad4cd03e2b277ae8566b38f22f92eed537c5806bd2"
+    "digest": "01157f86e3f311432dd2e4a840a563be006af7ea652d33f98d024962136d87f1"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -56174,11 +56174,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 376
+          "line": 377
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 376
+          "line": 377
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css",
@@ -70297,19 +70297,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 333
+          "line": 335
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 338
+          "line": 339
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 341
+          "line": 339
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 347
+          "line": 342
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
+          "line": 348
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css",
@@ -98974,7 +98978,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "FieldFiltersPanel",
@@ -99416,7 +99420,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "FilterPanel",
@@ -100149,7 +100153,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "SelectionPreviewRail",
@@ -100809,7 +100813,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "DetailPanel",
@@ -101502,7 +101506,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "DataTable",
@@ -103225,7 +103229,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "FormField",
@@ -103425,7 +103429,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Textarea",
@@ -103508,7 +103512,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "TagInput",
@@ -103699,7 +103703,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "InputNumber",
@@ -103956,7 +103960,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "PasswordInput",
@@ -104161,7 +104165,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Switch",
@@ -104322,7 +104326,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Toggle",
@@ -104586,7 +104590,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Radio",
@@ -104800,7 +104804,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Radio",
@@ -104979,7 +104983,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Checkbox",
@@ -105180,7 +105184,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Checkbox",
@@ -105309,7 +105313,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Slider",
@@ -105582,7 +105586,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "OTPInput",
@@ -105704,7 +105708,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Form",
@@ -106111,7 +106115,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Select",
@@ -107272,7 +107276,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "AutoComplete",
@@ -107555,7 +107559,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Mentions",
@@ -107741,7 +107745,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "TreeSelect",
@@ -108450,7 +108454,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Cascader",
@@ -109110,7 +109114,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Transfer",
@@ -109728,7 +109732,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Upload",
@@ -110454,7 +110458,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "DatePicker",
@@ -111542,7 +111546,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "TimePicker",
@@ -111982,7 +111986,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "ColorPicker",
@@ -112499,7 +112503,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Input",
@@ -112887,7 +112891,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Input",
@@ -113008,7 +113012,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Input",
@@ -113506,7 +113510,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Skeleton",
@@ -113591,7 +113595,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Skeleton",
@@ -113747,7 +113751,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Alert",
@@ -113980,7 +113984,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Progress",
@@ -114263,7 +114267,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Spinner",
@@ -114352,7 +114356,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Rate",
@@ -114430,7 +114434,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Modal",
@@ -115257,7 +115261,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Toast",
@@ -115446,7 +115450,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Toast",
@@ -115572,7 +115576,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Message",
@@ -115723,7 +115727,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Notification",
@@ -115925,7 +115929,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Result",
@@ -116302,7 +116306,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Modal (overlay)",
@@ -116719,7 +116723,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Tour",
@@ -117413,7 +117417,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "AlertDialog",
@@ -118000,7 +118004,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Sheet",
@@ -118969,7 +118973,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Watermark",
@@ -119038,7 +119042,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Affix",
@@ -119117,7 +119121,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Anchor",
@@ -119156,7 +119160,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Anchor",
@@ -119269,7 +119273,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "BottomTabBar",
@@ -119428,7 +119432,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Breadcrumb",
@@ -119657,7 +119661,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "FloatButton",
@@ -119922,7 +119926,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Menu",
@@ -119964,7 +119968,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Menu",
@@ -120617,7 +120621,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "MobileHeader",
@@ -120716,7 +120720,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Pagination",
@@ -120942,7 +120946,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Segmented",
@@ -121053,7 +121057,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Stepper",
@@ -121424,7 +121428,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Steps",
@@ -121767,7 +121771,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4552
+        "skinSelectorCount": 4553
       },
       {
         "section": "Tabs",
@@ -122038,8 +122042,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "032814568551840ba1b8d7ad78272b4180566bcc6a2e4bfdfaa0bb5fa77ddeab",
-      "032814568551840ba1b8d7ad78272b4180566bcc6a2e4bfdfaa0bb5fa77ddeab"
+      "111286b58b70776c7011f40e473de3e39f045a9a719aec0ffc5d9079acda355b",
+      "111286b58b70776c7011f40e473de3e39f045a9a719aec0ffc5d9079acda355b"
     ],
     "agree": true
   }
