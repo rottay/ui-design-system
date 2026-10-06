@@ -64,7 +64,8 @@
  * @package @rottay/design-system
  */
 
-import type { ReactNode, CSSProperties, FocusEvent } from 'react';
+import type { ReactNode, CSSProperties, FocusEvent, KeyboardEvent } from 'react';
+import type { ControlChrome } from '../../../../../foundation/contracts';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
@@ -134,6 +135,13 @@ export interface SelectProps<T = string | number> extends EngineAwareProps {
   size?: ResponsiveValue<SelectSize>;
   /** Visual variant */
   variant?: SelectVariant;
+  /**
+   * `none` renders the Modern trigger without its chrome (height floor, padding, paint) for a host that
+   * paints it; behaviour, focus ring and touch floor are kept. Modern only.
+   * @internal
+   * @default 'standard'
+   */
+  chrome?: ControlChrome;
   /** Allow multiple selection */
   multiple?: boolean;
   /** Enable search functionality */
@@ -164,6 +172,11 @@ export interface SelectProps<T = string | number> extends EngineAwareProps {
   onFocus?: (event?: FocusEvent<HTMLElement>) => void;
   /** Blur handler */
   onBlur?: (event?: FocusEvent<HTMLElement>) => void;
+  /**
+   * Runs after the Select's own key handling on the same event; `event.defaultPrevented` is true exactly
+   * when the Select consumed the key (open, commit, close).
+   */
+  onKeyDown?: (event: KeyboardEvent<HTMLElement>) => void;
   /** Clear handler */
   onClear?: () => void;
   /** Children for Option-based usage */

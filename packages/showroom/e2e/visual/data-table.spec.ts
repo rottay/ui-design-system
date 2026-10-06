@@ -160,7 +160,7 @@ test('rottay (dark) / data-table / modern: cell editing', async ({ page }) => {
   const container = await openProbe(page, 'rottay', 'modern', 1280);
   const editableCell = container.locator('td[data-editable="true"]').first();
   await editableCell.dblclick();
-  await container.locator('[data-part="editor-input"]').first().waitFor();
+  await container.locator('td[data-editing="true"] .ds-data-table__editor-control').first().waitFor();
   await page.waitForTimeout(300);
 
   const editingCell = container.locator('td[data-editing="true"]').first();

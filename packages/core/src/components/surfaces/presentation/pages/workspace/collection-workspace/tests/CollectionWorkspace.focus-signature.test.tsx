@@ -63,7 +63,7 @@ const POPOVER_SKIN = readFileSync(
 const POPOVER_SURFACE_FOCUS =
   ".ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface']:is([data-state~='focus-visible'], :focus-visible)";
 const PAGE_SIZE_FOCUS =
-  '.ds-collection-page-size-control:has(.ds-collection-page-size-control__select:focus-visible)';
+  '.ds-collection-page-size-control:has(.ds-collection-page-size-control__select select:focus-visible)';
 const PAGE_SIZE_LIFT = '0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent)';
 
 const DESKTOP: ResponsiveContextValue = {
@@ -116,7 +116,7 @@ describe('CollectionWorkspace — own focus targets wear the tenant focus signat
     expect(surface.parentElement).toHaveAttribute('data-anchor-scope', 'external');
   });
 
-  it('overlays the page-size pill with the native select the skin reads focus from', async () => {
+  it('overlays the page-size pill with the chrome-less Select whose native trigger the skin reads focus from', async () => {
     const view = renderSurface(
       <CollectionWorkspaceSurface<Row>
         title="Records"
@@ -136,9 +136,10 @@ describe('CollectionWorkspace — own focus targets wear the tenant focus signat
 
     const control = view.container.querySelector<HTMLElement>('[data-part="page-size-control"]');
     expect(control).toHaveClass('ds-collection-page-size-control');
-    const select = within(control as HTMLElement).getByRole('combobox', { name: 'Rows per page' });
+    const select = await within(control as HTMLElement).findByRole('combobox', { name: 'Rows per page' });
     expect(select.tagName).toBe('SELECT');
-    expect(select).toHaveClass('ds-collection-page-size-control__select');
+    expect(select).toHaveAttribute('data-chrome', 'none');
+    expect(select.parentElement).toHaveClass('ds-collection-page-size-control__select');
     expect(select).not.toHaveAttribute('tabindex', '-1');
   });
 

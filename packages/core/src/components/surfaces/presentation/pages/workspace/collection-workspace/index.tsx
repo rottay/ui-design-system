@@ -85,6 +85,7 @@ import { Stack } from '../../../../../primitives/layout/stack';
 import { Flex } from '../../../../../primitives/layout/flex';
 import { Text } from '../../../../../primitives/display/typography';
 import { Button } from '../../../../../primitives/inputs/button';
+import { Select } from '../../../../../primitives/inputs/select';
 import { Popover } from '../../../../../primitives/overlay/popover';
 import { ActionDock } from '../../../../../structures/workspace/action-dock';
 import { AdaptiveOverlay } from '../../../../../patterns/feedback/adaptive-overlay';
@@ -696,24 +697,22 @@ function PageSizeControl({
               {suffixLabel}
             </Text>
           )}
-          {/* Pinned native select (tests: role combobox named 'Rows per page'):
-              an invisible native control overlaid on the styled picker keeps
-              the OS-native popup (best mobile UX) while the DS Select cannot
-              reproduce this overlaid presentation without losing the custom
-              pill anatomy. See lane fragment for the minimal contract. */}
-          <select
+          {/* An invisible overlay on the pill: only the Modern native trigger keeps the OS popup and the
+              accessible name under every engine, so the overlay pins it; the pill paints the presentation. */}
+          <Select
+            engine="modern"
+            chrome="none"
+            size="sm"
+            placeholder=""
             aria-label={controlLabel}
             className="ds-collection-page-size-control__select"
-            data-part="page-size-select"
-            value={pagination.pageSize}
-            onChange={(event) => pagination.onChange(1, Number(event.currentTarget.value))}
-          >
-            {options.map((option) => (
-              <option key={option} value={option}>
-                {tSurfaceOr('collection_workspace.page_size_option', '{count} / page', { count: option })}
-              </option>
-            ))}
-          </select>
+            options={options.map((option) => ({
+              value: String(option),
+              label: tSurfaceOr('collection_workspace.page_size_option', '{count} / page', { count: option }),
+            }))}
+            value={String(pagination.pageSize)}
+            onChange={(next) => pagination.onChange(1, Number(next))}
+          />
           <ChevronDownIcon
             aria-hidden
             className="ds-collection-page-size-control__chevron"

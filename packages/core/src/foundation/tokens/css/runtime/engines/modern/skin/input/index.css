@@ -635,7 +635,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     forced-color-adjust: auto;
   }
 
-.ds-input-shell.ds-input-shell--modern:not(:where([data-chrome='none'])) {
+  .ds-input-shell.ds-input-shell--modern:not(:where([data-chrome='none'])) {
     background: Field;
     color: FieldText;
     border-color: ButtonText;

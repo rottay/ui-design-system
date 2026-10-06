@@ -5,6 +5,8 @@ import { describe, expect, it, vi } from 'vitest';
 import ModernInput from '../engines/modern';
 import ClassicInput from '../engines/classic';
 import RusticInput from '../engines/rustic';
+import { Input } from '..';
+import { renderWithEngine } from '@tests/support/engine';
 
 const shellOf = (container: HTMLElement) => container.querySelector('.ds-input-shell.ds-input-shell--modern') as HTMLElement;
 const fieldOf = (container: HTMLElement) => container.querySelector('.ds-input-field[data-part="field"]') as HTMLElement;
@@ -67,5 +69,16 @@ describe('Modern Input chrome="none"', () => {
       expect(container.querySelector('[data-chrome]')).toBeNull();
       unmount();
     }
+  });
+
+  it.each(['classic', 'rustic'] as const)('the public Input renders the same %s DOM with and without chrome', async (engine) => {
+    const normalise = (html: string) => html.replace(/(input-|_r_|rc_)[\w-]*/g, '$1#');
+    const plain = renderWithEngine(<Input engine={engine} aria-label="Name" />, engine);
+    await screen.findByRole('textbox', { name: 'Name' });
+    const reference = normalise(plain.container.innerHTML);
+    plain.unmount();
+    const chromeless = renderWithEngine(<Input engine={engine} chrome="none" aria-label="Name" />, engine);
+    await screen.findByRole('textbox', { name: 'Name' });
+    expect(normalise(chromeless.container.innerHTML)).toBe(reference);
   });
 });

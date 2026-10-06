@@ -181,7 +181,7 @@
 /* The native select is an invisible overlay, so the pill wears the tenant
    focus signature for it: `--_ds-collection-page-size-focus-layer` leads the
    lift stated above and is empty until the select holds keyboard focus. */
-.ds-collection-page-size-control:has(.ds-collection-page-size-control__select:focus-visible) {
+.ds-collection-page-size-control:has(.ds-collection-page-size-control__select select:focus-visible) {
   --_ds-collection-page-size-focus-layer: var(--ds-focus-ring),;
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
@@ -235,10 +235,6 @@
   color: var(--ds-color-primary);
   transform: translateY(1px);
 }
-.ds-collection-page-size-control__select:focus {
-  outline: none;
-}
-
 /* Drained geometry + typography (was inline). */
 .ds-surface.ds-collection-workspace
   .ds-collection-page-size-control__summary[data-part="page-size-summary"] {
@@ -338,25 +334,15 @@
   color: var(--ds-color-text-primary);
 }
 
-.ds-surface.ds-collection-workspace
-  .ds-collection-page-size-control__select[data-part="page-size-select"] {
-  appearance: none;
-  -webkit-appearance: none;
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__select {
   position: absolute;
   inset: 0;
   z-index: 2;
-  inline-size: 100%;
-  block-size: 100%;
-  padding: 0;
-  cursor: pointer;
-  font-size: var(--ds-font-size-xs, 12px);
-  line-height: 1;
-  border: 0;
-  border-radius: var(--ds-radius-full, 9999px);
-  background: transparent;
-  color: transparent;
   opacity: 0;
-  outline: none;
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__select > select[data-part='trigger'] {
+  block-size: 100%;
 }
 
 .ds-surface.ds-collection-workspace
@@ -1048,7 +1034,7 @@
     outline: 2px solid Highlight;
   }
 
-  .ds-collection-page-size-control:has(.ds-collection-page-size-control__select:focus-visible) {
+  .ds-collection-page-size-control:has(.ds-collection-page-size-control__select select:focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;

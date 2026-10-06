@@ -167,6 +167,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     placeholder,
     size: sizeProp = SELECT_DEFAULTS.size,
     variant = SELECT_DEFAULTS.variant,
+    chrome = 'standard',
     multiple = SELECT_DEFAULTS.multiple,
     searchable,
     clearable,
@@ -180,6 +181,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     onSearch,
     onFocus,
     onBlur,
+    onKeyDown,
     onClear,
     className,
     style,
@@ -255,6 +257,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const composingRef = useRef(false);
 
   const trigger = useInteractionState({ disabled });
+  const chromeStamp = chrome === 'none' ? 'none' : undefined;
 
   // The dropdown is portaled and, when searchable, owns focus: every dismissal returns focus to the trigger.
   const focusTrigger = useCallback(() => {
@@ -792,7 +795,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           name={name}
           id={id}
           autoFocus={autoFocus}
+          onKeyDown={onKeyDown}
           {...htmlProps}
+          data-chrome={chromeStamp}
           // The select IS the trigger part: a caller's data-part must not unkey it from the skin.
           {...partAttributes('trigger', trigger.state)}
         >
@@ -937,7 +942,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       data-mode={multiple ? 'multiple' : 'single'}
       data-searchable={isSearchable || undefined}
       style={style}
-      onKeyDown={handleKeyDown}
+      onKeyDown={(event) => {
+        handleKeyDown(event);
+        onKeyDown?.(event);
+      }}
     >
       <div
         {...triggerHtmlProps}
@@ -947,6 +955,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         id={id}
         {...partAttributes('trigger', trigger.state)}
         {...triggerHandlers}
+        data-chrome={chromeStamp}
         data-variant={variant}
         data-open={isOpen || undefined}
         data-disabled={disabled || undefined}

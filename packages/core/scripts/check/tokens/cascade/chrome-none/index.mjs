@@ -5,8 +5,8 @@
  * Loads every scope's freshly recomposed bundle (tenant-less and each first-party vertical) in Chromium and
  * reads each rostered owner in each rostered cell under fine light/dark, coarse and forced colours. Fails on
  * chrome left on a chrome-less owner, a kept arm (focus ring, forced outline/frame/ink, touch floor, disabled
- * dimming) that differs from the standard control, and a guarded selector that is unrostered or unexercised.
- * `--self-check` plants one of each defect in the tenant-less scope and requires each to be caught.
+ * dimming) that differs from the standard control, a host that changes a kept arm, and a guarded selector
+ * that is unrostered or unexercised. `--self-check` plants each defect per owner and host and requires it caught.
  *
  * Exit codes: 0 pass, 1 a finding or an uncaught plant, 2 bad invocation.
  * Usage: node scripts/check/tokens/cascade/chrome-none/index.mjs [--self-check] [--scope <key>]
@@ -84,33 +84,57 @@ export function guardedSelectors(css) {
       const head = selector.slice(0, at);
       const compound = lastCompound(head);
       const classes = [...compound.matchAll(/\.([\w-]+)/g)].map((hit) => hit[1]);
-      const owner = ROSTER.owners.find((candidate) => classes.includes(candidate.subjectClass));
+      const owner = ROSTER.owners.find((candidate) =>
+        candidate.subjectPart
+          ? compound.includes(`[data-part='${candidate.subjectPart}']`) && head.includes(`.${candidate.scopeClass}`)
+          : classes.includes(candidate.subjectClass));
       found.push({ selector, match: head.replace(/::[\w-]+/g, ''), owner: owner?.id ?? null, media: media.join(' and ') });
     }
   });
   return found;
 }
 
+const cellOf = (value) => (value.attrs || value.root || value.fixtures ? { attrs: {}, root: {}, ...value } : { attrs: value, root: {} });
+
 function cellMarkup(owner) {
   const cells = [];
   for (const [fixture, html] of Object.entries(owner.fixtures)) {
-    for (const [cell, attributes] of Object.entries(owner.cells)) {
+    for (const [cell, value] of Object.entries(owner.cells)) {
+      const { attrs, root, fixtures } = cellOf(value);
+      if (fixtures && !fixtures.includes(fixture)) continue;
       for (const chrome of ['none', 'standard']) {
-        cells.push(`<div data-probe-owner="${owner.id}" data-probe-fixture="${fixture}" data-probe-cell="${cell}" data-probe-chrome="${chrome}" data-probe-attrs='${JSON.stringify(attributes)}'>${html}</div>`);
+        cells.push(`<div data-probe-owner="${owner.id}" data-probe-fixture="${fixture}" data-probe-cell="${cell}" data-probe-chrome="${chrome}" data-probe-attrs='${JSON.stringify({ attrs, root })}'>${html}</div>`);
       }
     }
   }
   return cells.join('\n');
 }
 
+function hostMarkup(host) {
+  const owner = ROSTER.owners.find((candidate) => candidate.id === host.owner);
+  return host.cells
+    .map((cell) => {
+      const { attrs, root } = cellOf(owner.cells[cell]);
+      return `<div data-probe-host="${host.id}" data-probe-owner="${owner.id}" data-probe-cell="${cell}" data-probe-attrs='${JSON.stringify({ attrs, root })}'>${host.context.replace('{markup}', host.markup)}</div>`;
+    })
+    .join('\n');
+}
+
 function page(css, scope, environment) {
   const attributes = rootAttributes({ vertical: scope, theme: environment.theme });
   const classes = rootClassNames({ theme: environment.theme }).join(' ');
-  const body = ROSTER.owners.map(cellMarkup).join('\n');
+  const body = [...ROSTER.owners.map(cellMarkup), ...(ROSTER.hosts ?? []).map(hostMarkup)].join('\n');
   return `<!doctype html><html ${rootAttributesToHtml(attributes)} class="${classes}"><head><link rel="stylesheet" href="${pathToFileURL(css).href}">${FREEZE}</head><body style="margin:0">${body}</body></html>`;
 }
 
 function measureInPage({ owners, guarded }) {
+  const stamp = (host, owner) => {
+    const shell = host.querySelector(owner.shell);
+    const { attrs, root } = JSON.parse(host.dataset.probeAttrs);
+    for (const [name, value] of Object.entries(attrs)) shell.setAttribute(name, value);
+    if (owner.root) for (const [name, value] of Object.entries(root)) host.querySelector(owner.root).setAttribute(name, value);
+    return shell;
+  };
   const read = (element) => {
     const style = getComputedStyle(element);
     const pick = (property) => style.getPropertyValue(property);
@@ -130,11 +154,15 @@ function measureInPage({ owners, guarded }) {
   };
   const exercised = new Set();
   const rows = [];
-  for (const host of document.querySelectorAll('[data-probe-owner]')) {
+  for (const host of document.querySelectorAll('[data-probe-host]')) {
     const owner = owners.find((candidate) => candidate.id === host.dataset.probeOwner);
-    const shell = host.querySelector(owner.shell);
+    const shell = stamp(host, owner);
+    rows.push({ host: host.dataset.probeHost, owner: owner.id, cell: host.dataset.probeCell, shell: read(shell) });
+  }
+  for (const host of document.querySelectorAll('[data-probe-owner]:not([data-probe-host])')) {
+    const owner = owners.find((candidate) => candidate.id === host.dataset.probeOwner);
+    const shell = stamp(host, owner);
     const field = host.querySelector(owner.field);
-    for (const [name, value] of Object.entries(JSON.parse(host.dataset.probeAttrs))) shell.setAttribute(name, value);
     if (host.dataset.probeChrome === 'standard') {
       for (const element of host.querySelectorAll('[data-chrome]')) element.removeAttribute('data-chrome');
     } else {
@@ -157,6 +185,19 @@ function judge({ rows }, environment, scope) {
   const forced = environment.id.startsWith('forced');
   const coarse = environment.id.startsWith('coarse');
   const standardOf = new Map(rows.filter((row) => row.chrome === 'standard').map((row) => [`${row.owner}|${row.fixture}|${row.cell}`, row.shell]));
+  for (const row of rows.filter((candidate) => candidate.host)) {
+    const host = ROSTER.hosts.find((candidate) => candidate.id === row.host);
+    const owner = ROSTER.owners.find((candidate) => candidate.id === row.owner);
+    const standard = standardOf.get(`${row.owner}|${host.fixture}|${row.cell}`);
+    const where = `${scope}/${environment.id} host ${row.host}:${row.cell}`;
+    const fail = (detail) => findings.push({ kind: 'host-arm', where, detail });
+    const { shell } = row;
+    if (owner.keep.ring.includes(row.cell) && shell.boxShadow !== standard.boxShadow) fail(`focus ring ${shell.boxShadow.slice(0, 50)} != ${standard.boxShadow.slice(0, 50)}`);
+    if (owner.keep.ring.includes(row.cell) && forced && shell.outline !== standard.outline) fail(`forced outline ${shell.outline} != ${standard.outline}`);
+    if (forced && owner.keep.forcedFrame.includes(row.cell) && shell.border.join(' ') !== standard.border.join(' ')) fail(`forced frame ${shell.border.join(' ')} != ${standard.border.join(' ')}`);
+    if (forced && owner.keep.forcedInk.includes(row.cell) && (shell.color !== standard.color || shell.borderColor !== standard.borderColor)) fail(`forced ink ${shell.color}/${shell.borderColor} != ${standard.color}/${standard.borderColor}`);
+    if (coarse && Math.max(parseFloat(shell.minBlockSize) || 0, parseFloat(shell.minHeight) || 0) < owner.keep.touchFloorPx) fail(`touch floor lost (${shell.minBlockSize}/${shell.minHeight})`);
+  }
   for (const row of rows.filter((candidate) => candidate.chrome === 'none')) {
     const owner = ROSTER.owners.find((candidate) => candidate.id === row.owner);
     const standard = standardOf.get(`${row.owner}|${row.fixture}|${row.cell}`);
@@ -164,11 +205,13 @@ function judge({ rows }, environment, scope) {
     const fail = (kind, detail) => findings.push({ kind, where, detail });
     const { shell } = row;
     const ring = owner.keep.ring.includes(row.cell);
-    if (shell.padding.some((value) => parseFloat(value) !== 0)) fail('chrome', `padding ${shell.padding.join(' ')}`);
+    const reserve = owner.keep.arrowReserve?.includes(row.fixture);
+    if (shell.padding.some((value, side) => parseFloat(value) !== 0 && !(reserve && side === 1))) fail('chrome', `padding ${shell.padding.join(' ')}`);
     if (shell.backgroundImage !== 'none') fail('chrome', `background-image ${shell.backgroundImage.slice(0, 60)}`);
     if (!forced && !/^(transparent|rgba\(0, 0, 0, 0\))$/.test(shell.backgroundColor)) fail('chrome', `background-color ${shell.backgroundColor}`);
     const framed = forced && owner.keep.forcedFrame.includes(row.cell);
     if (!framed && shell.border.some((value) => parseFloat(value) !== 0)) fail('chrome', `border-width ${shell.border.join(' ')}`);
+    if (framed && (shell.border.join(' ') !== standard.border.join(' ') || shell.borderColor !== standard.borderColor)) fail('kept-arm', `forced frame ${shell.border.join(' ')} ${shell.borderColor} != ${standard.border.join(' ')} ${standard.borderColor}`);
     if (!ring && shell.boxShadow !== 'none') fail('chrome', `box-shadow ${shell.boxShadow.slice(0, 60)}`);
     if (!forced && shell.color !== row.fieldColor) fail('chrome', `ink ${shell.color} is not the field's ${row.fieldColor}`);
     if (coarse) {
@@ -254,20 +297,47 @@ function retarget(css, predicate, rewrite) {
 }
 
 const outsideMedia = (rule) => !atRuleChain(rule).some((at) => at.name === 'media');
+const insideForced = (rule) => atRuleChain(rule).some((at) => at.name === 'media' && /forced-colors: ?active/.test(at.params));
+
+function dropRule(css, predicate) {
+  const root = postcss.parse(css);
+  let hits = 0;
+  root.walkRules((rule) => {
+    if (!predicate(rule)) return;
+    rule.remove();
+    hits += 1;
+  });
+  if (hits !== 1) throw new Error(`self-check: a plant matched ${hits} rules instead of one`);
+  return root.toString();
+}
 
 function plants() {
   const [input] = ROSTER.owners;
-  return [
+  const perOwner = ROSTER.owners.flatMap((owner) => [
     {
-      id: 'unguarded owner rule',
+      id: `${owner.id}: unguarded owner rule`,
       expect: 'chrome',
-      transform: (css) => retarget(css, (rule) => rule.selector === input.plant.unguard && outsideMedia(rule), (selector) => selector.replace(GUARD, '')),
+      transform: (css) => retarget(css, (rule) => rule.selectors.includes(owner.plant.unguard) && outsideMedia(rule), (selector) => selector.replace(GUARD, '')),
     },
     {
-      id: 'over-guarded focus ring',
+      id: `${owner.id}: over-guarded focus ring`,
       expect: 'kept-arm',
-      transform: (css) => retarget(css, (rule) => rule.selector === input.plant.overguard && outsideMedia(rule), (selector) => `${selector}${GUARD}`),
+      transform: (css) => retarget(css, (rule) => rule.selectors.includes(owner.plant.overguard) && outsideMedia(rule), (selector) => `${selector}${GUARD}`),
     },
+    {
+      id: `${owner.id}: over-guarded forced frame`,
+      expect: 'kept-arm',
+      transform: (css) => retarget(css, (rule) => rule.selectors.includes(owner.plant.forcedFrame) && insideForced(rule), (selector) => `${selector}${GUARD}`),
+    },
+  ]);
+  const perHost = (ROSTER.hosts ?? []).map((host) => ({
+    id: `${host.id}: forced state arm not restated`,
+    expect: 'host-arm',
+    transform: (css) => dropRule(css, (rule) => rule.selectors.includes(host.plant.dropForced) && insideForced(rule)),
+  }));
+  return [
+    ...perOwner,
+    ...perHost,
     {
       id: 'guarded rule for an unrostered owner',
       expect: 'coverage',

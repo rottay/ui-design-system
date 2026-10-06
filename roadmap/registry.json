@@ -8657,6 +8657,11 @@
      "at": "2026-10-06 15:34",
      "by": "kimi",
      "note": "2026-10-06 — L4C landed (correccion pre-L5): los K-arm pins completos (warning/success rings, K2 foco forzado, K3 disabled forzado, K5 opacity — cada uno rojo bajo su mutante), el mapa de cobertura §2.2 por nombre (los rerun specs existen por nombre), la sonda gobernada Q12 registrada como gate blocking pre-build (chrome-none-cascade; 22 guards/20 exercised/320 medidos x 4 scopes; se auto-taladra; roja ante un host no guardado), la propuesta lleva A1/A3 y la tabla L5/L6 re-derivada. Review ACCEPT (b1b0eb21); C1 (el judge compara frames forzados + quinto plant) es el primer item de L5 — H6 depende de el."
+    },
+    {
+     "at": "2026-10-06 19:11",
+     "by": "kimi",
+     "note": "2026-10-06 — L5 landed: Select chrome='none' + onKeyDown tipeado; drenan la celda select del editor y el page-size de collection-workspace (ownership 2031/1332 -> 2029/1330; ambas rows por nombre). C1 landed primero (el judge compara frames forzados + quinto plant, red-proof); A2/H6 implementado (el host sobre K3 envuelve su frame en @media not forced-colors; el frame de error forzado sobrevive, medido); E5 binding (modernOnlyProps; frozen classic Select lo prueba). Ruling 6d: opcion (a) — el intento 'normal' midio PEOR (2596px vs 1368px); la celda se adjudica como flecha + el crecimiento del editor token (reparacion intencional). Touch-target floor re-seated 200->198 con el mover nombrado (las 2 raw selects drenadas; :116/:118 quedaron en 200 — el corpus de archivos/CSS no movio). Docs 57e7dd1 (editor-input retirada; data-invalid reworded), seal 57e7dd11, reseal be29c647. Tile review: 7 celdas ACCEPT con atribucion por celda (L5 / 81e11a852 zebra / D-1 stale-owed / dust)."
     }
    ]
   },

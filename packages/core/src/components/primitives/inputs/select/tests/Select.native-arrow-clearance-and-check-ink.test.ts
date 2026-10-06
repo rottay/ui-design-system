@@ -75,7 +75,7 @@ function specificity(selector: string): [number, number, number] {
 const beats = (a: [number, number, number], b: [number, number, number]) =>
   a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
 
-const NATIVE_TRIGGER = ".ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']";
+const NATIVE_TRIGGER = ".ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:not(:where([data-chrome='none']))";
 const NATIVE_ARROW = ".ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='native-arrow']";
 const CHECK_GLYPH =
   ".ds-select-shell__dropdown[data-part='dropdown'] :is([data-part='option-checkbox'], [data-part='option-check']) > .rottay-semantic-icon";

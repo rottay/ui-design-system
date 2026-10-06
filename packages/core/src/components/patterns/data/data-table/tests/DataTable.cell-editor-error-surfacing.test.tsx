@@ -117,7 +117,7 @@ describe("InlineCellEditor error surfacing (modern)", () => {
 
     const select = (await openEditor(
       container,
-      '[data-part="editor-input"]',
+      'td[data-editing="true"] .ds-data-table__editor-control select',
     )) as HTMLSelectElement;
 
     fireEvent.change(select, { target: { value: "pro" } });
@@ -128,7 +128,8 @@ describe("InlineCellEditor error surfacing (modern)", () => {
         container.querySelector('[data-part="editor-error"]')?.textContent,
       ).toBe("Pro is unavailable");
     });
-    expect(select.getAttribute("data-invalid")).toBe("true");
+    expect(select.getAttribute("data-status")).toBe("error");
+    expect(select.getAttribute("aria-invalid")).toBe("true");
 
     // Before the fix the select's onChange left the error mounted, so the
     // message and aria-invalid described a value the user had already replaced.
@@ -137,7 +138,7 @@ describe("InlineCellEditor error surfacing (modern)", () => {
     await waitFor(() => {
       expect(container.querySelector('[data-part="editor-error"]')).toBeNull();
     });
-    expect(select.getAttribute("data-invalid")).toBe("false");
+    expect(select.getAttribute("data-status")).toBeNull();
     expect(select.getAttribute("aria-invalid")).toBeNull();
   });
 });

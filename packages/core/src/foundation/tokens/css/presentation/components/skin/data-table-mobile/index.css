@@ -9,12 +9,11 @@
  * DELIBERATELY UNLAYERED (P-47). SPECIFICITY (P-48): the tenant `*` border floor
  * sits at (0,3,1); a border-painting rule must reach (0,4,0).
  *
- * CELL EDITORS scope on `.ds-pattern-data-table [data-part='editor-*']` — they
- * render inside the pattern root. The editor input's rest AND error borders both
- * paint a color, so both reach (0,4,0) by repeating `data-part`/`data-invalid`;
- * non-border channels win at (0,2,0). The error border keys on the stamped
- * `data-invalid='true'` and sits after the rest border so it wins on the invalid
- * cell.
+ * CELL EDITORS scope on `.ds-pattern-data-table` — they render inside the
+ * pattern root. The text editor is the chrome-less Input: its frame keys on the
+ * `.ds-data-table__editor-control` className and the shell's own
+ * `data-invalid='true'`; the select editor's frame lives in the modern
+ * data-table skin, which outranks the Select's bridge neutraliser.
  *
  * MOBILE CARD (trap-1): the caller previously froze the Card's
  * background/border-color/border-radius/box-shadow with an inline `style` that
@@ -36,24 +35,6 @@
  * DataTableMobileCards.tsx and PatternDataTable.tsx.
  */
 
-/* ---- inline cell editor input: rest + error border, plus the shared chrome ---
-   No hex fallbacks (ley anti-pintura-rígida): the semantic roles ARE the
-   contract; a broken token cascade must never resurrect hardcoded brand paint. */
-.ds-pattern-data-table [data-part="editor-input"] {
-  border-radius: var(--ds-radius-sm, 6px);
-  background: var(--ds-surface-card);
-  color: var(--ds-color-text-primary);
-  outline: none;
-}
-.ds-pattern-data-table
-  [data-part="editor-input"][data-part="editor-input"][data-part="editor-input"] {
-  border: 1.5px solid var(--ds-color-primary);
-}
-.ds-pattern-data-table
-  [data-part="editor-input"][data-part="editor-input"][data-invalid="true"] {
-  border: 1.5px solid var(--ds-color-error);
-}
-
 /* ---- chrome-less text editor (Input): the table paints its frame; focus is the Input's own ring ---- */
 .ds-pattern-data-table .ds-data-table__editor-control > .ds-input-shell--modern[data-chrome='none'] {
   background: var(--ds-surface-card);
@@ -65,14 +46,6 @@
 }
 
 /* ---- error message ---- */
-/* The editor controls are raw form elements: no primitive skin paints their
-   focus, so each wears the tenant focus signature here. */
-.ds-pattern-data-table
-  [data-part="editor-input"]:is([data-state~="focus-visible"], :focus-visible) {
-  outline: var(--ds-focus-ring-width) solid transparent;
-  outline-offset: var(--ds-focus-ring-offset);
-  box-shadow: var(--ds-focus-ring);
-}
 .ds-pattern-data-table [data-part="editor-error"] {
   color: var(--ds-color-error);
 }
@@ -558,13 +531,6 @@
 }
 
 @media (forced-colors: active) {
-  .ds-pattern-data-table
-    [data-part="editor-input"]:is([data-state~="focus-visible"], :focus-visible) {
-    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
-    outline-offset: var(--ds-focus-ring-offset);
-    box-shadow: none;
-  }
-
   .ds-pattern-data-table.ds-data-table--mobile
     .ds-data-table__mobile-card,
   .ds-pattern-data-table.ds-data-table--mobile

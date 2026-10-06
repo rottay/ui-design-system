@@ -12,8 +12,12 @@
 import { createEngineComponent } from '@/infrastructure/runtime/engines/presentation/component-factory';
 import type { InputProps } from '../contracts';
 
-export const BaseInput = createEngineComponent<InputProps>('Input', {
-  classic: () => import('./classic'),
-  modern: () => import('./modern'),
-  rustic: () => import('./rustic'),
-});
+export const BaseInput = createEngineComponent<InputProps>(
+  'Input',
+  {
+    classic: () => import('./classic'),
+    modern: () => import('./modern'),
+    rustic: () => import('./rustic'),
+  },
+  { modernOnlyProps: ['chrome'] },
+);

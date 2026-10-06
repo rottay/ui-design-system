@@ -45,7 +45,110 @@
       },
       "plant": {
         "unguard": ".ds-input-shell.ds-input-shell--modern:not(:where([data-chrome='none']))",
-        "overguard": ".ds-input-shell.ds-input-shell--modern[data-state~='focused']:not([data-disabled='true'])"
+        "overguard": ".ds-input-shell.ds-input-shell--modern[data-state~='focused']:not([data-disabled='true'])",
+        "forcedFrame": ".ds-input-shell.ds-input-shell--modern[data-invalid='true']"
+      }
+    },
+    {
+      "id": "select",
+      "subjectPart": "trigger",
+      "scopeClass": "ds-select-shell--modern",
+      "shell": "[data-part='trigger']",
+      "field": ".ds-select-shell[data-part='root']",
+      "root": ".ds-select-shell[data-part='root']",
+      "fixtures": {
+        "native": "<div class=\"ds-select-shell ds-select-shell--modern \" data-part=\"root\" data-size=\"md\"><select data-variant=\"outline\" aria-label=\"Native\" data-chrome=\"none\" data-part=\"trigger\"><option value=\"a\">Alpha</option><option value=\"b\">Beta</option></select><span data-part=\"native-arrow\" aria-hidden=\"true\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 256 256\" class=\"rottay-icon rottay-semantic-icon\" focusable=\"false\" aria-hidden=\"true\" data-asset-class=\"semantic-icon\" data-icon-name=\"navigation.down\" data-icon-role=\"navigation\" data-icon-state=\"idle\" data-icon-tone=\"default\" data-icon-weight=\"regular\" data-icon-mirrored=\"false\"><path d=\"M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z\"></path></svg></span></div>",
+        "custom": "<div class=\"ds-select-shell ds-select-shell--modern \" data-part=\"root\" data-size=\"md\" data-mode=\"single\"><div aria-label=\"Custom\" data-part=\"trigger\" data-chrome=\"none\" data-variant=\"outline\" tabindex=\"0\" role=\"combobox\" aria-expanded=\"false\" aria-haspopup=\"listbox\"><div data-part=\"trigger-value\"><span data-part=\"value\" data-mode=\"single\" title=\"Alpha\">Alpha</span></div><div data-part=\"trigger-actions\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 256 256\" class=\"rottay-icon rottay-semantic-icon\" focusable=\"false\" aria-hidden=\"true\" data-part=\"arrow-icon\" data-asset-class=\"semantic-icon\" data-icon-name=\"navigation.down\" data-icon-role=\"navigation\" data-icon-state=\"idle\" data-icon-tone=\"default\" data-icon-weight=\"regular\" data-icon-mirrored=\"false\"><path d=\"M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z\"></path></svg></div></div></div>"
+      },
+      "cells": {
+        "rest": {},
+        "hovered": {
+          "attrs": { "data-state": "hovered" }
+        },
+        "focused": {
+          "attrs": { "data-state": "focused focus-visible" }
+        },
+        "open": {
+          "attrs": { "data-open": "true" },
+          "fixtures": ["custom"]
+        },
+        "error": {
+          "attrs": { "data-status": "error" }
+        },
+        "error-focused": {
+          "attrs": { "data-status": "error", "data-state": "focused focus-visible" }
+        },
+        "error-open": {
+          "attrs": { "data-status": "error", "data-open": "true" },
+          "fixtures": ["custom"]
+        },
+        "warning": {
+          "attrs": { "data-status": "warning" }
+        },
+        "warning-focused": {
+          "attrs": { "data-status": "warning", "data-state": "focused focus-visible" }
+        },
+        "warning-open": {
+          "attrs": { "data-status": "warning", "data-open": "true" },
+          "fixtures": ["custom"]
+        },
+        "success": {
+          "attrs": { "data-status": "success" }
+        },
+        "success-focused": {
+          "attrs": { "data-status": "success", "data-state": "focused focus-visible" }
+        },
+        "success-open": {
+          "attrs": { "data-status": "success", "data-open": "true" },
+          "fixtures": ["custom"]
+        },
+        "filled": {
+          "attrs": { "data-variant": "filled" }
+        },
+        "flushed": {
+          "attrs": { "data-variant": "flushed" }
+        },
+        "disabled": {
+          "attrs": { "data-disabled": "true" }
+        },
+        "root-disabled": {
+          "root": { "data-disabled": "true" }
+        }
+      },
+      "keep": {
+        "ring": [
+          "focused",
+          "open",
+          "error-focused",
+          "error-open",
+          "warning-focused",
+          "warning-open",
+          "success-focused",
+          "success-open"
+        ],
+        "forcedFrame": ["error", "error-focused", "error-open"],
+        "opacity": ["disabled", "root-disabled"],
+        "forcedInk": ["disabled", "root-disabled"],
+        "touchFloorPx": 44,
+        "arrowReserve": ["native"]
+      },
+      "plant": {
+        "unguard": ".ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-part='trigger']:not(:where([data-chrome='none']))",
+        "overguard": ".ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible)",
+        "forcedFrame": ".ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='error']"
+      }
+    }
+  ],
+  "hosts": [
+    {
+      "id": "data-table-editor-select",
+      "owner": "select",
+      "fixture": "native",
+      "context": "<div class=\"ds-pattern-data-table ds-engine-modern\">{markup}</div>",
+      "markup": "<div data-part=\"editor-shell\"><div class=\"ds-select-shell ds-select-shell--modern ds-data-table__editor-control\" data-part=\"root\" data-size=\"sm\"><select data-variant=\"outline\" aria-label=\"Status\" data-chrome=\"none\" data-part=\"trigger\"><option value=\"a\">Alpha</option><option value=\"b\">Beta</option></select><span data-part=\"native-arrow\" aria-hidden=\"true\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 256 256\" class=\"rottay-icon rottay-semantic-icon\" focusable=\"false\" aria-hidden=\"true\" data-asset-class=\"semantic-icon\" data-icon-name=\"navigation.down\" data-icon-role=\"navigation\" data-icon-state=\"idle\" data-icon-tone=\"default\" data-icon-weight=\"regular\" data-icon-mirrored=\"false\"><path d=\"M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z\"></path></svg></span></div></div>",
+      "cells": ["rest", "focused", "error", "error-focused", "disabled"],
+      "plant": {
+        "dropForced": ".ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'][data-status='error']"
       }
     }
   ]

@@ -107,6 +107,11 @@ export interface CreateEngineComponentOptions<P extends object = object> {
    * fallback stands there unchanged.
    */
   admitProps?: (props: P, engine: EngineName) => string | undefined;
+  /**
+   * Props only the Modern implementation honors. They are dropped before any other engine renders
+   * (classic, rustic and custom packs), so a frozen or extension implementation never receives them.
+   */
+  modernOnlyProps?: readonly (keyof P)[];
 }
 
 /**
@@ -129,7 +134,7 @@ export function createEngineComponent<P extends object>(
 ): ForwardRefExoticComponent<
   PropsWithoutRef<P> & { engine?: EngineName } & RefAttributes<any>
 > {
-  const { fallback = null, customEnabled = true, onError, admitProps } = options;
+  const { fallback = null, customEnabled = true, onError, admitProps, modernOnlyProps } = options;
 
   /** A declared absence resolves to a named refusal, never to another engine. */
   const implementation = (
@@ -227,6 +232,9 @@ export function createEngineComponent<P extends object>(
 
     // Remove engine prop before passing to implementation
     const { engine: _, ...componentProps } = props;
+    if (activeEngine !== 'modern' && modernOnlyProps) {
+      for (const name of modernOnlyProps) delete (componentProps as Record<PropertyKey, unknown>)[name];
+    }
 
     return (
       <EngineErrorBoundary onError={onError}>

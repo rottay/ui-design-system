@@ -15,6 +15,7 @@ import type { EditableConfig } from '@/foundation/contracts/runtime/components/p
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernCheckbox from '../../../../../../primitives/inputs/checkbox/engines/modern';
 import ModernInput from '../../../../../../primitives/inputs/input/engines/modern';
+import ModernSelect from '../../../../../../primitives/inputs/select/engines/modern';
 
 const SAVE_FAILED_FALLBACK = 'Unable to save this change.';
 
@@ -69,7 +70,7 @@ export function InlineCellEditor<T>({
 }: InlineCellEditorProps<T>): React.ReactElement {
   const [editValue, setEditValue] = useState<unknown>(value);
   const [error, setError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement | HTMLSelectElement>(null);
+  const inputRef = useRef<HTMLElement>(null);
   const translate = useOptionalTranslation('components')?.t;
   // Every editor control is named after its column; without it a screen
   // reader focus landing inside the cell announces an unlabeled field.
@@ -181,9 +182,8 @@ export function InlineCellEditor<T>({
 
   const editorType = config.type ?? 'text';
 
-  // The text editor is the chrome-less Input and the checkbox the Checkbox primitive; the table paints
-  // the Input's frame and hands it its type and radius through the editor-control channels. The select
-  // stays a raw control painted on data-part='editor-input' and the data-invalid stamp.
+  // The text and select editors are the chrome-less Input and Select, the checkbox the Checkbox primitive;
+  // the table paints their frame and hands them type and radius through the editor-control channels.
 
   // Custom editor
   if (editorType === 'custom' && config.render) {
@@ -237,26 +237,23 @@ export function InlineCellEditor<T>({
   if (editorType === 'select' && config.options) {
     return (
       <div data-part="editor-shell" onClick={(e) => e.stopPropagation()}>
-        <select
-          ref={inputRef as React.RefObject<HTMLSelectElement>}
+        <ModernSelect
+          ref={inputRef}
+          chrome="none"
+          size="sm"
+          placeholder=""
+          className="ds-data-table__editor-control"
+          options={config.options.map((opt) => ({ value: String(opt.value), label: opt.label }))}
           value={String(editValue ?? '')}
-          data-part="editor-input"
-          data-invalid={error ? 'true' : 'false'}
+          status={error ? 'error' : 'default'}
           aria-label={accessibleName}
-          aria-invalid={error ? true : undefined}
-          onChange={(e) => {
-            const selected = config.options?.find((o) => String(o.value) === e.target.value);
-            setEditValue(selected ? selected.value : e.target.value);
+          onChange={(next) => {
+            const selected = config.options?.find((o) => String(o.value) === String(next));
+            setEditValue(selected ? selected.value : next);
             setError(null);
           }}
           onKeyDown={handleKeyDown}
-        >
-          {config.options.map((opt) => (
-            <option key={String(opt.value)} value={String(opt.value)}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+        />
         {error && (
           <span data-part="editor-error" role="alert">
             {error}

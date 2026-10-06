@@ -115,7 +115,14 @@ describe("DataTable modern -- the text cell editor composes the chrome-less Inpu
     wrapper!.walkDecls((decl) => {
       channels[decl.prop] = decl.value;
     });
-    expect(Object.keys(channels).sort()).toEqual(["--ds-input-sm-font-size", "--ds-input-sm-line-height", "--ds-input-sm-radius"]);
+    expect(Object.keys(channels).sort()).toEqual([
+      "--ds-input-sm-font-size",
+      "--ds-input-sm-line-height",
+      "--ds-input-sm-radius",
+      "--ds-select-radius",
+      "--ds-select-trigger-sm-font-size",
+      "--ds-select-trigger-sm-line-height",
+    ]);
     expect(channels["--ds-input-sm-font-size"]).toContain("--ds-data-table-editor-input-font-size");
     expect(channels["--ds-input-sm-line-height"]).toContain("--ds-data-table-editor-input-line-height");
   });

@@ -772,10 +772,8 @@
   white-space: normal;
 }
 
-/* ---- inline cell editor geometry. Paint (border rest/error, radius, fill,
-        accent-color) stays in the agnostic data-table-mobile skin; this block
-        owns only layout/type geometry and uses logical props so the error
-        anchoring mirrors under RTL. ---- */
+/* ---- inline cell editor geometry. The text editor's frame stays in the agnostic data-table-mobile
+        skin; the select editor's frame is painted here, above the Select's bridge neutraliser. ---- */
 .ds-pattern-data-table.ds-engine-modern [data-part="editor-shell"] {
   position: relative;
   display: flex;
@@ -784,36 +782,44 @@
   min-width: 0;
 }
 
-.ds-pattern-data-table.ds-engine-modern [data-part="editor-input"] {
-  box-sizing: border-box;
-  width: 100%;
-  padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
-  font-family: inherit;
-  font-size: var(
-    --ds-data-table-editor-input-font-size,
-    var(--ds-font-size-sm, 0.875rem)
-  );
-  line-height: var(
-    --ds-data-table-editor-input-line-height,
-    var(--ds-line-height-normal, 1.5)
-  );
-}
-
 .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control {
   /* The text editor is the chrome-less Input: its type and radius come through the Input's own size
      channels, set here on its field wrapper; the table paints only the control's frame. */
   --ds-input-sm-font-size: var(--ds-data-table-editor-input-font-size, var(--ds-font-size-sm, 0.875rem));
   --ds-input-sm-line-height: var(--ds-data-table-editor-input-line-height, var(--ds-line-height-normal, 1.5));
   --ds-input-sm-radius: var(--ds-radius-sm, 6px);
+  --ds-select-trigger-sm-font-size: var(--ds-data-table-editor-input-font-size, var(--ds-font-size-sm, 0.875rem));
+  --ds-select-trigger-sm-line-height: var(--ds-data-table-editor-input-line-height, var(--ds-line-height-normal, 1.5));
+  --ds-select-radius: var(--ds-radius-sm, 6px);
 }
 
 .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control > .ds-input-shell--modern[data-chrome='none'] {
   padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
 }
 
-.ds-pattern-data-table.ds-engine-modern select[data-part="editor-input"] {
-  appearance: auto;
-  cursor: pointer;
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'] {
+  padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
+  padding-inline-end: calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+  border: 1.5px solid var(--ds-color-primary);
+}
+
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+
+/* This frame outranks the Select's forced-colours state arms, so it restates them: the heavier
+   error edge and the disabled system ink. */
+@media (forced-colors: active) {
+  .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'][data-status='error'] {
+    border-width: 2px;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'][data-disabled='true'] {
+    color: GrayText;
+    border-color: GrayText;
+  }
 }
 
 .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-checkbox {

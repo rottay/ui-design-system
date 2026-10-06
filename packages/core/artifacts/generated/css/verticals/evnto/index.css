@@ -22619,7 +22619,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     forced-color-adjust: auto;
   }
 
-.ds-input-shell.ds-input-shell--modern:not(:where([data-chrome='none'])) {
+  .ds-input-shell.ds-input-shell--modern:not(:where([data-chrome='none'])) {
     background: Field;
     color: FieldText;
     border-color: ButtonText;
@@ -26751,10 +26751,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   white-space: normal;
 }
 
-/* ---- inline cell editor geometry. Paint (border rest/error, radius, fill,
-        accent-color) stays in the agnostic data-table-mobile skin; this block
-        owns only layout/type geometry and uses logical props so the error
-        anchoring mirrors under RTL. ---- */
+/* ---- inline cell editor geometry. The text editor's frame stays in the agnostic data-table-mobile
+        skin; the select editor's frame is painted here, above the Select's bridge neutraliser. ---- */
 .ds-pattern-data-table.ds-engine-modern [data-part="editor-shell"] {
   position: relative;
   display: flex;
@@ -26763,36 +26761,44 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   min-width: 0;
 }
 
-.ds-pattern-data-table.ds-engine-modern [data-part="editor-input"] {
-  box-sizing: border-box;
-  width: 100%;
-  padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
-  font-family: inherit;
-  font-size: var(
-    --ds-data-table-editor-input-font-size,
-    var(--ds-font-size-sm, 0.875rem)
-  );
-  line-height: var(
-    --ds-data-table-editor-input-line-height,
-    var(--ds-line-height-normal, 1.5)
-  );
-}
-
 .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control {
   /* The text editor is the chrome-less Input: its type and radius come through the Input's own size
      channels, set here on its field wrapper; the table paints only the control's frame. */
   --ds-input-sm-font-size: var(--ds-data-table-editor-input-font-size, var(--ds-font-size-sm, 0.875rem));
   --ds-input-sm-line-height: var(--ds-data-table-editor-input-line-height, var(--ds-line-height-normal, 1.5));
   --ds-input-sm-radius: var(--ds-radius-sm, 6px);
+  --ds-select-trigger-sm-font-size: var(--ds-data-table-editor-input-font-size, var(--ds-font-size-sm, 0.875rem));
+  --ds-select-trigger-sm-line-height: var(--ds-data-table-editor-input-line-height, var(--ds-line-height-normal, 1.5));
+  --ds-select-radius: var(--ds-radius-sm, 6px);
 }
 
 .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control > .ds-input-shell--modern[data-chrome='none'] {
   padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
 }
 
-.ds-pattern-data-table.ds-engine-modern select[data-part="editor-input"] {
-  appearance: auto;
-  cursor: pointer;
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'] {
+  padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
+  padding-inline-end: calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+  border: 1.5px solid var(--ds-color-primary);
+}
+
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+
+/* This frame outranks the Select's forced-colours state arms, so it restates them: the heavier
+   error edge and the disabled system ink. */
+@media (forced-colors: active) {
+  .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'][data-status='error'] {
+    border-width: 2px;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'][data-disabled='true'] {
+    color: GrayText;
+    border-color: GrayText;
+  }
 }
 
 .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-checkbox {
@@ -28403,12 +28409,11 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
  * DELIBERATELY UNLAYERED (P-47). SPECIFICITY (P-48): the tenant `*` border floor
  * sits at (0,3,1); a border-painting rule must reach (0,4,0).
  *
- * CELL EDITORS scope on `.ds-pattern-data-table [data-part='editor-*']` — they
- * render inside the pattern root. The editor input's rest AND error borders both
- * paint a color, so both reach (0,4,0) by repeating `data-part`/`data-invalid`;
- * non-border channels win at (0,2,0). The error border keys on the stamped
- * `data-invalid='true'` and sits after the rest border so it wins on the invalid
- * cell.
+ * CELL EDITORS scope on `.ds-pattern-data-table` — they render inside the
+ * pattern root. The text editor is the chrome-less Input: its frame keys on the
+ * `.ds-data-table__editor-control` className and the shell's own
+ * `data-invalid='true'`; the select editor's frame lives in the modern
+ * data-table skin, which outranks the Select's bridge neutraliser.
  *
  * MOBILE CARD (trap-1): the caller previously froze the Card's
  * background/border-color/border-radius/box-shadow with an inline `style` that
@@ -28430,24 +28435,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
  * DataTableMobileCards.tsx and PatternDataTable.tsx.
  */
 
-/* ---- inline cell editor input: rest + error border, plus the shared chrome ---
-   No hex fallbacks (ley anti-pintura-rígida): the semantic roles ARE the
-   contract; a broken token cascade must never resurrect hardcoded brand paint. */
-.ds-pattern-data-table [data-part="editor-input"] {
-  border-radius: var(--ds-radius-sm, 6px);
-  background: var(--ds-surface-card);
-  color: var(--ds-color-text-primary);
-  outline: none;
-}
-.ds-pattern-data-table
-  [data-part="editor-input"][data-part="editor-input"][data-part="editor-input"] {
-  border: 1.5px solid var(--ds-color-primary);
-}
-.ds-pattern-data-table
-  [data-part="editor-input"][data-part="editor-input"][data-invalid="true"] {
-  border: 1.5px solid var(--ds-color-error);
-}
-
 /* ---- chrome-less text editor (Input): the table paints its frame; focus is the Input's own ring ---- */
 .ds-pattern-data-table .ds-data-table__editor-control > .ds-input-shell--modern[data-chrome='none'] {
   background: var(--ds-surface-card);
@@ -28459,14 +28446,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 /* ---- error message ---- */
-/* The editor controls are raw form elements: no primitive skin paints their
-   focus, so each wears the tenant focus signature here. */
-.ds-pattern-data-table
-  [data-part="editor-input"]:is([data-state~="focus-visible"], :focus-visible) {
-  outline: var(--ds-focus-ring-width) solid transparent;
-  outline-offset: var(--ds-focus-ring-offset);
-  box-shadow: var(--ds-focus-ring);
-}
 .ds-pattern-data-table [data-part="editor-error"] {
   color: var(--ds-color-error);
 }
@@ -28952,13 +28931,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 @media (forced-colors: active) {
-  .ds-pattern-data-table
-    [data-part="editor-input"]:is([data-state~="focus-visible"], :focus-visible) {
-    outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
-    outline-offset: var(--ds-focus-ring-offset);
-    box-shadow: none;
-  }
-
   .ds-pattern-data-table.ds-data-table--mobile
     .ds-data-table__mobile-card,
   .ds-pattern-data-table.ds-data-table--mobile
@@ -38108,18 +38080,10 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   min-inline-size: 0;
   align-items: center;
   gap: var(--ds-select-trigger-gap, var(--ds-spacing-2));
-  min-block-size: calc(
-    var(--ds-select-trigger-responsive-height, var(--ds-select-trigger-height)) * var(--ds-density-effective-scale) *
-      var(--ds-control-height-scale, 1)
-  );
-  padding-inline: var(--ds-select-trigger-responsive-padding-x, var(--ds-select-trigger-padding-x));
-  color: var(--ds-select-color, var(--ds-color-text-primary));
   font-family: var(--ds-select-font-family, var(--ds-font-family-base));
   font-size: var(--ds-select-trigger-responsive-font-size, var(--ds-select-trigger-font-size));
   line-height: var(--ds-select-trigger-responsive-line-height, var(--ds-select-trigger-line-height));
   border-radius: var(--ds-select-radius, var(--ds-radius-md));
-  background: var(--ds-select-bg, var(--ds-material-control-background));
-  box-shadow: var(--ds-select-shadow, var(--ds-material-control-shadow));
   cursor: pointer;
   outline: none;
   transition:
@@ -38127,6 +38091,18 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
     background-color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
     box-shadow var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing)),
     color var(--ds-select-transition-duration, var(--ds-input-transition-duration)) var(--ds-select-transition-timing, var(--ds-input-transition-timing));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger']:not(:where([data-chrome='none'])),
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:not(:where([data-chrome='none'])) {
+  min-block-size: calc(
+    var(--ds-select-trigger-responsive-height, var(--ds-select-trigger-height)) * var(--ds-density-effective-scale) *
+      var(--ds-control-height-scale, 1)
+  );
+  padding-inline: var(--ds-select-trigger-responsive-padding-x, var(--ds-select-trigger-padding-x));
+  color: var(--ds-select-color, var(--ds-color-text-primary));
+  background: var(--ds-select-bg, var(--ds-material-control-background));
+  box-shadow: var(--ds-select-shadow, var(--ds-material-control-shadow));
 }
 
 /* The native <select> keeps its own box: flex would break its chrome in WebKit. */
@@ -38137,13 +38113,16 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   user-select: none;
 }
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-part='trigger'] {
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-part='trigger']:not(:where([data-chrome='none'])) {
   border: var(--ds-select-border-width, var(--ds-edge-standard-width)) var(--ds-edge-standard-style)
     var(--ds-select-border-color, var(--ds-material-control-border));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'] {
   appearance: none;
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:not(:where([data-chrome='none'])) {
   background-image: none;
   padding-inline-end: calc(
     var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size) +
@@ -38193,7 +38172,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 }
 
 @media (hover: hover) {
-  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:is([data-state~='hovered'], :hover):not([data-disabled='true']):not([data-open='true']):not([data-status]) {
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:is([data-state~='hovered'], :hover):not([data-disabled='true']):not([data-open='true']):not([data-status]):not(:where([data-chrome='none'])) {
     border-color: var(--ds-select-border-color-hover, var(--ds-material-control-border-hover));
     background: var(--ds-select-bg-hover, var(--ds-material-control-background-hover));
     box-shadow: var(--ds-select-shadow-hover, var(--ds-material-control-shadow-hover));
@@ -38203,52 +38182,63 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 /* A closed custom trigger reached by keyboard earns the same frame the open one wears. */
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-  border-color: var(--ds-select-border-color-focus, var(--ds-color-primary));
-  background: var(--ds-select-bg-focus, var(--ds-material-control-background-active));
   box-shadow: var(--ds-select-shadow-focus, var(--ds-focus-ring));
 }
 
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true']:not(:where([data-chrome='none'])),
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible):not(:where([data-chrome='none'])) {
+  border-color: var(--ds-select-border-color-focus, var(--ds-color-primary));
+  background: var(--ds-select-bg-focus, var(--ds-material-control-background-active));
+}
+
 /* A validation frame survives focus: the ring arrives, the hue stays. */
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='error'],
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='error']:is([data-state~='focus-visible'], :focus-visible),
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='error'][data-open='true'] {
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='error']:not(:where([data-chrome='none'])),
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='error']:is([data-state~='focus-visible'], :focus-visible):not(:where([data-chrome='none'])),
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='error'][data-open='true']:not(:where([data-chrome='none'])) {
   border-color: var(--ds-select-error-border, var(--ds-color-error));
   background: var(--ds-select-error-bg, var(--ds-material-control-background));
 }
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='warning'],
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='warning']:is([data-state~='focus-visible'], :focus-visible),
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='warning'][data-open='true'] {
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='warning']:not(:where([data-chrome='none'])),
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='warning']:is([data-state~='focus-visible'], :focus-visible):not(:where([data-chrome='none'])),
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='warning'][data-open='true']:not(:where([data-chrome='none'])) {
   border-color: var(--ds-select-warning-border, var(--ds-color-warning));
   background: var(--ds-select-warning-bg, var(--ds-material-control-background));
 }
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='success'],
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='success']:is([data-state~='focus-visible'], :focus-visible),
-.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='success'][data-open='true'] {
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='success']:not(:where([data-chrome='none'])),
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='success']:is([data-state~='focus-visible'], :focus-visible):not(:where([data-chrome='none'])),
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='success'][data-open='true']:not(:where([data-chrome='none'])) {
   border-color: var(--ds-select-success-border, var(--ds-color-success));
   background: var(--ds-select-success-bg, var(--ds-material-control-background));
 }
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant='filled'] {
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant='filled']:not(:where([data-chrome='none'])) {
   background: var(--ds-select-filled-bg, var(--ds-material-inset-background));
   border-color: var(--ds-select-filled-border, var(--ds-material-control-border));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant='flushed'] {
+  border-radius: 0;
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant='flushed']:not(:where([data-chrome='none'])) {
   padding-inline: 0;
   background: transparent;
   border-width: 0 0 var(--ds-select-border-width, var(--ds-edge-standard-width));
-  border-radius: 0;
   box-shadow: none;
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-disabled='true'] [data-part='trigger'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-disabled='true'] {
-  color: var(--ds-select-color-disabled, var(--ds-material-control-foreground-disabled));
-  background: var(--ds-select-bg-disabled, var(--ds-material-control-background-disabled));
   cursor: not-allowed;
   opacity: var(--ds-select-disabled-opacity, var(--ds-state-disabled-opacity));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-disabled='true'] [data-part='trigger']:not(:where([data-chrome='none'])),
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-disabled='true']:not(:where([data-chrome='none'])) {
+  color: var(--ds-select-color-disabled, var(--ds-material-control-foreground-disabled));
+  background: var(--ds-select-bg-disabled, var(--ds-material-control-background-disabled));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger-value'] {
@@ -38395,6 +38385,27 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-loading='true'] [data-part='native-arrow'] {
   opacity: 0;
+}
+
+/* The framework bridge paints every modern <select> at up to (0,3,1); a chrome-less trigger
+   neutralises it here, below every focus and forced-colours arm, and keeps only the arrow reserve. */
+.ds-select-shell.ds-select-shell--modern select[data-part='trigger'][data-chrome='none'] {
+  block-size: auto;
+  padding-block: 0;
+  padding-inline: 0 calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
+  background-color: transparent;
+  background-image: none;
+  border-width: 0;
+  color: inherit;
+  box-shadow: none;
+}
+@media not (pointer: coarse) {
+  .ds-select-shell.ds-select-shell--modern select[data-part='trigger'][data-chrome='none'] {
+    min-block-size: 0;
+  }
+}
+.ds-select-shell.ds-select-shell--modern select[data-part='trigger'][data-chrome='none'] ~ [data-part='native-arrow'] {
+  inset-inline-end: 0;
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading'] {
@@ -38808,6 +38819,9 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 @media (forced-colors: active) {
   .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant] {
     forced-color-adjust: auto;
+  }
+
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant]:not(:where([data-chrome='none'])) {
     border-color: ButtonText;
   }
 
@@ -91217,7 +91231,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The native select is an invisible overlay, so the pill wears the tenant
    focus signature for it: `--_ds-collection-page-size-focus-layer` leads the
    lift stated above and is empty until the select holds keyboard focus. */
-.ds-collection-page-size-control:has(.ds-collection-page-size-control__select:focus-visible) {
+.ds-collection-page-size-control:has(.ds-collection-page-size-control__select select:focus-visible) {
   --_ds-collection-page-size-focus-layer: var(--ds-focus-ring),;
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
@@ -91271,10 +91285,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-primary);
   transform: translateY(1px);
 }
-.ds-collection-page-size-control__select:focus {
-  outline: none;
-}
-
 /* Drained geometry + typography (was inline). */
 .ds-surface.ds-collection-workspace
   .ds-collection-page-size-control__summary[data-part="page-size-summary"] {
@@ -91374,25 +91384,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-text-primary);
 }
 
-.ds-surface.ds-collection-workspace
-  .ds-collection-page-size-control__select[data-part="page-size-select"] {
-  appearance: none;
-  -webkit-appearance: none;
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__select {
   position: absolute;
   inset: 0;
   z-index: 2;
-  inline-size: 100%;
-  block-size: 100%;
-  padding: 0;
-  cursor: pointer;
-  font-size: var(--ds-font-size-xs, 12px);
-  line-height: 1;
-  border: 0;
-  border-radius: var(--ds-radius-full, 9999px);
-  background: transparent;
-  color: transparent;
   opacity: 0;
-  outline: none;
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__select > select[data-part='trigger'] {
+  block-size: 100%;
 }
 
 .ds-surface.ds-collection-workspace
@@ -92084,7 +92084,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     outline: 2px solid Highlight;
   }
 
-  .ds-collection-page-size-control:has(.ds-collection-page-size-control__select:focus-visible) {
+  .ds-collection-page-size-control:has(.ds-collection-page-size-control__select select:focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;

@@ -133,11 +133,15 @@ export { SelectOption, SelectOptGroup };
  * complexity, while this entry point keeps compounds and the public contract stable.
  */
 export const Select = Object.assign(
-  createEngineComponent<SelectProps>('Select', {
-    classic: () => import('./engines/classic'),
-    modern: () => import('./engines/modern'),
-    rustic: () => import('./engines/rustic'),
-  }),
+  createEngineComponent<SelectProps>(
+    'Select',
+    {
+      classic: () => import('./engines/classic'),
+      modern: () => import('./engines/modern'),
+      rustic: () => import('./engines/rustic'),
+    },
+    { modernOnlyProps: ['chrome'] },
+  ),
   {
     /** Declarative option helper for JSX-based select configuration. */
     Option: SelectOption,

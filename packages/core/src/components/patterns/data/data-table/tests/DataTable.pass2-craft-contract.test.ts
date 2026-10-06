@@ -284,38 +284,33 @@ describe("DataTable pass 2 craft contract", () => {
     });
   });
 
-  describe("the inline cell editor's raw controls wear the tenant focus signature", () => {
+  describe("the inline cell editor's controls are primitives that own their focus", () => {
     const cellEditor = readFileSync(join(here, "../engines/modern/cell-editor/index.tsx"), "utf8");
     const mobile = mobileSkin.replace(/\/\*[\s\S]*?\*\//g, "");
-    const EDITOR_FOCUS =
-      '.ds-pattern-data-table [data-part="editor-input"]:is([data-state~="focus-visible"], :focus-visible)';
-    const editorRules = [...mobile.matchAll(/([^{}]*)\{([^{}]*)\}/g)]
-      .map(([, selector, body]) => [(selector ?? "").replace(/\s+/g, " ").trim(), body ?? ""] as const)
-      .filter(([selector]) => /editor-(?:input|checkbox)/.test(selector) && selector.includes("focus-visible"));
+    const modern = modernSkin.replace(/\/\*[\s\S]*?\*\//g, "");
+    const editorRules = [mobile, modern].flatMap((css) =>
+      [...css.matchAll(/([^{}]*)\{([^{}]*)\}/g)]
+        .map(([, selector, body]) => [(selector ?? "").replace(/\s+/g, " ").trim(), body ?? ""] as const)
+        .filter(([selector]) => /editor-(?:control|checkbox|input)/.test(selector)),
+    );
 
-    it("covers every focusable control the editor renders, and each is a raw element", () => {
-      const controls = [...cellEditor.matchAll(/<(input|select|textarea|button)\b[\s\S]*?data-part="([a-z-]+)"/g)].map(
-        ([, tag, part]) => `${tag}:${part}`
-      );
-      expect([...new Set(controls)].sort()).toEqual(["select:editor-input"]);
+    it("renders no raw form control: the text, select and checkbox editors are the primitives", () => {
+      expect(cellEditor).not.toMatch(/<(input|select|textarea|button)\b/);
       expect(cellEditor).toMatch(/<ModernInput\b[\s\S]{0,200}?chrome="none"/);
-      expect(cellEditor).not.toMatch(/<(?:Input|Select|Checkbox|DatePicker|InputNumber)\b/);
+      expect(cellEditor).toMatch(/<ModernSelect\b[\s\S]{0,200}?chrome="none"/);
       expect(cellEditor).toMatch(/<ModernCheckbox\b/);
-      expect(cellEditor).not.toMatch(/type="checkbox"/);
+      expect(cellEditor).not.toMatch(/<(?:Input|Select|Checkbox|DatePicker|InputNumber)\b/);
+      expect(cellEditor).not.toMatch(/editor-input/);
     });
 
-    it("paints the signature once, on the control, and a system-colour outline in forced colors", () => {
-      expect(editorRules.map(([selector]) => selector)).toEqual([EDITOR_FOCUS, EDITOR_FOCUS]);
-      const [[, body], [, forced]] = editorRules as unknown as [[string, string], [string, string]];
-      expect(body).toMatch(/outline:\s*var\(--ds-focus-ring-width\) solid transparent;/);
-      expect(body).toMatch(/outline-offset:\s*var\(--ds-focus-ring-offset\);/);
-      expect(body).toMatch(/box-shadow:\s*var\(--ds-focus-ring\);/);
-      expect(forced).toMatch(/outline:\s*max\(2px, var\(--ds-focus-ring-width\)\) solid Highlight;/);
-      expect(forced).toMatch(/outline-offset:\s*var\(--ds-focus-ring-offset\);/);
-      expect(forced).toMatch(/box-shadow:\s*none;/);
-      expect(mobile.slice(mobile.lastIndexOf("@media (forced-colors: active)"))).toContain(forced);
+    it("declares no focus channel on an editor control, so the primitive rings own focus (H3)", () => {
+      expect(editorRules.length).toBeGreaterThan(0);
+      for (const [selector, body] of editorRules) {
+        expect(selector).not.toMatch(/editor-input/);
+        expect(body, selector).not.toMatch(/(?:^|;)\s*(?:box-shadow|outline|outline-offset)\s*:/);
+      }
       for (const skin of [modernSkin, interactionsSkin]) {
-        expect(skin).not.toMatch(/editor-(?:input|checkbox)[^{}]*focus/);
+        expect(skin).not.toMatch(/editor-(?:control|checkbox|input)[^{}]*focus/);
       }
     });
 
@@ -330,19 +325,18 @@ describe("DataTable pass 2 craft contract", () => {
       expect(focusSelectors).toEqual(["[data-engine='modern'] select:not([data-part='editor-input']):focus"]);
     });
 
-    it("is not painted by any engine bridge select rule, so the mobile skin paints it and the native arrow is the only chevron", () => {
-      const bridge = readFileSync(
-        join(here, "../../../../../foundation/tokens/css/runtime/engines/modern/framework-bridge/index.css"),
+    it("neutralises the bridge on the chrome-less editor select (N) and wears the primitive arrow", () => {
+      const selectSkin = readFileSync(
+        join(here, "../../../../../foundation/tokens/css/runtime/engines/modern/skin/select/index.css"),
         "utf8"
       ).replace(/\/\*[\s\S]*?\*\//g, "");
-      const selectSelectors = [...bridge.matchAll(/([^{}]*)\{[^{}]*\}/g)]
-        .flatMap(([, selector]) => (selector ?? "").split(","))
-        .map((selector) => selector.replace(/\s+/g, " ").trim())
-        .filter((selector) => /\bselect\b/.test(selector));
-      expect(selectSelectors.length).toBeGreaterThan(0);
-      for (const selector of selectSelectors) {
-        expect(selector).toContain("select:not([data-part='editor-input'])");
-      }
+      const neutraliser = selectSkin.match(
+        /\.ds-select-shell\.ds-select-shell--modern select\[data-part='trigger'\]\[data-chrome='none'\] \{([^}]*)\}/
+      )?.[1] ?? "";
+      expect(neutraliser).toMatch(/background-image:\s*none;/);
+      expect(neutraliser).toMatch(/border-width:\s*0;/);
+      expect(selectSkin).toMatch(/select\[data-part='trigger'\]\[data-chrome='none'\] ~ \[data-part='native-arrow'\]/);
+      expect(modern).not.toMatch(/appearance:\s*auto/);
     });
 
     it("keeps the editing cell unclipped, so the ring is whole inside the cell padding", () => {

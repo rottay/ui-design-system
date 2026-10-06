@@ -1067,7 +1067,7 @@ describe('CollectionWorkspaceSurface', () => {
     expect(within(control!).getByText('10')).toBeInTheDocument();
     expect(within(control!).queryByText('Rows')).not.toBeInTheDocument();
     expect(within(control!).queryByText('/ page')).not.toBeInTheDocument();
-    expect(within(control!).getByRole('combobox', { name: 'Rows per page' }))
+    expect(await within(control!).findByRole('combobox', { name: 'Rows per page' }))
       .toBeInTheDocument();
   });
 
