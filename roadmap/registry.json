@@ -8637,6 +8637,11 @@
      "at": "2026-10-06 07:49",
      "by": "kimi",
      "note": "2026-10-06 — scope+API debriefed (REVIEW cadena: debrief REVISE -> v2 -> re-read §1.4 PROCEED, sesiones 20366bb5/c05207ea). L1 landed: file-manager file input drena al bare branch canónico del Input con la re-key M2; la row sale del ownership counter por nombre (2036/1336 -> 2035/1335, solo 5cb85406 removido, decrease-only). Ruling F1(a) del DT: el arm [data-part='file-input'] queda (no load-bearing; su retiro se bundleará con ARC-12 cuando P-88 alcance la bare branch) — el claim F2 del writer era falso y queda corregido aquí (dead-parts nunca la flaggearía: el stamp es literal en 3 sitios). L2 (checkbox, B1) y L3 (crumb) siguen; A1+A3 antes de L4, A2 antes de L5."
+    },
+    {
+     "at": "2026-10-06 09:50",
+     "by": "kimi",
+     "note": "2026-10-06 — L2 landed: el editor booleano de DataTable monta el Checkbox canónico (autoFocus, error→aria-invalid; teclado intacto via editor-shell). ownership 2035/1335 -> 2034/1335 (eaea 2->1); family-cut data-table 88->87 ambos contadores con mover nombrado; touch-target adjudications: rows stale editor-checkbox + file-manager file-input eliminadas (137->135). Evidencia F3: anillo de foco visible en los 6 ambientes + error pintado (sin defecto). Docs: 81aae6a en docs-engineering (P-88 law + row editor-checkbox retirada), seal movido 9239a8b4->81aae6ab con el pin de ci.yml, reseal f553e2bd (541->540 partes documentadas). RED PREEXISTENTE registrada: la suite vitest unit repo-wide falla 9-10 tests EN COMBINACION (cascade-layers/theme-iso/container-emission-budget/root-aliases/fixtures — contenido y aislamiento), reproducido en ba22b704f pre-wave; receiver: paquete propio fuera de ARC-22."
     }
    ]
   },

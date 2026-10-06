@@ -804,11 +804,11 @@
   cursor: pointer;
 }
 
-.ds-pattern-data-table.ds-engine-modern [data-part="editor-checkbox"] {
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-checkbox {
+  /* The table's governed size reaches the Checkbox primitive through its size channel,
+     unscaled once because the primitive applies the density scale itself. */
+  --ds-checkbox-sm-size: calc(var(--ds-data-table-editor-checkbox-size, var(--ds-spacing-4, 1rem)) / var(--ds-density-effective-scale, 1));
   flex-shrink: 0;
-  inline-size: var(--ds-data-table-editor-checkbox-size, var(--ds-spacing-4, 1rem));
-  block-size: var(--ds-data-table-editor-checkbox-size, var(--ds-spacing-4, 1rem));
-  cursor: pointer;
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="editor-error"] {

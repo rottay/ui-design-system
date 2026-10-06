@@ -13,6 +13,7 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import type { EditableConfig } from '@/foundation/contracts/runtime/components/patterns/core';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import ModernCheckbox from '../../../../../../primitives/inputs/checkbox/engines/modern';
 
 const SAVE_FAILED_FALLBACK = 'Unable to save this change.';
 
@@ -169,9 +170,9 @@ export function InlineCellEditor<T>({
 
   // Geometry (width, padding, font, error anchoring) lives in the modern
   // engine skin keyed on data-part='editor-shell'/'editor-input'/'editor-
-  // error'/'editor-checkbox'. Paint (border rest/error, radius, background,
-  // color, outline, accent-color) stays in the agnostic data-table-mobile
-  // skin, keyed on data-part='editor-input' and the data-invalid stamp.
+  // error'. Paint (border rest/error, radius, background, color, outline)
+  // stays in the agnostic data-table-mobile skin, keyed on 'editor-input' and
+  // data-invalid. The checkbox is the Checkbox primitive, painted by its skin.
 
   // Custom editor
   if (editorType === 'custom' && config.render) {
@@ -194,21 +195,21 @@ export function InlineCellEditor<T>({
     return (
       <div
         data-part="editor-shell"
+        onKeyDown={handleKeyDown}
         onClick={(e) => e.stopPropagation()}
       >
-        <input
-          ref={inputRef as React.RefObject<HTMLInputElement>}
-          type="checkbox"
-          data-part="editor-checkbox"
+        <ModernCheckbox
+          className="ds-data-table__editor-checkbox"
+          size="sm"
           aria-label={accessibleName}
-          aria-invalid={error ? true : undefined}
+          error={Boolean(error)}
+          autoFocus
           checked={Boolean(editValue)}
-          onChange={(e) => {
-            setEditValue(e.target.checked);
+          onChange={(checked) => {
+            setEditValue(checked);
             // Checkbox saves immediately on change
-            void saveValue(e.target.checked);
+            void saveValue(checked);
           }}
-          onKeyDown={handleKeyDown}
         />
         {/* The checkbox saves on toggle, so a rejected save has no other tell:
             without this node the failure is silent and never announced. */}

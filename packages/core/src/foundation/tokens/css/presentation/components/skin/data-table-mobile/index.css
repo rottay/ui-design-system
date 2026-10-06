@@ -54,14 +54,11 @@
   border: 1.5px solid var(--ds-color-error);
 }
 
-/* ---- checkbox editor + error message ---- */
-.ds-pattern-data-table [data-part="editor-checkbox"] {
-  accent-color: var(--ds-color-primary);
-}
+/* ---- error message ---- */
 /* The editor controls are raw form elements: no primitive skin paints their
    focus, so each wears the tenant focus signature here. */
 .ds-pattern-data-table
-  :is([data-part="editor-input"], [data-part="editor-checkbox"]):is([data-state~="focus-visible"], :focus-visible) {
+  [data-part="editor-input"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
@@ -552,7 +549,7 @@
 
 @media (forced-colors: active) {
   .ds-pattern-data-table
-    :is([data-part="editor-input"], [data-part="editor-checkbox"]):is([data-state~="focus-visible"], :focus-visible) {
+    [data-part="editor-input"]:is([data-state~="focus-visible"], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;

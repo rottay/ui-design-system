@@ -23,7 +23,7 @@ const ROWS: Row[] = [
 
 async function openEditor(
   container: HTMLElement,
-  part: string,
+  selector: string,
 ): Promise<HTMLElement> {
   const cell = await waitFor(() => {
     const el = container.querySelector('td[data-editable="true"]');
@@ -32,7 +32,7 @@ async function openEditor(
   });
   fireEvent.doubleClick(cell);
   return await waitFor(() => {
-    const el = container.querySelector(`[data-part="${part}"]`);
+    const el = container.querySelector(selector);
     expect(el).not.toBeNull();
     return el as HTMLElement;
   });
@@ -68,7 +68,7 @@ describe("InlineCellEditor error surfacing (modern)", () => {
 
     const checkbox = (await openEditor(
       container,
-      "editor-checkbox",
+      'td[data-editing="true"] .ds-data-table__editor-checkbox input[type="checkbox"]',
     )) as HTMLInputElement;
     expect(container.querySelector('[data-part="editor-error"]')).toBeNull();
     expect(checkbox.getAttribute("aria-invalid")).toBeNull();
@@ -117,7 +117,7 @@ describe("InlineCellEditor error surfacing (modern)", () => {
 
     const select = (await openEditor(
       container,
-      "editor-input",
+      '[data-part="editor-input"]',
     )) as HTMLSelectElement;
 
     fireEvent.change(select, { target: { value: "pro" } });

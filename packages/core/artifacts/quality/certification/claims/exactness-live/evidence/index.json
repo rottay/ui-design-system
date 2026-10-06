@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "81482ee3a2aa708f2f6c3ba7ecb91a6fb1df75bd72c3f07fabf2beb44539eb47",
+    "authorityDigest": "790811c8b9c67c2636439039050ce4544e261261db7c09b4bfd43d2b4fa3e713",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "9239a8b418dc8693d2b9531a3bfc84d383895d30",
+    "documentationRevision": "81aae6abc3d2768e35695f411b25be0c2a39a596",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -125,8 +125,8 @@
           "claim-census",
           "documentation-seal"
         ],
-        "bytes": 23788,
-        "sha256": "2503f4e0aa990e606ce57e3d1f6978604015874d26b325bdae76ec10a8aef666"
+        "bytes": 25309,
+        "sha256": "08c1e8820d43f0a94f3e505dd0e87e2d50e1e2e33bda357702e2b2b7770f8943"
       },
       {
         "path": "docs-engineering/engineering/design-system/components/surfaces/README.md",
@@ -187,8 +187,8 @@
           "data-part-corpus",
           "documentation-seal"
         ],
-        "bytes": 178924,
-        "sha256": "cc52dfdcece8270baeea0de694a85f7d463d4e84ed5ef4f56f1c97a4fc13833d"
+        "bytes": 181874,
+        "sha256": "ec771d2bebb0d3c9ab42caf13d7ce23b06e2ce6636234b63acad994fcdd31024"
       },
       {
         "path": "docs-engineering/engineering/design-system/runtime/tenancy/README.md",
@@ -223,7 +223,7 @@
           "workspace-toolchain"
         ],
         "bytes": 27490,
-        "sha256": "81c77ff2a7254f5cfde418aec9e43b37d0013fd72166cf82ff1eb683d0987995"
+        "sha256": "1dbc334cc7650b1a1b72f7b75c70a74900f061f91115421566d2faa2d2197d96"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5704834,
-        "sha256": "c2035726801d083c6c62370696dc4715281a02972559d3414a3079577622e761"
+        "bytes": 5704766,
+        "sha256": "b3aca27fa7c26e9d8ab4cb8ca41788fc887003613e3b1c43c750bf1a62136ce3"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5070810,
-        "sha256": "73a81e70af7722e68346d5b38d12d3d051255ffdfabc7ca752da7ef68d9dae15"
+        "bytes": 5070742,
+        "sha256": "b26d0f76cb362e26b35da4876ded5733d6f5e70b1bf920b1fe61f218b3715780"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5032003,
-        "sha256": "59aa30e2043b089649e2a71d230be41ddb815ee6b60b749c0db1aeaf1228618c"
+        "bytes": 5031935,
+        "sha256": "6c4abe634b10842d30874bb5d35e90daf4718e0f83cf1ff6ae7e69c334113b02"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5031263,
-        "sha256": "b5d78cc2848f26b2d400b2b8666a2e9a09caf70ddd41d6be5853c2f88210fa8a"
+        "bytes": 5031195,
+        "sha256": "69ecf92bda0dbd12858ada257476ed4f16765429a21a8a6861dd2bad8d175a9e"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -332,7 +332,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "67b31ba03c045337eb8f986c828ed7b67545d16d2b931a6184460560dd750910"
+        "sha256": "aaa64c0e01305ce40065ddb62db813309ff2e5807784611d963168b124abff12"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -1412,8 +1412,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 9455,
-        "sha256": "f60321094e7506d44159be609d481b21edd36d07ab9358f04170e6d2c32f21da"
+        "bytes": 9499,
+        "sha256": "ac456aabe69dab9b77da3cda30286a4fe033f89ec8ff34009747bd111b0db285"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/index.tsx",
@@ -1561,12 +1561,20 @@
         "sha256": "6581369883aaed124e8a748fcc1a9595bc75f43bf45489ef7d0204ee784c1836"
       },
       {
+        "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.cell-editor-checkbox-primitive.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5173,
+        "sha256": "43707206b4fcb36e6a8cd18da0b1e38c75b5a272a954a46a6d0d5e0697ddc5ac"
+      },
+      {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.cell-editor-error-surfacing.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 4404,
-        "sha256": "f7ac291cd2118c03bbcc8d8b58fdb1b32dbf631235e081f325d3e05117ecc118"
+        "bytes": 4470,
+        "sha256": "f2a7d353b6c6e94c1777b756f3ea25fe7a6cbef098eac5a740059b7cc04c1d88"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.cell-editor-save-failed-locale.test.tsx",
@@ -1605,8 +1613,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 18161,
-        "sha256": "8b7de1f43174ebfe5fc330fac943e7102fc679466cb0d52bbdff4d07d1c2624e"
+        "bytes": 18212,
+        "sha256": "c6617295d5fe6b1eb4e18f8321eb4422deeabdec1e9b64a4691c17de20384bcf"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.provider-locale.test.tsx",
@@ -28442,8 +28450,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 24731,
-        "sha256": "7685530934c5dec7271b6629737ec140b981217f11bfecc97947fe058fcc4ece"
+        "bytes": 24543,
+        "sha256": "1fbecc17c455d829d3a1852bd6d5687eb7ad9c7604ba736b43bf5c711bda0581"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-terminal-card-keyframes/index.css",
@@ -29948,8 +29956,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 89033,
-        "sha256": "ab7eb82cedc84f910aebe6cdd52b156d13ed2bcc7212f51b0381bbe6fd59ecaf"
+        "bytes": 89153,
+        "sha256": "8e3793bd02963a7a1e254c35de3eaea1ea0ae14e3bfda8b6ed4bc0bfaacb06d0"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css",
@@ -47755,7 +47763,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "81482ee3a2aa708f2f6c3ba7ecb91a6fb1df75bd72c3f07fabf2beb44539eb47"
+    "digest": "790811c8b9c67c2636439039050ce4544e261261db7c09b4bfd43d2b4fa3e713"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -49158,16 +49166,16 @@
           "claims": [
             "surface-profile-overrides"
           ],
-          "sha256": "2503f4e0aa990e606ce57e3d1f6978604015874d26b325bdae76ec10a8aef666",
+          "sha256": "08c1e8820d43f0a94f3e505dd0e87e2d50e1e2e33bda357702e2b2b7770f8943",
           "blocks": [
             {
               "claimId": "surface-profile-overrides",
-              "line": 247,
+              "line": 272,
               "sha256": "1d9f7f72afb78b9f32a880ed0682034c1b1a8f8d44cac0fe9761a325e54960df"
             },
             {
               "claimId": "surface-profile-overrides",
-              "line": 245,
+              "line": 270,
               "sha256": "e17d652eb1f683e087cb8f1feb30a91c8c7d2d7024fd76ea85ccb999946a9aef"
             }
           ]
@@ -49329,9 +49337,9 @@
     ],
     "documentation": {
       "path": "docs-engineering/engineering/design-system/runtime/skins/data-part-contracts/README.md",
-      "sha256": "cc52dfdcece8270baeea0de694a85f7d463d4e84ed5ef4f56f1c97a4fc13833d"
+      "sha256": "ec771d2bebb0d3c9ab42caf13d7ce23b06e2ce6636234b63acad994fcdd31024"
     },
-    "documentedEntries": 541,
+    "documentedEntries": 540,
     "inspectedSourceFiles": 390,
     "unresolvedStaticSinks": [],
     "unresolvedPolicy": {
@@ -57717,28 +57725,10 @@
           "line": 219
         }
       ],
-      "editor-checkbox": [
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 58
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 63
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 554
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 807
-        }
-      ],
       "editor-error": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 69
+          "line": 66
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -57772,11 +57762,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 63
+          "line": 60
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 554
+          "line": 551
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -90023,19 +90013,19 @@
       "state-icon-tile": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 410
+          "line": 407
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 421
+          "line": 418
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 421
+          "line": 418
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 425
+          "line": 422
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -98075,7 +98065,7 @@
       {
         "section": "Table",
         "part": "table",
-        "documentationLine": 114,
+        "documentationLine": 154,
         "engines": [
           "modern",
           "rustic"
@@ -98114,7 +98104,7 @@
       {
         "section": "Table",
         "part": "header-cell",
-        "documentationLine": 115,
+        "documentationLine": 155,
         "engines": [
           "modern",
           "rustic"
@@ -98210,7 +98200,7 @@
       {
         "section": "Table",
         "part": "sort-indicator",
-        "documentationLine": 116,
+        "documentationLine": 156,
         "engines": [
           "modern",
           "rustic"
@@ -98249,7 +98239,7 @@
       {
         "section": "Table",
         "part": "resize-handle",
-        "documentationLine": 117,
+        "documentationLine": 157,
         "engines": [
           "modern",
           "rustic"
@@ -98293,7 +98283,7 @@
       {
         "section": "Table",
         "part": "filter-row",
-        "documentationLine": 118,
+        "documentationLine": 158,
         "engines": [
           "modern",
           "rustic"
@@ -98332,7 +98322,7 @@
       {
         "section": "Table",
         "part": "field",
-        "documentationLine": 119,
+        "documentationLine": 159,
         "engines": [
           "modern",
           "rustic"
@@ -98433,7 +98423,7 @@
       {
         "section": "Table",
         "part": "selection-control",
-        "documentationLine": 120,
+        "documentationLine": 160,
         "engines": [
           "modern",
           "rustic"
@@ -98503,7 +98493,7 @@
       {
         "section": "Table",
         "part": "empty-cell",
-        "documentationLine": 121,
+        "documentationLine": 161,
         "engines": [
           "modern",
           "rustic"
@@ -98542,7 +98532,7 @@
       {
         "section": "Table",
         "part": "row",
-        "documentationLine": 122,
+        "documentationLine": 162,
         "engines": [
           "modern",
           "rustic"
@@ -98586,7 +98576,7 @@
       {
         "section": "Table",
         "part": "expand-button",
-        "documentationLine": 123,
+        "documentationLine": 163,
         "engines": [
           "modern",
           "rustic"
@@ -98630,7 +98620,7 @@
       {
         "section": "Table",
         "part": "expand-indicator",
-        "documentationLine": 124,
+        "documentationLine": 164,
         "engines": [
           "modern"
         ],
@@ -98655,7 +98645,7 @@
       {
         "section": "Table",
         "part": "cell",
-        "documentationLine": 125,
+        "documentationLine": 165,
         "engines": [
           "modern",
           "rustic"
@@ -98777,7 +98767,7 @@
       {
         "section": "Table",
         "part": "expanded-row",
-        "documentationLine": 126,
+        "documentationLine": 166,
         "engines": [
           "modern",
           "rustic"
@@ -98816,7 +98806,7 @@
       {
         "section": "Table",
         "part": "loading-overlay",
-        "documentationLine": 127,
+        "documentationLine": 167,
         "engines": [
           "modern",
           "rustic"
@@ -98855,7 +98845,7 @@
       {
         "section": "Table",
         "part": "spinner",
-        "documentationLine": 128,
+        "documentationLine": 168,
         "engines": [
           "modern",
           "rustic"
@@ -98894,7 +98884,7 @@
       {
         "section": "Table",
         "part": "footer",
-        "documentationLine": 129,
+        "documentationLine": 169,
         "engines": [
           "modern",
           "rustic"
@@ -98933,7 +98923,7 @@
       {
         "section": "Table",
         "part": "pagination-range",
-        "documentationLine": 130,
+        "documentationLine": 170,
         "engines": [
           "modern",
           "rustic"
@@ -98972,7 +98962,7 @@
       {
         "section": "Table",
         "part": "pagination-button",
-        "documentationLine": 131,
+        "documentationLine": 171,
         "engines": [
           "modern",
           "rustic"
@@ -99029,7 +99019,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "root",
-        "documentationLine": 144,
+        "documentationLine": 184,
         "engines": [
           "shared"
         ],
@@ -99059,7 +99049,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "title-pill",
-        "documentationLine": 145,
+        "documentationLine": 185,
         "engines": [
           "shared"
         ],
@@ -99089,7 +99079,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "subtitle",
-        "documentationLine": 146,
+        "documentationLine": 186,
         "engines": [
           "shared"
         ],
@@ -99119,7 +99109,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "presets-pill",
-        "documentationLine": 147,
+        "documentationLine": 187,
         "engines": [
           "shared"
         ],
@@ -99149,7 +99139,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "grid",
-        "documentationLine": 148,
+        "documentationLine": 188,
         "engines": [
           "shared"
         ],
@@ -99179,7 +99169,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "preset-chip",
-        "documentationLine": 149,
+        "documentationLine": 189,
         "engines": [
           "shared"
         ],
@@ -99209,7 +99199,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "preset-chip-icon",
-        "documentationLine": 150,
+        "documentationLine": 190,
         "engines": [
           "shared"
         ],
@@ -99239,7 +99229,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "signal",
-        "documentationLine": 151,
+        "documentationLine": 191,
         "engines": [
           "shared"
         ],
@@ -99269,7 +99259,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "signal-label",
-        "documentationLine": 152,
+        "documentationLine": 192,
         "engines": [
           "shared"
         ],
@@ -99299,7 +99289,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "filter-card",
-        "documentationLine": 153,
+        "documentationLine": 193,
         "engines": [
           "shared"
         ],
@@ -99329,7 +99319,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "filter-card-icon",
-        "documentationLine": 154,
+        "documentationLine": 194,
         "engines": [
           "shared"
         ],
@@ -99359,7 +99349,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "filter-card-label",
-        "documentationLine": 155,
+        "documentationLine": 195,
         "engines": [
           "shared"
         ],
@@ -99389,7 +99379,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "filter-card-description",
-        "documentationLine": 156,
+        "documentationLine": 196,
         "engines": [
           "shared"
         ],
@@ -99419,7 +99409,7 @@
       {
         "section": "FieldFiltersPanel",
         "part": "control-slot",
-        "documentationLine": 157,
+        "documentationLine": 197,
         "engines": [
           "shared"
         ],
@@ -99449,7 +99439,7 @@
       {
         "section": "FilterPanel",
         "part": "root",
-        "documentationLine": 184,
+        "documentationLine": 224,
         "engines": [
           "modern",
           "rustic"
@@ -99501,7 +99491,7 @@
       {
         "section": "FilterPanel",
         "part": "header",
-        "documentationLine": 185,
+        "documentationLine": 225,
         "engines": [
           "modern",
           "rustic"
@@ -99540,7 +99530,7 @@
       {
         "section": "FilterPanel",
         "part": "title",
-        "documentationLine": 186,
+        "documentationLine": 226,
         "engines": [
           "modern",
           "rustic"
@@ -99579,7 +99569,7 @@
       {
         "section": "FilterPanel",
         "part": "active-count-badge",
-        "documentationLine": 187,
+        "documentationLine": 227,
         "engines": [
           "modern",
           "rustic"
@@ -99623,7 +99613,7 @@
       {
         "section": "FilterPanel",
         "part": "collapse-toggle",
-        "documentationLine": 188,
+        "documentationLine": 228,
         "engines": [
           "modern",
           "rustic"
@@ -99667,7 +99657,7 @@
       {
         "section": "FilterPanel",
         "part": "content",
-        "documentationLine": 189,
+        "documentationLine": 229,
         "engines": [
           "modern"
         ],
@@ -99692,7 +99682,7 @@
       {
         "section": "FilterPanel",
         "part": "field-row",
-        "documentationLine": 190,
+        "documentationLine": 230,
         "engines": [
           "modern",
           "rustic"
@@ -99731,7 +99721,7 @@
       {
         "section": "FilterPanel",
         "part": "field-label",
-        "documentationLine": 191,
+        "documentationLine": 231,
         "engines": [
           "modern",
           "rustic"
@@ -99770,7 +99760,7 @@
       {
         "section": "FilterPanel",
         "part": "input",
-        "documentationLine": 192,
+        "documentationLine": 232,
         "engines": [
           "modern",
           "rustic"
@@ -99978,7 +99968,7 @@
       {
         "section": "FilterPanel",
         "part": "range-separator",
-        "documentationLine": 193,
+        "documentationLine": 233,
         "engines": [
           "modern",
           "rustic"
@@ -100043,7 +100033,7 @@
       {
         "section": "FilterPanel",
         "part": "option-icon-badge",
-        "documentationLine": 194,
+        "documentationLine": 234,
         "engines": [
           "modern"
         ],
@@ -100068,7 +100058,7 @@
       {
         "section": "FilterPanel",
         "part": "loading-spinner",
-        "documentationLine": 195,
+        "documentationLine": 235,
         "engines": [
           "modern"
         ],
@@ -100098,7 +100088,7 @@
       {
         "section": "FilterPanel",
         "part": "reset-button",
-        "documentationLine": 196,
+        "documentationLine": 236,
         "engines": [
           "modern",
           "rustic"
@@ -100142,7 +100132,7 @@
       {
         "section": "FilterPanel",
         "part": "apply-button",
-        "documentationLine": 197,
+        "documentationLine": 237,
         "engines": [
           "modern",
           "rustic"
@@ -100186,7 +100176,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "root",
-        "documentationLine": 216,
+        "documentationLine": 256,
         "engines": [
           "shared"
         ],
@@ -100234,7 +100224,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "close",
-        "documentationLine": 217,
+        "documentationLine": 257,
         "engines": [
           "shared"
         ],
@@ -100264,7 +100254,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "custom-sticky-card",
-        "documentationLine": 218,
+        "documentationLine": 258,
         "engines": [
           "shared"
         ],
@@ -100294,7 +100284,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "fallback-empty",
-        "documentationLine": 219,
+        "documentationLine": 259,
         "engines": [
           "shared"
         ],
@@ -100324,7 +100314,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "fallback-boolean",
-        "documentationLine": 220,
+        "documentationLine": 260,
         "engines": [
           "shared"
         ],
@@ -100354,7 +100344,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "fallback-string",
-        "documentationLine": 221,
+        "documentationLine": 261,
         "engines": [
           "shared"
         ],
@@ -100384,7 +100374,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "identity-card",
-        "documentationLine": 222,
+        "documentationLine": 262,
         "engines": [
           "shared"
         ],
@@ -100414,7 +100404,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "identity-card-accent",
-        "documentationLine": 223,
+        "documentationLine": 263,
         "engines": [
           "shared"
         ],
@@ -100444,7 +100434,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "identity-title",
-        "documentationLine": 224,
+        "documentationLine": 264,
         "engines": [
           "shared"
         ],
@@ -100474,7 +100464,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "identity-subtitle",
-        "documentationLine": 225,
+        "documentationLine": 265,
         "engines": [
           "shared"
         ],
@@ -100504,7 +100494,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "match-reason-panel",
-        "documentationLine": 226,
+        "documentationLine": 266,
         "engines": [
           "shared"
         ],
@@ -100534,7 +100524,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "match-reason-icon",
-        "documentationLine": 227,
+        "documentationLine": 267,
         "engines": [
           "shared"
         ],
@@ -100559,7 +100549,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "match-reason-eyebrow",
-        "documentationLine": 228,
+        "documentationLine": 268,
         "engines": [
           "shared"
         ],
@@ -100589,7 +100579,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "match-reason-body",
-        "documentationLine": 229,
+        "documentationLine": 269,
         "engines": [
           "shared"
         ],
@@ -100619,7 +100609,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "snapshot-card",
-        "documentationLine": 230,
+        "documentationLine": 270,
         "engines": [
           "shared"
         ],
@@ -100649,7 +100639,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "snapshot-header",
-        "documentationLine": 231,
+        "documentationLine": 271,
         "engines": [
           "shared"
         ],
@@ -100679,7 +100669,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "snapshot-title",
-        "documentationLine": 232,
+        "documentationLine": 272,
         "engines": [
           "shared"
         ],
@@ -100709,7 +100699,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "snapshot-subtitle",
-        "documentationLine": 233,
+        "documentationLine": 273,
         "engines": [
           "shared"
         ],
@@ -100739,7 +100729,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "snapshot-row",
-        "documentationLine": 234,
+        "documentationLine": 274,
         "engines": [
           "shared"
         ],
@@ -100769,7 +100759,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "snapshot-row-label",
-        "documentationLine": 235,
+        "documentationLine": 275,
         "engines": [
           "shared"
         ],
@@ -100799,7 +100789,7 @@
       {
         "section": "SelectionPreviewRail",
         "part": "snapshot-empty",
-        "documentationLine": 236,
+        "documentationLine": 276,
         "engines": [
           "shared"
         ],
@@ -100829,7 +100819,7 @@
       {
         "section": "DetailPanel",
         "part": "root",
-        "documentationLine": 258,
+        "documentationLine": 298,
         "engines": [
           "modern",
           "rustic"
@@ -100894,7 +100884,7 @@
       {
         "section": "DetailPanel",
         "part": "back-button",
-        "documentationLine": 259,
+        "documentationLine": 299,
         "engines": [
           "modern",
           "rustic"
@@ -100933,7 +100923,7 @@
       {
         "section": "DetailPanel",
         "part": "breadcrumbs",
-        "documentationLine": 260,
+        "documentationLine": 300,
         "engines": [
           "modern",
           "rustic"
@@ -100972,7 +100962,7 @@
       {
         "section": "DetailPanel",
         "part": "breadcrumb-link",
-        "documentationLine": 261,
+        "documentationLine": 301,
         "engines": [
           "modern",
           "rustic"
@@ -101016,7 +101006,7 @@
       {
         "section": "DetailPanel",
         "part": "breadcrumb-separator",
-        "documentationLine": 262,
+        "documentationLine": 302,
         "engines": [
           "modern",
           "rustic"
@@ -101055,7 +101045,7 @@
       {
         "section": "DetailPanel",
         "part": "breadcrumb-current",
-        "documentationLine": 263,
+        "documentationLine": 303,
         "engines": [
           "modern"
         ],
@@ -101080,7 +101070,7 @@
       {
         "section": "DetailPanel",
         "part": "header",
-        "documentationLine": 264,
+        "documentationLine": 304,
         "engines": [
           "modern",
           "rustic"
@@ -101119,7 +101109,7 @@
       {
         "section": "DetailPanel",
         "part": "title",
-        "documentationLine": 265,
+        "documentationLine": 305,
         "engines": [
           "modern",
           "rustic"
@@ -101158,7 +101148,7 @@
       {
         "section": "DetailPanel",
         "part": "status-badge",
-        "documentationLine": 266,
+        "documentationLine": 306,
         "engines": [
           "modern",
           "rustic"
@@ -101197,7 +101187,7 @@
       {
         "section": "DetailPanel",
         "part": "subtitle",
-        "documentationLine": 267,
+        "documentationLine": 307,
         "engines": [
           "modern",
           "rustic"
@@ -101236,7 +101226,7 @@
       {
         "section": "DetailPanel",
         "part": "action-button",
-        "documentationLine": 268,
+        "documentationLine": 308,
         "engines": [
           "modern",
           "rustic"
@@ -101275,7 +101265,7 @@
       {
         "section": "DetailPanel",
         "part": "action-spinner",
-        "documentationLine": 269,
+        "documentationLine": 309,
         "engines": [
           "modern"
         ],
@@ -101300,7 +101290,7 @@
       {
         "section": "DetailPanel",
         "part": "tab-list",
-        "documentationLine": 270,
+        "documentationLine": 310,
         "engines": [
           "modern",
           "rustic"
@@ -101339,7 +101329,7 @@
       {
         "section": "DetailPanel",
         "part": "tab-button",
-        "documentationLine": 271,
+        "documentationLine": 311,
         "engines": [
           "modern",
           "rustic"
@@ -101378,7 +101368,7 @@
       {
         "section": "DetailPanel",
         "part": "tab-badge",
-        "documentationLine": 272,
+        "documentationLine": 312,
         "engines": [
           "modern",
           "rustic"
@@ -101417,7 +101407,7 @@
       {
         "section": "DetailPanel",
         "part": "tab-panel",
-        "documentationLine": 273,
+        "documentationLine": 313,
         "engines": [
           "modern",
           "rustic"
@@ -101456,7 +101446,7 @@
       {
         "section": "DetailPanel",
         "part": "sidebar",
-        "documentationLine": 274,
+        "documentationLine": 314,
         "engines": [
           "modern",
           "rustic"
@@ -101495,7 +101485,7 @@
       {
         "section": "DetailPanel",
         "part": "footer",
-        "documentationLine": 275,
+        "documentationLine": 315,
         "engines": [
           "modern",
           "rustic"
@@ -101534,7 +101524,7 @@
       {
         "section": "DataTable",
         "part": "root",
-        "documentationLine": 298,
+        "documentationLine": 338,
         "engines": [
           "classic",
           "modern",
@@ -101587,7 +101577,7 @@
       {
         "section": "DataTable",
         "part": "card",
-        "documentationLine": 299,
+        "documentationLine": 339,
         "engines": [
           "modern"
         ],
@@ -101612,7 +101602,7 @@
       {
         "section": "DataTable",
         "part": "scroll",
-        "documentationLine": 300,
+        "documentationLine": 340,
         "engines": [
           "modern"
         ],
@@ -101637,7 +101627,7 @@
       {
         "section": "DataTable",
         "part": "skeleton-row",
-        "documentationLine": 301,
+        "documentationLine": 341,
         "engines": [
           "shared"
         ],
@@ -101662,7 +101652,7 @@
       {
         "section": "DataTable",
         "part": "skeleton-cell",
-        "documentationLine": 302,
+        "documentationLine": 342,
         "engines": [
           "shared"
         ],
@@ -101687,7 +101677,7 @@
       {
         "section": "DataTable",
         "part": "table",
-        "documentationLine": 303,
+        "documentationLine": 343,
         "engines": [
           "modern",
           "rustic"
@@ -101726,7 +101716,7 @@
       {
         "section": "DataTable",
         "part": "table-head",
-        "documentationLine": 304,
+        "documentationLine": 344,
         "engines": [
           "modern"
         ],
@@ -101751,7 +101741,7 @@
       {
         "section": "DataTable",
         "part": "header-row",
-        "documentationLine": 305,
+        "documentationLine": 345,
         "engines": [
           "modern",
           "rustic"
@@ -101790,7 +101780,7 @@
       {
         "section": "DataTable",
         "part": "header-cell",
-        "documentationLine": 306,
+        "documentationLine": 346,
         "engines": [
           "modern",
           "rustic"
@@ -101912,7 +101902,7 @@
       {
         "section": "DataTable",
         "part": "drag-grip",
-        "documentationLine": 307,
+        "documentationLine": 347,
         "engines": [
           "modern"
         ],
@@ -101942,7 +101932,7 @@
       {
         "section": "DataTable",
         "part": "sort-icon",
-        "documentationLine": 308,
+        "documentationLine": 348,
         "engines": [
           "modern"
         ],
@@ -101967,7 +101957,7 @@
       {
         "section": "DataTable",
         "part": "drop-indicator",
-        "documentationLine": 309,
+        "documentationLine": 349,
         "engines": [
           "modern",
           "rustic"
@@ -102006,7 +101996,7 @@
       {
         "section": "DataTable",
         "part": "resize-handle",
-        "documentationLine": 310,
+        "documentationLine": 350,
         "engines": [
           "modern",
           "rustic"
@@ -102050,7 +102040,7 @@
       {
         "section": "DataTable",
         "part": "resize-handle-bar",
-        "documentationLine": 311,
+        "documentationLine": 351,
         "engines": [
           "modern",
           "rustic"
@@ -102089,7 +102079,7 @@
       {
         "section": "DataTable",
         "part": "body-row",
-        "documentationLine": 312,
+        "documentationLine": 352,
         "engines": [
           "modern",
           "rustic"
@@ -102133,7 +102123,7 @@
       {
         "section": "DataTable",
         "part": "selection-cell",
-        "documentationLine": 313,
+        "documentationLine": 353,
         "engines": [
           "modern",
           "rustic"
@@ -102185,7 +102175,7 @@
       {
         "section": "DataTable",
         "part": "expand-cell",
-        "documentationLine": 314,
+        "documentationLine": 354,
         "engines": [
           "modern",
           "rustic"
@@ -102237,7 +102227,7 @@
       {
         "section": "DataTable",
         "part": "expand-button",
-        "documentationLine": 315,
+        "documentationLine": 355,
         "engines": [
           "modern",
           "rustic"
@@ -102281,7 +102271,7 @@
       {
         "section": "DataTable",
         "part": "data-cell",
-        "documentationLine": 316,
+        "documentationLine": 356,
         "engines": [
           "modern",
           "rustic"
@@ -102338,7 +102328,7 @@
       {
         "section": "DataTable",
         "part": "actions-cell",
-        "documentationLine": 317,
+        "documentationLine": 357,
         "engines": [
           "modern",
           "rustic"
@@ -102390,7 +102380,7 @@
       {
         "section": "DataTable",
         "part": "inline-edit-action",
-        "documentationLine": 318,
+        "documentationLine": 358,
         "engines": [
           "modern"
         ],
@@ -102438,7 +102428,7 @@
       {
         "section": "DataTable",
         "part": "expanded-row",
-        "documentationLine": 319,
+        "documentationLine": 359,
         "engines": [
           "modern"
         ],
@@ -102476,7 +102466,7 @@
       {
         "section": "DataTable",
         "part": "expanded-row-content",
-        "documentationLine": 320,
+        "documentationLine": 360,
         "engines": [
           "modern",
           "rustic"
@@ -102528,7 +102518,7 @@
       {
         "section": "DataTable",
         "part": "group-header-row",
-        "documentationLine": 321,
+        "documentationLine": 361,
         "engines": [
           "modern"
         ],
@@ -102553,7 +102543,7 @@
       {
         "section": "DataTable",
         "part": "group-header-cell",
-        "documentationLine": 322,
+        "documentationLine": 362,
         "engines": [
           "modern"
         ],
@@ -102578,7 +102568,7 @@
       {
         "section": "DataTable",
         "part": "group-header-chevron",
-        "documentationLine": 323,
+        "documentationLine": 363,
         "engines": [
           "modern"
         ],
@@ -102603,7 +102593,7 @@
       {
         "section": "DataTable",
         "part": "group-header-count-pill",
-        "documentationLine": 324,
+        "documentationLine": 364,
         "engines": [
           "modern"
         ],
@@ -102628,7 +102618,7 @@
       {
         "section": "DataTable",
         "part": "group-header-aggregate",
-        "documentationLine": 325,
+        "documentationLine": 365,
         "engines": [
           "modern"
         ],
@@ -102653,7 +102643,7 @@
       {
         "section": "DataTable",
         "part": "pagination-bar",
-        "documentationLine": 326,
+        "documentationLine": 366,
         "engines": [
           "modern",
           "rustic"
@@ -102692,7 +102682,7 @@
       {
         "section": "DataTable",
         "part": "pagination-nav-button",
-        "documentationLine": 327,
+        "documentationLine": 367,
         "engines": [
           "modern"
         ],
@@ -102740,7 +102730,7 @@
       {
         "section": "DataTable",
         "part": "pagination-page-button",
-        "documentationLine": 328,
+        "documentationLine": 368,
         "engines": [
           "modern"
         ],
@@ -102770,7 +102760,7 @@
       {
         "section": "DataTable",
         "part": "pagination-ellipsis",
-        "documentationLine": 329,
+        "documentationLine": 369,
         "engines": [
           "modern"
         ],
@@ -102795,7 +102785,7 @@
       {
         "section": "DataTable",
         "part": "bulk-bar",
-        "documentationLine": 330,
+        "documentationLine": 370,
         "engines": [
           "modern",
           "rustic"
@@ -102834,7 +102824,7 @@
       {
         "section": "DataTable",
         "part": "bulk-bar-count",
-        "documentationLine": 331,
+        "documentationLine": 371,
         "engines": [
           "modern"
         ],
@@ -102859,7 +102849,7 @@
       {
         "section": "DataTable",
         "part": "bulk-bar-action",
-        "documentationLine": 332,
+        "documentationLine": 372,
         "engines": [
           "modern",
           "rustic"
@@ -102903,7 +102893,7 @@
       {
         "section": "DataTable",
         "part": "empty-state",
-        "documentationLine": 333,
+        "documentationLine": 373,
         "engines": [
           "modern",
           "rustic"
@@ -102942,7 +102932,7 @@
       {
         "section": "DataTable",
         "part": "state-icon-tile",
-        "documentationLine": 334,
+        "documentationLine": 374,
         "engines": [
           "modern",
           "shared"
@@ -103017,7 +103007,7 @@
       {
         "section": "DataTable",
         "part": "state-title",
-        "documentationLine": 335,
+        "documentationLine": 375,
         "engines": [
           "modern"
         ],
@@ -103055,7 +103045,7 @@
       {
         "section": "DataTable",
         "part": "state-description",
-        "documentationLine": 336,
+        "documentationLine": 376,
         "engines": [
           "modern"
         ],
@@ -103093,7 +103083,7 @@
       {
         "section": "DataTable",
         "part": "virtual-spacer",
-        "documentationLine": 337,
+        "documentationLine": 377,
         "engines": [
           "modern"
         ],
@@ -103156,33 +103146,8 @@
       },
       {
         "section": "DataTable",
-        "part": "editor-checkbox",
-        "documentationLine": 361,
-        "engines": [
-          "modern"
-        ],
-        "sourceStamps": [
-          {
-            "part": "editor-checkbox",
-            "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 202,
-            "syntax": "jsx-intrinsic",
-            "sinkKind": "intrinsic-dom",
-            "provenance": {
-              "tagName": "input"
-            },
-            "staticValues": [
-              "editor-checkbox"
-            ]
-          }
-        ],
-        "skinSelectorCorpusKey": "editor-checkbox",
-        "skinSelectorCount": 4
-      },
-      {
-        "section": "DataTable",
         "part": "editor-input",
-        "documentationLine": 362,
+        "documentationLine": 401,
         "engines": [
           "modern"
         ],
@@ -103190,7 +103155,7 @@
           {
             "part": "editor-input",
             "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 231,
+            "line": 232,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -103203,7 +103168,7 @@
           {
             "part": "editor-input",
             "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 267,
+            "line": 268,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -103220,7 +103185,7 @@
       {
         "section": "DataTable",
         "part": "editor-error",
-        "documentationLine": 363,
+        "documentationLine": 402,
         "engines": [
           "modern"
         ],
@@ -103228,7 +103193,7 @@
           {
             "part": "editor-error",
             "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 216,
+            "line": 217,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -103241,7 +103206,7 @@
           {
             "part": "editor-error",
             "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 249,
+            "line": 250,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -103254,7 +103219,7 @@
           {
             "part": "editor-error",
             "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 283,
+            "line": 284,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -103271,7 +103236,7 @@
       {
         "section": "FormField",
         "part": "root",
-        "documentationLine": 415,
+        "documentationLine": 458,
         "engines": [
           "modern",
           "rustic"
@@ -103310,7 +103275,7 @@
       {
         "section": "FormField",
         "part": "label",
-        "documentationLine": 416,
+        "documentationLine": 459,
         "engines": [
           "modern",
           "rustic"
@@ -103349,7 +103314,7 @@
       {
         "section": "FormField",
         "part": "required-mark",
-        "documentationLine": 417,
+        "documentationLine": 460,
         "engines": [
           "modern",
           "rustic"
@@ -103388,7 +103353,7 @@
       {
         "section": "FormField",
         "part": "help-text",
-        "documentationLine": 418,
+        "documentationLine": 461,
         "engines": [
           "modern",
           "rustic"
@@ -103427,7 +103392,7 @@
       {
         "section": "FormField",
         "part": "error-message",
-        "documentationLine": 419,
+        "documentationLine": 462,
         "engines": [
           "modern",
           "rustic"
@@ -103466,7 +103431,7 @@
       {
         "section": "Textarea",
         "part": "root",
-        "documentationLine": 431,
+        "documentationLine": 474,
         "engines": [
           "modern",
           "rustic"
@@ -103510,7 +103475,7 @@
       {
         "section": "Textarea",
         "part": "count",
-        "documentationLine": 432,
+        "documentationLine": 475,
         "engines": [
           "modern",
           "rustic"
@@ -103549,7 +103514,7 @@
       {
         "section": "TagInput",
         "part": "root",
-        "documentationLine": 450,
+        "documentationLine": 493,
         "engines": [
           "modern",
           "rustic"
@@ -103593,7 +103558,7 @@
       {
         "section": "TagInput",
         "part": "tag-chip",
-        "documentationLine": 451,
+        "documentationLine": 494,
         "engines": [
           "modern",
           "rustic"
@@ -103637,7 +103602,7 @@
       {
         "section": "TagInput",
         "part": "tag-remove",
-        "documentationLine": 452,
+        "documentationLine": 495,
         "engines": [
           "rustic"
         ],
@@ -103662,7 +103627,7 @@
       {
         "section": "TagInput",
         "part": "input",
-        "documentationLine": 453,
+        "documentationLine": 496,
         "engines": [
           "modern",
           "rustic"
@@ -103701,7 +103666,7 @@
       {
         "section": "TagInput",
         "part": "error-message",
-        "documentationLine": 454,
+        "documentationLine": 497,
         "engines": [
           "modern",
           "rustic"
@@ -103740,7 +103705,7 @@
       {
         "section": "InputNumber",
         "part": "root",
-        "documentationLine": 466,
+        "documentationLine": 509,
         "engines": [
           "modern",
           "rustic"
@@ -103784,7 +103749,7 @@
       {
         "section": "InputNumber",
         "part": "addon-before",
-        "documentationLine": 467,
+        "documentationLine": 510,
         "engines": [
           "modern",
           "rustic"
@@ -103823,7 +103788,7 @@
       {
         "section": "InputNumber",
         "part": "addon-after",
-        "documentationLine": 468,
+        "documentationLine": 511,
         "engines": [
           "modern",
           "rustic"
@@ -103862,7 +103827,7 @@
       {
         "section": "InputNumber",
         "part": "prefix",
-        "documentationLine": 469,
+        "documentationLine": 512,
         "engines": [
           "modern",
           "rustic"
@@ -103901,7 +103866,7 @@
       {
         "section": "InputNumber",
         "part": "suffix",
-        "documentationLine": 470,
+        "documentationLine": 513,
         "engines": [
           "modern",
           "rustic"
@@ -103940,7 +103905,7 @@
       {
         "section": "InputNumber",
         "part": "stepper-button",
-        "documentationLine": 471,
+        "documentationLine": 514,
         "engines": [
           "modern",
           "rustic"
@@ -103997,7 +103962,7 @@
       {
         "section": "PasswordInput",
         "part": "root",
-        "documentationLine": 483,
+        "documentationLine": 526,
         "engines": [
           "modern",
           "rustic"
@@ -104041,7 +104006,7 @@
       {
         "section": "PasswordInput",
         "part": "visibility-toggle",
-        "documentationLine": 484,
+        "documentationLine": 527,
         "engines": [
           "modern",
           "rustic"
@@ -104085,7 +104050,7 @@
       {
         "section": "PasswordInput",
         "part": "strength-track",
-        "documentationLine": 485,
+        "documentationLine": 528,
         "engines": [
           "modern",
           "rustic"
@@ -104124,7 +104089,7 @@
       {
         "section": "PasswordInput",
         "part": "strength-fill",
-        "documentationLine": 486,
+        "documentationLine": 529,
         "engines": [
           "modern",
           "rustic"
@@ -104163,7 +104128,7 @@
       {
         "section": "PasswordInput",
         "part": "error-message",
-        "documentationLine": 487,
+        "documentationLine": 530,
         "engines": [
           "modern",
           "rustic"
@@ -104202,7 +104167,7 @@
       {
         "section": "Switch",
         "part": "root",
-        "documentationLine": 510,
+        "documentationLine": 553,
         "engines": [
           "modern",
           "rustic"
@@ -104246,7 +104211,7 @@
       {
         "section": "Switch",
         "part": "track",
-        "documentationLine": 511,
+        "documentationLine": 554,
         "engines": [
           "modern",
           "rustic"
@@ -104285,7 +104250,7 @@
       {
         "section": "Switch",
         "part": "thumb",
-        "documentationLine": 512,
+        "documentationLine": 555,
         "engines": [
           "modern",
           "rustic"
@@ -104324,7 +104289,7 @@
       {
         "section": "Switch",
         "part": "label",
-        "documentationLine": 513,
+        "documentationLine": 556,
         "engines": [
           "modern",
           "rustic"
@@ -104363,7 +104328,7 @@
       {
         "section": "Toggle",
         "part": "root",
-        "documentationLine": 530,
+        "documentationLine": 573,
         "engines": [
           "modern",
           "rustic"
@@ -104407,7 +104372,7 @@
       {
         "section": "Toggle",
         "part": "track",
-        "documentationLine": 531,
+        "documentationLine": 574,
         "engines": [
           "modern",
           "rustic"
@@ -104446,7 +104411,7 @@
       {
         "section": "Toggle",
         "part": "thumb",
-        "documentationLine": 532,
+        "documentationLine": 575,
         "engines": [
           "modern",
           "rustic"
@@ -104485,7 +104450,7 @@
       {
         "section": "Toggle",
         "part": "label",
-        "documentationLine": 533,
+        "documentationLine": 576,
         "engines": [
           "modern",
           "rustic"
@@ -104524,7 +104489,7 @@
       {
         "section": "Toggle",
         "part": "description",
-        "documentationLine": 534,
+        "documentationLine": 577,
         "engines": [
           "modern",
           "rustic"
@@ -104563,7 +104528,7 @@
       {
         "section": "Toggle",
         "part": "inner-label",
-        "documentationLine": 535,
+        "documentationLine": 578,
         "engines": [
           "rustic"
         ],
@@ -104588,7 +104553,7 @@
       {
         "section": "Toggle",
         "part": "spinner",
-        "documentationLine": 536,
+        "documentationLine": 579,
         "engines": [
           "rustic"
         ],
@@ -104613,7 +104578,7 @@
       {
         "section": "Radio",
         "part": "root",
-        "documentationLine": 567,
+        "documentationLine": 610,
         "engines": [
           "modern",
           "rustic",
@@ -104671,7 +104636,7 @@
       {
         "section": "Radio",
         "part": "circle",
-        "documentationLine": 568,
+        "documentationLine": 611,
         "engines": [
           "modern",
           "rustic"
@@ -104710,7 +104675,7 @@
       {
         "section": "Radio",
         "part": "dot",
-        "documentationLine": 569,
+        "documentationLine": 612,
         "engines": [
           "modern",
           "rustic"
@@ -104749,7 +104714,7 @@
       {
         "section": "Radio",
         "part": "label",
-        "documentationLine": 570,
+        "documentationLine": 613,
         "engines": [
           "modern",
           "rustic"
@@ -104788,7 +104753,7 @@
       {
         "section": "Radio",
         "part": "description",
-        "documentationLine": 571,
+        "documentationLine": 614,
         "engines": [
           "modern",
           "rustic"
@@ -104827,7 +104792,7 @@
       {
         "section": "Radio",
         "part": "root",
-        "documentationLine": 577,
+        "documentationLine": 620,
         "engines": [
           "modern",
           "rustic",
@@ -104885,7 +104850,7 @@
       {
         "section": "Radio",
         "part": "option",
-        "documentationLine": 578,
+        "documentationLine": 621,
         "engines": [
           "shared"
         ],
@@ -104928,7 +104893,7 @@
       {
         "section": "Radio",
         "part": "dot",
-        "documentationLine": 579,
+        "documentationLine": 622,
         "engines": [
           "modern",
           "rustic"
@@ -104967,7 +104932,7 @@
       {
         "section": "Radio",
         "part": "description",
-        "documentationLine": 580,
+        "documentationLine": 623,
         "engines": [
           "modern",
           "rustic"
@@ -105006,7 +104971,7 @@
       {
         "section": "Checkbox",
         "part": "root",
-        "documentationLine": 593,
+        "documentationLine": 636,
         "engines": [
           "modern",
           "rustic",
@@ -105064,7 +105029,7 @@
       {
         "section": "Checkbox",
         "part": "box",
-        "documentationLine": 594,
+        "documentationLine": 637,
         "engines": [
           "modern",
           "rustic"
@@ -105103,7 +105068,7 @@
       {
         "section": "Checkbox",
         "part": "checkmark",
-        "documentationLine": 595,
+        "documentationLine": 638,
         "engines": [
           "modern",
           "rustic"
@@ -105168,7 +105133,7 @@
       {
         "section": "Checkbox",
         "part": "label",
-        "documentationLine": 596,
+        "documentationLine": 639,
         "engines": [
           "modern",
           "rustic"
@@ -105207,7 +105172,7 @@
       {
         "section": "Checkbox",
         "part": "root",
-        "documentationLine": 607,
+        "documentationLine": 650,
         "engines": [
           "modern",
           "rustic",
@@ -105265,7 +105230,7 @@
       {
         "section": "Checkbox",
         "part": "option",
-        "documentationLine": 608,
+        "documentationLine": 651,
         "engines": [
           "shared"
         ],
@@ -105290,7 +105255,7 @@
       {
         "section": "Checkbox",
         "part": "box",
-        "documentationLine": 609,
+        "documentationLine": 652,
         "engines": [
           "modern",
           "rustic"
@@ -105329,7 +105294,7 @@
       {
         "section": "Slider",
         "part": "root",
-        "documentationLine": 621,
+        "documentationLine": 664,
         "engines": [
           "modern",
           "rustic"
@@ -105394,7 +105359,7 @@
       {
         "section": "Slider",
         "part": "rail",
-        "documentationLine": 622,
+        "documentationLine": 665,
         "engines": [
           "modern",
           "rustic"
@@ -105446,7 +105411,7 @@
       {
         "section": "Slider",
         "part": "track",
-        "documentationLine": 623,
+        "documentationLine": 666,
         "engines": [
           "modern",
           "rustic"
@@ -105498,7 +105463,7 @@
       {
         "section": "Slider",
         "part": "handle",
-        "documentationLine": 624,
+        "documentationLine": 667,
         "engines": [
           "modern",
           "rustic"
@@ -105576,7 +105541,7 @@
       {
         "section": "Slider",
         "part": "mark-label",
-        "documentationLine": 625,
+        "documentationLine": 668,
         "engines": [
           "modern",
           "rustic"
@@ -105628,7 +105593,7 @@
       {
         "section": "OTPInput",
         "part": "root",
-        "documentationLine": 642,
+        "documentationLine": 685,
         "engines": [
           "modern",
           "rustic"
@@ -105667,7 +105632,7 @@
       {
         "section": "OTPInput",
         "part": "slot",
-        "documentationLine": 643,
+        "documentationLine": 686,
         "engines": [
           "modern",
           "rustic"
@@ -105711,7 +105676,7 @@
       {
         "section": "OTPInput",
         "part": "error-message",
-        "documentationLine": 644,
+        "documentationLine": 687,
         "engines": [
           "modern",
           "rustic"
@@ -105750,7 +105715,7 @@
       {
         "section": "Form",
         "part": "root",
-        "documentationLine": 657,
+        "documentationLine": 700,
         "engines": [
           "modern",
           "rustic"
@@ -105789,7 +105754,7 @@
       {
         "section": "Form",
         "part": "item",
-        "documentationLine": 658,
+        "documentationLine": 701,
         "engines": [
           "modern",
           "rustic"
@@ -105828,7 +105793,7 @@
       {
         "section": "Form",
         "part": "label",
-        "documentationLine": 659,
+        "documentationLine": 702,
         "engines": [
           "modern",
           "rustic"
@@ -105867,7 +105832,7 @@
       {
         "section": "Form",
         "part": "label-text",
-        "documentationLine": 660,
+        "documentationLine": 703,
         "engines": [
           "modern"
         ],
@@ -105892,7 +105857,7 @@
       {
         "section": "Form",
         "part": "required-mark",
-        "documentationLine": 661,
+        "documentationLine": 704,
         "engines": [
           "modern",
           "rustic"
@@ -105944,7 +105909,7 @@
       {
         "section": "Form",
         "part": "tooltip-icon",
-        "documentationLine": 662,
+        "documentationLine": 705,
         "engines": [
           "modern",
           "rustic"
@@ -105988,7 +105953,7 @@
       {
         "section": "Form",
         "part": "feedback-icon",
-        "documentationLine": 663,
+        "documentationLine": 706,
         "engines": [
           "modern",
           "rustic"
@@ -106027,7 +105992,7 @@
       {
         "section": "Form",
         "part": "help-text",
-        "documentationLine": 664,
+        "documentationLine": 707,
         "engines": [
           "modern",
           "rustic"
@@ -106066,7 +106031,7 @@
       {
         "section": "Form",
         "part": "extra-text",
-        "documentationLine": 665,
+        "documentationLine": 708,
         "engines": [
           "modern",
           "rustic"
@@ -106105,7 +106070,7 @@
       {
         "section": "Form",
         "part": "error-list",
-        "documentationLine": 666,
+        "documentationLine": 709,
         "engines": [
           "modern",
           "rustic"
@@ -106144,7 +106109,7 @@
       {
         "section": "Select",
         "part": "root",
-        "documentationLine": 686,
+        "documentationLine": 729,
         "engines": [
           "modern",
           "rustic"
@@ -106196,7 +106161,7 @@
       {
         "section": "Select",
         "part": "trigger",
-        "documentationLine": 687,
+        "documentationLine": 730,
         "engines": [
           "modern",
           "rustic"
@@ -106258,7 +106223,7 @@
       {
         "section": "Select",
         "part": "value",
-        "documentationLine": 688,
+        "documentationLine": 731,
         "engines": [
           "modern",
           "rustic"
@@ -106323,7 +106288,7 @@
       {
         "section": "Select",
         "part": "placeholder",
-        "documentationLine": 689,
+        "documentationLine": 732,
         "engines": [
           "modern",
           "rustic"
@@ -106362,7 +106327,7 @@
       {
         "section": "Select",
         "part": "arrow-icon",
-        "documentationLine": 690,
+        "documentationLine": 733,
         "engines": [
           "modern",
           "rustic"
@@ -106406,7 +106371,7 @@
       {
         "section": "Select",
         "part": "clear-button",
-        "documentationLine": 691,
+        "documentationLine": 734,
         "engines": [
           "modern",
           "rustic"
@@ -106450,7 +106415,7 @@
       {
         "section": "Select",
         "part": "tag",
-        "documentationLine": 692,
+        "documentationLine": 735,
         "engines": [
           "modern",
           "rustic"
@@ -106489,7 +106454,7 @@
       {
         "section": "Select",
         "part": "tag-remove",
-        "documentationLine": 693,
+        "documentationLine": 736,
         "engines": [
           "modern",
           "rustic"
@@ -106533,7 +106498,7 @@
       {
         "section": "Select",
         "part": "tag-count",
-        "documentationLine": 694,
+        "documentationLine": 737,
         "engines": [
           "modern",
           "rustic"
@@ -106572,7 +106537,7 @@
       {
         "section": "Select",
         "part": "dropdown",
-        "documentationLine": 695,
+        "documentationLine": 738,
         "engines": [
           "modern",
           "rustic"
@@ -106611,7 +106576,7 @@
       {
         "section": "Select",
         "part": "search-input",
-        "documentationLine": 696,
+        "documentationLine": 739,
         "engines": [
           "modern",
           "rustic"
@@ -106650,7 +106615,7 @@
       {
         "section": "Select",
         "part": "search-input-wrapper",
-        "documentationLine": 697,
+        "documentationLine": 740,
         "engines": [
           "modern"
         ],
@@ -106675,7 +106640,7 @@
       {
         "section": "Select",
         "part": "search-icon",
-        "documentationLine": 698,
+        "documentationLine": 741,
         "engines": [
           "modern"
         ],
@@ -106705,7 +106670,7 @@
       {
         "section": "Select",
         "part": "option-list",
-        "documentationLine": 699,
+        "documentationLine": 742,
         "engines": [
           "modern"
         ],
@@ -106730,7 +106695,7 @@
       {
         "section": "Select",
         "part": "option",
-        "documentationLine": 700,
+        "documentationLine": 743,
         "engines": [
           "modern",
           "rustic",
@@ -106783,7 +106748,7 @@
       {
         "section": "Select",
         "part": "option-icon",
-        "documentationLine": 701,
+        "documentationLine": 744,
         "engines": [
           "modern",
           "rustic",
@@ -106836,7 +106801,7 @@
       {
         "section": "Select",
         "part": "option-check",
-        "documentationLine": 702,
+        "documentationLine": 745,
         "engines": [
           "modern",
           "rustic"
@@ -106875,7 +106840,7 @@
       {
         "section": "Select",
         "part": "option-checkbox",
-        "documentationLine": 703,
+        "documentationLine": 746,
         "engines": [
           "modern",
           "rustic"
@@ -106914,7 +106879,7 @@
       {
         "section": "Select",
         "part": "option-description",
-        "documentationLine": 704,
+        "documentationLine": 747,
         "engines": [
           "modern"
         ],
@@ -106939,7 +106904,7 @@
       {
         "section": "Select",
         "part": "group-label",
-        "documentationLine": 705,
+        "documentationLine": 748,
         "engines": [
           "modern",
           "rustic",
@@ -106992,7 +106957,7 @@
       {
         "section": "Select",
         "part": "empty",
-        "documentationLine": 706,
+        "documentationLine": 749,
         "engines": [
           "modern",
           "rustic"
@@ -107044,7 +107009,7 @@
       {
         "section": "Select",
         "part": "loading",
-        "documentationLine": 707,
+        "documentationLine": 750,
         "engines": [
           "modern",
           "rustic"
@@ -107083,7 +107048,7 @@
       {
         "section": "Select",
         "part": "loading-spinner",
-        "documentationLine": 708,
+        "documentationLine": 751,
         "engines": [
           "modern"
         ],
@@ -107134,7 +107099,7 @@
       {
         "section": "Select",
         "part": "option",
-        "documentationLine": 718,
+        "documentationLine": 761,
         "engines": [
           "modern",
           "rustic",
@@ -107187,7 +107152,7 @@
       {
         "section": "Select",
         "part": "option-icon",
-        "documentationLine": 719,
+        "documentationLine": 762,
         "engines": [
           "modern",
           "rustic",
@@ -107240,7 +107205,7 @@
       {
         "section": "Select",
         "part": "option-group",
-        "documentationLine": 720,
+        "documentationLine": 763,
         "engines": [
           "shared"
         ],
@@ -107265,7 +107230,7 @@
       {
         "section": "Select",
         "part": "group-label",
-        "documentationLine": 721,
+        "documentationLine": 764,
         "engines": [
           "modern",
           "rustic",
@@ -107318,7 +107283,7 @@
       {
         "section": "AutoComplete",
         "part": "root",
-        "documentationLine": 733,
+        "documentationLine": 776,
         "engines": [
           "modern",
           "rustic"
@@ -107357,7 +107322,7 @@
       {
         "section": "AutoComplete",
         "part": "input-wrapper",
-        "documentationLine": 734,
+        "documentationLine": 777,
         "engines": [
           "modern",
           "rustic"
@@ -107396,7 +107361,7 @@
       {
         "section": "AutoComplete",
         "part": "input",
-        "documentationLine": 735,
+        "documentationLine": 778,
         "engines": [
           "modern",
           "rustic"
@@ -107440,7 +107405,7 @@
       {
         "section": "AutoComplete",
         "part": "clear-button",
-        "documentationLine": 736,
+        "documentationLine": 779,
         "engines": [
           "modern",
           "rustic"
@@ -107484,7 +107449,7 @@
       {
         "section": "AutoComplete",
         "part": "dropdown",
-        "documentationLine": 737,
+        "documentationLine": 780,
         "engines": [
           "modern",
           "rustic"
@@ -107523,7 +107488,7 @@
       {
         "section": "AutoComplete",
         "part": "option",
-        "documentationLine": 738,
+        "documentationLine": 781,
         "engines": [
           "modern",
           "rustic"
@@ -107562,7 +107527,7 @@
       {
         "section": "AutoComplete",
         "part": "empty",
-        "documentationLine": 739,
+        "documentationLine": 782,
         "engines": [
           "modern",
           "rustic"
@@ -107601,7 +107566,7 @@
       {
         "section": "Mentions",
         "part": "root",
-        "documentationLine": 754,
+        "documentationLine": 797,
         "engines": [
           "modern",
           "rustic"
@@ -107640,7 +107605,7 @@
       {
         "section": "Mentions",
         "part": "textarea",
-        "documentationLine": 755,
+        "documentationLine": 798,
         "engines": [
           "modern",
           "rustic"
@@ -107684,7 +107649,7 @@
       {
         "section": "Mentions",
         "part": "dropdown",
-        "documentationLine": 756,
+        "documentationLine": 799,
         "engines": [
           "modern",
           "rustic"
@@ -107723,7 +107688,7 @@
       {
         "section": "Mentions",
         "part": "option",
-        "documentationLine": 757,
+        "documentationLine": 800,
         "engines": [
           "modern",
           "rustic"
@@ -107762,7 +107727,7 @@
       {
         "section": "Mentions",
         "part": "empty",
-        "documentationLine": 758,
+        "documentationLine": 801,
         "engines": [
           "modern",
           "rustic"
@@ -107801,7 +107766,7 @@
       {
         "section": "TreeSelect",
         "part": "root",
-        "documentationLine": 775,
+        "documentationLine": 818,
         "engines": [
           "modern"
         ],
@@ -107826,7 +107791,7 @@
       {
         "section": "TreeSelect",
         "part": "trigger",
-        "documentationLine": 776,
+        "documentationLine": 819,
         "engines": [
           "modern",
           "rustic"
@@ -107870,7 +107835,7 @@
       {
         "section": "TreeSelect",
         "part": "value",
-        "documentationLine": 777,
+        "documentationLine": 820,
         "engines": [
           "modern",
           "rustic"
@@ -107911,7 +107876,7 @@
       {
         "section": "TreeSelect",
         "part": "placeholder",
-        "documentationLine": 777,
+        "documentationLine": 820,
         "engines": [
           "modern",
           "rustic"
@@ -107952,7 +107917,7 @@
       {
         "section": "TreeSelect",
         "part": "arrow-icon",
-        "documentationLine": 778,
+        "documentationLine": 821,
         "engines": [
           "modern",
           "rustic"
@@ -107991,7 +107956,7 @@
       {
         "section": "TreeSelect",
         "part": "clear-button",
-        "documentationLine": 779,
+        "documentationLine": 822,
         "engines": [
           "modern",
           "rustic"
@@ -108035,7 +108000,7 @@
       {
         "section": "TreeSelect",
         "part": "dropdown",
-        "documentationLine": 780,
+        "documentationLine": 823,
         "engines": [
           "modern",
           "rustic"
@@ -108074,7 +108039,7 @@
       {
         "section": "TreeSelect",
         "part": "search-input-wrapper",
-        "documentationLine": 781,
+        "documentationLine": 824,
         "engines": [
           "modern",
           "rustic"
@@ -108113,7 +108078,7 @@
       {
         "section": "TreeSelect",
         "part": "search-input",
-        "documentationLine": 782,
+        "documentationLine": 825,
         "engines": [
           "modern",
           "rustic"
@@ -108157,7 +108122,7 @@
       {
         "section": "TreeSelect",
         "part": "tree-list",
-        "documentationLine": 783,
+        "documentationLine": 826,
         "engines": [
           "modern",
           "rustic"
@@ -108222,7 +108187,7 @@
       {
         "section": "TreeSelect",
         "part": "option",
-        "documentationLine": 784,
+        "documentationLine": 827,
         "engines": [
           "modern",
           "rustic"
@@ -108266,7 +108231,7 @@
       {
         "section": "TreeSelect",
         "part": "tree-node-toggle",
-        "documentationLine": 785,
+        "documentationLine": 828,
         "engines": [
           "modern",
           "rustic"
@@ -108310,7 +108275,7 @@
       {
         "section": "TreeSelect",
         "part": "tree-node-label",
-        "documentationLine": 786,
+        "documentationLine": 829,
         "engines": [
           "modern",
           "rustic"
@@ -108349,7 +108314,7 @@
       {
         "section": "TreeSelect",
         "part": "tree-node-highlight",
-        "documentationLine": 787,
+        "documentationLine": 830,
         "engines": [
           "modern",
           "rustic"
@@ -108388,7 +108353,7 @@
       {
         "section": "TreeSelect",
         "part": "option-icon",
-        "documentationLine": 788,
+        "documentationLine": 831,
         "engines": [
           "modern",
           "rustic"
@@ -108432,7 +108397,7 @@
       {
         "section": "TreeSelect",
         "part": "empty",
-        "documentationLine": 789,
+        "documentationLine": 832,
         "engines": [
           "modern",
           "rustic"
@@ -108471,7 +108436,7 @@
       {
         "section": "TreeSelect",
         "part": "loading",
-        "documentationLine": 790,
+        "documentationLine": 833,
         "engines": [
           "modern",
           "rustic"
@@ -108510,7 +108475,7 @@
       {
         "section": "Cascader",
         "part": "root",
-        "documentationLine": 806,
+        "documentationLine": 849,
         "engines": [
           "modern"
         ],
@@ -108535,7 +108500,7 @@
       {
         "section": "Cascader",
         "part": "trigger",
-        "documentationLine": 807,
+        "documentationLine": 850,
         "engines": [
           "modern",
           "rustic"
@@ -108579,7 +108544,7 @@
       {
         "section": "Cascader",
         "part": "value",
-        "documentationLine": 808,
+        "documentationLine": 851,
         "engines": [
           "modern",
           "rustic"
@@ -108620,7 +108585,7 @@
       {
         "section": "Cascader",
         "part": "placeholder",
-        "documentationLine": 808,
+        "documentationLine": 851,
         "engines": [
           "modern",
           "rustic"
@@ -108661,7 +108626,7 @@
       {
         "section": "Cascader",
         "part": "arrow-icon",
-        "documentationLine": 809,
+        "documentationLine": 852,
         "engines": [
           "modern",
           "rustic"
@@ -108700,7 +108665,7 @@
       {
         "section": "Cascader",
         "part": "clear-button",
-        "documentationLine": 810,
+        "documentationLine": 853,
         "engines": [
           "modern",
           "rustic"
@@ -108744,7 +108709,7 @@
       {
         "section": "Cascader",
         "part": "dropdown",
-        "documentationLine": 811,
+        "documentationLine": 854,
         "engines": [
           "modern",
           "rustic"
@@ -108783,7 +108748,7 @@
       {
         "section": "Cascader",
         "part": "search-input-wrapper",
-        "documentationLine": 812,
+        "documentationLine": 855,
         "engines": [
           "modern",
           "rustic"
@@ -108822,7 +108787,7 @@
       {
         "section": "Cascader",
         "part": "search-input",
-        "documentationLine": 813,
+        "documentationLine": 856,
         "engines": [
           "modern",
           "rustic"
@@ -108866,7 +108831,7 @@
       {
         "section": "Cascader",
         "part": "menu-column",
-        "documentationLine": 814,
+        "documentationLine": 857,
         "engines": [
           "modern",
           "rustic"
@@ -108905,7 +108870,7 @@
       {
         "section": "Cascader",
         "part": "option-list",
-        "documentationLine": 815,
+        "documentationLine": 858,
         "engines": [
           "modern",
           "rustic"
@@ -108970,7 +108935,7 @@
       {
         "section": "Cascader",
         "part": "option",
-        "documentationLine": 816,
+        "documentationLine": 859,
         "engines": [
           "modern",
           "rustic"
@@ -109027,7 +108992,7 @@
       {
         "section": "Cascader",
         "part": "menu-item-arrow",
-        "documentationLine": 817,
+        "documentationLine": 860,
         "engines": [
           "rustic"
         ],
@@ -109052,7 +109017,7 @@
       {
         "section": "Cascader",
         "part": "empty",
-        "documentationLine": 818,
+        "documentationLine": 861,
         "engines": [
           "modern",
           "rustic"
@@ -109117,7 +109082,7 @@
       {
         "section": "Cascader",
         "part": "loading",
-        "documentationLine": 819,
+        "documentationLine": 862,
         "engines": [
           "modern",
           "rustic"
@@ -109156,7 +109121,7 @@
       {
         "section": "Transfer",
         "part": "root",
-        "documentationLine": 832,
+        "documentationLine": 875,
         "engines": [
           "modern",
           "rustic"
@@ -109195,7 +109160,7 @@
       {
         "section": "Transfer",
         "part": "panel",
-        "documentationLine": 833,
+        "documentationLine": 876,
         "engines": [
           "modern",
           "rustic"
@@ -109234,7 +109199,7 @@
       {
         "section": "Transfer",
         "part": "panel-header",
-        "documentationLine": 834,
+        "documentationLine": 877,
         "engines": [
           "modern",
           "rustic"
@@ -109273,7 +109238,7 @@
       {
         "section": "Transfer",
         "part": "panel-select-all",
-        "documentationLine": 835,
+        "documentationLine": 878,
         "engines": [
           "modern",
           "rustic"
@@ -109312,7 +109277,7 @@
       {
         "section": "Transfer",
         "part": "panel-count",
-        "documentationLine": 836,
+        "documentationLine": 879,
         "engines": [
           "modern",
           "rustic"
@@ -109351,7 +109316,7 @@
       {
         "section": "Transfer",
         "part": "panel-search",
-        "documentationLine": 837,
+        "documentationLine": 880,
         "engines": [
           "modern",
           "rustic"
@@ -109395,7 +109360,7 @@
       {
         "section": "Transfer",
         "part": "panel-list",
-        "documentationLine": 838,
+        "documentationLine": 881,
         "engines": [
           "modern",
           "rustic"
@@ -109434,7 +109399,7 @@
       {
         "section": "Transfer",
         "part": "panel-item",
-        "documentationLine": 839,
+        "documentationLine": 882,
         "engines": [
           "modern",
           "rustic"
@@ -109478,7 +109443,7 @@
       {
         "section": "Transfer",
         "part": "panel-item-checkbox",
-        "documentationLine": 840,
+        "documentationLine": 883,
         "engines": [
           "modern",
           "rustic"
@@ -109517,7 +109482,7 @@
       {
         "section": "Transfer",
         "part": "panel-empty",
-        "documentationLine": 841,
+        "documentationLine": 884,
         "engines": [
           "modern",
           "rustic"
@@ -109556,7 +109521,7 @@
       {
         "section": "Transfer",
         "part": "panel-pagination",
-        "documentationLine": 842,
+        "documentationLine": 885,
         "engines": [
           "modern",
           "rustic"
@@ -109595,7 +109560,7 @@
       {
         "section": "Transfer",
         "part": "pagination-button",
-        "documentationLine": 843,
+        "documentationLine": 886,
         "engines": [
           "modern",
           "rustic"
@@ -109652,7 +109617,7 @@
       {
         "section": "Transfer",
         "part": "operations",
-        "documentationLine": 844,
+        "documentationLine": 887,
         "engines": [
           "modern",
           "rustic"
@@ -109691,7 +109656,7 @@
       {
         "section": "Transfer",
         "part": "move-button",
-        "documentationLine": 845,
+        "documentationLine": 888,
         "engines": [
           "modern",
           "rustic"
@@ -109748,7 +109713,7 @@
       {
         "section": "Upload",
         "part": "root",
-        "documentationLine": 857,
+        "documentationLine": 900,
         "engines": [
           "modern",
           "rustic"
@@ -109813,7 +109778,7 @@
       {
         "section": "Upload",
         "part": "trigger",
-        "documentationLine": 858,
+        "documentationLine": 901,
         "engines": [
           "modern",
           "rustic"
@@ -109852,7 +109817,7 @@
       {
         "section": "Upload",
         "part": "dropzone",
-        "documentationLine": 859,
+        "documentationLine": 902,
         "engines": [
           "modern",
           "rustic"
@@ -109891,7 +109856,7 @@
       {
         "section": "Upload",
         "part": "add-button",
-        "documentationLine": 860,
+        "documentationLine": 903,
         "engines": [
           "modern",
           "rustic"
@@ -109930,7 +109895,7 @@
       {
         "section": "Upload",
         "part": "file-list",
-        "documentationLine": 861,
+        "documentationLine": 904,
         "engines": [
           "modern",
           "rustic"
@@ -110021,7 +109986,7 @@
       {
         "section": "Upload",
         "part": "file-item",
-        "documentationLine": 862,
+        "documentationLine": 905,
         "engines": [
           "modern",
           "rustic"
@@ -110125,7 +110090,7 @@
       {
         "section": "Upload",
         "part": "file-item-overlay",
-        "documentationLine": 863,
+        "documentationLine": 906,
         "engines": [
           "modern",
           "rustic"
@@ -110177,7 +110142,7 @@
       {
         "section": "Upload",
         "part": "file-item-action",
-        "documentationLine": 864,
+        "documentationLine": 907,
         "engines": [
           "modern",
           "rustic"
@@ -110346,7 +110311,7 @@
       {
         "section": "Upload",
         "part": "progress-track",
-        "documentationLine": 865,
+        "documentationLine": 908,
         "engines": [
           "rustic"
         ],
@@ -110371,7 +110336,7 @@
       {
         "section": "Upload",
         "part": "progress-bar",
-        "documentationLine": 866,
+        "documentationLine": 909,
         "engines": [
           "rustic"
         ],
@@ -110396,7 +110361,7 @@
       {
         "section": "Upload",
         "part": "preview-modal",
-        "documentationLine": 867,
+        "documentationLine": 910,
         "engines": [
           "modern",
           "rustic"
@@ -110435,7 +110400,7 @@
       {
         "section": "Upload",
         "part": "preview-close-button",
-        "documentationLine": 868,
+        "documentationLine": 911,
         "engines": [
           "modern",
           "rustic"
@@ -110474,7 +110439,7 @@
       {
         "section": "DatePicker",
         "part": "root",
-        "documentationLine": 886,
+        "documentationLine": 929,
         "engines": [
           "modern",
           "rustic"
@@ -110539,7 +110504,7 @@
       {
         "section": "DatePicker",
         "part": "trigger-input",
-        "documentationLine": 887,
+        "documentationLine": 930,
         "engines": [
           "modern",
           "rustic"
@@ -110645,7 +110610,7 @@
       {
         "section": "DatePicker",
         "part": "separator",
-        "documentationLine": 888,
+        "documentationLine": 931,
         "engines": [
           "modern",
           "rustic"
@@ -110684,7 +110649,7 @@
       {
         "section": "DatePicker",
         "part": "calendar-icon",
-        "documentationLine": 889,
+        "documentationLine": 932,
         "engines": [
           "modern",
           "rustic"
@@ -110723,7 +110688,7 @@
       {
         "section": "DatePicker",
         "part": "clear-button",
-        "documentationLine": 890,
+        "documentationLine": 933,
         "engines": [
           "modern",
           "rustic"
@@ -110780,7 +110745,7 @@
       {
         "section": "DatePicker",
         "part": "panel",
-        "documentationLine": 891,
+        "documentationLine": 934,
         "engines": [
           "modern",
           "rustic"
@@ -110871,7 +110836,7 @@
       {
         "section": "DatePicker",
         "part": "header",
-        "documentationLine": 892,
+        "documentationLine": 935,
         "engines": [
           "modern",
           "rustic"
@@ -110962,7 +110927,7 @@
       {
         "section": "DatePicker",
         "part": "nav-button",
-        "documentationLine": 893,
+        "documentationLine": 936,
         "engines": [
           "modern",
           "rustic"
@@ -111097,7 +111062,7 @@
       {
         "section": "DatePicker",
         "part": "panel-title",
-        "documentationLine": 894,
+        "documentationLine": 937,
         "engines": [
           "modern",
           "rustic"
@@ -111188,7 +111153,7 @@
       {
         "section": "DatePicker",
         "part": "grid",
-        "documentationLine": 895,
+        "documentationLine": 938,
         "engines": [
           "modern",
           "rustic"
@@ -111279,7 +111244,7 @@
       {
         "section": "DatePicker",
         "part": "weekday-header",
-        "documentationLine": 896,
+        "documentationLine": 939,
         "engines": [
           "modern",
           "rustic"
@@ -111318,7 +111283,7 @@
       {
         "section": "DatePicker",
         "part": "cell",
-        "documentationLine": 897,
+        "documentationLine": 940,
         "engines": [
           "modern",
           "rustic"
@@ -111388,7 +111353,7 @@
       {
         "section": "DatePicker",
         "part": "time-column",
-        "documentationLine": 898,
+        "documentationLine": 941,
         "engines": [
           "modern",
           "rustic"
@@ -111427,7 +111392,7 @@
       {
         "section": "DatePicker",
         "part": "footer",
-        "documentationLine": 899,
+        "documentationLine": 942,
         "engines": [
           "modern",
           "rustic"
@@ -111518,7 +111483,7 @@
       {
         "section": "DatePicker",
         "part": "today-button",
-        "documentationLine": 900,
+        "documentationLine": 943,
         "engines": [
           "modern",
           "rustic"
@@ -111562,7 +111527,7 @@
       {
         "section": "TimePicker",
         "part": "root",
-        "documentationLine": 923,
+        "documentationLine": 966,
         "engines": [
           "modern",
           "rustic"
@@ -111627,7 +111592,7 @@
       {
         "section": "TimePicker",
         "part": "trigger-input",
-        "documentationLine": 924,
+        "documentationLine": 967,
         "engines": [
           "modern",
           "rustic"
@@ -111733,7 +111698,7 @@
       {
         "section": "TimePicker",
         "part": "separator",
-        "documentationLine": 925,
+        "documentationLine": 968,
         "engines": [
           "modern",
           "rustic"
@@ -111772,7 +111737,7 @@
       {
         "section": "TimePicker",
         "part": "clock-icon",
-        "documentationLine": 926,
+        "documentationLine": 969,
         "engines": [
           "modern",
           "rustic"
@@ -111811,7 +111776,7 @@
       {
         "section": "TimePicker",
         "part": "clear-button",
-        "documentationLine": 927,
+        "documentationLine": 970,
         "engines": [
           "modern",
           "rustic"
@@ -111855,7 +111820,7 @@
       {
         "section": "TimePicker",
         "part": "panel",
-        "documentationLine": 928,
+        "documentationLine": 971,
         "engines": [
           "modern"
         ],
@@ -111880,7 +111845,7 @@
       {
         "section": "TimePicker",
         "part": "header",
-        "documentationLine": 929,
+        "documentationLine": 972,
         "engines": [
           "modern"
         ],
@@ -111905,7 +111870,7 @@
       {
         "section": "TimePicker",
         "part": "time-column",
-        "documentationLine": 930,
+        "documentationLine": 973,
         "engines": [
           "modern"
         ],
@@ -111943,7 +111908,7 @@
       {
         "section": "TimePicker",
         "part": "time-option",
-        "documentationLine": 931,
+        "documentationLine": 974,
         "engines": [
           "modern"
         ],
@@ -111973,7 +111938,7 @@
       {
         "section": "TimePicker",
         "part": "footer",
-        "documentationLine": 932,
+        "documentationLine": 975,
         "engines": [
           "modern"
         ],
@@ -111998,7 +111963,7 @@
       {
         "section": "TimePicker",
         "part": "now-button",
-        "documentationLine": 933,
+        "documentationLine": 976,
         "engines": [
           "modern"
         ],
@@ -112028,7 +111993,7 @@
       {
         "section": "ColorPicker",
         "part": "root",
-        "documentationLine": 945,
+        "documentationLine": 988,
         "engines": [
           "modern",
           "rustic"
@@ -112067,7 +112032,7 @@
       {
         "section": "ColorPicker",
         "part": "trigger",
-        "documentationLine": 946,
+        "documentationLine": 989,
         "engines": [
           "modern"
         ],
@@ -112097,7 +112062,7 @@
       {
         "section": "ColorPicker",
         "part": "swatch",
-        "documentationLine": 947,
+        "documentationLine": 990,
         "engines": [
           "modern",
           "rustic"
@@ -112136,7 +112101,7 @@
       {
         "section": "ColorPicker",
         "part": "display-text",
-        "documentationLine": 948,
+        "documentationLine": 991,
         "engines": [
           "modern",
           "rustic"
@@ -112175,7 +112140,7 @@
       {
         "section": "ColorPicker",
         "part": "clear-button",
-        "documentationLine": 949,
+        "documentationLine": 992,
         "engines": [
           "modern",
           "rustic"
@@ -112219,7 +112184,7 @@
       {
         "section": "ColorPicker",
         "part": "dropdown",
-        "documentationLine": 950,
+        "documentationLine": 993,
         "engines": [
           "modern",
           "rustic"
@@ -112258,7 +112223,7 @@
       {
         "section": "ColorPicker",
         "part": "native-color-input",
-        "documentationLine": 951,
+        "documentationLine": 994,
         "engines": [
           "modern",
           "rustic"
@@ -112297,7 +112262,7 @@
       {
         "section": "ColorPicker",
         "part": "hex-input",
-        "documentationLine": 952,
+        "documentationLine": 995,
         "engines": [
           "modern",
           "rustic"
@@ -112341,7 +112306,7 @@
       {
         "section": "ColorPicker",
         "part": "preset-group",
-        "documentationLine": 953,
+        "documentationLine": 996,
         "engines": [
           "modern",
           "rustic"
@@ -112380,7 +112345,7 @@
       {
         "section": "ColorPicker",
         "part": "preset-label",
-        "documentationLine": 954,
+        "documentationLine": 997,
         "engines": [
           "modern",
           "rustic"
@@ -112419,7 +112384,7 @@
       {
         "section": "ColorPicker",
         "part": "preset-swatch",
-        "documentationLine": 955,
+        "documentationLine": 998,
         "engines": [
           "modern",
           "rustic"
@@ -112463,7 +112428,7 @@
       {
         "section": "Input",
         "part": "root",
-        "documentationLine": 979,
+        "documentationLine": 1022,
         "engines": [
           "modern",
           "rustic",
@@ -112584,7 +112549,7 @@
       {
         "section": "Input",
         "part": "control",
-        "documentationLine": 980,
+        "documentationLine": 1023,
         "engines": [
           "modern",
           "shared"
@@ -112623,7 +112588,7 @@
       {
         "section": "Input",
         "part": "affix-prefix",
-        "documentationLine": 981,
+        "documentationLine": 1024,
         "engines": [
           "modern",
           "rustic"
@@ -112662,7 +112627,7 @@
       {
         "section": "Input",
         "part": "affix-suffix",
-        "documentationLine": 982,
+        "documentationLine": 1025,
         "engines": [
           "modern",
           "rustic"
@@ -112701,7 +112666,7 @@
       {
         "section": "Input",
         "part": "clear-button",
-        "documentationLine": 983,
+        "documentationLine": 1026,
         "engines": [
           "modern",
           "rustic"
@@ -112745,7 +112710,7 @@
       {
         "section": "Input",
         "part": "count",
-        "documentationLine": 984,
+        "documentationLine": 1027,
         "engines": [
           "modern",
           "rustic",
@@ -112798,7 +112763,7 @@
       {
         "section": "Input",
         "part": "error-message",
-        "documentationLine": 985,
+        "documentationLine": 1028,
         "engines": [
           "modern",
           "rustic",
@@ -112851,7 +112816,7 @@
       {
         "section": "Input",
         "part": "root",
-        "documentationLine": 994,
+        "documentationLine": 1037,
         "engines": [
           "modern",
           "rustic",
@@ -112972,7 +112937,7 @@
       {
         "section": "Input",
         "part": "root",
-        "documentationLine": 995,
+        "documentationLine": 1038,
         "engines": [
           "modern",
           "rustic",
@@ -113093,7 +113058,7 @@
       {
         "section": "Input",
         "part": "control",
-        "documentationLine": 996,
+        "documentationLine": 1039,
         "engines": [
           "modern",
           "shared"
@@ -113132,7 +113097,7 @@
       {
         "section": "Input",
         "part": "count",
-        "documentationLine": 997,
+        "documentationLine": 1040,
         "engines": [
           "modern",
           "rustic",
@@ -113185,7 +113150,7 @@
       {
         "section": "Input",
         "part": "error-message",
-        "documentationLine": 998,
+        "documentationLine": 1041,
         "engines": [
           "modern",
           "rustic",
@@ -113238,7 +113203,7 @@
       {
         "section": "Input",
         "part": "visibility-toggle",
-        "documentationLine": 999,
+        "documentationLine": 1042,
         "engines": [
           "shared"
         ],
@@ -113268,7 +113233,7 @@
       {
         "section": "Input",
         "part": "search-button",
-        "documentationLine": 1000,
+        "documentationLine": 1043,
         "engines": [
           "shared"
         ],
@@ -113298,7 +113263,7 @@
       {
         "section": "Button",
         "part": "trigger",
-        "documentationLine": 1020,
+        "documentationLine": 1063,
         "engines": [
           "classic",
           "modern",
@@ -113417,7 +113382,7 @@
       {
         "section": "Button",
         "part": "trigger",
-        "documentationLine": 1040,
+        "documentationLine": 1083,
         "engines": [
           "classic",
           "modern",
@@ -113536,7 +113501,7 @@
       {
         "section": "Button",
         "part": "spinner",
-        "documentationLine": 1041,
+        "documentationLine": 1084,
         "engines": [
           "modern"
         ],
@@ -113561,7 +113526,7 @@
       {
         "section": "VoiceInputButton",
         "part": "root",
-        "documentationLine": 1068,
+        "documentationLine": 1111,
         "engines": [
           "shared"
         ],
@@ -113591,7 +113556,7 @@
       {
         "section": "Skeleton",
         "part": "root",
-        "documentationLine": 1103,
+        "documentationLine": 1146,
         "engines": [
           "modern",
           "rustic",
@@ -113676,7 +113641,7 @@
       {
         "section": "Skeleton",
         "part": "line",
-        "documentationLine": 1104,
+        "documentationLine": 1147,
         "engines": [
           "modern",
           "rustic"
@@ -113715,7 +113680,7 @@
       {
         "section": "Skeleton",
         "part": "title",
-        "documentationLine": 1105,
+        "documentationLine": 1148,
         "engines": [
           "modern",
           "rustic"
@@ -113754,7 +113719,7 @@
       {
         "section": "Skeleton",
         "part": "avatar",
-        "documentationLine": 1106,
+        "documentationLine": 1149,
         "engines": [
           "modern",
           "rustic"
@@ -113793,7 +113758,7 @@
       {
         "section": "Alert",
         "part": "root",
-        "documentationLine": 1142,
+        "documentationLine": 1185,
         "engines": [
           "rustic",
           "shared"
@@ -113832,7 +113797,7 @@
       {
         "section": "Alert",
         "part": "icon",
-        "documentationLine": 1143,
+        "documentationLine": 1186,
         "engines": [
           "rustic",
           "shared"
@@ -113871,7 +113836,7 @@
       {
         "section": "Alert",
         "part": "label",
-        "documentationLine": 1144,
+        "documentationLine": 1187,
         "engines": [
           "rustic"
         ],
@@ -113896,7 +113861,7 @@
       {
         "section": "Alert",
         "part": "description",
-        "documentationLine": 1145,
+        "documentationLine": 1188,
         "engines": [
           "rustic",
           "shared"
@@ -113948,7 +113913,7 @@
       {
         "section": "Alert",
         "part": "action",
-        "documentationLine": 1146,
+        "documentationLine": 1189,
         "engines": [
           "rustic"
         ],
@@ -113973,7 +113938,7 @@
       {
         "section": "Progress",
         "part": "root",
-        "documentationLine": 1165,
+        "documentationLine": 1208,
         "engines": [
           "modern",
           "rustic",
@@ -114065,7 +114030,7 @@
       {
         "section": "Progress",
         "part": "track",
-        "documentationLine": 1166,
+        "documentationLine": 1209,
         "engines": [
           "rustic",
           "shared"
@@ -114130,7 +114095,7 @@
       {
         "section": "Progress",
         "part": "fill",
-        "documentationLine": 1167,
+        "documentationLine": 1210,
         "engines": [
           "modern",
           "rustic",
@@ -114209,7 +114174,7 @@
       {
         "section": "Progress",
         "part": "label",
-        "documentationLine": 1168,
+        "documentationLine": 1211,
         "engines": [
           "modern",
           "rustic",
@@ -114301,7 +114266,7 @@
       {
         "section": "Spinner",
         "part": "root",
-        "documentationLine": 1190,
+        "documentationLine": 1233,
         "engines": [
           "modern",
           "rustic"
@@ -114348,7 +114313,7 @@
       {
         "section": "Spinner",
         "part": "indicator",
-        "documentationLine": 1191,
+        "documentationLine": 1234,
         "engines": [
           "rustic"
         ],
@@ -114373,7 +114338,7 @@
       {
         "section": "Spinner",
         "part": "label",
-        "documentationLine": 1192,
+        "documentationLine": 1235,
         "engines": [
           "rustic"
         ],
@@ -114398,7 +114363,7 @@
       {
         "section": "Rate",
         "part": "root",
-        "documentationLine": 1204,
+        "documentationLine": 1247,
         "engines": [
           "modern",
           "rustic"
@@ -114437,7 +114402,7 @@
       {
         "section": "Rate",
         "part": "star",
-        "documentationLine": 1205,
+        "documentationLine": 1248,
         "engines": [
           "modern",
           "rustic"
@@ -114476,7 +114441,7 @@
       {
         "section": "Modal",
         "part": "root",
-        "documentationLine": 1241,
+        "documentationLine": 1284,
         "engines": [
           "modern",
           "rustic"
@@ -114515,7 +114480,7 @@
       {
         "section": "Modal",
         "part": "backdrop",
-        "documentationLine": 1242,
+        "documentationLine": 1285,
         "engines": [
           "modern"
         ],
@@ -114540,7 +114505,7 @@
       {
         "section": "Modal",
         "part": "surface",
-        "documentationLine": 1243,
+        "documentationLine": 1286,
         "engines": [
           "modern",
           "rustic"
@@ -114579,7 +114544,7 @@
       {
         "section": "Modal",
         "part": "header",
-        "documentationLine": 1244,
+        "documentationLine": 1287,
         "engines": [
           "modern",
           "rustic",
@@ -114632,7 +114597,7 @@
       {
         "section": "Modal",
         "part": "title",
-        "documentationLine": 1245,
+        "documentationLine": 1288,
         "engines": [
           "modern",
           "rustic",
@@ -114685,7 +114650,7 @@
       {
         "section": "Modal",
         "part": "description",
-        "documentationLine": 1246,
+        "documentationLine": 1289,
         "engines": [
           "modern",
           "rustic"
@@ -114724,7 +114689,7 @@
       {
         "section": "Modal",
         "part": "body",
-        "documentationLine": 1247,
+        "documentationLine": 1290,
         "engines": [
           "modern",
           "rustic",
@@ -114777,7 +114742,7 @@
       {
         "section": "Modal",
         "part": "footer",
-        "documentationLine": 1248,
+        "documentationLine": 1291,
         "engines": [
           "modern",
           "rustic",
@@ -114830,7 +114795,7 @@
       {
         "section": "Modal",
         "part": "action",
-        "documentationLine": 1249,
+        "documentationLine": 1292,
         "engines": [
           "modern",
           "rustic"
@@ -114887,7 +114852,7 @@
       {
         "section": "Modal",
         "part": "close-button",
-        "documentationLine": 1250,
+        "documentationLine": 1293,
         "engines": [
           "modern",
           "rustic",
@@ -114950,7 +114915,7 @@
       {
         "section": "Drawer",
         "part": "backdrop",
-        "documentationLine": 1280,
+        "documentationLine": 1323,
         "engines": [
           "modern",
           "rustic"
@@ -114989,7 +114954,7 @@
       {
         "section": "Drawer",
         "part": "surface",
-        "documentationLine": 1281,
+        "documentationLine": 1324,
         "engines": [
           "modern",
           "rustic"
@@ -115028,7 +114993,7 @@
       {
         "section": "Drawer",
         "part": "header",
-        "documentationLine": 1282,
+        "documentationLine": 1325,
         "engines": [
           "modern",
           "rustic",
@@ -115081,7 +115046,7 @@
       {
         "section": "Drawer",
         "part": "title",
-        "documentationLine": 1283,
+        "documentationLine": 1326,
         "engines": [
           "modern",
           "rustic",
@@ -115134,7 +115099,7 @@
       {
         "section": "Drawer",
         "part": "close-button",
-        "documentationLine": 1284,
+        "documentationLine": 1327,
         "engines": [
           "modern",
           "rustic",
@@ -115197,7 +115162,7 @@
       {
         "section": "Drawer",
         "part": "body",
-        "documentationLine": 1285,
+        "documentationLine": 1328,
         "engines": [
           "modern",
           "rustic",
@@ -115250,7 +115215,7 @@
       {
         "section": "Drawer",
         "part": "footer",
-        "documentationLine": 1286,
+        "documentationLine": 1329,
         "engines": [
           "modern",
           "rustic",
@@ -115303,7 +115268,7 @@
       {
         "section": "Toast",
         "part": "root",
-        "documentationLine": 1303,
+        "documentationLine": 1346,
         "engines": [
           "rustic",
           "shared"
@@ -115342,7 +115307,7 @@
       {
         "section": "Toast",
         "part": "icon",
-        "documentationLine": 1304,
+        "documentationLine": 1347,
         "engines": [
           "rustic"
         ],
@@ -115367,7 +115332,7 @@
       {
         "section": "Toast",
         "part": "body",
-        "documentationLine": 1305,
+        "documentationLine": 1348,
         "engines": [
           "rustic"
         ],
@@ -115392,7 +115357,7 @@
       {
         "section": "Toast",
         "part": "action",
-        "documentationLine": 1306,
+        "documentationLine": 1349,
         "engines": [
           "rustic"
         ],
@@ -115417,7 +115382,7 @@
       {
         "section": "Toast",
         "part": "close-button",
-        "documentationLine": 1307,
+        "documentationLine": 1350,
         "engines": [
           "rustic"
         ],
@@ -115442,7 +115407,7 @@
       {
         "section": "Toast",
         "part": "progress-bar",
-        "documentationLine": 1308,
+        "documentationLine": 1351,
         "engines": [
           "rustic"
         ],
@@ -115467,7 +115432,7 @@
       {
         "section": "Toast",
         "part": "stack-container",
-        "documentationLine": 1319,
+        "documentationLine": 1362,
         "engines": [
           "shared"
         ],
@@ -115492,7 +115457,7 @@
       {
         "section": "Toast",
         "part": "root",
-        "documentationLine": 1325,
+        "documentationLine": 1368,
         "engines": [
           "rustic",
           "shared"
@@ -115531,7 +115496,7 @@
       {
         "section": "Toast",
         "part": "track",
-        "documentationLine": 1326,
+        "documentationLine": 1369,
         "engines": [
           "shared"
         ],
@@ -115569,7 +115534,7 @@
       {
         "section": "Toast",
         "part": "fill",
-        "documentationLine": 1327,
+        "documentationLine": 1370,
         "engines": [
           "shared"
         ],
@@ -115607,7 +115572,7 @@
       {
         "section": "Message",
         "part": "stack-container",
-        "documentationLine": 1356,
+        "documentationLine": 1399,
         "engines": [
           "rustic"
         ],
@@ -115632,7 +115597,7 @@
       {
         "section": "Message",
         "part": "root",
-        "documentationLine": 1357,
+        "documentationLine": 1400,
         "engines": [
           "rustic"
         ],
@@ -115657,7 +115622,7 @@
       {
         "section": "Message",
         "part": "icon",
-        "documentationLine": 1358,
+        "documentationLine": 1401,
         "engines": [
           "rustic"
         ],
@@ -115708,7 +115673,7 @@
       {
         "section": "Message",
         "part": "body",
-        "documentationLine": 1359,
+        "documentationLine": 1402,
         "engines": [
           "rustic"
         ],
@@ -115733,7 +115698,7 @@
       {
         "section": "Message",
         "part": "close-button",
-        "documentationLine": 1360,
+        "documentationLine": 1403,
         "engines": [
           "rustic"
         ],
@@ -115758,7 +115723,7 @@
       {
         "section": "Notification",
         "part": "stack-container",
-        "documentationLine": 1398,
+        "documentationLine": 1441,
         "engines": [
           "rustic"
         ],
@@ -115783,7 +115748,7 @@
       {
         "section": "Notification",
         "part": "root",
-        "documentationLine": 1399,
+        "documentationLine": 1442,
         "engines": [
           "rustic"
         ],
@@ -115808,7 +115773,7 @@
       {
         "section": "Notification",
         "part": "icon",
-        "documentationLine": 1400,
+        "documentationLine": 1443,
         "engines": [
           "rustic"
         ],
@@ -115846,7 +115811,7 @@
       {
         "section": "Notification",
         "part": "title",
-        "documentationLine": 1401,
+        "documentationLine": 1444,
         "engines": [
           "rustic"
         ],
@@ -115871,7 +115836,7 @@
       {
         "section": "Notification",
         "part": "description",
-        "documentationLine": 1402,
+        "documentationLine": 1445,
         "engines": [
           "rustic"
         ],
@@ -115896,7 +115861,7 @@
       {
         "section": "Notification",
         "part": "body",
-        "documentationLine": 1403,
+        "documentationLine": 1446,
         "engines": [
           "rustic"
         ],
@@ -115921,7 +115886,7 @@
       {
         "section": "Notification",
         "part": "action",
-        "documentationLine": 1404,
+        "documentationLine": 1447,
         "engines": [
           "rustic"
         ],
@@ -115946,7 +115911,7 @@
       {
         "section": "Notification",
         "part": "close-button",
-        "documentationLine": 1405,
+        "documentationLine": 1448,
         "engines": [
           "rustic"
         ],
@@ -115971,7 +115936,7 @@
       {
         "section": "Result",
         "part": "root",
-        "documentationLine": 1423,
+        "documentationLine": 1466,
         "engines": [
           "modern",
           "rustic"
@@ -116010,7 +115975,7 @@
       {
         "section": "Result",
         "part": "status-icon",
-        "documentationLine": 1424,
+        "documentationLine": 1467,
         "engines": [
           "modern",
           "rustic"
@@ -116088,7 +116053,7 @@
       {
         "section": "Result",
         "part": "status-code",
-        "documentationLine": 1425,
+        "documentationLine": 1468,
         "engines": [
           "modern",
           "rustic"
@@ -116153,7 +116118,7 @@
       {
         "section": "Result",
         "part": "icon",
-        "documentationLine": 1426,
+        "documentationLine": 1469,
         "engines": [
           "modern",
           "rustic"
@@ -116192,7 +116157,7 @@
       {
         "section": "Result",
         "part": "title",
-        "documentationLine": 1427,
+        "documentationLine": 1470,
         "engines": [
           "modern",
           "rustic"
@@ -116231,7 +116196,7 @@
       {
         "section": "Result",
         "part": "description",
-        "documentationLine": 1428,
+        "documentationLine": 1471,
         "engines": [
           "modern",
           "rustic"
@@ -116270,7 +116235,7 @@
       {
         "section": "Result",
         "part": "content",
-        "documentationLine": 1429,
+        "documentationLine": 1472,
         "engines": [
           "modern",
           "rustic"
@@ -116309,7 +116274,7 @@
       {
         "section": "Result",
         "part": "extra",
-        "documentationLine": 1430,
+        "documentationLine": 1473,
         "engines": [
           "modern",
           "rustic"
@@ -116348,7 +116313,7 @@
       {
         "section": "Modal (overlay)",
         "part": "root",
-        "documentationLine": 1570,
+        "documentationLine": 1613,
         "engines": [
           "modern",
           "rustic"
@@ -116387,7 +116352,7 @@
       {
         "section": "Modal (overlay)",
         "part": "backdrop",
-        "documentationLine": 1571,
+        "documentationLine": 1614,
         "engines": [
           "modern"
         ],
@@ -116412,7 +116377,7 @@
       {
         "section": "Modal (overlay)",
         "part": "surface",
-        "documentationLine": 1572,
+        "documentationLine": 1615,
         "engines": [
           "modern",
           "rustic"
@@ -116451,7 +116416,7 @@
       {
         "section": "Modal (overlay)",
         "part": "header",
-        "documentationLine": 1573,
+        "documentationLine": 1616,
         "engines": [
           "modern",
           "rustic",
@@ -116504,7 +116469,7 @@
       {
         "section": "Modal (overlay)",
         "part": "title",
-        "documentationLine": 1574,
+        "documentationLine": 1617,
         "engines": [
           "modern",
           "rustic",
@@ -116557,7 +116522,7 @@
       {
         "section": "Modal (overlay)",
         "part": "description",
-        "documentationLine": 1575,
+        "documentationLine": 1618,
         "engines": [
           "modern",
           "rustic"
@@ -116596,7 +116561,7 @@
       {
         "section": "Modal (overlay)",
         "part": "body",
-        "documentationLine": 1576,
+        "documentationLine": 1619,
         "engines": [
           "modern",
           "rustic",
@@ -116649,7 +116614,7 @@
       {
         "section": "Modal (overlay)",
         "part": "footer",
-        "documentationLine": 1577,
+        "documentationLine": 1620,
         "engines": [
           "modern",
           "rustic",
@@ -116702,7 +116667,7 @@
       {
         "section": "Modal (overlay)",
         "part": "close-button",
-        "documentationLine": 1578,
+        "documentationLine": 1621,
         "engines": [
           "modern",
           "rustic",
@@ -116765,7 +116730,7 @@
       {
         "section": "Tour",
         "part": "root",
-        "documentationLine": 1598,
+        "documentationLine": 1641,
         "engines": [
           "modern",
           "rustic"
@@ -116804,7 +116769,7 @@
       {
         "section": "Tour",
         "part": "backdrop",
-        "documentationLine": 1599,
+        "documentationLine": 1642,
         "engines": [
           "modern",
           "rustic"
@@ -116843,7 +116808,7 @@
       {
         "section": "Tour",
         "part": "spotlight",
-        "documentationLine": 1600,
+        "documentationLine": 1643,
         "engines": [
           "modern",
           "rustic"
@@ -116882,7 +116847,7 @@
       {
         "section": "Tour",
         "part": "surface",
-        "documentationLine": 1601,
+        "documentationLine": 1644,
         "engines": [
           "modern",
           "rustic"
@@ -116921,7 +116886,7 @@
       {
         "section": "Tour",
         "part": "title",
-        "documentationLine": 1602,
+        "documentationLine": 1645,
         "engines": [
           "modern",
           "rustic"
@@ -116960,7 +116925,7 @@
       {
         "section": "Tour",
         "part": "description",
-        "documentationLine": 1603,
+        "documentationLine": 1646,
         "engines": [
           "modern",
           "rustic"
@@ -116999,7 +116964,7 @@
       {
         "section": "Tour",
         "part": "close-button",
-        "documentationLine": 1604,
+        "documentationLine": 1647,
         "engines": [
           "modern",
           "rustic"
@@ -117043,7 +117008,7 @@
       {
         "section": "Tour",
         "part": "footer",
-        "documentationLine": 1605,
+        "documentationLine": 1648,
         "engines": [
           "modern",
           "rustic"
@@ -117082,7 +117047,7 @@
       {
         "section": "Tour",
         "part": "indicator",
-        "documentationLine": 1606,
+        "documentationLine": 1649,
         "engines": [
           "modern",
           "rustic"
@@ -117121,7 +117086,7 @@
       {
         "section": "Tour",
         "part": "action",
-        "documentationLine": 1607,
+        "documentationLine": 1650,
         "engines": [
           "modern",
           "rustic"
@@ -117178,7 +117143,7 @@
       {
         "section": "ConfirmDialog",
         "part": "backdrop",
-        "documentationLine": 1622,
+        "documentationLine": 1665,
         "engines": [
           "modern",
           "rustic"
@@ -117217,7 +117182,7 @@
       {
         "section": "ConfirmDialog",
         "part": "surface",
-        "documentationLine": 1623,
+        "documentationLine": 1666,
         "engines": [
           "modern",
           "rustic"
@@ -117256,7 +117221,7 @@
       {
         "section": "ConfirmDialog",
         "part": "icon",
-        "documentationLine": 1624,
+        "documentationLine": 1667,
         "engines": [
           "modern",
           "rustic"
@@ -117295,7 +117260,7 @@
       {
         "section": "ConfirmDialog",
         "part": "title",
-        "documentationLine": 1625,
+        "documentationLine": 1668,
         "engines": [
           "modern",
           "rustic"
@@ -117334,7 +117299,7 @@
       {
         "section": "ConfirmDialog",
         "part": "description",
-        "documentationLine": 1626,
+        "documentationLine": 1669,
         "engines": [
           "modern",
           "rustic"
@@ -117373,7 +117338,7 @@
       {
         "section": "ConfirmDialog",
         "part": "action",
-        "documentationLine": 1627,
+        "documentationLine": 1670,
         "engines": [
           "modern",
           "rustic"
@@ -117448,7 +117413,7 @@
       {
         "section": "ConfirmDialog",
         "part": "spinner",
-        "documentationLine": 1628,
+        "documentationLine": 1671,
         "engines": [
           "rustic"
         ],
@@ -117473,7 +117438,7 @@
       {
         "section": "AlertDialog",
         "part": "root",
-        "documentationLine": 1648,
+        "documentationLine": 1691,
         "engines": [
           "modern"
         ],
@@ -117498,7 +117463,7 @@
       {
         "section": "AlertDialog",
         "part": "backdrop",
-        "documentationLine": 1649,
+        "documentationLine": 1692,
         "engines": [
           "modern",
           "rustic"
@@ -117537,7 +117502,7 @@
       {
         "section": "AlertDialog",
         "part": "surface",
-        "documentationLine": 1650,
+        "documentationLine": 1693,
         "engines": [
           "modern",
           "rustic"
@@ -117576,7 +117541,7 @@
       {
         "section": "AlertDialog",
         "part": "icon",
-        "documentationLine": 1651,
+        "documentationLine": 1694,
         "engines": [
           "modern",
           "rustic"
@@ -117615,7 +117580,7 @@
       {
         "section": "AlertDialog",
         "part": "title",
-        "documentationLine": 1652,
+        "documentationLine": 1695,
         "engines": [
           "modern",
           "rustic"
@@ -117654,7 +117619,7 @@
       {
         "section": "AlertDialog",
         "part": "description",
-        "documentationLine": 1653,
+        "documentationLine": 1696,
         "engines": [
           "modern",
           "rustic"
@@ -117693,7 +117658,7 @@
       {
         "section": "AlertDialog",
         "part": "footer",
-        "documentationLine": 1654,
+        "documentationLine": 1697,
         "engines": [
           "modern",
           "rustic"
@@ -117732,7 +117697,7 @@
       {
         "section": "AlertDialog",
         "part": "action",
-        "documentationLine": 1655,
+        "documentationLine": 1698,
         "engines": [
           "modern",
           "rustic"
@@ -117776,7 +117741,7 @@
       {
         "section": "Popconfirm",
         "part": "trigger",
-        "documentationLine": 1671,
+        "documentationLine": 1714,
         "engines": [
           "modern",
           "rustic"
@@ -117815,7 +117780,7 @@
       {
         "section": "Popconfirm",
         "part": "surface",
-        "documentationLine": 1672,
+        "documentationLine": 1715,
         "engines": [
           "modern",
           "rustic"
@@ -117854,7 +117819,7 @@
       {
         "section": "Popconfirm",
         "part": "icon",
-        "documentationLine": 1673,
+        "documentationLine": 1716,
         "engines": [
           "modern",
           "rustic"
@@ -117893,7 +117858,7 @@
       {
         "section": "Popconfirm",
         "part": "title",
-        "documentationLine": 1674,
+        "documentationLine": 1717,
         "engines": [
           "modern",
           "rustic"
@@ -117932,7 +117897,7 @@
       {
         "section": "Popconfirm",
         "part": "description",
-        "documentationLine": 1675,
+        "documentationLine": 1718,
         "engines": [
           "modern",
           "rustic"
@@ -117971,7 +117936,7 @@
       {
         "section": "Popconfirm",
         "part": "action",
-        "documentationLine": 1676,
+        "documentationLine": 1719,
         "engines": [
           "modern",
           "rustic"
@@ -118046,7 +118011,7 @@
       {
         "section": "Sheet",
         "part": "root",
-        "documentationLine": 1696,
+        "documentationLine": 1739,
         "engines": [
           "modern",
           "rustic"
@@ -118085,7 +118050,7 @@
       {
         "section": "Sheet",
         "part": "backdrop",
-        "documentationLine": 1697,
+        "documentationLine": 1740,
         "engines": [
           "modern",
           "rustic"
@@ -118124,7 +118089,7 @@
       {
         "section": "Sheet",
         "part": "surface",
-        "documentationLine": 1698,
+        "documentationLine": 1741,
         "engines": [
           "modern",
           "rustic"
@@ -118163,7 +118128,7 @@
       {
         "section": "Sheet",
         "part": "handle",
-        "documentationLine": 1699,
+        "documentationLine": 1742,
         "engines": [
           "modern",
           "rustic"
@@ -118202,7 +118167,7 @@
       {
         "section": "Sheet",
         "part": "header",
-        "documentationLine": 1700,
+        "documentationLine": 1743,
         "engines": [
           "modern",
           "rustic"
@@ -118241,7 +118206,7 @@
       {
         "section": "Sheet",
         "part": "title",
-        "documentationLine": 1701,
+        "documentationLine": 1744,
         "engines": [
           "modern",
           "rustic"
@@ -118280,7 +118245,7 @@
       {
         "section": "Sheet",
         "part": "close-button",
-        "documentationLine": 1702,
+        "documentationLine": 1745,
         "engines": [
           "modern",
           "rustic"
@@ -118324,7 +118289,7 @@
       {
         "section": "Sheet",
         "part": "body",
-        "documentationLine": 1703,
+        "documentationLine": 1746,
         "engines": [
           "modern",
           "rustic"
@@ -118363,7 +118328,7 @@
       {
         "section": "ContextMenu",
         "part": "trigger",
-        "documentationLine": 1723,
+        "documentationLine": 1766,
         "engines": [
           "modern",
           "rustic"
@@ -118407,7 +118372,7 @@
       {
         "section": "ContextMenu",
         "part": "surface",
-        "documentationLine": 1724,
+        "documentationLine": 1767,
         "engines": [
           "modern",
           "rustic"
@@ -118446,7 +118411,7 @@
       {
         "section": "ContextMenu",
         "part": "divider",
-        "documentationLine": 1725,
+        "documentationLine": 1768,
         "engines": [
           "modern",
           "rustic"
@@ -118485,7 +118450,7 @@
       {
         "section": "ContextMenu",
         "part": "group-label",
-        "documentationLine": 1726,
+        "documentationLine": 1769,
         "engines": [
           "modern",
           "rustic"
@@ -118524,7 +118489,7 @@
       {
         "section": "ContextMenu",
         "part": "item",
-        "documentationLine": 1727,
+        "documentationLine": 1770,
         "engines": [
           "modern",
           "rustic"
@@ -118563,7 +118528,7 @@
       {
         "section": "Popover",
         "part": "trigger",
-        "documentationLine": 1741,
+        "documentationLine": 1784,
         "engines": [
           "modern",
           "rustic"
@@ -118615,7 +118580,7 @@
       {
         "section": "Popover",
         "part": "surface",
-        "documentationLine": 1742,
+        "documentationLine": 1785,
         "engines": [
           "modern",
           "rustic"
@@ -118659,7 +118624,7 @@
       {
         "section": "Popover",
         "part": "title",
-        "documentationLine": 1743,
+        "documentationLine": 1786,
         "engines": [
           "modern",
           "rustic"
@@ -118698,7 +118663,7 @@
       {
         "section": "Popover",
         "part": "arrow",
-        "documentationLine": 1744,
+        "documentationLine": 1787,
         "engines": [
           "modern",
           "rustic"
@@ -118737,7 +118702,7 @@
       {
         "section": "Dropdown",
         "part": "trigger",
-        "documentationLine": 1764,
+        "documentationLine": 1807,
         "engines": [
           "modern",
           "rustic"
@@ -118776,7 +118741,7 @@
       {
         "section": "Dropdown",
         "part": "surface",
-        "documentationLine": 1765,
+        "documentationLine": 1808,
         "engines": [
           "modern",
           "rustic"
@@ -118815,7 +118780,7 @@
       {
         "section": "Dropdown",
         "part": "divider",
-        "documentationLine": 1766,
+        "documentationLine": 1809,
         "engines": [
           "modern",
           "rustic"
@@ -118854,7 +118819,7 @@
       {
         "section": "Dropdown",
         "part": "group-label",
-        "documentationLine": 1767,
+        "documentationLine": 1810,
         "engines": [
           "modern",
           "rustic"
@@ -118893,7 +118858,7 @@
       {
         "section": "Dropdown",
         "part": "item",
-        "documentationLine": 1768,
+        "documentationLine": 1811,
         "engines": [
           "modern",
           "rustic"
@@ -118937,7 +118902,7 @@
       {
         "section": "HoverCard",
         "part": "trigger",
-        "documentationLine": 1782,
+        "documentationLine": 1825,
         "engines": [
           "modern",
           "rustic"
@@ -118976,7 +118941,7 @@
       {
         "section": "HoverCard",
         "part": "surface",
-        "documentationLine": 1783,
+        "documentationLine": 1826,
         "engines": [
           "modern",
           "rustic"
@@ -119015,7 +118980,7 @@
       {
         "section": "Watermark",
         "part": "root",
-        "documentationLine": 1801,
+        "documentationLine": 1844,
         "engines": [
           "modern",
           "rustic"
@@ -119054,7 +119019,7 @@
       {
         "section": "Watermark",
         "part": "pattern",
-        "documentationLine": 1802,
+        "documentationLine": 1845,
         "engines": [
           "modern",
           "rustic"
@@ -119093,7 +119058,7 @@
       {
         "section": "ActionDock",
         "part": "root",
-        "documentationLine": 1889,
+        "documentationLine": 1932,
         "engines": [
           "shared"
         ],
@@ -119123,7 +119088,7 @@
       {
         "section": "Affix",
         "part": "root",
-        "documentationLine": 1917,
+        "documentationLine": 1960,
         "engines": [
           "modern",
           "rustic",
@@ -119202,7 +119167,7 @@
       {
         "section": "Anchor",
         "part": "root",
-        "documentationLine": 1933,
+        "documentationLine": 1976,
         "engines": [
           "modern",
           "rustic"
@@ -119241,7 +119206,7 @@
       {
         "section": "Anchor",
         "part": "item",
-        "documentationLine": 1934,
+        "documentationLine": 1977,
         "engines": [
           "modern",
           "rustic"
@@ -119280,7 +119245,7 @@
       {
         "section": "BackTop",
         "part": "trigger",
-        "documentationLine": 1947,
+        "documentationLine": 1990,
         "engines": [
           "modern",
           "rustic"
@@ -119324,7 +119289,7 @@
       {
         "section": "BottomTabBar",
         "part": "root",
-        "documentationLine": 1960,
+        "documentationLine": 2003,
         "engines": [
           "shared"
         ],
@@ -119354,7 +119319,7 @@
       {
         "section": "BottomTabBar",
         "part": "tab-button",
-        "documentationLine": 1961,
+        "documentationLine": 2004,
         "engines": [
           "shared"
         ],
@@ -119384,7 +119349,7 @@
       {
         "section": "BottomTabBar",
         "part": "icon",
-        "documentationLine": 1962,
+        "documentationLine": 2005,
         "engines": [
           "shared"
         ],
@@ -119414,7 +119379,7 @@
       {
         "section": "BottomTabBar",
         "part": "badge",
-        "documentationLine": 1963,
+        "documentationLine": 2006,
         "engines": [
           "shared"
         ],
@@ -119444,7 +119409,7 @@
       {
         "section": "BottomTabBar",
         "part": "label",
-        "documentationLine": 1964,
+        "documentationLine": 2007,
         "engines": [
           "shared"
         ],
@@ -119474,7 +119439,7 @@
       {
         "section": "Breadcrumb",
         "part": "root",
-        "documentationLine": 1978,
+        "documentationLine": 2021,
         "engines": [
           "modern",
           "rustic"
@@ -119513,7 +119478,7 @@
       {
         "section": "Breadcrumb",
         "part": "crumb",
-        "documentationLine": 1979,
+        "documentationLine": 2022,
         "engines": [
           "modern",
           "rustic",
@@ -119664,7 +119629,7 @@
       {
         "section": "Breadcrumb",
         "part": "separator",
-        "documentationLine": 1980,
+        "documentationLine": 2023,
         "engines": [
           "modern",
           "rustic"
@@ -119703,7 +119668,7 @@
       {
         "section": "FloatButton",
         "part": "root",
-        "documentationLine": 2006,
+        "documentationLine": 2049,
         "engines": [
           "modern",
           "rustic"
@@ -119742,7 +119707,7 @@
       {
         "section": "FloatButton",
         "part": "trigger",
-        "documentationLine": 2007,
+        "documentationLine": 2050,
         "engines": [
           "modern",
           "rustic"
@@ -119859,7 +119824,7 @@
       {
         "section": "FloatButton",
         "part": "panel",
-        "documentationLine": 2008,
+        "documentationLine": 2051,
         "engines": [
           "modern",
           "rustic"
@@ -119898,7 +119863,7 @@
       {
         "section": "FloatButton",
         "part": "badge",
-        "documentationLine": 2009,
+        "documentationLine": 2052,
         "engines": [
           "modern",
           "rustic"
@@ -119963,7 +119928,7 @@
       {
         "section": "Link",
         "part": "root",
-        "documentationLine": 2024,
+        "documentationLine": 2067,
         "engines": [
           "modern",
           "rustic"
@@ -120007,7 +119972,7 @@
       {
         "section": "Menu",
         "part": "root",
-        "documentationLine": 2037,
+        "documentationLine": 2080,
         "engines": [
           "modern",
           "rustic"
@@ -120049,7 +120014,7 @@
       {
         "section": "Menu",
         "part": "item",
-        "documentationLine": 2038,
+        "documentationLine": 2081,
         "engines": [
           "modern",
           "rustic",
@@ -120115,7 +120080,7 @@
       {
         "section": "Menu",
         "part": "icon",
-        "documentationLine": 2039,
+        "documentationLine": 2082,
         "engines": [
           "modern",
           "rustic",
@@ -120207,7 +120172,7 @@
       {
         "section": "Menu",
         "part": "label",
-        "documentationLine": 2040,
+        "documentationLine": 2083,
         "engines": [
           "modern",
           "rustic",
@@ -120299,7 +120264,7 @@
       {
         "section": "Menu",
         "part": "divider",
-        "documentationLine": 2041,
+        "documentationLine": 2084,
         "engines": [
           "modern",
           "rustic",
@@ -120355,7 +120320,7 @@
       {
         "section": "Menu",
         "part": "group",
-        "documentationLine": 2042,
+        "documentationLine": 2085,
         "engines": [
           "modern",
           "rustic",
@@ -120411,7 +120376,7 @@
       {
         "section": "Menu",
         "part": "group-label",
-        "documentationLine": 2043,
+        "documentationLine": 2086,
         "engines": [
           "modern",
           "rustic",
@@ -120464,7 +120429,7 @@
       {
         "section": "Menu",
         "part": "panel",
-        "documentationLine": 2044,
+        "documentationLine": 2087,
         "engines": [
           "modern",
           "rustic",
@@ -120556,7 +120521,7 @@
       {
         "section": "Menu",
         "part": "trigger",
-        "documentationLine": 2045,
+        "documentationLine": 2088,
         "engines": [
           "modern",
           "rustic",
@@ -120619,7 +120584,7 @@
       {
         "section": "Menu",
         "part": "arrow-icon",
-        "documentationLine": 2046,
+        "documentationLine": 2089,
         "engines": [
           "modern",
           "rustic",
@@ -120672,7 +120637,7 @@
       {
         "section": "MobileHeader",
         "part": "root",
-        "documentationLine": 2073,
+        "documentationLine": 2116,
         "engines": [
           "shared"
         ],
@@ -120702,7 +120667,7 @@
       {
         "section": "MobileHeader",
         "part": "trigger",
-        "documentationLine": 2074,
+        "documentationLine": 2117,
         "engines": [
           "shared"
         ],
@@ -120732,7 +120697,7 @@
       {
         "section": "MobileHeader",
         "part": "label",
-        "documentationLine": 2075,
+        "documentationLine": 2118,
         "engines": [
           "shared"
         ],
@@ -120762,7 +120727,7 @@
       {
         "section": "Pagination",
         "part": "root",
-        "documentationLine": 2087,
+        "documentationLine": 2130,
         "engines": [
           "modern",
           "rustic"
@@ -120801,7 +120766,7 @@
       {
         "section": "Pagination",
         "part": "pagination-range",
-        "documentationLine": 2088,
+        "documentationLine": 2131,
         "engines": [
           "modern",
           "rustic"
@@ -120840,7 +120805,7 @@
       {
         "section": "Pagination",
         "part": "pagination-nav-button",
-        "documentationLine": 2089,
+        "documentationLine": 2132,
         "engines": [
           "modern",
           "rustic"
@@ -120897,7 +120862,7 @@
       {
         "section": "Pagination",
         "part": "pagination-page-button",
-        "documentationLine": 2090,
+        "documentationLine": 2133,
         "engines": [
           "modern",
           "rustic"
@@ -120941,7 +120906,7 @@
       {
         "section": "Pagination",
         "part": "ellipsis",
-        "documentationLine": 2091,
+        "documentationLine": 2134,
         "engines": [
           "modern",
           "rustic"
@@ -120980,7 +120945,7 @@
       {
         "section": "Segmented",
         "part": "root",
-        "documentationLine": 2103,
+        "documentationLine": 2146,
         "engines": [
           "modern",
           "rustic"
@@ -121027,7 +120992,7 @@
       {
         "section": "Segmented",
         "part": "option",
-        "documentationLine": 2104,
+        "documentationLine": 2147,
         "engines": [
           "modern",
           "rustic"
@@ -121071,7 +121036,7 @@
       {
         "section": "Segmented",
         "part": "icon",
-        "documentationLine": 2105,
+        "documentationLine": 2148,
         "engines": [
           "modern"
         ],
@@ -121096,7 +121061,7 @@
       {
         "section": "Stepper",
         "part": "root",
-        "documentationLine": 2122,
+        "documentationLine": 2165,
         "engines": [
           "modern",
           "rustic"
@@ -121138,7 +121103,7 @@
       {
         "section": "Stepper",
         "part": "item",
-        "documentationLine": 2123,
+        "documentationLine": 2166,
         "engines": [
           "modern",
           "rustic",
@@ -121191,7 +121156,7 @@
       {
         "section": "Stepper",
         "part": "label",
-        "documentationLine": 2124,
+        "documentationLine": 2167,
         "engines": [
           "modern",
           "rustic",
@@ -121244,7 +121209,7 @@
       {
         "section": "Stepper",
         "part": "description",
-        "documentationLine": 2125,
+        "documentationLine": 2168,
         "engines": [
           "modern",
           "rustic",
@@ -121297,7 +121262,7 @@
       {
         "section": "Stepper",
         "part": "icon",
-        "documentationLine": 2126,
+        "documentationLine": 2169,
         "engines": [
           "modern",
           "rustic",
@@ -121350,7 +121315,7 @@
       {
         "section": "Stepper",
         "part": "subtitle",
-        "documentationLine": 2127,
+        "documentationLine": 2170,
         "engines": [
           "modern",
           "rustic",
@@ -121403,7 +121368,7 @@
       {
         "section": "Stepper",
         "part": "connector",
-        "documentationLine": 2128,
+        "documentationLine": 2171,
         "engines": [
           "rustic",
           "shared"
@@ -121442,7 +121407,7 @@
       {
         "section": "Stepper",
         "part": "panel",
-        "documentationLine": 2134,
+        "documentationLine": 2177,
         "engines": [
           "shared"
         ],
@@ -121467,7 +121432,7 @@
       {
         "section": "Steps",
         "part": "root",
-        "documentationLine": 2168,
+        "documentationLine": 2211,
         "engines": [
           "modern",
           "rustic"
@@ -121509,7 +121474,7 @@
       {
         "section": "Steps",
         "part": "item",
-        "documentationLine": 2169,
+        "documentationLine": 2212,
         "engines": [
           "modern",
           "rustic",
@@ -121562,7 +121527,7 @@
       {
         "section": "Steps",
         "part": "icon",
-        "documentationLine": 2170,
+        "documentationLine": 2213,
         "engines": [
           "modern",
           "rustic",
@@ -121615,7 +121580,7 @@
       {
         "section": "Steps",
         "part": "label",
-        "documentationLine": 2171,
+        "documentationLine": 2214,
         "engines": [
           "modern",
           "rustic",
@@ -121668,7 +121633,7 @@
       {
         "section": "Steps",
         "part": "subtitle",
-        "documentationLine": 2172,
+        "documentationLine": 2215,
         "engines": [
           "modern",
           "rustic",
@@ -121721,7 +121686,7 @@
       {
         "section": "Steps",
         "part": "description",
-        "documentationLine": 2173,
+        "documentationLine": 2216,
         "engines": [
           "modern",
           "rustic",
@@ -121774,7 +121739,7 @@
       {
         "section": "Steps",
         "part": "connector",
-        "documentationLine": 2174,
+        "documentationLine": 2217,
         "engines": [
           "rustic",
           "shared"
@@ -121813,7 +121778,7 @@
       {
         "section": "Tabs",
         "part": "root",
-        "documentationLine": 2192,
+        "documentationLine": 2235,
         "engines": [
           "modern",
           "rustic"
@@ -121852,7 +121817,7 @@
       {
         "section": "Tabs",
         "part": "tab-list",
-        "documentationLine": 2193,
+        "documentationLine": 2236,
         "engines": [
           "modern",
           "rustic"
@@ -121891,7 +121856,7 @@
       {
         "section": "Tabs",
         "part": "tab-button",
-        "documentationLine": 2194,
+        "documentationLine": 2237,
         "engines": [
           "modern",
           "rustic"
@@ -121935,7 +121900,7 @@
       {
         "section": "Tabs",
         "part": "icon",
-        "documentationLine": 2195,
+        "documentationLine": 2238,
         "engines": [
           "modern"
         ],
@@ -121960,7 +121925,7 @@
       {
         "section": "Tabs",
         "part": "tab-badge",
-        "documentationLine": 2196,
+        "documentationLine": 2239,
         "engines": [
           "classic",
           "modern",
@@ -122013,7 +121978,7 @@
       {
         "section": "Tabs",
         "part": "indicator",
-        "documentationLine": 2197,
+        "documentationLine": 2240,
         "engines": [
           "modern"
         ],
@@ -122038,7 +122003,7 @@
       {
         "section": "Tabs",
         "part": "tab-panel",
-        "documentationLine": 2198,
+        "documentationLine": 2241,
         "engines": [
           "modern",
           "rustic"
@@ -122118,8 +122083,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "379f8de22d7fdb98425204dbdbdfc71550bf1a563d46314a77e33a3d91c867e8",
-      "379f8de22d7fdb98425204dbdbdfc71550bf1a563d46314a77e33a3d91c867e8"
+      "f553e2bdb32b45abe4e50e19adf10cfa7c5af2946635c7a4fd46ccf318eae8bc",
+      "f553e2bdb32b45abe4e50e19adf10cfa7c5af2946635c7a4fd46ccf318eae8bc"
     ],
     "agree": true
   }

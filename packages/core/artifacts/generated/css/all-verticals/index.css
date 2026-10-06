@@ -26817,11 +26817,11 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   cursor: pointer;
 }
 
-.ds-pattern-data-table.ds-engine-modern [data-part="editor-checkbox"] {
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-checkbox {
+  /* The table's governed size reaches the Checkbox primitive through its size channel,
+     unscaled once because the primitive applies the density scale itself. */
+  --ds-checkbox-sm-size: calc(var(--ds-data-table-editor-checkbox-size, var(--ds-spacing-4, 1rem)) / var(--ds-density-effective-scale, 1));
   flex-shrink: 0;
-  inline-size: var(--ds-data-table-editor-checkbox-size, var(--ds-spacing-4, 1rem));
-  block-size: var(--ds-data-table-editor-checkbox-size, var(--ds-spacing-4, 1rem));
-  cursor: pointer;
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="editor-error"] {
@@ -28470,14 +28470,11 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   border: 1.5px solid var(--ds-color-error);
 }
 
-/* ---- checkbox editor + error message ---- */
-.ds-pattern-data-table [data-part="editor-checkbox"] {
-  accent-color: var(--ds-color-primary);
-}
+/* ---- error message ---- */
 /* The editor controls are raw form elements: no primitive skin paints their
    focus, so each wears the tenant focus signature here. */
 .ds-pattern-data-table
-  :is([data-part="editor-input"], [data-part="editor-checkbox"]):is([data-state~="focus-visible"], :focus-visible) {
+  [data-part="editor-input"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
@@ -28968,7 +28965,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 @media (forced-colors: active) {
   .ds-pattern-data-table
-    :is([data-part="editor-input"], [data-part="editor-checkbox"]):is([data-state~="focus-visible"], :focus-visible) {
+    [data-part="editor-input"]:is([data-state~="focus-visible"], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;

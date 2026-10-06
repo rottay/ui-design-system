@@ -288,7 +288,7 @@ describe("DataTable pass 2 craft contract", () => {
     const cellEditor = readFileSync(join(here, "../engines/modern/cell-editor/index.tsx"), "utf8");
     const mobile = mobileSkin.replace(/\/\*[\s\S]*?\*\//g, "");
     const EDITOR_FOCUS =
-      '.ds-pattern-data-table :is([data-part="editor-input"], [data-part="editor-checkbox"]):is([data-state~="focus-visible"], :focus-visible)';
+      '.ds-pattern-data-table [data-part="editor-input"]:is([data-state~="focus-visible"], :focus-visible)';
     const editorRules = [...mobile.matchAll(/([^{}]*)\{([^{}]*)\}/g)]
       .map(([, selector, body]) => [(selector ?? "").replace(/\s+/g, " ").trim(), body ?? ""] as const)
       .filter(([selector]) => /editor-(?:input|checkbox)/.test(selector) && selector.includes("focus-visible"));
@@ -297,8 +297,10 @@ describe("DataTable pass 2 craft contract", () => {
       const controls = [...cellEditor.matchAll(/<(input|select|textarea|button)\b[\s\S]*?data-part="([a-z-]+)"/g)].map(
         ([, tag, part]) => `${tag}:${part}`
       );
-      expect([...new Set(controls)].sort()).toEqual(["input:editor-checkbox", "input:editor-input", "select:editor-input"]);
+      expect([...new Set(controls)].sort()).toEqual(["input:editor-input", "select:editor-input"]);
       expect(cellEditor).not.toMatch(/<(?:Input|Select|Checkbox|DatePicker|InputNumber)\b/);
+      expect(cellEditor).toMatch(/<ModernCheckbox\b/);
+      expect(cellEditor).not.toMatch(/type="checkbox"/);
     });
 
     it("paints the signature once, on the control, and a system-colour outline in forced colors", () => {
