@@ -1581,4 +1581,11 @@ list to the new WO by dated amendment.
   carry-over, its own modern-skin lot); modern Toggle checked thumb on the light track (1.26:1 —
   same). None is reachable from the foundation dark block; each keeps its acceptance pending.
 
+- **F-D — Copy i18n faltante renderiza keys crudas.** La escena modern foundation muestra
+  `components.surfaces.states.refresh` y `components.surfaces.states.offline_cached_notice` como
+  texto crudo (ya en la baseline de HEAD — pre-existente, encontrado por el tile review R15 r4).
+  Receiver: lote writer propio (agregar las keys en todos los locales + chequeo de completitud de
+  `states.*` referenciadas). No espera decisión del owner: es reparación de contenido faltante.
+  Ejecutado: despachado 2026-10-05.
+
 **Status** — OPEN, pending owner review.
