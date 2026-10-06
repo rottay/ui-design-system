@@ -38100,7 +38100,10 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'] {
   appearance: none;
   background-image: none;
-  padding-inline-end: var(--ds-select-native-arrow-clearance, var(--ds-spacing-8));
+  padding-inline-end: calc(
+    var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size) +
+      var(--ds-select-trigger-gap, var(--ds-spacing-2))
+  );
 }
 
 /* Per-size geometry follows the input field grammar so a Select beside an Input reads as one family. */
@@ -38667,6 +38670,11 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   color: var(--ds-color-primary);
   border-radius: var(--ds-radius-full);
   background: var(--ds-select-option-check-bg, transparent);
+}
+
+/* The check marks selection on its chip, so it wears the chip's paired ink, not a status tone. */
+.ds-select-shell__dropdown[data-part='dropdown'] :is([data-part='option-checkbox'], [data-part='option-check']) > .rottay-semantic-icon {
+  color: currentColor;
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='empty'],

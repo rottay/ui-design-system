@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "9a9517a3e645f613339c5ee5e20123f2956487941a1da474c072de18b794a6ad",
+    "authorityDigest": "952790868f2f53aa5443cd8a88b4b30d992e22d63afb57ff887d118b734d5f98",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5703618,
-        "sha256": "4d20872b6138ba1d299a3733710750fe114797ab22740e2781ddd30ebda213ff"
+        "bytes": 5704005,
+        "sha256": "25a14ddce63a6726429fd310e111920eb65a1c6b57081b879764796808cf0f80"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5069594,
-        "sha256": "b730f697dcbbc522748f57dc4045c59ddf0cac09309b2888a7f6455fe8266bfc"
+        "bytes": 5069981,
+        "sha256": "bbc1e2f95f8d7fcd41a33867cf4dfb51045ee445b3194bd3250124b63395825d"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5030829,
-        "sha256": "5fc862f5d6cadd9a99a79d4c04541ae6da1f63d55ac4ec158958055aff48a294"
+        "bytes": 5031216,
+        "sha256": "bcaffd098dca43c691941eea9d96bda8d0d548d12a3770fbe6c82b2b104f1650"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5030089,
-        "sha256": "d097677afd7e85d2c004eee49220b17061525addb5d04439ab320934d8035d17"
+        "bytes": 5030476,
+        "sha256": "c5f8c5e8947fc386c7b7a402918164411b23a5ad44e21be95b0120cebe957186"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -14951,6 +14951,14 @@
         ],
         "bytes": 1319,
         "sha256": "5574a8703ed20064ab52c00a2b1df977e637e21f0623a0bf7f4583d1556d81b6"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/select/tests/Select.native-arrow-clearance-and-check-ink.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 6217,
+        "sha256": "3734843b1cdcad1c672c69ddfdf51c34647ea64ddc17c2f3311f72c78af6333f"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/inputs/select/tests/Select.real-engines.test.tsx",
@@ -30514,8 +30522,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 37852,
-        "sha256": "b86646aaf58189951e2b0fb6039e66e978cca1501b70c9b9d213bd56747a0d70"
+        "bytes": 38239,
+        "sha256": "d3956ade866f3056777433b84f66c30ce1d7200acb962cfba4319943e9833478"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet/index.css",
@@ -47723,7 +47731,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "9a9517a3e645f613339c5ee5e20123f2956487941a1da474c072de18b794a6ad"
+    "digest": "952790868f2f53aa5443cd8a88b4b30d992e22d63afb57ff887d118b734d5f98"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -50526,15 +50534,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 293
+          "line": 296
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 302
+          "line": 305
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select/index.css",
@@ -53622,43 +53630,43 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 251
+          "line": 254
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 270
+          "line": 273
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 270
+          "line": 273
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 275
+          "line": 278
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 282
+          "line": 285
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 288
+          "line": 291
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 679
+          "line": 687
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 736
+          "line": 744
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 751
+          "line": 759
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea/index.css",
@@ -57172,231 +57180,227 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 349
+          "line": 352
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 358
+          "line": 361
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 367
+          "line": 370
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 388
+          "line": 391
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 388
+          "line": 391
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 393
+          "line": 396
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 398
+          "line": 401
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 415
+          "line": 418
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 419
+          "line": 422
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 425
+          "line": 428
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 429
+          "line": 432
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 442
+          "line": 445
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 446
+          "line": 449
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 457
+          "line": 460
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 462
+          "line": 465
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 467
+          "line": 470
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 473
+          "line": 476
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 473
+          "line": 476
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 480
+          "line": 483
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 484
+          "line": 487
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 489
+          "line": 492
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 505
+          "line": 508
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 509
+          "line": 512
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 513
+          "line": 516
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 540
+          "line": 543
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 545
+          "line": 548
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 551
+          "line": 554
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 558
+          "line": 561
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 564
+          "line": 567
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 578
+          "line": 581
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 582
+          "line": 585
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 587
+          "line": 590
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 599
+          "line": 602
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 603
+          "line": 606
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 612
+          "line": 615
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 612
+          "line": 615
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 619
+          "line": 622
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 624
+          "line": 627
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 631
+          "line": 634
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 642
+          "line": 646
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 642
+          "line": 650
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 658
+          "line": 650
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 663
+          "line": 666
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 663
+          "line": 671
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 690
+          "line": 671
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 699
+          "line": 698
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 707
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 719
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 736
+          "line": 727
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 759
+          "line": 744
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 759
+          "line": 767
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 764
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 768
+          "line": 767
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
@@ -57404,15 +57408,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 778
+          "line": 776
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 783
+          "line": 780
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 783
+          "line": 786
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
+          "line": 791
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
+          "line": 791
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select/index.css",
@@ -57924,19 +57936,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 642
+          "line": 650
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 663
+          "line": 671
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 663
+          "line": 671
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 783
+          "line": 791
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
@@ -61385,19 +61397,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 473
+          "line": 476
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 489
+          "line": 492
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 505
+          "line": 508
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 509
+          "line": 512
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
@@ -66511,7 +66523,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 322
+          "line": 325
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select/index.css",
@@ -66627,35 +66639,35 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 349
+          "line": 352
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 349
+          "line": 352
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 358
+          "line": 361
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 358
+          "line": 361
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 358
+          "line": 361
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 358
+          "line": 361
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 719
+          "line": 727
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 719
+          "line": 727
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css",
@@ -67433,55 +67445,55 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 473
+          "line": 476
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 513
+          "line": 516
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 540
+          "line": 543
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 540
+          "line": 543
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 545
+          "line": 548
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 551
+          "line": 554
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 558
+          "line": 561
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 599
+          "line": 602
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 690
+          "line": 698
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 759
+          "line": 767
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 759
+          "line": 767
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 764
+          "line": 772
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select/index.css",
@@ -67675,11 +67687,15 @@
       "option-check": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 631
+          "line": 634
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 778
+          "line": 646
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
+          "line": 786
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select/index.css",
@@ -67689,31 +67705,35 @@
       "option-checkbox": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 564
+          "line": 567
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 578
+          "line": 581
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 578
+          "line": 581
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 582
+          "line": 585
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 646
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 768
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 772
+          "line": 776
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
+          "line": 780
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select/index.css",
@@ -67727,11 +67747,11 @@
       "option-description": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 612
+          "line": 615
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 624
+          "line": 627
         }
       ],
       "option-group": [
@@ -67759,15 +67779,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 587
+          "line": 590
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 599
+          "line": 602
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select/index.css",
@@ -67827,19 +67847,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 446
+          "line": 449
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 457
+          "line": 460
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 480
+          "line": 483
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 484
+          "line": 487
         }
       ],
       "pagination-bar": [
@@ -69285,7 +69305,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 192
+          "line": 195
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select/index.css",
@@ -81877,287 +81897,287 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 77
+          "line": 80
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 85
+          "line": 88
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 93
+          "line": 96
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 101
+          "line": 104
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 109
+          "line": 112
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 118
+          "line": 121
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 126
+          "line": 129
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 126
+          "line": 129
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 134
+          "line": 137
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 134
+          "line": 137
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 134
+          "line": 137
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 141
+          "line": 144
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 141
+          "line": 144
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 141
+          "line": 144
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 148
+          "line": 151
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 148
+          "line": 151
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 148
+          "line": 151
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 155
+          "line": 158
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 160
+          "line": 163
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 168
+          "line": 171
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 168
+          "line": 171
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 176
+          "line": 179
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 184
+          "line": 187
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 192
+          "line": 195
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 200
+          "line": 203
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 209
+          "line": 212
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 217
+          "line": 220
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 217
+          "line": 220
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 234
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 234
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 239
+          "line": 242
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 246
+          "line": 249
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 251
+          "line": 254
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 251
+          "line": 254
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 270
+          "line": 273
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 270
+          "line": 273
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 275
+          "line": 278
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 275
+          "line": 278
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 282
+          "line": 285
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 282
+          "line": 285
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 288
+          "line": 291
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 288
+          "line": 291
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 293
+          "line": 296
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 302
+          "line": 305
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 307
+          "line": 310
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 318
+          "line": 321
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 322
+          "line": 325
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 331
+          "line": 334
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 338
+          "line": 341
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 349
+          "line": 352
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 358
+          "line": 361
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 669
+          "line": 677
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 679
+          "line": 687
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 685
+          "line": 693
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 719
+          "line": 727
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 726
+          "line": 734
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 732
+          "line": 740
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 736
+          "line": 744
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 736
+          "line": 744
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 736
+          "line": 744
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 736
+          "line": 744
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 745
+          "line": 753
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 745
+          "line": 753
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 751
+          "line": 759
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 751
+          "line": 759
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 751
+          "line": 759
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 751
+          "line": 759
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet/index.css",
@@ -88953,7 +88973,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 425
+          "line": 428
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/search-command-bar/index.css",
@@ -89047,11 +89067,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 429
+          "line": 432
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 442
+          "line": 445
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select/index.css",
@@ -89133,27 +89153,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 398
+          "line": 401
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 415
+          "line": 418
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 415
+          "line": 418
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 419
+          "line": 422
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 736
+          "line": 744
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-select/index.css",
@@ -93735,19 +93755,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 217
+          "line": 220
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 234
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 234
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 751
+          "line": 759
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select/index.css",
@@ -93771,23 +93791,23 @@
       "tag-count": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 217
+          "line": 220
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 234
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 234
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 246
+          "line": 249
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 751
+          "line": 759
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select/index.css",
@@ -93797,43 +93817,43 @@
       "tag-remove": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 251
+          "line": 254
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 270
+          "line": 273
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 270
+          "line": 273
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 275
+          "line": 278
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 282
+          "line": 285
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 288
+          "line": 291
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 685
+          "line": 693
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 736
+          "line": 744
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 751
+          "line": 759
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select/index.css",
@@ -96429,119 +96449,119 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 77
+          "line": 80
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 85
+          "line": 88
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 93
+          "line": 96
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 101
+          "line": 104
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 109
+          "line": 112
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 118
+          "line": 121
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 126
+          "line": 129
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 126
+          "line": 129
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 134
+          "line": 137
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 134
+          "line": 137
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 134
+          "line": 137
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 141
+          "line": 144
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 141
+          "line": 144
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 141
+          "line": 144
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 148
+          "line": 151
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 148
+          "line": 151
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 148
+          "line": 151
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 155
+          "line": 158
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 160
+          "line": 163
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 168
+          "line": 171
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 168
+          "line": 171
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 669
+          "line": 677
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 705
+          "line": 713
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 726
+          "line": 734
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 732
+          "line": 740
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 736
+          "line": 744
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 736
+          "line": 744
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 745
+          "line": 753
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 745
+          "line": 753
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
@@ -97809,11 +97829,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 200
+          "line": 203
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 209
+          "line": 212
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
@@ -106546,7 +106566,7 @@
           }
         ],
         "skinSelectorCorpusKey": "dropdown",
-        "skinSelectorCount": 225
+        "skinSelectorCount": 226
       },
       {
         "section": "Select",
@@ -106810,7 +106830,7 @@
           }
         ],
         "skinSelectorCorpusKey": "option-check",
-        "skinSelectorCount": 3
+        "skinSelectorCount": 4
       },
       {
         "section": "Select",
@@ -106849,7 +106869,7 @@
           }
         ],
         "skinSelectorCorpusKey": "option-checkbox",
-        "skinSelectorCount": 9
+        "skinSelectorCount": 10
       },
       {
         "section": "Select",
@@ -107458,7 +107478,7 @@
           }
         ],
         "skinSelectorCorpusKey": "dropdown",
-        "skinSelectorCount": 225
+        "skinSelectorCount": 226
       },
       {
         "section": "AutoComplete",
@@ -107658,7 +107678,7 @@
           }
         ],
         "skinSelectorCorpusKey": "dropdown",
-        "skinSelectorCount": 225
+        "skinSelectorCount": 226
       },
       {
         "section": "Mentions",
@@ -108009,7 +108029,7 @@
           }
         ],
         "skinSelectorCorpusKey": "dropdown",
-        "skinSelectorCount": 225
+        "skinSelectorCount": 226
       },
       {
         "section": "TreeSelect",
@@ -108718,7 +108738,7 @@
           }
         ],
         "skinSelectorCorpusKey": "dropdown",
-        "skinSelectorCount": 225
+        "skinSelectorCount": 226
       },
       {
         "section": "Cascader",
@@ -112193,7 +112213,7 @@
           }
         ],
         "skinSelectorCorpusKey": "dropdown",
-        "skinSelectorCount": 225
+        "skinSelectorCount": 226
       },
       {
         "section": "ColorPicker",
@@ -122058,8 +122078,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "47b77f31efd759f8973b49beb8d0b98042b552ec76fb80d1393269a4689f2db2",
-      "47b77f31efd759f8973b49beb8d0b98042b552ec76fb80d1393269a4689f2db2"
+      "cac2c92d06d9e64bf312974f7c5d124bc526b15c4593277ae35ffb771d5d795e",
+      "cac2c92d06d9e64bf312974f7c5d124bc526b15c4593277ae35ffb771d5d795e"
     ],
     "agree": true
   }
