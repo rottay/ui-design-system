@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "5ceab92ccb122911fd80d1ef98ebeec25fb436833d5838e33d9289a40e527bab"
+    "semanticHash": "56387a4e49a8f40f4b5fb6efc10d5bc275531638810905bf045a8558c6d31457"
   },
   "divergentInputs": [
     {
@@ -17206,8 +17206,8 @@
         "sha256": "49ed1d55f9fd5e173664316bfaab57de0c78d5c1be78dd84645ca9ff3d4b732b"
       },
       "live": {
-        "bytes": 68740,
-        "sha256": "818725d82d368f63a7a0fae2cf9308d673d679a674571b5183e7e44b86e0ebe9"
+        "bytes": 69085,
+        "sha256": "8f72aacb791b695513a3e7a753e42e35bf61cf71b39695b114aa661b23c86c17"
       }
     },
     {
@@ -17217,8 +17217,8 @@
         "sha256": "1851c0251f3b84e33300b4141e967f250913e299f4c2285595bd6e6a692ca280"
       },
       "live": {
-        "bytes": 54487,
-        "sha256": "185430102ee8995cf3110fd9c1e3e624a9ac20daac0b78788b23f65c27b8582b"
+        "bytes": 54724,
+        "sha256": "781498536ff8b5d0febf3b6477f1fcacd71f78178fc2f2cbebc6cff9591e9e5a"
       }
     },
     {
@@ -17228,8 +17228,8 @@
         "sha256": "7d83abebc23efb56c998b2aea3b29fcabda289364ac77021e1540f8badaf66a5"
       },
       "live": {
-        "bytes": 59028,
-        "sha256": "9ec827fc19dfd99d11109668c71e39ed2e701077f7cee84b20aafefd931ccd50"
+        "bytes": 59300,
+        "sha256": "2b35f5aa56745bbe21480022b2eb0ebb5e9ac8acda9c471e96a6eca290fad290"
       }
     },
     {
@@ -17239,8 +17239,8 @@
         "sha256": "f6364f04db63e666f2dfcca224f3669ab8d228a0eaeaccf189a87d3f3bbdfbef"
       },
       "live": {
-        "bytes": 56074,
-        "sha256": "877ce02fbfa54dbe705d75bde0f37bed18f6ebd02648b93995a629a6d1fed135"
+        "bytes": 56368,
+        "sha256": "fa804d0544e23c9ec5c218db8d7a111af98700feeaadbff73b3608cebe4c9031"
       }
     },
     {
@@ -17250,8 +17250,8 @@
         "sha256": "06484e3434450589d55c7991cd45f0c469eeef0e7efd62add74c216e27722c3f"
       },
       "live": {
-        "bytes": 53767,
-        "sha256": "e45037800c478919b93b52e5347a69225987e95292a380b517941dc19af8ad37"
+        "bytes": 54027,
+        "sha256": "6be09ba65a55d1b0b057f35bf2e017e3b6c567b6a553265f7566462b15bfdc50"
       }
     },
     {

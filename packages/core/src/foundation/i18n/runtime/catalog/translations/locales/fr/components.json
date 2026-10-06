@@ -150,7 +150,11 @@
       "capability_label": "Disponible lorsque les données seront récupérées",
       "capability_aria": "Fonctionnalités de surface enregistrées",
       "error_boundary_title": "{surface} a rencontré une erreur",
-      "error_boundary_generic_surface": "Cette section"
+      "error_boundary_generic_surface": "Cette section",
+      "stale_message": "Ces données ne sont peut-être pas à jour.",
+      "refresh": "Actualiser",
+      "offline_message": "Vous êtes hors ligne. Impossible de charger de nouvelles données.",
+      "offline_cached_notice": "Affichage des données en cache de votre dernière connexion."
     },
     "list": {
       "empty_title": "Aucun resultat disponible",

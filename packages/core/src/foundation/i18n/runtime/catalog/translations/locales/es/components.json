@@ -486,7 +486,11 @@
       "capability_aria": "Capacidades de la superficie registradas",
       "error_boundary_title": "{surface} encontró un error",
       "error_boundary_generic_surface": "Esta sección",
-      "error_description": "Se produjo un error al renderizar esta superficie."
+      "error_description": "Se produjo un error al renderizar esta superficie.",
+      "stale_message": "Es posible que estos datos estén desactualizados.",
+      "refresh": "Actualizar",
+      "offline_message": "Sin conexión. No se pueden cargar datos nuevos.",
+      "offline_cached_notice": "Se muestran datos en caché de tu última conexión."
     },
     "list": {
       "empty_title": "No hay resultados disponibles",

@@ -486,7 +486,11 @@
       "capability_aria": "Registered surface capabilities",
       "error_boundary_title": "{surface} encountered an error",
       "error_boundary_generic_surface": "This section",
-      "error_description": "An error occurred while rendering this surface."
+      "error_description": "An error occurred while rendering this surface.",
+      "stale_message": "This data may be out of date.",
+      "refresh": "Refresh",
+      "offline_message": "You are offline. New data cannot be loaded.",
+      "offline_cached_notice": "Showing cached data from your last connection."
     },
     "list": {
       "empty_title": "No results available",

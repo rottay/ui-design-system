@@ -177,7 +177,11 @@
       "capability_label": "Disponível quando os dados forem recuperados",
       "capability_aria": "Capacidades registadas da superfície",
       "error_boundary_title": "{surface} encontrou um erro",
-      "error_boundary_generic_surface": "Esta secção"
+      "error_boundary_generic_surface": "Esta secção",
+      "stale_message": "Estes dados podem estar desatualizados.",
+      "refresh": "Atualizar",
+      "offline_message": "Está offline. Não é possível carregar novos dados.",
+      "offline_cached_notice": "A mostrar dados em cache da última ligação."
     },
     "list": {
       "empty_title": "Nenhum resultado disponivel",

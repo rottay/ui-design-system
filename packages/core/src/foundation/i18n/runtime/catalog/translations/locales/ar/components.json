@@ -486,7 +486,11 @@
       "capability_aria": "إمكانات الواجهة المسجلة",
       "error_boundary_title": "حدث خطأ في {surface}",
       "error_boundary_generic_surface": "هذا القسم",
-      "error_description": "حدث خطأ أثناء عرض هذه الواجهة."
+      "error_description": "حدث خطأ أثناء عرض هذه الواجهة.",
+      "stale_message": "قد تكون هذه البيانات قديمة.",
+      "refresh": "تحديث",
+      "offline_message": "أنت غير متصل بالإنترنت. لا يمكن تحميل بيانات جديدة.",
+      "offline_cached_notice": "يتم عرض البيانات المخزنة مؤقتًا من آخر اتصال."
     },
     "list": {
       "empty_title": "لا توجد نتائج متاحة",

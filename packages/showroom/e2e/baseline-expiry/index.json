@@ -271,11 +271,11 @@
       "spec": "e2e/visual/surfaces-long-tail-batch.spec.ts",
       "status": "pre-migration",
       "owner": "WO-EVI-03",
-      "measuredAt": "2026-10-05 @ 7b8128c5d",
+      "measuredAt": "2026-10-05 @ b426769af",
       "expiresWhen": "reference-identity-approved",
       "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
       "baselines": 32,
-      "sha256": "48dd36562237bc113ba8f219bc3c943a598e27c7641fb6b481b6073dd5fc5cc8"
+      "sha256": "d0b3dcfc9eaebca87cbc081fb16636e6758303ff569966a3fff22dcce7facaf8"
     },
     {
       "spec": "e2e/visual/tenant-branding/index.spec.ts",

@@ -1,7 +1,7 @@
 {
   "_comment": "Locale classification + decrease-only shortfall ledger for i18n-key-parity-gate.mjs. `mandatoryLocales` ship at 100% of the reference key set (the union of every mandatory locale's leaf keys) -- any hole fails --check and there is NO baseline escape for them. `declaredPartialLocales` ship incomplete BY DECISION; their `missing` count is a decrease-only CEILING: growth fails --check, a NEW partial locale with no entry fails --check, and a shrink reports a tighten opportunity (run --seed to lower the ceiling). Every locale in SUPPORTED_LOCALES must appear in exactly one of the two lists. `adoption.modernFloor` is a decrease-only FLOOR on the share of Modern component entrypoints naming a translation hook (a fall fails --check, a rise reports a tighten opportunity); `modernTargetPercent` is BLOCKING: the TEXT-CARRYING Modern measure (Modern entrypoints rendering copy through the catalog or a hardcoded literal, a local const followed one level, pure re-exports measured through their target) below it fails --check, naming the hardcoded entrypoints; it never reads off the hook-mention share. `argumentlessToLocale.ceiling` is a decrease-only CEILING on argument-less toLocale*() lines under src/ outside tests/.",
-  "referenceKeyCount": 1477,
-  "referenceKeyCountReason": "Re-seeded 2026-09-28 from 1474 to 1477: the mandatory corpus grew by the keys b79810512 added for the data-table cell editor and widget-board catalog search; fr/pt present floors rose with it (1359/1353), missing ceilings unchanged (118/124).",
+  "referenceKeyCount": 1481,
+  "referenceKeyCountReason": "Re-seeded 2026-10-05 from 1477 to 1481: W24-I18N added the four surface-lifecycle banner keys the states structure already read (surfaces.states.stale_message, refresh, offline_message, offline_cached_notice) to every locale; fr/pt present floors rose with it (1363/1357), missing ceilings unchanged (118/124).",
   "mandatoryLocales": [
     "en",
     "es",
@@ -10,12 +10,12 @@
   "declaredPartialLocales": {
     "fr": {
       "missing": 118,
-      "present": 1359,
+      "present": 1363,
       "reason": "French is a declared-partial, non-product locale. The 2026-07-30 Modern full-coverage wave expanded the mandatory EN/ES/AR contract from 456 to 1127 keys; French received 671 natural translations in the same wave and preserved the committed 147-key debt ceiling by shrinking it to 146. No English-copy placeholders were added to simulate translation."
     },
     "pt": {
       "missing": 124,
-      "present": 1353,
+      "present": 1357,
       "reason": "Portuguese is a declared-partial, non-product locale. The 2026-07-30 Modern full-coverage wave expanded the mandatory EN/ES/AR contract from 456 to 1127 keys; Portuguese received 670 natural translations in the same wave and preserved the committed 147-key debt ceiling. No English-copy placeholders were added to simulate translation."
     }
   },
