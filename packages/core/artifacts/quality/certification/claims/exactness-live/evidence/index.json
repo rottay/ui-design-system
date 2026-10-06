@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "29bcf24bf806bd85e3d77769d7ed8c97084b95105efbc3b7ca784faf977f10e3",
+    "authorityDigest": "3acfa12ca585c7fc5fd2442a4ddab2ea0434fc26f072cc768fdf4594895508eb",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,16 +255,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5704629,
-        "sha256": "c9816f62ed45b9fff7f22163415e7fa0a6e4f4c1454e1982c2afefbb650a7100"
+        "bytes": 5704671,
+        "sha256": "f26c4d9f4e8a2fc0e3bb47b417570c7409ae10e9cc59bcd962c9dbd7f3edbde9"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 631268,
-        "sha256": "0af65f35d55daafaa89ec45ab5ec6a9b9b092c8a3bbfa47ff0d4c6a379b7f3c0"
+        "bytes": 631865,
+        "sha256": "8b42fe788acdc0d62ffb466450045c7a7f06797baeb01d3b58d65e2c2641bc58"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/modern/index.css",
@@ -279,8 +279,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5070605,
-        "sha256": "50ab3f8dc8642556f787a81f4f76e9cd5f38f5b727e1ad2de323b51960582c34"
+        "bytes": 5070647,
+        "sha256": "33936e442052c01fc8fa3f2320f2013a5bd6a2b60950b7ad3ba45dc19d7978a1"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
@@ -26935,8 +26935,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 355323,
-        "sha256": "a6ad000825d34291e439982b33b0d65799b23385176694c62acbda649a06e760"
+        "bytes": 355365,
+        "sha256": "992cb3c7779c18d9923a7c00ddfee74893a5069366fa2623bf68dea93485a86c"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
@@ -31367,8 +31367,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 4879,
-        "sha256": "4b8b34fd11a075fed866f4a53d7a21334c1ef16c1690ddaa0f104e1e653ab0f9"
+        "bytes": 5092,
+        "sha256": "68462bdbf1196db08620fda541c5ebbae820e50f90a75597e4025214aefc4247"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd/index.css",
@@ -31847,8 +31847,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 7133,
-        "sha256": "9c20bce037a3706244b19c186f1b7b09c2af86bddee8ecbbd4b4c1528eb1b2bf"
+        "bytes": 7517,
+        "sha256": "723b787bc0e7a80eeb0b99d2843ef0d964302599040442e5157ba05cf9674fdc"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
@@ -37080,8 +37080,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 72630,
-        "sha256": "cd1a49f5b3ea9d79c42beb0bce71485687fc5dfef267e17f8797bd24ff8a8a13"
+        "bytes": 73225,
+        "sha256": "a89871007945c2133b03b380357dd0a663d23204317f9f7cfb440423db2fd0e5"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/capability-reachability.test.ts",
@@ -40258,8 +40258,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 6129,
-        "sha256": "be29f154d7ff16a2d9b2082492bef021b0c92c9d74653fd76b3f6232eec88a59"
+        "bytes": 8190,
+        "sha256": "298cd3ec99a057a6c1af7977f14e0c852cd5472e608eb0adb31ec4c95a4c3c4a"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/tests/index.test.ts",
@@ -40276,6 +40276,14 @@
         ],
         "bytes": 16276,
         "sha256": "a0c767049f2ddc87db03a00f633465f105da18a9aa85c2824c20b550714ac547"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/tests/outlined-primary-ink.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3013,
+        "sha256": "e9ddbb20cc5fb4755b08d465088ff53e40ee2eed638626dab92bcd410c9a2817"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/textarea/index.ts",
@@ -44112,7 +44120,7 @@
           "stale-claim-corpus"
         ],
         "bytes": 6073,
-        "sha256": "61aae5345fde350ee4f0081da3cbcf29f3b97c8d537dbf7cf78180ee47ade348"
+        "sha256": "d5bde79e30d6cd4dd59b878fdb796054c9485090bbd7f92094dbccaece02015b"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/record-subgrid.spec.ts",
@@ -44159,8 +44167,8 @@
         "roles": [
           "stale-claim-corpus"
         ],
-        "bytes": 15994,
-        "sha256": "f5411dfcdb2b7e09604dbc0e512ceef32e503893a559792aa0ea77d0427e51b2"
+        "bytes": 15987,
+        "sha256": "7e5e730878fe32f3ca67b1a047324d77c218425430de0ca5a6883ea464a5d19a"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/tenant-branding/index.spec.ts",
@@ -47369,8 +47377,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 8463,
-        "sha256": "bdefd8552aa4aa913d05132cab271d5393cd87c58774239c48def657b5f6e5f7"
+        "bytes": 9069,
+        "sha256": "e3afea83f8e1998c737673cdb6f216099b7120a9bb39ea12e1c43d9d7bc7251a"
       },
       {
         "path": "ui-design-system/packages/showroom/src/components/torture-sections/headers-patterns/index.tsx",
@@ -47576,8 +47584,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 16081,
-        "sha256": "477e17e86ca4e8730a64eea7a0ef256661a0ab8b8bbc5f38322bb9343e3d0c74"
+        "bytes": 16322,
+        "sha256": "72927869c21933b93224cda12cb48e421eb6f53fa43a0fa022a2549c23d1be50"
       },
       {
         "path": "ui-design-system/packages/showroom/src/components/torture-tenant/index.ts",
@@ -47585,8 +47593,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7824,
-        "sha256": "86c1a2cb3c3b3b9bbea01f051250483ab3f79de30b9dd3695a02ca6127afbdc4"
+        "bytes": 8577,
+        "sha256": "a1a0b0ae321e0afaf9f8a0360fa78e5025123ffbd553b836cd6b3289b1c49324"
       },
       {
         "path": "ui-design-system/packages/showroom/src/components/torture-tenant/specimen/index.ts",
@@ -47739,7 +47747,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "29bcf24bf806bd85e3d77769d7ed8c97084b95105efbc3b7ca784faf977f10e3"
+    "digest": "3acfa12ca585c7fc5fd2442a4ddab2ea0434fc26f072cc768fdf4594895508eb"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -53950,7 +53958,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 132
+          "line": 137
         }
       ],
       "close-button": [
@@ -86533,11 +86541,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css",
-          "line": 30
+          "line": 32
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css",
-          "line": 30
+          "line": 32
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd/index.css",
@@ -87853,67 +87861,75 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 114
+          "line": 116
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 114
+          "line": 116
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 114
+          "line": 119
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 114
+          "line": 119
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 118
+          "line": 119
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 118
+          "line": 119
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 118
+          "line": 123
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 118
+          "line": 123
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 122
+          "line": 123
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 122
+          "line": 123
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 122
+          "line": 127
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 122
+          "line": 127
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 126
+          "line": 127
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 126
+          "line": 127
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 126
+          "line": 131
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
-          "line": 126
+          "line": 131
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
+          "line": 131
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
+          "line": 131
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
@@ -90211,23 +90227,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css",
-          "line": 57
+          "line": 59
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css",
-          "line": 61
+          "line": 63
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css",
-          "line": 64
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css",
-          "line": 67
+          "line": 66
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css",
           "line": 70
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css",
+          "line": 73
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/user-profile-card/index.css",
@@ -99030,7 +99046,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "FieldFiltersPanel",
@@ -99472,7 +99488,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "FilterPanel",
@@ -100205,7 +100221,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "SelectionPreviewRail",
@@ -100865,7 +100881,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "DetailPanel",
@@ -101558,7 +101574,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "DataTable",
@@ -103281,7 +103297,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "FormField",
@@ -103481,7 +103497,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Textarea",
@@ -103564,7 +103580,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "TagInput",
@@ -103755,7 +103771,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "InputNumber",
@@ -104012,7 +104028,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "PasswordInput",
@@ -104217,7 +104233,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Switch",
@@ -104378,7 +104394,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Toggle",
@@ -104642,7 +104658,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Radio",
@@ -104856,7 +104872,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Radio",
@@ -105035,7 +105051,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Checkbox",
@@ -105236,7 +105252,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Checkbox",
@@ -105365,7 +105381,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Slider",
@@ -105638,7 +105654,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "OTPInput",
@@ -105760,7 +105776,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Form",
@@ -106167,7 +106183,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Select",
@@ -107328,7 +107344,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "AutoComplete",
@@ -107611,7 +107627,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Mentions",
@@ -107797,7 +107813,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "TreeSelect",
@@ -108506,7 +108522,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Cascader",
@@ -109166,7 +109182,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Transfer",
@@ -109784,7 +109800,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Upload",
@@ -110510,7 +110526,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "DatePicker",
@@ -111598,7 +111614,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "TimePicker",
@@ -112038,7 +112054,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "ColorPicker",
@@ -112555,7 +112571,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Input",
@@ -112943,7 +112959,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Input",
@@ -113064,7 +113080,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Input",
@@ -113562,7 +113578,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Skeleton",
@@ -113647,7 +113663,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Skeleton",
@@ -113803,7 +113819,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Alert",
@@ -114036,7 +114052,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Progress",
@@ -114319,7 +114335,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Spinner",
@@ -114408,7 +114424,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Rate",
@@ -114486,7 +114502,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Modal",
@@ -115313,7 +115329,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Toast",
@@ -115502,7 +115518,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Toast",
@@ -115628,7 +115644,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Message",
@@ -115779,7 +115795,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Notification",
@@ -115981,7 +115997,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Result",
@@ -116358,7 +116374,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Modal (overlay)",
@@ -116775,7 +116791,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Tour",
@@ -117469,7 +117485,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "AlertDialog",
@@ -118056,7 +118072,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Sheet",
@@ -119025,7 +119041,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Watermark",
@@ -119094,7 +119110,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Affix",
@@ -119173,7 +119189,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Anchor",
@@ -119212,7 +119228,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Anchor",
@@ -119325,7 +119341,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "BottomTabBar",
@@ -119484,7 +119500,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Breadcrumb",
@@ -119713,7 +119729,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "FloatButton",
@@ -119978,7 +119994,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Menu",
@@ -120020,7 +120036,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Menu",
@@ -120673,7 +120689,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "MobileHeader",
@@ -120772,7 +120788,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Pagination",
@@ -120998,7 +121014,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Segmented",
@@ -121109,7 +121125,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Stepper",
@@ -121480,7 +121496,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Steps",
@@ -121823,7 +121839,7 @@
           }
         ],
         "skinSelectorCorpusKey": "root",
-        "skinSelectorCount": 4553
+        "skinSelectorCount": 4555
       },
       {
         "section": "Tabs",
@@ -122094,8 +122110,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "3442d0e0cc1509ec383a4f7522a7dea9b0e77605ec80b5a9cebffb47280b742e",
-      "3442d0e0cc1509ec383a4f7522a7dea9b0e77605ec80b5a9cebffb47280b742e"
+      "b19517d311e85862b319e0a146ed88b8a3d320762f789cbb76b3088da92b6297",
+      "b19517d311e85862b319e0a146ed88b8a3d320762f789cbb76b3088da92b6297"
     ],
     "agree": true
   }

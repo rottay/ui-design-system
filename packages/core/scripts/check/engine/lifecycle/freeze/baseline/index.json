@@ -610,6 +610,12 @@
       "reason": "WO-FAM-01 (D-16, landed ad38a9327): Switch merged into Toggle; the frozen rustic switch skin is deleted with its family. DT authorization, owner may veto.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css": {
+      "blob": "723b787bc0e7a80eeb0b99d2843ef0d964302599040442e5157ba05cf9674fdc",
+      "relocationDigest": "64da716a62c4e6e423b7795083f6ca6b0de60f302e7ae50242206a82212ed318",
+      "reason": "Owner a11y exception 2026-10-06 (W25-SENT lot B, Streaming), bounded to ONE selector's ink, no redesign: packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css gains one rule on the existing selector .rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary'][data-outlined='true'] { color: var(--ds-tag-primary-outlined-ink, var(--ds-color-primary)); } -- the governed outlined ink Modern reads (modern/skin/tag) instead of the solid-fill ink #fff on a transparent fill -- plus the ink-section header amended so it no longer claims outlined primary shares the solid ink. The channel's dark leg is derived in the non-frozen tag deriver to clear AA on canvas, raised ground and the primary highlight wash (bithire dark #6d8cef). Streaming: bithire light 1.00 -> 5.55, bithire dark 15.92 -> 5.04, rottay/evnto light 1.00 -> 17.93, rottay/evnto dark 15.92 -> 12.64. No declaration removed; every other frozen rule byte-identical (+7/-2, the -2 being the reworded header comment).",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree-select/index.css": {
       "blob": "0de3061e02b93ac370b49214f19ea5db1bf91f5d6fc637b9432462b163ef0463",
       "relocationDigest": "f55cf3edb033b10904c400883838789fb6f6b9414a7c70d03277c46a79dd3957",

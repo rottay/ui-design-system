@@ -918,8 +918,15 @@ describe("digest identity across the canonicalization extraction", () => {
     // and leaves the delta, nothing else. Persisted rows recompile.
     const POST_LIGHT_BASE_LADDER_DIGEST =
       "sha256-3383dd08d1c3f95859b8b75bfb00243dc7bbf5edec926fa076f6982d53b036b1";
-    expect(artifact.digest).toBe(POST_LIGHT_BASE_LADDER_DIGEST);
+    expect(artifact.digest).not.toBe(POST_LIGHT_BASE_LADDER_DIGEST);
+    // Twentieth declared move (outlined primary tag ink clears AA on its grounds), measured against e6e0c2dcb:
+    // the dark delta gains --ds-tag-primary-outlined-ink #579f9a, nothing else; base 65 unchanged. Persisted rows recompile.
+    const POST_OUTLINED_PRIMARY_INK_DIGEST =
+      "sha256-c51799d0fe908c8d5f2a57b5e6fd4a41a3f7dfab5a4c42d2fccfc6e212cda897";
+    expect(artifact.digest).toBe(POST_OUTLINED_PRIMARY_INK_DIGEST);
     const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
+    expect(dark?.variables["--ds-tag-primary-outlined-ink"]).toBe("#579f9a");
+    expect(artifact.variables["--ds-tag-primary-outlined-ink"]).toBeUndefined();
     expect(dark?.variables["--ds-badge-selected-ink"]).toBe("#3f918b");
     expect(dark?.variables["--ds-color-link"]).toBe("#419A92");
     expect(dark?.variables["--ds-color-link-hover"]).toBe("#4A9891");

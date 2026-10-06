@@ -4547,6 +4547,7 @@
   --ds-elevation-6: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 28px 56px rgba(0, 0, 0, 0.62), 0 44px 84px rgba(0, 0, 0, 0.52), 0 0 40px color-mix(in srgb, var(--ds-color-primary, #ffffff) 12%, transparent);
   --ds-focus-ring-color: #2A55E0;
   --ds-sidebar-item-color-active: var(--ds-color-neutral-100);
+  --ds-tag-primary-outlined-ink: #6d8cef;
 }
 
 /* === Compiled for every [data-density] boundary, re-resolved by its local factor — do not edit === */

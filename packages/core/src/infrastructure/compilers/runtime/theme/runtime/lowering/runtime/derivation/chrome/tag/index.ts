@@ -10,7 +10,22 @@
  * @package @rottay/design-system
  */
 
-import type { FamilyDeriver } from "../../../../foundation/contract";
+import { contrastRatio } from "@/foundation/kernel/color/contrast";
+import {
+  isHexColor,
+  mixColor,
+  normalizeHexColor,
+} from "@/infrastructure/compilers/kernel/foundation/css/color-math";
+import {
+  WCAG_AA_NORMAL_TEXT_RATIO,
+  measureReadableInk,
+} from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
+import type {
+  AssembledChannels,
+  FamilyDeriver,
+  LoweringContext,
+} from "../../../../foundation/contract";
+import { textGrounds } from "../../../../foundation/palette";
 
 /** A vertical's own tag chrome outranks every relation stated here. */
 export const tagChromeDeriver: FamilyDeriver = {
@@ -66,8 +81,40 @@ export const tagChromeDeriver: FamilyDeriver = {
     "--ds-tag-radius-md",
     "--ds-tag-radius-lg",
   ],
-  derive: () => deriveTagChannels(),
+  derive: (context, below) => ({
+    ...deriveTagChannels(),
+    "--ds-tag-primary-outlined-ink": deriveOutlinedPrimaryInk(context, below),
+  }),
 };
+
+const OUTLINED_PRIMARY_INK_CHAIN = "var(--ds-color-primary)";
+/** The recommended pricing plan's resting tint (modern/skin/pricing-table), which carries an outlined primary badge. */
+const PRIMARY_HIGHLIGHT_WASH = 0.1;
+const INK_STEPS = 20;
+
+/** The primary stays the ink where it clears AA on every ground it is painted on (canvas, raised
+ *  ground, the primary wash over it); otherwise it steps toward the readable ink until it does. */
+export function deriveOutlinedPrimaryInk(context: LoweringContext, below: AssembledChannels): string {
+  const primary = below["--ds-color-primary"];
+  const grounds = textGrounds(context.theme.palette, context.mode);
+  if (!primary || !isHexColor(primary) || grounds.length === 0 || !grounds.every((g) => isHexColor(g))) {
+    return OUTLINED_PRIMARY_INK_CHAIN;
+  }
+  const ink = normalizeHexColor(primary);
+  const surfaces = grounds.map((g) => normalizeHexColor(g));
+  surfaces.push(mixColor(surfaces[surfaces.length - 1], ink, PRIMARY_HIGHLIGHT_WASH));
+  const clears = (candidate: string) =>
+    surfaces.every((surface) => contrastRatio(candidate, surface) >= WCAG_AA_NORMAL_TEXT_RATIO);
+  if (clears(ink)) return OUTLINED_PRIMARY_INK_CHAIN;
+
+  const readable = measureReadableInk(surfaces[0]);
+  if (readable.status !== "measured") return OUTLINED_PRIMARY_INK_CHAIN;
+  for (let step = 1; step < INK_STEPS; step += 1) {
+    const candidate = mixColor(ink, readable.ink, step / INK_STEPS);
+    if (clears(candidate)) return candidate;
+  }
+  return readable.ink;
+}
 
 export function deriveTagChannels(): Record<string, string> {
   const vars: Record<string, string> = {};

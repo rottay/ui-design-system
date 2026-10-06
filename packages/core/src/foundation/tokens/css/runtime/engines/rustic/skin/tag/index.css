@@ -56,8 +56,8 @@
   border-radius: var(--ds-tag-radius-full, 9999px);
 }
 
-/* ---- ink: the variant's text colour, outlined or not. The bare rule carries
-        `default`, the lookup's own fallback for an unrecognised variant. ---- */
+/* ---- ink: the variant's text colour, outlined or not (outlined primary excepted, below).
+        The bare rule carries `default`, the lookup's fallback for an unrecognised variant. ---- */
 .rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'] {
   color: var(--ds-tag-default-color);
 }
@@ -110,6 +110,11 @@
 .rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary'][data-bordered='true'],
 .rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary'][data-outlined='true'] {
   border: 1px solid var(--ds-tag-primary-border);
+}
+/* `--ds-tag-primary-color` is ink for the solid fill; outlined has no fill, so it reads
+   the outlined ink, derived to clear AA on the grounds the chip sits on. */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary'][data-outlined='true'] {
+  color: var(--ds-tag-primary-outlined-ink, var(--ds-color-primary));
 }
 .rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='secondary'][data-bordered='true'],
 .rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='secondary'][data-outlined='true'] {

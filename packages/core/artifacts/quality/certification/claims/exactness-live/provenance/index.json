@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "3442d0e0cc1509ec383a4f7522a7dea9b0e77605ec80b5a9cebffb47280b742e"
+    "semanticHash": "b19517d311e85862b319e0a146ed88b8a3d320762f789cbb76b3088da92b6297"
   },
   "divergentInputs": [
     {
@@ -176,16 +176,16 @@
         "sha256": "9e3e93a018970d9e0a598bce7fe2c960104af98b130992cc5c072cced8d74e03"
       },
       "live": {
-        "bytes": 5704629,
-        "sha256": "c9816f62ed45b9fff7f22163415e7fa0a6e4f4c1454e1982c2afefbb650a7100"
+        "bytes": 5704671,
+        "sha256": "f26c4d9f4e8a2fc0e3bb47b417570c7409ae10e9cc59bcd962c9dbd7f3edbde9"
       }
     },
     {
       "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
       "archive": null,
       "live": {
-        "bytes": 631268,
-        "sha256": "0af65f35d55daafaa89ec45ab5ec6a9b9b092c8a3bbfa47ff0d4c6a379b7f3c0"
+        "bytes": 631865,
+        "sha256": "8b42fe788acdc0d62ffb466450045c7a7f06797baeb01d3b58d65e2c2641bc58"
       }
     },
     {
@@ -206,8 +206,8 @@
         "sha256": "a43d0f7917d69e88530d142f42365e5648c387abb74088772f447c3f1b9f0921"
       },
       "live": {
-        "bytes": 5070605,
-        "sha256": "50ab3f8dc8642556f787a81f4f76e9cd5f38f5b727e1ad2de323b51960582c34"
+        "bytes": 5070647,
+        "sha256": "33936e442052c01fc8fa3f2320f2013a5bd6a2b60950b7ad3ba45dc19d7978a1"
       }
     },
     {
@@ -17726,8 +17726,8 @@
         "sha256": "7cc8b3fd9b89480c38c9324e9cf08eb3051e5914c00491b22cdec571b6d3bbf4"
       },
       "live": {
-        "bytes": 355323,
-        "sha256": "a6ad000825d34291e439982b33b0d65799b23385176694c62acbda649a06e760"
+        "bytes": 355365,
+        "sha256": "992cb3c7779c18d9923a7c00ddfee74893a5069366fa2623bf68dea93485a86c"
       }
     },
     {
@@ -21467,6 +21467,17 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css",
+      "archive": {
+        "bytes": 4879,
+        "sha256": "4b8b34fd11a075fed866f4a53d7a21334c1ef16c1690ddaa0f104e1e653ab0f9"
+      },
+      "live": {
+        "bytes": 5092,
+        "sha256": "68462bdbf1196db08620fda541c5ebbae820e50f90a75597e4025214aefc4247"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/modal/index.css",
       "archive": {
         "bytes": 3910,
@@ -21519,6 +21530,17 @@
         "sha256": "733378304af382d11def92c3ded5fa3441bc3ab6aefc89a58c46ec3e16a27d83"
       },
       "live": null
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag/index.css",
+      "archive": {
+        "bytes": 7133,
+        "sha256": "9c20bce037a3706244b19c186f1b7b09c2af86bddee8ecbbd4b4c1528eb1b2bf"
+      },
+      "live": {
+        "bytes": 7517,
+        "sha256": "723b787bc0e7a80eeb0b99d2843ef0d964302599040442e5157ba05cf9674fdc"
+      }
     },
     {
       "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css",
@@ -25932,8 +25954,8 @@
         "sha256": "143fb8e3b7b5017e6cccd7ecf80b10fb9026f7ef3ae6ea442435dc80b34e2aee"
       },
       "live": {
-        "bytes": 72630,
-        "sha256": "cd1a49f5b3ea9d79c42beb0bce71485687fc5dfef267e17f8797bd24ff8a8a13"
+        "bytes": 73225,
+        "sha256": "a89871007945c2133b03b380357dd0a663d23204317f9f7cfb440423db2fd0e5"
       }
     },
     {
@@ -29084,8 +29106,8 @@
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/index.ts",
       "archive": null,
       "live": {
-        "bytes": 6129,
-        "sha256": "be29f154d7ff16a2d9b2082492bef021b0c92c9d74653fd76b3f6232eec88a59"
+        "bytes": 8190,
+        "sha256": "298cd3ec99a057a6c1af7977f14e0c852cd5472e608eb0adb31ec4c95a4c3c4a"
       }
     },
     {
@@ -29102,6 +29124,14 @@
       "live": {
         "bytes": 16276,
         "sha256": "a0c767049f2ddc87db03a00f633465f105da18a9aa85c2824c20b550714ac547"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/tag/tests/outlined-primary-ink.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 3013,
+        "sha256": "e9ddbb20cc5fb4755b08d465088ff53e40ee2eed638626dab92bcd410c9a2817"
       }
     },
     {
@@ -31848,7 +31878,7 @@
       },
       "live": {
         "bytes": 6073,
-        "sha256": "61aae5345fde350ee4f0081da3cbcf29f3b97c8d537dbf7cf78180ee47ade348"
+        "sha256": "d5bde79e30d6cd4dd59b878fdb796054c9485090bbd7f92094dbccaece02015b"
       }
     },
     {
@@ -31913,8 +31943,8 @@
         "sha256": "7303141f2fc1943f76602c539fc658712407cde5798be734dc8d7f978f9989e5"
       },
       "live": {
-        "bytes": 15994,
-        "sha256": "f5411dfcdb2b7e09604dbc0e512ceef32e503893a559792aa0ea77d0427e51b2"
+        "bytes": 15987,
+        "sha256": "7e5e730878fe32f3ca67b1a047324d77c218425430de0ca5a6883ea464a5d19a"
       }
     },
     {
@@ -33902,8 +33932,8 @@
         "sha256": "e407cb473b9885fcd03ef7143f019c8f3134ca57b896caac6952f6791ac917e3"
       },
       "live": {
-        "bytes": 8463,
-        "sha256": "bdefd8552aa4aa913d05132cab271d5393cd87c58774239c48def657b5f6e5f7"
+        "bytes": 9069,
+        "sha256": "e3afea83f8e1998c737673cdb6f216099b7120a9bb39ea12e1c43d9d7bc7251a"
       }
     },
     {
@@ -34009,8 +34039,8 @@
         "sha256": "cffea052f26d1eaf0d32473f885e272a6d992d1691064469613167b618f73b3a"
       },
       "live": {
-        "bytes": 16081,
-        "sha256": "477e17e86ca4e8730a64eea7a0ef256661a0ab8b8bbc5f38322bb9343e3d0c74"
+        "bytes": 16322,
+        "sha256": "72927869c21933b93224cda12cb48e421eb6f53fa43a0fa022a2549c23d1be50"
       }
     },
     {
@@ -34020,8 +34050,8 @@
         "sha256": "da67530a21dab5555e9d4e1a338fff1db469e1191426ae61edc8cf5477ea3600"
       },
       "live": {
-        "bytes": 7824,
-        "sha256": "86c1a2cb3c3b3b9bbea01f051250483ab3f79de30b9dd3695a02ca6127afbdc4"
+        "bytes": 8577,
+        "sha256": "a1a0b0ae321e0afaf9f8a0360fa78e5025123ffbd553b836cd6b3289b1c49324"
       }
     },
     {
