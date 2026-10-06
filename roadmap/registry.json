@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-05",
+ "updated": "2026-10-06",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -7670,6 +7670,11 @@
      "at": "2026-10-05 22:49",
      "by": "kimi-dt",
      "note": "2026-10-06 — the same owner packet for the evidence lane: E-1/E-2 APPROVED and registered as WO-ARC-22/WO-ARC-23 (the status-filter-pills and filter-dropdown residue rows move to them by this amendment); §F-A/B/C/C-bis approved (F-A: coherent SSR hints + first-paint proof, never force-desktop-on-mobile; F-B: governed clearance; F-C/C-bis: real contrast repair, never re-record-to-hide). D-30: the current reviewed technical identities are the PROVISIONAL references for EVI-03 (exact fixtures/styles/modes/digests to be identified and recorded); final branding stays deferred; the provisional pick does not close EVI-03 and re-records no defect. The pre-migration baseline law (WO-EVI-03 expiry) now has its provisional reference — the next baseline work cites it explicitly."
+    },
+    {
+     "at": "2026-10-06 06:26",
+     "by": "kimi",
+     "note": "2026-10-06 — Wave W25 integrada (9 commits, 646203f5e..ee00b3d95). Obligaciones del checklist cerradas con evidencia: F-B clearance gobernado de Select (9f2343702, medido por tamaño/RTL/ancho), Select-success glyph >=3:1 ambos modos, Toggle checked thumb 14.23/6.48 con el canal publico dotBg preservado (d98506e88, residuos variants/unchecked nombrados con receivers pendientes), SENT badge 1.26->14.23 con excepcion frozen acotada (d7030850b, freeze auth 116), Streaming reparado en AMBOS modos incl. bithire dark via canal gobernado + pierna dark derivada per-mode (ee00b3d95, freeze auth 117, 20° digest move declarado en changeset), F-A ssrViewport hints coherentes con prueba de primer paint 8/8 (665073712), P-88 law + censo fleet 49 sitios (bb6b0525f; ARC-12 sigue open), Q1 disposition (4675150b5; debt 4->3), AM-1 R5' (57a6e201b), GAT12 censo pinned (646203f5e; WO todo por fase-6 lock; CI wiring = owner/CI window). Tile review independiente: 9 celdas ACCEPT, 3 REJECT (divergencia de captura del card de chat bajo investigacion W26-capture; no re-grabadas). Siguen NO MET: F-86 clausula 2 (ownership 31/25), CI verified (push prohibido), liveness chain (RET-01)."
     }
    ]
   },
