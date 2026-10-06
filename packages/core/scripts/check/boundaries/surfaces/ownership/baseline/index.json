@@ -2175,12 +2175,6 @@
       "rule": "aria-role-reconstruction",
       "count": 1
     },
-    "2c28f5f15d9a7ac84145": {
-      "path": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "clickable-noninteractive",
-      "count": 1
-    },
     "10e576a0e49c1ab9fdd4": {
       "path": "src/components/patterns/data/detail-panel/engines/rustic/index.tsx",
       "category": "native-interactive",

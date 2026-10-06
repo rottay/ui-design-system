@@ -1862,7 +1862,8 @@
         "PatternDetailPanel": [
           "@ant-design/icons",
           "@phosphor-icons/react",
-          "antd"
+          "antd",
+          "motion"
         ],
         "PatternEmptyState": [
           "@phosphor-icons/react",

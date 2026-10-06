@@ -8642,6 +8642,11 @@
      "at": "2026-10-06 09:50",
      "by": "kimi",
      "note": "2026-10-06 — L2 landed: el editor booleano de DataTable monta el Checkbox canónico (autoFocus, error→aria-invalid; teclado intacto via editor-shell). ownership 2035/1335 -> 2034/1335 (eaea 2->1); family-cut data-table 88->87 ambos contadores con mover nombrado; touch-target adjudications: rows stale editor-checkbox + file-manager file-input eliminadas (137->135). Evidencia F3: anillo de foco visible en los 6 ambientes + error pintado (sin defecto). Docs: 81aae6a en docs-engineering (P-88 law + row editor-checkbox retirada), seal movido 9239a8b4->81aae6ab con el pin de ci.yml, reseal f553e2bd (541->540 partes documentadas). RED PREEXISTENTE registrada: la suite vitest unit repo-wide falla 9-10 tests EN COMBINACION (cascade-layers/theme-iso/container-emission-budget/root-aliases/fixtures — contenido y aislamiento), reproducido en ba22b704f pre-wave; receiver: paquete propio fuera de ARC-22."
+    },
+    {
+     "at": "2026-10-06 13:28",
+     "by": "kimi",
+     "note": "2026-10-06 — L3 landed: la trail de DetailPanel compone el Breadcrumb canónico (partes del panel retiradas en modern; rustic intacto). ownership 2033/1334 -> 2032/1333 (2c28f5f1 fuera por nombre); touch-targets 135->132 (3 rows stale del crumb); supplier contract: PatternDetailPanel gana motion via Breadcrumb->Dropdown (el writer lo omitio; la ceremonia lo encontro via contract:check — fix del generador oficial, NO hand-edit). F1 cerrado: el anillo del primitive en el crumb, fine y forzado, ambos tenants. F2 registrado: el onClick del ultimo crumb se retira (era pointer-only sin rol, contradecia aria-current); el nombre accesible del nav pasa a common.breadcrumb (fr/pt ganan localizacion; un override de tenant sobre detailPanel.breadcrumb queda sin efecto — nota de migracion). Tile review: 15-20 ACCEPT; cell 21 (tab-hovered) RECHAZADA y revertida: lleva una perdida PERCEPTIBLE del hover wash (--ds-tab-bg-hover / bg-secondary) entre 621a6429e y hoy, NO causada por L3 — investigacion propia registrada (atribuir commit, luego decision del owner sobre el hover sin wash). F-L3-1 registrado para el owner del Breadcrumb: el underline en reposo se clipea."
     }
    ]
   },

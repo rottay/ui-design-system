@@ -60,8 +60,6 @@ function createProps(overrides: Partial<DetailPanelProps<Customer>> = {}): Detai
 const COMMON_PART_COUNTS: Record<string, number> = {
   root: 1,
   breadcrumbs: 1,
-  'breadcrumb-separator': 1,
-  'breadcrumb-link': 1,
   header: 1,
   'back-button': 1,
   title: 1,
@@ -77,8 +75,13 @@ const COMMON_PART_COUNTS: Record<string, number> = {
 };
 
 const MODERN_ONLY_PART_COUNTS: Record<string, number> = {
-  'breadcrumb-current': 1,
   'action-spinner': 1,
+};
+
+// The frozen engines keep their own crumb anatomy; Modern composes the Breadcrumb primitive.
+const FROZEN_BREADCRUMB_PART_COUNTS: Record<string, number> = {
+  'breadcrumb-separator': 1,
+  'breadcrumb-link': 1,
 };
 
 const MODERN_LOADING_PART_COUNTS: Record<string, number> = {
@@ -114,12 +117,25 @@ describe('PatternDetailPanel data-part contract', () => {
 
     const expectedCounts = {
       ...COMMON_PART_COUNTS,
-      ...(engine === 'modern' ? MODERN_ONLY_PART_COUNTS : {}),
+      ...(engine === 'modern' ? MODERN_ONLY_PART_COUNTS : FROZEN_BREADCRUMB_PART_COUNTS),
     };
 
     for (const [part, count] of Object.entries(expectedCounts)) {
-      const nodes = container.querySelectorAll(`[data-part="${part}"]`);
+      const nodes = Array.from(container.querySelectorAll(`[data-part="${part}"]`)).filter(
+        (node) => !node.closest('.ds-breadcrumb'),
+      );
       expect(nodes.length, `data-part="${part}" did not reach the DOM`).toBe(count);
+    }
+
+    if (engine === 'modern') {
+      const trail = container.querySelector('[data-part="breadcrumbs"] nav.ds-breadcrumb.ds-breadcrumb--modern');
+      expect(trail, 'the modern trail is the composed Breadcrumb primitive').not.toBeNull();
+      expect(trail!.querySelectorAll('[data-part="crumb"]')).toHaveLength(2);
+      expect(trail!.querySelectorAll('[data-part="crumb"][aria-current="page"]')).toHaveLength(1);
+      expect(trail!.querySelectorAll('[data-part="separator"]')).toHaveLength(1);
+      for (const part of ['breadcrumb-separator', 'breadcrumb-link', 'breadcrumb-current']) {
+        expect(container.querySelectorAll(`[data-part="${part}"]`), `modern no longer stamps ${part}`).toHaveLength(0);
+      }
     }
 
     if (engine === 'rustic') {

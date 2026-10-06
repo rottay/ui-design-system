@@ -203,11 +203,11 @@ describe('DetailPanel modern skin — engine-specific interaction rules', () => 
     ).toBe(true);
   });
 
-  it('replaces the imperative breadcrumb-link hover with a [data-part=breadcrumb-link]:hover rule', () => {
+  it('leaves the trail to the composed Breadcrumb primitive: no crumb paint in the panel skin', () => {
     expect(
-      /\[data-part='breadcrumb-link'\][^{]*:hover/.test(SKINS.modern),
-      'the modern breadcrumb-link :hover rule is missing',
-    ).toBe(true);
+      /breadcrumb-(?:link|current|separator)/.test(SKINS.modern),
+      'the modern panel skin must not paint the retired crumb parts',
+    ).toBe(false);
   });
 });
 
@@ -325,9 +325,6 @@ const NO_COLOR_PARTS: Record<'modern' | 'rustic', readonly string[]> = {
     'status-badge',
     'subtitle',
     'title',
-    'breadcrumb-separator',
-    'breadcrumb-link',
-    'breadcrumb-current',
   ],
   rustic: [
     'breadcrumbs',

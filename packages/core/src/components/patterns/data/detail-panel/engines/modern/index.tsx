@@ -4,7 +4,7 @@
  * @fileoverview Modern engine for the DetailPanel pattern.
  *
  * Premium entity detail view with:
- * - Breadcrumbs: clean, small, muted with "/" separators
+ * - Breadcrumbs: the composed Breadcrumb primitive
  * - Header: back button + avatar + title + status badge + action buttons
  * - Tab navigation: token-driven bordered tabs with badge support
  * - Tab content area: clean rendering with proper padding
@@ -23,11 +23,10 @@
 import React, { useRef, useState } from 'react';
 import type { DetailPanelProps, DetailAction } from '../../contracts';
 import Button from '../../../../../primitives/inputs/button/engines/modern';
-import Link from '../../../../../primitives/navigation/link/engines/modern';
+import ModernBreadcrumb from '../../../../../primitives/navigation/breadcrumb/engines/modern';
 import Skeleton from '../../../../../primitives/feedback/skeleton/engines/modern';
 import { VisuallyHidden } from '../../../../../primitives/foundation/visually-hidden';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
-import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 
 /* ------------------------------------------------------------------ */
@@ -195,80 +194,6 @@ function TabButton({
 }
 
 /* ------------------------------------------------------------------ */
-/* Breadcrumbs                                                         */
-/* ------------------------------------------------------------------ */
-
-/**
- * Clean breadcrumb trail with "/" separators and hover states.
- */
-function Breadcrumbs({
-  items,
-  navLabel,
-}: {
-  items: { label: string; href?: string; onClick?: () => void }[];
-  navLabel: string;
-}) {
-  return (
-    <nav
-      aria-label={navLabel}
-      data-part="breadcrumbs"
-    >
-      {items.map((crumb, idx) => {
-        const isLast = idx === items.length - 1;
-        const isClickable = !isLast && (crumb.href || crumb.onClick);
-
-        return (
-          <React.Fragment key={`crumb-${idx}`}>
-            {idx > 0 && (
-              <span
-                data-part="breadcrumb-separator"
-                aria-hidden="true"
-              >
-                <NavigationForwardIcon size={10} decorative />
-              </span>
-            )}
-            {crumb.href && !isLast ? (
-              <Link
-                href={crumb.href}
-                underline={false}
-                onClick={crumb.onClick}
-                data-part="breadcrumb-link"
-              >
-                {crumb.label}
-              </Link>
-            ) : (
-              <span
-                data-part="breadcrumb-current"
-                data-clickable={isClickable ? 'true' : 'false'}
-                data-last={isLast ? 'true' : 'false'}
-                aria-current={isLast ? 'page' : undefined}
-                /* Breadcrumb primitive law: an ancestor crumb whose only
-                   affordance is onClick has to be operable without a pointer. */
-                role={isClickable ? 'button' : undefined}
-                tabIndex={isClickable ? 0 : undefined}
-                onKeyDown={
-                  isClickable
-                    ? (event: React.KeyboardEvent<HTMLSpanElement>) => {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                          event.preventDefault();
-                          crumb.onClick?.();
-                        }
-                      }
-                    : undefined
-                }
-                onClick={crumb.onClick}
-              >
-                {crumb.label}
-              </span>
-            )}
-          </React.Fragment>
-        );
-      })}
-    </nav>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* Main component                                                      */
 /* ------------------------------------------------------------------ */
 
@@ -351,7 +276,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
   };
   const labels = {
     back: tOr('detailPanel.back', 'Go back'),
-    breadcrumb: tOr('detailPanel.breadcrumb', 'Breadcrumb'),
     tabs: tOr('detailPanel.tabs', 'Detail panel tabs'),
     loading: tOr('detailPanel.loading', 'Loading details…'),
   };
@@ -455,7 +379,18 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
       <div data-part="panel-inner">
         {/* ---- Breadcrumbs ---- */}
         {breadcrumbs && breadcrumbs.length > 0 && (
-          <Breadcrumbs items={breadcrumbs} navLabel={labels.breadcrumb} />
+          <div data-part="breadcrumbs">
+            {/* The last item is the current one by contract (inert, aria-current="page");
+                an earlier crumb with only onClick renders as a real button. */}
+            <ModernBreadcrumb
+              items={breadcrumbs.map((crumb, index) => ({
+                key: `crumb-${index}`,
+                label: crumb.label,
+                href: crumb.href,
+                onClick: crumb.onClick,
+              }))}
+            />
+          </div>
         )}
 
         {/* ---- Header ---- */}

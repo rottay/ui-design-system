@@ -1,5 +1,6 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { DetailPanelProps, DetailTab } from '../contracts';
@@ -42,7 +43,8 @@ describe('Modern DetailPanel — uncontrolled tab reconciliation', () => {
 });
 
 describe('Modern DetailPanel — breadcrumb and loading a11y', () => {
-  it('makes an onClick-only ancestor crumb operable from the keyboard', () => {
+  it("renders an onClick-only ancestor crumb as the Breadcrumb primitive's native button, operable from the keyboard", async () => {
+    const user = userEvent.setup();
     const onClick = vi.fn();
     render(
       <ModernDetailPanel
@@ -52,15 +54,32 @@ describe('Modern DetailPanel — breadcrumb and loading a11y', () => {
       />,
     );
 
-    const crumb = screen.getByText('Customers');
-    expect(crumb).toHaveAttribute('role', 'button');
-    expect(crumb).toHaveAttribute('tabindex', '0');
+    const crumb = screen.getByRole('button', { name: 'Customers' });
+    expect(crumb.tagName).toBe('BUTTON');
+    expect(crumb).toHaveAttribute('type', 'button');
+    expect(crumb).toHaveAttribute('data-part', 'crumb');
+    expect(crumb.closest('[data-part="breadcrumbs"] nav.ds-breadcrumb.ds-breadcrumb--modern')).not.toBeNull();
 
-    fireEvent.keyDown(crumb, { key: 'Enter' });
+    crumb.focus();
+    await user.keyboard('{Enter}');
     expect(onClick).toHaveBeenCalledTimes(1);
 
-    fireEvent.keyDown(crumb, { key: ' ' });
+    await user.keyboard(' ');
     expect(onClick).toHaveBeenCalledTimes(2);
+  });
+
+  it('exposes one breadcrumb navigation landmark, named by the primitive', () => {
+    render(
+      <ModernDetailPanel
+        {...createProps({
+          breadcrumbs: [{ label: 'Customers', onClick: vi.fn() }, { label: 'Acme Corp' }],
+        })}
+      />,
+    );
+
+    const landmarks = screen.getAllByRole('navigation', { name: 'Breadcrumb' });
+    expect(landmarks).toHaveLength(1);
+    expect(landmarks[0]!.closest('[data-part="breadcrumbs"]')).not.toBeNull();
   });
 
   it('marks the trailing crumb as the current page', () => {
@@ -72,8 +91,11 @@ describe('Modern DetailPanel — breadcrumb and loading a11y', () => {
       />,
     );
 
-    const current = screen.getByText('Acme Corp', { selector: '[data-part="breadcrumb-current"]' });
+    const current = screen
+      .getByText('Acme Corp', { selector: '[data-part="breadcrumbs"] [data-part="label"]' })
+      .closest('[data-part="crumb"]');
     expect(current).toHaveAttribute('aria-current', 'page');
+    expect(current?.tagName).not.toBe('BUTTON');
   });
 
   it('announces the skeleton branch as busy', () => {

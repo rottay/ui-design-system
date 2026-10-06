@@ -111,16 +111,6 @@
       "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
     },
     {
-      "key": "detail-panel/index.css :: .ds-pattern-detail-panel.ds-engine-modern :: [data-part='breadcrumb-current']",
-      "kind": "exempt",
-      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
-    },
-    {
-      "key": "detail-panel/index.css :: .ds-pattern-detail-panel.ds-engine-modern :: [data-part='breadcrumb-link']",
-      "kind": "exempt",
-      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
-    },
-    {
       "key": "file-manager/index.css :: .ds-pattern-file-manager.ds-engine-modern :: [data-part='grid-card']",
       "kind": "exempt",
       "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
@@ -272,11 +262,6 @@
       "kind": "debt",
       "owner": "design-system/D1-floors",
       "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
-    },
-    {
-      "key": "src/components/patterns/data/detail-panel/engines/modern/index.tsx :: span :: [data-part='breadcrumb-current']",
-      "kind": "exempt",
-      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor) (same box as the CSS row detail-panel.css :: .ds-pattern-detail-panel.ds-engine-modern :: [data-part='breadcrumb-current'])"
     },
     {
       "key": "src/components/patterns/data/file-manager/engines/modern/index.tsx :: GridCard :: .ds-file-manager__grid-card",

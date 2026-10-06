@@ -157,7 +157,7 @@ test('rottay (dark) / detail-panel / modern: breadcrumb-link hovered', async ({ 
   test.setTimeout(60_000);
 
   const container = await openProbe(page, 'rottay', 'modern', 1280);
-  const link = container.locator('[data-part="breadcrumb-link"]').first();
+  const link = container.locator('[data-part="breadcrumbs"] a[data-part="crumb"]').first();
   await link.hover();
   await page.waitForTimeout(300);
 

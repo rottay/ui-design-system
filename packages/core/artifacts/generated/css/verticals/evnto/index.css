@@ -25614,61 +25614,13 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   color: var(--ds-color-text-primary);
 }
 
-/* ---- breadcrumbs: separator, link (+ its hover), current (+ its `isLast`
-        emphasis, which is always the last element child of the nav). Layout
-        and geometry drained from the JSX inline styles. ---- */
+/* ---- breadcrumbs slot: the composed Breadcrumb primitive paints the trail;
+        the panel keeps only the slot's placement. ---- */
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumbs'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-2, 8px);
-  margin-block-end: var(--ds-spacing-3, 12px);
   inline-size: fit-content;
   max-inline-size: 100%;
-  padding-block: 4px;
-  padding-inline: 9px;
-  overflow-inline: auto;
-  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
-  border-radius: var(--ds-radius-full);
-  background: var(--ds-breadcrumb-bg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
-  scrollbar-width: none;
-  font-size: var(--ds-font-size-xs);
-  line-height: var(--ds-line-height-body);
-}
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-separator'] {
-  display: inline-flex;
-  align-items: center;
-  color: var(--ds-color-text-disabled);
-  font-size: var(--ds-font-size-2xs);
-  user-select: none;
-}
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link'] {
-  color: var(--ds-color-text-secondary);
-  font-weight: 500;
-  text-decoration: none;
-  transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out);
-}
-@media (hover: hover) {
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:is([data-state~='hovered'], :hover) {
-    color: var(--ds-color-text-primary);
-  }
-}
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:is([data-state~='pressed'], :active) {
-  color: var(--ds-color-text-primary);
-}
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-current'] {
-  color: var(--ds-color-text-secondary);
-  font-weight: 500;
-}
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-current'][data-clickable='true'] {
-  cursor: pointer;
-}
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-current'][data-last='true'] {
-  color: var(--ds-color-text-primary);
-  font-weight: 600;
-}
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-current']:last-child {
-  color: var(--ds-color-text-primary);
+  min-inline-size: 0;
+  margin-block-end: var(--ds-spacing-3, 12px);
 }
 
 /* ---- title ---- */
@@ -25957,15 +25909,14 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   }
 }
 
-/* ---- forced colors: every card frame, the tab chrome and the breadcrumbs
-        pill keep a system-colored edge; the interactive parts (Button,
+/* ---- forced colors: every card frame and the tab chrome keep a
+        system-colored edge; the interactive parts (Button, Breadcrumb,
         Skeleton) follow their own primitives' contracts. ---- */
 @media (forced-colors: active) {
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'][data-pattern='detail-panel'],
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header'],
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='avatar'],
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='actions'],
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumbs'],
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='status-badge'],
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-list'],
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel'],
@@ -25978,8 +25929,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     border-color: Highlight;
   }
 
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible) {
     outline: var(--ds-focus-ring-width, 2px) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset, 2px);
   }
