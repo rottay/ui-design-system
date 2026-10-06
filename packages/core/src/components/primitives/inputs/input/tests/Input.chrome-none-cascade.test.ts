@@ -52,16 +52,22 @@ describe('Modern Input skin: the chrome-none cascade contract', () => {
     }
   });
 
-  it('keeps the focus rings, the coarse floor and the forced-colours state arms unguarded', () => {
-    const unguardedSelectors = rules.filter(({ rule }) => !rule.selector.includes(GUARD)).map(({ rule, media }) => `${media}|${rule.selector}`);
-    for (const ring of [
-      ".ds-input-shell.ds-input-shell--modern[data-state~='focused']:not([data-disabled='true'])",
-      ".ds-input-shell.ds-input-shell--modern[data-invalid='true'][data-state~='focused']:not([data-disabled='true'])",
-    ]) {
-      expect(unguardedSelectors.some((entry) => entry.endsWith(`|${ring}`))).toBe(true);
-    }
-    expect(unguardedSelectors.some((entry) => /pointer: coarse/.test(entry) && entry.endsWith('|.ds-input-shell.ds-input-shell--modern'))).toBe(true);
-    expect(unguardedSelectors.some((entry) => /forced-colors/.test(entry) && entry.endsWith("|.ds-input-shell.ds-input-shell--modern[data-invalid='true']"))).toBe(true);
+  const SHELL = '.ds-input-shell.ds-input-shell--modern';
+  const FORCED = 'media (forced-colors: active)';
+  it.each([
+    ['base', `${SHELL}[data-state~='focused']:not([data-disabled='true'])`, 'box-shadow'],
+    ['base', `${SHELL}[data-invalid='true'][data-state~='focused']:not([data-disabled='true'])`, 'box-shadow'],
+    ['base', `${SHELL}[data-warning='true'][data-state~='focused']:not([data-invalid='true']):not([data-disabled='true'])`, 'box-shadow'],
+    ['base', `${SHELL}[data-success='true'][data-state~='focused']:not([data-disabled='true'])`, 'box-shadow'],
+    ['base', `${SHELL}[data-disabled='true']`, 'opacity'],
+    ['media (pointer: coarse)', SHELL, 'min-block-size'],
+    [FORCED, `${SHELL}[data-invalid='true']`, 'border-width'],
+    [FORCED, `${SHELL}[data-state~='focused']`, 'outline'],
+    [FORCED, `${SHELL}[data-disabled='true']`, 'color'],
+    [FORCED, `${SHELL}[data-disabled='true']`, 'border-color'],
+  ])('keeps the %s arm %s { %s } unguarded', (media, selector, prop) => {
+    const owners = rules.filter((entry) => entry.media === (media === 'base' ? '' : media) && entry.rule.selectors.includes(selector));
+    expect(owners.some(({ rule }) => rule.some((node) => node.type === 'decl' && node.prop === prop))).toBe(true);
   });
 
   it('never declares a focus channel under chrome="none"', () => {

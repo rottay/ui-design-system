@@ -1,0 +1,52 @@
+{
+  "guard": ":not(:where([data-chrome='none']))",
+  "owners": [
+    {
+      "id": "input",
+      "subjectClass": "ds-input-shell--modern",
+      "shell": ".ds-input-shell.ds-input-shell--modern",
+      "field": ".ds-input-field[data-part='field']",
+      "fixtures": {
+        "plain": "<div class=\"ds-input-field\" data-part=\"field\" data-chrome=\"none\"><input aria-label=\"Plain\" class=\"ds-input-shell ds-input-shell--modern\" data-part=\"root\" data-variant=\"outline\" data-size=\"md\" data-chrome=\"none\" type=\"text\" value=\"\"></div>",
+        "affix": "<div class=\"ds-input-field\" data-part=\"field\" data-chrome=\"none\"><div class=\"ds-input-shell ds-input-shell--modern\" data-part=\"root\" data-variant=\"outline\" data-size=\"md\" data-chrome=\"none\"><span data-part=\"affix-prefix\"><span>@</span></span><input aria-label=\"Affix\" class=\"ds-input-control\" data-part=\"control\" type=\"text\" value=\"\"></div></div>"
+      },
+      "cells": {
+        "rest": {},
+        "size-xs": { "data-size": "xs" },
+        "size-sm": { "data-size": "sm" },
+        "size-lg": { "data-size": "lg" },
+        "size-xl": { "data-size": "xl" },
+        "filled": { "data-variant": "filled" },
+        "flushed": { "data-variant": "flushed" },
+        "unstyled": { "data-variant": "unstyled" },
+        "hovered": { "data-state": "hovered" },
+        "filled-hovered": { "data-variant": "filled", "data-state": "hovered" },
+        "focused": { "data-state": "focused focus-visible" },
+        "filled-focused": { "data-variant": "filled", "data-state": "focused focus-visible" },
+        "invalid": { "data-invalid": "true" },
+        "invalid-focused": { "data-invalid": "true", "data-state": "focused focus-visible" },
+        "warning": { "data-warning": "true" },
+        "warning-focused": { "data-warning": "true", "data-state": "focused focus-visible" },
+        "success": { "data-success": "true" },
+        "success-focused": { "data-success": "true", "data-state": "focused focus-visible" },
+        "readonly": { "data-readonly": "true" },
+        "disabled": { "data-disabled": "true" }
+      },
+      "keep": {
+        "ring": ["focused", "filled-focused", "invalid-focused", "warning-focused", "success-focused"],
+        "forcedFrame": ["invalid", "invalid-focused"],
+        "opacity": ["disabled"],
+        "forcedInk": ["disabled"],
+        "touchFloorPx": 44
+      },
+      "unexercisable": {
+        "input.ds-input-shell.ds-input-shell--modern:-webkit-autofill": "UA autofill cannot be synthesized in a page; the guard is pinned by Input.chrome-none-cascade.test.ts.",
+        "input.ds-input-shell.ds-input-shell--modern:autofill": "UA autofill cannot be synthesized in a page; the guard is pinned by Input.chrome-none-cascade.test.ts."
+      },
+      "plant": {
+        "unguard": ".ds-input-shell.ds-input-shell--modern:not(:where([data-chrome='none']))",
+        "overguard": ".ds-input-shell.ds-input-shell--modern[data-state~='focused']:not([data-disabled='true'])"
+      }
+    }
+  ]
+}

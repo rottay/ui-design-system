@@ -508,6 +508,17 @@ export const CI_GATES = Object.freeze([
       'This entry IS its own drill: `--self-check` re-runs the same three subjects against the same bundle with the tier order REVERSED and requires every one to flip, so the planted negative rides in the same process as the measurement.',
     prerequisites: ['showroom-workspace'],
   },
+  // A chrome="none" control paints no chrome but keeps its focus, forced-colours, touch and disabled
+  // arms; only computed style over every scope's fresh bundle settles that.
+  {
+    id: 'chrome-none-cascade',
+    run: ['node', 'scripts/check/tokens/cascade/chrome-none/index.mjs', '--self-check'],
+    blocking: true,
+    phase: 'pre-build',
+    noDrillReason:
+      'This entry IS its own drill: `--self-check` re-runs the tenant-less scope with an owner rule unguarded, the focus ring over-guarded, a guarded rule for an unrostered owner and an unexercised guarded rule planted, and requires each plant to produce its own class of finding.',
+    prerequisites: ['showroom-workspace', 'playwright-chromium'],
+  },
   // THE BY-AXIS TENANT-DIFFERENCE PROBE (kit-2026-09 section 5 rule 4). Two
   // tenant documents of one vertical differing in exactly one group, measured
   // per family as COMPUTED STYLE in Chromium across three verticals and two

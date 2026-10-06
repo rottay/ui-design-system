@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "bcf5bc1d1abf5ccd62750f9f133e910276a15610fad6da5a4f9393a872c2937e",
+    "authorityDigest": "1201636355d23a3c6a8d8522e65f4c4a9b60019b84ba22e043361409a16f41fa",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -14216,8 +14216,48 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 4523,
-        "sha256": "d1140e433ad86720e8a1c796fe71d0fa17fe74d5ddc2673807cfa8539ae54d9b"
+        "bytes": 4869,
+        "sha256": "e2f9d1f592ab41cd592bd27c419cab6a4e267266dfeffeb7489f8eaecbb6a149"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/tests/Input.chrome-none.parity.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5908,
+        "sha256": "81d4844ff9d073bea465d7c74a0d443b4c2ba58418e40bd4ca902115233878f7"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/tests/Input.chrome-none.rerun-composition-enter.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1054,
+        "sha256": "0617c08d574b21d2eac14224b61cc2f33011d8afbefbfdf080b84b11784d4adb"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/tests/Input.chrome-none.rerun-integration.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1028,
+        "sha256": "87750e4ebccf686aec07073ff3328eed195bdb7a957ee2243d2f3964c8aa130c"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/tests/Input.chrome-none.rerun-submit-intent.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1032,
+        "sha256": "88759c2c0871fdee91b70bd94637af9cea780d1445eb25a7a3958ef981b36d38"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/tests/Input.chrome-none.roster.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1094,
+        "sha256": "4c49d0edc2f0c4a2f25f5259454d93f03e46742c690755d21afa19dcbcad69a9"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/tests/Input.chrome-none.test.tsx",
@@ -47810,7 +47850,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "bcf5bc1d1abf5ccd62750f9f133e910276a15610fad6da5a4f9393a872c2937e"
+    "digest": "1201636355d23a3c6a8d8522e65f4c4a9b60019b84ba22e043361409a16f41fa"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4221 counters; 3223 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -121998,8 +122038,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "935c667fe7628cb28298d7a20dd6216d7c5b2a2dbffad09240cdd26dda10940b",
-      "935c667fe7628cb28298d7a20dd6216d7c5b2a2dbffad09240cdd26dda10940b"
+      "cb464a0ea65876873c8684c3c9c41b3dcfaeb337ae72531f7362f99a4928f7fd",
+      "cb464a0ea65876873c8684c3c9c41b3dcfaeb337ae72531f7362f99a4928f7fd"
     ],
     "agree": true
   }
