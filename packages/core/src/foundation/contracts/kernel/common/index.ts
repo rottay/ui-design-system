@@ -150,18 +150,24 @@ export type Alignment = 'start' | 'center' | 'end';
  * redefinitions across component-specific prop files.
  *
  * Pass-through honesty law (binding on every engine implementation):
- * `id`, `aria-*`, and `data-*` attributes declared here MUST reach the root
- * DOM element the engine owns -- an engine may not silently drop them.
- * `data-part` follows the anatomy-ownership rule (P-79, superseding the
- * SKN-03 always-engine-wins wording): an explicit caller `data-part` names
- * the part the COMPOSING component owns, so it MUST reach the DOM and win;
- * the engine stamps its own default root part only when the caller passed
- * none, so standalone use keeps the primitive's own anatomy contract. Inner
- * sub-parts (spinner/icon/label/content/...) stay engine-owned and can never
- * be renamed by a root `data-part`.
+ * `id`, `aria-*`, and every `data-*` attribute other than the anatomy
+ * channels `data-part` and `data-state` declared here MUST reach the root DOM
+ * element the engine owns (for a form control, the native control it labels)
+ * -- an engine may not silently drop them.
+ *
+ * `data-part` and `data-state` follow the primitive-ownership rule (P-88,
+ * owner ruling 2026-10-06, superseding the P-79 caller-wins wording): a
+ * component with a skin of its own keeps its canonical `data-part`/`data-state`
+ * on its root and trigger. A caller `data-part` or `data-state` cannot replace
+ * them or switch the skin off, and neither is forwarded to any element the
+ * component paints.
+ * Composition goes through the documented `className`/slot hooks, which land
+ * on a stable element and are covered by tests. Only a structural component
+ * with no part of its own may forward a caller `data-part`/`data-state`. Inner
+ * sub-parts (spinner/icon/label/content/...) stay engine-owned in both cases.
  */
 export interface BaseComponentProps {
-  /** Arbitrary semantic state hooks forwarded to the rendered DOM element. */
+  /** Arbitrary semantic state hooks forwarded to the rendered DOM element (`data-part`/`data-state` excepted, see below). */
   [dataAttribute: `data-${string}`]: string | number | boolean | undefined;
   /** Arbitrary ARIA relationships/states forwarded to the rendered DOM element. */
   [ariaAttribute: `aria-${string}`]: string | number | boolean | undefined;
@@ -186,7 +192,11 @@ export interface BaseComponentProps {
   dir?: 'ltr' | 'rtl' | 'auto';
   /** Data attribute for testing */
   'data-testid'?: string;
-  /** Skin anatomy hook: identifies a component part for tenant CSS selectors */
+  /**
+   * Skin anatomy hook for tenant CSS selectors. Forwarded only by structural
+   * components with no part of their own; a skinned component keeps its
+   * canonical part and does not forward this value (P-88). Use `className`.
+   */
   'data-part'?: string;
   /** Accessible label for non-textual or landmark-style containers */
   'aria-label'?: string;

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Dead-part audit (P-79).
+ * Dead-part audit (P-79 finding, P-88 law).
  *
  * There are three ways a skin can silently paint nothing, and we guard two:
  *
@@ -10,10 +10,12 @@
  *
  * The third silence is the one P-79 exposed. `BaseComponentProps` declares
  * `data-part` on every component ("skin anatomy hook"), so `tsc` accepts a stamp
- * anywhere -- but Grid and Card drop it, and Button drops it in modern. A rule
- * anchored on a part that never lands simply never fires: tsc is happy, the paint
- * counter does not read attributes, jsdom is not consulted, and the pixels are
- * quietly wrong.
+ * anywhere -- but under P-88 a skinned component keeps its own part and does not
+ * forward the caller's (Card, Select), and only a structural component with no
+ * part of its own forwards it. A rule anchored on a caller part that a skinned
+ * component refused simply never fires: tsc is happy, the paint counter does not
+ * read attributes, jsdom is not consulted, and the pixels are quietly wrong. Such
+ * a rule must anchor on the component's documented className/slot hook instead.
  *
  * The check: every `[data-part='X']` a skin selects for must be a part the source
  * actually stamps somewhere. A skin that reaches for a part nobody stamps is

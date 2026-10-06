@@ -2144,8 +2144,8 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
   const stampedParts = union(sources, 'parts');
   const stampedStates = union(sources, 'states');
   const stampedVariants = union(sources, 'variants');
-  /* A default part a caller may rename (P-79) is read through the owned
-   * `data-component` stamped on the same element, never through the part. */
+  /* A default part a structural primitive lets a caller rename (P-88) is read
+   * through the owned `data-component` on the same element, never the part. */
   const consumedComponents = union(skins, 'components');
   const anchoredParts = new Set(sources.flatMap((entry) => entry.componentAnchors)
     .filter((anchor) => consumedComponents.has(anchor.component))
@@ -2169,7 +2169,7 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
   }
   /* A state painted on a compound that carries a composed primitive's class is
    * stamped by that primitive, not by this family: the class and the state land
-   * on the same element (P-79). The occurrences that reach no such primitive are
+   * on the same element (P-88). The occurrences that reach no such primitive are
    * kept, because they name the parts this family still owes a stamp. */
   const stateComposedFrom = new Set();
   const composedStampedStates = new Set();

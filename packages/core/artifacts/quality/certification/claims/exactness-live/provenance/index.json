@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "9b12844b5575a9b4a36b692a28b89ad049f930d01aca9095236910b6c12a96ea"
+    "semanticHash": "8a1536f910749c828dfefa186cadb9cea34879df257e69f5c4f7a33e22e28c9a"
   },
   "divergentInputs": [
     {
@@ -4842,6 +4842,17 @@
       "live": {
         "bytes": 22670,
         "sha256": "51c5c7634a8aba1b5af57dfac82ab3a12e6ed6dbe489cfc509bc2179eb30ac6b"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/display/card/tests/Card.passthrough-contract.test.tsx",
+      "archive": {
+        "bytes": 3821,
+        "sha256": "758cfb98a9db880b552020b68f45baee604b2109055352905dde429e0a1848dc"
+      },
+      "live": {
+        "bytes": 3866,
+        "sha256": "00f27c91af64eea5a7eefc168705745ad7a8388ad98b7a88ffd80f012e985a4e"
       }
     },
     {
@@ -17032,8 +17043,16 @@
         "sha256": "60977c9152276e8826cd82585a7d4461266af47218ace05dbc88043c8b9b3b40"
       },
       "live": {
-        "bytes": 12777,
-        "sha256": "f74230f9d0e36772dbb5723b0220dcfbc9ab744ece8f9253a3473626426ef84a"
+        "bytes": 13337,
+        "sha256": "dc4aa505a8975b2f22e50e91c8b4730f8e51a3090d0b16c578c574f1d8eb96e2"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/contracts/kernel/common/tests/PassThroughLaw.contract.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 3830,
+        "sha256": "4a43eefcaa2f2e2dc8fb17edf53d8c2d078382c89890bad962452d69a5d87779"
       }
     },
     {

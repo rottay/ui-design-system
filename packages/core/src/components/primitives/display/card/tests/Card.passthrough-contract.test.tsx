@@ -1,9 +1,9 @@
 /**
- * Pass-through honesty law contract (audit SKN-02): engines win on `data-part`;
- * callers win on `id`, `aria-*`, and every other `data-*` attribute. Each
- * engine must forward the caller's passthrough to the root DOM element it owns
- * and stamp its own `data-part` after it, so the engine part always survives.
- * The law is documented on `BaseComponentProps` in
+ * Pass-through honesty law contract (P-88): a skinned component keeps its own
+ * `data-part`/`data-state`; callers win on `id`, `aria-*`, and every `data-*`
+ * attribute other than those two. Each engine must forward the caller's
+ * passthrough to the root DOM element it owns and stamp its own `data-part`
+ * after it, so the engine part always survives. The law is documented on `BaseComponentProps` in
  * `foundation/contracts/kernel/common`.
  */
 import React from 'react';
@@ -18,7 +18,7 @@ const passthrough = {
   id: 'caller-card-id',
   'aria-label': 'Caller label',
   'data-custom': 'caller-data',
-  // The one attribute the caller must NOT win: the engine re-stamps its part.
+  // P-88: the one attribute the caller must NOT win; the engine re-stamps its part.
   'data-part': 'caller-part-attempt',
 } as const;
 
