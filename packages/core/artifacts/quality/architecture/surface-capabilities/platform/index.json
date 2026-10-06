@@ -1,7 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "app": "app-platform",
   "source": "generated-from-productive-typescript",
+  "provenance": {
+    "commit": "44abb81938270a17ff58d2bd6a490d354c9caf5e",
+    "materialization": "git-archive:src"
+  },
   "counts": {
     "route": 190,
     "field": 63,

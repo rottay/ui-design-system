@@ -4,9 +4,11 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  buildSurfaceCapabilityCensus,
+  buildPinnedSurfaceCapabilityCensus,
+  resolveSurfaceCapabilityRepository,
   serializeSurfaceCapabilityCensus,
   SURFACE_CAPABILITY_KINDS,
+  SURFACE_CAPABILITY_PINS,
 } from '../../libraries/taxonomy/surfaces/index.mjs';
 import { repoRoot as findRepoRoot } from '../../libraries/repo-root/index.mjs';
 
@@ -17,12 +19,14 @@ const outputDirectory = path.join(
   designSystemRoot,
   'packages/core/artifacts/quality/architecture/surface-capabilities',
 );
-const appNames = ['app-bithire', 'app-evnto', 'app-platform'];
 const check = process.argv.includes('--check');
 
 let failed = false;
-for (const appName of appNames) {
-  const census = await buildSurfaceCapabilityCensus(path.join(workspaceRoot, appName));
+for (const appName of Object.keys(SURFACE_CAPABILITY_PINS)) {
+  const census = await buildPinnedSurfaceCapabilityCensus({
+    app: appName,
+    repository: resolveSurfaceCapabilityRepository(appName, { env: process.env, workspaceRoot }),
+  });
   for (const kind of SURFACE_CAPABILITY_KINDS) {
     if (census.counts[kind] === 0) {
       throw new Error(`${appName} generated zero ${kind} registrations`);
@@ -42,7 +46,7 @@ for (const appName of appNames) {
     await writeFile(outputPath, serialized);
   }
 
-  console.log(`[surface-capabilities] ${appName}: total=${census.total} ${SURFACE_CAPABILITY_KINDS.map((kind) => `${kind}=${census.counts[kind]}`).join(' ')}`);
+  console.log(`[surface-capabilities] ${appName}@${census.provenance.commit}: total=${census.total} ${SURFACE_CAPABILITY_KINDS.map((kind) => `${kind}=${census.counts[kind]}`).join(' ')}`);
 }
 
 if (failed) process.exitCode = 1;

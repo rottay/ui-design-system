@@ -1,7 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "app": "app-bithire",
   "source": "generated-from-productive-typescript",
+  "provenance": {
+    "commit": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+    "materialization": "git-archive:src"
+  },
   "counts": {
     "route": 225,
     "field": 433,

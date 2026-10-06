@@ -1,8 +1,17 @@
-import { readdir, readFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import ts from 'typescript';
 
-export const SURFACE_CAPABILITY_CENSUS_VERSION = 1;
+export const SURFACE_CAPABILITY_CENSUS_VERSION = 2;
+export const SURFACE_CAPABILITY_PINS = Object.freeze({
+  'app-bithire': '8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f',
+  'app-evnto': '88f52d51bad3940fb44911e5c0833c2f00f9c917',
+  'app-platform': '44abb81938270a17ff58d2bd6a490d354c9caf5e',
+});
+const PINNED_MATERIALIZATION = 'git-archive:src';
+const FULL_COMMIT = /^[0-9a-f]{40}$/;
 export const SURFACE_CAPABILITY_KINDS = Object.freeze([
   'route',
   'field',
@@ -210,7 +219,10 @@ function scanSourceFile(sourceRoot, file, sourceText) {
   return entries;
 }
 
-export async function buildSurfaceCapabilityCensus(repoRoot) {
+export async function buildSurfaceCapabilityCensus(repoRoot, { app, provenance } = {}) {
+  if (typeof app !== 'string' || app.length === 0) {
+    throw new Error('surface capability census requires an explicit app name');
+  }
   const sourceRoot = path.join(repoRoot, 'src');
   const files = await listProductSourceFiles(sourceRoot);
   const entries = [];
@@ -239,12 +251,57 @@ export async function buildSurfaceCapabilityCensus(repoRoot) {
 
   return {
     schemaVersion: SURFACE_CAPABILITY_CENSUS_VERSION,
-    app: path.basename(repoRoot),
+    app,
     source: 'generated-from-productive-typescript',
+    ...(provenance ? { provenance } : {}),
     counts,
     total: ordered.length,
     entries: ordered,
   };
+}
+
+export function resolveSurfaceCapabilityRepository(app, { env, workspaceRoot }) {
+  const variable = `APP_${app.replace(/^app-/, '').toUpperCase()}_ROOT`;
+  if (Object.hasOwn(env, variable)) {
+    const value = env[variable];
+    if (typeof value !== 'string' || value.trim().length === 0) {
+      throw new Error(`${variable} is set but blank`);
+    }
+    return path.resolve(value);
+  }
+  return path.join(workspaceRoot, app);
+}
+
+function git(repository, args) {
+  return execFileSync('git', ['-C', repository, ...args], { stdio: ['ignore', 'pipe', 'pipe'] });
+}
+
+export async function buildPinnedSurfaceCapabilityCensus({ app, repository, pins = SURFACE_CAPABILITY_PINS }) {
+  if (!Object.hasOwn(pins, app)) {
+    throw new Error(`no pinned commit for ${app}`);
+  }
+  const commit = pins[app];
+  if (!FULL_COMMIT.test(commit)) {
+    throw new Error(`${app} pin must be a full 40-hex commit, got ${commit}`);
+  }
+  try {
+    git(repository, ['cat-file', '-e', `${commit}^{commit}`]);
+  } catch (error) {
+    throw new Error(`${app} pin ${commit} is not a commit in ${repository}`, { cause: error });
+  }
+
+  const root = await mkdtemp(path.join(tmpdir(), `rottay-surface-census-${app}-`));
+  try {
+    const archive = path.join(root, 'src.tar');
+    git(repository, ['archive', '--format=tar', '-o', archive, commit, '--', 'src']);
+    execFileSync('tar', ['-xf', archive, '-C', root], { stdio: ['ignore', 'pipe', 'pipe'] });
+    return await buildSurfaceCapabilityCensus(root, {
+      app,
+      provenance: { commit, materialization: PINNED_MATERIALIZATION },
+    });
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 }
 
 export function serializeSurfaceCapabilityCensus(census) {
