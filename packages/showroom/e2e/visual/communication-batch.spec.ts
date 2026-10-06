@@ -68,6 +68,61 @@ async function waitForGroundPaint(page: Page, ground: 'dark' | 'light'): Promise
   );
 }
 
+/**
+ * Pins the MessageBubble geometry the screenshot's colour tolerance cannot see
+ * (W26-CAPTURE): the card fills its measure -- the private
+ * `--_ds-assistant-bubble-measure` channel, 80% of the bubble root when
+ * unauthored -- and sits on the edge its `data-align` names. The measure is
+ * resolved by a real browser layout (a probe in the card's own place, carrying
+ * the card's box model and channel), never a literal width, so the shrink-
+ * wrapped ~178px card of the pre-b1f6e9be6 baselines fails red here even when
+ * its pixels pass at threshold 0.2.
+ */
+async function expectBubbleFillsMeasure(scope: Locator): Promise<readonly ('start' | 'end')[]> {
+  const bubbles = scope.locator('.ds-assistant-message-bubble[data-part="root"]');
+  await expect(bubbles.first(), 'the scene must render a MessageBubble').toBeVisible();
+  const geometry = await bubbles.evaluateAll((roots) =>
+    roots.map((root) => {
+      const card = root.querySelector<HTMLElement>(':scope > .ds-assistant-message-bubble-card[data-part="root"]');
+      if (!card) return null;
+      const cardStyle = getComputedStyle(card);
+      const probe = (inlineSize: string): number => {
+        const element = document.createElement('div');
+        element.setAttribute('aria-hidden', 'true');
+        element.style.cssText = `display:block;block-size:0;margin:0;box-sizing:${cardStyle.boxSizing};padding-inline:${cardStyle.paddingInlineStart} ${cardStyle.paddingInlineEnd};border-inline-style:solid;border-inline-width:${cardStyle.borderInlineStartWidth} ${cardStyle.borderInlineEndWidth};inline-size:${inlineSize}`;
+        const channel = cardStyle.getPropertyValue('--_ds-assistant-bubble-measure').trim();
+        if (channel) element.style.setProperty('--_ds-assistant-bubble-measure', channel);
+        root.append(element);
+        const width = element.getBoundingClientRect().width;
+        element.remove();
+        return width;
+      };
+      const rtl = getComputedStyle(root).direction === 'rtl';
+      const rootBox = root.getBoundingClientRect();
+      const cardBox = card.getBoundingClientRect();
+      const align: 'start' | 'end' = root.getAttribute('data-align') === 'end' ? 'end' : 'start';
+      const atEnd = (align === 'end') !== rtl;
+      return {
+        align,
+        rootWidth: rootBox.width,
+        // the @container cut (30rem): below it the bubble takes the full row
+        cut: probe('30rem'),
+        measure: probe('var(--_ds-assistant-bubble-measure, 80%)'),
+        cardWidth: cardBox.width,
+        edgeGap: atEnd ? Math.abs(rootBox.right - cardBox.right) : Math.abs(cardBox.left - rootBox.left),
+      };
+    }),
+  );
+  for (const bubble of geometry) {
+    expect(bubble, 'every MessageBubble root must carry its card').not.toBeNull();
+    if (!bubble) continue;
+    expect(bubble.rootWidth, 'the scene must hold the bubble above the 30rem cut').toBeGreaterThanOrEqual(bubble.cut);
+    expect(Math.abs(bubble.cardWidth - bubble.measure), `the ${bubble.align} bubble card (${bubble.cardWidth}px) must fill its measure (${bubble.measure}px of ${bubble.rootWidth}px)`).toBeLessThanOrEqual(1);
+    expect(bubble.edgeGap, `the ${bubble.align} bubble card must sit on its inline-${bubble.align} edge`).toBeLessThanOrEqual(1);
+  }
+  return geometry.flatMap((bubble) => (bubble ? [bubble.align] : []));
+}
+
 async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<Locator> {
   await page.setViewportSize({ width: 1280, height: 2400 });
   await page.goto(
@@ -101,6 +156,9 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
       return getComputedStyle(outline).stroke === expected;
     });
   expect(outlinePaintMatchesToken).toBe(true);
+
+  // The assistant band's end-aligned bubble is this scene's geometry pin.
+  expect(await expectBubbleFillsMeasure(container.locator('[data-testid="probe-communication-assistant"]'))).toContain('end');
 
   return container;
 }
