@@ -10,7 +10,7 @@ import { expect, test, type Route } from '@playwright/test';
 //
 // THE ROUTE. `/probe/first-paint` and `/probe/first-paint?modal=1`, and nothing
 // else. This file certifies those two requests; it makes no claim about any
-// other showroom route, and in particular none of them passes `ssrViewport`, so
+// other showroom route (the whitelabel probe's `?w=` hint is probe-viewport-hint.spec.ts's), so
 // nothing here should be read as "the showroom is desktop-first".
 //
 // HOW "BEFORE HYDRATION" IS ESTABLISHED. Every `/_next/static/chunks/**`

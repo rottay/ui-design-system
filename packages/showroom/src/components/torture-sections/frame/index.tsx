@@ -13,9 +13,11 @@ import {
   Table,
   Toast,
   isImplementedEngineName,
+  useResponsive,
 } from '@rottay/design-system';
 import { StateGallery, FLAGSHIP_SLUGS } from '@/components/state-gallery';
 import { TortureSurface, TORTURE_FIXTURES, type TortureFixture, type ProbeEngine } from '@/components/torture-surface';
+import { captureWidthViewport } from '@/components/torture-tenant';
 
 const CAPTURE_WIDTHS: Record<string, number> = {
   '360': 360,
@@ -66,6 +68,19 @@ function ChromeExtras() {
   );
 }
 
+/** The tier the responsive runtime published, and whether the browser has answered it yet. */
+function ViewportWitness() {
+  const { deviceClass, hasResolvedViewport } = useResponsive();
+  return (
+    <output
+      hidden
+      data-testid="probe-viewport"
+      data-device-class={deviceClass}
+      data-resolved={hasResolvedViewport ? 'true' : 'false'}
+    />
+  );
+}
+
 export function sanitizeFixture(raw: string | null): TortureFixture {
   return raw && (TORTURE_FIXTURES as string[]).includes(raw) ? (raw as TortureFixture) : 'torture-dark';
 }
@@ -110,6 +125,8 @@ function TortureFrameContent({ children }: TortureFrameProps) {
     return raw && CAPTURE_WIDTHS[raw] ? CAPTURE_WIDTHS[raw] : undefined;
   }, [searchParams]);
 
+  const viewport = useMemo(() => captureWidthViewport(searchParams.get('w')), [searchParams]);
+
   const slugs = useMemo(() => {
     const only = searchParams.get('slug');
     return only && FLAGSHIP_SLUGS.includes(only) ? [only] : FLAGSHIP_SLUGS;
@@ -123,7 +140,9 @@ function TortureFrameContent({ children }: TortureFrameProps) {
       rtl={rtl}
       engine={engine}
       managementSource={canonicalManagement ? 'canonical-db' : 'legacy-brand-fixture'}
+      viewport={viewport}
     >
+      <ViewportWitness />
       <Box
         data-testid="probe-ground"
         style={{

@@ -20,6 +20,7 @@ import {
   resolveDocumentRootAttributes,
   staticVerticalAnatomyAttributes,
   type DocumentRootAttributes,
+  type DocumentViewportHint,
   type ImplementedEngineName,
   type TenantThemeArtifact,
 } from '@rottay/design-system/server';
@@ -129,12 +130,25 @@ export function sanitizeEngine(raw: string | null): ProbeEngine {
   return isImplementedEngineName(raw) ? raw : 'modern';
 }
 
+/** The tier `?w=` declares (phone < 640 <= tablet < 1024 <= desktop); no `?w=` stays unhinted, never desktop. */
+const CAPTURE_WIDTH_VIEWPORTS: Readonly<Record<string, DocumentViewportHint>> = {
+  '360': 'phone',
+  '768': 'tablet',
+  '1280': 'desktop',
+};
+
+export function captureWidthViewport(raw: string | null): DocumentViewportHint | undefined {
+  return raw ? CAPTURE_WIDTH_VIEWPORTS[raw] : undefined;
+}
+
 export interface TortureFirstPaintPlan {
   fixture: TortureFixture;
   engine: ProbeEngine;
   ground: 'dark' | 'light';
   rtl: boolean;
   managementSource: ManagementFixtureSource;
+  /** The `?w=` tier, stamped as `data-ds-viewport` and handed to the provider as `ssrViewport`. */
+  viewport: DocumentViewportHint | undefined;
   /**
    * The governed root attribute set, or `null` when this fixture's settled
    * ground is not deterministic from bundled or compiled CSS. A null plan
@@ -179,8 +193,9 @@ export function resolveTortureFirstPaint(
       : 'legacy-brand-fixture';
   const ground = surfaceGroundFor(fixture);
   const locale = rtl ? 'ar' : 'en';
+  const viewport = captureWidthViewport(readQueryValue(query, 'w'));
 
-  const base = { fixture, engine, ground, rtl, managementSource } as const;
+  const base = { fixture, engine, ground, rtl, managementSource, viewport } as const;
 
   if (fixture === 'themanagementmiami' && managementSource === 'canonical-db') {
     const artifact = compileCanonicalManagementArtifact(specimen);
@@ -190,6 +205,7 @@ export function resolveTortureFirstPaint(
         themeMode: ground,
         engine,
         locale,
+        ...(viewport ? { viewport } : {}),
         tenant: { slug: artifact.slug, verticalKey: artifact.verticalKey },
       }),
       css: artifact.css,
@@ -208,6 +224,7 @@ export function resolveTortureFirstPaint(
           themeMode: ground,
           engine,
           locale,
+          ...(viewport ? { viewport } : {}),
           tenant: { slug: fixture, verticalKey },
         }),
         ...staticVerticalAnatomyAttributes(verticalKey),

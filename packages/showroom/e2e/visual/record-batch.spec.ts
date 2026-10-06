@@ -90,8 +90,8 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
   const fixtureGround = FIXTURES.find((f) => f.id === fixture)?.ground ?? 'dark';
   await waitForGroundPaint(page, fixtureGround);
 
-  // No ssrViewport here: hydration paints the phone posture and corrects to desktop in a later
-  // transition. A capture before that commit shoots the shorter phone layout.
+  // `w=1280` hints desktop; the wait guards a regression to the unhinted phone-first paint, whose
+  // capture before the desktop correction shoots the shorter phone layout.
   await page.waitForFunction(
     (selector) => {
       const container = document.querySelector(selector);

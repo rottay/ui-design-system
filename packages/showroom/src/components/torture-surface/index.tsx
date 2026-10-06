@@ -17,6 +17,7 @@ import {
   emitThemeCss,
   emitTenantThemeArtifactForSsr,
   isFirstPartyVerticalId,
+  type DocumentViewportHint,
   type TenantThemeArtifact,
   type ThemeIntent,
 } from '@rottay/design-system/server';
@@ -195,6 +196,7 @@ export function TortureSurface({
   ground,
   managementSource = 'legacy-brand-fixture',
   artifact,
+  viewport,
   children,
 }: {
   fixture: TortureFixture;
@@ -224,6 +226,8 @@ export function TortureSurface({
    * same digest and neither becomes a second source of truth.
    */
   artifact?: TenantThemeArtifact;
+  /** The request's declared tier; omitted, the provider paints mobile-first and corrects after hydration. */
+  viewport?: DocumentViewportHint;
   children: ReactNode;
 }) {
   const compiledArtifact =
@@ -339,6 +343,7 @@ export function TortureSurface({
       forceTheme={ground ?? surfaceGroundFor(fixture)}
       tenantConfig={providerConfig}
       locale={rtl ? 'ar' : 'en'}
+      {...(viewport ? { ssrViewport: viewport } : {})}
       // A declaration is EVIDENCE, so exactly one branch here can produce one:
       //   - compiled-artifact: the server embedded this artifact's CSS and the
       //     element is in the document, so the declaration names bytes the

@@ -175,8 +175,8 @@ async function waitForSettled(page: Page, locator: Locator): Promise<void> {
 
 const TABLE_POSTURE_CASES = ['admin-audit', 'data-list', 'data-report'] as const;
 
-// The probe passes no `ssrViewport`, so hydration paints the phone posture (cards) and the
-// desktop correction lands in a transition seconds later; wait on that posture, not on stability.
+// `w=1280` hints desktop, so the first paint already carries the table; this wait is the guard
+// that an unhinted regression (phone first, desktop seconds later) cannot shoot cards.
 async function waitForDesktopPosture(root: Locator): Promise<void> {
   await expect(
     root.locator('[data-posture^="phone"]'),
