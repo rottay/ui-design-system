@@ -21,6 +21,8 @@ import { transform as unionMemberRemoved } from './transforms/union-member-remov
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 
 export const DEFAULT_MAP = path.join(SCRIPT_DIR, 'release-3-0-map/index.json');
+export const DEFAULT_STANDING = path.join(SCRIPT_DIR, 'standing-reports/index.json');
+const REPOSITORY_ROOT = path.resolve(findPackageRoot(SCRIPT_DIR), '../..');
 
 /** Subpath re-pointing runs first so a later pass sees symbols on the door the map keys them by. */
 export const TRANSFORMS = Object.freeze([
@@ -51,6 +53,8 @@ const ID = /^([a-z][a-z-]*)\/(\.(?:\/[A-Za-z0-9._*-]+)*)#([A-Za-z_$*][\w$]*|\*)(
 const MEMBER_NAME = /^[A-Za-z_$][\w$]*$/;
 const RELEASE_LINE = /^(\d+)\.(\d+)$/;
 const MAX_PASSES = 6;
+const STANDING_ROW_KEYS = ['id', 'file', 'count', 'class', 'proof', 'why'];
+const GLOB = /[*?[\]{}!]/;
 
 /** The shape every map id has: `<class>/<subpath>#<symbol>` with an optional `.<member>`. */
 export function parseEntryId(id) {
@@ -468,11 +472,163 @@ export function runCodemods({
   return { mode: write ? 'write' : 'dry-run', findings, summary: summarize(findings, files.length, changed) };
 }
 
+function standingFail(where, message) {
+  throw new Error(`standing register: ${where}: ${message}`);
+}
+
+/**
+ * The register of reports `--check` lets stand. Each row names one (id, file) by literal path, the count
+ * it may not exceed, its class and, for a member row, the proof kind the kit must keep finding there.
+ */
+export function loadStanding(standingPath = DEFAULT_STANDING) {
+  const raw = JSON.parse(fs.readFileSync(standingPath, 'utf8'));
+  if (raw.schemaVersion !== 1) standingFail(standingPath, `unsupported schemaVersion ${raw.schemaVersion}`);
+  if (!Number.isInteger(raw.ceiling) || raw.ceiling < 0) standingFail(standingPath, '`ceiling` must be a non-negative integer');
+  if (!Array.isArray(raw.rows)) standingFail(standingPath, '`rows` must be a list');
+  const keys = new Set();
+  for (const row of raw.rows) {
+    const where = `${row?.id} ${row?.file}`;
+    if (row === null || typeof row !== 'object' || Object.keys(row).some((key) => !STANDING_ROW_KEYS.includes(key))) {
+      standingFail(where, `a row is \`{ ${STANDING_ROW_KEYS.join(', ')} }\``);
+    }
+    if (!parseEntryId(String(row.id))) standingFail(where, '`id` is not an entry id');
+    if (typeof row.file !== 'string' || path.isAbsolute(row.file) || row.file.split('/').includes('..') || GLOB.test(row.file)
+      || !(SOURCE_EXTENSION.test(row.file) || STYLESHEET_EXTENSION.test(row.file))) {
+      standingFail(where, '`file` is one source file by literal relative path: no glob, no directory');
+    }
+    if (!Number.isInteger(row.count) || row.count < 1) standingFail(where, '`count` must be a positive integer');
+    if (typeof row.why !== 'string' || row.why.trim() === '') standingFail(where, '`why` must be a non-empty string');
+    if (!STANDING_CLASSES[row.class]) standingFail(where, `unknown class \`${row.class}\`; known: ${Object.keys(STANDING_CLASSES).join(', ')}`);
+    if (row.class === 'retirement-assertion' ? row.proof !== undefined : typeof row.proof !== 'string') {
+      standingFail(where, `a \`${row.class}\` row ${row.class === 'retirement-assertion' ? 'states no' : 'pins its'} \`proof\``);
+    }
+    const key = `${row.id}\0${row.file}`;
+    if (keys.has(key)) standingFail(where, 'duplicate (id, file)');
+    keys.add(key);
+  }
+  const total = raw.rows.reduce((sum, row) => sum + row.count, 0);
+  if (total !== raw.ceiling) standingFail(standingPath, `the rows sum to ${total}, the header \`ceiling\` is ${raw.ceiling}`);
+  return { path: standingPath, ceiling: raw.ceiling, rows: raw.rows };
+}
+
+/** What each class admits. A row the id, path, reason or proof of its findings does not fit is refused. */
+const STANDING_CLASSES = Object.freeze({
+  'retirement-assertion': {
+    path: (file) => file.startsWith('packages/core/src/') && file.split('/').includes('tests'),
+    reasons: new Set(['string-literal', 'unmapped-unpublished-subpath']),
+    proofs: null,
+  },
+  'member-report': {
+    path: (file) => file.startsWith('packages/showroom/src/'),
+    reasons: new Set(['member-changed']),
+    proofs: new Set(['spelled', 'import']),
+    reportOnlyMember: true,
+  },
+  'member-carrier': {
+    path: (file) => file.startsWith('packages/showroom/src/'),
+    reasons: new Set(['member-changed']),
+    proofs: new Set(['carrier']),
+    reportOnlyMember: true,
+  },
+});
+
+function admission(row, map) {
+  const law = STANDING_CLASSES[row.class];
+  if (!law.path(row.file)) return `class \`${row.class}\` does not admit the path`;
+  if (law.reportOnlyMember) {
+    const entry = map.byId.get(row.id);
+    if (parseEntryId(row.id).class !== 'member-changed' || entry?.id !== row.id || entry.mode !== 'report-only') {
+      return `class \`${row.class}\` admits only the id of a report-only member-changed entry`;
+    }
+  }
+  if (law.proofs && !law.proofs.has(row.proof)) return `class \`${row.class}\` does not admit \`proof: ${row.proof}\``;
+  return null;
+}
+
+/**
+ * `--check` against the register: red on any rewrite, any report no row names, a row its findings exceed,
+ * fall short of or contradict in proof, reason or class. Row paths are relative to `root`. A row is judged
+ * only when the run covers its file and its id; one it does not cover is counted and left alone.
+ */
+export function checkStanding({
+  findings, standing, map, operands, root, cwd = process.cwd(), classes = null, only = null,
+}) {
+  const relative = (file) => path.relative(root, file).split(path.sep).join('/');
+  const scanned = operands.map((operand) => path.resolve(cwd, operand));
+  const covered = (row) => {
+    const target = path.resolve(root, row.file);
+    if (!scanned.some((operand) => target === operand || target.startsWith(`${operand}${path.sep}`))) return false;
+    if (classes && !classes.includes(parseEntryId(row.id).class)) return false;
+    return !only || only.includes(row.id);
+  };
+  const violations = [];
+  for (const row of standing.rows) {
+    const refused = admission(row, map);
+    if (refused) violations.push({ kind: 'class-refused', id: row.id, file: row.file, message: refused });
+  }
+  const live = new Map();
+  for (const item of findings) {
+    const file = relative(item.file);
+    if (item.action === 'rewrite') {
+      violations.push({ kind: 'rewrite', id: item.id, file, message: `L${item.line} a rewrite is never registrable; write it` });
+      continue;
+    }
+    const key = `${item.id}\0${file}`;
+    if (!live.has(key)) live.set(key, { id: item.id, file, items: [] });
+    live.get(key).items.push(item);
+  }
+  const rows = new Map(standing.rows.map((row) => [`${row.id}\0${row.file}`, row]));
+  let reports = 0;
+  for (const [key, { id, file, items }] of live) {
+    const row = rows.get(key);
+    if (!row) {
+      for (const item of items) violations.push({ kind: 'unregistered', id, file, message: `L${item.line} [${item.reason}] no register row` });
+      continue;
+    }
+    reports += Math.min(items.length, row.count);
+    if (items.length > row.count) violations.push({ kind: 'above-pin', id, file, message: `${items.length} live, the row stands at ${row.count}` });
+    const law = STANDING_CLASSES[row.class];
+    const reasons = [...new Set(items.map((item) => item.reason))].filter((reason) => !law.reasons.has(reason));
+    if (reasons.length > 0) violations.push({ kind: 'class-refused', id, file, message: `class \`${row.class}\` does not admit reason ${reasons.join(', ')}` });
+    const proofs = [...new Set(items.map((item) => item.proof ?? null))];
+    if (proofs.length !== 1 || proofs[0] !== (row.proof ?? null)) {
+      violations.push({ kind: 'proof-differs', id, file, message: `live proof ${proofs.map((proof) => proof ?? 'none').join(', ')}, the row pins ${row.proof ?? 'none'}` });
+    }
+  }
+  let evaluated = 0;
+  for (const row of standing.rows) {
+    if (!covered(row)) continue;
+    evaluated += 1;
+    const count = live.get(`${row.id}\0${row.file}`)?.items.length ?? 0;
+    if (count < row.count) {
+      violations.push({
+        kind: count === 0 ? 'zero' : 'below-pin',
+        id: row.id,
+        file: row.file,
+        message: `${count} live, the row stands at ${row.count}: lower or delete the row in this lot`,
+      });
+    }
+  }
+  return { path: standing.path, ceiling: standing.ceiling, reports, rows: evaluated, outside: standing.rows.length - evaluated, violations };
+}
+
+function standingLine(result, options, cwd) {
+  if (!result) return 'standing: not read (--no-standing)';
+  const notes = [];
+  if (result.path !== DEFAULT_STANDING) notes.push(`register ${path.relative(cwd, result.path)}`);
+  if (options.mapPath !== DEFAULT_MAP) notes.push(`map ${path.relative(cwd, options.mapPath)}`);
+  if (result.outside > 0) notes.push(`${result.outside} row(s) outside this run, not judged`);
+  return `standing: ${result.reports} report(s) in ${result.rows} row(s), ceiling ${result.ceiling}${notes.length > 0 ? ` (${notes.join('; ')})` : ''}`;
+}
+
 const USAGE = `Usage: node scripts/maintain/codemods/index.mjs [--dry-run | --write | --check] [options] <file-or-directory> [...]
 
   --dry-run          plan and report; write nothing (default)
   --write            apply every proven rewrite; reports are still printed
-  --check            dry-run that exits 1 while any finding remains
+  --check            dry-run that exits 1 on any rewrite and on any report the standing register does not hold
+  --no-standing      with --check: read no register, exit 1 while any finding remains
+  --standing <path>  standing register (default: standing-reports/index.json, its paths relative to the
+                     repository root); the paths of a register given here are relative to the cwd
   --map <path>       codemod map (default: release-3-0-map/index.json)
   --class <name>     limit to one change class (repeatable)
   --only <id>        limit to one map entry id (repeatable)
@@ -481,7 +637,10 @@ const USAGE = `Usage: node scripts/maintain/codemods/index.mjs [--dry-run | --wr
   --quiet            print the summary only`;
 
 function parseArguments(argv) {
-  const options = { write: false, check: false, json: false, quiet: false, assumeLtr: false, classes: [], only: [], operands: [], mapPath: DEFAULT_MAP };
+  const options = {
+    write: false, check: false, json: false, quiet: false, assumeLtr: false, classes: [], only: [], operands: [], mapPath: DEFAULT_MAP,
+    standing: true, standingPath: DEFAULT_STANDING,
+  };
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     const value = () => {
@@ -496,6 +655,8 @@ function parseArguments(argv) {
     else if (argument === '--quiet') options.quiet = true;
     else if (argument === '--assume-ltr') options.assumeLtr = true;
     else if (argument === '--map') options.mapPath = path.resolve(value());
+    else if (argument === '--no-standing') options.standing = false;
+    else if (argument === '--standing') options.standingPath = path.resolve(value());
     else if (argument === '--class') options.classes.push(value());
     else if (argument === '--only') options.only.push(value());
     else if (argument.startsWith('--')) throw new Error(`unknown option ${argument}`);
@@ -503,11 +664,13 @@ function parseArguments(argv) {
   }
   if (options.write && (options.check || options.dryRun)) throw new Error('--write excludes --check and --dry-run');
   if (options.operands.length === 0) throw new Error('no file or directory given');
+  if (!options.standing && options.standingPath !== DEFAULT_STANDING) throw new Error('--standing excludes --no-standing');
+  if ((!options.standing || options.standingPath !== DEFAULT_STANDING) && !options.check) throw new Error('--standing and --no-standing need --check');
   for (const name of options.classes) if (!CLASSES.includes(name)) throw new Error(`unknown class ${name}; known: ${CLASSES.join(', ')}`);
   return options;
 }
 
-function printReport(result, options, cwd) {
+function printReport(result, options, cwd, standing) {
   const verb = result.mode === 'write' ? 'REWROTE' : 'REWRITE';
   if (!options.quiet) {
     let currentFile = null;
@@ -529,6 +692,11 @@ function printReport(result, options, cwd) {
     const reasons = Object.entries(bucket.reasons).map(([reason, count]) => `${reason}=${count}`).join(' ');
     console.log(`  ${className.padEnd(30)} rewrite=${String(bucket.rewrite).padEnd(5)} report=${String(bucket.report).padEnd(5)} ${reasons}`);
   }
+  if (!options.check) return;
+  for (const violation of standing?.violations ?? []) {
+    console.log(`  STANDING ${violation.kind} ${violation.id} ${violation.file}: ${violation.message}`);
+  }
+  console.log(standingLine(standing, options, cwd));
 }
 
 function runCli() {
@@ -542,6 +710,16 @@ function runCli() {
   }
   const cwd = process.cwd();
   const map = loadMap(options.mapPath);
+  let register = null;
+  if (options.check && options.standing) {
+    try {
+      register = loadStanding(options.standingPath);
+    } catch (error) {
+      console.error(error.message);
+      process.exitCode = 2;
+      return;
+    }
+  }
   const unknown = options.only.filter((id) => !map.byId.has(id));
   if (unknown.length > 0) {
     console.error(`no map entry ${unknown.join(', ')}\n\n${USAGE}`);
@@ -558,13 +736,26 @@ function runCli() {
     assumeLtr: options.assumeLtr,
     cwd,
   });
+  const standing = register && checkStanding({
+    findings: result.findings,
+    standing: register,
+    map,
+    operands: options.operands,
+    root: options.standingPath === DEFAULT_STANDING ? REPOSITORY_ROOT : cwd,
+    cwd,
+    classes: options.classes.length > 0 ? options.classes : null,
+    only: options.only.length > 0 ? options.only.map((id) => map.byId.get(id).id) : null,
+  });
   if (options.json) {
     const findings = result.findings.map((item) => ({ ...item, file: path.relative(cwd, item.file) }));
-    console.log(JSON.stringify({ mode: options.check ? 'check' : result.mode, map: path.relative(cwd, map.path), line: map.line, roots: options.operands, summary: result.summary, findings }, null, 2));
+    const output = { mode: options.check ? 'check' : result.mode, map: path.relative(cwd, map.path), line: map.line, roots: options.operands, summary: result.summary, findings };
+    if (options.check) output.standing = standing ? { ...standing, path: path.relative(cwd, standing.path), line: standingLine(standing, options, cwd) } : null;
+    console.log(JSON.stringify(output, null, 2));
   } else {
-    printReport(result, options, cwd);
+    printReport(result, options, cwd, standing);
   }
-  if (options.check && result.findings.length > 0) process.exitCode = 1;
+  if (!options.check) return;
+  if (standing ? standing.violations.length > 0 : result.findings.length > 0) process.exitCode = 1;
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) runCli();

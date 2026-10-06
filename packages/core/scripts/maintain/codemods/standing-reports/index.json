@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "line": "3.0",
+  "ceiling": 25,
+  "rows": [
+    {
+      "id": "css-class-renamed/.#ActionDock",
+      "file": "packages/core/src/components/structures/workspace/action-dock/tests/ActionDock.test.tsx",
+      "count": 1,
+      "class": "retirement-assertion",
+      "why": "Asserts that the retired `rottay-action-dock` class is no longer emitted; the retired name is the subject of the assertion."
+    },
+    {
+      "id": "subpath-removed/./does-not-exist#*",
+      "file": "packages/core/src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/tests/index.test.ts",
+      "count": 1,
+      "class": "retirement-assertion",
+      "why": "The ESLint rule test feeds an unpublished subpath to prove the rule refuses it; the specifier is the input of the refusal."
+    },
+    {
+      "id": "css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS",
+      "file": "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-compiler.test.ts",
+      "count": 1,
+      "class": "retirement-assertion",
+      "why": "Asserts that the retired `--ds-color-accent-*` reference tokens are refused or absent; the retired names are the subject of the assertion."
+    },
+    {
+      "id": "css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS",
+      "file": "packages/core/src/infrastructure/compilers/runtime/theme/facade/foundation/admission/tests/retired-references.test.ts",
+      "count": 6,
+      "class": "retirement-assertion",
+      "why": "Asserts that the retired `--ds-color-accent-*` reference tokens are refused or absent; the retired names are the subject of the assertion."
+    },
+    {
+      "id": "css-custom-property-renamed/.#BrandPaletteAliases",
+      "file": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette/tests/index.test.ts",
+      "count": 2,
+      "class": "retirement-assertion",
+      "why": "Asserts that the retired palette and typography aliases are no longer lowered or emitted; the retired names are the subject of the assertion."
+    },
+    {
+      "id": "css-custom-property-renamed/.#BrandPaletteAliases",
+      "file": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/tests/index.test.ts",
+      "count": 2,
+      "class": "retirement-assertion",
+      "why": "Asserts that the retired palette and typography aliases are no longer lowered or emitted; the retired names are the subject of the assertion."
+    },
+    {
+      "id": "member-changed/.#TenantConfig",
+      "file": "packages/showroom/src/app/probe/custom-component-pack/page.tsx",
+      "count": 1,
+      "class": "member-carrier",
+      "proof": "carrier",
+      "why": "Guard imprecision, not a relay: the reported lines spread CSS style objects, and the file writes its `TenantConfig` as a literal in the file."
+    },
+    {
+      "id": "member-changed/.#Callout",
+      "file": "packages/showroom/src/app/probe/ds-reference/sections/display-surfaces/index.tsx",
+      "count": 1,
+      "class": "member-report",
+      "proof": "import",
+      "why": "`Callout` stays published and deprecated in 3.0 (frozen group, removal on the 4.0 line); the entry declares no member proof, so each importing file is reported once."
+    },
+    {
+      "id": "member-changed/.#Callout",
+      "file": "packages/showroom/src/app/probe/ds-reference/sections/primitive-state-repairs/index.tsx",
+      "count": 1,
+      "class": "member-report",
+      "proof": "import",
+      "why": "`Callout` stays published and deprecated in 3.0 (frozen group, removal on the 4.0 line); the entry declares no member proof, so each importing file is reported once."
+    },
+    {
+      "id": "member-changed/.#TenantConfig",
+      "file": "packages/showroom/src/components/brand-locale-evidence/index.tsx",
+      "count": 1,
+      "class": "member-report",
+      "proof": "spelled",
+      "why": "Spells a removed `TenantConfig` member the kit cannot follow without types; the showroom typecheck against a build of the same candidate is the proof that no read or write of a removed member compiles."
+    },
+    {
+      "id": "member-changed/.#TenantConfig",
+      "file": "packages/showroom/src/components/layout-foundations-evidence/index.tsx",
+      "count": 1,
+      "class": "member-report",
+      "proof": "spelled",
+      "why": "Spells a removed `TenantConfig` member the kit cannot follow without types; the showroom typecheck against a build of the same candidate is the proof that no read or write of a removed member compiles."
+    },
+    {
+      "id": "member-changed/.#TenantConfig",
+      "file": "packages/showroom/src/components/probe-ground/ground/index.tsx",
+      "count": 1,
+      "class": "member-carrier",
+      "proof": "carrier",
+      "why": "Guard imprecision, not a relay: the reported lines spread a stage object and mount options, and both `tenantConfig` values are literals annotated in the file."
+    },
+    {
+      "id": "member-changed/.#Callout",
+      "file": "packages/showroom/src/components/probes/primitives/feedback/index.tsx",
+      "count": 1,
+      "class": "member-report",
+      "proof": "import",
+      "why": "`Callout` stays published and deprecated in 3.0 (frozen group, removal on the 4.0 line); the entry declares no member proof, so each importing file is reported once."
+    },
+    {
+      "id": "member-changed/.#Callout",
+      "file": "packages/showroom/src/components/torture-sections/data-display-states/index.tsx",
+      "count": 1,
+      "class": "member-report",
+      "proof": "import",
+      "why": "`Callout` stays published and deprecated in 3.0 (frozen group, removal on the 4.0 line); the entry declares no member proof, so each importing file is reported once."
+    },
+    {
+      "id": "member-changed/.#TenantConfig",
+      "file": "packages/showroom/src/components/torture-surface/index.tsx",
+      "count": 1,
+      "class": "member-report",
+      "proof": "spelled",
+      "why": "Spells a removed `TenantConfig` member the kit cannot follow without types; the showroom typecheck against a build of the same candidate is the proof that no read or write of a removed member compiles."
+    },
+    {
+      "id": "member-changed/.#TenantConfig",
+      "file": "packages/showroom/src/components/visual-authority-probe/config/index.ts",
+      "count": 1,
+      "class": "member-report",
+      "proof": "spelled",
+      "why": "Spells a removed `TenantConfig` member the kit cannot follow without types; the showroom typecheck against a build of the same candidate is the proof that no read or write of a removed member compiles."
+    },
+    {
+      "id": "member-changed/./server#censusRuntimeVisualPayload",
+      "file": "packages/showroom/src/components/visual-authority-probe/index.tsx",
+      "count": 1,
+      "class": "member-report",
+      "proof": "import",
+      "why": "`censusRuntimeVisualPayload` stays published with a narrowed input; the entry declares no member proof, so the importing file is reported once and the typecheck proves the call."
+    },
+    {
+      "id": "member-changed/.#TenantConfig",
+      "file": "packages/showroom/src/components/visual-authority-probe/index.tsx",
+      "count": 1,
+      "class": "member-carrier",
+      "proof": "carrier",
+      "why": "A carrier of the type: the file asserts a design-system value as `TenantConfig` (`getKnownTenantConfig(...) as TenantConfig`) and spreads a probe payload; the typecheck does not see a removed member arriving that way."
+    }
+  ]
+}

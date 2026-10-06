@@ -419,6 +419,204 @@ Lane-wide rules (binding on every WO):
   re-homed to WO-RET-06 at this adoption, 27 have no map entry yet and carry
   no codemod id; the map entries are owed before either work order's R3-class
   gate can pass on them.
+- **AMENDMENT (2026-10-06, AM-1 v3. R5 relaxed by name to R5′; standing register; notice entries; transferred subset; the `Callout` route and E8 24 -> 25. R1–R4 and R6 of the 2026-10-03 amendment stand verbatim. Adopting this closes nothing)** —
+  Authority: owner decision packet 2026-10-06, `roadmap/owner-decisions-2026-10-06.md`
+  § "AM-1 — Ratified v3" (registered at a64aa0aea), quoted verbatim: "R5 becomes R5′
+  with the exact initial registry: 18 rows / 25 reports / 17 files, the 3-carrier
+  sub-ceiling, and the class/proof/path/count restrictions as described. Negatives and
+  retired-name assertions preserved. Typecheck against the candidate's own constructed
+  declarations. Callout is approved as row 25 of RET-06's frozen group plus the five
+  parity-failed transfers, all Variant conditions kept, including "goes last". The
+  current census is revalidated before adoption; any difference is explained, never a
+  reason to raise the ceiling. A transfer is not a repair. R1–R4/R6 stand untouched."
+  The ratification covers R5′ AND the `Callout` route with E8 at 25.
+  Independent review of this text: `claude-opus-5-5`, separate session, HOLD on v2 with
+  eight edits, all applied in v3; census revalidation of v3 at a64aa0aea by a separate
+  read-only session, ADOPT WITH NAMED DIFFS, the three diffs applied here.
+  MEASURED at ba22b704f (identical at 08a3edbd7, 66ae3a530 and a64aa0aea): `node
+  packages/core/scripts/maintain/codemods/index.mjs --check --no-standing
+  packages/core/src packages/showroom/src` exits 1 with 0 rewrites and 25 reports over
+  seven ids, in 17 files.
+  R5 "zero findings" is NOT MET as written. It is relaxed to R5′ below; it is not
+  restated as met.
+  The 25, by class:
+  RA 13 reports in 6 design-system test files that spell a retired name in order to
+     assert its absence or its refusal: `css-class-renamed/.#ActionDock` 1; the resolver
+     report `subpath-removed/./does-not-exist#*` 1;
+     `css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS` 7 (2 files);
+     `css-custom-property-renamed/.#BrandPaletteAliases` 4 (2 files).
+  N  12 reports of report-only `member-changed` entries on exports that stay published,
+     in 11 showroom files: `.#TenantConfig` 7, `.#Callout` 4,
+     `./server#censusRuntimeVisualPayload` 1. `.#TenantConfig` reports only what the kit
+     cannot prove: four files that spell a removed member name, and three files that
+     spell none but spread or assert a value they do not write. `.#Callout` and
+     `./server#censusRuntimeVisualPayload` carry no member proof and report once per
+     importing file.
+  LANDED, no longer in the measurement: the 20 `spread` reports of
+  `union-member-removed/.#BoxProps.left` / `.right` (65abdd45d, see N4); seven
+  `TenantConfig` / `baselineFor` reports (06032f1a3 and 5c887859c together).
+  `.#baselineFor` reports 0 and is not registered.
+  RA cannot reach zero without deleting the proof of a retirement; N cannot reach zero
+  while the showroom uses the export, because the kit proves spelling and arity inside
+  one file and does not infer types.
+  R5′ `node packages/core/scripts/maintain/codemods/index.mjs --check packages/core/src
+     packages/showroom/src` exits 0 — the command exactly as printed here, run from the
+     repository root, with neither `--map` nor `--standing`. `--check` reads the standing
+     register `packages/core/scripts/maintain/codemods/standing-reports/index.json` and
+     is red on: any rewrite; any report whose (id, file) has no register row; a file
+     whose live count for an id exceeds its row; a row whose live count is lower than
+     its pin or zero (the row is lowered or deleted in the same lot); a row whose live
+     `proof` differs from its pin; a row of a class its id, path, reason or `proof` does
+     not admit. The command prints `standing: <n> report(s) in <m> row(s), ceiling <c>`
+     on every run, where <c> is the register header. A run with `--map` or `--standing`
+     prints the non-default path on the `standing:` line and is not evidence for this
+     criterion. `--check --no-standing` prints the raw findings and
+     `standing: not read (--no-standing)`, and is the output kept as evidence beside
+     R5.txt (exit 1 expected, 25 reports).
+     AND `node --test packages/core/scripts/maintain/codemods/tests/*/index.test.mjs`
+     green.
+     AND `pnpm --filter @rottay/showroom typecheck` exits 0 against a design-system build
+     of the same candidate: the showroom reads `@rottay/design-system` through the built
+     declarations (`packages/core/dist/index.d.ts`), so the leg counts only when that
+     build was produced from the candidate commit, and the evidence records the build
+     beside the typecheck. This, not the kit, is the proof that no showroom file spells a
+     read or a write of a removed member of an N export. It is not a proof for a value a
+     file receives and relays; see `member-carrier`.
+  THE REGISTER. Rows are `{ id, file, count, class, proof, why }`; no glob, no
+     directory, no id wildcard; paths are relative to the repository root. The kit's
+     `member-changed` finding carries the proof kind as data —
+     `proof: "spelled" | "carrier" | "escapes" | "import"` (`import`: the entry declares
+     no member proof; a failed arity proof or a site the kit does not follow carries no
+     `proof` and is admitted by no class) — and the register pins it; `proof` is absent
+     on a `retirement-assertion` row.
+     Three classes, closed:
+     `retirement-assertion` — admitted only for a file under
+        `packages/core/src/**/tests/**`, and only for a report whose reason is
+        `string-literal` or `unmapped-unpublished-subpath`.
+     `member-report` — admitted only for an id of class `member-changed` whose map entry
+        is `mode: report-only`, only for a file under `packages/showroom/src/**`, and only
+        for `proof` `spelled` or `import`.
+     `member-carrier` — same id and path admission, only for `proof: "carrier"`. These
+        are the rows the typecheck does not prove. Sub-ceiling 3, a literal in the kit
+        test. The guard that reports them is type-blind: it fires on any spread or
+        assertion of a value the file does not write, in a file that names the type. Each
+        row's `why` states what the reported lines are. At adoption:
+        `components/visual-authority-probe/index.tsx` asserts a design-system value as
+        `TenantConfig` (a carrier of the type); `app/probe/custom-component-pack/page.tsx`
+        and `components/probe-ground/ground/index.tsx` spread style, stage and option
+        objects and write their `TenantConfig` as a literal in the file (guard
+        imprecision, not a relay). A `member-carrier` row leaves the register when the kit
+        stops reporting the file — because the construct was removed, or because a
+        precision proof landed in the kit — and by no other route.
+     `proof: "escapes"` is admitted by no class.
+     Disclosed limit: the kit decides `spelled` before it looks for carriers, so a
+     `spelled` row is not evaluated for carrier lines; the `proof` pin detects a carrier
+     that appears in an `import` row and does not detect one that appears in a `spelled`
+     row.
+     Initial content, fixed by name at adoption: 18 rows, 25 reports, 17 files —
+     `retirement-assertion` 6 rows / 13 reports / 6 files; `member-report` 9 rows /
+     9 reports; `member-carrier` 3 rows / 3 reports; the 12 showroom rows sit in 11 files
+     (one file carries two ids) — exactly the (id, file) pairs of the measurement above.
+     The kit test (`tests/cli/index.test.mjs`) pins the adoption roster: the 18 (id, file)
+     keys by name, each with its adoption count, class and `proof`. It asserts that every
+     register row is a roster key with `count <=` its adoption count and the roster's
+     class and `proof`; that `sum(count) === ceiling` for the header; and that the
+     `member-carrier` rows number at most 3. So the register moves down by editing the
+     register alone, and a row can be added, swapped for another, raised above its
+     adoption count or re-classed only by editing the roster in the kit test, in review.
+     The header at adoption is `ceiling: 25`.
+     A row is not a waiver of a migration: no `rewrite`-mode entry and no report of reason
+     `spread`, `non-literal-value`, `unmapped-value`, `conflict`, `indirect` or `dynamic`
+     may be registered.
+  NOTICE ENTRIES (R3 "a codemod id the map confirms" for a row that survives 3.0).
+     "Notice" names a map entry only; no register class bears that name.
+  N1 A ledger row that survives this closure names a map entry of class
+     `member-changed`, `mode: report-only`, carrying the census, carrying
+     `notice: { removeIn: "<line>" }` equal to the row's `removeIn`, whose `change`
+     states that nothing is removed in 3.0 and whose `guidance` states what the later
+     line will ask. It migrates nothing and says so.
+  N2 The correspondence is exact in both directions: every `notice` entry is named by at
+     least one ledger row whose receiver is listed in `compatReceivers`, and under
+     `--assume-done` every non-`debt` row names a `notice` entry. A notice entry with no
+     row (the symbol was retired, or never ledgered) is red; a surviving row that names a
+     rewrite entry is red. So a notice cannot stand in for a removal, and a removal
+     cannot hide behind a notice. Law LANDED at 66ae3a530.
+  N3 LANDED at 76eefe5d8: the 31 entries, by id (all `member-changed/.#…`):
+     `BadgeProps.closable`; `CalendarProps.dateCellRender`, `.monthCellRender`;
+     `CardProps.backgroundColor`; `TablePaginationConfig.size`; `TooltipPlacement.left`,
+     `.left-start`, `.left-end`, `.right`, `.right-start`, `.right-end`;
+     `ModalProps.closeOnOverlayClick`; `SliderProps.tooltip` (one id for the two slider
+     rows); `BoxProps.paddingRight`, `.pr`, `.paddingLeft`, `.pl`, `.marginRight`, `.mr`,
+     `.marginLeft`, `.ml`; `HoverCardSide.left`, `.right`; `AvatarVariant`;
+     `AvatarProps.variant`; `BrandSurfaces.materials` (26 ids for the 27 rows without a
+     codemod id); and `BadgeVariant`, `BadgeProps.variant`, `TagVariant`,
+     `TagProps.variant`, `Variant` (5, the transferred rows). The two entries already
+     named by a surviving row, `member-changed/.#Callout` and
+     `member-changed/.#BrandMotion.entranceDuration`, gained `notice` in the same lot:
+     33 notice entries, 647 + 31 = 678 map entries; the gate reports "notice entries: 33
+     in the codemod map, 33 named by a row whose receiver is listed in compatReceivers".
+     The 31 add 0 reports to R5′ (the census above is unchanged across 76eefe5d8).
+  N4 LANDED at 65abdd45d. The kit proves an inline spread: a JSX spread whose operand is
+     an object literal with only static property names, none of them the entry's prop
+     nor the successor of a renamed prop, is not a use of that prop and is not reported.
+     Any other spread stays `spread`. Fixture: `union-member-removed/inline-spread`.
+     `union-member-removed` reports 0 on the measured roots. Nothing of this class is
+     registered and nothing of it is owed.
+  MEMBER PROOFS, LANDED at 06032f1a3, recorded because they define what an N row means.
+     A `member-changed` entry may declare an arity proof (`.#baselineFor`) or a spelling
+     proof (`.#TenantConfig`); the kit then reports only a file it cannot prove. A file
+     that asserts, satisfies, spreads or `Object.assign`s a value it does not write stays
+     reported. Accepted limit, pinned: an annotation relay of a value the file does not
+     write is not reported (fixture `member-changed/member-spelling`, case
+     `annotation-relay`); computed or imported keys, bindings that leave the file and JSX
+     spread attributes are the other disclosed limits of that commit.
+  TRANSFERRED SUBSET (E11, fixed by name; LANDED at 76eefe5d8). Of the ceiling of 22,
+  exactly five rows transfer to WO-RET-06, each with a failed parity verdict backed by a
+  fixture and `removeIn` 4.0: `BadgeVariant`, `BadgeBaseProps.variant`, `Variant`
+  (`parity-failed:prop-renamed/badge-variant-secondary`), `TagVariant`,
+  `TagProps.variant` (`parity-failed:prop-renamed/tag-variant-secondary`). The verdict
+  law is the one hardened at 921a18f74 and again at 76ca8c60f: the fixture's own map
+  entry names the row's anchor in `parity.anchors`, a report row locates the failing
+  member and value, and the named backing test exists, is related, asserts and was
+  executed (`lastRun`). The gate accepts all five.
+  `Variant` transferred under its precondition, met at 76eefe5d8: `Variant` is in
+  `parity.anchors` of `prop-renamed/badge-variant-secondary` only — no dedicated
+  fixture, not the Tag fixture — under three conditions, all kept:
+     (a) the `Variant` row keeps its consumer evidence with the needle
+         `export type BadgeVariant = Variant;`, the only mechanical tie between the
+         anchor and the fixture: if the alias changes, the row goes red;
+     (b) the real-fixture pins of the gate test assert that `Variant` on the Badge
+         fixture is accepted and that `Variant` on the Tag fixture is `NO SYMBOL`;
+     (c) the fixture entry's `resolves` text and the row's `reason` state that `Variant`
+         answers through the alias and has three dependents — Badge, Tag, and
+         `AvatarVariant = Variant` — and that `Variant` leaves last: repairing Badge
+         parity does not release it while Tag or Avatar still build on it. The re-home
+         route is carried by the ledger, not by those two texts: the `AvatarVariant` row
+         carries its own blocker (`replacement-capability-absent:gradient`, class
+         `compat-canon-pending`), so when Badge parity is repaired the `Variant` row
+         re-homes to the Tag fixture or to that blocker, and it does not leave the ledger
+         while either holds.
+  A transfer is not a repair. Of the other 17 names of the ceiling, sixteen are absent
+  from the ledger and no marker of theirs remains (the gate counts 38 markers for 38
+  rows).
+  THE `Callout` ROUTE (a second route across the closure; ratified by name with this
+  text). `Callout` was inside the ceiling of 22 and did not transfer on a failed parity
+  verdict: at c04d6bab0 it was reclassified `compat-frozen-sole-implementer`, and the gate
+  accepts the row in that class. It is the 25th row of the frozen group. E11's "only rows
+  whose parity verdict is recorded as failed with a fixture" therefore reads, from this
+  date, "and `Callout`, by reclassification to the frozen group"; E8 and step 1 of
+  WO-RET-06 read 25, by name, from this date. No row enters from outside the ceiling of
+  22: 5 + 16 + 1 = 22.
+  The same lines are added to the WO-RET-06 block by its AMENDMENT of 2026-10-06.
+  RECORDED, NOT AN ACCEPTANCE ITEM OF THIS WORK ORDER. The chart families' import cost
+  through the package root is ungoverned since ab3b19712 (last measured 180 modules /
+  1,217,767 bytes on the retired door). Receiver and form: the owner decision packet
+  2026-10-06, § "Chart budget — option A as primary acceptance"; not a blocker of this
+  work order.
+  CHANGES, besides R5: E8's count, 24 -> 25; E11's transfer route, which gains `Callout`
+  by reclassification. Nothing else of the 2026-10-03 amendment.
+  DOES NOT: admit any report of the three applications; change R3's two views; let a
+  register row survive the removal of its file or its id; touch a frozen engine.
 - **Files** — `packages/core/src/components/**`; `packages/core/src/infrastructure/runtime/application/**`; `packages/core/src/entrypoints/**`; `packages/core/package.json`; `packages/core/src/graphics/**`; `.changeset/**`.
 - **Acceptance gate** — Import graph: 0 unreachable modules; `exports` with a censused consumer per subpath; `grep -rn "@deprecated" src | wc -l` = 0; `grep -c '"pack": "bithire"' corpus/manifest.json` = 0.
 - **Do NOT** — Do not delete a productively consumed implementation without migrating its consumers. The explicit target-major public glyph/door retirement above preserves useful private implementations and documents deferred app adaptation; its Showroom migration remains a prerequisite to closing this WO (consumer notes X-01…X-06).
@@ -606,5 +804,35 @@ Lane-wide rules (binding on every WO):
   no `PatternApprovalInbox` row; `ApprovalInbox.contract.test.tsx` passes.
   This amendment adds no row, door or finding to the closed scope above, and
   no ledger row names this work order because of it.
+- **AMENDMENT (2026-10-06, AM-1 v3: the transferred subset and the `Callout` route of WO-RET-01; the acceptance above stands, this is added to it)** —
+  Authority: owner decision packet 2026-10-06, § "AM-1 — Ratified v3" (registered at
+  a64aa0aea), quoted in full in the WO-RET-01 AMENDMENT of the same date: "Callout is
+  approved as row 25 of RET-06's frozen group plus the five parity-failed transfers, all
+  Variant conditions kept, including "goes last". [...] A transfer is not a repair."
+  Nothing above is rewritten: each line below states what the named field of this block
+  gains. The ledger rows landed at 76eefe5d8 (parity law hardened at 76ca8c60f); the gate
+  accepts every row named here. Adopting this text closes nothing.
+  **Steps** gains: *step 1 reads "Frozen group (25 rows)", the 25th being `Callout` (by
+  reclassification at c04d6bab0, not by a parity verdict). Step 5's subset is fixed:
+  `BadgeVariant`, `BadgeBaseProps.variant`, `Variant`
+  (`parity-failed:prop-renamed/badge-variant-secondary`), `TagVariant`,
+  `TagProps.variant` (`parity-failed:prop-renamed/tag-variant-secondary`), each
+  `removeIn` 4.0.*
+  **Scope (closed list)** gains: *Markers, frozen sole-implementer: `Callout` (the 25th;
+  blocker `frozen-equivalence-absent`, codemod `member-changed/.#Callout`, a notice entry
+  with `removeIn` 4.0). Markers, consumed with failed parity — the subset that transferred
+  from the ceiling of 22, fixed by name: the five rows above. Of the other 17 names of the
+  ceiling, sixteen left the ledger inside WO-RET-01 and `Callout` entered the frozen
+  group: 5 + 16 + 1 = 22; nothing outside the ceiling entered. `Variant` leaves last: it
+  is the base of `BadgeVariant`, `TagVariant` and `AvatarVariant`, so repairing Badge
+  parity does not release it while Tag or Avatar still build on it; at that point the row
+  re-homes to the Tag fixture or to the `AvatarVariant` row's own blocker
+  (`replacement-capability-absent:gradient`, class `compat-canon-pending`), and its
+  conditions stay as written in WO-RET-01: (a) the consumer needle
+  `export type BadgeVariant = Variant;` on the row, (b) the two real-fixture pins of the
+  gate test (accepted on the Badge fixture, `NO SYMBOL` on the Tag fixture), (c) the
+  dependents and "leaves last" stated in the row's `reason` and the fixture's `resolves`.*
+  **Do NOT** gains: *Do not treat a transferred row as repaired: a transfer is not a
+  repair. Do not release `Variant` before Tag and Avatar no longer build on it.*
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-06 (Transitional compatibility and transferred closures of the 3.0 line) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-42, F-109, F-111, F-113, F-115, F-84, F-88 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.

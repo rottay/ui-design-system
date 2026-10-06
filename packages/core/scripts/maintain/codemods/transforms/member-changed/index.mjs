@@ -122,19 +122,22 @@ function carriers(analysis, names) {
  */
 function spellingVerdict(analysis, entry, site, names) {
   const nodes = namingNodes(analysis, site);
-  if (!nodes) return 'the kit does not follow this kind of site, so it proves nothing about it.';
+  if (!nodes) return { text: 'the kit does not follow this kind of site, so it proves nothing about it.' };
   const spellings = memberSpellings(analysis, membersOf(entry));
   if (spellings.length > 0) {
     const shown = spellings.slice(0, 6).map((node) => describeSpelling(analysis, node, entry));
     const more = spellings.length > shown.length ? `, and ${spellings.length - shown.length} more` : '';
-    return `this file spells a changed member: ${shown.join('; ')}${more}.`;
+    return { proof: 'spelled', text: `this file spells a changed member: ${shown.join('; ')}${more}.` };
   }
   const left = republication(analysis, nodes);
-  if (left) return `this file spells none of the changed members, but ${left}, so its uses are not all in this file.`;
+  if (left) return { proof: 'escapes', text: `this file spells none of the changed members, but ${left}, so its uses are not all in this file.` };
   const carried = carriers(analysis, names);
   if (carried.length === 0) return null;
   const more = carried.length > 6 ? `, and ${carried.length - 6} more` : '';
-  return `this file spells none of the changed members, but ${carried.slice(0, 6).join('; ')}${more}, so a removed member can arrive unspelled and unseen by the typecheck.`;
+  return {
+    proof: 'carrier',
+    text: `this file spells none of the changed members, but ${carried.slice(0, 6).join('; ')}${more}, so a removed member can arrive unspelled and unseen by the typecheck.`,
+  };
 }
 
 function isCallWithin(node, max) {
@@ -150,11 +153,11 @@ function isCallWithin(node, max) {
  */
 function arityVerdict(analysis, entry, site) {
   const nodes = namingNodes(analysis, site);
-  if (!nodes) return 'the kit does not follow this kind of site, so it proves nothing about it.';
+  if (!nodes) return { text: 'the kit does not follow this kind of site, so it proves nothing about it.' };
   const unproven = nodes.filter((node) => !isCallWithin(node, entry.maxArguments));
   if (unproven.length > 0) {
     const lines = [...new Set(unproven.map((node) => lineOf(analysis, node)))].slice(0, 6).map((line) => `L${line}`).join(', ');
-    return `not a direct call with at most ${entry.maxArguments} argument(s) and no spread at ${lines}.`;
+    return { text: `not a direct call with at most ${entry.maxArguments} argument(s) and no spread at ${lines}.` };
   }
   return null;
 }
@@ -163,7 +166,8 @@ function arityVerdict(analysis, entry, site) {
  * A member of a published type or value changed (removed, renamed, narrowed). Finding the member's uses needs
  * type inference the kit does not do, so every design-system-resolved use of the owning export is reported,
  * unless the entry states a proof the kit can run on syntax alone (`memberProof`, `maxArguments`) and the
- * file passes it.
+ * file passes it. A report carries `proof`: `import` when the entry states no proof, otherwise what the
+ * spelling proof found (`spelled`, `escapes`, `carrier`); a failed arity proof or an unfollowed site has none.
  */
 export const transform = {
   class: 'member-changed',
@@ -179,13 +183,15 @@ export const transform = {
       const entrySites = sites.get(symbolKey(entry.subpath, entry.symbol)) ?? [];
       const names = entry.memberProof === 'spelling' ? entrySites.flatMap((site) => namingNodes(analysis, site) ?? []) : [];
       for (const site of entrySites) {
-        let verdict = '';
+        let verdict = { proof: 'import' };
         if (entry.memberProof === 'spelling') verdict = spellingVerdict(analysis, entry, site, names);
         else if (entry.maxArguments !== undefined) verdict = arityVerdict(analysis, entry, site);
         if (verdict === null) continue;
         const uses = site.type === 'import' ? `; ${referencesOf(analysis, site.node).length} reference(s) in this file` : '';
-        findings.push(report(analysis, entry, site.node, 'member-changed',
-          `${subject} changed on \`${entry.subpath}\`${uses}. ${entry.change} ${entry.guidance}${verdict ? ` Reported because ${verdict}` : ''}`));
+        const finding = report(analysis, entry, site.node, 'member-changed',
+          `${subject} changed on \`${entry.subpath}\`${uses}. ${entry.change} ${entry.guidance}${verdict.text ? ` Reported because ${verdict.text}` : ''}`);
+        if (verdict.proof) finding.proof = verdict.proof;
+        findings.push(finding);
       }
     }
     return findings;
