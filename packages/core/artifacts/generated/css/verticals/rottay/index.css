@@ -86973,7 +86973,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-inline-size: 0;
 }
 
-/* ---- behavior-only file input (the pinned testid chrome): never visible ---- */
+/* ---- behavior-only file picker (Input's bare file branch): the className hides
+        it; the part arm only mirrors the stamped anatomy and is never load-bearing ---- */
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-input,
 .ds-pattern-file-manager.ds-engine-modern [data-part='file-input'] {
   display: none;
 }

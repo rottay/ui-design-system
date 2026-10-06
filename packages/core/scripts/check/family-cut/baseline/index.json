@@ -79,7 +79,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 103,
+        "channelsRead": 104,
         "classTokens": 3,
         "partsStamped": 12,
         "partsConsumed": 12
@@ -95,7 +95,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-01: Switch and Toggle are one family (D-16); Toggle keeps the richer contract and absorbs Switch's busy semantics, click value, ref and accessible-name paths, and Switch survives only as a deprecated alias compound. Decision relations by derivation/chrome/toggle, constants by presentation/components/toggle; one ds-toggle vocabulary and one --ds-toggle-* namespace read by the skin. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 98 -> 99 = a3b241626 (the on-primary ink lot: --ds-color-on-error) -- coverage. | denominator re-read 2026-10-04: sourceFiles 5 -> 3, channelsRead 99 -> 103; no blocking arm and no ratchet moved, measured by the gate."
+      "cutNote": "WO-FAM-01: Switch and Toggle are one family (D-16); Toggle keeps the richer contract and absorbs Switch's busy semantics, click value, ref and accessible-name paths, and Switch survives only as a deprecated alias compound. Decision relations by derivation/chrome/toggle, constants by presentation/components/toggle; one ds-toggle vocabulary and one --ds-toggle-* namespace read by the skin. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 98 -> 99 = a3b241626 (the on-primary ink lot: --ds-color-on-error) -- coverage. | denominator re-read 2026-10-04: sourceFiles 5 -> 3, channelsRead 99 -> 103; no blocking arm and no ratchet moved, measured by the gate. | denominator re-read 2026-10-06: channelsRead 103 -> 104, mover named: the TOGGLE v2 checked-thumb repair (d98506e88, WO-EVI-02 contrast lot) reads the fill's paired ink via @container style() queries (--ds-toggle-dot-bg default-detection plus the paired-ink channels); no blocking arm and no ratchet moved, measured by the gate."
     },
     "segmented": {
       "cut": "WO-FAM-01",

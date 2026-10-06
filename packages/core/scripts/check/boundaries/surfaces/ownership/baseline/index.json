@@ -2337,12 +2337,6 @@
       "rule": "stable-typography",
       "count": 4
     },
-    "5cb85406f20c38db2327": {
-      "path": "src/components/patterns/data/file-manager/engines/modern/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-input",
-      "count": 1
-    },
     "045ecaff9c76e417738c": {
       "path": "src/components/patterns/data/file-manager/engines/modern/index.tsx",
       "category": "primitive-reconstruction",

@@ -41,6 +41,7 @@ import { LayoutListIcon } from '@/graphics/icons/semantic/generated/roles/layout
 import { ContentFolderIcon } from '@/graphics/icons/semantic/generated/roles/content-folder';
 import { ContentFileIcon } from '@/graphics/icons/semantic/generated/roles/content-file';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
+import ModernInput from '../../../../../primitives/inputs/input/engines/modern';
 import ModernCheckbox from '../../../../../primitives/inputs/checkbox/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
 import ModernEmpty from '../../../../../primitives/display/empty/engines/modern';
@@ -150,11 +151,10 @@ function fileKindOf(item: FileSystemItem): 'folder' | 'image' | 'pdf' | 'text' |
  *
  * Supports list and grid views with container-query grid columns, toggle
  * selection via composed Checkbox primitives, and a content-area drop zone
- * with drag-over feedback. The single raw `<input type="file">` that stays is
- * deliberate: the public contract pins `data-testid="file-input"` on it (the
- * composed Upload primitive owns its own internal input and cannot forward a
- * caller testid), so this chrome-free, behavior-only input keeps the native
- * picker plumbing while the Upload BUTTON is a composed Button primitive.
+ * with drag-over feedback. The hidden picker is the Input primitive's bare
+ * `type="file"` branch (it forwards the ref, the native change event and the
+ * pinned `data-testid="file-input"`); the Upload BUTTON is a composed Button
+ * primitive that opens it.
  *
  * @param props - {@link FileManagerProps} -- files, folders, callbacks, and display options.
  * @returns The FileManager UI as a token-painted card surface.
@@ -356,12 +356,13 @@ export default function ModernFileManager(props: FileManagerProps) {
             )}
             {onUpload && (
               <>
-                <input
+                <ModernInput
                   ref={fileInputRef}
                   type="file"
                   multiple
+                  className="ds-file-manager__file-input"
                   data-part="file-input"
-                  onChange={handleUploadChange}
+                  onChange={(_value, event) => handleUploadChange(event)}
                   data-testid="file-input"
                 />
                 <ModernButton

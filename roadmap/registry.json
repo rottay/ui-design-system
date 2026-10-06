@@ -8618,7 +8618,7 @@
    "lane": "architecture",
    "order": 26,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -8628,11 +8628,17 @@
     "audit-2026-09-05"
    ],
    "notes": "Owner decision packet 2026-10-06 (proposals §E-1 approved): chrome-less variants OF the canonical Input/Select/Button, never new raw controls; the behaviour contract (keyboard/focus/aria) is kept, the chrome (height floor, padding, variant paint) drops. Drains by name: data-table cell-editor input+select, file-manager file input, collection-workspace page-size select, detail-panel onClick-only crumb, status-filter-pills toggle. The API formalizes with an independent debrief before any shared API lands.",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi",
+   "claimedAt": "2026-10-06",
    "doneAt": null,
    "evidence": null,
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-10-06 07:49",
+     "by": "kimi",
+     "note": "2026-10-06 — scope+API debriefed (REVIEW cadena: debrief REVISE -> v2 -> re-read §1.4 PROCEED, sesiones 20366bb5/c05207ea). L1 landed: file-manager file input drena al bare branch canónico del Input con la re-key M2; la row sale del ownership counter por nombre (2036/1336 -> 2035/1335, solo 5cb85406 removido, decrease-only). Ruling F1(a) del DT: el arm [data-part='file-input'] queda (no load-bearing; su retiro se bundleará con ARC-12 cuando P-88 alcance la bare branch) — el claim F2 del writer era falso y queda corregido aquí (dead-parts nunca la flaggearía: el stamp es literal en 3 sitios). L2 (checkbox, B1) y L3 (crumb) siguen; A1+A3 antes de L4, A2 antes de L5."
+    }
+   ]
   },
   {
    "id": "WO-ARC-23",
