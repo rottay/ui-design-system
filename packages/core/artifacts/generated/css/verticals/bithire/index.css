@@ -22013,6 +22013,12 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   scroll-margin-block: var(--ds-spacing-6, 1.5rem);
 }
 
+.ds-input-field[data-part='field'][data-chrome='none'] {
+  /* Inline-size containment would collapse an auto-layout table cell to zero; a chrome-less field
+     sizes from its content (the compact-affix container query below then never applies). */
+  container-type: normal;
+}
+
 .ds-input-shell.ds-input-shell--modern {
   --ds-input-resolved-radius: var(
     --ds-input-responsive-radius,
@@ -22028,28 +22034,12 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   inline-size: 100%;
   min-inline-size: 0;
   gap: var(--_ds-input-resolved-gap);
-  /* Height is a FLOOR, never a ceiling (zoom / large type-scale posture): the
-     per-size rules below write the `--_ds-input-resolved-height` relay, the
-     responsive engine writes `--_ds-input-responsive-height`, and the coarse
-     block recomputes max(resolved, touch floor) -- the Select trigger's own
-     grammar, so the field family grows together when type scales up. An unset
-     relay makes this declaration invalid at computed-value time, which reads
-     as `min-block-size: 0` (chrome-free unstyled stays free). */
-  min-block-size: var(--_ds-input-responsive-height, var(--_ds-input-resolved-height));
-  color: var(--ds-input-color, var(--ds-color-text-primary));
   caret-color: var(--ds-input-caret-color, var(--ds-input-border-focus, var(--ds-color-primary)));
   /* The addon-shell branch is a <div> whose whole surface focuses the inner
      control on click: it must advertise text entry, not the default arrow.
      The readonly/disabled rules below override this with their own cursors. */
   cursor: text;
-  background: var(--ds-input-bg, var(--ds-material-control-background, var(--ds-surface-control)));
-  /* Identical chain to select.css — that identity IS the field coherence.
-     Edge axis owns width/style, material role owns colour, chrome stays senior. */
-  border: var(--ds-input-border-width, var(--ds-edge-standard-width, 1px))
-    var(--ds-input-border-style, var(--ds-edge-standard-style, solid))
-    var(--ds-input-border, var(--ds-material-control-border, var(--ds-color-border)));
   border-radius: var(--ds-input-resolved-radius);
-  box-shadow: var(--ds-input-shadow-rest), var(--ds-input-inset-shadow, none);
   font-family: var(--ds-input-font-family);
   font-weight: var(--ds-input-font-weight, var(--ds-font-weight-normal));
   letter-spacing: var(--ds-input-letter-spacing);
@@ -22059,6 +22049,25 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     background-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
     box-shadow var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
     opacity var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
+}
+
+.ds-input-shell.ds-input-shell--modern:not(:where([data-chrome='none'])) {
+  /* Height is a FLOOR, never a ceiling (zoom / large type-scale posture): the
+     per-size rules below write the `--_ds-input-resolved-height` relay, the
+     responsive engine writes `--_ds-input-responsive-height`, and the coarse
+     block recomputes max(resolved, touch floor) -- the Select trigger's own
+     grammar, so the field family grows together when type scales up. An unset
+     relay makes this declaration invalid at computed-value time, which reads
+     as `min-block-size: 0` (chrome-free unstyled stays free). */
+  min-block-size: var(--_ds-input-responsive-height, var(--_ds-input-resolved-height));
+  color: var(--ds-input-color, var(--ds-color-text-primary));
+  background: var(--ds-input-bg, var(--ds-material-control-background, var(--ds-surface-control)));
+  /* Identical chain to select.css — that identity IS the field coherence.
+     Edge axis owns width/style, material role owns colour, chrome stays senior. */
+  border: var(--ds-input-border-width, var(--ds-edge-standard-width, 1px))
+    var(--ds-input-border-style, var(--ds-edge-standard-style, solid))
+    var(--ds-input-border, var(--ds-material-control-border, var(--ds-color-border)));
+  box-shadow: var(--ds-input-shadow-rest), var(--ds-input-inset-shadow, none);
 }
 
 /* Shell/control contract: the shell node is ALWAYS the paint owner. In the
@@ -22086,8 +22095,10 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
 /* Standalone branch: the shell <input> keeps the base rule's border, surface
    and shadow -- only UA chrome resets live here, never paint declarations. */
 input.ds-input-shell.ds-input-shell--modern {
-  padding: 0;
   text-align: start;
+}
+input.ds-input-shell.ds-input-shell--modern:not(:where([data-chrome='none'])) {
+  padding: 0;
 }
 
 .ds-input-shell.ds-input-shell--modern > .ds-input-control::placeholder,
@@ -22242,9 +22253,11 @@ input.ds-input-shell.ds-input-shell--modern::selection {
   --_ds-input-resolved-height: calc(
     var(--ds-input-xs-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
-  padding-inline: var(--ds-input-xs-padding-x);
   font-size: var(--ds-input-xs-font-size);
   line-height: var(--ds-input-xs-line-height);
+}
+.ds-input-shell.ds-input-shell--modern[data-size='xs']:not([data-size-responsive]):not(:where([data-chrome='none'])) {
+  padding-inline: var(--ds-input-xs-padding-x);
 }
 
 .ds-input-shell.ds-input-shell--modern[data-size='sm']:not([data-size-responsive]) {
@@ -22253,9 +22266,12 @@ input.ds-input-shell.ds-input-shell--modern::selection {
   --_ds-input-resolved-height: calc(
     var(--ds-input-sm-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
-  padding-inline: var(--ds-input-sm-padding-x);
   font-size: var(--ds-input-sm-font-size);
   line-height: var(--ds-input-sm-line-height);
+}
+
+.ds-input-shell.ds-input-shell--modern[data-size='sm']:not([data-size-responsive]):not(:where([data-chrome='none'])) {
+  padding-inline: var(--ds-input-sm-padding-x);
 }
 
 .ds-input-shell.ds-input-shell--modern[data-size='md']:not([data-size-responsive]) {
@@ -22264,9 +22280,12 @@ input.ds-input-shell.ds-input-shell--modern::selection {
   --_ds-input-resolved-height: calc(
     var(--ds-input-md-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
-  padding-inline: var(--ds-input-md-padding-x);
   font-size: var(--ds-input-md-font-size);
   line-height: var(--ds-input-md-line-height);
+}
+
+.ds-input-shell.ds-input-shell--modern[data-size='md']:not([data-size-responsive]):not(:where([data-chrome='none'])) {
+  padding-inline: var(--ds-input-md-padding-x);
 }
 
 .ds-input-shell.ds-input-shell--modern[data-size='lg']:not([data-size-responsive]) {
@@ -22275,9 +22294,12 @@ input.ds-input-shell.ds-input-shell--modern::selection {
   --_ds-input-resolved-height: calc(
     var(--ds-input-lg-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
-  padding-inline: var(--ds-input-lg-padding-x);
   font-size: var(--ds-input-lg-font-size);
   line-height: var(--ds-input-lg-line-height);
+}
+
+.ds-input-shell.ds-input-shell--modern[data-size='lg']:not([data-size-responsive]):not(:where([data-chrome='none'])) {
+  padding-inline: var(--ds-input-lg-padding-x);
 }
 
 .ds-input-shell.ds-input-shell--modern[data-size='xl']:not([data-size-responsive]) {
@@ -22286,26 +22308,36 @@ input.ds-input-shell.ds-input-shell--modern::selection {
   --_ds-input-resolved-height: calc(
     var(--ds-input-xl-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1)
   );
-  padding-inline: var(--ds-input-xl-padding-x);
   font-size: var(--ds-input-xl-font-size);
   line-height: var(--ds-input-xl-line-height);
 }
 
+.ds-input-shell.ds-input-shell--modern[data-size='xl']:not([data-size-responsive]):not(:where([data-chrome='none'])) {
+  padding-inline: var(--ds-input-xl-padding-x);
+}
+
 /* Variants */
-.ds-input-shell.ds-input-shell--modern[data-variant='filled'] {
+.ds-input-shell.ds-input-shell--modern[data-variant='filled']:not(:where([data-chrome='none'])) {
   background: var(--ds-input-filled-bg, var(--ds-surface-inset));
   border-color: var(--ds-input-filled-border, transparent);
 }
 
 .ds-input-shell.ds-input-shell--modern[data-variant='flushed'] {
+  border-radius: 0;
+}
+
+.ds-input-shell.ds-input-shell--modern[data-variant='flushed']:not(:where([data-chrome='none'])) {
   padding-inline: 0;
   background: transparent;
   border-width: 0 0 var(--ds-input-border-width);
-  border-radius: 0;
   box-shadow: none;
 }
 
 .ds-input-shell.ds-input-shell--modern[data-variant='unstyled'] {
+  border-radius: 0;
+}
+
+.ds-input-shell.ds-input-shell--modern[data-variant='unstyled']:not(:where([data-chrome='none'])) {
   block-size: auto;
   /* Chrome-free means no height floor either: the base rule's relay-driven
      min-block-size is cancelled here (this variant selector outranks it). */
@@ -22313,22 +22345,21 @@ input.ds-input-shell.ds-input-shell--modern::selection {
   padding: 0;
   background: transparent;
   border: 0;
-  border-radius: 0;
   box-shadow: none;
 }
 
 /* Interaction and semantic states */
-.ds-input-shell.ds-input-shell--modern[data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']):not(:where([data-chrome='none'])) {
   background: var(--ds-input-bg-hover, var(--ds-input-bg));
   border-color: var(--ds-input-border-hover, var(--ds-material-control-border-hover));
   box-shadow: var(--ds-input-shadow-hover, var(--ds-input-shadow-rest)), var(--ds-input-inset-shadow, none);
 }
 
-.ds-input-shell.ds-input-shell--modern[data-variant='filled'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) {
+.ds-input-shell.ds-input-shell--modern[data-variant='filled'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not(:where([data-chrome='none'])) {
   background: var(--ds-input-filled-bg-hover, var(--ds-input-bg-hover));
 }
 
-.ds-input-shell.ds-input-shell--modern[data-state~='focused']:not([data-disabled='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-state~='focused']:not([data-disabled='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']):not(:where([data-chrome='none'])) {
   background: var(--ds-input-bg-focus, var(--ds-input-bg));
   border-color: var(--ds-input-border-focus, var(--ds-color-primary));
 }
@@ -22338,11 +22369,11 @@ input.ds-input-shell.ds-input-shell--modern::selection {
   box-shadow: var(--ds-input-focus-ring, var(--ds-focus-ring));
 }
 
-.ds-input-shell.ds-input-shell--modern[data-variant='filled'][data-state~='focused']:not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) {
+.ds-input-shell.ds-input-shell--modern[data-variant='filled'][data-state~='focused']:not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not(:where([data-chrome='none'])) {
   background: var(--ds-input-filled-bg-focus, var(--ds-input-bg-focus));
 }
 
-.ds-input-shell.ds-input-shell--modern[data-invalid='true']:not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-invalid='true']:not([data-variant='unstyled']):not(:where([data-chrome='none'])) {
   color: var(--ds-input-error-color, var(--ds-input-color));
   background: var(--ds-input-error-bg, var(--ds-input-bg));
   border-color: var(--ds-input-error-border, var(--ds-color-error));
@@ -22352,7 +22383,7 @@ input.ds-input-shell.ds-input-shell--modern::selection {
   box-shadow: var(--ds-input-focus-ring-error, var(--ds-focus-ring));
 }
 
-.ds-input-shell.ds-input-shell--modern[data-warning='true']:not([data-invalid='true']):not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-warning='true']:not([data-invalid='true']):not([data-variant='unstyled']):not(:where([data-chrome='none'])) {
   background: var(--ds-input-warning-bg, var(--ds-input-bg));
   border-color: var(--ds-input-warning-border, var(--ds-color-warning));
 }
@@ -22361,7 +22392,7 @@ input.ds-input-shell.ds-input-shell--modern::selection {
   box-shadow: var(--ds-input-focus-ring-warning, var(--ds-focus-ring));
 }
 
-.ds-input-shell.ds-input-shell--modern[data-success='true']:not([data-invalid='true']):not([data-warning='true']):not([data-variant='unstyled']) {
+.ds-input-shell.ds-input-shell--modern[data-success='true']:not([data-invalid='true']):not([data-warning='true']):not([data-variant='unstyled']):not(:where([data-chrome='none'])) {
   background: var(--ds-input-success-bg, var(--ds-input-bg));
   border-color: var(--ds-input-success-border, var(--ds-color-success));
 }
@@ -22371,20 +22402,26 @@ input.ds-input-shell.ds-input-shell--modern::selection {
 }
 
 .ds-input-shell.ds-input-shell--modern[data-readonly='true']:not([data-disabled='true']):not([data-variant='unstyled']) {
+  cursor: var(--ds-input-readonly-cursor);
+}
+
+.ds-input-shell.ds-input-shell--modern[data-readonly='true']:not([data-disabled='true']):not([data-variant='unstyled']):not(:where([data-chrome='none'])) {
   color: var(--ds-input-readonly-color, var(--ds-input-color));
   background: var(--ds-input-readonly-bg, var(--ds-input-bg));
   border-color: var(--ds-input-readonly-border, var(--ds-input-border));
   border-style: var(--ds-input-readonly-border-style);
-  cursor: var(--ds-input-readonly-cursor);
 }
 
 .ds-input-shell.ds-input-shell--modern[data-disabled='true'] {
+  cursor: var(--ds-input-disabled-cursor);
+  opacity: var(--ds-input-disabled-opacity);
+}
+
+.ds-input-shell.ds-input-shell--modern[data-disabled='true']:not(:where([data-chrome='none'])) {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
   background: var(--ds-input-bg-disabled, var(--ds-material-control-background-disabled));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border));
   box-shadow: var(--ds-input-shadow-disabled, none);
-  cursor: var(--ds-input-disabled-cursor);
-  opacity: var(--ds-input-disabled-opacity);
 }
 
 .ds-input-shell.ds-input-shell--modern[data-disabled='true'] * {
@@ -22400,7 +22437,7 @@ input.ds-input-shell.ds-input-shell--modern::selection {
 
 /* Browser chrome */
 .ds-input-shell.ds-input-shell--modern > .ds-input-control:-webkit-autofill,
-input.ds-input-shell.ds-input-shell--modern:-webkit-autofill {
+input.ds-input-shell.ds-input-shell--modern:-webkit-autofill:not(:where([data-chrome='none'])) {
   -webkit-text-fill-color: var(--ds-input-autofill-color, var(--ds-input-color));
   caret-color: var(--ds-input-autofill-caret, var(--ds-input-caret-color));
   box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-input-bg)) inset;
@@ -22410,7 +22447,7 @@ input.ds-input-shell.ds-input-shell--modern:-webkit-autofill {
    channels as the WebKit rule above, so the autofilled posture cannot drift
    across browsers. */
 .ds-input-shell.ds-input-shell--modern > .ds-input-control:autofill,
-input.ds-input-shell.ds-input-shell--modern:autofill {
+input.ds-input-shell.ds-input-shell--modern:autofill:not(:where([data-chrome='none'])) {
   caret-color: var(--ds-input-autofill-caret, var(--ds-input-caret-color));
   box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-input-bg)) inset;
 }
@@ -22580,6 +22617,9 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 @media (forced-colors: active) {
   .ds-input-shell.ds-input-shell--modern {
     forced-color-adjust: auto;
+  }
+
+.ds-input-shell.ds-input-shell--modern:not(:where([data-chrome='none'])) {
     background: Field;
     color: FieldText;
     border-color: ButtonText;
@@ -26738,6 +26778,18 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   );
 }
 
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control {
+  /* The text editor is the chrome-less Input: its type and radius come through the Input's own size
+     channels, set here on its field wrapper; the table paints only the control's frame. */
+  --ds-input-sm-font-size: var(--ds-data-table-editor-input-font-size, var(--ds-font-size-sm, 0.875rem));
+  --ds-input-sm-line-height: var(--ds-data-table-editor-input-line-height, var(--ds-line-height-normal, 1.5));
+  --ds-input-sm-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control > .ds-input-shell--modern[data-chrome='none'] {
+  padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
+}
+
 .ds-pattern-data-table.ds-engine-modern select[data-part="editor-input"] {
   appearance: auto;
   cursor: pointer;
@@ -28394,6 +28446,16 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table
   [data-part="editor-input"][data-part="editor-input"][data-invalid="true"] {
   border: 1.5px solid var(--ds-color-error);
+}
+
+/* ---- chrome-less text editor (Input): the table paints its frame; focus is the Input's own ring ---- */
+.ds-pattern-data-table .ds-data-table__editor-control > .ds-input-shell--modern[data-chrome='none'] {
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+  border: 1.5px solid var(--ds-color-primary);
+}
+.ds-pattern-data-table .ds-data-table__editor-control > .ds-input-shell--modern[data-chrome='none'][data-invalid='true'] {
+  border-color: var(--ds-color-error);
 }
 
 /* ---- error message ---- */

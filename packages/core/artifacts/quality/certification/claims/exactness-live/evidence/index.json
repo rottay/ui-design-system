@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "8d7e0740e8119fbfe8d231efe4895d55d716ba376a968d1fd9720d1b5658ae34",
+    "authorityDigest": "bcf5bc1d1abf5ccd62750f9f133e910276a15610fad6da5a4f9393a872c2937e",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5700765,
-        "sha256": "a15bbb86efdd8784426a55b3a2631981dc5c4cd1af9864490ac1f9fb20f13b79"
+        "bytes": 5703924,
+        "sha256": "dc390b6f2a8f2efb3016f8f5e5f0ea195d0964a0f5fca2f149e653dece3933e7"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5066741,
-        "sha256": "5462bd747b03a4444ae4543a0235fda7be703e2e3e60706e95bb9878c161dfd0"
+        "bytes": 5069900,
+        "sha256": "a6f0065c48cd4e6e0391c29d5ce0763a69ef9368d7875bac461f24f0cbffd6f1"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5027934,
-        "sha256": "6495ff15c992d4d095e585c41c8fbdece092a4e5526f54c6297a3fac8aad1384"
+        "bytes": 5031093,
+        "sha256": "2abd81b845b9fcd39f79e8f026879c8a65b08c4b272f50d8ef38038e4db7fc9c"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5027194,
-        "sha256": "4e081ff7ca02ecec6834a45c50e32a90c3b111ea58a779f3d005c2ddc2444234"
+        "bytes": 5030353,
+        "sha256": "1bde62495f3c196bdbdc6216011c3b4362b8f2883befaf89da55b3a0c328fd70"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -1412,8 +1412,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 9499,
-        "sha256": "ac456aabe69dab9b77da3cda30286a4fe033f89ec8ff34009747bd111b0db285"
+        "bytes": 9909,
+        "sha256": "1b17dbd125229cfab9fb0d3a3faf24d85674bc997e506c3bcf08f6b698e5e9d6"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/index.tsx",
@@ -1557,16 +1557,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 10372,
-        "sha256": "6581369883aaed124e8a748fcc1a9595bc75f43bf45489ef7d0204ee784c1836"
+        "bytes": 10403,
+        "sha256": "b1c437497559e5f92e8aa71832aff428985ac424cc2c98709ef7d8ab3b34a33b"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.cell-editor-checkbox-primitive.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5173,
-        "sha256": "43707206b4fcb36e6a8cd18da0b1e38c75b5a272a954a46a6d0d5e0697ddc5ac"
+        "bytes": 5183,
+        "sha256": "a59c25f92fce92c39a65408f775ed4e05f01f4ebe731edb89ba91efe13ca7460"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.cell-editor-error-surfacing.test.tsx",
@@ -1581,16 +1581,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 2265,
-        "sha256": "1b35ffeb2cfe0be8a0a2eb02d137eda483343a58d8773b8e653592f204574760"
+        "bytes": 2275,
+        "sha256": "f513f2b7dd659dc85d698900513ac4f04cce92d10f8a37c51b674defdef16c16"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.cell-editor-text-input-primitive.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 6048,
+        "sha256": "55fd8e7879c84a2f1264ac1e8e3ce88c33011fd366e52797eead1158867225b2"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.contract.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 16118,
-        "sha256": "5535032b043f016a92e239ef4bafc9e500c77269f340a3485767748f83420b1f"
+        "bytes": 16270,
+        "sha256": "b106778b1b5aa2083a06ec10e6cad6720264357b12db88fd5aeadb7f2bff944c"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.modern-pagination-locale.test.tsx",
@@ -1613,8 +1621,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 18212,
-        "sha256": "c6617295d5fe6b1eb4e18f8321eb4422deeabdec1e9b64a4691c17de20384bcf"
+        "bytes": 18269,
+        "sha256": "c004a62278cccc34ad136b307856c9d189fd042b7dd8a13e587e95210f98b052"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/tests/DataTable.provider-locale.test.tsx",
@@ -14129,8 +14137,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 14645,
-        "sha256": "7dcb832fa0b416bd5f5ec2f07e93df63debb7b40ad7f10eecf03f577be55e6c2"
+        "bytes": 14920,
+        "sha256": "21a5d0b4f5b24678faa33768cf4001a24a9eb78b71345816559b24e8baadf1d6"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/classic/index.tsx",
@@ -14162,8 +14170,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 17693,
-        "sha256": "ecc4a857f0b5c7bc967318db05c1212dcf44e7d258abc402f8fd71ee39b00e4b"
+        "bytes": 18006,
+        "sha256": "e6b0dd3e14f1d42782df52d1ca3cea8368a72344fd6323871d7beb5947fdc459"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/rustic/index.tsx",
@@ -14202,6 +14210,22 @@
         ],
         "bytes": 8705,
         "sha256": "0ee672e8a3f623709500cc52112142c9c136d73e4d4d7b5457d3c83b4a384b79"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/tests/Input.chrome-none-cascade.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4523,
+        "sha256": "d1140e433ad86720e8a1c796fe71d0fa17fe74d5ddc2673807cfa8539ae54d9b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/tests/Input.chrome-none.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3308,
+        "sha256": "db4a0af67cc37c4cb3882f284af189c5c21fe782ee16d7628237a67d4fd565ad"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/tests/Input.focus-signature.test.ts",
@@ -25753,8 +25777,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 13337,
-        "sha256": "dc4aa505a8975b2f22e50e91c8b4730f8e51a3090d0b16c578c574f1d8eb96e2"
+        "bytes": 13606,
+        "sha256": "0b78f7194b982d284ed930ae3201197aa698e7b50c845a1c1f0d09097edcbb85"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/kernel/common/tests/PassThroughLaw.contract.test.tsx",
@@ -28464,8 +28488,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 24543,
-        "sha256": "1fbecc17c455d829d3a1852bd6d5687eb7ad9c7604ba736b43bf5c711bda0581"
+        "bytes": 25043,
+        "sha256": "0ca88aff1737d821ca70bd97fe2a1d492a095daa04afd7f137124de9efb151a2"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-terminal-card-keyframes/index.css",
@@ -29970,8 +29994,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 89153,
-        "sha256": "8e3793bd02963a7a1e254c35de3eaea1ea0ae14e3bfda8b6ed4bc0bfaacb06d0"
+        "bytes": 89881,
+        "sha256": "3acefe2b3cb01e256cee9ae3281d57b1a71ce9832cd442f5033024278eb2f8ca"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css",
@@ -30190,8 +30214,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 29816,
-        "sha256": "263e37fe3e8dd1e9c7c98f51652c0d0972222b36e3a27d94810974e481849717"
+        "bytes": 31747,
+        "sha256": "759ddf48060a181b70cef3fb6b144007743b9cdd341fe396a0bc602af9032933"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/invoice-template/index.css",
@@ -47786,7 +47810,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "8d7e0740e8119fbfe8d231efe4895d55d716ba376a968d1fd9720d1b5658ae34"
+    "digest": "bcf5bc1d1abf5ccd62750f9f133e910276a15610fad6da5a4f9393a872c2937e"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4221 counters; 3223 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -49971,35 +49995,35 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1757
+          "line": 1769
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1763
+          "line": 1775
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1773
+          "line": 1785
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1782
+          "line": 1794
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1795
+          "line": 1807
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1808
+          "line": 1820
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1979
+          "line": 1991
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1979
+          "line": 1991
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css",
@@ -50193,11 +50217,11 @@
       "affix-prefix": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 121
+          "line": 132
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 545
+          "line": 582
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-residual/index.css",
@@ -50207,11 +50231,11 @@
       "affix-suffix": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 121
+          "line": 132
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 545
+          "line": 582
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-residual/index.css",
@@ -52021,59 +52045,51 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1248
+          "line": 1260
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1259
+          "line": 1271
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1272
+          "line": 1284
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1280
+          "line": 1292
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1296
+          "line": 1308
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1307
+          "line": 1319
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1316
+          "line": 1328
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1327
+          "line": 1339
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1376
+          "line": 1388
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1564
+          "line": 1576
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1564
+          "line": 1576
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1564
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1751
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1757
+          "line": 1576
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -52081,55 +52097,55 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1773
+          "line": 1769
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1782
+          "line": 1775
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1795
+          "line": 1785
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1808
+          "line": 1794
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1881
+          "line": 1807
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1891
+          "line": 1820
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1902
+          "line": 1893
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1912
+          "line": 1903
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1957
+          "line": 1914
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1967
+          "line": 1924
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1973
+          "line": 1969
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1987
+          "line": 1979
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1987
+          "line": 1985
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -52137,55 +52153,63 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2055
+          "line": 1999
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2078
+          "line": 2011
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2083
+          "line": 2067
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2092
+          "line": 2090
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2100
+          "line": 2095
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2106
+          "line": 2104
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2119
+          "line": 2112
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2125
+          "line": 2118
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2131
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2291
+          "line": 2137
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2300
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2309
+          "line": 2303
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2331
+          "line": 2312
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 2321
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 2343
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css",
@@ -52495,49 +52519,11 @@
       "bulk-bar": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 983
+          "line": 995
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1510
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1520
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1520
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2230
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2291
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2300
-        }
-      ],
-      "bulk-bar-action": [
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1015
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1023
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1529
+          "line": 1522
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -52545,15 +52531,53 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1536
+          "line": 1532
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1540
+          "line": 2242
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 2303
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 2312
+        }
+      ],
+      "bulk-bar-action": [
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 1027
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 1035
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 1541
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 1544
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 1548
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 1552
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css",
@@ -52579,11 +52603,11 @@
       "bulk-bar-count": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1002
+          "line": 1014
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1524
+          "line": 1536
         }
       ],
       "calendar-icon": [
@@ -52639,35 +52663,35 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1028
+          "line": 1040
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1046
+          "line": 1058
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1046
+          "line": 1058
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1055
+          "line": 1067
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1962
+          "line": 1974
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2291
+          "line": 2303
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2300
+          "line": 2312
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery/index.css",
@@ -53603,39 +53627,39 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 144
+          "line": 155
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 181
+          "line": 192
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 190
+          "line": 201
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 197
+          "line": 208
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 203
+          "line": 214
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 410
+          "line": 447
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 566
+          "line": 603
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 577
+          "line": 614
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 621
+          "line": 661
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
@@ -55277,27 +55301,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 460
+          "line": 497
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 467
+          "line": 504
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 478
+          "line": 515
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 485
+          "line": 522
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 485
+          "line": 522
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 490
+          "line": 527
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/textarea/index.css",
@@ -55607,23 +55631,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1353
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1356
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1356
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
           "line": 1365
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1751
+          "line": 1368
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 1368
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 1377
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -55631,27 +55651,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1773
+          "line": 1775
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1782
+          "line": 1785
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1795
+          "line": 1794
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1808
+          "line": 1807
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1869
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1873
+          "line": 1820
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -55659,31 +55675,39 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1891
+          "line": 1885
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1902
+          "line": 1893
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1912
+          "line": 1903
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2030
+          "line": 1914
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2035
+          "line": 1924
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2135
+          "line": 2042
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2325
+          "line": 2047
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 2147
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 2337
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css",
@@ -56589,51 +56613,51 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1196
+          "line": 1208
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1204
+          "line": 1216
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1204
+          "line": 1216
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1213
+          "line": 1225
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1220
+          "line": 1232
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1618
+          "line": 1630
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2170
+          "line": 2182
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2176
+          "line": 2188
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2281
+          "line": 2293
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2281
+          "line": 2293
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2362
+          "line": 2374
         }
       ],
       "drop-indicator": [
@@ -56643,23 +56667,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1228
+          "line": 1240
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1228
+          "line": 1240
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1719
+          "line": 1731
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1719
+          "line": 1731
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2315
+          "line": 2327
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
@@ -57705,11 +57729,11 @@
       "editor-error": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 66
+          "line": 76
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 814
+          "line": 826
         }
       ],
       "editor-input": [
@@ -57739,11 +57763,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 60
+          "line": 70
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 551
+          "line": 561
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -57751,7 +57775,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 802
+          "line": 814
         }
       ],
       "ellipsis": [
@@ -58119,7 +58143,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1051
+          "line": 1063
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/widget-board/index.css",
@@ -58175,23 +58199,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 460
+          "line": 497
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 494
+          "line": 531
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 524
+          "line": 561
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 536
+          "line": 573
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 585
+          "line": 622
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
@@ -58245,19 +58269,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1334
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1341
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
           "line": 1346
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2250
+          "line": 1353
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 1358
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -58265,11 +58285,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2281
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2281
+          "line": 2293
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 2293
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table/index.css",
@@ -58323,11 +58347,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1979
+          "line": 1991
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1979
+          "line": 1991
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table/index.css",
@@ -58391,15 +58415,15 @@
       "expanded-row": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 823
+          "line": 835
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1376
+          "line": 1388
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1382
+          "line": 1394
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table/index.css",
@@ -58421,15 +58445,15 @@
       "expanded-row-content": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 828
+          "line": 840
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1387
+          "line": 1399
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css",
@@ -58994,47 +59018,51 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 460
+          "line": 32
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 460
+          "line": 497
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 467
+          "line": 497
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 478
+          "line": 504
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 485
+          "line": 515
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 485
+          "line": 522
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 490
+          "line": 522
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 494
+          "line": 527
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 524
+          "line": 531
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 536
+          "line": 561
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 585
+          "line": 573
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
+          "line": 622
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css",
@@ -61246,11 +61274,11 @@
       "group-header-aggregate": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 886
+          "line": 898
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1443
+          "line": 1455
         }
       ],
       "group-header-cell": [
@@ -61260,51 +61288,51 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 838
+          "line": 850
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1415
+          "line": 1427
         }
       ],
       "group-header-chevron": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 856
+          "line": 868
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1418
+          "line": 1430
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1422
+          "line": 1434
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2256
+          "line": 2268
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
         }
       ],
       "group-header-count-pill": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 870
+          "line": 882
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1426
+          "line": 1438
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1437
+          "line": 1449
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1437
+          "line": 1449
         }
       ],
       "group-header-row": [
@@ -61318,27 +61346,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1289
+          "line": 1301
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1296
+          "line": 1308
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1393
+          "line": 1405
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1403
+          "line": 1415
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1403
+          "line": 1415
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2331
+          "line": 2343
         }
       ],
       "group-label": [
@@ -62774,91 +62802,87 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1164
+          "line": 1176
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1170
+          "line": 1182
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1174
+          "line": 1186
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1174
+          "line": 1186
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1183
+          "line": 1195
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1190
+          "line": 1202
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1657
+          "line": 1669
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1673
+          "line": 1685
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1707
+          "line": 1719
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1707
+          "line": 1719
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1743
+          "line": 1755
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1820
+          "line": 1832
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1824
+          "line": 1836
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1828
+          "line": 1840
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1869
+          "line": 1881
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1873
+          "line": 1885
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1925
+          "line": 1937
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1935
+          "line": 1947
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2013
+          "line": 2025
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2325
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2331
+          "line": 2337
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -62866,7 +62890,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2362
+          "line": 2355
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 2374
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger/index.css",
@@ -63104,39 +63132,39 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1121
+          "line": 1133
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1150
+          "line": 1162
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1150
+          "line": 1162
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2007
+          "line": 2019
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2130
+          "line": 2142
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2130
+          "line": 2142
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2291
+          "line": 2303
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2300
+          "line": 2312
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
@@ -64118,11 +64146,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1450
+          "line": 1462
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1454
+          "line": 1466
         }
       ],
       "inner-label": [
@@ -67856,35 +67884,35 @@
       "pagination-bar": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 901
+          "line": 913
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1461
+          "line": 1473
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1469
+          "line": 1481
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1469
+          "line": 1481
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2044
+          "line": 2056
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2219
+          "line": 2231
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2291
+          "line": 2303
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2300
+          "line": 2312
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css",
@@ -68020,15 +68048,15 @@
       "pagination-ellipsis": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 952
+          "line": 964
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 965
+          "line": 977
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1485
+          "line": 1497
         }
       ],
       "pagination-nav-button": [
@@ -68038,31 +68066,31 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 928
+          "line": 940
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 947
+          "line": 959
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1473
+          "line": 1485
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1477
+          "line": 1489
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1477
+          "line": 1489
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1481
+          "line": 1493
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2241
+          "line": 2253
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css",
@@ -68168,35 +68196,35 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 917
+          "line": 929
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 952
+          "line": 964
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 969
+          "line": 981
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 978
+          "line": 990
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1488
+          "line": 1500
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1494
+          "line": 1506
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1499
+          "line": 1511
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1503
+          "line": 1515
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css",
@@ -68298,7 +68326,7 @@
       "pagination-range": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 917
+          "line": 929
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css",
@@ -70008,7 +70036,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1610
+          "line": 1622
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table/index.css",
@@ -70046,15 +70074,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1240
+          "line": 1252
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2315
+          "line": 2327
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css",
@@ -77100,15 +77128,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1853
+          "line": 1865
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1859
+          "line": 1871
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css",
@@ -88836,49 +88864,49 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1103
+          "line": 1115
         }
       ],
       "search-button": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 144
+          "line": 155
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 174
+          "line": 185
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 181
+          "line": 192
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 190
+          "line": 201
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 197
+          "line": 208
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 203
+          "line": 214
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 410
+          "line": 447
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 566
+          "line": 603
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 577
+          "line": 614
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 621
+          "line": 661
         }
       ],
       "search-icon": [
@@ -89580,31 +89608,31 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1624
+          "line": 1636
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1651
+          "line": 1663
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1651
+          "line": 1663
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1657
+          "line": 1669
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1673
+          "line": 1685
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1688
+          "line": 1700
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
         }
       ],
       "sort-indicator": [
@@ -89944,25 +89972,25 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1084
+          "line": 1096
         }
       ],
       "state-icon-tile": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 407
+          "line": 417
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 418
+          "line": 428
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 418
+          "line": 428
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
-          "line": 422
+          "line": 432
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
@@ -89978,15 +90006,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1070
+          "line": 1082
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1074
+          "line": 1086
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1074
+          "line": 1086
         }
       ],
       "state-title": [
@@ -89996,7 +90024,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1081
+          "line": 1093
         }
       ],
       "status-badge": [
@@ -93538,7 +93566,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2210
+          "line": 2222
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/operational-ledger/index.css",
@@ -93684,15 +93712,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1097
+          "line": 1109
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1103
+          "line": 1115
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 2262
+          "line": 2274
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
@@ -97898,11 +97926,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 823
+          "line": 835
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
-          "line": 1947
+          "line": 1959
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table/index.css",
@@ -97912,39 +97940,39 @@
       "visibility-toggle": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 144
+          "line": 155
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 181
+          "line": 192
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 190
+          "line": 201
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 197
+          "line": 208
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 203
+          "line": 214
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 410
+          "line": 447
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 566
+          "line": 603
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 577
+          "line": 614
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css",
-          "line": 621
+          "line": 661
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
@@ -98363,7 +98391,7 @@
           }
         ],
         "skinSelectorCorpusKey": "field",
-        "skinSelectorCount": 179
+        "skinSelectorCount": 180
       },
       {
         "section": "Table",
@@ -103042,24 +103070,11 @@
           {
             "part": "editor-input",
             "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 232,
+            "line": 243,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
               "tagName": "select"
-            },
-            "staticValues": [
-              "editor-input"
-            ]
-          },
-          {
-            "part": "editor-input",
-            "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 268,
-            "syntax": "jsx-intrinsic",
-            "sinkKind": "intrinsic-dom",
-            "provenance": {
-              "tagName": "input"
             },
             "staticValues": [
               "editor-input"
@@ -103080,7 +103095,7 @@
           {
             "part": "editor-error",
             "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 217,
+            "line": 228,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -103093,7 +103108,7 @@
           {
             "part": "editor-error",
             "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 250,
+            "line": 261,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -103106,7 +103121,7 @@
           {
             "part": "editor-error",
             "path": "ui-design-system/packages/core/src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-            "line": 284,
+            "line": 299,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -112356,7 +112371,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 329,
+            "line": 333,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -112372,7 +112387,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 448,
+            "line": 453,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -112393,7 +112408,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 490,
+            "line": 495,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -112458,7 +112473,7 @@
           {
             "part": "control",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 462,
+            "line": 467,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -112484,7 +112499,7 @@
           {
             "part": "affix-prefix",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 454,
+            "line": 459,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -112523,7 +112538,7 @@
           {
             "part": "affix-suffix",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 470,
+            "line": 475,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -112620,7 +112635,7 @@
           {
             "part": "count",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 401,
+            "line": 406,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -112673,7 +112688,7 @@
           {
             "part": "error-message",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 418,
+            "line": 423,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -112744,7 +112759,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 329,
+            "line": 333,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -112760,7 +112775,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 448,
+            "line": 453,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -112781,7 +112796,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 490,
+            "line": 495,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -112865,7 +112880,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 329,
+            "line": 333,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -112881,7 +112896,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 448,
+            "line": 453,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -112902,7 +112917,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 490,
+            "line": 495,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -112967,7 +112982,7 @@
           {
             "part": "control",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 462,
+            "line": 467,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -113007,7 +113022,7 @@
           {
             "part": "count",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 401,
+            "line": 406,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -113060,7 +113075,7 @@
           {
             "part": "error-message",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/input/engines/modern/index.tsx",
-            "line": 418,
+            "line": 423,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -121983,8 +121998,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "5d5c13cfb3ad007279220a6cbd455a7dc3b5e43c3256f219c5e1cbf72ee1b516",
-      "5d5c13cfb3ad007279220a6cbd455a7dc3b5e43c3256f219c5e1cbf72ee1b516"
+      "935c667fe7628cb28298d7a20dd6216d7c5b2a2dbffad09240cdd26dda10940b",
+      "935c667fe7628cb28298d7a20dd6216d7c5b2a2dbffad09240cdd26dda10940b"
     ],
     "agree": true
   }

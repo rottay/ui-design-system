@@ -8647,6 +8647,11 @@
      "at": "2026-10-06 13:28",
      "by": "kimi",
      "note": "2026-10-06 — L3 landed: la trail de DetailPanel compone el Breadcrumb canónico (partes del panel retiradas en modern; rustic intacto). ownership 2033/1334 -> 2032/1333 (2c28f5f1 fuera por nombre); touch-targets 135->132 (3 rows stale del crumb); supplier contract: PatternDetailPanel gana motion via Breadcrumb->Dropdown (el writer lo omitio; la ceremonia lo encontro via contract:check — fix del generador oficial, NO hand-edit). F1 cerrado: el anillo del primitive en el crumb, fine y forzado, ambos tenants. F2 registrado: el onClick del ultimo crumb se retira (era pointer-only sin rol, contradecia aria-current); el nombre accesible del nav pasa a common.breadcrumb (fr/pt ganan localizacion; un override de tenant sobre detailPanel.breadcrumb queda sin efecto — nota de migracion). Tile review: 15-20 ACCEPT; cell 21 (tab-hovered) RECHAZADA y revertida: lleva una perdida PERCEPTIBLE del hover wash (--ds-tab-bg-hover / bg-secondary) entre 621a6429e y hoy, NO causada por L3 — investigacion propia registrada (atribuir commit, luego decision del owner sobre el hover sin wash). F-L3-1 registrado para el owner del Breadcrumb: el underline en reposo se clipea."
+    },
+    {
+     "at": "2026-10-06 14:50",
+     "by": "kimi",
+     "note": "2026-10-06 — L4 landed: Input chrome='none' (ControlChrome, minor, contract-diff en el changeset) + el editor de texto de data-table drena (row eaea fuera; ownership 2032/1333 -> 2031/1332; productive 26/21 exact). touch-targets 132->131 (editor-input fuera). La limitacion de autofill queda registrada. F2 ruling del DT: los K-arm pins faltantes y la prueba gobernada Q12 van en un paquete de correccion ANTES de L5; la equivalencia del test agregado se prueba con el mapa de cobertura en ese paquete. F5: la tabla de lotes L5/L6 se re-deriva del baseline vivo en ese paquete."
     }
    ]
   },

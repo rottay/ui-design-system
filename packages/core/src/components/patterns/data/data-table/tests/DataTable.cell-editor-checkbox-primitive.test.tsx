@@ -113,7 +113,7 @@ describe("DataTable modern -- the checkbox cell editor composes the Checkbox pri
     await user.keyboard("{Tab}");
 
     await waitFor(() => {
-      const editor = container.querySelector<HTMLInputElement>('td[data-editing="true"] [data-part="editor-input"]');
+      const editor = container.querySelector<HTMLInputElement>('td[data-editing="true"] .ds-data-table__editor-control input');
       expect(editor).not.toBeNull();
       expect(editor!.value).toBe("free");
     });

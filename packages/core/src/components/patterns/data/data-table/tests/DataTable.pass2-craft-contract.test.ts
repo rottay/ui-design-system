@@ -297,7 +297,8 @@ describe("DataTable pass 2 craft contract", () => {
       const controls = [...cellEditor.matchAll(/<(input|select|textarea|button)\b[\s\S]*?data-part="([a-z-]+)"/g)].map(
         ([, tag, part]) => `${tag}:${part}`
       );
-      expect([...new Set(controls)].sort()).toEqual(["input:editor-input", "select:editor-input"]);
+      expect([...new Set(controls)].sort()).toEqual(["select:editor-input"]);
+      expect(cellEditor).toMatch(/<ModernInput\b[\s\S]{0,200}?chrome="none"/);
       expect(cellEditor).not.toMatch(/<(?:Input|Select|Checkbox|DatePicker|InputNumber)\b/);
       expect(cellEditor).toMatch(/<ModernCheckbox\b/);
       expect(cellEditor).not.toMatch(/type="checkbox"/);

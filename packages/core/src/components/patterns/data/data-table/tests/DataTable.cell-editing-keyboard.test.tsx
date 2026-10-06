@@ -63,7 +63,7 @@ async function focusRowByKeyboard(
 
 async function focusedEditor(container: HTMLElement): Promise<HTMLInputElement> {
   return waitFor(() => {
-    const editor = container.querySelector<HTMLInputElement>('[data-part="editor-input"]');
+    const editor = container.querySelector<HTMLInputElement>('td[data-editing="true"] .ds-data-table__editor-control input');
     expect(editor).not.toBeNull();
     expect(document.activeElement).toBe(editor);
     return editor!;
@@ -71,7 +71,7 @@ async function focusedEditor(container: HTMLElement): Promise<HTMLInputElement> 
 }
 
 async function editorClosed(container: HTMLElement): Promise<void> {
-  await waitFor(() => expect(container.querySelector('[data-part="editor-input"]')).toBeNull());
+  await waitFor(() => expect(container.querySelector('td[data-editing="true"]')).toBeNull());
 }
 
 function editingColumn(container: HTMLElement): string | undefined {

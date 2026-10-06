@@ -32,7 +32,7 @@ function renderEditor(onSave: () => Promise<void>, locale?: SupportedLocale) {
 
 async function rejectedSaveMessage(onSave: () => Promise<void>, locale?: SupportedLocale) {
   const { container } = renderEditor(onSave, locale);
-  const input = container.querySelector('[data-part="editor-input"]') as HTMLInputElement;
+  const input = container.querySelector('.ds-data-table__editor-control input') as HTMLInputElement;
   fireEvent.keyDown(input, { key: 'Enter' });
   return await waitFor(() => {
     const error = container.querySelector('[data-part="editor-error"]');

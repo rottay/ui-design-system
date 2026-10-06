@@ -1905,12 +1905,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "eaea03986d8eac40fec8": {
-      "path": "src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-input",
-      "count": 1
-    },
     "cd6589b9d12fe14f52da": {
       "path": "src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx",
       "category": "native-interactive",

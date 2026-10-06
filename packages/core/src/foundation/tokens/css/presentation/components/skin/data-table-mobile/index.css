@@ -54,6 +54,16 @@
   border: 1.5px solid var(--ds-color-error);
 }
 
+/* ---- chrome-less text editor (Input): the table paints its frame; focus is the Input's own ring ---- */
+.ds-pattern-data-table .ds-data-table__editor-control > .ds-input-shell--modern[data-chrome='none'] {
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+  border: 1.5px solid var(--ds-color-primary);
+}
+.ds-pattern-data-table .ds-data-table__editor-control > .ds-input-shell--modern[data-chrome='none'][data-invalid='true'] {
+  border-color: var(--ds-color-error);
+}
+
 /* ---- error message ---- */
 /* The editor controls are raw form elements: no primitive skin paints their
    focus, so each wears the tenant focus signature here. */

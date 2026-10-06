@@ -799,6 +799,18 @@
   );
 }
 
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control {
+  /* The text editor is the chrome-less Input: its type and radius come through the Input's own size
+     channels, set here on its field wrapper; the table paints only the control's frame. */
+  --ds-input-sm-font-size: var(--ds-data-table-editor-input-font-size, var(--ds-font-size-sm, 0.875rem));
+  --ds-input-sm-line-height: var(--ds-data-table-editor-input-line-height, var(--ds-line-height-normal, 1.5));
+  --ds-input-sm-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control > .ds-input-shell--modern[data-chrome='none'] {
+  padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
+}
+
 .ds-pattern-data-table.ds-engine-modern select[data-part="editor-input"] {
   appearance: auto;
   cursor: pointer;

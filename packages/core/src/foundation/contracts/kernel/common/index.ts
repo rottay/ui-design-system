@@ -89,6 +89,12 @@ export type StatusType = '' | 'error' | 'warning';
 export type Variant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'gradient';
 
 /**
+ * Chrome of a form control: `none` keeps the control's behaviour, focus signature and touch floor
+ * but drops its height floor, padding and paint, for embedding in a host that paints it (a grid cell, a pill).
+ */
+export type ControlChrome = 'standard' | 'none';
+
+/**
  * Semantic color axis: what a component's color communicates, independent of how it renders.
  * Pairs with a component's own structural variant type (the rendering-style axis, e.g.
  * `BadgeStyle`'s `'solid' | 'outline' | 'soft' | 'ghost'`) rather than folding both concerns

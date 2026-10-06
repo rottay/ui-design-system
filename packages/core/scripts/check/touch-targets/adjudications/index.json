@@ -235,12 +235,6 @@
       "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
     },
     {
-      "key": "src/components/patterns/data/data-table/engines/modern/cell-editor/index.tsx :: input :: [data-part='editor-input']",
-      "kind": "debt",
-      "owner": "design-system/D1-floors",
-      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
-    },
-    {
       "key": "src/components/patterns/data/data-table/engines/modern/index.tsx :: DragGrip :: dynamic",
       "kind": "exempt",
       "reason": "slot wrapper, not a second box: the call site carries only the role, and the component renders the intrinsic `[data-part='drag-grip']` that discovery finds and proves on its own row in data-table/index.css (its coarse `::after` hit area)"

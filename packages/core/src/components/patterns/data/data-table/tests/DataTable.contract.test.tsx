@@ -315,11 +315,12 @@ describe("DataTable data-part contract (desktop)", () => {
     fireEvent.doubleClick(editableCell);
 
     const input = await waitFor(() => {
-      const el = container.querySelector('[data-part="editor-input"]');
+      const el = container.querySelector('td[data-editing="true"] .ds-data-table__editor-control input');
       expect(el).not.toBeNull();
       return el as HTMLInputElement;
     });
-    expect(input.getAttribute("data-invalid")).toBe("false");
+    expect(input.getAttribute("data-invalid")).toBeNull();
+    expect(input.getAttribute("data-chrome")).toBe("none");
 
     fireEvent.change(input, { target: { value: "" } });
     fireEvent.keyDown(input, { key: "Enter" });
@@ -327,6 +328,7 @@ describe("DataTable data-part contract (desktop)", () => {
     await waitFor(() => {
       expect(input.getAttribute("data-invalid")).toBe("true");
     });
+    expect(input.getAttribute("aria-invalid")).toBe("true");
     const errorSpan = container.querySelector('[data-part="editor-error"]');
     expect(errorSpan?.textContent).toBe("Required");
   });

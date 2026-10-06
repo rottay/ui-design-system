@@ -14,6 +14,7 @@ import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from
 import type { EditableConfig } from '@/foundation/contracts/runtime/components/patterns/core';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernCheckbox from '../../../../../../primitives/inputs/checkbox/engines/modern';
+import ModernInput from '../../../../../../primitives/inputs/input/engines/modern';
 
 const SAVE_FAILED_FALLBACK = 'Unable to save this change.';
 
@@ -166,13 +167,23 @@ export function InlineCellEditor<T>({
     [attemptSave, onCancel, onTabNext, onTabPrev],
   );
 
+  // Enter commits through the Input's IME-guarded submit intent (onPressEnter); here it only stays in the cell.
+  const handleTextKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.stopPropagation();
+        return;
+      }
+      handleKeyDown(e);
+    },
+    [handleKeyDown],
+  );
+
   const editorType = config.type ?? 'text';
 
-  // Geometry (width, padding, font, error anchoring) lives in the modern
-  // engine skin keyed on data-part='editor-shell'/'editor-input'/'editor-
-  // error'. Paint (border rest/error, radius, background, color, outline)
-  // stays in the agnostic data-table-mobile skin, keyed on 'editor-input' and
-  // data-invalid. The checkbox is the Checkbox primitive, painted by its skin.
+  // The text editor is the chrome-less Input and the checkbox the Checkbox primitive; the table paints
+  // the Input's frame and hands it its type and radius through the editor-control channels. The select
+  // stays a raw control painted on data-part='editor-input' and the data-invalid stamp.
 
   // Custom editor
   if (editorType === 'custom' && config.render) {
@@ -258,19 +269,19 @@ export function InlineCellEditor<T>({
   // Text / Number / Date editor
   return (
     <div data-part="editor-shell" onClick={(e) => e.stopPropagation()}>
-      <input
+      <ModernInput
         ref={inputRef as React.RefObject<HTMLInputElement>}
+        chrome="none"
+        size="sm"
+        className="ds-data-table__editor-control"
         type={editorType === 'number' ? 'number' : editorType === 'date' ? 'date' : 'text'}
         value={editValue == null ? '' : String(editValue)}
         placeholder={config.placeholder}
         min={config.min}
         max={config.max}
-        data-part="editor-input"
-        data-invalid={error ? 'true' : 'false'}
+        status={error ? 'error' : 'default'}
         aria-label={accessibleName}
-        aria-invalid={error ? true : undefined}
-        onChange={(e) => {
-          const raw = e.target.value;
+        onChange={(raw) => {
           if (editorType === 'number') {
             setEditValue(raw === '' ? null : Number(raw));
           } else {
@@ -278,7 +289,11 @@ export function InlineCellEditor<T>({
           }
           setError(null);
         }}
-        onKeyDown={handleKeyDown}
+        onPressEnter={(e) => {
+          e.preventDefault();
+          void attemptSave();
+        }}
+        onKeyDown={handleTextKeyDown}
       />
       {error && (
         <span data-part="editor-error" role="alert">

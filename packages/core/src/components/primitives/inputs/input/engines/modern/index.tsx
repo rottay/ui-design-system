@@ -96,6 +96,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
     size: sizeProp = INPUT_DEFAULTS.size,
     variant = INPUT_DEFAULTS.variant,
+    chrome = 'standard',
     status = INPUT_DEFAULTS.status,
     type = INPUT_DEFAULTS.type,
     placeholder,
@@ -175,11 +176,14 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       value: sizeProp,
       resolve: (v: InputSize) => resolvedSize(v).fontSize,
     } as ResponsivePropEntry<any>);
-    responsiveEntries.push({
-      cssProperty: 'padding-inline',
-      value: sizeProp,
-      resolve: (v: InputSize) => resolvedSize(v).paddingX,
-    } as ResponsivePropEntry<any>);
+    // A chrome-less control has no padding; the responsive layer would otherwise reinstate it.
+    if (chrome !== 'none') {
+      responsiveEntries.push({
+        cssProperty: 'padding-inline',
+        value: sizeProp,
+        resolve: (v: InputSize) => resolvedSize(v).paddingX,
+      } as ResponsivePropEntry<any>);
+    }
     responsiveEntries.push({
       cssProperty: 'line-height',
       value: sizeProp,
@@ -349,6 +353,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'data-loading': loading ? 'true' : undefined,
     'data-filled': isFilled ? 'true' : undefined,
     'data-size-responsive': sizeIsResponsive ? 'true' : undefined,
+    'data-chrome': chrome === 'none' ? 'none' : undefined,
   } as const;
 
   const shellClassName = 'ds-input-shell ds-input-shell--modern';
@@ -436,7 +441,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // buttons valid while the actual input remains associated by FormField.
   if (prefix || suffix || showClearButton || loading) {
     return (
-      <div className={`ds-input-field ${className}`.trim()} data-part="field" style={style}>
+      <div className={`ds-input-field ${className}`.trim()} data-part="field" data-chrome={skinAttributes['data-chrome']} style={style}>
         <div
           className={shellClassName}
           onClick={(event) => {
@@ -479,7 +484,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   // Simple input without prefix/suffix -- the shell IS the input element
   return (
-    <div className={`ds-input-field ${className}`.trim()} data-part="field" style={style}>
+    <div className={`ds-input-field ${className}`.trim()} data-part="field" data-chrome={skinAttributes['data-chrome']} style={style}>
       <input
         {...inputProps}
         {...responsiveAttrs}

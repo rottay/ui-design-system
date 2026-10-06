@@ -57,7 +57,7 @@
 
 'use client';
 
-import type { EngineAwareProps } from '../../../../../foundation/contracts';
+import type { ControlChrome, EngineAwareProps } from '../../../../../foundation/contracts';
 import type { ReactNode, ChangeEvent, FocusEvent, KeyboardEvent, InputHTMLAttributes, AriaRole } from 'react';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
@@ -154,6 +154,13 @@ export interface InputProps extends EngineAwareProps {
   size?: ResponsiveValue<InputSize>;
   /** Visual variant */
   variant?: InputVariant;
+  /**
+   * `none` renders the Modern control without its chrome (height floor, padding, paint) for a host that
+   * paints it; behaviour, focus ring and touch floor are kept. Modern only.
+   * @internal
+   * @default 'standard'
+   */
+  chrome?: ControlChrome;
   /** Validation status */
   status?: InputStatus;
   /** Input HTML type */
