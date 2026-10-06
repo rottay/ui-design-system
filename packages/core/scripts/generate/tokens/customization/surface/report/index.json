@@ -3,37 +3,37 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "d1304596b1bea116b32d8167c87c690a677f538d52a21ce163f1d532ca2a3389",
+    "inputsDigest": "e9217c09a249d7052d546b153fd1e9add5f5b7998f6fd20bdc058532e541e979",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 500,
       "productionTsFiles": 2172,
-      "testFiles": 1991,
+      "testFiles": 2004,
       "artifactFiles": 3,
       "showroomReaderFiles": 388
     }
   },
   "counts": {
-    "universe": 8753,
-    "writers": 7530,
-    "foundationTokens": 4185,
-    "componentTokens": 725,
-    "tenantChannels": 4515,
+    "universe": 8747,
+    "writers": 7532,
+    "foundationTokens": 4195,
+    "componentTokens": 729,
+    "tenantChannels": 4508,
     "publicHooks": 107,
-    "unadjudicatedReads": 1204,
-    "deadWriters": 269,
+    "unadjudicatedReads": 1196,
+    "deadWriters": 270,
     "frontierReserved": 0,
-    "modernConsumedUnique": 4795,
-    "tsReadNames": 3114,
-    "tsWriteNames": 3920,
-    "tsMetadataNames": 5849,
+    "modernConsumedUnique": 4789,
+    "tsReadNames": 3113,
+    "tsWriteNames": 3913,
+    "tsMetadataNames": 5868,
     "showroomReadNames": 121,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
   "frontierFamilies": [],
   "deadByClass": {
-    "foundation": 126,
+    "foundation": 127,
     "component": 0,
     "tenantChannel": 198,
     "authoredCssLocal": 6
@@ -460,7 +460,8 @@
     "--ds-workspace-card-status-color",
     "--ds-workspace-card-title-color",
     "--ds-workspace-card-value-color",
-    "--ds-workspace-card-value-color-hover"
+    "--ds-workspace-card-value-color-hover",
+    "--ds-z-modal"
   ],
   "rows": {
     "--ds-action-dock-backdrop-filter": {
@@ -12809,7 +12810,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 2,
         "showroom": 0,
         "tests": true,
@@ -16737,7 +16738,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 3
+      "tsMetadataMentions": 4
     },
     "--ds-button-primary-color-active": {
       "category": "compiler-derived-channel",
@@ -19042,6 +19043,22 @@
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
+    },
+    "--ds-calendar-selected-color": {
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 2,
+        "ts": 0,
+        "showroom": 0,
+        "tests": true,
+        "modern": true,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 1
     },
     "--ds-calendar-shadow": {
       "category": "unadjudicated-read",
@@ -23076,10 +23093,10 @@
       "tsMetadataMentions": 1
     },
     "--ds-carousel-arrow-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 2,
         "ts": 0,
@@ -23089,7 +23106,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-carousel-arrow-bg-hover": {
       "category": "unadjudicated-read",
@@ -23220,10 +23237,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-carousel-dot-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 3,
         "ts": 0,
@@ -23233,7 +23250,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-carousel-dot-bg-active": {
       "category": "unadjudicated-read",
@@ -26721,7 +26738,7 @@
         "artifact": false
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-checkbox-checkmark-size": {
       "category": "canonical-authority",
@@ -33145,8 +33162,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 321,
-        "ts": 65,
+        "css": 322,
+        "ts": 69,
         "showroom": 244,
         "tests": true,
         "modern": true,
@@ -33241,12 +33258,12 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 14,
-        "ts": 4,
+        "css": 13,
+        "ts": 3,
         "showroom": 66,
         "tests": true,
         "modern": true,
-        "artifact": true
+        "artifact": false
       },
       "tsWriteSites": 3,
       "tsMetadataMentions": 15
@@ -33257,8 +33274,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 227,
-        "ts": 72,
+        "css": 229,
+        "ts": 74,
         "showroom": 114,
         "tests": true,
         "modern": true,
@@ -33433,8 +33450,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 255,
-        "ts": 75,
+        "css": 256,
+        "ts": 76,
         "showroom": 151,
         "tests": true,
         "modern": true,
@@ -33481,10 +33498,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 13,
+        "css": 12,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": true
       },
@@ -34457,7 +34474,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 18,
+        "css": 19,
         "ts": 4,
         "showroom": 0,
         "tests": true,
@@ -35289,15 +35306,15 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1217,
-        "ts": 463,
+        "css": 1212,
+        "ts": 464,
         "showroom": 184,
         "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 4,
-      "tsMetadataMentions": 13
+      "tsWriteSites": 5,
+      "tsMetadataMentions": 14
     },
     "--ds-color-primary-": {
       "category": "consumed-external-origin",
@@ -35328,8 +35345,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-color-primary-200": {
       "category": "canonical-authority",
@@ -35344,8 +35361,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-color-primary-300": {
       "category": "canonical-authority",
@@ -35353,15 +35370,15 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
-        "ts": 6,
+        "css": 3,
+        "ts": 3,
         "showroom": 5,
         "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-color-primary-400": {
       "category": "canonical-authority",
@@ -35392,8 +35409,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-color-primary-500": {
       "category": "canonical-authority",
@@ -35401,15 +35418,15 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 96,
-        "ts": 56,
+        "css": 97,
+        "ts": 59,
         "showroom": 116,
         "tests": true,
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 9
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 10
     },
     "--ds-color-primary-600": {
       "category": "canonical-authority",
@@ -35424,8 +35441,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-color-primary-700": {
       "category": "canonical-authority",
@@ -35440,8 +35457,8 @@
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-color-primary-800": {
       "category": "canonical-authority",
@@ -35450,14 +35467,14 @@
       "writer": true,
       "reads": {
         "css": 5,
-        "ts": 7,
+        "ts": 9,
         "showroom": 0,
         "tests": true,
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-color-primary-900": {
       "category": "canonical-authority",
@@ -35472,8 +35489,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-color-primary-bg": {
       "category": "unadjudicated-read",
@@ -35504,8 +35521,8 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 2,
-      "tsMetadataMentions": 3
+      "tsWriteSites": 3,
+      "tsMetadataMentions": 4
     },
     "--ds-color-primary-hover": {
       "category": "compiler-derived-channel",
@@ -35536,8 +35553,8 @@
         "modern": false,
         "artifact": true
       },
-      "tsWriteSites": 2,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 3,
+      "tsMetadataMentions": 1
     },
     "--ds-color-primary-subtle": {
       "category": "compiler-derived-channel",
@@ -36137,8 +36154,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 38,
-        "ts": 12,
+        "css": 41,
+        "ts": 15,
         "showroom": 3,
         "tests": true,
         "modern": true,
@@ -36169,8 +36186,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 115,
-        "ts": 66,
+        "css": 123,
+        "ts": 73,
         "showroom": 1,
         "tests": true,
         "modern": true,
@@ -36185,8 +36202,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 778,
-        "ts": 263,
+        "css": 780,
+        "ts": 264,
         "showroom": 125,
         "tests": true,
         "modern": true,
@@ -36201,8 +36218,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 453,
-        "ts": 157,
+        "css": 454,
+        "ts": 158,
         "showroom": 396,
         "tests": true,
         "modern": true,
@@ -36473,8 +36490,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 54,
-        "ts": 56,
+        "css": 53,
+        "ts": 54,
         "showroom": 18,
         "tests": true,
         "modern": true,
@@ -38964,10 +38981,10 @@
       "tsMetadataMentions": 1
     },
     "--ds-command-palette-focus-line": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -38977,7 +38994,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-command-palette-footer-color": {
       "category": "compiler-derived-channel",
@@ -52805,7 +52822,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 383,
+        "css": 384,
         "ts": 28,
         "showroom": 0,
         "tests": true,
@@ -55989,7 +56006,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 249,
+        "css": 258,
         "ts": 68,
         "showroom": 0,
         "tests": true,
@@ -56005,7 +56022,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 23,
+        "css": 18,
         "ts": 10,
         "showroom": 0,
         "tests": true,
@@ -56021,7 +56038,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 199,
+        "css": 205,
         "ts": 16,
         "showroom": 0,
         "tests": true,
@@ -56037,7 +56054,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 312,
+        "css": 316,
         "ts": 24,
         "showroom": 0,
         "tests": true,
@@ -56341,7 +56358,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 62,
+        "css": 67,
         "ts": 7,
         "showroom": 0,
         "tests": false,
@@ -56373,7 +56390,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 10,
+        "css": 11,
         "ts": 9,
         "showroom": 0,
         "tests": true,
@@ -56917,7 +56934,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 199,
+        "css": 202,
         "ts": 161,
         "showroom": 0,
         "tests": true,
@@ -56981,7 +56998,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 257,
+        "css": 258,
         "ts": 110,
         "showroom": 0,
         "tests": true,
@@ -57141,7 +57158,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 89,
+        "css": 91,
         "ts": 27,
         "showroom": 0,
         "tests": true,
@@ -57189,7 +57206,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 160,
+        "css": 162,
         "ts": 35,
         "showroom": 0,
         "tests": true,
@@ -59077,8 +59094,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 22,
-        "ts": 7,
+        "css": 20,
+        "ts": 6,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -59269,8 +59286,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
-        "ts": 6,
+        "css": 10,
+        "ts": 5,
         "showroom": 0,
         "tests": false,
         "modern": true,
@@ -64175,6 +64192,22 @@
       "tsWriteSites": 1,
       "tsMetadataMentions": 1
     },
+    "--ds-input-number-suffix-space": {
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "showroom": 0,
+        "tests": false,
+        "modern": true,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 1
+    },
     "--ds-input-number-touch-target-min": {
       "category": "canonical-authority",
       "tier": "internal",
@@ -64229,7 +64262,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -69407,22 +69440,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-markdown-focus-ring": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 2,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-markdown-link-decoration-hover": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -70869,8 +70886,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 51,
-        "ts": 32,
+        "css": 52,
+        "ts": 33,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -71125,8 +71142,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
-        "ts": 2,
+        "css": 4,
+        "ts": 3,
         "showroom": 0,
         "tests": false,
         "modern": true,
@@ -83541,8 +83558,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 22,
-        "ts": 3,
+        "css": 23,
+        "ts": 2,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -84181,12 +84198,12 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
-        "ts": 2,
+        "css": 1,
+        "ts": 1,
         "showroom": 0,
         "tests": true,
-        "modern": true,
-        "artifact": true
+        "modern": false,
+        "artifact": false
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 3
@@ -84637,7 +84654,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-pagination-bg": {
       "category": "unadjudicated-read",
@@ -86576,10 +86593,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-popconfirm-primary-color": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -86589,7 +86606,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-popconfirm-radius": {
       "category": "unadjudicated-read",
@@ -86765,7 +86782,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-popover-body-max-height": {
       "category": "compiler-derived-channel",
@@ -86845,7 +86862,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-popover-border-color": {
       "category": "unadjudicated-read",
@@ -87229,7 +87246,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-popover-edge-current": {
       "category": "component-channel",
@@ -88269,7 +88286,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-popover-title-divider": {
       "category": "compiler-derived-channel",
@@ -89368,7 +89385,7 @@
         "css": 1,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": false,
         "artifact": false
       },
@@ -89968,10 +89985,10 @@
       "tsMetadataMentions": 1
     },
     "--ds-qrcode-button-color": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 2,
         "ts": 0,
@@ -89981,7 +89998,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-qrcode-default-icon-size": {
       "category": "canonical-authority",
@@ -90285,7 +90302,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-qrcode-refresh-button-font-size": {
       "category": "canonical-authority",
@@ -90384,10 +90401,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-qrcode-spinner-color": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -90397,7 +90414,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-qrcode-spinner-track": {
       "category": "unadjudicated-read",
@@ -92005,7 +92022,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 382,
+        "css": 383,
         "ts": 104,
         "showroom": 22,
         "tests": true,
@@ -92197,8 +92214,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 58,
-        "ts": 22,
+        "css": 57,
+        "ts": 21,
         "showroom": 3,
         "tests": true,
         "modern": true,
@@ -97648,10 +97665,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-segmented-active-color": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "canonical-authority",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -97661,7 +97678,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-segmented-active-shadow": {
       "category": "unadjudicated-read",
@@ -98741,11 +98758,11 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
-        "modern": false,
+        "tests": true,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -99178,7 +99195,7 @@
         "showroom": 0,
         "tests": false,
         "modern": true,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 1,
       "tsMetadataMentions": 1
@@ -100181,7 +100198,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -100197,10 +100214,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -101413,10 +101430,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -101592,7 +101609,7 @@
         "css": 6,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -101653,10 +101670,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -104789,7 +104806,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -104808,23 +104825,7 @@
         "css": 1,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 1
-    },
-    "--ds-shortcuts-overlay-dialog-radius": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -105023,22 +105024,6 @@
       "tsWriteSites": 1,
       "tsMetadataMentions": 1
     },
-    "--ds-shortcuts-overlay-inset-block-start": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 1
-    },
     "--ds-shortcuts-overlay-item-gap": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
@@ -105151,22 +105136,6 @@
       "tsWriteSites": 1,
       "tsMetadataMentions": 1
     },
-    "--ds-shortcuts-overlay-narrow-inset-block-start": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 1
-    },
     "--ds-shortcuts-overlay-padding-inline": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
@@ -105190,54 +105159,6 @@
       "writer": true,
       "reads": {
         "css": 3,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 1
-    },
-    "--ds-shortcuts-overlay-scrim": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 1
-    },
-    "--ds-shortcuts-overlay-scrim-filter": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 2,
-        "ts": 0,
-        "showroom": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 1
-    },
-    "--ds-shortcuts-overlay-scrim-tint": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -105343,22 +105264,6 @@
       "tsWriteSites": 1,
       "tsMetadataMentions": 1
     },
-    "--ds-shortcuts-overlay-z-index": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "showroom": 0,
-        "tests": true,
-        "modern": true,
-        "artifact": true
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 1
-    },
     "--ds-sidebar": {
       "category": "consumed-external-origin",
       "tier": "internal",
@@ -105381,8 +105286,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
-        "ts": 2,
+        "css": 5,
+        "ts": 4,
         "showroom": 10,
         "tests": true,
         "modern": false,
@@ -105453,7 +105358,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 1
+      "tsMetadataMentions": 3
     },
     "--ds-sidebar-group-color": {
       "category": "compiler-derived-channel",
@@ -108069,7 +107974,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 413,
+        "css": 416,
         "ts": 110,
         "showroom": 0,
         "tests": true,
@@ -108149,7 +108054,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 16,
+        "css": 17,
         "ts": 12,
         "showroom": 0,
         "tests": true,
@@ -108165,7 +108070,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 613,
+        "css": 617,
         "ts": 154,
         "showroom": 4,
         "tests": true,
@@ -108245,8 +108150,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 421,
-        "ts": 121,
+        "css": 423,
+        "ts": 122,
         "showroom": 8,
         "tests": true,
         "modern": true,
@@ -108309,7 +108214,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 349,
+        "css": 352,
         "ts": 126,
         "showroom": 6,
         "tests": true,
@@ -108453,7 +108358,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 155,
+        "css": 159,
         "ts": 56,
         "showroom": 4,
         "tests": true,
@@ -108533,8 +108438,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 65,
-        "ts": 37,
+        "css": 64,
+        "ts": 36,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -113357,7 +113262,7 @@
         "artifact": true
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-steps-item-color-completed": {
       "category": "unadjudicated-read",
@@ -113589,8 +113494,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 284,
-        "ts": 98,
+        "css": 285,
+        "ts": 99,
         "showroom": 60,
         "tests": true,
         "modern": true,
@@ -114229,8 +114134,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
-        "ts": 12,
+        "css": 9,
+        "ts": 13,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -126848,7 +126753,7 @@
         "css": 2,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -127056,7 +126961,7 @@
         "css": 1,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -128112,7 +128017,7 @@
         "css": 1,
         "ts": 1,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": true
       },
@@ -138194,7 +138099,7 @@
         "showroom": 0,
         "tests": false,
         "modern": true,
-        "artifact": true
+        "artifact": false
       },
       "tsWriteSites": 0,
       "tsMetadataMentions": 1
@@ -140986,14 +140891,14 @@
     "--ds-z-modal": {
       "category": "canonical-authority",
       "tier": "internal",
-      "status": "active",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
-        "css": 1,
-        "ts": 1,
+        "css": 0,
+        "ts": 0,
         "showroom": 0,
-        "tests": true,
-        "modern": true,
+        "tests": false,
+        "modern": false,
         "artifact": true
       },
       "tsWriteSites": 0,
