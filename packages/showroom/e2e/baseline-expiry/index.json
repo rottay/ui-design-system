@@ -121,11 +121,11 @@
       "spec": "e2e/visual/flagships.spec.ts",
       "status": "pre-migration",
       "owner": "WO-EVI-03",
-      "measuredAt": "2026-10-05 @ 7b8128c5d",
+      "measuredAt": "2026-10-05 @ 79b1a43b9",
       "expiresWhen": "reference-identity-approved",
       "reason": "Captured before the family migration against the current reference identities; the evidence-graph lane forbids regenerating it before the pick.",
       "baselines": 48,
-      "sha256": "7d2f6904d750233ac500feadb1af05257df73c5fa0fad6cfaabb9f39e2c5e062"
+      "sha256": "05ccc9a8b56fb1d71accb6e6487eda962590b5c95e12b041775fa62d4ed84f2c"
     },
     {
       "spec": "e2e/visual/forms-batch.spec.ts",
