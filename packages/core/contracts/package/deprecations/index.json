@@ -12,22 +12,6 @@
   ],
   "rows": [
     {
-      "file": "src/components/patterns/workflow/approval-inbox/index.ts",
-      "anchor": "PatternApprovalInbox",
-      "class": "debt",
-      "reason": "Superseded by `DecisionInboxSurface`; no application renders it, and the two remaining call sites are showroom previews that move with the retirement.",
-      "scope": "Exported pattern with Classic and Modern engines. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Showroom sites: app/probe/ds-reference/sections/component-behaviors/index.tsx and app/(docs)/patterns/[group]/[pattern]/pattern-preview-fixtures.tsx.",
-      "replacement": "`DecisionInboxSurface`",
-      "canonicalOwner": null,
-      "blocker": null,
-      "receiver": "WO-RET-01",
-      "since": "2026-04-02",
-      "removeIn": "3.0",
-      "evidence": [],
-      "codemod": null,
-      "changeset": null
-    },
-    {
       "file": "src/components/primitives/display/avatar/contracts/index.ts",
       "anchor": "AvatarVariant",
       "class": "compat-canon-pending",

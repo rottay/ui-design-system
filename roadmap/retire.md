@@ -278,7 +278,16 @@ Lane-wide rules (binding on every WO):
      documents carry the open-ended fields was not measured.
   DEBT. Five ledger rows are `debt` after this adoption; none transfers; this
   work order does not close while any is a `debt` row:
-  D1 `PatternApprovalInbox` — waits on owner question Q1.
+  D1 `PatternApprovalInbox` — RESOLVED by owner ruling Q1 (2026-10-06,
+     `roadmap/owner-decisions-2026-10-06.md`): canonical at the patterns
+     tier. The `@deprecated` marker, its ledger row and the
+     `.changeset/major-canonical-tree.md` "succeeded by" bullet are removed;
+     nothing retires and no migration is owed (no alias or duplicate
+     exists). Consumers, stated: zero application consumers; the showroom
+     pattern docs preview and the ds-reference behaviour probe (bithire,
+     the-management). Contract: `ApprovalInbox.contract.test.tsx` through the
+     public facade on Classic and Modern, with the Rustic absence refused by
+     name. The surface question is recorded by dated AMENDMENT in WO-RET-06.
   D2 `ComponentExtensions`, `ExtensionHelpers`, `EngineAwareProps.extensions`
      — RECORD: no `docs-engineering` write permission exists for the two
      sha-pinned `component-extensions` blocks
@@ -312,6 +321,8 @@ Lane-wide rules (binding on every WO):
      pass-through and inline row decisions are ported into
      `DecisionInboxSurface`, six showroom sites migrate, the pattern and its
      Classic engine retire (freeze route 2). Unanswered: a debt row remains.
+     ANSWERED 2026-10-06: YES (`roadmap/owner-decisions-2026-10-06.md` §Q1);
+     applied as D1 above.
   Q2 `docs-engineering`: A, permit replacing the two sha-pinned
      `component-extensions` blocks in a separate docs-engineering commit when
      the triple retires; B, the triple stays `reserved-deprecated` until
@@ -570,5 +581,30 @@ Lane-wide rules (binding on every WO):
   **Acceptance** gains: *`node packages/core/scripts/check/boundaries/surfaces/ownership/index.mjs --check` exits 0 and prints the counter `frozen-transferred (Classic + Rustic) → WO-RET-06`, and either (a) the counter reads 0 because the frozen engine files left the package under a dated owner decision, each frozen file edit carrying one engine-freeze `--authorize` entry per file per lot; or (b) a dated owner disposition, recorded in this block as an AMENDMENT, states that the frozen engines keep this debt for as long as they ship, in which case the counter stays published and decrease-only, the rows stop naming this work order, and the disposition names the final authority. No frozen file is edited to lower the counter. The counter is never merged into, or subtracted from, the productive counter. Evidence: the gate output and the id-set digest under `evidence/ret-06-closure/`, sha256 quoted in `done --evidence`.*
   **Do NOT** gains: *Do not treat this transfer as closure of F-86. Do not delete, allowlist or re-key a frozen row to lower the counter. Do not accept a row whose path is not under a frozen engine.*
   **Delegation prompt** gains F-86 in its list of fiches.
+- **AMENDMENT (owner ruling Q1, 2026-10-06; the acceptance above stands, this is added to it)** —
+  Authority: `roadmap/owner-decisions-2026-10-06.md` §Q1, quoted verbatim:
+  "Canonical, reusable capability. No retirement to shrink a census, no
+  duplicate implementation. Its real disposition gets consumers, contract and
+  tests; a redundant alias retires only with migration." WO-RET-01 Q1 routes
+  here: "the surface's row-decision path composes it, or is declared out of
+  scope".
+  Decision: DECLARED OUT OF SCOPE. `DecisionInboxSurface` does not compose
+  `PatternApprovalInbox`, and neither is a duplicate of the other. The
+  surface is a generic queue workspace: rows of any `T` in a `PatternDataTable`
+  with columns, filters, an open set of keyed decisions (`requiresReason`,
+  `confirm`, `loading`, `disabled`), batch decisions per action key and a
+  review rail. The pattern is a compact, embeddable inbox with a fixed item
+  shape (`ApprovalItem`: title, subtitle, amount, risk, submittedAt,
+  slaDeadline), domain grouping, and exactly approve, reject and batch
+  approve. Composing it would bind the surface's generic row to `ApprovalItem`
+  and shrink its decisions to two, losing reason capture and confirmation.
+  Both stay canonical at their own tiers.
+  Acceptance for this amendment: `git grep -n "DecisionInboxSurface" --
+  packages/core/src/components/patterns/workflow/approval-inbox
+  packages/core/contracts/package/deprecations
+  .changeset/major-canonical-tree.md` is empty; the deprecations ledger has
+  no `PatternApprovalInbox` row; `ApprovalInbox.contract.test.tsx` passes.
+  This amendment adds no row, door or finding to the closed scope above, and
+  no ledger row names this work order because of it.
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-06 (Transitional compatibility and transferred closures of the 3.0 line) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-42, F-109, F-111, F-113, F-115, F-84, F-88 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.

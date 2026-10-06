@@ -16,9 +16,10 @@ export type {
 } from './contracts';
 
 /**
- * @deprecated Use `DecisionInboxSurface` instead. This pattern is superseded
- * by the decision-inbox surface which composes DataTable + decision actions.
- * Will be removed in a future major version.
+ * Compact, embeddable approve/reject inbox: items grouped by domain, each with
+ * optional amount, risk and SLA deadline, single approve/reject actions and
+ * batch approve over a selection. Implemented on Classic and Modern; Rustic is
+ * a declared absence.
  */
 export const PatternApprovalInbox = createEngineComponent<ApprovalInboxProps>(
   'PatternApprovalInbox',

@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "8a1536f910749c828dfefa186cadb9cea34879df257e69f5c4f7a33e22e28c9a"
+    "semanticHash": "47b77f31efd759f8973b49beb8d0b98042b552ec76fb80d1393269a4689f2db2"
   },
   "divergentInputs": [
     {
@@ -4079,8 +4079,16 @@
         "sha256": "8b7dbcad3e51761bf1c97f780af95d915b69d6a4678c8065fc1ac13758a21a8d"
       },
       "live": {
-        "bytes": 1053,
-        "sha256": "bbe411239287ba95b81b88ec128e0867b5c7e8848bd6c4379d6c9ef2c337439c"
+        "bytes": 1111,
+        "sha256": "f0aadec45a99db117b29c7a7c2c08907b56e53a52d27f378f1d47fba2d4b3ef1"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/patterns/workflow/approval-inbox/tests/ApprovalInbox.contract.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 5869,
+        "sha256": "b1bf699acb6e2fce593c6ebd5dddf96829bf7f0435ea1a9bd3adb8cc71322e9e"
       }
     },
     {

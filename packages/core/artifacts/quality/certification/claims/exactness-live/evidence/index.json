@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "d869d09730eadf60a4da3cae8e3aeff271fe2f8d9d685a080c6e268bd9051721",
+    "authorityDigest": "9a9517a3e645f613339c5ee5e20123f2956487941a1da474c072de18b794a6ad",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -7135,8 +7135,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1053,
-        "sha256": "bbe411239287ba95b81b88ec128e0867b5c7e8848bd6c4379d6c9ef2c337439c"
+        "bytes": 1111,
+        "sha256": "f0aadec45a99db117b29c7a7c2c08907b56e53a52d27f378f1d47fba2d4b3ef1"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/workflow/approval-inbox/tests/ApprovalInbox.contract.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5869,
+        "sha256": "b1bf699acb6e2fce593c6ebd5dddf96829bf7f0435ea1a9bd3adb8cc71322e9e"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/workflow/approval-inbox/tests/ApprovalInbox.modern-action-focus.test.tsx",
@@ -47715,7 +47723,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "d869d09730eadf60a4da3cae8e3aeff271fe2f8d9d685a080c6e268bd9051721"
+    "digest": "9a9517a3e645f613339c5ee5e20123f2956487941a1da474c072de18b794a6ad"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -122050,8 +122058,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "8a1536f910749c828dfefa186cadb9cea34879df257e69f5c4f7a33e22e28c9a",
-      "8a1536f910749c828dfefa186cadb9cea34879df257e69f5c4f7a33e22e28c9a"
+      "47b77f31efd759f8973b49beb8d0b98042b552ec76fb80d1393269a4689f2db2",
+      "47b77f31efd759f8973b49beb8d0b98042b552ec76fb80d1393269a4689f2db2"
     ],
     "agree": true
   }
