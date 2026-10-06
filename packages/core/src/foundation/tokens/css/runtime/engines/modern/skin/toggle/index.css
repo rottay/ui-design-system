@@ -216,6 +216,19 @@
   transform: translateX(calc(var(--ds-toggle-resolved-track-w) - var(--ds-toggle-resolved-track-h)));
 }
 
+/* An unauthored dot on the canonical primary or error fill takes that fill's paired
+   ink, as the state glyph does; an authored dot or track keeps the public channel. */
+@container style(--ds-toggle-dot-bg: var(--ds-color-white)) and style(--_ds-toggle-fill: var(--ds-color-primary)) {
+  .ds-toggle.ds-toggle--modern [data-part='thumb'] {
+    background-color: var(--ds-color-text-on-primary);
+  }
+}
+@container style(--ds-toggle-dot-bg: var(--ds-color-white)) and style(--_ds-toggle-fill: var(--ds-color-error)) {
+  .ds-toggle.ds-toggle--modern [data-part='thumb'] {
+    background-color: var(--ds-color-on-error);
+  }
+}
+
 /* RTL: the same markup travels toward the inline end, which is negative X. */
 .ds-toggle.ds-toggle--modern[data-checked='true']:dir(rtl) [data-part='thumb'],
 [dir='rtl'] .ds-toggle.ds-toggle--modern[data-checked='true'] [data-part='thumb'] {
