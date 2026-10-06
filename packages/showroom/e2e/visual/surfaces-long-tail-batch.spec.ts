@@ -486,6 +486,12 @@ async function openFilterDisclosure(
     await trigger.click();
     await expect(disclosure).toBeVisible({ timeout: 2_000 });
   }).toPass({ timeout: 30_000 });
+  // The filter panel is a lazy engine component behind a null Suspense fallback:
+  // a cold open commits the surface with only its action row and React reveals
+  // the panel ~300 ms later (the fallback throttle). Measure and capture only
+  // once the panel's own controls are in the surface -- the same selector the
+  // posture measure reads, so the wait and the measure cannot disagree.
+  await expect(disclosure.locator('input, select, [role="combobox"]').first()).toBeVisible();
   return disclosure;
 }
 
