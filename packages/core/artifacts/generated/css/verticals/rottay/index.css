@@ -80526,7 +80526,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 @layer rottay-components {
 /**
- * Assistant skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Assistant skin — engine-agnostic, layered `rottay-components` (facade/entrypoints/base).
  * Home: foundation/tokens/css/presentation/components/skin/assistant.css. The kit has no engine split
  * and no single root: eight independently-exported sub-components
  * (AssistantStatusBadge, StreamingText, TypingIndicator, ToolCallCard,
@@ -80537,10 +80537,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * prop; ConfirmActionCard's controls ride Button's variant prop) and have no
  * rules here.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's base layer, so a layered rule loses to preflight regardless of
- * specificity. Unlayered outranks preflight and still yields to a caller's
- * inline `style`.
+ * Layered at `rottay-components`, which sorts BEFORE `rottay-engines` (the
+ * entrypoint's @layer order), so an engine-layer rule wins ties against these.
  *
  * CARD-ROOTED EXPORTS (P-79 precision): ToolCallCard, PreviewDiffCard, and
  * ConfirmActionCard render a `<Card>` whose root always carries the FORCED

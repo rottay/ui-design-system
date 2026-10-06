@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "2feed751a5b476f4420ba435dae6f8e77a0eef9ed712536d7a455f50209b9cbe",
+    "authorityDigest": "c87f1076e76354aea5748a66dfec5fcd9234f61d9bc287ad1b9fdc19837247dc",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5703680,
-        "sha256": "9a29432c773c98ab087b67917fca524eaeb88719b847593a341fe298d48cc949"
+        "bytes": 5703618,
+        "sha256": "4d20872b6138ba1d299a3733710750fe114797ab22740e2781ddd30ebda213ff"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5069656,
-        "sha256": "c114ff49b885bad033318e7f4e97fc769efc55bf5c8d528028ad1dd8464a7bca"
+        "bytes": 5069594,
+        "sha256": "b730f697dcbbc522748f57dc4045c59ddf0cac09309b2888a7f6455fe8266bfc"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5030891,
-        "sha256": "e2ec8f1640d3697abc84caa42caf1065fb823fdb79ac4a03e51657e6aec01c9b"
+        "bytes": 5030829,
+        "sha256": "5fc862f5d6cadd9a99a79d4c04541ae6da1f63d55ac4ec158958055aff48a294"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5030151,
-        "sha256": "8ad185600e6a1d3c3b0cd85d1d965eba1829de8945c00f10833aa1fa9cb6b84b"
+        "bytes": 5030089,
+        "sha256": "d097677afd7e85d2c004eee49220b17061525addb5d04439ab320934d8035d17"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -27952,8 +27952,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 18661,
-        "sha256": "0093355ba6986dd3622305b2232af229b29159dd0fd2c31552566be5e7d06b71"
+        "bytes": 18599,
+        "sha256": "ce11c1189d890baae687d270364b206b249c9a77a354323253732c114fef0a8e"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css",
@@ -47707,7 +47707,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "2feed751a5b476f4420ba435dae6f8e77a0eef9ed712536d7a455f50209b9cbe"
+    "digest": "c87f1076e76354aea5748a66dfec5fcd9234f61d9bc287ad1b9fdc19837247dc"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -56130,55 +56130,55 @@
       "dot": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 203
+          "line": 201
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 203
+          "line": 201
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 208
+          "line": 206
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 208
+          "line": 206
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 213
+          "line": 211
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 213
+          "line": 211
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 217
+          "line": 215
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 220
+          "line": 218
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 227
+          "line": 225
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 234
+          "line": 232
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 237
+          "line": 235
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 377
+          "line": 375
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 377
+          "line": 375
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css",
@@ -70285,35 +70285,35 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 105
+          "line": 103
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 135
+          "line": 133
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 198
+          "line": 196
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 335
+          "line": 333
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 339
+          "line": 337
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 339
+          "line": 337
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 342
+          "line": 340
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
-          "line": 348
+          "line": 346
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css",
@@ -122042,8 +122042,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "56387a4e49a8f40f4b5fb6efc10d5bc275531638810905bf045a8558c6d31457",
-      "56387a4e49a8f40f4b5fb6efc10d5bc275531638810905bf045a8558c6d31457"
+      "9b12844b5575a9b4a36b692a28b89ad049f930d01aca9095236910b6c12a96ea",
+      "9b12844b5575a9b4a36b692a28b89ad049f930d01aca9095236910b6c12a96ea"
     ],
     "agree": true
   }
