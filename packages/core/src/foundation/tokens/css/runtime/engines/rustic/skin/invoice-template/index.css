@@ -20,6 +20,8 @@
  * standing violation of the DS no-hardcoded-colours rule, and load-bearing: the
  * four `statusColors` backgrounds all assume white text over them. Transcribed
  * byte-exact, NOT fixed; changing it is a visual decision with its own baselines.
+ * Except `sent`: its `--ds-color-primary` fill goes light in dark mode, so its ink
+ * reads the paired `--ds-color-text-on-primary` channel (owner a11y exception).
  * The `--ds-color-*` fallback hexes below (`#e5e7eb`, `#fff`, `#f9fafb`, …) are
  * likewise pre-existing and transcribed verbatim.
  *
@@ -63,6 +65,7 @@
 }
 .ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='sent'] {
   background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, #fff);
 }
 .ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='paid'] {
   background: var(--ds-color-success, #22c55e);

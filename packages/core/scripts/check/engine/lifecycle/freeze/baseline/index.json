@@ -550,6 +550,12 @@
       "reason": "WO-FAM-02 lot FAM02-C3 input-number-namespace-rename (DT-adjudicated): mechanical rename of every --ds-inputnumber-* read to --ds-input-number-*, the one family namespace the vertical chrome emission and neutral theme floors now produce. The single non-textual consequence: the corner-radius floor read inside the Rustic inline --ds-input-number-radius value and the addon corners becomes --ds-input-number-corner-radius (declared in themes/default as var(--ds-radius-md)), because the renamed inline property would otherwise reference itself. No other token, selector, markup or behaviour changes.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css": {
+      "blob": "68462bdbf1196db08620fda541c5ebbae820e50f90a75597e4025214aefc4247",
+      "relocationDigest": "5685a84a13748023cdbdd5c045c663bc77cc1c6fe6461eaf283df28358feba12",
+      "reason": "Owner a11y exception 2026-10-06 (W25-SENT lot A), bounded to ONE selector's ink, no redesign: packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/invoice-template/index.css selector .ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='sent'] gains color: var(--ds-color-text-on-primary, #fff) (the paired ink of its var(--ds-color-primary) fill, which goes light in dark: white SENT 1.26:1 -> 14.23:1 rottay/evnto dark; every light leg and bithire both modes unchanged). Fill, draft/paid/overdue and every other frozen rule byte-identical; additions only (+3/-0, incl. a 2-line header comment).",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/modal/index.css": {
       "blob": "865c7cafeb0230ee9ce554a65582ab211c8dec91024ad508cfa80dbc3b9f4eff",
       "relocationDigest": "90413a69d5434e961e9ada8c406b8e5ce852e54b34351b6cc593d3c489c65016",
