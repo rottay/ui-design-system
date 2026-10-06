@@ -17,6 +17,7 @@
  * @category Overlay
  */
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
+import { isFrozenEngineName } from '@/foundation/contracts/kernel/engine-identity';
 import type { PopoverProps } from './contracts';
 
 export {
@@ -31,10 +32,21 @@ export {
 } from './contracts';
 
 /** Popover component with multi-engine support. No compound sub-components. */
-export const Popover = createEngineComponent<PopoverProps>('Popover', {
-  classic: () => import('./engines/classic'),  // Ant Design Popover
-  modern: () => import('./engines/modern'),     // Token-owned Modern overlay
-  rustic: () => import('./engines/rustic'),      // Vanilla portal
-});
+export const Popover = createEngineComponent<PopoverProps>(
+  'Popover',
+  {
+    classic: () => import('./engines/classic'),  // Ant Design Popover
+    modern: () => import('./engines/modern'),     // Token-owned Modern overlay
+    rustic: () => import('./engines/rustic'),      // Vanilla portal
+  },
+  {
+    // The anchored mode exists only in the Modern engine; a frozen engine
+    // would render its own trigger wrapper and ignore the external anchor.
+    admitProps: ({ anchor }, engine) =>
+      anchor !== undefined && isFrozenEngineName(engine)
+        ? `the anchored mode (\`anchor\`) is implemented by the modern engine only; the frozen "${engine}" engine cannot pin a surface to a caller-owned element. This refusal is development-only.`
+        : undefined,
+  }
+);
 
 export default Popover;

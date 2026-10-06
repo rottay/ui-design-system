@@ -8651,7 +8651,7 @@
    "lane": "architecture",
    "order": 27,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -8661,11 +8661,17 @@
     "audit-2026-09-05"
    ],
    "notes": "Owner decision packet 2026-10-06 (proposals §E-2 approved): a controlled disclosure anchoring to a caller-owned element, tenant-scoped and in-tree (never portalled), reusing the interaction/focus/placement kernel — no second overlay system. Drains by name: collection-workspace filter-dropdown. The API formalizes with an independent debrief before any shared API lands.",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "kimi",
+   "claimedAt": "2026-10-06",
    "doneAt": null,
    "evidence": null,
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-10-06 12:42",
+     "by": "kimi",
+     "note": "2026-10-06 — API debriefed en 3 rondas (REVISE -> narrow REVISE -> N-1/N-2 confirmados) -> implementacion integrada. La ancla externa monta in-tree bajo el tenant root, nunca portal, reusa el kernel de interaccion/foco/placement (sin listener ni math nueva ni layer kind nueva). La row del filter-dropdown deja el ownership counter por nombre (2033/1334). La colision 0px que el tile review rechazo se reparo de raiz (selector muerto ancestor-scoped -> scoped al content box de la disclosure, canal gobernado, fallback literal retirado; census de paint: solo cambia dentro de la disclosure abierta). 4 celdas nuevas (rottay/bithire x LTR/RTL) con tile review ACCEPT (14/14 en la wave). Ships dark: el unico adoptante es el collection workspace. Docs owed a la docs window (seccion 7-4 + F-4 + F-8 del review)."
+    }
+   ]
   }
  ],
  "traceability": {

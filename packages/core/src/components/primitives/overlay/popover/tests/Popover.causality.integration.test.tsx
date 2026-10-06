@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest';
 
 import { readAnatomyBones } from '@/components/primitives/feedback/skeleton/runtime/anatomy-renderer';
 import { Popover } from '../engines/modern';
-import type { PopoverProps } from '../contracts';
+import type { PopoverTriggerProps } from '../contracts';
 import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
@@ -30,7 +30,7 @@ import {
  * afterwards or inheriting one from the probe host.
  */
 function popoverMarkup(
-  props: Partial<PopoverProps> = {},
+  props: Partial<PopoverTriggerProps> = {},
   direction: 'ltr' | 'rtl' = 'ltr',
 ): string {
   const host = document.createElement('div');

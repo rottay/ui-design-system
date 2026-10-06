@@ -761,6 +761,7 @@ describe('CollectionWorkspaceSurface', () => {
           })}
         />
       </ResponsiveContext.Provider>,
+      { engine: 'modern' },
     );
 
     expect(screen.queryByText('Lifecycle status')).not.toBeInTheDocument();
@@ -772,12 +773,28 @@ describe('CollectionWorkspaceSurface', () => {
     fireEvent.click(trigger);
     let dialog = await screen.findByRole('dialog', { name: 'Advanced filters' });
     expect(dialog).toHaveAttribute('id', trigger.getAttribute('aria-controls'));
-    expect(dialog).toHaveAttribute('data-part', 'filter-dropdown-surface');
+    expect(dialog).toHaveAttribute('data-part', 'surface');
+    expect(dialog).toHaveClass('ds-collection-workspace__filter-dropdown');
     expect(dialog).toHaveStyle({ position: 'fixed' });
-    const statusSelect = within(dialog).getByRole('combobox');
-    await waitFor(() => expect(statusSelect).toHaveFocus());
+    // Fixed measure: the instance maximum follows the minimum the skin lands
+    // from the workspace width token (computed width: the WO-ARC-23 visual cell).
+    expect(dialog.style.getPropertyValue('--ds-popover-instance-max-width')).toBe(
+      'var(--ds-popover-min-width)',
+    );
+    // Cold open: the lazily routed filter fields mount after the actions, so
+    // focus lands inside the dialog; the warm re-open below pins the first control.
+    const statusSelect = await within(dialog).findByRole('combobox');
+    await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true));
 
-    fireEvent.change(statusSelect, { target: { value: 'active' } });
+    // The nested Select's portalled listbox sits above the disclosure: choosing
+    // from it must not light-dismiss the parent.
+    fireEvent.click(statusSelect);
+    const activeOption = await screen.findByRole('option', { name: 'Active' });
+    fireEvent.pointerDown(activeOption);
+    fireEvent.mouseDown(activeOption);
+    fireEvent.click(activeOption);
+    expect(screen.getByRole('dialog', { name: 'Advanced filters' })).toBeInTheDocument();
+    await waitFor(() => expect(statusSelect).toHaveTextContent('Active'));
     fireEvent.keyDown(document, { key: 'Escape' });
     await waitFor(() => {
       expect(screen.queryByRole('dialog', { name: 'Advanced filters' }))
@@ -788,10 +805,10 @@ describe('CollectionWorkspaceSurface', () => {
 
     fireEvent.click(trigger);
     dialog = await screen.findByRole('dialog', { name: 'Advanced filters' });
-    expect(within(dialog).getByRole<HTMLSelectElement>('combobox').value).toBe('');
-    fireEvent.change(within(dialog).getByRole('combobox'), {
-      target: { value: 'inactive' },
-    });
+    await waitFor(() => expect(within(dialog).getByRole('combobox')).toHaveFocus());
+    expect(within(dialog).getByRole('combobox')).not.toHaveTextContent('Active');
+    fireEvent.click(within(dialog).getByRole('combobox'));
+    fireEvent.click(await screen.findByRole('option', { name: 'Inactive' }));
     fireEvent.click(within(dialog).getByRole('button', { name: 'Apply filters' }));
 
     await waitFor(() => {
@@ -800,6 +817,34 @@ describe('CollectionWorkspaceSurface', () => {
     });
     expect(onFilterChange).toHaveBeenCalledTimes(1);
     expect(onFilterChange).toHaveBeenCalledWith({ status: 'inactive' });
+  });
+
+  it('keeps tablet filters inline under a forced frozen engine, which has no anchored disclosure', async () => {
+    const { container } = renderSurface(
+      <ResponsiveContext.Provider value={TABLET_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            adaptive: { tablet: { filters: 'dropdown' } },
+            controls: {
+              filters: [
+                {
+                  key: 'status',
+                  label: 'Lifecycle status',
+                  type: 'select',
+                  options: [{ label: 'Active', value: 'active' }],
+                },
+              ],
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+      { engine: 'rustic' },
+    );
+
+    expect(await screen.findByText('Lifecycle status')).toBeInTheDocument();
+    expect(container.querySelector('[aria-haspopup="dialog"]')).toBeNull();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(container.querySelector('[data-anchor-scope="external"]')).toBeNull();
   });
 
   it('exposes the same anchored dropdown contract in non-premium tablet mode', async () => {
@@ -821,6 +866,7 @@ describe('CollectionWorkspaceSurface', () => {
           })}
         />
       </ResponsiveContext.Provider>,
+      { engine: 'modern' },
     );
 
     expect(screen.queryByPlaceholderText('Filter candidates')).not.toBeInTheDocument();
@@ -830,8 +876,9 @@ describe('CollectionWorkspaceSurface', () => {
 
     fireEvent.click(trigger);
     const dialog = await screen.findByRole('dialog', { name: 'Advanced filters' });
-    expect(dialog).toHaveAttribute('data-part', 'filter-dropdown-surface');
-    expect(within(dialog).getByPlaceholderText('Filter candidates')).toBeInTheDocument();
+    expect(dialog).toHaveAttribute('data-part', 'surface');
+    expect(dialog).toHaveClass('ds-collection-workspace__filter-dropdown');
+    expect(await within(dialog).findByPlaceholderText('Filter candidates')).toBeInTheDocument();
 
     fireEvent.click(within(dialog).getByRole('button', { name: 'Cancel' }));
     await waitFor(() => {
@@ -876,7 +923,7 @@ describe('CollectionWorkspaceSurface', () => {
       );
     }
 
-    renderSurface(<PostureTransitionHarness />);
+    renderSurface(<PostureTransitionHarness />, { engine: 'modern' });
     const trigger = await screen.findByRole('button', { name: /Advanced filters/ });
     fireEvent.click(trigger);
     expect(screen.getAllByText('Lifecycle status').length).toBeGreaterThan(0);
@@ -888,8 +935,7 @@ describe('CollectionWorkspaceSurface', () => {
       { timeout: 1000 },
     );
     await waitFor(() => {
-      expect((within(dialog).getByRole('combobox') as HTMLSelectElement).value)
-        .toBe('active');
+      expect(within(dialog).getByRole('combobox')).toHaveTextContent('Active');
     });
   });
 

@@ -911,9 +911,11 @@
   min-inline-size: 0;
 }
 
-.ds-surface.ds-collection-workspace
-  .ds-collection-workspace__filter-dropdown-actions[data-part="filter-dropdown-actions"] {
-  margin-block-start: var(--ds-spacing-md, 16px);
+/* The filter disclosure mounts beside the workspace root, never inside it, so
+   its action row is spaced from the disclosure's own content box. */
+.ds-collection-workspace__filter-dropdown-content[data-part="filter-dropdown-content"]
+  > .ds-collection-workspace__filter-dropdown-actions[data-part="filter-dropdown-actions"] {
+  margin-block-start: var(--ds-spacing-md);
 }
 
 .ds-surface.ds-collection-workspace
@@ -994,58 +996,19 @@
   justify-content: center;
 }
 
-/* Fixed, in-tree filter disclosure. Its standalone scope is intentional: the
-   panel is a sibling of the clipped workspace shell rather than its child. */
-.ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"][data-open="true"] {
-  box-sizing: border-box;
-  /* Stay on the dropdown tier so Select/DatePicker portals (mounted later on
-     the same or a higher tier) can paint above this parent disclosure. */
-  z-index: var(--ds-z-dropdown, var(--ds-z-index-dropdown, 1000));
-  inline-size: min(
-    var(--ds-collection-filter-dropdown-width, 22.5rem),
-    calc(100dvw - (var(--ds-spacing-3, 0.75rem) * 2))
-  );
-  min-inline-size: 0;
-  overflow: auto;
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
-  padding: var(
+/* Filter disclosure measure. The anchored Popover owns paint, band, focus
+   signature and motion; the workspace lands its fixed measure and padding
+   through the popover input tokens the skin reads on the surface. */
+.ds-collection-workspace__filter-dropdown[data-part="surface"] {
+  --ds-popover-min-width: var(--ds-collection-filter-dropdown-width, 22.5rem);
+  --ds-popover-bordered-padding-block: var(
     --ds-collection-filter-dropdown-padding,
     var(--ds-popover-padding, var(--ds-spacing-md, 1rem))
   );
-  color: var(--ds-popover-content-color, var(--ds-color-text-primary));
-  background: var(--ds-popover-bg, var(--ds-surface-card));
-  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-popover-border, var(--ds-color-border-secondary));
-  border-radius: var(--ds-popover-radius, var(--ds-radius-lg));
-  box-shadow: var(--ds-popover-shadow, var(--ds-elevation-3));
-  -webkit-overflow-scrolling: touch;
-}
-
-.ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"][data-positioned="false"] {
-  pointer-events: none;
-  opacity: 0;
-}
-
-/* The surface takes focus by script when it opens with nothing focusable
-   inside, so it wears the tenant focus signature. The signature shares
-   box-shadow with the popover elevation; a `none` elevation would void the
-   list. */
-.ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"]:focus-visible {
-  outline: var(--ds-focus-ring-width) solid transparent;
-  outline-offset: var(--ds-focus-ring-offset);
-  box-shadow: var(--ds-focus-ring);
-}
-
-@container not (style(--ds-popover-shadow: none) or style(--ds-elevation-3: none)) {
-  .ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"]:focus-visible {
-    box-shadow: var(--ds-focus-ring), var(--ds-popover-shadow, var(--ds-elevation-3));
-  }
-}
-
-@supports (inline-size: 100dvw) {
-  .ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"][data-open="true"] {
-    max-inline-size: calc(100dvw - (var(--ds-spacing-3, 0.75rem) * 2));
-  }
+  --ds-popover-bordered-padding-inline: var(
+    --ds-collection-filter-dropdown-padding,
+    var(--ds-popover-padding, var(--ds-spacing-md, 1rem))
+  );
 }
 
 /* -------------------------------------------------------------------------
@@ -1085,8 +1048,7 @@
     outline: 2px solid Highlight;
   }
 
-  .ds-collection-page-size-control:has(.ds-collection-page-size-control__select:focus-visible),
-  .ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"]:focus-visible {
+  .ds-collection-page-size-control:has(.ds-collection-page-size-control__select:focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
@@ -1094,12 +1056,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-collection-workspace__filter-dropdown[data-part="filter-dropdown-surface"] {
-    animation: none !important;
-    scroll-behavior: auto;
-    transition: none !important;
-  }
-
   .ds-surface.ds-collection-workspace [data-part="preview-accordion-icon"] {
     transition: none;
   }

@@ -28,6 +28,13 @@
  *   a real destination stays user-owned and is never hijacked.
  * - The popover is a non-modal lightweight layer: it joins the shared Escape
  *   route but never locks page scroll.
+ *
+ * Anchored mode (`anchor`): the trigger is caller-owned, so nothing is cloned
+ * or wrapped and no reason handler opens or closes the surface -- only Escape,
+ * an outside press and the controlled `open` prop do. The surface renders
+ * in-tree at the mount point in both positioning branches (never portalled),
+ * inherits its tenant scope, takes the dropdown band so nested field panels
+ * stack above it, and unmounts after its exit.
  */
 
 import React, {
@@ -119,6 +126,64 @@ function focusFirstWithin(
   const target =
     root.querySelector<HTMLElement>(selector) ?? (fallbackToRoot ? root : null);
   target?.focus({ preventScroll: true });
+}
+
+/**
+ * Returns focus to an anchor: the anchor itself when it is focusable (an
+ * external anchor IS the button), otherwise its first focusable descendant.
+ */
+function focusAnchor(anchor: HTMLElement | null): void {
+  if (!anchor || !anchor.isConnected) return;
+  const target = anchor.matches(TRIGGER_FOCUSABLE_SELECTOR)
+    ? anchor
+    : anchor.querySelector<HTMLElement>(TRIGGER_FOCUSABLE_SELECTOR);
+  target?.focus({ preventScroll: true });
+}
+
+/** An anchored surface has no trigger reasons: nothing opens or closes it but the caller. */
+const NO_TRIGGERS: ReadonlySet<PopoverTrigger> = new Set();
+
+/** The anchored mode reads only the locale from the anchor's ancestors. */
+const ANCHORED_LOCALE_ATTRIBUTES = ['dir', 'lang'];
+
+const SCOPE_ATTRIBUTES = [
+  'dir',
+  'lang',
+  'class',
+  'style',
+  'data-theme',
+  'data-engine',
+  'data-density',
+  'data-tenant',
+  'data-vertical',
+];
+
+/**
+ * The first ancestor of `start` that becomes the containing block of a
+ * fixed-positioned descendant, which would misplace the measured branch.
+ */
+function findFixedContainingBlock(start: HTMLElement | null): HTMLElement | null {
+  for (let node = start; node && node !== document.documentElement; node = node.parentElement) {
+    const computed = window.getComputedStyle(node);
+    const read = (property: string): string => computed.getPropertyValue(property).trim();
+    const transform = read('transform');
+    const filter = read('filter');
+    const perspective = read('perspective');
+    const contain = read('contain');
+    const containerType = read('container-type');
+    const willChange = read('will-change');
+    if (
+      (transform && transform !== 'none') ||
+      (filter && filter !== 'none') ||
+      (perspective && perspective !== 'none') ||
+      /\b(layout|paint|strict|content)\b/u.test(contain) ||
+      (containerType && containerType !== 'normal') ||
+      /\b(transform|filter)\b/u.test(willChange)
+    ) {
+      return node;
+    }
+  }
+  return null;
 }
 
 function normalizeTriggers(
@@ -335,7 +400,13 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       style,
       overlayClassName,
       overlayStyle,
+      anchor,
+      id: anchoredId,
+      initialFocus = 'first-control',
     } = props;
+    const anchored = anchor !== undefined;
+    const showArrow = anchored ? false : arrow;
+    const destroyOnHide = anchored ? true : destroyTooltipOnHide;
 
     const [internalOpen, setInternalOpen] = useState(defaultOpen);
     const isControlled = controlledOpen !== undefined;
@@ -343,7 +414,9 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     const [present, setPresent] = useState(Boolean(isOpen));
     const [positioningActive, setPositioningActive] = useState(Boolean(isOpen));
     const [mounted, setMounted] = useState(false);
-    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const hostRef = useRef<HTMLDivElement | null>(null);
+    const guardedOpenRef = useRef(false);
     const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
     // The surface's own focus only: focus is parked on it by script when its
     // content holds no control, so the platform's answer is the one reading of
@@ -368,7 +441,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
 
     const surfaceId = useId();
     const titleId = `${surfaceId}-title`;
-    const triggers = normalizeTriggers(trigger);
+    const triggers = anchored ? NO_TRIGGERS : normalizeTriggers(trigger);
     const enterTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const leaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const exitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -403,14 +476,14 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         () => {
           exitTimeoutRef.current = null;
           setPositioningActive(false);
-          if (destroyTooltipOnHide) setPresent(false);
+          if (destroyOnHide) setPresent(false);
         },
         resolveExitFallbackMs(surfaceEl, POPOVER_EXIT_FALLBACK)
       );
       return () => {
         if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);
       };
-    }, [destroyTooltipOnHide, isOpen, present, surfaceEl]);
+    }, [destroyOnHide, isOpen, present, surfaceEl]);
 
     useEffect(
       () => () => {
@@ -423,12 +496,23 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       []
     );
 
+    // Anchored mode: the caller's ref is re-read on every commit while open,
+    // so a ref re-pointed between two elements re-pins without a re-open.
+    useLayoutEffect(() => {
+      if (!anchored || !isOpen) return;
+      const current = anchor?.current ?? null;
+      const next = current && current.isConnected ? current : null;
+      setAnchorEl((previous) => (previous === next ? previous : next));
+    });
+
     useLayoutEffect(() => {
       if (!anchorEl || typeof window === 'undefined') return undefined;
       const update = (): void => {
         const locale = readLocaleContext(anchorEl, false);
         setDirection(locale.direction);
         setLanguage(locale.language);
+        // An in-tree surface inherits its scope; only the portal branch re-stamps it.
+        if (anchored) return;
         setPortalScope(readPopoverPortalScope(anchorEl));
         setPortalVariables(readDsPortalVariables(anchorEl));
       };
@@ -445,22 +529,14 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       while (owner) {
         observer?.observe(owner, {
           attributes: true,
-          attributeFilter: [
-            'dir',
-            'lang',
-            'class',
-            'style',
-            'data-theme',
-            'data-engine',
-            'data-density',
-            'data-tenant',
-            'data-vertical',
-          ],
+          attributeFilter: anchored ? ANCHORED_LOCALE_ATTRIBUTES : SCOPE_ATTRIBUTES,
         });
         owner = owner.parentElement;
       }
       return () => observer?.disconnect();
-    }, [anchorEl]);
+    }, [anchored, anchorEl]);
+
+    const anchorReady = !anchored || Boolean(anchorEl?.isConnected);
 
     const requestOpen = useCallback(
       (nextOpen: boolean) => {
@@ -522,7 +598,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     const handleEscape = useCallback(() => {
       closeAll();
       suppressNextFocusRef.current = true;
-      if (anchorEl) focusFirstWithin(anchorEl, TRIGGER_FOCUSABLE_SELECTOR);
+      focusAnchor(anchorEl);
       focusResetTimeoutRef.current = setTimeout(() => {
         suppressNextFocusRef.current = false;
         focusResetTimeoutRef.current = null;
@@ -543,10 +619,14 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     // `modal: true` so a nested popover blocks lower dialogs from consuming
     // the same key press; they take no scroll lock and no focus restore.
     const overlay = useFieldOverlay({
-      kind: 'popover',
+      // Literal kinds by design: the adoption census reads the declared kind
+      // from source. Anchored stays `anchored` while its anchor is missing.
+      ...(anchored
+        ? { kind: 'dropdown' as const, surface: 'anchored' as const }
+        : { kind: 'popover' as const }),
       open: Boolean(isOpen),
       anchor: anchorEl,
-      panel: surfaceEl,
+      panel: anchorReady ? surfaceEl : null,
       measure: positioningActive,
       placement: physicalPlacement,
       // ONE direction for this instance: the anchor context read above, which
@@ -584,6 +664,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         );
         const resolvedLogical = toLogicalPlacement(resolvedPhysical, direction);
         setResolvedPlacement(resolvedLogical);
+        if (anchored) return;
         setArrowOffset(
           resolveArrowOffset(resolvedLogical, anchorEl, surfaceEl, direction)
         );
@@ -614,6 +695,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       preferredOverlayPlacement,
       overlay.positionStyle.left,
       overlay.positionStyle.top,
+      anchored,
       surfaceEl,
     ]);
 
@@ -658,8 +740,13 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       }
       const surface = surfaceEl;
       if (!surface || didInitialFocusRef.current) return undefined;
-      if (!activeReasonsRef.current.has('click')) return undefined;
-      if (lastPointerModalityRef.current === 'touch') return undefined;
+      if (anchored) {
+        // A controlled disclosure declares its landing instead of sniffing activation.
+        if (initialFocus === 'none') return undefined;
+      } else {
+        if (!activeReasonsRef.current.has('click')) return undefined;
+        if (lastPointerModalityRef.current === 'touch') return undefined;
+      }
       if (typeof window === 'undefined') return undefined;
       didInitialFocusRef.current = true;
       let handOffFrame: number | null = null;
@@ -695,6 +782,10 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         if (!requestedOpenRef.current || !surface.isConnected) return;
         const active = document.activeElement;
         if (active && surface.contains(active)) return;
+        if (anchored && initialFocus === 'surface') {
+          surface.focus({ preventScroll: true });
+          return;
+        }
         focusFirstWithin(surface, SURFACE_FOCUSABLE_SELECTOR, true);
         if (
           document.activeElement !== surface ||
@@ -713,7 +804,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         window.cancelAnimationFrame(frame);
         stopHandOff();
       };
-    }, [isOpen, surfaceEl]);
+    }, [anchored, initialFocus, isOpen, surfaceEl]);
 
     // Focus ownership, return: closing paths beyond Escape (light dismiss,
     // controlled close, blur-driven hide, destroy-on-hide) must not strand
@@ -725,9 +816,74 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         focusInsideSurfaceRef.current ||
         Boolean(surfaceEl?.contains(document.activeElement));
       focusInsideSurfaceRef.current = false;
-      if (!focusWasInside || !anchorEl) return;
-      focusFirstWithin(anchorEl, TRIGGER_FOCUSABLE_SELECTOR);
+      if (!focusWasInside) return;
+      focusAnchor(anchorEl);
     }, [anchorEl, isOpen, surfaceEl]);
+
+    const ownAnchorName = anchorAttrs['data-ds-anchor'];
+
+    // Development-only guards for the anchored mode. Read-only: they warn and
+    // never move, listen or position anything.
+    useLayoutEffect(() => {
+      if (process.env.NODE_ENV === 'production') return;
+      if (!anchored || !isOpen || !anchorEl) return;
+      const registered = anchorEl.style.getPropertyValue('anchor-name').trim();
+      if (registered && registered !== ownAnchorName) {
+        console.warn(
+          `[Popover] the anchor already carries anchor-name "${registered}" from another overlay. ` +
+            'Both overlays register and release the same property, so one will strip the other.'
+        );
+      }
+    }, [anchored, anchorEl, isOpen, ownAnchorName]);
+
+    useEffect(() => {
+      if (process.env.NODE_ENV === 'production' || !anchored) return;
+      if (!isOpen) {
+        guardedOpenRef.current = false;
+        return;
+      }
+      const current = anchor?.current ?? null;
+      if (!current || !current.isConnected) {
+        console.warn(
+          '[Popover] the anchored surface is open but its anchor is missing or detached; ' +
+            'the surface is withheld until the anchor ref points at a connected element.'
+        );
+        return;
+      }
+      if (guardedOpenRef.current || !anchorEl || !surfaceEl) return;
+      guardedOpenRef.current = true;
+      const scopeMismatch =
+        surfaceEl.closest('[data-ds-root]') !== anchorEl.closest('[data-ds-root]') ||
+        surfaceEl.closest('[data-tenant]') !== anchorEl.closest('[data-tenant]');
+      if (scopeMismatch) {
+        console.warn(
+          '[Popover] the anchored surface is mounted outside its anchor\'s DS/tenant scope ' +
+            '(it is probably portalled by the caller). Mount it in the anchor\'s tree so it ' +
+            'inherits the tenant scope.'
+        );
+      }
+      const containingBlock = findFixedContainingBlock(
+        hostRef.current?.parentElement ?? null
+      );
+      if (containingBlock) {
+        console.warn(
+          '[Popover] an ancestor of the anchored surface establishes a containing block for ' +
+            'fixed descendants (transform, filter, perspective, contain, container-type or ' +
+            'will-change), so the measured position will be offset. Mount the Popover outside it.',
+          containingBlock
+        );
+      }
+    }, [anchor, anchored, anchorEl, isOpen, surfaceEl]);
+
+    const setSurfaceRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        setSurfaceEl(node);
+        if (!anchored) return;
+        if (typeof ref === 'function') ref(node);
+        else if (ref) ref.current = node;
+      },
+      [anchored, ref]
+    );
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>): void => {
       if (!triggers.has('click')) return;
@@ -830,20 +986,17 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     };
 
     const resolvedRole = (role ?? 'dialog') as PopoverRole;
-    const describedTrigger = describeTrigger(
-      children,
-      surfaceId,
-      Boolean(isOpen),
-      resolvedRole
-    );
+    const describedTrigger = anchored
+      ? null
+      : describeTrigger(children, surfaceId, Boolean(isOpen), resolvedRole);
     const arrowCentered =
-      typeof arrow === 'object' ? arrow.pointAtCenter : false;
+      typeof showArrow === 'object' ? showArrow.pointAtCenter : false;
 
     const surfaceNode = present && mounted ? (
       <div
-        ref={setSurfaceEl}
+        ref={setSurfaceRef}
         {...layerProps}
-        id={surfaceId}
+        id={anchored ? anchoredId : surfaceId}
         role={resolvedRole}
         aria-modal={resolvedRole === 'dialog' ? false : undefined}
         aria-label={title || ariaLabelledBy ? undefined : ariaLabel}
@@ -865,17 +1018,17 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         }
         data-variant={recipe}
         data-custom-max-width={maxWidth === undefined ? undefined : 'true'}
-        data-density={density ?? portalScope['data-density']}
+        data-density={anchored ? density : density ?? portalScope['data-density']}
         data-has-title={Boolean(title)}
-        data-has-arrow={Boolean(arrow)}
+        data-has-arrow={Boolean(showArrow)}
         data-arrow-centered={arrowCentered ? 'true' : 'false'}
         data-arrow-tracked={arrowOffset ? 'true' : 'false'}
-        data-layer-kind="popover"
+        data-layer-kind={anchored ? 'dropdown' : 'popover'}
         data-ds-position-strategy={strategy}
         className={overlayClassName || undefined}
         style={surfaceStyle}
-        onPointerEnter={handlePointerEnter}
-        onPointerLeave={handlePointerLeave}
+        onPointerEnter={anchored ? undefined : handlePointerEnter}
+        onPointerLeave={anchored ? undefined : handlePointerLeave}
         onFocus={(event) => {
           if (event.target === event.currentTarget) {
             setSurfaceFocus({
@@ -883,13 +1036,13 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
               focusVisible: event.currentTarget.matches(':focus-visible'),
             });
           }
-          handleFocus();
+          if (!anchored) handleFocus();
         }}
         onBlur={(event) => {
           if (event.target === event.currentTarget) {
             setSurfaceFocus({ focused: false, focusVisible: false });
           }
-          handleBlur(event);
+          if (!anchored) handleBlur(event);
         }}
         onAnimationEnd={(event) => {
           if (event.target !== event.currentTarget || isOpen) return;
@@ -898,7 +1051,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
             exitTimeoutRef.current = null;
           }
           setPositioningActive(false);
-          if (destroyTooltipOnHide) setPresent(false);
+          if (destroyOnHide) setPresent(false);
         }}
       >
         {title ? (
@@ -907,9 +1060,27 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           </div>
         ) : null}
         <div data-part="body">{content}</div>
-        {arrow ? <span data-part="arrow" aria-hidden="true" /> : null}
+        {showArrow ? <span data-part="arrow" aria-hidden="true" /> : null}
       </div>
     ) : null;
+
+    if (anchored) {
+      // Box-less host so the Modern skin's trigger > surface keys land; the
+      // surface stays here, in-tree, in both positioning branches, and is
+      // withheld while its anchor is missing.
+      return (
+        <div
+          ref={hostRef}
+          className="ds-popover ds-popover--modern"
+          data-part="trigger"
+          data-anchor-scope="external"
+          data-open={isOpen ? 'true' : 'false'}
+          data-density={density}
+        >
+          {anchorReady ? surfaceNode : null}
+        </div>
+      );
+    }
 
     return (
       <div

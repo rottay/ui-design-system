@@ -443,3 +443,113 @@ for (const fixture of FIXTURES) {
     });
   }
 }
+
+// ---------------------------------------------------------------------------
+// WO-ARC-23 -- opened-state evidence for the collection workspace's tablet
+// filter disclosure (the anchored Popover). Modern only: a forced frozen
+// engine keeps the filters inline, a declared absence pinned by unit tests.
+// Both ceremony grounds, LTR and RTL. The geometry and in-tree assertions run
+// before the capture, so a portalled or mis-measured panel cannot be accepted.
+// ---------------------------------------------------------------------------
+
+const DISCLOSURE_DIRECTIONS = ['ltr', 'rtl'] as const;
+
+async function openFilterDisclosure(
+  page: Page,
+  fixture: Fixture,
+  direction: (typeof DISCLOSURE_DIRECTIONS)[number],
+): Promise<Locator> {
+  await page.setViewportSize({ width: 820, height: 1180 });
+  await page.clock.setFixedTime(new Date('2026-07-14T12:00:00.000Z'));
+  const rtl = direction === 'rtl' ? '&rtl=1' : '';
+  await page.goto(
+    `/probe/whitelabel-torture?fixture=${fixture}&engine=modern&w=768&filterDisclosure=1${rtl}`,
+    { waitUntil: 'domcontentloaded' },
+  );
+  await expectHydrated(page);
+  await page.waitForFunction(() => document.documentElement.getAttribute('data-engine') === 'modern');
+  await page.evaluate(() => document.fonts.ready);
+  const ground = FIXTURES.find((candidate) => candidate.id === fixture)?.ground ?? 'dark';
+  await waitForGroundPaint(page, ground);
+
+  const section = page.locator('[data-testid="probe-collection-filter-disclosure"]');
+  await section.waitFor({ timeout: 30_000 });
+  const trigger = section.locator('button[aria-haspopup="dialog"][aria-controls]').first();
+  const disclosure = section.locator('[data-anchor-scope="external"] > [role="dialog"]');
+
+  // The probe may hydrate in the phone posture first (sheet) and settle into
+  // the tablet posture later; retry until the anchored disclosure is the one open.
+  await expect(async () => {
+    if (await page.locator('[role="dialog"]').first().isVisible()) {
+      await page.keyboard.press('Escape');
+    }
+    await trigger.click();
+    await expect(disclosure).toBeVisible({ timeout: 2_000 });
+  }).toPass({ timeout: 30_000 });
+  return disclosure;
+}
+
+for (const fixture of FIXTURES) {
+  for (const direction of DISCLOSURE_DIRECTIONS) {
+    test(`${fixture.id} (${fixture.ground}) / WO-ARC-23 filter disclosure / modern / ${direction}: opened in-tree`, async ({ page }) => {
+      test.setTimeout(120_000);
+      const disclosure = await openFilterDisclosure(page, fixture.id, direction);
+
+      await expect(disclosure).toHaveAttribute('data-part', 'surface');
+      await expect(disclosure).toHaveAttribute('data-layer-kind', 'dropdown');
+      await expect(disclosure).toHaveClass(/ds-collection-workspace__filter-dropdown/);
+      const posture = await disclosure.evaluate((element) => {
+        const surface = element as HTMLElement;
+        const style = getComputedStyle(surface);
+        return {
+          portalled: surface.closest('[data-rottay-portal]') !== null,
+          tenantRoot: surface.closest('[data-tenant]') === document.querySelector('[data-tenant]'),
+          inlineSize: surface.getBoundingClientRect().width,
+          // The workspace lands its measure as the popover minimum and the
+          // instance maximum, so the surface is fixed at the computed minimum.
+          expectedInlineSize: Number.parseFloat(style.minInlineSize),
+          maxInlineSize: Number.parseFloat(style.maxInlineSize),
+          dir: surface.getAttribute('dir'),
+          strategy: surface.getAttribute('data-ds-position-strategy'),
+          ...(() => {
+            // The action row must clear the last filter control by the governed
+            // spacing channel; a 0 px collision must never become a baseline.
+            const actions = surface.querySelector<HTMLElement>('[data-part="filter-dropdown-actions"]');
+            const controls = Array.from(
+              surface.querySelectorAll<HTMLElement>('input, select, [role="combobox"]'),
+            ).filter((control) => !actions?.contains(control));
+            const last = controls[controls.length - 1];
+            const probe = document.createElement('div');
+            probe.style.blockSize = 'var(--ds-spacing-md)';
+            surface.append(probe);
+            const spacing = probe.getBoundingClientRect().height;
+            probe.remove();
+            return {
+              actionsGap:
+                actions && last
+                  ? actions.getBoundingClientRect().top - last.getBoundingClientRect().bottom
+                  : null,
+              spacing,
+            };
+          })(),
+        };
+      });
+      expect(posture.portalled, 'the anchored disclosure never crosses a portal').toBe(false);
+      expect(posture.tenantRoot, 'the surface inherits the tenant root it is mounted under').toBe(true);
+      expect(posture.strategy).toMatch(/^(anchor-css|js)$/);
+      expect(posture.expectedInlineSize).toBeGreaterThan(0);
+      expect(Math.abs(posture.maxInlineSize - posture.expectedInlineSize)).toBeLessThanOrEqual(1);
+      expect(Math.abs(posture.inlineSize - posture.expectedInlineSize)).toBeLessThanOrEqual(1);
+      expect(posture.dir).toBe(direction);
+      expect(posture.spacing).toBeGreaterThan(0);
+      expect(posture.actionsGap, 'the action row clears the last filter control').not.toBeNull();
+      expect(Math.abs((posture.actionsGap ?? 0) - posture.spacing)).toBeLessThanOrEqual(1);
+
+      await waitForSettled(page, disclosure);
+      await expect(page).toHaveScreenshot(
+        `${fixture.id}-collection-filter-disclosure-modern-${direction}.png`,
+        { maxDiffPixelRatio: 0.0005 },
+      );
+    });
+  }
+}

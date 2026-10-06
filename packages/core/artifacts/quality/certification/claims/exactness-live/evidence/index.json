@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "790811c8b9c67c2636439039050ce4544e261261db7c09b4bfd43d2b4fa3e713",
+    "authorityDigest": "903cf00c54c58ea2a51ba32e82b5b2dc15f4ccf8f55ee9a10130ba70b738fc83",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5704766,
-        "sha256": "b3aca27fa7c26e9d8ab4cb8ca41788fc887003613e3b1c43c750bf1a62136ce3"
+        "bytes": 5703157,
+        "sha256": "2e853a6098c3a42f5a0f8ec3132d882820a5836209a40f41e6662b805de1c5b5"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5070742,
-        "sha256": "b26d0f76cb362e26b35da4876ded5733d6f5e70b1bf920b1fe61f218b3715780"
+        "bytes": 5069133,
+        "sha256": "6bc1800bd9c9d0f551fb93486fd85f4c8e2de517aae60aaeac8fd5f80ecf307c"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5031935,
-        "sha256": "6c4abe634b10842d30874bb5d35e90daf4718e0f83cf1ff6ae7e69c334113b02"
+        "bytes": 5030326,
+        "sha256": "a122a54a504ba76db50b4c43fdd8163b178b2c3691ca6d7421c7eb48cbf4a068"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5031195,
-        "sha256": "69ecf92bda0dbd12858ada257476ed4f16765429a21a8a6861dd2bad8d175a9e"
+        "bytes": 5029586,
+        "sha256": "8038be5d1af3bae097d10826a788728556a1a20654978810af2798c3c51ece58"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -20168,8 +20168,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 7459,
-        "sha256": "f6458ad27cbc73ec45c7c29db94805edfb6f3285b727e8bf6cef12a27b74be6e"
+        "bytes": 9041,
+        "sha256": "82b8d4fdd1f9ad8f5cdb4a797d90c7694d4c8c4f0bcfbf9f232975433f2eebd2"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/engines/classic/index.tsx",
@@ -20190,8 +20190,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 36867,
-        "sha256": "a0159176b76d72a4d6ab0619e0ab9f98e1e847910a986728a8c8d86106367249"
+        "bytes": 44058,
+        "sha256": "c7abea0bd45651b8993f05791d1c0d05e3ce86fe8b3d8b0ef5b1a81a537b37c7"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/engines/rustic/index.tsx",
@@ -20212,8 +20212,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 1298,
-        "sha256": "41fb962d0c10f287b5e6ac0c57bca7bfbedb77ff9b73f81fd240262025506479"
+        "bytes": 1871,
+        "sha256": "09eb74cdd215dcc5c5a5f96f609f72a63a38c655a1b3617bc6a313dc35702991"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/Popover.stories.tsx",
@@ -20224,12 +20224,20 @@
         "sha256": "0ca821481b67c981d2694adc84ad06d4465bb92c2529190cd15f5b9bfee27bff"
       },
       {
+        "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/tests/Popover.anchored.types.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 2721,
+        "sha256": "370c3c86a273a6fcc3cd85f310a5c16f16a88acfdd684ee6aa6a140cda5a2503"
+      },
+      {
         "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/tests/Popover.causality.integration.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 7304,
-        "sha256": "8ad47875c524e086e761fbf7d71e661a8d8dcab2ec344e0aae38a2f032741e3d"
+        "bytes": 7318,
+        "sha256": "f31d672a64f31f3665a7557c435adaa6f32e701d6cad06f71f2328a45689c7a0"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/tests/Popover.fab17-protected-control.test.tsx",
@@ -20238,6 +20246,14 @@
         ],
         "bytes": 2757,
         "sha256": "8276e5c7767377bd33c08a31540aa6ad2a67f3a9c63d6cbaa4fb22f551a179bc"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/tests/Popover.modern-anchored.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 25995,
+        "sha256": "0425c1a84bd6a117c497084a0ee8ec2495180d492cb2ebbd2bacb3e35e4ba8ec"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/tests/Popover.modern-controlled-escape.test.tsx",
@@ -20922,8 +20938,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 16600,
-        "sha256": "d045e8b054a95d1649f9a5e7eb5392a63d51077f91b71be777ad93f56fd286c3"
+        "bytes": 17714,
+        "sha256": "ae41590acfa18fdaac9b9c13e1b115efe5b224173f3897e343f4769f5b2cd7c3"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/runtime/overlay/field-overlay/tests/FieldOverlayScrollLock.test.tsx",
@@ -24323,32 +24339,14 @@
         "sha256": "f8277d0fa98b62d4139c8477a9e86d6b2a193c39df24136fc210a8f2b48bf13b"
       },
       {
-        "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/filter-dropdown/index.tsx",
-        "roles": [
-          "audit-input",
-          "claim-census",
-          "stale-claim-corpus"
-        ],
-        "bytes": 8583,
-        "sha256": "58402f70b9aab63cad265974666a51e4ac06ed5ab14762ba7e4d4772761d4d66"
-      },
-      {
-        "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/filter-dropdown/tests/CollectionFilterDropdown.test.tsx",
-        "roles": [
-          "audit-input"
-        ],
-        "bytes": 7876,
-        "sha256": "2002107ec70fd46501a7b5e8a62633134dbbc28016dfd1e2e4a9f540518f9885"
-      },
-      {
         "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
         "roles": [
           "audit-input",
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 107157,
-        "sha256": "80145518f83ea4cb574f6a7be7f492303a73d7017a73246ff11ae40b23cc1293"
+        "bytes": 107934,
+        "sha256": "f15c40bedcea977c87f0545d4ef30470c900227686f6442d449f2b0d8b2e2729"
       },
       {
         "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
@@ -24401,12 +24399,20 @@
         "sha256": "104207384cf6ad955e9e337eb4ecff81f3cd59f8ef0eccbab60808cc3ce82579"
       },
       {
+        "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.filter-disclosure.browser-geometry.integration.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5951,
+        "sha256": "cc830d1095eb3ae98b1bdefb05d63ee2582ffc3f87a186d7d6ac3590320ff998"
+      },
+      {
         "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.focus-signature.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 7667,
-        "sha256": "3a40462c53455a9ee4d2271bdacd1761d8565e1f3240301ffb6668e9bb417e02"
+        "bytes": 8968,
+        "sha256": "9ce29334f99e3d4499b28b8ea100fa876dfcf480c3ef42a6fd0a10d05a850e2d"
       },
       {
         "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.grid-columns.test.tsx",
@@ -24445,8 +24451,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 95089,
-        "sha256": "18c8aa073663db91df875baaeedf265169d33566ce2d47191e5a075ea03bfb59"
+        "bytes": 97370,
+        "sha256": "3eb89532a42ab7ecf164a3e06f38807f4c67e376f201f7cce7af9dd2951a927e"
       },
       {
         "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.view-transition.test.tsx",
@@ -24455,6 +24461,14 @@
         ],
         "bytes": 6878,
         "sha256": "677adb1b60e5709605661f79b9309a482145376eedacd45990d254f5cf7ef083"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/fixtures/filter-disclosure-scene/index.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 6296,
+        "sha256": "3cfa9de49808dc677c62372252785b688a6a897b6aa9657ce11648267d2fe0d7"
       },
       {
         "path": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/command-center/index.tsx",
@@ -28340,8 +28354,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 42393,
-        "sha256": "7f5e6dc6f9c50467968ac49eb6d3a1c134b5e6ce83ee851f88ff9ebe66a1a2a9"
+        "bytes": 40604,
+        "sha256": "988506269278492b38c50c7a41f77fc9b50a7f26bc3b854efc1457f8e0a38562"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/column-menu/index.css",
@@ -30436,8 +30450,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 24703,
-        "sha256": "dc9190c9c53692fd785de68f6824565b67cc348d7e0b2d1660657dda2a761efd"
+        "bytes": 24883,
+        "sha256": "f07d28e1b361a0513d273f76c5630e9741236179fa830026491384161ec65c95"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
@@ -37923,7 +37937,7 @@
           "stale-claim-corpus"
         ],
         "bytes": 302702,
-        "sha256": "a2d19a3ffc53bf4d782049a57a8f9f346a5f50aa851e2181afccf29174ff6be1"
+        "sha256": "0a3ebe964f779a5a0536c73b0cb0dbd0af066842bed7d6736da1e55e1e310e4c"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/index.ts",
@@ -44183,8 +44197,8 @@
         "roles": [
           "stale-claim-corpus"
         ],
-        "bytes": 19471,
-        "sha256": "dcb37914e841417afff623814c2117466a25e302e5d3bf4504b50c1df41aee8c"
+        "bytes": 25129,
+        "sha256": "05b8a6821b9dc136f2ac2c113d63fc55752745fbdd8e37fb8042817799144cc1"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/tenant-branding/index.spec.ts",
@@ -46439,8 +46453,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7866,
-        "sha256": "ac35615cda46a7d6aa1b4154bc7e39d7b32a123b06632dafa8955eeb2e5d4131"
+        "bytes": 8166,
+        "sha256": "0b762c24169e32608359bc3800102ba8f070e507cd9e15dc6c37948e7e323e3a"
       },
       {
         "path": "ui-design-system/packages/showroom/src/app/probe/whitelabel-torture/scenes/all/page.tsx",
@@ -47298,6 +47312,15 @@
         "sha256": "cb86a974ff399a5f40d91456283971876ccf419cb7e70dcc56145c631271ddc4"
       },
       {
+        "path": "ui-design-system/packages/showroom/src/components/torture-sections/collection-filter-disclosure/index.tsx",
+        "roles": [
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 2209,
+        "sha256": "59649ab7bf07f4c5b90260a1ebf2e83e168410fe0c0ccdaf5cb7a8340269750d"
+      },
+      {
         "path": "ui-design-system/packages/showroom/src/components/torture-sections/communication/index.tsx",
         "roles": [
           "claim-census",
@@ -47510,8 +47533,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 2631,
-        "sha256": "e1fac5d0593c7b80c49c735037b9a4b48b66f283d72d218d5b3236c6f6670616"
+        "bytes": 2653,
+        "sha256": "ad62a41c11a63608a515d39817e8fa2a8f99d36387cc17fdd8b451b3645208d0"
       },
       {
         "path": "ui-design-system/packages/showroom/src/components/torture-sections/skin-coverage/index.tsx",
@@ -47763,19 +47786,19 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "790811c8b9c67c2636439039050ce4544e261261db7c09b4bfd43d2b4fa3e713"
+    "digest": "903cf00c54c58ea2a51ba32e82b5b2dc15f4ccf8f55ee9a10130ba70b738fc83"
   },
   "paintAudit": {
-    "output": "engine-token-audit --check OK (4224 counters; 3226 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
+    "output": "engine-token-audit --check OK (4221 counters; 3223 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
     "baseline": {
       "path": "ui-design-system/packages/core/scripts/check/engine/tokens/audit/baseline/index.json",
-      "sha256": "083a7050caddf17ad3d6bf788bcc1b872c0d847b7c6b50059b4f29540130c982",
+      "sha256": "613203d3c50d781fd6e126a1e5c8923daa56461e5167f7918ad5dc373f594507",
       "ok": true,
       "errors": [],
-      "counters": 4224,
-      "zeroLocked": 3226,
+      "counters": 4221,
+      "zeroLocked": 3223,
       "positiveGoverned": 998,
-      "ordinaryCeilings": 4203,
+      "ordinaryCeilings": 4200,
       "positiveOrdinaryCeilings": 988,
       "exactInvariants": 14,
       "positiveExactInvariants": 3,
@@ -50336,51 +50359,47 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 291
+          "line": 296
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 291
+          "line": 296
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 310
+          "line": 315
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 310
+          "line": 315
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 325
+          "line": 330
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 332
+          "line": 337
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 339
+          "line": 344
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 346
+          "line": 351
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 353
+          "line": 358
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 357
+          "line": 362
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 361
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 365
+          "line": 366
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -50388,19 +50407,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 379
+          "line": 375
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 401
+          "line": 384
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 445
+          "line": 406
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 445
+          "line": 450
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "line": 450
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
@@ -51872,19 +51895,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 236
+          "line": 241
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 251
+          "line": 256
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 389
+          "line": 394
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 441
+          "line": 446
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet/index.css",
@@ -90864,6 +90887,10 @@
           "line": 181
         },
         {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
+          "line": 1002
+        },
+        {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/column-menu/index.css",
           "line": 51
         },
@@ -92157,15 +92184,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 48
+          "line": 53
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 48
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 92
+          "line": 53
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -92173,27 +92196,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 97
+          "line": 102
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 109
+          "line": 102
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 109
+          "line": 114
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 119
+          "line": 114
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 127
+          "line": 124
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 133
+          "line": 132
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -92209,31 +92232,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 163
+          "line": 153
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 173
+          "line": 168
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 188
+          "line": 178
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 196
+          "line": 193
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 202
+          "line": 201
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 210
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 210
+          "line": 207
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -92249,19 +92268,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 236
+          "line": 220
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 251
+          "line": 225
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 259
+          "line": 241
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 265
+          "line": 256
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "line": 264
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -92281,43 +92304,43 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 291
+          "line": 290
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 310
+          "line": 296
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 325
+          "line": 315
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 332
+          "line": 330
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 339
+          "line": 337
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 346
+          "line": 344
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 353
+          "line": 351
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 357
+          "line": 358
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 361
+          "line": 362
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 365
+          "line": 366
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -92325,75 +92348,79 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 379
+          "line": 375
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 389
+          "line": 384
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 395
+          "line": 394
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 395
+          "line": 400
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 401
+          "line": 400
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 407
+          "line": 406
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 407
+          "line": 412
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 411
+          "line": 412
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 411
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 417
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 417
+          "line": 422
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 425
+          "line": 422
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 425
+          "line": 430
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 429
+          "line": 430
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 429
+          "line": 434
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 435
+          "line": 434
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 441
+          "line": 440
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 445
+          "line": 446
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "line": 450
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet/index.css",
@@ -94657,11 +94684,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 220
+          "line": 225
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 435
+          "line": 440
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/result/index.css",
@@ -95335,11 +95362,11 @@
       "trigger": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-          "line": 929
+          "line": 931
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
-          "line": 945
+          "line": 947
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/column-menu/index.css",
@@ -96259,11 +96286,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 48
+          "line": 46
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 92
+          "line": 53
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -96271,19 +96298,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 109
+          "line": 102
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 119
+          "line": 114
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 127
+          "line": 124
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 133
+          "line": 132
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -96299,27 +96326,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 163
+          "line": 153
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 173
+          "line": 168
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 188
+          "line": 178
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 196
+          "line": 193
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 202
+          "line": 201
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 210
+          "line": 207
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -96331,19 +96358,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 236
+          "line": 225
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 251
+          "line": 241
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 259
+          "line": 256
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 265
+          "line": 264
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -96363,43 +96390,43 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 291
+          "line": 290
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 310
+          "line": 296
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 325
+          "line": 315
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 332
+          "line": 330
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 339
+          "line": 337
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 346
+          "line": 344
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 353
+          "line": 351
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 357
+          "line": 358
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 361
+          "line": 362
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 365
+          "line": 366
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
@@ -96407,51 +96434,55 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 379
+          "line": 375
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 389
+          "line": 384
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 395
+          "line": 394
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 401
+          "line": 400
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 407
+          "line": 406
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 411
+          "line": 412
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 417
+          "line": 416
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 425
+          "line": 422
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 429
+          "line": 430
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 435
+          "line": 434
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 441
+          "line": 440
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 445
+          "line": 446
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "line": 450
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
@@ -106218,7 +106249,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "Select",
@@ -107830,7 +107861,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "TreeSelect",
@@ -108539,7 +108570,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "Cascader",
@@ -109812,7 +109843,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "Upload",
@@ -112057,7 +112088,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "ColorPicker",
@@ -113377,7 +113408,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "Button",
@@ -113496,7 +113527,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "Button",
@@ -114539,7 +114570,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "Modal",
@@ -114988,7 +115019,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "Drawer",
@@ -116411,7 +116442,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "Modal (overlay)",
@@ -116881,7 +116912,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "Tour",
@@ -117216,7 +117247,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "ConfirmDialog",
@@ -117536,7 +117567,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "AlertDialog",
@@ -117775,7 +117806,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "Popconfirm",
@@ -117814,7 +117845,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "Popconfirm",
@@ -118123,7 +118154,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "Sheet",
@@ -118367,7 +118398,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "ContextMenu",
@@ -118406,7 +118437,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "ContextMenu",
@@ -118537,7 +118568,7 @@
           {
             "part": "trigger",
             "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/engines/modern/index.tsx",
-            "line": 921,
+            "line": 1075,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -118550,7 +118581,20 @@
           {
             "part": "trigger",
             "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/engines/modern/index.tsx",
-            "line": 945,
+            "line": 1092,
+            "syntax": "jsx-intrinsic",
+            "sinkKind": "intrinsic-dom",
+            "provenance": {
+              "tagName": "div"
+            },
+            "staticValues": [
+              "trigger"
+            ]
+          },
+          {
+            "part": "trigger",
+            "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/engines/modern/index.tsx",
+            "line": 1116,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -118575,7 +118619,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "Popover",
@@ -118589,7 +118633,7 @@
           {
             "part": "surface",
             "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/engines/modern/index.tsx",
-            "line": 856,
+            "line": 1009,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -118619,7 +118663,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "Popover",
@@ -118633,7 +118677,7 @@
           {
             "part": "title",
             "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/engines/modern/index.tsx",
-            "line": 905,
+            "line": 1058,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -118672,7 +118716,7 @@
           {
             "part": "arrow",
             "path": "ui-design-system/packages/core/src/components/primitives/overlay/popover/engines/modern/index.tsx",
-            "line": 910,
+            "line": 1063,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -118736,7 +118780,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "Dropdown",
@@ -118775,7 +118819,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "Dropdown",
@@ -118936,7 +118980,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "HoverCard",
@@ -118975,7 +119019,7 @@
           }
         ],
         "skinSelectorCorpusKey": "surface",
-        "skinSelectorCount": 503
+        "skinSelectorCount": 504
       },
       {
         "section": "Watermark",
@@ -119284,7 +119328,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "BottomTabBar",
@@ -119819,7 +119863,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "FloatButton",
@@ -120579,7 +120623,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "Menu",
@@ -120692,7 +120736,7 @@
           }
         ],
         "skinSelectorCorpusKey": "trigger",
-        "skinSelectorCount": 482
+        "skinSelectorCount": 483
       },
       {
         "section": "MobileHeader",
@@ -122083,8 +122127,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "f553e2bdb32b45abe4e50e19adf10cfa7c5af2946635c7a4fd46ccf318eae8bc",
-      "f553e2bdb32b45abe4e50e19adf10cfa7c5af2946635c7a4fd46ccf318eae8bc"
+      "0b5e9a012064c5409fbb6a667229745124560573b619d46b99e8f1ba32d1af3a",
+      "0b5e9a012064c5409fbb6a667229745124560573b619d46b99e8f1ba32d1af3a"
     ],
     "agree": true
   }

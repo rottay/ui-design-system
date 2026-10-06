@@ -61,14 +61,14 @@
     "interpolatedFamilies": 71,
     "interpolatedNames": 553,
     "foundationTokens": 4195,
-    "componentTokens": 730,
+    "componentTokens": 733,
     "componentSuppliers": 374,
-    "reads": 7700,
+    "reads": 7698,
     "hooks": 107,
     "unadjudicatedReads": 1196,
     "promoted": 107,
     "styleFiles": 500,
-    "componentFiles": 1305
+    "componentFiles": 1304
   },
   "declaredSlots": {
     "--ds-command-grid-opacity": {
@@ -3000,6 +3000,8 @@
     "--ds-personality-typography-heading-letter-spacing",
     "--ds-popover-arrow-anchor-offset",
     "--ds-popover-body-max-height-current",
+    "--ds-popover-bordered-padding-block",
+    "--ds-popover-bordered-padding-inline",
     "--ds-popover-bordered-radius",
     "--ds-popover-bordered-shadow",
     "--ds-popover-closed-transform",
@@ -3009,6 +3011,7 @@
     "--ds-popover-instance-max-width",
     "--ds-popover-instance-z-index",
     "--ds-popover-max-width-current",
+    "--ds-popover-min-width",
     "--ds-popover-muted-ink-current",
     "--ds-popover-padding-block-current",
     "--ds-popover-padding-inline-current",

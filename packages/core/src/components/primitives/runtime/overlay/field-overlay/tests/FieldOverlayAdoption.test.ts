@@ -86,6 +86,19 @@ const INLINE_RENDERERS: Record<string, { reason: string; skinBlockers: readonly 
 };
 
 /**
+ * Families whose host carries a second, mode-dependent posture that the source
+ * traits below cannot see. The roster, the door and the census stay those of
+ * the family's primary posture; each entry names the behavioural test that
+ * pins the second one, so the exception cannot outlive its proof.
+ */
+const DUAL_POSTURE: Record<string, { posture: string; pinnedBy: string }> = {
+  'overlay/popover': {
+    posture: 'anchored mode renders in-tree in both positioning branches, never portalled',
+    pinnedBy: 'overlay/popover/tests/Popover.modern-anchored.test.tsx',
+  },
+};
+
+/**
  * The door each family's panel actually leaves through, measured from source.
  *
  * - `field-overlay-panel` -- the family authors its own panel and wraps it in
@@ -328,6 +341,16 @@ describe('useFieldOverlay adoption', () => {
       expect(host(family), `${family} must stay fixed-positioned in tree`).toMatch(
         FIXED_POSITION,
       );
+    }
+  });
+
+  it('pins every dual-posture family with a behavioural no-portal test that exists', () => {
+    for (const [family, { posture, pinnedBy }] of Object.entries(DUAL_POSTURE)) {
+      expect(FAMILIES, family).toContain(family);
+      expect(posture.length, `${family} states its second posture`).toBeGreaterThan(0);
+      const pin = resolve(PRIMITIVES, pinnedBy);
+      expect(existsSync(pin), pinnedBy).toBe(true);
+      expect(readFileSync(pin, 'utf8')).toMatch(/closest\('\[data-rottay-portal\]'\)\)\.toBeNull\(\)/);
     }
   });
 

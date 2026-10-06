@@ -8001,12 +8001,6 @@
       "rule": "stable-typography",
       "count": 2
     },
-    "d8aef31436e42064ddfa": {
-      "path": "src/components/surfaces/presentation/pages/workspace/collection-workspace/filter-dropdown/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "aria-role-reconstruction",
-      "count": 1
-    },
     "c8385c72d1c4ccda7f0e": {
       "path": "src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
       "category": "native-interactive",

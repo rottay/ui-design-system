@@ -53,14 +53,6 @@
           "reason": "`left: dropdownPos.left` is a measured `getBoundingClientRect()` edge clamped to the viewport, the saved-views-menu precedent. The rect is already in physical coordinates; re-reading it as a logical inset would mirror an already-mirrored number."
         }
       ]
-    },
-    "surfaces/presentation/pages/workspace/collection-workspace/filter-dropdown/index.tsx": {
-      "sites": [
-        {
-          "locator": "style left: position?.left",
-          "reason": "`left: position?.left` is the same measured-rect clamp as export-button: the value comes from a viewport measurement, so it is physical by construction."
-        }
-      ]
     }
   },
   "pinnedDebt": {

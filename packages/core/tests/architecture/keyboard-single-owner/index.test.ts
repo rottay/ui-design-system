@@ -34,7 +34,7 @@ const OWNER_WIDENING =
  * The residual. A row leaves when its site subscribes through an owner; a row
  * is never added. The ceiling started at 8 and only moves down.
  */
-const CEILING = 4;
+const CEILING = 3;
 const LOOSE_LEDGER: Readonly<Record<string, { reason: string; receiver: string }>> = {
   "src/components/patterns/customization/token-inspector/index.tsx": {
     reason: "one listener mixes the ctrl+shift+T chord with a no-prevent Escape that fires from text fields",
@@ -46,10 +46,6 @@ const LOOSE_LEDGER: Readonly<Record<string, { reason: string; receiver: string }
   },
   "src/components/patterns/visualization/charts/runtime/chart-engine/runtime/interaction/controller/index.ts": {
     reason: "Escape resets hover/pin state and yields to a handled key; not an escape-to-close layer",
-    receiver: OWNER_WIDENING,
-  },
-  "src/components/surfaces/presentation/pages/workspace/collection-workspace/filter-dropdown/index.tsx": {
-    reason: "yields to Escape a caller-supplied control already handled (defaultPrevented)",
     receiver: OWNER_WIDENING,
   },
 };

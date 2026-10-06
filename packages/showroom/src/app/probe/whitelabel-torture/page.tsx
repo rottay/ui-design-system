@@ -35,6 +35,7 @@ import { ApplicationSurfaceStates } from '@/components/torture-sections/applicat
 import { TenantBrandingStates } from '@/components/torture-sections/tenant-branding';
 import { VisualizationStates } from '@/components/torture-sections/visualizations';
 import { SkinCoverageStates } from '@/components/torture-sections/skin-coverage';
+import { CollectionFilterDisclosureStates } from '@/components/torture-sections/collection-filter-disclosure';
 
 // ---------------------------------------------------------------------------
 // Whitelabel torture probe (WO-GAT-03 hostile-tenant whitelabel proof)
@@ -52,6 +53,7 @@ import { SkinCoverageStates } from '@/components/torture-sections/skin-coverage'
 //   ?navigationOverlay=shortcuts-overlay         open shortcuts-overlay instead of command-palette
 //   ?longTail=1                                  CK-I surface long-tail evidence
 //   ?skinCoverage=1                              skin parts only an opened or configured mount stamps
+//   ?filterDisclosure=1                          collection workspace tablet filter disclosure (WO-ARC-23)
 //   ?tenantSource=canonical-db                   themanagementmiami from the published document
 //
 // torture-dark and torture-light compile their CSS at render via the dynamic
@@ -124,6 +126,7 @@ export default async function WhitelabelTorturePage({ searchParams }: TortureRou
         {active.has('visualizations') && <VisualizationStates />}
         {active.has('longTail') && <SurfacesLongTailFixture />}
         {active.has('skinCoverage') && <SkinCoverageStates />}
+        {active.has('filterDisclosure') && <CollectionFilterDisclosureStates />}
       </TortureFrame>
     </>
   );

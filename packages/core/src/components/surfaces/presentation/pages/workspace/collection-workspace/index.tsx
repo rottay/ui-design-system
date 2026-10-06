@@ -44,6 +44,8 @@ import type {
 } from '../../../../foundation/contracts/adaptive/collection';
 import { deviceAliasForBreakpoint } from '@/foundation/contracts/kernel/responsive/breakpoints';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
+import { useDeclaredEngine } from '@/infrastructure/runtime/engines/composition/react/provider';
+import { isFrozenEngineName } from '@/foundation/contracts/kernel/engine-identity';
 import { resolveSurfacePosture, type SurfaceAdaptivePosture } from '../../../../foundation/contracts/adaptive';
 import type { ViewMode } from '../../../../../patterns/data/list-toolbar/contracts';
 import type { DensityPosture } from '@/infrastructure/runtime/foundation/density';
@@ -83,11 +85,11 @@ import { Stack } from '../../../../../primitives/layout/stack';
 import { Flex } from '../../../../../primitives/layout/flex';
 import { Text } from '../../../../../primitives/display/typography';
 import { Button } from '../../../../../primitives/inputs/button';
+import { Popover } from '../../../../../primitives/overlay/popover';
 import { ActionDock } from '../../../../../structures/workspace/action-dock';
 import { AdaptiveOverlay } from '../../../../../patterns/feedback/adaptive-overlay';
 import { WorkspaceShell } from '../../../../../structures/shell/workspace-shell';
 import { CollectionRenderDispatch } from './render-dispatch';
-import { CollectionFilterDropdown } from './filter-dropdown';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../../foundation/contracts/adaptive/collection';
 import {
   DENSITY_PRESETS,
@@ -978,8 +980,11 @@ function CollectionWorkspaceSurfaceContent<T extends object>(props: CollectionWo
   const usesFilterSheet = Boolean(
     hasFilters && posture.filters === 'sheet',
   );
+  // The anchored disclosure is Modern-only; a forced frozen engine keeps the filters inline.
+  const declaredEngine = useDeclaredEngine();
+  const hostsAnchoredDisclosure = !isFrozenEngineName(declaredEngine);
   const usesFilterDropdown = Boolean(
-    hasFilters && posture.filters === 'dropdown',
+    hasFilters && posture.filters === 'dropdown' && hostsAnchoredDisclosure,
   );
   const usesFilterDisclosure = usesFilterSheet || usesFilterDropdown;
   const inlineFiltersExpanded = filtersExpanded && !usesFilterDisclosure;
@@ -1735,34 +1740,42 @@ function CollectionWorkspaceSurfaceContent<T extends object>(props: CollectionWo
     </AdaptiveOverlay>
   ) : null;
 
-  const filterDropdown = hasFilters ? (
-    <CollectionFilterDropdown
-      anchorRef={filterDropdownAnchorRef}
+  const filterDropdown = usesFilterDropdown ? (
+    <Popover
+      anchor={filterDropdownAnchorRef}
       open={usesFilterDropdown && filtersExpanded}
       onOpenChange={handleFilterDisclosureOpenChange}
       id={filterDisclosureId}
-      ariaLabel={tSurfaceOr('collection_workspace.filters_title', 'Advanced filters')}
-    >
-      <Box
-        className="ds-collection-workspace__filter-dropdown-content"
-        data-part="filter-dropdown-content"
-      >
-        {filterDraftPanel}
-        <Flex
-          className="ds-collection-workspace__filter-dropdown-actions"
-          data-part="filter-dropdown-actions"
-          gap={2}
-          justify="end"
+      aria-label={tSurfaceOr('collection_workspace.filters_title', 'Advanced filters')}
+      role="dialog"
+      placement="bottomRight"
+      offset={8}
+      // The skin lands the workspace measure as the popover minimum on this
+      // surface; the maximum follows it, so the disclosure width is fixed.
+      maxWidth="var(--ds-popover-min-width)"
+      overlayClassName="ds-collection-workspace__filter-dropdown"
+      content={
+        <Box
+          className="ds-collection-workspace__filter-dropdown-content"
+          data-part="filter-dropdown-content"
         >
-          <Button variant="secondary" onClick={closeFilterDisclosure}>
-            {tSurfaceOr('collection_workspace.cancel', 'Cancel')}
-          </Button>
-          <Button variant="primary" onClick={applyFilterDisclosure}>
-            {tSurfaceOr('collection_workspace.apply_filters', 'Apply filters')}
-          </Button>
-        </Flex>
-      </Box>
-    </CollectionFilterDropdown>
+          {filterDraftPanel}
+          <Flex
+            className="ds-collection-workspace__filter-dropdown-actions"
+            data-part="filter-dropdown-actions"
+            gap={2}
+            justify="end"
+          >
+            <Button variant="secondary" onClick={closeFilterDisclosure}>
+              {tSurfaceOr('collection_workspace.cancel', 'Cancel')}
+            </Button>
+            <Button variant="primary" onClick={applyFilterDisclosure}>
+              {tSurfaceOr('collection_workspace.apply_filters', 'Apply filters')}
+            </Button>
+          </Flex>
+        </Box>
+      }
+    />
   ) : null;
 
   const previewDetailsTitle = tSurfaceOr(

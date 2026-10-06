@@ -32,7 +32,7 @@
  * @category Overlay
  * @package @rottay/design-system
  */
-import type { ReactNode, CSSProperties } from 'react';
+import type { ReactNode, CSSProperties, RefObject } from 'react';
 import type { OverlayPlacement } from '../../../runtime/overlay/positioning';
 
 /**
@@ -111,6 +111,36 @@ export const POPOVER_TO_OVERLAY_PLACEMENT: Record<PopoverPlacement, OverlayPlace
   rightBottom: 'inline-end-end',
 };
 
+/** Props both Popover modes carry, with one meaning in each. */
+interface PopoverSharedProps {
+  /** Content of the popover */
+  content: ReactNode;
+  /** Placement of the popover */
+  placement?: PopoverPlacement;
+  /** Whether the popover is open (controlled) */
+  open?: boolean;
+  /** Callback when open state changes */
+  onOpenChange?: (open: boolean) => void;
+  /** Coordinated material and density recipe. @default 'bordered' */
+  recipe?: PopoverRecipe;
+  /** Local density override; omitted values inherit the active tenant density. */
+  density?: PopoverDensity;
+  /** Gap in pixels between trigger and surface. @default 10 */
+  offset?: number;
+  /** Maximum inline size, additionally clamped to the viewport. @default 384 */
+  maxWidth?: number | string;
+  /** Close an open popover when Escape is pressed. @default true */
+  closeOnEscape?: boolean;
+  /** Close an open popover on pointer interaction outside. @default true */
+  closeOnInteractOutside?: boolean;
+  /** Semantic role for the non-modal popup surface. @default 'dialog' */
+  role?: PopoverRole;
+  /** Overlay class name */
+  overlayClassName?: string;
+  /** Overlay styles */
+  overlayStyle?: CSSProperties;
+}
+
 /**
  * Props for the Popover component.
  * A floating panel for displaying rich content on user interaction.
@@ -127,45 +157,23 @@ export const POPOVER_TO_OVERLAY_PLACEMENT: Record<PopoverPlacement, OverlayPlace
  * </Popover>
  * ```
  */
-export interface PopoverProps {
-  /** Content of the popover */
-  content: ReactNode;
+export interface PopoverTriggerProps extends PopoverSharedProps {
   /** Title of the popover */
   title?: ReactNode;
   /** Trigger method */
   trigger?: PopoverTrigger | PopoverTrigger[];
-  /** Placement of the popover */
-  placement?: PopoverPlacement;
-  /** Whether the popover is open (controlled) */
-  open?: boolean;
   /** Default open state */
   defaultOpen?: boolean;
-  /** Callback when open state changes */
-  onOpenChange?: (open: boolean) => void;
   /** Whether to show arrow */
   arrow?: boolean | { pointAtCenter: boolean };
-  /** Coordinated material and density recipe. @default 'bordered' */
-  recipe?: PopoverRecipe;
-  /** Local density override; omitted values inherit the active tenant density. */
-  density?: PopoverDensity;
   /** The trigger element */
   children: ReactNode;
   /** Mouse enter delay in ms */
   mouseEnterDelay?: number;
   /** Mouse leave delay in ms */
   mouseLeaveDelay?: number;
-  /** Gap in pixels between trigger and surface. @default 10 */
-  offset?: number;
-  /** Maximum inline size, additionally clamped to the viewport. @default 384 */
-  maxWidth?: number | string;
   /** Coarse-pointer fallback for hover/focus-only popovers. @default 'toggle' */
   touchBehavior?: PopoverTouchBehavior;
-  /** Close an open popover when Escape is pressed. @default true */
-  closeOnEscape?: boolean;
-  /** Close an open popover on pointer interaction outside. @default true */
-  closeOnInteractOutside?: boolean;
-  /** Semantic role for the non-modal popup surface. @default 'dialog' */
-  role?: PopoverRole;
   /** Accessible label when no visible title labels the surface. */
   'aria-label'?: string;
   /** External accessible label id. Takes precedence over the visible title. */
@@ -176,13 +184,52 @@ export interface PopoverProps {
   className?: string;
   /** Additional styles */
   style?: CSSProperties;
-  /** Overlay class name */
-  overlayClassName?: string;
-  /** Overlay styles */
-  overlayStyle?: CSSProperties;
   /** z-index */
   zIndex?: number;
+  anchor?: never;
+  id?: never;
+  initialFocus?: never;
 }
+
+/** Where focus lands when an anchored disclosure opens. */
+export type PopoverInitialFocus = 'first-control' | 'surface' | 'none';
+
+interface PopoverAnchoredBase extends PopoverSharedProps {
+  /**
+   * Caller-owned element the surface pins to. The surface renders in-tree at
+   * the Popover's own mount point and is never portalled. Modern engine only.
+   */
+  anchor: RefObject<HTMLElement | null>;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  /** Surface id; the caller's trigger points `aria-controls` at it. */
+  id: string;
+  /** @default 'first-control' */
+  initialFocus?: PopoverInitialFocus;
+  // Present as `never` so a destructure over the union compiles in every engine.
+  children?: never;
+  title?: never;
+  trigger?: never;
+  defaultOpen?: never;
+  arrow?: never;
+  mouseEnterDelay?: never;
+  mouseLeaveDelay?: never;
+  touchBehavior?: never;
+  destroyTooltipOnHide?: never;
+  className?: never;
+  style?: never;
+  zIndex?: never;
+}
+
+/**
+ * Anchored disclosure: the trigger is caller-owned and lives elsewhere in the
+ * tree. Controlled, named, in-tree under the tenant scope.
+ */
+export type PopoverAnchoredProps =
+  | (PopoverAnchoredBase & { 'aria-label': string; 'aria-labelledby'?: never })
+  | (PopoverAnchoredBase & { 'aria-labelledby': string; 'aria-label'?: never });
+
+export type PopoverProps = PopoverTriggerProps | PopoverAnchoredProps;
 
 /**
  * Default values for Popover component props.

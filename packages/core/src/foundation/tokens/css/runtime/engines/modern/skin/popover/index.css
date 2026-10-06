@@ -42,6 +42,11 @@
   display: contents;
 }
 
+/* The anchored mode hosts its in-tree surface without adding a box. */
+.ds-popover.ds-popover--modern[data-part='trigger'][data-anchor-scope='external'] {
+  display: contents;
+}
+
 /* The stamped `dir` is the surface's reading direction: the in-tree branch
    renders it under a trigger that declares none, so nothing here may outrank
    the UA `[dir]` rule. */
