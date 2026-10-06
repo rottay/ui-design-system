@@ -553,6 +553,28 @@ apps see zero API change through `createEngineComponent`.
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system` plus the vertical apps, prove the DB TenantThemeConfig round-trip (DS-IMP-061) from DB write to first paint per app, keeping schema/compiler ownership in the DS and plumb in the apps. Gate: round-trip proven per app, DS never reads the DB, W4 exit cert green, phase-1 pin holds. Fences: edit-only, no commits, never git-restore directories.
 
+### WO-ARC-22 Chrome-less variants of the canonical controls (proposal E-1)
+- **Source IDs / phase** — owner decision packet 2026-10-06 (proposals §E-1, approved); capability lane.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — Input, Select and Button each gain a chrome-less variant that keeps the full behaviour contract (keyboard, focus, aria) and drops the chrome (height floor, padding, variant paint), for in-grid and in-pill embedding. Variants OF the canonical primitives, never new raw controls.
+- **Steps** — Formalize scope and the exact variant API per primitive with an independent debrief BEFORE any new shared API; implement per primitive with its tests; drain the pinned residue rows onto the variant.
+- **Acceptance gate** — The variant carries keyboard/focus/aria identical to the canonical control and zero chrome paint; the waiting residue rows (data-table cell-editor input + select, file-manager file input, collection-workspace page-size select, detail-panel onClick-only crumb, status-filter-pills toggle) mount on it and leave the ownership counter by name; visual cells re-recorded under the standing ceremony; build and unit green.
+- **Execution control** — Rollback: remove the variant prop per primitive; the canonical controls are untouched. Disable: the variant ships dark until its residue rows migrate. Telemetry: the ownership counter drops per row name. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline; do not add product/domain semantics; do not create a new raw control instead of a variant; edit-only, no commits, never git-restore directories.
+- **Size** — M.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, build the chrome-less variants of Input/Select/Button (owner packet 2026-10-06, proposals §E-1) with the behaviour contract intact, formalizing the API with an independent debrief before any shared API lands. Gate: behaviour parity proven, residue rows drained by name, build/unit green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-ARC-23 Anchored disclosure: Popover with an external anchor (proposal E-2)
+- **Source IDs / phase** — owner decision packet 2026-10-06 (proposals §E-2, approved); capability lane.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — A controlled disclosure that anchors to a caller-owned element and stays in-tree (tenant scope), not portalled, reusing the interaction/focus/placement kernel. No second overlay system.
+- **Steps** — Formalize scope and the anchor API with an independent debrief BEFORE any new shared API; implement on the kernel; prove focus return, escape and placement; drain the waiting residue row.
+- **Acceptance gate** — The anchored disclosure renders in-tree under the tenant scope, reuses the kernel's interaction/focus/placement, and the collection-workspace filter-dropdown row mounts on it and leaves the ownership counter by name; visual cells re-recorded under the standing ceremony; build and unit green.
+- **Execution control** — Rollback: remove the anchor API; the kernel is untouched. Disable: the API ships dark until the residue row migrates. Telemetry: the ownership counter drops by the row's name. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
+- **Do NOT** — Do not weaken a floor or baseline; do not add product/domain semantics; no portal, no second overlay system; edit-only, no commits, never git-restore directories.
+- **Size** — M.
+- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, build the externally-anchored disclosure (owner packet 2026-10-06, proposals §E-2) on the interaction/focus/placement kernel, tenant-scoped and in-tree, with the API formalized by an independent debrief first. Gate: in-tree anchor proven with focus/escape/placement, the residue row drained by name, build/unit green. Fences: edit-only, no commits, never git-restore directories.
+
 ### WO-ARC-17 Anatomy variants, typed grammar and the extension pilots
 - **Source IDs / phase** — DS-IMP-017, DS-IMP-018, DS-IMP-019, DS-IMP-020, DS-IMP-023, DS-IMP-024; Phase 2A.
 - **Depends on** — WO-GAT-05, WO-GAT-06, WO-ARC-14 (the anatomy manifest spine).

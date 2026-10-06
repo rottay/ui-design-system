@@ -6395,6 +6395,11 @@
      "at": "2026-10-04 16:35",
      "by": "claude-dt",
      "note": "2026-10-04 kimi-dt: I2(iii) record (IconFrame/Meter, kept canonical at F-88's ruling). IconFrame (primitives/foundation/icon-frame): what no other primitive provides — the bounded framed-icon MEDALLION (headers/cards/rows/metrics), presentation-only, engine-independent by the raw-element tier, composing exclusively the governed semantic Icon and never rendering a control (icon-only actions are Button.Icon). Tests: IconFrame.test.tsx. Meter (primitives/foundation/meter): the scalar-reading gauge (score/capacity/health/signal), WHATWG <meter> semantics fail-closed, explicitly NOT task progress (Progress owns that); paint/track/arc in the canonical skins, only per-instance geometry dynamic. Tests: Meter.test.tsx, Meter.announced-reading.test.tsx. Consumers measured today: zero imports in app-bithire/app-evnto/app-platform src; the showroom is the only consumer (4 and 3 files). Both stay."
+    },
+    {
+     "at": "2026-10-05 22:49",
+     "by": "kimi-dt",
+     "note": "2026-10-06 — OWNER DECISION PACKET (roadmap/owner-decisions-2026-10-06.md, the owner explicitly delegated): Q1 PatternApprovalInbox STAYS canonical (disposition lot gets consumers/contract/tests; a redundant alias retires only with migration). Q4 option A: surfaces.overlays is a semantic scrim ladder from the surface/mode canon, no second compiler — the R1/backdrop lane unblocks. Files: bounded EXT-DS (claim-floor, documentation-allowlist, exactness) + backdrop gates + Modal skin authorized, exact physical paths enumerated in the WO before any edit; the two docs-engineering component-extensions blocks authorized (separate docs commit + official reseal). SENT: bounded frozen a11y exception for the badge's foreground/paired ink authorized (exact selectors registered in the freeze gate; Streaming joins if it needs the same; both modes; byte-identity outside the lot; the non-text floor never auto-approves small text); the modern Select-success and Toggle-checked repairs authorized outright. Chart budget: option A primary (real consumer bundles per renderer/component, root+subpath, ESM/CJS, gzip, sibling isolation); source graph stays diagnostic; goes to the governing charts/boundary WO with a link from RET-01, formal registration if no receiver exists; the historical figure authorizes no new ceiling; NOT a new RET-01 blocker. AM-1 v3 ratified (R5->R5', 18 rows/25 reports/17 files, 3-carrier sub-ceiling, class/proof/path/count restrictions, negatives preserved; Callout row 25 frozen-group + the 5 parity-failed transfers with all Variant conditions incl. goes-last; census revalidation BEFORE adoption). P-79/P-88: P-88 WINS — a skinned component keeps its canonical data-part/data-state; composition through documented className/slot hooks; F-5C stands under this law. None of this closes RET-01 or any WO; the closures stay behind their own acceptance."
     }
    ]
   },
@@ -7660,6 +7665,11 @@
      "at": "2026-10-05 21:31",
      "by": "kimi-dt",
      "note": "2026-10-05 late-night — wave follow-ups closed: W24-I18N (6162bacd9, F-D: 4 missing surfaces.states keys in all 5 locales, on-voice; the 4 long-tail foundation cells re-recorded with real copy after the tile review caught a stale-server record; :7001-free rule registered). Assistant skin header tells the truth about its layer (79b1a43b9, comment-only, P-47 claim was stale since the file is layered rottay-components). Flagship staleness lot (d9c98f8db): 4 cells re-recorded from the measurer's table (flagship-pre-e022af3ff.md — bithire-modal-768/1280 = e022af3ff width + e904ae6ba ring; card-360 x2 = 925226684 edge ring); rottay-modal-768 NOT committed (1px sub-gate flip-flop on one build, 6-run proven — registered as known jitter, never a movement); input-360 pair byte-identical, nothing owed. Tile review: review-flagship6 ACCEPT with the revert condition discharged. Flagships 48/48 + door gate green after. State: wave fully closed; remaining lanes are the owner-decision packet + the todo WOs."
+    },
+    {
+     "at": "2026-10-05 22:49",
+     "by": "kimi-dt",
+     "note": "2026-10-06 — the same owner packet for the evidence lane: E-1/E-2 APPROVED and registered as WO-ARC-22/WO-ARC-23 (the status-filter-pills and filter-dropdown residue rows move to them by this amendment); §F-A/B/C/C-bis approved (F-A: coherent SSR hints + first-paint proof, never force-desktop-on-mobile; F-B: governed clearance; F-C/C-bis: real contrast repair, never re-record-to-hide). D-30: the current reviewed technical identities are the PROVISIONAL references for EVI-03 (exact fixtures/styles/modes/digests to be identified and recorded); final branding stays deferred; the provisional pick does not close EVI-03 and re-records no defect. The pre-migration baseline law (WO-EVI-03 expiry) now has its provisional reference — the next baseline work cites it explicitly."
     }
    ]
   },
@@ -8596,6 +8606,50 @@
     "audit-2026-09-05"
    ],
    "notes": "owner-approved 2026-09-20 (proposals.md style/history queue; Fable review ACCEPT: evidence/style-history-roadmap-review/index.md); registered 2026-09-20 by the sole DT per the queue instructions — no new source IDs, phase or DS-improvements authority; wave 4; touchedRepos: [ui-design-system, app-bithire] (explicit cross-repo exception under D-31; other apps receive the protocol/recipe only); extends the consumer contract through the CON-05 versioned change protocol; WO-ARC-21 keeps its original acceptance/authority"
+  },
+  {
+   "id": "WO-ARC-22",
+   "title": "Chrome-less variants of the canonical controls (proposal E-1)",
+   "lane": "architecture",
+   "order": 26,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "Owner decision packet 2026-10-06 (proposals §E-1 approved): chrome-less variants OF the canonical Input/Select/Button, never new raw controls; the behaviour contract (keyboard/focus/aria) is kept, the chrome (height floor, padding, variant paint) drops. Drains by name: data-table cell-editor input+select, file-manager file input, collection-workspace page-size select, detail-panel onClick-only crumb, status-filter-pills toggle. The API formalizes with an independent debrief before any shared API lands.",
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-ARC-23",
+   "title": "Anchored disclosure: Popover with an external anchor (proposal E-2)",
+   "lane": "architecture",
+   "order": 27,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "Owner decision packet 2026-10-06 (proposals §E-2 approved): a controlled disclosure anchoring to a caller-owned element, tenant-scoped and in-tree (never portalled), reusing the interaction/focus/placement kernel — no second overlay system. Drains by name: collection-workspace filter-dropdown. The API formalizes with an independent debrief before any shared API lands.",
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "progressLog": []
   }
  ],
  "traceability": {

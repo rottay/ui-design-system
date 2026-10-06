@@ -1556,9 +1556,13 @@ owner approves 1:1.
   a caller-owned element and stays in-tree (tenant scope), not portalled. Row waiting on it:
   collection-workspace filter-dropdown (1).
 
-**Status** — OPEN, pending owner review. On approval each becomes a `### WO-` block in its lane
-plus a registry entry; the residue rows' receivers move from WO-ARC-15 / the EVI-02 follow-up
-list to the new WO by dated amendment.
+**Status** — APPROVED by the owner's decision packet of 2026-10-06 (this repo, recorded in the
+WO-EVI-02/WO-RET-01 trail). E-1: chrome-less variants OF the canonical primitives, never new raw
+controls. E-2: disclosure/Popover with an external anchor, tenant-scoped, reusing the
+interaction/focus/placement kernel — no second overlay system. Scope/receiver/dependencies and an
+independent debrief are formalized before any new shared API. On approval each becomes a `### WO-`
+block in its lane plus a registry entry; the residue rows' receivers move from WO-ARC-15 / the
+EVI-02 follow-up list to the new WO by dated amendment.
 
 ## F. Findings from the F-wave execution (2026-10-05), pending owner review
 
@@ -1588,4 +1592,10 @@ list to the new WO by dated amendment.
   `states.*` referenciadas). No espera decisión del owner: es reparación de contenido faltante.
   Ejecutado: despachado 2026-10-05.
 
-**Status** — OPEN, pending owner review.
+**Status** — APPROVED by the owner's decision packet of 2026-10-06 (provenance recorded in the
+trail): F-A lands as coherent SSR hints per route/viewport + a first-paint/hydration proof (never
+forcing desktop on mobile); F-B as a governed clearance (inset + icon size + gap), proven with long
+values, all sizes, RTL/LTR, breakpoints; F-C/C-bis as REAL contrast repairs, never re-records
+hiding a defect — SENT and Streaming ride the bounded frozen a11y exception with exact selectors
+registered in the freeze gate, and the modern Select-success and Toggle-checked repairs are
+authorized outright. F-D executed and landed 2026-10-05 (6162bacd9).
