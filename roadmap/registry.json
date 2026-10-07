@@ -8676,7 +8676,7 @@
    "lane": "architecture",
    "order": 27,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -8688,8 +8688,8 @@
    "notes": "Owner decision packet 2026-10-06 (proposals §E-2 approved): a controlled disclosure anchoring to a caller-owned element, tenant-scoped and in-tree (never portalled), reusing the interaction/focus/placement kernel — no second overlay system. Drains by name: collection-workspace filter-dropdown. The API formalizes with an independent debrief before any shared API lands.",
    "claimedBy": "kimi",
    "claimedAt": "2026-10-06",
-   "doneAt": null,
-   "evidence": null,
+   "doneAt": "2026-10-06",
+   "evidence": "2026-10-06 — WO-ARC-23 completa (E-2). El disclosure anclado monta in-tree bajo el tenant root, nunca portal, reusando el kernel de interaccion/foco/placement (sin listener ni math ni layer kind nuevas). API formalizada por debrief independiente en 3 rondas ANTES de land (N-1 literal kind, N-2 anchor-missing en ambas ramas). La row del filter-dropdown dreno por nombre (ownership 2033->2028 con las demas de la ola). Foco/escape/placement probados por los tests del lote + la spec browser-geometry. 4 celdas nuevas bajo la ceremonia con tile review (14/14). La carrera de medicion del spec (panel lazy, ~300ms) se root-causeo y corrigio con el wait por los controles (d706298c3, review 5a4ee86a). Build verde, unit verde, full visual sin drift. Ships dark: el unico adoptante es el collection workspace; docs owed a la docs window (7-4/F-4/F-8). Commits: 5a446ffec + d706298c3.",
    "progressLog": [
     {
      "at": "2026-10-06 12:42",
