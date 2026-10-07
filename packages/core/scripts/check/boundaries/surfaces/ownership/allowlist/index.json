@@ -62,6 +62,18 @@
     {
       "id": "6db672bcfdb8b3b42663",
       "reason": "Same element as the page-shell TabButton native-button entry above (the role=\"tab\" finding of the one <button>), under the same Tabs-capability debrief of 2026-10-07: Tabs owns its panel and its panel-less mode drops aria-controls, while this strip drives a content area outside the header with measured tab-to-panel linkage; keyboard parity is pinned by PatternPageShell.modern-craft.test.tsx and PatternPageShell.modern-rescue.test.tsx. REVIEW CONDITION: re-evaluate together with the native-button entry for this element."
+    },
+    {
+      "id": "37edb5515206b8701945",
+      "reason": "The workbench-header SavedViewTab is a native <button role=\"tab\"> (one element, carrying both the native-button and the role=tab finding). Tabs cannot express \"no tab selected\": it resolves activeKey ?? defaultActiveKey ?? firstSelectableKey(items) (tabs/engines/modern/index.tsx:396-407), and a no-selection state is a capability Tabs does not have (G4, Tabs-capability debrief 2026-10-07). The site's no-selection state is real: SavedViewTab carries aria-selected={isActive} and activeViewId may be undefined or name no view. Option (b), selecting the first view, was rejected because it misreports state. The strip is keyboard-complete in the selected state (roving tabIndex, automatic activation, RTL-mirrored arrows, Home/End) and reachable in the no-selection state: the first view holds the single tab stop while nothing is selected (WorkbenchHeader.modern-rescue.test.tsx). REVIEW CONDITION: re-evaluate when Tabs gains a no-selection state (G4) that keeps a single tab stop; the migration and this fix close together."
+    },
+    {
+      "id": "b5260c5a9114cce431c4",
+      "reason": "The workbench-header SavedViewTab is a native <button role=\"tab\"> (one element, carrying both the native-button and the role=tab finding). Tabs cannot express \"no tab selected\": it resolves activeKey ?? defaultActiveKey ?? firstSelectableKey(items) (tabs/engines/modern/index.tsx:396-407), and a no-selection state is a capability Tabs does not have (G4, Tabs-capability debrief 2026-10-07). The site's no-selection state is real: SavedViewTab carries aria-selected={isActive} and activeViewId may be undefined or name no view. Option (b), selecting the first view, was rejected because it misreports state. The strip is keyboard-complete in the selected state (roving tabIndex, automatic activation, RTL-mirrored arrows, Home/End) and reachable in the no-selection state: the first view holds the single tab stop while nothing is selected (WorkbenchHeader.modern-rescue.test.tsx). REVIEW CONDITION: re-evaluate when Tabs gains a no-selection state (G4) that keeps a single tab stop; the migration and this fix close together."
+    },
+    {
+      "id": "d8a7b8e16d608173994e",
+      "reason": "The calendar-view DayCell is a role=\"gridcell\" of the pattern's APG month grid, and no DS primitive is a gridcell. The EventChip no longer shares this exception: it is hosted on the Button primitive with chrome=\"none\" (EventChip trial 2026-10-07, GREEN: 21 protocol steps preserved in Chromium and WebKit, paint measured against the div chip). Keyboard parity of the cell, verified 2026-10-07: roving tabIndex on day cells, arrows move by day/week and mirror Left/Right under RTL, Enter/Space fire onDateClick, F2 enters the cell's first event chip. REVIEW CONDITION: re-evaluate when a calendar-cell host contract or the ARC-15 floor lands."
     }
   ]
 }

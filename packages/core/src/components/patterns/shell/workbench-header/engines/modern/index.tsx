@@ -86,10 +86,13 @@ function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
 function SavedViewTab({
   label,
   isActive,
+  isTabStop,
   onClick,
 }: {
   label: string;
   isActive: boolean;
+  /** The strip's single Tab stop: the active view, or the first view when none is active. */
+  isTabStop: boolean;
   onClick?: () => void;
 }) {
   const interaction = useInteractionState();
@@ -99,7 +102,7 @@ function SavedViewTab({
       type="button"
       role="tab"
       aria-selected={isActive}
-      tabIndex={isActive ? 0 : -1}
+      tabIndex={isTabStop ? 0 : -1}
       onClick={onClick}
       {...interaction.handlers}
       {...partAttributes('tab', interaction.state)}
@@ -208,6 +211,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
   const hasIcon = Boolean(icon);
   const hasActions = Boolean(quickActions && quickActions.length > 0);
   const hasTabs = Boolean(savedViews && savedViews.length > 0);
+  const hasActiveView = Boolean(savedViews?.some((view) => view.id === activeViewId));
 
   const chrome = (
     <>
@@ -277,13 +281,14 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
           data-part="tabs"
           onKeyDown={handleTabsKeyDown}
         >
-          {savedViews.map((view) => {
+          {savedViews.map((view, index) => {
             const isActive = view.id === activeViewId;
             return (
               <SavedViewTab
                 key={view.id}
                 label={view.label}
                 isActive={isActive}
+                isTabStop={hasActiveView ? isActive : index === 0}
                 onClick={onViewChange ? () => onViewChange(view.id) : undefined}
               />
             );

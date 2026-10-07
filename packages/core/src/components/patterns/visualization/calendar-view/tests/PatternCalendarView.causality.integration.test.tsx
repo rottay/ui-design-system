@@ -247,7 +247,7 @@ describe('calendar-view causality surface', () => {
         { id: 'themed', selector: EVENT, property: 'background-color' },
         {
           id: 'stated',
-          selector: "#calendar [data-part='event'][style]",
+          selector: "#calendar [data-part='event'][style*='--ds-calendar-view-entry-accent']",
           property: 'background-color',
         },
         {
@@ -265,7 +265,7 @@ describe('calendar-view causality surface', () => {
   }, 120_000);
 
   it('inks each chip against its own accent, so a stated accent carries its own ink', async () => {
-    const STATED = "#calendar [data-part='event'][style]";
+    const STATED = "#calendar [data-part='event'][style*='--ds-calendar-view-entry-accent']";
     const readings = await measureArms({
       vertical: 'rottay',
       markup,

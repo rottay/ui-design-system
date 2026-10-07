@@ -114,7 +114,7 @@ describe('PatternCalendarView modern — rescue drills', () => {
     );
 
     const chip = container.querySelector('[data-part="event"]') as HTMLElement;
-    expect(chip).toHaveAttribute('role', 'button');
+    expect(screen.getByRole('button', { name: 'Standup' })).toBe(chip);
     // APG in-cell interaction mode (elevation wave): a widget inside a
     // gridcell is reached through the cell with F2, so it is programmatically
     // focusable but never its own tab stop.

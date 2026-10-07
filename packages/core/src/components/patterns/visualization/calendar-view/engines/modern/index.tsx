@@ -371,7 +371,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     return true;
   };
 
-  const handleChipKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, ev: CalendarEvent<T>) => {
+  const handleChipKeyDown = (e: React.KeyboardEvent<HTMLElement>, ev: CalendarEvent<T>) => {
     const chip = e.currentTarget;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -584,45 +584,47 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                         </div>
                         {/* Show at most 3 event chips per cell to keep the grid compact;
                             overflow is shown as "+N more" below. */}
-                        {dayEvents.slice(0, 3).map((ev) => (
-                          <EventChip
-                            key={ev.id}
-                            /* Button semantics only when the chip actually
-                               activates something. Without `onEventClick` the
-                               chip is read-only content, so advertising a
-                               button role and a tab stop would sell an inert
-                               control (and add a tab stop per chip). */
-                            role={eventsInteractive ? 'button' : undefined}
-                            /* APG grid: a widget inside a cell is reached
-                               through the cell (F2), never through its own
-                               tab stop. */
-                            tabIndex={eventsInteractive ? -1 : undefined}
-                            /* A `renderEvent` chip can be pure iconography;
-                               the event title is the control's name floor. */
-                            aria-label={eventsInteractive && renderEvent ? ev.title : undefined}
-                            onClick={
-                              eventsInteractive
-                                ? (e) => { e.stopPropagation(); onEventClick?.(ev); }
-                                : undefined
-                            }
-                            onKeyDown={
-                              eventsInteractive ? (e) => handleChipKeyDown(e, ev) : undefined
-                            }
-                            /* Per-event color is consumer config data: it rides the
-                               family's own accent channel (quoted key) and the skin
-                               owns the fill. An event that states NO colour stamps
-                               nothing, so the derived resting accent stays reachable
-                               from the theme instead of being shadowed on every
-                               render by an inline property. */
-                            {...(ev.color === undefined
-                              ? {}
-                              : {
-                                  style: { '--ds-calendar-view-entry-accent': ev.color } as React.CSSProperties,
-                                })}
-                          >
-                            {renderEvent ? renderEvent(ev) : ev.title}
-                          </EventChip>
-                        ))}
+                        {dayEvents.slice(0, 3).map((ev) => {
+                          /* Per-event color is consumer config data: it rides the
+                             family's own accent channel (quoted key) and the skin
+                             owns the fill. An event that states NO colour stamps
+                             no accent, so the derived resting accent stays reachable
+                             from the theme instead of being shadowed on every
+                             render by an inline property. */
+                          const accent =
+                            ev.color === undefined
+                              ? undefined
+                              : ({ '--ds-calendar-view-entry-accent': ev.color } as React.CSSProperties);
+                          /* Without `onEventClick` the chip is read-only content:
+                             advertising a button and a tab stop would sell an
+                             inert control (and add a tab stop per chip). */
+                          if (!eventsInteractive) {
+                            return (
+                              <EventChip key={ev.id} {...(accent === undefined ? {} : { style: accent })}>
+                                {renderEvent ? renderEvent(ev) : ev.title}
+                              </EventChip>
+                            );
+                          }
+                          return (
+                            <ModernButton
+                              key={ev.id}
+                              chrome="none"
+                              data-part="event"
+                              /* APG grid: a widget inside a cell is reached
+                                 through the cell (F2), never through its own
+                                 tab stop. */
+                              tabIndex={-1}
+                              /* A `renderEvent` chip can be pure iconography;
+                                 the event title is the control's name floor. */
+                              aria-label={renderEvent ? ev.title : undefined}
+                              onClick={(e) => { e.stopPropagation(); onEventClick?.(ev); }}
+                              onKeyDown={(e) => handleChipKeyDown(e as React.KeyboardEvent<HTMLElement>, ev)}
+                              style={accent}
+                            >
+                              {renderEvent ? renderEvent(ev) : ev.title}
+                            </ModernButton>
+                          );
+                        })}
                         {dayEvents.length > 3 && (
                           <div data-part="overflow-count">
                             {tOr('calendarView.overflowMore', '+{count} more', { count: dayEvents.length - 3 })}

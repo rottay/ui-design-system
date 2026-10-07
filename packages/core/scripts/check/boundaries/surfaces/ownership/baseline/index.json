@@ -6495,18 +6495,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "37edb5515206b8701945": {
-      "path": "src/components/patterns/shell/workbench-header/engines/modern/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-button",
-      "count": 1
-    },
-    "b5260c5a9114cce431c4": {
-      "path": "src/components/patterns/shell/workbench-header/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "aria-role-reconstruction",
-      "count": 1
-    },
     "3efe14401365c5b5bb84": {
       "path": "src/components/patterns/visualization/calendar-view/engines/classic/index.tsx",
       "category": "primitive-reconstruction",
@@ -6602,12 +6590,6 @@
       "category": "shared-chrome-literal",
       "rule": "stable-typography",
       "count": 1
-    },
-    "d8a7b8e16d608173994e": {
-      "path": "src/components/patterns/visualization/calendar-view/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "clickable-noninteractive",
-      "count": 2
     },
     "d84c863449ccbcd3ee45": {
       "path": "src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx",

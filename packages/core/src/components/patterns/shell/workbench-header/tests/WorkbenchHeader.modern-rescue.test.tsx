@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import ModernWorkbenchHeader from '../engines/modern';
@@ -161,5 +161,32 @@ describe('WorkbenchHeader modern — locale-correct content', () => {
     expect(container.querySelector('[data-part="title"] bdi')).toBeInTheDocument();
     expect(container.querySelector('[data-part="subtitle"] bdi')).toBeInTheDocument();
     expect(container.querySelectorAll('[data-part="tab"] bdi')).toHaveLength(2);
+  });
+});
+
+describe('WorkbenchHeader modern — the strip stays reachable when no view is active', () => {
+  it.each([
+    ['no activeViewId', undefined],
+    ['an unknown activeViewId', 'missing'],
+  ])('puts the single tab stop on the first view with %s, selecting nothing', (_case, activeViewId) => {
+    const onViewChange = vi.fn();
+    render(
+      <ModernWorkbenchHeader
+        title="Hub"
+        savedViews={VIEWS}
+        activeViewId={activeViewId}
+        onViewChange={onViewChange}
+      />,
+    );
+
+    const tabs = screen.getAllByRole('tab');
+    expect(tabs.filter((tab) => tab.getAttribute('tabindex') === '0')).toEqual([tabs[0]]);
+    expect(tabs.every((tab) => tab.getAttribute('aria-selected') === 'false')).toBe(true);
+    expect(onViewChange).not.toHaveBeenCalled();
+
+    tabs[0].focus();
+    fireEvent.keyDown(screen.getByRole('tablist'), { key: 'ArrowRight' });
+    expect(tabs[1]).toHaveFocus();
+    expect(onViewChange).toHaveBeenCalledWith(VIEWS[1].id);
   });
 });

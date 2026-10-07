@@ -101828,6 +101828,43 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   font-size: var(--ds-font-size-xs, 0.75rem);
   transition: filter var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
+/* An interactive chip is a Button for behaviour only: its box, type and press motion are withdrawn here.
+   `:where()` keeps the chip rule's weight, so the narrow-container dot below still wins. */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  [data-part='day-cell']
+  [data-part='event']:where([data-chrome='none']) {
+  --ds-button-hover-transform: none;
+  --ds-button-hover-filter: none;
+  --ds-button-active-transform: none;
+  --ds-button-active-filter: none;
+  display: flex;
+  align-items: flex-start;
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding-block: 0;
+  border: 0;
+  text-align: start;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  position: static;
+  isolation: auto;
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  [data-part='day-cell']
+  [data-part='event']:where([data-chrome='none'])
+  > [data-part='content'] {
+  display: block;
+  position: static;
+  z-index: auto;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 /* The ink is read against the chip's OWN accent, resolved here so a per-event stamp gets its own ink. */
 @supports (color: contrast-color(red)) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
@@ -101987,6 +102024,12 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
     border-radius: var(--ds-radius-sm);
     background: Canvas;
     color: CanvasText;
+  }
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    [data-part='day-cell']
+    [data-part='event']:where([data-chrome='none']) {
+    inline-size: 100%;
   }
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
