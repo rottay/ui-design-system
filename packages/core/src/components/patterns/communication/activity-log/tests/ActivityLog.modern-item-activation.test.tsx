@@ -61,4 +61,14 @@ describe('ActivityLog modern item activation is a composed chrome-less Button', 
     expect(SKIN).toMatch(/\[data-part='item-body'\] > \[data-part='item-hit'\] \{\s*position: absolute;\s*z-index: var\(--ds-z-index-relative-above\);\s*inset: 0;\s*border-radius: inherit;\s*clip-path: border-box;\s*\}/);
     expect(SKIN).toMatch(/\[data-part='item-hit'\] > \[data-part='item-activate'\] \{\s*position: absolute;\s*inset: -4%;\s*max-inline-size: none;\s*\}/);
   });
+
+  it('lifts the truncated names and the timestamp text above the frame so their title tooltips stay reachable', async () => {
+    expect(SKIN).toMatch(/\[data-part='item-body'\] :is\(\[data-part='user'\], \[data-part='entity'\], \[data-part='timestamp-text'\]\) \{\s*position: relative;\s*z-index: var\(--ds-z-index-relative-above\);\s*\}/);
+    expect(SKIN).toMatch(/\[data-part='item-body'\]\[data-interactive='true'\]::after \{\s*z-index: var\(--ds-z-index-relative-above\);\s*\}/);
+    const { container } = await mount({ onActivityClick: vi.fn() });
+    const text = container.querySelector('[data-part="timestamp"] > [data-part="timestamp-text"]');
+    expect(text?.tagName).toBe('SPAN');
+    expect(text?.getAttribute('title')).toBeTruthy();
+    expect(container.querySelector('[data-part="timestamp"]')).not.toHaveAttribute('title');
+  });
 });

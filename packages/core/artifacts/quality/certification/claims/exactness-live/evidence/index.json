@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "cfd4f379447ea7a854f9a10ee251513c5b2617b86aaa53f6e649e7dda41865a4",
+    "authorityDigest": "386404e003bfa3eaf75bcb2cbd1c6ce7968a425eaab46e38c742ebef5501a697",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "481c2e7663d148a4449c915cdab4ee2e28f04fb1",
+    "documentationRevision": "f83deeb3c67f24b77372d6db7895a39e9868e0a9",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -223,7 +223,7 @@
           "workspace-toolchain"
         ],
         "bytes": 27490,
-        "sha256": "a24e480ad165dfbd80e08c7247fc7375d476172c7e243c668b6d30c5dee51491"
+        "sha256": "7599a8f542993400f1d8eb212ffeaf4c6b9dd5755ca678f7d95dfc4cb5cbe692"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5710133,
-        "sha256": "48ba21079192e8a4061990a1fd760e51c949f2ea40244e1f0f748badfe65ec59"
+        "bytes": 5710788,
+        "sha256": "7806a6b285390256a6cad13199312b4a8894b80680e448ce0d87747acf79f86c"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5075091,
-        "sha256": "b3aedb438d2071571cce69ab79654ba640b22fa657f5e286a3517da522ddf3d0"
+        "bytes": 5075746,
+        "sha256": "34d49fb8c6a93dc4fdb20486cbc39a182abbf53420faa5d7961bc6f8153cb8bb"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5036284,
-        "sha256": "fffeb44100100d4797025f9309a47ac849e1334ccb2803bcd5334cd2b75f0a6a"
+        "bytes": 5036939,
+        "sha256": "3ec2ee128f3b4d8ad1c3a0a5d3af465d3ce3f6f376efe1ce943f6b5861fb5002"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5035544,
-        "sha256": "ba97a62ce2b45ca3ed02d46746fcdbb1d084fad10e4a557df8ff92cc0170761a"
+        "bytes": 5036199,
+        "sha256": "b267126179de8ba4790b783b2c58ab59f1265e866ecd5f4aa333c054d0e996c7"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -332,7 +332,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "576cc458676f10b596e97eca7511752755d72fd3f3ce1b28a5f0f177df4d7345"
+        "sha256": "97841a1643f06d72299b7d337386a0a46c18beee1bbe45dc37d0ee7b2db953aa"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -521,8 +521,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 21546,
-        "sha256": "50985302ee5de16d96e0e73318a7b6c013192b04bd6cd2afb88e73ff09fec2d7"
+        "bytes": 21710,
+        "sha256": "8f4537a9f8aeeda254c162893569cbea84019c361db6460eed674517c33f0974"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/communication/activity-log/engines/rustic/index.tsx",
@@ -573,8 +573,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 3242,
-        "sha256": "4a11d66d73498f719b8bedf0500143bcd0614bbdb191428f455c1592d440ee24"
+        "bytes": 4091,
+        "sha256": "4427f3f44c763300bef4c68b9e108191972044527db61c94543bf4e689eb9fb3"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/communication/activity-log/tests/ActivityLog.narrow-host.integration.test.tsx",
@@ -30032,8 +30032,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 12567,
-        "sha256": "461120b826eadb67d379ca972b0e07e159188c6edc40bd1c5b085cb215c6a069"
+        "bytes": 13222,
+        "sha256": "698554f3adf7870a794bd697a995263158fdca51fcc4b087fb6632d6839f0506"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
@@ -48180,7 +48180,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "cfd4f379447ea7a854f9a10ee251513c5b2617b86aaa53f6e649e7dda41865a4"
+    "digest": "386404e003bfa3eaf75bcb2cbd1c6ce7968a425eaab46e38c742ebef5501a697"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4219 counters; 3222 completed zeros locked exactly; 987 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -51710,7 +51710,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 175
+          "line": 185
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
@@ -58154,7 +58154,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 247
+          "line": 257
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
@@ -74875,7 +74875,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 268
+          "line": 278
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
@@ -122368,8 +122368,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "ad51c8c2352c1da1e160827b6a103c86ba0e395baec41427528c1c2ae446dd6f",
-      "ad51c8c2352c1da1e160827b6a103c86ba0e395baec41427528c1c2ae446dd6f"
+      "1fe68c893f2ebc3815b784a3b89b6f0a2b07898771f95e71a1f3194c4d096b18",
+      "1fe68c893f2ebc3815b784a3b89b6f0a2b07898771f95e71a1f3194c4d096b18"
     ],
     "agree": true
   }

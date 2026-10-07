@@ -523,12 +523,12 @@ export default function ModernActivityLog(props: ActivityLogProps) {
                         )}
                       </div>
 
-                      {/* Timestamp: relative (i18n floor) with absolute tooltip */}
-                      <div
-                        data-part="timestamp"
-                        title={formatAbsoluteTime(activity.timestamp, locale)}
-                      >
-                        {formatRelativeTime(activity.timestamp)}
+                      {/* Timestamp: relative (i18n floor) with absolute tooltip. The tooltip rides the inline text so
+                          only the text, not the full-width line, is lifted above the item's activation. */}
+                      <div data-part="timestamp">
+                        <span data-part="timestamp-text" title={formatAbsoluteTime(activity.timestamp, locale)}>
+                          {formatRelativeTime(activity.timestamp)}
+                        </span>
                       </div>
 
                       {/* Diff view */}

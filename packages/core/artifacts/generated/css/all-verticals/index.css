@@ -67901,6 +67901,16 @@ html[data-ds-motion='reduced']
   inset: -4%;
   max-inline-size: none;
 }
+/* Lifted above the frame (same layer, later in source) so the truncated names and the absolute time keep their
+   title tooltips; these inline zones do not activate the item. */
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'] :is([data-part='user'], [data-part='entity'], [data-part='timestamp-text']) {
+  position: relative;
+  z-index: var(--ds-z-index-relative-above);
+}
+/* The focus ring (the body's ::after, last in source) stays above the lifted text, as it was above all content. */
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']::after {
+  z-index: var(--ds-z-index-relative-above);
+}
 @media (hover: hover) {
   .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
