@@ -1,0 +1,721 @@
+{
+  "schemaVersion": 2,
+  "criterion": "F-91 clause 1: every dead writer the DS declares is retired or carries a disposition held by a verifiable receiver.",
+  "vocabulary": {
+    "RETIRE": "retire the writer with its producer, allowlist and catalog entries",
+    "WIRE": "give the writer a productive DS reader",
+    "DECIDE": "an owner decision is owed before the writer is wired or retired",
+    "KEEP_RESERVED": "deliberately unread (reserved hook, closed vocabulary, opt-in ramp, ramp member)",
+    "KEEP_APP_READ": "read only by app code the DS-scoped projection does not see"
+  },
+  "dispositions": {
+    "--ds-action-dock-reserved-block-end": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_RESERVED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-action-dock-reserved-block-end] is KEEP_RESERVED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-action-dock-reserved-block-start": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_RESERVED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-action-dock-reserved-block-start] is KEEP_RESERVED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-bottom-tab-bar-reserved-block-end": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_RESERVED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-bottom-tab-bar-reserved-block-end] is KEEP_RESERVED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-button-primary-border-color": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-button-primary-border-color] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-cell-meter-fill": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 2x app-bithire. writers/unused/system entries[--ds-cell-meter-fill] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-cell-meter-shadow": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-cell-meter-shadow] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-cell-meter-track": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 3x app-bithire. writers/unused/system entries[--ds-cell-meter-track] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-cell-meter-track-border": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 3x app-bithire. writers/unused/system entries[--ds-cell-meter-track-border] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-cell-pill-bg": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 2x app-bithire. writers/unused/system entries[--ds-cell-pill-bg] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-cell-pill-border": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 2x app-bithire. writers/unused/system entries[--ds-cell-pill-border] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-cell-pill-color": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-cell-pill-color] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-cell-pill-dot-current": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 2x app-bithire. writers/unused/system entries[--ds-cell-pill-dot-current] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-cell-pill-shadow": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-cell-pill-shadow] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-chart-card-bg": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-chart-card-bg] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-color-accent-live": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "OWNER_MENU",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-color-accent-live] is OWNER_MENU/OWNER_DECISION (the row would paint something new; it sits on the registry ownerDecisionMenu). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-color-mono-100": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_RAMP_MEMBER_FLOOR_RELOCATED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-color-mono-100] is KEEP_RAMP_MEMBER_FLOOR_RELOCATED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The row cites 9 app-platform reader files; none of them reads this step today, so the keep rests on ramp membership alone. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-color-mono-200": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_RAMP_MEMBER_FLOOR_RELOCATED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-color-mono-200] is KEEP_RAMP_MEMBER_FLOOR_RELOCATED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The row cites 9 app-platform reader files; none of them reads this step today, so the keep rests on ramp membership alone. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-color-mono-800": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_RAMP_MEMBER_FLOOR_RELOCATED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-color-mono-800] is KEEP_RAMP_MEMBER_FLOOR_RELOCATED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The row cites 9 app-platform reader files; none of them reads this step today, so the keep rests on ramp membership alone. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-color-mono-900": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_RAMP_MEMBER_FLOOR_RELOCATED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-color-mono-900] is KEEP_RAMP_MEMBER_FLOOR_RELOCATED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The row cites 9 app-platform reader files; none of them reads this step today, so the keep rests on ramp membership alone. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-color-surface-subtle": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 2x app-bithire. writers/unused/system entries[--ds-color-surface-subtle] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-duration-gentle": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_CLOSED_VOCABULARY",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-duration-gentle] is KEEP_CLOSED_VOCABULARY/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-duration-instant": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_CLOSED_VOCABULARY",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-duration-instant] is KEEP_CLOSED_VOCABULARY/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-ease-in-out": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 6x app-platform. writers/unused/system entries[--ds-ease-in-out] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-elevation-surface-0": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-elevation-surface-0] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-elevation-surface-1": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-elevation-surface-1] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-elevation-surface-2": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-elevation-surface-2] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-elevation-surface-5": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-elevation-surface-5] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-empty-bg": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-empty-bg] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-empty-border": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-empty-border] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-empty-icon-bg": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-empty-icon-bg] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-empty-icon-border": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-empty-icon-border] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-empty-title-color": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "RETIRE_PROPOSED",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-empty-title-color] is RETIRE_PROPOSED/OWNER_DECISION (a proposed retirement the registry law keeps unexecuted until the owner signs). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-error-state-bg": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-error-state-bg] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-error-state-border": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 2x app-bithire. writers/unused/system entries[--ds-error-state-border] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-error-state-icon-bg": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 1x app-bithire. writers/unused/system entries[--ds-error-state-icon-bg] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-font-pack-arabic-text": {
+      "verdict": "WIRE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "RECONNECT_PENDING_PART",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-font-pack-arabic-text] is RECONNECT_PENDING_PART/OWNER_DECISION (owner: foundation/kernel/typography; the arabic-safe tail must read var() -- the same debt the dead-writer anchor admits). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-input-success-message-color": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "OWNER_MENU",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-input-success-message-color] is OWNER_MENU/OWNER_DECISION (the row would paint something new; it sits on the registry ownerDecisionMenu). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-input-success-message-font-size": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "OWNER_MENU",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-input-success-message-font-size] is OWNER_MENU/OWNER_DECISION (the row would paint something new; it sits on the registry ownerDecisionMenu). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-input-success-message-margin-top": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "OWNER_MENU",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-input-success-message-margin-top] is OWNER_MENU/OWNER_DECISION (the row would paint something new; it sits on the registry ownerDecisionMenu). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-letter-spacing-snug": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_CLOSED_VOCABULARY",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-letter-spacing-snug] is KEEP_CLOSED_VOCABULARY/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-letter-spacing-subtle-wide": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_CLOSED_VOCABULARY",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-letter-spacing-subtle-wide] is KEEP_CLOSED_VOCABULARY/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-meter-track-border": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 19x app-bithire. writers/unused/system entries[--ds-meter-track-border] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-popover-title-gap-current": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "OWNER_MENU",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-popover-title-gap-current] is OWNER_MENU/OWNER_DECISION (the row would paint something new; it sits on the registry ownerDecisionMenu). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-premium-card-rim": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "cards",
+        "decision": "DELIBERATE_DELTA_PENDING_OWNER",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/cards entries[--ds-premium-card-rim] is DELIBERATE_DELTA_PENDING_OWNER/OWNER_DECISION (provenance A-kimi-premium): it resolves to real paint per vertical, so connecting it would newly paint a surface. Its law forbids RETIRE without owner sign-off (\"Kimi/premium provenance defaults to RECONNECT/PROMOTE -- RETIRE is forbidden without owner sign-off\") and any family-level decision. Receiver: the cards registry's owner-decision route, ownerDecisionMenu[\"rim\"]. Held until the owner answers that menu row; no date is invented."
+    },
+    "--ds-result-icon-success": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "OWNER_MENU",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-result-icon-success] is OWNER_MENU/OWNER_DECISION (the row would paint something new; it sits on the registry ownerDecisionMenu). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-result-icon-warning": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "OWNER_MENU",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-result-icon-warning] is OWNER_MENU/OWNER_DECISION (the row would paint something new; it sits on the registry ownerDecisionMenu). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-rich-card-bg": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "cards",
+        "decision": "DELIBERATE_DELTA_PENDING_OWNER",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/cards entries[--ds-rich-card-bg] is DELIBERATE_DELTA_PENDING_OWNER/OWNER_DECISION (provenance A-kimi-premium): it resolves to real paint per vertical, so connecting it would newly paint a surface. Its law forbids RETIRE without owner sign-off (\"Kimi/premium provenance defaults to RECONNECT/PROMOTE -- RETIRE is forbidden without owner sign-off\") and any family-level decision. Receiver: the cards registry's owner-decision route, ownerDecisionMenu[\"bg\"]. Held until the owner answers that menu row; no date is invented."
+    },
+    "--ds-rich-card-border": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "cards",
+        "decision": "DELIBERATE_DELTA_PENDING_OWNER",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 5x app-bithire. writers/unused/cards entries[--ds-rich-card-border] is DELIBERATE_DELTA_PENDING_OWNER/OWNER_DECISION (provenance A-kimi-premium): it resolves to real paint per vertical, so connecting it would newly paint a surface. Its law forbids RETIRE without owner sign-off (\"Kimi/premium provenance defaults to RECONNECT/PROMOTE -- RETIRE is forbidden without owner sign-off\") and any family-level decision. Receiver: the cards registry's owner-decision route, ownerDecisionMenu[\"border\"]. Held until the owner answers that menu row; no date is invented. The registry row records consumerFiles 0; app-bithire now reads it (5x app-bithire), which the owner answer must account for."
+    },
+    "--ds-rich-card-border-hover": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "cards",
+        "decision": "DELIBERATE_DELTA_PENDING_OWNER",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/cards entries[--ds-rich-card-border-hover] is DELIBERATE_DELTA_PENDING_OWNER/OWNER_DECISION (provenance A-kimi-premium): it resolves to real paint per vertical, so connecting it would newly paint a surface. Its law forbids RETIRE without owner sign-off (\"Kimi/premium provenance defaults to RECONNECT/PROMOTE -- RETIRE is forbidden without owner sign-off\") and any family-level decision. Receiver: the cards registry's owner-decision route, ownerDecisionMenu[\"border-hover\"]. Held until the owner answers that menu row; no date is invented."
+    },
+    "--ds-rich-card-border-selected": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "cards",
+        "decision": "DELIBERATE_DELTA_PENDING_OWNER",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/cards entries[--ds-rich-card-border-selected] is DELIBERATE_DELTA_PENDING_OWNER/OWNER_DECISION (provenance A-kimi-premium): it resolves to real paint per vertical, so connecting it would newly paint a surface. Its law forbids RETIRE without owner sign-off (\"Kimi/premium provenance defaults to RECONNECT/PROMOTE -- RETIRE is forbidden without owner sign-off\") and any family-level decision. Receiver: the cards registry's owner-decision route, ownerDecisionMenu[\"border-selected\"]. Held until the owner answers that menu row; no date is invented."
+    },
+    "--ds-rich-card-footer-bg": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "cards",
+        "decision": "DELIBERATE_DELTA_PENDING_OWNER",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/cards entries[--ds-rich-card-footer-bg] is DELIBERATE_DELTA_PENDING_OWNER/OWNER_DECISION (provenance A-kimi-premium): it resolves to real paint per vertical, so connecting it would newly paint a surface. Its law forbids RETIRE without owner sign-off (\"Kimi/premium provenance defaults to RECONNECT/PROMOTE -- RETIRE is forbidden without owner sign-off\") and any family-level decision. Receiver: the cards registry's owner-decision route, ownerDecisionMenu[\"footer-bg\"]. Held until the owner answers that menu row; no date is invented."
+    },
+    "--ds-rich-card-ring-selected": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "cards",
+        "decision": "DELIBERATE_DELTA_PENDING_OWNER",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/cards entries[--ds-rich-card-ring-selected] is DELIBERATE_DELTA_PENDING_OWNER/OWNER_DECISION (provenance A-kimi-premium): it resolves to real paint per vertical, so connecting it would newly paint a surface. Its law forbids RETIRE without owner sign-off (\"Kimi/premium provenance defaults to RECONNECT/PROMOTE -- RETIRE is forbidden without owner sign-off\") and any family-level decision. Receiver: the cards registry's owner-decision route, ownerDecisionMenu[\"ring-selected\"]. Held until the owner answers that menu row; no date is invented."
+    },
+    "--ds-rich-card-sheen": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "cards",
+        "decision": "DELIBERATE_DELTA_PENDING_OWNER",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/cards entries[--ds-rich-card-sheen] is DELIBERATE_DELTA_PENDING_OWNER/OWNER_DECISION (provenance A-kimi-premium): it resolves to real paint per vertical, so connecting it would newly paint a surface. Its law forbids RETIRE without owner sign-off (\"Kimi/premium provenance defaults to RECONNECT/PROMOTE -- RETIRE is forbidden without owner sign-off\") and any family-level decision. Receiver: the cards registry's owner-decision route, ownerDecisionMenu[\"sheen\"]. Held until the owner answers that menu row; no date is invented."
+    },
+    "--ds-shadow-primary": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "OWNER_MENU",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-shadow-primary] is OWNER_MENU/OWNER_DECISION (the row would paint something new; it sits on the registry ownerDecisionMenu). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-space-fluid-1": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-space-fluid-1] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The ramp's own source says \"Opt-in; nothing consumes these by default\". No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-space-fluid-10": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-space-fluid-10] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The ramp's own source says \"Opt-in; nothing consumes these by default\". No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-space-fluid-12": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-space-fluid-12] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The ramp's own source says \"Opt-in; nothing consumes these by default\". No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-space-fluid-2": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-space-fluid-2] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The ramp's own source says \"Opt-in; nothing consumes these by default\". No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-space-fluid-3": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-space-fluid-3] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The ramp's own source says \"Opt-in; nothing consumes these by default\". No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-space-fluid-4": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-space-fluid-4] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The ramp's own source says \"Opt-in; nothing consumes these by default\". No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-space-fluid-6": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-space-fluid-6] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The ramp's own source says \"Opt-in; nothing consumes these by default\". No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-space-fluid-8": {
+      "verdict": "KEEP_RESERVED",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PARAMETRIC_RAMP",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-space-fluid-8] is KEEP_PARAMETRIC_RAMP/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The ramp's own source says \"Opt-in; nothing consumes these by default\". No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-state-transition": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "UNSURE",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-state-transition] is UNSURE/OWNER_DECISION (held on the registry unsureRegister). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-surface-card-border-soft": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 80x app-bithire. writers/unused/system entries[--ds-surface-card-border-soft] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-surface-card-color-muted": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "OWNER_MENU",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-surface-card-color-muted] is OWNER_MENU/OWNER_DECISION (the row would paint something new; it sits on the registry ownerDecisionMenu). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-surface-card-grid-line-strong": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "UNSURE",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-surface-card-grid-line-strong] is UNSURE/OWNER_DECISION (held on the registry unsureRegister). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-surface-focus-ring": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 2x app-bithire. writers/unused/system entries[--ds-surface-focus-ring] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-table-action-slots-width": {
+      "verdict": "DECIDE",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "RECONNECT_PENDING_PART",
+        "finalState": "OWNER_DECISION"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system entries[--ds-table-action-slots-width] is RECONNECT_PENDING_PART/OWNER_DECISION (no rule selects the part it would wire). Receiver: the system registry's owner-decision route; held until the owner rules, no date invented."
+    },
+    "--ds-typography-body-letter-spacing": {
+      "verdict": "RETIRE",
+      "registered": "2026-10-07",
+      "heldBy": "WO-RET-01",
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system records the MERGE as EXECUTED onto the live channel, so this name is a leftover declaration. Held by WO-RET-01 (retire code without productive consumers), in progress; no date beyond that work order's own closure."
+    },
+    "--ds-typography-display-letter-spacing": {
+      "verdict": "RETIRE",
+      "registered": "2026-10-07",
+      "heldBy": "WO-RET-01",
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system records the DERIVE as EXECUTED onto the live channel, so this name is a leftover declaration. Held by WO-RET-01 (retire code without productive consumers), in progress; no date beyond that work order's own closure."
+    },
+    "--ds-workflow-gap": {
+      "verdict": "KEEP_APP_READ",
+      "registered": "2026-10-07",
+      "heldBy": {
+        "registry": "system",
+        "decision": "KEEP_PUBLIC_READ_FLOORED",
+        "finalState": "KEEP_ACTIVE"
+      },
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 2x app-bithire. writers/unused/system entries[--ds-workflow-gap] is KEEP_PUBLIC_READ_FLOORED/KEEP_ACTIVE: an adjudicated keep, held by that row (the gate fails if it drifts). The DS-scoped census cannot see app reads; the keep holds while they measure. No owning work order or date exists for it in roadmap/registry.json; it holds until the system registry re-adjudicates the row."
+    },
+    "--ds-z-modal": {
+      "verdict": "RETIRE",
+      "registered": "2026-10-07",
+      "heldBy": "WO-RET-01",
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. An alias of --ds-z-index-modal, which the overlay skins read directly; only a doc comment names it. Registered in writers/unused/system as RETIRE_PROPOSED with owner WO-RET-01 (review D4). Held by WO-RET-01 (retire code without productive consumers), in progress; no date beyond that work order's own closure."
+    }
+  }
+}

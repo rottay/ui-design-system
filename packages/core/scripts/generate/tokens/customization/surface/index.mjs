@@ -50,7 +50,7 @@
  * non-zero — proving each gate bites.
  */
 import { createHash } from 'node:crypto';
-import { readdirSync, readFileSync, statSync, writeFileSync, existsSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
@@ -66,6 +66,7 @@ const WORKSPACE_ROOT = dirname(findRepoRoot(HERE));
 const SHOWROOM_SRC = join(ROOT, '../showroom/src');
 const REPORT_PATH = join(HERE, 'report/index.json');
 const DEAD_BASELINE_PATH = join(ROOT, 'scripts/generate/tokens/customization/surface/dead-writers-baseline/index.json');
+const DISPOSITIONS_PATH = join(ROOT, 'src/foundation/tokens/data/decisions/writers/unused/dispositions/index.json');
 const MANIFEST_PATH = join(ROOT, 'contracts/css/hooks/index.json');
 const REGISTRY_PATH = join(ROOT, 'src/foundation/contracts/composition/tenants/capabilities/index.ts');
 const ALLOWLIST_PATH = join(ROOT, 'src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts');
@@ -957,11 +958,136 @@ export function buildDeadBaselineDoc({ live, previous, reason, widen = false, ow
   };
 }
 
+// F-91: every dead writer the DS declares carries one disposition, held by a receiver the gate can verify: an open
+// work order, the registry row that adjudicated it, or a due day. Compiler-derived channels are counted, never claimed.
+export const DISPOSITIONS_SCHEMA_VERSION = 2;
+export const DATED_CATEGORIES = Object.freeze(['canonical-authority', 'authored-css-local']);
+export const DATED_VERDICTS = Object.freeze({
+  RETIRE: 'retire the writer with its producer, allowlist and catalog entries',
+  WIRE: 'give the writer a productive DS reader',
+  DECIDE: 'an owner decision is owed before the writer is wired or retired',
+  KEEP_RESERVED: 'deliberately unread (reserved hook, closed vocabulary, opt-in ramp, ramp member)',
+  KEEP_APP_READ: 'read only by app code the DS-scoped projection does not see',
+});
+const REGISTRY_FINAL_STATE_BY_VERDICT = Object.freeze({ KEEP_RESERVED: 'KEEP_ACTIVE', KEEP_APP_READ: 'KEEP_ACTIVE', DECIDE: 'OWNER_DECISION' });
+const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
+const WORK_ORDER = /^WO-[A-Z]{3,4}-\d{2}$/;
+const ROADMAP_REGISTRY_PATH = join(findRepoRoot(HERE), 'roadmap/registry.json');
+const ADJUDICATION_REGISTRIES = Object.freeze({
+  system: join(ROOT, 'src/foundation/tokens/data/decisions/writers/unused/system/index.json'),
+  cards: join(ROOT, 'src/foundation/tokens/data/decisions/writers/unused/cards/index.json'),
+});
+
+export function datedPopulation(report) {
+  return report.deadWriters.filter((name) => DATED_CATEGORIES.includes(report.rows[name]?.category));
+}
+
+function readJson(path) {
+  try { return JSON.parse(readFileSync(path, 'utf8')); } catch { return null; }
+}
+
+/** The receivers a row may name: open work orders, and the rows of the two adjudication registries. */
+export function loadReceivers() {
+  const roadmap = readJson(ROADMAP_REGISTRY_PATH);
+  const workOrders = new Map((roadmap?.workOrders ?? []).map((order) => [order.id, order.status]));
+  const registries = Object.fromEntries(Object.entries(ADJUDICATION_REGISTRIES).map(([key, path]) => [key, readJson(path)]));
+  return { roadmapReadable: roadmap !== null, workOrders, registries };
+}
+
+function dispositionProblems(name, row, { today, receivers }) {
+  const problems = [];
+  if (!row || typeof row !== 'object') return ['the row is not an object'];
+  if (!Object.hasOwn(DATED_VERDICTS, row.verdict)) problems.push(`verdict ${JSON.stringify(row.verdict ?? null)} is not in the closed vocabulary`);
+  if (!ISO_DAY.test(row.registered ?? '')) problems.push('registered is not a YYYY-MM-DD day');
+  if (typeof row.reason !== 'string' || row.reason.trim() === '') problems.push('it states no reason');
+  const forms = [row.due !== undefined, typeof row.heldBy === 'string', typeof row.heldBy === 'object' && row.heldBy !== null];
+  if (forms.filter(Boolean).length !== 1) return [...problems, 'it names no receiver, or more than one: exactly one of due (with owner), heldBy work order, heldBy registry row'];
+  if (forms[0]) {
+    if (!WORK_ORDER.test(row.owner ?? '')) problems.push(`owner ${JSON.stringify(row.owner ?? null)} is not a work-order id`);
+    if (!ISO_DAY.test(row.due)) problems.push('due is not a YYYY-MM-DD day');
+    else if (ISO_DAY.test(row.registered ?? '') && row.due < row.registered) problems.push(`due ${row.due} precedes registered ${row.registered}`);
+    else if (row.due < today) problems.push(`OVERDUE: due ${row.due}, today ${today} -- execute the verdict or re-register it with a new date and reason`);
+  } else if (forms[1]) {
+    if (!WORK_ORDER.test(row.heldBy)) problems.push(`heldBy ${JSON.stringify(row.heldBy)} is not a work-order id`);
+    else if (!receivers.roadmapReadable) problems.push('roadmap/registry.json is unreadable, so the holding work order cannot be verified');
+    else if (!receivers.workOrders.has(row.heldBy)) problems.push(`heldBy ${row.heldBy} is not a work order in roadmap/registry.json`);
+    else if (receivers.workOrders.get(row.heldBy) === 'done') problems.push(`RECEIVER CLOSED: ${row.heldBy} is done and this debt is still open -- execute the verdict or re-home the row`);
+  } else {
+    const { registry, decision, finalState } = row.heldBy;
+    const entry = receivers.registries[registry]?.entries?.[name];
+    if (!Object.hasOwn(ADJUDICATION_REGISTRIES, registry)) problems.push(`heldBy registry ${JSON.stringify(registry ?? null)} is not system or cards`);
+    else if (!entry) problems.push(`heldBy registry ${registry} has no row for ${name}`);
+    else if (entry.decision !== decision || entry.finalState !== finalState) {
+      problems.push(`DRIFTED: the ${registry} row now reads ${entry.decision}/${entry.finalState}, the disposition cites ${decision}/${finalState} -- re-register it`);
+    }
+    const expected = REGISTRY_FINAL_STATE_BY_VERDICT[row.verdict];
+    if (expected && finalState !== expected) problems.push(`a ${row.verdict} disposition must rest on a ${expected} registry row, not ${finalState}`);
+  }
+  return problems;
+}
+
+export function evaluateDatedDispositions(population, doc, { today, receivers = loadReceivers() }) {
+  if (!doc || doc.schemaVersion !== DISPOSITIONS_SCHEMA_VERSION || typeof doc.dispositions !== 'object' || doc.dispositions === null) {
+    return [`dated: writers/unused/dispositions is missing, unreadable or not schemaVersion ${DISPOSITIONS_SCHEMA_VERSION}`];
+  }
+  const failures = [];
+  const live = new Set(population);
+  for (const name of population) {
+    if (!Object.hasOwn(doc.dispositions, name)) {
+      failures.push(`dated: ${name} is a dead writer with no disposition -- retire it, or register one: --write-dispositions --names=${name} --verdict=... (--held-by=WO-...|registry:<system|cards> | --due=YYYY-MM-DD --owner=WO-...) --reason "..."`);
+      continue;
+    }
+    for (const problem of dispositionProblems(name, doc.dispositions[name], { today, receivers })) failures.push(`dated: ${name} -- ${problem}`);
+  }
+  for (const name of Object.keys(doc.dispositions)) {
+    if (!live.has(name)) failures.push(`dated: ${name} has a disposition but is no longer a dead writer the DS declares -- a win; remove its row in the same commit`);
+  }
+  return failures;
+}
+
+export function buildDispositionsDoc({ previous, population, names, verdict, heldBy, due, owner, reason, registered, receivers = loadReceivers() }) {
+  const live = new Set(population);
+  if (names.length === 0) throw new Error('--write-dispositions names no token: --names=<a,b,...>');
+  const outside = names.filter((name) => !live.has(name));
+  if (outside.length > 0) throw new Error(`only a live dead writer the DS declares takes a disposition; not one: ${outside.join(', ')}`);
+  const dispositions = { ...(previous?.schemaVersion === DISPOSITIONS_SCHEMA_VERSION ? previous.dispositions : {}) };
+  for (const name of names) {
+    let receiver;
+    if (typeof heldBy === 'string' && heldBy.startsWith('registry:')) {
+      const registry = heldBy.slice('registry:'.length);
+      const entry = receivers.registries[registry]?.entries?.[name];
+      receiver = { heldBy: { registry, decision: entry?.decision, finalState: entry?.finalState } };
+    } else if (typeof heldBy === 'string') {
+      receiver = { heldBy };
+    } else {
+      receiver = { owner, due };
+    }
+    const row = { verdict, registered, ...receiver, reason };
+    const problems = dispositionProblems(name, row, { today: registered, receivers });
+    if (problems.length > 0) throw new Error(`refused ${name}: ${problems.join('; ')}`);
+    dispositions[name] = row;
+  }
+  return {
+    schemaVersion: DISPOSITIONS_SCHEMA_VERSION,
+    criterion: 'F-91 clause 1: every dead writer the DS declares is retired or carries a disposition held by a verifiable receiver.',
+    vocabulary: DATED_VERDICTS,
+    dispositions: Object.fromEntries(Object.entries(dispositions).sort(([left], [right]) => left.localeCompare(right))),
+  };
+}
+
+function loadDispositions() {
+  return existsSync(DISPOSITIONS_PATH) ? readJson(DISPOSITIONS_PATH) : null;
+}
+
+const utcDay = () => new Date().toISOString().slice(0, 10);
+
 function main() {
   const drill = flagValue('--drill');
   const check = flagValue('--check');
   const write = Boolean(flag('--write'));
   const writeBaseline = Boolean(flag('--write-baseline'));
+  const writeDispositions = Boolean(flag('--write-dispositions'));
+  const today = flag('--today') ? flagValue('--today') : utcDay();
 
   const { report, leanedOn } = buildReport({ drill });
   const failures = [];
@@ -982,6 +1108,29 @@ function main() {
       });
       writeFileSync(DEAD_BASELINE_PATH, `${JSON.stringify(doc, null, 2)}\n`);
       console.log(`customization-surface: wrote dead-writer baseline (${doc.names.length} names, ${doc.lastMoveKind})`);
+    } catch (error) {
+      console.error(`customization-surface: ${error.message}`);
+      process.exit(1);
+    }
+  }
+
+  if (writeDispositions) {
+    const reasonIndex = args.indexOf('--reason');
+    try {
+      const doc = buildDispositionsDoc({
+        previous: loadDispositions(),
+        population: datedPopulation(report),
+        names: String(flagValue('--names') ?? '').split(',').map((name) => name.trim()).filter(Boolean),
+        verdict: flagValue('--verdict'),
+        heldBy: flag('--held-by') ? flagValue('--held-by') : undefined,
+        due: flag('--due') ? flagValue('--due') : undefined,
+        owner: flag('--owner') ? flagValue('--owner') : undefined,
+        reason: reasonIndex >= 0 ? args[reasonIndex + 1] : undefined,
+        registered: flag('--registered') ? flagValue('--registered') : today,
+      });
+      mkdirSync(dirname(DISPOSITIONS_PATH), { recursive: true });
+      writeFileSync(DISPOSITIONS_PATH, `${JSON.stringify(doc, null, 2)}\n`);
+      console.log(`customization-surface: wrote ${Object.keys(doc.dispositions).length} disposition(s)`);
     } catch (error) {
       console.error(`customization-surface: ${error.message}`);
       process.exit(1);
@@ -1029,7 +1178,16 @@ function main() {
     }
   }
 
-  if (!write && !writeBaseline && !check) {
+  if (wantAll || check === 'dated') {
+    const population = datedPopulation(report);
+    if (drill === 'undated') population.push('--ds-drill-undated-dead-writer');
+    const receivers = loadReceivers();
+    if (drill === 'receiver-closed') for (const id of receivers.workOrders.keys()) receivers.workOrders.set(id, 'done');
+    if (drill === 'drifted') for (const entry of Object.values(receivers.registries.system?.entries ?? {})) entry.finalState = 'EXECUTED';
+    failures.push(...evaluateDatedDispositions(population, loadDispositions(), { today, receivers }));
+  }
+
+  if (!write && !writeBaseline && !writeDispositions && !check) {
     console.log(JSON.stringify(report.counts, null, 2));
   }
   if (failures.length > 0) {
@@ -1037,6 +1195,7 @@ function main() {
     process.exit(1);
   }
   if (check) {
+    if (check === 'dated') console.log(`customization-surface --check=dated OK (${datedPopulation(report).length} DS-declared dead writer(s), each held by a verified receiver; ${report.deadWriters.length - datedPopulation(report).length} compiler-derived channel(s) counted, not claimed; today ${today})`);
     console.log(`customization-surface --check=${check} OK (universe=${report.counts.universe}, dead=${report.counts.deadWriters}, hooks=${report.counts.publicHooks}/${report.counts.unadjudicatedReads}, capabilities=${report.capabilityEvidence.length} verified)`);
   }
 }

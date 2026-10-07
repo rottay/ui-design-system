@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "cc0f64b3db1ed65a7b823868d3ead82ef89ecc1c710aade16f631b4db220ce6f",
+    "authorityDigest": "a2a734889877a48f7e9bdbecd6f6dc100b64bb518d4f661ac70c614edb374895",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -32396,12 +32396,20 @@
         "sha256": "61c6b4d8830964e5f51f77915b62181063bcc0774fdeafb5f806a732aa82f9fe"
       },
       {
+        "path": "ui-design-system/packages/core/src/foundation/tokens/data/decisions/writers/unused/dispositions/index.json",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 60861,
+        "sha256": "43db5da9b6f6b301d336e24982e4e3d7fd4dba20e9a9d26d1d54816b8c330c60"
+      },
+      {
         "path": "ui-design-system/packages/core/src/foundation/tokens/data/decisions/writers/unused/system/index.json",
         "roles": [
           "audit-input"
         ],
-        "bytes": 853286,
-        "sha256": "03a57d206ec2b80c64ff2d0f6be2140aeabfdee888c94ea1a6b0c49f1af663c6"
+        "bytes": 855847,
+        "sha256": "36a5c138fc1e80e56f87b7734251881a4fe56ba995ca20684e8d866bdc04746c"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/data/prototypes/index.json",
@@ -48124,7 +48132,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "cc0f64b3db1ed65a7b823868d3ead82ef89ecc1c710aade16f631b4db220ce6f"
+    "digest": "a2a734889877a48f7e9bdbecd6f6dc100b64bb518d4f661ac70c614edb374895"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4218 counters; 3221 completed zeros locked exactly; 987 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -122308,8 +122316,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "61970e115b9f30aaaff2e622def725b321021ae1ca58a9415f38ea00102ed64b",
-      "61970e115b9f30aaaff2e622def725b321021ae1ca58a9415f38ea00102ed64b"
+      "7fa67d5ec5d7be7d0187c68679fcc3d102d2e75955662e162811f8d0ee821cda",
+      "7fa67d5ec5d7be7d0187c68679fcc3d102d2e75955662e162811f8d0ee821cda"
     ],
     "agree": true
   }

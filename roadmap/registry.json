@@ -6410,6 +6410,16 @@
      "at": "2026-10-07 06:21",
      "by": "kimi",
      "note": "2026-10-07 — Q4 Fase 1 landed (la escalera semantica de scrims, respuesta a Q4): los canales --ds-overlay-{light,medium,heavy} se producen SIEMPRE (rango derivado; precedencia: color authorado > fuerza authorada > canon); el censo de admission reporta por nombre; el Overlay interno retirado (sin importador restante). Paint byte-identica salvo la emision declarada de la escalera en los artefactos (canales no-leidos hasta Fase 2 — Fence 1 ruled in-fence por mi con la condicion G1 cumplida: la sonda de paint corrio sobre la base del commit). R1/E4 queda por medir contra este lote en la re-evaluacion del cierre. Fase 2 queda gateada al owner (G8 visual sign-off, G7 major, D5 migracion MM fuera del DS)."
+    },
+    {
+     "at": "2026-10-07 07:06",
+     "by": "kimi",
+     "note": "2026-10-07 — R1 MET: WO-DER-10 registrado (holder D-30, programs: [], no claimable hasta el pick del owner) y las 2 rows re-homed (census verde en ambos brazos, 814da3739). Decisiones registradas I1(ii): RecipeVariantConfig y createRecipeVariant (root-publicados, 0 consumidores medidos en showroom+apps) se TRANSFIEREN a WO-RET-06 como canon-pending (su retiro espera la ventana 4.0 — no se retiran para achicar el censo). F-94: la disposicion de VerticalTheme (=FlatTheme, 0 consumidores) es la misma: transfer a WO-RET-06 canon-pending, registrado aqui. Pendientes con paquete propio: F-91 clausula 1 (dead-tokens.json ausente + los tokens con 0 lectores sin disposicion fechada) y F-110 clausula 2 (la factory compat sin la negativa label-XOR-decorative; AlertIcon publico). Los artefactos de cierre (R1-R6.txt con sha256) se producen cuando el resto este verde."
+    },
+    {
+     "at": "2026-10-07 09:37",
+     "by": "kimi",
+     "note": "2026-10-07 — Disposiciones DT registradas (evidencia completa en w26-f91f110): F-110 clausula 2 — el factory compat de Phosphor es SOLO-INTERNO tras el major de RET-01 (la ley label-XOR-decorative gobierna el factory canonico, que es la puerta publica); los 20 sitios Classic frozen no migran porque Classic no shippea productivamente (frozen, fail-closed, no seleccionable por tenants); la negativa implementada y medida (204 refusals / 40+ glyphs) queda como evidencia del blast radius si el owner quiere la ruta (a) con excepcion frozen + migracion — revision del owner bienvenida, la disposicion es revisable. F-110 clausula 1 residual: AlertIcon (binding legacy-catalog unico restante, 0 consumidores productivos; una probe page + un archivo app-platform ya roto por otras causas; reemplazo semantico existe: Icon name='status.warning') se TRANSFIERE a WO-RET-06 canon-pending (retiro en la ventana 4.0). F-91 clausula 1: paquete entregado con las 72 disposiciones fechadas (en revision)."
     }
    ]
   },
@@ -8603,23 +8613,25 @@
    ],
    "evidence": "DONE 2026-09-24 (b88fc8617, Fable ACCEPT of the WO's own acceptance, der-09-step34-verdict.md — every clause reproduced by her own runs). ACCEPTANCE, clause by clause: (1) byte-equal artifacts pre/post migration — sha256 three-way (pre-migration 1053cab42, HEAD, disk) identical for all 7 first-party artifacts; the official pre/post path is the gate manifest's rows, each run by its own command line, exit 0; (2) DER-06's affected metrics re-certified WITHOUT weaker gates — its own blocking gate taught v3 by the same law (structure keyed by version, closed domains over the effective set, derivability with produced = the full compile; the old decisions-only leg was vacuous since D6-2c-ii — stronger now), BrandTheme grep 0, name intersection 99.75% >= 90%, root reach 93.0-93.1% >= 80% per vertical, per-family coverage equal (277 families, 2 unreachable = the pin); (3) the same style reused across BitHire/Evnto with their own brands — structural-neutral@1 held, the style-reference ledger's 21 owned leaves identical across brands and ONLY the 4 palette leaves move; evnto's 'own brand' is the instrument's second palette (evnto authors no brand rows — stated, not hidden); (4) two styles in one vertical visibly affect declared non-color axes with brand inputs fixed — bithire's 6 brand rows held, product-dense vs editorial-quiet: 0 color/font channels move, the 19-row contrasting roster pinned, the 3 that cannot move named, and through EVI-02's UNMODIFIED instrument: shape 138/205, typography 173/174, rhythm 174/209, depth 63/187, states 147/147, motion 156/195, the palette-only negative control 0% in all 4 cells; (5) version pins unchanged (the fixture folders untouched since 45dfb2820); registration/source-truth + folder/index checks pass. FOLLOW-UPS NAMED (not blocking): the proof's compile seam used beyond its declared purpose (a scenario should carry its document shape — the axis-difference instrument owner); the proof registered as a manifest row (style-reuse-differentiation, post-build non-blocking, goes blocking with EVI-02's browser wiring). Suites: styles+presets+ingress 662/662, style-registry 21/21, proof 7/7, DER-06 14/14, axis-difference 152/152."
   },
-    {
-     "id": "WO-DER-10",
-     "title": "D-30 BitHire identity: record the owner's pick, finalize the bithire preset, retire the candidates",
-     "lane": "derivation",
-     "order": 10,
-     "size": "S",
-     "status": "todo",
-     "dependsOn": ["WO-DER-07"],
-     "mustLandWith": [],
-     "programs": [],
-     "notes": "Holder of the D-30 branding obligation (owner ruling R29, 2026-10-03; roadmap/kit-2026-09.md §5d; owner decision packet 2026-10-06 §D-30). Registered by the DT under the owner's 2026-10-06 delegation so the candidate presets have an OPEN receiver after WO-DER-07 closed. programs is empty ON PURPOSE: D-30 is NOT a condition of milestone C (R29), and membership in audit-2026-09-05 would make it one. Not claimable until the owner records the pick; registering this WO chooses nothing.",
-     "claimedBy": null,
-     "claimedAt": null,
-     "doneAt": null,
-     "progressLog": [],
-     "evidence": null
-    },
+  {
+   "id": "WO-DER-10",
+   "title": "D-30 BitHire identity: record the owner's pick, finalize the bithire preset, retire the candidates",
+   "lane": "derivation",
+   "order": 10,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-DER-07"
+   ],
+   "mustLandWith": [],
+   "programs": [],
+   "notes": "Holder of the D-30 branding obligation (owner ruling R29, 2026-10-03; roadmap/kit-2026-09.md §5d; owner decision packet 2026-10-06 §D-30). Registered by the DT under the owner's 2026-10-06 delegation so the candidate presets have an OPEN receiver after WO-DER-07 closed. programs is empty ON PURPOSE: D-30 is NOT a condition of milestone C (R29), and membership in audit-2026-09-05 would make it one. Not claimable until the owner records the pick; registering this WO chooses nothing.",
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "progressLog": [],
+   "evidence": null
+  },
   {
    "id": "WO-CON-08",
    "title": "Tenant revision history and atomic publication",
@@ -8665,8 +8677,6 @@
      "by": "kimi",
      "note": "2026-10-06 — scope+API debriefed (REVIEW cadena: debrief REVISE -> v2 -> re-read §1.4 PROCEED, sesiones 20366bb5/c05207ea). L1 landed: file-manager file input drena al bare branch canónico del Input con la re-key M2; la row sale del ownership counter por nombre (2036/1336 -> 2035/1335, solo 5cb85406 removido, decrease-only). Ruling F1(a) del DT: el arm [data-part='file-input'] queda (no load-bearing; su retiro se bundleará con ARC-12 cuando P-88 alcance la bare branch) — el claim F2 del writer era falso y queda corregido aquí (dead-parts nunca la flaggearía: el stamp es literal en 3 sitios). L2 (checkbox, B1) y L3 (crumb) siguen; A1+A3 antes de L4, A2 antes de L5."
     },
-
-
     {
      "at": "2026-10-06 09:50",
      "by": "kimi",

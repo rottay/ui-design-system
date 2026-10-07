@@ -1437,7 +1437,7 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 137/167 work orders done (82%)
+## Work-order burn-down — 137/168 work orders done (82%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -1452,7 +1452,7 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
 | [consumer-contract](./consumer-contract.md) | 7 | 0 | 1 | 8 |
 | [catalog-door](./catalog-door.md) | 4 | 0 | 0 | 4 |
-| [derivation](./derivation.md) | 9 | 0 | 0 | 9 |
+| [derivation](./derivation.md) | 9 | 0 | 1 | 10 |
 | [family-cuts](./family-cuts.md) | 15 | 0 | 0 | 15 |
 | [emission-mount](./emission-mount.md) | 3 | 0 | 0 | 3 |
 | [platform-invariants](./platform-invariants.md) | 8 | 0 | 0 | 8 |
@@ -1492,13 +1492,14 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-RET-01 | Retire code without productive consumers and the legacy public API (changeset 3.0) | claude-dt | 2026-10-02 | 2026-10-07 06:21 — 2026-10-07 — Q4 Fase 1 landed (la escalera semantica de scrims, respuesta a Q4): los canales --ds-overlay-{light,medium,heavy} se producen SIEMPRE (rango derivado; precedencia: color authorado > fuerza authorada > canon); el censo de admission reporta por nombre; el Overlay interno retirado (sin importador restante). Paint byte-identica salvo la emision declarada de la escalera en los artefactos (canales no-leidos hasta Fase 2 — Fence 1 ruled in-fence por mi con la condicion G1 cumplida: la sonda de paint corrio sobre la base del commit). R1/E4 queda por medir contra este lote en la re-evaluacion del cierre. Fase 2 queda gateada al owner (G8 visual sign-off, G7 major, D5 migracion MM fuera del DS). |
+| WO-RET-01 | Retire code without productive consumers and the legacy public API (changeset 3.0) | claude-dt | 2026-10-02 | 2026-10-07 09:37 — 2026-10-07 — Disposiciones DT registradas (evidencia completa en w26-f91f110): F-110 clausula 2 — el factory compat de Phosphor es SOLO-INTERNO tras el major de RET-01 (la ley label-XOR-decorative gobierna el factory canonico, que es la puerta publica); los 20 sitios Classic frozen no migran porque Classic no shippea productivamente (frozen, fail-closed, no seleccionable por tenants); la negativa implementada y medida (204 refusals / 40+ glyphs) queda como evidencia del blast radius si el owner quiere la ruta (a) con excepcion frozen + migracion — revision del owner bienvenida, la disposicion es revisable. F-110 clausula 1 residual: AlertIcon (binding legacy-catalog unico restante, 0 consumidores productivos; una probe page + un archivo app-platform ya roto por otras causas; reemplazo semantico existe: Icon name='status.warning') se TRANSFIERE a WO-RET-06 canon-pending (retiro en la ventana 4.0). F-91 clausula 1: paquete entregado con las 72 disposiciones fechadas (en revision). |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | claude-dt | 2026-09-11 | 2026-10-06 06:26 — 2026-10-06 — Wave W25 integrada (9 commits, 646203f5e..ee00b3d95). Obligaciones del checklist cerradas con evidencia: F-B clearance gobernado de Select (9f2343702, medido por tamaño/RTL/ancho), Select-success glyph >=3:1 ambos modos, Toggle checked thumb 14.23/6.48 con el canal publico dotBg preservado (d98506e88, residuos variants/unchecked nombrados con receivers pendientes), SENT badge 1.26->14.23 con excepcion frozen acotada (d7030850b, freeze auth 116), Streaming reparado en AMBOS modos incl. bithire dark via canal gobernado + pierna dark derivada per-mode (ee00b3d95, freeze auth 117, 20° digest move declarado en changeset), F-A ssrViewport hints coherentes con prueba de primer paint 8/8 (665073712), P-88 law + censo fleet 49 sitios (bb6b0525f; ARC-12 sigue open), Q1 disposition (4675150b5; debt 4->3), AM-1 R5' (57a6e201b), GAT12 censo pinned (646203f5e; WO todo por fase-6 lock; CI wiring = owner/CI window). Tile review independiente: 9 celdas ACCEPT, 3 REJECT (divergencia de captura del card de chat bajo investigacion W26-capture; no re-grabadas). Siguen NO MET: F-86 clausula 2 (ownership 31/25), CI verified (push prohibido), liveness chain (RET-01). |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
+| WO-DER-10 | D-30 BitHire identity: record the owner's pick, finalize the bithire preset, retire the candidates | S | derivation |  |
 
 ## Blocked (dependencies or phase claim lock)
 

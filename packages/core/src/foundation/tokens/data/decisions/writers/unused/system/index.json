@@ -15782,7 +15782,15 @@
           "app-bithire/src/features/home/surface/screens/workflows/workbench/surface-only/styles/index.css"
         ]
       },
-      "note": "Adjudicated C12 (2026-09-25). A published AppShell channel (SHELL_PUBLISHED_CHANNELS) that entered the surface as a CSS-declared writer in da6b06d41 with no reader in core or showroom; app-bithire reads it 8 times (3+3+2 var() reads, each with a 56px fallback), identical at the CI-pinned corpus ref 8abd05578. Outside the census scope, not outside the truth: the customization-surface --check re-measures these files and fails if the count moves."
+      "note": "Adjudicated C12 (2026-09-25). A published AppShell channel (SHELL_PUBLISHED_CHANNELS) that entered the surface as a CSS-declared writer in da6b06d41 with no reader in core or showroom; app-bithire reads it 8 times (3+3+2 var() reads, each with a 56px fallback), identical at the CI-pinned corpus ref 8abd05578. Outside the census scope, not outside the truth: the customization-surface --check re-measures these files and fails if the count moves.",
+      "corpusDrift": {
+        "registered": "2026-10-07",
+        "pin": "app-bithire 8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f (the CI corpus ref, .github/workflows/ci.yml APP_BITHIRE_ROOT)",
+        "atPin": "8 var() reads in the three appFiles above (3+2+3), measured by git archive of the pin: the adjudication holds in CI.",
+        "atHead": "app-bithire ad2252f098 (196 commits past the pin) moved the files out of screens/workflows/: 8 var() reads in src/features/settings/surface/screens/setup-guide/overview/wiring/styles/index.css (3), src/features/home/surface/screens/chat/wiring/styles/index.css (3), src/features/home/surface/screens/surfaces/focused/wiring/styles/index.css (2). A workstation run against the moving checkout reads 0 and fails the dead arm.",
+        "owner": "WO-GAT-12",
+        "ownerNote": "Re-homing appFiles must move WITH the corpus pin, never ahead of it (CI would then read 0). WO-GAT-12 owns pinned sibling SHAs, but its stated scope is the arc-11 capability census; the DT confirms it as receiver or names another."
+      }
     },
     "--ds-font-pack-arabic-text": {
       "name": "--ds-font-pack-arabic-text",
@@ -15936,6 +15944,29 @@
         "appFiles": []
       },
       "note": "Adjudicated D6-2d-resto (2026-09-15). Read by runtime/engines/classic/theme/index.css on .ant-switch, which is reachable: the Classic Toggle engine wraps Ant Design's Switch and `Switch` is still publicly exported. Nine read sites across the seven kept channels, all without a fallback, so retiring the declaration would change a shipped frozen engine's computed paint. The other fourteen --ds-switch-* channels had no reader anywhere and were retired in the same lot."
+    },
+    "--ds-z-modal": {
+      "name": "--ds-z-modal",
+      "provenanceClass": "B-modern-current",
+      "decision": "RETIRE_PROPOSED",
+      "executed": false,
+      "declaredInSourceCss": [
+        "core/src/foundation/tokens/css/foundation/base/z-index/index.css"
+      ],
+      "emittedBy": [
+        "core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.ts"
+      ],
+      "readers": {
+        "coreSrc": 0,
+        "showroom": 0,
+        "apps": 0,
+        "appFiles": []
+      },
+      "owner": "WO-RET-01",
+      "note": "Registered 2026-10-07 (W26 F-91, review D4). A NEW dead writer the dead-writer anchor reports at HEAD 814da3739 and that no adjudication had recorded. It aliases --ds-z-index-modal (declared var(--ds-z-index-modal, 1500) in base/z-index and in the generated root aliases); the modal, upload and class-floor skins read --ds-z-index-modal directly, and the only var(--ds-z-modal) occurrence is a doc comment in confirm-dialog/engines/modern. Measured 0 var() readers in packages/core/src, packages/showroom/src, app-bithire, app-evnto and app-platform. Retirement removes the alias from base/z-index, the root-alias table and the generated facade artifacts in one commit, under WO-RET-01; until then the anchor's NEW-dead finding stays a DT widening ruling.",
+      "adjudicatedBy": "W26 F-91 writer (Opus), review-w26-f91f110 D4",
+      "historicalVerdict": "RETIRE_PROPOSED",
+      "finalState": "OWNER_DECISION"
     }
   },
   "totals": {

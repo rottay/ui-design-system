@@ -1,13 +1,28 @@
 {
   "schemaVersion": 1,
   "note": "Decrease-only dead-writer inventory (name-keyed). A NEW name here fails the gate; deletions are the goal. Regenerate only with --write-baseline after reviewing the diff.",
-  "lastMove": "C12 (2026-09-25, DT ruling option A, documented-reason door as in fe9a0ab42). +1 admitted with declared debt: --ds-font-pack-arabic-text stays honestly dead. 8ae785f1e (WO-INV-02 packet A) made it a writer and f56c64974 rostered the arabic-text pack, whose hook ships in every vertical bundle; measured 0 readers in packages/core, packages/showroom, app-bithire, app-evnto and app-platform, because the DS-A007 arabic-safe tail (foundation/kernel/typography withArabicSafeFallback) appends the literal family instead of reading var(--ds-font-pack-arabic-text). The reconnection is pending in f56c64974; owner: kernel typography. The debt closes by removal from this anchor when the kernel tail reads var(). -6 wins registered: --ds-breakpoint-{sm,md,lg,xl,2xl} (89976e4c7, WO-FAM-07: the container deriver reads the measure ladder; it predates the anchor ba33315db, which moved only xs) and --ds-letter-spacing-subtle (7a67243d8, cascade-wiring: mobile-header title tracking). The sidebar trio, --ds-shell-header-height and --ds-shell-inline-end-inset were never anchored: they leave the live list by showroom reads, a verified KEEP_LIVE_APP_CONSUMER and retirement, respectively.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen): +1 nombre(s), -6",
+  "lastMove": "3 nuevos dead writers registrados por nombre con disposicion fechada; 4 dejaron de ser dead (--ds-posture-*, ganaron lectores — la victoria se registra bajando el ancla en el mismo commit). Ninguna row lleva fecha: los receivers estan verificados y 68 no tienen lane agendado. Medido y revisado (review-w26-f91f110 v2 ACCEPT, V2-1).",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen): +3 nombre(s), -4",
   "admissions": [
+    {
+      "name": "--ds-collection-card-gap",
+      "owner": "WO-RET-01 (F-91; los 2 primeros registrados INV-07, z-modal registrado bajo WO-RET-01)",
+      "reason": "3 nuevos dead writers registrados por nombre con disposicion fechada; 4 dejaron de ser dead (--ds-posture-*, ganaron lectores — la victoria se registra bajando el ancla en el mismo commit). Ninguna row lleva fecha: los receivers estan verificados y 68 no tienen lane agendado. Medido y revisado (review-w26-f91f110 v2 ACCEPT, V2-1)."
+    },
     {
       "name": "--ds-font-pack-arabic-text",
       "owner": "foundation/kernel/typography (withArabicSafeFallback must read var(--ds-font-pack-arabic-text))",
       "reason": "C12 (2026-09-25, DT ruling option A, documented-reason door as in fe9a0ab42). +1 admitted with declared debt: --ds-font-pack-arabic-text stays honestly dead. 8ae785f1e (WO-INV-02 packet A) made it a writer and f56c64974 rostered the arabic-text pack, whose hook ships in every vertical bundle; measured 0 readers in packages/core, packages/showroom, app-bithire, app-evnto and app-platform, because the DS-A007 arabic-safe tail (foundation/kernel/typography withArabicSafeFallback) appends the literal family instead of reading var(--ds-font-pack-arabic-text). The reconnection is pending in f56c64974; owner: kernel typography. The debt closes by removal from this anchor when the kernel tail reads var(). -6 wins registered: --ds-breakpoint-{sm,md,lg,xl,2xl} (89976e4c7, WO-FAM-07: the container deriver reads the measure ladder; it predates the anchor ba33315db, which moved only xs) and --ds-letter-spacing-subtle (7a67243d8, cascade-wiring: mobile-header title tracking). The sidebar trio, --ds-shell-header-height and --ds-shell-inline-end-inset were never anchored: they leave the live list by showroom reads, a verified KEEP_LIVE_APP_CONSUMER and retirement, respectively."
+    },
+    {
+      "name": "--ds-listing-grid-min-compact-width",
+      "owner": "WO-RET-01 (F-91; los 2 primeros registrados INV-07, z-modal registrado bajo WO-RET-01)",
+      "reason": "3 nuevos dead writers registrados por nombre con disposicion fechada; 4 dejaron de ser dead (--ds-posture-*, ganaron lectores — la victoria se registra bajando el ancla en el mismo commit). Ninguna row lleva fecha: los receivers estan verificados y 68 no tienen lane agendado. Medido y revisado (review-w26-f91f110 v2 ACCEPT, V2-1)."
+    },
+    {
+      "name": "--ds-z-modal",
+      "owner": "WO-RET-01 (F-91; los 2 primeros registrados INV-07, z-modal registrado bajo WO-RET-01)",
+      "reason": "3 nuevos dead writers registrados por nombre con disposicion fechada; 4 dejaron de ser dead (--ds-posture-*, ganaron lectores — la victoria se registra bajando el ancla en el mismo commit). Ninguna row lleva fecha: los receivers estan verificados y 68 no tienen lane agendado. Medido y revisado (review-w26-f91f110 v2 ACCEPT, V2-1)."
     }
   ],
   "names": [
@@ -33,6 +48,7 @@
     "--ds-collection-card-footer-bg",
     "--ds-collection-card-footer-border",
     "--ds-collection-card-footer-color",
+    "--ds-collection-card-gap",
     "--ds-collection-card-icon-bg",
     "--ds-collection-card-icon-border",
     "--ds-collection-card-icon-color",
@@ -123,6 +139,7 @@
     "--ds-listing-grid-card-border",
     "--ds-listing-grid-card-gap",
     "--ds-listing-grid-card-shadow",
+    "--ds-listing-grid-min-compact-width",
     "--ds-listing-grid-min-tall-width",
     "--ds-listing-grid-selected-ring",
     "--ds-listing-grid-skeleton-bg",
@@ -137,10 +154,6 @@
     "--ds-metric-card-selected-ring",
     "--ds-metric-card-title-color",
     "--ds-popover-title-gap-current",
-    "--ds-posture-container-compact-max",
-    "--ds-posture-container-standard-max",
-    "--ds-posture-id",
-    "--ds-posture-span-bias",
     "--ds-premium-card-footer-color",
     "--ds-premium-card-glass-bg",
     "--ds-premium-card-rim",
@@ -281,6 +294,7 @@
     "--ds-workspace-card-status-color",
     "--ds-workspace-card-title-color",
     "--ds-workspace-card-value-color",
-    "--ds-workspace-card-value-color-hover"
+    "--ds-workspace-card-value-color-hover",
+    "--ds-z-modal"
   ]
 }

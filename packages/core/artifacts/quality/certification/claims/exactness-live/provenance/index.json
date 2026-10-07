@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "61970e115b9f30aaaff2e622def725b321021ae1ca58a9415f38ea00102ed64b"
+    "semanticHash": "7fa67d5ec5d7be7d0187c68679fcc3d102d2e75955662e162811f8d0ee821cda"
   },
   "divergentInputs": [
     {
@@ -22091,11 +22091,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/foundation/tokens/data/decisions/writers/unused/dispositions/index.json",
+      "archive": null,
+      "live": {
+        "bytes": 60861,
+        "sha256": "43db5da9b6f6b301d336e24982e4e3d7fd4dba20e9a9d26d1d54816b8c330c60"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/foundation/tokens/data/decisions/writers/unused/system/index.json",
       "archive": null,
       "live": {
-        "bytes": 853286,
-        "sha256": "03a57d206ec2b80c64ff2d0f6be2140aeabfdee888c94ea1a6b0c49f1af663c6"
+        "bytes": 855847,
+        "sha256": "36a5c138fc1e80e56f87b7734251881a4fe56ba995ca20684e8d866bdc04746c"
       }
     },
     {

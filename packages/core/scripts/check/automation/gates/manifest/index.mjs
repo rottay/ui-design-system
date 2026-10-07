@@ -809,11 +809,13 @@ export const CI_GATES = Object.freeze([
   // manifest, capability registry, raw allowlist, expressive lists) plus a
   // PostCSS/TS-AST consumption scan; these gates keep it fresh, fully
   // classified, evidence-backed and decrease-only on dead writers.
-  { id: 'customization-surface-drill', run: ['node', '--test', 'scripts/generate/tokens/customization/surface/tests/gate/index.test.mjs', 'scripts/generate/tokens/customization/surface/tests/classifier/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['customization-surface-freshness', 'customization-surface-classification', 'customization-capability-consumers', 'customization-dead-writers'], },
+  { id: 'customization-surface-drill', run: ['node', '--test', 'scripts/generate/tokens/customization/surface/tests/gate/index.test.mjs', 'scripts/generate/tokens/customization/surface/tests/classifier/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['customization-surface-freshness', 'customization-surface-classification', 'customization-capability-consumers', 'customization-dead-writers', 'customization-dead-dated'], },
   { id: 'customization-surface-freshness', run: ['node', 'scripts/generate/tokens/customization/surface/index.mjs', '--check=freshness'], blocking: true, phase: 'pre-build', drillId: 'customization-surface-drill', },
   { id: 'customization-surface-classification', run: ['node', 'scripts/generate/tokens/customization/surface/index.mjs', '--check=classification'], blocking: true, phase: 'pre-build', drillId: 'customization-surface-drill', },
   { id: 'customization-capability-consumers', run: ['node', 'scripts/generate/tokens/customization/surface/index.mjs', '--check=capabilities'], blocking: true, phase: 'pre-build', drillId: 'customization-surface-drill', },
   { id: 'customization-dead-writers', run: ['node', 'scripts/generate/tokens/customization/surface/index.mjs', '--check=dead'], blocking: true, phase: 'pre-build', drillId: 'customization-surface-drill', ratchet: 'scripts/generate/tokens/customization/surface/dead-writers-baseline/index.json', },
+  // F-91: every dead writer the DS declares is retired or carries a dated disposition.
+  { id: 'customization-dead-dated', run: ['node', 'scripts/generate/tokens/customization/surface/index.mjs', '--check=dated'], blocking: true, phase: 'pre-build', drillId: 'customization-surface-drill', },
   // Official tokens documentation is a deterministic projection; stale docs,
   // derivation cycles, undocumented public hooks, unknown capability
   // channels and unadjudicated dual authorities all block here.

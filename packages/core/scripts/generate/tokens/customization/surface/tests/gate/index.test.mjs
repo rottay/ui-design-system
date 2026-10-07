@@ -12,7 +12,14 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { packageRoot as findPackageRoot } from '../../../../../../libraries/repo-root/index.mjs';
-import { adjudicatedAliveNames, buildReport, verifyKeepLiveClaims } from '../../index.mjs';
+import {
+  adjudicatedAliveNames,
+  buildDispositionsDoc,
+  buildReport,
+  datedPopulation,
+  evaluateDatedDispositions,
+  verifyKeepLiveClaims,
+} from '../../index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
@@ -176,4 +183,91 @@ test('the real registries: the key reading strictly dominates the name-only read
   for (const name of nameOnly) assert.ok(keyed.has(name), `${name}: the key reading must not lose a named row`);
   // A named 301-era row, so this cannot pass on an empty registry.
   assert.ok(keyed.has('--ds-input-placeholder'), 'the EXECUTED_DEFECT_FIX row that had been inert since it was written');
+});
+
+/**
+ * F-91: every dead writer the DS declares carries one disposition held by a receiver the gate verifies. The positive
+ * case runs the real arm; the drills and planted rows prove each way a row can be wrong is red.
+ */
+test('positive: every DS-declared dead writer is held by a verified receiver', () => {
+  const { status, out } = run('--check=dated');
+  assert.equal(status, 0, out);
+  assert.match(out, /each held by a verified receiver/);
+});
+
+test('drill: a DS-declared dead writer with no disposition fails the dated arm', () => {
+  const { status, out } = run('--check=dated', '--drill=undated');
+  assert.notEqual(status, 0);
+  assert.match(out, /--ds-drill-undated-dead-writer is a dead writer with no disposition/);
+});
+
+test('drill: a holding work order that closes with the debt open fails the dated arm', () => {
+  const { status, out } = run('--check=dated', '--drill=receiver-closed');
+  assert.notEqual(status, 0);
+  assert.match(out, /RECEIVER CLOSED: WO-[A-Z]+-\d{2} is done and this debt is still open/);
+});
+
+test('drill: a registry row that moves under its disposition fails the dated arm', () => {
+  const { status, out } = run('--check=dated', '--drill=drifted');
+  assert.notEqual(status, 0);
+  assert.match(out, /DRIFTED: the system row now reads/);
+});
+
+const RECEIVERS = {
+  roadmapReadable: true,
+  workOrders: new Map([['WO-RET-01', 'in-progress'], ['WO-RET-02', 'done']]),
+  registries: {
+    system: { entries: { '--ds-planted': { decision: 'KEEP_PARAMETRIC_RAMP', finalState: 'KEEP_ACTIVE' } } },
+    cards: { entries: { '--ds-planted': { decision: 'DELIBERATE_DELTA_PENDING_OWNER', finalState: 'OWNER_DECISION' } } },
+  },
+};
+const ROW = { verdict: 'RETIRE', registered: '2026-10-07', reason: 'planted' };
+const check = (row, today = '2026-10-07') => evaluateDatedDispositions(['--ds-planted'], { schemaVersion: 2, dispositions: { '--ds-planted': row } }, { today, receivers: RECEIVERS });
+
+test('planted: each receiver form passes when it verifies', () => {
+  assert.deepEqual(check({ ...ROW, heldBy: 'WO-RET-01' }), []);
+  assert.deepEqual(check({ ...ROW, verdict: 'KEEP_RESERVED', heldBy: { registry: 'system', decision: 'KEEP_PARAMETRIC_RAMP', finalState: 'KEEP_ACTIVE' } }), []);
+  assert.deepEqual(check({ ...ROW, verdict: 'DECIDE', heldBy: { registry: 'cards', decision: 'DELIBERATE_DELTA_PENDING_OWNER', finalState: 'OWNER_DECISION' } }), []);
+  assert.deepEqual(check({ ...ROW, owner: 'WO-RET-01', due: '2026-11-06' }), []);
+});
+
+test('planted: an overdue dated row, an unknown or closed work order and a mismatched registry row all fail', () => {
+  assert.match(check({ ...ROW, owner: 'WO-RET-01', due: '2026-11-06' }, '2026-11-07').join('\n'), /OVERDUE: due 2026-11-06, today 2026-11-07/);
+  assert.match(check({ ...ROW, heldBy: 'WO-NOP-99' }).join('\n'), /not a work order in roadmap\/registry.json/);
+  assert.match(check({ ...ROW, heldBy: 'WO-RET-02' }).join('\n'), /RECEIVER CLOSED/);
+  assert.match(check({ ...ROW, heldBy: 'kernel typography' }).join('\n'), /not a work-order id/);
+  assert.match(check({ ...ROW, verdict: 'KEEP_RESERVED', heldBy: { registry: 'cards', decision: 'DELIBERATE_DELTA_PENDING_OWNER', finalState: 'OWNER_DECISION' } }).join('\n'), /must rest on a KEEP_ACTIVE registry row/);
+  assert.match(check({ ...ROW, heldBy: { registry: 'system', decision: 'RETIRE_PROPOSED', finalState: 'OWNER_DECISION' } }).join('\n'), /DRIFTED/);
+  assert.match(check({ ...ROW, heldBy: { registry: 'elsewhere' } }).join('\n'), /not system or cards/);
+  assert.match(check({ ...ROW, heldBy: 'WO-RET-01', due: '2026-11-06', owner: 'WO-RET-01' }).join('\n'), /exactly one of/);
+  assert.match(check({ ...ROW }).join('\n'), /names no receiver/);
+  assert.match(check({ ...ROW, verdict: 'KEEP', heldBy: 'WO-RET-01' }).join('\n'), /closed vocabulary/);
+});
+
+test('planted: a stale row and a missing or v1 document fail', () => {
+  const doc = { schemaVersion: 2, dispositions: { '--ds-planted': { ...ROW, heldBy: 'WO-RET-01' } } };
+  assert.match(evaluateDatedDispositions([], doc, { today: '2026-10-07', receivers: RECEIVERS })[0], /no longer a dead writer/);
+  assert.match(evaluateDatedDispositions(['--ds-planted'], null, { today: '2026-10-07', receivers: RECEIVERS })[0], /missing, unreadable/);
+  assert.match(evaluateDatedDispositions(['--ds-planted'], { schemaVersion: 1, dispositions: {} }, { today: '2026-10-07', receivers: RECEIVERS })[0], /schemaVersion 2/);
+});
+
+test('planted: the door copies the registry row it rests on and refuses what it cannot verify', () => {
+  const base = { previous: null, population: ['--ds-planted'], names: ['--ds-planted'], reason: 'planted', registered: '2026-10-07', receivers: RECEIVERS };
+  const held = buildDispositionsDoc({ ...base, verdict: 'KEEP_RESERVED', heldBy: 'registry:system' }).dispositions['--ds-planted'];
+  assert.deepEqual(held.heldBy, { registry: 'system', decision: 'KEEP_PARAMETRIC_RAMP', finalState: 'KEEP_ACTIVE' });
+  assert.throws(() => buildDispositionsDoc({ ...base, names: ['--ds-live-token'], verdict: 'RETIRE', heldBy: 'WO-RET-01' }), /only a live dead writer/);
+  assert.throws(() => buildDispositionsDoc({ ...base, verdict: 'RETIRE', heldBy: 'WO-RET-02' }), /RECEIVER CLOSED/);
+  assert.throws(() => buildDispositionsDoc({ ...base, verdict: 'DECIDE', heldBy: 'registry:system' }), /must rest on a OWNER_DECISION registry row/);
+  assert.throws(() => buildDispositionsDoc({ ...base, verdict: 'RETIRE', owner: 'WO-RET-01' }), /names no receiver/);
+  assert.throws(() => buildDispositionsDoc({ ...base, names: [], verdict: 'RETIRE', heldBy: 'WO-RET-01' }), /names no token/);
+});
+
+test('scope: the dispositioned population is the DS-declared dead writers, and the fiche examples are in it', () => {
+  const { report } = buildReport();
+  const population = datedPopulation(report);
+  for (const name of ['--ds-space-fluid-1', '--ds-elevation-surface-0', '--ds-color-mono-100']) {
+    assert.ok(population.includes(name), `${name}: named by F-91 and still dead, so it must be dispositioned`);
+  }
+  for (const name of population) assert.ok(['canonical-authority', 'authored-css-local'].includes(report.rows[name].category));
+  assert.ok(report.deadWriters.some((name) => !population.includes(name)), 'the compiler-derived channels stay outside the claim');
 });
