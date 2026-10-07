@@ -39,7 +39,7 @@
  * encoding -- a key is only ever compared against another key produced by the
  * same build.
  *
- * @module Runtime/Foundation/ChangeKey
+ * @module Kernel/ChangeKey
  * @package @rottay/design-system
  */
 

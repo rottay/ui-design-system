@@ -22,8 +22,7 @@
     "src/components/surfaces/foundation/common/test-utils/index.tsx",
     "src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/parse/index.ts",
     "src/foundation/presets/candidates/bithire/documents/index.ts",
-    "src/foundation/presets/candidates/bithire/index.ts",
-    "src/infrastructure/runtime/foundation/change-key/index.ts"
+    "src/foundation/presets/candidates/bithire/index.ts"
   ],
   "stylesUnreferenced": [
     "src/foundation/tokens/css/presentation/components/index.css",

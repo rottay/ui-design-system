@@ -50,7 +50,7 @@ normalizes them:
 ```text
 src/
   contracts/        Typed contracts, born under the target grammar (WO-CAT-02)
-  kernel/           Reserved by D-21 (b); not materialized yet
+  kernel/           Dependency-free primitives every owner may import (change-key)
   tokens/           Reserved by D-21 (b); not materialized yet
   compilers/        Reserved by D-21 (b); not materialized yet
   runtime/          Reserved by D-21 (b); not materialized yet

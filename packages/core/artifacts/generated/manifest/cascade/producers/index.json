@@ -18,7 +18,7 @@
     "cssEdges": "5d9e8c6752744ce3ae601f83632bc3b5f0d5fa4f4291874e35f42f518d33d622",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
-    "srcTsx": "2af4dec0a5ea7499183e4c5ad512d670241ac07a74aa4e8538dc10c7d429069c",
+    "srcTsx": "4351191b31ade00f17fcc5c4ed4451907a57c99ccf9eb975b5f95788bee0cf5d",
     "srcCompilers": "b656735a561ac794917927f782f847640e03b920488087adf88c7456e1ed4e9a",
     "artifacts": "dbb63bbe1a3344ab1611d82009bb569e77d735fb50cbe570c08df4ccce84f7be"
   },
@@ -2180,7 +2180,6 @@
       "packages/core/src/infrastructure/runtime/features/facade/index.ts",
       "packages/core/src/infrastructure/runtime/features/index.ts",
       "packages/core/src/infrastructure/runtime/features/presentation/gates/feature/index.tsx",
-      "packages/core/src/infrastructure/runtime/foundation/change-key/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/density/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/diagnostics/development-logging/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/engine-visual/index.tsx",
@@ -2287,7 +2286,8 @@
       "packages/core/src/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention/index.ts",
       "packages/core/src/infrastructure/runtime/theming/index.ts",
       "packages/core/src/infrastructure/runtime/verticals/facade/index.ts",
-      "packages/core/src/infrastructure/runtime/verticals/index.ts"
+      "packages/core/src/infrastructure/runtime/verticals/index.ts",
+      "packages/core/src/kernel/change-key/index.ts"
     ]
   },
   "causalRootsExcluded": [
@@ -2309,7 +2309,7 @@
     "privateRelay": "43678988337cf6daa10547344cf6e092ebacfeaf38a6765c417be66c047ef09e",
     "closedProducer": "2306dc3704a8cf62cfcec61e1015cea35d96cf848df449ed0f714cf0acd3c28b",
     "closedZeroGovernedReceipts": "877b4bc65c15506fb14149b9e44c33ca184072bca7871275acf6e3930e5ed225",
-    "publicBoundaryReceipts": "6d936ae39926265a390067aca18846963ddd19cf1e5990f434ffb3886908bb75",
+    "publicBoundaryReceipts": "1c28f90a9500533b603950e29766adc939717331cfbc519fabf8912757006034",
     "privateRelayReceipts": "d5833cba8c57911a228185d544cb2a8896a32d322fd48a2413582a5947b4d676",
     "closedProducerReceipts": "8e3d63336d1b40e22eb1787e07868384aadf042496b8ca4d75e6f7cfb0855e2b",
     "branchCompositeOpen": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -71939,7 +71939,7 @@
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/surfaces/presentation/pages/workspace/command-center/index.tsx","symbol":"CommandCenterSurfaceContent","line":494,"ordinal":16979,"template":"undefined","reason":"undefined-keyword"},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/surfaces/presentation/pages/workspace/decision-inbox/index.tsx","symbol":"DecisionInboxSurfaceContent","line":575,"ordinal":21501,"template":"undefined","reason":"undefined-keyword"},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/motion/react/presentation/effects/grid-pattern/index.tsx","symbol":"GridPattern","line":85,"ordinal":4107,"template":"undefined","reason":"undefined-keyword"},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/infrastructure/runtime/spatial/presentation/experience/index.tsx","symbol":"SpatialExperience","line":634,"ordinal":19377,"template":"undefined","reason":"undefined-keyword"}
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/infrastructure/runtime/spatial/presentation/experience/index.tsx","symbol":"SpatialExperience","line":635,"ordinal":19425,"template":"undefined","reason":"undefined-keyword"}
   ],
   "closedZeroGoverned": [
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/patterns/communication/activity-log/engines/rustic/index.tsx","symbol":"RusticActivityLog","line":198,"ordinal":7118,"template":"avatarStyle(24)","reason":"zero-governed-emission-object:call"},
@@ -73067,8 +73067,8 @@
     {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/pictograms/presentation/feature-pictogram/index.tsx","symbol":"FeaturePictogram","line":117,"ordinal":3364,"template":"style","reason":"public-boundary-candidate:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"object-supplied-by-caller-across-public-entrypoint","sinkTags":["svg"],"relayKinds":["PUBLIC_BOUNDARY_CANDIDATE"],"occurrences":1,"evidence":{"entrypoint":"packages/core/src/entrypoints/graphics/pictograms/index.ts","exportedAs":"FeaturePictogram","via":"variable-declaration-via-wrapper:forwardRef","hopChainDepth":3,"path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/graphics/pictograms/presentation/feature-pictogram/index.tsx","symbol":"FeaturePictogram","line":117,"ordinal":3361,"template":"...style","reason":"public-boundary-candidate:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"object-supplied-by-caller-across-public-entrypoint","sinkTags":["svg"],"relayKinds":["PUBLIC_BOUNDARY_CANDIDATE"],"occurrences":1,"evidence":{"entrypoint":"packages/core/src/entrypoints/graphics/pictograms/index.ts","exportedAs":"FeaturePictogram","via":"variable-declaration-via-wrapper:forwardRef","hopChainDepth":3,"path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
     {"plane":"tsx-inline-stamp","file":"packages/core/src/infrastructure/runtime/foundation/root-attributes/presentation/index.ts","symbol":"apply","line":101,"ordinal":4617,"template":"element.style.setProperty(property, cssValue, priority)","reason":"public-boundary-candidate:dynamic-setProperty","consumable":false,"tenantSafe":false,"nonConsumableCause":"object-supplied-by-caller-across-public-entrypoint","sinkTags":[],"relayKinds":["PUBLIC_BOUNDARY_CANDIDATE"],"occurrences":1,"evidence":{"entrypoint":"packages/core/src/index.ts","exportedAs":"claimRootStyleProperty","via":"package-export","hopChainDepth":3,"publicGenericWriter":{"writer":"claimRootStyleProperty","parameter":"property","declaredAt":"packages/core/src/infrastructure/runtime/foundation/root-attributes/presentation/index.ts:96","entrypoint":"packages/core/src/index.ts","exportedAs":"claimRootStyleProperty","domainEnumerated":false,"residualDebt":"f5-generic-writer-name-domain"},"path":["terminal-at-sink","publicGenericWriter"]}},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/infrastructure/runtime/spatial/presentation/experience/index.tsx","symbol":"rootStyle","line":610,"ordinal":18526,"template":"style","reason":"public-boundary-candidate:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"object-supplied-by-caller-across-public-entrypoint","sinkTags":["section"],"relayKinds":["PUBLIC_BOUNDARY_CANDIDATE"],"occurrences":1,"evidence":{"entrypoint":"packages/core/src/entrypoints/graphics/spatial/index.ts","exportedAs":"SpatialExperience","via":"direct-function-declaration","hopChainDepth":3,"path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
-    {"plane":"tsx-inline-stamp","file":"packages/core/src/infrastructure/runtime/spatial/presentation/experience/index.tsx","symbol":"rootStyle","line":610,"ordinal":18523,"template":"...style","reason":"public-boundary-candidate:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"object-supplied-by-caller-across-public-entrypoint","sinkTags":["section"],"relayKinds":["PUBLIC_BOUNDARY_CANDIDATE"],"occurrences":1,"evidence":{"entrypoint":"packages/core/src/entrypoints/graphics/spatial/index.ts","exportedAs":"SpatialExperience","via":"direct-function-declaration","hopChainDepth":3,"path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}}
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/infrastructure/runtime/spatial/presentation/experience/index.tsx","symbol":"rootStyle","line":611,"ordinal":18574,"template":"style","reason":"public-boundary-candidate:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"object-supplied-by-caller-across-public-entrypoint","sinkTags":["section"],"relayKinds":["PUBLIC_BOUNDARY_CANDIDATE"],"occurrences":1,"evidence":{"entrypoint":"packages/core/src/entrypoints/graphics/spatial/index.ts","exportedAs":"SpatialExperience","via":"direct-function-declaration","hopChainDepth":3,"path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
+    {"plane":"tsx-inline-stamp","file":"packages/core/src/infrastructure/runtime/spatial/presentation/experience/index.tsx","symbol":"rootStyle","line":611,"ordinal":18571,"template":"...style","reason":"public-boundary-candidate:spread","consumable":false,"tenantSafe":false,"nonConsumableCause":"object-supplied-by-caller-across-public-entrypoint","sinkTags":["section"],"relayKinds":["PUBLIC_BOUNDARY_CANDIDATE"],"occurrences":1,"evidence":{"entrypoint":"packages/core/src/entrypoints/graphics/spatial/index.ts","exportedAs":"SpatialExperience","via":"direct-function-declaration","hopChainDepth":3,"path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}}
   ],
   "privateRelay": [
     {"plane":"tsx-inline-stamp","file":"packages/core/src/components/patterns/communication/activity-log/engines/classic/index.tsx","symbol":"ClassicActivityLog","line":145,"ordinal":5034,"template":"style","reason":"private-relay-unresolved:identifier","consumable":false,"tenantSafe":false,"nonConsumableCause":"private-passthrough-not-followed-by-resolver","sinkTags":["Card"],"relayKinds":["CUSTOM_COMPONENT_SINK_NOT_FOLLOWED"],"occurrences":1,"evidence":{"bindingKind":"relay","path":["terminal-at-sink","destructuredLocal-source","directParam","propertyLookupThroughOpaque"]}},
@@ -73968,6 +73968,6 @@
   "provenance": {
     "producedBy": "cascade:producers --write",
     "writtenOn": "2026-10-07",
-    "contentDigest": "620e667a133091cc6a87fcdd2c2def0b84e48ee172bffbc9e9b2aa09ed5750d0"
+    "contentDigest": "a3b24b00337e3f7e2f7dfd61b2f96a63a410e1dc0c21529e2b508ef303734c8d"
   }
 }

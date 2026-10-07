@@ -179,18 +179,6 @@
       "receiver": "WO-RET-04"
     },
     {
-      "path": "src/infrastructure/runtime/foundation/change-key/index.ts",
-      "class": "test-support",
-      "readers": [
-        {
-          "file": "src/infrastructure/runtime/foundation/change-key/tests/index.test.ts",
-          "kind": "test-import"
-        }
-      ],
-      "reason": "No production importer: only its own unit suite reads it. Prepared cut, kept until the tree normalization decides its owner.",
-      "receiver": "WO-RET-04"
-    },
-    {
       "path": "src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/parse/index.ts",
       "class": "drift-test-reader",
       "readers": [

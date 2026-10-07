@@ -15,6 +15,7 @@ import type {
   SpatialContextState,
   SpatialPolicyInput,
 } from '../../../../../foundation/contracts/kernel/spatial';
+import { changeKey } from '@/kernel/change-key';
 import { useMotionPolicy } from '@/infrastructure/runtime/foundation/motion/composition/react/preference';
 import { isSpatialSceneModule } from '../../foundation/validation';
 import { resolveSpatialPolicy } from '../../runtime/resolution';
@@ -348,7 +349,7 @@ export function SpatialExperience(props: SpatialExperienceProps) {
   );
 
   useEffect(() => {
-    const eventKey = [id, resolution.mode, resolution.backend, resolution.reason].join('|');
+    const eventKey = changeKey(id, resolution.mode, resolution.backend, resolution.reason);
     if (lastModeEventRef.current === eventKey) return;
     lastModeEventRef.current = eventKey;
     emit({
