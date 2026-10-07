@@ -9,7 +9,6 @@
 
 export {
   containerScope,
-  DENSITY_SCOPE_POSTURES,
   densityScopeSelector,
   emitBaseRule,
   emitContrastRule,

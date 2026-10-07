@@ -1,11 +1,11 @@
 import { FleetGround, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 import {
   K3LaneAProbe,
-  type LaneADensity,
   type LaneALocale,
   type LaneASource,
   type LaneAState,
 } from "@/components/probes/patterns/data-display";
+import type { DensityPosture } from "@rottay/design-system";
 
 function sanitizeSource(value: string | null): LaneASource {
   return value === "themanagement-db" ? value : "bithire-static";
@@ -15,7 +15,7 @@ function sanitizeLocale(value: string | null): LaneALocale {
   return value === "es" || value === "ar" ? value : "en";
 }
 
-function sanitizeDensity(value: string | null): LaneADensity {
+function sanitizeDensity(value: string | null): DensityPosture {
   return value === "compact" || value === "spacious" ? value : "comfortable";
 }
 

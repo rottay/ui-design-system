@@ -25,18 +25,10 @@
 
 import type { CSSProperties } from 'react';
 
-/**
- * Canonical component layout mode. Presentation surfaces deliberately expose
- * two presets; the broader appearance vocabulary is modeled separately below.
- */
-export type DensityMode = 'comfortable' | 'compact';
-
-/**
- * Complete semantic density vocabulary accepted across appearance and
- * container-scoped presentation APIs. `normal` is the tenant-facing alias for
- * the component-facing `comfortable` mode.
- */
-export type DensityPreference = DensityMode | 'normal' | 'spacious';
+/** Rendered density of a document, subtree or component: the one type of the posture axis.
+ *  The tenant appearance axis is `DensityMode` (decision `density.mode`); the two compose. */
+export const DENSITY_POSTURES = ['compact', 'comfortable', 'spacious'] as const;
+export type DensityPosture = (typeof DENSITY_POSTURES)[number];
 
 /** Effective scale bounds shared by CSS projection and the numeric token graph. */
 export const DENSITY_SCALE_BOUNDS = Object.freeze({ min: 0.5, max: 3 });
@@ -58,8 +50,9 @@ export const DENSITY_GLOBAL_EFFECTIVE_SCALE_VARIABLE =
 /**
  * Single numeric authority for semantic density. Do not duplicate these
  * literals in CSS, appearance compilation, or runtime hooks.
+ * `normal` is the tenant appearance spelling of `comfortable`.
  */
-export const DENSITY_MODE_FACTORS: Readonly<Record<DensityPreference, number>> =
+export const DENSITY_MODE_FACTORS: Readonly<Record<DensityPosture | 'normal', number>> =
   Object.freeze({
     compact: 0.85,
     comfortable: 1,
@@ -80,14 +73,14 @@ export interface DensityPreset {
 }
 
 /** The default density mode when a consumer does not specify one. */
-export const DEFAULT_DENSITY_MODE: DensityMode = 'comfortable';
+export const DEFAULT_DENSITY_MODE: Exclude<DensityPosture, 'spacious'> = 'comfortable';
 
 /**
  * Token-resolved presets per density mode. Each string value is a CSS custom
  * property handle with a literal fallback so the mode renders correctly with or
  * without a theme that defines the per-mode token.
  */
-export const DENSITY_PRESETS: Record<DensityMode, DensityPreset> = {
+export const DENSITY_PRESETS: Record<Exclude<DensityPosture, 'spacious'>, DensityPreset> = {
   comfortable: {
     modeFactor: DENSITY_MODE_FACTORS.comfortable,
     cellPadding:
@@ -107,19 +100,19 @@ export const DENSITY_PRESETS: Record<DensityMode, DensityPreset> = {
 };
 
 /**
- * Narrows any density-like string to the canonical two-value {@link DensityMode}.
+ * Narrows any density-like string to the two preset steps of the posture axis.
  * `'compact'` maps to `'compact'`; everything else (including the legacy
  * `'spacious'`, `'normal'`, `undefined`) resolves to `'comfortable'`.
  *
  * @param input - Raw density value from a prop, config, or token.
  * @returns The canonical density mode.
  */
-export function normalizeDensityMode(input?: string | null): DensityMode {
+export function normalizeDensityMode(input?: string | null): Exclude<DensityPosture, 'spacious'> {
   return input === 'compact' ? 'compact' : 'comfortable';
 }
 
 /** Runtime guard used before untrusted tenant appearance is compiled to CSS. */
-export function isDensityPreference(input: unknown): input is DensityPreference {
+export function isDensityPreference(input: unknown): input is DensityPosture | 'normal' {
   return typeof input === 'string'
     && Object.prototype.hasOwnProperty.call(DENSITY_MODE_FACTORS, input);
 }
@@ -159,7 +152,7 @@ export function resolveEffectiveDensityScale(
  * @param mode - The density mode to resolve.
  * @returns A style object of density CSS variables, ready to spread into `style`.
  */
-export function resolveDensityStyleVars(mode: DensityMode): CSSProperties {
+export function resolveDensityStyleVars(mode: Exclude<DensityPosture, 'spacious'>): CSSProperties {
   const preset = DENSITY_PRESETS[mode];
   return {
     '--ds-density-cell-padding': preset.cellPadding,

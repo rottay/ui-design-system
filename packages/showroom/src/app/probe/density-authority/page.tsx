@@ -1,10 +1,10 @@
 import { FleetGround, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 import {
   DensityAuthorityProbe,
-  type DensityAuthorityDensity,
   type DensityAuthorityLocale,
   type DensityAuthoritySource,
 } from "@/components/density-authority";
+import type { DensityPosture } from "@rottay/design-system";
 
 /**
  * Two governed sources only. A mixed source that layered a customer Appearance
@@ -17,7 +17,7 @@ function sanitizeSource(value: string | null): DensityAuthoritySource {
   return value === "themanagement-db" ? value : "bithire-static";
 }
 
-function sanitizeDensity(value: string | null): DensityAuthorityDensity {
+function sanitizeDensity(value: string | null): DensityPosture {
   return value === "compact" || value === "spacious" ? value : "comfortable";
 }
 

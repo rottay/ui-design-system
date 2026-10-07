@@ -4,7 +4,7 @@ import type {
   ThemeCompilationDensityScopeBlock,
   ThemeCompilationModeBlock,
 } from "@/foundation/contracts/composition/tenants/themes/compiled";
-import type { DensityPreference } from "@/foundation/tokens/ts/foundation/base/density";
+import { DENSITY_POSTURES } from "@/foundation/tokens/ts/foundation/base/density";
 import type { EmissionScope } from "@/foundation/contracts/composition/tenants/themes/emission";
 import {
   containerScope,
@@ -336,17 +336,10 @@ export function emitContrastRule(
   return `@media ${PREFERS_MORE_CONTRAST} {\n${rules.join("\n")}\n}`;
 }
 
-/** The postures a boundary is spelled with in CSS; `normal` names no scope. */
-export const DENSITY_SCOPE_POSTURES = [
-  "compact",
-  "comfortable",
-  "spacious",
-] as const satisfies readonly DensityPreference[];
-
 /** Every density boundary below `baseSelector`, unlayered at the base selector's own weight: that
- *  placement is the consumer-override contract. */
+ *  placement is the consumer-override contract. A boundary is spelled with a posture; `normal` names no scope. */
 export function densityScopeSelector(baseSelector: string): string {
-  const boundaries = DENSITY_SCOPE_POSTURES.map(
+  const boundaries = DENSITY_POSTURES.map(
     (posture) => `[data-density='${posture}']:not(:root)`
   ).join(", ");
   const base = baseSelector.includes(",") ? `:is(${baseSelector})` : baseSelector;

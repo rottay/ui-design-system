@@ -1,11 +1,11 @@
 import { FleetGround, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 import {
   P1ListToolbarProbe,
-  type P1ListToolbarDensity,
   type P1ListToolbarLocale,
   type P1ListToolbarSource,
   type P1ListToolbarState,
 } from "@/components/probes/patterns/list-toolbar";
+import type { DensityPosture } from "@rottay/design-system";
 
 function sanitizeSource(value: string | null): P1ListToolbarSource {
   return value === "themanagement-db" ? value : "bithire-static";
@@ -15,7 +15,7 @@ function sanitizeLocale(value: string | null): P1ListToolbarLocale {
   return value === "es" || value === "ar" ? value : "en";
 }
 
-function sanitizeDensity(value: string | null): P1ListToolbarDensity {
+function sanitizeDensity(value: string | null): DensityPosture {
   return value === "compact" || value === "spacious" ? value : "comfortable";
 }
 

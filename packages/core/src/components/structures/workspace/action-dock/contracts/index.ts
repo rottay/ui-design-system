@@ -12,6 +12,7 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { ViewportPosture } from '@/foundation/contracts/kernel/adaptation/foundation';
+import type { DensityPosture } from '@/foundation/tokens/ts/foundation/base/density';
 
 /**
  * Priority grammar slot for a structured dock action.
@@ -25,15 +26,6 @@ import type { ViewportPosture } from '@/foundation/contracts/kernel/adaptation/f
  *   action is never hidden behind a menu.
  */
 export type ActionDockPriority = 'primary' | 'secondary' | 'danger';
-
-/**
- * Local density boundary steps. Stamping one re-projects the canonical
- * `--ds-spacing-*` and `--ds-density-effective-scale` channels inside the
- * dock (foundation density law), so the dock chrome and the Buttons it
- * composes track the same density posture. Omit to inherit the ambient
- * density from the nearest ancestor boundary.
- */
-export type ActionDockDensity = 'compact' | 'comfortable' | 'spacious';
 
 /**
  * Narrow-viewport collapse law.
@@ -118,8 +110,14 @@ export interface ActionDockProps {
    * English fallback 'More actions' (explicit prop always wins).
    */
   overflowLabel?: string;
-  /** Local density boundary for the dock subtree. */
-  density?: ActionDockDensity;
+  /**
+   * Local density boundary for the dock subtree. Stamping one re-projects the
+   * canonical `--ds-spacing-*` and `--ds-density-effective-scale` channels
+   * inside the dock, so the dock chrome and the Buttons it composes track the
+   * same posture. Omit to inherit the ambient density from the nearest ancestor
+   * boundary.
+   */
+  density?: DensityPosture;
   /** Position of the dock on the viewport. @default 'bottom' */
   position?: 'bottom' | 'top';
   /**

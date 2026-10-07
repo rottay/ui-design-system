@@ -24,10 +24,9 @@ import {
   useContext,
   type ReactNode,
 } from 'react';
+import type { DensityPosture } from '@/foundation/tokens/ts/foundation/base/density';
 
-export const DENSITY_POSTURES = ['compact', 'comfortable', 'spacious'] as const;
-
-export type DensityPosture = (typeof DENSITY_POSTURES)[number];
+export { DENSITY_POSTURES, type DensityPosture } from '@/foundation/tokens/ts/foundation/base/density';
 
 export interface DensityScopeValue {
   readonly posture: DensityPosture;

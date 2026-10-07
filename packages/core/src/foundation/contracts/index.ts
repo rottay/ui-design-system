@@ -69,7 +69,6 @@ export * from './kernel/tokens/extensions';
 export type {
   CopyMode,
   DashboardMode,
-  DensityProfile,
   FeatureRouteMeta,
   FirstPartyVerticalId,
   IconographyMode,

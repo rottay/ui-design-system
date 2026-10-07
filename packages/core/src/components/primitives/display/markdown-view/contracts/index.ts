@@ -18,6 +18,7 @@
  */
 
 import type { ReactNode } from 'react';
+import type { DensityPosture } from '@/foundation/tokens/ts/foundation/base/density';
 
 // ---------------------------------------------------------------------------
 // Inline AST
@@ -184,9 +185,6 @@ export interface MarkdownCodeSlotProps {
   language?: string;
 }
 
-/** Rendering-density posture for the document rhythm. */
-export type MarkdownDensity = 'compact' | 'comfortable';
-
 /**
  * Props for the MarkdownView pattern.
  *
@@ -202,7 +200,7 @@ export interface MarkdownViewProps {
    * Vertical rhythm between blocks.
    * @default 'comfortable'
    */
-  density?: MarkdownDensity;
+  density?: Exclude<DensityPosture, 'spacious'>;
   /** Link-handling policy (scheme allowlist + navigation hook). */
   linkPolicy?: MarkdownLinkPolicy;
   /**

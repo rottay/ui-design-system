@@ -35,18 +35,18 @@ import {
   TagInput,
   Text,
   Upload,
+  type DensityPosture,
 } from "@rottay/design-system";
 
 
 export type LaneVSource = "bithire-static" | "themanagement-db";
 export type LaneVLocale = "en" | "es" | "ar";
-export type LaneVDensity = "compact" | "comfortable" | "spacious";
 export type LaneVState = "rest" | "disabled" | "error";
 
 export interface K2LaneVProbeProps {
   source: LaneVSource;
   locale: LaneVLocale;
-  density: LaneVDensity;
+  density: DensityPosture;
   state: LaneVState;
 }
 

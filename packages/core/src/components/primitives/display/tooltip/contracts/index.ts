@@ -39,6 +39,7 @@
  */
 
 import type { ReactNode } from "react";
+import type { DensityPosture } from "@/foundation/tokens/ts/foundation/base/density";
 import type {
   BaseComponentProps,
   WithChildren,
@@ -135,9 +136,6 @@ export type TooltipTouchBehavior = "long-press" | "none";
  */
 export type TooltipRecipe = "minimal" | "bordered" | "inverse" | "rich";
 
-/** Explicit local density override; omitted values inherit the tenant scope. */
-export type TooltipDensity = "compact" | "comfortable" | "spacious";
-
 /**
  * Tooltip component props.
  */
@@ -224,7 +222,7 @@ export interface TooltipProps
    * Local density override. When omitted, the tooltip inherits the active
    * tenant density, including when its bubble is rendered through a portal.
    */
-  density?: TooltipDensity;
+  density?: DensityPosture;
 
   /**
    * Whether to show the tooltip arrow.

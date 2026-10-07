@@ -33,6 +33,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties, RefObject } from 'react';
+import type { DensityPosture } from '@/foundation/tokens/ts/foundation/base/density';
 import type { OverlayPlacement } from '../../../runtime/overlay/positioning';
 
 /**
@@ -45,9 +46,6 @@ export type PopoverTrigger = 'click' | 'hover' | 'focus';
 
 /** Bounded Modern material recipes; anatomy remains stable across recipes. */
 export type PopoverRecipe = 'minimal' | 'bordered' | 'inverse' | 'rich';
-
-/** Explicit local density override; omitted values inherit the tenant scope. */
-export type PopoverDensity = 'compact' | 'comfortable' | 'spacious';
 
 /** Coarse-pointer fallback for hover/focus-only popovers. */
 export type PopoverTouchBehavior = 'toggle' | 'none';
@@ -124,7 +122,7 @@ interface PopoverSharedProps {
   /** Coordinated material and density recipe. @default 'bordered' */
   recipe?: PopoverRecipe;
   /** Local density override; omitted values inherit the active tenant density. */
-  density?: PopoverDensity;
+  density?: DensityPosture;
   /** Gap in pixels between trigger and surface. @default 10 */
   offset?: number;
   /** Maximum inline size, additionally clamped to the viewport. @default 384 */

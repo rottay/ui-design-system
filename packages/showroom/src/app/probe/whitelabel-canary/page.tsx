@@ -6,7 +6,6 @@ import {
   ProbeCellSwitch,
   probeParam,
   type ProbeCellAxis,
-  type FleetDensity,
   type FleetLocale,
   type FleetSource,
   type FleetTheme,
@@ -14,6 +13,7 @@ import {
 } from "@/components/probes/ground";
 
 import { WlCanaryCanvas } from "./canvas";
+import type { DensityPosture } from "@rottay/design-system";
 
 /** The only mountable sources. Anything else is a hard failure. */
 const SOURCES: readonly FleetSource[] = ["bithire-static", "themanagement-db", "themanagement-seeds"];
@@ -58,7 +58,7 @@ export default async function WlCanaryProbePage({ searchParams }: { searchParams
   const localeParam = probeParam(params, "locale");
   const locale: FleetLocale = localeParam === "es" || localeParam === "ar" ? localeParam : "en";
   const densityParam = probeParam(params, "density");
-  const density: FleetDensity = densityParam === "compact" || densityParam === "spacious" ? densityParam : "comfortable";
+  const density: DensityPosture = densityParam === "compact" || densityParam === "spacious" ? densityParam : "comfortable";
   const theme: FleetTheme = probeParam(params, "theme") === "dark" ? "dark" : "light";
   const seedPrimary = probeParam(params, "seedPrimary") ?? undefined;
 

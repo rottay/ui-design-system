@@ -41,19 +41,19 @@ import {
   Stack,
   Text,
   Watermark,
+  type DensityPosture,
 } from "@rottay/design-system";
 
 
 export type K4LaneCSource = "bithire-static" | "themanagement-db";
 export type K4LaneCLocale = "en" | "es" | "ar";
-export type K4LaneCDensity = "compact" | "comfortable" | "spacious";
 export type K4LaneCState = "rest" | "loading" | "error";
 export type K4LaneCTheme = "light" | "dark";
 
 export interface K4LaneCProbeProps {
   source: K4LaneCSource;
   locale: K4LaneCLocale;
-  density: K4LaneCDensity;
+  density: DensityPosture;
   state: K4LaneCState;
   theme?: K4LaneCTheme;
 }

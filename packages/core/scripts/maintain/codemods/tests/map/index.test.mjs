@@ -295,7 +295,7 @@ test('the entries that need a decision per site are report-only, whatever their 
     'prop-renamed/.#CountUpProps.delay', 'prop-renamed/.#CountUpProps.duration',
     'prop-renamed/.#StaggerChildrenProps.delayChildren', 'prop-renamed/.#StaggerChildrenProps.staggerDelay',
     'prop-renamed/.#TextRevealProps.delay', 'prop-renamed/.#TextRevealProps.duration',
-    'symbol-removed/.#Steps', 'symbol-removed/.#StepsProps',
+    'symbol-removed/.#DensityProfile', 'symbol-removed/.#MarkdownDensity', 'symbol-removed/.#Steps', 'symbol-removed/.#StepsProps',
     'union-member-removed/.#SwitchProps.large', 'union-member-removed/.#SwitchProps.small',
   ]);
   for (const entry of decided) assert.equal(entry.replacement?.values, undefined, `${entry.id}: no value-table workaround`);

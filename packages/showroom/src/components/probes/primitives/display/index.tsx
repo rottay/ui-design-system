@@ -28,18 +28,18 @@ import {
   Stack,
   Tag,
   Text,
+  type DensityPosture,
 } from "@rottay/design-system";
 
 
 export type LaneASource = "bithire-static" | "themanagement-db";
 export type LaneALocale = "en" | "es" | "ar";
-export type LaneADensity = "compact" | "comfortable" | "spacious";
 export type LaneAState = "rest" | "disabled" | "loading";
 
 export interface K1LaneAProbeProps {
   source: LaneASource;
   locale: LaneALocale;
-  density: LaneADensity;
+  density: DensityPosture;
   state: LaneAState;
 }
 

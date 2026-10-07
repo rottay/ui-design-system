@@ -36,20 +36,20 @@ import {
   Stack,
   Text,
   type ActionDockAction,
+  type DensityPosture,
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
 
 
 export type P1ActionDockSource = "bithire-static" | "themanagement-db";
 export type P1ActionDockLocale = "en" | "es" | "ar";
-export type P1ActionDockDensity = "compact" | "comfortable" | "spacious";
 export type P1ActionDockState = "rest" | "loading" | "error";
 export type P1ActionDockTheme = "light" | "dark";
 
 export interface P1ActionDockProbeProps {
   source: P1ActionDockSource;
   locale: P1ActionDockLocale;
-  density: P1ActionDockDensity;
+  density: DensityPosture;
   state: P1ActionDockState;
   theme?: P1ActionDockTheme;
 }

@@ -30,7 +30,6 @@ export type {
   TooltipTrigger as TooltipTriggerType,
   TooltipTouchBehavior,
   TooltipRecipe,
-  TooltipDensity,
   TooltipState,
   TooltipTriggerProps,
   TooltipContentProps,

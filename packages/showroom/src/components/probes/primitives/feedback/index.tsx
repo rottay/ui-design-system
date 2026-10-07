@@ -34,18 +34,18 @@ import {
   Skeleton,
   Spinner,
   Stack,
+  type DensityPosture,
 } from "@rottay/design-system";
 
 
 export type LaneCSource = "bithire-static" | "themanagement-db";
 export type LaneCLocale = "en" | "es" | "ar";
-export type LaneCDensity = "compact" | "comfortable" | "spacious";
 export type LaneCState = "rest" | "loading" | "empty" | "error";
 
 export interface K1LaneCProbeProps {
   source: LaneCSource;
   locale: LaneCLocale;
-  density: LaneCDensity;
+  density: DensityPosture;
   state: LaneCState;
 }
 

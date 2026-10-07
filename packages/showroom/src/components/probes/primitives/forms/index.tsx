@@ -31,18 +31,18 @@ import {
   Text,
   Textarea,
   Toggle,
+  type DensityPosture,
 } from "@rottay/design-system";
 
 
 export type LaneBSource = "bithire-static" | "themanagement-db";
 export type LaneBLocale = "en" | "es" | "ar";
-export type LaneBDensity = "compact" | "comfortable" | "spacious";
 export type LaneBState = "rest" | "disabled" | "error" | "loading";
 
 export interface K1LaneBProbeProps {
   source: LaneBSource;
   locale: LaneBLocale;
-  density: LaneBDensity;
+  density: DensityPosture;
   state: LaneBState;
 }
 

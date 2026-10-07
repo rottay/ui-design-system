@@ -132,13 +132,12 @@ export type { SurfaceShellNavigationAdapt } from './runtime/postures';
 // Runtime profile defaults + per-surface override hook
 export {
   useSurfaceProfileDefaults,
-  normalizeSurfaceDensity,
+  normalizeDensityPosture,
   resolveListCardMinWidth,
   resolveSurfaceTabsType,
 } from '../structures/foundation/chrome/runtime/profile-defaults';
 export type {
   ResolvedSurfaceProfileDefaults,
-  SurfaceDensity,
   SurfaceSectionSpacing,
 } from '../structures/foundation/chrome/runtime/profile-defaults';
 export { useSurfaceProfileDefaultsWithOverrides } from '../structures/foundation/chrome/runtime/profile-defaults/overrides';

@@ -36,7 +36,7 @@ import {
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
 
-import type { FleetDensity, FleetLocale, FleetSource } from "@/components/probes/ground/documents";
+import type { FleetLocale, FleetSource } from "@/components/probes/ground/documents";
 
 /**
  * White-label canary (2026-07-27).
@@ -803,7 +803,7 @@ export interface WlCanaryCanvasProps {
   /** The tenant the ground ACTUALLY mounted, never the one the query asked for. */
   readonly mountedSlug: string;
   readonly locale: FleetLocale;
-  readonly density: FleetDensity;
+  readonly density: DensityPosture;
   readonly modalInitiallyOpen: boolean;
   readonly sheetInitiallyOpen: boolean;
 }

@@ -1,12 +1,12 @@
 import { FleetGround, probeParam, type ProbeSearchParams } from "@/components/probes/ground";
 import {
   K4LaneCProbe,
-  type K4LaneCDensity,
   type K4LaneCLocale,
   type K4LaneCSource,
   type K4LaneCState,
   type K4LaneCTheme,
 } from "@/components/probes/patterns/media-actions";
+import type { DensityPosture } from "@rottay/design-system";
 
 function sanitizeSource(value: string | null): K4LaneCSource {
   return value === "themanagement-db" ? value : "bithire-static";
@@ -16,7 +16,7 @@ function sanitizeLocale(value: string | null): K4LaneCLocale {
   return value === "es" || value === "ar" ? value : "en";
 }
 
-function sanitizeDensity(value: string | null): K4LaneCDensity {
+function sanitizeDensity(value: string | null): DensityPosture {
   return value === "compact" || value === "spacious" ? value : "comfortable";
 }
 

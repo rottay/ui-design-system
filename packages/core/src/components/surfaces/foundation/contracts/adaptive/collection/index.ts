@@ -27,6 +27,7 @@ import type {
   SurfaceCapabilityRegistration,
 } from '../..';
 import type { PanePosture } from '..';
+import type { DensityPosture } from '@/foundation/tokens/ts/foundation/base/density';
 
 // ---------------------------------------------------------------------------
 // Canonical view modes
@@ -263,8 +264,8 @@ export interface WorkspaceColumnSettingsConfig {
 /** Density control. */
 export interface WorkspaceDensityConfig {
   enabled: boolean;
-  value?: 'compact' | 'comfortable' | 'spacious';
-  onChange?: (density: 'compact' | 'comfortable' | 'spacious') => void;
+  value?: DensityPosture;
+  onChange?: (density: DensityPosture) => void;
 }
 
 /** Export actions. */

@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import type { DensityMode } from '../../../../../../foundation/tokens/ts/foundation/base/density';
+import type { DensityPosture } from '../../../../../../foundation/tokens/ts/foundation/base/density';
 type DashboardInsightIcon = ComponentType<any>;
 
 // Variant types
@@ -43,7 +43,7 @@ export interface MetricsProps {
    * render denser than route-grade dashboards.
    * @default 'comfortable'
    */
-  density?: DensityMode;
+  density?: Exclude<DensityPosture, 'spacious'>;
 }
 
 export interface ActivityProps {

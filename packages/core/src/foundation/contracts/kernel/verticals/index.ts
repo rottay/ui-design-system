@@ -91,9 +91,6 @@ export type ShapeProfile = 'sharp' | 'balanced' | 'rounded';
 /** Animation intensity and style. */
 export type MotionProfile = 'precise' | 'calm' | 'expressive';
 
-/** Information density. */
-export type DensityProfile = 'compact' | 'comfortable' | 'airy';
-
 // ---------------------------------------------------------------------------
 // Composition modes (how each surface type is presented)
 // ---------------------------------------------------------------------------
@@ -130,7 +127,9 @@ export interface VerticalManifest {
   tone: VerticalTone;
   shape: ShapeProfile;
   motion: MotionProfile;
-  density: DensityProfile;
+  /** The rendered density posture (`DensityPosture`), spelled inline: this support layer may not import the
+   *  token density module that owns the type. `tests/architecture/density-one-type-per-axis` pins the identity. */
+  density: 'compact' | 'comfortable' | 'spacious';
 
   // Composition modes
   shell: ShellMode;

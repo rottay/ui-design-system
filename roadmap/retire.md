@@ -855,5 +855,18 @@ Lane-wide rules (binding on every WO):
   D-E (the door and the feature-pictogram asset class stay published; nothing here retires them).
   **Files** gains for W-2 only: *those exact 4 paths, each carrying the retirement's consistency edit and
   nothing else.*
+- **AMENDMENT (2026-10-07, DT ruling on the W-3a companion surface; the acceptance above stands, this is added to it)** —
+  The W-3a packet (the density axis: ten names retired into the two surviving axes) measured these companion
+  paths outside the Files list: `packages/core/src/index.ts` (the DENSITY block), `packages/core/src/foundation/contracts/index.ts`
+  (the DensityProfile barrel line), `packages/core/src/infrastructure/runtime/foundation/density/index.ts`,
+  `packages/core/src/infrastructure/runtime/theming/composition/mount/index.ts`,
+  `packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/index.ts`,
+  `packages/core/src/infrastructure/runtime/foundation/root-attributes/ssr/tests/index.test.ts`,
+  the new guard `packages/core/tests/architecture/density-one-type-per-axis/index.test.ts`, and the regenerated
+  mirrors (`packages/core/contracts/runtime/suppliers/index.json`,
+  `packages/core/scripts/check/modern-rescue/family-inventory/index.json`). **Files** gains for W-3a only:
+  *those exact paths, each carrying the axis's retirement edit or the official regen and nothing else.*
+  The `VerticalManifest.density` inline spelling (the structure law refuses the cross-layer import) is pinned
+  identical to `DensityPosture` by the guard — the departure is registered, not hidden.
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-06 (Transitional compatibility and transferred closures of the 3.0 line) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-42, F-109, F-111, F-113, F-115, F-84, F-88 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.

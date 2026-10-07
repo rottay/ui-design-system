@@ -8,11 +8,9 @@
  */
 
 import type { GroundRequest } from "@/components/probe-ground";
+import type { DensityPosture } from "@rottay/design-system";
 
 export type FleetSource = "bithire-static" | "themanagement-db" | "themanagement-seeds";
-
-/** The density axis the probe matrix sweeps. */
-export type FleetDensity = "compact" | "comfortable" | "spacious";
 
 /** Locales the probe matrix renders. `ar` is the RTL case. */
 export type FleetLocale = "en" | "es" | "ar";
@@ -24,7 +22,7 @@ export type FleetTheme = "light" | "dark";
 export const FLEET_ARTIFACT_TESTID = "showroom-tenant-artifact";
 
 /** The document vocabulary has no `comfortable`; `normal` is its canonical alias. */
-const DOCUMENT_DENSITY: Record<FleetDensity, "compact" | "normal" | "spacious"> = {
+const DOCUMENT_DENSITY: Record<DensityPosture, "compact" | "normal" | "spacious"> = {
   compact: "compact",
   comfortable: "normal",
   spacious: "spacious",
@@ -132,7 +130,7 @@ export function seedsOnlyDocument(primary: string = THEMANAGEMENT_LIGHT_PALETTE.
   };
 }
 
-function themanagementDocument(theme: FleetTheme, density?: FleetDensity, recipeProfile?: string) {
+function themanagementDocument(theme: FleetTheme, density?: DensityPosture, recipeProfile?: string) {
   return {
     ...THEMANAGEMENT_DOCUMENT,
     visualFoundation: {
@@ -153,7 +151,7 @@ function themanagementDocument(theme: FleetTheme, density?: FleetDensity, recipe
 export interface FleetGroundOptions {
   readonly locale?: FleetLocale;
   /** Static path: a `DensityScope` posture. DB path: the document's own density. Seeds: neither. */
-  readonly density?: FleetDensity;
+  readonly density?: DensityPosture;
   readonly theme?: FleetTheme;
   /** A governed recipe-profile id, compiled into the DB document. */
   readonly recipeProfile?: string;

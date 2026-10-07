@@ -46,19 +46,19 @@ import {
   Transfer,
   type MentionsOption,
   type TransferItem,
+  type DensityPosture,
 } from "@rottay/design-system";
 
 
 export type K4LaneDSource = "bithire-static" | "themanagement-db";
 export type K4LaneDLocale = "en" | "es" | "ar";
-export type K4LaneDDensity = "compact" | "comfortable" | "spacious";
 export type K4LaneDState = "rest" | "error" | "disabled";
 export type K4LaneDGround = "light" | "dark";
 
 export interface K4LaneDProbeProps {
   source: K4LaneDSource;
   locale: K4LaneDLocale;
-  density: K4LaneDDensity;
+  density: DensityPosture;
   state: K4LaneDState;
   ground: K4LaneDGround;
 }

@@ -57,7 +57,6 @@ import type {
 
 export type {
   MarkdownViewProps,
-  MarkdownDensity,
   MarkdownLinkPolicy,
   MarkdownLinkScheme,
   MarkdownCodeSlotProps,

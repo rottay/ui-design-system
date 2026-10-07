@@ -14,7 +14,7 @@ import {
   resolveDensityModeFactor,
   resolveDensityStyleVars,
   resolveEffectiveDensityScale,
-  type DensityMode,
+  type DensityPosture,
 } from '../ts/foundation/base/density';
 
 describe('density presets (design-language §3)', () => {
@@ -85,7 +85,7 @@ describe('density presets (design-language §3)', () => {
   });
 
   it('resolveDensityStyleVars carries the mode preset as CSS custom properties', () => {
-    const modes: DensityMode[] = ['comfortable', 'compact'];
+    const modes: Exclude<DensityPosture, 'spacious'>[] = ['comfortable', 'compact'];
     for (const mode of modes) {
       const vars = resolveDensityStyleVars(mode) as unknown as Record<string, string>;
       expect(vars['--ds-density-cell-padding']).toBe(DENSITY_PRESETS[mode].cellPadding);

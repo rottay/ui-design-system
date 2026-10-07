@@ -25,7 +25,6 @@ export {
   type PopoverTrigger,
   type PopoverPlacement,
   type PopoverRecipe,
-  type PopoverDensity,
   type PopoverRole,
   type PopoverTouchBehavior,
   POPOVER_DEFAULTS,

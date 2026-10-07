@@ -1,0 +1,10 @@
+[
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "rewrite",
+    "id": "symbol-removed/.#ActionDockDensity",
+    "reason": "import-binding"
+  }
+]

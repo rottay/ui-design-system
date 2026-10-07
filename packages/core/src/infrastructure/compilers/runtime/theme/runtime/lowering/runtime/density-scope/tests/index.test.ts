@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { compileThemeIntent, staticThemeIntent } from "@/entrypoints/server";
 import type { FamilyDeriver } from "../../../foundation/contract";
-import { DENSITY_SCOPE_POSTURES } from "../../../../emission";
+import { DENSITY_POSTURES } from "@/foundation/tokens/ts/foundation/base/density";
 import { FAMILY_DERIVERS } from "../../derivation";
 import { buildLoweringContext, lowerBlock, runDerivation } from "../../pipeline";
 import {
@@ -174,7 +174,7 @@ describe("density-scope roster", () => {
     const postures = [...css("base/density/index.css").matchAll(/\[data-density='([a-z]+)'\]:not\(:root\)/g)].map(
       (match) => match[1]
     );
-    expect([...new Set(postures)].sort()).toEqual([...DENSITY_SCOPE_POSTURES].sort());
+    expect([...new Set(postures)].sort()).toEqual([...DENSITY_POSTURES].sort());
   });
 
   it("names a density-scope input exactly when the boundary re-declares it", () => {

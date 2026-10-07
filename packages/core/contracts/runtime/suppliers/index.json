@@ -783,8 +783,8 @@
         "migrateAndAdmitDocument",
         "migrateDocumentV1ToV2",
         "migrateV1",
+        "normalizeDensityPosture",
         "normalizeLayoutRevision",
-        "normalizeSurfaceDensity",
         "normalizeSurfaceError",
         "normalizeWidgetLayout",
         "notification",
@@ -1750,7 +1750,7 @@
           "d3",
           "motion"
         ],
-        "normalizeSurfaceDensity": [
+        "normalizeDensityPosture": [
           "antd"
         ],
         "notification": [

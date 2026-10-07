@@ -541,7 +541,7 @@ export type {
 export {
   resolveDocumentRootAttributes,
   buildThemePrepaintScript,
-  type DocumentDensityPosture,
+  type DensityPosture,
   type DocumentMotionPosture,
   type DocumentRootAttributes,
   type DocumentRootAttributesInput,

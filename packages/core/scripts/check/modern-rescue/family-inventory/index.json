@@ -2410,7 +2410,6 @@
       "divergenceProfile": "atomic-static",
       "publicExports": [
         "MarkdownViewProps",
-        "MarkdownDensity",
         "MarkdownLinkPolicy",
         "MarkdownLinkScheme",
         "MarkdownCodeSlotProps",
@@ -5769,7 +5768,6 @@
       "divergenceProfile": "structure",
       "publicExports": [
         "ActionDockAction",
-        "ActionDockDensity",
         "ActionDockOverflow",
         "ActionDockPriority",
         "ActionDockProps",

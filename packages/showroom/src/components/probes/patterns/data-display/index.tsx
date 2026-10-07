@@ -35,6 +35,7 @@ import {
   Timeline,
   Tree,
   type TreeDataNode,
+  type DensityPosture,
 } from "@rottay/design-system";
 
 
@@ -49,13 +50,12 @@ type ProbeListItem = { title: string; description: string };
 
 export type LaneASource = "bithire-static" | "themanagement-db";
 export type LaneALocale = "en" | "es" | "ar";
-export type LaneADensity = "compact" | "comfortable" | "spacious";
 export type LaneAState = "rest" | "loading" | "empty";
 
 export interface K3LaneAProbeProps {
   source: LaneASource;
   locale: LaneALocale;
-  density: LaneADensity;
+  density: DensityPosture;
   state: LaneAState;
 }
 

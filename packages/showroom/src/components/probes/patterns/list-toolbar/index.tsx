@@ -48,13 +48,12 @@ import { Icon } from "@rottay/design-system/icons";
 
 export type P1ListToolbarSource = "bithire-static" | "themanagement-db";
 export type P1ListToolbarLocale = "en" | "es" | "ar";
-export type P1ListToolbarDensity = "compact" | "comfortable" | "spacious";
 export type P1ListToolbarState = "rest";
 
 export interface P1ListToolbarProbeProps {
   source: P1ListToolbarSource;
   locale: P1ListToolbarLocale;
-  density: P1ListToolbarDensity;
+  density: DensityPosture;
   state?: P1ListToolbarState;
 }
 

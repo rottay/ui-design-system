@@ -97,7 +97,6 @@ export type { CodeBlockProps, HighlighterAdapter, HighlightTokenLine, HighlightT
 export { MarkdownView, parseMarkdown, parseInline, sanitizeHref } from './markdown-view';
 export type {
   MarkdownViewProps,
-  MarkdownDensity,
   MarkdownLinkPolicy,
   MarkdownLinkScheme,
   MarkdownCodeSlotProps,

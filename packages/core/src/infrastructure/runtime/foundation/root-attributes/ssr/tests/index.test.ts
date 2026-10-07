@@ -7,14 +7,15 @@
  * from the same resolver the client uses.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, expectTypeOf } from 'vitest';
 
-import { DENSITY_POSTURES } from '@/infrastructure/runtime/foundation/density';
+import { DENSITY_POSTURES, type DensityPosture } from '@/foundation/tokens/ts/foundation/base/density';
 
 import {
-  DOCUMENT_DENSITY_POSTURES,
   buildThemePrepaintScript,
   resolveDocumentRootAttributes,
+  type DocumentRootAttributes,
+  type DocumentRootAttributesInput,
 } from '..';
 
 const BASE = { engine: 'modern', locale: 'en' } as const;
@@ -134,21 +135,15 @@ describe('buildThemePrepaintScript', () => {
   });
 });
 
-/**
- * The root density channel's vocabulary, kept identical to the runtime's.
- *
- * `runtime/foundation/density` owns the React runtime for this posture and is
- * this owner's architectural PEER, so neither may import the other. The
- * vocabulary is therefore declared twice and proven equal here — a test may
- * cross the boundary that production code may not.
- */
-describe('the root density channel and the density runtime declare one vocabulary', () => {
-  it('admits exactly the postures the runtime owner declares', () => {
-    expect([...DOCUMENT_DENSITY_POSTURES].sort()).toEqual([...DENSITY_POSTURES].sort());
+/** The root density channel speaks the posture axis: one declaration, owned by the token density module. */
+describe('the root density channel is typed by the one posture vocabulary', () => {
+  it('types the input and the stamped attribute as DensityPosture', () => {
+    expectTypeOf<DocumentRootAttributesInput['density']>().toEqualTypeOf<DensityPosture | undefined>();
+    expectTypeOf<DocumentRootAttributes['data-density']>().toEqualTypeOf<DensityPosture | undefined>();
   });
 
-  it('projects every one of them onto the root', () => {
-    for (const posture of DOCUMENT_DENSITY_POSTURES) {
+  it('projects every posture onto the root', () => {
+    for (const posture of DENSITY_POSTURES) {
       expect(
         resolveDocumentRootAttributes({
           themeMode: 'light',

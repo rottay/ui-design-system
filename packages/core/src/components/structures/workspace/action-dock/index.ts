@@ -18,7 +18,6 @@ import type { ActionDockProps } from './contracts';
 
 export type {
   ActionDockAction,
-  ActionDockDensity,
   ActionDockOverflow,
   ActionDockPriority,
   ActionDockProps,

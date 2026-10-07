@@ -15,15 +15,10 @@ import { useProductProfile } from '../../../../../../infrastructure/runtime/prod
 import type { CardVariant } from '../../../../../primitives/display/card/contracts';
 import type { TabsType } from '../../../../../primitives/navigation/tabs';
 import type { ListSurfaceView } from '../../contracts';
+import type { DensityPosture } from '@/foundation/tokens/ts/foundation/base/density';
 
 /**
- * Qualitative density levels used across all surfaces.
- * Controls spacing, padding, font sizes, and how much information fits on screen.
- */
-export type SurfaceDensity = 'compact' | 'comfortable' | 'spacious';
-
-/**
- * Spacing between surface sections, derived directly from `SurfaceDensity`.
+ * Spacing between surface sections, derived directly from the density posture.
  * - `sm` = compact density (tight spacing, more content visible)
  * - `md` = comfortable density (balanced default)
  * - `lg` = spacious density (generous whitespace, content-focused)
@@ -31,7 +26,7 @@ export type SurfaceDensity = 'compact' | 'comfortable' | 'spacious';
 export type SurfaceSectionSpacing = 'sm' | 'md' | 'lg';
 
 export interface ResolvedSurfaceProfileDefaults {
-  density: SurfaceDensity;
+  density: DensityPosture;
   listView: ListSurfaceView;
   schedulerView: 'month' | 'week' | 'day';
   tabsType: TabsType;
@@ -76,7 +71,7 @@ export interface ResolvedSurfaceProfileDefaults {
  * resolve card padding as `normal`. We normalize both into one shared density
  * vocabulary so surfaces can make stable layout decisions.
  */
-export function normalizeSurfaceDensity(input?: string | null): SurfaceDensity | undefined {
+export function normalizeDensityPosture(input?: string | null): DensityPosture | undefined {
   if (!input) {
     return undefined;
   }
@@ -98,7 +93,7 @@ export function normalizeSurfaceDensity(input?: string | null): SurfaceDensity |
  * - spacious products get card tabs with stronger visual grouping
  * - everything else stays on the simpler line tabs
  */
-export function resolveSurfaceTabsType(density: SurfaceDensity): TabsType {
+export function resolveSurfaceTabsType(density: DensityPosture): TabsType {
   return density === 'spacious' ? 'card' : 'line';
 }
 
@@ -107,7 +102,7 @@ export function resolveSurfaceTabsType(density: SurfaceDensity): TabsType {
  * density. This keeps cards from feeling cramped in media-first products while
  * still allowing compact operator products to fit more information onscreen.
  */
-export function resolveListCardMinWidth(density: SurfaceDensity): number {
+export function resolveListCardMinWidth(density: DensityPosture): number {
   switch (density) {
     case 'compact':
       return 240;
@@ -142,8 +137,8 @@ export function useSurfaceProfileDefaults(): ResolvedSurfaceProfileDefaults {
     // Density resolution: personality tokens take priority over product profile
     // settings because personality is the more specific customization layer.
     const density =
-      normalizeSurfaceDensity(tokens.personality.card.paddingDensity) ??
-      normalizeSurfaceDensity(profile.surfaceDefaults?.density) ??
+      normalizeDensityPosture(tokens.personality.card.paddingDensity) ??
+      normalizeDensityPosture(profile.surfaceDefaults?.density) ??
       'comfortable';
 
     // Section spacing maps directly from density to keep surface sections

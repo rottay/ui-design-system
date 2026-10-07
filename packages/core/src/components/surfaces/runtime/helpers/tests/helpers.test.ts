@@ -23,7 +23,7 @@ import {
   stringifySurfaceValue,
 } from '..';
 import {
-  normalizeSurfaceDensity,
+  normalizeDensityPosture,
   resolveListCardMinWidth,
   resolveSurfaceTabsType,
 } from '../../../../structures/foundation/chrome/runtime/profile-defaults';
@@ -324,9 +324,9 @@ describe('normalizeSurfaceError', () => {
 
 describe('surface profile defaults', () => {
   it('normalizes token density into the shared surface vocabulary', () => {
-    expect(normalizeSurfaceDensity('normal')).toBe('comfortable');
-    expect(normalizeSurfaceDensity('compact')).toBe('compact');
-    expect(normalizeSurfaceDensity('spacious')).toBe('spacious');
+    expect(normalizeDensityPosture('normal')).toBe('comfortable');
+    expect(normalizeDensityPosture('compact')).toBe('compact');
+    expect(normalizeDensityPosture('spacious')).toBe('spacious');
   });
 
   it('uses card tabs only for spacious products', () => {

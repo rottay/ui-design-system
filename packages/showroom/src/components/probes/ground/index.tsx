@@ -6,10 +6,10 @@ import { FleetDensityScope } from "./density";
 import {
   FLEET_ARTIFACT_TESTID,
   fleetGroundRequest,
-  type FleetDensity,
   type FleetGroundOptions,
   type FleetSource,
 } from "./documents";
+import type { DensityPosture } from "@rottay/design-system";
 
 export { ProbeCellSwitch, type ProbeCellAxis, type ProbeCellSwitchProps } from "./cell-switch";
 export { probeParam, type ProbeSearchParams } from "./params";
@@ -19,7 +19,6 @@ export {
   SEEDS_ONLY_DOCUMENT_ALLOWLIST,
   fleetGroundRequest,
   seedsOnlyDocument,
-  type FleetDensity,
   type FleetGroundOptions,
   type FleetLocale,
   type FleetSource,
@@ -29,7 +28,7 @@ export {
 export interface FleetStageProps {
   readonly ground: Ground;
   /** Scoped only on a code-owned ground; a compiled one carries its own density. */
-  readonly density?: FleetDensity;
+  readonly density?: DensityPosture;
   readonly children: ReactNode;
 }
 

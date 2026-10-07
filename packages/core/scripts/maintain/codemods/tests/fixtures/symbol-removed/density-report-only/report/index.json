@@ -1,0 +1,34 @@
+[
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 31,
+    "action": "report",
+    "id": "symbol-removed/.#MarkdownDensity",
+    "reason": "report-only"
+  },
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 15,
+    "action": "report",
+    "id": "symbol-removed/.#DensityProfile",
+    "reason": "report-only"
+  },
+  {
+    "file": "index.ts",
+    "line": 2,
+    "column": 15,
+    "action": "report",
+    "id": "symbol-removed-no-replacement/.#Density",
+    "reason": "no-public-replacement"
+  },
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 48,
+    "action": "report",
+    "id": "member-changed/.#VerticalManifest.density",
+    "reason": "member-changed"
+  }
+]

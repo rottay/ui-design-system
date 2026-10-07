@@ -34,19 +34,19 @@ import {
   Stack,
   Text,
   VoiceInputButton,
+  type DensityPosture,
 } from "@rottay/design-system";
 
 
 export type LaneBSource = "bithire-static" | "themanagement-db";
 export type LaneBLocale = "en" | "es" | "ar";
-export type LaneBDensity = "compact" | "comfortable" | "spacious";
 export type LaneBState = "rest" | "stress";
 export type LaneBTheme = "light" | "dark";
 
 export interface K4LaneBProbeProps {
   source: LaneBSource;
   locale: LaneBLocale;
-  density: LaneBDensity;
+  density: DensityPosture;
   state: LaneBState;
   theme: LaneBTheme;
 }

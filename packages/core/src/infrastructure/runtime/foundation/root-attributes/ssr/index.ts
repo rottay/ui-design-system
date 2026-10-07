@@ -25,6 +25,7 @@
 import type { SupportedLocale, TextDirection } from '@/foundation/i18n/kernel/contracts';
 import { resolveDocumentLocaleAttributes } from '@/foundation/i18n/runtime/resolution';
 import { verticalDefaultMode } from '@/infrastructure/compilers/kernel/foundation/modes';
+import type { DensityPosture } from '@/foundation/tokens/ts/foundation/base/density';
 
 /** The tenant's declared theme intent, before any viewer preference. */
 export type TenantThemeMode = 'light' | 'dark' | 'auto';
@@ -32,23 +33,8 @@ export type TenantThemeMode = 'light' | 'dark' | 'auto';
 /** The theme actually painted. `auto` is never one of these. */
 export type ResolvedTheme = 'light' | 'dark';
 
-/**
- * The density posture the document root declares.
- *
- * DECLARED HERE, NOT IMPORTED. `runtime/foundation/density` owns the React
- * runtime for this vocabulary and is this owner's architectural PEER, so an
- * import in either direction is sibling debt the structure gate refuses. The
- * two declarations are proven identical by an executable assertion in
- * `./tests`, which may cross a boundary production code may not.
- */
-export type DocumentDensityPosture = 'compact' | 'comfortable' | 'spacious';
-
-/** Every posture the root channel admits. */
-export const DOCUMENT_DENSITY_POSTURES: readonly DocumentDensityPosture[] = Object.freeze([
-  'compact',
-  'comfortable',
-  'spacious',
-]);
+/** The density posture the document root declares: the posture axis, owned one layer down. */
+export type { DensityPosture } from '@/foundation/tokens/ts/foundation/base/density';
 
 /**
  * The document-wide motion posture. `system` is the absence of a document
@@ -86,7 +72,7 @@ export interface DocumentRootAttributesInput {
    * `--ds-density-mode-factor` on the FIRST paint instead of after a client
    * effect; `RootDensityProvider` claims the same channel on hydration.
    */
-  density?: DocumentDensityPosture;
+  density?: DensityPosture;
   /** Document motion policy. `system` stamps nothing and defers to the OS. */
   motion?: DocumentMotionPosture;
   /** Viewport tier the responsive runtime renders its server snapshot for. */
@@ -105,7 +91,7 @@ export interface DocumentRootAttributes {
   'data-ds-root'?: '';
   'data-vertical'?: string;
   'data-tenant'?: string;
-  'data-density'?: DocumentDensityPosture;
+  'data-density'?: DensityPosture;
   'data-ds-motion'?: 'reduced';
   'data-ds-viewport'?: DocumentViewportHint;
   'data-recipe-profile'?: string;

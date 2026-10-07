@@ -39,13 +39,13 @@ import {
   Stack,
   Stepper,
   Text,
+  type DensityPosture,
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
 
 
 export type LaneBSource = "bithire-static" | "themanagement-db";
 export type LaneBLocale = "en" | "es" | "ar";
-export type LaneBDensity = "compact" | "comfortable" | "spacious";
 export type LaneBState = "rest" | "disabled" | "error";
 
 /**
@@ -72,7 +72,7 @@ export type LaneBVariant =
 export interface K3LaneBProbeProps {
   source: LaneBSource;
   locale: LaneBLocale;
-  density: LaneBDensity;
+  density: DensityPosture;
   state: LaneBState;
   variant?: LaneBVariant;
 }

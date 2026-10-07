@@ -1,0 +1,10 @@
+[
+  {
+    "file": "index.ts",
+    "line": 1,
+    "column": 41,
+    "action": "rewrite",
+    "id": "symbol-removed/./server#DocumentDensityPosture",
+    "reason": "import-binding"
+  }
+]

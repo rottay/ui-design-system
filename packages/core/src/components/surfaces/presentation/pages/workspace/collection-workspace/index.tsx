@@ -96,7 +96,6 @@ import {
   DENSITY_PRESETS,
   normalizeDensityMode,
 } from '../../../../../../foundation/tokens/ts/foundation/base/density';
-import type { DensityMode } from '../../../../../../foundation/tokens/ts/foundation/base/density';
 
 const COLLECTION_WORKSPACE_DENSITY_LOCAL_FACTOR_HOOK =
   '--ds-collection-workspace-density-local-factor';
@@ -107,7 +106,7 @@ const COLLECTION_WORKSPACE_DENSITY_LOCAL_FACTOR_HOOK =
  * Structural `--ds-density-scale` and appearance
  * `--ds-density-mode-factor` stay inherited from brand/tenant resolution.
  */
-function resolveCollectionWorkspaceDensityStyleVars(mode: DensityMode): React.CSSProperties {
+function resolveCollectionWorkspaceDensityStyleVars(mode: Exclude<DensityPosture, 'spacious'>): React.CSSProperties {
   const preset = DENSITY_PRESETS[mode];
   return {
     '--ds-density-cell-padding': preset.cellPadding,
@@ -166,7 +165,7 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
    * enabled and given a value, still overrides this baseline.
    * @default 'comfortable'
    */
-  density?: DensityMode;
+  density?: Exclude<DensityPosture, 'spacious'>;
   /** Override which chrome regions render for this workspace instance. */
   chrome?: CollectionWorkspaceChromeConfig;
   /**

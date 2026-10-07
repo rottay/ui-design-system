@@ -200,12 +200,12 @@ export type {
 // DENSITY (public scoped visual-density contract)
 // ============================================
 export {
-  DENSITY_POSTURES,
   DensityScope,
   useDensity,
 } from './infrastructure/runtime/foundation/density';
+export { DENSITY_POSTURES } from './foundation/tokens/ts/foundation/base/density';
+export type { DensityPosture } from './foundation/tokens/ts/foundation/base/density';
 export type {
-  DensityPosture,
   DensityScopeProps,
   DensityScopeValue,
 } from './infrastructure/runtime/foundation/density';

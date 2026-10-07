@@ -51,19 +51,19 @@ import {
   useNotification,
   type DropdownPlacement,
   type NotificationPlacement,
+  type DensityPosture,
 } from "@rottay/design-system";
 
 
 export type K4LaneASource = "bithire-static" | "themanagement-db";
 export type K4LaneALocale = "en" | "es" | "ar";
-export type K4LaneADensity = "compact" | "comfortable" | "spacious";
 export type K4LaneAState = "rest" | "loading" | "error";
 export type K4LaneATheme = "light" | "dark";
 
 export interface K4LaneAProbeProps {
   source: K4LaneASource;
   locale: K4LaneALocale;
-  density: K4LaneADensity;
+  density: DensityPosture;
   state: K4LaneAState;
   theme?: K4LaneATheme;
 }

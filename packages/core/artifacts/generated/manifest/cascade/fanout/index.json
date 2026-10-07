@@ -4366,7 +4366,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 389,
+          "line": 388,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -4387,7 +4387,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 392,
+          "line": 391,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -92116,35 +92116,35 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 308,
+          "line": 307,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 382,
+          "line": 381,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 455,
+          "line": 454,
           "prop": "borderBottom",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 478,
+          "line": 477,
           "prop": "borderBottom",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 499,
+          "line": 498,
           "prop": "borderTop",
           "scalars": []
         },
@@ -96264,14 +96264,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 305,
+          "line": 304,
           "prop": "scrollbarColor",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 435,
+          "line": 434,
           "prop": "scrollbarColor",
           "scalars": []
         }
@@ -126743,7 +126743,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 389,
+          "line": 388,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -149453,14 +149453,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 117,
+          "line": 116,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 318,
+          "line": 317,
           "prop": "color",
           "scalars": []
         },
@@ -174560,7 +174560,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/density/index.ts",
-          "line": 96,
+          "line": 89,
           "prop": "cardPadding",
           "decl": "var(--ds-density-card-padding-comfortable, calc(1rem * var($",
           "scalars": []
@@ -174580,7 +174580,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/density/index.ts",
-          "line": 104,
+          "line": 97,
           "prop": "cardPadding",
           "decl": "var(--ds-density-card-padding-compact, calc(0.75rem * var($",
           "scalars": []
@@ -174666,7 +174666,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/density/index.ts",
-          "line": 94,
+          "line": 87,
           "prop": "cellPadding",
           "decl": "var(--ds-density-cell-padding-comfortable, calc(0.875rem * var($",
           "scalars": []
@@ -174686,7 +174686,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/density/index.ts",
-          "line": 102,
+          "line": 95,
           "prop": "cellPadding",
           "decl": "var(--ds-density-cell-padding-compact, calc(0.5rem * var($",
           "scalars": []
@@ -212629,7 +212629,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 89,
+          "line": 88,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -218813,14 +218813,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 314,
+          "line": 313,
           "prop": "fontSize",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 457,
+          "line": 456,
           "prop": "fontSize",
           "scalars": []
         },
@@ -250928,14 +250928,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 315,
+          "line": 314,
           "prop": "lineHeight",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 547,
+          "line": 546,
           "prop": "lineHeight",
           "scalars": []
         }
@@ -310302,7 +310302,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-          "line": 1754,
+          "line": 1753,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -327505,7 +327505,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 306,
+          "line": 305,
           "prop": "borderRadius",
           "scalars": []
         },
@@ -330175,14 +330175,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 115,
+          "line": 114,
           "prop": "borderRadius",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 381,
+          "line": 380,
           "prop": "borderRadius",
           "scalars": []
         },
@@ -365926,14 +365926,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 107,
+          "line": 106,
           "prop": "compact",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 362,
+          "line": 361,
           "prop": "undefined",
           "scalars": []
         },
@@ -372467,35 +372467,35 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 92,
+          "line": 91,
           "prop": "compact",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 108,
+          "line": 107,
           "prop": "comfortable",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 365,
+          "line": 364,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 454,
+          "line": 453,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 477,
+          "line": 476,
           "prop": "padding",
           "scalars": []
         }
@@ -376701,28 +376701,28 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 99,
+          "line": 98,
           "prop": "compact",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 301,
+          "line": 300,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 454,
+          "line": 453,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 477,
+          "line": 476,
           "prop": "padding",
           "scalars": []
         }
@@ -380413,7 +380413,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 93,
+          "line": 92,
           "prop": "comfortable",
           "scalars": []
         },
@@ -383208,14 +383208,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 100,
+          "line": 99,
           "prop": "comfortable",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 351,
+          "line": 350,
           "prop": "paddingInlineStart",
           "scalars": []
         }
@@ -395100,7 +395100,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 392,
+          "line": 391,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -402202,14 +402202,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 116,
+          "line": 115,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/markdown-view/index.tsx",
-          "line": 307,
+          "line": 306,
           "prop": "background",
           "scalars": []
         }

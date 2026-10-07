@@ -60,16 +60,16 @@ import {
   Tag,
   Text,
   useDensity,
+  type DensityPosture,
 } from "@rottay/design-system";
 
 
 export type DensityAuthoritySource = "bithire-static" | "themanagement-db";
-export type DensityAuthorityDensity = "compact" | "comfortable" | "spacious";
 export type DensityAuthorityLocale = "en" | "es" | "ar";
 
 export interface DensityAuthorityProbeProps {
   source: DensityAuthoritySource;
-  density: DensityAuthorityDensity;
+  density: DensityPosture;
   locale: DensityAuthorityLocale;
 }
 

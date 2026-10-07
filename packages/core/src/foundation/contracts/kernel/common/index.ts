@@ -315,9 +315,6 @@ export type Position =
   | 'right-center'
   | 'center';
 
-/** Spacing density presets that control padding and gaps globally. */
-export type Density = 'compact' | 'normal' | 'comfortable';
-
 /** Semantic color token names available for component theming. */
 export type ColorToken =
   | 'neutral'

@@ -1,7 +1,6 @@
 import {
   FleetGround,
   probeParam,
-  type FleetDensity,
   type FleetLocale,
   type FleetSource,
   type FleetTheme,
@@ -9,6 +8,7 @@ import {
 } from "@/components/probes/ground";
 
 import { DaisyRegressionCanvas } from "./canvas";
+import type { DensityPosture } from "@rottay/design-system";
 
 /**
  * Daisy-regression live evidence probe (2026-07-26).
@@ -35,7 +35,7 @@ export default async function DaisyRegressionProbePage({ searchParams }: { searc
   const localeParam = probeParam(params, "locale");
   const locale: FleetLocale = localeParam === "es" || localeParam === "ar" ? localeParam : "en";
   const densityParam = probeParam(params, "density");
-  const density: FleetDensity = densityParam === "compact" || densityParam === "spacious" ? densityParam : "comfortable";
+  const density: DensityPosture = densityParam === "compact" || densityParam === "spacious" ? densityParam : "comfortable";
   const theme: FleetTheme = probeParam(params, "theme") === "dark" ? "dark" : "light";
   // The dialog is opt-in (`&dialog=1`) so it does not cover the loading
   // cells in their own captures (it portals above everything by design).
