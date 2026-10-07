@@ -67,6 +67,9 @@ const PRIMITIVE_CATEGORY_SUPPORT_OWNERS = new Set(['foundation']);
 // the groups their behaviour actually belongs to, so no pattern owner nests again.
 const LAYERED_PATTERN_OWNERS = new Set();
 const STRUCTURE_SUPPORT_OWNERS = new Set(['contracts']);
+// A group-level support owner holds implementation shared by structures of several groups (`foundation/chrome`,
+// `foundation/shell-contracts`). Its children are support, never families.
+const STRUCTURE_GROUP_SUPPORT_OWNERS = new Set(['foundation']);
 const LOCAL_LAYER_ORDER = Object.freeze([
   'foundation',
   'kernel',
@@ -228,15 +231,16 @@ let totalPrimitiveComponents = 0;
   lines.push('');
   for (const group of groups) {
     const children = listDirs(join(tierDir, group));
+    const isSupportOwner = STRUCTURE_GROUP_SUPPORT_OWNERS.has(group);
     const families = children
       .filter((family) => !STRUCTURE_SUPPORT_OWNERS.has(family));
     const supportOwners = children
       .filter((family) => STRUCTURE_SUPPORT_OWNERS.has(family));
-    lines.push(`### ${group}/`);
+    lines.push(`### ${group}/${isSupportOwner ? ' (support owner)' : ''}`);
     lines.push('');
     for (const f of families) {
       lines.push(`- \`${group}/${f}/\``);
-      totalFamilies++;
+      if (!isSupportOwner) totalFamilies++;
     }
     if (supportOwners.length > 0) {
       lines.push('');

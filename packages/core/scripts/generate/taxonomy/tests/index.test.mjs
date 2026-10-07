@@ -109,6 +109,23 @@ test('a category support owner reports its parts as support, never as a placehol
   assert.equal(/`display\/foundation`/u.test(rendered), false, 'the support owner is not a placeholder or an unexposed family');
 });
 
+const familyCount = (rendered) => Number(/(\d+) families across/u.exec(rendered)?.[1]);
+
+test('a new structures/foundation child is group support, never a family', () => {
+  const root = makePackage();
+  const before = familyCount(renderTaxonomy({ packageRoot: root }));
+  fs.mkdirSync(path.join(root, 'src/components/structures/foundation/brand-new-support'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'src/components/structures/foundation/brand-new-support/index.ts'), 'export const S = 1;\n');
+  const rendered = renderTaxonomy({ packageRoot: root });
+
+  assert.match(rendered, /### foundation\/ \(support owner\)\n\n- `foundation\/brand-new-support\/`/u);
+  assert.equal(familyCount(rendered), before, 'a structures/foundation child must not count as a family');
+
+  // Control: the same child under an ordinary structures group does count.
+  fs.mkdirSync(path.join(root, 'src/components/structures/headers/brand-new-header'), { recursive: true });
+  assert.equal(familyCount(renderTaxonomy({ packageRoot: root })), before + 1);
+});
+
 test('write then check is byte-identical and reports clean', () => {
   const root = makePackage();
   assert.equal(runMain([], root).code, 0);

@@ -41,7 +41,7 @@ Tier support: `facade/`, `foundation/`, `runtime/`.
 - `feedback/loading-overlay/`
 - `feedback/surface-lifecycle/`
 
-### foundation/
+### foundation/ (support owner)
 
 - `foundation/chrome/`
 - `foundation/shell-contracts/`
@@ -311,4 +311,4 @@ Tier support: `facade/`, `foundation/`, `runtime/`.
 
 ---
 
-**Summary**: 6 primitive categories (96 components), 133 families across structures/patterns/surfaces.
+**Summary**: 6 primitive categories (96 components), 131 families across structures/patterns/surfaces.
