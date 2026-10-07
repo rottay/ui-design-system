@@ -6557,7 +6557,7 @@
    "lane": "retire",
    "order": 4,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-06",
     "WO-EMI-02",
@@ -6568,9 +6568,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 5; closes F-44, F-96, F-98, F-99, F-101, F-116, F-82",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-dt",
+   "claimedAt": "2026-10-07",
+   "progressLog": [
+    {
+     "at": "2026-10-07 12:01",
+     "by": "kimi-dt",
+     "note": "2026-10-07 kimi-dt: claimed after the closure-read (ret04-closure-read.md, independent Opus session 87e5723f, pinned at a7a13ab04, read-only). Deps all DONE; phaseClaimBlocker null (programs: audit-2026-09-05, not ds-improvements); no wave-5 owner-GO registered; family-cuts 15/15 done so no active family writers (the README retirement start-order law is met). CENSUS re-measured at the pin (F-44 quoted vs today): authored >800 lines 141 -> 217 (69 productive core/src); repeated-segment owner dirs 34 + hyphen-word 68 in core/src (NO script exists yet — W-4); single-child 195 core/src; 3 empty dirs in the live worktree; scripts volume 50.4% of src (F-44's <25% NOT MET — owner disposition D4); graphics->runtime edges 24 import lines in 18 files. structure:check green but measures NONE of the WO's census quantities (no line-count/single-child/empty-dir/showroom law; baseline is a stale inventory snapshot with a both-directions --write-baseline — W-4 replaces it with tighten-only). The R32 Q4 prerequisite (--relocate-paths) is REAL and scoped (W-1, size M, ~250-350 impl + ~300 test lines, gate delta zero). EVI-02 LIVENESS CHAIN: the liveness gate reds on exactly 2 findings — the missing R1 artifact (EVI-02's own --write) + 31 unknown-family sites (27 shared chart engine + 4 structures/shell/contracts); the effect verdict is fully clean (all four classes 0). Minimal unblock = W-3 (shell-contracts move, 31->27, executable now, outside ownership scope) + D1. D1 RULED by DT: route (ii) attribution law — the liveness gate declares the shared chart engine a resolved-shared owner of the 18 chart rows via an explicit declared table beside KNOWN_NON_FAMILY_TERRITORY (size S, reviewed); this is NOT a re-baseline (no counter moves, no measurement weakens; the four effect classes stay drained at 0 — the manifest's return-to-blocking law holds) and NOT the physical move (route i, size L, deferred — it needs W-1 + allowlist re-key D7 + inventory regen and would churn the tree mid-drain for no liveness gain). Packet plan registered: W-1 relocate-paths mode; W-2 change-key prepared cut + spatial adoption (must also re-key consumer-census rows; packinv re-seed is DT-window); W-3 shell contracts; W-3b liveness attribution law (D1-ii); W-4 structure-law instruments; W-5 hygiene (F-101 headers, 4 dead engine-styles exports, F-82 orphan barrels, 3 empty dirs); W-6 monolith splits outside ownership scope; W-7 ownership-scope splits (after W-1); W-8 D-21 global window; W-9 showroom; W-10 F-99 renames. Owner/DT dispositions open: D2 (repeated-word definition), D3 (scope of >800), D4 OWNER (scripts volume), D5 (family-inventory ids), D6 (presets vs DER-10), D7 (allowlist re-key under relocate), D8 (kernel/performance exports), D9 (graphics->runtime by code or doc)."
+    }
+   ]
   },
   {
    "id": "WO-RET-05",
