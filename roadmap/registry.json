@@ -6642,6 +6642,11 @@
      "at": "2026-10-07 10:46",
      "by": "kimi",
      "note": "2026-10-07 — WO-RET-06 abierta tras el cierre de RET-01. La closure-read (sesion 1af06fdd) midio: NO cierra solo con writer work — necesita las disposiciones del owner D-A (las 25 rows frozen), D-B (la familia Variant), D-C (persisted data, fuera del alcance DS-only), D-D (doors residuales + findings). Ejecutable sin owner: W-1 (puertas + transfers), W-2 (F-113 + pictograms), W-3 (F-84, con design debrief), W-4 (BrandMotion editor). La enmienda W-0 registrada: los 4 nombres transferidos hoy (RecipeVariantConfig, createRecipeVariant, VerticalTheme, AlertIcon) entran al scope con la ley de transferencia intacta."
+    },
+    {
+     "at": "2026-10-07 16:13",
+     "by": "kimi-dt",
+     "note": "2026-10-07 kimi-dt: W-1 INTEGRATED (373aa5222; review b1b0eb21 ACCEPT with the companion amendment verified against the 13 named paths). Six doors retired (./styles/modern, ./dist/*.css, ./icons/{foundation,identity,intelligence,operations}; 38 -> 32 subpaths) + the four W-0 names retired directly (RecipeVariantConfig, createRecipeVariant, VerticalTheme -> FlatTheme, AlertIcon -> Icon status.warning). Consumer-census [door-disposition] 11 -> 5 exactly. Every consumer claim re-measured independently by the review. Integrator-owed executed: 6 zero counters hand-removed (the tool refuses deletion; keys listed by the review), build + packinv re-seed (7640), cascade regen, STATUS republication. Registered: reseal + docs pages await the owner's docs restructure settling; the apps' ds-supplier snapshot refresh note (the review's I1); the pack modules' generator pruning (I2). The 5 remaining door-disposition findings are the owned rows. W-1's ledger: the 34 deprecations rows unchanged (no row names RET-06 added)."
     }
    ]
   },
