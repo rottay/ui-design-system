@@ -55,7 +55,7 @@
  */
 
 import type { ReactNode, MouseEvent, ButtonHTMLAttributes } from 'react';
-import type { BaseComponentProps, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
+import type { BaseComponentProps, ControlChrome, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import type { ButtonRecipeSizeValue } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
@@ -126,6 +126,13 @@ export interface ButtonPublicProps extends BaseComponentProps, EngineAwareProps,
    * Button shape.
    * @default 'default'
    */
+  /**
+   * `none` renders the Modern button without its chrome (height floor, padding, paint) for a host that
+   * paints it; behaviour, focus ring, forced-colours state arms and touch floor are kept. Modern only.
+   * @internal
+   * @default 'standard'
+   */
+  chrome?: ControlChrome;
   shape?: ButtonShape;
 
   /**

@@ -137,6 +137,298 @@
         "overguard": ".ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible)",
         "forcedFrame": ".ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='error']"
       }
+    },
+    {
+      "id": "button",
+      "subjectClass": "ds-button--modern",
+      "shell": ".ds-button.ds-button--modern",
+      "fixtureShell": {
+        "group-h": ".ds-button.ds-button--modern[data-group-position~='last']",
+        "group-v": ".ds-button.ds-button--modern[data-group-position~='last']"
+      },
+      "field": null,
+      "fixtures": {
+        "plain": "<button data-recipe=\"feedback.press\" data-recipe-state=\"animated\" data-variant=\"primary\" data-size=\"md\" data-shape=\"default\" data-chrome=\"none\" data-part=\"trigger\" type=\"button\" class=\"ds-button ds-button--modern ds-button--primary ds-button--md ds-button--default\" style=\"--ds-recipe-enter: 80ms; --ds-recipe-exit: 64ms; --ds-recipe-settle: 80ms; --ds-recipe-cycle: 0ms; --ds-recipe-x: 0px; --ds-recipe-y: 0px; --ds-recipe-scale-from: 0.994; --ds-recipe-curve: var(--ds-motion-ease-out); --ds-button-transition-duration: 80ms; --ds-button-transition-timing: var(--ds-motion-ease-out);\" aria-disabled=\"false\" aria-busy=\"false\"><span data-part=\"content\" data-state=\"visible\"><span data-part=\"label\">Save</span></span></button>",
+        "group-h": "<div class=\"ds-button-group ds-button-group--horizontal ds-button-group--connected \" role=\"group\" data-part=\"group\" data-orientation=\"horizontal\" data-connected=\"true\" data-mobile=\"false\"><button data-connected=\"true\" data-group-position=\"first\" data-recipe=\"feedback.press\" data-recipe-state=\"animated\" data-variant=\"primary\" data-size=\"md\" data-shape=\"default\" data-chrome=\"none\" data-part=\"trigger\" type=\"button\" class=\"ds-button ds-button--modern ds-button--primary ds-button--md ds-button--default\" style=\"--ds-recipe-enter: 80ms; --ds-recipe-exit: 64ms; --ds-recipe-settle: 80ms; --ds-recipe-cycle: 0ms; --ds-recipe-x: 0px; --ds-recipe-y: 0px; --ds-recipe-scale-from: 0.994; --ds-recipe-curve: var(--ds-motion-ease-out); --ds-button-transition-duration: 80ms; --ds-button-transition-timing: var(--ds-motion-ease-out);\" aria-disabled=\"false\" aria-busy=\"false\"><span data-part=\"content\" data-state=\"visible\"><span data-part=\"label\">A</span></span></button><button data-connected=\"true\" data-group-position=\"last\" data-recipe=\"feedback.press\" data-recipe-state=\"animated\" data-variant=\"primary\" data-size=\"md\" data-shape=\"default\" data-chrome=\"none\" data-part=\"trigger\" type=\"button\" class=\"ds-button ds-button--modern ds-button--primary ds-button--md ds-button--default\" style=\"--ds-recipe-enter: 80ms; --ds-recipe-exit: 64ms; --ds-recipe-settle: 80ms; --ds-recipe-cycle: 0ms; --ds-recipe-x: 0px; --ds-recipe-y: 0px; --ds-recipe-scale-from: 0.994; --ds-recipe-curve: var(--ds-motion-ease-out); --ds-button-transition-duration: 80ms; --ds-button-transition-timing: var(--ds-motion-ease-out);\" aria-disabled=\"false\" aria-busy=\"false\"><span data-part=\"content\" data-state=\"visible\"><span data-part=\"label\">B</span></span></button></div>",
+        "group-v": "<div class=\"ds-button-group ds-button-group--vertical ds-button-group--connected \" role=\"group\" data-part=\"group\" data-orientation=\"vertical\" data-connected=\"true\" data-mobile=\"false\"><button data-connected=\"true\" data-group-position=\"first\" data-recipe=\"feedback.press\" data-recipe-state=\"animated\" data-variant=\"primary\" data-size=\"md\" data-shape=\"default\" data-chrome=\"none\" data-part=\"trigger\" type=\"button\" class=\"ds-button ds-button--modern ds-button--primary ds-button--md ds-button--default\" style=\"--ds-recipe-enter: 80ms; --ds-recipe-exit: 64ms; --ds-recipe-settle: 80ms; --ds-recipe-cycle: 0ms; --ds-recipe-x: 0px; --ds-recipe-y: 0px; --ds-recipe-scale-from: 0.994; --ds-recipe-curve: var(--ds-motion-ease-out); --ds-button-transition-duration: 80ms; --ds-button-transition-timing: var(--ds-motion-ease-out);\" aria-disabled=\"false\" aria-busy=\"false\"><span data-part=\"content\" data-state=\"visible\"><span data-part=\"label\">A</span></span></button><button data-connected=\"true\" data-group-position=\"last\" data-recipe=\"feedback.press\" data-recipe-state=\"animated\" data-variant=\"primary\" data-size=\"md\" data-shape=\"default\" data-chrome=\"none\" data-part=\"trigger\" type=\"button\" class=\"ds-button ds-button--modern ds-button--primary ds-button--md ds-button--default\" style=\"--ds-recipe-enter: 80ms; --ds-recipe-exit: 64ms; --ds-recipe-settle: 80ms; --ds-recipe-cycle: 0ms; --ds-recipe-x: 0px; --ds-recipe-y: 0px; --ds-recipe-scale-from: 0.994; --ds-recipe-curve: var(--ds-motion-ease-out); --ds-button-transition-duration: 80ms; --ds-button-transition-timing: var(--ds-motion-ease-out);\" aria-disabled=\"false\" aria-busy=\"false\"><span data-part=\"content\" data-state=\"visible\"><span data-part=\"label\">B</span></span></button></div>"
+      },
+      "cells": {
+        "rest": {
+          "fixtures": ["plain"]
+        },
+        "primary": {
+          "attrs": { "data-variant": "primary" },
+          "fixtures": ["plain"]
+        },
+        "primary-hovered": {
+          "attrs": { "data-variant": "primary", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "primary-pressed": {
+          "attrs": { "data-variant": "primary", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "secondary": {
+          "attrs": { "data-variant": "secondary" },
+          "fixtures": ["plain"]
+        },
+        "secondary-hovered": {
+          "attrs": { "data-variant": "secondary", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "secondary-pressed": {
+          "attrs": { "data-variant": "secondary", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "default": {
+          "attrs": { "data-variant": "default" },
+          "fixtures": ["plain"]
+        },
+        "default-hovered": {
+          "attrs": { "data-variant": "default", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "default-pressed": {
+          "attrs": { "data-variant": "default", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "outline": {
+          "attrs": { "data-variant": "outline" },
+          "fixtures": ["plain"]
+        },
+        "outline-hovered": {
+          "attrs": { "data-variant": "outline", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "outline-pressed": {
+          "attrs": { "data-variant": "outline", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "ghost": {
+          "attrs": { "data-variant": "ghost" },
+          "fixtures": ["plain"]
+        },
+        "ghost-hovered": {
+          "attrs": { "data-variant": "ghost", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "ghost-pressed": {
+          "attrs": { "data-variant": "ghost", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "text": {
+          "attrs": { "data-variant": "text" },
+          "fixtures": ["plain"]
+        },
+        "text-hovered": {
+          "attrs": { "data-variant": "text", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "text-pressed": {
+          "attrs": { "data-variant": "text", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "dashed": {
+          "attrs": { "data-variant": "dashed" },
+          "fixtures": ["plain"]
+        },
+        "dashed-hovered": {
+          "attrs": { "data-variant": "dashed", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "dashed-pressed": {
+          "attrs": { "data-variant": "dashed", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "danger": {
+          "attrs": { "data-variant": "danger" },
+          "fixtures": ["plain"]
+        },
+        "danger-hovered": {
+          "attrs": { "data-variant": "danger", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "danger-pressed": {
+          "attrs": { "data-variant": "danger", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "success": {
+          "attrs": { "data-variant": "success" },
+          "fixtures": ["plain"]
+        },
+        "success-hovered": {
+          "attrs": { "data-variant": "success", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "success-pressed": {
+          "attrs": { "data-variant": "success", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "warning": {
+          "attrs": { "data-variant": "warning" },
+          "fixtures": ["plain"]
+        },
+        "warning-hovered": {
+          "attrs": { "data-variant": "warning", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "warning-pressed": {
+          "attrs": { "data-variant": "warning", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "info": {
+          "attrs": { "data-variant": "info" },
+          "fixtures": ["plain"]
+        },
+        "info-hovered": {
+          "attrs": { "data-variant": "info", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "info-pressed": {
+          "attrs": { "data-variant": "info", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "ai": {
+          "attrs": { "data-variant": "ai" },
+          "fixtures": ["plain"]
+        },
+        "ai-hovered": {
+          "attrs": { "data-variant": "ai", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "ai-pressed": {
+          "attrs": { "data-variant": "ai", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "link": {
+          "attrs": { "data-variant": "link" },
+          "fixtures": ["plain"]
+        },
+        "link-hovered": {
+          "attrs": { "data-variant": "link", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "link-pressed": {
+          "attrs": { "data-variant": "link", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "gradient": {
+          "attrs": { "data-gradient": "true" },
+          "fixtures": ["plain"]
+        },
+        "gradient-hovered": {
+          "attrs": { "data-gradient": "true", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "shadow": {
+          "attrs": { "data-shadow": "true" },
+          "fixtures": ["plain"]
+        },
+        "shadow-hovered": {
+          "attrs": { "data-shadow": "true", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "bordered": {
+          "attrs": { "data-variant": "ghost", "data-bordered": "true" },
+          "fixtures": ["plain"]
+        },
+        "full-width": {
+          "attrs": { "data-full-width": "true" },
+          "fixtures": ["plain"]
+        },
+        "size-xs": {
+          "attrs": { "data-size": "xs" },
+          "fixtures": ["plain"]
+        },
+        "size-sm": {
+          "attrs": { "data-size": "sm" },
+          "fixtures": ["plain"]
+        },
+        "size-lg": {
+          "attrs": { "data-size": "lg" },
+          "fixtures": ["plain"]
+        },
+        "size-xl": {
+          "attrs": { "data-size": "xl" },
+          "fixtures": ["plain"]
+        },
+        "circle": {
+          "attrs": { "data-shape": "circle" },
+          "fixtures": ["plain"]
+        },
+        "icon-only": {
+          "attrs": { "data-icon-only": "true" },
+          "fixtures": ["plain"]
+        },
+        "tone-ghost": {
+          "attrs": { "data-variant": "ghost", "data-tone": "danger" },
+          "fixtures": ["plain"]
+        },
+        "tone-default": {
+          "attrs": { "data-variant": "default", "data-tone": "danger" },
+          "fixtures": ["plain"]
+        },
+        "tone-ghost-hovered": {
+          "attrs": { "data-variant": "ghost", "data-tone": "danger", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "tone-default-hovered": {
+          "attrs": { "data-variant": "default", "data-tone": "danger", "data-state": "hovered" },
+          "fixtures": ["plain"]
+        },
+        "tone-ghost-pressed": {
+          "attrs": { "data-variant": "ghost", "data-tone": "danger", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "tone-default-pressed": {
+          "attrs": { "data-variant": "default", "data-tone": "danger", "data-state": "pressed" },
+          "fixtures": ["plain"]
+        },
+        "selected-default": {
+          "attrs": { "data-variant": "default", "aria-pressed": "true" },
+          "fixtures": ["plain"]
+        },
+        "selected-text": {
+          "attrs": { "data-variant": "text", "aria-pressed": "true" },
+          "fixtures": ["plain"]
+        },
+        "selected-primary": {
+          "attrs": { "data-variant": "primary", "aria-pressed": "true" },
+          "fixtures": ["plain"]
+        },
+        "disabled": {
+          "attrs": { "data-disabled": "true" },
+          "fixtures": ["plain"]
+        },
+        "focused": {
+          "attrs": { "data-state": "focused focus-visible" },
+          "fixtures": ["plain"]
+        },
+        "group-default": {
+          "attrs": { "data-variant": "default" },
+          "fixtures": ["group-h", "group-v"]
+        }
+      },
+      "keep": {
+        "ring": ["focused"],
+        "forcedFrame": [
+          "tone-ghost",
+          "tone-default",
+          "tone-ghost-hovered",
+          "tone-default-hovered",
+          "tone-ghost-pressed",
+          "tone-default-pressed"
+        ],
+        "opacity": ["disabled"],
+        "forcedInk": ["disabled", "selected-default", "selected-text", "selected-primary"],
+        "forcedFill": { "selected-default": "SelectedItem", "selected-text": "SelectedItem", "selected-primary": "SelectedItem" },
+        "touchFloorPx": 44
+      },
+      "plant": {
+        "unguard": ".ds-button.ds-button--modern[data-variant]:not(:where([data-chrome='none']))",
+        "overguard": ".ds-button.ds-button--modern[data-variant]:is([data-state~='focus-visible'], :focus-visible)",
+        "forcedFrame": ".ds-button.ds-button--modern[data-tone='danger']"
+      }
     }
   ],
   "hosts": [
@@ -149,6 +441,17 @@
       "cells": ["rest", "focused", "error", "error-focused", "disabled"],
       "plant": {
         "dropForced": ".ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'][data-status='error']"
+      }
+    },
+    {
+      "id": "status-filter-pills",
+      "owner": "button",
+      "fixture": "plain",
+      "context": "{markup}",
+      "markup": "<div data-part=\"root\" data-size=\"md\" class=\"rottay-flex rottay-flex--modern ds-pattern-status-filter-pills\" style=\"--ds-flex-gap: 8px;\" data-align=\"center\" data-gap=\"uniform\" data-component=\"flex\"><button data-selected=\"false\" aria-pressed=\"false\" data-recipe=\"feedback.press\" data-recipe-state=\"animated\" data-variant=\"primary\" data-size=\"md\" data-shape=\"round\" data-chrome=\"none\" data-part=\"trigger\" type=\"button\" class=\"ds-button ds-button--modern ds-button--primary ds-button--md ds-button--round ds-status-filter-pills__pill\" style=\"--ds-recipe-enter: 80ms; --ds-recipe-exit: 64ms; --ds-recipe-settle: 80ms; --ds-recipe-cycle: 0ms; --ds-recipe-x: 0px; --ds-recipe-y: 0px; --ds-recipe-scale-from: 0.994; --ds-recipe-curve: var(--ds-motion-ease-out); --ds-button-transition-duration: 80ms; --ds-button-transition-timing: var(--ds-motion-ease-out); --ds-button-transition: var(--ds-transition-normal); --ds-button-hover-transform: translateY(-1px) scale(1); --ds-button-active-transform: translateY(0) scale(0.98);\" aria-disabled=\"false\" aria-busy=\"false\"><span data-part=\"content\" data-state=\"visible\"><span data-part=\"label\"><span class=\"rottay-typography rottay-typography--modern font-normal text-left ds-status-filter-pills__pill-label\" data-selected=\"false\" data-part=\"pill-label\" data-color=\"default\" data-align=\"left\" data-size=\"sm\" data-ramp=\"tier\" data-wrap=\"pretty\" style=\"font-weight: var(--ds-type-supporting-font-weight);\">Open</span></span></span></button></div>",
+      "cells": ["rest", "focused", "selected-primary", "disabled"],
+      "plant": {
+        "inject": ".ds-pattern-status-filter-pills .ds-status-filter-pills__pill:is([data-state~='focus-visible'], :focus-visible) { box-shadow: none; outline: none; }"
       }
     }
   ]

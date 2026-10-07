@@ -158,6 +158,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPub
     variant: variantProp,
     size: sizeProp,
     shape: shapeProp,
+    chrome = 'standard',
     htmlType = BUTTON_DEFAULTS.htmlType,
     disabled = BUTTON_DEFAULTS.disabled,
     pending = false,
@@ -258,7 +259,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPub
       value: resolvedSizeProp,
       resolve: (v: ButtonSize) => `var(--ds-button-${v}-padding-y)`,
     } as ResponsivePropEntry<any>);
-    responsiveEntries.push({
+    if (chrome !== 'none') responsiveEntries.push({
       cssProperty: 'padding-inline',
       value: resolvedSizeProp,
       resolve: (v: ButtonSize) =>
@@ -500,6 +501,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPub
     'data-shadow': shadow ? 'true' : undefined,
     'data-pulse': pulse ? 'true' : undefined,
     'data-bordered': bordered ? 'true' : undefined,
+    'data-chrome': chrome === 'none' ? 'none' : undefined,
     ...partAttributes(dataPart ?? 'trigger', interaction),
     ...responsive.attrs,
   };

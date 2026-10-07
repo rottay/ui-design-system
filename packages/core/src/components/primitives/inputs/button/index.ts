@@ -119,11 +119,15 @@ export type { ButtonGroupProps, ButtonIconProps } from './compound';
  * Keeping the engine selection isolated here makes it easier to layer tenant
  * personality on top without leaking that resolution into each engine file.
  */
-const ButtonBase = createEngineComponent<ButtonPublicProps>('Button', {
+const ButtonBase = createEngineComponent<ButtonPublicProps>(
+  'Button',
+  {
     classic: () => import('./engines/classic'),
     modern: () => import('./engines/modern'),
     rustic: () => import('./engines/rustic'),
-  });
+  },
+  { modernOnlyProps: ['chrome'] },
+);
 
 /**
  * Public Button wrapper.

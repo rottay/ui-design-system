@@ -3189,12 +3189,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "fa192cfbd3b5d02fb58e": {
-      "path": "src/components/patterns/data/status-filter-pills/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "polymorphic-interactive",
-      "count": 1
-    },
     "e5ef5e8cd00daae3b627": {
       "path": "src/components/patterns/feedback/empty-state/engines/classic/index.tsx",
       "category": "shared-chrome-literal",

@@ -2287,7 +2287,9 @@
           "motion"
         ],
         "StatusFilterPills": [
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "Stepper": [
           "@phosphor-icons/react",

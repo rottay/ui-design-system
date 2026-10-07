@@ -19891,21 +19891,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   justify-content: center;
   min-inline-size: 0;
   max-inline-size: 100%;
-  /* The height is a FLOOR, not a ceiling: at 200% text zoom or a tall tenant
-     type-scale the label grows the control instead of clipping against
-     `overflow: clip`. Rest heights are unchanged — content never exceeds the
-     resolved height at 100%. `--_ds-button-height-floor` (declared below,
-     mechanical floors block) additionally clamps the DENSITY side: density
-     multiplies the resolved height with no floor of its own, so a compact
-     posture on a tight tenant scale could push a control below the active
-     mode's mechanical minimum (measured: 36px x 0.9 = 32.4px, F8). The floor
-     follows a taller control-height factor upward, never below its base. */
-  min-block-size: max(
-    calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))),
-    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
-  );
   gap: calc(var(--ds-button-gap) * var(--ds-density-effective-scale));
-  padding-block: 0;
   appearance: none;
   overflow: clip;
   cursor: pointer;
@@ -19921,13 +19907,6 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   text-decoration: none;
   text-transform: var(--ds-button-text-transform);
   white-space: nowrap;
-
-  border-width: var(--ds-button-border-width);
-  /* Border STYLE rides the same edge grammar as the width (see the component
-     token chain): solid everywhere except the inset-double profile, whose
-     3px double keyline is its identity. The dashed variant's own style rule
-     below still wins (equal specificity, later in the file). */
-  border-style: var(--ds-edge-standard-style, solid);
   border-radius: var(--ds-button-resolved-radius, var(--ds-radius-md));
   outline: none;
 
@@ -19940,6 +19919,30 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     color var(--ds-button-transition-duration) var(--ds-button-transition-timing),
     filter var(--ds-button-transition-duration) var(--ds-button-transition-timing),
     opacity var(--ds-button-transition-duration) var(--ds-button-transition-timing);
+}
+
+.ds-button.ds-button--modern[data-variant]:not(:where([data-chrome='none'])) {
+  /* The height is a FLOOR, not a ceiling: at 200% text zoom or a tall tenant
+     type-scale the label grows the control instead of clipping against
+     `overflow: clip`. Rest heights are unchanged — content never exceeds the
+     resolved height at 100%. `--_ds-button-height-floor` (declared below,
+     mechanical floors block) additionally clamps the DENSITY side: density
+     multiplies the resolved height with no floor of its own, so a compact
+     posture on a tight tenant scale could push a control below the active
+     mode's mechanical minimum (measured: 36px x 0.9 = 32.4px, F8). The floor
+     follows a taller control-height factor upward, never below its base. */
+  min-block-size: max(
+    calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))),
+    calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
+  );
+  padding-block: 0;
+
+  border-width: var(--ds-button-border-width);
+  /* Border STYLE rides the same edge grammar as the width (see the component
+     token chain): solid everywhere except the inset-double profile, whose
+     3px double keyline is its identity. The dashed variant's own style rule
+     below still wins (equal specificity, later in the file). */
+  border-style: var(--ds-edge-standard-style, solid);
 }
 
 /* A quiet optical highlight gives solid controls material depth without
@@ -19964,14 +19967,28 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   z-index: 0;
   inset: 0;
   border-radius: inherit;
+  pointer-events: none;
+  transition: opacity var(--ds-button-transition-duration)
+    var(--ds-button-transition-timing);
+}
+
+.ds-button.ds-button--modern:is(
+    [data-variant='primary'],
+    [data-variant='secondary'],
+    [data-variant='default'],
+    [data-variant='outline'],
+    [data-variant='dashed'],
+    [data-variant='danger'],
+    [data-variant='success'],
+    [data-variant='warning'],
+    [data-variant='info'],
+    [data-variant='ai']
+  ):not(:where([data-chrome='none']))::before {
   background: var(--ds-button-surface-highlight);
   opacity: calc(
     var(--ds-button-surface-highlight-opacity) * var(--ds-effect-intensity)
   );
-  pointer-events: none;
   content: '';
-  transition: opacity var(--ds-button-transition-duration)
-    var(--ds-button-transition-timing);
 }
 
 .ds-button.ds-button--modern [data-part='content'],
@@ -20125,6 +20142,10 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
 .ds-button.ds-button--modern[data-full-width='true'] {
   display: flex;
   inline-size: 100%;
+  white-space: normal;
+}
+
+.ds-button.ds-button--modern[data-full-width='true']:not(:where([data-chrome='none'])) {
   min-block-size: max(
     calc(var(--_ds-button-height-floor, 36px) * max(1, var(--ds-control-height-scale, 1))),
     calc(var(--ds-button-resolved-height) * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1))
@@ -20133,7 +20154,6 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   padding-block: calc(
     var(--ds-button-resolved-padding-y) * var(--ds-density-effective-scale)
   );
-  white-space: normal;
 }
 
 .ds-button.ds-button--modern[data-full-width='true'] [data-part='content'],
@@ -20197,12 +20217,15 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   --ds-button-resolved-radius: var(--ds-button-xs-radius, var(--ds-radius-sm));
   --ds-button-resolved-height: var(--ds-button-xs-height);
   --ds-button-resolved-padding-y: var(--ds-button-xs-padding-y);
-  padding-inline: calc(
-    var(--ds-button-xs-padding-x) * var(--ds-density-effective-scale)
-  );
   gap: calc(var(--ds-button-xs-gap) * var(--ds-density-effective-scale));
   font-size: var(--ds-button-xs-font-size);
   line-height: var(--ds-button-xs-line-height);
+}
+
+.ds-button.ds-button--modern[data-size='xs']:not([data-size-responsive]):not(:where([data-chrome='none'])) {
+  padding-inline: calc(
+    var(--ds-button-xs-padding-x) * var(--ds-density-effective-scale)
+  );
 }
 
 .ds-button.ds-button--modern[data-size='sm']:not([data-size-responsive]) {
@@ -20210,12 +20233,15 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   --ds-button-resolved-radius: var(--ds-button-sm-radius, var(--ds-radius-sm));
   --ds-button-resolved-height: var(--ds-button-sm-height);
   --ds-button-resolved-padding-y: var(--ds-button-sm-padding-y);
-  padding-inline: calc(
-    var(--ds-button-sm-padding-x) * var(--ds-density-effective-scale)
-  );
   gap: calc(var(--ds-button-sm-gap) * var(--ds-density-effective-scale));
   font-size: var(--ds-button-sm-font-size);
   line-height: var(--ds-button-sm-line-height);
+}
+
+.ds-button.ds-button--modern[data-size='sm']:not([data-size-responsive]):not(:where([data-chrome='none'])) {
+  padding-inline: calc(
+    var(--ds-button-sm-padding-x) * var(--ds-density-effective-scale)
+  );
 }
 
 .ds-button.ds-button--modern[data-size='md']:not([data-size-responsive]) {
@@ -20223,12 +20249,15 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   --ds-button-resolved-radius: var(--ds-button-md-radius, var(--ds-radius-md));
   --ds-button-resolved-height: var(--ds-button-md-height);
   --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
-  padding-inline: calc(
-    var(--ds-button-md-padding-x) * var(--ds-density-effective-scale)
-  );
   gap: calc(var(--ds-button-md-gap) * var(--ds-density-effective-scale));
   font-size: var(--ds-button-md-font-size);
   line-height: var(--ds-button-md-line-height);
+}
+
+.ds-button.ds-button--modern[data-size='md']:not([data-size-responsive]):not(:where([data-chrome='none'])) {
+  padding-inline: calc(
+    var(--ds-button-md-padding-x) * var(--ds-density-effective-scale)
+  );
 }
 
 .ds-button.ds-button--modern[data-size='lg']:not([data-size-responsive]) {
@@ -20236,12 +20265,15 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   --ds-button-resolved-radius: var(--ds-button-lg-radius, var(--ds-radius-lg));
   --ds-button-resolved-height: var(--ds-button-lg-height);
   --ds-button-resolved-padding-y: var(--ds-button-lg-padding-y);
-  padding-inline: calc(
-    var(--ds-button-lg-padding-x) * var(--ds-density-effective-scale)
-  );
   gap: calc(var(--ds-button-lg-gap) * var(--ds-density-effective-scale));
   font-size: var(--ds-button-lg-font-size);
   line-height: var(--ds-button-lg-line-height);
+}
+
+.ds-button.ds-button--modern[data-size='lg']:not([data-size-responsive]):not(:where([data-chrome='none'])) {
+  padding-inline: calc(
+    var(--ds-button-lg-padding-x) * var(--ds-density-effective-scale)
+  );
 }
 
 .ds-button.ds-button--modern[data-size='xl']:not([data-size-responsive]) {
@@ -20249,12 +20281,15 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   --ds-button-resolved-radius: var(--ds-button-xl-radius, var(--ds-radius-xl));
   --ds-button-resolved-height: var(--ds-button-xl-height);
   --ds-button-resolved-padding-y: var(--ds-button-xl-padding-y);
-  padding-inline: calc(
-    var(--ds-button-xl-padding-x) * var(--ds-density-effective-scale)
-  );
   gap: calc(var(--ds-button-xl-gap) * var(--ds-density-effective-scale));
   font-size: var(--ds-button-xl-font-size);
   line-height: var(--ds-button-xl-line-height);
+}
+
+.ds-button.ds-button--modern[data-size='xl']:not([data-size-responsive]):not(:where([data-chrome='none'])) {
+  padding-inline: calc(
+    var(--ds-button-xl-padding-x) * var(--ds-density-effective-scale)
+  );
 }
 
 .ds-button.ds-button--modern[data-shape='circle'],
@@ -20264,6 +20299,10 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
      sibling. */
   flex: 0 0 auto;
   aspect-ratio: 1;
+}
+
+.ds-button.ds-button--modern[data-shape='circle']:not(:where([data-chrome='none'])),
+.ds-button.ds-button--modern[data-icon-only='true']:not(:where([data-chrome='none'])) {
   padding-inline: 0;
 }
 
@@ -20374,7 +20413,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     [data-variant='outline'],
     [data-variant='dashed'],
     [data-variant='ghost']
-  ):not([data-group-position~='first']):not([data-disabled='true']) {
+  ):not([data-group-position~='first']):not([data-disabled='true']):not(:where([data-chrome='none'])) {
   border-inline-start-color: var(--ds-button-group-divider-color);
 }
 .ds-button-group[data-orientation='vertical']
@@ -20383,7 +20422,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     [data-variant='outline'],
     [data-variant='dashed'],
     [data-variant='ghost']
-  ):not([data-group-position~='first']):not([data-disabled='true']) {
+  ):not([data-group-position~='first']):not([data-disabled='true']):not(:where([data-chrome='none'])) {
   border-block-start-color: var(--ds-button-group-divider-color);
 }
 
@@ -20437,42 +20476,42 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
    Variant paint. Each state has an explicit tenant-authored channel.
    ------------------------------------------------------------------------- */
 
-.ds-button.ds-button--modern[data-variant='primary'] {
+.ds-button.ds-button--modern[data-variant='primary']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-primary-bg);
   color: var(--ds-button-primary-color);
   border-color: var(--ds-button-primary-border);
   box-shadow: var(--ds-button-primary-shadow, var(--ds-material-control-shadow));
 }
 
-.ds-button.ds-button--modern[data-variant='secondary'] {
+.ds-button.ds-button--modern[data-variant='secondary']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-secondary-bg);
   color: var(--ds-button-secondary-color);
   border-color: var(--ds-button-secondary-border);
   box-shadow: var(--ds-button-secondary-shadow, var(--ds-material-control-shadow));
 }
 
-.ds-button.ds-button--modern:is([data-variant='default'], [data-variant='outline']) {
+.ds-button.ds-button--modern:is([data-variant='default'], [data-variant='outline']):not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-default-bg);
   color: var(--ds-button-default-color);
   border-color: var(--ds-button-default-border);
   box-shadow: var(--ds-button-default-shadow, var(--ds-material-control-shadow));
 }
 
-.ds-button.ds-button--modern[data-variant='ghost'] {
+.ds-button.ds-button--modern[data-variant='ghost']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-ghost-bg);
   color: var(--ds-button-ghost-color);
   border-color: var(--ds-button-ghost-border);
   box-shadow: var(--ds-button-ghost-shadow, var(--ds-material-control-shadow));
 }
 
-.ds-button.ds-button--modern[data-variant='text'] {
+.ds-button.ds-button--modern[data-variant='text']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-text-bg);
   color: var(--ds-button-text-color);
   border-color: var(--ds-button-text-border);
   box-shadow: var(--ds-button-text-shadow, var(--ds-material-control-shadow));
 }
 
-.ds-button.ds-button--modern[data-variant='dashed'] {
+.ds-button.ds-button--modern[data-variant='dashed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-dashed-bg);
   color: var(--ds-button-dashed-color);
   border-color: var(--ds-button-dashed-border);
@@ -20480,35 +20519,35 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   box-shadow: var(--ds-button-dashed-shadow, var(--ds-material-control-shadow));
 }
 
-.ds-button.ds-button--modern[data-variant='danger'] {
+.ds-button.ds-button--modern[data-variant='danger']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-error-bg);
   color: var(--ds-button-error-color);
   border-color: var(--ds-button-error-border);
   box-shadow: var(--ds-button-error-shadow, var(--ds-material-control-shadow));
 }
 
-.ds-button.ds-button--modern[data-variant='success'] {
+.ds-button.ds-button--modern[data-variant='success']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-success-bg);
   color: var(--ds-button-success-color);
   border-color: var(--ds-button-success-border);
   box-shadow: var(--ds-button-success-shadow, var(--ds-material-control-shadow));
 }
 
-.ds-button.ds-button--modern[data-variant='warning'] {
+.ds-button.ds-button--modern[data-variant='warning']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-warning-bg);
   color: var(--ds-button-warning-color);
   border-color: var(--ds-button-warning-border);
   box-shadow: var(--ds-button-warning-shadow, var(--ds-material-control-shadow));
 }
 
-.ds-button.ds-button--modern[data-variant='info'] {
+.ds-button.ds-button--modern[data-variant='info']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-info-bg);
   color: var(--ds-button-info-color);
   border-color: var(--ds-button-info-border);
   box-shadow: var(--ds-button-info-shadow, var(--ds-material-control-shadow));
 }
 
-.ds-button.ds-button--modern[data-variant='ai'] {
+.ds-button.ds-button--modern[data-variant='ai']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-ai-bg);
   background-image: var(--ds-button-ai-texture);
   color: var(--ds-button-ai-color);
@@ -20517,15 +20556,18 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
 }
 
 .ds-button.ds-button--modern[data-variant='link'] {
+  text-underline-offset: var(--ds-button-link-underline-offset);
+}
+
+.ds-button.ds-button--modern[data-variant='link']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-link-bg);
   color: var(--ds-button-link-color);
   border-color: var(--ds-button-link-border);
   box-shadow: var(--ds-button-link-shadow, var(--ds-material-control-shadow));
   text-decoration: var(--ds-button-link-text-decoration);
-  text-underline-offset: var(--ds-button-link-underline-offset);
 }
 
-.ds-button.ds-button--modern[data-gradient='true'] {
+.ds-button.ds-button--modern[data-gradient='true']:not(:where([data-chrome='none'])) {
   background-image: var(--ds-button-gradient);
   background-position: 0% 50%;
   background-size: 180% 180%;
@@ -20535,13 +20577,13 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     [data-variant='ghost'],
     [data-variant='text'],
     [data-variant='link']
-  ) {
+  ):not(:where([data-chrome='none'])) {
   border-color: var(--ds-button-bordered-border);
 }
 
 .ds-button.ds-button--modern[data-shadow='true']:not([data-state~='hovered']):not(
     [data-state~='pressed']
-  ) {
+  ):not(:where([data-chrome='none'])) {
   box-shadow: var(--ds-button-elevated-shadow, var(--ds-material-control-shadow));
 }
 
@@ -20564,7 +20606,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
        identical currentColor-derived rest wash
      retirementCriteria: a governed --ds-material-control-* quiet-rest role
        ships and every private consumer migrates to it in one lot */
-.ds-button.ds-button--modern:is([data-variant='ghost'], [data-variant='text']) {
+.ds-button.ds-button--modern:is([data-variant='ghost'], [data-variant='text']):not(:where([data-chrome='none'])) {
   background-color: var(
     --_ds-button-quiet-rest-wash,
     color-mix(in srgb, currentColor 7%, transparent)
@@ -20594,10 +20636,17 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
       [data-variant='text']
     ):not(.ds-button-group[data-connected='true'] > *) {
     transform: var(--ds-button-hover-transform);
+  }
+
+  .ds-button.ds-button--modern[data-state~='hovered']:not([data-state~='pressed']):not(
+      [data-disabled='true']
+    ):not([data-loading='true']):not([data-pending='true']):not([data-variant='link']):not(
+      [data-variant='text']
+    ):not(.ds-button-group[data-connected='true'] > *):not(:where([data-chrome='none'])) {
     filter: var(--ds-button-hover-filter);
   }
 
-  .ds-button.ds-button--modern[data-state~='hovered']::before {
+  .ds-button.ds-button--modern[data-state~='hovered']:not(:where([data-chrome='none']))::before {
     opacity: calc(
       var(--ds-button-surface-highlight-hover-opacity) * var(--ds-effect-intensity)
     );
@@ -20607,84 +20656,84 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     transform: var(--ds-button-icon-hover-transform);
   }
 
-  .ds-button.ds-button--modern[data-variant='primary'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='primary'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-primary-bg-hover);
     color: var(--ds-button-primary-color-hover);
     border-color: var(--ds-button-primary-border-hover);
     box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern[data-variant='secondary'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='secondary'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-secondary-bg-hover);
     color: var(--ds-button-secondary-color-hover);
     border-color: var(--ds-button-secondary-border-hover);
     box-shadow: var(--ds-button-secondary-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='hovered'] {
+  .ds-button.ds-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-default-bg-hover);
     color: var(--ds-button-default-color-hover);
     border-color: var(--ds-button-default-border-hover);
     box-shadow: var(--ds-button-default-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern[data-variant='ghost'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='ghost'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-ghost-bg-hover);
     color: var(--ds-button-ghost-color-hover);
     border-color: var(--ds-button-ghost-border-hover);
     box-shadow: var(--ds-button-ghost-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern[data-variant='text'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='text'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-text-bg-hover);
     color: var(--ds-button-text-color-hover);
     border-color: var(--ds-button-text-border-hover);
     box-shadow: var(--ds-button-text-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern[data-variant='dashed'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='dashed'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-dashed-bg-hover);
     color: var(--ds-button-dashed-color-hover);
     border-color: var(--ds-button-dashed-border-hover);
     box-shadow: var(--ds-button-dashed-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern[data-variant='danger'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='danger'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-error-bg-hover);
     color: var(--ds-button-error-color-hover);
     border-color: var(--ds-button-error-border-hover);
     box-shadow: var(--ds-button-error-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern[data-variant='success'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='success'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-success-bg-hover);
     color: var(--ds-button-success-color-hover);
     border-color: var(--ds-button-success-border-hover);
     box-shadow: var(--ds-button-success-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern[data-variant='warning'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='warning'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-warning-bg-hover);
     color: var(--ds-button-warning-color-hover);
     border-color: var(--ds-button-warning-border-hover);
     box-shadow: var(--ds-button-warning-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern[data-variant='info'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='info'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-info-bg-hover);
     color: var(--ds-button-info-color-hover);
     border-color: var(--ds-button-info-border-hover);
     box-shadow: var(--ds-button-info-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern[data-variant='ai'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='ai'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-ai-bg-hover);
     color: var(--ds-button-ai-color-hover);
     border-color: var(--ds-button-ai-border-hover);
     box-shadow: var(--ds-button-ai-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 
-  .ds-button.ds-button--modern[data-variant='link'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-variant='link'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-color: var(--ds-button-link-bg-hover);
     color: var(--ds-button-link-color-hover);
     border-color: var(--ds-button-link-border-hover);
@@ -20692,11 +20741,11 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     text-decoration: var(--ds-button-link-text-decoration-hover);
   }
 
-  .ds-button.ds-button--modern[data-gradient='true'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-gradient='true'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     background-position: 100% 50%;
   }
 
-  .ds-button.ds-button--modern[data-shadow='true'][data-state~='hovered'] {
+  .ds-button.ds-button--modern[data-shadow='true'][data-state~='hovered']:not(:where([data-chrome='none'])) {
     box-shadow: var(--ds-button-elevated-shadow-hover, var(--ds-material-control-shadow-hover));
   }
 }
@@ -20705,10 +20754,15 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     .ds-button-group[data-connected='true'] > *
   ) {
   transform: var(--ds-button-active-transform);
+}
+
+.ds-button.ds-button--modern[data-state~='pressed']:not(
+    .ds-button-group[data-connected='true'] > *
+  ):not(:where([data-chrome='none'])) {
   filter: var(--ds-button-active-filter);
 }
 
-.ds-button.ds-button--modern[data-state~='pressed']::before {
+.ds-button.ds-button--modern[data-state~='pressed']:not(:where([data-chrome='none']))::before {
   opacity: calc(
     var(--ds-button-surface-highlight-active-opacity) * var(--ds-effect-intensity)
   );
@@ -20718,84 +20772,84 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   transform: var(--ds-button-icon-active-transform);
 }
 
-.ds-button.ds-button--modern[data-variant='primary'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='primary'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-primary-bg-active);
   color: var(--ds-button-primary-color-active);
   border-color: var(--ds-button-primary-border-active);
   box-shadow: var(--ds-button-primary-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern[data-variant='secondary'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='secondary'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-secondary-bg-active);
   color: var(--ds-button-secondary-color-active);
   border-color: var(--ds-button-secondary-border-active);
   box-shadow: var(--ds-button-secondary-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='pressed'] {
+.ds-button.ds-button--modern:is([data-variant='default'], [data-variant='outline'])[data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-default-bg-active);
   color: var(--ds-button-default-color-active);
   border-color: var(--ds-button-default-border-active);
   box-shadow: var(--ds-button-default-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern[data-variant='ghost'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='ghost'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-ghost-bg-active);
   color: var(--ds-button-ghost-color-active);
   border-color: var(--ds-button-ghost-border-active);
   box-shadow: var(--ds-button-ghost-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern[data-variant='text'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='text'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-text-bg-active);
   color: var(--ds-button-text-color-active);
   border-color: var(--ds-button-text-border-active);
   box-shadow: var(--ds-button-text-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern[data-variant='dashed'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='dashed'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-dashed-bg-active);
   color: var(--ds-button-dashed-color-active);
   border-color: var(--ds-button-dashed-border-active);
   box-shadow: var(--ds-button-dashed-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern[data-variant='danger'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='danger'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-error-bg-active);
   color: var(--ds-button-error-color-active);
   border-color: var(--ds-button-error-border-active);
   box-shadow: var(--ds-button-error-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern[data-variant='success'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='success'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-success-bg-active);
   color: var(--ds-button-success-color-active);
   border-color: var(--ds-button-success-border-active);
   box-shadow: var(--ds-button-success-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern[data-variant='warning'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='warning'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-warning-bg-active);
   color: var(--ds-button-warning-color-active);
   border-color: var(--ds-button-warning-border-active);
   box-shadow: var(--ds-button-warning-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern[data-variant='info'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='info'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-info-bg-active);
   color: var(--ds-button-info-color-active);
   border-color: var(--ds-button-info-border-active);
   box-shadow: var(--ds-button-info-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern[data-variant='ai'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='ai'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-ai-bg-active);
   color: var(--ds-button-ai-color-active);
   border-color: var(--ds-button-ai-border-active);
   box-shadow: var(--ds-button-ai-shadow-active, var(--ds-material-control-shadow-active));
 }
 
-.ds-button.ds-button--modern[data-variant='link'][data-state~='pressed'] {
+.ds-button.ds-button--modern[data-variant='link'][data-state~='pressed']:not(:where([data-chrome='none'])) {
   background-color: var(--ds-button-link-bg-active);
   color: var(--ds-button-link-color-active);
   border-color: var(--ds-button-link-border-active);
@@ -20822,7 +20876,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     [data-variant='ghost'],
     [data-variant='text'],
     [data-variant='link']
-  )[data-tone='danger']:not([data-disabled='true']) {
+  )[data-tone='danger']:not([data-disabled='true']):not(:where([data-chrome='none'])) {
   color: var(--ds-button-error-border);
 }
 
@@ -20830,7 +20884,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     [data-variant='default'],
     [data-variant='outline'],
     [data-variant='dashed']
-  )[data-tone='danger']:not([data-disabled='true']) {
+  )[data-tone='danger']:not([data-disabled='true']):not(:where([data-chrome='none'])) {
   color: var(--ds-button-error-border);
   border-color: var(--ds-button-error-border);
 }
@@ -20843,7 +20897,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
       [data-variant='default'],
       [data-variant='outline'],
       [data-variant='dashed']
-    )[data-tone='danger'][data-state~='hovered']:not([data-disabled='true']) {
+    )[data-tone='danger'][data-state~='hovered']:not([data-disabled='true']):not(:where([data-chrome='none'])) {
     background-color: color-mix(in srgb, var(--ds-button-error-bg) 8%, transparent);
     color: var(--ds-button-error-border-hover);
   }
@@ -20852,7 +20906,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
       [data-variant='default'],
       [data-variant='outline'],
       [data-variant='dashed']
-    )[data-tone='danger'][data-state~='hovered']:not([data-disabled='true']) {
+    )[data-tone='danger'][data-state~='hovered']:not([data-disabled='true']):not(:where([data-chrome='none'])) {
     border-color: var(--ds-button-error-border-hover);
   }
 }
@@ -20864,7 +20918,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     [data-variant='default'],
     [data-variant='outline'],
     [data-variant='dashed']
-  )[data-tone='danger'][data-state~='pressed']:not([data-disabled='true']) {
+  )[data-tone='danger'][data-state~='pressed']:not([data-disabled='true']):not(:where([data-chrome='none'])) {
   background-color: color-mix(in srgb, var(--ds-button-error-bg) 14%, transparent);
   color: var(--ds-button-error-border-active);
 }
@@ -20873,7 +20927,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     [data-variant='default'],
     [data-variant='outline'],
     [data-variant='dashed']
-  )[data-tone='danger'][data-state~='pressed']:not([data-disabled='true']) {
+  )[data-tone='danger'][data-state~='pressed']:not([data-disabled='true']):not(:where([data-chrome='none'])) {
   border-color: var(--ds-button-error-border-active);
 }
 
@@ -20901,7 +20955,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     [data-variant='ghost']
   ):is([aria-pressed='true'], [aria-current='true']):not(
     [data-disabled='true']
-  ) {
+  ):not(:where([data-chrome='none'])) {
   background-color: var(
     --_ds-button-selected-bg,
     var(--ds-button-default-bg-active)
@@ -20915,7 +20969,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     [data-variant='link']
   ):is([aria-pressed='true'], [aria-current='true']):not(
     [data-disabled='true']
-  ) {
+  ):not(:where([data-chrome='none'])) {
   color: var(--ds-color-primary);
 }
 
@@ -20928,7 +20982,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
     [data-variant='ai']
   ):is([aria-pressed='true'], [aria-current='true']):not(
     [data-disabled='true']
-  ) {
+  ):not(:where([data-chrome='none'])) {
   outline: var(--ds-button-border-width-focus) solid currentColor;
   outline-offset: calc(
     -1 * (var(--ds-button-border-width-focus) + var(--ds-button-border-width))
@@ -20974,12 +21028,15 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
 
 .ds-button.ds-button--modern[data-disabled='true'] {
   cursor: var(--ds-button-disabled-cursor);
+  opacity: var(--ds-button-disabled-opacity);
+  transform: none;
+}
+
+.ds-button.ds-button--modern[data-disabled='true']:not(:where([data-chrome='none'])) {
   background: var(--ds-button-disabled-bg);
   color: var(--ds-button-disabled-color);
   border-color: var(--ds-button-disabled-border-color);
   box-shadow: var(--ds-button-disabled-shadow, var(--ds-material-control-shadow));
-  opacity: var(--ds-button-disabled-opacity);
-  transform: none;
   filter: none;
 }
 
@@ -21051,6 +21108,9 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
 @media (forced-colors: active) {
   .ds-button.ds-button--modern[data-variant] {
     forced-color-adjust: auto;
+  }
+
+  .ds-button.ds-button--modern[data-variant]:not(:where([data-chrome='none'])) {
     background: ButtonFace;
     color: ButtonText;
     border-color: ButtonText;
@@ -21099,7 +21159,7 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
 }
 
 @media print {
-  .ds-button.ds-button--modern[data-variant] {
+  .ds-button.ds-button--modern[data-variant]:not(:where([data-chrome='none'])) {
     background: transparent;
     color: CanvasText;
     border-color: CanvasText;
@@ -86165,57 +86225,43 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    class, which consumers outside this package select on; the migration is
    registered for the consumer-readiness lane, never executed inside a cut. */
 /**
- * StatusFilterPills skin — deliberately unlayered (P-47).
- * Layered rules sort before Tailwind's base layer and cannot reliably paint
- * these elements. This component has one scope class, so border-colour rules
- * repeat their target part three times to reach (0,4,0). Text colour rules
- * repeat it four times to reach (0,5,0) and outrank the Typography engine skin.
+ * StatusFilterPills skin (layer rottay-components).
+ * Each pill is a chrome-less Button (`chrome="none"`, `shape="round"`): the Button owns its anatomy,
+ * motion, focus ring and forced-colours state arms; this skin paints only the pill's chrome (frame, fill,
+ * ink, lift, padding), keyed on the pill className beside the composed `.ds-button` (whose kernel stamps
+ * the states these arms read), repeated to reach (0,4,0) for the border-colour rules. The pill's type, gap and icon size travel as the Button's own size channels on
+ * the root. The pressed state is announced (`aria-pressed`) and reads through border + ink + label
+ * weight + count contrast, never hue alone.
  *
- * GEOMETRY: the engine stamps `data-size` (sm|md) on root and pill; all
- * geometry, motion (token-derived), and state paint live here — zero inline
- * styles. The pressed state is announced by the engine (`aria-pressed`) and
- * reads through border + ink + label weight + count contrast, never hue alone.
- *
- * STATE IS DECIDED ONCE (F-37, WO-FAM-08): the pill is a stateful part — the
- * pattern runs it through `useInteractionState` and stamps
- * `partAttributes('pill', …)` — so every hover, press and focus arm below
- * pairs the kernel token with the platform pseudo-class it stands for
- * (`:is([data-state~='hovered'], :hover)`), which leaves the selector's
- * specificity exactly where the ladder above put it. At rest the kernel
- * serializes nothing, so the pseudo-class is the fallback of one decision,
- * never a second authority.
- *
- * CHANNELS: every `--ds-filter-pill-*` name this file reads already has a
- * producer, so the family owns no deriver of its own; its vocabulary is the
- * shared filter-pill one, not a private namespace.
+ * CHANNELS: every `--ds-filter-pill-*` name this file reads already has a producer, so the family owns
+ * no deriver of its own; its vocabulary is the shared filter-pill one, not a private namespace.
  */
 
-/* ---- root: wraps when the composition narrows. ---- */
+/* ---- root: wraps when the composition narrows. The pills are chrome-less Buttons that keep the pill's
+        own type, gap and icon size through the Button's channels, set here on their ancestor. ---- */
 .ds-pattern-status-filter-pills[data-part='root'] {
   flex-wrap: wrap;
+  --ds-button-sm-font-size: var(--ds-font-size-xs);
+  --ds-button-md-font-size: calc(var(--ds-font-size-xs) * 1.083333);
+  --ds-button-sm-gap: calc(var(--ds-spacing-2, 6px) / var(--ds-density-effective-scale, 1));
+  --ds-button-md-gap: calc(var(--ds-spacing-2, 6px) / var(--ds-density-effective-scale, 1));
+  --ds-button-sm-icon-size: 12px;
+  --ds-button-md-icon-size: 14px;
+  --ds-button-sm-line-height: var(--ds-line-height-normal);
+  --ds-button-md-line-height: var(--ds-line-height-normal);
+  --ds-button-font-weight: normal;
+  --ds-button-letter-spacing: normal;
+  --ds-button-text-transform: none;
+  --ds-button-label-offset-y: 0px;
 }
 
-/* ---- pill geometry per size rung (was engine inline styles). ---- */
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-2, 6px);
-  cursor: pointer;
-  transition: background var(--ds-motion-feedback)
-      var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
-}
 /* Size-rung geometry is family-internal: the literals below are the shipped
    measures, preserved byte-exact (no public sizing channel). */
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'][data-size='sm'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='sm'] {
   padding: 4px 10px;
-  font-size: var(--ds-font-size-xs);
 }
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'][data-size='md'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='md'] {
   padding: 6px 14px;
-  font-size: calc(var(--ds-font-size-xs) * 1.083333);
 }
 
 /* The selected label shifts weight as a non-color cue beside border + ink. */
@@ -86225,15 +86271,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-pattern-status-filter-pills .ds-status-filter-pills__pill-label[data-part='pill-label'][data-selected='true'] {
   font-weight: 500;
-}
-
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'] {
-  inline-size: 14px;
-  block-size: 14px;
-}
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='sm'] .ds-status-filter-pills__pill-icon[data-part='pill-icon'] {
-  inline-size: 12px;
-  block-size: 12px;
 }
 
 .ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge[data-part='count-badge'] {
@@ -86259,13 +86296,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'] {
-  border-radius: var(--ds-radius-full, 9999px);
+  .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button {
   border: 1px solid var(--ds-filter-pill-border, transparent);
   background: var(--ds-filter-pill-bg, transparent);
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
-  outline: none;
-  box-shadow: var(--ds-filter-pill-shadow, none);
   /* Family glass contract (Sheet/Drawer idiom): unset, the declaration is
      invalid at computed-value time and resolves to none — only tenants that
      opt into `--ds-glass-backdrop-filter` get the frost. */
@@ -86273,17 +86307,27 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
 }
 
+/* The resting lift never covers a focused pill: the Button's own ring owns focus. */
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true'] {
+  .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button:not(:where([data-state~='focused'], [data-state~='focus-visible'], :focus-visible)) {
+  box-shadow: var(--ds-filter-pill-shadow, none);
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button[data-selected='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(--ds-filter-pill-active-bg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent));
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button[data-selected='true']:not(:where([data-state~='focused'], [data-state~='focus-visible'], :focus-visible)) {
   box-shadow: var(--ds-filter-pill-active-shadow, var(--ds-filter-pill-shadow, none));
 }
 
 @media (hover: hover) {
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='hovered'], :hover):not([data-selected='true']) {
+    .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button:is([data-state~='hovered'], :hover):not([data-selected='true']) {
     background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
     border-color: var(--ds-filter-pill-hover-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
   }
@@ -86291,13 +86335,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* Touch/active equivalent of the hover wash (4th-tanda law). */
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='pressed'], :active):not([data-selected='true']) {
+  .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button:is([data-state~='pressed'], :active):not([data-selected='true']) {
   background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
-}
-
-.ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='focus-visible'], :focus-visible) {
-  box-shadow: var(--ds-filter-pill-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent));
 }
 
 .ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'] {
@@ -86344,18 +86383,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
-/* ---- reduced motion: the state swap is instant. ---- */
-@media (prefers-reduced-motion: reduce) {
-  .ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'] {
-    transition: none;
-  }
-}
-
 /* ---- coarse pointers: every pill meets the canonical 44px touch floor. The
         painted density (padding, type) is untouched — the pill's block size
         grows to the target while the visual rhythm stays as authored. ---- */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'] {
+  .ds-pattern-status-filter-pills .ds-status-filter-pills__pill {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -86365,20 +86397,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         colors; the count badge keeps a real boundary. ---- */
 @media (forced-colors: active) {
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'] {
+    .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border-color: ButtonText;
     background: Canvas;
     color: CanvasText;
-    box-shadow: none;
   }
 
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true'] {
-    background: Highlight;
-    border-color: Highlight;
-    color: HighlightText;
+    .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button:not(:where([data-state~='focused'], [data-state~='focus-visible'], :focus-visible)) {
+    box-shadow: none;
   }
 
   .ds-pattern-status-filter-pills
@@ -86407,13 +86436,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-status-filter-pills
     .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-selected='true'] {
     color: inherit;
-  }
-
-  .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: 1px;
-    box-shadow: none;
   }
 }
 

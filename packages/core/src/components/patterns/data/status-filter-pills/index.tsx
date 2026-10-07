@@ -12,11 +12,10 @@
  * their own state container.
  */
 
-import type { ComponentProps, ComponentType, ReactNode } from 'react';
+import type { ComponentType } from 'react';
 type StatusFilterPillIcon = ComponentType<any>;
 
-import { partAttributes, useInteractionState } from '@/foundation/behavior';
-import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
+import { Button } from '../../../primitives/inputs/button';
 import { Box } from '../../../primitives/layout/box';
 import { Flex } from '../../../primitives/layout/flex';
 import { Text } from '../../../primitives/display/typography/compound/text';
@@ -48,41 +47,6 @@ export interface StatusFilterPillsProps {
   size?: 'sm' | 'md';
 }
 
-/**
- * The pill is a STATEFUL PART: one place decides when it is hovered, pressed
- * or focus-visible (the shared interaction kernel), and the skin pairs every
- * platform pseudo-class with the kernel token it stands for. At rest the
- * kernel serializes nothing, so `[data-state]` never matches a resting pill
- * and the pseudo-class stays the fallback of one decision rather than a
- * second authority (F-37).
- */
-function Pill({
-  children,
-  ...rest
-}: ComponentProps<typeof Box> & { children?: ReactNode }) {
-  const interaction = useInteractionState();
-  const kernel = interaction.handlers;
-  const chained = {
-    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
-    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
-    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
-    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
-    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
-    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
-  };
-  return (
-    <Box
-      as="button"
-      type="button"
-      {...rest}
-      {...chained}
-      {...partAttributes('pill', interaction.state)}
-    >
-      {children}
-    </Box>
-  );
-}
-
 export function StatusFilterPills({
   options,
   value,
@@ -105,24 +69,47 @@ export function StatusFilterPills({
         const isSelected = selectedValues.includes(option.value);
         const Icon = option.icon;
 
+        // Only the Modern Button honors chrome="none": a frozen engine's skin would outrank the pill paint
+        // and wash its label out, so the pill pins it under every engine.
         return (
-          <Pill
+          <Button
             key={option.value}
+            engine="modern"
+            chrome="none"
+            shape="round"
+            size={size}
             className="ds-status-filter-pills__pill"
             data-selected={isSelected}
-            data-size={size}
-            /* Toggle semantics: the pressed state is announced, never painted
-               alone (border + ink + weight + checkmark-free ring carry it). */
             aria-pressed={isSelected}
             onClick={() => onChange(option.value)}
+            icon={
+              Icon ? (
+                <Icon
+                  data-part="pill-icon"
+                  className="ds-status-filter-pills__pill-icon"
+                  data-selected={isSelected}
+                />
+              ) : undefined
+            }
+            suffix={
+              showCounts && option.count !== undefined ? (
+                <Box
+                  data-part="count-badge"
+                  className="ds-status-filter-pills__count-badge"
+                  data-selected={isSelected}
+                >
+                  <Text
+                    data-part="count-badge-text"
+                    className="ds-status-filter-pills__count-badge-text"
+                    data-selected={isSelected}
+                    size="sm"
+                  >
+                    {option.count}
+                  </Text>
+                </Box>
+              ) : undefined
+            }
           >
-            {Icon && (
-              <Icon
-                data-part="pill-icon"
-                className="ds-status-filter-pills__pill-icon"
-                data-selected={isSelected}
-              />
-            )}
             <Text
               data-part="pill-label"
               className="ds-status-filter-pills__pill-label"
@@ -131,23 +118,7 @@ export function StatusFilterPills({
             >
               {option.label}
             </Text>
-            {showCounts && option.count !== undefined && (
-              <Box
-                data-part="count-badge"
-                className="ds-status-filter-pills__count-badge"
-                data-selected={isSelected}
-              >
-                <Text
-                  data-part="count-badge-text"
-                  className="ds-status-filter-pills__count-badge-text"
-                  data-selected={isSelected}
-                  size="sm"
-                >
-                  {option.count}
-                </Text>
-              </Box>
-            )}
-          </Pill>
+          </Button>
         );
       })}
     </Flex>

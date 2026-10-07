@@ -375,7 +375,7 @@ describe("saved-views -- data-part contract (workspace-chrome anatomy)", () => {
 // ===========================================================================
 describe("status-filter-pills -- data-part contract (workspace-chrome anatomy)", () => {
   it.each(["modern"] as const)(
-    "stamps root/pill/pill-label/count-badge, all keyed on data-selected (%s)",
+    "stamps root, the chrome-less Button pills, pill-label and count-badge, all keyed on data-selected (%s)",
     async (engine) => {
       const { container } = renderWithEngine(
         <StatusFilterPills
@@ -392,13 +392,13 @@ describe("status-filter-pills -- data-part contract (workspace-chrome anatomy)",
       const root = await waitForPart(container, "root");
       expect(root.className).toContain("ds-pattern-status-filter-pills");
 
+      await waitFor(() => expect(q(container, ".ds-status-filter-pills__pill")).toHaveLength(2));
       expect(
-        q(container, '[data-part="pill"][data-selected="true"]')
+        q(container, '.ds-status-filter-pills__pill[data-chrome="none"][data-selected="true"]')
       ).toHaveLength(1);
       expect(
-        q(container, '[data-part="pill"][data-selected="false"]')
+        q(container, '.ds-status-filter-pills__pill[data-chrome="none"][data-selected="false"]')
       ).toHaveLength(1);
-      expect(q(container, ".ds-status-filter-pills__pill")).toHaveLength(2);
       expect(q(container, '[data-part="pill-label"]')).toHaveLength(2);
       expect(
         q(container, '[data-part="count-badge"][data-selected="true"]')

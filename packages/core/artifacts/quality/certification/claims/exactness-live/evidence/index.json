@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "0985a22d09ccbce360a6de748fef1171e9833e8be6e2f99020645dbd9b6aa93d",
+    "authorityDigest": "2a5bc10104e79bc2af5731c730ea52d7d1de8cd0ad9225387b1eff978c34ede6",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5705597,
-        "sha256": "8cd5d9ad53e43423f0eb81189f71a41ae85e6cfd231c777bc06b422f8e6e13f1"
+        "bytes": 5708249,
+        "sha256": "940daafe1ee8936857c509310cff3aaa3dae609df84882ca57ffdb73661b9c89"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5071573,
-        "sha256": "a932f2d348dce3e381c295bf285ac1e3d39a9bc19d98232e2531949cab62c4fc"
+        "bytes": 5074225,
+        "sha256": "33d815a9bf379aa31c140ac5927831605af5bdb146ef2ecc9e75ae469c4d8763"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5032766,
-        "sha256": "4b58d9f405bc3a0c47101484b246d990529694c5d07487d0063680db47386aed"
+        "bytes": 5035418,
+        "sha256": "83c98f2b7954103dd470545f5778fdc5e080e4fcb5765c40dc030248be782966"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5032026,
-        "sha256": "2e3fee4d9b713c215a54f8cd6defd033b52c65b5a3a013993c1ffaae0cbca750"
+        "bytes": 5034678,
+        "sha256": "8ec219250a07760ab5141fd4cd70b4f0f29c2a178b72ce5c8ab3c2764d238b59"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -2758,8 +2758,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 4974,
-        "sha256": "a569c0734c7646baec0f973f985a47a74916b9aaaded3671b442c62885e44da2"
+        "bytes": 3843,
+        "sha256": "ab2f724efd9671cb6a3ed3046d43fa5ab9d4e7f503f519dc3121433ea358c6d3"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/status-filter-pills/tests/StatusFilterPills.a11y.test.tsx",
@@ -2768,6 +2768,14 @@
         ],
         "bytes": 1858,
         "sha256": "a07e5f9a11780ad90020f864283cb2999ea73a1e94cdbc1e10d9a52e7ceee4a7"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/data/status-filter-pills/tests/StatusFilterPills.button-primitive.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4974,
+        "sha256": "6faf649d26551d314e1cc475c9a5e22b0a7a17f3c881e52f9eb4c549dc2d4dd9"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/status-filter-pills/tests/StatusFilterPills.caller-handler-composition.test.tsx",
@@ -2782,8 +2790,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 9417,
-        "sha256": "84ec6aebf91dc2481626d952b05b555bfd590a7d2b47b09eca4c9951e0ea00ed"
+        "bytes": 9683,
+        "sha256": "fc6b8d000891fe909e7b905ccd395cfec4a2410262e12ed291ad9fcf9cfe4fa5"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/data/tests/PatternsLongTailBatch.contract.test.tsx",
@@ -12811,8 +12819,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 18374,
-        "sha256": "90405b7b313ec3392b4ab0130be8b0abbf9e77a96de74e33cc65559d00be02d6"
+        "bytes": 18675,
+        "sha256": "21dc43ba35ee905d3032ac45360445874c207b6453734cf31ce4f02513883461"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/engines/classic/index.tsx",
@@ -12833,8 +12841,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 22027,
-        "sha256": "32b2cec86dc4a80a6ee1021824c18c9893f6040958bb50f47ea3e0c8b3b3d53c"
+        "bytes": 22134,
+        "sha256": "8fda76d660d4797b45f2f76f6fbb1499e2f9951287da0cf2e9302abed788dd1c"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/engines/rustic/index.tsx",
@@ -12855,8 +12863,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 5003,
-        "sha256": "0e5751dfbe1a608a3bab337260008105d7c047ed7fa6cc8c9318b376c62792d1"
+        "bytes": 5045,
+        "sha256": "e12d41de53f5fcac07b1ca05118de2769e98ba475e29f28a76e3de14ff3141c5"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.anchor-contract.test.tsx",
@@ -12897,6 +12905,142 @@
         ],
         "bytes": 17674,
         "sha256": "b9c019f5fab57e2b683a4ff8e01c2e13baa82e6dc1dd33e24b70980ed52b13be"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none-cascade.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4950,
+        "sha256": "a8013cdba29449fd7bd500fc6d6a404ca5ac1d0d12853736a59331e7e373a779"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.parity.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4286,
+        "sha256": "981a3956d644cc7af957a0f1c3db7a3e39a07fce83f1691868dd7475aa0b2732"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-anchor-contract.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1554,
+        "sha256": "12639c839a01497a527d1ff3060678ee64126ce61ff64819880b4202f44ae3c1"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-busy-contract.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1550,
+        "sha256": "b6d63d64733166e8fc568c9f01b47e094ea5e26b27f27651a54f46872d7f415f"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-busy-parity.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1546,
+        "sha256": "70e9aa572aac8ce9acd86c3820d705e8a65146680ff24989a283c5ccecabfd7a"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-busy-state.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1544,
+        "sha256": "8a75f4f24ae80a866f81b7843a84e7dbf88f58c0f2fd67df8c133662eb3608fa"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-integration-suite.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1546,
+        "sha256": "8623dcfa9a647e8883ef032aa8209337f8f1042994a635222e3de3a13d4355dc"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-modern-engine-advanced.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1568,
+        "sha256": "a4d559365fe3f038c6f1c621d66d5fad374ced07458d81290689a88e4cf4f427"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-modern-icon-only-name.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1566,
+        "sha256": "aa50199f4eadaab259d44f4c9226eebab13634575325ea759d25de144b42b494"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-modern-quiet-destructive-and-busy-reserve.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1606,
+        "sha256": "fef6910b339eda0943a46c4c12ac9ac9ea030d6ed21306b28a32170a7099439b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-motion-recipe.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1550,
+        "sha256": "c1cae6ec16e672da6e9445f546c70ceaefb650887445bf1495fec46488e37263"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-pass1-contract.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1552,
+        "sha256": "bbb99f9449db0ae7d33d678037e954d9aa3365849a81a5273aeb9edb23d285f9"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-pass2-craft.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1546,
+        "sha256": "ea3039b19da4b14ed7d6a7bf1fe9d6206ae66b99224fb138a943f2b6421f8202"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-passthrough-contract.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1564,
+        "sha256": "94eeedecce7da01ed88168119f5914c673b696ea7e7d7a3c6f45a6c277d699ab"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.rerun-resolved-radius.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1554,
+        "sha256": "bae090a9cbdf236d152452e34a0865bf804089af73442a8141c00af7c614902b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.roster.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 1301,
+        "sha256": "c228614499583e3d1234403f26febb5b64bf69aefd645ec8159fd2e46b994970"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.chrome-none.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 5040,
+        "sha256": "f13754283243a0ae35fd8af4a42e09e0bbd8a1d53572ffdca05c54eace53999f"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/tests/Button.disabled-dimming.test.tsx",
@@ -23389,8 +23533,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 60735,
-        "sha256": "aa2dcc08a0901df08a60531a3fe2fbe00e2ca37aa61b243a9b96c123ace951a4"
+        "bytes": 60848,
+        "sha256": "4f4028582a3efcbd121d6f9639431ca7b74f109399f8593fc6b0f49a3947b87c"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/workspace/view-mode-switcher/index.tsx",
@@ -29404,8 +29548,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 12436,
-        "sha256": "28dacff1324e1a2845552865e07294b50a7f3b32305a125c6c9ff243c89b0432"
+        "bytes": 11187,
+        "sha256": "52311ce43b61bd67075629794d8c24c77a8ba5af93eecd2acbe52fc4ea7bf825"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/stepper-compounds/index.css",
@@ -29980,8 +30124,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 56298,
-        "sha256": "593ac7603461142f06c481fb46a2bf373f72c1703821f406134be5dc8f4e55e4"
+        "bytes": 60199,
+        "sha256": "df5de832ed35bf57b400bce67e532d9fe09b754894848f46db8640b81fa67262"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
@@ -44365,8 +44509,8 @@
         "roles": [
           "stale-claim-corpus"
         ],
-        "bytes": 25129,
-        "sha256": "05b8a6821b9dc136f2ac2c113d63fc55752745fbdd8e37fb8042817799144cc1"
+        "bytes": 25616,
+        "sha256": "187d00042cb22cbd083f0bb74f6ad69e67c6bb6457269e087d6e2b8f0aea2e89"
       },
       {
         "path": "ui-design-system/packages/showroom/e2e/visual/tenant-branding/index.spec.ts",
@@ -47954,20 +48098,20 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "0985a22d09ccbce360a6de748fef1171e9833e8be6e2f99020645dbd9b6aa93d"
+    "digest": "2a5bc10104e79bc2af5731c730ea52d7d1de8cd0ad9225387b1eff978c34ede6"
   },
   "paintAudit": {
-    "output": "engine-token-audit --check OK (4221 counters; 3223 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
+    "output": "engine-token-audit --check OK (4222 counters; 3223 completed zeros locked exactly; 989 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
     "baseline": {
       "path": "ui-design-system/packages/core/scripts/check/engine/tokens/audit/baseline/index.json",
-      "sha256": "613203d3c50d781fd6e126a1e5c8923daa56461e5167f7918ad5dc373f594507",
+      "sha256": "05195e2567dc344eddf76b2093aeeabb43e42e831c2389fb0793d8152dce9cbb",
       "ok": true,
       "errors": [],
-      "counters": 4221,
+      "counters": 4222,
       "zeroLocked": 3223,
-      "positiveGoverned": 998,
-      "ordinaryCeilings": 4200,
-      "positiveOrdinaryCeilings": 988,
+      "positiveGoverned": 999,
+      "ordinaryCeilings": 4201,
+      "positiveOrdinaryCeilings": 989,
       "exactInvariants": 14,
       "positiveExactInvariants": 3,
       "minimumFloors": 7,
@@ -54903,23 +55047,23 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 160
+          "line": 177
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 172
+          "line": 189
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 179
+          "line": 196
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 292
+          "line": 309
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 322
+          "line": 342
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -63620,27 +63764,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 160
+          "line": 177
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 204
+          "line": 221
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 222
+          "line": 239
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 789
+          "line": 838
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 900
+          "line": 954
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1196
+          "line": 1253
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
@@ -66062,11 +66206,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 185
+          "line": 202
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 327
+          "line": 347
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
@@ -69460,7 +69604,7 @@
       "prefix": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 160
+          "line": 177
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -74378,7 +74522,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
-          "line": 32
+          "line": 20
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
@@ -89850,15 +89994,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 255
+          "line": 272
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1201
+          "line": 1258
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 1279
+          "line": 1339
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
@@ -90874,7 +91018,7 @@
       "suffix": [
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
-          "line": 160
+          "line": 177
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
@@ -113382,7 +113526,7 @@
           {
             "part": "trigger",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/engines/modern/index.tsx",
-            "line": 503,
+            "line": 505,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -113501,7 +113645,7 @@
           {
             "part": "trigger",
             "path": "ui-design-system/packages/core/src/components/primitives/inputs/button/engines/modern/index.tsx",
-            "line": 503,
+            "line": 505,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -122163,8 +122307,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "be29c64779d37c2d10c6686d30f1b508877cdfb8f0a0b2b10dc2bd286020f459",
-      "be29c64779d37c2d10c6686d30f1b508877cdfb8f0a0b2b10dc2bd286020f459"
+      "249b36870ca1081be2bae6823bfdded530c42a5ea264b28579b6afa25c153a74",
+      "249b36870ca1081be2bae6823bfdded530c42a5ea264b28579b6afa25c153a74"
     ],
     "agree": true
   }

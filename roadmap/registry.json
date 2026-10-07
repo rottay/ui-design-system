@@ -8662,6 +8662,11 @@
      "at": "2026-10-06 19:11",
      "by": "kimi",
      "note": "2026-10-06 — L5 landed: Select chrome='none' + onKeyDown tipeado; drenan la celda select del editor y el page-size de collection-workspace (ownership 2031/1332 -> 2029/1330; ambas rows por nombre). C1 landed primero (el judge compara frames forzados + quinto plant, red-proof); A2/H6 implementado (el host sobre K3 envuelve su frame en @media not forced-colors; el frame de error forzado sobrevive, medido); E5 binding (modernOnlyProps; frozen classic Select lo prueba). Ruling 6d: opcion (a) — el intento 'normal' midio PEOR (2596px vs 1368px); la celda se adjudica como flecha + el crecimiento del editor token (reparacion intencional). Touch-target floor re-seated 200->198 con el mover nombrado (las 2 raw selects drenadas; :116/:118 quedaron en 200 — el corpus de archivos/CSS no movio). Docs 57e7dd1 (editor-input retirada; data-invalid reworded), seal 57e7dd11, reseal be29c647. Tile review: 7 celdas ACCEPT con atribucion por celda (L5 / 81e11a852 zebra / D-1 stale-owed / dust)."
+    },
+    {
+     "at": "2026-10-06 22:35",
+     "by": "kimi",
+     "note": "2026-10-06 — L6 landed (FINAL lot): Button chrome='none' + status-filter-pills drenan al Button canónico (el Pill local y su kernel wiring borrados; el anillo privado retirado — el del primitive gana por layer, medido). ownership 2029/1330 -> 2028/1329 (23/18 exact). Ruling T1 del DT (opcion a): el ceiling channelLiteral se re-asienta 90->92 con el mover nombrado (los icon sizes de las pills ahora escriben los canales del Button, byte-preservados) y el size.total baja 661->657 — neto -2 literales. La R1-class engine='modern' pin: aceptada como excepcion fechada ligada a WO-RET-06 (misma clase que la de L5). family-cut: credit compuesto de las pills (from [button], medido d706298c3) + los re-reads data-table de L5 que se me pasaron (266->268, 87->86) ahora si landed. Todos los residuos del acceptance estan drenados por nombre: file input, checkbox, crumb, text editor, cell select, page-size select, pills."
     }
    ]
   },

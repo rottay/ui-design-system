@@ -3,57 +3,43 @@
    class, which consumers outside this package select on; the migration is
    registered for the consumer-readiness lane, never executed inside a cut. */
 /**
- * StatusFilterPills skin — deliberately unlayered (P-47).
- * Layered rules sort before Tailwind's base layer and cannot reliably paint
- * these elements. This component has one scope class, so border-colour rules
- * repeat their target part three times to reach (0,4,0). Text colour rules
- * repeat it four times to reach (0,5,0) and outrank the Typography engine skin.
+ * StatusFilterPills skin (layer rottay-components).
+ * Each pill is a chrome-less Button (`chrome="none"`, `shape="round"`): the Button owns its anatomy,
+ * motion, focus ring and forced-colours state arms; this skin paints only the pill's chrome (frame, fill,
+ * ink, lift, padding), keyed on the pill className beside the composed `.ds-button` (whose kernel stamps
+ * the states these arms read), repeated to reach (0,4,0) for the border-colour rules. The pill's type, gap and icon size travel as the Button's own size channels on
+ * the root. The pressed state is announced (`aria-pressed`) and reads through border + ink + label
+ * weight + count contrast, never hue alone.
  *
- * GEOMETRY: the engine stamps `data-size` (sm|md) on root and pill; all
- * geometry, motion (token-derived), and state paint live here — zero inline
- * styles. The pressed state is announced by the engine (`aria-pressed`) and
- * reads through border + ink + label weight + count contrast, never hue alone.
- *
- * STATE IS DECIDED ONCE (F-37, WO-FAM-08): the pill is a stateful part — the
- * pattern runs it through `useInteractionState` and stamps
- * `partAttributes('pill', …)` — so every hover, press and focus arm below
- * pairs the kernel token with the platform pseudo-class it stands for
- * (`:is([data-state~='hovered'], :hover)`), which leaves the selector's
- * specificity exactly where the ladder above put it. At rest the kernel
- * serializes nothing, so the pseudo-class is the fallback of one decision,
- * never a second authority.
- *
- * CHANNELS: every `--ds-filter-pill-*` name this file reads already has a
- * producer, so the family owns no deriver of its own; its vocabulary is the
- * shared filter-pill one, not a private namespace.
+ * CHANNELS: every `--ds-filter-pill-*` name this file reads already has a producer, so the family owns
+ * no deriver of its own; its vocabulary is the shared filter-pill one, not a private namespace.
  */
 
-/* ---- root: wraps when the composition narrows. ---- */
+/* ---- root: wraps when the composition narrows. The pills are chrome-less Buttons that keep the pill's
+        own type, gap and icon size through the Button's channels, set here on their ancestor. ---- */
 .ds-pattern-status-filter-pills[data-part='root'] {
   flex-wrap: wrap;
+  --ds-button-sm-font-size: var(--ds-font-size-xs);
+  --ds-button-md-font-size: calc(var(--ds-font-size-xs) * 1.083333);
+  --ds-button-sm-gap: calc(var(--ds-spacing-2, 6px) / var(--ds-density-effective-scale, 1));
+  --ds-button-md-gap: calc(var(--ds-spacing-2, 6px) / var(--ds-density-effective-scale, 1));
+  --ds-button-sm-icon-size: 12px;
+  --ds-button-md-icon-size: 14px;
+  --ds-button-sm-line-height: var(--ds-line-height-normal);
+  --ds-button-md-line-height: var(--ds-line-height-normal);
+  --ds-button-font-weight: normal;
+  --ds-button-letter-spacing: normal;
+  --ds-button-text-transform: none;
+  --ds-button-label-offset-y: 0px;
 }
 
-/* ---- pill geometry per size rung (was engine inline styles). ---- */
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-2, 6px);
-  cursor: pointer;
-  transition: background var(--ds-motion-feedback)
-      var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
-}
 /* Size-rung geometry is family-internal: the literals below are the shipped
    measures, preserved byte-exact (no public sizing channel). */
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'][data-size='sm'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='sm'] {
   padding: 4px 10px;
-  font-size: var(--ds-font-size-xs);
 }
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'][data-size='md'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='md'] {
   padding: 6px 14px;
-  font-size: calc(var(--ds-font-size-xs) * 1.083333);
 }
 
 /* The selected label shifts weight as a non-color cue beside border + ink. */
@@ -63,15 +49,6 @@
 }
 .ds-pattern-status-filter-pills .ds-status-filter-pills__pill-label[data-part='pill-label'][data-selected='true'] {
   font-weight: 500;
-}
-
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'] {
-  inline-size: 14px;
-  block-size: 14px;
-}
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='sm'] .ds-status-filter-pills__pill-icon[data-part='pill-icon'] {
-  inline-size: 12px;
-  block-size: 12px;
 }
 
 .ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge[data-part='count-badge'] {
@@ -97,13 +74,10 @@
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'] {
-  border-radius: var(--ds-radius-full, 9999px);
+  .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button {
   border: 1px solid var(--ds-filter-pill-border, transparent);
   background: var(--ds-filter-pill-bg, transparent);
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
-  outline: none;
-  box-shadow: var(--ds-filter-pill-shadow, none);
   /* Family glass contract (Sheet/Drawer idiom): unset, the declaration is
      invalid at computed-value time and resolves to none — only tenants that
      opt into `--ds-glass-backdrop-filter` get the frost. */
@@ -111,17 +85,27 @@
   -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
 }
 
+/* The resting lift never covers a focused pill: the Button's own ring owns focus. */
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true'] {
+  .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button:not(:where([data-state~='focused'], [data-state~='focus-visible'], :focus-visible)) {
+  box-shadow: var(--ds-filter-pill-shadow, none);
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button[data-selected='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(--ds-filter-pill-active-bg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent));
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button[data-selected='true']:not(:where([data-state~='focused'], [data-state~='focus-visible'], :focus-visible)) {
   box-shadow: var(--ds-filter-pill-active-shadow, var(--ds-filter-pill-shadow, none));
 }
 
 @media (hover: hover) {
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='hovered'], :hover):not([data-selected='true']) {
+    .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button:is([data-state~='hovered'], :hover):not([data-selected='true']) {
     background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
     border-color: var(--ds-filter-pill-hover-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
   }
@@ -129,13 +113,8 @@
 
 /* Touch/active equivalent of the hover wash (4th-tanda law). */
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='pressed'], :active):not([data-selected='true']) {
+  .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button:is([data-state~='pressed'], :active):not([data-selected='true']) {
   background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
-}
-
-.ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='focus-visible'], :focus-visible) {
-  box-shadow: var(--ds-filter-pill-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent));
 }
 
 .ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'] {
@@ -182,18 +161,11 @@
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
-/* ---- reduced motion: the state swap is instant. ---- */
-@media (prefers-reduced-motion: reduce) {
-  .ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'] {
-    transition: none;
-  }
-}
-
 /* ---- coarse pointers: every pill meets the canonical 44px touch floor. The
         painted density (padding, type) is untouched — the pill's block size
         grows to the target while the visual rhythm stays as authored. ---- */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-part='pill'] {
+  .ds-pattern-status-filter-pills .ds-status-filter-pills__pill {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -203,20 +175,17 @@
         colors; the count badge keeps a real boundary. ---- */
 @media (forced-colors: active) {
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'] {
+    .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border-color: ButtonText;
     background: Canvas;
     color: CanvasText;
-    box-shadow: none;
   }
 
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true'] {
-    background: Highlight;
-    border-color: Highlight;
-    color: HighlightText;
+    .ds-status-filter-pills__pill.ds-status-filter-pills__pill.ds-button:not(:where([data-state~='focused'], [data-state~='focus-visible'], :focus-visible)) {
+    box-shadow: none;
   }
 
   .ds-pattern-status-filter-pills
@@ -245,12 +214,5 @@
   .ds-pattern-status-filter-pills
     .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-selected='true'] {
     color: inherit;
-  }
-
-  .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
-    outline-offset: 1px;
-    box-shadow: none;
   }
 }

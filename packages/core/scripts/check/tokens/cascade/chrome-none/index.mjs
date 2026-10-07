@@ -3,7 +3,7 @@
  * @fileoverview Computed-style gate for `chrome="none"` controls: the guarded chrome is gone, the kept arms are not.
  *
  * Loads every scope's freshly recomposed bundle (tenant-less and each first-party vertical) in Chromium and
- * reads each rostered owner in each rostered cell under fine light/dark, coarse and forced colours. Fails on
+ * reads each rostered owner in each rostered cell under fine light/dark, coarse, forced colours and print. Fails on
  * chrome left on a chrome-less owner, a kept arm (focus ring, forced outline/frame/ink, touch floor, disabled
  * dimming) that differs from the standard control, a host that changes a kept arm, and a guarded selector
  * that is unrostered or unexercised. `--self-check` plants each defect per owner and host and requires it caught.
@@ -34,6 +34,7 @@ const ENVIRONMENTS = [
   { id: 'fine-dark', theme: 'dark', context: { viewport: { width: 1200, height: 900 } }, media: {} },
   { id: 'coarse-light', theme: 'light', context: { viewport: { width: 420, height: 900 }, hasTouch: true, isMobile: true }, media: {} },
   { id: 'forced-light', theme: 'light', context: { viewport: { width: 1200, height: 900 } }, media: { forcedColors: 'active' } },
+  { id: 'print-light', theme: 'light', context: { viewport: { width: 1200, height: 900 } }, media: { media: 'print' } },
 ];
 
 const FREEZE = '<style>*,*::before,*::after{transition:none!important;animation:none!important}</style>';
@@ -129,7 +130,7 @@ function page(css, scope, environment) {
 
 function measureInPage({ owners, guarded }) {
   const stamp = (host, owner) => {
-    const shell = host.querySelector(owner.shell);
+    const shell = host.querySelector(owner.fixtureShell?.[host.dataset.probeFixture] ?? owner.shell);
     const { attrs, root } = JSON.parse(host.dataset.probeAttrs);
     for (const [name, value] of Object.entries(attrs)) shell.setAttribute(name, value);
     if (owner.root) for (const [name, value] of Object.entries(root)) host.querySelector(owner.root).setAttribute(name, value);
@@ -150,6 +151,7 @@ function measureInPage({ owners, guarded }) {
       opacity: pick('opacity'),
       color: pick('color'),
       borderColor: pick('border-top-color'),
+      beforeContent: getComputedStyle(element, '::before').getPropertyValue('content'),
     };
   };
   const exercised = new Set();
@@ -157,12 +159,17 @@ function measureInPage({ owners, guarded }) {
   for (const host of document.querySelectorAll('[data-probe-host]')) {
     const owner = owners.find((candidate) => candidate.id === host.dataset.probeOwner);
     const shell = stamp(host, owner);
-    rows.push({ host: host.dataset.probeHost, owner: owner.id, cell: host.dataset.probeCell, shell: read(shell) });
+    const systemFill = owner.keep.forcedFill?.[host.dataset.probeCell];
+    const swatch = systemFill ? host.appendChild(document.createElement('span')) : null;
+    if (swatch) swatch.style.backgroundColor = systemFill;
+    const systemFillColor = swatch ? getComputedStyle(swatch).backgroundColor : null;
+    swatch?.remove();
+    rows.push({ host: host.dataset.probeHost, owner: owner.id, cell: host.dataset.probeCell, shell: read(shell), systemFillColor });
   }
   for (const host of document.querySelectorAll('[data-probe-owner]:not([data-probe-host])')) {
     const owner = owners.find((candidate) => candidate.id === host.dataset.probeOwner);
     const shell = stamp(host, owner);
-    const field = host.querySelector(owner.field);
+    const field = owner.field ? host.querySelector(owner.field) : shell.parentElement;
     if (host.dataset.probeChrome === 'standard') {
       for (const element of host.querySelectorAll('[data-chrome]')) element.removeAttribute('data-chrome');
     } else {
@@ -175,7 +182,16 @@ function measureInPage({ owners, guarded }) {
         }
       });
     }
-    rows.push({ owner: owner.id, fixture: host.dataset.probeFixture, cell: host.dataset.probeCell, chrome: host.dataset.probeChrome, shell: read(shell), fieldColor: getComputedStyle(field).color });
+    const systemFill = owner.keep.forcedFill?.[host.dataset.probeCell];
+    let systemFillColor = null;
+    if (systemFill) {
+      const swatch = document.createElement('span');
+      swatch.style.backgroundColor = systemFill;
+      host.append(swatch);
+      systemFillColor = getComputedStyle(swatch).backgroundColor;
+      swatch.remove();
+    }
+    rows.push({ owner: owner.id, fixture: host.dataset.probeFixture, cell: host.dataset.probeCell, chrome: host.dataset.probeChrome, shell: read(shell), fieldColor: getComputedStyle(field).color, systemFillColor });
   }
   return { rows, exercised: [...exercised] };
 }
@@ -196,6 +212,7 @@ function judge({ rows }, environment, scope) {
     if (owner.keep.ring.includes(row.cell) && forced && shell.outline !== standard.outline) fail(`forced outline ${shell.outline} != ${standard.outline}`);
     if (forced && owner.keep.forcedFrame.includes(row.cell) && shell.border.join(' ') !== standard.border.join(' ')) fail(`forced frame ${shell.border.join(' ')} != ${standard.border.join(' ')}`);
     if (forced && owner.keep.forcedInk.includes(row.cell) && (shell.color !== standard.color || shell.borderColor !== standard.borderColor)) fail(`forced ink ${shell.color}/${shell.borderColor} != ${standard.color}/${standard.borderColor}`);
+    if (forced && row.systemFillColor && shell.backgroundColor !== row.systemFillColor) fail(`forced fill ${shell.backgroundColor} != ${owner.keep.forcedFill[row.cell]} ${row.systemFillColor}`);
     if (coarse && Math.max(parseFloat(shell.minBlockSize) || 0, parseFloat(shell.minHeight) || 0) < owner.keep.touchFloorPx) fail(`touch floor lost (${shell.minBlockSize}/${shell.minHeight})`);
   }
   for (const row of rows.filter((candidate) => candidate.chrome === 'none')) {
@@ -208,6 +225,7 @@ function judge({ rows }, environment, scope) {
     const reserve = owner.keep.arrowReserve?.includes(row.fixture);
     if (shell.padding.some((value, side) => parseFloat(value) !== 0 && !(reserve && side === 1))) fail('chrome', `padding ${shell.padding.join(' ')}`);
     if (shell.backgroundImage !== 'none') fail('chrome', `background-image ${shell.backgroundImage.slice(0, 60)}`);
+    if (!['none', 'normal'].includes(shell.beforeContent)) fail('chrome', `::before content ${shell.beforeContent.slice(0, 40)}`);
     if (!forced && !/^(transparent|rgba\(0, 0, 0, 0\))$/.test(shell.backgroundColor)) fail('chrome', `background-color ${shell.backgroundColor}`);
     const framed = forced && owner.keep.forcedFrame.includes(row.cell);
     if (!framed && shell.border.some((value) => parseFloat(value) !== 0)) fail('chrome', `border-width ${shell.border.join(' ')}`);
@@ -221,6 +239,7 @@ function judge({ rows }, environment, scope) {
     if (ring && forced && shell.outline !== standard.outline) fail('kept-arm', `forced outline ${shell.outline} != ${standard.outline}`);
     if (shell.opacity !== standard.opacity) fail('kept-arm', `opacity ${shell.opacity} != ${standard.opacity}`);
     if (forced && owner.keep.forcedInk.includes(row.cell) && (shell.color !== standard.color || shell.borderColor !== standard.borderColor)) fail('kept-arm', `forced ink ${shell.color}/${shell.borderColor} != ${standard.color}/${standard.borderColor}`);
+    if (forced && row.systemFillColor && shell.backgroundColor !== row.systemFillColor) fail('kept-arm', `forced fill ${shell.backgroundColor} != ${owner.keep.forcedFill[row.cell]} ${row.systemFillColor}`);
   }
   return findings;
 }
@@ -297,6 +316,8 @@ function retarget(css, predicate, rewrite) {
 }
 
 const outsideMedia = (rule) => !atRuleChain(rule).some((at) => at.name === 'media');
+const flat = (selector) => selector.replace(/\s+/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')');
+const names = (rule, selector) => rule.selectors.map(flat).includes(flat(selector));
 const insideForced = (rule) => atRuleChain(rule).some((at) => at.name === 'media' && /forced-colors: ?active/.test(at.params));
 
 function dropRule(css, predicate) {
@@ -317,24 +338,30 @@ function plants() {
     {
       id: `${owner.id}: unguarded owner rule`,
       expect: 'chrome',
-      transform: (css) => retarget(css, (rule) => rule.selectors.includes(owner.plant.unguard) && outsideMedia(rule), (selector) => selector.replace(GUARD, '')),
+      transform: (css) => retarget(css, (rule) => names(rule, owner.plant.unguard) && outsideMedia(rule), (selector) => (flat(selector) === flat(owner.plant.unguard) ? selector.replace(GUARD, '') : selector)),
     },
     {
       id: `${owner.id}: over-guarded focus ring`,
       expect: 'kept-arm',
-      transform: (css) => retarget(css, (rule) => rule.selectors.includes(owner.plant.overguard) && outsideMedia(rule), (selector) => `${selector}${GUARD}`),
+      transform: (css) => retarget(css, (rule) => names(rule, owner.plant.overguard) && outsideMedia(rule), (selector) => `${selector}${GUARD}`),
     },
     {
       id: `${owner.id}: over-guarded forced frame`,
       expect: 'kept-arm',
-      transform: (css) => retarget(css, (rule) => rule.selectors.includes(owner.plant.forcedFrame) && insideForced(rule), (selector) => `${selector}${GUARD}`),
+      transform: (css) => retarget(css, (rule) => names(rule, owner.plant.forcedFrame) && insideForced(rule), (selector) => `${selector}${GUARD}`),
     },
   ]);
-  const perHost = (ROSTER.hosts ?? []).map((host) => ({
-    id: `${host.id}: forced state arm not restated`,
-    expect: 'host-arm',
-    transform: (css) => dropRule(css, (rule) => rule.selectors.includes(host.plant.dropForced) && insideForced(rule)),
-  }));
+  const perHost = (ROSTER.hosts ?? []).map((host) => (host.plant.dropForced
+    ? {
+        id: `${host.id}: forced state arm not restated`,
+        expect: 'host-arm',
+        transform: (css) => dropRule(css, (rule) => names(rule, host.plant.dropForced) && insideForced(rule)),
+      }
+    : {
+        id: `${host.id}: host repaints a kept arm`,
+        expect: 'host-arm',
+        transform: (css) => `${css}\n${host.plant.inject}\n`,
+      }));
   return [
     ...perOwner,
     ...perHost,

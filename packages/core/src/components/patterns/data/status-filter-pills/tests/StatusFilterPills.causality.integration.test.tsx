@@ -87,17 +87,17 @@ const pills = await serverMarkup();
  */
 const focusedPills = pills
   .replace(/id="[^"]*"/gu, '')
-  .replace(/data-part="pill"/gu, 'data-part="pill" data-state="focus-visible"');
+  .replace(/data-chrome="none"/gu, 'data-chrome="none" data-state="focus-visible"');
 const markup =
   `<div id="pills" style="inline-size:64rem">${pills}</div>`
   + `<div id="focused-pills" style="inline-size:64rem">${focusedPills}</div>`;
 
-const PILL = "#pills [data-part='pill']";
-const SELECTED = "#pills [data-part='pill'][data-selected='true']";
-const UNSELECTED = "#pills [data-part='pill'][data-selected='false']";
+const PILL = '#pills .ds-status-filter-pills__pill';
+const SELECTED = "#pills .ds-status-filter-pills__pill[data-selected='true']";
+const UNSELECTED = "#pills .ds-status-filter-pills__pill[data-selected='false']";
 const LABEL = "#pills [data-part='pill-label']";
 const BADGE = "#pills [data-part='count-badge']";
-const FOCUSED = "#focused-pills [data-part='pill'][data-state~='focus-visible']";
+const FOCUSED = "#focused-pills .ds-status-filter-pills__pill[data-state~='focus-visible']";
 
 describeCausality({
   family: 'status-filter-pills',
@@ -107,8 +107,8 @@ describeCausality({
     { id: 'selectedBorder', selector: SELECTED, property: 'border-top-color' },
     { id: 'labelFont', selector: LABEL, property: 'font-size' },
     { id: 'pillGap', selector: PILL, property: 'column-gap' },
-    // The pill's keyboard ring, as the channel and as the paint it lands.
-    { id: 'ringChannel', selector: PILL, property: '--ds-filter-pill-focus-ring' },
+    // The pill's keyboard ring is the Button's own, as the channel and as the paint it lands.
+    { id: 'ringChannel', selector: PILL, property: '--ds-button-focus-ring' },
     { id: 'ringPaint', selector: FOCUSED, property: 'box-shadow' },
     // The count badge's measure is a stated number, so it is the control every
     // arm holds.
@@ -168,13 +168,17 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {}
 
 describe('status-filter-pills causality surface', () => {
   it('serves the anatomy every probe reads', () => {
-    for (const part of ['root', 'pill', 'pill-label', 'count-badge', 'count-badge-text']) {
+    for (const part of ['root', 'trigger', 'pill-label', 'count-badge', 'count-badge-text']) {
       expect(pills, part).toContain(`data-part="${part}"`);
     }
-    // The pill is a stateful part decided by the kernel: at rest it carries NO
-    // `data-state`, so `[data-state]` never matches a resting pill and the
-    // skin's paired arms fall through to the platform pseudo-class.
-    expect(pills).not.toContain('data-state');
+    // Each pill is a chrome-less Button whose kernel decides its state: at rest the pill carries NO
+    // `data-state`, so the skin's paired arms fall through to the platform pseudo-class.
+    const pillTags = pills.match(/<button[^>]*ds-status-filter-pills__pill[^>]*>/gu) ?? [];
+    expect(pillTags).toHaveLength(OPTIONS.length);
+    for (const tag of pillTags) {
+      expect(tag).toContain('data-chrome="none"');
+      expect(tag).not.toContain('data-state');
+    }
   });
 
   /**
