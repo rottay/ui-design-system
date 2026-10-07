@@ -538,11 +538,25 @@ describe("digest identity across the canonicalization extraction", () => {
       "sha256-d9f15eb2a0a3eee6e160c6bfdedd2063a8a55ad6d29ef2da3fada0e5c8129f30";
     const POST_ACCENT_RAMP_RETIREMENT_CONFIG_DIGEST =
       "sha256-0ffe6baf9b180cfb1da5bc82b6b14f56f60e50ed1e3d4d5ef15608bfc4f1b368";
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       POST_ACCENT_RAMP_RETIREMENT_DOCUMENT_DIGEST
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_ACCENT_RAMP_RETIREMENT_CONFIG_DIGEST
+    );
+    // W26-Q4 Phase 1 (owner decision Q4, 2026-10-06): a declared WIDENING, the
+    // Pro scrim strengths under `chrome.scrim`. Not a vertical chrome family, so
+    // the envelope and artifact fences below are untouched. Attributed by A/B:
+    // without the `scrim` schema node both sentinels measure the pair above.
+    const POST_SCRIM_LADDER_DOCUMENT_DIGEST =
+      "sha256-8443ec5f73c7d3a7564313e1e1618712882c0813e0ed620592dd832255a7ea7e";
+    const POST_SCRIM_LADDER_CONFIG_DIGEST =
+      "sha256-67588d783a37dd82fc53f1809264910064df2f9d044954ca93f14b4f5985f1e8";
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_SCRIM_LADDER_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_SCRIM_LADDER_CONFIG_DIGEST
     );
   });
 

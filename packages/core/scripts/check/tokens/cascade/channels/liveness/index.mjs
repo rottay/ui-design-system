@@ -643,20 +643,9 @@ export function loadProbeEvidence(entries = DEFAULT_PROBE_EVIDENCE, { checkoutRo
  *     row measures LIVE, and the entry and its pin are deleted together. The
  *     consumer leg is the consumer-join law's: registered consumerRoots only.
  */
-export const DEFAULT_UNSTAMPED_ANCHORS = Object.freeze(
-  ['light', 'medium', 'heavy'].map((step) =>
-    Object.freeze({
-      channel: `--ds-overlay-${step}`,
-      stylesheet: 'src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css',
-      selector: `.rottay-overlay[data-intensity='${step}']`,
-      owner: 'src/components/primitives/runtime/overlay/backdrop',
-      exportName: 'Overlay',
-      registered: '2026-10-02',
-      proves:
-        'Overlay is the only stamper of data-intensity on .rottay-overlay; no DS module imports it, no package subpath exports it and no consumerRoot imports it, so the rule matches no rendered node',
-    }),
-  ),
-);
+// Empty: the internal Overlay retired with its three .rottay-overlay
+// [data-intensity] terminals, so no anchor has a terminal left.
+export const DEFAULT_UNSTAMPED_ANCHORS = Object.freeze([]);
 
 const DS_NAMED_IMPORT_RE = /\bimport\s+(?:type\s+)?(?:[\w$]+\s*,\s*)?\{([^}]*)\}\s*from\s*(['"])@rottay\/design-system(?:\/[^'"]*)?\2/g;
 

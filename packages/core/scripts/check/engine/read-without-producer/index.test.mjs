@@ -288,6 +288,7 @@ const EXITS = Object.freeze({
   '--ds-kbd-font-family': 'sharedPaint',
   '--ds-control-size-sm': 'sharedPaint',
   '--ds-control-size-md': 'sharedPaint',
+  '--ds-overlay-backdrop-filter': 'sharedPaint',
 });
 
 /* The two ways a name leaves the names ledger. EXITS: the read was retired and
@@ -381,7 +382,7 @@ test('the remaining WO-EVI-03 rows are named one by one in the ledger, each with
   }
 });
 
-test('the 45 exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
+test('the 46 exits are gone from the tree and the ledger, each written down with its disposition and mover', () => {
   const classes = readBaseline().readClasses;
   const shared = classifyReadClass(collectSharedPaintFiles(), 'css', PRODUCERS);
   const inline = classifyReadClass(collectComponentInlineFiles(), 'script', PRODUCERS);

@@ -66,10 +66,6 @@
       "sites": 2,
       "reason": "The countdown bar track is pinned on BOTH inline edges (`left: 0` with `right: 0`) inside the toast surface, so it spans the full width and the reading direction moves neither edge. Clearing it to `inset-inline: 0` is a zero-pixel change."
     },
-    "primitives/runtime/overlay/backdrop/index.tsx": {
-      "sites": 2,
-      "reason": "The fixed backdrop pins all four edges (`top/left/right/bottom: 0`) so it covers the viewport; both inline edges are fixed, so the reading direction moves nothing. Clearing it to `inset: 0` is a zero-pixel change."
-    },
     "primitives/feedback/progress/compound/circle/index.tsx": {
       "sites": 1,
       "reason": "`left: '50%'` centres the percentage label over the progress ring, paired with a translate that pulls it back by half its own width. A centred offset is symmetric, so the reading direction moves nothing; `insetInlineStart: '50%'` would be the idiom and a zero-pixel change."

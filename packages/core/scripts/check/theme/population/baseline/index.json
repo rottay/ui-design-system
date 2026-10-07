@@ -303,7 +303,7 @@
             "tooltip-compounds": {
               "kind": "an elevation alias, in depth under any proof",
               "reasons": [
-                "--ds-tooltip-shadow: src/foundation/tokens/css/foundation/themes/default/index.css:896 writes `var(--ds-shadow-md)`: --ds-shadow-md: src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/surfaces/index.ts:55 writes it from a value that is not a string literal"
+                "--ds-tooltip-shadow: src/foundation/tokens/css/foundation/themes/default/index.css:896 writes `var(--ds-shadow-md)`: --ds-shadow-md: src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/surfaces/index.ts:90 writes it from a value that is not a string literal"
               ],
               "note": "not a focus alias: `--ds-tooltip-shadow` is declared as `var(--ds-shadow-md)`. Listed because the publication names every family whose only depth declarations are var()-only shadows the proof does not certify; it was never a candidate to leave"
             }

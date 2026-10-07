@@ -102,6 +102,13 @@ export interface TenantOverlayTokens {
   heavy?: string;
 }
 
+/** Pro scrim strengths (alpha) per ladder step; the hue stays the block's canon. */
+export interface TenantOverlayStrengths {
+  light?: number;
+  medium?: number;
+  heavy?: number;
+}
+
 export interface TenantTokenOverrides {
   /** Surface-level structural tweaks such as border/glass usage */
   surface?: Partial<SurfaceTokens>;

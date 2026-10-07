@@ -33,10 +33,6 @@
         "floor": 1,
         "why": "The caller-supplied backgroundColor shorthand is intentionally forwarded into Card's style object; external CSS would change caller precedence."
       },
-      "primitives/runtime/overlay/backdrop/index.tsx": {
-        "floor": 1,
-        "why": "Overlay backgroundColor is the caller-provided backdrop colour. The value is arbitrary at runtime and must continue to win inline."
-      },
       "patterns/visualization/charts/runtime/exporting/foundation/file/index.ts": {
         "floor": 2,
         "runtimeSvgFloor": 5,

@@ -24,6 +24,7 @@ import type {
 import type {
   TenantGlassTokens,
   TenantGradientTokens,
+  TenantOverlayStrengths,
   TenantOverlayTokens,
   TenantTokenOverrides,
 } from "..";
@@ -633,6 +634,7 @@ export interface BrandSurfaces {
   glass?: TenantGlassTokens;
   gradients?: TenantGradientTokens;
   overlays?: TenantOverlayTokens;
+  overlayStrength?: TenantOverlayStrengths;
   densityScale?: number;
   /**
    * Semantic density posture for a code-owned static vertical: the FlatTheme

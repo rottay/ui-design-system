@@ -1733,6 +1733,9 @@
   --ds-otp-input-slot-color: var(--ds-color-text-primary);
   --ds-otp-input-slot-shadow-focus: var(--ds-input-focus-ring, var(--ds-focus-ring));
   --ds-otp-input-slot-shadow-focus-error: var(--ds-input-focus-ring-error, var(--ds-focus-ring));
+  --ds-overlay-heavy: color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent);
+  --ds-overlay-light: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
+  --ds-overlay-medium: color-mix(in srgb, var(--ds-color-bg-primary) 78%, transparent);
   --ds-page-shell-actions-backdrop: none;
   --ds-page-shell-header-icon-radius: var(--ds-radius-lg);
   --ds-page-shell-header-radius: var(--ds-radius-xl);
@@ -3936,6 +3939,9 @@
   --ds-elevation-4: 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-ambient-strength)), transparent);
   --ds-elevation-5: 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(8% * var(--ds-shadow-ambient-strength)), transparent);
   --ds-elevation-6: 0 12px 24px color-mix(in srgb, var(--ds-shadow-tint) calc(5% * var(--ds-shadow-key-strength)), transparent), 0 24px 48px color-mix(in srgb, var(--ds-shadow-tint) calc(7% * var(--ds-shadow-key-strength)), transparent), 0 48px 96px color-mix(in srgb, var(--ds-shadow-tint) calc(10% * var(--ds-shadow-ambient-strength)), transparent);
+  --ds-overlay-heavy: color-mix(in srgb, var(--ds-color-black) 90%, transparent);
+  --ds-overlay-light: color-mix(in srgb, var(--ds-color-black) 52%, transparent);
+  --ds-overlay-medium: color-mix(in srgb, var(--ds-color-black) 78%, transparent);
   --ds-sidebar-item-bg-active: var(--ds-color-primary-100);
 }
 

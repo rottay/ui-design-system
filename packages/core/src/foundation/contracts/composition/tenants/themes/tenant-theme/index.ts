@@ -58,6 +58,7 @@ import type {
   BrandTreeChrome,
   TenantAppearanceGeneral,
 } from "..";
+import type { TenantOverlayStrengths } from "../..";
 
 import {
   TENANT_THEME_SCHEMA_VERSION,
@@ -422,6 +423,8 @@ export interface TenantThemeChrome {
   tag?: BrandTagChrome;
   timeline?: BrandTimelineChrome;
   tree?: BrandTreeChrome;
+  /** Pro scrim ladder strengths; lowered into `surfaces.overlayStrength`, never into a chrome channel. */
+  scrim?: TenantOverlayStrengths;
 }
 
 export const TENANT_THEME_CHROME_FAMILIES = [

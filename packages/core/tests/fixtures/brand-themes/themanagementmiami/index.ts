@@ -140,9 +140,9 @@ export const themanagementmiamiFlatTheme: FlatTheme = {
     // Warmer and more expressive than the BitHire vertical baseline.
     effectIntensity: 0.45,
     overlays: {
-      light: "rgba(46, 38, 28, 0.03)",
-      medium: "rgba(46, 38, 28, 0.06)",
-      heavy: "rgba(46, 38, 28, 0.12)",
+      light: "rgba(46, 38, 28, 0.52)",
+      medium: "rgba(46, 38, 28, 0.78)",
+      heavy: "rgba(46, 38, 28, 0.9)",
     },
   },
 

@@ -186,7 +186,6 @@ export default [
       'src/components/primitives/layout/box/engines/modern/index.tsx',
       'src/components/primitives/layout/flex/runtime/presentation/index.ts',
       'src/components/primitives/layout/stack/runtime/presentation/index.ts',
-      'src/components/primitives/runtime/overlay/backdrop/index.tsx',
       'src/components/structures/shell/app-shell/index.tsx',
     ],
     rules: {

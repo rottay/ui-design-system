@@ -3164,7 +3164,7 @@ test('LIVE (GLASS-3): the adoption exit scans every authored src module, entrypo
   const roots = collectSourceFiles(DEFAULT_ADOPTION_ROOTS, ['.ts', '.tsx'], CORE_ROOT).map((file) => relative(CORE_ROOT, file).split(sep).join('/'));
   assert.equal(scanned, roots.length);
   for (const owner of ['src/entrypoints/', 'src/infrastructure/', 'src/components/']) assert.ok(roots.some((file) => file.startsWith(owner)), owner);
-  assert.deepEqual(result.unstampedAnchors.withdrawn, ['--ds-overlay-heavy', '--ds-overlay-light', '--ds-overlay-medium']);
+  assert.deepEqual(result.unstampedAnchors.withdrawn, []);
 });
 
 test('DRILL (GLASS-2-b anchor adopted): a consumerRoot importing the export from the package is the adoption exit', () => {
@@ -3193,10 +3193,9 @@ test('LIVE (GLASS-2-b discharged, OVM-ADOPT): the three overlay weights measure 
     const row = byName.get(`--ds-overlay-${step}`);
     assert.equal(row.classification, LIVENESS.modernPainted, row.name);
   }
-  // The Overlay primitive stays internal and unimported, so its
-  // `.rottay-overlay[data-intensity]` terminals still paint nobody and the
-  // anchor withdrawals stand; the pin alone discharged.
-  assert.deepEqual(result.unstampedAnchors.withdrawn, ['--ds-overlay-heavy', '--ds-overlay-light', '--ds-overlay-medium']);
+  // W26-Q4 Phase 1 retired the Overlay primitive with its three
+  // `.rottay-overlay[data-intensity]` terminals, so nothing is withdrawn.
+  assert.deepEqual(result.unstampedAnchors.withdrawn, []);
   assert.deepEqual((result.dispositions.byOwner['WO-EVI-02'] ?? []).filter((channel) => channel.startsWith('--ds-overlay-')), []);
   assert.deepEqual(dispositionFailures(result), []);
 });

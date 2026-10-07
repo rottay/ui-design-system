@@ -10,7 +10,11 @@
  * @package @rottay/design-system
  */
 
-import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type {
+  FlatTheme,
+  FlatThemeMode,
+} from "@/foundation/contracts/composition/tenants/themes";
+import { SCRIM_LADDER_STRENGTHS } from "@/foundation/contracts/composition/tenants/themes/scrim-ladder";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { semanticSurfaceRolesToSurfaceVariables } from "../../../foundation/materials";
@@ -26,7 +30,7 @@ import { semanticSurfaceRolesToSurfaceVariables } from "../../../foundation/mate
 export const surfacesDeriver: FamilyDeriver = {
   family: "surfaces",
   rank: "derived",
-  consumes: ["surfaces.*", "expressive.*"],
+  consumes: ["surfaces.*", "expressive.*", "palette.*"],
   produces: [
     "--ds-surface-*",
     "--ds-shadow-*",
@@ -36,16 +40,47 @@ export const surfacesDeriver: FamilyDeriver = {
     "--ds-effect-intensity",
   ],
   derive: (context) =>
-    deriveSurfaceChannels(context.theme, context.expressive.expansion),
+    deriveSurfaceChannels(
+      context.theme,
+      context.expressive.expansion,
+      context.mode
+    ),
 };
 
-export function deriveSurfaceChannels(
+/** A dark scrim takes the block's ground, so it attenuates content without tinting the page. */
+export function scrimStepValue(mode: FlatThemeMode, strength: number): string {
+  const hue =
+    mode === "dark" ? "var(--ds-color-bg-primary)" : "var(--ds-color-black)";
+  return `color-mix(in srgb, ${hue} ${Math.round(strength * 1000) / 10}%, transparent)`;
+}
+
+/** Every block states the scrim ladder; an authored colour outranks an authored strength. */
+export function deriveScrimLadderChannels(
   bt: FlatTheme,
-  expansion: ExpressiveExpansion
+  mode: FlatThemeMode
 ): Record<string, string> {
   const su = bt.surfaces;
   const vars: Record<string, string> = {};
-  if (!su) return vars;
+  vars["--ds-overlay-light"] =
+    su?.overlays?.light ||
+    scrimStepValue(mode, su?.overlayStrength?.light ?? SCRIM_LADDER_STRENGTHS.light);
+  vars["--ds-overlay-medium"] =
+    su?.overlays?.medium ||
+    scrimStepValue(mode, su?.overlayStrength?.medium ?? SCRIM_LADDER_STRENGTHS.medium);
+  vars["--ds-overlay-heavy"] =
+    su?.overlays?.heavy ||
+    scrimStepValue(mode, su?.overlayStrength?.heavy ?? SCRIM_LADDER_STRENGTHS.heavy);
+  return vars;
+}
+
+export function deriveSurfaceChannels(
+  bt: FlatTheme,
+  expansion: ExpressiveExpansion,
+  mode: FlatThemeMode
+): Record<string, string> {
+  const su = bt.surfaces;
+  const vars: Record<string, string> = {};
+  if (!su) return deriveScrimLadderChannels(bt, mode);
   Object.assign(
     vars,
     semanticSurfaceRolesToSurfaceVariables(su.surfaceRoles ?? su.materials)
@@ -86,11 +121,7 @@ export function deriveSurfaceChannels(
     if (su.gradients.mesh && su.gradients.mesh !== "none")
       vars["--ds-gradient-mesh"] = su.gradients.mesh;
   }
-  if (su.overlays) {
-    if (su.overlays.light) vars["--ds-overlay-light"] = su.overlays.light;
-    if (su.overlays.medium) vars["--ds-overlay-medium"] = su.overlays.medium;
-    if (su.overlays.heavy) vars["--ds-overlay-heavy"] = su.overlays.heavy;
-  }
+  Object.assign(vars, deriveScrimLadderChannels(bt, mode));
   // Premium effect-intensity dial (engines/modern spec section 5): multiplies
   // the gradient/glass/glow layer; 0 collapses it to flat.
   vars["--ds-effect-intensity"] = String(su.effectIntensity ?? 1);

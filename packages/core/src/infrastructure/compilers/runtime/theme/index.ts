@@ -45,6 +45,8 @@ export type {
   DocumentThemeIntentInput,
   DraftPreviewThemeIntentInput,
   PreviewThemeIntentInput,
+  ScrimDoor,
+  ScrimDoorFinding,
   UnlitReason,
 } from "./runtime/ingress";
 export { compileThemeIntent } from "./facade/runtime/compile";

@@ -23,7 +23,6 @@
     "src/foundation/contracts/kernel/adaptation/composition/families/registry/index.ts"
   ],
   "testOnlyModules": [
-    "src/components/primitives/runtime/overlay/backdrop/index.tsx",
     "src/components/surfaces/foundation/common/test-utils/index.tsx",
     "src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/parse/index.ts",
     "src/foundation/presets/candidates/bithire/documents/index.ts",

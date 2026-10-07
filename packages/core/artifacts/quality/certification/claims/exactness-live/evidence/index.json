@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "2232a805d12c4a1946c2d13aa3ece9a5c85a4d780907315136f169ea14115172",
+    "authorityDigest": "cc0f64b3db1ed65a7b823868d3ead82ef89ecc1c710aade16f631b4db220ce6f",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "34e290c79402d3fd2350dd44a44e33fb8c69a316",
+    "documentationRevision": "f6ed00c839b45f472a8b04d8f9109ee6f4077695",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -196,8 +196,8 @@
           "documentation-seal",
           "vertical-facts"
         ],
-        "bytes": 36308,
-        "sha256": "2bacff6bced2dbd39a0e024c1d805538febacd3b8d753250c3dc91e104d0ce92"
+        "bytes": 37581,
+        "sha256": "7b7b90f3bcbca1c507e70546fe5cfa4b3f443544d5747a12c9089894fbde50df"
       },
       {
         "path": "docs-engineering/engineering/design-system/runtime/verticals/README.md",
@@ -223,7 +223,7 @@
           "workspace-toolchain"
         ],
         "bytes": 27490,
-        "sha256": "40664950623aa48bac692504f4ff2e8c7c3105f99f84289da0db3c42174ee0c8"
+        "sha256": "aa0ddc9391b87ce3ed48ccfd9a424b63bc36167994add5e55ebb47c8c4a9a683"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5708285,
-        "sha256": "65ff3013b186673d12c6c50ee2c3cd872f3b29e04ad1d53198130f31abbd2f94"
+        "bytes": 5708429,
+        "sha256": "97f0480dc27b1e73a7b5925b4eede946ca86abb22bc10682543e54fb12afaad6"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5074261,
-        "sha256": "bf4a9a9ba00534c46ca3971c7758d5998510866b8a83f5444bca46304d00ebef"
+        "bytes": 5073387,
+        "sha256": "b86e7cb9a338ae47a4738b4005efaddaa1cdcb8f28b54c5d381faf702113d830"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5035454,
-        "sha256": "fcae6c8d1dd331ee202451c889e545f69312b2d50170e871d9c95e0085c7f3c6"
+        "bytes": 5034580,
+        "sha256": "d86d15bd5ea3acda9c5dd60d1c23b2fee1b4b253a6d39ea1d605b0464175ca1a"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5034714,
-        "sha256": "20659461b3692ad01c1b3130506762f51cd9e194d30edaa1c397e04cb029d8b7"
+        "bytes": 5033840,
+        "sha256": "1bd6943b2387bd61dad9073d5f22d197d272275804d8f79e1dea5b081eeaa112"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -332,7 +332,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "f21468dd89dcaf8f6a695a531722e16fa803053d3d8f143f9cfe5c9fafe2f980"
+        "sha256": "4856cc730778780311ad9d5c6f31d01ab510886e9028d7da955150026175d7b0"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -21200,24 +21200,6 @@
         "sha256": "9d1f509a9af4789346ee34a9d4881c6ba7a5fec484439355fa9d37f530772bf2"
       },
       {
-        "path": "ui-design-system/packages/core/src/components/primitives/runtime/overlay/backdrop/index.tsx",
-        "roles": [
-          "audit-input",
-          "claim-census",
-          "stale-claim-corpus"
-        ],
-        "bytes": 4064,
-        "sha256": "1eb0df1af714864d611efabb66dab4b237eaa7f02c70b4b3ce055f7ffb888703"
-      },
-      {
-        "path": "ui-design-system/packages/core/src/components/primitives/runtime/overlay/backdrop/tests/index.test.tsx",
-        "roles": [
-          "audit-input"
-        ],
-        "bytes": 5083,
-        "sha256": "9827fe5b86c9dd9accfa5e2454964b6de73ba1bdd14f7f70ff1a81adafa41618"
-      },
-      {
         "path": "ui-design-system/packages/core/src/components/primitives/runtime/overlay/dialog-attributes/index.ts",
         "roles": [
           "audit-input",
@@ -25029,8 +25011,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 19288,
-        "sha256": "6f675f0e4e83045c1aa9a6c1625d6af3c9b407d4bf826a80835be577b3adb7f5"
+        "bytes": 19597,
+        "sha256": "4033e4c5c137e25cf65cb98f7e1531b55c8476bb344ef8685c5d02c8f1d13539"
       },
       {
         "path": "ui-design-system/packages/core/src/contracts/theme/runtime/catalog/index.ts",
@@ -25587,8 +25569,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 22815,
-        "sha256": "ee06fb287f855d0d6dc4cf5a18d085db0ba629c0f85f9afd64a2c93315408196"
+        "bytes": 22848,
+        "sha256": "7a3633252673467840a40bef2f81076fc2a6cd220933f519a763159101ca78e3"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/behavior/composition/field-action/index.ts",
@@ -25719,8 +25701,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7336,
-        "sha256": "5985b5a196a6a8e60950422be975a9dfb1e83c219695584f538fe236ce32daa6"
+        "bytes": 7521,
+        "sha256": "c74b57962b499e60f39e0cc7ca52633a3f34127ed02c63de5a8c2e0429eb705e"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/product-profiles/index.ts",
@@ -25777,8 +25759,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 119140,
-        "sha256": "9904afb5bfac8e4363d7ce67870f2cf0e41786bff1de20a281aa2318d7cc4fb9"
+        "bytes": 119210,
+        "sha256": "31cea883404933ae3b970d57fc38cd741ef19469094df667c29e478dbf93c8be"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/intent/index.ts",
@@ -25807,8 +25789,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 54999,
-        "sha256": "24af724570c186294d716fc537b474eb9ecdd7c16fe8a3b65d516781145fb65c"
+        "bytes": 55382,
+        "sha256": "7d687743aa50dc5dbda59bca2781b7f1ef9fdbd328f67acf6555fb4eb0bbe974"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/iso/schema/index.ts",
@@ -25817,8 +25799,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 12734,
-        "sha256": "53749cebb272e7415643efdfa4730a89cc412d91afb30684ce5ac5b7a8fbb2a1"
+        "bytes": 12867,
+        "sha256": "7149aed28398acf2251b7719c6c250a21affbc1fcba7652c4ed0516c8b297ba2"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/iso/shape/index.ts",
@@ -25875,6 +25857,24 @@
         "sha256": "ecab5c8c69cf36aa8a8c8d6ef4d6a6b69057872cd10e4790eb8cae7c601b8615"
       },
       {
+        "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/scrim-ladder/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 4251,
+        "sha256": "b1a37ceef2bee5f5954a346e951b252a19e4ec6b483b02881a2e65b3cfe1c66d"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/scrim-ladder/tests/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3806,
+        "sha256": "10dd40d411977038c32060a1ddeda7ffc65f42a11e336b0a8ce1648971cae614"
+      },
+      {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/artifact-protocol/index.ts",
         "roles": [
           "audit-input",
@@ -25911,8 +25911,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 27008,
-        "sha256": "c7d5bedb0a32b25b45227a066ccbe83c632b502b36c7cecc0abb553a2fc654b0"
+        "bytes": 27202,
+        "sha256": "712dd8a8e62c265d7bbece694570bf2ed8e963252f3d0a30e998c30a21c49e4f"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/tests/artifact-protocol.test.ts",
@@ -27043,8 +27043,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1760,
-        "sha256": "75d686f25c162388cd3043cc477759a063ea22f1f296e77153de139e8dc5c057"
+        "bytes": 1588,
+        "sha256": "b18d87de1ff6f9c804fc208e752d65b51bb1eb71bac98c2dfafe62dfce3e3234"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/presets/policy/experience-baselines/evnto/tests/index.test.ts",
@@ -27269,24 +27269,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 355365,
-        "sha256": "992cb3c7779c18d9923a7c00ddfee74893a5069366fa2623bf68dea93485a86c"
+        "bytes": 355874,
+        "sha256": "211dc4a2c695baad4c47df61cafb31fd8927da5734dbb4326b7a6f5f8259504b"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 316594,
-        "sha256": "d6150eb89de7606ca5e4d5a34937f2e9212af50ad5a307a3eeeada748eb449a6"
+        "bytes": 317103,
+        "sha256": "8926270d8812761f82e359c3493b0d87195c42aaf5397598c633bec9b63c49bb"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 316607,
-        "sha256": "a2ef57fa88a1b7aaadfe286b7f0de4e43e80dc8040730620cc806e8cc17c3093"
+        "bytes": 317116,
+        "sha256": "a56380bb50866c4c85f9dd93500ff28e014cb0d52bd09f0cd8650ea8a68e9296"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/facade/entrypoints/base/index.css",
@@ -29278,8 +29278,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 1690,
-        "sha256": "79331c4b62a9fca85aa49747f6a0dc4d1b718e079f68657e44ddf54c5acbdf24"
+        "bytes": 307,
+        "sha256": "012e64e9395cb3eb377ed42e59427468b2c886005c489f5a53912ecd0ab67164"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components/skin/page-shell-surface/index.css",
@@ -37406,16 +37406,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 36299,
-        "sha256": "5f42e659503dcbd522a68b652b5b20b481f7f0537d273f6bbe3bad4a3e1641c3"
+        "bytes": 36452,
+        "sha256": "baa49aedfda638ccadcc8f4dcad50e27e2e7cf95132803314fef4fb7b1bb07f5"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/canonical-digest-identity.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 73225,
-        "sha256": "a89871007945c2133b03b380357dd0a663d23204317f9f7cfb440423db2fd0e5"
+        "bytes": 74003,
+        "sha256": "4ff67343082a092bdaaadc6bd07f03fdecc885b8741a24cffebc21f70e5b4f3f"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/capability-reachability.test.ts",
@@ -37542,8 +37542,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 97733,
-        "sha256": "6fdcb57206c41ffecbec8d618f006402df7f1aa1059dd0a8436b622f19eff7aa"
+        "bytes": 98063,
+        "sha256": "7abcd6b25370e9eb5c393038c47bf9fc2161841e4227696f77456406687a6802"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/semantic-material-overrides.test.ts",
@@ -37598,8 +37598,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 78958,
-        "sha256": "64152ba1f1545ca1d18d8239e57e682139789286a1a74d64c21b8757443d96fb"
+        "bytes": 79768,
+        "sha256": "c4f5fac9d013d2f1ad34a1f2c5549dd69dd709fba0fda39489ddb52638dcf363"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/v1-write-schema-catalog-closure.test.ts",
@@ -37812,8 +37812,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 65360,
-        "sha256": "33e94777c0d41738ed1bbb13e4d4ce7427cc677c7f53fc3a265e0bc1d9d368f9"
+        "bytes": 65664,
+        "sha256": "a3bfe106887c00885be43a002096b04ab1d8de70a66385d82d3aa92927b9006f"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts",
@@ -38036,8 +38036,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 8169,
-        "sha256": "561a63a0de59abca4a8a383637253e7b0bdacd48cf243eebc2291c60a5696157"
+        "bytes": 8278,
+        "sha256": "332818be273f6c129a152a1390e17f116bf204d3e6ad670fc86de797a078756c"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/facade/foundation/admission/tests/scale-step-references.test.ts",
@@ -38100,8 +38100,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 4026,
-        "sha256": "528f638b81c301ff2c1bc0658483f9cb997597d31bea1431b2499f8079b112a4"
+        "bytes": 4059,
+        "sha256": "ac01a39bdf27eeada355c7e999e5f56dd2aeaf1488722b53d954be4267829509"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/facade/admission/index.ts",
@@ -38241,7 +38241,7 @@
           "stale-claim-corpus"
         ],
         "bytes": 302702,
-        "sha256": "0a3ebe964f779a5a0536c73b0cb0dbd0af066842bed7d6736da1e55e1e310e4c"
+        "sha256": "2b90bc98b22177461399520e4faeffe66c4ec81d3695250bd2a67fda7e464e92"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/index.ts",
@@ -38398,8 +38398,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 30828,
-        "sha256": "d7d7ca563d5c15b86332bab362b1100eab9f1991198ce48fc12d4269c778d284"
+        "bytes": 31306,
+        "sha256": "57fb0d62ffa4f444ab65e01a199a7e32d53bc6c363c38226e0d077289d2051d9"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/draft-patch/index.ts",
@@ -38460,14 +38460,32 @@
         "sha256": "4b97270c07ed6fa3fb1ec1d341e9612a968a8c8ca35d5258f9d358ef79b99c87"
       },
       {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/scrim-doors/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 4444,
+        "sha256": "3dd17cf344d47c8f3ad4a9ca36830f9deea18f919b87d350705bb1cab934192b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/scrim-doors/tests/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 8157,
+        "sha256": "13e2548c2d857b2996c2e4a54ef260359815759223eea4b18f58aac7957750cb"
+      },
+      {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/index.ts",
         "roles": [
           "audit-input",
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 1529,
-        "sha256": "fa42fe0fb33b44ecde6f55f3b676d83cef23f440b906215b7053108305ccd916"
+        "bytes": 1562,
+        "sha256": "483d4d2e96a71b1a9ec0736b1612003c8f2ed8236fb48acd75a1b3a9f9dd0157"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/document/index.ts",
@@ -38534,8 +38552,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 690,
-        "sha256": "f4c8e7c184990d0e7a9adadd85fde55170e9d889b2ad9e8966652c18396bab2e"
+        "bytes": 771,
+        "sha256": "cd8c560a17131cbe2f5bd6abadd207286411441c37c5ae6a646f965a7ea9481c"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/presentation/admission/index.ts",
@@ -38544,8 +38562,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 15376,
-        "sha256": "a063a17bec04f5b71c27c5cc155769a719be3b80cead6edeef84c5d2fbd57964"
+        "bytes": 15780,
+        "sha256": "5f360913518e861dd2038db883b98504c9bde7f533cbe93bda6509f79ab88694"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/runtime/style/index.ts",
@@ -41246,8 +41264,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 4139,
-        "sha256": "108c9bd898a849aee85d8fc591932551976a7901352112ed30c721cbbe4d48f4"
+        "bytes": 5264,
+        "sha256": "2e2a1558fc63158928e6db95d3f8439f18fb52c5d213e284b9f3a02de538146b"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/surfaces/tests/index.test.ts",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4740,
+        "sha256": "4bfe227c408ccaae995e9b359bba19b841d85e57981c819768b507b217998616"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/tenant/index.ts",
@@ -41610,8 +41636,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 72452,
-        "sha256": "22d692f05b27d727b656aa36de66d28d91ea43146a0b3a0f084456e405b67e48"
+        "bytes": 73275,
+        "sha256": "9c16c925bc967ad9b596b4cf0d07c4b915a3ae17829533b4fdebd11adf415198"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/tests/torture-fixtures.test.ts",
@@ -48098,20 +48124,20 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "2232a805d12c4a1946c2d13aa3ece9a5c85a4d780907315136f169ea14115172"
+    "digest": "cc0f64b3db1ed65a7b823868d3ead82ef89ecc1c710aade16f631b4db220ce6f"
   },
   "paintAudit": {
-    "output": "engine-token-audit --check OK (4221 counters; 3223 completed zeros locked exactly; 988 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
+    "output": "engine-token-audit --check OK (4218 counters; 3221 completed zeros locked exactly; 987 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
     "baseline": {
       "path": "ui-design-system/packages/core/scripts/check/engine/tokens/audit/baseline/index.json",
-      "sha256": "bb8a94ddcee86ded657fac5b8c8b44fea9caa21cedd7146ac6ae5a00cc049a1a",
+      "sha256": "b3b943fc7b124aa8eab874a94d4b21ab88ad7f2988dbc4bc48d0d82908cc8a81",
       "ok": true,
       "errors": [],
-      "counters": 4221,
-      "zeroLocked": 3223,
-      "positiveGoverned": 998,
-      "ordinaryCeilings": 4200,
-      "positiveOrdinaryCeilings": 988,
+      "counters": 4218,
+      "zeroLocked": 3221,
+      "positiveGoverned": 997,
+      "ordinaryCeilings": 4197,
+      "positiveOrdinaryCeilings": 987,
       "exactInvariants": 14,
       "positiveExactInvariants": 3,
       "minimumFloors": 7,
@@ -49629,7 +49655,7 @@
       },
       "tenancy": {
         "path": "docs-engineering/engineering/design-system/runtime/tenancy/README.md",
-        "sha256": "2bacff6bced2dbd39a0e024c1d805538febacd3b8d753250c3dc91e104d0ce92"
+        "sha256": "7b7b90f3bcbca1c507e70546fe5cfa4b3f443544d5747a12c9089894fbde50df"
       },
       "engines": {
         "path": "docs-engineering/engineering/design-system/runtime/engines/README.md",
@@ -122263,7 +122289,7 @@
           "includeTests": false
         }
       ],
-      "typescriptFiles": 2608,
+      "typescriptFiles": 2609,
       "cssRoots": [
         "ui-design-system/packages/core/src/foundation/tokens/css/presentation/components",
         "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines"
@@ -122282,8 +122308,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "054045f160d0569135f91fd2a0c816525026fc16d00d8b91d1239f584e9ce233",
-      "054045f160d0569135f91fd2a0c816525026fc16d00d8b91d1239f584e9ce233"
+      "61970e115b9f30aaaff2e622def725b321021ae1ca58a9415f38ea00102ed64b",
+      "61970e115b9f30aaaff2e622def725b321021ae1ca58a9415f38ea00102ed64b"
     ],
     "agree": true
   }

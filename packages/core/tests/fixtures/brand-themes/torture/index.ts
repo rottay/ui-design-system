@@ -108,9 +108,9 @@ export const tortureDarkFlatTheme: FlatTheme = {
       mesh: 'radial-gradient(circle at 20% 20%, rgba(255, 0, 170, 0.25), transparent 60%)',
     },
     overlays: {
-      light: 'rgba(255, 0, 170, 0.10)',
-      medium: 'rgba(182, 255, 0, 0.16)',
-      heavy: 'rgba(0, 229, 255, 0.24)',
+      light: 'rgba(255, 0, 170, 0.52)',
+      medium: 'rgba(182, 255, 0, 0.78)',
+      heavy: 'rgba(0, 229, 255, 0.9)',
     },
   },
 
@@ -442,9 +442,9 @@ export const tortureLightFlatTheme: FlatTheme = {
       mesh: 'radial-gradient(circle at 80% 20%, rgba(122, 0, 255, 0.20), transparent 60%)',
     },
     overlays: {
-      light: 'rgba(122, 0, 255, 0.08)',
-      medium: 'rgba(255, 90, 0, 0.14)',
-      heavy: 'rgba(0, 179, 164, 0.22)',
+      light: 'rgba(122, 0, 255, 0.52)',
+      medium: 'rgba(255, 90, 0, 0.78)',
+      heavy: 'rgba(0, 179, 164, 0.9)',
     },
   },
 

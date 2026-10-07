@@ -179,9 +179,11 @@ describe("the accent ramp steps are retired from the reference allowlist", () =>
 
 describe("an authored overlay-medium is admitted and paints, never refused", () => {
   const LIVE_TENANT_VALUE = "rgba(32, 48, 40, 0.05)";
-  const SKIN = resolve(
-    process.cwd(),
-    "src/foundation/tokens/css/presentation/components/skin/overlay-modal-compounds/index.css"
+  const SKINS = ["modal", "sheet"].map((component) =>
+    resolve(
+      process.cwd(),
+      `src/foundation/tokens/css/runtime/engines/modern/skin/${component}/index.css`
+    )
   );
 
   it("stays an override key and a reference, never a retired one", () => {
@@ -213,15 +215,17 @@ describe("an authored overlay-medium is admitted and paints, never refused", () 
     });
     expect(emitted).toContain(LIVE_TENANT_VALUE);
 
-    const reads: string[] = [];
-    postcss.parse(readFileSync(SKIN, "utf8")).walkRules((rule) => {
-      if (!rule.selector.includes("[data-intensity='medium']")) return;
-      rule.walkDecls("background-color", (decl) => {
-        reads.push(decl.value);
+    for (const skin of SKINS) {
+      const reads: string[] = [];
+      postcss.parse(readFileSync(skin, "utf8")).walkRules((rule) => {
+        if (!rule.selector.includes("[data-intensity='medium']")) return;
+        rule.walkDecls("background-color", (decl) => {
+          reads.push(decl.value);
+        });
       });
-    });
-    expect(reads).toHaveLength(1);
-    expect(reads[0]).toMatch(/^var\(--ds-overlay-medium,/);
+      expect(reads, skin).toHaveLength(1);
+      expect(reads[0], skin).toMatch(/^var\(--ds-overlay-medium,/);
+    }
   });
 
   it("admits a reference to it on the schema node judge", () => {

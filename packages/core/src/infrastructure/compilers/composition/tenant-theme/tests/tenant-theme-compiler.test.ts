@@ -526,11 +526,24 @@ describe("TenantThemeConfig v1 server contract", () => {
     // The ten accent ramp steps left the reference-token roster -- never
     // emitted, never read -- and are refused by name at admission. Nothing else
     // in either schema moved, so the superseded pins drop to `not.toBe`.
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       "sha256-d9f15eb2a0a3eee6e160c6bfdedd2063a8a55ad6d29ef2da3fada0e5c8129f30"
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-0ffe6baf9b180cfb1da5bc82b6b14f56f60e50ed1e3d4d5ef15608bfc4f1b368"
+    );
+    // W26-Q4 Phase 1 (owner decision Q4, 2026-10-06): a declared WIDENING. The
+    // advanced chrome gained `scrim.{light,medium,heavy}`, the Pro scrim ladder
+    // strengths, bounded numbers lowered into `surfaces.overlayStrength`. It is
+    // not a vertical chrome family: `TENANT_THEME_CHROME_FAMILIES` and every
+    // envelope digest are unchanged, so no persisted artifact digest moves.
+    // Attributed by A/B: with the `scrim` schema node removed both sentinels
+    // measure the superseded pair byte-exact.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      "sha256-8443ec5f73c7d3a7564313e1e1618712882c0813e0ed620592dd832255a7ea7e"
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      "sha256-67588d783a37dd82fc53f1809264910064df2f9d044954ca93f14b4f5985f1e8"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(

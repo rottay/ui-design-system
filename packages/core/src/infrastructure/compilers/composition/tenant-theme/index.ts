@@ -392,6 +392,8 @@ export function validateTenantThemeAgainstVerticalEnvelope(
       });
     } else if (advanced && policy) {
       for (const family of Object.keys(advanced.chrome ?? {}).sort()) {
+        // `scrim` is the ladder strength door, gated by plan and its own bands, not a vertical chrome family.
+        if (family === "scrim") continue;
         if (!policy.chromeFamilies.includes(family as never)) {
           issues.push({
             code: "invalid_value",

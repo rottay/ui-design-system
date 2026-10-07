@@ -27,6 +27,7 @@ import {
   type ThemePlan,
 } from "@/contracts/theme/foundation/decisions";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import { scrimStrengthRefusals } from "@/foundation/contracts/composition/tenants/themes/scrim-ladder";
 import {
   assertThemeStyleReference,
   type ThemeStyleReference,
@@ -504,6 +505,12 @@ function assertOverrideEntitlement(
         plan
       ].join(" | ")}`
     );
+  }
+
+  const scrim = (chrome as Record<string, unknown>).scrim;
+  if (scrim !== undefined) {
+    const [refusal] = scrimStrengthRefusals(scrim, "overrides.chrome.scrim");
+    if (refusal) refuse(refusal);
   }
 }
 

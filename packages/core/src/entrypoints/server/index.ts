@@ -300,6 +300,8 @@ export type {
   DocumentAdmission,
   DocumentThemeIntentInput,
   PreviewThemeIntentInput,
+  ScrimDoor,
+  ScrimDoorFinding,
   UnlitReason,
 } from '../../infrastructure/compilers/runtime/theme';
 /**

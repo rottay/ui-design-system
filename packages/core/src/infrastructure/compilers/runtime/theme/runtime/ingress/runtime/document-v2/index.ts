@@ -29,3 +29,4 @@ export {
   migrateAndAdmitDocument,
   type DocumentAdmission,
 } from "./presentation/admission";
+export type { ScrimDoor, ScrimDoorFinding } from "../../foundation/scrim-doors";

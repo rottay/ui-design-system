@@ -48,6 +48,7 @@ import type {
 import type {
   TenantGlassTokens,
   TenantGradientTokens,
+  TenantOverlayStrengths,
   TenantOverlayTokens,
 } from "../../";
 import { BRAND_CAPABILITY_ABSENCE_REASONS } from "./capability-absence";
@@ -419,6 +420,7 @@ const DEFAULT_SURFACES_KEYS: readonly (keyof BrandSurfaces)[] = [
   "glass",
   "gradients",
   "overlays",
+  "overlayStrength",
   "densityScale",
   "density",
   "effectIntensity",
@@ -486,6 +488,12 @@ const DEFAULT_OVERLAYS_SHAPE: TenantOverlayTokens = {
   medium: undefined,
   heavy: undefined,
 } as unknown as TenantOverlayTokens;
+
+const DEFAULT_OVERLAY_STRENGTH_SHAPE: TenantOverlayStrengths = {
+  light: undefined,
+  medium: undefined,
+  heavy: undefined,
+} as unknown as TenantOverlayStrengths;
 
 const DEFAULT_RADIUS_SHAPE: Partial<
   Record<"sm" | "md" | "lg" | "xl" | "full", string>
@@ -567,6 +575,7 @@ function normalizeSurfaces(surfaces: BrandSurfaces | undefined): BrandSurfaces {
     glass: DEFAULT_GLASS_SHAPE,
     gradients: DEFAULT_GRADIENTS_SHAPE,
     overlays: DEFAULT_OVERLAYS_SHAPE,
+    overlayStrength: DEFAULT_OVERLAY_STRENGTH_SHAPE,
     densityScale: undefined,
     density: undefined,
     effectIntensity: undefined,
@@ -605,6 +614,10 @@ function normalizeSurfaces(surfaces: BrandSurfaces | undefined): BrandSurfaces {
     glass: mergeDefaultShape(DEFAULT_GLASS_SHAPE, surfaces.glass),
     gradients: mergeDefaultShape(DEFAULT_GRADIENTS_SHAPE, surfaces.gradients),
     overlays: mergeDefaultShape(DEFAULT_OVERLAYS_SHAPE, surfaces.overlays),
+    overlayStrength: mergeDefaultShape(
+      DEFAULT_OVERLAY_STRENGTH_SHAPE,
+      surfaces.overlayStrength
+    ),
   };
 }
 

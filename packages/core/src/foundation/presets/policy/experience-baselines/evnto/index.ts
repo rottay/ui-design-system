@@ -19,18 +19,12 @@ export const EVNTO_CANONICAL_SURFACES = {
   },
   glass: { blur: 'none', background: 'none', border: 'none' },
   gradients: { primary: 'none', surface: 'none', mesh: 'none' },
-  overlays: {
-    light: 'rgba(0, 0, 0, 0.01)',
-    medium: 'rgba(0, 0, 0, 0.03)',
-    heavy: 'rgba(0, 0, 0, 0.06)',
-  },
 } satisfies BrandSurfaces;
 
 Object.freeze(EVNTO_CANONICAL_SURFACES.borderRadius);
 Object.freeze(EVNTO_CANONICAL_SURFACES.shadows);
 Object.freeze(EVNTO_CANONICAL_SURFACES.glass);
 Object.freeze(EVNTO_CANONICAL_SURFACES.gradients);
-Object.freeze(EVNTO_CANONICAL_SURFACES.overlays);
 Object.freeze(EVNTO_CANONICAL_SURFACES);
 
 export const EVNTO_CANONICAL_MOTION = {

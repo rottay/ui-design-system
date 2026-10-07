@@ -320,6 +320,30 @@
     {
       "path": "dist/components/primitives/feedback/foundation/notifier/runtime/exit/index.js",
       "reason": "WO-RET-04 (61a2414b8): the notifier relocation under its support-owner name \u2014 the same module moved, content unchanged"
+    },
+    {
+      "path": "dist/foundation/contracts/composition/tenants/themes/scrim-ladder/index.cjs",
+      "reason": "W26-Q4 Phase 1 (owner decision Q4): the scrim ladder canon -- steps, bands, strengths and the Pro bounds"
+    },
+    {
+      "path": "dist/foundation/contracts/composition/tenants/themes/scrim-ladder/index.d.ts",
+      "reason": "W26-Q4 Phase 1 (owner decision Q4): the scrim ladder canon -- steps, bands, strengths and the Pro bounds"
+    },
+    {
+      "path": "dist/foundation/contracts/composition/tenants/themes/scrim-ladder/index.js",
+      "reason": "W26-Q4 Phase 1 (owner decision Q4): the scrim ladder canon -- steps, bands, strengths and the Pro bounds"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/scrim-doors/index.cjs",
+      "reason": "W26-Q4 Phase 1 (owner decision Q4): the scrim-door census DocumentAdmission.scrimDoors reports"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/scrim-doors/index.d.ts",
+      "reason": "W26-Q4 Phase 1 (owner decision Q4): the scrim-door census DocumentAdmission.scrimDoors reports"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/scrim-doors/index.js",
+      "reason": "W26-Q4 Phase 1 (owner decision Q4): the scrim-door census DocumentAdmission.scrimDoors reports"
     }
   ],
   "$reason": "WO-EMI-03. The emission owner's declared grammar is finished: `emission/index.ts` became a barrel and its implementation moved to `css/` (declaration/rule assembler, value admission) and `artifact/` (the tenant stylesheet format), with `tokens/` added as the third child -- the resolved token document, its var() resolver and its expression evaluator. `facade/runtime/tokens` is the intent-shaped door over that emitter and `contracts/theme/runtime/compilation` is the document's contract. Every path here is a new owner of published code, not a new dependency: the two shrinks reported beside them (`emission/index.{js,cjs}`) are the same code under its new owners, and the barrel is source-only because it re-exports and nothing else."

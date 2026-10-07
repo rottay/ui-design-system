@@ -60,6 +60,11 @@ import {
   migrateDocumentV2ToV3,
 } from "../../foundation/migrate";
 import { admitStyle } from "../../runtime/style";
+import {
+  censusScrimDoorsV1,
+  censusScrimDoorsV2,
+  type ScrimDoorFinding,
+} from "../../../../foundation/scrim-doors";
 
 export interface DocumentAdmission {
   /** The version the row was READ as: `1` the persisted transport, `2`/`3` the
@@ -101,6 +106,8 @@ export interface DocumentAdmission {
    * so a door that hands the ledger on does not have to search it for one ref.
    */
   styleClaim?: DecisionProvenanceClaim<ThemeDecisionId>;
+  /** Authored values that paint a scrim outside the ladder, named; admitted until the Q4 stored-row census reads 0. */
+  scrimDoors: readonly ScrimDoorFinding[];
 }
 
 /**
@@ -217,6 +224,7 @@ export function admitDocument(input: {
       profileClaims: expanded.claims,
       effective: expanded.document,
       ledger: v1Ledger(input.document, expanded.claims),
+      scrimDoors: censusScrimDoorsV1(input.document),
     };
   }
   const document = assertTenantThemeDocumentVersioned(input.document);
@@ -271,6 +279,7 @@ export function admitDocument(input: {
       profileClaims: expanded.claims,
       styleClaim: style?.claim,
     }),
+    scrimDoors: censusScrimDoorsV2(document.overrides?.chrome),
     ...(style ? { styleRef: style.ref, styleClaim: style.claim } : {}),
   };
 }

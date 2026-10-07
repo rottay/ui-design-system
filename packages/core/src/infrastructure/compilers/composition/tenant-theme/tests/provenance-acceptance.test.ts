@@ -818,7 +818,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // channels the Modal chamber now owns: --ds-shortcuts-overlay-z-index,
       // -inset-block-start, -narrow-inset-block-start, -scrim, -scrim-tint,
       // -scrim-filter and -dialog-radius.
-      rottay: 2957,
+      // Scrim ladder (W26-Q4 Phase 1): rottay 2957 -> 2960, +3, --ds-overlay-light,
+      // -medium and -heavy are produced in every block, not only when authored.
+      rottay: 2960,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -899,7 +901,8 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // offset over rottay stays 136.
       // Shortcuts-overlay on Modal (2026-10-04): bithire 3100 -> 3093, the same
       // seven keys as rottay.
-      bithire: 3093,
+      // Scrim ladder (W26-Q4 Phase 1): bithire 3093 -> 3096, the same three keys.
+      bithire: 3096,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -972,7 +975,8 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // byte-for-byte rottay's keys on all six commits.
       // Shortcuts-overlay on Modal (2026-10-04): evnto 2964 -> 2957, the same
       // seven keys as rottay.
-      evnto: 2957,
+      // Scrim ladder (W26-Q4 Phase 1): evnto 2957 -> 2960, the same three keys.
+      evnto: 2960,
     };
     for (const vertical of VERTICALS) {
       expect(

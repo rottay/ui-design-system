@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7657,
-  "unpackedSize": 43379974,
+  "entryCount": 7656,
+  "unpackedSize": 43378668,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -10977,10 +10977,6 @@
     {
       "path": "dist/components/primitives/runtime/collection/typeahead/index.js",
       "size": 483
-    },
-    {
-      "path": "dist/components/primitives/runtime/overlay/backdrop/index.d.ts",
-      "size": 1306
     },
     {
       "path": "dist/components/primitives/runtime/overlay/dialog-attributes/index.cjs",

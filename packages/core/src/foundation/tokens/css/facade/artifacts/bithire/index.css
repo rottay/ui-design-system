@@ -1862,6 +1862,9 @@
   --ds-otp-input-slot-color: var(--ds-color-text-primary);
   --ds-otp-input-slot-shadow-focus: var(--ds-input-focus-ring, var(--ds-focus-ring));
   --ds-otp-input-slot-shadow-focus-error: var(--ds-input-focus-ring-error, var(--ds-focus-ring));
+  --ds-overlay-heavy: color-mix(in srgb, var(--ds-color-black) 90%, transparent);
+  --ds-overlay-light: color-mix(in srgb, var(--ds-color-black) 52%, transparent);
+  --ds-overlay-medium: color-mix(in srgb, var(--ds-color-black) 78%, transparent);
   --ds-page-header-eyebrow-text-transform: uppercase;
   --ds-page-shell-actions-backdrop: none;
   --ds-page-shell-header-icon-radius: var(--ds-radius-lg);
@@ -4546,6 +4549,9 @@
   --ds-elevation-5: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 20px 40px rgba(0, 0, 0, 0.56), 0 32px 64px rgba(0, 0, 0, 0.48), 0 0 32px color-mix(in srgb, var(--ds-color-primary, #ffffff) 10%, transparent);
   --ds-elevation-6: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 28px 56px rgba(0, 0, 0, 0.62), 0 44px 84px rgba(0, 0, 0, 0.52), 0 0 40px color-mix(in srgb, var(--ds-color-primary, #ffffff) 12%, transparent);
   --ds-focus-ring-color: #2A55E0;
+  --ds-overlay-heavy: color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent);
+  --ds-overlay-light: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
+  --ds-overlay-medium: color-mix(in srgb, var(--ds-color-bg-primary) 78%, transparent);
   --ds-sidebar-item-color-active: var(--ds-color-neutral-100);
   --ds-tag-primary-outlined-ink: #6d8cef;
 }

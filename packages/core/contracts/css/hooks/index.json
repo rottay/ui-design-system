@@ -55,20 +55,20 @@
     "tenantChannel": 4508,
     "compilerConcreteEmissions": 5046,
     "compilerEmissionPatterns": 13,
-    "themeContractFiles": 71,
+    "themeContractFiles": 72,
     "ambiguousThemeContractTypes": 0,
     "unresolvedCompilerEmissions": 0,
     "interpolatedFamilies": 71,
     "interpolatedNames": 553,
     "foundationTokens": 4195,
-    "componentTokens": 749,
-    "componentSuppliers": 374,
-    "reads": 7698,
+    "componentTokens": 748,
+    "componentSuppliers": 373,
+    "reads": 7697,
     "hooks": 107,
     "unadjudicatedReads": 1196,
     "promoted": 107,
     "styleFiles": 500,
-    "componentFiles": 1304
+    "componentFiles": 1303
   },
   "declaredSlots": {
     "--ds-command-grid-opacity": {
@@ -3000,7 +3000,6 @@
     "--ds-notifier-wash",
     "--ds-notifier-well",
     "--ds-notifier-well-edge",
-    "--ds-overlay-backdrop-filter",
     "--ds-page-shell-action-gap",
     "--ds-page-shell-content-padding",
     "--ds-page-shell-header-padding",

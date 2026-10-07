@@ -24,6 +24,10 @@ import {
   TENANT_THEME_SCHEMA_VERSION,
   TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import {
+  SCRIM_LADDER_STEPS,
+  SCRIM_LADDER_STRENGTH_BOUNDS,
+} from "@/foundation/contracts/composition/tenants/themes/scrim-ladder";
 import { RECIPE_PROFILES } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 import { RESPONSIVE_POSTURE_PROFILES } from "@/foundation/tokens/ts/presentation/responsive-postures";
 import {
@@ -1910,6 +1914,14 @@ const chrome = object({
       "nodeColor",
       "nodeColorSelected",
     ])
+  ),
+  scrim: object(
+    Object.fromEntries(
+      SCRIM_LADDER_STEPS.map((step) => [
+        step,
+        number(SCRIM_LADDER_STRENGTH_BOUNDS[step]),
+      ])
+    )
   ),
 });
 

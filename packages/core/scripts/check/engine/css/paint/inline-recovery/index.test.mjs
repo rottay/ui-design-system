@@ -77,10 +77,6 @@ test('the twenty runtime paint sites keep their exact property identity', () => 
   assert.equal(countArc09PaintInFile(card.source, card.file), 1);
   assert.match(card.source, /\.\.\.\(backgroundColor \? \{ backgroundColor \} : \{\}\)/);
 
-  const overlay = component('primitives/runtime/overlay/backdrop/index.tsx');
-  assert.equal(countArc09PaintInFile(overlay.source, overlay.file), 1);
-  assert.match(overlay.source, /const overlayStyle: React\.CSSProperties = \{[\s\S]*?\n\s*backgroundColor,/);
-
   const chartExport = component('patterns/visualization/charts/runtime/exporting/foundation/file/index.ts');
   assert.equal(countArc09PaintInFile(chartExport.source, chartExport.file), 2);
   assert.equal((chartExport.source.match(/\.style\.setProperty\(prop, value\)/g) ?? []).length, 2);

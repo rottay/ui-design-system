@@ -37,6 +37,7 @@ import {
   TENANT_THEME_OVERRIDE_TOKENS,
   type TenantThemeOverrideToken,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import { scrimStrengthRefusals } from "@/foundation/contracts/composition/tenants/themes/scrim-ladder";
 import { typePairingToTypography } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import {
   isSafeFontFamily,
@@ -777,7 +778,18 @@ function migrateAdvanced(
     migrateTokenOverrides(advanced.tokenOverrides),
   ];
   if (advanced.chrome) {
-    patches.push({ chrome: advanced.chrome as ThemeLayerPatch["chrome"] });
+    const { scrim, ...chrome } = advanced.chrome;
+    if (Object.keys(chrome).length > 0) {
+      patches.push({ chrome: chrome as ThemeLayerPatch["chrome"] });
+    }
+    if (scrim !== undefined) {
+      const [refusal] = scrimStrengthRefusals(
+        scrim,
+        "visualFoundation.advanced.chrome.scrim"
+      );
+      if (refusal) throw new ThemePatchMigrationError(refusal);
+      patches.push({ surfaces: { overlayStrength: scrim } });
+    }
   }
   if (advanced.profiles !== undefined) {
     // v1 types every axis as an open `string`. Refused by name here, on the

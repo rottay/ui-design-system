@@ -1522,10 +1522,14 @@ function chromeFamilies(typeName: string): Map<string, Map<string, LeafKind>> {
   return families;
 }
 
+/** Admitted under the tenant chrome but lowered elsewhere: the scrim strengths land in `surfaces.overlayStrength`. */
+const ROUTED_OUTSIDE_CHROME = new Set(["scrim"]);
+
 const SCHEMA_CHROME = (() => {
   const merged = new Map<string, Map<string, LeafKind>>();
   for (const container of ["BrandChrome", "TenantThemeChrome"]) {
     for (const [family, fields] of chromeFamilies(container)) {
+      if (ROUTED_OUTSIDE_CHROME.has(family)) continue;
       const previous = merged.get(family) ?? new Map<string, LeafKind>();
       for (const [field, kind] of fields) {
         const known = previous.get(field);
@@ -1581,6 +1585,18 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
     }
     // Unions survive the census: at least one facet declares more than one kind.
     expect(kinds.filter((leaf) => leaf.alternatives.length > 1).length).toBeGreaterThan(0);
+  });
+
+  it("routes exactly one admitted chrome key outside chrome: scrim, into surfaces.overlayStrength", () => {
+    expect([...chromeFamilies("TenantThemeChrome").keys()].filter((family) => !chromeFamilies("BrandChrome").has(family)))
+      .toEqual([...ROUTED_OUTSIDE_CHROME]);
+    const patch = migrateV1({
+      schemaVersion: 1,
+      mode: "advanced",
+      visualFoundation: { advanced: { chrome: { scrim: { medium: 0.7 } } } },
+    } as unknown as TenantThemeDocument).patch;
+    expect(patch.surfaces?.overlayStrength).toEqual({ medium: 0.7 });
+    expect(patch.chrome).toBeUndefined();
   });
 
   it("every chrome branch the schema admits exists in DEFAULT_CHROME_SHAPE", () => {

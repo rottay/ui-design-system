@@ -14,10 +14,10 @@
   "stats": {
     "verticals": 3,
     "scopes": 6,
-    "channels": 18014,
-    "unresolved": 9397,
+    "channels": 18032,
+    "unresolved": 9412,
     "unresolvedByReason": {
-      "missing": 9367,
+      "missing": 9382,
       "guaranteed-invalid": 24,
       "cascade-keyword": 6
     }
@@ -202,6 +202,27 @@
       "vertical": "rottay",
       "scope": "base",
       "channel": "--ds-focus-ring",
+      "reason": "missing",
+      "cause": "--ds-color-bg-primary"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
+      "channel": "--ds-overlay-light",
+      "reason": "missing",
+      "cause": "--ds-color-bg-primary"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
+      "channel": "--ds-overlay-medium",
+      "reason": "missing",
+      "cause": "--ds-color-bg-primary"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "base",
+      "channel": "--ds-overlay-heavy",
       "reason": "missing",
       "cause": "--ds-color-bg-primary"
     },
@@ -11835,6 +11856,27 @@
     {
       "vertical": "rottay",
       "scope": "light",
+      "channel": "--ds-overlay-light",
+      "reason": "missing",
+      "cause": "--ds-color-black"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-overlay-medium",
+      "reason": "missing",
+      "cause": "--ds-color-black"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
+      "channel": "--ds-overlay-heavy",
+      "reason": "missing",
+      "cause": "--ds-color-black"
+    },
+    {
+      "vertical": "rottay",
+      "scope": "light",
       "channel": "--ds-elevation-1",
       "reason": "missing",
       "cause": "--ds-shadow-tint"
@@ -23983,6 +24025,27 @@
       "channel": "--ds-color-border-hover",
       "reason": "missing",
       "cause": "--ds-color-neutral-400"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "base",
+      "channel": "--ds-overlay-light",
+      "reason": "missing",
+      "cause": "--ds-color-black"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "base",
+      "channel": "--ds-overlay-medium",
+      "reason": "missing",
+      "cause": "--ds-color-black"
+    },
+    {
+      "vertical": "bithire",
+      "scope": "base",
+      "channel": "--ds-overlay-heavy",
+      "reason": "missing",
+      "cause": "--ds-color-black"
     },
     {
       "vertical": "bithire",
@@ -42250,6 +42313,27 @@
     {
       "vertical": "evnto",
       "scope": "base",
+      "channel": "--ds-overlay-light",
+      "reason": "missing",
+      "cause": "--ds-color-black"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
+      "channel": "--ds-overlay-medium",
+      "reason": "missing",
+      "cause": "--ds-color-black"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
+      "channel": "--ds-overlay-heavy",
+      "reason": "missing",
+      "cause": "--ds-color-black"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "base",
       "channel": "--ds-elevation-1",
       "reason": "missing",
       "cause": "--ds-shadow-tint"
@@ -54354,6 +54438,27 @@
       "vertical": "evnto",
       "scope": "dark",
       "channel": "--ds-focus-ring",
+      "reason": "missing",
+      "cause": "--ds-color-bg-primary"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
+      "channel": "--ds-overlay-light",
+      "reason": "missing",
+      "cause": "--ds-color-bg-primary"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
+      "channel": "--ds-overlay-medium",
+      "reason": "missing",
+      "cause": "--ds-color-bg-primary"
+    },
+    {
+      "vertical": "evnto",
+      "scope": "dark",
+      "channel": "--ds-overlay-heavy",
       "reason": "missing",
       "cause": "--ds-color-bg-primary"
     },
@@ -67526,6 +67631,9 @@
         "--ds-otp-input-slot-color": "var(--ds-color-text-primary)",
         "--ds-otp-input-slot-shadow-focus": "var(--ds-focus-ring)",
         "--ds-otp-input-slot-shadow-focus-error": "var(--ds-focus-ring)",
+        "--ds-overlay-heavy": "color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent)",
+        "--ds-overlay-light": "color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent)",
+        "--ds-overlay-medium": "color-mix(in srgb, var(--ds-color-bg-primary) 78%, transparent)",
         "--ds-page-shell-actions-backdrop": "none",
         "--ds-page-shell-header-icon-radius": "var(--ds-radius-lg)",
         "--ds-page-shell-header-radius": "var(--ds-radius-xl)",
@@ -70485,6 +70593,9 @@
         "--ds-otp-input-slot-color": "var(--ds-color-text-primary)",
         "--ds-otp-input-slot-shadow-focus": "var(--ds-focus-ring)",
         "--ds-otp-input-slot-shadow-focus-error": "var(--ds-focus-ring)",
+        "--ds-overlay-heavy": "color-mix(in srgb, var(--ds-color-black) 90%, transparent)",
+        "--ds-overlay-light": "color-mix(in srgb, var(--ds-color-black) 52%, transparent)",
+        "--ds-overlay-medium": "color-mix(in srgb, var(--ds-color-black) 78%, transparent)",
         "--ds-page-shell-actions-backdrop": "none",
         "--ds-page-shell-header-icon-radius": "var(--ds-radius-lg)",
         "--ds-page-shell-header-radius": "var(--ds-radius-xl)",
@@ -73575,6 +73686,9 @@
         "--ds-otp-input-slot-color": "var(--ds-color-text-primary)",
         "--ds-otp-input-slot-shadow-focus": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-otp-input-slot-shadow-focus-error": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
+        "--ds-overlay-heavy": "color-mix(in srgb, var(--ds-color-black) 90%, transparent)",
+        "--ds-overlay-light": "color-mix(in srgb, var(--ds-color-black) 52%, transparent)",
+        "--ds-overlay-medium": "color-mix(in srgb, var(--ds-color-black) 78%, transparent)",
         "--ds-page-header-eyebrow-text-transform": "uppercase",
         "--ds-page-shell-actions-backdrop": "none",
         "--ds-page-shell-header-icon-radius": "var(--ds-radius-lg)",
@@ -76670,6 +76784,9 @@
         "--ds-otp-input-slot-color": "var(--ds-color-text-primary)",
         "--ds-otp-input-slot-shadow-focus": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-otp-input-slot-shadow-focus-error": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
+        "--ds-overlay-heavy": "color-mix(in srgb, #0A0A0A 90%, transparent)",
+        "--ds-overlay-light": "color-mix(in srgb, #0A0A0A 52%, transparent)",
+        "--ds-overlay-medium": "color-mix(in srgb, #0A0A0A 78%, transparent)",
         "--ds-page-header-eyebrow-text-transform": "uppercase",
         "--ds-page-shell-actions-backdrop": "none",
         "--ds-page-shell-header-icon-radius": "var(--ds-radius-lg)",
@@ -79638,6 +79755,9 @@
         "--ds-otp-input-slot-color": "var(--ds-color-text-primary)",
         "--ds-otp-input-slot-shadow-focus": "var(--ds-focus-ring)",
         "--ds-otp-input-slot-shadow-focus-error": "var(--ds-focus-ring)",
+        "--ds-overlay-heavy": "color-mix(in srgb, var(--ds-color-black) 90%, transparent)",
+        "--ds-overlay-light": "color-mix(in srgb, var(--ds-color-black) 52%, transparent)",
+        "--ds-overlay-medium": "color-mix(in srgb, var(--ds-color-black) 78%, transparent)",
         "--ds-page-shell-actions-backdrop": "none",
         "--ds-page-shell-header-icon-radius": "var(--ds-radius-lg)",
         "--ds-page-shell-header-radius": "var(--ds-radius-xl)",
@@ -82597,6 +82717,9 @@
         "--ds-otp-input-slot-color": "var(--ds-color-text-primary)",
         "--ds-otp-input-slot-shadow-focus": "var(--ds-focus-ring)",
         "--ds-otp-input-slot-shadow-focus-error": "var(--ds-focus-ring)",
+        "--ds-overlay-heavy": "color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent)",
+        "--ds-overlay-light": "color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent)",
+        "--ds-overlay-medium": "color-mix(in srgb, var(--ds-color-bg-primary) 78%, transparent)",
         "--ds-page-shell-actions-backdrop": "none",
         "--ds-page-shell-header-icon-radius": "var(--ds-radius-lg)",
         "--ds-page-shell-header-radius": "var(--ds-radius-xl)",
@@ -83837,5 +83960,5 @@
       }
     }
   },
-  "digest": "8a04376ce311188b14a68d35186f428f4f8eaea0ea4c78c39ce715c0d0cb6242"
+  "digest": "2ccb82f9a75431bedb5096cc1a96deca7cfbb5a8dc91add4bcbb86a46721b9ac"
 }

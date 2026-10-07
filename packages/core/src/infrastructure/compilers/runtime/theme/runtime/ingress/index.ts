@@ -31,6 +31,8 @@ export {
 export type {
   DecisionProjection,
   DocumentAdmission,
+  ScrimDoor,
+  ScrimDoorFinding,
   StyleAdmission,
   UnlitReason,
 } from "./runtime/document-v2";

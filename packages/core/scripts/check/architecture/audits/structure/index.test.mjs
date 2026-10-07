@@ -237,7 +237,6 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
       foundation: 0,
       'dialog-attributes': 0,
       'focus-management': 0,
-      backdrop: 0,
       portal: 1,
       'portal-scope': 1,
       positioning: 1,
@@ -287,7 +286,7 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
   // Pinned before the loop: an entry silently deleted from the table would
   // otherwise leave a passing loop over whatever survived.
   assert.equal(owners.length, 29);
-  assert.equal(rankedChildren.length, 106);
+  assert.equal(rankedChildren.length, 105);
 
   for (const path of [...owners, ...rankedChildren]) {
     assert.equal(
