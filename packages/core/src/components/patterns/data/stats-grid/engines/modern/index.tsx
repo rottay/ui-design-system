@@ -28,13 +28,15 @@
  * />
  */
 
-import React, { useMemo, useRef } from "react";
+import React, { useId, useMemo, useRef } from "react";
 import { useBreakpoints } from "@/infrastructure/runtime/responsive";
 import { useAdaptation } from "@/infrastructure/runtime/adaptation";
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernStatistic from '../../../../../primitives/display/statistic/engines/modern';
 import { VisuallyHidden } from '../../../../../primitives/foundation';
+import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Grid } from '../../../../../primitives/layout/grid';
 import { GAP_MAP, type GridGap } from '../../../../../primitives/layout/grid/contracts';
 import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
@@ -216,36 +218,39 @@ function StatCard({
   const cardStyle: React.CSSProperties = {
     "--ds-stats-grid-accent": stat.color,
   } as React.CSSProperties;
+  const cardId = useId();
+  const interaction = useInteractionState();
 
-  // Interactivity stays behavioral (data-interactive); the cursor and the
-  // transition live in the skin. No hand-concatenated aria-label: the
-  // accessible name is computed from the full card content (label, the
-  // trend's visually-hidden localized direction, value, description), which
-  // is strictly richer and always localized, unlike the former
-  // `${label}: ${value}` string that dropped the trend and the description.
+  // The activation is a chrome-less Button the skin stretches over the card, named by the full card content
+  // (label, the trend's visually-hidden localized direction, value, description).
   return (
     <div
       className="ds-stats-grid__card"
-      data-part="card"
+      id={onClick ? cardId : undefined}
+      {...(onClick ? interaction.handlers : undefined)}
+      {...partAttributes("card", onClick ? interaction.state : {})}
       data-variant={variant || "default"}
       data-interactive={onClick ? "true" : "false"}
       style={cardStyle}
-      onClick={onClick}
-      role={onClick ? "button" : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onKeyDown={
-        onClick
-          ? (e) => {
+    >
+      {onClick && (
+        <div data-part="card-hit">
+          <ModernButton
+            chrome="none"
+            data-part="card-activate"
+            aria-labelledby={cardId}
+            onClick={onClick}
+            onKeyDown={(e) => {
               // Button role contract: Enter AND Space activate (Space scrolls
               // the page without preventDefault).
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
                 onClick();
               }
-            }
-          : undefined
-      }
-    >
+            }}
+          />
+        </div>
+      )}
       {/* Header row: pattern icon + the composed metric + the pattern's
           trend pill on the far end. */}
       <div data-part="label-row">

@@ -105,15 +105,19 @@ describe('ModernActivityLog — the interactive item body wears the tenant focus
 
   it('keeps the item body a tab stop only when it is actionable', async () => {
     const interactive = render(<ModernActivityLog activities={ACTIVITIES} onActivityClick={vi.fn()} />);
-    const body = await interactive.findByRole('button');
-    expect(body.getAttribute('data-part')).toBe('item-body');
-    expect(body.getAttribute('data-interactive')).toBe('true');
-    expect(body.tabIndex).toBe(0);
+    // The tab stop is the chrome-less Button stretched over the body.
+    const activation = await interactive.findByRole('button');
+    expect(activation.getAttribute('data-part')).toBe('item-activate');
+    const body = activation.closest('[data-part="item-body"]');
+    expect(body?.getAttribute('data-part')).toBe('item-body');
+    expect(body?.getAttribute('data-interactive')).toBe('true');
+    expect(activation.tabIndex).toBe(0);
     interactive.unmount();
 
     const passive = render(<ModernActivityLog activities={ACTIVITIES} />);
     const still = passive.container.querySelector<HTMLElement>('[data-part="item-body"]');
     expect(still?.getAttribute('data-interactive')).toBe('false');
     expect(still?.hasAttribute('tabindex')).toBe(false);
+    expect(passive.queryByRole('button')).toBeNull();
   });
 });

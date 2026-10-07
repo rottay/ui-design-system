@@ -288,7 +288,15 @@ describe("PatternStatsGrid advanced engine coverage", () => {
         ).toHaveClass("ds-stats-grid__trend");
       }
 
-      fireEvent.click(screen.getByText("Revenue"));
+      // Modern activates through the stretched chrome-less Button: jsdom has
+      // no layout, so a click on the text cannot reach the overlay (the
+      // notification-center drain precedent); classic/rustic keep the host
+      // div's handler, where the text click bubbles.
+      if (engine === "modern") {
+        fireEvent.click(screen.getByRole("button", { name: /Revenue/ }));
+      } else {
+        fireEvent.click(screen.getByText("Revenue"));
+      }
       expect(onStatClick).toHaveBeenCalledWith(
         expect.objectContaining({ key: "revenue" })
       );

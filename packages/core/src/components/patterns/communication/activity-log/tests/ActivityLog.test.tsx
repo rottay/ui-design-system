@@ -87,7 +87,8 @@ describe('PatternActivityLog', () => {
         engine,
       );
 
-      fireEvent.click(screen.getByText('Alice'));
+      // Modern stretches a chrome-less Button over the item body; the frozen engines keep the body handler.
+      fireEvent.click(engine === 'modern' ? screen.getAllByRole('button', { name: /Alice/ })[0] : screen.getByText('Alice'));
       expect(onClick).toHaveBeenCalled();
     },
   );

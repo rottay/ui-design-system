@@ -67884,7 +67884,22 @@ html[data-ds-motion='reduced']
   transition: background-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true'] {
+  position: relative;
   cursor: pointer;
+}
+/* The activation is a chrome-less Button stretched over the body inside a frame clipped to the body's corners (paint
+   and hits), oversized so its own ring and press posture never show: the body keeps its focus signature. */
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'] > [data-part='item-hit'] {
+  position: absolute;
+  z-index: var(--ds-z-index-relative-above);
+  inset: 0;
+  border-radius: inherit;
+  clip-path: border-box;
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-hit'] > [data-part='item-activate'] {
+  position: absolute;
+  inset: -4%;
+  max-inline-size: none;
 }
 @media (hover: hover) {
   .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:is([data-state~='hovered'], :hover) {
@@ -88864,6 +88879,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card[data-interactive="true"] {
   cursor: pointer;
+}
+/* The activation is a chrome-less Button stretched over the card inside a frame clipped to the card's corners (paint
+   and hits), oversized so its own ring and press posture never show: the card keeps its focus signature. */
+.ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card > [data-part="card-hit"] {
+  position: absolute;
+  z-index: var(--ds-z-index-relative-above);
+  inset: 0;
+  border-radius: inherit;
+  clip-path: border-box;
+}
+.ds-pattern-stats-grid.ds-engine-modern [data-part="card-hit"] > [data-part="card-activate"] {
+  position: absolute;
+  inset: -4%;
+  max-inline-size: none;
 }
 
 .ds-pattern-stats-grid.ds-engine-modern [data-part="label-row"] {

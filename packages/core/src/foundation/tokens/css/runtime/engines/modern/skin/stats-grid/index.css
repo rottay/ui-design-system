@@ -109,6 +109,20 @@
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card[data-interactive="true"] {
   cursor: pointer;
 }
+/* The activation is a chrome-less Button stretched over the card inside a frame clipped to the card's corners (paint
+   and hits), oversized so its own ring and press posture never show: the card keeps its focus signature. */
+.ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card > [data-part="card-hit"] {
+  position: absolute;
+  z-index: var(--ds-z-index-relative-above);
+  inset: 0;
+  border-radius: inherit;
+  clip-path: border-box;
+}
+.ds-pattern-stats-grid.ds-engine-modern [data-part="card-hit"] > [data-part="card-activate"] {
+  position: absolute;
+  inset: -4%;
+  max-inline-size: none;
+}
 
 .ds-pattern-stats-grid.ds-engine-modern [data-part="label-row"] {
   display: flex;

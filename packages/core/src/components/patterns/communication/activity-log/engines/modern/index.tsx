@@ -35,12 +35,14 @@
  * />
  */
 
-import React from 'react';
+import React, { useId } from 'react';
 import type { ActivityLogProps } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 import { Select } from '../../../../../primitives/inputs/select';
 import { VisuallyHidden } from '../../../../../primitives/foundation';
+import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import type { SelectOption as SelectOptionDef } from '../../../../../primitives/inputs/select/contracts';
 import ModernTimeline from '../../../../../primitives/display/timeline/engines/modern';
 import ModernAvatar from '../../../../../primitives/display/avatar/engines/modern';
@@ -283,6 +285,45 @@ function LoadingSkeleton() {
  * ModernActivityLog (main export)
  * --------------------------------------------------------------------------- */
 
+/** With `onActivate` the body is the action surface: a chrome-less Button stretched over it, named by its content.
+    Enter and Space fire on keydown as pinned; preventDefault stops the native second click and the Space scroll. */
+function ItemBody({
+  id,
+  onActivate,
+  children,
+}: {
+  id: string;
+  onActivate?: () => void;
+  children: React.ReactNode;
+}): React.ReactElement {
+  const interaction = useInteractionState();
+  if (!onActivate) {
+    return (
+      <div data-part="item-body" data-interactive="false">
+        {children}
+      </div>
+    );
+  }
+  return (
+    <div id={id} {...interaction.handlers} {...partAttributes('item-body', interaction.state)} data-interactive="true">
+      <div data-part="item-hit">
+        <ModernButton
+          chrome="none"
+          data-part="item-activate"
+          aria-labelledby={id}
+          onClick={onActivate}
+          onKeyDown={(event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            onActivate();
+          }}
+        />
+      </div>
+      {children}
+    </div>
+  );
+}
+
 /**
  * Modern engine for the ActivityLog pattern component.
  *
@@ -316,6 +357,8 @@ export default function ModernActivityLog(props: ActivityLogProps) {
     className,
     style,
   } = props;
+
+  const itemIdBase = useId();
 
   const copy = {
     allActions: tOr('activityLog.filter.allActions', 'All actions'),
@@ -444,29 +487,9 @@ export default function ModernActivityLog(props: ActivityLogProps) {
                 </span>
               ),
               children: (
-                /* The interactive content contract stays pattern-owned: the
-                    whole item body is the action surface when onActivityClick
-                    is set (role=button). Enter fires exactly as pinned; Space
-                    completes the button activation pattern (preventDefault
-                    keeps the keypress from scrolling the page). */
-                <div
-                  data-part="item-body"
-                  data-interactive={onActivityClick ? 'true' : 'false'}
-                  onClick={onActivityClick ? () => onActivityClick(activity) : undefined}
-                  role={onActivityClick ? 'button' : undefined}
-                  tabIndex={onActivityClick ? 0 : undefined}
-                  onKeyDown={
-                    onActivityClick
-                      ? (e) => {
-                          if (e.key === 'Enter') {
-                            onActivityClick(activity);
-                          } else if (e.key === ' ') {
-                            e.preventDefault();
-                            onActivityClick(activity);
-                          }
-                        }
-                      : undefined
-                  }
+                <ItemBody
+                  id={`${itemIdBase}-${activity.id}`}
+                  onActivate={onActivityClick ? () => onActivityClick(activity) : undefined}
                 >
                   {renderActivity ? (
                     renderActivity(activity)
@@ -512,7 +535,7 @@ export default function ModernActivityLog(props: ActivityLogProps) {
                       {activity.diff && <DiffView diff={activity.diff} copy={copy} />}
                     </>
                   )}
-                </div>
+                </ItemBody>
               ),
             };
           })}
