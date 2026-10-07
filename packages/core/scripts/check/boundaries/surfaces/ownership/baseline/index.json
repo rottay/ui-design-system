@@ -1893,12 +1893,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "a90fdec434a832b3d3ca": {
-      "path": "src/components/patterns/data/data-table/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "clickable-noninteractive",
-      "count": 3
-    },
     "665cca91b4aeef38d966": {
       "path": "src/components/patterns/data/data-table/engines/rustic/index.tsx",
       "category": "native-interactive",
@@ -4851,12 +4845,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "fc7819c40ee30645ca1d": {
-      "path": "src/components/patterns/navigation/command-palette/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "clickable-noninteractive",
-      "count": 1
-    },
     "aa46620294423796f771": {
       "path": "src/components/patterns/navigation/command-palette/engines/rustic/index.tsx",
       "category": "native-interactive",
@@ -6327,18 +6315,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "1c539f3e4fce972ed10b": {
-      "path": "src/components/patterns/shell/page-shell/engines/modern/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-button",
-      "count": 1
-    },
-    "6db672bcfdb8b3b42663": {
-      "path": "src/components/patterns/shell/page-shell/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "aria-role-reconstruction",
-      "count": 1
-    },
     "4b74779410c27fe487a3": {
       "path": "src/components/patterns/shell/page-shell/engines/rustic/index.tsx",
       "category": "native-interactive",
@@ -6871,12 +6847,6 @@
       "path": "src/components/patterns/visualization/kanban-board/engines/classic/index.tsx",
       "category": "shared-chrome-literal",
       "rule": "stable-typography",
-      "count": 1
-    },
-    "40671b431fc5edf58850": {
-      "path": "src/components/patterns/visualization/kanban-board/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "clickable-noninteractive",
       "count": 1
     },
     "a16ce77430151f02998b": {

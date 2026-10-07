@@ -42,6 +42,26 @@
     {
       "id": "4ea20ab8a5e06e924467",
       "reason": "TreeViewConnector is documented provider-free and server-safe, and the measured swap to NavLink breaks that contract (the engine-routed Link throws without a provider; 4 integration tests red when trialled). A static connector anchor is the correct element here."
+    },
+    {
+      "id": "a90fdec434a832b3d3ca",
+      "reason": "The data-table rows (body rows via BodyRow, and the group-header row) are <tr> elements of the pattern's ARIA grid (role=\"grid\" on the table, aria-rowindex/aria-colindex, td cells), which requires the native row element. No DS primitive renders a standalone <tr>: the Table primitive is a whole-table component with no compound row part and no exported row host, and this table's own row channel is the useStatefulPart props hook inside BodyRow, not an element host. Keyboard parity verified 2026-10-07: roving tabIndex (0/-1) on body rows, ArrowUp/ArrowDown/Home/End rove, Enter fires onRowClick, F2 opens the first editable cell; the group-header row is a tab stop that toggles on Enter/Space and carries aria-expanded. REVIEW CONDITION: re-evaluate if a grid-row host contract or the ARC-15 behaviour-core floor changes the element law; the exception covers the element choice, not the interaction quality."
+    },
+    {
+      "id": "40671b431fc5edf58850",
+      "reason": "The kanban BoardCard must be role=\"listitem\" inside the column's role=\"list\" and is both drag source and drop target of the shared sortable runtime (useDragSession getSourceProps/getTargetProps from primitives/runtime/collection/sortable); no DS primitive renders that role, and the sortable runtime, already composed here, is a props host rather than an element host. Keyboard parity verified 2026-10-07: the card is a tab stop (tabIndex 0, aria-roledescription), Enter/Space fire onItemClick through onActivate with the nested-control guard (a key on a control inside renderCard is ignored), the arrow-move protocol is the sortable runtime's immediate keyboard mode, and the coarse-pointer move rail uses real ModernButtons. REVIEW CONDITION: re-evaluate if the sortable runtime grows an item-host contract."
+    },
+    {
+      "id": "fc7819c40ee30645ca1d",
+      "reason": "The CommandPaletteRow is an APG combobox role=\"option\" carrying the option props of useComboboxFoundation (primitives/runtime/collection/combobox), the kernel that useListbox composes and through it Select, AutoComplete and Mentions. Focus stays on the role=\"combobox\" input via aria-activedescendant by design, so a row is never DOM-focused (the kernel's option props carry no tabIndex) and the div's onClick is the pointer arm of the canonical pattern, not a reconstruction. No standalone Listbox/Option primitive exists to host it: Select.Option is a declarative data carrier that accepts only value/children/label/disabled/icon/className/style and cannot carry the kernel's id, aria-selected or handlers. REVIEW CONDITION: re-evaluate if proposal E-3 (Select render channel, pending owner) or a future Listbox/Option primitive lands."
+    },
+    {
+      "id": "1c539f3e4fce972ed10b",
+      "reason": "The page-shell TabButton is a native <button role=\"tab\"> by the Tabs-capability debrief of 2026-10-07 (G3 rejected the channel): the strip switches the page content area rendered outside the header, Tabs owns its panel and shares no tab/panel ids, and its panel-less strip mode carries no aria-controls, so adoption would either drop the measured tab-to-panel linkage or need an external-panel channel that publishes the Tabs id grammar and splits panel ownership for one consumer, which was rejected as not lawful-minimal. The native strip is APG-complete: a tablist named through i18n (pageShell.tabs.label, carried by the ar catalog), roving tabIndex, automatic activation, RTL-mirrored arrows, Home/End (PatternPageShell.modern-craft.test.tsx, including the ar locale case), real aria-controls/aria-labelledby linkage and the hideHeader guard that drops tabpanel semantics (PatternPageShell.modern-rescue.test.tsx). The exception comment sits above the tablist. REVIEW CONDITION: re-evaluate if Tabs lands an external-panel channel for a second consumer, or if the strip is reskinned onto the Tabs anatomy."
+    },
+    {
+      "id": "6db672bcfdb8b3b42663",
+      "reason": "Same element as the page-shell TabButton native-button entry above (the role=\"tab\" finding of the one <button>), under the same Tabs-capability debrief of 2026-10-07: Tabs owns its panel and its panel-less mode drops aria-controls, while this strip drives a content area outside the header with measured tab-to-panel linkage; keyboard parity is pinned by PatternPageShell.modern-craft.test.tsx and PatternPageShell.modern-rescue.test.tsx. REVIEW CONDITION: re-evaluate together with the native-button entry for this element."
     }
   ]
 }
