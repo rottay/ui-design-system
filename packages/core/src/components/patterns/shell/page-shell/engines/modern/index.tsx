@@ -486,7 +486,8 @@ export default function ModernPageShell(props: PageShellProps) {
 
       {/* ---- Bottom border separator ---- */}
       {(tabs && tabs.length > 0) ? (
-        /* Tab strip acts as the separator */
+        /* Tab strip doubles as the separator. Native tablist by written exception (WO-EVI-02 packet T): its panel renders outside the
+           header, which Tabs cannot reference. Review if Tabs gains an external-panel channel or this strip moves to the Tabs anatomy. */
         <div
           role="tablist"
           aria-label={pageTabsLabel}

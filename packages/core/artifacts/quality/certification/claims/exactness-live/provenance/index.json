@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "ad79825ce5d334de182e96dddea8e0a814bf5247aec50e201bd95cdc614b922f"
+    "semanticHash": "0cff98505ca1af7d7e3057badc5a4550fb601916322219ee9682421056b9c351"
   },
   "divergentInputs": [
     {
@@ -133,7 +133,7 @@
       },
       "live": {
         "bytes": 27490,
-        "sha256": "0bf0192cedb4cfbe7a1035bebb8b2bc29341e8b8d24d9af911ec7ff90b2d5b93"
+        "sha256": "a24e480ad165dfbd80e08c7247fc7375d476172c7e243c668b6d30c5dee51491"
       }
     },
     {
@@ -273,7 +273,7 @@
       },
       "live": {
         "bytes": 166,
-        "sha256": "86588fb442ebde1fa0acf3005dd9b420f2b25905c785e04c2664346524e33b42"
+        "sha256": "576cc458676f10b596e97eca7511752755d72fd3f3ce1b28a5f0f177df4d7345"
       }
     },
     {
@@ -2888,8 +2888,8 @@
         "sha256": "6d668937fcdb6374075c71a979afb7519b28f610addc836bcd42694c73b280f7"
       },
       "live": {
-        "bytes": 19331,
-        "sha256": "38a25b4a4c97a5dcc8275e1cc632ecbd3ad54b66482e51a19219a063be1d40f8"
+        "bytes": 19559,
+        "sha256": "360b6d0884a679a7dd79c416c1bc149d3228ae2a62bb86316d75b4433f8cdf83"
       }
     },
     {
@@ -12291,6 +12291,17 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/contracts/index.ts",
+      "archive": {
+        "bytes": 9264,
+        "sha256": "248b92df51904371f9216bda0846984a7348618078453d6044c6968442b7aa63"
+      },
+      "live": {
+        "bytes": 10285,
+        "sha256": "5b3c4ac28a8073e01df32d6c570b553e00be306325c08ee157241dd1281c1b3b"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/engines/classic/index.tsx",
       "archive": {
         "bytes": 6581,
@@ -12308,8 +12319,8 @@
         "sha256": "d198797db8c13bb9abf3041974897d6ad187917ba637a50bcaae852a5083c4d6"
       },
       "live": {
-        "bytes": 25370,
-        "sha256": "6691356bc311a03938028d14c15dfbac49b98226cdef2691a2b78be19bc1e25f"
+        "bytes": 25857,
+        "sha256": "7b2f035240b37e37a2073ec8a05097bd5adfb317b2712d0fc6e977fc69019379"
       }
     },
     {
@@ -12332,6 +12343,14 @@
       "live": {
         "bytes": 2004,
         "sha256": "103dc70a8c4cef86706103f783c72df94fe39cb4db4d148f04e2092dd9f23e9c"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/tests/Tabs.aria-controls.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 4731,
+        "sha256": "9739b4aab8b939b743de3c2d1a2e81d7399bee0c75978e33fdc53f49695d1642"
       }
     },
     {
@@ -12411,6 +12430,14 @@
       "live": {
         "bytes": 5228,
         "sha256": "0a4ca2fac8f12c6bfff4e777c1f53410d5e0ad57f3c8a590df19e4ad9ce34e37"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/tests/Tabs.tablist-name.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 3294,
+        "sha256": "4eccdb14355de81f5fa8c4bd909bfe543e79cc42e74987c39d3f59be8dfde54b"
       }
     },
     {

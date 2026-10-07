@@ -51,8 +51,10 @@ export interface TabItem {
   label: ReactNode;
 
   /**
-   * Content rendered when this tab is active.
-   * Displayed in the tab panel area below the tab bar.
+   * Content rendered when this tab is active, in the Tabs-owned panel below the
+   * tab bar. Omit it when selecting the tab changes content Tabs does not own
+   * (a panel-less strip): no tab panel is rendered and the selected tab carries
+   * no `aria-controls`. Inactive tabs' content is not mounted.
    */
   children?: ReactNode;
 
@@ -241,6 +243,26 @@ export interface TabsProps extends EngineAwareProps {
 
   /** Localized accessible names for previous/next/more controls. */
   accessibilityLabels?: TabsAccessibilityLabels;
+
+  /**
+   * Accessible name for the tab list. Forwarded to the `role="tablist"`
+   * element -- never to the root or the panel. Name a tablist whenever the page
+   * holds more than one, or when no visible heading introduces it (WAI-ARIA
+   * APG tabs). Tabs supplies no default name: the name is product copy and
+   * the caller resolves it, localized.
+   *
+   * Engine support: Modern honours it. Classic and Rustic are frozen
+   * (engine-freeze policy) and do not forward it.
+   */
+  'aria-label'?: string;
+
+  /**
+   * Id of an element that names the tab list. Forwarded to the
+   * `role="tablist"` element alongside `aria-label`; when both are supplied
+   * both are emitted and `aria-labelledby` wins the accessible name
+   * computation. Same engine support as `aria-label`.
+   */
+  'aria-labelledby'?: string;
 
   /**
    * Size variant of the tabs. Accepts a plain value or a responsive breakpoint object.

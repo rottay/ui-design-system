@@ -156,6 +156,7 @@ interface TabButtonProps {
   tabsId: string;
   selected: boolean;
   focusable: boolean;
+  controlsPanel: boolean;
   label: React.ReactNode;
   badge: React.ReactNode;
   tabRef: (node: HTMLButtonElement | null) => void;
@@ -170,6 +171,7 @@ function TabButton({
   tabsId,
   selected,
   focusable,
+  controlsPanel,
   label,
   badge,
   tabRef,
@@ -195,7 +197,9 @@ function TabButton({
       aria-selected={selected}
       aria-disabled={unavailable || undefined}
       aria-busy={item.loading || undefined}
-      aria-controls={`tabs-panel-${tabsId}-${item.key}`}
+      /* Only the active panel is rendered, so an inactive tab's aria-controls
+         pointed at an id that was not in the document. */
+      aria-controls={controlsPanel ? `tabs-panel-${tabsId}-${item.key}` : undefined}
       tabIndex={focusable ? 0 : -1}
       disabled={item.disabled}
       onClick={() => onActivate(item.key)}
@@ -314,6 +318,8 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     indicator = 'tab',
     panelVariant = 'plain',
     accessibilityLabels,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledBy,
     onChange,
     className = '',
     style,
@@ -400,6 +406,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     ? requestedKey
     : firstSelectableKey(items);
   const activeItem = items.find((item) => item.key === currentKey);
+  const panelRendered = activeItem !== undefined && activeItem.children !== undefined;
   const enabledItems = useMemo(
     () => items.filter((item) => !item.disabled && !item.loading),
     [items]
@@ -686,6 +693,8 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         <div
           ref={tabListRef}
           role="tablist"
+          aria-label={ariaLabel || undefined}
+          aria-labelledby={ariaLabelledBy || undefined}
           aria-orientation="horizontal"
           data-tabs-id={tabsId}
           data-part="tab-list"
@@ -700,6 +709,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
                 tabsId={tabsId}
                 selected={item.key === currentKey}
                 focusable={(focusedKey ?? currentKey) === item.key}
+                controlsPanel={panelRendered && item.key === currentKey}
                 label={legacy.label}
                 badge={item.badge ?? legacy.badge}
                 tabRef={(node) => {
@@ -758,9 +768,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         ) : null}
       </VisuallyHidden>
 
-      {activeItem && activeItem.children !== undefined && (
-        <TabPanel tabsId={tabsId} item={activeItem} />
-      )}
+      {panelRendered && <TabPanel tabsId={tabsId} item={activeItem} />}
     </div>
   );
 }

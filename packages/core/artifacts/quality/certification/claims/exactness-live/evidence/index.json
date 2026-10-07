@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "61438785873ce96d0840d7e6eaade347a1312810ca1fdea2dcf5e49c085ad417",
+    "authorityDigest": "9e2a2a7d834f12e61220964d84cd73d1064f4b537088e6dd7829ddf993a8be2a",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "8bac7e8478b2ad40dee2071680d656c5dc4fe5b6",
+    "documentationRevision": "481c2e7663d148a4449c915cdab4ee2e28f04fb1",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -223,7 +223,7 @@
           "workspace-toolchain"
         ],
         "bytes": 27490,
-        "sha256": "0bf0192cedb4cfbe7a1035bebb8b2bc29341e8b8d24d9af911ec7ff90b2d5b93"
+        "sha256": "a24e480ad165dfbd80e08c7247fc7375d476172c7e243c668b6d30c5dee51491"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -332,7 +332,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "86588fb442ebde1fa0acf3005dd9b420f2b25905c785e04c2664346524e33b42"
+        "sha256": "576cc458676f10b596e97eca7511752755d72fd3f3ce1b28a5f0f177df4d7345"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -4947,8 +4947,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 19331,
-        "sha256": "38a25b4a4c97a5dcc8275e1cc632ecbd3ad54b66482e51a19219a063be1d40f8"
+        "bytes": 19559,
+        "sha256": "360b6d0884a679a7dd79c416c1bc149d3228ae2a62bb86316d75b4433f8cdf83"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/shell/page-shell/engines/rustic/index.tsx",
@@ -19610,8 +19610,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 9264,
-        "sha256": "248b92df51904371f9216bda0846984a7348618078453d6044c6968442b7aa63"
+        "bytes": 10285,
+        "sha256": "5b3c4ac28a8073e01df32d6c570b553e00be306325c08ee157241dd1281c1b3b"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/engines/classic/index.tsx",
@@ -19632,8 +19632,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 25370,
-        "sha256": "6691356bc311a03938028d14c15dfbac49b98226cdef2691a2b78be19bc1e25f"
+        "bytes": 25857,
+        "sha256": "7b2f035240b37e37a2073ec8a05097bd5adfb317b2712d0fc6e977fc69019379"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/engines/rustic/index.tsx",
@@ -19675,6 +19675,14 @@
         ],
         "bytes": 14650,
         "sha256": "467b1f37d6934ebe276fda76dd757b256b2946939e685e1f8647ead55bb7ecd7"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/tests/Tabs.aria-controls.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 4731,
+        "sha256": "9739b4aab8b939b743de3c2d1a2e81d7399bee0c75978e33fdc53f49695d1642"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/tests/Tabs.causality.integration.test.tsx",
@@ -19747,6 +19755,14 @@
         ],
         "bytes": 5228,
         "sha256": "0a4ca2fac8f12c6bfff4e777c1f53410d5e0ad57f3c8a590df19e4ad9ce34e37"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/tests/Tabs.tablist-name.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3294,
+        "sha256": "4eccdb14355de81f5fa8c4bd909bfe543e79cc42e74987c39d3f59be8dfde54b"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/tests/Tabs.tenant-theme.test.ts",
@@ -48164,7 +48180,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "61438785873ce96d0840d7e6eaade347a1312810ca1fdea2dcf5e49c085ad417"
+    "digest": "9e2a2a7d834f12e61220964d84cd73d1064f4b537088e6dd7829ddf993a8be2a"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4218 counters; 3221 completed zeros locked exactly; 987 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -122056,7 +122072,7 @@
           {
             "part": "root",
             "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/engines/modern/index.tsx",
-            "line": 655,
+            "line": 662,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -122095,7 +122111,7 @@
           {
             "part": "tab-list",
             "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/engines/modern/index.tsx",
-            "line": 691,
+            "line": 700,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -122134,7 +122150,7 @@
           {
             "part": "tab-button",
             "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/engines/modern/index.tsx",
-            "line": 190,
+            "line": 192,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -122177,7 +122193,7 @@
           {
             "part": "icon",
             "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/engines/modern/index.tsx",
-            "line": 209,
+            "line": 213,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -122217,7 +122233,7 @@
           {
             "part": "tab-badge",
             "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/engines/modern/index.tsx",
-            "line": 222,
+            "line": 226,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -122255,7 +122271,7 @@
           {
             "part": "indicator",
             "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/engines/modern/index.tsx",
-            "line": 720,
+            "line": 730,
             "syntax": "jsx-intrinsic",
             "sinkKind": "intrinsic-dom",
             "provenance": {
@@ -122281,7 +122297,7 @@
           {
             "part": "tab-panel",
             "path": "ui-design-system/packages/core/src/components/primitives/navigation/tabs/engines/modern/index.tsx",
-            "line": 292,
+            "line": 296,
             "syntax": "canonical-data-part-helper",
             "sinkKind": "canonical-helper",
             "provenance": {
@@ -122352,8 +122368,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "ad79825ce5d334de182e96dddea8e0a814bf5247aec50e201bd95cdc614b922f",
-      "ad79825ce5d334de182e96dddea8e0a814bf5247aec50e201bd95cdc614b922f"
+      "0cff98505ca1af7d7e3057badc5a4550fb601916322219ee9682421056b9c351",
+      "0cff98505ca1af7d7e3057badc5a4550fb601916322219ee9682421056b9c351"
     ],
     "agree": true
   }
