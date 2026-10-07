@@ -6173,7 +6173,7 @@
    "lane": "retire",
    "order": 1,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-EMI-02",
     "WO-FAM-01",
@@ -6421,7 +6421,9 @@
      "by": "kimi",
      "note": "2026-10-07 — Disposiciones DT registradas (evidencia completa en w26-f91f110): F-110 clausula 2 — el factory compat de Phosphor es SOLO-INTERNO tras el major de RET-01 (la ley label-XOR-decorative gobierna el factory canonico, que es la puerta publica); los 20 sitios Classic frozen no migran porque Classic no shippea productivamente (frozen, fail-closed, no seleccionable por tenants); la negativa implementada y medida (204 refusals / 40+ glyphs) queda como evidencia del blast radius si el owner quiere la ruta (a) con excepcion frozen + migracion — revision del owner bienvenida, la disposicion es revisable. F-110 clausula 1 residual: AlertIcon (binding legacy-catalog unico restante, 0 consumidores productivos; una probe page + un archivo app-platform ya roto por otras causas; reemplazo semantico existe: Icon name='status.warning') se TRANSFIERE a WO-RET-06 canon-pending (retiro en la ventana 4.0). F-91 clausula 1: paquete entregado con las 72 disposiciones fechadas (en revision)."
     }
-   ]
+   ],
+   "doneAt": "2026-10-07",
+   "evidence": "2026-10-07 — WO-RET-01 CIERRA. La closure-read independiente (sesion 1af06fdd) midio R2-R6 MET y R1 bloqueado por el receiver stale; hoy: R1 MET (WO-DER-10 registrado como holder D-30 con programs:[] — no claimable hasta el pick del owner — y las 2 rows re-homed; census verde en ambos brazos, 814da3739), I1(ii) y F-94 dispositioned por registro DT (RecipeVariantConfig/createRecipeVariant/VerticalTheme -> WO-RET-06 canon-pending), F-91 MET (f859797b9: 72 disposiciones con receiver verificado, el gate dead-dated blocking con drills), F-110: clausula 1 residual AlertIcon -> WO-RET-06 canon-pending, clausula 2 dispositionada (el factory compat es solo-interno tras el major; la ley gobierna el factory canonico; la evidencia del blast radius 204 refusals queda para el owner, que puede voltear a la ruta (a)). Recibos de cierre: evidence/ret-01-closure/ (c6a58255b): R1 a1b7ca9e, R2 1852cb19, R3 dda9fa88 (+json a81b0907), R4 8d82a680, R5prime 2d759971, R6 1bc28a95 (R6 contra el origin/main REAL 404bc67e4, 360 commits atras). Residuos registrados con receivers: F-88 -> RET-06, los 3 liveness channels (text-inverse + letter-spacing) -> WO-RET-01 ya registrados en el diseno EXT-DS, shell-header-height drift -> WO-GAT-12 (ventana CI), docs F-91 -> docs window. Codex nunca contactado."
   },
   {
    "id": "WO-RET-02",
