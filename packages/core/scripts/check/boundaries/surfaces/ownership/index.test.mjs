@@ -23,11 +23,18 @@ import {
   totalOf,
 } from './counters/index.mjs';
 import {
+  FROZEN_ID_SET_DIGEST,
+  planRelocation,
+  relocationFromRepository,
+  runRelocationCli,
+} from './relocation/index.mjs';
+import {
   analyzeOwnershipSource,
   applyAllowlist,
   buildBaseline,
   evaluateBaseline,
   isPresentationUtility,
+  relocationGate,
   runOwnershipGate,
   summaryLines,
   tightenBaseline,
@@ -688,4 +695,242 @@ test('allowlist needs justification and can target path/category/rule', () => {
   const result = applyAllowlist([finding], allowlist);
   assert.equal(result.active.length, 0);
   assert.equal(result.allowed.length, 1);
+});
+
+// ---- --relocate-paths: count-neutral re-keying of moved rows (WO-RET-04, R32 Q4) ----
+
+const MOVE_FROM = 'src/components/patterns/demo/engines/modern/index.tsx';
+const MOVE_TO = 'src/components/patterns/demo-moved/engines/modern/index.tsx';
+const BUTTON = 'export const A = ({ f }) => <button onClick={f}>x</button>;';
+const TAB = 'export const B = () => <div role="tab">t</div>;';
+const NO_ALLOWLIST = { schemaVersion: 1, entries: [] };
+const EMPTY_FROZEN = tallyCounters([])[FROZEN_TRANSFERRED].idSetDigest;
+
+function ledgerFor(files) {
+  return buildBaseline(Object.entries(files).flatMap(([file, source]) => analyzeOwnershipSource(source, file).findings));
+}
+
+function plan(oldSources, newSources, moves, { baseline = ledgerFor(oldSources), allowlist = NO_ALLOWLIST } = {}) {
+  return planRelocation({
+    baseline,
+    allowlist,
+    moves: moves.map(([from, to]) => ({ from, to: [to].flat(), source: 'inventory' })),
+    readOld: (file) => oldSources[file] ?? null,
+    readNew: (file) => newSources[file] ?? null,
+    frozenDigest: EMPTY_FROZEN,
+    ...relocationGate(),
+  });
+}
+
+const kinds = (result) => result.refusals.map((refusal) => refusal.kind);
+
+test('relocation: a pure rename re-keys every row to the new path with the same count', () => {
+  const source = `${BUTTON}\n${TAB}`;
+  const result = plan({ [MOVE_FROM]: source }, { [MOVE_TO]: source }, [[MOVE_FROM, MOVE_TO]]);
+  assert.deepEqual(result.refusals, []);
+  assert.equal(result.pairs.length, 2);
+  const moved = analyzeOwnershipSource(source, MOVE_TO).findings;
+  assert.deepEqual(ledgerRows(result.next).map((row) => row.path), [MOVE_TO, MOVE_TO]);
+  assert.deepEqual(validateBaseline(result.next), []);
+  assert.equal(result.next.purpose, BASELINE_PURPOSE);
+  assert.equal(evaluateBaseline(moved, result.next).ok, true);
+  assert.deepEqual(result.after.total, result.before.total);
+});
+
+test('relocation: a 1→2 split conserves every key across the new files', () => {
+  const second = 'src/components/patterns/demo-moved/engines/modern/tab/index.tsx';
+  const result = plan(
+    { [MOVE_FROM]: `${BUTTON}\n${TAB}` },
+    { [MOVE_TO]: BUTTON, [second]: TAB },
+    [[MOVE_FROM, [MOVE_TO, second]]],
+  );
+  assert.deepEqual(result.refusals, []);
+  assert.deepEqual(result.pairs.map((pair) => pair.to).sort(), [second, MOVE_TO].sort());
+  assert.deepEqual(result.after.counters[PRODUCTIVE].rows, result.before.counters[PRODUCTIVE].rows);
+  assert.deepEqual(result.after.counters[PRODUCTIVE].occurrences, result.before.counters[PRODUCTIVE].occurrences);
+});
+
+test('relocation: a count change on any key is refused and nothing is produced', () => {
+  const result = plan({ [MOVE_FROM]: BUTTON }, { [MOVE_TO]: `${BUTTON}\n${BUTTON.replace('A', 'C')}` }, [[MOVE_FROM, MOVE_TO]]);
+  assert.deepEqual(kinds(result), ['count-change']);
+  assert.equal(result.next, null);
+});
+
+test('relocation: a key that exists only on the new side is refused', () => {
+  const result = plan({ [MOVE_FROM]: BUTTON }, { [MOVE_TO]: `${BUTTON}\n${TAB}` }, [[MOVE_FROM, MOVE_TO]]);
+  assert.deepEqual(kinds(result), ['new-key']);
+});
+
+test('relocation: one key spread across two new files is refused because it adds a row', () => {
+  const second = 'src/components/patterns/demo-moved/engines/modern/b/index.tsx';
+  const twice = `${BUTTON}\n${BUTTON.replace('A', 'C')}`;
+  const result = plan({ [MOVE_FROM]: twice }, { [MOVE_TO]: BUTTON, [second]: BUTTON.replace('A', 'C') }, [[MOVE_FROM, [MOVE_TO, second]]]);
+  assert.deepEqual(kinds(result), ['key-split']);
+});
+
+test('relocation: a change of counter or owner class is refused', () => {
+  const shared = 'src/components/patterns/demo/index.tsx';
+  const result = plan({ [MOVE_FROM]: BUTTON }, { [shared]: BUTTON }, [[MOVE_FROM, shared]]);
+  assert.deepEqual(kinds(result), ['owner-class-change']);
+  assert.equal(ownerClass(MOVE_FROM), 'modern');
+  assert.equal(ownerClass(shared), 'shared');
+});
+
+test('relocation: a frozen from or to, and a target outside the gate scope, are refused', () => {
+  const frozen = 'src/components/patterns/demo/engines/rustic/index.tsx';
+  assert.ok(FROZEN.test(frozen));
+  const frozenMove = plan({ [frozen]: BUTTON }, { [MOVE_TO]: BUTTON }, [[frozen, MOVE_TO]], { baseline: buildBaseline([]) });
+  assert.deepEqual(kinds(frozenMove), ['frozen-path']);
+  assert.deepEqual(frozenMove.pairs, []);
+  assert.ok(kinds(plan({ [MOVE_FROM]: BUTTON }, { [frozen]: BUTTON }, [[MOVE_FROM, frozen]])).includes('frozen-path'));
+  const outside = 'src/components/primitives/demo/engines/modern/index.tsx';
+  assert.ok(kinds(plan({ [MOVE_FROM]: BUTTON }, { [outside]: BUTTON }, [[MOVE_FROM, outside]])).includes('outside-scope'));
+});
+
+test('relocation: an old row whose live count differs from its pin is refused, never relocated', () => {
+  const baseline = ledgerFor({ [MOVE_FROM]: `${BUTTON}\n${BUTTON.replace('A', 'C')}` });
+  const result = plan({ [MOVE_FROM]: BUTTON }, { [MOVE_TO]: BUTTON }, [[MOVE_FROM, MOVE_TO]], { baseline });
+  assert.deepEqual(kinds(result), ['unpinned-drift']);
+});
+
+test('relocation: a new id that already holds a row is refused', () => {
+  const baseline = ledgerFor({ [MOVE_FROM]: BUTTON, [MOVE_TO]: BUTTON });
+  const result = plan({ [MOVE_FROM]: BUTTON }, { [MOVE_TO]: BUTTON }, [[MOVE_FROM, MOVE_TO]], { baseline });
+  assert.deepEqual(kinds(result), ['id-collision']);
+});
+
+test('relocation: a moved file carrying an allowlisted finding is refused (the allowlist is re-keyed separately)', () => {
+  const allowed = analyzeOwnershipSource(TAB, MOVE_FROM).findings[0];
+  const allowlist = { schemaVersion: 1, entries: [{ id: allowed.id, reason: 'Fixture exception owned by the pattern on purpose.' }] };
+  const baseline = buildBaseline(analyzeOwnershipSource(BUTTON, MOVE_FROM).findings);
+  const result = plan({ [MOVE_FROM]: `${BUTTON}\n${TAB}` }, { [MOVE_TO]: `${BUTTON}\n${TAB}` }, [[MOVE_FROM, MOVE_TO]], { baseline, allowlist });
+  // One refusal per allowlisted id, never drift. Unre-keyed, the id-keyed exception does not cover the new
+  // path, so the same finding there is a new key: the double failure re-keying the allowlist must resolve.
+  assert.deepEqual(kinds(result), ['allowlisted-finding', 'new-key']);
+  assert.equal(result.next, null);
+});
+
+test('relocation: the committed ledger reads the pinned frozen digest, and a mismatch is refused', () => {
+  const real = JSON.parse(readFileSync(REAL_BASELINE, 'utf8'));
+  const gate = relocationGate();
+  const clean = planRelocation({
+    baseline: real, allowlist: NO_ALLOWLIST, moves: [], readOld: () => null, readNew: () => null, ...gate,
+  });
+  assert.equal(clean.ok, true);
+  assert.equal(clean.after.counters[FROZEN_TRANSFERRED].idSetDigest, FROZEN_ID_SET_DIGEST);
+  assert.equal(FROZEN_ID_SET_DIGEST, '61df609c1c1c1d3cb4fb4367ef4e7e041fd11c657d91b11e8d36ec0f0f33b2f5');
+  const wrong = planRelocation({
+    baseline: real, allowlist: NO_ALLOWLIST, moves: [], readOld: () => null, readNew: () => null, ...gate, frozenDigest: '0'.repeat(64),
+  });
+  assert.deepEqual([...new Set(kinds(wrong))], ['postcondition']);
+});
+
+function gitFixture() {
+  const root = mkdtempSync(resolve(tmpdir(), 'ds-a002-relocate-'));
+  const run = (...args) => {
+    const outcome = spawnSync('git', args, { cwd: root, encoding: 'utf8' });
+    assert.equal(outcome.status, 0, outcome.stderr);
+    return outcome.stdout;
+  };
+  run('init', '-q');
+  run('config', 'user.email', 'fixture@example.invalid');
+  run('config', 'user.name', 'fixture');
+  const packageRoot = resolve(root, 'packages/core');
+  const from = resolve(packageRoot, MOVE_FROM);
+  mkdirSync(dirname(from), { recursive: true });
+  writeFileSync(from, `${BUTTON}\n${TAB}\n`);
+  run('add', '.');
+  run('commit', '-q', '-m', 'fixture');
+  const baselinePath = resolve(root, 'baseline.json');
+  writeFileSync(baselinePath, `${JSON.stringify(ledgerFor({ [MOVE_FROM]: `${BUTTON}\n${TAB}\n` }), null, 2)}\n`);
+  return { root, run, packageRoot, from, to: resolve(packageRoot, MOVE_TO), baselinePath };
+}
+
+function fromRepository(fixture, inventoryPath = null) {
+  return relocationFromRepository({
+    packageRoot: fixture.packageRoot,
+    inventoryPath,
+    baseline: JSON.parse(readFileSync(fixture.baselinePath, 'utf8')),
+    allowlist: NO_ALLOWLIST,
+    frozenDigest: EMPTY_FROZEN,
+    ...relocationGate(),
+  });
+}
+
+function unstagedMove(fixture) {
+  mkdirSync(dirname(fixture.to), { recursive: true });
+  writeFileSync(fixture.to, readFileSync(fixture.from, 'utf8'));
+  rmSync(fixture.from);
+}
+
+test('relocation: a staged rename is read from the Git rename inventory', () => {
+  const fixture = gitFixture();
+  try {
+    mkdirSync(dirname(fixture.to), { recursive: true });
+    fixture.run('mv', 'packages/core/' + MOVE_FROM, 'packages/core/' + MOVE_TO);
+    const result = fromRepository(fixture);
+    assert.deepEqual(result.configurationIssues, []);
+    assert.deepEqual(result.gitRenames, [{ from: MOVE_FROM, to: MOVE_TO }]);
+    assert.equal(result.ok, true);
+    assert.equal(result.pairs.length, 2);
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test('relocation: an unstaged move is invisible to Git and needs the reviewed --inventory', () => {
+  const fixture = gitFixture();
+  try {
+    unstagedMove(fixture);
+    const blind = fromRepository(fixture);
+    assert.deepEqual(blind.gitRenames, []);
+    assert.deepEqual(blind.pairs, []);
+    const inventoryPath = resolve(fixture.root, 'inventory.json');
+    writeFileSync(inventoryPath, JSON.stringify([{ from: MOVE_FROM, to: [MOVE_TO] }]));
+    const seen = fromRepository(fixture, inventoryPath);
+    assert.deepEqual(seen.configurationIssues, []);
+    assert.equal(seen.ok, true);
+    assert.equal(seen.pairs.length, 2);
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test('relocation: the CLI dry run writes nothing; --write rewrites the ledger through the producer', () => {
+  const fixture = gitFixture();
+  try {
+    unstagedMove(fixture);
+    const inventoryPath = resolve(fixture.root, 'inventory.json');
+    writeFileSync(inventoryPath, JSON.stringify([{ from: MOVE_FROM, to: [MOVE_TO] }]));
+    const before = readFileSync(fixture.baselinePath, 'utf8');
+    const cli = (...flags) => runRelocationCli({
+      argv: ['node', 'gate', '--relocate-paths', '--inventory', inventoryPath, ...flags],
+      packageRoot: fixture.packageRoot,
+      baselinePath: fixture.baselinePath,
+      allowlistPath: resolve(fixture.root, 'absent-allowlist.json'),
+      quiet: true,
+      gate: relocationGate(),
+      frozenDigest: EMPTY_FROZEN,
+    });
+    assert.equal(cli(), 0);
+    assert.equal(readFileSync(fixture.baselinePath, 'utf8'), before);
+    assert.equal(cli('--check'), 1);
+    assert.equal(readFileSync(fixture.baselinePath, 'utf8'), before);
+    assert.equal(cli('--write'), 0);
+    const written = JSON.parse(readFileSync(fixture.baselinePath, 'utf8'));
+    assert.deepEqual(validateBaseline(written), []);
+    assert.deepEqual([...new Set(ledgerRows(written).map((row) => row.path))], [MOVE_TO]);
+    const moved = analyzeOwnershipSource(readFileSync(fixture.to, 'utf8'), MOVE_TO).findings;
+    assert.equal(evaluateBaseline(moved, written).ok, true);
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test('relocation: the removed producers stay removed alongside the new mode', () => {
+  for (const removed of ['--write-baseline', '--allow-increase']) {
+    const outcome = spawnSync(process.execPath, [GATE, '--relocate-paths', removed], { encoding: 'utf8' });
+    assert.equal(outcome.status, 1);
+    assert.match(outcome.stderr, /was removed; the only producer is the tighten-only --update-baseline/u);
+  }
 });

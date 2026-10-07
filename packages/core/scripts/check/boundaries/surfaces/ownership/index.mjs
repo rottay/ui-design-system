@@ -39,6 +39,7 @@
  *   node scripts/check/boundaries/surfaces/ownership/index.mjs --check
  *   node scripts/check/boundaries/surfaces/ownership/index.mjs --report --details=100
  *   node scripts/check/boundaries/surfaces/ownership/index.mjs --update-baseline
+ *   node scripts/check/boundaries/surfaces/ownership/index.mjs --relocate-paths [--inventory <json>] [--write]
  */
 
 import { createHash } from 'node:crypto';
@@ -65,6 +66,7 @@ import {
   tallyCounters,
   totalOf,
 } from './counters/index.mjs';
+import { runRelocationCli } from './relocation/index.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPT_DIR = dirname(SCRIPT_PATH);
@@ -450,7 +452,7 @@ function ownedInlineSvgPath(path) {
 }
 
 function addFinding(findings, sourceFile, path, node, category, rule, anchor, evidence) {
-  findings.push({
+  const finding = {
     id: findingId(path, category, rule, anchor),
     path,
     line: lineFor(sourceFile, node),
@@ -458,7 +460,10 @@ function addFinding(findings, sourceFile, path, node, category, rule, anchor, ev
     rule,
     evidence: normalizedEvidence(evidence),
     remediation: CATEGORY_REMEDIATION[category],
-  });
+  };
+  // The relocation mode pairs findings by anchor; it is never stored or printed.
+  Object.defineProperty(finding, 'anchor', { value: anchor, enumerable: false });
+  findings.push(finding);
 }
 
 /** Analyze one in-memory productive source. Exported for parser unit tests. */
@@ -927,6 +932,11 @@ export function validateBaseline(baseline) {
   return issues;
 }
 
+/** The gate functions the relocation mode reuses, so it stamps and analyses exactly as the gate does. */
+export function relocationGate() {
+  return { analyze: analyzeOwnershipSource, applyAllowlist, baselineDocument, validateAllowlist, validateBaseline };
+}
+
 function readJson(path, fallback) {
   if (!existsSync(path)) return fallback;
   return JSON.parse(readFileSync(path, 'utf8'));
@@ -1080,6 +1090,14 @@ async function main() {
       process.exitCode = 1;
       return;
     }
+  }
+
+  if (process.argv.includes('--relocate-paths')) {
+    process.exitCode = runRelocationCli({
+      argv: process.argv, packageRoot: DEFAULT_PACKAGE_ROOT, baselinePath, allowlistPath, quiet,
+      gate: relocationGate(),
+    });
+    return;
   }
 
   const result = runOwnershipGate({ sourceRoot, baselinePath, allowlistPath, acceptLegacyBaseline: update });

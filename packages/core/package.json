@@ -207,6 +207,7 @@
     "distfresh:check": "node scripts/package/artifacts/freshness/index.mjs",
     "engine-audit:check": "node scripts/check/engine/tokens/audit/index.mjs --check",
     "engine-audit:relocate-paths": "node scripts/maintain/engine/baseline-relocation/index.mjs",
+    "ownership:relocate-paths": "node scripts/check/boundaries/surfaces/ownership/index.mjs --relocate-paths",
     "public-barrel:check": "node scripts/package/public-api/barrel/index.mjs",
     "runtime-hardening:structural": "node scripts/check/evidence/certification/runtime-hardening/index.mjs --check --structural",
     "runtime-hardening:write": "node scripts/check/evidence/certification/runtime-hardening/index.mjs --write",
