@@ -1555,6 +1555,16 @@ owner approves 1:1.
 - **E-2 — Popover/disclosure with an external anchor.** A controlled disclosure that anchors to
   a caller-owned element and stays in-tree (tenant scope), not portalled. Row waiting on it:
   collection-workspace filter-dropdown (1).
+- **E-3 — Select render channel (trigger/option content), opened 2026-10-07.** The canonical
+  Select owns the combobox/listbox semantics and carries `chrome="none"` (WO-ARC-22), but its
+  contract exposes no render hook for trigger or option content. The locale-switcher's
+  select-only-combobox needs flag + autoglottonym content with per-option `lang`/`dir="auto"`,
+  which no Select channel can express today. Rows waiting on it: locale-switcher trigger and
+  option buttons (3 occurrences / 2 rows: `69148303d141ac94f950`, `d5fe5add1f1fdf89a660`).
+  Lawful shapes: (a) render hooks on Select (`optionRender`/`triggerRender`) inside the existing
+  contract; (b) a standalone Listbox/Option primitive over the shared combobox kernel — larger,
+  and it would also re-evaluate the command-palette option-row exception. Status: OPEN, pending
+  owner review; the rows stay pinned in the ownership counter until ruled.
 
 **Status** — APPROVED by the owner's decision packet of 2026-10-06 (this repo, recorded in the
 WO-EVI-02/WO-RET-01 trail). E-1: chrome-less variants OF the canonical primitives, never new raw
