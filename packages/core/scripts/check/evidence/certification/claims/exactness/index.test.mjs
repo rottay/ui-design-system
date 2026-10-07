@@ -1334,11 +1334,11 @@ test('G8 WO-GAT-07 projection is deterministic and binds only immutable executio
 
 test('G4 documentation permits only exact generated claim contracts even after allowlist rewrites', () => {
   const markers = {
-    'component-extensions': '<!-- GAT07-CLAIM component-extensions: reserved-deprecated; runtime=unimplemented; affirmative-behavior=false; owner=DS-IMP-021 -->',
+    'component-extensions': '<!-- GAT07-CLAIM component-extensions: retired; runtime=removed-3.0; affirmative-behavior=false; owner=DS-IMP-021 -->',
     'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=declared-32-applied-31; affirmative-behavior=true; owner=DS-IMP-022 -->',
   };
   const templates = {
-    'component-extensions': 'GAT07-CONTRACT component-extensions: symbols=[ComponentExtensions, ExtensionHelpers, EngineAwareProps.extensions]; disposition=reserved-deprecated; runtime-status=unimplemented; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-021; target-phase=2A.',
+    'component-extensions': 'GAT07-CONTRACT component-extensions: symbols=[ComponentExtensions, ExtensionHelpers, EngineAwareProps.extensions]; disposition=retired; runtime-status=removed-3.0; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-021; target-phase=2A.',
     'surface-profile-overrides': 'GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=active; runtime-status=declared-32-applied-31; affirmative-behavior=true; production-consumers=31; executable-assertions=2; owner=design-system-program/DS-IMP-022; target-phase=2A.',
   };
   const records = [{
@@ -1404,6 +1404,15 @@ test('G4 documentation permits only exact generated claim contracts even after a
     text: records[0].text.replace(templates['surface-profile-overrides'], ''),
   }], markers, templates);
   assert.equal(validateClaimDocumentationInventory(missingTemplate, asAllowlist(missingTemplate), markers, templates).ok, false);
+
+  const reservedRecords = [{
+    ...records[0],
+    text: records[0].text
+      .replace(markers['component-extensions'], '<!-- GAT07-CLAIM component-extensions: reserved-deprecated; runtime=unimplemented; affirmative-behavior=false; owner=DS-IMP-021 -->')
+      .replace(templates['component-extensions'], 'GAT07-CONTRACT component-extensions: symbols=[ComponentExtensions, ExtensionHelpers, EngineAwareProps.extensions]; disposition=reserved-deprecated; runtime-status=unimplemented; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-021; target-phase=2A.'),
+  }];
+  const reserved = buildClaimDocumentationInventory(reservedRecords, markers, templates);
+  assert.equal(validateClaimDocumentationInventory(reserved, asAllowlist(reserved), markers, templates).ok, false);
 
   const schemaOne = {
     ...allowlist,
@@ -1480,6 +1489,66 @@ test('G3 public claim floor is exact and rejects invented authority, assertions,
     assert.doesNotThrow(() => { result = evaluateClaimFloor(candidate); });
     assert.equal(result.ok, false, JSON.stringify(candidate));
   }
+
+  const retired = floor.claims.find((claim) => claim.id === 'component-extensions');
+  assert.equal(retired.disposition, 'retired');
+  const retiredLaw = [
+    [(claim) => { claim.definitionFiles = ['src/foundation/contracts/kernel/tokens/extensions/index.ts']; }, 'a retired claim has no definitionFiles'],
+    [(claim) => { claim.requiredAssertions.deprecatedMarkersMinimum = 0; }, 'a retired claim pins every assertion to exactly 0'],
+    [(claim) => { claim.requiredAssertions.deprecatedMarkers = 3; }, 'a retired claim pins every assertion to exactly 0'],
+    [(claim) => { delete claim.requiredAssertions.retiredSymbolDeclarations; }, 'a retired claim must pin retiredSymbolDeclarations'],
+    [(claim) => { claim.productionConsumers = ['src/components/primitives/display/card/index.tsx']; }, 'reserved claim must have zero productionConsumers'],
+  ];
+  for (const [mutate, message] of retiredLaw) {
+    const candidate = structuredClone(floor);
+    mutate(candidate.claims.find((claim) => claim.id === 'component-extensions'));
+    const result = evaluateClaimFloor(candidate);
+    assert.equal(result.ok, false);
+    assert.ok(result.errors.some((error) => error.includes(message)), `${message}: ${result.errors.join(' | ')}`);
+  }
+  const reverted = structuredClone(floor);
+  Object.assign(reverted.claims.find((claim) => claim.id === 'component-extensions'), { disposition: 'reserved-deprecated', runtimeStatus: 'unimplemented' });
+  assert.equal(evaluateClaimFloor(reverted).ok, false);
+});
+
+test('G3b the retired extensions family refuses a re-declaration by name in any file', () => {
+  const records = (extra) => [
+    { path: '/repo/src/foundation/contracts/runtime/engine/index.ts', kind: 'core', text: 'export interface EngineAwareProps { engine?: string }' },
+    { path: '/repo/src/foundation/contracts/kernel/tokens/extensions/index.ts', kind: 'core', text: 'export {};' },
+    ...extra,
+  ];
+  const measure = (extra) => analyzeClaimSourceRecords(records(extra))['component-extensions'];
+  assert.equal(measure([]).retiredSymbolDeclarations, 0);
+  const reintroductions = [
+    'export interface ComponentExtensions { slot?: string }',
+    'export type ExtensionHelpers<T> = { resolve(value: T): T };',
+    'interface Helpers { resolve(): void } export type { Helpers as ExtensionHelpers };',
+    'export interface EngineAwareProps { extensions?: Record<string, unknown> }',
+    'export type EngineAwareProps = { extensions?: unknown };',
+  ];
+  for (const text of reintroductions) {
+    const facts = measure([{ path: '/repo/src/components/patterns/elsewhere/index.ts', kind: 'core', text }]);
+    assert.equal(facts.retiredSymbolDeclarations, 1, text);
+    assert.equal(facts.retiredSymbolDeclarationSites[0].path, '/repo/src/components/patterns/elsewhere/index.ts');
+  }
+  const unrelated = measure([{ path: '/repo/src/components/primitives/inputs/upload/index.ts', kind: 'core', text: 'export interface UploadProps { extensions?: string[] }' }]);
+  assert.equal(unrelated.retiredSymbolDeclarations, 0);
+});
+
+test('G3c the frozen Card engines keep a type-only strip that is neither a declaration nor a consumer', () => {
+  const card = (engine) => join(CORE_ROOT, `src/components/primitives/display/card/engines/${engine}/index.tsx`);
+  const strips = ['classic', 'rustic'].map((engine) => ({ path: card(engine), kind: 'core', text: readFileSync(card(engine), 'utf8') }));
+  for (const record of strips) {
+    assert.match(record.text, /\n {4}extensions: _extensions,\n/);
+    assert.match(record.text, /\n {2}\} = props as CardProps & \{ extensions\?: unknown \};\n/);
+  }
+  const contracts = ['src/foundation/contracts/runtime/engine/index.ts', 'src/foundation/contracts/kernel/tokens/extensions/index.ts']
+    .map((path) => ({ path: join(CORE_ROOT, path), kind: 'core', text: readFileSync(join(CORE_ROOT, path), 'utf8') }));
+  const facts = analyzeClaimSourceRecords([...contracts, ...strips])['component-extensions'];
+  assert.equal(facts.retiredSymbolDeclarations, 0);
+  assert.equal(facts.staticallyResolvedExtensionRuntimeReferences, 0);
+  assert.equal(facts.staticallyResolvedPotentialConsumers, 0);
+  assert.equal(facts.unsupportedGovernedReferences, 0);
 });
 
 test('all reviewed paint evasion classes turn the production audit red', async (t) => {

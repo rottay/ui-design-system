@@ -105,7 +105,7 @@ const SKIN_DIRS = [
 ];
 
 const CANONICAL_DOC_MARKERS = Object.freeze({
-  'component-extensions': '<!-- GAT07-CLAIM component-extensions: reserved-deprecated; runtime=unimplemented; affirmative-behavior=false; owner=DS-IMP-021 -->',
+  'component-extensions': '<!-- GAT07-CLAIM component-extensions: retired; runtime=removed-3.0; affirmative-behavior=false; owner=DS-IMP-021 -->',
   'surface-profile-overrides': '<!-- GAT07-CLAIM surface-profile-overrides: active; runtime=declared-32-applied-31; affirmative-behavior=true; owner=DS-IMP-022 -->',
 });
 
@@ -252,25 +252,23 @@ const SURFACE_PROFILE_AUTHORITY = Object.freeze({
 const EXPECTED_CLAIM_FLOOR = Object.freeze({
   'component-extensions': {
     symbols: ['ComponentExtensions', 'ExtensionHelpers', 'EngineAwareProps.extensions'],
-    disposition: 'reserved-deprecated',
-    runtimeStatus: 'unimplemented',
+    disposition: 'retired',
+    runtimeStatus: 'removed-3.0',
     deferredOwner: {
       sourceId: 'DS-IMP-021',
       owner: 'design-system-program',
       targetPhase: '2A',
-      decision: 'external-import census, then component-owned replacement or removal',
+      decision: 'retired in the 3.0 changeset by WO-RET-01; reintroduction is refused',
     },
-    definitionFiles: [
-      'src/foundation/contracts/kernel/tokens/extensions/index.ts',
-      'src/foundation/contracts/runtime/engine/index.ts',
-    ],
+    definitionFiles: [],
     requiredAssertions: {
+      retiredSymbolDeclarations: 0,
       staticallyResolvedExtensionRuntimeReferences: 0,
       staticallyResolvedExtensionHelperReferences: 0,
       staticallyResolvedPotentialConsumers: 0,
       unsupportedGovernedReferences: 0,
       registeredExecutableEvidence: 0,
-      deprecatedMarkersMinimum: 3,
+      deprecatedMarkers: 0,
     },
   },
   'surface-profile-overrides': {
@@ -444,6 +442,21 @@ export function evaluateClaimFloor(floor) {
       }
       if (!Array.isArray(claim.executableAssertions) || claim.executableAssertions.length !== 0) {
         errors.push(`${claim.id}: reserved claim must have zero executableAssertions`);
+      }
+    }
+    if (claim.disposition === 'retired') {
+      if (!Array.isArray(claim.definitionFiles) || claim.definitionFiles.length !== 0) {
+        errors.push(`${claim.id}: a retired claim has no definitionFiles`);
+      }
+      const assertions = Object.entries(claim.requiredAssertions ?? {});
+      if (assertions.length === 0) errors.push(`${claim.id}: a retired claim must pin its zero assertions`);
+      for (const [assertion, value] of assertions) {
+        if (assertion.endsWith('Minimum') || value !== 0) {
+          errors.push(`${claim.id}.${assertion}: a retired claim pins every assertion to exactly 0`);
+        }
+      }
+      if (!Object.hasOwn(claim.requiredAssertions ?? {}, 'retiredSymbolDeclarations')) {
+        errors.push(`${claim.id}: a retired claim must pin retiredSymbolDeclarations`);
       }
     }
   }

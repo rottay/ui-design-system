@@ -233,6 +233,24 @@ function isTypeOnlyPosition(node) {
   return false;
 }
 
+// The retired `component-extensions` family is guarded by NAME, not by owner
+// path: a re-declaration in any file is a reintroduction.
+const RETIRED_EXTENSION_TYPE_NAMES = new Set(['ComponentExtensions', 'ExtensionHelpers']);
+
+function isRetiredExtensionDeclaration(node) {
+  const name = node.name;
+  if (!name || !(ts.isIdentifier(name) || ts.isStringLiteral(name))) return false;
+  if (RETIRED_EXTENSION_TYPE_NAMES.has(name.text)) {
+    return ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node) ||
+      ts.isClassDeclaration(node) || ts.isFunctionDeclaration(node) ||
+      ts.isVariableDeclaration(node) || ts.isEnumDeclaration(node) ||
+      ts.isModuleDeclaration(node) || ts.isExportSpecifier(node);
+  }
+  return name.text === 'extensions' &&
+    (ts.isPropertySignature(node) || ts.isPropertyDeclaration(node)) &&
+    enclosingTypeName(node) === 'EngineAwareProps';
+}
+
 /**
  * Name of the interface / type-alias / class that physically hosts a governed
  * declaration. Used for declaration identity, so re-hosting a field on another
@@ -341,6 +359,7 @@ export function analyzeClaimSourceRecords(records) {
   const findingKeys = new Set();
   let profileDeclarations = 0;
   let extensionDeprecations = 0;
+  const retiredDeclarationSites = [];
   let profileDeprecations = 0;
 
   const definitionSpecs = [
@@ -629,6 +648,12 @@ export function analyzeClaimSourceRecords(records) {
     const isEngineDefinition = normalized.endsWith('/src/foundation/contracts/runtime/engine/index.ts');
     const isSurfaceDefinition = SURFACE_PROFILE_DEFINITION_SUFFIXES.some((suffix) => normalized.endsWith(suffix));
     if (isExtensionDefinition || isEngineDefinition) extensionDeprecations += countDeprecated(record.text);
+    (function collectRetired(node) {
+      if (isRetiredExtensionDeclaration(node)) {
+        retiredDeclarationSites.push({ path: record.path, line: sourceLine(source, node), name: node.name.text });
+      }
+      ts.forEachChild(node, collectRetired);
+    })(source);
     if (isSurfaceDefinition) profileDeprecations += countDeprecated(record.text);
 
     function visit(node) {
@@ -790,6 +815,9 @@ export function analyzeClaimSourceRecords(records) {
       unsupportedReferences: sortedFindings(unsupportedReferences, 'component-extensions'),
       registeredExecutableEvidence: 0,
       deprecatedMarkers: extensionDeprecations,
+      retiredSymbolDeclarations: retiredDeclarationSites.length,
+      retiredSymbolDeclarationSites: retiredDeclarationSites
+        .sort((left, right) => left.path.localeCompare(right.path) || left.line - right.line),
     },
     'surface-profile-overrides': {
       profileOverrideDeclarations: profileDeclarations,

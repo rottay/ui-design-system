@@ -111,7 +111,6 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     onSelect,
     disabled = false,
     adapt,
-    extensions: _extensions,
     engine: _engine,
     // Caller passthrough (id / aria-* / data-*): spread first so the engine's
     // own stamps always land last.

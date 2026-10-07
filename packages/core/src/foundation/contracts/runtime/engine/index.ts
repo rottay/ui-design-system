@@ -20,7 +20,6 @@
 
 import type { CSSProperties } from 'react';
 import type { EngineName } from '../../kernel/engine-identity';
-import type { ComponentExtensions } from '../../kernel/tokens/extensions';
 
 export type { EngineName } from '../../kernel/engine-identity';
 
@@ -46,14 +45,6 @@ export interface EngineAwareProps {
    * Inline CSS styles for the component.
    */
   style?: CSSProperties;
-  /**
-   * Reserved compatibility field for the unimplemented universal extension API.
-   * Production components do not read it and passing it has no runtime effect.
-   *
-   * @deprecated DS-IMP-021 owns replacement/removal after the deferred
-   * external-import census. Use each component's evidenced props/compounds.
-   */
-  extensions?: ComponentExtensions;
 }
 
 /** Engine metadata stored in the engine registry. */

@@ -1011,54 +1011,6 @@
       ],
       "codemod": "member-changed/.#Variant",
       "changeset": ".changeset/ret-01-compat-rows-receiver-4-0.md"
-    },
-    {
-      "file": "src/foundation/contracts/kernel/tokens/extensions/index.ts",
-      "anchor": "ComponentExtensions",
-      "class": "debt",
-      "reason": "Type of the inert `extensions` prop; no production preset reads it and no resolver produces it, so it describes a contract with no implementation.",
-      "scope": "Exported interface. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Referenced only by its own module and by `EngineAwareProps.extensions`.",
-      "replacement": "none: the extension mechanism it describes has no runtime",
-      "canonicalOwner": null,
-      "blocker": null,
-      "receiver": "WO-RET-01",
-      "since": "2026-07-15",
-      "removeIn": "3.0",
-      "evidence": [],
-      "codemod": null,
-      "changeset": null
-    },
-    {
-      "file": "src/foundation/contracts/kernel/tokens/extensions/index.ts",
-      "anchor": "ExtensionHelpers",
-      "class": "debt",
-      "reason": "Reserved resolver shape that no runtime implementation creates; it is published API with nothing behind it.",
-      "scope": "Exported interface. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Referenced only inside its own module.",
-      "replacement": "none: no resolver creates this interface",
-      "canonicalOwner": null,
-      "blocker": null,
-      "receiver": "WO-RET-01",
-      "since": "2026-07-15",
-      "removeIn": "3.0",
-      "evidence": [],
-      "codemod": null,
-      "changeset": null
-    },
-    {
-      "file": "src/foundation/contracts/runtime/engine/index.ts",
-      "anchor": "EngineAwareProps.extensions",
-      "class": "debt",
-      "reason": "No production component reads `extensions` and passing it has no runtime effect; it advertises an extension mechanism that was never built.",
-      "scope": "One optional prop of `EngineAwareProps`. Line-grep census of 2026-10-03 over packages/core/src, packages/showroom/src and the src roots of app-bithire, app-evnto and app-platform; multi-line JSX, spread props and typed config objects were not re-measured. Zero `extensions={` call sites.",
-      "replacement": "none: each component exposes its own evidenced props and compounds",
-      "canonicalOwner": null,
-      "blocker": null,
-      "receiver": "WO-RET-01",
-      "since": "2026-07-15",
-      "removeIn": "3.0",
-      "evidence": [],
-      "codemod": null,
-      "changeset": null
     }
   ]
 }

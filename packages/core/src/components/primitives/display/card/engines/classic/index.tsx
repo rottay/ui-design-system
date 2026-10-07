@@ -122,7 +122,7 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
     // unknown props to the root element. It must spread BEFORE the engine's
     // own stamps so the engine's data-part always lands last.
     ...rest
-  } = props;
+  } = props as CardProps & { extensions?: unknown };
 
   // Responsive padding handling
   const reactId = useId();

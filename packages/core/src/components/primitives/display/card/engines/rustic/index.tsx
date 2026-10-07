@@ -131,7 +131,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     // root element. It must spread BEFORE the engine's own stamps so the
     // engine's data-part and skin contract always land last.
     ...rest
-  } = props;
+  } = props as CardProps & { extensions?: unknown };
 
   // Responsive padding handling
   const reactId = useId();

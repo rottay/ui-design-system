@@ -9,11 +9,11 @@
       "blocks": [
         {
           "claimId": "component-extensions",
-          "sha256": "3464f1aa41e687154765df298bc5e9a20d0da3b697a07916462b92cae21e09ad"
+          "sha256": "666a7b0b93b978f5c03759c4edfae705318ea587f3daf89e7dfa733df8b5da49"
         },
         {
           "claimId": "component-extensions",
-          "sha256": "f4f3b4507b7f839f263d2a07edfaa579200e3145b171051715e506a613b53caa"
+          "sha256": "b97eaf4d5e8d2f199b2b561baf406258b311cd3c83ae53c9c36a641328802191"
         }
       ]
     },
@@ -40,11 +40,11 @@
       "blocks": [
         {
           "claimId": "component-extensions",
-          "sha256": "3464f1aa41e687154765df298bc5e9a20d0da3b697a07916462b92cae21e09ad"
+          "sha256": "666a7b0b93b978f5c03759c4edfae705318ea587f3daf89e7dfa733df8b5da49"
         },
         {
           "claimId": "component-extensions",
-          "sha256": "f4f3b4507b7f839f263d2a07edfaa579200e3145b171051715e506a613b53caa"
+          "sha256": "b97eaf4d5e8d2f199b2b561baf406258b311cd3c83ae53c9c36a641328802191"
         },
         {
           "claimId": "surface-profile-overrides",
@@ -63,11 +63,11 @@
       "blocks": [
         {
           "claimId": "component-extensions",
-          "sha256": "3464f1aa41e687154765df298bc5e9a20d0da3b697a07916462b92cae21e09ad"
+          "sha256": "666a7b0b93b978f5c03759c4edfae705318ea587f3daf89e7dfa733df8b5da49"
         },
         {
           "claimId": "component-extensions",
-          "sha256": "f4f3b4507b7f839f263d2a07edfaa579200e3145b171051715e506a613b53caa"
+          "sha256": "b97eaf4d5e8d2f199b2b561baf406258b311cd3c83ae53c9c36a641328802191"
         }
       ]
     },

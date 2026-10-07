@@ -10,8 +10,8 @@
         "ExtensionHelpers",
         "EngineAwareProps.extensions"
       ],
-      "disposition": "reserved-deprecated",
-      "runtimeStatus": "unimplemented",
+      "disposition": "retired",
+      "runtimeStatus": "removed-3.0",
       "affirmativeBehaviorClaimAllowed": false,
       "productionConsumers": [],
       "executableAssertions": [],
@@ -19,19 +19,17 @@
         "sourceId": "DS-IMP-021",
         "owner": "design-system-program",
         "targetPhase": "2A",
-        "decision": "external-import census, then component-owned replacement or removal"
+        "decision": "retired in the 3.0 changeset by WO-RET-01; reintroduction is refused"
       },
-      "definitionFiles": [
-        "src/foundation/contracts/kernel/tokens/extensions/index.ts",
-        "src/foundation/contracts/runtime/engine/index.ts"
-      ],
+      "definitionFiles": [],
       "requiredAssertions": {
+        "retiredSymbolDeclarations": 0,
         "staticallyResolvedExtensionRuntimeReferences": 0,
         "staticallyResolvedExtensionHelperReferences": 0,
         "staticallyResolvedPotentialConsumers": 0,
         "unsupportedGovernedReferences": 0,
         "registeredExecutableEvidence": 0,
-        "deprecatedMarkersMinimum": 3
+        "deprecatedMarkers": 0
       }
     },
     {

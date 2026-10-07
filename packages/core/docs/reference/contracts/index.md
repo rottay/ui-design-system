@@ -91,14 +91,14 @@ personality dimensions.
 Animation, chart, typography, accent, and card personality. These define the
 "feel" of a product (formal, playful, expressive) independently of colors.
 
-### Reserved compatibility surface
+### Retired in 3.0
 
-<!-- GAT07-CLAIM component-extensions: reserved-deprecated; runtime=unimplemented; affirmative-behavior=false; owner=DS-IMP-021 -->
+<!-- GAT07-CLAIM component-extensions: retired; runtime=removed-3.0; affirmative-behavior=false; owner=DS-IMP-021 -->
 
-GAT07-CONTRACT component-extensions: symbols=[ComponentExtensions, ExtensionHelpers, EngineAwareProps.extensions]; disposition=reserved-deprecated; runtime-status=unimplemented; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-021; target-phase=2A.
+GAT07-CONTRACT component-extensions: symbols=[ComponentExtensions, ExtensionHelpers, EngineAwareProps.extensions]; disposition=retired; runtime-status=removed-3.0; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-021; target-phase=2A.
 
-The generated contract above is authoritative. Prefer evidenced
-component-owned props, compounds, and slots.
+The 3.0 changeset of WO-RET-01 removed these types and the prop; no component
+read them. Use each component's own documented props, compounds and slots.
 
 ## Usage
 
