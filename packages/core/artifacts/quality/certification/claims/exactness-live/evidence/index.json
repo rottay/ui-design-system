@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "2a5bc10104e79bc2af5731c730ea52d7d1de8cd0ad9225387b1eff978c34ede6",
+    "authorityDigest": "69f557c863ddf0da2d4f886c1af05d0e94a67f61143fb845e2df293dc795dc55",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "57e7dd113d5588d598929295851d8220487db220",
+    "documentationRevision": "b3b78fc72ce4e919cf5b2290bddfbb2f179616ce",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -143,8 +143,8 @@
           "claim-census",
           "documentation-seal"
         ],
-        "bytes": 35677,
-        "sha256": "25fb078c66b9931bfc20e0b47faee702d553bdd018d126b4195fc3181edbdd1d"
+        "bytes": 35266,
+        "sha256": "33665fb9eefc8c4aca3a6bcb2363d92ce2640683ad657ca1552308f2755c2ffb"
       },
       {
         "path": "docs-engineering/engineering/design-system/foundations/hooks/README.md",
@@ -161,8 +161,8 @@
           "claim-census",
           "documentation-seal"
         ],
-        "bytes": 21654,
-        "sha256": "eb9fa6fb3444c0888c9b9dc6fc6b9ff263f02cf6d662b14a765f7c4db9f3ac1d"
+        "bytes": 21626,
+        "sha256": "cfb2712d8bc8db37451c887ea677dd5a500daee87e003bc713e561d1bbbcaab0"
       },
       {
         "path": "docs-engineering/engineering/design-system/runtime/engines/modern/README.md",
@@ -223,7 +223,7 @@
           "workspace-toolchain"
         ],
         "bytes": 27490,
-        "sha256": "777c05e6452949238750355cd4c0363778f10e446f4b65aa7eb98d811c01cfbb"
+        "sha256": "7f9218de049b7764516bca7ded902cc10fcc8f3e59df40381f825a46f322acc1"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -305,7 +305,7 @@
           "documentation-seal"
         ],
         "bytes": 7023,
-        "sha256": "9d8f71085db5f55041cbdd43903fcc42f03c5be6404b2bace44809ea5a811ba4"
+        "sha256": "cd5a0b78bed5dd5fef6f31786ad88cc4ac4a5d776fcec75e5858f49f4df49e13"
       },
       {
         "path": "ui-design-system/packages/core/package.json",
@@ -323,7 +323,7 @@
           "claim-census"
         ],
         "bytes": 4293,
-        "sha256": "183f9792a45b5db542400503134c8613bede3b7cf506c04de0a88c576f61177b"
+        "sha256": "72f2f298a705f8190e140b73f730cc7aeaa2f8063641ea4abe91ae4ff66d3f85"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
@@ -332,23 +332,23 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "f327b3dd51953b957e6faf533d840d62b08ee7c2fc6f21c90381bb76adf9e347"
+        "sha256": "284e39e0d846ad4b22a5eb6615f918f165ff4f9d07fdee852dde21a8db2dcabe"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 73904,
-        "sha256": "7065d1b01a0ee1d3bdd7f6e5831ca650dba67ee6b50d99093146d58527ac438e"
+        "bytes": 74597,
+        "sha256": "0ba3819ac328c71ddcc836b3a009554d29a3fd2121a2f1586e387720dc84834c"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.test.mjs",
         "roles": [
           "audit-machinery"
         ],
-        "bytes": 117064,
-        "sha256": "cf18aa3dd8b39dd25d5096d47f23413416e828279c47b15fd8946cbd2044b81f"
+        "bytes": 122062,
+        "sha256": "e8074544cd01019cf7aabfa54ea2b3ab71f06e3e0f1977e371e026ccdf7321e4"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/public-claim-floor/index.json",
@@ -356,8 +356,8 @@
           "audit-machinery",
           "claim-census"
         ],
-        "bytes": 6287,
-        "sha256": "0a2eebeec9e29ee793bf8db115541d4a56c6fd7666bd317b56819a4aa9d74f59"
+        "bytes": 6171,
+        "sha256": "6bbca3cf3c16f3207d0ed5ca9a63f91d506299567ddf601b8abdf71c4170e9a7"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/stale-corpus/index.json",
@@ -8159,8 +8159,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 8196,
-        "sha256": "a555ef03334989a920e68c1084fec478e4cf2f9d5eb9c30e10bdd38ac63b5c7e"
+        "bytes": 8236,
+        "sha256": "ecbec730b91ba92554b62787476b0083ba87e9844ffe1e7a234d2dde7b502f23"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/card/engines/modern/index.tsx",
@@ -8169,8 +8169,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 11801,
-        "sha256": "e232f316f6c06d2b26285d3229c9e166ee1227fcf9fca05625f2a09c6a6b6d02"
+        "bytes": 11772,
+        "sha256": "79473f7c29224be4afb48b91c4f9ae73b46cd737d918d0eee5412b61672b4088"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/card/engines/rustic/index.tsx",
@@ -8179,8 +8179,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 10826,
-        "sha256": "36491e63eb0c038ee8dce285ca4c0974008fb813ca1c968c9ae133fa9b3e2fb3"
+        "bytes": 10866,
+        "sha256": "61cdc65b4d786f168b8778d8317841efd6886bb7b941e9a69fb02b15b89e8538"
       },
       {
         "path": "ui-design-system/packages/core/src/components/primitives/display/card/index.tsx",
@@ -26179,8 +26179,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 36230,
-        "sha256": "5d33a772b039f0705728810af126bced5cfef1c90d2a2a76d2f8f28071fccd68"
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/kernel/tokens/index.ts",
@@ -26319,8 +26319,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 2947,
-        "sha256": "812d4e415433b09c45035085b5597a27bc3dcd0b2914be25ea07610aad4cb4a4"
+        "bytes": 2509,
+        "sha256": "43393cc873e6c88586d7cf3c65379161d344c4d88d1f209a5c0311ee5274157c"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/contracts/runtime/errors/index.ts",
@@ -48098,7 +48098,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "2a5bc10104e79bc2af5731c730ea52d7d1de8cd0ad9225387b1eff978c34ede6"
+    "digest": "69f557c863ddf0da2d4f886c1af05d0e94a67f61143fb845e2df293dc795dc55"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4222 counters; 3223 completed zeros locked exactly; 989 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -48162,8 +48162,8 @@
             "ExtensionHelpers",
             "EngineAwareProps.extensions"
           ],
-          "disposition": "reserved-deprecated",
-          "runtimeStatus": "unimplemented",
+          "disposition": "retired",
+          "runtimeStatus": "removed-3.0",
           "affirmativeBehaviorClaimAllowed": false,
           "productionConsumers": [],
           "executableAssertions": [],
@@ -48171,19 +48171,17 @@
             "sourceId": "DS-IMP-021",
             "owner": "design-system-program",
             "targetPhase": "2A",
-            "decision": "external-import census, then component-owned replacement or removal"
+            "decision": "retired in the 3.0 changeset by WO-RET-01; reintroduction is refused"
           },
-          "definitionFiles": [
-            "src/foundation/contracts/kernel/tokens/extensions/index.ts",
-            "src/foundation/contracts/runtime/engine/index.ts"
-          ],
+          "definitionFiles": [],
           "requiredAssertions": {
+            "retiredSymbolDeclarations": 0,
             "staticallyResolvedExtensionRuntimeReferences": 0,
             "staticallyResolvedExtensionHelperReferences": 0,
             "staticallyResolvedPotentialConsumers": 0,
             "unsupportedGovernedReferences": 0,
             "registeredExecutableEvidence": 0,
-            "deprecatedMarkersMinimum": 3
+            "deprecatedMarkers": 0
           }
         },
         {
@@ -48293,36 +48291,13 @@
         "staticallyResolvedExtensionHelperReferenceFiles": [],
         "staticallyResolvedPotentialConsumers": 0,
         "potentialConsumers": [],
-        "containmentExclusions": [
-          {
-            "claimId": "component-extensions",
-            "path": "ui-design-system/packages/core/src/components/primitives/display/card/engines/classic/index.tsx",
-            "line": 119,
-            "reason": "unused underscore exclusion binding (containment, not consumption)",
-            "expression": "extensions",
-            "symbol": "extensions"
-          },
-          {
-            "claimId": "component-extensions",
-            "path": "ui-design-system/packages/core/src/components/primitives/display/card/engines/modern/index.tsx",
-            "line": 114,
-            "reason": "unused underscore exclusion binding (containment, not consumption)",
-            "expression": "extensions",
-            "symbol": "extensions"
-          },
-          {
-            "claimId": "component-extensions",
-            "path": "ui-design-system/packages/core/src/components/primitives/display/card/engines/rustic/index.tsx",
-            "line": 128,
-            "reason": "unused underscore exclusion binding (containment, not consumption)",
-            "expression": "extensions",
-            "symbol": "extensions"
-          }
-        ],
+        "containmentExclusions": [],
         "unsupportedGovernedReferences": 0,
         "unsupportedReferences": [],
         "registeredExecutableEvidence": 0,
-        "deprecatedMarkers": 3
+        "deprecatedMarkers": 0,
+        "retiredSymbolDeclarations": 0,
+        "retiredSymbolDeclarationSites": []
       },
       "surface-profile-overrides": {
         "profileOverrideDeclarations": 32,
@@ -49357,24 +49332,24 @@
     "documentation": {
       "allowlist": {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-allowlist/index.json",
-        "sha256": "183f9792a45b5db542400503134c8613bede3b7cf506c04de0a88c576f61177b"
+        "sha256": "72f2f298a705f8190e140b73f730cc7aeaa2f8063641ea4abe91ae4ff66d3f85"
       },
       "documents": {
         "ui-design-system/packages/core/docs/reference/contracts/index.md": {
           "claims": [
             "component-extensions"
           ],
-          "sha256": "9d8f71085db5f55041cbdd43903fcc42f03c5be6404b2bace44809ea5a811ba4",
+          "sha256": "cd5a0b78bed5dd5fef6f31786ad88cc4ac4a5d776fcec75e5858f49f4df49e13",
           "blocks": [
             {
               "claimId": "component-extensions",
               "line": 98,
-              "sha256": "3464f1aa41e687154765df298bc5e9a20d0da3b697a07916462b92cae21e09ad"
+              "sha256": "666a7b0b93b978f5c03759c4edfae705318ea587f3daf89e7dfa733df8b5da49"
             },
             {
               "claimId": "component-extensions",
               "line": 96,
-              "sha256": "f4f3b4507b7f839f263d2a07edfaa579200e3145b171051715e506a613b53caa"
+              "sha256": "b97eaf4d5e8d2f199b2b561baf406258b311cd3c83ae53c9c36a641328802191"
             }
           ]
         },
@@ -49401,17 +49376,17 @@
             "component-extensions",
             "surface-profile-overrides"
           ],
-          "sha256": "eb9fa6fb3444c0888c9b9dc6fc6b9ff263f02cf6d662b14a765f7c4db9f3ac1d",
+          "sha256": "cfb2712d8bc8db37451c887ea677dd5a500daee87e003bc713e561d1bbbcaab0",
           "blocks": [
             {
               "claimId": "component-extensions",
               "line": 262,
-              "sha256": "3464f1aa41e687154765df298bc5e9a20d0da3b697a07916462b92cae21e09ad"
+              "sha256": "666a7b0b93b978f5c03759c4edfae705318ea587f3daf89e7dfa733df8b5da49"
             },
             {
               "claimId": "component-extensions",
               "line": 260,
-              "sha256": "f4f3b4507b7f839f263d2a07edfaa579200e3145b171051715e506a613b53caa"
+              "sha256": "b97eaf4d5e8d2f199b2b561baf406258b311cd3c83ae53c9c36a641328802191"
             },
             {
               "claimId": "surface-profile-overrides",
@@ -49429,17 +49404,17 @@
           "claims": [
             "component-extensions"
           ],
-          "sha256": "25fb078c66b9931bfc20e0b47faee702d553bdd018d126b4195fc3181edbdd1d",
+          "sha256": "33665fb9eefc8c4aca3a6bcb2363d92ce2640683ad657ca1552308f2755c2ffb",
           "blocks": [
             {
               "claimId": "component-extensions",
-              "line": 722,
-              "sha256": "3464f1aa41e687154765df298bc5e9a20d0da3b697a07916462b92cae21e09ad"
+              "line": 721,
+              "sha256": "666a7b0b93b978f5c03759c4edfae705318ea587f3daf89e7dfa733df8b5da49"
             },
             {
               "claimId": "component-extensions",
-              "line": 720,
-              "sha256": "f4f3b4507b7f839f263d2a07edfaa579200e3145b171051715e506a613b53caa"
+              "line": 719,
+              "sha256": "b97eaf4d5e8d2f199b2b561baf406258b311cd3c83ae53c9c36a641328802191"
             }
           ]
         },
@@ -122307,8 +122282,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "249b36870ca1081be2bae6823bfdded530c42a5ea264b28579b6afa25c153a74",
-      "249b36870ca1081be2bae6823bfdded530c42a5ea264b28579b6afa25c153a74"
+      "4bfcec23dc68d0bcf7827d42a2c3e51ca89b44ec66b3cde28a71b053ac658b7e",
+      "4bfcec23dc68d0bcf7827d42a2c3e51ca89b44ec66b3cde28a71b053ac658b7e"
     ],
     "agree": true
   }
