@@ -8618,7 +8618,7 @@
    "lane": "architecture",
    "order": 26,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -8630,8 +8630,8 @@
    "notes": "Owner decision packet 2026-10-06 (proposals §E-1 approved): chrome-less variants OF the canonical Input/Select/Button, never new raw controls; the behaviour contract (keyboard/focus/aria) is kept, the chrome (height floor, padding, variant paint) drops. Drains by name: data-table cell-editor input+select, file-manager file input, collection-workspace page-size select, detail-panel onClick-only crumb, status-filter-pills toggle. The API formalizes with an independent debrief before any shared API lands.",
    "claimedBy": "kimi",
    "claimedAt": "2026-10-06",
-   "doneAt": null,
-   "evidence": null,
+   "doneAt": "2026-10-06",
+   "evidence": "2026-10-06 — WO-ARC-22 completa (E-1). Las 6 rows del acceptance drenadas por nombre via L1-L6 (file input, checkbox, crumb, text editor, cell select, page-size select, pills): ownership 2036/1336 -> 2028/1329, productive 30/24 -> 23/18, decrease-only en cada paso. Las variantes chrome-less de Input/Select/Button llevan el contrato de comportamiento identico (teclado/foco/aria; las suites rerun por nombre) y cero chrome paint (el gate gobernado chrome-none-cascade, blocking pre-build, auto-taladrado, cubre Input/Select/Button con fixtures reales y plants). API formalizada por debrief independiente ANTES de la API compartida (3 rondas ARC-22; la cadena ARC-23). Celdas visuales re-grabadas bajo la ceremonia con tile review (28/28 celdas aceptadas en la era, incl. las atribuciones D-1/81e11a852/dust). Build verde, unit verde, roadmap:check verde. Reviews independientes por lote (b1b0eb21 + cb33c9c8 tiles). Residuos registrados con receivers: los rojos preexistentes (paint/layers, cascade-wiring, read-without-producer), O-ARC-1, F-L3-1, O-TAB-1, O-L5-1, la limitacion de autofill, y la pin R1-class ligada a WO-RET-06.",
    "progressLog": [
     {
      "at": "2026-10-06 07:49",
