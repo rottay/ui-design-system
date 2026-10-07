@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-06",
+ "updated": "2026-10-07",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -6400,6 +6400,11 @@
      "at": "2026-10-05 22:49",
      "by": "kimi-dt",
      "note": "2026-10-06 — OWNER DECISION PACKET (roadmap/owner-decisions-2026-10-06.md, the owner explicitly delegated): Q1 PatternApprovalInbox STAYS canonical (disposition lot gets consumers/contract/tests; a redundant alias retires only with migration). Q4 option A: surfaces.overlays is a semantic scrim ladder from the surface/mode canon, no second compiler — the R1/backdrop lane unblocks. Files: bounded EXT-DS (claim-floor, documentation-allowlist, exactness) + backdrop gates + Modal skin authorized, exact physical paths enumerated in the WO before any edit; the two docs-engineering component-extensions blocks authorized (separate docs commit + official reseal). SENT: bounded frozen a11y exception for the badge's foreground/paired ink authorized (exact selectors registered in the freeze gate; Streaming joins if it needs the same; both modes; byte-identity outside the lot; the non-text floor never auto-approves small text); the modern Select-success and Toggle-checked repairs authorized outright. Chart budget: option A primary (real consumer bundles per renderer/component, root+subpath, ESM/CJS, gzip, sibling isolation); source graph stays diagnostic; goes to the governing charts/boundary WO with a link from RET-01, formal registration if no receiver exists; the historical figure authorizes no new ceiling; NOT a new RET-01 blocker. AM-1 v3 ratified (R5->R5', 18 rows/25 reports/17 files, 3-carrier sub-ceiling, class/proof/path/count restrictions, negatives preserved; Callout row 25 frozen-group + the 5 parity-failed transfers with all Variant conditions incl. goes-last; census revalidation BEFORE adoption). P-79/P-88: P-88 WINS — a skinned component keeps its canonical data-part/data-state; composition through documented className/slot hooks; F-5C stands under this law. None of this closes RET-01 or any WO; the closures stay behind their own acceptance."
+    },
+    {
+     "at": "2026-10-07 01:59",
+     "by": "kimi",
+     "note": "2026-10-07 — EXT-DS landed (eaeb1448b + c810f790e + 0c102b246): el triple de extensions RETIRADO con migracion (la ley: la deuda no cruza el cierre); bajo --assume-done=WO-RET-01 ya no hay lineas rojas del triple. Claim-floor + documentation-allowlist + exactness per el bounded Files del owner; docs commit b3b78fc (D1/D2) + seal + reseal 4bfcec23. La guardia de nombres retirados dispara por NOMBRE en cualquier archivo. RET-01 NO CIERRA: R1 sigue rojo en E4 + el backdrop espera Q4 Fase 1 (el orden serial del debrief: EXT-DS primero, Q4 P1 despues); R4 no corrio; R2/R6 se re-corren al cierre; R19 abierto; R6 contra el origin/main real es rojo en PopoverProps/Popover/BaseComponentProps (predecan el lote — necesitan contract-diff rows de sus lotes dueños). Q-7: CI exactness rojo hasta que el owner pushee docs-engineering."
     }
    ]
   },
