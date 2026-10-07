@@ -312,7 +312,10 @@ test('the literal renames of the retired size and alignment spellings are author
   for (const entry of sizes.filter((item) => item.id !== largestDensity)) assert.equal(entry.replacement.member, table[entry.member], entry.id);
   const sides = entries.filter((entry) => entry.prop === 'textAlign');
   assert.deepEqual(sides.map((entry) => [entry.member, entry.replacement.member, entry.directional]), [['left', 'start', true], ['right', 'end', true]]);
-  assert.equal(entries.length, sizes.length + sides.length);
+  const pictograms = entries.filter((entry) => entry.subpath === './pictograms');
+  assert.deepEqual(pictograms.map((entry) => [entry.member, entry.replacement, entry.mode]),
+    [['candidate-evidence', null, 'report-only'], ['event-moment', null, 'report-only']]);
+  assert.equal(entries.length, sizes.length + sides.length + pictograms.length);
 });
 
 const LEDGER = 'contracts/package/deprecations/index.json';

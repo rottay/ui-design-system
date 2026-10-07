@@ -71,16 +71,14 @@ Trademark Guidelines and any other agreement that applies to their use.
 
 ## FeaturePictogram assets
 
-`FeaturePictogram` artwork is not third-party content. The eight packaged
+`FeaturePictogram` artwork is not third-party content. The six packaged
 pictograms are original Rottay assets governed by
 `LicenseRef-Rottay-Original-Product-Asset-1.0`, rights holder Rottay, and the
 `internal-and-bundled-product` distribution policy:
 
 - `ai-assistant`
 - `analytics-insight`
-- `candidate-evidence`
 - `empty-search`
-- `event-moment`
 - `secure-access`
 - `team-collaboration`
 - `workflow-automation`

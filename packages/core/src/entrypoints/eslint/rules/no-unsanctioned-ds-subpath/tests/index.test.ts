@@ -407,7 +407,7 @@ function statedTally(markdown: string): string[] {
 }
 
 describe('showroom mounts the rule with a decrease-only baseline', () => {
-  const SHOWROOM_BASELINE_CAP = 2;
+  const SHOWROOM_BASELINE_CAP = 1;
 
   function showroomAllowSubpaths(config: string): string[] {
     const block = /allowSubpaths:\s*\[([^\]]*)\]/.exec(config);

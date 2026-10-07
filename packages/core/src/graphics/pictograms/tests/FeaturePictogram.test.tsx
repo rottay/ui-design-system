@@ -16,7 +16,7 @@ import {
 
 describe("FeaturePictogram", () => {
   it("keeps corpus, artwork and provenance exhaustive and supplier-free", () => {
-    expect(FEATURE_PICTOGRAM_NAMES).toHaveLength(8);
+    expect(FEATURE_PICTOGRAM_NAMES).toHaveLength(6);
     expect(FEATURE_PICTOGRAM_CORPUS.map((entry) => entry.name)).toEqual(
       FEATURE_PICTOGRAM_NAMES
     );
@@ -34,7 +34,9 @@ describe("FeaturePictogram", () => {
           entry.rendering === "local-svg-ssr"
       )
     ).toBe(true);
-    expect(isFeaturePictogramName("candidate-evidence")).toBe(true);
+    expect(isFeaturePictogramName("analytics-insight")).toBe(true);
+    expect(isFeaturePictogramName("candidate-evidence")).toBe(false);
+    expect(isFeaturePictogramName("event-moment")).toBe(false);
     expect(isFeaturePictogramName("lucide.Briefcase")).toBe(false);
   });
 
@@ -108,14 +110,14 @@ describe("FeaturePictogram", () => {
 
   it("enforces explicit accessible intent", () => {
     const { getByRole, rerender, container } = render(
-      <FeaturePictogram name="candidate-evidence" label="Candidate evidence" />
+      <FeaturePictogram name="analytics-insight" label="Analytics insight" />
     );
-    expect(getByRole("img", { name: "Candidate evidence" })).toBeTruthy();
+    expect(getByRole("img", { name: "Analytics insight" })).toBeTruthy();
     expect(container.querySelector("title")?.textContent).toBe(
-      "Candidate evidence"
+      "Analytics insight"
     );
 
-    rerender(<FeaturePictogram name="candidate-evidence" decorative />);
+    rerender(<FeaturePictogram name="analytics-insight" decorative />);
     expect(container.querySelector("svg")?.getAttribute("aria-hidden")).toBe(
       "true"
     );

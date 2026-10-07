@@ -9,6 +9,7 @@
     "./icons/roles/*",
     "./marks/brand",
     "./marks/cloud",
+    "./pictograms",
     "./styles/rottay",
     "./supplier-contract",
     "./supplier-honesty-cli"

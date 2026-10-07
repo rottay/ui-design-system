@@ -35,7 +35,7 @@ function AssetFixture(): React.ReactElement {
         data-testid="cloud-service-mark"
       />
       <FeaturePictogram
-        name="candidate-evidence"
+        name="analytics-insight"
         decorative
         data-testid="feature-pictogram"
       />
@@ -183,7 +183,7 @@ describe('graphic asset adapter controls', () => {
       <>
         <BrandMark name="google" decorative />
         <UnsafeIcon name="remote.icon" decorative />
-        <UnsafePictogram name="candidate-evidence" size={16} decorative />
+        <UnsafePictogram name="analytics-insight" size={16} decorative />
         <UnsafeCloud provider="gcp" service="lambda" decorative />
       </>,
     );
@@ -208,7 +208,7 @@ describe('graphic asset adapter controls', () => {
         code: 'invalid-optical-input',
         assetClass: 'feature-pictogram',
         provider: 'product-pictograms',
-        assetKey: 'candidate-evidence',
+        assetKey: 'analytics-insight',
         outcome: 'dropped',
       },
       {

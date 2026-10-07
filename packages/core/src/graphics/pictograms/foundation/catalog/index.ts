@@ -3,9 +3,7 @@ import type { CSSProperties } from 'react';
 export const FEATURE_PICTOGRAM_NAMES = [
   'ai-assistant',
   'analytics-insight',
-  'candidate-evidence',
   'empty-search',
-  'event-moment',
   'secure-access',
   'team-collaboration',
   'workflow-automation',
@@ -18,9 +16,7 @@ export interface FeaturePictogramCorpusEntry {
   readonly family:
     | 'ai'
     | 'data'
-    | 'bithire'
     | 'empty-state'
-    | 'evnto'
     | 'security'
     | 'team'
     | 'workflow';
@@ -46,23 +42,9 @@ export const FEATURE_PICTOGRAM_CORPUS: readonly FeaturePictogramCorpusEntry[] =
       source: 'rottay-original',
     },
     {
-      name: 'candidate-evidence',
-      family: 'bithire',
-      intent: 'Explain evidence-backed candidate evaluation.',
-      directional: false,
-      source: 'rottay-original',
-    },
-    {
       name: 'empty-search',
       family: 'empty-state',
       intent: 'Explain that a bounded search returned no results.',
-      directional: false,
-      source: 'rottay-original',
-    },
-    {
-      name: 'event-moment',
-      family: 'evnto',
-      intent: 'Explain a scheduled live event or memorable event moment.',
       directional: false,
       source: 'rottay-original',
     },

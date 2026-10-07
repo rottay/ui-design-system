@@ -63,13 +63,6 @@ export const CRA17_CANONICAL_ICON_NAMES = [
 /** Functional icon and mark optical-size audit axis requested by CRA17. */
 export const CRA17_ASSET_SIZES = [12, 16, 20, 24] as const;
 
-/**
- * FeaturePictogram is explanatory artwork, not a functional icon. Its public
- * contract intentionally starts at 32px, so the atlas audits its four legal
- * numeric sizes instead of bypassing the component with CSS shrinking.
- */
-export const CRA17_PICTOGRAM_SIZES = [32, 48, 64, 96] as const;
-
 export interface Cra17Axes {
   readonly corpus: Cra17Corpus;
   readonly direction: Cra17Direction;

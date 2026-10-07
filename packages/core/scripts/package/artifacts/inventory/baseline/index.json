@@ -4,7 +4,7 @@
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
   "entryCount": 7640,
-  "unpackedSize": 43265893,
+  "unpackedSize": 43263593,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -19384,15 +19384,15 @@
     },
     {
       "path": "dist/graphics/pictograms/foundation/catalog/index.cjs",
-      "size": 1551
+      "size": 1231
     },
     {
       "path": "dist/graphics/pictograms/foundation/catalog/index.d.ts",
-      "size": 2075
+      "size": 2015
     },
     {
       "path": "dist/graphics/pictograms/foundation/catalog/index.js",
-      "size": 1809
+      "size": 1411
     },
     {
       "path": "dist/graphics/pictograms/index.d.ts",
@@ -19400,7 +19400,7 @@
     },
     {
       "path": "dist/graphics/pictograms/presentation/feature-pictogram/artwork/index.cjs",
-      "size": 3264
+      "size": 2622
     },
     {
       "path": "dist/graphics/pictograms/presentation/feature-pictogram/artwork/index.d.ts",
@@ -19408,7 +19408,7 @@
     },
     {
       "path": "dist/graphics/pictograms/presentation/feature-pictogram/artwork/index.js",
-      "size": 4476
+      "size": 3581
     },
     {
       "path": "dist/graphics/pictograms/presentation/feature-pictogram/index.cjs",
@@ -30552,11 +30552,11 @@
     },
     {
       "path": "governance/graphics/sources/index.json",
-      "size": 8963
+      "size": 8909
     },
     {
       "path": "package.json",
-      "size": 24323
+      "size": 24434
     },
     {
       "path": "README.md",
@@ -30564,7 +30564,7 @@
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
-      "size": 7947
+      "size": 7905
     }
   ]
 }

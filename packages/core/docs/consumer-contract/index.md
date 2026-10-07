@@ -91,7 +91,7 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./marks` | guaranteed | — | 12 | 1 |
 | `./marks/brand` | retire-by | WO-RET-06 | 0 | 0 |
 | `./marks/cloud` | retire-by | WO-RET-06 | 0 | 0 |
-| `./pictograms` | retire-by | WO-RET-06 | 0 | 1 |
+| `./pictograms` | retire-by | WO-RET-06 | 0 | 0 |
 | `./charts` | guaranteed | — | 8 | 0 |
 | `./charts/spec` | guaranteed | — | 2 | 0 |
 | `./charts/access` | guaranteed | — | 2 | 0 |

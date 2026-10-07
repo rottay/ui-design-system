@@ -50,17 +50,6 @@ const AnalyticsInsight: Artwork = () => (
   </>
 );
 
-const CandidateEvidence: Artwork = () => (
-  <>
-    {halo}
-    <rect {...common} x="27" y="22" width="34" height="49" rx="7" />
-    <circle {...common} cx="44" cy="37" r="7" />
-    <path {...common} d="M34 54c2.7-5 6-7 10-7s7.3 2 10 7M34 61h13" />
-    <circle cx="64" cy="61" r="13" fill="currentColor" opacity=".12" />
-    <path {...common} d="m58.5 61 3.6 3.6 7-8" />
-  </>
-);
-
 const EmptySearch: Artwork = () => (
   <>
     {halo}
@@ -68,18 +57,6 @@ const EmptySearch: Artwork = () => (
     <path {...common} d="m55 55 14 14" />
     <path {...common} d="M35 42h16M39 49h8" opacity=".58" />
     <path {...common} d="M67 26v8m-4-4h8" />
-  </>
-);
-
-const EventMoment: Artwork = () => (
-  <>
-    {halo}
-    <rect {...common} x="25" y="29" width="46" height="40" rx="7" />
-    <path {...common} d="M25 41h46M36 24v10m24-10v10" />
-    <path
-      {...common}
-      d="m48 47 2.6 6 6.4.6-4.8 4.2 1.4 6.2-5.6-3.2-5.6 3.2 1.4-6.2-4.8-4.2 6.4-.6L48 47Z"
-    />
   </>
 );
 
@@ -129,9 +106,7 @@ export const FEATURE_PICTOGRAM_ARTWORK: Readonly<
 > = {
   "ai-assistant": AiAssistant,
   "analytics-insight": AnalyticsInsight,
-  "candidate-evidence": CandidateEvidence,
   "empty-search": EmptySearch,
-  "event-moment": EventMoment,
   "secure-access": SecureAccess,
   "team-collaboration": TeamCollaboration,
   "workflow-automation": WorkflowAutomation,

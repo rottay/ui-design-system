@@ -24,7 +24,6 @@ export default defineConfig([
           // Measured baseline of unsanctioned subpaths the probes still import.
           // Decrease-only; pinned by the design system's own rule test.
           allowSubpaths: [
-            './pictograms',
             './spatial',
           ],
         },

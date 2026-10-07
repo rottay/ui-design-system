@@ -17,11 +17,6 @@ import {
   type CloudProvider,
   type CloudService,
 } from '@rottay/design-system/marks';
-import {
-  FEATURE_PICTOGRAM_NAMES,
-  FeaturePictogram,
-  type FeaturePictogramName,
-} from '@rottay/design-system/pictograms';
 
 import { TortureSurface } from '../../../../components/torture-surface';
 import {
@@ -30,7 +25,6 @@ import {
   CRA17_CORPORA,
   CRA17_DIRECTIONS,
   CRA17_ENGINES,
-  CRA17_PICTOGRAM_SIZES,
   CRA17_TENANTS,
   CRA17_THEMES,
   cra17ProbeHref,
@@ -46,7 +40,6 @@ import {
 type AssetClass =
   | 'brand-mark'
   | 'cloud-service-mark'
-  | 'feature-pictogram'
   | 'icon';
 
 interface AssetEntry {
@@ -112,16 +105,6 @@ const CLOUD_ENTRIES: readonly AssetEntry[] = CLOUD_PROVIDERS.flatMap(
     })),
 );
 
-const PICTOGRAM_ENTRIES: readonly AssetEntry[] = FEATURE_PICTOGRAM_NAMES.map(
-  (name: FeaturePictogramName) => ({
-    key: name,
-    label: name,
-    render: (size) => (
-      <FeaturePictogram name={name} size={size} tone="brand" decorative />
-    ),
-  }),
-);
-
 const CLASS_COPY: Readonly<
   Record<
     AssetClass,
@@ -145,12 +128,6 @@ const CLASS_COPY: Readonly<
     title: 'CloudServiceMark',
     description:
       'Every provider/service pair from the public mark registry at the shared optical-size axis.',
-  },
-  'feature-pictogram': {
-    eyebrow: 'Explanatory artwork',
-    title: 'FeaturePictogram',
-    description:
-      'All eight registered product illustrations at their legal 32–96px explanatory-artwork scale.',
   },
 };
 
@@ -281,7 +258,6 @@ const STYLES = `
   .cra17-section[data-cra17-asset-class='icon'] { --cra17-accent: var(--ds-color-primary); }
   .cra17-section[data-cra17-asset-class='brand-mark'] { --cra17-accent: var(--ds-color-info, var(--ds-color-primary)); }
   .cra17-section[data-cra17-asset-class='cloud-service-mark'] { --cra17-accent: var(--ds-color-warning, var(--ds-color-primary)); }
-  .cra17-section[data-cra17-asset-class='feature-pictogram'] { --cra17-accent: var(--ds-color-ai, var(--ds-color-primary)); }
 
   .cra17-section-header {
     display: flex;
@@ -628,7 +604,6 @@ function SemanticAssetAtlasContent() {
         data-cra17-role-cell-count={icons.length * CRA17_ASSET_SIZES.length}
         data-cra17-brand-mark-count={BRAND_MARK_NAMES.length}
         data-cra17-cloud-mark-count={CLOUD_PROVIDERS.length * CLOUD_SERVICES.length}
-        data-cra17-feature-pictogram-count={FEATURE_PICTOGRAM_NAMES.length}
       >
         <style>{STYLES}</style>
         <div className="cra17-shell">
@@ -665,13 +640,6 @@ function SemanticAssetAtlasContent() {
               sizes={CRA17_ASSET_SIZES}
               axes={axes}
               sizeContract="12|16|20|24"
-            />
-            <AssetSection
-              assetClass="feature-pictogram"
-              entries={PICTOGRAM_ENTRIES}
-              sizes={CRA17_PICTOGRAM_SIZES}
-              axes={axes}
-              sizeContract="32|48|64|96"
             />
           </div>
         </div>

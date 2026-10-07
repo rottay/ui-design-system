@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "notice": {
     "path": "THIRD_PARTY_NOTICES.md",
-    "sha256": "008076644f8c3a938debb820b8c94b92625b1565d5aeb9a24add1eb98ff02004"
+    "sha256": "2c4a4cd37685dea88484548a35f9c3a706effdd0da07d803d19243579e289158"
   },
   "runtimePackageAllowlist": [
     "@rottay/design-system",
@@ -226,13 +226,11 @@
       "rightsHolder": "Rottay",
       "distribution": "internal-and-bundled-product",
       "artworkPath": "src/graphics/pictograms/presentation/feature-pictogram/artwork/index.tsx",
-      "artworkSha256": "6ace1914e3b0a27d0b6a65dbef3b9c69d706869009868706c144dbae62db996e",
+      "artworkSha256": "814631e1b52ff74de24bdd3cdad5b909df48a477fc4838630ce202cef7471322",
       "entries": [
         "ai-assistant",
         "analytics-insight",
-        "candidate-evidence",
         "empty-search",
-        "event-moment",
         "secure-access",
         "team-collaboration",
         "workflow-automation"
