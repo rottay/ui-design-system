@@ -6615,7 +6615,7 @@
    "lane": "retire",
    "order": 6,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-RET-01"
    ],
@@ -6624,9 +6624,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 5; closes F-42, F-109, F-111, F-113, F-115, F-84 (remainder), F-88 (frozen-engine clause if still open). Bounded successor of WO-RET-01, authorized by owner ruling 2026-10-03 section 1: \"Si no alcanzan, registrá un sucesor acotado mediante la maquinaria existente, sin segundo backlog ni denominador escondido.\" and scoped by owner ruling R19 (2026-10-03). Independent review: .tmp/ds-claude-2026-10-03/review-ret01-amendment-draft.md (claude-fable-5-1, ADOPT WITH CORRECTIONS, applied). Closed scope; receives no debt; a disposition deletes the row, it never keeps one; a transfer closes nothing. Mechanism for the six BitHire roles: WO-CRA-17 when phase 2B opens (no dependency edge).",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi",
+   "claimedAt": "2026-10-07",
+   "progressLog": [
+    {
+     "at": "2026-10-07 10:46",
+     "by": "kimi",
+     "note": "2026-10-07 — WO-RET-06 abierta tras el cierre de RET-01. La closure-read (sesion 1af06fdd) midio: NO cierra solo con writer work — necesita las disposiciones del owner D-A (las 25 rows frozen), D-B (la familia Variant), D-C (persisted data, fuera del alcance DS-only), D-D (doors residuales + findings). Ejecutable sin owner: W-1 (puertas + transfers), W-2 (F-113 + pictograms), W-3 (F-84, con design debrief), W-4 (BrandMotion editor). La enmienda W-0 registrada: los 4 nombres transferidos hoy (RecipeVariantConfig, createRecipeVariant, VerticalTheme, AlertIcon) entran al scope con la ley de transferencia intacta."
+    }
+   ]
   },
   {
    "id": "WO-EVI-01",

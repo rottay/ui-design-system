@@ -1456,7 +1456,7 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 | [family-cuts](./family-cuts.md) | 15 | 0 | 0 | 15 |
 | [emission-mount](./emission-mount.md) | 3 | 0 | 0 | 3 |
 | [platform-invariants](./platform-invariants.md) | 8 | 0 | 0 | 8 |
-| [retire](./retire.md) | 4 | 0 | 2 | 6 |
+| [retire](./retire.md) | 4 | 1 | 1 | 6 |
 | [evidence-graph](./evidence-graph.md) | 4 | 1 | 0 | 5 |
 
 ## Programme milestones (derived from their gate work orders)
@@ -1492,6 +1492,7 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
+| WO-RET-06 | Transitional compatibility and transferred closures of the 3.0 line | kimi | 2026-10-07 | 2026-10-07 10:46 — 2026-10-07 — WO-RET-06 abierta tras el cierre de RET-01. La closure-read (sesion 1af06fdd) midio: NO cierra solo con writer work — necesita las disposiciones del owner D-A (las 25 rows frozen), D-B (la familia Variant), D-C (persisted data, fuera del alcance DS-only), D-D (doors residuales + findings). Ejecutable sin owner: W-1 (puertas + transfers), W-2 (F-113 + pictograms), W-3 (F-84, con design debrief), W-4 (BrandMotion editor). La enmienda W-0 registrada: los 4 nombres transferidos hoy (RecipeVariantConfig, createRecipeVariant, VerticalTheme, AlertIcon) entran al scope con la ley de transferencia intacta. |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | claude-dt | 2026-09-11 | 2026-10-06 06:26 — 2026-10-06 — Wave W25 integrada (9 commits, 646203f5e..ee00b3d95). Obligaciones del checklist cerradas con evidencia: F-B clearance gobernado de Select (9f2343702, medido por tamaño/RTL/ancho), Select-success glyph >=3:1 ambos modos, Toggle checked thumb 14.23/6.48 con el canal publico dotBg preservado (d98506e88, residuos variants/unchecked nombrados con receivers pendientes), SENT badge 1.26->14.23 con excepcion frozen acotada (d7030850b, freeze auth 116), Streaming reparado en AMBOS modos incl. bithire dark via canal gobernado + pierna dark derivada per-mode (ee00b3d95, freeze auth 117, 20° digest move declarado en changeset), F-A ssrViewport hints coherentes con prueba de primer paint 8/8 (665073712), P-88 law + censo fleet 49 sitios (bb6b0525f; ARC-12 sigue open), Q1 disposition (4675150b5; debt 4->3), AM-1 R5' (57a6e201b), GAT12 censo pinned (646203f5e; WO todo por fase-6 lock; CI wiring = owner/CI window). Tile review independiente: 9 celdas ACCEPT, 3 REJECT (divergencia de captura del card de chat bajo investigacion W26-capture; no re-grabadas). Siguen NO MET: F-86 clausula 2 (ownership 31/25), CI verified (push prohibido), liveness chain (RET-01). |
 
 ## Next up (todo, dependencies satisfied)
@@ -1499,7 +1500,6 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
 | WO-RET-04 | Physical tree normalization: D-21 grammar applied to what remains, monoliths split, repeated path words removed | L | retire | audit-2026-09-05 |
-| WO-RET-06 | Transitional compatibility and transferred closures of the 3.0 line | L | retire | audit-2026-09-05 |
 | WO-DER-10 | D-30 BitHire identity: record the owner's pick, finalize the bithire preset, retire the candidates | S | derivation |  |
 
 ## Blocked (dependencies or phase claim lock)
