@@ -102,7 +102,8 @@ describe('PatternUserProfileCard', () => {
       const onClick = vi.fn();
       renderWithEngine(<Component {...createProps({ onClick })} />, engine);
 
-      fireEvent.click(screen.getByText('Jane Doe'));
+      // Modern stretches a chrome-less Button over the card; the frozen engines keep the root handler.
+      fireEvent.click(engine === 'modern' ? screen.getByRole('button', { name: 'Jane Doe' }) : screen.getByText('Jane Doe'));
       expect(onClick).toHaveBeenCalled();
     },
   );

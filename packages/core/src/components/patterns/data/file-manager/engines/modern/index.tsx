@@ -89,24 +89,21 @@ const FileRow = React.forwardRef<HTMLTableRowElement, StatefulProps<HTMLTableRow
   },
 );
 
-const GridCard = React.forwardRef<HTMLDivElement, StatefulProps<HTMLDivElement>>(
-  function GridCard({ children, onFocus, onBlur, ...rest }, ref) {
+type GridCardActivation = Pick<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'tabIndex' | 'aria-pressed' | 'aria-labelledby' | 'title' | 'onFocus' | 'onKeyDown'
+> & { onClick: () => void };
+
+/** The card owns every visible state; a chrome-less Button stretched over it carries the role and the roving stop,
+    and the card reads hover, press and focus off the events it bubbles. */
+const GridCard = React.forwardRef<HTMLButtonElement, StatefulProps<HTMLDivElement> & { activate: GridCardActivation }>(
+  function GridCard({ children, activate, ...rest }, ref) {
     const interaction = useInteractionState();
     return (
-      <div
-        {...rest}
-        {...interaction.handlers}
-        onFocus={(event) => {
-          interaction.handlers.onFocus(event);
-          onFocus?.(event);
-        }}
-        onBlur={(event) => {
-          interaction.handlers.onBlur(event);
-          onBlur?.(event);
-        }}
-        {...partAttributes('grid-card', interaction.state)}
-        ref={ref}
-      >
+      <div {...rest} {...interaction.handlers} {...partAttributes('grid-card', interaction.state)} data-interactive="true">
+        <div data-part="grid-card-hit">
+          <ModernButton chrome="none" data-part="grid-card-activate" ref={ref} {...activate} />
+        </div>
         {children}
       </div>
     );
@@ -251,7 +248,7 @@ export default function ModernFileManager(props: FileManagerProps) {
   // The grid holds ONE roving tab stop; arrows walk the cards so a large
   // folder costs a single Tab press.
   const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const gridCardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const gridCardRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const pendingCardFocus = useRef<number | null>(null);
 
   useEffect(() => {
@@ -264,7 +261,7 @@ export default function ModernFileManager(props: FileManagerProps) {
   // Enter/Space mirrors the click contract; inline arrows follow the writing
   // direction so the mirrored grid stays keyboard-honest under RTL.
   const handleGridCardKeyDown = useCallback((
-    event: React.KeyboardEvent<HTMLDivElement>,
+    event: React.KeyboardEvent<HTMLButtonElement>,
     item: FileSystemItem,
     index: number,
     count: number,
@@ -547,14 +544,17 @@ export default function ModernFileManager(props: FileManagerProps) {
                   data-selected={selectedItems.includes(item.id)}
                   data-file-kind={fileKindOf(item)}
                   className="ds-file-manager__grid-card"
-                  role="button"
-                  tabIndex={index === Math.min(activeCardIndex, items.length - 1) ? 0 : -1}
-                  aria-pressed={item.type === 'file' ? selectedItems.includes(item.id) : undefined}
-                  onClick={() => item.type === 'folder' ? onNavigate?.(item.id) : handleSelect(item.id)}
-                  onFocus={() => setActiveCardIndex(index)}
-                  onKeyDown={(event) => handleGridCardKeyDown(event, item, index, items.length)}
+                  activate={{
+                    tabIndex: index === Math.min(activeCardIndex, items.length - 1) ? 0 : -1,
+                    'aria-pressed': item.type === 'file' ? selectedItems.includes(item.id) : undefined,
+                    'aria-labelledby': `${rowIdBase}-${item.id}-card`,
+                    title: item.name,
+                    onClick: () => item.type === 'folder' ? onNavigate?.(item.id) : handleSelect(item.id),
+                    onFocus: () => setActiveCardIndex(index),
+                    onKeyDown: (event) => handleGridCardKeyDown(event, item, index, items.length),
+                  }}
                 >
-                  <div data-part="grid-card-body">
+                  <div data-part="grid-card-body" id={`${rowIdBase}-${item.id}-card`}>
                     {item.type === 'folder' ? (
                       <span className="ds-file-manager__folder-icon" data-part="folder-icon" data-file-kind="folder">
                         <ContentFolderIcon decorative size={36} />

@@ -73,6 +73,29 @@
   }
 }
 
+/* ---- activation: a chrome-less Button stretched over the card in a frame that paints nothing; the card owns
+        every visible state. Nested controls and the email are lifted above the frame as siblings. ---- */
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true'] {
+  position: relative;
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'] > [data-part='card-hit'] {
+  position: absolute;
+  z-index: var(--ds-z-index-relative-above);
+  inset: 0;
+  border-radius: inherit;
+  clip-path: border-box;
+  opacity: 0;
+}
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='card-hit'] > [data-part='card-activate'] {
+  position: absolute;
+  inset: -4%;
+  max-inline-size: none;
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'] :is([data-part='actions'], [data-part='header-extra'], [data-part='email']) {
+  position: relative;
+  z-index: var(--ds-z-index-relative-above);
+}
+
 /* ---- compact row: horizontal layout (was `flex items-center gap-3 p-3
         rounded-lg`); full variant keeps the shared panelCard chrome ---- */
 .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'] {

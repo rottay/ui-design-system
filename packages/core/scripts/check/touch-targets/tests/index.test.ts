@@ -117,7 +117,7 @@ describe('touch-target authority (mechanical discovery, single table)', () => {
     const { targets, floors } = discoverTouchSurface(skins);
     expect(targets.length).toBeGreaterThanOrEqual(200);
     expect(floors.length).toBeGreaterThanOrEqual(150);
-    expect(discoverTsxTouchTargets(tsx).length).toBeGreaterThanOrEqual(194);
+    expect(discoverTsxTouchTargets(tsx).length).toBeGreaterThanOrEqual(192);
     // The shared half of the law is really being read, not silently empty.
     const shared = discoverSharedFloors(loadSharedFloorSources());
     expect(shared).toContain('button');
@@ -139,9 +139,9 @@ describe('touch-target authority (mechanical discovery, single table)', () => {
       loadSharedFloorSources()
     );
     expect(result.violations).toEqual([]);
-    expect(result.targets).toBeGreaterThanOrEqual(194);
+    expect(result.targets).toBeGreaterThanOrEqual(192);
     expect(result.proven).toBeGreaterThanOrEqual(140);
-    expect(result.tsxTargets).toBeGreaterThanOrEqual(194);
+    expect(result.tsxTargets).toBeGreaterThanOrEqual(192);
     // The TSX prover is not vacuous: it really matches skins to elements.
     expect(result.tsxProven).toBeGreaterThanOrEqual(50);
     // Every class of interactivity is represented, so no discovery arm is dead.

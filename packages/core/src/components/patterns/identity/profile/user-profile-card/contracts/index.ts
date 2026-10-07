@@ -68,7 +68,10 @@ export interface ProfileAction {
 export interface UserProfileCardProps extends PatternBaseProps {
   /** User profile data */
   user: UserProfile;
-  /** Action buttons to display */
+  /**
+   * Action buttons to display. Rendered by `variant="full"` only; the compact
+   * row omits them by design. Supply row-level verbs from the host list.
+   */
   actions?: ProfileAction[];
   /** Card size */
   size?: Extract<Size, 'sm' | 'md' | 'lg'>;
@@ -76,7 +79,11 @@ export interface UserProfileCardProps extends PatternBaseProps {
   variant?: 'compact' | 'full';
   /** Whether user is online */
   online?: boolean;
-  /** Click handler for the card */
+  /**
+   * Click handler for the card. Activated by one stretched Button named by
+   * `user.name` and described by `user.role`, reached by pointer, Enter and
+   * Space; nested actions and `headerExtra` controls stay separately reachable.
+   */
   onClick?: () => void;
   /** Custom header content */
   headerExtra?: ReactNode;

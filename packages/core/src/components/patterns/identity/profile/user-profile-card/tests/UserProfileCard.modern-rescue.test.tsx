@@ -24,30 +24,31 @@ function renderModern(overrides: Partial<UserProfileCardProps> = {}) {
 }
 
 describe('ModernUserProfileCard — keyboard operability', () => {
-  it('promotes a clickable card with no nested controls to a real button', () => {
+  it('gives a clickable card one real button and leaves the root role-free', () => {
     const onClick = vi.fn();
     const { container } = renderModern({ onClick });
     const root = container.querySelector('[data-part="root"]');
+    const activation = screen.getByRole('button', { name: 'Jane Doe' });
 
-    expect(root).toHaveAttribute('role', 'button');
-    expect(root).toHaveAttribute('tabindex', '0');
+    expect(activation).toHaveAttribute('data-part', 'card-activate');
+    expect(root).not.toHaveAttribute('role');
+    expect(root).not.toHaveAttribute('tabindex');
   });
 
   it.each([['Enter'], [' ']])('activates the card with the %s key', (key) => {
     const onClick = vi.fn();
-    const { container } = renderModern({ onClick });
-    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    renderModern({ onClick });
 
-    fireEvent.keyDown(root, { key });
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Jane Doe' }), { key });
 
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
   it('ignores unrelated keys', () => {
     const onClick = vi.fn();
-    const { container } = renderModern({ onClick });
+    renderModern({ onClick });
 
-    fireEvent.keyDown(container.querySelector('[data-part="root"]') as HTMLElement, { key: 'a' });
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Jane Doe' }), { key: 'a' });
 
     expect(onClick).not.toHaveBeenCalled();
   });
@@ -71,6 +72,7 @@ describe('ModernUserProfileCard — keyboard operability', () => {
 
     expect(container.querySelector('[data-part="root"]')).not.toHaveAttribute('role', 'button');
     expect(screen.getByRole('button', { name: 'Message' })).toBeInTheDocument();
+    expect(container.querySelectorAll('[data-part="card-activate"]')).toHaveLength(1);
   });
 
   it('does not swallow a caller header slot behind role="button"', () => {
@@ -81,6 +83,7 @@ describe('ModernUserProfileCard — keyboard operability', () => {
 
     expect(container.querySelector('[data-part="root"]')).not.toHaveAttribute('role', 'button');
     expect(screen.getByRole('button', { name: 'Follow' })).toBeInTheDocument();
+    expect(container.querySelectorAll('[data-part="card-activate"]')).toHaveLength(1);
   });
 });
 

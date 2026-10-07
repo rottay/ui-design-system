@@ -248,11 +248,6 @@
       "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
     },
     {
-      "key": "src/components/patterns/data/file-manager/engines/modern/index.tsx :: GridCard :: .ds-file-manager__grid-card",
-      "kind": "exempt",
-      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row file-manager/index.css :: .ds-pattern-file-manager.ds-engine-modern :: [data-part='grid-card'])"
-    },
-    {
       "key": "src/components/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx :: div :: [data-part='backdrop']",
       "kind": "debt",
       "owner": "design-system/D1-floors",

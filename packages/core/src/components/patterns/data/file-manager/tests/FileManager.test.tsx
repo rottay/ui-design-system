@@ -130,7 +130,8 @@ describe('PatternFileManager', () => {
       expect(onRename).toHaveBeenCalledWith('d1', 'renamed-item');
 
       rerender(<Component {...props} viewMode="grid" />);
-      fireEvent.click(screen.getByText('Documents'));
+      // Modern stretches a chrome-less Button over the grid card; the frozen engines keep the card handler.
+      fireEvent.click(engine === 'modern' ? screen.getByRole('button', { name: 'Documents' }) : screen.getByText('Documents'));
       expect(onNavigate).toHaveBeenCalledWith('d1');
 
       promptSpy.mockRestore();

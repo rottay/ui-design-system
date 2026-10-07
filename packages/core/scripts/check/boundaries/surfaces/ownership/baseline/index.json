@@ -2289,12 +2289,6 @@
       "rule": "stable-typography",
       "count": 4
     },
-    "045ecaff9c76e417738c": {
-      "path": "src/components/patterns/data/file-manager/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "clickable-noninteractive",
-      "count": 1
-    },
     "4adf7304ca403120918e": {
       "path": "src/components/patterns/data/file-manager/engines/rustic/index.tsx",
       "category": "native-interactive",
@@ -4604,12 +4598,6 @@
       "category": "shared-chrome-literal",
       "rule": "stable-typography",
       "count": 1
-    },
-    "9b7e1640e90c202bf856": {
-      "path": "src/components/patterns/identity/profile/user-profile-card/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "clickable-noninteractive",
-      "count": 2
     },
     "758746726798fd71f4e9": {
       "path": "src/components/patterns/identity/profile/user-profile-card/engines/rustic/index.tsx",

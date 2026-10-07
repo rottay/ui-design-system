@@ -87151,9 +87151,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 }
 
-/* ---- grid card: an action surface (role=button in the engine), so it owns
+/* ---- grid card: an action surface (a stretched Button in the engine), so it owns
         the full state triad -- hover hairline, focus ring, selected fill. ---- */
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'] {
+  position: relative;
   padding: var(--ds-spacing-3);
   cursor: pointer;
   border-radius: var(--ds-radius-lg);
@@ -87173,7 +87174,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false'] {
   background: var(--ds-surface-card);
 }
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false'] {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-interactive='true'][data-selected='false'] {
   border: 1px solid var(--ds-color-border);
 }
 /* Hover reveals only where hovering is a real input mode (hover law);
@@ -87182,7 +87183,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false']:is([data-state~='hovered'], :hover) {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-interactive='true'][data-selected='false']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 35%, var(--ds-color-border));
   }
 }
@@ -87192,12 +87193,27 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
 }
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='true'] {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-interactive='true'][data-selected='true'] {
   /* Same 2px read with ZERO geometry shift: the border stays at the
      unselected 1px and the second pixel is an inset ring, so toggling
      selection never reflows the grid. */
   border: 1px solid var(--ds-color-primary);
   box-shadow: inset 0 0 0 1px var(--ds-color-primary);
+}
+/* The activation carrier paints nothing in any mode: the card owns every visible state and its forced-colours
+   re-expression. The Button's kept arms still compute (K3 untouched); they are never composited. */
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'] > [data-part='grid-card-hit'] {
+  position: absolute;
+  z-index: var(--ds-z-index-relative-above);
+  inset: -1px;              /* the card's 1px frame stays inside the hit area */
+  border-radius: inherit;
+  clip-path: border-box;    /* not overflow: clip -- Chromium does not round a descendant's hit-test for overflow clips */
+  opacity: 0;
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-hit'] > [data-part='grid-card-activate'] {
+  position: absolute;
+  inset: -4%;               /* keeps hit coverage under the kernel press scale */
+  max-inline-size: none;
 }
 .ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-body'] {
   display: flex;
@@ -87256,11 +87272,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     border: 1px solid ButtonText;
     background: Canvas;
   }
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false'] {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-interactive='true'][data-selected='false'] {
     border-color: ButtonText;
     background: Canvas;
   }
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='true'] {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-interactive='true'][data-selected='true'] {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
@@ -87379,6 +87395,29 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true'] {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
+}
+
+/* ---- activation: a chrome-less Button stretched over the card in a frame that paints nothing; the card owns
+        every visible state. Nested controls and the email are lifted above the frame as siblings. ---- */
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true'] {
+  position: relative;
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'] > [data-part='card-hit'] {
+  position: absolute;
+  z-index: var(--ds-z-index-relative-above);
+  inset: 0;
+  border-radius: inherit;
+  clip-path: border-box;
+  opacity: 0;
+}
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='card-hit'] > [data-part='card-activate'] {
+  position: absolute;
+  inset: -4%;
+  max-inline-size: none;
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'] :is([data-part='actions'], [data-part='header-extra'], [data-part='email']) {
+  position: relative;
+  z-index: var(--ds-z-index-relative-above);
 }
 
 /* ---- compact row: horizontal layout (was `flex items-center gap-3 p-3

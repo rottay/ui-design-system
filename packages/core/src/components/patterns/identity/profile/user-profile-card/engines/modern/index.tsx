@@ -17,10 +17,19 @@
  * ANATOMY LAW: the data-part set is pinned by the cross-capability contract
  * (avatar-container/avatar/avatar-fallback/presence-dot/name/role/
  * department-badge/email/status-badge/action-button/spinner) -- additive
- * attributes (data-size, data-interactive, data-part="loading-body") only,
- * never a rename. The certified Avatar primitive is NOT composed: the pinned
+ * attributes (data-size, data-interactive, data-state) and parts
+ * (loading-body, card-hit, card-activate) only, never a rename. The certified Avatar primitive is NOT composed: the pinned
  * contract requires this family's own fallback + presence-dot anatomy, which
  * the Avatar engine neither stamps nor forwards (documented BLOCKED pin).
+ *
+ * CARD ACTIVATION: with `onClick`, a chrome-less Button stretched over the
+ * card (`card-hit` > `card-activate`) is the one pointer and keyboard target
+ * in both variants, named by the user's name and described by the role. The
+ * root carries no handler, role or tab stop; it reads its hover, press and
+ * focus-visible state from that Button alone, so a nested action never lights
+ * the card. Actions, `headerExtra` and the email are lifted above the frame as
+ * siblings and keep their own tab stops after the activation. Without
+ * `onClick` the card is static: no frame, no Button, no `data-state`.
  *
  * @example
  * <ModernUserProfileCard
@@ -36,6 +45,7 @@ import type { UserProfileCardProps, UserProfile } from '../../contracts';
 import Button from '../../../../../../primitives/inputs/button/engines/modern';
 import { panelCardStyle, pillBadgeSmStyle, spinnerStyle } from '../../../../../foundation/engine-styles/modern';
 import { useOptionalFormatter, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 
 /* English floors for the presence vocabulary. */
 const STATUS_FLOORS: Record<NonNullable<UserProfile['status']>, string> = {
@@ -128,15 +138,28 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
     </div>
   );
 
-  /* A clickable card is promoted to a real button only when it owns no nested
-   controls, since role="button" makes descendants presentational. */
-  const hasNestedControls = actions.length > 0 || Boolean(headerExtra);
-  const rootIsButton = Boolean(onClick) && !hasNestedControls;
-  const handleRootKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    event.preventDefault();
-    onClick?.();
-  };
+  const nameId = React.useId();
+  const roleId = React.useId();
+  const interaction = useInteractionState();
+  const rootState = onClick ? partAttributes('root', interaction.state) : undefined;
+  const activation = onClick ? (
+    <div data-part="card-hit">
+      <Button
+        chrome="none"
+        data-part="card-activate"
+        aria-labelledby={nameId}
+        aria-describedby={roleId}
+        title={user.name}
+        onClick={onClick}
+        onKeyDown={(event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          onClick();
+        }}
+        {...interaction.handlers}
+      />
+    </div>
+  ) : null;
 
   if (loading) {
     return (
@@ -168,18 +191,16 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
         data-variant={variant}
         data-size={size}
         data-interactive={onClick ? 'true' : 'false'}
+        {...rootState}
         style={style}
-        onClick={onClick}
-        role={rootIsButton ? 'button' : undefined}
-        tabIndex={rootIsButton ? 0 : undefined}
-        onKeyDown={rootIsButton ? handleRootKeyDown : undefined}
       >
+        {activation}
         {renderAvatar()}
         <div data-part="identity">
           {/* Name and role are clipped to one ellipsised line by the skin, so
               both advertise their full text on hover. */}
-          <div data-part="name" title={user.name}><bdi>{user.name}</bdi></div>
-          <div data-part="role" title={user.role}><bdi>{user.role}</bdi></div>
+          <div data-part="name" id={onClick ? nameId : undefined} title={user.name}><bdi>{user.name}</bdi></div>
+          <div data-part="role" id={onClick ? roleId : undefined} title={user.role}><bdi>{user.role}</bdi></div>
         </div>
         {headerExtra && <div data-part="header-extra">{headerExtra}</div>}
       </div>
@@ -194,20 +215,18 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
       data-variant={variant}
       data-size={size}
       data-interactive={onClick ? 'true' : 'false'}
+      {...rootState}
       style={{ ...panelCardStyle, ...style }}
-      onClick={onClick}
-      role={rootIsButton ? 'button' : undefined}
-      tabIndex={rootIsButton ? 0 : undefined}
-      onKeyDown={rootIsButton ? handleRootKeyDown : undefined}
     >
+      {activation}
       <div data-part="body">
         {renderAvatar()}
 
         <div data-part="identity">
           {/* Name and role are clipped to one ellipsised line by the skin, so
               both advertise their full text on hover. */}
-          <h3 data-part="name" title={user.name}><bdi>{user.name}</bdi></h3>
-          <p data-part="role" title={user.role}><bdi>{user.role}</bdi></p>
+          <h3 data-part="name" id={onClick ? nameId : undefined} title={user.name}><bdi>{user.name}</bdi></h3>
+          <p data-part="role" id={onClick ? roleId : undefined} title={user.role}><bdi>{user.role}</bdi></p>
         </div>
 
         {user.department && (
