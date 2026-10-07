@@ -7744,6 +7744,11 @@
      "at": "2026-10-07 14:13",
      "by": "kimi-dt",
      "note": "2026-10-07 kimi-dt: LIVENESS UNBLOCKED and the gate is BLOCKING again. RET-04 W-3+W-3b (3b760b954) closed the 31 unknown-family sites (4 shell-contracts moved, 27 chart-engine declared resolved-shared under D1-ii); the R1 artifact is written (3221 channels); the manifest's channel-liveness flipped blocking:true (exclusion record removed per the manifest law — its content is recorded in the W-3 commit and the RET-04 trail). The manifest's return-to-blocking law was honored: the four effect classes were DRAINED to 0 before the write, not re-baselined. F-86 clause 2 state: productive 19/14 pinned; 14 of the 16 ruled rows have live dispositions (T v2 in flight for detail-panel + workbench-header; packet X ready for the 5 reasoned exceptions incl. page-shell; locale-switcher awaits owner ruling on E-3; user-profile-card carries the D3 defect evidence; file-manager carries D2)."
+    },
+    {
+     "at": "2026-10-07 15:28",
+     "by": "kimi-dt",
+     "note": "2026-10-07 kimi-dt: packet T v2 INTEGRATED (bc70bdc77; review b1b0eb21 ACCEPT + tile review of the 5 re-recorded cells). detail-panel composes the canonical Tabs (ids f0e3d090 + 218bb663 leave by name; productive 12/9 -> 10/7, id set 255f53e9dbfdcfa9). R1 re-ruled on the reviewer's corrected premise: the tenant recipe-profile DOES own Tabs' type — the pin became the profile-yielding default (profile.recipe ?? 'contained'), paint-identical where no profile is selected, and bithire's technical-sharp profile renders the governed underline (the owner's priority-1 verification — a tenant decision measurably propagating to a family — observed live). Profile-yield pinned by a new test (the review's L-A). The bithire strip delta (underline, ~7px shorter, content up, card unchanged) ratified and named in the changeset with the overflow-controls note (L-B). workbench-header stayed pinned (G4 real): packet X-2 delivered it as a reasoned exception + the tab-stop fix (pending review). Named follow-ups: M2 (Tabs root ink leaks secondary colour into every panel — a Tabs-owner lot, panel-surface's guard becomes redundant then); the tile review's L-A/L-B (closed here); docs DetailPanel page OWED (docs-engineering mid-restructure by the owner)."
     }
    ]
   },

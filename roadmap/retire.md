@@ -835,5 +835,15 @@ Lane-wide rules (binding on every WO):
   dependents and "leaves last" stated in the row's `reason` and the fixture's `resolves`.*
   **Do NOT** gains: *Do not treat a transferred row as repaired: a transfer is not a
   repair. Do not release `Variant` before Tag and Avatar no longer build on it.*
+- **AMENDMENT (2026-10-07, DT ruling on the W-1 companion surface; the acceptance above stands, this is added to it)** —
+  The W-1 packet (doors `./styles/modern`, `./dist/*.css`, `./icons/{foundation,identity,intelligence,operations}` +
+  the four §2 names) measured 13 companion files outside the Files list that the retirement cannot leave
+  consistent without: the four `vite.config.ts` build entries that pointed at the deleted entrypoints; the
+  icon-generator test fixture; the five tests that pinned the retired surface (including the public-API tests
+  that named `AlertIcon` as the kept helper); the regenerated mirrors the retired surface feeds (the supplier
+  contract, the hooks manifest, the taxonomy doc, the consumer-census baseline); and two prose lines that said
+  `AlertIcon` stays public. **Files** gains for W-1 only: *the exact 13 paths named in the W-1 report
+  (`w26-ret06-w1/report.md`), each carrying the retirement's consistency edit and nothing else.* Every other
+  field is unchanged; nothing else may ride the amendment.
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-06 (Transitional compatibility and transferred closures of the 3.0 line) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-42, F-109, F-111, F-113, F-115, F-84, F-88 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.
