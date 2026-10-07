@@ -29,7 +29,7 @@ import {
   SHELL_PUBLISHED_CHANNELS,
   SHELL_RESOLVED_CHANNELS,
   SHELL_SUPERSEDED_HOOK_CHANNELS,
-} from '../../contracts';
+} from '../../../foundation/shell-contracts';
 
 const SKIN = readFileSync(
   resolve(

@@ -10,7 +10,7 @@ import { appShellChromeDeriver } from '@/infrastructure/compilers/runtime/theme/
 import {
   SHELL_PUBLISHED_CHANNELS,
   SHELL_SUPERSEDED_HOOK_CHANNELS,
-} from '../../contracts';
+} from '../../../foundation/shell-contracts';
 
 const SKIN = readFileSync(
   resolve(

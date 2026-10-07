@@ -44,6 +44,7 @@ Tier support: `facade/`, `foundation/`, `runtime/`.
 ### foundation/
 
 - `foundation/chrome/`
+- `foundation/shell-contracts/`
 
 ### headers/
 
@@ -74,8 +75,6 @@ Tier support: `facade/`, `foundation/`, `runtime/`.
 - `shell/page-shell-surface/`
 - `shell/surface-chrome/`
 - `shell/workspace-shell/`
-
-Support: `shell/contracts/`.
 
 ### workspace/
 
@@ -313,4 +312,4 @@ Support: `shell/contracts/`.
 
 ---
 
-**Summary**: 6 primitive categories (96 components), 132 families across structures/patterns/surfaces.
+**Summary**: 6 primitive categories (96 components), 133 families across structures/patterns/surfaces.

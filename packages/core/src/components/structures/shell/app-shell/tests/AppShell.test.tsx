@@ -8,8 +8,8 @@ import {
   type ResponsiveContextValue,
 } from '../../../../../infrastructure/runtime/responsive';
 import { AppShell, useShellContext } from '..';
-import type { AppShellProps } from '../../contracts';
-import { SHELL_GEOMETRY_READS as READS } from '../../contracts';
+import type { AppShellProps } from '../../../foundation/shell-contracts';
+import { SHELL_GEOMETRY_READS as READS } from '../../../foundation/shell-contracts';
 
 const PHONE_CONTEXT: ResponsiveContextValue = {
   deviceClass: 'phone',

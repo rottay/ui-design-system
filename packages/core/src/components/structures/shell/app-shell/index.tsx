@@ -27,7 +27,7 @@
  *
  * @see `../index.ts` for the shell group barrel. This owner exports only its
  * own symbols — `AppShell`, `useShellContext` and `ShellContextValue`; the
- * shared props/geometry types live in the group's `../contracts` support owner.
+ * shared props/geometry types live in `../../foundation/shell-contracts`.
  */
 
 import React, {
@@ -46,8 +46,8 @@ import type {
   ShellInset,
   ShellInsetByPosture,
   ShellPosture,
-} from '../contracts';
-import { SHELL_DEFAULTS, SHELL_GEOMETRY_READS } from '../contracts';
+} from '../../foundation/shell-contracts';
+import { SHELL_DEFAULTS, SHELL_GEOMETRY_READS } from '../../foundation/shell-contracts';
 import type { Adapt } from '@/foundation/contracts/kernel/adaptation';
 import { partAttributes } from '@/foundation/behavior/kernel/anatomy';
 import { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';

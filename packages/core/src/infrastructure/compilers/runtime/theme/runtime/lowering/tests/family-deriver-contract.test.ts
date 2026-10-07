@@ -19,7 +19,7 @@ import {
   type FamilyFixture,
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
-import { SHELL_PUBLISHED_CHANNELS } from "@/components/structures/shell/contracts";
+import { SHELL_PUBLISHED_CHANNELS } from "@/components/structures/foundation/shell-contracts";
 import {
   SECTION_CARD_CHANNEL_PREFIX,
   SECTION_CARD_PUBLISHED_CHANNELS,

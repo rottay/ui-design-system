@@ -86,7 +86,9 @@
  *      (see point 8).
  *   4. `attributeFamily` returns the FULL `Set<canonicalId>` for a
  *      `sourceOwner` shared by more than one family row (never the first
- *      row); a read site landing on a shared owner is tallied
+ *      row); a read site landing on a shared owner -- a shared
+ *      `sourceOwner`, or a subtree in the declared `DECLARED_SHARED_OWNERS`
+ *      table (the shared chart engine) -- is tallied
  *      `unattributedSharedReadSites`, distinct from a clean single-owner
  *      resolution. `classifySemanticOwner` returns `null` for an unmatched
  *      `--ds-*` prefix — there is no truthy `'other'` escape hatch — and a
@@ -2124,7 +2126,7 @@ export function buildFamilyIndex(rows) {
   const categoryDirs = new Set(
     rows.map((row) => row.sourceOwner.slice(0, row.sourceOwner.lastIndexOf('/'))),
   );
-  return { ownerPrefixes, categoryDirs };
+  return { ownerPrefixes, categoryDirs, sharedOwners: resolveDeclaredSharedOwners(rows) };
 }
 
 const UI_ROOT_PREFIX = 'packages/core/src/components/';
@@ -2155,13 +2157,63 @@ function isKnownNonFamilyTerritory(packagesRelativePath) {
 }
 
 /**
+ * Declared shared owners (DT ruling D1-ii, 2026-10-07, WO-RET-04 trail): a
+ * subtree that lives INSIDE a family category directory, holds no family row
+ * of its own, and is the shared implementation of a named set of family rows.
+ * The shared chart engine (`charts/{runtime,presentation,foundation,contracts}`)
+ * is the one owner, ruled the shared owner of the `charts/families/<x>` rows.
+ * A read site under a declared owner resolves `resolved-shared`
+ * with ALL the ids of its families -- the same status and the same tally a
+ * shared `sourceOwner` already gets -- never `unattributed`.
+ *
+ * The ids are DERIVED from the family inventory (every row whose
+ * `sourceOwner` sits under `familiesUnder`), never hand-typed. An owner whose
+ * `familiesUnder` resolves no row attributes nothing, so its sites fall
+ * through to `unknown-family` and the gate stays red. Each entry is scoped per
+ * FULL path, like `KNOWN_NON_FAMILY_TERRITORY`: anything else under
+ * `patterns/visualization` (or under `charts/` itself) that matches no family
+ * row is still `unknown-family` drift.
+ */
+const DECLARED_SHARED_OWNERS = Object.freeze([
+  Object.freeze({
+    owners: Object.freeze([
+      'patterns/visualization/charts/runtime',
+      'patterns/visualization/charts/presentation',
+      'patterns/visualization/charts/foundation',
+      'patterns/visualization/charts/contracts',
+    ]),
+    familiesUnder: 'patterns/visualization/charts/families',
+  }),
+]);
+
+function resolveDeclaredSharedOwners(rows) {
+  return DECLARED_SHARED_OWNERS.map(({ owners, familiesUnder }) => {
+    const familyPrefix = `${UI_ROOT_PREFIX}${familiesUnder}/`;
+    const ids = rows
+      .filter((row) => row.sourceOwner.startsWith(familyPrefix))
+      .map((row) => row.id);
+    return { owners, ids: [...new Set(ids)].sort() };
+  });
+}
+
+function declaredSharedOwnerOf(packagesRelativePath, sharedOwners = []) {
+  if (!packagesRelativePath.startsWith(UI_ROOT_PREFIX)) return null;
+  const withinUi = packagesRelativePath.slice(UI_ROOT_PREFIX.length);
+  return sharedOwners.find(({ owners, ids }) => ids.length > 0 && owners.some(
+    (prefix) => withinUi === prefix || withinUi.startsWith(`${prefix}/`),
+  )) ?? null;
+}
+
+/**
  * `packagesRelativePath` must be `packages/core/...`-prefixed, matching
  * `family-inventory/index.json`'s own `sourceOwner` convention. A site under a
  * SHARED `sourceOwner` (more than one canonical id) resolves `status:
  * 'resolved-shared'` and returns ALL of those ids — the caller tallies the
  * SITE as `unattributedShared` (it cannot honestly attribute the read to one
  * specific family) while still recording every id in the channel's
- * `familyIds` (defect 4: "A shared owner returns ALL its IDs").
+ * `familyIds` (defect 4: "A shared owner returns ALL its IDs"). A site under a
+ * `DECLARED_SHARED_OWNERS` subtree resolves the same way, after every family
+ * row and before the non-family territory.
  */
 export function attributeFamily(packagesRelativePath, index) {
   for (const owner of index.ownerPrefixes) {
@@ -2174,6 +2226,13 @@ export function attributeFamily(packagesRelativePath, index) {
         status: owner.ids.length > 1 ? 'resolved-shared' : 'resolved',
       };
     }
+  }
+  const sharedOwner = declaredSharedOwnerOf(packagesRelativePath, index.sharedOwners);
+  if (sharedOwner !== null) {
+    return {
+      ids: new Set(sharedOwner.ids),
+      status: sharedOwner.ids.length > 1 ? 'resolved-shared' : 'resolved',
+    };
   }
   if (isKnownNonFamilyTerritory(packagesRelativePath)) {
     return { ids: new Set(), status: 'unattributed' };

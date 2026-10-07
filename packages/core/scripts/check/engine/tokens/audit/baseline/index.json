@@ -2013,7 +2013,7 @@
   "runtimeSvgPaint.structures/shell/bottom-tab-bar/engines/rustic/index.tsx": 0,
   "runtimeSvgPaint.structures/shell/bottom-tab-bar/index.ts": 0,
   "runtimeSvgPaint.structures/shell/bottom-tab-bar/runtime/rendering/index.tsx": 0,
-  "runtimeSvgPaint.structures/shell/contracts/index.ts": 0,
+  "runtimeSvgPaint.structures/foundation/shell-contracts/index.ts": 0,
   "runtimeSvgPaint.structures/shell/index.ts": 0,
   "runtimeSvgPaint.structures/shell/navigation/sidebar-surface/index.tsx": 0,
   "runtimeSvgPaint.structures/shell/page-shell-surface/index.tsx": 0,
@@ -3200,7 +3200,7 @@
   "embeddedCssPaint.structures/shell/bottom-tab-bar/engines/rustic/index.tsx": 0,
   "embeddedCssPaint.structures/shell/bottom-tab-bar/index.ts": 0,
   "embeddedCssPaint.structures/shell/bottom-tab-bar/runtime/rendering/index.tsx": 0,
-  "embeddedCssPaint.structures/shell/contracts/index.ts": 0,
+  "embeddedCssPaint.structures/foundation/shell-contracts/index.ts": 0,
   "embeddedCssPaint.structures/shell/index.ts": 0,
   "embeddedCssPaint.structures/shell/navigation/sidebar-surface/index.tsx": 0,
   "embeddedCssPaint.structures/shell/page-shell-surface/index.tsx": 0,
@@ -4216,5 +4216,6 @@
   "fallbackParity.color.infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/elevation/ladder/index.ts": 3,
   "scale.duplicateRootDeclarations": 3,
   "scale.duplicateRootRosterDrift": 0,
-  "fallbackParity.channel.foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css": 2
+  "fallbackParity.channel.foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css": 2,
+  "fleet.inlinePaint.structures/foundation/shell-contracts/index.ts": 0
 }

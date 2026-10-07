@@ -17,7 +17,7 @@ import type { FlatTheme } from "@/foundation/contracts/composition/tenants/theme
 import {
   SHELL_GEOMETRY_READS,
   SHELL_PUBLISHED_CHANNELS,
-} from "@/components/structures/shell/contracts";
+} from "@/components/structures/foundation/shell-contracts";
 import {
   describeFamilyContract,
   FIXTURE_TENANT_FACTS,

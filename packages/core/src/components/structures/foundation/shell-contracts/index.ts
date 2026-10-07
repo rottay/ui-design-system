@@ -25,7 +25,7 @@
  * derived are disjoint, and together they cover every shell channel the skin
  * reads; `AppShell.cut.test.tsx` proves both halves.
  *
- * @module Components/Structures/Shell/Contracts
+ * @module Components/Structures/Foundation/ShellContracts
  */
 
 import type { ReactNode, CSSProperties } from 'react';

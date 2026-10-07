@@ -13,8 +13,8 @@
  * `./app-shell` unchanged — same source, same public names, one owner per
  * family.
  *
- * The shared `AppShellProps` / geometry / inset contract stays in the group's
- * `./contracts` support owner because more than one child reads it.
+ * The shared `AppShellProps` / geometry / inset contract lives in the
+ * `../foundation/shell-contracts` support owner: more than one child reads it.
  */
 
 export { AppShell, useShellContext } from './app-shell';
@@ -28,8 +28,8 @@ export type {
   ShellInset,
   ShellInsetByPosture,
   ShellPosture,
-} from './contracts';
-export { SHELL_DEFAULTS } from './contracts';
+} from '../foundation/shell-contracts';
+export { SHELL_DEFAULTS } from '../foundation/shell-contracts';
 
 export { BottomTabBar, BOTTOM_TAB_BAR_DEFAULTS } from './bottom-tab-bar';
 export type { BottomTabBarProps, BottomTabBarItem } from './bottom-tab-bar';

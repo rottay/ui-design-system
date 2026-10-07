@@ -171,28 +171,14 @@ export const CI_GATES = Object.freeze([
   // require the R1 artifact and does NOT enforce the standing analysis
   // findings the producer refuses to hide; those stay in the exclusion below.
   { id: 'channel-liveness-dispositions', run: ['node', 'scripts/check/tokens/cascade/channels/liveness/index.mjs', '--check-dispositions'], blocking: true, phase: 'pre-build', drillId: 'channel-liveness-drill', },
-  // Excluded from blocking, with a reason that is now exact rather than a
-  // census from 2026-08-20. With the 43 rows pinned and enforced by the entry
-  // above, `--check` still carries FOUR findings the disposition registry does
-  // not cover and must not pretend to:
-  //   * the missing R1 `channel-liveness.json` artifact, which `--write`
-  //     refuses to produce while the analysis is red -- it unblocks when the
-  //     three below do;
-  //   * two unresolved emitter patterns (`derivation/typography/scale/index.ts:48`
-  //     and `:53`), a table computed elsewhere that the family roster covers only
-  //     by glob (`derivation/axes/index.ts:35` closed through its exact roster);
-  //   * 31 consumer sites under `patterns/visualization` with no canonical
-  //     family-inventory row -- inventory drift.
-  // Return to blocking = those four drained, not re-baselined.
+  // 2026-10-07: the exclusion drained and EVI-02's --write landed (3221
+  // channels), so the gate is blocking again. What the exclusion covered is
+  // recorded in the WO-EVI-02 trail and the W-3 integration commit; a blocking
+  // gate carries no exclusion record (the manifest's own law).
   {
     id: 'channel-liveness',
     run: ['node', 'scripts/check/tokens/cascade/channels/liveness/index.mjs', '--check'],
-    blocking: false,
-    excluded: {
-      reason: 'Every non-LIVE row is pinned and enforced BLOCKING by channel-liveness-dispositions; the nine status scale steps (tint 16/24 of the four status tones, --ds-color-info-300) classify CAPABILITY_SCALE_STEP_UNREAD under a capability pin and leave the effect red only while their acceptance measures green, which it does. What keeps the full --check red: the effect verdict on six rows (--ds-text-inverse READ_NO_PRODUCTIVE_TERMINAL, --ds-text-body-letter-spacing and --ds-text-emphasis-letter-spacing UNREAD_EMITTED_NO_KNOWN_ROUTE, and the three overlay ladder weights --ds-overlay-{light,medium,heavy} AUTHORABLE_UNPROVEN_EFFECT — the route is wired but no product surface stamps the anchor, and the medium weight has a live tenant author whose value paints nothing today), the missing R1 artifact that --write refuses to produce while that verdict is red, and 31 consumer sites with no family-inventory row (27 chart sites + 4 structures/shell/contracts).',
-      owner: 'WO-EVI-02 (the R1 artifact; the three overlay weights ride the GLASS-2 pin there) and WO-RET-01 (--ds-text-inverse and the two letter-spacing facets) and WO-RET-04 (family-inventory drift); every channel row is owned per CHANNEL_DISPOSITIONS',
-      trackedSince: '2026-08-20',  // re-adjudicada 2026-09-11 tras la auditoria 100 (antes: censo 2026-08-20)
-    },
+    blocking: true,
     phase: 'pre-build',
     drillId: 'channel-liveness-drill',
   },

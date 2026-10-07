@@ -7,7 +7,7 @@ import {
   type ResponsiveContextValue,
 } from '../../../../../infrastructure/runtime/responsive';
 import { AppShell } from '..';
-import type { AppShellProps } from '../../contracts';
+import type { AppShellProps } from '../../../foundation/shell-contracts';
 
 const PHONE_CONTEXT: ResponsiveContextValue = {
   deviceClass: 'phone',

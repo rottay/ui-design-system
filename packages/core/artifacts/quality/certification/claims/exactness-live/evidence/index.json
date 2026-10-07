@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "9e2a2a7d834f12e61220964d84cd73d1064f4b537088e6dd7829ddf993a8be2a",
+    "authorityDigest": "cfd4f379447ea7a854f9a10ee251513c5b2617b86aaa53f6e649e7dda41865a4",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -22076,6 +22076,16 @@
         "sha256": "6ecb783836bf57380db2de4457e6519e6a832ec3ef48d5476aeb6102d9930f20"
       },
       {
+        "path": "ui-design-system/packages/core/src/components/structures/foundation/shell-contracts/index.ts",
+        "roles": [
+          "audit-input",
+          "claim-census",
+          "stale-claim-corpus"
+        ],
+        "bytes": 11755,
+        "sha256": "08f309d87a4e11f531e8bc3d5190c29d382fd9f9688df19a2710719a2bbe6045"
+      },
+      {
         "path": "ui-design-system/packages/core/src/components/structures/headers/collection/index.tsx",
         "roles": [
           "audit-input",
@@ -22715,16 +22725,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 20901,
-        "sha256": "96fdb771efe97af41b0dddd4d2b758e61bbaf600e2715773fbbfedb20dad92b0"
+        "bytes": 20935,
+        "sha256": "e74072248351471c9a3b17a55fd2ef349c687344b92fc4ea2c809c43bbe3b7d6"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/shell/app-shell/tests/AppShell.bottom-bar.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 3718,
-        "sha256": "e08ac8b04d4d63b1b3bcfbca8693c37923d76f309cd80a8d285471af94e213a7"
+        "bytes": 3738,
+        "sha256": "3766a3354cc139d203a5c467ac6b461d0caf48f0e54febb20e057ac6044a7382"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/shell/app-shell/tests/AppShell.causality.integration.test.tsx",
@@ -22739,8 +22749,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 17357,
-        "sha256": "145685907dd888d049e689078025c4e6737f787231f617ea4c98551348ba6000"
+        "bytes": 17377,
+        "sha256": "6ffc228d8a001edb094424bafd14065b3b773076fa95759786c1b6ebb4ee0c80"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/shell/app-shell/tests/AppShell.focus-signature.test.ts",
@@ -22755,16 +22765,16 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 13261,
-        "sha256": "0ba4e701d4eb653f23c2399fa807a3110bf24feabcba08f6245a9586c02d843f"
+        "bytes": 13301,
+        "sha256": "f062ccf0af6aa9932ea472ed9ec028c950280727d1568e0c36ff22d46765b731"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/shell/app-shell/tests/shell-superseded-window.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 7139,
-        "sha256": "ebb5f63e6cc9f15bb185b42cb1d25e015425ea5569bf259fb5ee5bdf4c766394"
+        "bytes": 7159,
+        "sha256": "52244a09e252335333d3771b02d49ceedda9c4ff109e2fbdf45d724a5ba69699"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/shell/bottom-tab-bar/contracts/index.ts",
@@ -22868,24 +22878,14 @@
         "sha256": "2711a1d11a45fbdc7f2a6c3d1bca1d3bf6179a5b4df9bf4b22e2cd96d4cd6509"
       },
       {
-        "path": "ui-design-system/packages/core/src/components/structures/shell/contracts/index.ts",
-        "roles": [
-          "audit-input",
-          "claim-census",
-          "stale-claim-corpus"
-        ],
-        "bytes": 11745,
-        "sha256": "eb6825ca41d07af61d221956e85b9fa89eeb727a3c4a6585ccbd6df3e54bd367"
-      },
-      {
         "path": "ui-design-system/packages/core/src/components/structures/shell/index.ts",
         "roles": [
           "audit-input",
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 2651,
-        "sha256": "ebb4c1291f9fc60fff732dfed38dc42a1e89754ea70943da6ad5e9f40595fb76"
+        "bytes": 2690,
+        "sha256": "680d64571ecf6687a55921228c1048620215bbbf13942039140121fa8d866545"
       },
       {
         "path": "ui-design-system/packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx",
@@ -39094,16 +39094,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 11651,
-        "sha256": "fb0777e7a968f10a4eabc75294b4c1faad116814d811c7f4ba7dad1e898910f4"
+        "bytes": 11662,
+        "sha256": "66223293f1e1999d5643a9eedcaf4df139f3e1572026a47d17abaa56b89b0ba1"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/tests/index.test.ts",
         "roles": [
           "audit-input"
         ],
-        "bytes": 7404,
-        "sha256": "fd7b12763c37f95a0ff9d96241dff3aae002b04288d51b3611eedf309b958bb5"
+        "bytes": 7415,
+        "sha256": "3ff155de5e00490b279016242f76b01c1d946644d7d39fbb69e9c136f8b8c79d"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/tests/local-scope.integration.test.ts",
@@ -41524,8 +41524,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 10532,
-        "sha256": "faa22d6181eec0c263443d9ec76d17b4c5b56e52c68ecb7661f528ee384e5a09"
+        "bytes": 10543,
+        "sha256": "ca0f0dce45dcf4a1865319bf74e626601e9b09e0b56393635c3dac49bb2fd8f7"
       },
       {
         "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/tests/i0-inventory.test.ts",
@@ -48180,19 +48180,19 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "9e2a2a7d834f12e61220964d84cd73d1064f4b537088e6dd7829ddf993a8be2a"
+    "digest": "cfd4f379447ea7a854f9a10ee251513c5b2617b86aaa53f6e649e7dda41865a4"
   },
   "paintAudit": {
-    "output": "engine-token-audit --check OK (4218 counters; 3221 completed zeros locked exactly; 987 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
+    "output": "engine-token-audit --check OK (4219 counters; 3222 completed zeros locked exactly; 987 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
     "baseline": {
       "path": "ui-design-system/packages/core/scripts/check/engine/tokens/audit/baseline/index.json",
-      "sha256": "b3b943fc7b124aa8eab874a94d4b21ab88ad7f2988dbc4bc48d0d82908cc8a81",
+      "sha256": "b32bcca4e29b4a31db311d6f0634942f6d7a31f1b274f9d5e0a428d2886d9dde",
       "ok": true,
       "errors": [],
-      "counters": 4218,
-      "zeroLocked": 3221,
+      "counters": 4219,
+      "zeroLocked": 3222,
       "positiveGoverned": 997,
-      "ordinaryCeilings": 4197,
+      "ordinaryCeilings": 4198,
       "positiveOrdinaryCeilings": 987,
       "exactInvariants": 14,
       "positiveExactInvariants": 3,
@@ -122368,8 +122368,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "0cff98505ca1af7d7e3057badc5a4550fb601916322219ee9682421056b9c351",
-      "0cff98505ca1af7d7e3057badc5a4550fb601916322219ee9682421056b9c351"
+      "ad51c8c2352c1da1e160827b6a103c86ba0e395baec41427528c1c2ae446dd6f",
+      "ad51c8c2352c1da1e160827b6a103c86ba0e395baec41427528c1c2ae446dd6f"
     ],
     "agree": true
   }

@@ -766,6 +766,58 @@ test('GREEN: CLAUDE.md-documented non-family support owners under patterns/ are 
   assert.equal(attribution.status, 'unattributed');
 });
 
+/** Two chart family rows: the shared chart engine beside them is their declared shared owner. */
+const CHART_FAMILY_ROWS = [
+  { id: 'chart/basic/area-chart', sourceOwner: 'packages/core/src/components/patterns/visualization/charts/families/area-chart' },
+  { id: 'chart/basic/bar-chart', sourceOwner: 'packages/core/src/components/patterns/visualization/charts/families/bar-chart' },
+  { id: 'pattern/visualization/pattern-timeline', sourceOwner: 'packages/core/src/components/patterns/visualization/timeline' },
+];
+
+test('GREEN (D1-ii): a site in the declared shared chart engine resolves "resolved-shared" with ALL the chart family ids, derived from the rows', () => {
+  const index = buildFamilyIndex(CHART_FAMILY_ROWS);
+  for (const owner of ['runtime/theming/paint/index.ts', 'presentation/tooltip/index.tsx', 'foundation/renderers/index.ts', 'contracts/index.ts']) {
+    const attribution = attributeFamily(`packages/core/src/components/patterns/visualization/charts/${owner}`, index);
+    assert.equal(attribution.status, 'resolved-shared', owner);
+    assert.deepEqual([...attribution.ids].sort(), ['chart/basic/area-chart', 'chart/basic/bar-chart'], owner);
+  }
+  // A family's own folder still resolves to its one row (most specific wins).
+  const own = attributeFamily('packages/core/src/components/patterns/visualization/charts/families/bar-chart/index.tsx', index);
+  assert.equal(own.status, 'resolved');
+  assert.deepEqual([...own.ids], ['chart/basic/bar-chart']);
+});
+
+test('RED drill (D1-ii): a path under patterns/visualization that is neither a family row nor the declared shared owner is still "unknown-family"', () => {
+  const index = buildFamilyIndex(CHART_FAMILY_ROWS);
+  for (const path of [
+    'packages/core/src/components/patterns/visualization/brand-new-viz/index.tsx',
+    'packages/core/src/components/patterns/visualization/charts/tests/Charts.test.tsx',
+    'packages/core/src/components/patterns/visualization/charts/index.ts',
+    'packages/core/src/components/patterns/visualization/charts/runtime-extra/index.ts',
+  ]) {
+    const attribution = attributeFamily(path, index);
+    assert.equal(attribution.status, 'unknown-family', path);
+    assert.equal(attribution.categoryDir, 'packages/core/src/components/patterns/visualization', path);
+  }
+});
+
+test('RED (D1-ii): the declaration attributes nothing when the inventory names no chart family -- its sites fall through to "unknown-family"', () => {
+  const rows = [{ id: 'pattern/visualization/pattern-timeline', sourceOwner: 'packages/core/src/components/patterns/visualization/timeline' }];
+  const attribution = attributeFamily('packages/core/src/components/patterns/visualization/charts/runtime/index.ts', buildFamilyIndex(rows));
+  assert.equal(attribution.status, 'unknown-family');
+});
+
+test('LIVE (D1-ii): against the real inventory the shared chart engine carries every charts/families row id, and only those', () => {
+  const { rows } = loadFamilyRows(DEFAULT_FAMILY_INVENTORY);
+  const chartIds = rows
+    .filter((row) => row.sourceOwner.startsWith('packages/core/src/components/patterns/visualization/charts/families/'))
+    .map((row) => row.id)
+    .sort();
+  assert.ok(chartIds.length > 0);
+  const attribution = attributeFamily('packages/core/src/components/patterns/visualization/charts/runtime/index.ts', buildFamilyIndex(rows));
+  assert.equal(attribution.status, 'resolved-shared');
+  assert.deepEqual([...attribution.ids].sort(), chartIds);
+});
+
 test('LIVE: the real family-inventory/index.json resolves and buildFamilyIndex handles it without throwing', () => {
   const { rows } = loadFamilyRows(DEFAULT_FAMILY_INVENTORY);
   assert.ok(rows.length > 100);
@@ -1527,6 +1579,35 @@ test('RED 3/8: unknown family -- a consumer site under a known family category w
   );
   assert.ok(declaredOnlyDirect.failures.some((f) => f.includes('unknown family')));
   assert.ok(result); // sanity: first construction does not throw even without the drifted read
+});
+
+test('RED 3/8 drill (D1-ii): the declared shared chart engine is not unknown-family, an undeclared visualization path still is', () => {
+  const chartRuntime = 'src/components/patterns/visualization/charts/runtime/theming/paint/index.ts';
+  const shared = analyzeChannelLiveness(
+    baseAnalyzerArgs({
+      familyRows: CHART_FAMILY_ROWS,
+      tsStylesheets: [css(chartRuntime, 'var(--ds-color-primary)')],
+    }),
+  );
+  assert.ok(!shared.failures.some((f) => f.includes('unknown family')), shared.failures.join('\n'));
+  assert.equal(shared.counts.unknownFamilySites, 0);
+  assert.ok(shared.counts.unattributedSharedReadSites > 0);
+  const channel = shared.channels.find((row) => row.name === '--ds-color-primary');
+  assert.deepEqual(channel.familyIds, ['chart/basic/area-chart', 'chart/basic/bar-chart']);
+  assert.equal(channel.sharedFamilyAttribution, true);
+
+  const drifted = analyzeChannelLiveness(
+    baseAnalyzerArgs({
+      familyRows: CHART_FAMILY_ROWS,
+      tsStylesheets: [
+        css(chartRuntime, 'var(--ds-color-primary)'),
+        css('src/components/patterns/visualization/brand-new-viz/index.tsx', 'var(--ds-color-primary)'),
+      ],
+    }),
+  );
+  assert.equal(drifted.ok, false);
+  assert.equal(drifted.counts.unknownFamilySites, 1);
+  assert.ok(drifted.failures.some((f) => f.includes('unknown family') && f.includes('brand-new-viz')));
 });
 
 test('RED 4/8: a fabricated NEW channel with no terminal and no external evidence is a standing NO-GO row (defect 3 + 8)', () => {

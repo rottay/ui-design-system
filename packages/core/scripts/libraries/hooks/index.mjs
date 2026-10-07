@@ -1151,7 +1151,7 @@ export const PROMOTIONS = Object.freeze([
       // these spellings in 2.19.36, so they stay assignable until every named
       // consumer authors the canonical name; the skin reads the superseded arm
       // first so a consumer that has not migrated still outranks the compiled
-      // rest. Roster and end trigger: `structures/shell/contracts` ->
+      // rest. Roster and end trigger: `structures/foundation/shell-contracts` ->
       // `SHELL_SUPERSEDED_HOOK_CHANNELS`, measured by
       // `shell-superseded-window.test.ts`. Remove these fourteen rows, and the
       // skin's first arm, in the same change.

@@ -28,8 +28,8 @@
  * THE TWO SPELLINGS. The family's private chrome is `--ds-app-shell-*`, its
  * own namespace. The five track/cadence names keep `--ds-shell-*` because
  * they are the shell group's PUBLISHED band
- * (`structures/shell/contracts` -> `SHELL_PUBLISHED_CHANNELS`): four shell
- * skins, the responsive channel contract, `chrome-variables` and three
+ * (`structures/foundation/shell-contracts` -> `SHELL_PUBLISHED_CHANNELS`): four
+ * shell skins, the responsive channel contract, `chrome-variables` and three
  * applications read them, and `static-db-channel-vocabulary` pins two of them
  * as the static/DB parity vocabulary. The namespace law admits that band by
  * reading the contract, not by name. The fourteen private names an
