@@ -380,3 +380,20 @@ The owner approved separating **root closure**, **family adoption** and **fleet 
 - **Do NOT** — Do not duplicate authored documents and family fragments; do not widen identity baselines or leave permanent internal forwarding wrappers; do not dispatch style data packets against the singleton registry/generator reservation; do not treat version pins as mutable.
 - **Size** — M.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system` on main, execute WO-DER-09 (Shared style presets and first-party migration): read the current execution policy in `roadmap/README.md`, this complete WO block in `roadmap/derivation.md` (also returned by `show WO-DER-09`), and `evidence/style-history-roadmap-review/index.md`. The lane block is the executable spec; proposals.md is historical. Respect registry dependencies and declare your write set; finish only when the acceptance gate passes; report focused checks and their outputs. Do not contact Codex.
+
+### WO-DER-10 D-30 BitHire identity: record the owner's pick, finalize the bithire preset, retire the candidates
+- **Outcome** — The D-30 branding obligation has an open holder. When the owner records the pick (or amends), it is written to `roadmap/kit-2026-09.md` under `D-30 — chosen BitHire identity` with the chosen set's sha256, checked against the candidate digests recorded at `9ae086b19`. Then the bithire preset takes its final look, the showroom visual baselines are regenerated, and `foundation/presets/candidates/bithire/**` is deleted after its consumers are re-pointed, together with its two `lab-data` rows in the consumer-census attributions.
+- **Why** — WO-DER-07 closed its technical acceptance (owner ruling R29) and left D-30 as a deferred branding obligation (`roadmap/kit-2026-09.md` §5d). The consumer-census `lab-data` class requires an OPEN receiver for the candidate modules; WO-DER-07 is done, so they had none. The owner's 2026-10-06 D-30 decision keeps the candidates as the provisional technical reference for EVI-03.
+- **Closes** — n/a. Not a member of `audit-2026-09-05`: D-30 is not a condition of milestone C (R29).
+- **Wave** — branding stage; owner-gated.
+- **Depends on** — WO-DER-07. Not claimable until the owner records the pick; registering this WO chooses nothing.
+- **Steps** —
+  1. Record the owner's pick with its digest (owner act; never written to an audit tree).
+  2. Finalize the bithire preset from the chosen set (residual of WO-DER-06).
+  3. Regenerate the showroom visual baselines (residual of WO-EVI-03, whose Do-NOT stands).
+  4. Re-point the candidates' consumers, then delete `foundation/presets/candidates/bithire/**` and its two attribution rows.
+- **Files** — `packages/core/src/foundation/presets/candidates/bithire/**`; `packages/core/src/foundation/presets/verticals/bithire/**`; `packages/core/src/foundation/presets/verticals/tests/decisions.test.ts`; `packages/core/scripts/check/consumer-census/attributions/index.json` (the two candidate rows only); `packages/showroom/src/app/probe-ground/identity/**`; `roadmap/kit-2026-09.md`.
+- **Acceptance gate** — `roadmap/kit-2026-09.md` carries the `D-30 — chosen BitHire identity` section with a digest equal to one recorded candidate digest (or an owner amendment); `find packages/core/src/foundation/presets/candidates -type f` prints nothing; `node packages/core/scripts/check/consumer-census/index.mjs --check` exits 0 with no candidate rows.
+- **Do NOT** — Do not register a fictitious pick. Do not delete the candidates before the pick. Do not add this WO to `audit-2026-09-05`.
+- **Size** — S.
+- **Delegation prompt** — Only after the owner records the D-30 pick: in `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-DER-10 exactly as specified in `roadmap/derivation.md`; declare your write set; report the commands you ran and their output.

@@ -217,8 +217,8 @@
           "kind": "test-import"
         }
       ],
-      "reason": "Identity-candidate preset data for BitHire, not admitted to the vertical roster. Tests exercise it; no entrypoint publishes it.",
-      "receiver": "WO-DER-07"
+      "reason": "Identity-candidate preset data for BitHire, not admitted to the vertical roster. Tests exercise it; no entrypoint publishes it. Receiver: WO-DER-10, the D-30 holder (WO-DER-07 is done).",
+      "receiver": "WO-DER-10"
     },
     {
       "path": "src/foundation/presets/candidates/bithire/documents/index.ts",
@@ -233,8 +233,8 @@
           "kind": "test-import"
         }
       ],
-      "reason": "Candidate documents of the same lab preset, reached by the tests through the candidate index.",
-      "receiver": "WO-DER-07"
+      "reason": "Candidate documents of the same lab preset, reached by the tests through the candidate index. Receiver: WO-DER-10, the D-30 holder (WO-DER-07 is done).",
+      "receiver": "WO-DER-10"
     }
   ],
   "doors": [
