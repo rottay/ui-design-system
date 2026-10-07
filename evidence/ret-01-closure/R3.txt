@@ -1,0 +1,15 @@
+deprecations: 34 marker(s), 34 row(s) — debt 0, compat-consumed 5, compat-frozen-sole-implementer 25, compat-canon-pending 2, compat-persisted-data 2
+  receivers: WO-RET-06 34
+  assumed done: WO-RET-01
+  REPORT sibling evidence: 9 verified live, 0 historical audited receipt(s), not re-verified here, 0 NOT VERIFIED
+  EVIDENCE src/components/primitives/display/badge/contracts/index.ts#BadgeVariant: `consumer` verified live at ../app-bithire/src/features/interviews/model/domain/workflows/feedback/listing/index.ts; receipt at ad2252f098acaa50a7d99f3d21d469bc9826a42f re-proven
+  EVIDENCE src/components/primitives/display/badge/contracts/index.ts#BadgeBaseProps.variant: `consumer` verified live at ../app-bithire/src/vertical/showcase/applications/ai-recommendation-variants/index.tsx; receipt at ad2252f098acaa50a7d99f3d21d469bc9826a42f re-proven
+  EVIDENCE src/components/primitives/display/callout/index.tsx#Callout: `consumer` verified live at ../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx; receipt at 2ed7a6058e0c7e9a153fee1c7c20994e0694331f re-proven
+  EVIDENCE src/components/primitives/display/tag/contracts/index.ts#TagVariant: `consumer` verified live at ../app-bithire/src/vertical/surface/shell/header/index.tsx; receipt at ad2252f098acaa50a7d99f3d21d469bc9826a42f re-proven
+  EVIDENCE src/components/primitives/display/tag/contracts/index.ts#TagProps.variant: `consumer` verified live at ../app-bithire/src/vertical/surface/shell/header/index.tsx; receipt at ad2252f098acaa50a7d99f3d21d469bc9826a42f re-proven
+  EVIDENCE src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'left': `consumer` verified live at ../app-bithire/src/ui/forms/create/page-shell/components/index.tsx; receipt at ad2252f098acaa50a7d99f3d21d469bc9826a42f re-proven
+  EVIDENCE src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'left': `consumer` verified live at ../app-bithire/src/ui/tables/collection/preview/index.tsx; receipt at ad2252f098acaa50a7d99f3d21d469bc9826a42f re-proven
+  EVIDENCE src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'right': `consumer` verified live at ../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx; receipt at ad2252f098acaa50a7d99f3d21d469bc9826a42f re-proven
+  EVIDENCE src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'right': `consumer` verified live at ../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx; receipt at ad2252f098acaa50a7d99f3d21d469bc9826a42f re-proven
+  REPORT notice entries: 33 in the codemod map, 33 named by a row whose receiver is listed in compatReceivers
+✓ every marker has one row and every row verifies

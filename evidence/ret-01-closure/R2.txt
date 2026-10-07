@@ -1,0 +1,7 @@
+consumer-census: 38 published subpaths — 26 consumed, 12 consumerless; 2172 census modules — 2165 reachable, 5 test-only, 2 unreachable; 2 styles unreferenced; 302 export entry sources.
+consumer-census: consumer roots — showroom:ok app-bithire:ok app-evnto:ok app-platform:ok
+consumer-census: named classes — 0 unreachable outside named classes; 7 module(s) in a proven class; 0 test-only outside classes; 3 door(s) attributed; 9 consumerless door(s) held by an open disposition.
+consumer-census: installed-path reads — 18 (9 name a path the package no longer ships).
+consumer-census: OK — the census matches the baseline; every growth direction is pinned.
+=== showroom grep:
+0 líneas

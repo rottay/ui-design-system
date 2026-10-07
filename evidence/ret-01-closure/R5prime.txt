@@ -1,0 +1,98 @@
+
+packages/core/src/components/structures/workspace/action-dock/tests/ActionDock.test.tsx
+  REPORT  75:38 css-class-renamed/.#ActionDock [string-literal] `rottay-action-dock` -> `ds-action-dock`: a class string is not resolvable through an import; rename it by hand
+          '[class*="rottay-action-dock"]'
+
+packages/core/src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/tests/index.test.ts
+  REPORT  527:23 subpath-removed/./does-not-exist#* [unmapped-unpublished-subpath] `./does-not-exist` is not published by this package and the map has no entry for it
+          '@rottay/design-system/does-not-exist'
+
+packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-compiler.test.ts
+  REPORT  1312:31 css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS [string-literal] `--ds-color-accent-500` is removed with no recorded successor: a custom property name is not resolvable through an import; move the read by hand
+          "--ds-color-accent-500"
+
+packages/core/src/infrastructure/compilers/runtime/theme/facade/foundation/admission/tests/retired-references.test.ts
+  REPORT  78:25 css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS [string-literal] `--ds-color-accent-500` is removed with no recorded successor: a custom property name is not resolvable through an import; move the read by hand
+          "var(--ds-color-accent-500)"
+  REPORT  101:33 css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS [string-literal] `--ds-color-accent-500` is removed with no recorded successor: a custom property name is not resolvable through an import; move the read by hand
+          "--ds-color-accent-500"
+  REPORT  107:25 css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS [string-literal] `--ds-color-accent-50` is removed with no recorded successor: a custom property name is not resolvable through an import; move the read by hand
+          "var(--ds-radius-md, var(--ds-color-accent-50))"
+  REPORT  117:31 css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS [string-literal] `--ds-color-accent-50` is removed with no recorded successor: a custom property name is not resolvable through an import; move the read by hand
+          "--ds-color-accent-50"
+  REPORT  127:47 css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS [string-literal] `--ds-color-accent-900` is removed with no recorded successor: a custom property name is not resolvable through an import; move the read by hand
+          "var(--ds-color-accent-900)"
+  REPORT  143:22 css-custom-property-renamed/./server#TENANT_THEME_REFERENCE_TOKENS [string-literal] `--ds-color-accent-900` is removed with no recorded successor: a custom property name is not resolvable through an import; move the read by hand
+          "--ds-color-accent-900"
+
+packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette/tests/index.test.ts
+  REPORT  46:10 css-custom-property-renamed/.#BrandPaletteAliases [string-literal] `--ds-text-inverse` -> `--ds-color-text-on-primary`: a custom property name is not resolvable through an import; move the read by hand
+          "palette alias lowering: the retired --ds-text-tertiary and --ds-text-inverse aliases"
+  REPORT  48:27 css-custom-property-renamed/.#BrandPaletteAliases [string-literal] `--ds-text-inverse` -> `--ds-color-text-on-primary`: a custom property name is not resolvable through an import; move the read by hand
+          "--ds-text-inverse"
+
+packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/tests/index.test.ts
+  REPORT  96:5 css-custom-property-renamed/.#BrandPaletteAliases [string-literal] `--ds-text-body-letter-spacing` is removed with no recorded successor: a custom property name is not resolvable through an import; move the read by hand
+          "--ds-text-body-letter-spacing"
+  REPORT  97:5 css-custom-property-renamed/.#BrandPaletteAliases [string-literal] `--ds-text-emphasis-letter-spacing` is removed with no recorded successor: a custom property name is not resolvable through an import; move the read by hand
+          "--ds-text-emphasis-letter-spacing"
+
+packages/showroom/src/app/probe/custom-component-pack/page.tsx
+  REPORT  94:3 member-changed/.#TenantConfig [member-changed] `TenantConfig` (`brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`) changed on `.`; 1 reference(s) in this file. REMOVED fields `brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`; the type is identity + bounded branding + the artifact reference (`slug`/`vertical`). Migration: compile a `Theme`/`BrandTheme` into a `TenantThemeArtifact`, mount it with `mountTenantTheme` and declare `visualAuthority={{ authority: 'compiled-artifact', artifact }}`; the engine is the vertical roster's. Stop reading or writing the five removed fields; visual decisions reach the runtime through the compiled artifact. Reported because this file spells none of the changed members, but L219 spreads a value this file does not write; L259 spreads a value this file does not write; L321 spreads a value this file does not write, so a removed member can arrive unspelled and unseen by the typecheck.
+          type TenantConfig
+
+packages/showroom/src/app/probe/ds-reference/sections/display-surfaces/index.tsx
+  REPORT  21:18 member-changed/.#Callout [member-changed] `Callout` changed on `.`; 14 reference(s) in this file. not removed in 3.0: `Callout` stays published and deprecated; only its `variant` prop leaves. On the Modern engine `<Alert tone message description action emphasis="subtle" announce="tone" />` renders the same markup; on Classic and Rustic `Alert` drops the action tray and the callout tint set. An application on the Modern engine writes `Alert` with `emphasis="subtle"` and `announce="tone"`; note that a title change re-opens a dismissed Alert where the Callout stayed shut; the removal is recorded for the 4.0 line.
+          Callout
+
+packages/showroom/src/app/probe/ds-reference/sections/primitive-state-repairs/index.tsx
+  REPORT  27:3 member-changed/.#Callout [member-changed] `Callout` changed on `.`; 4 reference(s) in this file. not removed in 3.0: `Callout` stays published and deprecated; only its `variant` prop leaves. On the Modern engine `<Alert tone message description action emphasis="subtle" announce="tone" />` renders the same markup; on Classic and Rustic `Alert` drops the action tray and the callout tint set. An application on the Modern engine writes `Alert` with `emphasis="subtle"` and `announce="tone"`; note that a title change re-opens a dismissed Alert where the Callout stayed shut; the removal is recorded for the 4.0 line.
+          Callout
+
+packages/showroom/src/components/brand-locale-evidence/index.tsx
+  REPORT  20:3 member-changed/.#TenantConfig [member-changed] `TenantConfig` (`brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`) changed on `.`; 1 reference(s) in this file. REMOVED fields `brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`; the type is identity + bounded branding + the artifact reference (`slug`/`vertical`). Migration: compile a `Theme`/`BrandTheme` into a `TenantThemeArtifact`, mount it with `mountTenantTheme` and declare `visualAuthority={{ authority: 'compiled-artifact', artifact }}`; the engine is the vertical roster's. Stop reading or writing the five removed fields; visual decisions reach the runtime through the compiled artifact. Reported because this file spells a changed member: `appearance` L64 named.
+          type TenantConfig
+
+packages/showroom/src/components/layout-foundations-evidence/index.tsx
+  REPORT  20:3 member-changed/.#TenantConfig [member-changed] `TenantConfig` (`brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`) changed on `.`; 1 reference(s) in this file. REMOVED fields `brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`; the type is identity + bounded branding + the artifact reference (`slug`/`vertical`). Migration: compile a `Theme`/`BrandTheme` into a `TenantThemeArtifact`, mount it with `mountTenantTheme` and declare `visualAuthority={{ authority: 'compiled-artifact', artifact }}`; the engine is the vertical roster's. Stop reading or writing the five removed fields; visual decisions reach the runtime through the compiled artifact. Reported because this file spells a changed member: `appearance` L60 named.
+          type TenantConfig
+
+packages/showroom/src/components/probe-ground/ground/index.tsx
+  REPORT  2:15 member-changed/.#TenantConfig [member-changed] `TenantConfig` (`brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`) changed on `.`; 2 reference(s) in this file. REMOVED fields `brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`; the type is identity + bounded branding + the artifact reference (`slug`/`vertical`). Migration: compile a `Theme`/`BrandTheme` into a `TenantThemeArtifact`, mount it with `mountTenantTheme` and declare `visualAuthority={{ authority: 'compiled-artifact', artifact }}`; the engine is the vertical roster's. Stop reading or writing the five removed fields; visual decisions reach the runtime through the compiled artifact. Reported because this file spells none of the changed members, but L76 spreads a value this file does not write; L98 spreads a value this file does not write; L110 spreads a value this file does not write; L124 spreads a value this file does not write, so a removed member can arrive unspelled and unseen by the typecheck.
+          TenantConfig
+
+packages/showroom/src/components/probes/primitives/feedback/index.tsx
+  REPORT  28:3 member-changed/.#Callout [member-changed] `Callout` changed on `.`; 4 reference(s) in this file. not removed in 3.0: `Callout` stays published and deprecated; only its `variant` prop leaves. On the Modern engine `<Alert tone message description action emphasis="subtle" announce="tone" />` renders the same markup; on Classic and Rustic `Alert` drops the action tray and the callout tint set. An application on the Modern engine writes `Alert` with `emphasis="subtle"` and `announce="tone"`; note that a title change re-opens a dismissed Alert where the Callout stayed shut; the removal is recorded for the 4.0 line.
+          Callout
+
+packages/showroom/src/components/torture-sections/data-display-states/index.tsx
+  REPORT  8:3 member-changed/.#Callout [member-changed] `Callout` changed on `.`; 4 reference(s) in this file. not removed in 3.0: `Callout` stays published and deprecated; only its `variant` prop leaves. On the Modern engine `<Alert tone message description action emphasis="subtle" announce="tone" />` renders the same markup; on Classic and Rustic `Alert` drops the action tray and the callout tint set. An application on the Modern engine writes `Alert` with `emphasis="subtle"` and `announce="tone"`; note that a title change re-opens a dismissed Alert where the Callout stayed shut; the removal is recorded for the 4.0 line.
+          Callout
+
+packages/showroom/src/components/torture-surface/index.tsx
+  REPORT  8:3 member-changed/.#TenantConfig [member-changed] `TenantConfig` (`brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`) changed on `.`; 3 reference(s) in this file. REMOVED fields `brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`; the type is identity + bounded branding + the artifact reference (`slug`/`vertical`). Migration: compile a `Theme`/`BrandTheme` into a `TenantThemeArtifact`, mount it with `mountTenantTheme` and declare `visualAuthority={{ authority: 'compiled-artifact', artifact }}`; the engine is the vertical roster's. Stop reading or writing the five removed fields; visual decisions reach the runtime through the compiled artifact. Reported because this file spells a changed member: `engine` L195 destructured; `engine` L210 named; `engine` L271 written as an object key; `engine` L276 named; `engine` L288 written as an object key; `engine` L298 named, and 2 more.
+          type TenantConfig
+
+packages/showroom/src/components/visual-authority-probe/config/index.ts
+  REPORT  1:15 member-changed/.#TenantConfig [member-changed] `TenantConfig` (`brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`) changed on `.`; 2 reference(s) in this file. REMOVED fields `brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`; the type is identity + bounded branding + the artifact reference (`slug`/`vertical`). Migration: compile a `Theme`/`BrandTheme` into a `TenantThemeArtifact`, mount it with `mountTenantTheme` and declare `visualAuthority={{ authority: 'compiled-artifact', artifact }}`; the engine is the vertical roster's. Stop reading or writing the five removed fields; visual decisions reach the runtime through the compiled artifact. Reported because this file spells a changed member: `tokenOverrides` L40 written as an object key; `appearance` L53 named; `appearance` L69 written as an object key.
+          TenantConfig
+
+packages/showroom/src/components/visual-authority-probe/index.tsx
+  REPORT  16:3 member-changed/.#TenantConfig [member-changed] `TenantConfig` (`brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`) changed on `.`; 1 reference(s) in this file. REMOVED fields `brandTheme`, `tokenOverrides`, `personality`, `appearance`, `engine`; the type is identity + bounded branding + the artifact reference (`slug`/`vertical`). Migration: compile a `Theme`/`BrandTheme` into a `TenantThemeArtifact`, mount it with `mountTenantTheme` and declare `visualAuthority={{ authority: 'compiled-artifact', artifact }}`; the engine is the vertical roster's. Stop reading or writing the five removed fields; visual decisions reach the runtime through the compiled artifact. Reported because this file spells none of the changed members, but L215 asserts a value this file does not write; L262 spreads a value this file does not write, so a removed member can arrive unspelled and unseen by the typecheck.
+          type TenantConfig
+  REPORT  20:3 member-changed/./server#censusRuntimeVisualPayload [member-changed] `censusRuntimeVisualPayload` changed on `./server`; 1 reference(s) in this file. input narrowed to `Pick<TenantConfig, "branding"> | null | undefined`; it returns the one-field census above. Pass `Pick<TenantConfig, "branding">` and read the one-field census.
+          censusRuntimeVisualPayload
+
+codemods mode=check files=5132 filesWithFindings=17 filesChanged=0 wouldChange=0 rewrite=0 report=25
+  subpath-removed                rewrite=0     report=1     unmapped-unpublished-subpath=1
+  symbol-removed                 rewrite=0     report=0     
+  symbol-removed-no-replacement  rewrite=0     report=0     
+  prop-removed                   rewrite=0     report=0     
+  prop-renamed                   rewrite=0     report=0     
+  union-member-removed           rewrite=0     report=0     
+  member-changed                 rewrite=0     report=12    member-changed=12
+  css-class-renamed              rewrite=0     report=1     string-literal=1
+  css-custom-property-renamed    rewrite=0     report=11    string-literal=11
+  glyph-removed                  rewrite=0     report=0     
+  resolver                       rewrite=0     report=0     
+standing: 25 report(s) in 18 row(s), ceiling 25

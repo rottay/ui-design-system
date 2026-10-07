@@ -1,0 +1,1 @@
+contract-changeset: OK — every guaranteed-surface and shipped change in origin/main...HEAD is covered by a changeset the range introduces.

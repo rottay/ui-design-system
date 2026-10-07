@@ -1,0 +1,190 @@
+{
+  "ok": true,
+  "failures": [],
+  "report": {
+    "markers": 34,
+    "rawOccurrences": 34,
+    "testFileOccurrences": 0,
+    "rows": 34,
+    "byClass": {
+      "debt": 0,
+      "compat-consumed": 5,
+      "compat-frozen-sole-implementer": 25,
+      "compat-canon-pending": 2,
+      "compat-persisted-data": 2
+    },
+    "byReceiver": {
+      "WO-RET-06": 34
+    },
+    "receiverPhaseLocked": [],
+    "unverifiedEvidence": [],
+    "unverifiedByRow": {},
+    "siblingEvidence": [
+      {
+        "row": "src/components/primitives/display/badge/contracts/index.ts#BadgeVariant",
+        "kind": "consumer",
+        "path": "../app-bithire/src/features/interviews/model/domain/workflows/feedback/listing/index.ts",
+        "status": "verified-live",
+        "receipt": {
+          "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+          "date": "2026-10-04",
+          "holds": true,
+          "reproven": true,
+          "audited": {
+            "by": "claude-opus-5-5 (independent session 9bb43849",
+            "at": "2026-10-04",
+            "record": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json"
+          }
+        }
+      },
+      {
+        "row": "src/components/primitives/display/badge/contracts/index.ts#BadgeBaseProps.variant",
+        "kind": "consumer",
+        "path": "../app-bithire/src/vertical/showcase/applications/ai-recommendation-variants/index.tsx",
+        "status": "verified-live",
+        "receipt": {
+          "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+          "date": "2026-10-04",
+          "holds": true,
+          "reproven": true,
+          "audited": {
+            "by": "claude-opus-5-5 (independent session 9bb43849",
+            "at": "2026-10-04",
+            "record": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json"
+          }
+        }
+      },
+      {
+        "row": "src/components/primitives/display/callout/index.tsx#Callout",
+        "kind": "consumer",
+        "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
+        "status": "verified-live",
+        "receipt": {
+          "commit": "2ed7a6058e0c7e9a153fee1c7c20994e0694331f",
+          "date": "2026-10-04",
+          "holds": true,
+          "reproven": true,
+          "audited": {
+            "by": "claude-opus-5-5 (independent session 9bb43849",
+            "at": "2026-10-04",
+            "record": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json"
+          }
+        }
+      },
+      {
+        "row": "src/components/primitives/display/tag/contracts/index.ts#TagVariant",
+        "kind": "consumer",
+        "path": "../app-bithire/src/vertical/surface/shell/header/index.tsx",
+        "status": "verified-live",
+        "receipt": {
+          "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+          "date": "2026-10-04",
+          "holds": true,
+          "reproven": true,
+          "audited": {
+            "by": "claude-opus-5-5 (independent session 9bb43849",
+            "at": "2026-10-04",
+            "record": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json"
+          }
+        }
+      },
+      {
+        "row": "src/components/primitives/display/tag/contracts/index.ts#TagProps.variant",
+        "kind": "consumer",
+        "path": "../app-bithire/src/vertical/surface/shell/header/index.tsx",
+        "status": "verified-live",
+        "receipt": {
+          "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+          "date": "2026-10-04",
+          "holds": true,
+          "reproven": true,
+          "audited": {
+            "by": "claude-opus-5-5 (independent session 9bb43849",
+            "at": "2026-10-04",
+            "record": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json"
+          }
+        }
+      },
+      {
+        "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'left'",
+        "kind": "consumer",
+        "path": "../app-bithire/src/ui/forms/create/page-shell/components/index.tsx",
+        "status": "verified-live",
+        "receipt": {
+          "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+          "date": "2026-10-04",
+          "holds": true,
+          "reproven": true,
+          "audited": {
+            "by": "claude-opus-5-5 (independent session 9bb43849",
+            "at": "2026-10-04",
+            "record": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json"
+          }
+        }
+      },
+      {
+        "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'left'",
+        "kind": "consumer",
+        "path": "../app-bithire/src/ui/tables/collection/preview/index.tsx",
+        "status": "verified-live",
+        "receipt": {
+          "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+          "date": "2026-10-04",
+          "holds": true,
+          "reproven": true,
+          "audited": {
+            "by": "claude-opus-5-5 (independent session 9bb43849",
+            "at": "2026-10-04",
+            "record": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json"
+          }
+        }
+      },
+      {
+        "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'right'",
+        "kind": "consumer",
+        "path": "../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx",
+        "status": "verified-live",
+        "receipt": {
+          "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+          "date": "2026-10-04",
+          "holds": true,
+          "reproven": true,
+          "audited": {
+            "by": "claude-opus-5-5 (independent session 9bb43849",
+            "at": "2026-10-04",
+            "record": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json"
+          }
+        }
+      },
+      {
+        "row": "src/components/primitives/display/tooltip/contracts/index.ts#TooltipPlacement.'right'",
+        "kind": "consumer",
+        "path": "../app-bithire/src/vertical/surface/shell/role-switcher/index.tsx",
+        "status": "verified-live",
+        "receipt": {
+          "commit": "ad2252f098acaa50a7d99f3d21d469bc9826a42f",
+          "date": "2026-10-04",
+          "holds": true,
+          "reproven": true,
+          "audited": {
+            "by": "claude-opus-5-5 (independent session 9bb43849",
+            "at": "2026-10-04",
+            "record": "packages/core/contracts/package/deprecations/receipts/audits/2026-10-04-c/index.json"
+          }
+        }
+      }
+    ],
+    "rowsOnHistoricalReceipts": [],
+    "staleReceipts": [],
+    "unauditedReceipts": [],
+    "receipts": 9,
+    "codemodLookup": {
+      "map": 34
+    },
+    "notices": {
+      "entries": 33,
+      "named": 33
+    },
+    "consumers": "not requested"
+  }
+}
