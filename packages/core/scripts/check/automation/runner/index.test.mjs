@@ -122,9 +122,18 @@ test('every excluded gate names its reason and its owner', () => {
   // run. It returns to blocking with the same sibling-checkout wiring the
   // app-ds-hook-contract entry documents, never by hand and never by
   // softening the missing-root law.
+  // `channel-liveness` LEFT on 2026-10-07 (WO-EVI-02 + WO-RET-04 W-3/W-3b): the
+  // manifest's stated return condition was "EVI-02's --write, not a
+  // re-baseline" -- the effect verdict was already drained to 0 in every
+  // unproven class, the 31 unknown-family sites closed (4 moved with
+  // structures/foundation/shell-contracts, 27 attributed resolved-shared to
+  // the chart families under the declared DECLARED_SHARED_OWNERS table, DT
+  // ruling D1-ii), the R1 artifact was written (3221 channels) and the gate
+  // blocks again. No counter was re-baselined; the exclusion record's content
+  // is preserved in the W-3 integration commit and the WO-EVI-02 trail.
   assert.deepEqual(
     excluded.map((g) => g.id).sort(),
-    ['channel-liveness', 'channel-liveness-reconcile', 'consumer-census', 'style-reuse-differentiation', 'theme-keypath-coverage'],
+    ['channel-liveness-reconcile', 'consumer-census', 'style-reuse-differentiation', 'theme-keypath-coverage'],
     'la lista de exclusiones cambio; adjudicala antes de moverla',
   );
   for (const gate of excluded) {
