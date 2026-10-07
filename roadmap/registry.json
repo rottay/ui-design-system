@@ -6677,6 +6677,11 @@
      "at": "2026-10-07 18:08",
      "by": "kimi-dt",
      "note": "2026-10-07 kimi-dt: W-4 INTEGRATED (1d04d8509; review b1b0eb21 ACCEPT; MAJOR confirmed — narrows published surface). BrandMotion step 4(i) done: the six editor fields + the file-export read retired; BrandMotion/iso admission/lowering read untouched (4ii owner/ops, 4iii follows). The L1 ledger-scope correction landed with it; L2's BREAKING: marker sits after the target (the parser rejects a leading prefix — noted for future lots). The review's I1 registered: the brand-studio fixtures test ('multiple elements: Throughput') is no longer load-occasional — fails 3/3 on pristine; it joins the suite-isolation debt package. W-3's design debrief is done (session 96642395): W-3a (the density axis, major) + W-3b (the recipe vocabulary guard + buildRecipeManifest retirement, major) PROCEED; D-F (the fiche's literal 'un solo Density* type' restatement + the surviving recipe concept's naming) is a NEW owner question, registered."
+    },
+    {
+     "at": "2026-10-07 19:41",
+     "by": "kimi-dt",
+     "note": "2026-10-07 kimi-dt: W-3a INTEGRATED (93843d77e; review b1b0eb21 ACCEPT under ruling (i)). The density axis: DensityPosture declared once + DensityMode (./server) untouched; ten names retired (8 types + DensityPreference + normalizeSurfaceDensity->normalizeDensityPosture); the guard pins it (9/9); codemod kit 731->739 with 219/219; the dry-run law reads 0 rewrites + exactly the 3 named report-only reports (the VerticalManifest.density member notice on the 3 app manifests — the report-only channel working as designed; the debrief's 0/0 expectation was import-level and is corrected). MAJOR. The VerticalManifest.density inline spelling (structure refuses the cross-layer import) is registered + pinned identical by the guard. L1 registered: the expectTypeOf pins bite only via typecheck:tests (red on a pre-existing TS2339 — joins the suite-isolation debt package). I1: ProductProfileSurfaceDefaults.density inline — later hygiene lot. The W-3a companions ride the dated amendment (this commit's parent... the amendment is IN 93843d77e)."
     }
    ]
   },
