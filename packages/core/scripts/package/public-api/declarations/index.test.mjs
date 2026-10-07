@@ -205,26 +205,21 @@ test('current icons, marks, and pictograms emit a supplier-free public declarati
       },
     });
     assert.deepEqual(result.errors, []);
-    assert.ok(result.files >= 35, `expected a real public closure, found ${result.files} files`);
+    // 34 since `AlertIcon` left `./icons` (WO-RET-06 W-1) and its declaration left the public closure.
+    assert.ok(result.files >= 34, `expected a real public closure, found ${result.files} files`);
 
     const factory = await readFile(
       resolve(emittedRoot, 'graphics/icons/glyphs/runtime/factory/index.d.ts'),
       'utf8',
     );
-    const alert = await readFile(
-      resolve(emittedRoot, 'graphics/icons/glyphs/presentation/catalog/status/alert-icon/index.d.ts'),
-      'utf8',
-    );
     assert.match(factory, /DSIconComponent/u);
-    assert.match(alert, /AlertIcon/u);
-    assert.match(alert, /SvgIconProps/u);
-    assert.doesNotMatch(`${factory}\n${alert}`, /lucide|phosphor|hugeicons?|thesvg/iu);
+    assert.doesNotMatch(factory, /lucide|phosphor|hugeicons?|thesvg/iu);
+    assert.equal(existsSync(resolve(emittedRoot, 'graphics/icons/glyphs/presentation/catalog/status/alert-icon/index.d.ts')), false);
     assert.equal(existsSync(resolve(emittedRoot, 'graphics/icons/glyphs/presentation/catalog/action/index.d.ts')), false);
 
     const catalog = await sourceModuleExportNames(resolve(CORE_ROOT, 'src/graphics/icons/glyphs/presentation/catalog/index.ts'));
     assert.equal(catalog.length, 329);
-    const retired = catalog.filter((name) => name !== 'AlertIcon');
-    assert.equal(retired.length, 328);
+    const retired = catalog;
     const publicDeclaration = resolve(emittedRoot, 'entrypoints/icons/index.d.ts');
     const publicProgram = ts.createProgram([publicDeclaration], {
       noEmit: true,
@@ -238,8 +233,8 @@ test('current icons, marks, and pictograms emit a supplier-free public declarati
     const publicModule = checker.getSymbolAtLocation(publicSource);
     assert.ok(publicModule);
     const publicNames = checker.getExportsOfModule(publicModule).map((symbol) => symbol.name);
-    assert.equal(publicNames.length, 56);
-    for (const name of ['AlertIcon', 'createIcon', 'DSIconComponent', 'DSIconProps', 'BaseIcon', 'Icon', 'IconProps', 'ICON_NAMES', 'GENERATED_ICON_METADATA']) {
+    assert.equal(publicNames.length, 55);
+    for (const name of ['createIcon', 'DSIconComponent', 'DSIconProps', 'BaseIcon', 'Icon', 'IconProps', 'ICON_NAMES', 'GENERATED_ICON_METADATA']) {
       assert.ok(publicNames.includes(name), `${name} must remain in the emitted public API`);
     }
     for (const name of retired) assert.equal(publicNames.includes(name), false, `${name} must be absent from the emitted public API`);

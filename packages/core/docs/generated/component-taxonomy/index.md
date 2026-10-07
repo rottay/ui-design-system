@@ -176,7 +176,6 @@ Tier support: `facade/`, `foundation/`, `runtime/`.
 
 - `runtime/adaptive-layout/`
 - `runtime/cell-renderers/`
-- `runtime/component-factories/`
 - `runtime/filtering/`
 - `runtime/forms/`
 - `runtime/kanban/`

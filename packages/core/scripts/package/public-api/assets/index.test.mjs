@@ -10,7 +10,8 @@ const ROLE_SUBPATH = '@rottay/design-system/icons/roles/action-add';
 const PRESET_SUBPATH = '@rottay/design-system/icons/presets/bithire';
 const ICONS_SUBPATH = '@rottay/design-system/icons';
 const MARKS_SUBPATH = '@rottay/design-system/marks';
-const PRESERVED_CATALOG_HELPERS = ['AlertIcon'];
+// `AlertIcon`, the last preserved catalog helper, retired from `./icons` (WO-RET-06 W-1): the whole catalog is private.
+const PRESERVED_CATALOG_HELPERS = [];
 const ALERT_OWNER = '../../graphics/icons/glyphs/presentation/catalog/status/alert-icon';
 
 function sourceStatements(url) {
@@ -64,7 +65,7 @@ function retiredCatalogExportNames() {
   assert.equal(names.length, 329);
   assert.deepEqual(names.filter((name) => PRESERVED_CATALOG_HELPERS.includes(name)), PRESERVED_CATALOG_HELPERS);
   const retired = names.filter((name) => !PRESERVED_CATALOG_HELPERS.includes(name));
-  assert.equal(retired.length, 328);
+  assert.equal(retired.length, 329);
   return retired;
 }
 
@@ -86,7 +87,7 @@ test('canonical icons public source excludes the catalog and retains existing he
   const catalog = retiredCatalogExportNames();
   for (const name of catalog) assert.equal(exported.has(name), false, `${name} must remain private`);
   for (const name of [
-    'createIcon', 'BaseIcon', 'AlertIcon', 'ICON_SIZE_MAP', 'ICON_SIZE_TOKENS', 'IconSizeToken',
+    'createIcon', 'BaseIcon', 'ICON_SIZE_MAP', 'ICON_SIZE_TOKENS', 'IconSizeToken',
     'DSIconComponent', 'DSIconProps', 'DSIconSourceComponent', 'IconSize', 'SvgIconProps', 'IconComponent',
     'Icon', 'IconProps', 'ICON_NAMES', 'ICON_CORPUS', 'getIconCorpusEntry', 'isIconName',
     'GENERATED_ICON_NAMES', 'GENERATED_ICON_METADATA', 'ICON_PROVENANCE', 'installGraphicAssetRuntimeControl',
@@ -97,7 +98,7 @@ test('canonical icons omit every vendor-named glyph in emitted ESM and CJS', asy
   const catalog = retiredCatalogExportNames();
   for (const module of [await import(ICONS_SUBPATH), require(ICONS_SUBPATH)]) {
     for (const name of catalog) assert.equal(name in module, false, `${name} must not be a public export`);
-    for (const name of ['createIcon', 'BaseIcon', 'AlertIcon', 'ICON_SIZE_MAP', 'ICON_SIZE_TOKENS']) {
+    for (const name of ['createIcon', 'BaseIcon', 'ICON_SIZE_MAP', 'ICON_SIZE_TOKENS']) {
       assert.equal(name in module, true, `${name} must stay public`);
     }
   }

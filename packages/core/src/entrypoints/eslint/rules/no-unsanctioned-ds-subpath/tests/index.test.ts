@@ -133,15 +133,15 @@ describe('consumer contract: document is the single source', () => {
     expect(parsed.published.map((row) => row.subpath)).toEqual(exportKeys);
   });
 
-  it('publishes 38 subpaths and states that count in the document', () => {
+  it('publishes 32 subpaths and states that count in the document', () => {
     // The export map, disposition table and prose carry the same live count.
-    expect(exportKeys).toHaveLength(38);
-    expect(parsed.published).toHaveLength(38);
+    expect(exportKeys).toHaveLength(32);
+    expect(parsed.published).toHaveLength(32);
     expect(documentMarkdown).toContain(
-      '| Subpaths publicados | 38 |',
+      '| Subpaths publicados | 32 |',
     );
     expect(documentMarkdown).toContain(
-      '## 1. Superficie de importación sancionada (38/38)',
+      '## 1. Superficie de importación sancionada (32/32)',
     );
   });
 
@@ -453,8 +453,8 @@ describe('showroom mounts the rule with a decrease-only baseline', () => {
     expect(classifySubpath('./icons')?.disposition).toBe('guaranteed');
 
     // An unsanctioned subpath with no showroom consumer must never be baselined.
-    expect(classifySubpath('./styles/modern')?.disposition).toBe('retire-by');
-    expect(measuredBySubpath.get('./styles/modern')?.showroom).toBe(0);
+    expect(classifySubpath('./styles/rottay')?.disposition).toBe('retire-by');
+    expect(measuredBySubpath.get('./styles/rottay')?.showroom).toBe(0);
 
     // The cap is the current measurement: the list may only shrink.
     expect(baseline.length).toBeLessThanOrEqual(SHOWROOM_BASELINE_CAP);
@@ -480,20 +480,20 @@ describe('no-unsanctioned-ds-subpath', () => {
   it('fails on a published subpath scheduled for retirement', () => {
     const { created, reports } = visitors();
     created.ImportDeclaration?.({
-      source: { value: '@rottay/design-system/styles/modern' },
+      source: { value: '@rottay/design-system/styles/rottay' },
     });
 
     expect(reports).toHaveLength(1);
     expect(reports[0]?.messageId).toBe('retireBy');
     expect(reports[0]?.data).toMatchObject({
-      specifier: '@rottay/design-system/styles/modern',
-      subpath: './styles/modern',
+      specifier: '@rottay/design-system/styles/rottay',
+      subpath: './styles/rottay',
       retiredBy: 'WO-RET-06',
     });
   });
 
-  it('fails on a published pack door still scheduled for retirement', () => {
-    expect(importFrom('@rottay/design-system/icons/foundation')).toEqual([
+  it('fails on a published icon door still scheduled for retirement', () => {
+    expect(importFrom('@rottay/design-system/icons/roles/action')).toEqual([
       'retireBy',
     ]);
   });
@@ -508,6 +508,12 @@ describe('no-unsanctioned-ds-subpath', () => {
     for (const specifier of [
       '@rottay/design-system/patterns/charts',
       '@rottay/design-system/public-entrypoints-manifest',
+      '@rottay/design-system/icons/foundation',
+      '@rottay/design-system/icons/identity',
+      '@rottay/design-system/icons/intelligence',
+      '@rottay/design-system/icons/operations',
+      '@rottay/design-system/styles/modern',
+      '@rottay/design-system/dist/bithire.css',
     ]) {
       expect(importFrom(specifier), specifier).toEqual(['unknown']);
     }
@@ -539,7 +545,7 @@ describe('no-unsanctioned-ds-subpath', () => {
     expect(classifySubpath('./icons/roles/action')?.subpath).toBe(
       './icons/roles/*',
     );
-    expect(classifySubpath('./dist/bithire.css')?.subpath).toBe('./dist/*.css');
+    expect(classifySubpath('./dist/bithire.css')).toBeNull();
     expect(classifySubpath('./icons/roles/')).toBeNull();
     expect(classifySubpath('./icons')?.subpath).toBe('./icons');
     expect(subpathOfSpecifier('@rottay/design-system')).toBe('.');
@@ -548,18 +554,18 @@ describe('no-unsanctioned-ds-subpath', () => {
 
   it('covers re-exports, require and dynamic import', () => {
     const { created, reports } = visitors();
-    const source = { value: '@rottay/design-system/styles/modern' };
+    const source = { value: '@rottay/design-system/styles/rottay' };
 
     created.ExportAllDeclaration?.({ source });
     created.ExportNamedDeclaration?.({ source });
     created.ImportExpression?.({ source });
     created.CallExpression?.({
       callee: { type: 'Identifier', name: 'require' },
-      arguments: [{ value: '@rottay/design-system/styles/modern' }],
+      arguments: [{ value: '@rottay/design-system/styles/rottay' }],
     });
     created.CallExpression?.({
       callee: { type: 'Import' },
-      arguments: [{ value: '@rottay/design-system/styles/modern' }],
+      arguments: [{ value: '@rottay/design-system/styles/rottay' }],
     });
     created.ExportNamedDeclaration?.({});
 
@@ -652,7 +658,7 @@ describe('no-unsanctioned-ds-subpath', () => {
     ).toEqual([]);
 
     expect(
-      importFrom('@rottay/design-system/styles/modern', [
+      importFrom('@rottay/design-system/styles/rottay', [
         { allowSubpaths: ['./icons/presets/bithire'] },
       ]),
     ).toEqual(['retireBy']);

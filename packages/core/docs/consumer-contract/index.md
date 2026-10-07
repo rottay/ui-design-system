@@ -32,7 +32,7 @@ contrato puede desaparecer (D-07) sin aviso a las apps.
 | Espejo | `packages/core/src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.ts` | copia derivada que la regla importa (sin `node:fs`, funciona publicada) |
 | Lector | `.../no-unsanctioned-ds-subpath/contract/parse/index.ts` | parser puro markdown → filas |
 | Regla | `.../no-unsanctioned-ds-subpath/index.ts`, publicada como `@rottay/design-system/eslint` → `@rottay/no-unsanctioned-ds-subpath` | falla en todo lo que no está `guaranteed` |
-| Anti-deriva | `.../no-unsanctioned-ds-subpath/tests/index.test.ts` | reparsea este archivo, exige igualdad exacta con el espejo, exige 38/38 contra `package.json` `exports` (mismo conjunto y mismo orden) |
+| Anti-deriva | `.../no-unsanctioned-ds-subpath/tests/index.test.ts` | reparsea este archivo, exige igualdad exacta con el espejo, exige 32/32 contra `package.json` `exports` (mismo conjunto y mismo orden) |
 
 La regla es **fail-closed**: un especificador `@rottay/design-system…` que no
 aparezca como `guaranteed` en §1.2 se reporta, incluso si no está en ninguna
@@ -58,7 +58,7 @@ el showroom es parte del propio paquete y sus sondas no son consumo de producto
 (mismo criterio que ya aplicaba el borrador a `./spatial` y a
 `./tenant-theme-canary-fixtures`).
 
-## 1. Superficie de importación sancionada (38/38)
+## 1. Superficie de importación sancionada (32/32)
 
 Censo: `app-bithire` y `packages/showroom` (alcance del owner, 2026-09-05).
 Se cuentan especificadores de módulo reales (`from`, `import`, `import()`,
@@ -70,9 +70,9 @@ disposición es la parte normativa y es la que no puede derivar.
 
 | Métrica | Valor |
 | --- | --- |
-| Subpaths publicados | 38 |
+| Subpaths publicados | 32 |
 | `guaranteed` | 26 |
-| `retire-by WO-RET-06` | 11 |
+| `retire-by WO-RET-06` | 5 |
 | `lab` | 1 |
 | Subpaths publicados con 0 consumidores en alcance (bithire + showroom) | 14 |
 | Importaciones a superficie garantizada | bithire 2086 · showroom 325 |
@@ -88,10 +88,6 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./icons` | guaranteed | — | 864 | 53 |
 | `./icons/presets/bithire` | guaranteed | — | 11 | 0 |
 | `./icons/roles/*` | retire-by | WO-RET-06 | 0 | 0 |
-| `./icons/foundation` | retire-by | WO-RET-06 | 0 | 0 |
-| `./icons/identity` | retire-by | WO-RET-06 | 0 | 0 |
-| `./icons/intelligence` | retire-by | WO-RET-06 | 0 | 0 |
-| `./icons/operations` | retire-by | WO-RET-06 | 0 | 0 |
 | `./marks` | guaranteed | — | 12 | 1 |
 | `./marks/brand` | retire-by | WO-RET-06 | 0 | 0 |
 | `./marks/cloud` | retire-by | WO-RET-06 | 0 | 0 |
@@ -106,7 +102,6 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./styles/bithire` | guaranteed | — | 2 | 0 |
 | `./styles/evnto` | guaranteed | — | 0 | 0 |
 | `./styles/rottay` | retire-by | WO-RET-06 | 0 | 0 |
-| `./styles/modern` | retire-by | WO-RET-06 | 0 | 0 |
 | `./styles/frozen-engines` | guaranteed | — | 0 | 1 |
 | `./eslint` | guaranteed | — | 1 | 0 |
 | `./supplier-contract` | guaranteed | — | 0 | 0 |
@@ -119,7 +114,6 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./fonts/humanist-text.css` | guaranteed | — | 0 | 0 |
 | `./fonts/geometric-display.css` | guaranteed | — | 0 | 0 |
 | `./fonts/plex-mono.css` | guaranteed | — | 0 | 0 |
-| `./dist/*.css` | retire-by | WO-RET-06 | 0 | 0 |
 | `./tenant-theme-canary-fixtures` | guaranteed | — | 2 | 3 |
 <!-- consumer-contract:published:end -->
 

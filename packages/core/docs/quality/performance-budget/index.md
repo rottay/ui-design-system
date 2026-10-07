@@ -171,9 +171,9 @@ growth without widening the route budget. RET-01-F consolidates the renderer,
 metadata and runtime governance there; it does not add `./icons/legacy`.
 The RET-01/D07 target major removes the public vendor-named glyph catalog from
 `./icons`, while preserving all 282 semantic roles, metadata, runtime governance
-and structural SVG helpers, including the explicitly preserved first-party
-`AlertIcon` leaf wrapper. The 329-binding private catalog is not reexported:
-328 vendor-named glyphs leave the public API and only that helper remains.
+and structural SVG helpers. The 329-binding private catalog is not reexported:
+328 vendor-named glyphs left the public API with RET-01, and the first-party
+`AlertIcon` leaf wrapper it preserved retired with WO-RET-06 W-1.
 App-platform named-glyph consumers still need the
 documented semantic-role migration after the DS-first change; the 52 Showroom
 files that imported this door are already migrated to the semantic facade, and

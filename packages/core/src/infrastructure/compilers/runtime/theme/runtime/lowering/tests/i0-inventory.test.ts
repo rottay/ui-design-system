@@ -75,13 +75,13 @@ describe("public CSS export surface (from package.json)", () => {
 
   // `./styles` and `./styles/default` retired with the 3.0 export trim
   // (d2edce40d, WO-RET-01): zero consumers in the census.
-  it("package.json publishes exactly the six style subpaths", () => {
+  // `./styles/modern` retired with WO-RET-06 W-1 (no importer).
+  it("package.json publishes exactly the five style subpaths", () => {
     expect(styleExports.map(({ subpath }) => subpath).sort()).toEqual([
       "./styles.css",
       "./styles/bithire",
       "./styles/evnto",
       "./styles/frozen-engines",
-      "./styles/modern",
       "./styles/rottay",
     ]);
   });

@@ -31,10 +31,6 @@ export const PUBLISHED_SUBPATHS: readonly ContractRow[] = [
   { subpath: './icons', disposition: 'guaranteed', retiredBy: null },
   { subpath: './icons/presets/bithire', disposition: 'guaranteed', retiredBy: null },
   { subpath: './icons/roles/*', disposition: 'retire-by', retiredBy: 'WO-RET-06' },
-  { subpath: './icons/foundation', disposition: 'retire-by', retiredBy: 'WO-RET-06' },
-  { subpath: './icons/identity', disposition: 'retire-by', retiredBy: 'WO-RET-06' },
-  { subpath: './icons/intelligence', disposition: 'retire-by', retiredBy: 'WO-RET-06' },
-  { subpath: './icons/operations', disposition: 'retire-by', retiredBy: 'WO-RET-06' },
   { subpath: './marks', disposition: 'guaranteed', retiredBy: null },
   { subpath: './marks/brand', disposition: 'retire-by', retiredBy: 'WO-RET-06' },
   { subpath: './marks/cloud', disposition: 'retire-by', retiredBy: 'WO-RET-06' },
@@ -49,7 +45,6 @@ export const PUBLISHED_SUBPATHS: readonly ContractRow[] = [
   { subpath: './styles/bithire', disposition: 'guaranteed', retiredBy: null },
   { subpath: './styles/evnto', disposition: 'guaranteed', retiredBy: null },
   { subpath: './styles/rottay', disposition: 'retire-by', retiredBy: 'WO-RET-06' },
-  { subpath: './styles/modern', disposition: 'retire-by', retiredBy: 'WO-RET-06' },
   { subpath: './styles/frozen-engines', disposition: 'guaranteed', retiredBy: null },
   { subpath: './eslint', disposition: 'guaranteed', retiredBy: null },
   { subpath: './supplier-contract', disposition: 'guaranteed', retiredBy: null },
@@ -62,7 +57,6 @@ export const PUBLISHED_SUBPATHS: readonly ContractRow[] = [
   { subpath: './fonts/humanist-text.css', disposition: 'guaranteed', retiredBy: null },
   { subpath: './fonts/geometric-display.css', disposition: 'guaranteed', retiredBy: null },
   { subpath: './fonts/plex-mono.css', disposition: 'guaranteed', retiredBy: null },
-  { subpath: './dist/*.css', disposition: 'retire-by', retiredBy: 'WO-RET-06' },
   { subpath: './tenant-theme-canary-fixtures', disposition: 'guaranteed', retiredBy: null },
 ];
 

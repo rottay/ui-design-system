@@ -43,7 +43,8 @@ describe('public api contract', () => {
     // Current canonical exports: root, server, icons and the canonical CSS door.
     // RET-01-E (2026-10-02): the per-family subpaths, ./styles, ./styles/default,
     // ./effects and ./spatial/spec retired census-backed (zero consumers measured);
-    // ./styles/rottay and ./styles/modern stay (app-platform's next.config consumes them).
+    // ./styles/rottay stays; ./styles/modern retired with WO-RET-06 W-1 (no importer: app-platform's
+    // next.config carries an alias that resolves a file path, not the door).
     const currentExports = Object.keys(packageJson.exports).sort();
 
     // Required subpaths that must exist
@@ -71,8 +72,8 @@ describe('public api contract', () => {
       expect(currentExports, `missing vertical style export: ${path}`).toContain(path);
     }
 
-    // Engine-specific styles exist as optimization path (not required by apps)
-    expect(currentExports).toContain('./styles/modern');
+    // The engine sheet ships inside every bundle; it has no door of its own (WO-RET-06 W-1).
+    expect(currentExports).not.toContain('./styles/modern');
 
     // Neutral consumers request the canonical bundle through ./styles.css.
 

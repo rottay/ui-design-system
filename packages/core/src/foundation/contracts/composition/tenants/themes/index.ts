@@ -3167,15 +3167,6 @@ export interface BrandTreeChrome {
   nodeColorSelected?: string;
 }
 
-// ── Vertical Theme ──────────────────────────────────────
-// Code-owned premium identity for a vertical. Same shape as FlatTheme
-// because verticals carry the deepest premium decisions. The distinction
-// is ownership: VerticalTheme is code-owned, FlatTheme is the generic
-// authored source shape.
-
-/** Code-owned vertical premium identity. Same shape as FlatTheme. */
-export type VerticalTheme = FlatTheme;
-
 // ── Tenant Appearance ───────────────────────────────────
 // DB-owned customization layered on top of the vertical theme.
 // Split into General (safe presets) and Advanced (fine-grained).

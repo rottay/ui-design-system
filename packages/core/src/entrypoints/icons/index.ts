@@ -21,7 +21,6 @@ export type {
 export { ICON_SIZE_MAP, ICON_SIZE_TOKENS } from '../../graphics/icons/glyphs/foundation';
 export type { IconSizeToken } from '../../graphics/icons/glyphs/foundation';
 export { BaseIcon } from '../../graphics/icons/glyphs/foundation/contracts/base';
-export { AlertIcon } from '../../graphics/icons/glyphs/presentation/catalog/status/alert-icon';
 export { Icon } from '../../graphics/icons/semantic/presentation/icon';
 export {
   ICON_CORPUS,

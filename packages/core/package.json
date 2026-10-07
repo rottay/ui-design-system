@@ -39,26 +39,6 @@
       "import": "./dist/graphics/icons/semantic/generated/roles/*.js",
       "require": "./dist/graphics/icons/semantic/generated/roles/*.cjs"
     },
-    "./icons/foundation": {
-      "types": "./dist/icons-foundation.d.ts",
-      "import": "./dist/icons-foundation.js",
-      "require": "./dist/icons-foundation.cjs"
-    },
-    "./icons/identity": {
-      "types": "./dist/icons-identity.d.ts",
-      "import": "./dist/icons-identity.js",
-      "require": "./dist/icons-identity.cjs"
-    },
-    "./icons/intelligence": {
-      "types": "./dist/icons-intelligence.d.ts",
-      "import": "./dist/icons-intelligence.js",
-      "require": "./dist/icons-intelligence.cjs"
-    },
-    "./icons/operations": {
-      "types": "./dist/icons-operations.d.ts",
-      "import": "./dist/icons-operations.js",
-      "require": "./dist/icons-operations.cjs"
-    },
     "./marks": {
       "types": "./dist/marks.d.ts",
       "import": "./dist/marks.js",
@@ -129,11 +109,6 @@
       "import": "./dist/rottay.css",
       "default": "./dist/rottay.css"
     },
-    "./styles/modern": {
-      "style": "./dist/modern-engine.css",
-      "import": "./dist/modern-engine.css",
-      "default": "./dist/modern-engine.css"
-    },
     "./styles/frozen-engines": {
       "style": "./dist/frozen-engines.css",
       "import": "./dist/frozen-engines.css",
@@ -190,7 +165,6 @@
       "import": "./dist/fonts/plex-mono.css",
       "default": "./dist/fonts/plex-mono.css"
     },
-    "./dist/*.css": "./dist/*.css",
     "./tenant-theme-canary-fixtures": {
       "types": "./contracts/themes/canaries/index.d.ts",
       "default": "./contracts/themes/canaries/index.json"
@@ -356,10 +330,6 @@
       "./server": "entrypoints/server/index.ts",
       "./icons": "entrypoints/icons/index.ts",
       "./icons/presets/bithire": "entrypoints/icons/presets/bithire/index.ts",
-      "./icons/foundation": "entrypoints/icons/foundation/index.ts",
-      "./icons/identity": "entrypoints/icons/identity/index.ts",
-      "./icons/intelligence": "entrypoints/icons/intelligence/index.ts",
-      "./icons/operations": "entrypoints/icons/operations/index.ts",
       "./marks": "entrypoints/graphics/marks/index.ts",
       "./marks/brand": "entrypoints/graphics/marks/brand/index.ts",
       "./marks/cloud": "entrypoints/graphics/marks/cloud/index.ts",

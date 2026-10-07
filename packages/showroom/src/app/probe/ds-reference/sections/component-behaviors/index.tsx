@@ -94,7 +94,7 @@ import {
   PatternCalendarView,
   PatternTreeView,
 } from '@rottay/design-system';
-import { AlertIcon } from '@rottay/design-system/icons';
+import { Icon } from '@rottay/design-system/icons';
 
 import { SceneFrame, SpecimenRow } from '../../chrome';
 
@@ -690,6 +690,11 @@ function DropdownReentryHarness() {
       <button type="button" data-testid="lab-dropdown-trigger">Row actions</button>
     </Dropdown>
   );
+}
+
+/** The cell renderer takes an icon component; the semantic Icon carries the warning meaning. */
+function StatusWarningCellIcon(props: { size?: number; style?: React.CSSProperties; className?: string; 'data-part'?: string }) {
+  return <Icon name="status.warning" decorative {...props} />;
 }
 
 function LabelledSearchIcon() {
@@ -1467,7 +1472,7 @@ export function ComponentBehaviorScene({ only }: { only: ComponentBehaviorCase }
               {cellRenderers.avatarName('Alexandra Konstantinopolous', 'alexandra.konstantinopolous@example.com')}
             </div>
             <div data-testid="lab-cellreveal-icontext" style={{ minInlineSize: 0, overflow: 'hidden' }}>
-              {cellRenderers.iconText(AlertIcon, 'alexandra.konstantinopolous@example.com')}
+              {cellRenderers.iconText(StatusWarningCellIcon, 'alexandra.konstantinopolous@example.com')}
             </div>
           </div>
         </SpecimenRow>

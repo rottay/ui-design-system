@@ -1065,10 +1065,11 @@ test('live tree: the census is internally consistent and the committed baseline 
   assert.deepEqual(overlap, []);
 
   // Stylesheet and resolve-based consumption is measured: the vertical skins
-  // load through CSS @import and the platform CSS through the wildcard.
+  // load through CSS @import.
   assert.ok(measured.perSubpathConsumers['./styles/bithire'].includes('app-bithire'), `./styles/bithire consumers: ${measured.perSubpathConsumers['./styles/bithire']}`);
   assert.ok(measured.perSubpathConsumers['./styles/evnto'].includes('app-evnto'), `./styles/evnto consumers: ${measured.perSubpathConsumers['./styles/evnto']}`);
-  assert.ok(measured.perSubpathConsumers['./dist/*.css'].includes('app-platform'), `./dist/*.css consumers: ${measured.perSubpathConsumers['./dist/*.css']}`);
+  // `./dist/*.css` retired with WO-RET-06 W-1: app-platform's import names the unbuilt `dist/platform.css` (codemod-registered).
+  assert.equal(measured.perSubpathConsumers['./dist/*.css'], undefined);
 
   // The committed baseline parses and pins exactly what the tree measures:
   // --check exits 0 and names nothing.

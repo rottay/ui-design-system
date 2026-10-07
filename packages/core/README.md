@@ -133,8 +133,8 @@ zero-consumer retirement. Use `Icon` with a semantic `name` and either
 `label` or `decorative={true}`, or a focused role/preset entry. `IconProps` accepts the
 documented visual/anatomy attributes, not arbitrary SVG props; custom SVGs
 retain `BaseIcon`/`SvgIconProps` and `createIcon`/`DSIconProps`.
-The first-party `AlertIcon` wrapper stays explicit from its existing leaf owner:
-329 private-barrel bindings become 328 public removals plus one preserved helper.
+The first-party `AlertIcon` wrapper, kept through RET-01, retired with WO-RET-06 W-1
+(use `<Icon name="status.warning" />`): all 329 private-barrel bindings are now removed from the public API.
 See the [migration guide](../../docs/api.md#6-icons-and-marks) and
 [exact removed symbols](../../.changeset/ret-01-icons-doors.md).
 No legacy door or supplier-name aliases are introduced.

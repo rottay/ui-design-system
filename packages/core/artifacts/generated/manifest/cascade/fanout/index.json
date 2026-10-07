@@ -44,16 +44,16 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2672,
+    "filesScanned": 2666,
     "channels": 9266,
     "channelsDs": 8575,
     "channelsBridge": 691,
     "channelsWithoutReaders": 199,
     "channelsPaintsFalse": 945,
     "channelsPaintsInModernFalse": 2022,
-    "readers": 46203,
+    "readers": 46135,
     "readersByPlane": {
-      "modern-skin-css": 16608,
+      "modern-skin-css": 16540,
       "presentation-css": 12409,
       "foundation-css": 1743,
       "runtime-css": 197,
@@ -219,20 +219,6 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 133,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 138,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
           "line": 143,
           "prop": "background",
           "scalars": []
@@ -248,6 +234,20 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
           "line": 153,
+          "prop": "background",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
+          "line": 158,
+          "prop": "background",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
+          "line": 163,
           "prop": "background",
           "scalars": []
         }
@@ -1462,14 +1462,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 337,
+          "line": 374,
           "prop": "inline-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 338,
+          "line": 375,
           "prop": "block-size",
           "scalars": []
         }
@@ -39118,6 +39118,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/presentation/components/button/index.css",
+        "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher/index.css"
@@ -39142,6 +39143,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/presentation/components/button/index.css",
+        "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher/index.css",
@@ -41954,14 +41956,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 274,
+          "line": 273,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 278,
+          "line": 277,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -42979,6 +42981,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/presentation/components/button/index.css",
+        "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher/index.css"
@@ -43003,6 +43006,7 @@
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/presentation/components/button/index.css",
+        "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css",
         "src/foundation/tokens/css/runtime/engines/modern/skin/workspace-switcher/index.css",
@@ -47586,14 +47590,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 316,
+          "line": 315,
           "prop": "inline-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 317,
+          "line": 316,
           "prop": "block-size",
           "scalars": []
         },
@@ -51344,7 +51348,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 330,
+          "line": 367,
           "prop": "min-block-size",
           "scalars": []
         }
@@ -51372,7 +51376,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 281,
+          "line": 318,
           "prop": "color",
           "scalars": []
         }
@@ -51391,7 +51395,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 353,
+          "line": 390,
           "prop": "min-block-size",
           "scalars": []
         }
@@ -56140,7 +56144,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 157,
+          "line": 156,
           "prop": "background",
           "scalars": []
         },
@@ -56241,21 +56245,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 152,
+          "line": 151,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 181,
+          "line": 180,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 186,
+          "line": 185,
           "prop": "border-color",
           "scalars": []
         },
@@ -56997,7 +57001,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 150,
+          "line": 149,
           "prop": "padding",
           "scalars": []
         },
@@ -58810,7 +58814,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 153,
+          "line": 152,
           "prop": "border-radius",
           "scalars": []
         },
@@ -80437,28 +80441,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 119,
+          "line": 118,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 170,
+          "line": 169,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 207,
+          "line": 206,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 233,
+          "line": 232,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -85808,42 +85812,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 369,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 375,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 380,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 419,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 426,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 463,
+          "line": 359,
           "prop": "background",
           "scalars": []
         },
@@ -88723,77 +88692,49 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 126,
+          "line": 125,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 152,
+          "line": 151,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 181,
+          "line": 180,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 186,
+          "line": 185,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 356,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 370,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 376,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 490,
+          "line": 390,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 505,
+          "line": 442,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 557,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 648,
+          "line": 528,
           "prop": "border-block-start",
           "scalars": []
         },
@@ -92531,14 +92472,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 203,
+          "line": 202,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 230,
+          "line": 229,
           "prop": "border",
           "scalars": []
         },
@@ -94251,7 +94192,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 457,
+          "line": 353,
           "prop": "border",
           "scalars": []
         },
@@ -99540,21 +99481,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 143,
+          "line": 153,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 144,
+          "line": 154,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 145,
+          "line": 155,
           "prop": "color",
           "scalars": []
         },
@@ -103089,7 +103030,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 289,
+          "line": 288,
           "prop": "border",
           "scalars": []
         },
@@ -103219,21 +103160,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 294,
+          "line": 293,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 299,
+          "line": 298,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 303,
+          "line": 302,
           "prop": "border-color",
           "scalars": []
         },
@@ -103381,21 +103322,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 293,
+          "line": 292,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 298,
+          "line": 297,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 302,
+          "line": 301,
           "prop": "background",
           "scalars": []
         },
@@ -104162,7 +104103,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 288,
+          "line": 287,
           "prop": "color",
           "scalars": []
         },
@@ -105235,21 +105176,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 138,
+          "line": 148,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 139,
+          "line": 149,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 140,
+          "line": 150,
           "prop": "color",
           "scalars": []
         },
@@ -116452,36 +116393,29 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 160,
+          "line": 159,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 208,
+          "line": 207,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 254,
+          "line": 253,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 256,
+          "line": 255,
           "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 392,
-          "prop": "box-shadow",
           "scalars": []
         },
         {
@@ -117447,7 +117381,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 281,
+          "line": 318,
           "prop": "color",
           "scalars": []
         },
@@ -129624,42 +129558,42 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 261,
+          "line": 260,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 262,
+          "line": 261,
           "prop": "border-color",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
+          "line": 266,
+          "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
           "line": 267,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 268,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 282,
+          "line": 281,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 283,
+          "line": 282,
           "prop": "border-color",
           "scalars": []
         },
@@ -132248,21 +132182,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 133,
+          "line": 143,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 134,
+          "line": 144,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 135,
+          "line": 145,
           "prop": "color",
           "scalars": []
         },
@@ -136755,13 +136689,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 362,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown/index.css",
           "line": 276,
           "prop": "color",
@@ -137573,56 +137500,56 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 148,
+          "line": 158,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 149,
+          "line": 159,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 150,
+          "line": 160,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 185,
+          "line": 195,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 190,
+          "line": 200,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 225,
+          "line": 235,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 231,
+          "line": 241,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 251,
+          "line": 261,
           "prop": "color",
           "scalars": []
         },
@@ -141125,7 +141052,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 255,
+          "line": 254,
           "prop": "color",
           "scalars": []
         },
@@ -142313,7 +142240,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-          "line": 434,
+          "line": 370,
           "prop": "--ds-detail-panel-status-fg",
           "scalars": []
         },
@@ -142563,21 +142490,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 171,
+          "line": 181,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 214,
+          "line": 224,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 234,
+          "line": 244,
           "prop": "color",
           "scalars": []
         },
@@ -143235,50 +143162,15 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 354,
+          "line": 338,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 368,
+          "line": 385,
           "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 374,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 379,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 427,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 442,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 492,
-          "prop": "box-shadow",
           "scalars": []
         },
         {
@@ -149824,7 +149716,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 210,
+          "line": 220,
           "prop": "color",
           "scalars": []
         },
@@ -150111,28 +150003,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 337,
+          "line": 361,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 420,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 465,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 475,
+          "line": 371,
           "prop": "color",
           "scalars": []
         },
@@ -150531,7 +150409,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 313,
+          "line": 350,
           "prop": "color",
           "scalars": []
         },
@@ -154603,21 +154481,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 153,
+          "line": 163,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 154,
+          "line": 164,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 155,
+          "line": 165,
           "prop": "color",
           "scalars": []
         },
@@ -167524,7 +167402,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 228,
+          "line": 227,
           "prop": "min-block-size",
           "decl": "min-block-size: calc(var(--ds-control-height-sm, 32px) + 8px)",
           "scalars": []
@@ -183505,7 +183383,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 155,
+          "line": 154,
           "prop": "background",
           "scalars": []
         },
@@ -183532,7 +183410,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 152,
+          "line": 151,
           "prop": "border",
           "scalars": []
         },
@@ -183560,7 +183438,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 169,
+          "line": 168,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -183616,35 +183494,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 148,
+          "line": 147,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 487,
-          "prop": "margin-block-end",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 525,
+          "line": 410,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 647,
+          "line": 527,
           "prop": "padding-block-start",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 688,
+          "line": 568,
           "prop": "gap",
           "scalars": []
         }
@@ -183665,21 +183536,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 193,
+          "line": 192,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 220,
+          "line": 219,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 227,
+          "line": 226,
           "prop": "gap",
           "scalars": []
         }
@@ -183700,7 +183571,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 140,
+          "line": 139,
           "prop": "padding",
           "scalars": []
         }
@@ -183721,6 +183592,13 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
+          "line": 411,
+          "prop": "margin-block-start",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
           "line": 526,
           "prop": "margin-block-start",
           "scalars": []
@@ -183728,21 +183606,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 646,
+          "line": 564,
           "prop": "margin-block-start",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 684,
-          "prop": "margin-block-start",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 689,
+          "line": 569,
           "prop": "margin-block-start",
           "scalars": []
         }
@@ -183763,7 +183634,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 540,
+          "line": 425,
           "prop": "inline-size",
           "scalars": []
         }
@@ -183786,7 +183657,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 462,
+          "line": 358,
           "prop": "background",
           "scalars": []
         },
@@ -183816,7 +183687,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 465,
+          "line": 361,
           "prop": "color",
           "scalars": []
         },
@@ -183842,7 +183713,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 540,
+          "line": 425,
           "prop": "inline-size",
           "scalars": []
         }
@@ -183861,28 +183732,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 508,
+          "line": 393,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 553,
+          "line": 438,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 602,
+          "line": 487,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 606,
+          "line": 491,
           "prop": "background",
           "scalars": []
         }
@@ -183901,14 +183772,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 505,
+          "line": 390,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 557,
+          "line": 442,
           "prop": "border",
           "scalars": []
         }
@@ -183927,14 +183798,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 512,
+          "line": 397,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 560,
+          "line": 445,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -191679,70 +191550,63 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 126,
+          "line": 125,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 151,
+          "line": 150,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 203,
+          "line": 202,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 230,
+          "line": 229,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 256,
+          "line": 255,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 457,
+          "line": 353,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 490,
+          "line": 389,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 504,
+          "line": 441,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 556,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 648,
+          "line": 528,
           "prop": "border-block-start",
           "scalars": []
         },
@@ -197307,28 +197171,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 171,
+          "line": 170,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 257,
+          "line": 256,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 357,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 514,
+          "line": 399,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -198090,35 +197947,35 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 182,
+          "line": 181,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 187,
+          "line": 186,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 263,
+          "line": 262,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 269,
+          "line": 268,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 278,
+          "line": 277,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -203830,7 +203687,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 104,
+          "line": 114,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -204250,13 +204107,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 389,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/drawer/index.css",
           "line": 405,
           "prop": "box-shadow",
@@ -204580,7 +204430,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 306,
+          "line": 343,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -206319,14 +206169,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 97,
+          "line": 107,
           "prop": "outline-offset",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 284,
+          "line": 294,
           "prop": "outline-offset",
           "scalars": []
         },
@@ -206528,13 +206378,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css",
           "line": 578,
-          "prop": "outline-offset",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 747,
           "prop": "outline-offset",
           "scalars": []
         },
@@ -206776,14 +206619,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 305,
+          "line": 342,
           "prop": "outline-offset",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 440,
+          "line": 483,
           "prop": "outline-offset",
           "scalars": []
         },
@@ -207898,14 +207741,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 96,
+          "line": 106,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 283,
+          "line": 293,
           "prop": "outline",
           "scalars": []
         },
@@ -208244,13 +208087,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/date-picker/index.css",
           "line": 577,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 746,
           "prop": "outline",
           "scalars": []
         },
@@ -208645,21 +208481,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 304,
+          "line": 341,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 412,
+          "line": 449,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 413,
+          "line": 450,
           "prop": "outline-offset",
           "decl": "outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)))",
           "scalars": []
@@ -208667,7 +208503,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 439,
+          "line": 482,
           "prop": "outline",
           "scalars": []
         },
@@ -210521,7 +210357,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 444,
+          "line": 340,
           "prop": "font-family",
           "scalars": []
         },
@@ -211703,7 +211539,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 444,
+          "line": 340,
           "prop": "font-family",
           "scalars": []
         },
@@ -213509,13 +213345,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
           "line": 170,
-          "prop": "font-size",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 421,
           "prop": "font-size",
           "scalars": []
         },
@@ -216749,7 +216578,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 172,
+          "line": 182,
           "prop": "font-size",
           "scalars": []
         },
@@ -216996,7 +216825,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 477,
+          "line": 373,
           "prop": "font-size",
           "scalars": []
         },
@@ -219262,7 +219091,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 445,
+          "line": 341,
           "prop": "font-size",
           "scalars": []
         },
@@ -219604,21 +219433,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 186,
+          "line": 196,
           "prop": "font-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 191,
+          "line": 201,
           "prop": "font-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 203,
+          "line": 213,
           "prop": "font-size",
           "scalars": []
         },
@@ -219838,7 +219667,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 466,
+          "line": 362,
           "prop": "font-size",
           "scalars": []
         },
@@ -220098,7 +219927,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 314,
+          "line": 351,
           "prop": "font-size",
           "scalars": []
         },
@@ -222980,7 +222809,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 235,
+          "line": 245,
           "prop": "font-weight",
           "scalars": []
         },
@@ -224125,14 +223954,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 173,
+          "line": 183,
           "prop": "font-weight",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 215,
+          "line": 225,
           "prop": "font-weight",
           "scalars": []
         },
@@ -224272,14 +224101,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 446,
+          "line": 342,
           "prop": "font-weight",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 467,
+          "line": 363,
           "prop": "font-weight",
           "scalars": []
         },
@@ -249944,7 +249773,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 448,
+          "line": 344,
           "prop": "letter-spacing",
           "scalars": []
         },
@@ -250966,21 +250795,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 344,
+          "line": 364,
           "prop": "line-height",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 468,
-          "prop": "line-height",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 478,
+          "line": 374,
           "prop": "line-height",
           "scalars": []
         },
@@ -251186,7 +251008,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 447,
+          "line": 343,
           "prop": "line-height",
           "scalars": []
         },
@@ -255875,7 +255697,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 113,
+          "line": 112,
           "prop": "--ds-detail-panel-content-gap",
           "decl": "--ds-detail-panel-content-gap: var(--ds-listing-grid-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -279752,7 +279574,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 174,
+          "line": 173,
           "prop": "transition",
           "scalars": []
         },
@@ -284610,8 +284432,15 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 122,
+          "line": 121,
           "prop": "animation",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
+          "line": 173,
+          "prop": "transition",
           "scalars": []
         },
         {
@@ -284625,48 +284454,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
           "line": 175,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 176,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 347,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 348,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 349,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 350,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 351,
           "prop": "transition",
           "scalars": []
         },
@@ -291401,49 +291188,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
+          "line": 174,
+          "prop": "transition",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
           "line": 175,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 176,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 347,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 348,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 349,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 350,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 351,
           "prop": "transition",
           "scalars": []
         },
@@ -296157,7 +295909,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-          "line": 101,
+          "line": 103,
           "prop": "animation",
           "scalars": []
         },
@@ -296569,7 +296321,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 121,
+          "line": 120,
           "prop": "animation",
           "scalars": []
         },
@@ -297449,7 +297201,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 121,
+          "line": 120,
           "prop": "animation",
           "scalars": []
         },
@@ -320579,28 +320331,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 204,
+          "line": 203,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 320,
+          "line": 319,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 418,
-          "prop": "border-radius",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 458,
+          "line": 354,
           "prop": "border-radius",
           "scalars": []
         },
@@ -320761,7 +320506,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 342,
+          "line": 379,
           "prop": "border-radius",
           "scalars": []
         },
@@ -322316,42 +322061,35 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 117,
+          "line": 116,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 153,
+          "line": 152,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 231,
+          "line": 230,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 491,
+          "line": 391,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 506,
-          "prop": "border-radius",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 558,
+          "line": 443,
           "prop": "border-radius",
           "scalars": []
         },
@@ -324588,7 +324326,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 202,
+          "line": 212,
           "prop": "border-radius",
           "scalars": []
         },
@@ -324869,13 +324607,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "line": 211,
-          "prop": "border-radius",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 340,
           "prop": "border-radius",
           "scalars": []
         },
@@ -329130,7 +328861,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 431,
+          "line": 468,
           "prop": "border-radius",
           "scalars": []
         },
@@ -333990,7 +333721,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 111,
+          "line": 110,
           "prop": "--ds-detail-panel-padding",
           "decl": "--ds-detail-panel-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -334000,7 +333731,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 112,
+          "line": 111,
           "prop": "--ds-detail-panel-section-gap",
           "decl": "--ds-detail-panel-section-gap: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -334010,7 +333741,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 113,
+          "line": 112,
           "prop": "--ds-detail-panel-content-gap",
           "decl": "--ds-detail-panel-content-gap: var(--ds-listing-grid-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -334020,7 +333751,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 114,
+          "line": 113,
           "prop": "--ds-detail-panel-item-gap",
           "decl": "--ds-detail-panel-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -350115,13 +349846,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 391,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "line": 183,
           "prop": "box-shadow",
@@ -351861,7 +351585,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 120,
+          "line": 119,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -362454,14 +362178,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 189,
+          "line": 199,
           "prop": "margin-block-start",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 209,
+          "line": 219,
           "prop": "gap",
           "scalars": []
         },
@@ -363378,28 +363102,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 312,
+          "line": 349,
           "prop": "padding-inline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 340,
+          "line": 377,
           "prop": "margin-block-start",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 341,
+          "line": 378,
           "prop": "margin-inline-end",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 429,
+          "line": 466,
           "prop": "padding-inline",
           "scalars": []
         },
@@ -366624,7 +366348,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 250,
+          "line": 260,
           "prop": "padding-block",
           "scalars": []
         },
@@ -367323,21 +367047,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 113,
+          "line": 123,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 199,
+          "line": 209,
           "prop": "margin-block-start",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 200,
+          "line": 210,
           "prop": "padding",
           "scalars": []
         },
@@ -373041,7 +372765,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 200,
+          "line": 210,
           "prop": "padding",
           "scalars": []
         },
@@ -373404,7 +373128,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 114,
+          "line": 113,
           "prop": "--ds-detail-panel-item-gap",
           "decl": "--ds-detail-panel-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -373414,7 +373138,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 436,
+          "line": 332,
           "prop": "margin-block-end",
           "scalars": []
         },
@@ -377256,7 +376980,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 243,
+          "line": 253,
           "prop": "padding-block",
           "scalars": []
         },
@@ -377515,7 +377239,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 111,
+          "line": 110,
           "prop": "--ds-detail-panel-padding",
           "decl": "--ds-detail-panel-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -377525,7 +377249,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 113,
+          "line": 112,
           "prop": "--ds-detail-panel-content-gap",
           "decl": "--ds-detail-panel-content-gap: var(--ds-listing-grid-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -377535,14 +377259,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 150,
+          "line": 149,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 503,
+          "line": 388,
           "prop": "padding",
           "scalars": []
         },
@@ -380885,7 +380609,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 242,
+          "line": 252,
           "prop": "gap",
           "scalars": []
         },
@@ -380948,7 +380672,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 112,
+          "line": 111,
           "prop": "--ds-detail-panel-section-gap",
           "decl": "--ds-detail-panel-section-gap: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -382029,7 +381753,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 111,
+          "line": 110,
           "prop": "--ds-detail-panel-padding",
           "decl": "--ds-detail-panel-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -395856,7 +395580,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 116,
+          "line": 115,
+          "prop": "background",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
+          "line": 159,
           "prop": "background",
           "scalars": []
         },
@@ -395870,42 +395601,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 161,
+          "line": 204,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 205,
+          "line": 231,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 232,
+          "line": 394,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 355,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 509,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 602,
+          "line": 487,
           "prop": "background",
           "scalars": []
         },
@@ -400203,14 +399920,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 581,
+          "line": 466,
           "prop": "background-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 582,
+          "line": 467,
           "prop": "background-size",
           "scalars": []
         },
@@ -401123,7 +400840,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 86,
+          "line": 96,
           "prop": "background",
           "scalars": []
         },
@@ -401687,14 +401404,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 90,
+          "line": 100,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
-          "line": 201,
+          "line": 211,
           "prop": "background",
           "scalars": []
         },
@@ -401856,13 +401573,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "line": 214,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 489,
           "prop": "background",
           "scalars": []
         },
@@ -403023,21 +402733,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 162,
+          "line": 161,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 554,
+          "line": 439,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 606,
+          "line": 491,
           "prop": "background",
           "scalars": []
         },
@@ -405392,27 +405102,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 369,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 375,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 380,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 474,
           "prop": "background",
@@ -405522,13 +405211,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 337,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 448,
           "prop": "color",
@@ -405579,13 +405261,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 354,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 464,
           "prop": "color",
@@ -405631,27 +405306,6 @@
           "plane": "classic-css",
           "file": "src/foundation/tokens/css/runtime/engines/classic/theme/index.css",
           "line": 551,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 368,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 374,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 379,
           "prop": "color",
           "scalars": []
         },
@@ -408468,13 +408122,6 @@
       "readers": [
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 355,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 466,
           "prop": "background",
@@ -408639,13 +408286,6 @@
       "readers": [
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 357,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 468,
           "prop": "box-shadow",
@@ -408698,13 +408338,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 359,
-          "prop": "transform",
-          "scalars": []
-        },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css",
@@ -409327,14 +408960,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 486,
-          "prop": "gap",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 683,
+          "line": 563,
           "prop": "gap",
           "scalars": []
         },
@@ -409725,13 +409351,6 @@
       "readers": [
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 343,
-          "prop": "font-weight",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 450,
           "prop": "font-weight",
@@ -409765,13 +409384,6 @@
       "readers": [
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 358,
-          "prop": "font-weight",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 465,
           "prop": "font-weight",
@@ -409803,13 +409415,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 334,
-          "prop": "gap",
-          "scalars": []
-        },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css",
@@ -409937,13 +409542,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 340,
-          "prop": "border-radius",
-          "scalars": []
-        },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
@@ -410183,13 +409781,6 @@
       "readers": [
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 489,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 572,
           "prop": "background",
@@ -410247,34 +409838,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 356,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 370,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 376,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 490,
-          "prop": "border",
-          "scalars": []
-        },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
@@ -410404,13 +409967,6 @@
       "readers": [
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 488,
-          "prop": "padding",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 571,
           "prop": "padding",
@@ -410442,13 +409998,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 491,
-          "prop": "border-radius",
-          "scalars": []
-        },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
@@ -410683,13 +410232,6 @@
       "readers": [
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 342,
-          "prop": "font-size",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 449,
           "prop": "font-size",
@@ -410738,13 +410280,6 @@
       "readers": [
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 335,
-          "prop": "min-block-size",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "line": 446,
           "prop": "min-height",
@@ -410787,13 +410322,6 @@
       "readers": [
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 408,
-          "prop": "font-size",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css",
           "line": 23,
           "prop": "--_ds-tabs-current-icon-size",
@@ -410826,13 +410354,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 336,
-          "prop": "padding",
-          "scalars": []
-        },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
@@ -427629,7 +427150,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 230,
+          "line": 229,
           "prop": "border",
           "scalars": []
         },
@@ -427981,7 +427502,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 232,
+          "line": 231,
           "prop": "background",
           "scalars": []
         },
@@ -429168,7 +428689,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 231,
+          "line": 230,
           "prop": "border-radius",
           "scalars": []
         },
@@ -433930,13 +433451,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 401,
-          "prop": "min-block-size",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/drawer/index.css",
           "line": 410,
           "prop": "min-inline-size",
@@ -434280,14 +433794,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 353,
+          "line": 390,
           "prop": "min-block-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 457,
+          "line": 500,
           "prop": "min-block-size",
           "scalars": []
         },
@@ -453463,7 +452977,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 232,
+          "line": 231,
           "prop": "background",
           "scalars": []
         }
@@ -453482,7 +452996,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 230,
+          "line": 229,
           "prop": "border",
           "scalars": []
         }
@@ -453514,28 +453028,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 509,
+          "line": 394,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 554,
+          "line": 439,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 602,
+          "line": 487,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 606,
+          "line": 491,
           "prop": "background",
           "scalars": []
         }
@@ -453554,14 +453068,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 602,
+          "line": 487,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 606,
+          "line": 491,
           "prop": "background",
           "scalars": []
         }
@@ -453603,21 +453117,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 126,
+          "line": 125,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 505,
+          "line": 390,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 557,
+          "line": 442,
           "prop": "border",
           "scalars": []
         },
@@ -453673,14 +453187,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 181,
+          "line": 180,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 186,
+          "line": 185,
           "prop": "border-color",
           "scalars": []
         },
@@ -453713,14 +453227,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 514,
+          "line": 399,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 562,
+          "line": 447,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -453750,7 +453264,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 648,
+          "line": 528,
           "prop": "border-block-start",
           "scalars": []
         }
@@ -453810,7 +453324,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 114,
+          "line": 113,
           "prop": "--ds-detail-panel-item-gap",
           "decl": "--ds-detail-panel-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -453882,28 +453396,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 509,
+          "line": 394,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 554,
+          "line": 439,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 602,
+          "line": 487,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 606,
+          "line": 491,
           "prop": "background",
           "scalars": []
         }
@@ -453933,14 +453447,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 579,
+          "line": 464,
           "prop": "background-image",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 580,
+          "line": 465,
           "prop": "background-image",
           "scalars": []
         }
@@ -453959,14 +453473,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 581,
+          "line": 466,
           "prop": "background-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 582,
+          "line": 467,
           "prop": "background-size",
           "scalars": []
         }
@@ -453985,14 +453499,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 603,
+          "line": 488,
           "prop": "transform",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 607,
+          "line": 492,
           "prop": "transform",
           "scalars": []
         }
@@ -454081,7 +453595,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 203,
+          "line": 202,
           "prop": "border",
           "scalars": []
         },
@@ -454204,14 +453718,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 502,
+          "line": 387,
           "prop": "min-block-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 550,
+          "line": 435,
           "prop": "min-block-size",
           "scalars": []
         }
@@ -454230,7 +453744,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 592,
+          "line": 477,
           "prop": "background",
           "scalars": []
         }
@@ -454251,14 +453765,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 503,
+          "line": 388,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 551,
+          "line": 436,
           "prop": "padding",
           "scalars": []
         }
@@ -454286,21 +453800,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 117,
+          "line": 116,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 506,
+          "line": 391,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 558,
+          "line": 443,
           "prop": "border-radius",
           "scalars": []
         },
@@ -454343,28 +453857,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 120,
+          "line": 119,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 171,
+          "line": 170,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 514,
+          "line": 399,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 562,
+          "line": 447,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -454413,14 +453927,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 182,
+          "line": 181,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 187,
+          "line": 186,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -454453,14 +453967,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 513,
+          "line": 398,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 561,
+          "line": 446,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -454512,14 +454026,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 516,
+          "line": 401,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
-          "line": 564,
+          "line": 449,
           "prop": "transition",
           "scalars": []
         }
@@ -456709,6 +456223,20 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
           "line": 74,
+          "prop": "z-index",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
+          "line": 88,
+          "prop": "z-index",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css",
+          "line": 92,
           "prop": "z-index",
           "scalars": []
         },

@@ -128,7 +128,8 @@ test('prop entries name components and props types the package publishes, or one
 
 test('the two report-only classes of the review stay report-only, with the reason stated', () => {
   const glyphs = of('glyph-removed');
-  assert.equal(glyphs.length, 328);
+  // The 328 catalog glyphs of the review, plus `AlertIcon` (WO-RET-06 W-1), whose role is known: status.warning.
+  assert.equal(glyphs.length, 329);
   assert.match(glyphs[0].note, /OPEN obligation: a 328-row glyph -> candidate-role table is owed/);
   for (const entry of [...glyphs, ...of('css-class-renamed'), ...of('symbol-removed-no-replacement'),
     ...of('css-custom-property-renamed'), ...of('member-changed')]) {

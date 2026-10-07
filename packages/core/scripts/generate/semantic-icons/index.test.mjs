@@ -428,7 +428,7 @@ test('a named pack import tree-shakes to one exact supplier glyph', () => {
     {
       cwd: CORE_ROOT,
       encoding: 'utf8',
-      input: 'import { SecurityAlertIcon } from "./src/entrypoints/icons/identity/index.ts"; console.log(SecurityAlertIcon);',
+      input: 'import { SecurityAlertIcon } from "./src/graphics/icons/semantic/generated/packs/identity.tsx"; console.log(SecurityAlertIcon);',
       stdio: ['pipe', 'pipe', 'pipe'],
     },
   );
