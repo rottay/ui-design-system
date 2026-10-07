@@ -4,7 +4,7 @@
   "scope": "Phase-0 exact proof and minimal public-claim floor; not DS-IMP-060 completion",
   "reproducibility": {
     "classification": "deterministic same-input runs",
-    "authorityDigest": "a2a734889877a48f7e9bdbecd6f6dc100b64bb518d4f661ac70c614edb374895",
+    "authorityDigest": "4028bc13c5c74b7357fc5027747a2a55f9995313ad9a2348259ef4918cd48f52",
     "sourceHeadIsAuthority": false,
     "toolchain": {
       "node": {
@@ -102,7 +102,7 @@
   "documentationAuthority": {
     "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json",
     "requirementsRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
-    "documentationRevision": "f6ed00c839b45f472a8b04d8f9109ee6f4077695",
+    "documentationRevision": "6e0199cf854c1e02da14e5e024847d0a468b4efb",
     "inspectedDocsMatchRevision": true,
     "sealed": true,
     "sealingErrors": []
@@ -223,7 +223,7 @@
           "workspace-toolchain"
         ],
         "bytes": 27490,
-        "sha256": "aa0ddc9391b87ce3ed48ccfd9a424b63bc36167994add5e55ebb47c8c4a9a683"
+        "sha256": "44dce6d014219b0e062b8f4329944ab2b926e7c175df78c30967d46df63deb58"
       },
       {
         "path": "ui-design-system/.gitignore",
@@ -255,8 +255,8 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5708429,
-        "sha256": "97f0480dc27b1e73a7b5925b4eede946ca86abb22bc10682543e54fb12afaad6"
+        "bytes": 5708894,
+        "sha256": "7712ecb31a99c56aead61415cf066a795a821eed41f40ee35a3fda10abe5c738"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/engines/frozen/index.css",
@@ -279,24 +279,24 @@
         "roles": [
           "audit-input"
         ],
-        "bytes": 5073387,
-        "sha256": "b86e7cb9a338ae47a4738b4005efaddaa1cdcb8f28b54c5d381faf702113d830"
+        "bytes": 5073852,
+        "sha256": "92cc7866580b4554b2ef502d13e29f83914b7f636e9a52ab394895443355fec5"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/evnto/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5034580,
-        "sha256": "d86d15bd5ea3acda9c5dd60d1c23b2fee1b4b253a6d39ea1d605b0464175ca1a"
+        "bytes": 5035045,
+        "sha256": "957c8292a94180ae4d664c1fc32e06dcfd3cee88169ed83bc2be33b205e76826"
       },
       {
         "path": "ui-design-system/packages/core/artifacts/generated/css/verticals/rottay/index.css",
         "roles": [
           "audit-input"
         ],
-        "bytes": 5033840,
-        "sha256": "1bd6943b2387bd61dad9073d5f22d197d272275804d8f79e1dea5b081eeaa112"
+        "bytes": 5034305,
+        "sha256": "8a9e7ea3a3d28867027afbb4ec8ed935e329653a726b613f5977870c70e4c49b"
       },
       {
         "path": "ui-design-system/packages/core/docs/reference/contracts/index.md",
@@ -332,7 +332,7 @@
           "documentation-seal"
         ],
         "bytes": 166,
-        "sha256": "4856cc730778780311ad9d5c6f31d01ab510886e9028d7da955150026175d7b0"
+        "sha256": "f11a248e057e3412ddf0c44b46e2f30fc47253a95cb363f7eefe4827f6816b28"
       },
       {
         "path": "ui-design-system/packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
@@ -829,8 +829,8 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 20790,
-        "sha256": "1491583c70a7070bfc46e1f734bb65386aa07b0210d859864463972bc74c0398"
+        "bytes": 20826,
+        "sha256": "6d04446c2125a05156cf8fd150b236d3e4ba052dc49d21a4a01ebb2f08d30eee"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx",
@@ -885,12 +885,20 @@
         "sha256": "1eb8c56ad3823d421e51203ab9cc1a2e307deffdb3dc457904271af14d4c7b2b"
       },
       {
+        "path": "ui-design-system/packages/core/src/components/patterns/communication/notification-center/tests/NotificationCenter.row-activation.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3388,
+        "sha256": "c8eb3a59ac606bbbce60e77011a534f0a1a092fef4d47a14e4db8a4b7a5ffb4d"
+      },
+      {
         "path": "ui-design-system/packages/core/src/components/patterns/communication/notification-center/tests/NotificationCenter.test.tsx",
         "roles": [
           "audit-input"
         ],
-        "bytes": 7252,
-        "sha256": "465faedeedf3c52217d5ed3aa38af8495229903e035556667d03cc7771163a2d"
+        "bytes": 7430,
+        "sha256": "ec6502e584cbbc7bb86e2ed26067f250b1cd2bf9519c556938f9a65c013f940e"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/communication/presence/index.tsx",
@@ -6011,8 +6019,16 @@
           "claim-census",
           "stale-claim-corpus"
         ],
-        "bytes": 7355,
-        "sha256": "8e69d6ef5d350e0f4fe7847641a73f0f6412fdd9f7d402a75c1afed30f60a8c5"
+        "bytes": 10294,
+        "sha256": "eea23892f969b510f0bb254d32ee5b51e2121bb0d22110265e15dcf67f2b6261"
+      },
+      {
+        "path": "ui-design-system/packages/core/src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/calendar-heat-map/tests/SvgCalendarHeatMapRenderer.interaction.test.tsx",
+        "roles": [
+          "audit-input"
+        ],
+        "bytes": 3285,
+        "sha256": "1afd247c15f423849163528bace1fda81ee48e0d3e3e68248c10da459f0d4527"
       },
       {
         "path": "ui-design-system/packages/core/src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/funnel/index.tsx",
@@ -30624,8 +30640,8 @@
           "data-part-corpus",
           "stale-claim-corpus"
         ],
-        "bytes": 17322,
-        "sha256": "773fbe12def1421ac15235c619f6491198dce58fb528a567cee1b3b1fda0210e"
+        "bytes": 17787,
+        "sha256": "c2f5e4c2cdefae9d1cbdc0804baeef5796679abf1279cebc5d717dea90f82efb"
       },
       {
         "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notifier/index.css",
@@ -48132,7 +48148,7 @@
         "sha256": "8b9a26c8a6cc4fd312fc865648564762d45e81b7af3034028173d0bc16e87a77"
       }
     ],
-    "digest": "a2a734889877a48f7e9bdbecd6f6dc100b64bb518d4f661ac70c614edb374895"
+    "digest": "4028bc13c5c74b7357fc5027747a2a55f9995313ad9a2348259ef4918cd48f52"
   },
   "paintAudit": {
     "output": "engine-token-audit --check OK (4218 counters; 3221 completed zeros locked exactly; 987 decrease-only ceilings; 3 positive exact invariants; 7 positive minimum floors)",
@@ -49770,7 +49786,7 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 318
+          "line": 328
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notifier/index.css",
@@ -62679,11 +62695,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 343
+          "line": 353
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 354
+          "line": 364
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
@@ -63917,27 +63933,27 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 216
+          "line": 226
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 221
+          "line": 231
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 224
+          "line": 234
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 227
+          "line": 237
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 230
+          "line": 240
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 364
+          "line": 374
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notifier/index.css",
@@ -69059,15 +69075,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 343
+          "line": 353
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 343
+          "line": 353
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 349
+          "line": 359
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/splitter/index.css",
@@ -79947,15 +79963,15 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 200
+          "line": 210
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 354
+          "line": 364
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 354
+          "line": 364
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notifier/index.css",
@@ -88765,10 +88781,6 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 200
-        },
-        {
-          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
           "line": 203
         },
         {
@@ -88777,19 +88789,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 292
+          "line": 213
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 292
+          "line": 220
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 299
+          "line": 302
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 299
+          "line": 302
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
@@ -88797,11 +88809,19 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 354
+          "line": 309
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 358
+          "line": 319
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
+          "line": 364
+        },
+        {
+          "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
+          "line": 368
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table/index.css",
@@ -96443,11 +96463,11 @@
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 379
+          "line": 389
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
-          "line": 384
+          "line": 394
         },
         {
           "path": "ui-design-system/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
@@ -98887,7 +98907,7 @@
           }
         ],
         "skinSelectorCorpusKey": "row",
-        "skinSelectorCount": 139
+        "skinSelectorCount": 140
       },
       {
         "section": "Table",
@@ -122316,8 +122336,8 @@
   "deterministicRuns": {
     "count": 2,
     "hashes": [
-      "7fa67d5ec5d7be7d0187c68679fcc3d102d2e75955662e162811f8d0ee821cda",
-      "7fa67d5ec5d7be7d0187c68679fcc3d102d2e75955662e162811f8d0ee821cda"
+      "a6638e341ad9608f40ce2a919dac305dfe6e0a217db640381a4bcccb520f599c",
+      "a6638e341ad9608f40ce2a919dac305dfe6e0a217db640381a4bcccb520f599c"
     ],
     "agree": true
   }

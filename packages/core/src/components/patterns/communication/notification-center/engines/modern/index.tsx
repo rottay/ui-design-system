@@ -162,6 +162,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
     groupEarlier: tOr('notificationCenter.groupEarlier', 'Earlier'),
   };
   const unreadStatusId = useId();
+  const rowIdPrefix = useId();
   const emptyMessage = emptyMessageProp ?? copy.empty;
 
   // Controlled/uncontrolled open state pattern -- see Classic engine for the
@@ -387,11 +388,15 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                   <ul data-part="rows">
                     {group.items.map(item => (
                   <li key={item.id}>
-                    <div
-                      data-part="row"
-                      data-unread={!item.read}
-                      onClick={() => onRead?.(item.id)}
-                    >
+                    <div data-part="row" data-unread={!item.read}>
+                      {onRead && (
+                        <Button
+                          chrome="none"
+                          data-part="row-activate"
+                          aria-labelledby={`${rowIdPrefix}-${item.id}-title`}
+                          onClick={() => onRead(item.id)}
+                        />
+                      )}
                       <div data-part="icon" data-type={item.type}>
                         {item.icon || TYPE_ICON[item.type]}
                       </div>
@@ -400,7 +405,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                           {/* Unread reaches AT as TEXT (never tint/weight/dot
                               alone); the visual dot below stays decorative. */}
                           {!item.read && <VisuallyHidden>{copy.unread}</VisuallyHidden>}
-                          <span data-part="row-title" data-unread={!item.read}>{item.title}</span>
+                          <span data-part="row-title" id={`${rowIdPrefix}-${item.id}-title`} data-unread={!item.read}>{item.title}</span>
                           {!item.read && <div data-part="unread-dot" data-unread={true} aria-hidden="true" />}
                         </div>
                         <p data-part="row-message">{item.message}</p>
@@ -411,8 +416,8 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                           >
                             {formatTimestamp(item.timestamp, tOr, locale)}
                           </span>
-                          {/* stopPropagation prevents the action click from also
-                              firing the row-level onRead handler */}
+                          {/* stopPropagation keeps the action click from reaching
+                              the caller's own handlers around the row */}
                           {item.action && (
                             <Button
                               variant="ghost"
@@ -425,12 +430,8 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                           )}
                         </div>
                       </div>
-                      {/* Mark-read: the keyboard path to the row's own click
-                          contract (rows are pointer action surfaces; this
-                          composed Button makes the same callback reachable
-                          for keyboard users, with a governed icon + i18n
-                          label). stopPropagation keeps it from double-firing
-                          the row handler. */}
+                      {/* Mark-read: an explicit, labelled read action beside the
+                          row's own activation (governed icon + i18n label). */}
                       {/* A panel of five rows otherwise offers five buttons all
                           named "Dismiss" -- the title is what tells them apart. */}
                       {onRead && !item.read && (

@@ -67611,11 +67611,21 @@ html[data-ds-motion='reduced']
 /* ---- row: layout + bottom rule (was flex/p-3/border-b utilities) + the
         unread tint (preserved verbatim, communication-pattern anatomy §0) ---- */
 .ds-pattern-notification-center.ds-engine-modern [data-part='row'] {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: var(--ds-spacing-3);
   padding: var(--ds-spacing-3);
   cursor: pointer;
+}
+/* The row's activation is a chrome-less Button stretched over the row; the composed action Buttons paint
+   above it in source order, and the timestamp is lifted so its full-date title stays reachable. */
+.ds-pattern-notification-center.ds-engine-modern [data-part='row'] > [data-part='row-activate'] {
+  position: absolute;
+  inset: 0;
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='row-timestamp'] {
+  position: relative;
 }
 .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='row'] {
   border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);

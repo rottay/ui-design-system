@@ -81,7 +81,8 @@ describe('PatternNotificationCenter', () => {
         engine,
       );
 
-      fireEvent.click(screen.getByText('New message'));
+      // Modern stretches a chrome-less Button over the row; the frozen engines keep the row handler.
+      fireEvent.click(engine === 'modern' ? screen.getByRole('button', { name: 'New message' }) : screen.getByText('New message'));
       expect(onRead).toHaveBeenCalledWith('n1');
     },
   );

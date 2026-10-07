@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -15,7 +16,9 @@ import {
 import {
   buildSvgCalendarHeatMapGeometry,
 } from '../../../../foundation/renderers/geometry';
+import type { ChartInteraction } from '../../../../foundation/interaction';
 import { useChartDimensions } from '../../../../runtime/dimensions';
+import { useChartInteraction } from '../../../../runtime/interaction/controller';
 import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
@@ -23,6 +26,12 @@ const DEFAULT_LOW_COLOR = 'var(--ds-color-bg-tertiary)';
 const DEFAULT_HIGH_COLOR = 'var(--ds-color-primary-500)';
 const LOW_COLOR_FALLBACK = '#e5e7eb';
 const HIGH_COLOR_FALLBACK = '#0072b2';
+const CELL_ACTION_LABEL = 'Select date';
+
+interface CalendarCellDatum {
+  readonly dateKey: string;
+  readonly value: number;
+}
 
 export interface SvgCalendarHeatMapRendererProps {
   readonly startDate: Date;
@@ -150,6 +159,40 @@ export function SvgCalendarHeatMapRenderer({
       values,
     ],
   );
+  const tooltipFor = useCallback((dateKey: string, value: number, state: 'empty' | 'filled'): string => (formatTooltip
+    ? formatTooltip(dateKey, value)
+    : state === 'filled'
+      ? `${dateKey}: ${value}`
+      : `${dateKey}: No activity`), [formatTooltip]);
+  const interaction = useMemo<ChartInteraction<CalendarCellDatum> | undefined>(
+    () => (onCellClick
+      ? {
+        mode: 'select',
+        actionLabel: CELL_ACTION_LABEL,
+        onAction: ({ datum }) => onCellClick(datum.dateKey, datum.value),
+      }
+      : undefined),
+    [onCellClick],
+  );
+  const interactionItems = useMemo(() => {
+    const origin = geometry.cells[0];
+    const pitch = cellSize + cellGap;
+    return geometry.cells.map((cell) => ({
+      key: cell.id,
+      label: tooltipFor(cell.dateKey, cell.value ?? 0, cell.state),
+      datum: { dateKey: cell.dateKey, value: cell.value ?? 0 },
+      x: cell.x + cell.width / 2,
+      y: cell.y + cell.height / 2,
+      ...(origin && pitch > 0
+        ? { row: Math.round((cell.y - origin.y) / pitch), column: Math.round((cell.x - origin.x) / pitch) }
+        : {}),
+    }));
+  }, [cellGap, cellSize, geometry.cells, tooltipFor]);
+  const interactionState = useChartInteraction({
+    items: interactionItems,
+    interaction,
+    navigation: 'grid',
+  });
   const surfaceStyle: CSSProperties = {
     ...(typeof width === 'string' ? { width } : {}),
     ...style,
@@ -176,6 +219,8 @@ export function SvgCalendarHeatMapRenderer({
       className={rendererClassName}
       style={surfaceStyle}
       ownerRef={containerRef}
+      interactionMode={interactionState.mode}
+      interactionRootProps={interactionState.rootProps}
     >
       {showDayLabels ? (
         <g data-part="day-labels" aria-hidden="true">
@@ -212,13 +257,8 @@ export function SvgCalendarHeatMapRenderer({
 
       <g data-part="cells">
         {geometry.cells.map((cell) => {
-          const numericValue = cell.value ?? 0;
-          const tooltip = formatTooltip
-            ? formatTooltip(cell.dateKey, numericValue)
-            : cell.state === 'filled'
-              ? `${cell.dateKey}: ${numericValue}`
-              : `${cell.dateKey}: No activity`;
-          return (
+          const tooltip = tooltipFor(cell.dateKey, cell.value ?? 0, cell.state);
+          const rect = (
             <rect
               key={cell.id}
               data-part="cell"
@@ -232,10 +272,50 @@ export function SvgCalendarHeatMapRenderer({
               ry={2}
               fill={cell.fill}
               style={{ cursor: onCellClick ? 'pointer' : 'default' }}
-              onClick={onCellClick ? () => onCellClick(cell.dateKey, numericValue) : undefined}
             >
               {showTitles ? <title>{tooltip}</title> : null}
             </rect>
+          );
+          if (interactionState.mode === 'static') return rect;
+          const datumProps = interactionState.getDatumProps(cell.id);
+          const hitWidth = Math.max(24, cell.width);
+          const hitHeight = Math.max(24, cell.height);
+          const hitX = cell.x - (hitWidth - cell.width) / 2;
+          const hitY = cell.y - (hitHeight - cell.height) / 2;
+          return (
+            <g
+              key={cell.id}
+              data-part="calendar-cell-mark"
+              data-datum-id={cell.id}
+              data-chart-datum-key={datumProps['data-chart-datum-key']}
+              data-active={datumProps['data-active']}
+              data-focused={datumProps['data-focused']}
+              data-hovered={datumProps['data-hovered']}
+              data-pinned={datumProps['data-pinned']}
+              tabIndex={datumProps.tabIndex}
+              role="button"
+              aria-label={`${tooltip}. ${CELL_ACTION_LABEL}`}
+            >
+              <rect
+                data-part="interaction-target"
+                x={hitX}
+                y={hitY}
+                width={hitWidth}
+                height={hitHeight}
+                pointerEvents="all"
+                aria-hidden="true"
+              />
+              <rect
+                data-part="interaction-halo"
+                x={hitX}
+                y={hitY}
+                width={hitWidth}
+                height={hitHeight}
+                rx={4}
+                aria-hidden="true"
+              />
+              {rect}
+            </g>
           );
         })}
       </g>
