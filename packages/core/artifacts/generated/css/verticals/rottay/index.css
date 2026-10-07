@@ -86245,8 +86245,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   --ds-button-md-font-size: calc(var(--ds-font-size-xs) * 1.083333);
   --ds-button-sm-gap: calc(var(--ds-spacing-2, 6px) / var(--ds-density-effective-scale, 1));
   --ds-button-md-gap: calc(var(--ds-spacing-2, 6px) / var(--ds-density-effective-scale, 1));
-  --ds-button-sm-icon-size: 12px;
-  --ds-button-md-icon-size: 14px;
+  --ds-button-sm-icon-size: var(--ds-icon-xs-size);
+  --ds-button-md-icon-size: var(--ds-icon-sm-size);
   --ds-button-sm-line-height: var(--ds-line-height-normal);
   --ds-button-md-line-height: var(--ds-line-height-normal);
   --ds-button-font-weight: normal;

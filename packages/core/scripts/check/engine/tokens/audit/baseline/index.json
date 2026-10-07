@@ -3322,7 +3322,7 @@
   "skinLiterals.frozen.important": 28,
   "skinLiterals.dataTenant.total": 0,
   "skinLiterals.frozen.dataTenant": 0,
-  "skinLiterals.channelLiteral.total": 92,
+  "skinLiterals.channelLiteral.total": 90,
   "skinLiterals.frozen.channelLiteral": 6,
   "skinLiterals.lineHeight.runtime/engines/modern/skin/activity-log/index.css": 1,
   "skinLiterals.size.runtime/engines/modern/skin/activity-log/index.css": 3,
@@ -4219,6 +4219,5 @@
   "fallbackParity.color.infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/elevation/ladder/index.ts": 3,
   "scale.duplicateRootDeclarations": 3,
   "scale.duplicateRootRosterDrift": 0,
-  "fallbackParity.channel.foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css": 2,
-  "skinLiterals.channelLiteral.presentation/components/skin/status-filter-pills/index.css": 2
+  "fallbackParity.channel.foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css": 2
 }
