@@ -121,8 +121,9 @@ describe('PatternDetailPanel data-part contract', () => {
     };
 
     for (const [part, count] of Object.entries(expectedCounts)) {
+      // Modern composes Tabs, whose own root is a nested `data-part="root"`; its tab parts still count here.
       const nodes = Array.from(container.querySelectorAll(`[data-part="${part}"]`)).filter(
-        (node) => !node.closest('.ds-breadcrumb'),
+        (node) => !node.closest('.ds-breadcrumb') && !(part === 'root' && node.classList.contains('ds-tabs')),
       );
       expect(nodes.length, `data-part="${part}" did not reach the DOM`).toBe(count);
     }
@@ -159,19 +160,14 @@ describe('PatternDetailPanel data-part contract', () => {
       'false',
     ]);
 
-    // data-active/data-disabled on every tab-button -- 'overview' is the
-    // uncontrolled default active tab, 'history' is the disabled one.
-    const tabButtons = container.querySelectorAll('[data-part="tab-button"]');
-    expect(Array.from(tabButtons).map((el) => el.getAttribute('data-active'))).toEqual([
-      'true',
-      'false',
-      'false',
-    ]);
-    expect(Array.from(tabButtons).map((el) => el.getAttribute('data-disabled'))).toEqual([
-      'false',
-      'false',
-      'true',
-    ]);
+    // The active and disabled state on every tab-button -- 'overview' is the uncontrolled default active
+    // tab, 'history' the disabled one. Modern's strip is the composed Tabs, which states them in ARIA.
+    const tabButtons = Array.from(container.querySelectorAll('[data-part="tab-button"]'));
+    const activeAttr = engine === 'modern' ? 'aria-selected' : 'data-active';
+    expect(tabButtons.map((el) => el.getAttribute(activeAttr))).toEqual(['true', 'false', 'false']);
+    expect(
+      tabButtons.map((el) => (engine === 'modern' ? String(el.hasAttribute('disabled')) : el.getAttribute('data-disabled'))),
+    ).toEqual(['false', 'false', 'true']);
   });
 
   it.each(ENGINES)('stamps data-loading and the skeleton parts on the loading branch under the %s engine', async (engine) => {

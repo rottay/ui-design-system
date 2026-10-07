@@ -33,21 +33,25 @@ describe('Modern DetailPanel — tab relationship integrity', () => {
       const controls = tab.getAttribute('aria-controls');
       if (controls === null) continue;
       // aria-controls must never reference an id that isn't rendered — only
-      // the active tab's panel exists in the DOM.
+      // the active tab's panel exists in the DOM, and it is that tab's tabpanel.
       expect(document.getElementById(controls)).not.toBeNull();
+      expect(document.getElementById(controls)).toHaveAttribute('role', 'tabpanel');
     }
   });
 
   it('keeps aria-controls on the active tab only, and follows the selection', () => {
     render(<ModernDetailPanel {...createProps({ tabs: TABS })} />);
 
+    // Relationships, not literals: the ids are generated per instance, so two panels never collide.
     const [overview, billing] = screen.getAllByRole('tab');
-    expect(overview.getAttribute('aria-controls')).toBe('panel-overview');
+    expect(overview.getAttribute('aria-controls')).toBe(screen.getByRole('tabpanel').id);
+    expect(screen.getByRole('tabpanel')).toHaveAttribute('aria-labelledby', overview.id);
     expect(billing.getAttribute('aria-controls')).toBeNull();
 
     fireEvent.click(billing);
-    expect(screen.getByRole('tab', { name: 'Billing' }).getAttribute('aria-controls'))
-      .toBe('panel-billing');
+    const billingTab = screen.getByRole('tab', { name: 'Billing' });
+    expect(billingTab.getAttribute('aria-controls')).toBe(screen.getByRole('tabpanel').id);
+    expect(screen.getByRole('tabpanel')).toHaveAttribute('aria-labelledby', billingTab.id);
     expect(screen.getByRole('tab', { name: 'Overview' }).getAttribute('aria-controls'))
       .toBeNull();
   });
@@ -106,7 +110,9 @@ describe('Modern DetailPanel — instance-scoped tab focus', () => {
 
     const second = screen.getByTestId('second');
     const secondTabs = within(second).getAllByRole('tab');
-    fireEvent.keyDown(within(second).getByRole('tablist'), { key: 'ArrowRight' });
+    // The keys land on the focused tab (the composed Tabs handles them per tab, not on the list).
+    secondTabs[0].focus();
+    fireEvent.keyDown(secondTabs[0], { key: 'ArrowRight' });
 
     // Arrow-key focus must stay scoped to the panel instance that received
     // the key, not fall through to the first DOM match across panels.
@@ -133,14 +139,15 @@ describe('Modern DetailPanel — instance-scoped tab focus', () => {
     );
 
     const tabs = screen.getAllByRole('tab');
-    const tablist = screen.getByRole('tablist');
+    const press = (key: string) => fireEvent.keyDown(document.activeElement!, { key });
+    tabs[0].focus();
 
     // RTL: ArrowLeft is the visual-forward key, so it advances the selection.
-    fireEvent.keyDown(tablist, { key: 'ArrowLeft' });
+    press('ArrowLeft');
     expect(tabs[1]).toHaveFocus();
-    fireEvent.keyDown(tablist, { key: 'ArrowLeft' });
+    press('ArrowLeft');
     expect(tabs[2]).toHaveFocus();
-    fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+    press('ArrowRight');
     expect(tabs[1]).toHaveFocus();
   });
 
@@ -155,13 +162,14 @@ describe('Modern DetailPanel — instance-scoped tab focus', () => {
     );
 
     const tabs = screen.getAllByRole('tab');
-    const tablist = screen.getByRole('tablist');
+    const press = (key: string) => fireEvent.keyDown(document.activeElement!, { key });
+    tabs[0].focus();
 
-    fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+    press('ArrowRight');
     expect(tabs[1]).toHaveFocus();
-    fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+    press('ArrowRight');
     expect(tabs[2]).toHaveFocus();
-    fireEvent.keyDown(tablist, { key: 'ArrowLeft' });
+    press('ArrowLeft');
     expect(tabs[1]).toHaveFocus();
   });
 });

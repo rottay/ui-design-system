@@ -196,11 +196,11 @@ describe('DetailPanel modern skin — engine-specific interaction rules', () => 
     ).toBe(true);
   });
 
-  it('gates the tab-button hover on :not([data-active]) (the !isActive gate)', () => {
+  it('leaves the strip to the composed Tabs primitive: no tab paint in the panel skin', () => {
     expect(
-      /\[data-part='tab-button'\][^{]*:hover[^{]*:not\(\[data-active='true'\]\)/.test(SKINS.modern),
-      'the modern tab-button hover must exclude the active tab',
-    ).toBe(true);
+      /data-part='tab-(?:button|badge|icon|list|panel)'/.test(SKINS.modern),
+      'the modern panel skin must not paint the Tabs anatomy',
+    ).toBe(false);
   });
 
   it('leaves the trail to the composed Breadcrumb primitive: no crumb paint in the panel skin', () => {
@@ -293,10 +293,7 @@ const NO_PAINT_PARTS: Record<'modern' | 'rustic', readonly string[]> = {
     'action-button',
     'action-spinner',
     'back-button',
-    'tab-button',
-    'tab-badge',
     'status-badge',
-    'tab-list',
     'sidebar',
     'footer',
   ],
@@ -320,8 +317,6 @@ const NO_COLOR_PARTS: Record<'modern' | 'rustic', readonly string[]> = {
   modern: [
     'action-button',
     'back-button',
-    'tab-button',
-    'tab-badge',
     'status-badge',
     'subtitle',
     'title',

@@ -2133,18 +2133,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "f0e3d090e1b66c29ef29": {
-      "path": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-button",
-      "count": 1
-    },
-    "218bb6639a6ffa6b3ecf": {
-      "path": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "aria-role-reconstruction",
-      "count": 1
-    },
     "10e576a0e49c1ab9fdd4": {
       "path": "src/components/patterns/data/detail-panel/engines/rustic/index.tsx",
       "category": "native-interactive",

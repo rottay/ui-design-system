@@ -36,7 +36,7 @@ describe('Modern DetailPanel — uncontrolled tab reconciliation', () => {
       'true',
       'false',
     ]);
-    expect(screen.getByRole('tabpanel')).toHaveAttribute('id', 'panel-overview');
+    expect(screen.getByRole('tabpanel')).toHaveAttribute('aria-labelledby', tabButtons[0].id);
     expect(screen.getByText('Overview tab')).toBeInTheDocument();
   });
 

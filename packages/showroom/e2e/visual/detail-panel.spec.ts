@@ -145,7 +145,8 @@ test('rottay (dark) / detail-panel / modern: inactive tab hovered', async ({ pag
 
   const container = await openProbe(page, 'rottay', 'modern', 1280);
   const tab = container
-    .locator('[data-part="tab-button"][data-active="false"][data-disabled="false"]')
+    // Modern's strip is the composed Tabs, which states selection and availability in ARIA.
+    .locator('[role="tab"][aria-selected="false"]:not([disabled])')
     .first();
   await tab.hover();
   await page.waitForTimeout(300);

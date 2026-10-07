@@ -20,14 +20,16 @@
  * @package @rottay/design-system
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import type { DetailPanelProps, DetailAction } from '../../contracts';
 import Button from '../../../../../primitives/inputs/button/engines/modern';
 import ModernBreadcrumb from '../../../../../primitives/navigation/breadcrumb/engines/modern';
 import Skeleton from '../../../../../primitives/feedback/skeleton/engines/modern';
 import { VisuallyHidden } from '../../../../../primitives/foundation/visually-hidden';
+import ModernTabs from '../../../../../primitives/navigation/tabs/engines/modern';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
-import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
 
 /* ------------------------------------------------------------------ */
 /* SkeletonBlock                                                       */
@@ -135,65 +137,6 @@ function BackButton({ onClick, label }: { onClick: () => void; label: string }) 
 }
 
 /* ------------------------------------------------------------------ */
-/* TabButton                                                           */
-/* ------------------------------------------------------------------ */
-
-/**
- * Individual tab button with hover state, active indicator, badge support,
- * and proper ARIA attributes for accessible tab navigation.
- */
-function TabButton({
-  tabKey,
-  label,
-  icon,
-  badge,
-  isActive,
-  disabled,
-  onClick,
-  buttonRef,
-}: {
-  tabKey: string;
-  label: string;
-  icon?: React.ReactNode;
-  badge?: number | string;
-  isActive: boolean;
-  disabled?: boolean;
-  onClick: () => void;
-  buttonRef: (node: HTMLButtonElement | null) => void;
-}) {
-  return (
-    <button
-      type="button"
-      role="tab"
-      id={`tab-${tabKey}`}
-      ref={buttonRef}
-      data-part="tab-button"
-      data-active={isActive ? 'true' : 'false'}
-      data-disabled={disabled ? 'true' : 'false'}
-      aria-selected={isActive}
-      /* Only the active panel is rendered, so an inactive tab's aria-controls
-         pointed at an id that was not in the document. */
-      aria-controls={isActive ? `panel-${tabKey}` : undefined}
-      tabIndex={isActive ? 0 : -1}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {icon && (
-        <span data-part="tab-icon">
-          {icon}
-        </span>
-      )}
-      {label}
-      {badge != null && (
-        <span data-part="tab-badge">
-          {badge}
-        </span>
-      )}
-    </button>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* Main component                                                      */
 /* ------------------------------------------------------------------ */
 
@@ -257,19 +200,10 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     controlledActiveTab ??
     (seedIsDisabled ? firstSelectableKey ?? seedKey : seedKey);
 
-  // Instance-scoped tab refs: `document.getElementById` returns the FIRST
-  // match in the document, so a second panel's arrows stole focus to the first.
-  const tabRefs = useRef(new Map<string, HTMLButtonElement>());
-
   // Chrome copy: catalogued when an I18nProvider is mounted, the documented
   // English floor otherwise (a missing key echoes the full key back, which
   // the endsWith guard detects). Pattern-owned strings, never page copy.
   const i18n = useOptionalTranslation('components');
-  // The reading direction comes from the shared i18n authority; this family
-  // measures nothing of its own. The computed-style probe it replaces could
-  // not answer in jsdom either, which is why the RTL keyboard behaviour here
-  // had no test until now.
-  const directionIsRtl = useReadingDirectionIsRtl();
   const tOr = (key: string, fallback: string): string => {
     const translated = i18n?.t(key);
     return translated && !translated.endsWith(key) ? translated : fallback;
@@ -279,6 +213,10 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     tabs: tOr('detailPanel.tabs', 'Detail panel tabs'),
     loading: tOr('detailPanel.loading', 'Loading details…'),
   };
+
+  // The tenant's recipe profile owns the Tabs recipe when it selects one;
+  // 'contained' stays the pattern's default otherwise (review M1 re-rule).
+  const tabsRecipe = useRecipeProfileDefaults('tabs').recipe ?? 'contained';
 
   // Only update internal state when uncontrolled. Always fire onTabChange
   // so controlled consumers can sync their own state.
@@ -366,8 +304,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     );
   }
 
-  // Resolve the active tab object so we can render its content below the tab bar.
-  const activeTabObj = tabs?.find((t) => t.key === activeTab);
 
   return (
     <div
@@ -470,71 +406,24 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
         >
           {/* Main content area */}
           <div data-part="main">
-            {/* Tab navigation */}
+            {/* Tab navigation: the canonical Tabs owns the strip, its keyboard and its panel; the pattern keeps
+                the panel's card surface. */}
             {tabs && tabs.length > 0 && (
-              <>
-                <div
-                  role="tablist"
-                  aria-label={labels.tabs}
-                  data-part="tab-list"
-                  onKeyDown={(e) => {
-                    const enabledTabs = tabs.filter((t) => !t.disabled);
-                    if (enabledTabs.length === 0) return;
-                    const currentIdx = enabledTabs.findIndex((t) => t.key === activeTab);
-                    // Direction-aware arrows (data-table/action-dock precedent):
-                    // in RTL the visual-forward key is ArrowLeft, so the same
-                    // physical cue always moves the selection the same way.
-                    const isRtl = directionIsRtl;
-                    const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
-                    const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
-                    let nextIdx = -1;
-                    if (e.key === forwardKey) {
-                      nextIdx = currentIdx < enabledTabs.length - 1 ? currentIdx + 1 : 0;
-                    } else if (e.key === backwardKey) {
-                      nextIdx = currentIdx > 0 ? currentIdx - 1 : enabledTabs.length - 1;
-                    } else if (e.key === 'Home') {
-                      nextIdx = 0;
-                    } else if (e.key === 'End') {
-                      nextIdx = enabledTabs.length - 1;
-                    }
-                    if (nextIdx >= 0) {
-                      e.preventDefault();
-                      const nextTab = enabledTabs[nextIdx];
-                      handleTabChange(nextTab.key);
-                      // Move focus to the newly activated tab button
-                      tabRefs.current.get(nextTab.key)?.focus();
-                    }
-                  }}
-                >
-                  {tabs.map((tab) => (
-                    <TabButton
-                      key={tab.key}
-                      tabKey={tab.key}
-                      label={tab.label}
-                      icon={tab.icon}
-                      badge={tab.badge}
-                      isActive={activeTab === tab.key}
-                      disabled={tab.disabled}
-                      onClick={() => !tab.disabled && handleTabChange(tab.key)}
-                      buttonRef={(node) => {
-                        if (node) tabRefs.current.set(tab.key, node);
-                        else tabRefs.current.delete(tab.key);
-                      }}
-                    />
-                  ))}
-                </div>
-                {/* A panel whose content has no focusable descendant is
-                    otherwise unreachable by keyboard (APG tabpanel rule). */}
-                <div
-                  role="tabpanel"
-                  id={`panel-${activeTab}`}
-                  aria-labelledby={`tab-${activeTab}`}
-                  data-part="tab-panel"
-                  tabIndex={0}
-                >
-                  {activeTabObj?.content}
-                </div>
-              </>
+              <ModernTabs
+                type={tabsRecipe}
+                aria-label={labels.tabs}
+                activeKey={activeTab}
+                onChange={handleTabChange}
+                items={tabs.map((tab) => ({
+                  key: tab.key,
+                  // A string label ending in " <number>" would be split into a badge by Tabs.
+                  label: <>{tab.label}</>,
+                  icon: tab.icon,
+                  badge: tab.badge,
+                  disabled: tab.disabled,
+                  children: <div data-part="panel-surface">{tab.content}</div>,
+                }))}
+              />
             )}
           </div>
 
