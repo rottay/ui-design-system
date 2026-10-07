@@ -956,7 +956,7 @@
       "anchor": "BrandMotion",
       "class": "compat-persisted-data",
       "reason": "Theme documents stored for tenants may carry its twelve open-ended fields: the theme-document iso schema admits them and the personality lowering reads them, and nothing proves the stored data absent or migrated. No bundled preset authors the interface any more.",
-      "scope": "Exported interface; it types `FlatTheme.motion`. The Brand Studio editor still authors six of the open-ended fields (entrance, entranceDuration, hoverLift, hoverScale, pulseSpeed and skeletonStyle) into drafts and its file export reads entranceDuration; that door is retired before the interface is narrowed. The four governed fields (intensity, durationScale, ambient, character) stay. No database was inspected: whether stored tenant payloads carry the open-ended fields was not measured.",
+      "scope": "Exported interface; it types `FlatTheme.motion`. The Brand Studio editor no longer authors the six open-ended fields (entrance, entranceDuration, hoverLift, hoverScale, pulseSpeed and skeletonStyle) and its file export no longer reads entranceDuration (WO-RET-06 W-4); drafts that carry them still round-trip. The four governed fields (intensity, durationScale, ambient, character) stay. No database was inspected: whether stored tenant payloads carry the open-ended fields was not measured.",
       "replacement": "the vertical `MotionProfile` plus the bounded `TenantMotionDial`",
       "canonicalOwner": "src/foundation/contracts/composition/tenants/themes/index.ts",
       "blocker": "persisted-data-unproven",

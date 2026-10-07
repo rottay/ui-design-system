@@ -40,7 +40,7 @@ describe('PatternBrandStudio editor grouping', () => {
   it('names every editor section as a group so its fields inherit that context', async () => {
     await renderStudio();
 
-    for (const name of ['Palette', 'Typography', 'Surfaces', 'Motion', 'Chrome']) {
+    for (const name of ['Palette', 'Typography', 'Surfaces', 'Chrome']) {
       expect(screen.getByRole('group', { name })).toBeInTheDocument();
     }
 

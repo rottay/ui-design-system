@@ -144,10 +144,9 @@ describe('WO-DER-08 studio draft transport', () => {
     expect(relifted.recipes.disposition).toBe('not-authored');
   });
 
-  it('edits a governed family the incoming draft never authored', async () => {
-    // The carry must not outrank authorship: a draft whose `motion` is withheld
-    // is the ordinary case (every partial `value` in the tree lifts that way),
-    // and the Motion section exists to make the first edit to it.
+  it('an editor edit leaves every governed family it never touched withheld', async () => {
+    // The editor authors no governed family since the open-ended motion fields
+    // retired (WO-RET-06 W-4); the first edit to one is covered at the door above.
     const seen: Theme[] = [];
     function Host(): React.ReactElement {
       const [draft, setDraft] = useState<Theme>(normalizeThemeDraft(BARE));
@@ -169,17 +168,37 @@ describe('WO-DER-08 studio draft transport', () => {
       </DesignSystemProvider>,
     );
     await screen.findByText('Bare Draft Studio');
-    expect(normalizeThemeDraft(BARE).motion.disposition).toBe('not-authored');
+    expect(screen.queryByLabelText('Hover scale')).toBeNull();
 
-    fireEvent.change(screen.getByLabelText('Hover scale'), { target: { value: '1.08' } });
+    fireEvent.change(screen.getByLabelText('Effect intensity'), { target: { value: '0.4' } });
 
     const emitted = seen[seen.length - 1]!;
-    expect(emitted.motion.disposition).toBeUndefined();
-    expect(emitted.motion.value?.hoverScale).toBe(1.08);
     // The edit survives the door, not merely the payload.
-    expect(projectThemeDraft(emitted).motion?.hoverScale).toBe(1.08);
+    expect(projectThemeDraft(emitted).surfaces?.effectIntensity).toBe(0.4);
+    for (const family of ['motion', 'charts', 'recipes', 'expressive', 'responsive'] as const) {
+      expect(emitted[family].disposition, family).toBe('not-authored');
+    }
     // And the controlled host re-renders with it, which is what an editor is.
-    expect((screen.getByLabelText('Hover scale') as HTMLInputElement).value).toBe('1.08');
+    expect((screen.getByLabelText('Effect intensity') as HTMLInputElement).value).toBe('0.4');
+  });
+
+  it('an editor edit carries the open-ended motion a stored draft already authors', async () => {
+    const seen: Theme[] = [];
+    render(
+      <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
+        <PatternBrandStudio
+          vertical={VERTICAL}
+          value={normalizeThemeDraft(FLAT)}
+          title="Flat Draft Studio"
+          onChange={(next) => seen.push(next)}
+        />
+      </DesignSystemProvider>,
+    );
+    await screen.findByText('Flat Draft Studio');
+
+    fireEvent.change(screen.getByLabelText('Effect intensity'), { target: { value: '0.4' } });
+
+    expect(projectThemeDraft(seen[seen.length - 1]!).motion).toEqual(FLAT.motion);
   });
 
   it('accepts a governed draft as `value` and emits a governed draft from `onChange`', async () => {

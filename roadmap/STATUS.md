@@ -1335,6 +1335,7 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | export | `.#FlatThemeModes` | renamed from BrandThemeModes; shape byte-identical | major | `der-06-brand-theme-authority-retired.md` |
 | export | `.#flatThemeToTenantAppearance` | renamed from brandThemeToTenantAppearance; shape byte-identical | major | `der-06-brand-theme-authority-retired.md` |
 | export | `.#flatThemeToTenantAppearanceAdvanced` | renamed from brandThemeToTenantAppearanceAdvanced; shape byte-identical | major | `der-06-brand-theme-authority-retired.md` |
+| export | `.#flatThemeToTenantAppearanceAdvanced` | BREAKING: motion.entranceDuration no longer projects to --ds-motion-calm; palette, typography and chrome only (WO-RET-06 W-4) | major | `ret-06-w4-brand-studio-motion-fields.md` |
 | export | `.#FormSurfaceProps` | changed; adds optional `adapt?: Adapt<FormSurfaceAdaptation>` | minor | `fam-10-adapt-slot-and-ledger.md` |
 | export | `.#GaugeChart` | changed; parameter defaults for segment tones now resolve through the chart paint chain (same values at rest). Patch: no prop shape moved. | patch | `fam-09-5b-semantic-chart-tones.md` |
 | export | `.#governedTenantTheme` | added: lifts an already-flat authored draft into the governed `Theme` the compile door takes, so a consumer holding the flat shape reaches the new transport without naming the lowering's lift itself | minor | `der-08-studio-draft-governed-theme.md` |
@@ -1356,6 +1357,7 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | export | `.#NavigationLinkInteractionStamp` | added; the pick type naming the stamp fields a host Link may forward | minor | `states-literal-paint-wiring.md` |
 | export | `.#NavigationLinkProps` | changed; additive optional interaction-stamp fields (`data-state` plus pointer/focus/keyboard handlers), no existing field altered | minor | `states-literal-paint-wiring.md` |
 | export | `.#NetworkGraph` | changed; additive optional `colorScheme` prop, no existing prop altered | minor | `fam-09-scheme-input-last-three.md` |
+| export | `.#PatternBrandStudio` | BREAKING: the Motion section and its six open-ended BrandMotion fields are removed from the editor; drafts carrying them still round-trip (WO-RET-06 W-4) | major | `ret-06-w4-brand-studio-motion-fields.md` |
 | export | `.#Popover` | the component now serves both modes (trigger and anchored); the anchored mode mounts in-tree under the tenant scope, never portalled (WO-ARC-23) | minor | `w26-arc23-anchored-disclosure.md` |
 | export | `.#Posture` | added; the viewport and container posture names in one union | major | `inv-07-adaptation-slots.md` |
 | export | `.#PrimaryActionPlacement` | 'app-bar' / 'bottom-bar' / 'floating' (WO-INV-06) | minor | `surface-posture-contract.md` |

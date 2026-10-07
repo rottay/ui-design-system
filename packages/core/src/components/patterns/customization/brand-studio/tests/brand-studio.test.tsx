@@ -213,7 +213,8 @@ describe('PatternBrandStudio export paths', () => {
     expect('card' in (advanced.chrome ?? {})).toBe(false);
     expect('accent' in (advanced.chrome ?? {})).toBe(false);
 
-    // Palette/typography/motion funnel through bounded token overrides.
+    // Palette/typography funnel through bounded token overrides; the open-ended
+    // motion fields a stored draft may still carry are not projected.
     const overrides = advanced.tokenOverrides ?? {};
     expect(overrides['--ds-color-primary']).toBe('#1a56db');
     expect(overrides['--ds-color-bg-primary']).toBe('#f8fafc');
@@ -224,7 +225,7 @@ describe('PatternBrandStudio export paths', () => {
     expect(overrides['--ds-color-border-primary']).toBe('#cbd5e1');
     expect(overrides['--ds-color-border-secondary']).toBe('#e2e8f0');
     expect(overrides['--ds-font-family-base']).toBe('Inter, sans-serif');
-    expect(overrides['--ds-motion-calm']).toBe('200ms');
+    expect('--ds-motion-calm' in overrides).toBe(false);
 
     // No unbounded overrides: every key is a --ds-* token and the count is small.
     const keys = Object.keys(overrides);

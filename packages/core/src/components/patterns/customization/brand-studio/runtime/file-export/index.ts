@@ -6,11 +6,12 @@
  *     ({@link serializeThemeDraft} / {@link deserializeThemeDraft}).
  *   - draft -> TenantAppearanceAdvanced: a bounded projection
  *     ({@link flatThemeToTenantAppearanceAdvanced}). Chrome maps directly.
- *     Palette, typography, and motion have no Advanced home, so they funnel
- *     through bounded `tokenOverrides` keyed on the exact `--ds-*` names the
- *     brand compiler emits. `chrome.card` and `chrome.accent` are personality
- *     tokens with no `--ds-*` mapping and are dropped. No unbounded token
- *     overrides are produced: every key is a known member of a fixed allowlist.
+ *     Palette and typography have no Advanced home, so they funnel through
+ *     bounded `tokenOverrides` keyed on the exact `--ds-*` names the brand
+ *     compiler emits. The open-ended motion fields are not projected.
+ *     `chrome.card` and `chrome.accent` are personality tokens with no `--ds-*`
+ *     mapping and are dropped. No unbounded token overrides are produced: every
+ *     key is a known member of a fixed allowlist.
  *
  * @module Patterns/Customization/BrandStudio/FileExport
  * @package @rottay/design-system
@@ -22,7 +23,6 @@ import type {
   BrandChrome,
   BrandPalette,
   BrandTypography,
-  BrandMotion,
   TenantAppearance,
   TenantAppearanceAdvanced,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
@@ -232,7 +232,7 @@ const TYPOGRAPHY_FONT_TOKENS: Array<[keyof BrandTypography, `--ds-${string}`]> =
 ];
 
 /**
- * Funnel palette, typography, and motion into a bounded `--ds-*` token map.
+ * Funnel palette and typography into a bounded `--ds-*` token map.
  * Only the fixed allowlist below is emitted, so the projection can never grow
  * an unbounded override surface.
  */
@@ -266,21 +266,13 @@ function buildBoundedTokenOverrides(theme: FlatTheme): TokenOverrides {
     }
   }
 
-  if (theme.motion) {
-    const motion: BrandMotion = theme.motion;
-    // The compiler's `calm` motion token tracks the theme entrance duration.
-    if (motion.entranceDuration != null) {
-      overrides['--ds-motion-calm'] = `${motion.entranceDuration}ms`;
-    }
-  }
-
   return overrides as TokenOverrides;
 }
 
 /**
  * Project a draft into a bounded TenantAppearanceAdvanced. Chrome families map
- * directly (minus card/accent); palette, typography, and motion funnel into
- * bounded `--ds-*` token overrides. This projection is intentionally lossy — the
+ * directly (minus card/accent); palette and typography funnel into bounded
+ * `--ds-*` token overrides. This projection is intentionally lossy — the
  * lossless path is {@link serializeThemeDraft}.
  */
 export function flatThemeToTenantAppearanceAdvanced(

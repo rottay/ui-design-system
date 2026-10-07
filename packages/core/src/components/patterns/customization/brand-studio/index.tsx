@@ -10,7 +10,7 @@
  * through the same reader before emitting.
  *
  * The editor exposes only the bounded theme fields (palette, typography,
- * surfaces, motion, chrome). The preview resolves the in-flight theme as a
+ * surfaces, chrome). The preview resolves the in-flight theme as a
  * PATCH over the vertical it is a draft for — the same door a tenant document
  * takes — and injects the channels that draft actually MOVES off the untouched
  * vertical into two scoped containers, one dark ground and one light ground,
@@ -1055,42 +1055,6 @@ function buildLabelStyleOptions(t: BrandStudioTranslator): Array<{
   ];
 }
 
-function buildEntranceOptions(t: BrandStudioTranslator): Array<{
-  value: 'none' | 'fade' | 'slideUp' | 'spring' | 'bounce';
-  label: string;
-}> {
-  return [
-    { value: 'none', label: t('brandStudio.option.none', 'None') },
-    { value: 'fade', label: t('brandStudio.option.fade', 'Fade') },
-    { value: 'slideUp', label: t('brandStudio.option.slideUp', 'Slide up') },
-    { value: 'spring', label: t('brandStudio.option.spring', 'Spring') },
-    { value: 'bounce', label: t('brandStudio.option.bounce', 'Bounce') },
-  ];
-}
-
-function buildPulseOptions(t: BrandStudioTranslator): Array<{
-  value: 'none' | 'slow' | 'normal' | 'fast';
-  label: string;
-}> {
-  return [
-    { value: 'none', label: t('brandStudio.option.none', 'None') },
-    { value: 'slow', label: t('brandStudio.option.slow', 'Slow') },
-    { value: 'normal', label: t('brandStudio.option.normal', 'Normal') },
-    { value: 'fast', label: t('brandStudio.option.fast', 'Fast') },
-  ];
-}
-
-function buildSkeletonOptions(t: BrandStudioTranslator): Array<{
-  value: 'pulse' | 'shimmer' | 'wave';
-  label: string;
-}> {
-  return [
-    { value: 'pulse', label: t('brandStudio.option.pulse', 'Pulse') },
-    { value: 'shimmer', label: t('brandStudio.option.shimmer', 'Shimmer') },
-    { value: 'wave', label: t('brandStudio.option.wave', 'Wave') },
-  ];
-}
-
 /** Ensure `draft.palette` exists and return it (typed, mutable). primaryColor is required by the contract. */
 function draftPalette(draft: FlatTheme): BrandPalette {
   const palette = draft.palette ?? { primaryColor: '' };
@@ -1210,7 +1174,6 @@ function FlatThemeEditor({
   const typography = theme.typography ?? {};
   const surfaces = theme.surfaces ?? {};
   const radius = surfaces.borderRadius ?? {};
-  const motion = theme.motion ?? {};
   const controls = theme.chrome?.controls ?? {};
   const buttonPrimary = controls.buttonPrimary ?? {};
   const input = controls.input ?? {};
@@ -1432,72 +1395,6 @@ function FlatThemeEditor({
           onChange={(v) =>
             emit((d) => {
               d.surfaces = { ...(d.surfaces ?? {}), densityScale: v };
-            })
-          }
-        />
-      </EditorSection>
-
-      <EditorSection title={t('brandStudio.section.motion', 'Motion')}>
-        <SelectField
-          label={t('brandStudio.field.entrance', 'Entrance')}
-          value={motion.entrance}
-          options={buildEntranceOptions(t)}
-          inheritPlaceholder={inheritPlaceholder}
-          onChange={(v) =>
-            emit((d) => {
-              d.motion = { ...(d.motion ?? {}), entrance: v };
-            })
-          }
-        />
-        <NumberField
-          label={t('brandStudio.field.entranceDuration', 'Entrance duration (ms)')}
-          value={motion.entranceDuration}
-          placeholder="200"
-          onChange={(v) =>
-            emit((d) => {
-              d.motion = { ...(d.motion ?? {}), entranceDuration: v };
-            })
-          }
-        />
-        <NumberField
-          label={t('brandStudio.field.hoverLift', 'Hover lift')}
-          value={motion.hoverLift}
-          placeholder="0"
-          onChange={(v) =>
-            emit((d) => {
-              d.motion = { ...(d.motion ?? {}), hoverLift: v };
-            })
-          }
-        />
-        <NumberField
-          label={t('brandStudio.field.hoverScale', 'Hover scale')}
-          value={motion.hoverScale}
-          placeholder="1"
-          onChange={(v) =>
-            emit((d) => {
-              d.motion = { ...(d.motion ?? {}), hoverScale: v };
-            })
-          }
-        />
-        <SelectField
-          label={t('brandStudio.field.pulseSpeed', 'Pulse speed')}
-          value={motion.pulseSpeed}
-          options={buildPulseOptions(t)}
-          inheritPlaceholder={inheritPlaceholder}
-          onChange={(v) =>
-            emit((d) => {
-              d.motion = { ...(d.motion ?? {}), pulseSpeed: v };
-            })
-          }
-        />
-        <SelectField
-          label={t('brandStudio.field.skeleton', 'Skeleton')}
-          value={motion.skeletonStyle}
-          options={buildSkeletonOptions(t)}
-          inheritPlaceholder={inheritPlaceholder}
-          onChange={(v) =>
-            emit((d) => {
-              d.motion = { ...(d.motion ?? {}), skeletonStyle: v };
             })
           }
         />
