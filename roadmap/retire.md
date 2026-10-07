@@ -845,5 +845,15 @@ Lane-wide rules (binding on every WO):
   `AlertIcon` stays public. **Files** gains for W-1 only: *the exact 13 paths named in the W-1 report
   (`w26-ret06-w1/report.md`), each carrying the retirement's consistency edit and nothing else.* Every other
   field is unchanged; nothing else may ride the amendment.
+- **AMENDMENT (2026-10-07, DT ruling on the W-2 companion surface; the acceptance above stands, this is added to it)** —
+  The W-2 packet (F-113: the two vertical pictograms retired + the shared-corpora law test; A1: the atlas
+  probe drops its pictogram section) measured 4 companion files outside the Files list that the retirement
+  cannot leave consistent without: `packages/core/THIRD_PARTY_NOTICES.md` (the licence pin),
+  `packages/core/src/infrastructure/runtime/graphics/asset-governance/tests/asset-adapter-control.test.tsx`,
+  and `packages/showroom/eslint.config.mjs` (the showroom no longer sanctions `./pictograms`), plus the
+  one-line consumer-census baseline admission of `./pictograms` as a consumerless door HELD by owner question
+  D-E (the door and the feature-pictogram asset class stay published; nothing here retires them).
+  **Files** gains for W-2 only: *those exact 4 paths, each carrying the retirement's consistency edit and
+  nothing else.*
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-06 (Transitional compatibility and transferred closures of the 3.0 line) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-42, F-109, F-111, F-113, F-115, F-84, F-88 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.

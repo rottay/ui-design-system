@@ -818,6 +818,10 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | signature | `./icons#XCircleIcon` | removed vendor-named glyph (choose semantic Icon intent; retain explicit accessibility and supported props) (RET-01-D07) | major | `ret-01-icons-doors.md` |
 | signature | `./icons#XIcon` | removed vendor-named glyph (choose semantic Icon intent; retain explicit accessibility and supported props) (RET-01-D07) | major | `ret-01-icons-doors.md` |
 | signature | `./icons#ZapIcon` | removed vendor-named glyph (choose semantic Icon intent; retain explicit accessibility and supported props) (RET-01-D07) | major | `ret-01-icons-doors.md` |
+| signature | `./pictograms#FEATURE_PICTOGRAM_CORPUS` | loses the `candidate-evidence` and `event-moment` rows (zero consumers, WO-RET-06 W-2) | major | `ret-06-w2-vertical-pictograms.md` |
+| signature | `./pictograms#FEATURE_PICTOGRAM_NAMES` | loses `candidate-evidence` and `event-moment`; six shared names remain (zero consumers, WO-RET-06 W-2) | major | `ret-06-w2-vertical-pictograms.md` |
+| signature | `./pictograms#FeaturePictogramCorpusEntry` | `family` loses `bithire` and `evnto` (zero consumers, WO-RET-06 W-2) | major | `ret-06-w2-vertical-pictograms.md` |
+| signature | `./pictograms#FeaturePictogramName` | the union loses `candidate-evidence` and `event-moment`; no replacement (zero consumers, WO-RET-06 W-2) | major | `ret-06-w2-vertical-pictograms.md` |
 | signature | `./primitives/skeleton#Skeleton` | the same nine static members removed on the subpath export of the same declaration | major | `fam-14-anatomy-derived-skeleton.md` |
 | signature | `./primitives/switch#Switch` | the same alias on the subpath export | major | `fam-01-family-cut-pilot.md` |
 | signature | `./primitives/toggle#Toggle` | the Modern engine forwards its ref to the native switch; a busy toggle stays focusable | major | `fam-01-family-cut-pilot.md` |
