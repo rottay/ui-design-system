@@ -6585,6 +6585,11 @@
      "at": "2026-10-07 16:21",
      "by": "kimi-dt",
      "note": "2026-10-07 kimi-dt: W-1 INTEGRATED (5830a72e2; review b1b0eb21 ACCEPT). The ownership gate's --relocate-paths mode meets the R32 Q4 prerequisite verbatim (count conservation per (category,rule,anchor), the frozen digest invariant, every named refusal, dry-run default, --write explicit through the producer). Drill 25->40/40; the existing gate byte-identical; a real staged rename proven end to end. This unlocks W-7 (ownership-scope splits) and the F-99 renames. Rulings registered: M1 — before the first allowlisted-family move the mode names the allowlisted-key class explicitly (today it reads misleading kinds); the allowlist re-key lands first as a separate reviewed act (D7 stands). I3 — frozen files are refused even with no rows; an F-99 rename carrying classic/rustic siblings cannot use this mode."
+    },
+    {
+     "at": "2026-10-07 18:32",
+     "by": "kimi-dt",
+     "note": "2026-10-07 kimi-dt: W-2 INTEGRATED (479f034b5; review b1b0eb21 ACCEPT). The prepared first cut landed: change-key is the first owner of the kernel/ root (true rename, no shim); the spatial mode-event guard adopts changeKey (provably the same injective encoding — the changeset says 'same encoding, behaviour unchanged' per the review's L1). Census: testOnlyModules 5 -> 4, --assume-done 7 -> 6 by exactly the change-key row. Integration note: the build's prebuild caught the hooks contract stale (MANIFEST_STALE) — regenerated; the writer's gate list missed it, the system caught it (registered as a briefing lesson: mirror regens are confirmed by the build, not by the writer's list)."
     }
    ]
   },
