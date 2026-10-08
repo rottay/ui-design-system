@@ -103,6 +103,16 @@ describe('artifact-name-intersection drills — a tenant-only name fails closed'
     baseline.residual['--ds-chart-series-1'].identity = ' ';
     assert.match(evaluate(measure(ROOT), baseline).failures.join('\n'), /--ds-chart-series-1: adjudicated with no written identity/u);
   });
+
+  it('RED: a tenant-only name pinned with its ruling still owed', () => {
+    const dir = sandbox();
+    plant(dir, 'rottay', ':root { --ds-zz-owed: 1px; }');
+    const baseline = structuredClone(BASELINE);
+    baseline.residual['--ds-zz-owed'] = { declaredBy: ['rottay'], identity: 'x', ruledBy: 'OWED: pending' };
+    const { failures } = verdict(dir, baseline);
+    assert.equal(failures.length, 1);
+    assert.match(failures[0], /--ds-zz-owed: pinned in the residual but its ruling is owed/u);
+  });
 });
 
 describe('artifact-name-intersection drills — the threshold', () => {

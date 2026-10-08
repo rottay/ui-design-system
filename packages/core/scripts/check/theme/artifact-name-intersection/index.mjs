@@ -122,6 +122,9 @@ export function evaluate(result, baseline) {
         failures.push(`${name}: adjudicated with no written ${key}`);
       }
     }
+    if (typeof entry?.ruledBy === 'string' && entry.ruledBy.startsWith('OWED')) {
+      failures.push(`${name}: pinned in the residual but its ruling is owed — a name is adjudicated only once ruled`);
+    }
   }
 
   for (const [name, declaredBy] of Object.entries(result.nonShared)) {
