@@ -868,5 +868,39 @@ Lane-wide rules (binding on every WO):
   *those exact paths, each carrying the axis's retirement edit or the official regen and nothing else.*
   The `VerticalManifest.density` inline spelling (the structure law refuses the cross-layer import) is pinned
   identical to `DensityPosture` by the guard — the departure is registered, not hidden.
+- **AMENDMENT (2026-10-07, owner decision packet — dated dispositions D-A, D-B, D-C, D-E, D-F; the acceptance above stands, this is added to it)** —
+  Ratified by the owner's packet of 2026-10-07 (prompt text; the audit it cites is
+  `docs-engineering/archive/audits/2026-10-07/design-system/progress-and-owner-decisions-davila.md`). Each
+  disposition below is scoped exactly as ratified; nothing else of the pending set is approved.
+  - **D-A (the frozen group, 25 rows):** the frozen engines keep the enumerated behaviours for as long as they
+    ship — route (b) of the R32 Q4 acceptance. The counter stays published and decrease-only; the rows stop
+    naming this work order; the final authority is this disposition. The frozen behaviours are NOT made
+    productive, and no improvements are added to retire markers. The disposition lot (delete the 25 rows +
+    markers with documentation) follows in its own packet with the frozen-digest invariant intact.
+  - **D-B (the `Variant` family, 7 rows):** `variant` stays the canonical expression of the `secondary`/`gradient`
+    structural fills where the evidence demonstrates those fills. Scope documented; the parity tests stay.
+    `Variant` keeps its "leaves last" condition from the AM-1 v3 amendment; nothing here releases it early.
+  - **D-C (persisted data, 2 rows):** backward-compatible admission and reading of existing stored documents is
+    preserved. BrandMotion/materials are NOT narrowed without an authorized census or migration outside the DS
+    (step 4(ii) stays owner/ops). The editor's retirement (W-4) proves nothing about the DB. New authoring stays
+    governed by the catalog and permissions.
+  - **D-E (the `./pictograms` door + the feature-pictogram asset class):** the class is NOT retired to lower a
+    counter. It stays as an explicitly bounded LAB capability: owner = the DS graphics lane; measured support =
+    zero application consumers and the retired atlas-probe section (measured at W-2, `965241fa6`); review =
+    re-evaluated when a measured application consumer appears or the graphics lane retires the class by a
+    specific decision with its exact Files and the capability-preservation proof. The door's acceptance line
+    ("`subpath ./pictograms — removed`, only once another door exposes the pictogram facade or the showroom probe
+    is retired / F-113") is adapted by name: F-113 is met for the shared corpus (W-2); the door's retirement is
+    suspended under this disposition, and the census row keeps naming the disposition. No productive consumption
+    is invented; no app adoption is claimed.
+  - **D-F (F-84's literal closure):** the fiche's "un solo `Density*` type" is restated as **one type per axis**,
+    ratified: `DensityPosture` for the local posture axis, `DensityMode` for the persisted document decision,
+    keeping `normal` and the existing data. The word `recipe` is ratified as exactly one concept: the governed
+    presentation recipe. No persisted key is renamed and no data is migrated to reach a grep zero. The W-3a
+    guard's identity pins get a typecheck sentinel of their own (green without mutation, red with it), because
+    Vitest does not evaluate `expectTypeOf` — that sentinel is a named follow-up lot, and the pre-existing
+    `typecheck:tests` TS2339 keeps its own receiver (never silenced).
+  Explicitly NOT ratified by this packet: D-D and the remaining prior decisions, any phase opening, any
+  capability retirement beyond the named ones, and any publication/CI step.
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-06 (Transitional compatibility and transferred closures of the 3.0 line) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-42, F-109, F-111, F-113, F-115, F-84, F-88 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.

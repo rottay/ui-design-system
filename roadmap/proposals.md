@@ -1563,8 +1563,11 @@ owner approves 1:1.
   option buttons (3 occurrences / 2 rows: `69148303d141ac94f950`, `d5fe5add1f1fdf89a660`).
   Lawful shapes: (a) render hooks on Select (`optionRender`/`triggerRender`) inside the existing
   contract; (b) a standalone Listbox/Option primitive over the shared combobox kernel — larger,
-  and it would also re-evaluate the command-palette option-row exception. Status: OPEN, pending
-  owner review; the rows stay pinned in the ownership counter until ruled.
+  and it would also re-evaluate the command-palette option-row exception. **Status: APPROVED by the
+  owner's packet of 2026-10-07 in shape (a)** — extend the canonical Select with option/trigger
+  rendering AFTER a shared-contract debrief; NO second listbox; Select keeps keyboard, focus,
+  selection, textual-label search, disabled and ARIA; the locale-switcher contributes content,
+  `lang` and direction; customization causality is tested; no final identity design now.
 
 **Status** — APPROVED by the owner's decision packet of 2026-10-06 (this repo, recorded in the
 WO-EVI-02/WO-RET-01 trail). E-1: chrome-less variants OF the canonical primitives, never new raw
