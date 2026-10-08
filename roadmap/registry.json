@@ -6655,6 +6655,11 @@
      "at": "2026-10-08 11:18",
      "by": "codex-temporary-dt",
      "note": "Aclaración de H-Sb tras leer el registro completo: shell-header conserva8lecturas en HEAD y en CI, pero corpusDrift ya advierte que CI fija app-bithire 8abd05578 y usa los paths workflows antiguos. NO repath appFiles por separado: moverlas sin el pin produciría cero en CI. Recomendación simple del reviewer metadata queda HOLD en ese punto; receptor propuesto WO-GAT-12 requiere confirmar alcance/coordinar corpus pinned, sin editar apps ni claimsWIP. H-Sc tres disposiciones con heldBy RET01DONE se transfieren a RET04OPEN conservando verdict/registered/evidencia sin declarar ejecución; token command-home mantiene debrief de consumidor real/tenant scan antes de cualquier retiro. Esto no cambia W7a ACCEPT ni138/168."
+    },
+    {
+     "at": "2026-10-08 11:39",
+     "by": "codex-temporary-dt",
+     "note": "H-Sc INTEGRATED e28ac18a9: three dated dispositions heldBy DONE RET01 transferred to OPEN RET04 with exact6scalar diff/registered2026-10-07/verdictRETIRE/measurement/history preserved. Independent OpusAdmin d2ddd60c ACCEPT distinct writer1498df91; sourceSHA0387378c currentHEAD/index/physical1path/foreign10 pre+post guards. Root dated arm PASS72 verifiable receivers +2plantedreceiverunit tests188ms, no repeat/globalbuild. These3tokenretirements remainOPEN, not executed/WOdone/countshortcut;138/168 unchanged. Surface report input digest excludes dispositions, inspected canonicalgenerator; no unnecessary regeneration. Shell-header appFiles unchanged/HOLD pinnedCIcorpus coordination; command-home boundeddebrief goes independentreview before any synthetic reader or retirement; claimmissingdocs/foreigninputs unresolved. Evidence canonicalouter surface-dated-receivers/review report and rootdated/planted logs."
     }
    ]
   },
