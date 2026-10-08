@@ -6812,6 +6812,11 @@
      "at": "2026-10-08 08:34",
      "by": "codex-temporary-dt",
      "note": "D-B six evidenced component variant rows canonical INTEGRATED 7abec66fb with independent Claude Admin Opus whole-source review plus two-line delta ACCEPT; 13 exact SHA256-guarded paths, foreign10/index preserved. TS token/AST/runtime/type identity; ledger9->3/receipts4->0/map719->713 removes six dead notice-only entries, four real overflowCount fixture findings retained. Reused117Node/105Vitest/current3-row ledger present+absent PASS, correction2fixturetestsPASS; no repeated suites/build. Reviewer caught BadgeBaseProps not-public target and disclosed same missed D-A row: both phantom changeset rows deleted only, public BadgeProps inherited members remain. Public-target validation gap in contract-changeset goes to DT/core-contracts scoped instrument debrief before publication; current six D-B/nine D-A targets verified real. GenericVariant still deprecated, leaves-last terminal owner Q2 remains OPEN; two persisted rows untouched. External DS display-doc README receiver Q3 separate, no docs-engineering/apps edits. Not WO DONE or fresh dist/pack."
+    },
+    {
+     "at": "2026-10-08 19:50",
+     "by": "kimi-dt",
+     "note": "Q2 GenericVariant dated amendment integrated (7 paths): Variant SUPPORTED as the shared variant contract of Badge/Tag/Avatar (necessary public compat, NOT transitional; 7 literals unchanged; Tone stays guidance). @deprecated marker removed (type line token-identical), deprecations ledger row 3->2 (D-C rows byte-identical), notice-only codemod entry removed (map 713->712, pin 3->2), doc section replaced, patch changeset with one signature row .#Variant + supersession of the 4.0-removal and D-B open-disposition records (neither pending changeset edited). Amendment text in retire.md carries C1 supersedes/survives verbatim + the verbatim owner ruling. Independent reviews: amendment ACCEPT-with-C1 and implementation ACCEPT (6e120b05). Gates: deprecations 0 failures/2 rows both sibling modes, map+deprecations tests 100/100, contract-changeset OK, public-entrypoints OK. Does NOT close RET-06: D-C persisted rows, Q3 docs-engineering receiver and the contract-changeset public-target blind spot remain."
     }
    ]
   },
