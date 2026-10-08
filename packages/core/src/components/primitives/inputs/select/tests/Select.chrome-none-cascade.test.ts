@@ -15,7 +15,7 @@ const ROOT = ".ds-select-shell.ds-select-shell--modern[data-part='root']";
 const NEUTRALISER = `.ds-select-shell.ds-select-shell--modern select[data-part='trigger'][data-chrome='none'] {
   block-size: auto;
   padding-block: 0;
-  padding-inline: 0 calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
+  padding-inline: 0 calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
   background-color: transparent;
   background-image: none;
   border-width: 0;

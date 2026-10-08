@@ -87,7 +87,7 @@ describe("modern native Select: arrow clearance", () => {
     const clearance = declaration(ruleFor(SKIN, NATIVE_TRIGGER), "padding-inline-end");
     expect(inset).toBe("var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset))");
     expect(clearance).toBe(
-      `calc( ${inset} + var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )`,
+      `calc( ${inset} + var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )`,
     );
     expect(clearance).not.toMatch(LENGTH_LITERAL);
   });

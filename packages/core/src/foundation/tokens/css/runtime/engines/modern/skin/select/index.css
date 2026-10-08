@@ -78,8 +78,8 @@
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:not(:where([data-chrome='none'])) {
   background-image: none;
   padding-inline-end: calc(
-    var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size) +
-      var(--ds-select-trigger-gap, var(--ds-spacing-2))
+    var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) +
+      var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2))
   );
 }
 
@@ -345,7 +345,7 @@
 .ds-select-shell.ds-select-shell--modern select[data-part='trigger'][data-chrome='none'] {
   block-size: auto;
   padding-block: 0;
-  padding-inline: 0 calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
+  padding-inline: 0 calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
   background-color: transparent;
   background-image: none;
   border-width: 0;

@@ -425,8 +425,9 @@ const MUTATORS: Record<string, Mutators> = {
  *
  *  - `palette.dark-mode`: a MEASUREMENT bug, not a gap. The write moved the
  *    dark mode block all along, and `compileStatic` read the root block only.
- *    It now reads the mode blocks; `modes.dark.palette.primaryColor` moves 31
- *    (bithire) and 35 (evnto) dark-mode channels and 0 root channels.
+ *    It now reads the mode blocks; `modes.dark.palette.primaryColor` moved 31
+ *    (bithire) and 35 (evnto) dark-mode channels and 0 root channels then;
+ *    bithire moves 32 since W25-SENT B (see the re-measure on the drill).
  *  - `shape.button-style`: stale since WO-DER-03. `surfaces.buttonStyle: pill`
  *    moves the six button radii on all three verticals.
  *  - `experience.profile`: the explicit `expressive.profiles` keys outrank the
@@ -842,7 +843,15 @@ const DRAINED_STATIC_DRILLS: Readonly<Record<string, {
   readonly refusedOn?: Partial<Record<FirstParty, RegExp>>;
 }>> = {
   'palette.dark-mode': {
-    moves: { bithire: 31, evnto: 35 },
+    // Re-measured 2026-10-07 (W26 R-2): bithire 31 -> 32. The one entrant is
+    // `dark:--ds-tag-primary-outlined-ink`, first at ee00b3d95 (W25-SENT B):
+    // the tag deriver now derives the outlined ink per mode from the primary,
+    // stepping it toward the readable ink until it clears AA. bithire's dark
+    // primary fails AA on its grounds, so the ink is a derived hex that follows
+    // the primary (#6d8cef -> #ce813b under this write); evnto's clears, so the
+    // ink stays the `var(--ds-color-primary)` chain, emits no dark delta and
+    // holds at 35. Nothing left either set.
+    moves: { bithire: 32, evnto: 35 },
     anchors: ['dark:--ds-color-primary-500', 'dark:--ds-button-primary-bg-hover'],
     // REGISTERED, not fixed here: dark is rottay's default mode, so its door
     // refuses a `modes.dark` overlay, and the catalog keypath names only

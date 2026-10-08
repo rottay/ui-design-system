@@ -44,17 +44,17 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2665,
+    "filesScanned": 2663,
     "channels": 9266,
     "channelsDs": 8575,
     "channelsBridge": 691,
-    "channelsWithoutReaders": 199,
-    "channelsPaintsFalse": 945,
-    "channelsPaintsInModernFalse": 2022,
-    "readers": 46138,
+    "channelsWithoutReaders": 200,
+    "channelsPaintsFalse": 946,
+    "channelsPaintsInModernFalse": 2023,
+    "readers": 45877,
     "readersByPlane": {
-      "modern-skin-css": 16543,
-      "presentation-css": 12409,
+      "modern-skin-css": 16546,
+      "presentation-css": 12152,
       "foundation-css": 1743,
       "runtime-css": 197,
       "engines-shared-css": 23,
@@ -66,11 +66,11 @@
       "infrastructure-tsx": 20,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 8133
+      "ts-other": 8126
     },
     "channelsByPlane": {
       "modern-skin-css": 4908,
-      "presentation-css": 2501,
+      "presentation-css": 2500,
       "foundation-css": 778,
       "runtime-css": 80,
       "engines-shared-css": 22,
@@ -59421,20 +59421,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 26,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 45,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 35,
           "prop": "--ds-surface-card-shadow",
@@ -80799,13 +80785,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 295,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 533,
           "prop": "--ds-filter-pill-count-bg",
@@ -89861,90 +89840,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 24,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 219,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 280,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 311,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 326,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 339,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 360,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 367,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 402,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 415,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 424,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 434,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 26,
           "prop": "--ds-surface-card-border",
@@ -91360,14 +91255,14 @@
         {
           "plane": "ts-other",
           "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 67,
+          "line": 27,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 76,
+          "line": 36,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -92600,69 +92495,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css",
           "line": 192,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 496,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 540,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 561,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 578,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 614,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 635,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 652,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 681,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 744,
           "prop": "border",
           "scalars": []
         },
@@ -94313,13 +94145,6 @@
           "file": "src/foundation/tokens/css/presentation/components/meter/index.css",
           "line": 46,
           "prop": "--_ds-meter-track-bg",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 43,
-          "prop": "border",
           "scalars": []
         },
         {
@@ -97461,27 +97286,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 190,
-          "prop": "border-bottom",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 195,
-          "prop": "border-top",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 204,
-          "prop": "border-top",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 32,
           "prop": "--ds-surface-card-border-soft",
@@ -98288,14 +98092,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 6,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 40,
+          "line": 7,
           "prop": "border",
           "scalars": []
         },
@@ -100589,20 +100386,6 @@
           "file": "src/foundation/tokens/css/presentation/components/meter/index.css",
           "line": 261,
           "prop": "--_meter-fill",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 338,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 343,
-          "prop": "background",
           "scalars": []
         },
         {
@@ -119057,230 +118840,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 234,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 247,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 260,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 264,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 270,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 279,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 294,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 300,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 310,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 363,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 378,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 401,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 406,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 414,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 423,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 433,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 455,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 519,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 525,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 594,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 602,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 613,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 618,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 643,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 648,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 651,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 680,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 684,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 692,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 735,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 770,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 782,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 95,
           "prop": "--ds-control-brand-tint",
@@ -123657,7 +123216,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 77,
+          "line": 37,
           "prop": "borderTopColor",
           "scalars": []
         },
@@ -132706,76 +132265,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 325,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 330,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 481,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 483,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 539,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 544,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 560,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 565,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 743,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 748,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 590,
           "prop": "--ds-meter-fill-success",
@@ -136787,20 +136276,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 100,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 181,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/semantic-surface/index.css",
           "line": 57,
           "prop": "--_surface-foreground-disabled",
@@ -140237,7 +139712,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 94,
+          "line": 54,
           "prop": "color",
           "scalars": []
         },
@@ -144946,48 +144421,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 211,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 369,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 454,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 518,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 593,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 734,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 43,
           "prop": "--ds-surface-card-color",
@@ -147735,13 +147168,6 @@
           "file": "src/components/patterns/data/list-toolbar/foundation/tokens/index.ts",
           "line": 47,
           "prop": "inline-expr",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 29,
-          "prop": "color",
           "scalars": []
         },
         {
@@ -155089,34 +154515,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 495,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 500,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 577,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 582,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 382,
           "prop": "--ds-metric-card-meter-fill-warning",
@@ -161032,13 +160430,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 38,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2870,
           "prop": "background-image",
@@ -161178,13 +160569,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 39,
-          "prop": "background-size",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2871,
           "prop": "background-size",
@@ -161204,20 +160588,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 842,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 864,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -161262,20 +160632,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 844,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 866,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2607,
           "prop": "box-shadow",
@@ -161316,13 +160672,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 848,
-          "prop": "box-shadow",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -161508,20 +160857,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 443,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 803,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3267,
           "prop": "background",
@@ -161578,20 +160913,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 440,
-          "prop": "padding",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 801,
-          "prop": "padding",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3264,
           "prop": "padding",
@@ -161618,55 +160939,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 473,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 663,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 674,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 703,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 764,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 776,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 888,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -161718,34 +160990,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 472,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 662,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 701,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 886,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3296,
           "prop": "border",
@@ -161788,13 +161032,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 721,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3544,
           "prop": "background",
@@ -161814,34 +161051,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 523,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 720,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 768,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 780,
-          "prop": "border-color",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -161978,20 +161187,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 452,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 822,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3276,
           "prop": "background",
@@ -162020,20 +161215,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 467,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 832,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3291,
           "prop": "background",
@@ -162060,20 +161241,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 466,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 830,
-          "prop": "border",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -162153,13 +161320,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 754,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3577,
           "prop": "background",
@@ -162181,13 +161341,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 758,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3581,
           "prop": "background",
@@ -162207,27 +161360,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 516,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 605,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 626,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -162257,27 +161389,10 @@
       "declaredIn": [
         "src/foundation/tokens/css/presentation/components/patterns/index.css"
       ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 690,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 881,
-          "prop": "background",
-          "scalars": []
-        }
-      ]
+      "planes": [],
+      "paints": false,
+      "paintsInModern": false,
+      "readers": []
     },
     {
       "channel": "--ds-command-home-panel-border",
@@ -162292,34 +161407,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 441,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 802,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 813,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 880,
-          "prop": "border-color",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -162376,83 +161463,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 450,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 507,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 514,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 589,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 599,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 625,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 672,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 689,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 730,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 763,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 775,
-          "prop": "border",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -162560,20 +161570,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 444,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 805,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3268,
           "prop": "box-shadow",
@@ -162600,34 +161596,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 509,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 591,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 732,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 815,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -198261,13 +197229,6 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 8,
-          "prop": "boxShadow",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
           "file": "src/components/primitives/display/card/contracts/index.ts",
           "line": 487,
           "prop": "md",
@@ -199871,7 +198832,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 158,
+          "line": 152,
           "prop": "padding",
           "scalars": []
         },
@@ -230785,6 +229746,14 @@
         },
         {
           "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+          "line": 802,
+          "prop": "padding-inline-end",
+          "decl": "padding-inline-end: calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown/index.css",
           "line": 185,
           "prop": "grid-template-columns",
@@ -230830,6 +229799,22 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/notifier/index.css",
           "line": 269,
           "prop": "block-size",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
+          "line": 82,
+          "prop": "padding-inline-end",
+          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
+          "line": 348,
+          "prop": "padding-inline",
+          "decl": "padding-inline: 0 calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
           "scalars": []
         },
         {
@@ -231066,13 +230051,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 209,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3033,
           "prop": "background",
@@ -231092,13 +230070,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 208,
-          "prop": "border",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -258191,20 +257162,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 99,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 180,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/select/index.css",
           "line": 147,
           "prop": "--ds-select-option-color-disabled",
@@ -260731,13 +259688,6 @@
           "file": "src/foundation/tokens/css/presentation/components/input/index.css",
           "line": 91,
           "prop": "--ds-input-border-color-hover",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 136,
-          "prop": "border-color",
           "scalars": []
         },
         {
@@ -264390,13 +263340,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css",
           "line": 128,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 122,
           "prop": "border-color",
           "scalars": []
         },
@@ -270655,13 +269598,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 374,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -290399,13 +289335,6 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 28,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
           "file": "src/components/patterns/foundation/motion/transition/index.ts",
           "line": 2,
           "prop": "inline-expr",
@@ -295808,7 +294737,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 79,
+          "line": 39,
           "prop": "animation",
           "scalars": []
         },
@@ -311862,20 +310791,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 80,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 162,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2912,
           "prop": "border-color",
@@ -311903,27 +310818,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 50,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 144,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 149,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -312178,20 +311072,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 81,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 161,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2913,
           "prop": "background",
@@ -312218,20 +311098,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 103,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 184,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -312261,13 +311127,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 155,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -312303,20 +311162,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 90,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 172,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -312375,27 +311220,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 49,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 143,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 150,
-          "prop": "border",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -312630,27 +311454,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 70,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 156,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 167,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 235,
           "prop": "--ds-rich-card-border-hover",
@@ -312827,20 +311630,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 102,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 183,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2930,
           "prop": "border-color",
@@ -312868,13 +311657,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 203,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -313195,13 +311977,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 189,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -313835,13 +312610,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 199,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3023,
           "prop": "background",
@@ -313861,13 +312629,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 194,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -313890,20 +312651,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 89,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 173,
-          "prop": "border-color",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -313984,13 +312731,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 168,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 237,
           "prop": "--ds-rich-card-ring-selected",
@@ -314067,27 +312807,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 52,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 145,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 151,
-          "prop": "box-shadow",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -314223,20 +312942,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 82,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 163,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2914,
           "prop": "box-shadow",
@@ -314264,20 +312969,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 71,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 157,
-          "prop": "box-shadow",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -314413,20 +313104,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 91,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 174,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2923,
           "prop": "box-shadow",
@@ -314454,13 +313131,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 59,
-          "prop": "background-image",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -314723,13 +313393,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 58,
-          "prop": "background-image",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -316022,7 +314685,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 174,
+          "line": 168,
           "prop": "background-color",
           "scalars": []
         },
@@ -316085,7 +314748,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 173,
+          "line": 167,
           "prop": "border-color",
           "scalars": []
         },
@@ -316135,7 +314798,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 172,
+          "line": 166,
           "prop": "border-radius",
           "scalars": []
         },
@@ -316454,7 +315117,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 179,
+          "line": 173,
           "prop": "background-color",
           "scalars": []
         }
@@ -316482,7 +315145,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 178,
+          "line": 172,
           "prop": "opacity",
           "scalars": []
         }
@@ -316945,7 +315608,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 183,
+          "line": 177,
           "prop": "opacity",
           "scalars": []
         },
@@ -317168,7 +315831,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 187,
+          "line": 181,
           "prop": "opacity",
           "scalars": []
         },
@@ -323626,14 +322289,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 7,
-          "prop": "borderRadius",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 39,
+          "line": 6,
           "prop": "borderRadius",
           "scalars": []
         },
@@ -325512,13 +324168,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 673,
-          "prop": "border-radius",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 449,
           "prop": "--ds-compact-card-radius",
@@ -326834,13 +325483,6 @@
           "plane": "ts-other",
           "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
           "line": 25,
-          "prop": "borderRadius",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
-          "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 65,
           "prop": "borderRadius",
           "scalars": []
         },
@@ -329087,41 +327729,6 @@
           "file": "src/foundation/tokens/css/presentation/components/input/index.css",
           "line": 175,
           "prop": "--ds-input-affix-radius",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 487,
-          "prop": "border-radius",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 702,
-          "prop": "border-radius",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 831,
-          "prop": "border-radius",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 875,
-          "prop": "border-radius",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 887,
-          "prop": "border-radius",
           "scalars": []
         },
         {
@@ -343087,15 +341694,15 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
           "line": 802,
           "prop": "padding-inline-end",
-          "decl": "padding-inline-end: calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
+          "decl": "padding-inline-end: calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
-          "line": 81,
+          "line": 82,
           "prop": "padding-inline-end",
-          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
+          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
           "scalars": []
         },
         {
@@ -343103,7 +341710,7 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
           "line": 348,
           "prop": "padding-inline",
-          "decl": "padding-inline: 0 calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
+          "decl": "padding-inline: 0 calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
           "scalars": []
         },
         {
@@ -345606,7 +344213,7 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
           "line": 81,
           "prop": "padding-inline-end",
-          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
+          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
           "scalars": []
         },
         {
@@ -347944,7 +346551,7 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
           "line": 802,
           "prop": "padding-inline-end",
-          "decl": "padding-inline-end: calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
+          "decl": "padding-inline-end: calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
           "scalars": []
         },
         {
@@ -347959,7 +346566,7 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
           "line": 82,
           "prop": "padding-inline-end",
-          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
+          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
           "scalars": []
         },
         {
@@ -347967,7 +346574,7 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
           "line": 348,
           "prop": "padding-inline",
-          "decl": "padding-inline: 0 calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
+          "decl": "padding-inline: 0 calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
           "scalars": []
         }
       ]
@@ -348355,7 +346962,7 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
           "line": 81,
           "prop": "padding-inline-end",
-          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
+          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
           "scalars": []
         },
         {
@@ -349883,13 +348490,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css",
           "line": 391,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 426,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -352527,13 +351127,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css",
           "line": 130,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 636,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -357486,118 +356079,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 234,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 247,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 260,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 264,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 270,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 279,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 294,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 300,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 310,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 363,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 378,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 401,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 406,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 414,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 423,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 433,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 252,
           "prop": "--ds-premium-card-accent",
@@ -358863,20 +357344,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 417,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 426,
-          "prop": "box-shadow",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -367678,7 +366145,7 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
           "line": 802,
           "prop": "padding-inline-end",
-          "decl": "padding-inline-end: calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
+          "decl": "padding-inline-end: calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
           "scalars": []
         },
         {
@@ -368834,7 +367301,7 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
           "line": 82,
           "prop": "padding-inline-end",
-          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
+          "decl": "padding-inline-end: calc( var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)) )",
           "scalars": []
         },
         {
@@ -368849,7 +367316,7 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select/index.css",
           "line": 348,
           "prop": "padding-inline",
-          "decl": "padding-inline: 0 calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
+          "decl": "padding-inline: 0 calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)))",
           "scalars": []
         },
         {
@@ -397021,13 +395488,6 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/components/patterns/foundation/engine-styles/modern/index.ts",
-          "line": 38,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "ts-other",
           "file": "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
           "line": 373,
           "prop": "--ds-page-header-bg",
@@ -397651,118 +396111,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/widget-board/index.css",
           "line": 123,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 289,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 316,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 319,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 331,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 344,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 370,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 407,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 445,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 456,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 501,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 545,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 566,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 583,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 619,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 642,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 749,
           "prop": "background",
           "scalars": []
         },
@@ -399808,27 +398156,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 59,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 115,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 223,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2891,
           "prop": "background-image",
@@ -399928,20 +398255,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css",
           "line": 467,
-          "prop": "background-size",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 61,
-          "prop": "background-size",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 117,
           "prop": "background-size",
           "scalars": []
         },
@@ -400515,13 +398828,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 130,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2958,
           "prop": "background",
@@ -400541,20 +398847,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 129,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 137,
-          "prop": "border-color",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -400606,13 +398898,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 139,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2967,
           "prop": "box-shadow",
@@ -400632,13 +398917,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 131,
-          "prop": "box-shadow",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -401092,13 +399370,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 227,
-          "prop": "background-image",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 156,
           "prop": "--ds-shell-shimmer-faint",
@@ -401133,13 +399404,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 387,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -403827,20 +402091,6 @@
         },
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 109,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 315,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 106,
           "prop": "--ds-surface-hero-bg",
@@ -404464,20 +402714,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 108,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 123,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2936,
           "prop": "border",
@@ -404527,13 +402763,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 125,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2953,
           "prop": "box-shadow",
@@ -404555,13 +402784,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 110,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2938,
           "prop": "box-shadow",
@@ -404581,13 +402803,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 114,
-          "prop": "background-image",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -416967,7 +415182,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 159,
+          "line": 153,
           "prop": "color",
           "scalars": []
         }
@@ -438308,7 +436523,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 130,
+          "line": 124,
           "prop": "transition",
           "scalars": []
         },
@@ -438676,7 +436891,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 123,
+          "line": 117,
           "prop": "background-color",
           "scalars": []
         }
@@ -439295,7 +437510,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 134,
+          "line": 128,
           "prop": "background-color",
           "scalars": []
         }
@@ -439367,7 +437582,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
-          "line": 129,
+          "line": 123,
           "prop": "color",
           "scalars": []
         }
@@ -454051,13 +452266,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 34,
-          "prop": "padding",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2866,
           "prop": "padding",
@@ -454077,13 +452285,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 44,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -454133,13 +452334,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 25,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 2857,
           "prop": "background",
@@ -454164,13 +452358,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 24,
-          "prop": "border",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
@@ -454379,13 +452566,6 @@
       "readers": [
         {
           "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 30,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 812,
           "prop": "--ds-command-home-console-bg",
@@ -454462,13 +452642,6 @@
       "paints": true,
       "paintsInModern": true,
       "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
-          "line": 26,
-          "prop": "box-shadow",
-          "scalars": []
-        },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",

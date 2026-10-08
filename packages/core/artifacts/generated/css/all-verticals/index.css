@@ -26726,7 +26726,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern .ds-data-table__editor-control.ds-select-shell--modern > select[data-chrome='none'] {
   padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
-  padding-inline-end: calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
+  padding-inline-end: calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
   background: var(--ds-surface-card);
   color: var(--ds-color-text-primary);
   border: 1.5px solid var(--ds-color-primary);
@@ -38073,8 +38073,8 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:not(:where([data-chrome='none'])) {
   background-image: none;
   padding-inline-end: calc(
-    var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) + var(--ds-select-arrow-size) +
-      var(--ds-select-trigger-gap, var(--ds-spacing-2))
+    var(--ds-select-trigger-responsive-padding-x, var(--ds-select-native-arrow-inset)) +
+      var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2))
   );
 }
 
@@ -38340,7 +38340,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 .ds-select-shell.ds-select-shell--modern select[data-part='trigger'][data-chrome='none'] {
   block-size: auto;
   padding-block: 0;
-  padding-inline: 0 calc(var(--ds-select-arrow-size) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
+  padding-inline: 0 calc(var(--ds-select-arrow-size, var(--ds-icon-sm-size)) + var(--ds-select-trigger-gap, var(--ds-spacing-2)));
   background-color: transparent;
   background-image: none;
   border-width: 0;
