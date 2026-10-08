@@ -18,8 +18,10 @@ import {
   CHROME_EMITTER_FILES,
   chromeEmitterClosure,
   chromeEmitterInventory,
+  chromeEmitterRoleViolations,
   chromeEmitterSources,
   dataOnlyViolations,
+  writerViolations,
 } from '../index.mjs';
 
 const CORE_ROOT = packageRoot(dirname(fileURLToPath(import.meta.url)));
@@ -29,9 +31,12 @@ import { applyRadiusDial } from "@/foundation/kernel/geometry/radius-dial";
 
 import { DRILL_CHROME_VARIABLES } from "./tables";
 
+import { setDrillVars } from "./writers";
+
 export function chromeToVariables(chrome: BrandChrome): Record<string, string> {
   const vars: Record<string, string> = {};
   for (const [field, name] of Object.entries(DRILL_CHROME_VARIABLES)) vars[name] = String(applyRadiusDial(field));
+  setDrillVars(vars, chrome);
   return vars;
 }
 `;
@@ -60,11 +65,21 @@ export const DRILL_CHROME_VARIABLES = {
 } as const satisfies Readonly<Record<string, unknown>>;
 `;
 
+const WRITERS_SOURCE = `import type { BrandChrome } from "@/foundation/contracts/composition/tenants/themes";
+
+function setDrillVars(vars: Record<string, string>, chrome: BrandChrome): void {
+  if (chrome) vars["--ds-drill-writer"] = "1";
+}
+
+export { setDrillVars };
+`;
+
 function plant(overrides = {}) {
   const core = mkdtempSync(join(tmpdir(), 'chrome-emitter-drill-'));
   const files = {
     [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_SOURCE,
     [`${CHROME_EMITTER_DIR}/tables/index.ts`]: TABLES_SOURCE,
+    [`${CHROME_EMITTER_DIR}/writers/index.ts`]: WRITERS_SOURCE,
     [`${CHROME_EMITTER_DIR}/tests/frozen.test.ts`]: 'import { chromeToVariables } from "..";\n',
     'src/foundation/kernel/geometry/radius-dial/index.ts': 'export const applyRadiusDial = (value: string) => value;\n',
     ...overrides,
@@ -80,26 +95,27 @@ function plant(overrides = {}) {
 
 const emitterDir = (core) => join(core, CHROME_EMITTER_DIR);
 
-test('the shipped emitter is exactly its two declared members, root first', () => {
+test('the shipped emitter is exactly its three declared members, root first', () => {
   assert.deepEqual(
     CHROME_EMITTER_FILES.map((entry) => `${entry.role}:${entry.path}`),
-    ['root:index.ts', 'data:tables/index.ts'],
+    ['root:index.ts', 'data:tables/index.ts', 'writer:writers/index.ts'],
   );
   assert.deepEqual(
     chromeEmitterSources(CORE_ROOT),
     CHROME_EMITTER_FILES.map((entry) => join(CORE_ROOT, CHROME_EMITTER_DIR, entry.path)),
   );
-  assert.deepEqual(chromeEmitterClosure(CORE_ROOT), ['index.ts', 'tables/index.ts']);
-  assert.deepEqual(chromeEmitterInventory(emitterDir(CORE_ROOT)), ['index.ts', 'tables/index.ts']);
+  assert.deepEqual(chromeEmitterClosure(CORE_ROOT), ['index.ts', 'tables/index.ts', 'writers/index.ts']);
+  assert.deepEqual(chromeEmitterInventory(emitterDir(CORE_ROOT)), ['index.ts', 'tables/index.ts', 'writers/index.ts']);
   const tables = join(CORE_ROOT, CHROME_EMITTER_DIR, 'tables/index.ts');
   assert.deepEqual(dataOnlyViolations(tables, readFileSync(tables, 'utf8')), []);
 });
 
-test('a planted two-member emitter is admitted', () => {
+test('a planted three-member emitter is admitted', () => {
   const core = plant();
   assert.deepEqual(chromeEmitterSources(core), [
     join(emitterDir(core), 'index.ts'),
     join(emitterDir(core), 'tables/index.ts'),
+    join(emitterDir(core), 'writers/index.ts'),
   ]);
 });
 
@@ -120,10 +136,10 @@ test('a declared member the root does not import is refused (the one-member tree
 
 test('a new undeclared import inside the folder is refused', () => {
   const core = plant({
-    [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import { WRITER } from "./writers";\n`,
-    [`${CHROME_EMITTER_DIR}/writers/index.ts`]: 'export const WRITER = { a: "--ds-writer" } as const;\n',
+    [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import { UNDECLARED } from "./undeclared";\n`,
+    [`${CHROME_EMITTER_DIR}/undeclared/index.ts`]: 'export const UNDECLARED = { a: "--ds-undeclared" } as const;\n',
   });
-  assert.throws(() => chromeEmitterSources(core), /undeclared writers\/index\.ts is imported by the root/);
+  assert.throws(() => chromeEmitterSources(core), /undeclared undeclared\/index\.ts is imported by the root/);
 });
 
 test('an import that resolves to no file inside the folder is refused', () => {
@@ -160,8 +176,8 @@ test('the @/ alias resolves to the same member as the relative specifier', () =>
       `"@/${CHROME_EMITTER_DIR.slice('src/'.length)}/tables"`,
     ),
   });
-  assert.deepEqual(chromeEmitterClosure(core), ['index.ts', 'tables/index.ts']);
-  assert.equal(chromeEmitterSources(core).length, 2);
+  assert.deepEqual(chromeEmitterClosure(core), ['index.ts', 'tables/index.ts', 'writers/index.ts']);
+  assert.equal(chromeEmitterSources(core).length, 3);
 });
 
 test('re-exports and dynamic imports are value edges', () => {
@@ -176,9 +192,9 @@ test('tests/ is neither inventory nor an edge', () => {
     [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import { helper } from "./tests/helper";\n`,
     [`${CHROME_EMITTER_DIR}/tests/helper/index.ts`]: 'export const helper = 1;\n',
   });
-  assert.deepEqual(chromeEmitterInventory(emitterDir(core)), ['index.ts', 'tables/index.ts']);
-  assert.deepEqual(chromeEmitterClosure(core), ['index.ts', 'tables/index.ts']);
-  assert.equal(chromeEmitterSources(core).length, 2);
+  assert.deepEqual(chromeEmitterInventory(emitterDir(core)), ['index.ts', 'tables/index.ts', 'writers/index.ts']);
+  assert.deepEqual(chromeEmitterClosure(core), ['index.ts', 'tables/index.ts', 'writers/index.ts']);
+  assert.equal(chromeEmitterSources(core).length, 3);
 });
 
 test('an import that leaves the folder (radius-dial) is not a member', () => {
@@ -216,7 +232,7 @@ test('the root is not held to the data grammar: writers live there', () => {
   const core = plant({
     [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}function setExtraVars(vars: Record<string, string>) { vars["--ds-extra"] = "1"; }\n`,
   });
-  assert.equal(chromeEmitterSources(core).length, 2);
+  assert.equal(chromeEmitterSources(core).length, 3);
 });
 
 test('the canonical API has no member override: extra options cannot change the authority', () => {
@@ -228,7 +244,7 @@ test('the canonical API has no member override: extra options cannot change the 
   const elsewhere = plant({ [`${CHROME_EMITTER_DIR}/orphan/index.ts`]: 'export const ORPHAN = ["--ds-orphan"] as const;\n' });
   assert.deepEqual(
     chromeEmitterSources(valid, { files: [{ path: 'orphan/index.ts', role: 'root' }], emitterDir: emitterDir(elsewhere) }),
-    [join(emitterDir(valid), 'index.ts'), join(emitterDir(valid), 'tables/index.ts')],
+    [join(emitterDir(valid), 'index.ts'), join(emitterDir(valid), 'tables/index.ts'), join(emitterDir(valid), 'writers/index.ts')],
   );
 });
 
@@ -281,6 +297,136 @@ test('whitespace inside a helper literal is significant; formatting outside lite
     assert.notEqual(helper, shipped, label);
     assert.match(dataOnlyViolations('tables.ts', `${header}${helper}`).join(' '), /chromeVariableMap/, label);
     const core = plant({ [`${CHROME_EMITTER_DIR}/tables/index.ts`]: TABLES_SOURCE.replace(shipped, helper) });
+    assert.throws(() => chromeEmitterSources(core), /data member tables\/index\.ts is not data only/, label);
+  }
+});
+
+/* ── the writer role ─────────────────────────────────────────────────────── */
+
+const W = `${CHROME_EMITTER_DIR}/writers/index.ts`;
+const WRITER_HEAD = `import type { BrandChrome } from "@/foundation/contracts/composition/tenants/themes";
+`;
+const writerOf = (body, exportList = 'setDrillVars') => `${WRITER_HEAD}\n${body}\nexport { ${exportList} };\n`;
+const DRILL_WRITER = 'function setDrillVars(vars: Record<string, string>, chrome: BrandChrome): void {\n  if (chrome) vars["--ds-drill-writer"] = "1";\n}\n';
+
+test('the shipped writer member is admitted by the writer grammar', () => {
+  const file = join(CORE_ROOT, CHROME_EMITTER_DIR, 'writers/index.ts');
+  assert.deepEqual(writerViolations(file, readFileSync(file, 'utf8')), []);
+});
+
+test('the role list is closed: exactly one member per role', () => {
+  assert.deepEqual(chromeEmitterRoleViolations(CHROME_EMITTER_FILES), []);
+  const cases = {
+    'two writers': [...CHROME_EMITTER_FILES, { path: 'writers2/index.ts', role: 'writer' }],
+    'role typo': [CHROME_EMITTER_FILES[0], CHROME_EMITTER_FILES[1], { path: 'writers/index.ts', role: 'writter' }],
+    'no data member': [CHROME_EMITTER_FILES[0], CHROME_EMITTER_FILES[2]],
+  };
+  for (const [label, files] of Object.entries(cases)) assert.notDeepEqual(chromeEmitterRoleViolations(files), [], label);
+});
+
+test('a second writer member is undeclared and refused', () => {
+  const core = plant({
+    [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import { setOtherVars } from "./writers2";\n`,
+    [`${CHROME_EMITTER_DIR}/writers2/index.ts`]: writerOf('function setOtherVars(vars: Record<string, string>): void {\n  vars["--ds-other"] = "1";\n}\n', 'setOtherVars'),
+  });
+  assert.throws(() => chromeEmitterSources(core), /undeclared writers2\/index\.ts is imported by the root/);
+});
+
+test('every shape outside the writer grammar is refused', () => {
+  const mutants = {
+    'writer imports the root': `import { chromeToVariables } from "..";\n${writerOf(DRILL_WRITER)}`,
+    'writer imports radius-dial': `import { applyRadiusDial } from "@/foundation/kernel/geometry/radius-dial";\n${writerOf(DRILL_WRITER)}`,
+    'const table in a writer': writerOf(`const LOCAL_VARIABLES = { a: "--ds-local" } as const;\n${DRILL_WRITER}`),
+    'second helper in a writer': writerOf(`const chromeVariableMap = (fields: unknown) => fields;\n${DRILL_WRITER}`),
+    'function named chromeVariableMap': writerOf(`function chromeVariableMap(fields: unknown) { return fields; }\n${DRILL_WRITER}`, 'setDrillVars, chromeVariableMap'),
+    'private non-exported writer': writerOf(`${DRILL_WRITER}function setHiddenVars(vars: Record<string, string>): void {\n  vars["--ds-hidden"] = "1";\n}\n`),
+    'export list names a missing writer': writerOf(DRILL_WRITER, 'setDrillVars, setGhostVars'),
+    'aliased export': writerOf(DRILL_WRITER, 'setDrillVars as setAliasVars'),
+    'inline export function': `${WRITER_HEAD}\nexport ${DRILL_WRITER}`,
+    'default export': `${WRITER_HEAD}\n${DRILL_WRITER}\nexport default setDrillVars;\n`,
+    're-export': `${writerOf(DRILL_WRITER)}export type { BrandChrome } from "@/foundation/contracts/composition/tenants/themes";\n`,
+    'export list not trailing': `${WRITER_HEAD}\nexport { setDrillVars };\n${DRILL_WRITER}`,
+    'expression statement': writerOf(`${DRILL_WRITER}console.log("--ds-x");\n`),
+    'class': writerOf(`${DRILL_WRITER}class Writer {}\n`),
+    'enum': writerOf(`${DRILL_WRITER}enum Mode { A }\n`),
+    'async writer': writerOf('async function setDrillVars(vars: Record<string, string>): Promise<void> {\n  vars["--ds-x"] = "1";\n}\n'),
+    'writer calls writer': writerOf(`${DRILL_WRITER}function setMoreVars(vars: Record<string, string>, chrome: BrandChrome): void {\n  setDrillVars(vars, chrome);\n}\n`, 'setDrillVars, setMoreVars'),
+    'template channel key': writerOf('function setDrillVars(vars: Record<string, string>, prefix: string): void {\n  vars[`--ds-${prefix}-bg`] = "1";\n}\n'),
+    'template key without substitution': writerOf('function setDrillVars(vars: Record<string, string>): void {\n  vars[`--ds-drill-bg`] = "1";\n}\n'),
+  };
+  for (const [label, text] of Object.entries(mutants)) {
+    const core = plant({ [W]: text });
+    assert.throws(() => chromeEmitterSources(core), /writer member writers\/index\.ts is not a writer/, label);
+  }
+});
+
+test('a writer value-imports nothing, not even the data member (sibling-owner-dependency); a type-only import is not an edge', () => {
+  const dataImport = 'import { DRILL_CHROME_VARIABLES } from "../tables";\n';
+  for (const specifier of ['"../tables"', `"@/${CHROME_EMITTER_DIR.slice('src/'.length)}/tables"`]) {
+    const text = `${dataImport.replace('"../tables"', specifier)}${WRITERS_SOURCE}`;
+    assert.match(writerViolations('writers.ts', text).join(' '), /value import of .* \(sibling-owner-dependency\)/, specifier);
+    const core = plant({ [W]: text });
+    assert.throws(() => chromeEmitterSources(core), /writer member writers\/index\.ts is not a writer: :1 value import of .* \(sibling-owner-dependency\)/, specifier);
+  }
+  const typeOnly = plant({
+    [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_SOURCE.replace('import { DRILL_CHROME_VARIABLES } from "./tables";\n', ''),
+    [W]: 'import type { DRILL_CHROME_VARIABLES } from "../tables";\n\nfunction setDrillVars(vars: Record<string, string>): void {\n  vars["--ds-drill"] = "1";\n}\n\nexport { setDrillVars };\n',
+  });
+  assert.deepEqual(chromeEmitterClosure(typeOnly), ['index.ts', 'writers/index.ts']);
+  assert.throws(() => chromeEmitterSources(typeOnly), /declared tables\/index\.ts is not imported by the root/);
+});
+
+test('the root must import exactly the exported writers and may not shadow one', () => {
+  const dead = plant({
+    [W]: writerOf(`${DRILL_WRITER}function setSpareVars(vars: Record<string, string>): void {\n  vars["--ds-spare"] = "1";\n}\n`, 'setDrillVars, setSpareVars'),
+  });
+  assert.throws(() => chromeEmitterSources(dead), /the root imports \[setDrillVars\] from the writer, not its writers \[setDrillVars, setSpareVars\]/);
+  const shadow = plant({
+    [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}function setDrillVars(vars: Record<string, string>): void {\n  vars["--ds-shadow"] = "1";\n}\n`,
+  });
+  assert.throws(() => chromeEmitterSources(shadow), /the root shadows writer setDrillVars/);
+  const namespace = plant({ [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_SOURCE.replace('import { setDrillVars } from "./writers";', 'import * as writers from "./writers";\nconst setDrillVars = writers.setDrillVars;') });
+  assert.throws(() => chromeEmitterSources(namespace), /the root imports \[<non-named import>\] from the writer/);
+});
+
+test('a writer planted in the data member, or a data member importing writers, is refused', () => {
+  const shippedWriters = readFileSync(join(CORE_ROOT, CHROME_EMITTER_DIR, 'writers/index.ts'), 'utf8');
+  const shippedWriter = shippedWriters.match(/function setSurfaceChromeVars\([\s\S]*?\n}\n/)[0];
+  assert.match(dataOnlyViolations('tables.ts', `${TABLES_SOURCE}${shippedWriter}`).join(' '), /FunctionDeclaration/);
+  const writerInData = plant({ [`${CHROME_EMITTER_DIR}/tables/index.ts`]: `${TABLES_SOURCE}${shippedWriter}` });
+  assert.throws(() => chromeEmitterSources(writerInData), /data member tables\/index\.ts is not data only/);
+  const dataImportsWriters = plant({ [`${CHROME_EMITTER_DIR}/tables/index.ts`]: `import { setDrillVars } from "../writers";\n${TABLES_SOURCE}` });
+  assert.throws(() => chromeEmitterSources(dataImportsWriters), /data member tables\/index\.ts is not data only: :1 value import/);
+});
+
+/* ── a bare identifier is data only as an earlier const of the same member ── */
+
+test('an identifier is data only when it names an earlier admitted const of the same member', () => {
+  const header = 'import type { BrandDrillChrome, BRAND_TYPE_ONLY } from "@/foundation/contracts/composition/tenants/themes";\n';
+  const helper = TABLES_SOURCE.match(/const chromeVariableMap[\s\S]*?as Readonly<Record<keyof T, string>>;\n/)[0];
+  assert.deepEqual(
+    dataOnlyViolations('tables.ts', `${header}${helper}const PREFIX = "--ds-drill-";\nconst FIELDS = ["bg"] as const;\nconst A = { bg: "--ds-a" } as const;\nconst LIST = [["a", A]] as const;\nconst MAPPED = chromeVariableMap<BrandDrillChrome>(PREFIX, FIELDS);\n`),
+    [],
+  );
+  const refused = {
+    globalThis: 'const A = [globalThis] as const;\n',
+    undefined: 'const A = { a: undefined };\n',
+    NaN: 'const A = [NaN];\n',
+    'forward reference': 'const A = [B];\nconst B = { b: "--ds-b" };\n',
+    'self reference': 'const A = [A];\n',
+    'helper alias': 'const A = chromeVariableMap;\n',
+    'helper inside data': 'const A = [chromeVariableMap];\n',
+    'type-only name': 'const A = [BRAND_TYPE_ONLY];\n',
+    'name from another member': 'const A = [setDrillVars];\n',
+    'refused const reused': 'const B = Object.keys({});\nconst A = [B];\n',
+    'forward identifier inside helper args': 'const A = chromeVariableMap<BrandDrillChrome>(LATER, ["bg"] as const);\nconst LATER = "--ds-later-";\n',
+    spread: 'const B = { b: "--ds-b" };\nconst A = { ...B };\n',
+    shorthand: 'const B = "--ds-b";\nconst A = { B };\n',
+    'array spread': 'const B = ["--ds-b"];\nconst A = [...B];\n',
+  };
+  for (const [label, body] of Object.entries(refused)) {
+    assert.match(dataOnlyViolations('tables.ts', `${header}${helper}${body}`).join(' '), /is not data/, label);
+    const core = plant({ [`${CHROME_EMITTER_DIR}/tables/index.ts`]: `${TABLES_SOURCE}${body}` });
     assert.throws(() => chromeEmitterSources(core), /data member tables\/index\.ts is not data only/, label);
   }
 });

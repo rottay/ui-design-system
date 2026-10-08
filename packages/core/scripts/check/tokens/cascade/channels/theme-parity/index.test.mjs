@@ -1247,5 +1247,6 @@ test("the shipped inventory reads the chrome emitter through its one authority",
   assert.deepEqual(chrome, [
     "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
     "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/tables/index.ts",
+    "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/writers/index.ts",
   ]);
 });

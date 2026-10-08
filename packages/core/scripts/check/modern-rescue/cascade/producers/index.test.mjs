@@ -5626,7 +5626,7 @@ test('OM-5 NAMED LIMIT: a conditional spread inside an object is a producer wher
 
 test('plane: every chrome emitter member is ts-chrome-variables and nothing else is', () => {
   const chrome = 'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables';
-  assert.deepEqual(CHROME_VARIABLE_SOURCES, [`${chrome}/index.ts`, `${chrome}/tables/index.ts`]);
+  assert.deepEqual(CHROME_VARIABLE_SOURCES, [`${chrome}/index.ts`, `${chrome}/tables/index.ts`, `${chrome}/writers/index.ts`]);
   for (const file of CHROME_VARIABLE_SOURCES) assert.equal(planeOfCompilerFile(file), 'ts-chrome-variables', file);
   for (const file of [
     ...LOWERING_SOURCES,

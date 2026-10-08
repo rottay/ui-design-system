@@ -49,10 +49,12 @@ import {
 const postcss = postcssModule.default ?? postcssModule;
 
 const CHROME_ANCHOR = ANCHORS.tenantChannel.path;
-// The emitter is a closed two-member folder: the root must import its data
+// The emitter is a closed three-member folder: the root must import its data
 // member. Planted roots keep the import; the data member adds no token.
 const CHROME_TABLES = CHROME_ANCHOR.replace(/index\.ts$/, 'tables/index.ts');
 const CHROME_TABLES_IMPORT = 'import { CHROME_FIXTURE_TABLE } from "./tables";\n';
+const CHROME_WRITERS = CHROME_ANCHOR.replace(/index\.ts$/, 'writers/index.ts');
+const CHROME_WRITERS_IMPORT = 'import { setFixtureVars } from "./writers";\n';
 // The lowering's channel writers are one owner per concern, so this anchor is a
 // DIRECTORY. A planted tree therefore writes the emitter as an owner inside it,
 // exactly as the real tree does.
@@ -378,11 +380,12 @@ function coreFixture() {
   write(
     root,
     CHROME_ANCHOR,
-    `${CHROME_TABLES_IMPORT}` +
+    `${CHROME_TABLES_IMPORT}${CHROME_WRITERS_IMPORT}` +
       `export function chromeVariables(a) {\n  const vars = {};\n${emissions.join('\n')}\n  return vars;\n}\n` +
       `${families.join('\n')}\n`,
   );
   write(root, CHROME_TABLES, 'export const CHROME_FIXTURE_TABLE = ["fixture"] as const;\n');
+  write(root, CHROME_WRITERS, 'function setFixtureVars(vars) {}\n\nexport { setFixtureVars };\n');
   write(
     root,
     `${THEME_CONTRACTS_ANCHOR}/index.ts`,
@@ -552,7 +555,7 @@ test('ANCHOR DRIFT: a missing derivation source fails loudly and names the ancho
 
 test('ANCHOR DRIFT: an emptied anchor fails rather than yielding a short allowlist', () => {
   const root = coreFixture();
-  write(root, CHROME_ANCHOR, `${CHROME_TABLES_IMPORT}export function chromeVariables() { return {}; }\n`);
+  write(root, CHROME_ANCHOR, `${CHROME_TABLES_IMPORT}${CHROME_WRITERS_IMPORT}export function chromeVariables() { return {}; }\n`);
   assert.throws(() => deriveHookManifest({ coreRoot: root, postcss, promotions: [] }), /ANCHOR DRIFT/);
 });
 
@@ -711,7 +714,7 @@ test('ANCHOR DRIFT: the emitter losing its interpolated families is fatal', () =
     { length: 260 },
     (_, index) => `  vars["--ds-literal-${index}"] = source.value;`,
   ).join('\n');
-  write(root, CHROME_ANCHOR, `${CHROME_TABLES_IMPORT}export function emit(vars, source) {\n${literals}\n}\n`);
+  write(root, CHROME_ANCHOR, `${CHROME_TABLES_IMPORT}${CHROME_WRITERS_IMPORT}export function emit(vars, source) {\n${literals}\n}\n`);
   assert.throws(
     () => deriveHookManifest({ coreRoot: root, postcss, promotions: [] }),
     /ANCHOR DRIFT[\s\S]*interpolated emission families/,

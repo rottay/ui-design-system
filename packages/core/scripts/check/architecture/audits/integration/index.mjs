@@ -27,6 +27,7 @@ import {
   SymbolAmbiguousError,
   requireExactlyOneExportedDeclaration,
 } from '../../../../libraries/exported-symbol/index.mjs';
+import { chromeEmitterClosure } from '../../../../libraries/tokens/chrome-emitter/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -88,11 +89,17 @@ function relPath(abs) {
 // a LIST, not one file: a var emitted by any one of these with no consumer is a
 // violation, and the violation names every emitter that produced it. Palette,
 // typography, and surface vars are foundational theme output and out of scope.
+// The canonical emitter is its root plus every member of the folder the root
+// value-imports, each scanned whole; a missing root keeps its single entry.
+const CHROME_EMITTER_ROOT = join(SRC_ROOT, 'infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts');
+const CANONICAL_CHROME_EMITTERS = existsSync(CHROME_EMITTER_ROOT)
+  ? chromeEmitterClosure(dirname(SRC_ROOT), dirname(CHROME_EMITTER_ROOT)).map((member) => ({
+      path: join(dirname(CHROME_EMITTER_ROOT), member),
+      whole: true,
+    }))
+  : [{ path: CHROME_EMITTER_ROOT, whole: true }];
 const CHROME_EMITTERS = [
-  {
-    path: join(SRC_ROOT, 'infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts'),
-    whole: true,
-  },
+  ...CANONICAL_CHROME_EMITTERS,
   {
     path: join(
       SRC_ROOT,

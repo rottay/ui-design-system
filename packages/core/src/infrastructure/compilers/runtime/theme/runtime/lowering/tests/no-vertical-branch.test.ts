@@ -19,6 +19,9 @@ import { describe, expect, it } from 'vitest';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
+// A .mjs tooling module: the chrome emitter's closed member list.
+import { chromeEmitterSources } from "../../../../../../../../scripts/libraries/tokens/chrome-emitter/index.mjs";
+
 const bithireFlatTheme = firstPartyFixture('bithire');
 const evntoFlatTheme = firstPartyFixture('evnto');
 const rottayFlatTheme = firstPartyFixture('rottay');
@@ -101,6 +104,22 @@ describe('the brand compiler has no per-vertical branch', () => {
     const offenders = modules.flatMap((module) =>
       verticalsNamedIn(codeOf(readFileSync(module, 'utf-8'))).map(
         (name) => `${relative(COMPILERS_ROOT, module)}: ${name}`
+      )
+    );
+    expect(offenders).toEqual([]);
+  });
+
+  it('names no vertical in any member of the chrome emitter', () => {
+    const members: string[] = chromeEmitterSources(join(COMPILERS_ROOT, '..', '..', '..'));
+    expect(members[0]).toBe(CHROME_VARIABLES);
+    expect(members.map((member) => relative(COMPILERS_ROOT, member))).toEqual([
+      'kernel/foundation/css/chrome-variables/index.ts',
+      'kernel/foundation/css/chrome-variables/tables/index.ts',
+      'kernel/foundation/css/chrome-variables/writers/index.ts',
+    ]);
+    const offenders = members.flatMap((member) =>
+      verticalsNamedIn(codeOf(readFileSync(member, 'utf-8'))).map(
+        (name) => `${relative(COMPILERS_ROOT, member)}: ${name}`
       )
     );
     expect(offenders).toEqual([]);

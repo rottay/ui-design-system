@@ -28,6 +28,11 @@ import {
   requireExactlyOneExportedDeclaration,
   requireExportedDeclarations,
 } from '../../../../../libraries/exported-symbol/index.mjs';
+import {
+  CHROME_EMITTER_DIR,
+  chromeEmitterClosure,
+  chromeEmitterSources,
+} from '../../../../../libraries/tokens/chrome-emitter/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const AUDIT = resolve(HERE, '../index.mjs');
@@ -349,4 +354,63 @@ test('the resolver counts every declaration form, so absence cannot be undercoun
   // `export default` has no name, so a NAMED lookup for it must be an absence
   // rather than a silent match on whatever the default happens to be.
   assert.throws(() => requireExactlyOneExportedDeclaration('fixture.ts', 'default', source), SymbolAbsentError);
+});
+
+test('T9: a var emitted only by a member the chrome root imports is in scope and reported', () => {
+  const root = join(mkdtempSync(join(tmpdir(), 'ds-integration-writers-')), 'src');
+  const write = (relative, contents) => {
+    const absolute = join(root, relative);
+    mkdirSync(dirname(absolute), { recursive: true });
+    writeFileSync(absolute, contents);
+  };
+  write(
+    'infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts',
+    [
+      'import { setFixtureWriterVars } from "./writers";',
+      '',
+      'export function chromeToVariables(vars: Record<string, string>): void {',
+      "  vars['--ds-fixture-chrome-bg'] = 'transparent';",
+      '  setFixtureWriterVars(vars);',
+      '}',
+      '',
+    ].join('\n'),
+  );
+  write(
+    'infrastructure/compilers/kernel/foundation/css/chrome-variables/writers/index.ts',
+    [
+      'function setFixtureWriterVars(vars: Record<string, string>): void {',
+      "  vars['--ds-fixture-writer-orphan'] = 'red';",
+      '}',
+      '',
+      'export { setFixtureWriterVars };',
+      '',
+    ].join('\n'),
+  );
+  write('infrastructure/compilers/runtime/theme/runtime/lowering/index.ts', brandSource());
+  write(
+    'infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts',
+    chromeOwnerSource(),
+  );
+  write('foundation/tokens/css/runtime/engines/modern/index.css', CONSUMER_CSS);
+
+  const result = spawnSync(
+    process.execPath,
+    [AUDIT, '--package-root', CORE_ROOT, '--emitter-root', root],
+    { encoding: 'utf8' },
+  );
+  const output = `${result.stdout ?? ''}${result.stderr ?? ''}`;
+  assert.match(
+    output,
+    /\[orphan-premium-var\] infrastructure\/compilers\/kernel\/foundation\/css\/chrome-variables\/writers\/index\.ts\n\s+Premium chrome var "--ds-fixture-writer-orphan" is emitted but has no non-test consumer/,
+  );
+  assert.doesNotMatch(output, /Premium chrome var "--ds-fixture-chrome-bg"/, 'the root var is still consumed');
+});
+
+test('T10: on the real tree the scanned chrome closure is the validated emitter authority', () => {
+  const dir = join(CORE_ROOT, CHROME_EMITTER_DIR);
+  assert.deepEqual(
+    chromeEmitterClosure(CORE_ROOT).map((member) => join(dir, member)),
+    chromeEmitterSources(CORE_ROOT),
+  );
+  assert.ok(chromeEmitterClosure(CORE_ROOT).includes('writers/index.ts'));
 });

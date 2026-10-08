@@ -19,10 +19,19 @@
  *
  * A `data` member must be data only: type-only imports, type declarations and
  * `const` bindings to object/array literals or `chromeVariableMap(...)` calls
- * (optionally wrapped in `as` / `satisfies`). The one admitted helper is the
- * existing `chromeVariableMap` arrow, matched by its exact syntax tree. A writer,
- * a function, a statement or a value import in a data member throws, because
- * the readers that attribute emissions by `${file}::${fn}` only look at the root.
+ * (optionally wrapped in `as` / `satisfies`). A bare identifier is data only when
+ * it names an earlier admitted const of the same member. The one admitted helper
+ * is the existing `chromeVariableMap` arrow, matched by its exact syntax tree. A
+ * writer, a function, a statement or a value import in a data member throws.
+ *
+ * A `writer` member holds template-free channel writers only: type-only
+ * imports, type declarations, plain function declarations and one trailing
+ * `export { … }` naming exactly those functions. A writer imports no value: a
+ * writer -> data edge is a sibling-owner dependency the structure law refuses.
+ * Every call site stays in the root, and no writer builds a channel name from a
+ * template, because the readers that attribute interpolated emissions by
+ * `${file}::${fn}` and the census that resolves literal call sites read one file.
+ * The root must import exactly the exported writers and may not shadow them.
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
@@ -34,7 +43,10 @@ export const CHROME_EMITTER_DIR = 'src/infrastructure/compilers/kernel/foundatio
 export const CHROME_EMITTER_FILES = Object.freeze([
   Object.freeze({ path: 'index.ts', role: 'root' }),
   Object.freeze({ path: 'tables/index.ts', role: 'data' }),
+  Object.freeze({ path: 'writers/index.ts', role: 'writer' }),
 ]);
+
+const CHROME_EMITTER_ROLES = Object.freeze(['root', 'data', 'writer']);
 
 const NON_PRODUCTIVE_DIRS = new Set(['tests', 'test', '__tests__', 'fixtures', '__fixtures__', 'stories']);
 const SOURCE_FILE = /\.(?:ts|tsx|mts|cts|js|mjs|cjs|jsx)$/;
@@ -220,32 +232,32 @@ function unwrap(node) {
   return current;
 }
 
-function isDataValue(node) {
+function isDataValue(node, admitted) {
   const value = unwrap(node);
+  if (ts.isIdentifier(value)) return admitted.has(value.text) && value.text !== ADMITTED_HELPER;
   if (
     ts.isStringLiteralLike(value) ||
     ts.isNumericLiteral(value) ||
-    ts.isIdentifier(value) ||
     value.kind === ts.SyntaxKind.TrueKeyword ||
     value.kind === ts.SyntaxKind.FalseKeyword ||
     value.kind === ts.SyntaxKind.NullKeyword
   ) {
     return true;
   }
-  if (ts.isArrayLiteralExpression(value)) return value.elements.every(isDataValue);
+  if (ts.isArrayLiteralExpression(value)) return value.elements.every((element) => isDataValue(element, admitted));
   if (ts.isObjectLiteralExpression(value)) {
     return value.properties.every(
       (property) =>
         ts.isPropertyAssignment(property) &&
         !ts.isComputedPropertyName(property.name) &&
-        isDataValue(property.initializer),
+        isDataValue(property.initializer, admitted),
     );
   }
   if (ts.isCallExpression(value)) {
     return (
       ts.isIdentifier(value.expression) &&
       value.expression.text === ADMITTED_HELPER &&
-      value.arguments.every(isDataValue)
+      value.arguments.every((argument) => isDataValue(argument, admitted))
     );
   }
   return false;
@@ -268,6 +280,7 @@ export function dataOnlyViolations(file, text) {
   const violations = [];
   const at = (node) => sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line + 1;
   let helpers = 0;
+  const admitted = new Set();
   for (const statement of sourceFile.statements) {
     if (ts.isImportDeclaration(statement)) {
       if (!statement.importClause?.isTypeOnly) violations.push(`:${at(statement)} value import`);
@@ -297,10 +310,115 @@ export function dataOnlyViolations(file, text) {
         }
         continue;
       }
-      if (!isDataValue(initializer)) violations.push(`:${at(declaration)} ${name} is not data`);
+      if (isDataValue(initializer, admitted)) admitted.add(name);
+      else violations.push(`:${at(declaration)} ${name} is not data`);
     }
   }
   return violations;
+}
+
+/** Violations of the closed role list: exactly one member per role, no other role. */
+export function chromeEmitterRoleViolations(files) {
+  const violations = [];
+  for (const entry of files) {
+    if (!CHROME_EMITTER_ROLES.includes(entry.role)) violations.push(`${entry.path} has unknown role "${entry.role}"`);
+  }
+  for (const role of CHROME_EMITTER_ROLES) {
+    const count = files.filter((entry) => entry.role === role).length;
+    if (count !== 1) violations.push(`role ${role} has ${count} members, not 1`);
+  }
+  return violations;
+}
+
+const hasModifier = (node, kind) => Boolean(node.modifiers?.some((modifier) => modifier.kind === kind));
+
+/** Top-level function declaration names of a parsed member. */
+function declaredFunctionNames(sourceFile) {
+  return sourceFile.statements
+    .filter((statement) => ts.isFunctionDeclaration(statement) && statement.name)
+    .map((statement) => statement.name.text);
+}
+
+/** Violations of the writer grammar for one member; empty means admitted. */
+export function writerViolations(file, text) {
+  const sourceFile = parse(file, text);
+  const violations = [];
+  const at = (node) => sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line + 1;
+  const functions = declaredFunctionNames(sourceFile);
+  const statements = sourceFile.statements;
+  let exportList = null;
+  statements.forEach((statement, index) => {
+    if (ts.isImportDeclaration(statement)) {
+      if (statement.importClause?.isTypeOnly) return;
+      violations.push(`:${at(statement)} value import of "${statement.moduleSpecifier.text}" (sibling-owner-dependency)`);
+      return;
+    }
+    if (ts.isInterfaceDeclaration(statement) || ts.isTypeAliasDeclaration(statement)) return;
+    if (ts.isFunctionDeclaration(statement)) {
+      const name = statement.name?.text ?? '<anonymous>';
+      if (hasModifier(statement, ts.SyntaxKind.ExportKeyword)) violations.push(`:${at(statement)} inline export of ${name}`);
+      if (hasModifier(statement, ts.SyntaxKind.AsyncKeyword) || statement.asteriskToken) violations.push(`:${at(statement)} ${name} is async or a generator`);
+      if (!statement.body) violations.push(`:${at(statement)} ${name} has no body`);
+      if (name === ADMITTED_HELPER) violations.push(`:${at(statement)} ${ADMITTED_HELPER} is not a writer`);
+      return;
+    }
+    if (
+      ts.isExportDeclaration(statement) &&
+      !statement.moduleSpecifier &&
+      !statement.isTypeOnly &&
+      statement.exportClause &&
+      ts.isNamedExports(statement.exportClause) &&
+      index === statements.length - 1 &&
+      exportList === null
+    ) {
+      exportList = statement.exportClause.elements;
+      for (const element of exportList) {
+        if (element.propertyName || element.isTypeOnly) violations.push(`:${at(element)} aliased or type-only export ${element.name.text}`);
+      }
+      return;
+    }
+    if (ts.isVariableStatement(statement)) {
+      violations.push(`:${at(statement)} binding in a writer`);
+      return;
+    }
+    violations.push(`:${at(statement)} ${ts.SyntaxKind[statement.kind]}`);
+  });
+  const exported = (exportList ?? []).map((element) => (element.propertyName ?? element.name).text);
+  if (exportList === null) violations.push('no single trailing export list');
+  else if (exported.length !== functions.length || [...exported].sort().join() !== [...functions].sort().join()) {
+    violations.push(`export list [${exported.join(', ')}] is not the declared writers [${functions.join(', ')}]`);
+  }
+  const writerNames = new Set(functions);
+  const visit = (node) => {
+    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && writerNames.has(node.expression.text)) {
+      violations.push(`:${at(node)} writer calls writer ${node.expression.text}`);
+    }
+    if (
+      ts.isElementAccessExpression(node) &&
+      (ts.isTemplateExpression(node.argumentExpression) || ts.isNoSubstitutionTemplateLiteral(node.argumentExpression))
+    ) {
+      violations.push(`:${at(node)} template channel key`);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return violations;
+}
+
+/** Names a parsed file value-imports from one absolute target. */
+function importedNamesFrom(sourceFile, resolveImport, target) {
+  const names = [];
+  for (const statement of sourceFile.statements) {
+    if (!ts.isImportDeclaration(statement) || statement.importClause?.isTypeOnly) continue;
+    if (!ts.isStringLiteral(statement.moduleSpecifier) || resolveImport(statement.moduleSpecifier.text) !== target) continue;
+    const bindings = statement.importClause?.namedBindings;
+    if (bindings && ts.isNamedImports(bindings)) {
+      for (const element of bindings.elements) if (!element.isTypeOnly) names.push((element.propertyName ?? element.name).text);
+    } else {
+      names.push('<non-named import>');
+    }
+  }
+  return names;
 }
 
 /**
@@ -309,6 +427,8 @@ export function dataOnlyViolations(file, text) {
  * every data member is data only.
  */
 export function chromeEmitterSources(coreRoot) {
+  const roles = chromeEmitterRoleViolations(CHROME_EMITTER_FILES);
+  if (roles.length > 0) fail(roles.join('; '));
   const dir = join(coreRoot, CHROME_EMITTER_DIR);
   const declared = CHROME_EMITTER_FILES.map((entry) => entry.path).sort();
   const inventory = chromeEmitterInventory(dir);
@@ -318,11 +438,33 @@ export function chromeEmitterSources(coreRoot) {
   for (const path of declared) if (!closure.includes(path)) problems.push(`declared ${path} is not imported by the root`);
   for (const path of closure) if (!declared.includes(path)) problems.push(`undeclared ${path} is imported by the root`);
   if (problems.length > 0) fail(problems.join('; '));
-  for (const entry of CHROME_EMITTER_FILES) {
-    if (entry.role !== 'data') continue;
-    const file = join(dir, entry.path);
-    const violations = dataOnlyViolations(file, readFileSync(file, 'utf8'));
-    if (violations.length > 0) fail(`data member ${entry.path} is not data only: ${violations.join(', ')}`);
+  const memberOf = (role) => join(dir, CHROME_EMITTER_FILES.find((entry) => entry.role === role).path);
+  const rootFile = memberOf('root');
+  const dataFile = memberOf('data');
+  const writerFile = memberOf('writer');
+  const resolverFor = (file) => (specifier) => {
+    const target = resolveSpecifier(coreRoot, file, specifier);
+    return typeof target === 'string' ? target : null;
+  };
+  const dataViolations = dataOnlyViolations(dataFile, readFileSync(dataFile, 'utf8'));
+  if (dataViolations.length > 0) fail(`data member ${relative(dir, dataFile)} is not data only: ${dataViolations.join(', ')}`);
+  const writerText = readFileSync(writerFile, 'utf8');
+  const writerProblems = writerViolations(writerFile, writerText);
+  if (writerProblems.length > 0) fail(`writer member ${relative(dir, writerFile)} is not a writer: ${writerProblems.join(', ')}`);
+  const rootSource = parse(rootFile, readFileSync(rootFile, 'utf8'));
+  const writers = declaredFunctionNames(parse(writerFile, writerText));
+  const imported = importedNamesFrom(rootSource, resolverFor(rootFile), writerFile);
+  const rootFunctions = declaredFunctionNames(rootSource);
+  const crossProblems = [];
+  if ([...new Set(imported)].sort().join() !== [...writers].sort().join() || imported.length !== writers.length) {
+    crossProblems.push(`the root imports [${imported.join(', ')}] from the writer, not its writers [${writers.join(', ')}]`);
   }
+  for (const name of writers) if (rootFunctions.includes(name)) crossProblems.push(`the root shadows writer ${name}`);
+  const seen = new Set();
+  for (const name of [...rootFunctions, ...writers]) {
+    if (seen.has(name)) crossProblems.push(`function ${name} is declared twice across members`);
+    seen.add(name);
+  }
+  if (crossProblems.length > 0) fail(crossProblems.join('; '));
   return CHROME_EMITTER_FILES.map((entry) => join(dir, entry.path));
 }
