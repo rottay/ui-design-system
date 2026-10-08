@@ -89070,7 +89070,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 44,
+          "line": 53,
           "prop": "border",
           "scalars": []
         },
@@ -96615,7 +96615,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 44,
+          "line": 53,
           "prop": "border",
           "scalars": []
         },
@@ -143036,7 +143036,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 47,
+          "line": 56,
           "prop": "color",
           "scalars": []
         },
@@ -190805,7 +190805,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 44,
+          "line": 53,
           "prop": "border",
           "scalars": []
         },
@@ -214786,7 +214786,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 101,
+          "line": 110,
           "prop": "font-size",
           "scalars": []
         },
@@ -215884,14 +215884,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 49,
+          "line": 58,
           "prop": "font-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 105,
+          "line": 114,
           "prop": "font-size",
           "scalars": []
         },
@@ -223097,7 +223097,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 92,
+          "line": 101,
           "prop": "font-weight",
           "scalars": []
         },
@@ -249301,7 +249301,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 93,
+          "line": 102,
           "prop": "letter-spacing",
           "scalars": []
         },
@@ -283860,21 +283860,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 51,
+          "line": 60,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 52,
+          "line": 61,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 53,
+          "line": 62,
           "prop": "transition",
           "scalars": []
         },
@@ -290518,21 +290518,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 51,
+          "line": 60,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 52,
+          "line": 61,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 53,
+          "line": 62,
           "prop": "transition",
           "scalars": []
         },
@@ -323339,7 +323339,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 45,
+          "line": 54,
           "prop": "border-radius",
           "scalars": []
         },
@@ -361175,14 +361175,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 41,
+          "line": 50,
           "prop": "row-gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 42,
+          "line": 51,
           "prop": "padding-block",
           "scalars": []
         },
@@ -366633,21 +366633,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 40,
+          "line": 49,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 43,
+          "line": 52,
           "prop": "padding-inline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 75,
+          "line": 84,
           "prop": "gap",
           "scalars": []
         },
@@ -399048,14 +399048,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 62,
+          "line": 71,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 66,
+          "line": 75,
           "prop": "background",
           "scalars": []
         },
