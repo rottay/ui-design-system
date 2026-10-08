@@ -1,5 +1,27 @@
 # Design System Roadmap — Modern Engine Premium Uplift
 
+## Temporary owner succession — 2026-10-08
+
+The human owner appointed Codex as the temporary sole DT, auditor and local
+integrator on 2026-10-08 after Kimi Admin exhausted its quota. Claude Admin
+(`admin@rottay.com`, effective model `claude-opus-5-5`) remains the source writer;
+independent code review uses a distinct verified session. Codex does not become
+a continuous source writer. This narrow assignment supersedes the Codex
+exclusion only for this owner-requested continuation.
+
+Starting checkpoint: `47a0aac05`, main, 138/168 DONE. Preserve delivered
+`w26-ret06-da` and `w26-f54-gate-l1` packets and foreign documentation WIP.
+Shared index, registry, generators and heavy verification remain singleton.
+No apps, branches/worktrees, push, publication or deployment are authorized.
+The existing DAG, acceptance and proportional-validation policy stand.
+
+At 13:00 America/New_York on 2026-10-08, stop opening new implementation lots.
+Do not interrupt running writers: finish and independently review their finite
+packets, preserve any HOLD, and reach the next integration checkpoint. Transfer
+the DT seat to Kimi only after that barrier is met and recorded. There must
+never be two active integrators. Until then Codex supervises at ten-minute
+intervals, without intermediate polling; afterwards the Codex exclusion resumes.
+
 ## Current owner succession — 2026-10-04
 
 The owner appointed Kimi as the sole active DT, coordinator, auditor and
