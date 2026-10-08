@@ -560,6 +560,10 @@ export const CI_GATES = Object.freeze([
   // producers say.
   { id: 'artifact-coverage-drill', run: ['node', '--test', 'scripts/check/theme/artifact-coverage/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['artifact-coverage'], },
   { id: 'artifact-coverage', run: ['node', 'scripts/check/theme/artifact-coverage/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'artifact-coverage-drill', ratchet: 'scripts/check/theme/artifact-coverage/baseline/index.json', },
+  // F-54's closure measure (DT ruling 2026-10-08): the composed bundles' declared --ds-* names, shared >= 90%,
+  // with every tenant-only name adjudicated by name. Reads the tracked bundles; no build.
+  { id: 'artifact-name-intersection-drill', run: ['node', '--test', 'scripts/check/theme/artifact-name-intersection/tests/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['artifact-name-intersection'], },
+  { id: 'artifact-name-intersection', run: ['node', 'scripts/check/theme/artifact-name-intersection/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'artifact-name-intersection-drill', ratchet: 'scripts/check/theme/artifact-name-intersection/baseline/index.json', },
   // THE DENOMINATOR OF EVERY CAUSAL PERCENTAGE THIS LANE PUBLISHES.
   // `WO-EVI-02` R4 amendment 3: each axis's denominator is the set of families
   // that declare they consume it, read from the typed catalog at a recorded

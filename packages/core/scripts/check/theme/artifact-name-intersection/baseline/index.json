@@ -1,0 +1,139 @@
+{
+ "purpose": "The F-54 closure measure: distinct --ds-* names DECLARED by the three tracked composed per-vertical bundles (artifacts/generated/css/verticals/*), intersection over union, which must stay at or above the fiche threshold of 90% (a code constant, not a pin). residual is the by-name adjudication of every name not every bundle declares, with the verticals allowed to declare it.",
+ "direction": "Shrink-only. A residual name may disappear or become shared (a notice, not a failure). A tenant-only name not listed here, or a listed name declared by a vertical outside its declaredBy, fails closed; it enters only through a reviewed lot citing its owner-ratified identity authoring.",
+ "ruling": "WO-EVI-02 F-54 clause 1, kimi-dt 2026-10-08 (roadmap commit fabb9f0a6): the closure denominator is the composed per-vertical bundle; threshold unchanged. Measured at live HEAD fabb9f0a6 with comments stripped: 7054/7072 = 99.75% (the ruling quotes 7055/7073: its count includes --ds-affix-affixed-shadow, which every bundle carries only inside a comment).",
+ "pinnedOn": "2026-10-08",
+ "verticals": [
+  "bithire",
+  "evnto",
+  "rottay"
+ ],
+ "residual": {
+  "--ds-chart-series-1": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-10": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-11": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-12": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-2": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-3": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-4": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-5": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-6": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-7": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-8": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-chart-series-9": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire chart palette",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-font-pack-geometric-display": {
+   "declaredBy": [
+    "evnto"
+   ],
+   "identity": "the evnto display font pack (src/foundation/presets/verticals/roster/index.ts, evnto fontPacks), the evnto twin of --ds-font-pack-grotesk-display",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity — ratified at the gate lot (w26-f54-name-intersection-gate): the 18th name the ruling's own arithmetic counted (7073 - 7055) but its name list missed; the evnto twin of --ds-font-pack-grotesk-display"
+  },
+  "--ds-font-pack-grotesk-display": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire display font pack (verticals roster fontPacks)",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-material-canvas-texture": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire material canvas texture",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-material-card-highlight": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire material card highlight",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-material-card-texture": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire material card texture",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  },
+  "--ds-material-panel-texture": {
+   "declaredBy": [
+    "bithire"
+   ],
+   "identity": "the authored bithire material panel texture",
+   "ruledBy": "kimi-dt 2026-10-08, WO-EVI-02 F-54 clause 1 (fabb9f0a6): lawful authored identity"
+  }
+ }
+}
