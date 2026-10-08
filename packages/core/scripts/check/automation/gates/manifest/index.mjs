@@ -75,6 +75,12 @@ export const CI_GATES = Object.freeze([
   { id: 'property-law', run: ['node', 'scripts/check/motion-budget/audits/property-law/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'property-law-drill', ratchet: 'scripts/check/motion-budget/audits/property-law/baseline/index.json', },
   { id: 'retired-vertical-identity-drill', run: ['node', '--test', 'scripts/check/verticals/retired-identity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['retired-vertical-identity'], },
   { id: 'retired-vertical-identity', run: ['node', 'scripts/check/verticals/retired-identity/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'retired-vertical-identity-drill', },
+  // WO-RET-06 W-3a: the density type identities, statically. `expectTypeOf` in the density guard is
+  // invisible to Vitest, and `typecheck:tests` (the ci.yml step, not a row here) keeps its own
+  // pre-existing error and receiver. This gate compiles a dedicated probe under its own tsconfig, so
+  // nothing outside its scope can mask or credit it; the drill reds a flipped identity in a scratch copy.
+  { id: 'density-identity-drill', run: ['node', '--test', 'scripts/check/architecture/density-identity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['density-identity'], },
+  { id: 'density-identity', run: ['node', 'scripts/check/architecture/density-identity/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'density-identity-drill', },
   // WO-DER-06: a first-party vertical preset is decisions and nothing the
   // compiler already produces from them. The derivability half compiles each
   // override against the decisions alone through dist/server.js, so gate and

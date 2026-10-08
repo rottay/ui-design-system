@@ -1,0 +1,16 @@
+{
+  "extends": "../../../../../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "../../../../../..",
+    "paths": {
+      "@/*": ["../../../../../../src/*"],
+      "@types/*": ["../../../../../../src/foundation/contracts/*"],
+      "@ui/*": ["../../../../../../src/components/*"],
+      "@rottay/design-system": ["../../../../../../src/index.ts"],
+      "@rottay/design-system/server": ["../../../../../../src/entrypoints/server/index.ts"]
+    }
+  },
+  "include": [],
+  "files": ["../index.ts"]
+}
