@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -43,8 +43,19 @@ test('MUTANT: a parallel --ds-shadow-* ramp declared with literals is a second s
   assert.equal(shadowScaleDefinitions(':root { --ds-elevation-1: var(--ds-elevation-base); }'), 0);
 });
 
+function auditSources(dir) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) return ['tests', 'shadow-scales', 'baseline'].includes(entry.name) ? [] : auditSources(full);
+    return entry.name.endsWith('.mjs') ? [full] : [];
+  });
+}
+
 test('the audit counts scales through this classifier and no other', () => {
-  const audit = readFileSync(join(HERE, '../../index.mjs'), 'utf8');
-  assert.match(audit, /scales \+= shadowScaleDefinitions\(readFileSync\(f, 'utf8'\)\);/u);
-  assert.ok(!/--ds-elevation-1:\\s\*/u.test(audit), 'the audit must not keep a second copy of the scale pattern');
+  const sources = auditSources(join(HERE, '../..')).map((file) => [file, readFileSync(file, 'utf8')]);
+  const callers = sources.filter(([, text]) => /scales \+= shadowScaleDefinitions\(readFileSync\(f, 'utf8'\)\);/u.test(text));
+  assert.deepEqual(callers.map(([file]) => file), [join(HERE, '../../counters/depth/index.mjs')]);
+  for (const [file, text] of sources) {
+    assert.ok(!/--ds-elevation-1:\\s\*/u.test(text), `${file} must not keep a second copy of the scale pattern`);
+  }
 });

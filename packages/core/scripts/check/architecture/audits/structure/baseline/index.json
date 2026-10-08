@@ -118,7 +118,6 @@
         "packages/core/scripts/check/engine/css/paint/layers/index.test.mjs",
         "packages/core/scripts/check/engine/lifecycle/freeze/index.mjs",
         "packages/core/scripts/check/engine/lifecycle/freeze/index.test.mjs",
-        "packages/core/scripts/check/engine/tokens/audit/index.mjs",
         "packages/core/scripts/check/engine/tokens/audit/tests/framework-classes/index.test.mjs",
         "packages/core/scripts/check/evidence/certification/claims/exactness/index.mjs",
         "packages/core/scripts/check/evidence/certification/claims/exactness/index.test.mjs",
