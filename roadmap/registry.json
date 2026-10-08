@@ -6600,6 +6600,11 @@
      "at": "2026-10-07 20:10",
      "by": "kimi-dt",
      "note": "2026-10-07 kimi-dt: W-4 INTEGRATED (4f0e09cdd; review HOLD on M1 -> the scoped re-anchor fix -> delta review ACCEPT). The structure gate now measures the WO's census quantities (the five laws, decrease-only, member-exact; the D2/D3 definitions parameterised). --write-baseline retired; tighten-only + per-law sighted re-anchor. The gate file shrank (1640 -> 1583). The one-time re-anchor (4639 -> 4816) is done and sighted. W-5 (hygiene) and the monolith splits (W-6/W-7) now measure as ratchet decreases."
+    },
+    {
+     "at": "2026-10-07 22:18",
+     "by": "kimi-dt",
+     "note": "2026-10-08 kimi-dt: W-5 INTEGRATED (7ba9dc177; review b1b0eb21 ACCEPT, the integrator-authored changeset per its M1). F-101 headers/strings tell the truth; the 4 dead engine-styles exports retired (engine-audit 18->10, the honest correction); the physical-properties pin removed per its own written reason; F-82's tombstone + orphan barrel deleted (census 2->0); the 3 empty worktree dirs + 2 parents rmdir'd (the law's registry now empty); the structure tighten -1 via the W-4 producer. The missed-suite fix rides: asset-facades' 8->6 pictogram records (W-2's retirement; the suite was missed by the lot+review+integration — registered as the lesson the closure eval named). The review's L1 (--ds-command-home-panel-bg-strong now truthfully dead) registered."
     }
    ]
   },
