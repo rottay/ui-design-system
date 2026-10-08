@@ -135,7 +135,8 @@ describe('governed keys reach the DOM under a translated ground', () => {
 
     const trigger = await screen.findByTestId('locale-switcher-trigger');
     trigger.click();
-    const panel = await screen.findByTestId('locale-switcher-menu');
+    const panel = await screen.findByRole('listbox');
+    expect(panel).toHaveAccessibleName(lookup(catalog('ar'), 'locale_switcher.panel_aria') as string);
     expect(panel.getAttribute('aria-label')).toBe(
       lookup(catalog('ar'), 'locale_switcher.panel_aria'),
     );

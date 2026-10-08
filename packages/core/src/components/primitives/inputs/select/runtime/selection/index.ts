@@ -10,7 +10,7 @@
  */
 
 import type React from 'react';
-import type { SelectOption, SelectOptionGroup } from '../../contracts';
+import type { SelectLabelProps, SelectOption, SelectOptionGroup } from '../../contracts';
 
 // ---------------------------------------------------------------------------
 // Virtual scroll defaults
@@ -42,6 +42,37 @@ export function getLabelText(label: React.ReactNode): string {
   if (typeof label === 'string') return label;
   if (typeof label === 'number') return String(label);
   return '';
+}
+
+/**
+ * The single text source of an option: type-ahead, search, tokens and names.
+ * Rendered output is never read, so a rich label needs `textValue`.
+ */
+export function getOptionText(option: Pick<SelectOption, 'label' | 'textValue'>): string {
+  if (typeof option.textValue === 'string' && option.textValue !== '') return option.textValue;
+  return getLabelText(option.label);
+}
+
+/** The label is not text and no `textValue` names the option. */
+export function isUnnamedOption(option: Pick<SelectOption, 'label' | 'textValue'>): boolean {
+  return typeof option.label !== 'string' && typeof option.label !== 'number' && getOptionText(option) === '';
+}
+
+/** The trigger and tag `title`: `textValue`, else a string label. */
+export function getOptionTitle(option: Pick<SelectOption, 'label' | 'textValue'>): string | undefined {
+  if (typeof option.textValue === 'string' && option.textValue !== '') return option.textValue;
+  return typeof option.label === 'string' ? option.label : undefined;
+}
+
+const NO_LABEL_PROPS: SelectLabelProps = Object.freeze({});
+
+/** `lang`/`dir` for the element carrying the label text; `dir` defaults to `auto` when `lang` is set. */
+export function getOptionLabelProps(option: Pick<SelectOption, 'lang' | 'dir'>): SelectLabelProps {
+  if (!option.lang && !option.dir) return NO_LABEL_PROPS;
+  return Object.freeze({
+    ...(option.lang ? { lang: option.lang } : {}),
+    dir: option.dir ?? 'auto',
+  });
 }
 
 /**

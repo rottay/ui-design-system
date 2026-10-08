@@ -17,6 +17,8 @@
  * - `SelectOptionGroup` - Grouped options structure
  * - `SelectOptionProps` - Props for Select.Option compound component
  * - `SelectOptGroupProps` - Props for Select.OptGroup compound component
+ * - `SelectOptionRenderState` / `SelectValueRenderState` - Read-only facts handed to the render channel
+ * - `SelectLabelProps` / `SelectTextDirection` - Language and direction of an option's label text
  * - `SelectSearchState` - Search state interface
  * - `SelectDropdownState` - Dropdown state interface
  *
@@ -81,6 +83,45 @@ export type SelectStatus = 'default' | 'error' | 'warning' | 'success';
 // Mode types
 export type SelectMode = 'single' | 'multiple' | 'tags';
 
+/** Text-direction attribute values a label may declare. */
+export type SelectTextDirection = 'auto' | 'ltr' | 'rtl';
+
+/**
+ * The attributes the element carrying an option's label text must bear. Select
+ * derives them from the option's `lang`/`dir`; both are absent when the option
+ * declares no language, so a spread is a no-op.
+ */
+export interface SelectLabelProps {
+  readonly lang?: string;
+  readonly dir?: SelectTextDirection;
+}
+
+/** Read-only facts about one rendered option. Content only: no handler, setter, ref or id. */
+export interface SelectOptionRenderState {
+  /** The option is in the current value (`aria-selected`). */
+  readonly selected: boolean;
+  /** The option is the active descendant (keyboard or pointer). */
+  readonly active: boolean;
+  /** The option, or its group, is disabled. */
+  readonly disabled: boolean;
+  /** Row index in the rendered list (group captions count). */
+  readonly index: number;
+  /** `multiple` is on. */
+  readonly multiple: boolean;
+  /** Spread on the element that carries the label text. */
+  readonly labelProps: SelectLabelProps;
+}
+
+/** Read-only facts about one selected option shown in the trigger. */
+export interface SelectValueRenderState {
+  /** `single` = the trigger's value; `tag` = one tag in multiple mode. */
+  readonly placement: 'single' | 'tag';
+  /** The Select, or the selected option, is disabled. */
+  readonly disabled: boolean;
+  /** Spread on the element that carries the label text. */
+  readonly labelProps: SelectLabelProps;
+}
+
 /**
  * Select option interface
  */
@@ -97,6 +138,20 @@ export interface SelectOption<T = string | number> {
   group?: string;
   /** Additional description */
   description?: ReactNode;
+  /**
+   * Plain text the option is matched and named by: type-ahead, the default
+   * search filter, token separators, the tag remove label and the trigger
+   * title. Required when `label` is not a string or number; when absent the
+   * text is `label` itself if it is a string or number.
+   */
+  textValue?: string;
+  /** BCP-47 language of the label text (e.g. an autoglottonym's own language). */
+  lang?: string;
+  /**
+   * Direction of the label text. Defaults to `'auto'` when `lang` is set,
+   * otherwise unset (the label follows its surroundings).
+   */
+  dir?: SelectTextDirection;
 }
 
 /**
@@ -238,6 +293,34 @@ export interface SelectProps<T = string | number> extends EngineAwareProps {
    * the native menu would break visual consistency.
    */
   forceCustomDropdown?: boolean;
+  /**
+   * Content of one listbox option. Replaces only the children of the option's
+   * `option-content` part: the option element, its ARIA, the multiple
+   * checkbox, the icon well and the selected check stay Select's. Must not
+   * contain interactive elements or an `id`, `role` or `aria-*` state.
+   * Setting it renders the custom listbox. Modern only.
+   */
+  renderOption?: (
+    option: SelectOption<T>,
+    defaultContent: ReactNode,
+    state: SelectOptionRenderState,
+  ) => ReactNode;
+  /**
+   * Content of a selected option shown in the trigger (the single value, or
+   * each tag's label). The trigger, placeholder, clear button, tag remove
+   * button and chevron stay Select's. Same restrictions as `renderOption`.
+   * Setting it renders the custom listbox. Modern only.
+   */
+  renderValue?: (
+    option: SelectOption<T>,
+    defaultContent: ReactNode,
+    state: SelectValueRenderState,
+  ) => ReactNode;
+  /**
+   * Accessible name of the open listbox. Unset: no name is stamped (today's
+   * markup). Modern only.
+   */
+  listboxLabel?: string;
 }
 
 /**

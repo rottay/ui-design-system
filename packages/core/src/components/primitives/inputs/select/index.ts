@@ -113,6 +113,10 @@ export type {
   SelectOptGroupProps,
   SelectSearchState,
   SelectDropdownState,
+  SelectOptionRenderState,
+  SelectValueRenderState,
+  SelectLabelProps,
+  SelectTextDirection,
 } from './contracts';
 
 // Export constants
@@ -140,7 +144,7 @@ export const Select = Object.assign(
       modern: () => import('./engines/modern'),
       rustic: () => import('./engines/rustic'),
     },
-    { modernOnlyProps: ['chrome'] },
+    { modernOnlyProps: ['chrome', 'renderOption', 'renderValue', 'listboxLabel'] },
   ),
   {
     /** Declarative option helper for JSX-based select configuration. */

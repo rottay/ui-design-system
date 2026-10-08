@@ -113,7 +113,10 @@ export interface RealMountStep {
   readonly input?: RealMountInput;
 }
 
-/** `property` is a computed property, `@attr.<name>` an attribute, or `@inline.<name>` the element's own inline value. */
+/**
+ * `property` is a computed property, `@attr.<name>` an attribute, `@inline.<name>` the element's own
+ * inline value, or `@rect.<key>` its rounded border box (anchor-positioned layers resolve only there).
+ */
 export type RealMountTarget = Pick<ProbeTarget, 'id' | 'selector' | 'property'>;
 
 export interface RealMountScene {
@@ -209,6 +212,7 @@ export async function measureRealMount(request: RealMountRequest): Promise<Probe
             if (!element) values[target.id] = `<no match: ${target.selector}>`;
             else if (target.property.startsWith('@attr.')) values[target.id] = element.getAttribute(target.property.slice(6)) ?? '<absent>';
             else if (target.property.startsWith('@inline.')) values[target.id] = element.style.getPropertyValue(target.property.slice(8));
+            else if (target.property.startsWith('@rect.')) values[target.id] = String(Math.round(element.getBoundingClientRect()[target.property.slice(6) as 'left']));
             else values[target.id] = getComputedStyle(element).getPropertyValue(target.property);
           }
           return values;

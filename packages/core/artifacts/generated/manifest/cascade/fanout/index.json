@@ -51,9 +51,9 @@
     "channelsWithoutReaders": 200,
     "channelsPaintsFalse": 946,
     "channelsPaintsInModernFalse": 2023,
-    "readers": 45877,
+    "readers": 45849,
     "readersByPlane": {
-      "modern-skin-css": 16546,
+      "modern-skin-css": 16518,
       "presentation-css": 12152,
       "foundation-css": 1743,
       "runtime-css": 197,
@@ -89070,7 +89070,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 74,
+          "line": 44,
           "prop": "border",
           "scalars": []
         },
@@ -96615,14 +96615,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 74,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 144,
+          "line": 44,
           "prop": "border",
           "scalars": []
         },
@@ -107984,13 +107977,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 192,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/skeleton/index.css",
           "line": 24,
           "prop": "background",
@@ -116688,20 +116674,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css",
           "line": 270,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 82,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 200,
           "prop": "color",
           "scalars": []
         },
@@ -143064,14 +143036,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 59,
-          "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 172,
+          "line": 47,
           "prop": "color",
           "scalars": []
         },
@@ -190840,14 +190805,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 74,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 144,
+          "line": 44,
           "prop": "border",
           "scalars": []
         },
@@ -196972,13 +196930,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "line": 383,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 147,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -203224,13 +203175,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "line": 194,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 79,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -214842,7 +214786,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 121,
+          "line": 101,
           "prop": "font-size",
           "scalars": []
         },
@@ -215940,28 +215884,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 61,
+          "line": 49,
           "prop": "font-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 71,
-          "prop": "font-size",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 126,
-          "prop": "font-size",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 176,
+          "line": 105,
           "prop": "font-size",
           "scalars": []
         },
@@ -223167,14 +223097,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 113,
-          "prop": "font-weight",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 189,
+          "line": 92,
           "prop": "font-weight",
           "scalars": []
         },
@@ -249378,7 +249301,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 114,
+          "line": 93,
           "prop": "letter-spacing",
           "scalars": []
         },
@@ -280466,13 +280389,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 148,
-          "prop": "animation",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "line": 131,
           "prop": "animation",
@@ -283944,28 +283860,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 65,
+          "line": 51,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 66,
+          "line": 52,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 97,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 179,
+          "line": 53,
           "prop": "transition",
           "scalars": []
         },
@@ -290609,35 +290518,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 65,
+          "line": 51,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 66,
+          "line": 52,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 97,
-          "prop": "transition",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 148,
-          "prop": "animation",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 179,
+          "line": 53,
           "prop": "transition",
           "scalars": []
         },
@@ -320921,13 +320816,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 145,
-          "prop": "border-radius",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "line": 126,
           "prop": "border-radius",
@@ -323451,14 +323339,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 57,
-          "prop": "border-radius",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 170,
+          "line": 45,
           "prop": "border-radius",
           "scalars": []
         },
@@ -343763,7 +343644,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 325,
+          "line": 408,
           "prop": "fontSize",
           "scalars": []
         },
@@ -343792,7 +343673,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 325,
+          "line": 408,
           "prop": "height",
           "scalars": []
         },
@@ -343842,7 +343723,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 325,
+          "line": 408,
           "prop": "padding",
           "scalars": []
         },
@@ -344062,7 +343943,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 324,
+          "line": 407,
           "prop": "fontSize",
           "scalars": []
         },
@@ -344091,7 +343972,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 324,
+          "line": 407,
           "prop": "height",
           "scalars": []
         },
@@ -344141,7 +344022,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 324,
+          "line": 407,
           "prop": "padding",
           "scalars": []
         },
@@ -345391,7 +345272,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 323,
+          "line": 406,
           "prop": "fontSize",
           "scalars": []
         },
@@ -345420,7 +345301,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 323,
+          "line": 406,
           "prop": "height",
           "scalars": []
         },
@@ -345470,7 +345351,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 323,
+          "line": 406,
           "prop": "padding",
           "scalars": []
         },
@@ -346458,28 +346339,28 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/inputs/select/engines/modern/index.tsx",
-          "line": 208,
+          "line": 220,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/inputs/select/engines/modern/index.tsx",
-          "line": 209,
+          "line": 221,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/inputs/select/engines/modern/index.tsx",
-          "line": 210,
+          "line": 222,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/inputs/select/engines/modern/index.tsx",
-          "line": 211,
+          "line": 223,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -347501,7 +347382,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 326,
+          "line": 409,
           "prop": "fontSize",
           "scalars": []
         },
@@ -347530,7 +347411,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 326,
+          "line": 409,
           "prop": "height",
           "scalars": []
         },
@@ -347580,7 +347461,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 326,
+          "line": 409,
           "prop": "padding",
           "scalars": []
         },
@@ -347651,7 +347532,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 322,
+          "line": 405,
           "prop": "fontSize",
           "scalars": []
         },
@@ -347680,7 +347561,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 322,
+          "line": 405,
           "prop": "height",
           "scalars": []
         },
@@ -347730,7 +347611,7 @@
         {
           "plane": "ts-other",
           "file": "src/components/primitives/inputs/select/contracts/index.ts",
-          "line": 322,
+          "line": 405,
           "prop": "padding",
           "scalars": []
         },
@@ -348462,13 +348343,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "line": 374,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 81,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -361301,29 +361175,15 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 54,
+          "line": 41,
           "prop": "row-gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 55,
+          "line": 42,
           "prop": "padding-block",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 141,
-          "prop": "margin-block-start",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 142,
-          "prop": "padding",
           "scalars": []
         },
         {
@@ -366773,36 +366633,22 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 53,
+          "line": 40,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 56,
+          "line": 43,
           "prop": "padding-inline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 69,
-          "prop": "padding-inline",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 166,
+          "line": 75,
           "prop": "gap",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 168,
-          "prop": "padding",
           "scalars": []
         },
         {
@@ -371813,13 +371659,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css",
           "line": 128,
-          "prop": "padding",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 168,
           "prop": "padding",
           "scalars": []
         },
@@ -394228,13 +394067,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 146,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
           "line": 34,
           "prop": "background",
@@ -399216,14 +399048,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 87,
+          "line": 62,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 91,
+          "line": 66,
           "prop": "background",
           "scalars": []
         },
@@ -399970,20 +399802,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css",
           "line": 949,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 188,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 192,
           "prop": "background",
           "scalars": []
         },
@@ -431834,13 +431652,6 @@
         },
         {
           "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 224,
-          "prop": "min-block-size",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "line": 208,
           "prop": "min-block-size",
@@ -453647,13 +453458,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "line": 183,
-          "prop": "z-index",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
-          "line": 137,
           "prop": "z-index",
           "scalars": []
         },

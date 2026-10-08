@@ -5313,18 +5313,6 @@
       "rule": "stable-typography",
       "count": 1
     },
-    "69148303d141ac94f950": {
-      "path": "src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx",
-      "category": "native-interactive",
-      "rule": "native-button",
-      "count": 2
-    },
-    "d5fe5add1f1fdf89a660": {
-      "path": "src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx",
-      "category": "primitive-reconstruction",
-      "rule": "aria-role-reconstruction",
-      "count": 1
-    },
     "3894dae15076a71a5658": {
       "path": "src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
       "category": "local-svg",

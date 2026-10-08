@@ -24,6 +24,10 @@ export type {
   SelectSize,
   SelectStatus,
   SelectOption,
+  SelectOptionRenderState,
+  SelectValueRenderState,
+  SelectLabelProps,
+  SelectTextDirection,
 } from './select';
 
 export { Checkbox, CheckboxGroup } from './checkbox';

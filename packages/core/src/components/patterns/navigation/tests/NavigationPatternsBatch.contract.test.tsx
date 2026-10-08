@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { PatternCommandPalette } from '../command-palette';
 import type { CommandItem } from '../command-palette';
@@ -409,7 +409,8 @@ describe('shortcuts-overlay -- data-part contract (navigation-pattern anatomy)',
 // locale-switcher -- the one component that already carried a scope class
 // ===========================================================================
 describe('locale-switcher -- data-part contract (navigation-pattern anatomy)', () => {
-  it.each(ENGINES)('stamps every part + active/focused state on open (%s)', async (engine) => {
+  it('stamps every part + active/focused state on open (rustic)', async () => {
+    const engine = 'rustic';
     const { container } = renderWithEngine(
       <PatternLocaleSwitcher locale="en" onChange={noop} locales={DEFAULT_LOCALES} />,
       engine,
@@ -434,8 +435,44 @@ describe('locale-switcher -- data-part contract (navigation-pattern anatomy)', (
       expect(container.querySelector('[data-part="option"][data-focused="true"]')).not.toBeNull();
     });
 
-    // Both engines already carried ds-pattern-locale-switcher + ds-engine-<engine>
-    // in source -- the pre-step keeps them as the skin anchor (no rottay-* mint).
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(root.className).toContain('ds-pattern-locale-switcher');
+    expect(root.className).toContain(`ds-engine-${engine}`);
+  });
+
+  // Modern composes the canonical Select: the parts are the root, Select's own and the pattern's content.
+  it('stamps the root, Select parts and the locale content on open (modern)', async () => {
+    const engine = 'modern';
+    const { container } = renderWithEngine(
+      <PatternLocaleSwitcher locale="en" onChange={noop} locales={DEFAULT_LOCALES} />,
+      engine,
+    );
+    await partsOf(container);
+    const trigger = await screen.findByRole('combobox', { name: /Language/ });
+    fireEvent.click(trigger);
+    const listbox = await screen.findByRole('listbox');
+
+    const parts = new Set(
+      Array.from(document.querySelectorAll('[data-part]')).map((el) => el.getAttribute('data-part') as string),
+    );
+    for (const part of ['root', 'trigger', 'value', 'dropdown', 'option-list', 'option', 'option-content', 'option-check', 'locale-content', 'flag', 'autoglottonym']) {
+      expect(parts, `locale-switcher/${engine} must stamp data-part="${part}"`).toContain(part);
+    }
+    for (const retired of ['panel', 'check', 'trigger-label', 'trigger-code']) {
+      expect(parts, `locale-switcher/${engine} retired data-part="${retired}"`).not.toContain(retired);
+    }
+    expect(listbox.querySelectorAll('[data-pattern="locale-switcher"][data-part="locale-content"]')).toHaveLength(DEFAULT_LOCALES.length);
+
+    // The current locale is aria-selected; data-active is the active descendant.
+    expect(listbox.querySelectorAll('[role="option"][aria-selected="true"]')).toHaveLength(1);
+    expect(screen.getByRole('option', { name: 'English' })).toHaveAttribute('aria-selected', 'true');
+    fireEvent.mouseEnter(screen.getByRole('option', { name: 'Español' }));
+    await waitFor(() => {
+      expect(screen.getByRole('option', { name: 'Español' })).toHaveAttribute('data-active', 'true');
+    });
+    expect(listbox.querySelectorAll('[data-active="true"]')).toHaveLength(1);
+    expect(trigger.getAttribute('aria-activedescendant')).toBe(screen.getByRole('option', { name: 'Español' }).id);
+
     const root = container.querySelector('[data-part="root"]') as HTMLElement;
     expect(root.className).toContain('ds-pattern-locale-switcher');
     expect(root.className).toContain(`ds-engine-${engine}`);

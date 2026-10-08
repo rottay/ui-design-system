@@ -66805,114 +66805,102 @@ html[data-ds-motion='reduced']
  * LocaleSwitcher — Modern engine skin.
  *
  * LAYER: imported by `facade/entrypoints/base.css` and
- * `facade/entrypoints/styles.css` into `layer(rottay-engines)` (the old
- * "unlayered" note predates the wiring). Caller inline styles still win.
+ * `facade/entrypoints/styles.css` into `layer(rottay-engines)`. Caller inline
+ * styles still win.
  *
- * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-locale-switcher
- * ds-engine-modern` + `data-part='root'` (+ `data-loading`). The engine
- * stamps data-parts only; ALL geometry and paint live here (the old inline
- * size maps, the panel's popup object and the per-option style literals are
- * drained into the rules below, values transcribed verbatim; z-index moved
- * from an arbitrary 50 to the token scale).
+ * The pattern composes the canonical Select with `chrome="none"`, so it paints
+ * exactly two things: the trigger FRAME (Select drops its own; the focus ring,
+ * the coarse-pointer floor and the disabled arms stay Select's) and its own
+ * CONTENT (flag, autoglottonym, compact code). The listbox panel and its rows
+ * are Select's.
  *
- * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0)
- * to beat the tenant's unlayered `…*` border-color floor at (0,3,1) — here
- * through the always-stamped root `data-part` ancestor; repeating an
- * attribute on one element is forbidden. `border: none` resets carry no
- * color and stay at (0,3,0). Non-border paint wins at (0,3,0).
+ * SCOPE: the frame rules hang off the outer `<div>` carrying
+ * `ds-pattern-locale-switcher ds-engine-modern` + `data-part='root'` +
+ * `data-pattern='locale-switcher'`. The content rules hang off
+ * `[data-pattern='locale-switcher']`, which the content root stamps too, so they
+ * hold inside Select's portaled panel.
  *
- * KEYBOARD / HOVER: the option's focus model is APG activedescendant — the
- * engine moves `data-focused` with both pointer and keys, so the background
- * rule keyed on it already serves every input mode (no `:hover` selector is
- * needed on options). The trigger is a plain button: its hover rides the
- * (hover: hover) guard with an unguarded `:active` twin.
+ * GEOMETRY: the switcher is a compact control. Select's shell fills its parent,
+ * so the root sizes to its content and a host that stretches its children
+ * (a flex column, a grid cell) cannot widen the trigger.
  *
- * The option's three-way background was `isFocused ? hoverBg : isActive ?
- * insetBg : transparent`, so focus outranks active: the [data-focused] rule is
- * ordered AFTER [data-active] so it wins at equal specificity when a row is
- * both. Modern's focus/active values genuinely differ (hoverBg carries a
- * fallback, insetBg does not) — the divergence is preserved, not normalized
- * (rustic collapses both to one token; that asymmetry is intentional).
+ * SPECIFICITY: the frame rules reach (0,5,0) through the root `data-part`, above
+ * Select's (0,4,1) trigger base, and so also above the tenant's unlayered
+ * `…*` border-color floor at (0,3,1) (P-48). The frame's block-size floor is
+ * the one exception: it sits in `:where()` so Select's coarse-pointer floor wins.
  */
 
-/* ---- root geometry (drained from the engine's inline wrapper) ---- */
+/* ---- root geometry ---- */
 .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] {
   position: relative;
   display: inline-block;
+}
+.ds-pattern-locale-switcher.ds-engine-modern[data-part='root'][data-pattern='locale-switcher'] {
+  inline-size: fit-content;
+  max-inline-size: 100%;
 }
 .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'][data-loading='true'] {
   cursor: progress;
 }
 
-/* ---- trigger: min-block-size (not fixed block-size) + flex-wrap so a long
-        autoglottonym or a flag+label pair wraps onto a second line instead
-        of clipping in narrow toolbars; the chevron rotates on open and its
-        motion rides the fast channel ---- */
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* ---- trigger frame (chrome-less Select trigger): flex-wrap so a long
+        autoglottonym or a flag+label pair wraps onto a second line instead of
+        clipping in narrow toolbars ---- */
+.ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'][data-chrome='none'] {
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--ds-spacing-2, 8px);
   row-gap: var(--ds-spacing-1, 4px);
   padding-block: var(--ds-spacing-1, 4px);
   padding-inline: var(--ds-spacing-2, 8px);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle, var(--ds-color-border));
   border-radius: var(--ds-radius-md);
   background: transparent;
   color: var(--ds-color-text-primary);
   font-family: inherit;
   font-size: var(--ds-font-size-sm, 14px);
   line-height: 1;
-  min-block-size: 32px;
-  cursor: pointer;
   transition: border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-size='sm'] {
-  padding-inline: var(--ds-spacing-2, 8px);
+.ds-pattern-locale-switcher.ds-engine-modern :where([data-part='trigger'][data-chrome='none']) {
+  min-block-size: 32px;
+}
+.ds-pattern-locale-switcher.ds-engine-modern :where(.ds-select-shell[data-size='sm'] [data-part='trigger'][data-chrome='none']) {
   min-block-size: 28px;
-  font-size: var(--ds-font-size-sm);
 }
-.ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'] {
-  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle, var(--ds-color-border));
-}
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
-  outline: none;
-  box-shadow: var(
-    --ds-focus-ring,
-    var(
-      --ds-shadow-focus-ring,
-      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
-    )
-  );
-}
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']:is([data-state~='pressed'], :active) {
+.ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'][data-chrome='none']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 @media (hover: hover) {
-  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']:is([data-state~='hovered'], :hover) {
+  .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'][data-chrome='none']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
 }
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] > svg {
-  opacity: 0.5;
-  flex-shrink: 0;
-  transition: transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
-}
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][aria-expanded='true'] > svg {
-  transform: rotate(180deg);
+
+/* ---- the locale content (option rows and the trigger value) ---- */
+[data-pattern='locale-switcher'][data-part='locale-content'] {
+  display: inline-flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  white-space: normal;
 }
 
-/* ---- trigger label (autoglottonym): wraps with the trigger, never
-        truncates a language name ---- */
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger-label'] {
+/* The autoglottonym wraps with its row, never truncates a language name. */
+[data-pattern='locale-switcher'] [data-part='autoglottonym'] {
+  min-inline-size: 0;
   overflow-wrap: anywhere;
+  line-height: 1.3;
+}
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] [data-pattern='locale-switcher'] [data-part='autoglottonym'] {
   line-height: 1.2;
 }
 
-/* ---- compact trigger carrier: the BCP-47 code reads as a tracked uppercase
-        tag so a label-less trigger is never chevron-only ---- */
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger-code'] {
+/* The compact trigger's BCP-47 code reads as a tracked uppercase tag, so a
+   label-less trigger is never chevron-only. */
+[data-pattern='locale-switcher'] [data-part='code'] {
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
   line-height: 1.2;
@@ -66920,121 +66908,26 @@ html[data-ds-motion='reduced']
 }
 
 /* ---- flag glyph (emoji; geometry only) ---- */
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='flag'] {
+[data-pattern='locale-switcher'] [data-part='flag'] {
+  flex-shrink: 0;
   font-size: var(--ds-font-size-lg);
   line-height: 1;
-  flex-shrink: 0;
 }
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-size='sm'] [data-part='flag'] {
+.ds-pattern-locale-switcher.ds-engine-modern .ds-select-shell[data-size='sm'] [data-part='trigger'] [data-part='flag'] {
   font-size: var(--ds-font-size-sm);
 }
 
-/* ---- panel (the old inline popup object, re-anchored logically so it
-        opens from the inline-start edge under RTL). max-inline-size keeps a
-        long autoglottonym list inside the viewport; the entrance rides the
-        canonical keyframes on the fast motion channel ---- */
-.ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
-  position: absolute;
-  inset-block-start: 100%;
-  inset-inline-start: 0;
-  z-index: var(--ds-z-index-dropdown, 1000);
-  min-inline-size: 180px;
-  max-inline-size: min(16rem, calc(100dvw - 2rem));
-  max-block-size: 280px;
-  margin-block-start: var(--ds-spacing-1, 4px);
-  padding: var(--ds-spacing-1, 4px);
-  overflow-y: auto;
-  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
-  border-radius: var(--ds-radius-lg);
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-2);
-  animation: ds-foundation-fade-in-down var(--ds-motion-feedback) var(--ds-motion-ease-enter, ease-out);
-}
-
-/* ---- inline-end flip: the engine measures the real panel against the
-        viewport and stamps data-placement='end' when the inline-start
-        anchor would push the panel past the inline-end edge (a switcher in
-        the end of a 320px toolbar). The extra attribute outranks the base
-        anchor rule at equal class weight. ---- */
-.ds-pattern-locale-switcher.ds-engine-modern[data-part='root']
-  [data-part='panel'][data-placement='end'] {
-  inset-inline-start: auto;
-  inset-inline-end: 0;
-}
-
-/* ---- options ---- */
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-2, 8px);
-  inline-size: 100%;
-  padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);
-  border: none;
-  border-radius: var(--ds-radius-md);
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  /* The row is an inert activedescendant option, not a button, so the family
-     face has to be declared: there is no UA button font to inherit from. */
-  font-family: inherit;
-  font-size: var(--ds-font-size-sm, 14px);
-  text-align: start;
-  cursor: pointer;
-  transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
-}
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='option-label'] {
-  flex: 1;
-  min-inline-size: 0;
-  overflow-wrap: anywhere;
-  line-height: 1.3;
-}
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-active='true'] {
-  background: var(--ds-surface-inset);
-  font-weight: var(--ds-font-weight-semibold, 600);
-}
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-focused='true'] {
-  background: var(--ds-surface-inset, var(--ds-color-neutral-100));
-}
-
-/* ---- active check (active state reads by shape + weight, never color
-        alone) ---- */
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='check'] {
-  display: inline-flex;
-  flex-shrink: 0;
-  color: var(--ds-color-primary);
-}
-
-/* ---- forced colors: the panel/trigger frames read as ButtonText; the
-        keyboard/pointer focus row gets a Highlight outline (the active
-        locale already reads by check shape + weight). ---- */
+/* ---- forced colors: the host-painted trigger frame reads as ButtonText ---- */
 @media (forced-colors: active) {
-  .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'],
-  .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
+  .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'][data-chrome='none'] {
     border-color: ButtonText;
-  }
-
-  .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-focused='true'] {
-    outline: 2px solid Highlight;
-    outline-offset: -2px;
-  }
-}
-
-/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
-   below the canonical --ds-touch-target-min channel; fine pointers keep the
-   authored size untouched. */
-@media (hover: none), (pointer: coarse) {
-  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'],
-  .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'] {
-    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
 
 /* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
    relaid out, or left waiting on an event that never arrives. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'],
-  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'],
-  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] > svg,
-  .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
+  .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'][data-chrome='none'] {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

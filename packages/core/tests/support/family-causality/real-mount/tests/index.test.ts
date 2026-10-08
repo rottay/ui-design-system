@@ -46,4 +46,18 @@ describe('real-mount step selector refusal', () => {
     expect(readings.drill).toEqual({ attr: '<absent>', inline: '' });
     expect(readings['drill>both']).toEqual({ attr: 'on', inline: 'on' });
   }, TIMEOUT);
+
+  it('reads the element box', async () => {
+    const readings = await measureRealMount({
+      vertical: 'bithire',
+      bundle,
+      scenes: [
+        {
+          ...scene({ id: 'size', selector: '#first', style: { width: '37px' } }),
+          targets: [{ id: 'width', selector: '#first', property: '@rect.width' }],
+        },
+      ],
+    });
+    expect(readings['drill>size']).toEqual({ width: '37' });
+  }, TIMEOUT);
 });

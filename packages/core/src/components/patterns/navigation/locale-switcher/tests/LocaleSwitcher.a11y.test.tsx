@@ -8,13 +8,12 @@ import { renderWithEngine } from '@tests/support/engine';
 import ModernLocaleSwitcher from '../engines/modern';
 import { DEFAULT_LOCALES } from '../runtime/default-locales';
 
-const MODERN_SKIN = readFileSync(
-  join(
-    __dirname,
-    '../../../../../foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css',
-  ),
-  'utf8',
-);
+const SKIN = (family: string) =>
+  readFileSync(join(__dirname, `../../../../../foundation/tokens/css/runtime/engines/modern/skin/${family}/index.css`), 'utf8');
+const MODERN_SKIN = SKIN('locale-switcher');
+const SELECT_SKIN = SKIN('select');
+
+const listbox = () => document.querySelector<HTMLElement>('[role="listbox"]');
 
 // The trigger keeps DOM focus while the panel is open, so the APG combobox
 // wiring (aria-controls + aria-activedescendant) has to live on the trigger:
@@ -26,15 +25,15 @@ describe('modern locale switcher -- virtual focus is announced from the trigger'
       'modern',
     );
 
-    const trigger = screen.getByTestId('locale-switcher-trigger');
-    expect(trigger.getAttribute('role')).toBe('combobox');
+    const trigger = screen.getByRole('combobox', { name: /Language/ });
+    expect(trigger).toBe(screen.getByTestId('locale-switcher-trigger'));
 
     fireEvent.click(trigger);
     fireEvent.keyDown(trigger, { key: 'ArrowDown' });
 
-    const listbox = screen.getByTestId('locale-switcher-menu');
-    expect(listbox.id).not.toBe('');
-    expect(trigger.getAttribute('aria-controls')).toBe(listbox.id);
+    const panel = screen.getByRole('listbox');
+    expect(panel.id).not.toBe('');
+    expect(trigger.getAttribute('aria-controls')).toBe(panel.id);
 
     const activeId = trigger.getAttribute('aria-activedescendant') ?? '';
     expect(activeId).not.toBe('');
@@ -42,7 +41,7 @@ describe('modern locale switcher -- virtual focus is announced from the trigger'
     const activeOption = document.getElementById(activeId);
     expect(activeOption).not.toBeNull();
     expect(activeOption?.getAttribute('role')).toBe('option');
-    expect(activeOption?.getAttribute('data-focused')).toBe('true');
+    expect(activeOption?.getAttribute('data-active')).toBe('true');
   });
 
   it('scopes option ids per instance so two switchers cannot collide', () => {
@@ -55,13 +54,19 @@ describe('modern locale switcher -- virtual focus is announced from the trigger'
     );
 
     const triggers = screen.getAllByTestId('locale-switcher-trigger');
-    for (const trigger of triggers) fireEvent.click(trigger);
+    const ids: string[] = [];
+    const optionIds: string[] = [];
+    for (const trigger of triggers) {
+      fireEvent.click(trigger);
+      ids.push(screen.getByRole('listbox').id);
+      optionIds.push(...screen.getAllByRole('option').map((option) => option.id));
+      fireEvent.keyDown(trigger, { key: 'Escape' });
+      expect(listbox()).toBeNull();
+    }
 
-    const listboxes = screen.getAllByTestId('locale-switcher-menu');
-    expect(listboxes).toHaveLength(2);
-    expect(listboxes[0].id).not.toBe(listboxes[1].id);
-
-    const optionIds = screen.getAllByRole('option').map((option) => option.id);
+    expect(ids).toHaveLength(2);
+    expect(ids[0]).not.toBe(ids[1]);
+    expect(optionIds).toHaveLength(DEFAULT_LOCALES.length * 2);
     expect(new Set(optionIds).size).toBe(optionIds.length);
   });
 });
@@ -89,7 +94,7 @@ describe('modern locale switcher -- loading is non-operable and announced', () =
     expect(screen.queryByRole('listbox')).toBeNull();
 
     fireEvent.keyDown(root as HTMLElement, { key: 'ArrowDown' });
-    expect(screen.queryByTestId('locale-switcher-menu')).toBeNull();
+    expect(listbox()).toBeNull();
     expect(onChange).not.toHaveBeenCalled();
   });
 
@@ -101,24 +106,29 @@ describe('modern locale switcher -- loading is non-operable and announced', () =
     );
 
     fireEvent.click(screen.getByTestId('locale-switcher-trigger'));
-    expect(screen.getByTestId('locale-switcher-menu')).toBeInTheDocument();
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
 
     rerender(
       <ModernLocaleSwitcher locale="en" onChange={onChange} locales={DEFAULT_LOCALES} loading />,
     );
 
-    expect(screen.queryByTestId('locale-switcher-menu')).toBeNull();
+    expect(listbox()).toBeNull();
     expect(screen.getByTestId('locale-switcher-trigger').closest("[data-part='source'][inert]")).toBeTruthy();
     expect(screen.queryByRole('combobox')).toBeNull();
   });
 });
 
 describe('modern locale switcher -- coarse-pointer touch floor', () => {
-  it('floors option rows at the governed touch-target channel', () => {
-    const coarseBlock = MODERN_SKIN.slice(MODERN_SKIN.indexOf('@media (hover: none), (pointer: coarse)'));
-    expect(coarseBlock).not.toBe('');
-    expect(coarseBlock).toContain("[data-part='option']");
-    expect(coarseBlock).toContain('min-block-size: var(--ds-touch-target-min, 44px);');
+  it('floors the trigger and the option rows through Select, and the frame floor yields to it', () => {
+    const coarseBlock = SELECT_SKIN.slice(SELECT_SKIN.indexOf('@media (pointer: coarse)'));
+    expect(SELECT_SKIN.indexOf('@media (pointer: coarse)')).toBeGreaterThan(-1);
+    expect(coarseBlock).toMatch(/\[data-part='trigger'\] \{\s*min-block-size: max\(/);
+    expect(coarseBlock).toMatch(/\[data-part='option'\] \{\s*min-block-size: max\(/);
+    expect(coarseBlock).toContain('var(--ds-touch-target-min)');
+    // The pattern's own block-size floor sits in :where(), so it never outranks Select's coarse floor.
+    const floors = MODERN_SKIN.split('}').filter((rule) => /min-block-size/.test(rule));
+    expect(floors.length).toBeGreaterThan(0);
+    for (const rule of floors) expect(rule).toMatch(/:where\(/);
   });
 
   it('does not resurrect the menu when loading clears', () => {
@@ -126,13 +136,13 @@ describe('modern locale switcher -- coarse-pointer touch floor', () => {
     const { rerender } = renderWithEngine(<ModernLocaleSwitcher locale="en" onChange={onChange} />, 'modern');
 
     fireEvent.click(screen.getByTestId('locale-switcher-trigger'));
-    expect(screen.getByTestId('locale-switcher-menu')).toBeInTheDocument();
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
 
     rerender(<ModernLocaleSwitcher locale="en" onChange={onChange} loading />);
-    expect(screen.queryByTestId('locale-switcher-menu')).toBeNull();
+    expect(listbox()).toBeNull();
 
     rerender(<ModernLocaleSwitcher locale="en" onChange={onChange} />);
-    expect(screen.queryByTestId('locale-switcher-menu')).toBeNull();
+    expect(listbox()).toBeNull();
     expect(screen.getByTestId('locale-switcher-trigger').getAttribute('aria-expanded')).toBe('false');
   });
 });
@@ -157,11 +167,58 @@ describe('modern locale switcher -- the compact trigger always carries text', ()
     // Before: `showLabel` defaulted to false at size sm and `flag` is optional
     // on LocaleDef, so this trigger rendered a bare decorative chevron with no
     // text carrier at all.
-    const code = trigger.querySelector("[data-part='trigger-code']");
+    const code = trigger.querySelector("[data-part='code']");
     expect(code).not.toBeNull();
     expect(code?.textContent).toBe('pt');
+    // A BCP-47 tag is not text in that language.
+    expect(code?.hasAttribute('lang')).toBe(false);
 
-    // The new part is not an unstyled orphan: the skin owns its typography.
-    expect(MODERN_SKIN).toContain("[data-part='trigger-code']");
+    // The part is not an unstyled orphan: the skin owns its typography.
+    expect(MODERN_SKIN).toContain("[data-part='code']");
+  });
+});
+
+describe('modern locale switcher -- each row is named by its autoglottonym in its own language', () => {
+  it('gives every option the autoglottonym as its name, and its label element lang=code dir=auto', () => {
+    renderWithEngine(<ModernLocaleSwitcher locale="en" onChange={vi.fn()} locales={DEFAULT_LOCALES} />, 'modern');
+    fireEvent.click(screen.getByRole('combobox', { name: /Language/ }));
+
+    const options = screen.getAllByRole('option');
+    expect(options).toHaveLength(DEFAULT_LOCALES.length);
+    DEFAULT_LOCALES.forEach((def, index) => {
+      const option = options[index]!;
+      expect(screen.getByRole('option', { name: def.label })).toBe(option);
+      const label = option.querySelector("[data-part='autoglottonym']");
+      expect(label).toHaveAttribute('lang', def.code);
+      expect(label).toHaveAttribute('dir', 'auto');
+      expect(option.hasAttribute('lang') || option.hasAttribute('dir')).toBe(false);
+      expect(option.querySelector("[data-part='flag']")).toHaveAttribute('aria-hidden', 'true');
+    });
+  });
+
+  it('reaches a locale by typing its autoglottonym', () => {
+    renderWithEngine(<ModernLocaleSwitcher locale="en" onChange={vi.fn()} locales={DEFAULT_LOCALES} />, 'modern');
+    const trigger = screen.getByRole('combobox', { name: /Language/ });
+    fireEvent.click(trigger);
+    fireEvent.keyDown(trigger, { key: 'f' });
+    expect(document.getElementById(trigger.getAttribute('aria-activedescendant')!)).toHaveAccessibleName('Français');
+    fireEvent.keyDown(trigger, { key: '\u0627' });
+    expect(document.getElementById(trigger.getAttribute('aria-activedescendant')!)).toHaveAccessibleName(
+      '\u0627\u0644\u0639\u0631\u0628\u064A\u0629',
+    );
+  });
+
+  it('does not call onChange when the current locale is chosen again', () => {
+    const onChange = vi.fn();
+    renderWithEngine(<ModernLocaleSwitcher locale="en" onChange={onChange} locales={DEFAULT_LOCALES} />, 'modern');
+    const trigger = screen.getByRole('combobox', { name: /Language/ });
+    fireEvent.click(trigger);
+    fireEvent.click(screen.getByRole('option', { name: 'English' }));
+    expect(onChange).not.toHaveBeenCalled();
+    fireEvent.click(trigger);
+    fireEvent.keyDown(trigger, { key: 'ArrowDown' });
+    fireEvent.keyDown(trigger, { key: 'Enter' });
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith('pt');
   });
 });

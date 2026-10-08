@@ -26,7 +26,13 @@ import React, {
 
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import { isComposingKey, partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
-import type { SelectProps, SelectOption, SelectSize } from '../../contracts';
+import type {
+  SelectProps,
+  SelectOption,
+  SelectOptionRenderState,
+  SelectSize,
+  SelectValueRenderState,
+} from '../../contracts';
 import { SELECT_DEFAULTS } from '../../contracts';
 import {
   FieldOverlayPanel,
@@ -47,7 +53,10 @@ import { ActionSearchIcon } from '@/graphics/icons/semantic/generated/roles/acti
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 import {
-  getLabelText,
+  getOptionLabelProps,
+  getOptionText,
+  getOptionTitle,
+  isUnnamedOption,
   buildRenderableList,
   flatOptionsFromGroups,
   DEFAULT_ITEM_HEIGHT,
@@ -194,6 +203,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     virtual,
     tokenSeparators,
     forceCustomDropdown = false,
+    renderOption,
+    renderValue,
+    listboxLabel,
     ...rest
   } = props;
 
@@ -229,6 +241,17 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     }
     return flatOptions;
   }, [flatOptions, optionGroups]);
+
+  const warnedUnnamedRef = useRef(false);
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production' || warnedUnnamedRef.current) return;
+    const unnamed = allOptions.find(isUnnamedOption);
+    if (!unnamed) return;
+    warnedUnnamedRef.current = true;
+    console.warn(
+      `Select option ${String(unnamed.value)} has a non-text label and no textValue; it cannot be reached by type-ahead or search.`
+    );
+  }, [allOptions]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -290,8 +313,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
   const defaultFilter = useCallback((input: string, option?: SelectOption): boolean => {
     if (!option) return false;
-    const labelText = getLabelText(option.label);
-    return labelText.toLowerCase().includes(input.toLowerCase());
+    return getOptionText(option).toLowerCase().includes(input.toLowerCase());
   }, []);
 
   const filteredOptions = useMemo(() => {
@@ -326,7 +348,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const getItemText = useCallback(
     (index: number) => {
       const item = arrayValueAt(renderableItems, index);
-      return item?.type === 'option' && item.option ? getLabelText(item.option.label) : undefined;
+      return item?.type === 'option' && item.option ? getOptionText(item.option) : undefined;
     },
     [renderableItems]
   );
@@ -447,7 +469,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       if (!token) return false;
 
       const matchOption = allOptions.find(
-        (opt) => getLabelText(opt.label).toLowerCase() === token.toLowerCase() || String(opt.value) === token
+        (opt) => getOptionText(opt).toLowerCase() === token.toLowerCase() || String(opt.value) === token
       );
       if (matchOption && !internalValue.includes(matchOption.value)) {
         const newValue = [...internalValue, matchOption.value];
@@ -675,6 +697,18 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     };
   }, [isOpen, containerEl, dropdownEl]);
 
+  const valueContent = (opt: SelectOption, placement: SelectValueRenderState['placement']): React.ReactNode =>
+    renderValue
+      ? renderValue(
+          opt,
+          opt.label,
+          Object.freeze({ placement, disabled: disabled || Boolean(opt.disabled), labelProps: getOptionLabelProps(opt) }),
+        )
+      : opt.label;
+
+  // A hook spreads `labelProps` on its own text element, so Select stamps them only on its default content.
+  const valueLabelProps = (opt: SelectOption) => (renderValue ? undefined : getOptionLabelProps(opt));
+
   const displayValue = useMemo(() => {
     if (selectedOptions.length === 0) return null;
 
@@ -688,12 +722,14 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             <span key={opt.value} data-part="tag">
               <span
                 data-part="tag-label"
-                title={typeof opt.label === 'string' ? opt.label : undefined}
+                title={getOptionTitle(opt)}
+                lang={valueLabelProps(opt)?.lang}
+                dir={valueLabelProps(opt)?.dir}
               >
-                {opt.label}
+                {valueContent(opt, 'tag')}
               </span>
               <TagRemoveButton
-                label={`${tCommonOr('remove', EN_FALLBACK.remove)} ${getLabelText(opt.label)}`}
+                label={`${tCommonOr('remove', EN_FALLBACK.remove)} ${getOptionText(opt)}`}
                 onRemove={() => handleSelect(opt.value, opt)}
               />
             </span>
@@ -711,12 +747,14 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       <span
         data-part="value"
         data-mode="single"
-        title={typeof selectedOptions[0].label === 'string' ? selectedOptions[0].label : undefined}
+        title={getOptionTitle(selectedOptions[0])}
+        lang={valueLabelProps(selectedOptions[0])?.lang}
+        dir={valueLabelProps(selectedOptions[0])?.dir}
       >
-        {selectedOptions[0].label}
+        {valueContent(selectedOptions[0], 'single')}
       </span>
     );
-  }, [selectedOptions, multiple, maxTagCount, handleSelect, translationCommon]);
+  }, [selectedOptions, multiple, maxTagCount, handleSelect, translationCommon, renderValue, disabled]);
 
   const triggerHandlers = {
     onPointerEnter: trigger.handlers.onPointerEnter,
@@ -729,7 +767,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   /*  Native <select> for the simple case                              */
   /* ---------------------------------------------------------------- */
 
-  if (!forceCustomDropdown && !isSearchable && !multiple && !optionGroups && !virtual) {
+  if (!forceCustomDropdown && !isSearchable && !multiple && !optionGroups && !virtual && !renderOption && !renderValue) {
     const handleNativeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selectedValue = e.target.value;
       const selectedOption = allOptions.find((o) => String(o.value) === selectedValue);
@@ -807,8 +845,14 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             </option>
           )}
           {allOptions.map((option) => (
-            <option key={String(option.value)} value={option.value} disabled={option.disabled}>
-              {option.label}
+            <option
+              key={String(option.value)}
+              value={option.value}
+              disabled={option.disabled}
+              lang={getOptionLabelProps(option).lang}
+              dir={getOptionLabelProps(option).dir}
+            >
+              {option.textValue || option.label}
             </option>
           ))}
         </select>
@@ -874,6 +918,27 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     const option = item.option!;
     const isSelected = internalValue.includes(option.value);
     const optionProps = listbox.getOptionProps(idx, { selected: isSelected, disabled: option.disabled });
+    const labelProps = getOptionLabelProps(option);
+    const defaultContent = (
+      <>
+        <span data-part="option-label" lang={labelProps.lang} dir={labelProps.dir}>{option.label}</span>
+        {option.description && (
+          <span data-part="option-description">
+            {option.description}
+          </span>
+        )}
+      </>
+    );
+    const renderState: SelectOptionRenderState | undefined = renderOption
+      ? Object.freeze({
+          selected: isSelected,
+          active: idx === activeIndex,
+          disabled: Boolean(option.disabled),
+          index: idx,
+          multiple,
+          labelProps,
+        })
+      : undefined;
     return (
       <div
         key={option.value}
@@ -900,13 +965,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           </span>
         )}
         {option.icon ? <span data-part="option-icon">{option.icon}</span> : null}
-        <span data-part="option-content" data-has-description={option.description ? 'true' : undefined}>
-          <span data-part="option-label">{option.label}</span>
-          {option.description && (
-            <span data-part="option-description">
-              {option.description}
-            </span>
-          )}
+        <span data-part="option-content" data-has-description={!renderOption && option.description ? 'true' : undefined}>
+          {renderOption && renderState ? renderOption(option, defaultContent, renderState) : defaultContent}
         </span>
         {!multiple && isSelected && (
           <span data-part="option-check">
@@ -1073,6 +1133,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               id={listboxProps.id}
               aria-busy={listboxProps['aria-busy']}
               aria-multiselectable={listboxProps['aria-multiselectable']}
+              aria-label={listboxLabel}
               data-part="option-list"
               data-virtual={virtualEnabled || undefined}
               style={virtualEnabled ? ({ '--ds-select-virtual-height': `${containerHeight}px` } as React.CSSProperties) : undefined}
