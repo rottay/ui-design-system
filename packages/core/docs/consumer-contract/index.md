@@ -463,6 +463,11 @@ Alcance (owner, 2026-09-05): el único carril APP en marcha es app-bithire; app-
 Las 24 props, miembros de unión y grafías físicas que solo implementan Classic
 y Rustic dejaron de ser deprecaciones por la disposición D-A del owner: siguen
 publicados, sin marcador `@deprecated`, y son canónicos para los motores que los
-implementan. La tabla, la evidencia y el alcance excluido (Classic y Rustic no
+implementan. La fila 25, el componente `Callout`, recibe la misma disposición:
+Classic y Rustic son los únicos motores con implementación propia de `Callout`;
+Modern no tiene motor propio, y `Callout` sigue publicado para todos los motores (en Modern lo pinta la
+presentación de callout de `Alert`), sin paridad declarada con el `Alert` de
+Classic y Rustic, que no lee `action`.
+La tabla, la evidencia y el alcance excluido (Classic y Rustic no
 pasan a ser productivos) están en
 [`frozen-engine-capabilities/`](frozen-engine-capabilities/index.md).

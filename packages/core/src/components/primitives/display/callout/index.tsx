@@ -1,11 +1,13 @@
 'use client';
 
 /**
- * @fileoverview Callout - folded into Alert.
+ * @fileoverview Callout - canonical for every engine (D-A); on Modern it is
+ * painted by Alert's callout presentation.
  * Callout is Alert with a title, a body and an action tray; the Modern engine
  * renders both through one alert surface.
  *
- * @example Migration
+ * @example Modern-only alternative
+ * Classic and Rustic `Alert` has no action tray.
  * ```tsx
  * // Before
  * <Callout tone="warning" title="Attention" action={<Button>Renew</Button>} closable>
