@@ -34,6 +34,7 @@ import {
   parseEmitterMappings,
   parseTypeRegistry,
 } from "../../../../../libraries/tokens/index.mjs";
+import { chromeEmitterSources } from "../../../../../libraries/tokens/chrome-emitter/index.mjs";
 
 const contract = `
 export interface FlatTheme {
@@ -1096,7 +1097,7 @@ test("the productivity test moves no number on the shipped lowering", () => {
   // SAME census, because the lowering has no generated owner at all. When one
   // appears, this comparison is what says whether it is productive.
   const lowering = join(CORE_ROOT, "src/infrastructure/compilers/runtime/theme/runtime/lowering");
-  const naive = [join(CORE_ROOT, "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts")];
+  const naive = [...chromeEmitterSources(CORE_ROOT)];
   const walk = (dir) => {
     if (existsSync(join(dir, "index.ts"))) naive.push(join(dir, "index.ts"));
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -1193,4 +1194,58 @@ test("INV-07 discharged (G103-02): the posture channels left the census with the
   }
   // The deduction the obligation bought is gone with it: the roll-up is read raw.
   assert.equal(Object.hasOwn(baseline.ceilings, "emitted-but-unconsumed.posture"), false);
+});
+
+/* -------------------------------------------------------------------------- */
+/* the chrome emitter is two files: a map is credited where it is used         */
+/* -------------------------------------------------------------------------- */
+
+const SPLIT_TABLES = `export const DRILL_CARD_VARIABLES = chromeVariableMap<Card>("--ds-drill-card-", ["bg", "border"] as const);
+`;
+
+function splitEmissions(rootText) {
+  const { registry } = parseTypeRegistry([{ file: "theme.ts", text: contract }]);
+  return new Set(
+    parseEmitterMappings(
+      [
+        { file: "chrome/index.ts", text: rootText },
+        { file: "chrome/tables/index.ts", text: SPLIT_TABLES },
+      ],
+      registry,
+    ).emissions.map((emission) => emission.name),
+  );
+}
+
+test("DRILL: a map the root only imports or re-exports is not credited", () => {
+  for (const rootText of [
+    `import { DRILL_CARD_VARIABLES } from "./tables";\nexport function chromeToVariables() { return {}; }\n`,
+    `export { DRILL_CARD_VARIABLES } from "./tables";\n`,
+    `import * as DRILL_CARD_VARIABLES from "./tables";\n`,
+  ]) {
+    const emitted = splitEmissions(rootText);
+    assert.ok(!emitted.has("--ds-drill-card-bg"), rootText);
+    assert.ok(!emitted.has("--ds-drill-card-border"), rootText);
+  }
+});
+
+test("DRILL: a map the root imports and uses is credited from its data file", () => {
+  const emitted = splitEmissions(
+    `import { DRILL_CARD_VARIABLES } from "./tables";
+export function chromeToVariables(vars: Record<string, string>, card: Card) {
+  setMappedChromeVars(vars, card, DRILL_CARD_VARIABLES);
+}
+`,
+  );
+  assert.ok(emitted.has("--ds-drill-card-bg"));
+  assert.ok(emitted.has("--ds-drill-card-border"));
+});
+
+test("the shipped inventory reads the chrome emitter through its one authority", () => {
+  const chrome = chromeEmitterSources(CORE_ROOT).map((file) => relative(CORE_ROOT, file).replace(/\\/g, "/"));
+  const shipped = runThemeChannelParityGate();
+  assert.deepEqual(shipped.analysis.emitterFiles.slice(0, chrome.length), chrome);
+  assert.deepEqual(chrome, [
+    "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+    "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/tables/index.ts",
+  ]);
 });

@@ -52,6 +52,7 @@ import {
   parseEmitterMappings,
   parseTypeRegistry,
 } from '../../../../../libraries/tokens/index.mjs';
+import { chromeEmitterSources } from '../../../../../libraries/tokens/chrome-emitter/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -447,7 +448,7 @@ export function collectEmitterOwners(dir) {
 }
 
 const emitterFiles = [
-  join(srcDir, 'infrastructure', 'compilers', 'kernel', 'foundation', 'css', 'chrome-variables', 'index.ts'),
+  ...chromeEmitterSources(root),
   ...collectEmitterOwners(loweringDir),
 ];
 

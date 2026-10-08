@@ -545,6 +545,14 @@ function resolveAlias(node, environment, registry) {
 const STATIC_MAP_KEBAB = (field) =>
   field.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 
+// An import or re-export only names a map; crediting it would emit nothing.
+const isModuleBindingName = (node) =>
+  Boolean(node.parent) &&
+  (ts.isImportSpecifier(node.parent) ||
+    ts.isExportSpecifier(node.parent) ||
+    ts.isImportClause(node.parent) ||
+    ts.isNamespaceImport(node.parent));
+
 function recordKeyOwnerTypeName(typeNode) {
   if (!typeNode) return null;
   if (ts.isParenthesizedTypeNode(typeNode))
@@ -703,7 +711,7 @@ export function parseEmitterMappings(sources, registry) {
     const usedMaps = new Set();
     for (const source of sourceFiles) {
       const visitUse = (node) => {
-        if (ts.isIdentifier(node) && staticMaps.has(node.text)) {
+        if (ts.isIdentifier(node) && staticMaps.has(node.text) && !isModuleBindingName(node)) {
           const definition = staticMaps.get(node.text);
           if (node !== definition.nameNode) usedMaps.add(node.text);
         }

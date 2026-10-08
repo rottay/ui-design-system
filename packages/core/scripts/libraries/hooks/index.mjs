@@ -80,6 +80,7 @@ import {
   parseEmitterMappings,
   parseTypeRegistry,
 } from '../tokens/index.mjs';
+import { chromeEmitterSources } from '../tokens/chrome-emitter/index.mjs';
 
 // ---------------------------------------------------------------------------
 // Selector analysis
@@ -1409,7 +1410,8 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
   // \1). Without that, a template literal carrying CSS text —
   // `` `--ds-listing-grid-gap: ${value};` `` — reads as an emission key and
   // wrongly promotes a hook into the tenant-owned channel.
-  const chromeSource = readFileSync(chromePath, 'utf8');
+  const chromePaths = chromeEmitterSources(coreRoot);
+  const chromeSource = chromePaths.map((file) => readFileSync(file, 'utf8')).join('\n');
   const tenantChannel = new Set();
   for (const match of chromeSource.matchAll(/\[\s*(["'`])(--ds-[a-z0-9-]+)\1\s*\]\s*=/g)) {
     tenantChannel.add(match[2]);
@@ -1444,7 +1446,7 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
   // only one of them would leave the others' channels unowned -- the exact
   // failure this anchor list exists to prevent.
   const compilerSources = [
-    chromePath,
+    ...chromePaths,
     ...collectFiles(flatThemeEmitterPath, ['.ts']).filter((file) => (
       file.endsWith(`${sep}index.ts`) && !file.includes(`${sep}tests${sep}`)
     )),

@@ -79,6 +79,8 @@ import { sha256Hex } from '../governance/index.mjs';
  * `withBuildFixture` has to author every one of those files or the build dies
  * with ENOENT, and a hand-copied list goes stale the day the roster moves. */
 import { REACH_SOURCES } from '../../../orchestration/runtime/tenant-reach/index.mjs';
+import { planeOfCompilerFile } from './index.mjs';
+import { CHROME_VARIABLE_SOURCES, LOWERING_SOURCES } from '../../../orchestration/runtime/tenant-reach/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = join(HERE, 'index.mjs');
@@ -5619,5 +5621,20 @@ test('OM-5 NAMED LIMIT: a conditional spread inside an object is a producer wher
       } as React.CSSProperties;`;
   for (const site of pinnedStampSites(dtWithReturn(dtLiveText(), conditionalSpread))) {
     assert.equal(site.disposition, PRODUCER_D, `conditional spread :${site.form}`);
+  }
+});
+
+test('plane: every chrome emitter member is ts-chrome-variables and nothing else is', () => {
+  const chrome = 'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables';
+  assert.deepEqual(CHROME_VARIABLE_SOURCES, [`${chrome}/index.ts`, `${chrome}/tables/index.ts`]);
+  for (const file of CHROME_VARIABLE_SOURCES) assert.equal(planeOfCompilerFile(file), 'ts-chrome-variables', file);
+  for (const file of [
+    ...LOWERING_SOURCES,
+    'packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts',
+    `${chrome}/orphan/index.ts`,
+    `${chrome}/tests/frozen-engine-compat.test.ts`,
+    `${chrome}/tables`,
+  ]) {
+    assert.equal(planeOfCompilerFile(file), 'ts-compilers', file);
   }
 });

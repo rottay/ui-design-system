@@ -72,7 +72,7 @@ import {
 import { CASCADE_ENGINE_ORDER } from "../../../../libraries/engine/roster/index.mjs";
 import { classifyCrossFileRows, dispositionIndex, injectedScanPaths } from "../disposition/index.mjs";
 import {
-  CHROME_VARIABLES,
+  CHROME_VARIABLE_SOURCES,
   LOWERING_SOURCES,
   buildEnumerators,
   expandTemplate,
@@ -100,8 +100,8 @@ export const PLANES = ["css", "ts-compilers", "ts-chrome-variables", "tsx-inline
 /** Which plane a compiler source belongs to. The split is BY NAME, not postal. */
 const APPEARANCE_POSTURE =
   "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts";
-const planeOfCompilerFile = (file) =>
-  file === CHROME_VARIABLES ? "ts-chrome-variables" : "ts-compilers";
+export const planeOfCompilerFile = (file) =>
+  CHROME_VARIABLE_SOURCES.includes(file) ? "ts-chrome-variables" : "ts-compilers";
 
 /* ---------------------------------------------------------------- ids --- */
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");
@@ -947,7 +947,7 @@ export function buildProducers({
   const COMPILER_APPLICABILITY =
     "compiler emission: the theme document is applied at :root / [data-tenant] scope, above every engine selector, and the compiler has no engine branch -- engine-agnostic by construction, not by specificity";
 
-  for (const path of [CHROME_VARIABLES, ...LOWERING_SOURCES, APPEARANCE_POSTURE].filter((p) =>
+  for (const path of [...CHROME_VARIABLE_SOURCES, ...LOWERING_SOURCES, APPEARANCE_POSTURE].filter((p) =>
     existsSync(join(root, p)),
   )) {
     const source = read(path);

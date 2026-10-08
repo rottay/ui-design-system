@@ -29,7 +29,13 @@
  */
 import { existsSync, readFileSync } from 'node:fs';
 
+import { CHROME_EMITTER_DIR, CHROME_EMITTER_FILES } from '../../../../libraries/tokens/chrome-emitter/index.mjs';
+
 export const CHROME_VARIABLES = 'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts';
+/** Every file of the chrome emitter, root first, so name resolution keeps its precedence. */
+export const CHROME_VARIABLE_SOURCES = Object.freeze(
+  CHROME_EMITTER_FILES.map((entry) => `packages/core/${CHROME_EMITTER_DIR}/${entry.path}`),
+);
 /**
  * The theme lowering's channel writers: one owner per concern, so a template is
  * attributed to the writer that actually emits it rather than to whichever file
@@ -140,7 +146,7 @@ export const LOWERING_SOURCES = Object.freeze([
 ]);
 
 export const REACH_SOURCES = Object.freeze([
-  CHROME_VARIABLES,
+  ...CHROME_VARIABLE_SOURCES,
   ...LOWERING_SOURCES,
   TENANT_THEME,
 ]);
@@ -349,7 +355,7 @@ export function overrideTokens(root) {
  * array. The vocabularies live beside the contracts, not beside the emitters.
  */
 const CONSTANT_SOURCES = Object.freeze([
-  CHROME_VARIABLES,
+  ...CHROME_VARIABLE_SOURCES,
   ...LOWERING_SOURCES,
   TENANT_THEME,
   'packages/core/src/foundation/kernel/color/oklch/ramp/index.ts',
@@ -583,7 +589,7 @@ export function tenantReach({ root }) {
   const unattributed = [];
   const perEnumerator = new Map();
 
-  for (const path of [CHROME_VARIABLES, ...LOWERING_SOURCES]) {
+  for (const path of [...CHROME_VARIABLE_SOURCES, ...LOWERING_SOURCES]) {
     const source = read(root, path);
     const bodies = new Map(functionBodies(source).map((fn) => [fn.name, fn.body]));
     for (const emission of templateEmissions(source)) {
