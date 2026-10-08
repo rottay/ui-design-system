@@ -147,8 +147,6 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
         "menuSectionTitleStyle",
         "panelCardStyle",
         "pillBadgeSmStyle",
-        "pillBadgeStyle",
-        "popupPanelStyle",
         "spinnerStyle",
       ].map((name) => [name, ownedStyle()])
     ),

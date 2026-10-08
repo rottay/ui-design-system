@@ -41,11 +41,7 @@ export const REPEATED_PATH_WORD_DEFINITIONS = Object.freeze(['segment-adjacent',
 export const REPEATED_PATH_WORD_DEFINITION = 'segment-adjacent';
 
 /** Empty folders a live worktree may hold; Git cannot track them. An exemption list, not a definition: it may only shrink. */
-export const REGISTERED_WORKTREE_EMPTY_DIRECTORIES = Object.freeze([
-  'entrypoints/icons/legacy',
-  'infrastructure/runtime/application/navigation/routing/tests',
-  'infrastructure/runtime/application/notifications/tests',
-]);
+export const REGISTERED_WORKTREE_EMPTY_DIRECTORIES = Object.freeze([]);
 
 export const STRUCTURE_LAWS = Object.freeze([
   'authored-line-count',

@@ -139,7 +139,7 @@ describe("chrome/workspace-shell", () => {
     const frame = readFileSync(
       resolve(
         process.cwd(),
-        "src/foundation/tokens/css/presentation/components/patterns-paint/index.css"
+        "src/foundation/tokens/css/presentation/components/patterns/index.css"
       ),
       "utf8"
     );

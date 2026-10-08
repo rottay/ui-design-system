@@ -276,7 +276,6 @@ describe('semantic Icon accessibility and rendering', () => {
     );
     const cssEntrypoints = [
       'src/foundation/tokens/css/facade/entrypoints/base/index.css',
-      'src/foundation/tokens/css/presentation/components/index.css',
     ].map((path) => readFileSync(resolve(process.cwd(), path), 'utf8'));
 
     expect(publicTypes).not.toMatch(/phosphor|IconWeight|Lucide/i);

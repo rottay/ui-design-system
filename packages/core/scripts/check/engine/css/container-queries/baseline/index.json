@@ -5,10 +5,6 @@
     "src/foundation/tokens/css/presentation/components/patterns/index.css": {
       "count": 1,
       "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave)"
-    },
-    "src/foundation/tokens/css/presentation/components/patterns-paint/index.css": {
-      "count": 1,
-      "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave)"
     }
   },
   "selfReferentialQueries": {

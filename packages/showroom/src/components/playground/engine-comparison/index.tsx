@@ -32,7 +32,7 @@ const ENGINES: Array<{
   {
     id: 'modern',
     label: 'Modern',
-    subtitle: 'DaisyUI',
+    subtitle: 'Rottay skins',
     accent: '#34d399',
   },
   {

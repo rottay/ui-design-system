@@ -85,7 +85,7 @@ const ENGINES = [
   },
   {
     name: 'Modern',
-    foundation: 'Tailwind / DaisyUI',
+    foundation: 'Rottay-native skins',
     personality: 'Rounded, spacious, and contemporary.',
   },
   {

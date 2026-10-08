@@ -234,7 +234,6 @@
         "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
         "packages/core/src/foundation/tokens/css/foundation/responsive/channels/index.css",
         "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
-        "packages/core/src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
         "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css",
         "packages/core/src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
         "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",

@@ -76,10 +76,8 @@ const DECLARED_OFF_LADDER = [
   // Component-container threshold: the bottom tab bar switches to its wide
   // arrangement against its OWN container width. Not a viewport step.
   "presentation/components/skin/bottom-tab-bar/index.css: min-width: 600px",
-  // Legacy inclusive viewport bound on the command-home console, duplicated in
-  // the paint sheet. 640px matches this query AND the `sm` step at the same
-  // viewport; owned by whoever unifies patterns/ with patterns-paint/.
-  "presentation/components/patterns-paint/index.css: max-width: 640px",
+  // Legacy inclusive viewport bound on the command-home console. 640px matches
+  // this query AND the `sm` step at the same viewport.
   "presentation/components/patterns/index.css: max-width: 640px",
   // 30rem = 480px, BELOW the smallest non-zero step (`sm`, 640px), and it is a
   // reachability guard rather than a layout tier: the sidebar panel anchors at

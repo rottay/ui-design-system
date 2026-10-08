@@ -42,11 +42,16 @@ const ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 /** A file no band declares, so a planted site is unambiguously the drill's. */
 const CLEAN_FILE = 'primitives/layout/box/engines/modern/index.tsx';
 /**
- * `menuItemStyle`'s `textAlign: 'left'`, a DEAD export that retires under
- * WO-RET-04 rather than being made logical, so it is the row that stays put.
- * It is a `.ts` file, hence the CSSProperties plant below rather than a JSX one.
+ * The debt band is empty in the live ledger (its last row retired with its dead
+ * export, WO-RET-04 W-5), so the debt drills pin this clean file at one planted
+ * site in a SANDBOX baseline and judge against that.
  */
-const PINNED_DEBT = 'patterns/foundation/engine-styles/modern/index.ts';
+const DRILL_DEBT = CLEAN_FILE;
+const DRILL_DEBT_SITE = "textAlign: 'left'";
+const withDrillDebtPin = () => ({
+  ...readBaseline(),
+  pinnedDebt: { [DRILL_DEBT]: { sites: 1, reason: 'drill: one planted physical site, pinned in a sandbox baseline only' } },
+});
 /** A measured pointer coordinate; the exception names exactly this site. */
 const EXCEPTION_FILE = 'patterns/customization/token-inspector/index.tsx';
 const EXCEPTION_SITE = 'left: state.position.x,';
@@ -55,7 +60,7 @@ const parseErrors = (path, text) =>
   ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true, path.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS)
     .parseDiagnostics.map((diagnostic) => ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'));
 
-function withPlantedTree(edit, assertFindings) {
+function withPlantedTree(edit, assertFindings, baseline = readBaseline()) {
   const sandbox = mkdtempSync(join(tmpdir(), 'physical-properties-drill-'));
   try {
     const target = join(sandbox, SCAN_ROOT);
@@ -63,7 +68,7 @@ function withPlantedTree(edit, assertFindings) {
     cpSync(join(ROOT, SCAN_ROOT), target, { recursive: true });
     edit(sandbox);
     const sites = physicalSites(sandbox);
-    assertFindings(judge(sites), countSites(sites));
+    assertFindings(judge(sites, baseline), countSites(sites));
   } finally {
     rmSync(sandbox, { recursive: true, force: true });
   }
@@ -308,16 +313,26 @@ test('a physical-looking key that never reaches a style object is not a finding'
   );
 });
 
-test('a SECOND site in an already-pinned file grows its count and fails', () => {
-  const pin = readBaseline().pinnedDebt[PINNED_DEBT].sites;
+test('the debt drill baseline is honest: one planted site at its pin is green', () => {
   withPlantedTree(
-    (sandbox) => plant(sandbox, PINNED_DEBT, 'marginRight: 4'),
+    (sandbox) => plant(sandbox, DRILL_DEBT, DRILL_DEBT_SITE),
+    (findings) => assert.deepEqual(findings, []),
+    withDrillDebtPin(),
+  );
+});
+
+test('a SECOND site in an already-pinned file grows its count and fails', () => {
+  const baseline = withDrillDebtPin();
+  const pin = baseline.pinnedDebt[DRILL_DEBT].sites;
+  withPlantedTree(
+    (sandbox) => plant(sandbox, DRILL_DEBT, `${DRILL_DEBT_SITE}, marginRight: 4`),
     (findings) => {
-      const reported = mentions(findings, PINNED_DEBT);
+      const reported = mentions(findings, DRILL_DEBT);
       assert.equal(reported.length, 1, JSON.stringify(findings, null, 1));
       assert.ok(reported[0].includes(`GREW from ${pin} to ${pin + 1}`), reported[0]);
       assert.ok(reported[0].includes('debt'), 'the finding must name the band');
     },
+    baseline,
   );
 });
 
@@ -339,16 +354,13 @@ test('a correction that removes a site fails with an instruction to LOWER the pi
   // The ratchet direction: shrinking is red too, so the pin follows the tree
   // down instead of quietly keeping room for the site to come back.
   withPlantedTree(
-    (sandbox) => rewrite(
-      sandbox,
-      PINNED_DEBT,
-      (text) => text.replace("textAlign: 'left' as const", "textAlign: 'start' as const"),
-    ),
+    (sandbox) => plant(sandbox, DRILL_DEBT, "textAlign: 'start'"),
     (findings) => {
-      const reported = mentions(findings, PINNED_DEBT);
+      const reported = mentions(findings, DRILL_DEBT);
       assert.equal(reported.length, 1, JSON.stringify(findings, null, 1));
       assert.ok(reported[0].includes('remove the pin') || reported[0].includes('lower the pin'), reported[0]);
     },
+    withDrillDebtPin(),
   );
 });
 
@@ -431,8 +443,10 @@ test('judge() refuses a count map: counts cannot bind an exception to its site',
 test('every band row carries a reason long enough to be one', () => {
   const baseline = readBaseline();
   for (const band of ['pinnedDebt', 'inert']) {
+    assert.ok(baseline[band] && typeof baseline[band] === 'object' && !Array.isArray(baseline[band]), `${band} must stay declared`);
     const rows = Object.entries(baseline[band]);
-    assert.ok(rows.length > 0, `${band} must not be empty-by-accident`);
+    // Debt is meant to reach zero (it did, WO-RET-04 W-5); a new debt site still fails as unbanded.
+    if (band === 'inert') assert.ok(rows.length > 0, `${band} must not be empty-by-accident`);
     for (const [path, pin] of rows) {
       assert.ok(pin.reason.length > 120, `a one-line reason is not a reason: ${band} ${path}`);
       assert.ok(Number.isInteger(pin.sites) && pin.sites > 0, `${band} ${path} must pin a real count`);

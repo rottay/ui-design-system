@@ -5,8 +5,9 @@
  *
  * @remarks
  * These contracts describe engine selection and metadata only. The actual
- * component implementations live under `src/engines/` and individual
- * component folders. Four engines are supported:
+ * component implementations live in each component's
+ * `engines/{classic,modern,rustic}` folder, selected at runtime by
+ * `createEngineComponent()`. Four engines are supported:
  * - **classic**: Ant Design (enterprise, structured, corporate)
  * - **modern**: the Rottay-native premium skin and the PRIMARY engine
  *   (contemporary, rounded, glassmorphism)

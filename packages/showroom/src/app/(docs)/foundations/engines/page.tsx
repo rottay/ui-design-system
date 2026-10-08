@@ -40,7 +40,7 @@ const ENGINES: EngineInfo[] = [
   {
     name: 'modern',
     label: 'Modern',
-    foundation: 'Tailwind / DaisyUI',
+    foundation: 'Rottay-native skins',
     description:
       'Rounded, contemporary, and more expressive for product experiences with visible brand energy.',
     characteristics: ['Rounded corners', 'Confident elevation', 'Generous rhythm', 'Soft motion'],

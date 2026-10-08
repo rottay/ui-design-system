@@ -2697,7 +2697,6 @@
         },
         "--ds-workspace-frame-padding": {
           "readers": [
-            "src/foundation/tokens/css/presentation/components/patterns-paint/index.css",
             "src/foundation/tokens/css/presentation/components/patterns/index.css"
           ],
           "family": "patterns-paint",

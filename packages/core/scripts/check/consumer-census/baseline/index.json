@@ -24,8 +24,5 @@
     "src/foundation/presets/candidates/bithire/documents/index.ts",
     "src/foundation/presets/candidates/bithire/index.ts"
   ],
-  "stylesUnreferenced": [
-    "src/foundation/tokens/css/presentation/components/index.css",
-    "src/foundation/tokens/css/presentation/components/patterns-paint/index.css"
-  ]
+  "stylesUnreferenced": []
 }

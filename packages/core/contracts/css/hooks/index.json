@@ -63,11 +63,11 @@
     "foundationTokens": 4195,
     "componentTokens": 748,
     "componentSuppliers": 372,
-    "reads": 7697,
+    "reads": 7696,
     "hooks": 107,
     "unadjudicatedReads": 1196,
     "promoted": 107,
-    "styleFiles": 500,
+    "styleFiles": 498,
     "componentFiles": 1301
   },
   "declaredSlots": {

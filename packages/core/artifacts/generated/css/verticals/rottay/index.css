@@ -18899,21 +18899,15 @@ html[data-tenant][data-ds-motion='reduced'] .ant-typography a {
 /**
  * Modern Engine Theme - Rottay Design System
  *
- * Maps --ds-* design tokens to Tailwind CSS and DaisyUI component classes.
- * This file bridges the centralized token system with Tailwind CSS 4.x / DaisyUI 5.x.
+ * The residue of the former DaisyUI bridge. The `@plugin "daisyui"` integration
+ * is removed and every Modern family paints from its own skin
+ * (`runtime/engines/modern/skin/*`) off the `--ds-*` channels. What remains:
+ * - the few rules for legacy `.rottay-*` hooks (tree, empty, qrcode) and the
+ *   table overflow guard, all reading `--ds-*` variables;
+ * - one note per drained bridge, naming the skin that took its paint over.
  *
- * CONTRACT: This file defines ONE bridge to DaisyUI 5.
- * Legacy DaisyUI 4 variables (--p, --b1, etc.) are NOT supported.
- * All tenant CSS must provide --color-* in oklch format.
- *
- * Architecture:
- * - Gated on [data-engine='modern'], the CSS engine-selection authority (D-18)
- * - All values reference --ds-* variables from default.css
- * - Covers all interactive states: hover, focus, active, disabled
- * - Maintains visual parity with the Classic engine
- *
- * @version 0.5.0
- * @engine Modern (Tailwind CSS 4.x / DaisyUI 5.x)
+ * Every rule is gated on [data-engine='modern'], the CSS engine-selection
+ * authority (D-18).
  */
 
 

@@ -265,8 +265,10 @@ describe("CRA17 four-facade asset certification", () => {
       expect(Object.isFrozen(record)).toBe(true);
     }
 
+    // Six pictograms remain: the two vertical ones (candidate-evidence,
+    // event-moment) retired at 965241fa6 (WO-RET-06 W-2/F-113).
     const pictogramRecords = Object.values(FEATURE_PICTOGRAM_PROVENANCE);
-    expect(pictogramRecords).toHaveLength(8);
+    expect(pictogramRecords).toHaveLength(6);
     for (const record of pictogramRecords) {
       expect(record).toMatchObject({
         source: "rottay-original",
@@ -340,7 +342,6 @@ describe("CRA17 four-facade asset certification", () => {
 
     const cssEntrypoints = [
       "src/foundation/tokens/css/facade/entrypoints/base/index.css",
-      "src/foundation/tokens/css/presentation/components/index.css",
     ].map(readSource);
     for (const entrypoint of cssEntrypoints) {
       expect(entrypoint).toContain("semantic-icon/index.css");
