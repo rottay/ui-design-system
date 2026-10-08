@@ -3,12 +3,12 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "b8f601eb9bd1f6e2f74a030d2895b53493d98bf441cdb18a99800f7ac1a5c11f",
+    "inputsDigest": "e7766a30b8a800b3ade56f446b539da4d0e8f3d542b5c0a5d48664237e99a9d0",
     "manifestSchemaVersion": 4,
     "corpus": {
-      "authoredCssFiles": 500,
-      "productionTsFiles": 2172,
-      "testFiles": 2051,
+      "authoredCssFiles": 498,
+      "productionTsFiles": 2187,
+      "testFiles": 2073,
       "artifactFiles": 3,
       "showroomReaderFiles": 389
     }
@@ -21,21 +21,21 @@
     "tenantChannels": 4508,
     "publicHooks": 107,
     "unadjudicatedReads": 1196,
-    "deadWriters": 270,
+    "deadWriters": 271,
     "frontierReserved": 0,
     "modernConsumedUnique": 4789,
     "tsReadNames": 3113,
     "tsWriteNames": 3913,
     "tsMetadataNames": 5867,
-    "showroomReadNames": 121,
+    "showroomReadNames": 120,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
   "frontierFamilies": [],
   "deadByClass": {
-    "foundation": 127,
+    "foundation": 128,
     "component": 0,
-    "tenantChannel": 198,
+    "tenantChannel": 199,
     "authoredCssLocal": 6
   },
   "controls": {
@@ -240,6 +240,7 @@
     "--ds-command-font",
     "--ds-command-grid-bg",
     "--ds-command-grid-line-strong",
+    "--ds-command-home-panel-bg-strong",
     "--ds-command-letter-spacing",
     "--ds-command-line",
     "--ds-compact-card-action-bg",
@@ -13922,7 +13923,7 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 20
+      "tsMetadataMentions": 19
     },
     "--ds-button-active-filter": {
       "category": "compiler-derived-channel",
@@ -22298,7 +22299,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 31,
+        "css": 29,
         "ts": 5,
         "showroom": 0,
         "tests": true,
@@ -32556,7 +32557,7 @@
       "reads": {
         "css": 0,
         "ts": 1,
-        "showroom": 1,
+        "showroom": 0,
         "tests": false,
         "modern": false,
         "artifact": false
@@ -33162,7 +33163,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 321,
+        "css": 320,
         "ts": 69,
         "showroom": 244,
         "tests": true,
@@ -33290,7 +33291,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 214,
+        "css": 209,
         "ts": 74,
         "showroom": 83,
         "tests": true,
@@ -33370,7 +33371,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 445,
+        "css": 429,
         "ts": 125,
         "showroom": 156,
         "tests": true,
@@ -33434,7 +33435,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 192,
+        "css": 183,
         "ts": 27,
         "showroom": 0,
         "tests": true,
@@ -33450,7 +33451,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 255,
+        "css": 254,
         "ts": 76,
         "showroom": 151,
         "tests": true,
@@ -33466,8 +33467,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 288,
-        "ts": 131,
+        "css": 284,
+        "ts": 130,
         "showroom": 59,
         "tests": true,
         "modern": true,
@@ -33514,7 +33515,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 365,
+        "css": 363,
         "ts": 143,
         "showroom": 9,
         "tests": true,
@@ -34282,7 +34283,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 70,
+        "css": 69,
         "ts": 36,
         "showroom": 22,
         "tests": true,
@@ -35306,9 +35307,9 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1211,
+        "css": 1176,
         "ts": 466,
-        "showroom": 184,
+        "showroom": 183,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -35802,7 +35803,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 256,
+        "css": 246,
         "ts": 78,
         "showroom": 14,
         "tests": true,
@@ -36138,7 +36139,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 43,
+        "css": 40,
         "ts": 13,
         "showroom": 0,
         "tests": true,
@@ -36202,8 +36203,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 776,
-        "ts": 264,
+        "css": 764,
+        "ts": 263,
         "showroom": 125,
         "tests": true,
         "modern": true,
@@ -36218,7 +36219,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 452,
+        "css": 450,
         "ts": 158,
         "showroom": 396,
         "tests": true,
@@ -36266,7 +36267,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 198,
+        "css": 194,
         "ts": 89,
         "showroom": 11,
         "tests": true,
@@ -38138,7 +38139,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38218,7 +38219,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38234,7 +38235,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 4,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38250,7 +38251,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 4,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38266,7 +38267,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38314,7 +38315,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38346,7 +38347,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -38362,7 +38363,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 5,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38378,7 +38379,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 4,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38394,7 +38395,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38410,7 +38411,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38458,7 +38459,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38474,7 +38475,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38490,7 +38491,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38522,7 +38523,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38538,7 +38539,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38554,7 +38555,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 3,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38567,10 +38568,10 @@
     "--ds-command-home-panel-bg-strong": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "active",
+      "status": "dead-writer",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 0,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38586,7 +38587,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 9,
+        "css": 5,
         "ts": 1,
         "showroom": 0,
         "tests": false,
@@ -38602,7 +38603,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 20,
+        "css": 9,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38634,7 +38635,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -38650,7 +38651,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 4,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -49046,7 +49047,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 4,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -52822,7 +52823,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 382,
+        "css": 380,
         "ts": 28,
         "showroom": 0,
         "tests": true,
@@ -53190,7 +53191,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 76,
+        "css": 75,
         "ts": 37,
         "showroom": 1,
         "tests": true,
@@ -53206,8 +53207,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 59,
-        "ts": 24,
+        "css": 58,
+        "ts": 23,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -56006,7 +56007,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 255,
+        "css": 253,
         "ts": 68,
         "showroom": 0,
         "tests": true,
@@ -56038,7 +56039,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 202,
+        "css": 201,
         "ts": 16,
         "showroom": 0,
         "tests": true,
@@ -56054,7 +56055,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 313,
+        "css": 312,
         "ts": 24,
         "showroom": 0,
         "tests": true,
@@ -56358,7 +56359,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 66,
+        "css": 65,
         "ts": 7,
         "showroom": 0,
         "tests": false,
@@ -56934,7 +56935,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 203,
+        "css": 201,
         "ts": 161,
         "showroom": 0,
         "tests": true,
@@ -57206,7 +57207,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 162,
+        "css": 161,
         "ts": 35,
         "showroom": 0,
         "tests": true,
@@ -60262,7 +60263,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 21,
+        "css": 24,
         "ts": 13,
         "showroom": 0,
         "tests": true,
@@ -60326,7 +60327,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -60342,7 +60343,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -66774,7 +66775,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 19,
+        "css": 18,
         "ts": 6,
         "showroom": 0,
         "tests": true,
@@ -70086,7 +70087,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 3,
         "ts": 2,
         "showroom": 0,
         "tests": true,
@@ -70342,7 +70343,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 36,
+        "css": 35,
         "ts": 19,
         "showroom": 0,
         "tests": false,
@@ -71366,7 +71367,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 1,
         "showroom": 0,
         "tests": false,
@@ -75318,7 +75319,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 2,
         "showroom": 0,
         "tests": false,
@@ -79981,7 +79982,7 @@
         "modern": true,
         "artifact": true
       },
-      "tsWriteSites": 2,
+      "tsWriteSites": 1,
       "tsMetadataMentions": 0
     },
     "--ds-motion-deliberate": {
@@ -80038,7 +80039,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 148,
+        "css": 147,
         "ts": 19,
         "showroom": 1,
         "tests": true,
@@ -80102,7 +80103,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 649,
+        "css": 643,
         "ts": 55,
         "showroom": 0,
         "tests": true,
@@ -80135,7 +80136,7 @@
       "writer": true,
       "reads": {
         "css": 171,
-        "ts": 16,
+        "ts": 15,
         "showroom": 0,
         "tests": true,
         "modern": true,
@@ -80150,7 +80151,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 641,
+        "css": 634,
         "ts": 42,
         "showroom": 1,
         "tests": true,
@@ -88518,7 +88519,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -88534,7 +88535,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 25,
+        "css": 22,
         "ts": 12,
         "showroom": 0,
         "tests": true,
@@ -88550,7 +88551,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -88566,7 +88567,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -88582,7 +88583,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 2,
         "ts": 1,
         "showroom": 0,
         "tests": false,
@@ -88598,7 +88599,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -88630,7 +88631,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 25,
+        "css": 22,
         "ts": 8,
         "showroom": 0,
         "tests": false,
@@ -88646,7 +88647,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 14,
+        "css": 11,
         "ts": 7,
         "showroom": 0,
         "tests": false,
@@ -88678,7 +88679,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -88694,7 +88695,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 6,
         "ts": 5,
         "showroom": 0,
         "tests": false,
@@ -88822,7 +88823,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -89078,7 +89079,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -89094,7 +89095,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -89110,7 +89111,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 6,
         "ts": 3,
         "showroom": 0,
         "tests": false,
@@ -89126,7 +89127,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 6,
         "ts": 3,
         "showroom": 0,
         "tests": false,
@@ -89142,7 +89143,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 15,
+        "css": 12,
         "ts": 5,
         "showroom": 0,
         "tests": false,
@@ -89158,7 +89159,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -89174,7 +89175,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 13,
+        "css": 11,
         "ts": 6,
         "showroom": 0,
         "tests": false,
@@ -89190,7 +89191,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -89206,7 +89207,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 2,
         "showroom": 0,
         "tests": true,
@@ -89270,7 +89271,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -91942,7 +91943,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 173,
+        "css": 172,
         "ts": 46,
         "showroom": 2,
         "tests": true,
@@ -91974,8 +91975,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 271,
-        "ts": 69,
+        "css": 269,
+        "ts": 68,
         "showroom": 3,
         "tests": true,
         "modern": true,
@@ -92006,8 +92007,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 383,
-        "ts": 104,
+        "css": 380,
+        "ts": 103,
         "showroom": 22,
         "tests": true,
         "modern": true,
@@ -92166,7 +92167,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 205,
+        "css": 200,
         "ts": 52,
         "showroom": 3,
         "tests": true,
@@ -102454,7 +102455,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 24,
+        "css": 21,
         "ts": 20,
         "showroom": 0,
         "tests": true,
@@ -102966,7 +102967,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 7,
         "ts": 5,
         "showroom": 0,
         "tests": false,
@@ -106006,7 +106007,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 51,
+        "css": 35,
         "ts": 7,
         "showroom": 0,
         "tests": true,
@@ -106646,7 +106647,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 6,
         "ts": 2,
         "showroom": 0,
         "tests": true,
@@ -107958,7 +107959,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 416,
+        "css": 414,
         "ts": 110,
         "showroom": 0,
         "tests": true,
@@ -108054,7 +108055,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 619,
+        "css": 617,
         "ts": 154,
         "showroom": 4,
         "tests": true,
@@ -108134,7 +108135,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 421,
+        "css": 420,
         "ts": 122,
         "showroom": 8,
         "tests": true,
@@ -113478,8 +113479,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 284,
-        "ts": 99,
+        "css": 282,
+        "ts": 98,
         "showroom": 60,
         "tests": true,
         "modern": true,
@@ -113494,7 +113495,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 170,
+        "css": 154,
         "ts": 42,
         "showroom": 0,
         "tests": true,
@@ -113590,7 +113591,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 4,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -113638,7 +113639,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 14,
+        "css": 10,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -113766,7 +113767,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -113782,7 +113783,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -113814,7 +113815,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -113830,7 +113831,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -113910,7 +113911,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 2,
         "ts": 1,
         "showroom": 0,
         "tests": false,
@@ -113926,7 +113927,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 2,
         "ts": 1,
         "showroom": 0,
         "tests": false,
@@ -114006,7 +114007,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 95,
+        "css": 92,
         "ts": 24,
         "showroom": 5,
         "tests": true,
@@ -114150,7 +114151,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 80,
+        "css": 78,
         "ts": 23,
         "showroom": 0,
         "tests": false,
@@ -114166,7 +114167,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -114198,7 +114199,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -114214,7 +114215,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -114230,7 +114231,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -114454,7 +114455,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 9,
+        "css": 6,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -114486,7 +114487,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 5,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -114502,7 +114503,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 5,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -114518,7 +114519,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 9,
+        "css": 6,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -115558,7 +115559,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 5,
         "ts": 1,
         "showroom": 0,
         "tests": false,
@@ -115654,7 +115655,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 4,
         "ts": 2,
         "showroom": 0,
         "tests": false,
@@ -115670,7 +115671,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -116054,7 +116055,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 4,
         "ts": 1,
         "showroom": 0,
         "tests": true,
@@ -116326,7 +116327,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -116342,7 +116343,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -116358,7 +116359,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -116438,7 +116439,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 7,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -116566,7 +116567,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 1,
         "showroom": 0,
         "tests": false,
@@ -116598,7 +116599,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 15,
+        "css": 11,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -116646,7 +116647,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -116662,7 +116663,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -116838,7 +116839,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 2,
         "showroom": 0,
         "tests": true,
@@ -116854,7 +116855,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 1,
         "showroom": 0,
         "tests": true,
@@ -116870,7 +116871,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 2,
         "showroom": 0,
         "tests": false,
@@ -116886,7 +116887,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 1,
         "showroom": 0,
         "tests": true,
@@ -131486,7 +131487,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 217,
+        "css": 215,
         "ts": 50,
         "showroom": 0,
         "tests": true,
@@ -139726,7 +139727,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -139742,7 +139743,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "showroom": 0,
         "tests": false,
@@ -139774,7 +139775,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -139790,7 +139791,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -139854,7 +139855,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 1,
         "showroom": 0,
         "tests": true,
@@ -139902,7 +139903,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 2,
         "ts": 0,
         "showroom": 0,
         "tests": true,
@@ -140494,7 +140495,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 10,
+        "css": 9,
         "ts": 8,
         "showroom": 0,
         "tests": true,
@@ -140702,7 +140703,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 34,
+        "css": 41,
         "ts": 5,
         "showroom": 0,
         "tests": true,

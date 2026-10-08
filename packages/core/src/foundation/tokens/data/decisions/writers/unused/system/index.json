@@ -1379,7 +1379,7 @@
       {
         "token": "--ds-density-card-padding",
         "briefSaid": "middle tier at card.css:377/396, pattern proven by --ds-density-cell-padding.",
-        "finding": "CORRECTED after the H2a slice arrived. My first refusal said the host site does not exist; that was wrong. engines/modern/skin/card.css:377 and :396 paint padding: var(--ds-card-instance-padding, var(--ds-card-padding-current)) and CAN take this token as a middle tier — I had looked at .ds-data-table__mobile-card, which declares no padding, and concluded too fast. The real reason it is not pure zero-delta is narrower and worse: it is zero-delta only where the token is UNSET, and three known emitters set it — collection-workspace/index.tsx:103, metrics/cards/index.tsx:178 and data-table-mobile.css:102-131 — so every card body inside those contexts would repaint.",
+        "finding": "CORRECTED after the H2a slice arrived. My first refusal said the host site does not exist; that was wrong. engines/modern/skin/card.css:377 and :396 paint padding: var(--ds-card-instance-padding, var(--ds-card-padding-current)) and CAN take this token as a middle tier — I had looked at .ds-data-table__mobile-card, which declares no padding, and concluded too fast. The real reason it is not pure zero-delta is narrower and worse: it is zero-delta only where the token is UNSET, and three known emitters set it — collection-workspace/foundation/index.ts:21, metrics/cards/index.tsx:178 and data-table-mobile.css:102-131 — so every card body inside those contexts would repaint.",
         "disposition": "OWNER_MENU. Wiring it is a real capability (density-aware card padding) but it lands a visible change at three live call sites, so it is an owner call, not a silent swap."
       },
       {
@@ -7656,7 +7656,7 @@
         "apps": 0,
         "appFiles": []
       },
-      "note": "agent named engines/modern/skin/card.css:377,396 as a valid host; REFUSED as zero-delta because it is only zero where the token is unset — 3 known emitters set it (collection-workspace/index.tsx:103, metrics/cards/index.tsx:178, data-table-mobile.css:102-131) and would repaint",
+      "note": "agent named engines/modern/skin/card.css:377,396 as a valid host; REFUSED as zero-delta because it is only zero where the token is unset — 3 known emitters set it (collection-workspace/foundation/index.ts:21, metrics/cards/index.tsx:178, data-table-mobile.css:102-131) and would repaint",
       "successor": "card.css [data-part='body'] padding middle tier",
       "adjudicatedBy": "H2a slice (per-token, read individually)",
       "historicalVerdict": "OWNER_MENU",

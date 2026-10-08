@@ -131,6 +131,13 @@ const SVG_CREATE_ELEMENT_TAGS = new Set([
  * style reaches React. The two lower-layer producers (`runtime/personality`
  * and `foundation/tokens/ts/foundation/base/density`) return only non-paint/custom-property values.
  * Every entry is still verified to exist and export the exact symbol.
+ *
+ * A row may opt into `stylePathProof: "localLiteral"`. Its self-count of zero
+ * is then not enough: every top-level return must hold, at each declared style
+ * path, a spread-free object literal with static non-paint keys (inline or a
+ * single-use local `const`). Only such a row certifies a destructured field of
+ * its call result. The proof covers inline paint properties, not the values
+ * under non-paint keys; channel values stay with the cascade producers.
  */
 const ownedStyle = (transparentArgs = []) => ({
   kind: "style",
@@ -341,6 +348,38 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
           kind: "style",
           ownership: "zeroPaint",
           stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  // The CollectionWorkspace density helper and the root instance geometry the
+  // chrome hook returns: custom properties and `maxWidth` only.
+  [
+    "components/surfaces/presentation/pages/workspace/collection-workspace/foundation/index",
+    new Map([
+      [
+        "resolveCollectionWorkspaceDensityStyleVars",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          stylePathProof: "localLiteral",
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
+    "components/surfaces/presentation/pages/workspace/collection-workspace/resolution/index",
+    new Map([
+      [
+        "useCollectionWorkspaceChrome",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set(["rootInstanceStyle"]),
+          stylePathProof: "localLiteral",
           transparentArgs: [],
         },
       ],
@@ -1142,6 +1181,129 @@ function paintNamesInContractNode(node) {
   return names;
 }
 
+function stripTypeWrappers(node) {
+  let current = node;
+  while (
+    current &&
+    (ts.isParenthesizedExpression(current) ||
+      ts.isAsExpression(current) ||
+      ts.isSatisfiesExpression(current) ||
+      ts.isTypeAssertionExpression(current))
+  ) {
+    current = current.expression;
+  }
+  return current;
+}
+
+/**
+ * The initializer of the only `const` named `name` in `fn`, when its sole
+ * reference is the one that returns it. Any write, alias, capture or second
+ * declaration is another reference and fails closed.
+ */
+function soleLocalConstInitializer(name, fn) {
+  const declarations = [];
+  let references = 0;
+  function visit(node) {
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      node.name.text === name
+    ) {
+      declarations.push(node);
+      if (node.type) visit(node.type);
+      if (node.initializer) visit(node.initializer);
+      return;
+    }
+    if (
+      ts.isIdentifier(node) &&
+      node.text === name &&
+      !(ts.isPropertyAccessExpression(node.parent) && node.parent.name === node) &&
+      !(ts.isPropertyAssignment(node.parent) && node.parent.name === node)
+    ) {
+      references += 1;
+    }
+    ts.forEachChild(node, visit);
+  }
+  visit(fn);
+  const declaration = declarations[0];
+  if (declarations.length !== 1 || references !== 1 || !declaration.initializer) {
+    return null;
+  }
+  if (!(declaration.parent.flags & ts.NodeFlags.Const)) return null;
+  return declaration.initializer;
+}
+
+function isZeroPaintLocalLiteral(node, fn, seen) {
+  const value = stripTypeWrappers(node);
+  if (!value) return false;
+  if (ts.isIdentifier(value)) {
+    if (seen.has(value.text)) return false;
+    return isZeroPaintLocalLiteral(
+      soleLocalConstInitializer(value.text, fn),
+      fn,
+      new Set(seen).add(value.text)
+    );
+  }
+  if (!ts.isObjectLiteralExpression(value)) return false;
+  return value.properties.every((property) => {
+    if (
+      !ts.isPropertyAssignment(property) &&
+      !ts.isShorthandPropertyAssignment(property)
+    ) {
+      return false;
+    }
+    const name = staticPropertyName(property.name);
+    return name !== null && !isPaintProperty(name);
+  });
+}
+
+function valueAtStylePath(expression, path, fn) {
+  let value = stripTypeWrappers(expression);
+  for (const key of path) {
+    if (value && ts.isIdentifier(value)) {
+      value = stripTypeWrappers(soleLocalConstInitializer(value.text, fn));
+    }
+    if (!value || !ts.isObjectLiteralExpression(value)) return null;
+    if (value.properties.some((property) => ts.isSpreadAssignment(property))) {
+      return null;
+    }
+    const matches = value.properties.filter(
+      (property) =>
+        (ts.isPropertyAssignment(property) ||
+          ts.isShorthandPropertyAssignment(property)) &&
+        staticPropertyName(property.name) === key
+    );
+    if (matches.length !== 1) return null;
+    value = ts.isPropertyAssignment(matches[0])
+      ? matches[0].initializer
+      : matches[0].name;
+  }
+  return value;
+}
+
+/** The `localLiteral` proof: every declared style path of every top-level return is a zero-paint local literal. */
+function stylePathsAreLocalLiterals(symbol, contract) {
+  const returned = returnExpressionsForContract(symbol.node);
+  const paths = [...(contract.stylePaths ?? new Set([""]))];
+  return (
+    returned.length > 0 &&
+    paths.length > 0 &&
+    returned.every((expression) =>
+      paths.every((path) =>
+        isZeroPaintLocalLiteral(
+          valueAtStylePath(
+            expression,
+            path === "" ? [] : path.split("."),
+            symbol.node
+          ),
+          symbol.node,
+          new Set()
+        )
+      )
+    )
+  );
+}
+
 function certifiedProducerContract(entry, fileName) {
   if (!entry?.importSource || !entry.importedName) return null;
   const resolved = resolveSamePackageModule(fileName, entry.importSource);
@@ -1186,7 +1348,9 @@ function certifiedProducerContract(entry, fileName) {
       countArc09PaintInFile(
         symbol.node.getText(symbol.sourceFile),
         symbol.file
-      ) === 0;
+      ) === 0 &&
+      (contract.stylePathProof !== "localLiteral" ||
+        stylePathsAreLocalLiterals(symbol, contract));
   } else if (contract.ownership === "overwritten") {
     const names = paintNamesInContractNode(symbol.node);
     valid =
@@ -1834,6 +1998,17 @@ function countScopedStylePaintInFile(text, fileName) {
       );
     }
     return false;
+  }
+
+  /** A destructured call whose validated contract proved its style paths are local literals. */
+  function isLiteralProvenBindingSource(entry) {
+    const call = unwrapExpression(entry.bindingSource);
+    if (!call || !ts.isCallExpression(call)) return false;
+    const callable = localCallable(call);
+    const contract = callable?.entry
+      ? certifiedProducerContract(callable.entry, fileName)
+      : null;
+    return contract?.stylePathProof === "localLiteral";
   }
 
   function isCertifiedProducerEntry(entry, seen = new Set()) {
@@ -3050,7 +3225,15 @@ function countScopedStylePaintInFile(text, fileName) {
         const stateSources = reactStateSources(entry);
         if (stateSources) {
           for (const source of stateSources) markExpression(source, mode);
-        } else if (!isCertifiedProducerEntry(entry)) {
+        } else if (
+          !isCertifiedProducerEntry(entry) &&
+          !(
+            entry.fromBindingPattern &&
+            !entry.restBinding &&
+            isLiteralProvenBindingSource(entry) &&
+            isCertifiedStyleProducerValue(expression)
+          )
+        ) {
           recordOpaque(expression, mode, entry);
         }
       }

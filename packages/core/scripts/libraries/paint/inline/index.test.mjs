@@ -368,3 +368,152 @@ test('a key that names a module which no longer exports the symbol is reported b
     rmSync(sandbox, { recursive: true, force: true });
   }
 });
+
+// ---------------------------------------------------------------------------
+// localLiteral proof: a destructured field of a certified call is trusted only
+// when every declared style path returns a zero-paint local literal
+// ---------------------------------------------------------------------------
+
+const WORKSPACE = 'src/components/surfaces/presentation/pages/workspace/collection-workspace';
+const WORKSPACE_PARENT = `${WORKSPACE}/index.tsx`;
+const DENSITY_HELPER = 'foundation/index.ts';
+const CHROME_HOOK = 'resolution/index.tsx';
+const ROOT_LITERAL = "  const rootInstanceStyle: React.CSSProperties = {\n    maxWidth: presentation?.maxWidth ?? (surfaceMode === 'embed' ? '100%' : undefined),\n  };\n";
+const HELPER_RETURN = "    '--ds-density-local-factor': `var(${COLLECTION_WORKSPACE_DENSITY_LOCAL_FACTOR_HOOK}, ${preset.modeFactor})`,\n";
+const UNKNOWN_IMPORT = "import { unknownStyle } from '@/w7a/not-a-module';\n";
+
+const WORKSPACE_CONSUMER = `import { resolveCollectionWorkspaceDensityStyleVars } from '../foundation';
+import { useCollectionWorkspaceChrome } from '../resolution';
+
+export function ConsumerFixture(input: Parameters<typeof useCollectionWorkspaceChrome>[0]): React.ReactElement {
+  const { rootInstanceStyle, isPremium } = useCollectionWorkspaceChrome(input);
+  const densityStyleVars = resolveCollectionWorkspaceDensityStyleVars('compact');
+  return <div data-premium={isPremium} style={{ ...rootInstanceStyle, ...densityStyleVars }} />;
+}
+`;
+
+function once(source, from, to) {
+  const parts = source.split(from);
+  assert.equal(parts.length, 2, `the fixture seed must occur exactly once: ${from.slice(0, 60)}`);
+  return parts.join(to);
+}
+
+/** Copies the two workspace producers into a sandbox core, applies the edits, counts the consumer. */
+function countWorkspaceConsumer({ helper = (s) => s, hook = (s) => s, consumer = WORKSPACE_CONSUMER, extra = {} } = {}) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'paint-inline-local-literal-'));
+  try {
+    const root = join(sandbox, 'packages/core', WORKSPACE);
+    for (const [relative, edit] of [[DENSITY_HELPER, helper], [CHROME_HOOK, hook]]) {
+      const target = join(root, relative);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, edit(readFileSync(join(CORE, WORKSPACE, relative), 'utf8')));
+    }
+    for (const [relative, text] of Object.entries(extra)) {
+      const target = join(root, relative);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, text);
+    }
+    const file = join(root, 'fixture-consumer/index.tsx');
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, consumer);
+    return countArc09PaintInFile(consumer, file);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+const withUnknownImport = (anchor) => (source) => once(source, anchor, `${anchor}${UNKNOWN_IMPORT}`);
+const hookImport = withUnknownImport("import type React from 'react';\n");
+const helperImport = withUnknownImport("import React from 'react';\n");
+
+test('the workspace parent really reads both producers through the certified forms', () => {
+  const source = readFileSync(join(CORE, WORKSPACE_PARENT), 'utf8');
+  assert.ok(source.includes('const densityStyleVars = resolveCollectionWorkspaceDensityStyleVars('));
+  assert.ok(source.includes('...rootInstanceStyle,'));
+  assert.ok(readFileSync(join(CORE, WORKSPACE, CHROME_HOOK), 'utf8').includes(ROOT_LITERAL));
+  assert.ok(readFileSync(join(CORE, WORKSPACE, DENSITY_HELPER), 'utf8').includes(HELPER_RETURN));
+});
+
+test('CONTROL: the workspace parent counts zero inline paint', () => {
+  const file = join(CORE, WORKSPACE_PARENT);
+  assert.equal(countArc09PaintInFile(readFileSync(file, 'utf8'), file), 0);
+});
+
+test('CONTROL: the sandboxed consumer of both producers counts zero', () => {
+  assert.equal(countWorkspaceConsumer(), 0);
+});
+
+test('CONTROL: a renamed destructure of the proven path counts zero', () => {
+  const consumer = WORKSPACE_CONSUMER
+    .replace('const { rootInstanceStyle, isPremium }', 'const { rootInstanceStyle: rootStyleAlias, isPremium }')
+    .replace('...rootInstanceStyle,', '...rootStyleAlias,');
+  assert.equal(countWorkspaceConsumer({ consumer }), 0);
+});
+
+const PRODUCER_PLANTS = [
+  ['E2 paint key in the density helper return', { helper: (s) => once(s, HELPER_RETURN, `${HELPER_RETURN}    color: 'red',\n`) }],
+  ['E3 paint key in the root literal', { hook: (s) => once(s, ROOT_LITERAL, ROOT_LITERAL.replace('  };\n', "    color: 'red',\n  };\n")) }],
+  ['E4 annotated import call at the path', { hook: (s) => hookImport(once(s, ROOT_LITERAL, '  const rootInstanceStyle: React.CSSProperties = unknownStyle();\n')) }],
+  ['E5 painted const aliased to the path', { hook: (s) => once(s, ROOT_LITERAL, "  const paintedBase = { color: 'red' };\n  const rootInstanceStyle: React.CSSProperties = paintedBase;\n") }],
+  ['E6 computed paint key', { hook: (s) => once(s, ROOT_LITERAL, "  const paintKey = 'color';\n  const rootInstanceStyle: React.CSSProperties = { [paintKey]: 'red' };\n") }],
+  ['E7 opaque spread in the root literal', { hook: (s) => hookImport(once(s, ROOT_LITERAL, ROOT_LITERAL.replace('  };\n', '    ...unknownStyle(),\n  };\n'))) }],
+  ['E7b opaque spread in the density helper', { helper: (s) => helperImport(once(s, HELPER_RETURN, `${HELPER_RETURN}    ...unknownStyle(),\n`)) }],
+  ['E10 un-annotated import call at the path (self-count zero)', { hook: (s) => hookImport(once(s, ROOT_LITERAL, '  const rootInstanceStyle = unknownStyle();\n')) }],
+  ['E11 un-annotated painted literal', { hook: (s) => once(s, ROOT_LITERAL, "  const rootInstanceStyle = { color: 'red' };\n") }],
+  ['E12 helper returns an import call before its literal', { helper: (s) => helperImport(once(s, "  return {\n    '--ds-density-cell-padding'", "  return unknownStyle() ?? {\n    '--ds-density-cell-padding'")) }],
+  ['E12b helper returns a bare import call', { helper: (s) => helperImport(once(s, '  const preset = DENSITY_PRESETS[mode];\n', '  const preset = DENSITY_PRESETS[mode];\n  return unknownStyle(preset);\n')) }],
+  ['E15 the returned const is written after its declaration', { hook: (s) => once(s, ROOT_LITERAL, `${ROOT_LITERAL.replace('const rootInstanceStyle: React.CSSProperties', 'const rootInstanceStyle')}  Object.assign(rootInstanceStyle, unknownStyle());\n`) }],
+  ['E16 the path is a reassigned let (self-count zero)', { hook: (s) => hookImport(once(s, ROOT_LITERAL, `${ROOT_LITERAL.replace('const rootInstanceStyle: React.CSSProperties', 'let rootInstanceStyle')}  rootInstanceStyle = unknownStyle();\n`)) }],
+  ['N4 an early return carries a painted path', { hook: (s) => once(s, ROOT_LITERAL, `  if (loading === undefined) return { rootInstanceStyle: { color: 'red' } } as never;\n${ROOT_LITERAL}`) }],
+  ['N5 a closure mutates the returned const', { hook: (s) => once(s, ROOT_LITERAL, `${ROOT_LITERAL}  const paintLater = () => { Object.assign(rootInstanceStyle, { color: 'red' }); };\n  void paintLater;\n`) }],
+  ['N6 an import call laundered through satisfies/as', { hook: (s) => hookImport(once(s, ROOT_LITERAL, '  const rootInstanceStyle = (unknownStyle() as unknown) satisfies unknown as React.CSSProperties;\n')) }],
+  ['N7 an opaque spread in the returned object (self-count zero)', { hook: (s) => hookImport(once(s, '  return {\n    scopedPrimaryAction,', '  return {\n    ...unknownStyle(),\n    scopedPrimaryAction,')) }],
+  ['N8 a duplicate key overrides the proven path (self-count zero)', { hook: (s) => hookImport(once(s, 'rootInstanceStyle, canToggleSelectionMode,\n', 'rootInstanceStyle, canToggleSelectionMode, rootInstanceStyle: unknownStyle(),\n')) }],
+];
+
+for (const [name, edits] of PRODUCER_PLANTS) {
+  test(`PLANT: ${name} leaves the consumer counted`, () => {
+    const count = countWorkspaceConsumer(edits);
+    assert.ok(count > 0, `expected the producer to lose its certification, got ${count}`);
+  });
+}
+
+const CONSUMER_PLANTS = [
+  ['E8 a same-named helper from an unregistered module', {
+    consumer: WORKSPACE_CONSUMER.replace("from '../foundation';", "from '../impostor';"),
+    extra: { 'impostor/index.ts': "import type React from 'react';\nexport function resolveCollectionWorkspaceDensityStyleVars(mode: string): React.CSSProperties {\n  return { '--ds-density-cell-padding': mode } as React.CSSProperties;\n}\n" },
+  }],
+  ['E13 a rest binding of the certified call', {
+    consumer: WORKSPACE_CONSUMER.replace('const { rootInstanceStyle, isPremium }', 'const { isPremium, ...chromeRest }')
+      .replace('style={{ ...rootInstanceStyle, ...densityStyleVars }}', 'style={chromeRest}'),
+  }],
+  ['E14 a field outside the declared style paths', {
+    consumer: WORKSPACE_CONSUMER.replace('const { rootInstanceStyle, isPremium }', 'const { searchCommand, isPremium }')
+      .replace('style={{ ...rootInstanceStyle, ...densityStyleVars }}', 'style={searchCommand as React.CSSProperties}'),
+  }],
+  ['N1 the consumer writes paint onto the proven path', {
+    consumer: WORKSPACE_CONSUMER.replace("  const densityStyleVars", "  rootInstanceStyle.color = 'red';\n  const densityStyleVars"),
+  }],
+  ['N2 the consumer assigns paint into the proven path', {
+    consumer: WORKSPACE_CONSUMER.replace("  const densityStyleVars", "  Object.assign(rootInstanceStyle, { color: 'red' });\n  const densityStyleVars"),
+  }],
+  ['N3 the consumer assigns paint into the density result', {
+    consumer: WORKSPACE_CONSUMER.replace("  return <div", "  Object.assign(densityStyleVars, { color: 'red' });\n  return <div"),
+  }],
+];
+
+for (const [name, edits] of CONSUMER_PLANTS) {
+  test(`PLANT: ${name} is counted`, () => {
+    assert.notEqual(edits.consumer, WORKSPACE_CONSUMER, 'the plant must change the consumer');
+    const count = countWorkspaceConsumer(edits);
+    assert.ok(count > 0, `expected the consumer to stay counted, got ${count}`);
+  });
+}
+
+test('GATE: an existing row without the proof still counts its destructured style path', () => {
+  // usePortalScope certifies `variables` by self-count alone; destructuring it
+  // must stay opaque exactly as before the localLiteral routing existed.
+  const file = join(CORE, WORKSPACE_PARENT);
+  const consumer = "import { usePortalScope } from '../../../../../primitives/runtime/overlay/portal-scope';\nexport function X() {\n  const { variables } = usePortalScope();\n  return <div style={variables} />;\n}\n";
+  assert.equal(countArc09PaintInFile(consumer, file), 1);
+});

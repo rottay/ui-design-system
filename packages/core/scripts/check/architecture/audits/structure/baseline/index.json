@@ -220,7 +220,6 @@
         "packages/core/src/components/structures/workspace/tests/WorkspaceChromeBatch.contract.test.tsx",
         "packages/core/src/components/surfaces/foundation/contracts/index.ts",
         "packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
-        "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
         "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx",
         "packages/core/src/components/surfaces/tests/SurfacesLongTailBatch.contract.test.tsx",
         "packages/core/src/contracts/theme/runtime/catalog/index.ts",
