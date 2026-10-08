@@ -264,7 +264,6 @@
         "packages/core/src/infrastructure/compilers/runtime/theme/runtime/resolution/tests/index.test.ts",
         "packages/core/src/infrastructure/runtime/application/commands/runtime/registry/tests/registry.test.tsx",
         "packages/core/src/infrastructure/runtime/application/interaction/shortcuts/index.ts",
-        "packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
         "packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/tests/retained-artifact-gate.integration.test.tsx",
         "packages/core/src/infrastructure/runtime/foundation/root-attributes/registry/index.ts",
         "packages/core/src/infrastructure/runtime/foundation/root-attributes/tests/index.test.ts",

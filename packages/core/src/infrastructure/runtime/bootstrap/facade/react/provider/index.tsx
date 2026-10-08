@@ -76,23 +76,16 @@
  */
 
 import React, {
-  ReactNode,
   useState,
   useEffect,
-  useInsertionEffect,
   useLayoutEffect,
   useReducer,
   useRef,
   useMemo,
   useSyncExternalStore,
-  memo,
 } from 'react';
 import { EngineProvider } from '../../../../engines/composition/react/provider';
 import { ThemeProvider } from '../../../../theming';
-import type {
-  PreparedTenantThemeArtifactClaim,
-  VisualAuthorityDeclaration,
-} from '../../../../theming';
 import {
   censusRuntimeVisualPayload,
   prepareMountedTenantThemeArtifactClaim,
@@ -108,19 +101,11 @@ import { FeatureProvider } from '../../../../features';
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import { toSupportedLocale } from '@/foundation/i18n/runtime/resolution';
 import type {
-  EngineName,
   MotionProfile,
-  ProductProfile,
-  ProductProfileKey,
   TenantConfig,
   TenantMotionDial,
-  VerticalKey,
   VerticalPreset,
 } from '../../../../../../foundation/contracts';
-import type {
-  LocaleTranslations,
-  SupportedLocale,
-} from '@/foundation/i18n/kernel/contracts';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
 import {
   getTenantConfig as resolveTenantConfig,
@@ -135,14 +120,12 @@ import {
 import { ReservedTenantIdentityError } from '@/foundation/presets/verticals/roster';
 import { getUnresolvedTenantConfig } from '../../../../tenant/foundation/configuration/defaults';
 import { ResponsiveProvider } from '../../../../responsive';
-import type { DocumentViewportHint } from '../../../../foundation/root-attributes/ssr';
 import { MotionProvider } from '../../../../motion';
 import { AntdConfigProvider } from '../../../../engines/presentation/adapters/antd';
 import {
   EngineVisualDeclarationProvider,
   assertEngineVisualBelongs,
 } from '../../../../foundation/engine-visual';
-import type { EngineVisualDeclaration } from '@/foundation/contracts/composition/tenants/themes/engine-adapter';
 import type { TenantAppearance } from '@/foundation/contracts/composition/tenants/themes';
 import { resolveEngine } from '../../../../engines/runtime/resolution';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry';
@@ -161,224 +144,19 @@ import {
 import { expandExpressiveProfiles } from '@/foundation/tokens/ts/presentation/expressive-profiles/expansion';
 import { IconExpressiveProfileContext } from '@/infrastructure/runtime/foundation/icons/active-profile/foundation/read';
 import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
+import type { DesignSystemProviderProps } from './props';
+import { LoadingScreen, MemoizedChildren } from './boundaries';
+import { NO_RETENTION_REVOCATION, NO_RETENTION_SUBSCRIPTION, RetainedArtifactArm, RetainedArtifactSeal } from './retention';
+import {
+  buildResolvedRuntimeConfig,
+  isCommittedTenantRequest,
+  partitionTenantOverrides,
+  resolveTenantConfigWithOverrides,
+} from './tenant-config';
+import { mergeLocaleTranslations } from './translations';
 
-export interface DesignSystemProviderProps {
-  children: ReactNode;
-  /**
-   * Tenant slug to resolve config from registry/API.
-   * Use this when you want the design system to handle config resolution.
-   * An unresolved slug retains its own identity with generic DS defaults.
-   */
-  tenantSlug?: string | null;
-  /**
-   * Provide tenant config directly (standalone mode).
-   * Takes precedence over tenantSlug if both are provided.
-   */
-  tenantConfig?: TenantConfig;
-  /**
-   * Selects the owner of each tenant visual channel.
-   *
-   * Prefer the typed declaration. `{ authority: 'compiled-artifact', artifact }`
-   * carries the artifact's coverage and compiled appearance, so the provider
-   * suppresses exactly the channels the artifact owns, recognises its own
-   * compiled appearance echoed back through the config, and leaves uncovered
-   * channels (personality) to their subordinate emitters.
-   *
-   * The declaration is EVIDENCE, not a switch, so there is no string form.
-   * `'compiled-artifact'` as a bare string used to mean "trust me, it is
-   * mounted"; it now resolves as `invalid-declaration` and the provider blocks,
-   * because a string carries neither the coverage to suppress nor the bytes to
-   * verify. `{ authority: 'provider' }` is the explicit context-only escape
-   * hatch and is refused if the config still carries runtime visual payload.
-   *
-   * Omitting the prop is the honest default for a tenant with no visual
-   * payload. It is NOT a way to skip the proof: a config carrying branding
-   * colors, tokenOverrides, appearance, personality or brandTheme with no
-   * declaration resolves `uncompiled-visual-payload` and blocks as well.
-   */
-  visualAuthority?: VisualAuthorityDeclaration;
-  /**
-   * The compiled engine projection for this tenant.
-   *
-   * Only an engine that seeds a third-party library needs it — `classic` seeds
-   * antd — and that engine REFUSES to render without one, because the
-   * alternative is re-deriving the same values from the live cascade after
-   * mount and painting a guess before that. Produce it from the same
-   * `compileTheme(resolution, resolveAdapter(engine))` call that produced the
-   * mounted artifact.
-   */
-  engineVisual?: EngineVisualDeclaration;
-  /**
-   * Runtime tenant overrides applied on top of the resolved tenant.
-   *
-   * The prop has TWO lanes, and the split is a contract, not an optimization.
-   *
-   * BEHAVIOR lane — exactly `locale`, `fallbackLocale`, `customTranslations`,
-   * `features` and `theme`. None of these is paint: they select a dictionary, a
-   * capability set, or a light/dark/auto MODE. They are delivered at the read
-   * sites that consume them (I18nProvider, FeatureProvider, ThemeProvider) and
-   * are NEVER folded into the published `TenantConfig`. A behavior-only
-   * override therefore publishes the SAME object it received — the exact
-   * code-owned instance keeps its registry identity, its governed motion dial
-   * and its `isCodeOwnedTenantConfig` membership. `theme` lands in the
-   * `explicitTenantTheme` slot, under `forceTheme`, and passes the same
-   * light/dark/auto validation the config's own `theme` passes; it can never
-   * introduce a raw token.
-   *
-   * VISUAL/IDENTITY lane — every other key (`branding`, `tokenOverrides`,
-   * `personality`, `brandTheme`, `appearance`, `slug`, ...). Supplying any of
-   * them REBUILDS the config, which is exactly what makes it visible to the
-   * runtime visual census and to the reserved-identity assert. That is the
-   * intended outcome, not a regression: an app that wants to paint must publish
-   * a compiled artifact, and an app that touches a code-owned tenant gets a
-   * `ReservedTenantIdentityError`.
-   *
-   * The rebuild is key-conditional and transparent: a section absent from the
-   * override is never fabricated, and a key present in the override is never
-   * pruned. `tokenOverrides: {}` stays `{}` — zero census keys, so it mounts —
-   * instead of expanding into seven empty sections that the census would read
-   * as a real visual payload.
-   */
-  tenantOverrides?: Partial<TenantConfig>;
-  /**
-   * Product profile that sits between engine defaults and tenant overrides.
-   *
-   * The provider accepts either a registered key or an inline object so teams
-   * can move fast locally without turning the DS into a bottleneck.
-   */
-  productProfile?: ProductProfileKey | ProductProfile;
-  /**
-   * Industry vertical preset.
-   *
-   * Accepts a registered vertical key (e.g., 'evnto', 'bithire', 'rottay')
-   * or an inline VerticalPreset object. When provided, the vertical's engine
-   * is used as the default (unless forceEngine overrides it) and the vertical's
-   * defaultProductProfile is used when no explicit productProfile is given.
-   *
-   * The vertical personality is merged into the personality chain between
-   * DEFAULT_PERSONALITY and the product profile personality.
-   */
-  vertical?: VerticalKey | VerticalPreset;
-  /** Force a specific engine */
-  forceEngine?: EngineName;
-  /** Force a specific theme */
-  forceTheme?: string;
-  /** Force a specific locale on top of tenant defaults */
-  locale?: SupportedLocale;
-  /** Locale used when a key is missing in the active locale */
-  fallbackLocale?: SupportedLocale;
-  /** App-level translation overrides merged with tenant translations */
-  customTranslations?: Partial<LocaleTranslations>;
-  /** Callback when locale changes */
-  onLocaleChange?: (locale: SupportedLocale) => void;
-  /** Callback when tenant is resolved */
-  onTenantResolved?: (tenant: TenantConfig) => void;
-  /** Callback on error */
-  onError?: (error: Error) => void;
-  /**
-   * Skip loading individual tenant CSS files.
-   * Defaults to true - assumes you import @rottay/design-system/styles in your app.
-   * Set to false if you want to load tenant CSS dynamically from a URL.
-   */
-  skipCssLoading?: boolean;
-  /** Base URL for tenant CSS files (only used when skipCssLoading=false) */
-  cssBaseUrl?: string;
-  /**
-   * The viewport tier this REQUEST is for: exactly the value handed to
-   * `mountTenantTheme` as `options.viewport`, forwarded to the responsive
-   * runtime this provider mounts.
-   *
-   * WHY THE PROVIDER HAS TO CARRY IT. The mount projects the hint onto `<html>`
-   * so CSS can match it, and it is tempting to let the client read it back from
-   * there. It cannot: React asks the responsive store for its server answer on
-   * a machine with no document AND again while hydrating in the browser, so an
-   * attribute read makes those two answers disagree and React throws the whole
-   * first paint away. Omitted, the tree renders mobile-first on the server --
-   * the design system does not invent a viewport it was never told about.
-   */
-  ssrViewport?: DocumentViewportHint;
-}
-
-/**
- * Simple loading component - minimal to avoid SSR issues
- */
-const LoadingScreen: React.FC = () => null;
-
-// Stable identities for the no-artifact case. useSyncExternalStore resubscribes
-// whenever the subscribe function changes, so these must not be inline.
-const NO_RETENTION_SUBSCRIPTION = (): (() => void) => () => {};
-const NO_RETENTION_REVOCATION = (): string | null => null;
-
-/**
- * PHASE ONE. Arm the retained-artifact watch, from a commit, before anything
- * below it exists.
- *
- * `useInsertionEffect` is the earliest committed moment React offers: it runs
- * in the mutation phase, ahead of every descendant's insertion effect, every
- * layout effect in the tree, and the paint. Arming here closes the window a
- * descendant would otherwise have to touch the artifact unobserved, rather
- * than narrowing it.
- *
- * It is a COMMITTED moment, which is the other half of the reason. Arming
- * during render looked equivalent and was not: React abandons renders, and an
- * abandoned arm leaves an observer and a permanent ledger entry that no
- * cleanup will ever reach. The claim's `commit` hands back the release for
- * exactly the hold it took, so React's own cleanup contract does the rest.
- *
- * The sentinel renders nothing. It is a position in the tree, and the position
- * is the point.
- */
-function RetainedArtifactArm({
-  claim,
-}: {
-  claim: PreparedTenantThemeArtifactClaim;
-}): null {
-  useInsertionEffect(() => claim.commit(), [claim]);
-  return null;
-}
-
-/**
- * PHASE TWO. Settle the verdict after the whole subtree has run, before paint.
- *
- * A `MutationObserver` reports in a microtask, and a React commit yields none:
- * the mutation phase, every layout effect and the browser's paint are one task.
- * So a descendant can detach the artifact in its layout effect, restore it, and
- * have the frame painted from a document the runtime is still vouching for --
- * with the observer's records still sitting in a queue nobody has read.
- *
- * As the LAST child of the provider's own output, this sentinel's layout effect
- * runs after every descendant's and before the provider's own hooks. It drains
- * those records and re-audits the admitted node; the provider's store check --
- * a parent layout effect, running immediately after this one -- sees the new
- * verdict and re-renders synchronously into the block. No frame in between.
- *
- * THE EXACT REACH OF THIS SENTINEL, because an overstated law is worse than a
- * narrow one. It runs in every commit the provider is PART OF: the mount, the
- * provider's own updates, a StrictMode replay. A descendant that updates its
- * own state commits without re-rendering the provider, and React runs only that
- * subtree's effects -- this sentinel is not in that commit and does not fire.
- * Nothing can change that; a component React did not render has no effect to
- * run.
- *
- * That case is not uncovered, it is covered by the other half of the mechanism
- * and one step later. The observer armed at mount is persistent and still
- * judging; its records arrive in a microtask, and the store change that follows
- * schedules React's sync lane in another. Both drain at the checkpoint that
- * ends the task, and the event loop reaches its rendering step only after that
- * checkpoint -- so the tampered frame still never paints. What the seal adds,
- * and adds only here, is that the verdict is settled BEFORE CONTROL RETURNS,
- * with no reliance on that ordering at all.
- */
-function RetainedArtifactSeal({
-  claim,
-}: {
-  claim: PreparedTenantThemeArtifactClaim;
-}): null {
-  // Deliberately dependency-free: every commit is a fresh opportunity for a
-  // descendant to have touched the artifact, so every commit is sealed.
-  useLayoutEffect(() => { claim.seal(); });
-  return null;
-}
+export type { DesignSystemProviderProps } from './props';
+export { BEHAVIOR_OVERRIDE_KEYS, isCommittedTenantRequest, mergeDefinedOwnEntries } from './tenant-config';
 
 const LEGACY_PROFILE_DURATION_MS: Readonly<Record<MotionProfile, number>> = {
   precise: 180,
@@ -435,300 +213,6 @@ function resolveTenantMotionDial(
       explicit?.durationScale ?? derivedDurationScale ?? expressive?.durationScale,
     ambient: explicit?.ambient ?? expressive?.ambient,
   };
-}
-
-/**
- * Memoized children boundary.
- *
- * Prevents the entire children subtree from re-rendering when a provider
- * higher in the composition chain re-renders due to its own state changes
- * (e.g., ThemeProvider loading state). Children will only re-render when
- * they consume a context whose value actually changed.
- */
-const MemoizedChildren = memo(function MemoizedChildren({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  return <>{children}</>;
-});
-
-/**
- * The exact keys of `tenantOverrides` that select BEHAVIOR rather than paint.
- *
- * The membership test is what makes a behavior-only override non-destructive,
- * so the set is closed and deliberately small. Each member is a selection the
- * runtime can honour without rebuilding the tenant config:
- *
- * - `locale` / `fallbackLocale` — which dictionary I18nProvider reads
- * - `customTranslations`        — copy layered over that dictionary
- * - `features`                  — the capability set FeatureProvider unions
- * - `theme`                     — the light/dark/auto MODE, validated exactly
- *                                 like the config's own `theme` and seated in
- *                                 the same `explicitTenantTheme` slot, under
- *                                 `forceTheme`. A mode is not a token, so this
- *                                 admits no raw paint.
- *
- * Everything else — branding, identity, `componentPack` — is visual or
- * identity payload and MUST travel through the config so the census and the
- * reserved-identity assert can see it.
- *
- * Exported so the drill can assert against THIS declaration instead of a copy.
- * A test that restates the tuple proves only that it agrees with itself, and
- * would stay green through any widening of the real set. The export is
- * module-internal by construction: the barrel above this file enumerates its
- * exports by name (`bootstrap/facade/index.ts`), so nothing reaches the package
- * API.
- */
-export const BEHAVIOR_OVERRIDE_KEYS = [
-  'locale',
-  'fallbackLocale',
-  'customTranslations',
-  'features',
-  'theme',
-] as const;
-
-type BehaviorOverrideKey = (typeof BEHAVIOR_OVERRIDE_KEYS)[number];
-
-/**
- * Partial by nature, not by convenience: the overlay holds whichever behavior
- * keys the caller actually wrote. `TenantConfig['features']` is REQUIRED, so a
- * total `Pick` claimed every overlay carries a feature list and could only be
- * produced through a cast — a type that lied about the value it described.
- */
-type TenantBehaviorOverlay = Partial<Pick<TenantConfig, BehaviorOverrideKey>>;
-
-const BEHAVIOR_OVERRIDE_KEY_SET: ReadonlySet<string> = new Set(
-  BEHAVIOR_OVERRIDE_KEYS,
-);
-
-interface TenantOverridePartition {
-  /** Behavior selections, delivered at read sites. `null` when none present. */
-  readonly behavior: TenantBehaviorOverlay | null;
-  /** Visual/identity payload, folded into the config. `null` when none. */
-  readonly config: Partial<TenantConfig> | null;
-}
-
-/**
- * Splits the prop into its two lanes by OWN keys whose value is not
- * `undefined`.
- *
- * `undefined` is treated as absence on purpose: `{ locale: undefined }` is what
- * a caller writes when a conditional produced nothing, and reading it as "the
- * key is present" would make a no-op override rebuild the config and take a
- * code-owned tenant down with it.
- */
-function partitionTenantOverrides(
-  tenantOverrides?: Partial<TenantConfig>,
-): TenantOverridePartition {
-  if (!tenantOverrides) return { behavior: null, config: null };
-
-  let behavior: Record<string, unknown> | null = null;
-  let config: Record<string, unknown> | null = null;
-
-  for (const key of Object.keys(tenantOverrides)) {
-    const value = (tenantOverrides as Record<string, unknown>)[key];
-    if (value === undefined) continue;
-    if (BEHAVIOR_OVERRIDE_KEY_SET.has(key)) {
-      (behavior ??= {})[key] = value;
-    } else {
-      (config ??= {})[key] = value;
-    }
-  }
-
-  return {
-    behavior: behavior as TenantBehaviorOverlay | null,
-    config: config as Partial<TenantConfig> | null,
-  };
-}
-
-/**
- * THE undefined discipline, in one place, for every object merge in this
- * partition.
- *
- * Start from the base, copy only the override's OWN entries whose value is
- * actually defined. Never delete a base key, never keep a new own key holding
- * `undefined`, never invent a sibling neither side wrote.
- *
- * A plain `{ ...base, ...override }` fails all three at once, and it fails them
- * SILENTLY: `{ logo: undefined }` is an own key, so the spread overwrites a real
- * base logo with `undefined` and leaves the key standing. The tenant loses
- * identity it never asked to drop, and the census gains a key to count.
- *
- * `undefined` means "I wrote nothing here" everywhere else in this file —
- * `partitionTenantOverrides` is built on exactly that reading, because it is
- * what a caller produces when a conditional yields nothing. This helper is that
- * reading applied one level down, so branding and token sections cannot drift
- * from the top-level rule they sit under.
- */
-export function mergeDefinedOwnEntries<T extends object>(base: T, override: Partial<T>): T {
-  // Entries over a stated plain-record shape, not computed reads and writes on
-  // `T`. `T extends object` includes functions, so `override[key]` and
-  // `merged[key] = value` are indistinguishable from a capability escape
-  // (`obj[k].constructor` reaching `Function`) to the dependency-honesty
-  // analyser that guards this package's runtime edges. `Object.entries` yields
-  // exactly the own enumerable string keys the `for...in` + `hasOwnProperty`
-  // pair yielded, in the same order, so the merge is unchanged.
-  const merged: Record<string, unknown> = { ...(base as Record<string, unknown>) };
-  for (const [key, value] of Object.entries(override as Record<string, unknown>)) {
-    if (value === undefined) continue;
-    merged[key] = value;
-  }
-  return merged as T;
-}
-
-/**
- * Applies the visual/identity lane on top of a resolved tenant.
- *
- * Called ONLY when that lane is non-empty, which is what preserves the object
- * identity of a behavior-only mount. The merge is transparent: last write wins
- * for scalars, `branding` merges field-wise under the undefined discipline when
- * the override declares it, and no key the caller omitted is invented.
- *
- * The top-level spread below needs no such guard: `configOverrides` is the
- * partition's config lane, already built by skipping every own key whose value
- * was `undefined`. `branding` is where the rule has to be re-stated, because the
- * caller's nested object arrives verbatim — `{ branding: { companyName, favicon:
- * '/f.ico', logo: undefined } }` is the shape that erased a tenant's real logo
- * while publishing a favicon, and the census would then have counted the key.
- */
-function applyTenantConfigOverrides(
-  baseTenantConfig: TenantConfig,
-  configOverrides: Partial<TenantConfig>,
-): TenantConfig {
-  const merged: Record<string, unknown> = {
-    ...baseTenantConfig,
-    ...configOverrides,
-  };
-
-  if (configOverrides.branding !== undefined) {
-    // `TenantBranding` in, `TenantBranding` out: the helper is generic over the
-    // base's own shape, so `companyName` stays required and every identity and
-    // visual field keeps its declared type. Nothing here is cast.
-    merged.branding = mergeDefinedOwnEntries(
-      baseTenantConfig.branding,
-      configOverrides.branding,
-    );
-  }
-
-  return merged as unknown as TenantConfig;
-}
-
-/**
- * THE single derivation shared by the sync path, the async render path and the
- * async `onTenantResolved` notification.
- *
- * Returning the base object untouched when the visual/identity lane is empty is
- * the whole point: `Object.is(resolved, base)` stays true, so the registry
- * WeakSet still recognises the config, `getCodeOwnedRuntimeConfig` still finds
- * its cached projection, and the governed-behavior WeakMap still resolves the
- * authored motion dial.
- */
-function resolveTenantConfigWithOverrides(
-  baseTenantConfig: TenantConfig,
-  partition: TenantOverridePartition,
-): TenantConfig {
-  return partition.config === null
-    ? baseTenantConfig
-    : applyTenantConfigOverrides(baseTenantConfig, partition.config);
-}
-
-/**
- * The config a component is handed: identity and identity-only branding.
- *
- * A transport may still carry seed colours and fonts on `branding` -- that is
- * the last visual channel `TenantConfig` has -- and they are dropped here,
- * because the mounted artifact already compiled them. The artifact's own
- * normalized appearance travels beside this config on the tenant context, not
- * inside it.
- */
-function buildResolvedRuntimeConfig(config: TenantConfig): TenantConfig {
-  const { branding, ...identityAndBehavior } = config;
-  const identityBranding = {
-    companyName: branding.companyName,
-    ...(branding.logo === undefined ? {} : { logo: branding.logo }),
-    ...(branding.logoMark === undefined ? {} : { logoMark: branding.logoMark }),
-    ...(branding.favicon === undefined ? {} : { favicon: branding.favicon }),
-  };
-  return {
-    ...identityAndBehavior,
-    branding: identityBranding,
-  } as TenantConfig;
-}
-
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-/**
- * Pure predicate used by the async tenant effect to decide whether a pending
- * request still belongs to the committed tree.
- *
- * The effect reads `committedAsyncRequestKeyRef` from a layout effect that runs
- * after every commit, so the ref is authoritative before any child layout
- * effect can settle a stale request. `cancelled` is the effect's own local
- * cleanup flag. Both conditions must hold: a mutant that drops the key
- * comparison (`!cancelled`) survives only because React's passive cleanup may
- * run before the async continuation in test harnesses.
- *
- * Exported only so the integration drill can assert the exact predicate, not
- * restate it. The facade barrel enumerates its exports by name and keeps this
- * module-internal.
- */
-export function isCommittedTenantRequest(
-  cancelled: boolean,
-  requestKey: string,
-  committedKey: string | null,
-): boolean {
-  return !cancelled && committedKey === requestKey;
-}
-
-/**
- * Recursively merges locale dictionaries while preserving namespace structure.
- *
- * A plain object spread would replace an entire translation namespace when an
- * app only wants to override one key. This helper keeps overrides surgical,
- * which is especially important for tenant-specific copy tweaks.
- */
-function mergeLocaleTranslations(
-  baseTranslations?: Partial<LocaleTranslations>,
-  overrideTranslations?: Partial<LocaleTranslations>
-): Partial<LocaleTranslations> | undefined {
-  if (!baseTranslations && !overrideTranslations) {
-    return undefined;
-  }
-
-  if (!baseTranslations) {
-    return overrideTranslations;
-  }
-
-  if (!overrideTranslations) {
-    return baseTranslations;
-  }
-
-  const result: Record<string, unknown> = {
-    ...baseTranslations,
-  };
-
-  for (const [key, value] of Object.entries(overrideTranslations)) {
-    // `undefined` means "I wrote nothing here" at every layer of this merge,
-    // just like it does in the config and token override partitions. It must
-    // not erase a base value, a sibling, or a sibling branch.
-    if (value === undefined) continue;
-
-    const currentValue = result[key];
-
-    if (isPlainObject(currentValue) && isPlainObject(value)) {
-      result[key] = mergeLocaleTranslations(
-        currentValue as Partial<LocaleTranslations>,
-        value as Partial<LocaleTranslations>
-      );
-    } else {
-      result[key] = value;
-    }
-  }
-
-  return result as Partial<LocaleTranslations>;
 }
 
 export function DesignSystemProvider({
