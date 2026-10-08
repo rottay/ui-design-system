@@ -9,7 +9,6 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
-import { buildRecipeManifest } from "@/infrastructure/runtime/foundation/recipes/manifest";
 import {
   SECTION_CARD_CHANNEL_PREFIX,
   SECTION_CARD_PUBLISHED_CHANNELS,
@@ -78,13 +77,13 @@ describe("chrome/surface-chrome", () => {
     }
   });
 
-  it("names the namespace the governed recipe manifest already publishes", () => {
+  it("names the namespace the governed recipe declares and the hooks manifest publishes", () => {
     // The family id is `surface-chrome`; the spelling is the recipe's, and the
     // recipe is public API. That is why the rename is refused.
-    const section = buildRecipeManifest().families.find(
-      (entry) => entry.name === "sectionCard"
-    );
-    expect(section?.customPropertyPrefix).toBe(SECTION_CARD_CHANNEL_PREFIX);
+    const hooks = JSON.parse(readFileSync(resolve(process.cwd(), "contracts/css/hooks/index.json"), "utf8")) as {
+      tenantChannel: readonly string[];
+    };
+    for (const channel of SECTION_CARD_PUBLISHED_CHANNELS) expect(hooks.tenantChannel).toContain(channel);
     for (const channel of surfaceChromeChromeDeriver.produces) {
       expect(channel.startsWith(SECTION_CARD_CHANNEL_PREFIX)).toBe(true);
     }

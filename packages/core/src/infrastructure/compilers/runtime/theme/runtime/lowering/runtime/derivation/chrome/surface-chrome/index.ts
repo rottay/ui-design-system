@@ -9,8 +9,8 @@
  * The family id is `surface-chrome` and the namespace is `--ds-section-card-*`.
  * That is not drift, and since WO-FAM-11 sub-lot C it is not silent either:
  * the four names are `SECTION_CARD_PUBLISHED_CHANNELS`, declared by the
- * governed section-card recipe next to the prefix `buildRecipeManifest()`
- * publishes as the tenant-ownable namespace for that family, and the
+ * governed section-card recipe next to the prefix the hooks manifest
+ * (`./hooks-manifest`) publishes the four channels under, and the
  * family-namespace law admits exactly that list. The class root the component
  * emits comes from the same recipe, so renaming either would break a published
  * contract and leave the published prefix governing nothing; the family-cut

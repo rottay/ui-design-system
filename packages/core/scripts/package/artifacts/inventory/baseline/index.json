@@ -3,8 +3,8 @@
   "generatedBy": "pnpm --filter @rottay/design-system packinv:write (after a clean build)",
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
-  "entryCount": 7642,
-  "unpackedSize": 43268293,
+  "entryCount": 7639,
+  "unpackedSize": 43262697,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -16,7 +16,7 @@
     },
     {
       "path": "contracts/runtime/suppliers/index.json",
-      "size": 105838
+      "size": 105776
     },
     {
       "path": "contracts/themes/canaries/index.d.ts",
@@ -1892,7 +1892,7 @@
     },
     {
       "path": "dist/components/patterns/foundation/contract-builders/index.d.ts",
-      "size": 120
+      "size": 121
     },
     {
       "path": "dist/components/patterns/foundation/engine-styles/modern/index.cjs",
@@ -2068,7 +2068,7 @@
     },
     {
       "path": "dist/components/patterns/navigation/command-palette/index.cjs",
-      "size": 631
+      "size": 654
     },
     {
       "path": "dist/components/patterns/navigation/command-palette/index.d.ts",
@@ -2076,7 +2076,7 @@
     },
     {
       "path": "dist/components/patterns/navigation/command-palette/index.js",
-      "size": 401
+      "size": 417
     },
     {
       "path": "dist/components/patterns/navigation/command-palette/runtime/application-commands/index.cjs",
@@ -19472,15 +19472,15 @@
     },
     {
       "path": "dist/index.cjs",
-      "size": 91598
+      "size": 91470
     },
     {
       "path": "dist/index.d.ts",
-      "size": 7060
+      "size": 6852
     },
     {
       "path": "dist/index.js",
-      "size": 98538
+      "size": 98400
     },
     {
       "path": "dist/infrastructure/compilers/composition/tenant-theme/document-v2/index.cjs",
@@ -23020,15 +23020,15 @@
     },
     {
       "path": "dist/infrastructure/runtime/foundation/recipes/contracts/families/section-card/index.cjs",
-      "size": 550
+      "size": 489
     },
     {
       "path": "dist/infrastructure/runtime/foundation/recipes/contracts/families/section-card/index.d.ts",
-      "size": 1676
+      "size": 1647
     },
     {
       "path": "dist/infrastructure/runtime/foundation/recipes/contracts/families/section-card/index.js",
-      "size": 585
+      "size": 523
     },
     {
       "path": "dist/infrastructure/runtime/foundation/recipes/contracts/families/tabs/index.cjs",
@@ -23089,18 +23089,6 @@
     {
       "path": "dist/infrastructure/runtime/foundation/recipes/engine/index.js",
       "size": 1184
-    },
-    {
-      "path": "dist/infrastructure/runtime/foundation/recipes/manifest/index.cjs",
-      "size": 1795
-    },
-    {
-      "path": "dist/infrastructure/runtime/foundation/recipes/manifest/index.d.ts",
-      "size": 1083
-    },
-    {
-      "path": "dist/infrastructure/runtime/foundation/recipes/manifest/index.js",
-      "size": 2070
     },
     {
       "path": "dist/infrastructure/runtime/foundation/recipes/profiles/index.cjs",

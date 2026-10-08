@@ -1,2 +1,2 @@
-/** Type-safe recipes for composing pattern contracts. */
+/** Type-safe builders for composing pattern contracts. */
 export * from './columns';

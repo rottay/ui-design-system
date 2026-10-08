@@ -1,14 +1,14 @@
 /**
  * Authored section-card recipe definition (DS-S001).
  *
- * The governed section-card anatomy exposed through the public recipe
- * manifest and rendered by the surfaces section-card helper.
+ * The governed section-card anatomy rendered by the surfaces section-card
+ * helper.
  */
 
 /**
- * The tenant-ownable custom-property namespace this recipe publishes. The
- * manifest states it, so it is public API: a tenant that reads
- * `buildRecipeManifest()` is told to address the section card through it.
+ * The tenant-ownable custom-property namespace this recipe publishes, spelled
+ * from the recipe's `ds-section-card` class root. The hooks manifest
+ * (`./hooks-manifest`) publishes the four channels under it, so it is public API.
  */
 export const SECTION_CARD_CHANNEL_PREFIX = '--ds-section-card-';
 

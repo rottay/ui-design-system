@@ -72,7 +72,7 @@ const SUMMARIES = [
 ] as const satisfies readonly ChartInsightSummary[];
 
 describe('ChartGrammar closed registry', () => {
-  it('contains exactly neutral and the three canonical vertical recipes', () => {
+  it('contains exactly neutral and the three canonical vertical grammars', () => {
     expect(CHART_GRAMMAR_IDS).toEqual([
       'neutral',
       'bithire',

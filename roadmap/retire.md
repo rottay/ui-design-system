@@ -868,6 +868,15 @@ Lane-wide rules (binding on every WO):
   *those exact paths, each carrying the axis's retirement edit or the official regen and nothing else.*
   The `VerticalManifest.density` inline spelling (the structure law refuses the cross-layer import) is pinned
   identical to `DensityPosture` by the guard — the departure is registered, not hidden.
+  The W-3b companions (the recipe-vocabulary guard + the manifest retirement), same dated ruling:
+  `packages/core/src/index.ts` (the manifest block), `packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/tests/family-deriver-contract.test.ts`,
+  `packages/core/src/infrastructure/runtime/foundation/recipes/contracts/families/section-card/index.ts`
+  (comment only), `packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/surface-chrome/index.ts`
+  (comment only), the new guard `packages/core/tests/architecture/recipe-single-concept/index.test.ts`, and the
+  regenerated mirror `packages/core/contracts/runtime/suppliers/index.json`. **Files** gains for W-3b only:
+  *those exact paths, each carrying the retirement's edit or the official regen and nothing else.* The review's
+  L1 is a registered follow-up: a generic loop over `RECIPE_PROFILES` against the recipe definitions restores
+  the deleted manifest test's invariant (4 axes are checked by the types alone today).
 - **AMENDMENT (2026-10-07, owner decision packet — dated dispositions D-A, D-B, D-C, D-E, D-F; the acceptance above stands, this is added to it)** —
   Ratified by the owner's packet of 2026-10-07 (prompt text; the audit it cites is
   `docs-engineering/archive/audits/2026-10-07/design-system/progress-and-owner-decisions-davila.md`). Each

@@ -18,7 +18,7 @@
     "cssEdges": "5d9e8c6752744ce3ae601f83632bc3b5f0d5fa4f4291874e35f42f518d33d622",
     "cascadeRoots": "cc6fcf8b9bffd91b1f2572dd817593fe5b747b1c4892ebf15e45480059c96856",
     "rootCatalog": "8f22e285b34483d8fab7e69686a01a6704985abbd05d5c97be2d63152db0ad0f",
-    "srcTsx": "5696505beca0c9e3e8dd9001c7a6e5526256a6f7219640c01669fa1732ed1b88",
+    "srcTsx": "5754bed104222ac8c8df52d58a06beac27e75c48b81f5dc7f866ef2f5b86e549",
     "srcCompilers": "b656735a561ac794917927f782f847640e03b920488087adf88c7456e1ed4e9a",
     "artifacts": "dbb63bbe1a3344ab1611d82009bb569e77d735fb50cbe570c08df4ccce84f7be"
   },
@@ -95,8 +95,8 @@
       "stampSites": 513
     },
     "measuredCensus": {
-      "scannedFiles": 1875,
-      "excludedFiles": 2352,
+      "scannedFiles": 1874,
+      "excludedFiles": 2351,
       "styleSinks": 3135,
       "stampSites": 380,
       "distinctCustomProperties": 252,
@@ -108,13 +108,13 @@
     "censusDiff": {
       "scannedFiles": {
         "authored": 1740,
-        "measured": 1875,
-        "delta": 135
+        "measured": 1874,
+        "delta": 134
       },
       "excludedFiles": {
         "authored": 1664,
-        "measured": 2352,
-        "delta": 688
+        "measured": 2351,
+        "delta": 687
       },
       "styleSinks": {
         "authored": 3283,
@@ -150,7 +150,7 @@
     "censusReconciliation": {
       "method": "identity, not tolerance. This module publishes the full member lists below; the authored census published COUNTS ONLY and no member list, so the two cannot be reconciled member by member from its side. The residual is therefore expressed as unknownProvenance rows with file and symbol, never as a numeric tolerance.",
       "authoredPublishesMemberLists": false,
-      "scannedFiles": 1875,
+      "scannedFiles": 1874,
       "governedChannels": 229,
       "unresolvedSites": 0
     },
@@ -2203,7 +2203,6 @@
       "packages/core/src/infrastructure/runtime/foundation/recipes/contracts/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/recipes/emphasis/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/recipes/engine/index.ts",
-      "packages/core/src/infrastructure/runtime/foundation/recipes/manifest/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/recipes/profiles/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/root-attributes/index.ts",
       "packages/core/src/infrastructure/runtime/foundation/root-attributes/presentation/index.ts",
@@ -73967,7 +73966,7 @@
   "callArgsPending": [],
   "provenance": {
     "producedBy": "cascade:producers --write",
-    "writtenOn": "2026-10-07",
-    "contentDigest": "f8fc339d944d7b874130d25e3cf697e0858958c1e6815939cb2ebe1d0dc85c7e"
+    "writtenOn": "2026-10-08",
+    "contentDigest": "2f9841c34a0d626ca4a07d46eba4ddbb40c3a494c0cf8919466fede25dd48d75"
   }
 }

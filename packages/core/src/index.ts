@@ -71,13 +71,6 @@ export type {
   RecipeProfileProviderProps,
   RecipeProfileValidation,
 } from './infrastructure/runtime/foundation/recipes/profiles';
-export {
-  buildRecipeManifest,
-} from './infrastructure/runtime/foundation/recipes/manifest';
-export type {
-  RecipeManifest,
-  RecipeManifestFamily,
-} from './infrastructure/runtime/foundation/recipes/manifest';
 
 // ============================================
 // EXPRESSIVE PROFILES (C1b white-label contract)
