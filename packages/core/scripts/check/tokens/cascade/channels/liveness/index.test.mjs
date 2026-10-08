@@ -2970,7 +2970,10 @@ test('LIVE (TINT-SCALE): the nine status steps classify CAPABILITY_SCALE_STEP_UN
   assert.deepEqual(result.dispositions.byCapability, { 'palette.status-seeds': CAPABILITY_ROWS });
   assert.equal(result.capability.rosters.tint.length, 25);
   assert.equal(result.capability.rosters.ramps.length, 60);
-  assert.deepEqual(result.capability.baseDarkRampRoles, ['error', 'neutral'], 'C3: the base dark scope re-seeds only the error and neutral ramps');
+  // 239dd6306 admitted the inverted primary ramp into the base dark scope (the
+  // W25 SENT wave, reviewed); C3's pin predates it. The admission is DT-ruled
+  // 2026-10-07 and the pin re-seated to match.
+  assert.deepEqual(result.capability.baseDarkRampRoles, ['error', 'neutral', 'primary'], 'C3: the base dark scope re-seeds only the error, neutral and (admitted) primary ramps');
   for (const [vertical, modes] of Object.entries(result.capability.resolution)) {
     assert.notEqual(modes.light['--ds-color-bg-primary'], modes.dark['--ds-color-bg-primary'], `${vertical}: C1.b`);
   }

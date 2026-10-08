@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "generatedBy": "scripts/check/tokens/cascade/channels/liveness/index.mjs --write",
   "roundId": "R1",
-  "sourceDigest": "deb2d647371d50b04bbbb54d63a349a8d106ceb1e851a8780e8254f0407c7a38",
+  "sourceDigest": "18abc6b0daa91fecb202d55e8ccd47ddcfd1448f216cfb68e16d994e13882367",
   "scopeLaw": "Tenant-channel liveness ledger scoped to TENANT_THEME_OVERRIDE_TOKENS ∪ TENANT_THEME_REFERENCE_TOKENS ∪ brand-theme-compiler-emitted names, plus the app-bithire external consumerRoot. NOT the customization-surface-census.mjs dead-writer census. NOT tenant-channel-consumer-gate.mjs. NOT theme-channel-parity-gate.mjs. No classification asserts a channel is dead, but membership on TENANT_THEME_REFERENCE_TOKENS never protects a row from a NO-GO finding by itself -- only a proven finite terminal-paint chain (in-repo or via a required consumerRoot) does that. A CAPABILITY_SCALE_STEP_UNREAD row is published apart from LIVE: a measured step of a public scale whose capability (single producer, admission and emission in agreement, resolution in every supported mode) the acceptance proves and whose paint nothing proves; it is never counted LIVE and leaves the effect red only while its acceptance measures green for that exact channel.",
   "inputs": {
     "tenantThemeContract": "src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
@@ -18,7 +18,7 @@
     "compiledArtifactRoot": "src/foundation/tokens/css/facade/artifacts",
     "compiledArtifactCount": 3,
     "cssFileCount": 500,
-    "tsFileCount": 1181
+    "tsFileCount": 1179
   },
   "consumerRoots": [
     {
@@ -206,7 +206,7 @@
     "compiledRows": 3060,
     "compiledArtifacts": 3,
     "attributedReadSites": 1007,
-    "unattributedReadSites": 73593,
+    "unattributedReadSites": 73384,
     "unattributedSharedReadSites": 27,
     "unknownFamilySites": 0,
     "byClassification": {
@@ -18439,8 +18439,8 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css:687 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:36 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css:1181 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:274 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:278 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:273 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:277 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:111 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/button/index.css:251 (box-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/skin/field-filters-panel/index.css:203 (feeds --ds-button-focus-ring)"
@@ -19945,7 +19945,7 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:330 (min-block-size)"
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:367 (min-block-size)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_MODERN_PAINTED",
@@ -19993,7 +19993,7 @@
       "tsReadOnly": false,
       "consumerSites": [
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:270 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:281 (color)"
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:318 (color)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_MODERN_PAINTED",
@@ -20040,7 +20040,7 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:353 (min-block-size)"
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:390 (min-block-size)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_MODERN_PAINTED",
@@ -30947,11 +30947,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 1320,
+        "dsTerminal": 1318,
         "externalTerminal": 2367,
         "dsTs": 4,
         "externalTs": 0,
-        "total": 3691
+        "total": 3689
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -31021,9 +31021,9 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/menu/index.css:84 (background-color)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:109 (background)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:117 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css:86 (background)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css:96 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:118 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:385 (background)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:386 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css:226 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css:231 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:231 (background)",
@@ -31198,11 +31198,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 804,
+        "dsTerminal": 802,
         "externalTerminal": 2654,
         "dsTs": 21,
         "externalTs": 4,
-        "total": 3483
+        "total": 3481
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -31270,11 +31270,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 1190,
+        "dsTerminal": 1183,
         "externalTerminal": 977,
         "dsTs": 35,
         "externalTs": 5,
-        "total": 2207
+        "total": 2200
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -31345,11 +31345,11 @@
       ],
       "sharedFamilyAttribution": true,
       "reads": {
-        "dsTerminal": 1306,
+        "dsTerminal": 1304,
         "externalTerminal": 2799,
         "dsTs": 5,
         "externalTs": 3,
-        "total": 4113
+        "total": 4111
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -31435,11 +31435,11 @@
       ],
       "sharedFamilyAttribution": true,
       "reads": {
-        "dsTerminal": 770,
+        "dsTerminal": 766,
         "externalTerminal": 1466,
         "dsTs": 49,
         "externalTs": 3,
-        "total": 2288
+        "total": 2284
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -31911,7 +31911,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/activity-timeline/index.css:231 (border-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css:222 (border-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:208 (border)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:289 (border)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:288 (border)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:185 (border)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css:222 (border-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:159 (border-color)",
@@ -31971,9 +31971,9 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:294 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:299 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:303 (border-color)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:293 (border-color)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:298 (border-color)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:302 (border-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css:55 (border-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/step-wizard/index.css:124 (border)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:169 (background)",
@@ -32098,9 +32098,9 @@
       "tsReadOnly": false,
       "consumerSites": [
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css:223 (background-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:293 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:298 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:302 (background)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:292 (background)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:297 (background)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:301 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/alert-dialog/index.css:38 (background-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow/index.css:113 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/callout/index.css:38 (background-color)",
@@ -32270,7 +32270,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:243 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow/index.css:341 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow/index.css:352 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:288 (color)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:287 (color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery/index.css:210 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/moderation-gallery/index.css:218 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow/index.css:156 (background)",
@@ -33510,11 +33510,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 1757,
+        "dsTerminal": 1746,
         "externalTerminal": 1741,
         "dsTs": 8,
         "externalTs": 5,
-        "total": 3511
+        "total": 3500
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -33579,11 +33579,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 1265,
+        "dsTerminal": 1261,
         "externalTerminal": 1542,
         "dsTs": 12,
         "externalTs": 2,
-        "total": 2821
+        "total": 2817
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -33783,11 +33783,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 846,
+        "dsTerminal": 844,
         "externalTerminal": 19,
         "dsTs": 2,
         "externalTs": 0,
-        "total": 867
+        "total": 865
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -33979,11 +33979,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 681,
+        "dsTerminal": 678,
         "externalTerminal": 609,
         "dsTs": 3,
         "externalTs": 0,
-        "total": 1293
+        "total": 1290
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -34100,11 +34100,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 1293,
+        "dsTerminal": 1284,
         "externalTerminal": 1327,
         "dsTs": 2,
         "externalTs": 0,
-        "total": 2622
+        "total": 2613
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -34166,11 +34166,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4266,
+        "dsTerminal": 4245,
         "externalTerminal": 8024,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 12290
+        "total": 12269
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -34232,11 +34232,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4269,
+        "dsTerminal": 4248,
         "externalTerminal": 8024,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 12293
+        "total": 12272
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -35717,11 +35717,11 @@
       ],
       "sharedFamilyAttribution": true,
       "reads": {
-        "dsTerminal": 2674,
+        "dsTerminal": 2669,
         "externalTerminal": 5929,
         "dsTs": 73,
         "externalTs": 119,
-        "total": 8795
+        "total": 8790
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -36026,11 +36026,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 519,
+        "dsTerminal": 518,
         "externalTerminal": 2,
         "dsTs": 2,
         "externalTs": 3,
-        "total": 526
+        "total": 525
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -36304,12 +36304,12 @@
       "consumerSites": [
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:332 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:333 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:261 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:262 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:267 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:268 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:282 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:283 (border-color)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:260 (background)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:261 (border-color)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:266 (background)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:267 (border-color)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:281 (background)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:282 (border-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/detail-panel/index.css:65 (color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/detail-panel/index.css:112 (border)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/detail-panel/index.css:113 (background)",
@@ -38235,11 +38235,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 65,
+        "dsTerminal": 64,
         "externalTerminal": 2,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 67
+        "total": 66
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -38265,11 +38265,11 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:308 (color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:319 (color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css:210 (color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:362 (color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/dropdown/index.css:276 (color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:205 (color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:210 (color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:281 (color)"
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:281 (color)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:337 (color)"
       ],
       "consumerSitesTruncated": true,
       "classification": "LIVE_MODERN_PAINTED",
@@ -38419,11 +38419,11 @@
       ],
       "sharedFamilyAttribution": true,
       "reads": {
-        "dsTerminal": 1133,
+        "dsTerminal": 1124,
         "externalTerminal": 1277,
         "dsTs": 66,
         "externalTs": 3,
-        "total": 2479
+        "total": 2470
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -38509,11 +38509,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 633,
+        "dsTerminal": 630,
         "externalTerminal": 591,
         "dsTs": 55,
         "externalTs": 4,
-        "total": 1283
+        "total": 1280
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -39447,11 +39447,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 6055,
+        "dsTerminal": 6032,
         "externalTerminal": 10405,
         "dsTs": 1,
         "externalTs": 0,
-        "total": 16461
+        "total": 16438
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -47257,11 +47257,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 69,
+        "dsTerminal": 68,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 69
+        "total": 68
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -52974,7 +52974,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css:97 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css:503 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css:539 (border-radius)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:153 (border-radius)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:152 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/card/index.css:40 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/card/index.css:180 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:112 (border-radius)",
@@ -56232,11 +56232,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 3012,
+        "dsTerminal": 3006,
         "externalTerminal": 13695,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 16707
+        "total": 16701
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -56298,11 +56298,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 3012,
+        "dsTerminal": 3006,
         "externalTerminal": 13695,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 16707
+        "total": 16701
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -64444,11 +64444,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 431,
+        "dsTerminal": 430,
         "externalTerminal": 4,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 435
+        "total": 434
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -65341,11 +65341,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 246,
+        "dsTerminal": 244,
         "externalTerminal": 312,
         "dsTs": 2,
         "externalTs": 0,
-        "total": 560
+        "total": 558
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -66001,7 +66001,7 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:432 (min-block-size)"
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:448 (min-block-size)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_MODERN_PAINTED",
@@ -66887,11 +66887,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 417,
+        "dsTerminal": 416,
         "externalTerminal": 151,
         "dsTs": 1,
         "externalTs": 0,
-        "total": 569
+        "total": 568
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -66951,11 +66951,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 440,
+        "dsTerminal": 439,
         "externalTerminal": 153,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 593
+        "total": 592
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -67017,11 +67017,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 634,
+        "dsTerminal": 632,
         "externalTerminal": 152,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 786
+        "total": 784
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -67083,11 +67083,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 774,
+        "dsTerminal": 772,
         "externalTerminal": 152,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 926
+        "total": 924
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -67351,7 +67351,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:225 (font-family)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:171 (font-family)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:97 (font-family)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:444 (font-family)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:340 (font-family)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/empty-state/index.css:132 (font-family)"
       ],
       "consumerSitesTruncated": true,
@@ -74394,7 +74394,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:133 (letter-spacing)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css:432 (letter-spacing)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:372 (letter-spacing)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:448 (letter-spacing)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:344 (letter-spacing)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/empty-state/index.css:140 (letter-spacing)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/notifier/index.css:289 (letter-spacing)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/result/index.css:120 (letter-spacing)",
@@ -74486,11 +74486,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 36,
+        "dsTerminal": 35,
         "externalTerminal": 0,
         "dsTs": 3,
         "externalTs": 0,
-        "total": 39
+        "total": 38
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -74510,9 +74510,8 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:254 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:391 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:403 (line-height)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:344 (line-height)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:468 (line-height)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:478 (line-height)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:364 (line-height)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:374 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:377 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:451 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:524 (line-height)",
@@ -74520,7 +74519,8 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:305 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:319 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:332 (line-height)",
-        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/modal-compounds/index.css:44 (line-height)"
+        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/modal-compounds/index.css:44 (line-height)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/drawer/index.css:364 (line-height)"
       ],
       "consumerSitesTruncated": true,
       "classification": "LIVE_MODERN_PAINTED",
@@ -74617,7 +74617,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:102 (line-height)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:109 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:373 (line-height)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:447 (line-height)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:343 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:190 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:211 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:298 (line-height)"
@@ -74738,7 +74738,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:78 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:574 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:577 (line-height)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css:213 (line-height)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css:236 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css:421 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css:437 (line-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css:453 (line-height)",
@@ -76696,10 +76696,10 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:316 (background-image)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:69 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1050 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:118 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:168 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:511 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:559 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:117 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:167 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:396 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:444 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:71 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1050 (box-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:404 (feeds --ds-premium-card-depth)",
@@ -91852,11 +91852,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 1662,
+        "dsTerminal": 1657,
         "externalTerminal": 1043,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 2705
+        "total": 2700
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -91918,11 +91918,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 28,
+        "dsTerminal": 27,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 28
+        "total": 27
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -103165,11 +103165,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 240,
+        "dsTerminal": 239,
         "externalTerminal": 692,
         "dsTs": 6,
         "externalTs": 0,
-        "total": 938
+        "total": 937
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -103229,11 +103229,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 391,
+        "dsTerminal": 389,
         "externalTerminal": 479,
         "dsTs": 8,
         "externalTs": 0,
-        "total": 878
+        "total": 876
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -103291,11 +103291,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 391,
+        "dsTerminal": 389,
         "externalTerminal": 479,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 870
+        "total": 868
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -103359,11 +103359,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 564,
+        "dsTerminal": 562,
         "externalTerminal": 1376,
         "dsTs": 12,
         "externalTs": 1,
-        "total": 1953
+        "total": 1951
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -103421,11 +103421,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 564,
+        "dsTerminal": 562,
         "externalTerminal": 1376,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 1940
+        "total": 1938
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -103596,11 +103596,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 1220,
+        "dsTerminal": 1216,
         "externalTerminal": 2566,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 3786
+        "total": 3782
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -104124,11 +104124,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 289,
+        "dsTerminal": 288,
         "externalTerminal": 7,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 296
+        "total": 295
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -107922,8 +107922,8 @@
       "consumerSites": [
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:36 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css:1181 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:274 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:278 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:273 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:277 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:111 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/button/index.css:251 (box-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css:577 (feeds --ds-button-focus-ring)"
@@ -117044,11 +117044,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 509,
+        "dsTerminal": 507,
         "externalTerminal": 419,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 928
+        "total": 926
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -117106,11 +117106,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 97,
+        "dsTerminal": 96,
         "externalTerminal": 163,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 260
+        "total": 259
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -117124,13 +117124,12 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/patterns-paint/index.css:426 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3250 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:240 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:388 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:183 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:373 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:374 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:78 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:129 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css:52 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css:365 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css:388 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:707 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:278 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:337 (box-shadow)",
@@ -117140,7 +117139,8 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:398 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1077 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:62 (outline)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:2344 (box-shadow)"
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:2344 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns-paint/index.css:125 (box-shadow)"
       ],
       "consumerSitesTruncated": true,
       "classification": "LIVE_MODERN_PAINTED",
@@ -117273,11 +117273,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 509,
+        "dsTerminal": 507,
         "externalTerminal": 419,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 928
+        "total": 926
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -117496,7 +117496,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/record-facts/index.css:43 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css:82 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/visual-excellence-preview/index.css:269 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:118 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:117 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:110 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/confirm-dialog/index.css:91 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/date-picker/index.css:263 (box-shadow)",
@@ -117540,11 +117540,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 509,
+        "dsTerminal": 507,
         "externalTerminal": 419,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 928
+        "total": 926
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -128992,11 +128992,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 926,
+        "dsTerminal": 924,
         "externalTerminal": 2260,
         "dsTs": 4,
         "externalTs": 0,
-        "total": 3190
+        "total": 3188
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -129108,11 +129108,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 585,
+        "dsTerminal": 583,
         "externalTerminal": 0,
         "dsTs": 4,
         "externalTs": 0,
-        "total": 589
+        "total": 587
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -129132,8 +129132,8 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:327 (background)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/input-compounds/index.css:83 (background)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/input-compounds/index.css:291 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css:90 (background)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css:201 (background)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css:100 (background)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/activity-log/index.css:211 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:169 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/approval-workflow/index.css:122 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:328 (background)",
@@ -130520,11 +130520,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 7,
+        "dsTerminal": 6,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 7
+        "total": 6
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -130535,7 +130535,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:355 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:466 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:373 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:378 (background)",
@@ -130719,11 +130718,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 7,
+        "dsTerminal": 6,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 7
+        "total": 6
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -130734,7 +130733,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:357 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:468 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:374 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:379 (box-shadow)",
@@ -130778,11 +130776,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 3,
+        "dsTerminal": 2,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 3
+        "total": 2
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -130793,7 +130791,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:359 (transform)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:369 (transform)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:388 (transform)"
       ],
@@ -131885,11 +131882,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 5,
+        "dsTerminal": 4,
         "externalTerminal": 0,
         "dsTs": 1,
         "externalTs": 0,
-        "total": 6
+        "total": 5
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -131900,8 +131897,7 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:486 (gap)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:683 (gap)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:563 (gap)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:569 (gap)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:61 (gap)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:355 (gap)",
@@ -132646,11 +132642,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4,
+        "dsTerminal": 3,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 4
+        "total": 3
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -132661,7 +132657,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:343 (font-weight)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:450 (font-weight)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:190 (font-weight)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:331 (font-weight)"
@@ -132696,11 +132691,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4,
+        "dsTerminal": 3,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 4
+        "total": 3
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -132711,7 +132706,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:358 (font-weight)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:465 (font-weight)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:307 (font-weight)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:342 (font-weight)"
@@ -132746,11 +132740,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 2,
+        "dsTerminal": 1,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 2
+        "total": 1
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -132761,7 +132755,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:334 (gap)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:182 (gap)"
       ],
       "consumerSitesTruncated": false,
@@ -132841,11 +132834,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 8,
+        "dsTerminal": 7,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 8
+        "total": 7
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -132859,7 +132852,6 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:287 (transform)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:428 (transform)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:488 (transform)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:359 (transform)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:369 (transform)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:388 (transform)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:270 (transform)",
@@ -132995,11 +132987,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 8,
+        "dsTerminal": 7,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 8
+        "total": 7
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -133010,7 +133002,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:340 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:455 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:228 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:232 (border-radius)",
@@ -133398,11 +133389,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 5,
+        "dsTerminal": 4,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 5
+        "total": 4
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -133413,7 +133404,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:489 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:572 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:157 (background)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:242 (background)",
@@ -133499,11 +133489,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 15,
+        "dsTerminal": 11,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 15
+        "total": 11
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -133514,10 +133504,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:356 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:370 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:376 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:490 (border)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:467 (border-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:475 (border-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:573 (border)",
@@ -133654,11 +133640,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4,
+        "dsTerminal": 3,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 4
+        "total": 3
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -133669,7 +133655,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:488 (padding)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:571 (padding)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:135 (padding)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:241 (padding)"
@@ -133704,11 +133689,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4,
+        "dsTerminal": 3,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 4
+        "total": 3
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -133719,7 +133704,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:491 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:574 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:137 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:244 (border-radius)"
@@ -134227,11 +134211,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4,
+        "dsTerminal": 3,
         "externalTerminal": 0,
         "dsTs": 1,
         "externalTs": 0,
-        "total": 5
+        "total": 4
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -134242,7 +134226,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:342 (font-size)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:449 (font-size)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:330 (font-size)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:189 (font-size)",
@@ -134284,11 +134267,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 5,
+        "dsTerminal": 4,
         "externalTerminal": 0,
         "dsTs": 1,
         "externalTs": 0,
-        "total": 6
+        "total": 5
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -134299,7 +134282,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:335 (min-block-size)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:446 (min-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:327 (min-height)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:178 (block-size)",
@@ -134339,11 +134321,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4,
+        "dsTerminal": 3,
         "externalTerminal": 0,
         "dsTs": 1,
         "externalTs": 0,
-        "total": 5
+        "total": 4
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -134354,7 +134336,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:408 (font-size)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:252 (inline-size)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:253 (block-size)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:471 (font-size)",
@@ -134396,11 +134377,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4,
+        "dsTerminal": 3,
         "externalTerminal": 0,
         "dsTs": 1,
         "externalTs": 0,
-        "total": 5
+        "total": 4
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -134411,7 +134392,6 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:336 (padding)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:447 (padding)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:328 (padding)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:183 (padding)",
@@ -134448,11 +134428,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 5,
+        "dsTerminal": 4,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 5
+        "total": 4
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -134463,8 +134443,7 @@
       "cssReadNoTerminal": false,
       "tsReadOnly": false,
       "consumerSites": [
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:486 (gap)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:683 (gap)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:563 (gap)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css:569 (gap)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css:61 (gap)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header/index.css:355 (gap)",
@@ -144540,11 +144519,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 97,
+        "dsTerminal": 96,
         "externalTerminal": 192,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 289
+        "total": 288
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -144558,13 +144537,12 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/patterns-paint/index.css:426 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3250 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:240 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:388 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:183 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:373 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:374 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:78 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:129 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css:52 (box-shadow)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css:365 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/user-profile-card/index.css:388 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:707 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css:278 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:337 (box-shadow)",
@@ -144574,7 +144552,8 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:398 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1077 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:62 (outline)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:2344 (box-shadow)"
+        "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:2344 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns-paint/index.css:125 (box-shadow)"
       ],
       "consumerSitesTruncated": true,
       "classification": "LIVE_MODERN_PAINTED",
@@ -155448,11 +155427,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 37,
+        "dsTerminal": 36,
         "externalTerminal": 0,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 37
+        "total": 36
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -157752,11 +157731,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 1046,
+        "dsTerminal": 1044,
         "externalTerminal": 1460,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 2506
+        "total": 2504
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
