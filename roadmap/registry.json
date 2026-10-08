@@ -7879,6 +7879,11 @@
      "at": "2026-10-08 04:35",
      "by": "kimi-dt",
      "note": "2026-10-08 kimi-dt: CORRECTION to the F-54 ruling's figures (the ruling stands; the numbers were the writer's to measure exactly, and the gate lot measured them): (1) the composed-bundle residual is 18 names, NOT 17 — my surplus extraction counted only bithire-only names and missed --ds-font-pack-geometric-display, declared by EVNTO only (its display font pack, the roster's first evnto fontPacks entry — the evnto twin of the bithire grotesk pack the ruling already classified). RATIFIED as lawful authored identity, same class, with the miss named in the baseline's ruledBy. The writer correctly BLOCKED on the gap instead of silently pinning (the gate would have been red at HEAD). (2) The composed-bundle count is 7054/7072 = 99.75%, NOT 7055/7073: my grep counted --ds-affix-affixed-shadow, which all three bundles carry only inside a COMMENT; the gate uses artifact-coverage's declaredChannels parser (comments stripped) — the repo's one definition of 'declared'. The ratio is identical to two decimals; the threshold is untouched. Lesson registered: the DT's quick measurements set the direction; the gate's parser sets the record."
+    },
+    {
+     "at": "2026-10-08 04:55",
+     "by": "kimi-dt",
+     "note": "2026-10-08 kimi-dt: the F-54 durable gate INTEGRATED (302518ed7) — artifact-name-intersection: the ruling made self-enforcing (composed-bundle ∩/∪ >= 90% with the threshold a code constant; the 18-name residual adjudicated by name, shrink-only, every non-adjudicated tenant-only name failing closed; the facade class reported informationally with the D-30 reason). Writer a3afbec3 delivered BLOCKED-on-ruling on exactly the right gap (my ruling named 17 names; the measured residual is 18 — the evnto-only --ds-font-pack-geometric-display, ratified at integration as the bithire pack's twin). Review b1b0eb21 ACCEPT — reproduced with an INDEPENDENT postcss parse (7054/7072, the same 18 names, zero parser divergence) and re-proved every fail-closed arm by mutating the real tracked bundles (incl. a shared name one bundle stops declaring — red). Review follow-ups: L1 (OWED-prefixed ruledBy must fail closed — micro-lot dispatched to a3afbec3), L2 (residual growth is review-guarded; optional declared-widening registration)."
     }
    ]
   },
