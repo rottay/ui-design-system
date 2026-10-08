@@ -79,13 +79,8 @@ export function toCanonicalSize<T extends string | undefined>(
 /** Status types for form control validation states. */
 export type StatusType = '' | 'error' | 'warning';
 
-/**
- * @deprecated Legacy color axis conflating semantic meaning (primary, success, warning, error)
- * with one structural value (gradient) in a single union. Use {@link Tone} for semantic color;
- * pair it with a component's own structural variant type (e.g. `BadgeStyle`) for rendering
- * style. `BadgeVariant`, `TagVariant` and `AvatarVariant` are canonical structural fills
- * still built on this union; it leaves last, and its terminal disposition awaits the owner.
- */
+/** Shared colour and structural-fill union behind `BadgeVariant`, `TagVariant` and `AvatarVariant`;
+ * use {@link Tone} for semantic colour. */
 export type Variant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'gradient';
 
 /**

@@ -66,38 +66,6 @@
       ],
       "codemod": "member-changed/.#BrandMotion.entranceDuration",
       "changeset": null
-    },
-    {
-      "file": "src/foundation/contracts/kernel/common/index.ts",
-      "anchor": "Variant",
-      "class": "compat-consumed",
-      "reason": "Base union behind `BadgeVariant`, `TagVariant` and `AvatarVariant` (and `AvatarProps.variant` through the last). Under owner disposition D-B (2026-10-07) those six are canonical for the measured `secondary`/`gradient` structural fills and are no longer deprecated; they remain built on this deprecated shared union, and its terminal disposition is pending an owner decision. Transferred to WO-RET-06 at the RET-01 closure (E11): parity failed with a fixture (prop-renamed/badge-variant-secondary), removal recorded for the 4.0 line. `Variant` answers through the alias `export type BadgeVariant = Variant` (the row keeps that consumer needle); it has three dependents — BadgeVariant, TagVariant and AvatarVariant — and leaves last: repairing Badge parity does not release it while Tag or Avatar still build on it.",
-      "scope": "Exported type alias. Inside the package only the badge, tag and avatar contracts import it. No direct import of the name was found in the three apps; it is reached through the three component variant types.",
-      "replacement": "`Tone` for semantic colour, plus the component's own structural variant",
-      "canonicalOwner": "src/foundation/contracts/kernel/common/index.ts",
-      "blocker": "parity-failed:prop-renamed/badge-variant-secondary",
-      "receiver": "WO-RET-06",
-      "since": "2026-07-10",
-      "removeIn": "4.0",
-      "evidence": [
-        {
-          "kind": "consumer",
-          "path": "packages/core/src/components/primitives/display/badge/contracts/index.ts",
-          "needle": "export type BadgeVariant = Variant;"
-        },
-        {
-          "kind": "consumer",
-          "path": "packages/core/src/components/primitives/display/tag/contracts/index.ts",
-          "needle": "export type TagVariant = Variant;"
-        },
-        {
-          "kind": "consumer",
-          "path": "packages/core/src/components/primitives/display/avatar/contracts/index.ts",
-          "needle": "export type AvatarVariant = Variant;"
-        }
-      ],
-      "codemod": "member-changed/.#Variant",
-      "changeset": ".changeset/ret-01-compat-rows-receiver-4-0.md"
     }
   ]
 }

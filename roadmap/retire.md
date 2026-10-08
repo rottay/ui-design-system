@@ -911,5 +911,46 @@ Lane-wide rules (binding on every WO):
     `typecheck:tests` TS2339 keeps its own receiver (never silenced).
   Explicitly NOT ratified by this packet: D-D and the remaining prior decisions, any phase opening, any
   capability retirement beyond the named ones, and any publication/CI step.
+- **AMENDMENT (2026-10-08, owner ruling #3 — the generic `Variant`; the acceptance above stands, this is added to it)** —
+  Authority: owner ruling of 2026-10-08, #3, as adopted by the DT on the same date: keep the shared type needed by
+  `BadgeVariant`, `TagVariant` and `AvatarVariant` and its public compatibility; do not remove a useful
+  dependency to empty the ledger (verbatim: "Conservá el tipo compartido necesario para BadgeVariant, TagVariant
+  y AvatarVariant y su compatibilidad pública. No retires una dependencia útil para vaciar el ledger."). This
+  resolves the open question D-B left on `Variant` and settles AM-1 v3's
+  "leaves last": its retirement order is moot, because the dependents are canonical (D-B) and stay.
+  **Supersedes, for `Variant` only:** the WO-RET-06 AM-1 v3 Do NOT 'Do not release `Variant` before Tag and Avatar
+  no longer build on it' (:837) and its re-home route (:829-831); D-B's 'keeps its leaves-last condition; nothing
+  here releases it early' (:891); and the WO-RET-01 AM-1 v3 re-home clause 'does not leave the ledger while either
+  holds' (:596-598) with its conditions (a) (the row's consumer needle) and (c) (the row's `reason`), which leave
+  with the row. **Survives unchanged:** condition (b), the two real-fixture pins of gate test H1.6, and the Badge
+  fixture's `resolves` text, which now reads as the dependency statement and as an ordering constraint for any
+  future retirement, not as a pending retirement.
+  **Canonical owner:** `packages/core/src/foundation/contracts/kernel/common/index.ts` (`export type Variant`),
+  published at the root subpath `.` through `foundation/contracts`. Lawful home: kernel/common is the shared
+  low-level type owner (its file header lists `Variant`); a union consumed by three primitives' contracts is a
+  shared dependency and must sit below them (`primitives` import kernel, never each other); its production
+  importers are exactly the badge, tag and avatar contracts; three type-level tests (ToneAxis contract, Button
+  and Toast variant-union) reference it as an unchanged reference union.
+  **Support condition:** `Variant` is SUPPORTED as the shared variant contract of Badge, Tag and Avatar for as
+  long as any of `BadgeVariant`, `TagVariant` or `AvatarVariant` is built on it — necessary public compat, not
+  transitional. Its seven literals and their meaning do not change. `Tone` stays the recommended semantic-colour
+  axis; that is guidance, not a deprecation.
+  **Disposition (verifiable):** marker removed (the `@deprecated` JSDoc of `Variant`; the type line byte-
+  identical), row deleted (the `Variant` row of `packages/core/contracts/package/deprecations/index.json`),
+  capability documented (`packages/core/docs/consumer-contract/structural-variant-fills/index.md`, the section
+  that replaces "Lo que D-B no decide"). The ledger is not the record (a ledger row is a deprecation with a
+  removal line); the record is this AMENDMENT, the doc section and the changeset's contract-diff row. Its
+  notice-only codemod entry `member-changed/.#Variant` leaves with the row (D-A24/D-B precedent). The parity
+  fixture `prop-renamed/badge-variant-secondary` and the Badge/Tag parity tests stay unchanged. Proof: the
+  deprecations gate green with no `Variant` row and no unledgered marker; the three aliases and `Variant` still
+  exported from `.` (export chain unchanged); the contract-changeset surface shows exactly one signature row
+  `.#Variant` (deprecation tag only); gate test H1.6 unchanged and green.
+  **What may change it later:** only a dated owner decision approving a public-compat change to `Variant` or its
+  three aliases, with its own debrief (consumers measured, migration and capability-preservation proof) and
+  independent review. Named, not scheduled.
+  **Boundaries:** values and behavior preserved; no app migration; no retirement deadline (`removeIn` is dropped
+  with the row, not moved); the dependency is not removed; no genuinely transitional alias exists. Resolving this
+  row does not close WO-RET-06 (the D-C rows, the doors/findings and its other obligations remain). The amendment
+  and its implementation each require independent review.
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-06 (Transitional compatibility and transferred closures of the 3.0 line) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-42, F-109, F-111, F-113, F-115, F-84, F-88 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.

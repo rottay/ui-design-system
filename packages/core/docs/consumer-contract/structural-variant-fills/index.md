@@ -40,9 +40,22 @@ Fuera del alcance: el tipo de Badge y Tag sigue aceptando `gradient`, pero ning�
 skin Modern de Badge ni Tag lo pinta y ningún test lo mide. No se declara como
 relleno demostrado.
 
-## Lo que D-B no decide
+## La unión compartida `Variant` (resolución del owner #3, 2026-10-08)
 
-El `Variant` genérico del kernel sigue deprecado, con su fila en el ledger y su
-condición "leaves last" de la enmienda AM-1 v3: los seis alias canónicos siguen
-construidos sobre esa unión compartida. Su disposición terminal (y qué la recibe
-cuando su blocker se resuelva) queda abierta, pendiente del owner.
+- **Owner canónico:** `packages/core/src/foundation/contracts/kernel/common/index.ts`
+  (`export type Variant`), publicado en el subpath raíz `.`. Sus importadores de
+  producción son exactamente los contratos de Badge, Tag y Avatar.
+- **Condición de soporte:** `Variant` está soportado como el contrato de variante
+  compartido de Badge, Tag y Avatar mientras `BadgeVariant`, `TagVariant` o
+  `AvatarVariant` se construyan sobre él: compatibilidad pública necesaria, no
+  transitoria. Sus siete literales y su significado no cambian; `Tone` sigue siendo
+  el eje recomendado para el color semántico (guía, no deprecación).
+- **Disposición:** se quitó su marcador `@deprecated` (la línea del tipo no cambia),
+  su fila salió del ledger de deprecaciones con su aviso de codemod, y ya no tiene
+  fecha de retiro. Los fixtures de paridad y sus tests no cambian.
+- **Qué puede cambiarlo:** solo una decisión fechada del owner que apruebe un cambio
+  de compatibilidad pública de `Variant` o de sus tres alias, con su propio debrief
+  (consumidores medidos, migración y prueba de preservación de capacidad) y revisión
+  independiente.
+- **Límites:** sin cambio de valores ni de comportamiento, sin migración de apps,
+  sin retiro de la dependencia. Esta resolución no cierra WO-RET-06.
