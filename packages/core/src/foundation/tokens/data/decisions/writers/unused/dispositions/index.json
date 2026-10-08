@@ -692,14 +692,14 @@
     "--ds-typography-body-letter-spacing": {
       "verdict": "RETIRE",
       "registered": "2026-10-07",
-      "heldBy": "WO-RET-01",
-      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system records the MERGE as EXECUTED onto the live channel, so this name is a leftover declaration. Held by WO-RET-01 (retire code without productive consumers), in progress; no date beyond that work order's own closure."
+      "heldBy": "WO-RET-04",
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system records the MERGE as EXECUTED onto the live channel, so this name is a leftover declaration. Transferred 2026-10-08 by codex-temporary-dt from closed WO-RET-01 to open WO-RET-04; debt remains OPEN until existing verdict executes and verifies."
     },
     "--ds-typography-display-letter-spacing": {
       "verdict": "RETIRE",
       "registered": "2026-10-07",
-      "heldBy": "WO-RET-01",
-      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system records the DERIVE as EXECUTED onto the live channel, so this name is a leftover declaration. Held by WO-RET-01 (retire code without productive consumers), in progress; no date beyond that work order's own closure."
+      "heldBy": "WO-RET-04",
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. writers/unused/system records the DERIVE as EXECUTED onto the live channel, so this name is a leftover declaration. Transferred 2026-10-08 by codex-temporary-dt from closed WO-RET-01 to open WO-RET-04; debt remains OPEN until existing verdict executes and verifies."
     },
     "--ds-workflow-gap": {
       "verdict": "KEEP_APP_READ",
@@ -714,8 +714,8 @@
     "--ds-z-modal": {
       "verdict": "RETIRE",
       "registered": "2026-10-07",
-      "heldBy": "WO-RET-01",
-      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. An alias of --ds-z-index-modal, which the overlay skins read directly; only a doc comment names it. Registered in writers/unused/system as RETIRE_PROPOSED with owner WO-RET-01 (review D4). Held by WO-RET-01 (retire code without productive consumers), in progress; no date beyond that work order's own closure."
+      "heldBy": "WO-RET-04",
+      "reason": "Measured 2026-10-07 (w26-f91f110 fiche-class-census: var() reads, comments stripped, build output excluded, over packages/core/src, packages/showroom/src and the app-bithire/app-evnto/app-platform src): 0 readers anywhere. An alias of --ds-z-index-modal, which the overlay skins read directly; only a doc comment names it. Registered in writers/unused/system as RETIRE_PROPOSED with owner WO-RET-01 (review D4). Transferred 2026-10-08 by codex-temporary-dt from closed WO-RET-01 to open WO-RET-04; debt remains OPEN until existing verdict executes and verifies."
     }
   }
 }
