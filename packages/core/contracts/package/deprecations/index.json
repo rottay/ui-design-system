@@ -129,53 +129,6 @@
       "changeset": ".changeset/ret-01-compat-rows-receiver-4-0.md"
     },
     {
-      "file": "src/components/primitives/display/callout/index.tsx",
-      "anchor": "Callout",
-      "class": "compat-frozen-sole-implementer",
-      "reason": "The frozen Classic and Rustic Callout engines are the only implementers, on those engines, of the action tray, the callout tint set and the title-above-body layout: the frozen Alert engines ignore `action`, `emphasis` and `announce`. On Modern the component already renders Alert's callout presentation and `<Alert emphasis=\"subtle\" announce=\"tone\">` is markup-identical, so retiring it loses behaviour only under Classic and Rustic.",
-      "scope": "Exported component with Classic and Rustic engines of its own and the Modern path loaded from `Alert`. Kit dry-run of 2026-10-03 over the showroom and the src roots of app-bithire, app-evnto and app-platform: app-evnto imports it in one file (8 sites); the showroom imports it in four probe and torture files (13 sites, all on `tone`) that exercise the component itself; design-system src uses it in its own stories and tests only.",
-      "replacement": "`<Alert tone message description action emphasis=\"subtle\" announce=\"tone\" />` on Modern; none on Classic and Rustic",
-      "canonicalOwner": "src/components/primitives/feedback/alert/engines/modern/index.tsx",
-      "blocker": "frozen-equivalence-absent",
-      "receiver": "WO-RET-06",
-      "since": "2026-09-14",
-      "removeIn": "4.0",
-      "evidence": [
-        {
-          "kind": "frozen-implementer",
-          "path": "packages/core/src/components/primitives/display/callout/engines/classic/index.tsx",
-          "needle": "{action && (",
-          "absentNeedle": "Alert"
-        },
-        {
-          "kind": "frozen-implementer",
-          "path": "packages/core/src/components/primitives/display/callout/engines/rustic/index.tsx",
-          "needle": "{action && (",
-          "absentNeedle": "Alert"
-        },
-        {
-          "kind": "census-receipt",
-          "path": "packages/core/src/components/primitives/feedback/alert/tests/Alert.callout-parity.test.tsx",
-          "needle": "describe('Alert renders what the folded Callout renders', () => {",
-          "note": "Measured: Modern equality over 64 combinations and the dismiss-identity delta. Not measured here: any equivalence on Classic or Rustic, where the changeset records the loss."
-        },
-        {
-          "kind": "consumer",
-          "path": "packages/showroom/src/components/torture-sections/data-display-states/index.tsx",
-          "needle": "<Callout tone=\"danger\" title=\"Error\" action={<Button size=\"xs\">Retry</Button>}>",
-          "note": "One of the 13 showroom sites; this one renders the action tray the frozen Alert engines drop."
-        },
-        {
-          "kind": "consumer",
-          "path": "../app-evnto/src/features/identity/profile/surface/screens/account/index.tsx",
-          "needle": "<Callout variant=\"warning\" title=\"Offline\"",
-          "note": "Callout is imported from @rottay/design-system at :14 of the same file. The needle changes when the application migrates `variant` to `tone`; the receipt is re-minted then."
-        }
-      ],
-      "codemod": "member-changed/.#Callout",
-      "changeset": null
-    },
-    {
       "file": "src/components/primitives/display/tag/contracts/index.ts",
       "anchor": "TagVariant",
       "class": "compat-consumed",

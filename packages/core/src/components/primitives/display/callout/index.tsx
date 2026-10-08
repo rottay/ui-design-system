@@ -31,7 +31,6 @@ export {
   CALLOUT_COLORS,
 } from './contracts';
 
-/** @deprecated Kept until 4.0. On the Modern engine `<Alert tone message description action emphasis="subtle" announce="tone" />` renders the same markup; the Classic and Rustic engines have no replacement. */
 export const Callout = createEngineComponent<CalloutPublicProps>('Callout', {
   classic: () => import('./engines/classic'),
   modern: loadModernCallout,

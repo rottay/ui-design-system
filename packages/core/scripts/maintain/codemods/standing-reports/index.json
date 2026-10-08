@@ -59,7 +59,7 @@
       "count": 1,
       "class": "member-report",
       "proof": "import",
-      "why": "`Callout` stays published and deprecated in 3.0 (frozen group, removal on the 4.0 line); the entry declares no member proof, so each importing file is reported once."
+      "why": "`Callout` stays published and canonical (WO-RET-06, owner disposition D-A of 2026-10-07; no removal scheduled); the entry declares no member proof, so each importing file is reported once."
     },
     {
       "id": "member-changed/.#Callout",
@@ -67,7 +67,7 @@
       "count": 1,
       "class": "member-report",
       "proof": "import",
-      "why": "`Callout` stays published and deprecated in 3.0 (frozen group, removal on the 4.0 line); the entry declares no member proof, so each importing file is reported once."
+      "why": "`Callout` stays published and canonical (WO-RET-06, owner disposition D-A of 2026-10-07; no removal scheduled); the entry declares no member proof, so each importing file is reported once."
     },
     {
       "id": "member-changed/.#TenantConfig",
@@ -99,7 +99,7 @@
       "count": 1,
       "class": "member-report",
       "proof": "import",
-      "why": "`Callout` stays published and deprecated in 3.0 (frozen group, removal on the 4.0 line); the entry declares no member proof, so each importing file is reported once."
+      "why": "`Callout` stays published and canonical (WO-RET-06, owner disposition D-A of 2026-10-07; no removal scheduled); the entry declares no member proof, so each importing file is reported once."
     },
     {
       "id": "member-changed/.#Callout",
@@ -107,7 +107,7 @@
       "count": 1,
       "class": "member-report",
       "proof": "import",
-      "why": "`Callout` stays published and deprecated in 3.0 (frozen group, removal on the 4.0 line); the entry declares no member proof, so each importing file is reported once."
+      "why": "`Callout` stays published and canonical (WO-RET-06, owner disposition D-A of 2026-10-07; no removal scheduled); the entry declares no member proof, so each importing file is reported once."
     },
     {
       "id": "member-changed/.#TenantConfig",
