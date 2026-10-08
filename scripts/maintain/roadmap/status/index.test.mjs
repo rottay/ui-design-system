@@ -1980,36 +1980,36 @@ test("DS trace items reject state aliases outside workOrders status", () => {
 
 test("structured owner GO rejects an Owner approval denied reason", () => {
   const registry = liveRegistry();
-  registry.traceability["ds-improvements"].phaseControls["0"].claimStateReason = "Owner approval denied for Phase 0.";
+  registry.traceability["ds-improvements"].phaseControls["1"].claimStateReason = "Owner approval denied for Phase 1.";
   assert.ok(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("claimStateReason records a denied/revoked owner decision"),
   ));
   assert.match(
-    phaseClaimBlocker(registry, registry.workOrders.find((workOrder) => workOrder.id === "WO-GAT-05"), { today: LIVE_REGISTRY_TODAY }),
+    phaseClaimBlocker(registry, registry.workOrders.find((workOrder) => workOrder.id === "WO-ARC-12"), { today: LIVE_REGISTRY_TODAY }),
     /owner GO is denied or revoked/,
   );
 
   const withheld = liveRegistry();
-  withheld.traceability["ds-improvements"].phaseControls["0"].claimStateReason =
-    "Owner withheld approval and vetoed Phase 0.";
+  withheld.traceability["ds-improvements"].phaseControls["1"].claimStateReason =
+    "Owner withheld approval and vetoed Phase 1.";
   assert.ok(validateRegistryMutationIntegrity(withheld, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("records a denied/revoked owner decision"),
   ));
 
   const fakeEvidence = liveRegistry();
-  fakeEvidence.traceability["ds-improvements"].phaseControls["0"].ownerGo.evidence =
+  fakeEvidence.traceability["ds-improvements"].phaseControls["1"].ownerGo.evidence =
     "FAKE: owner vetoed this wave; authorization does not exist.";
   assert.ok(validateRegistryMutationIntegrity(fakeEvidence, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("records a denied/revoked owner decision"),
   ));
 
   const nonexistent = liveRegistry();
-  nonexistent.traceability["ds-improvements"].phaseControls["0"].ownerGo.evidence =
+  nonexistent.traceability["ds-improvements"].phaseControls["1"].ownerGo.evidence =
     "The purported owner approval was nonexistent.";
   assert.match(
     phaseClaimBlocker(
       nonexistent,
-      nonexistent.workOrders.find((workOrder) => workOrder.id === "WO-GAT-05"),
+      nonexistent.workOrders.find((workOrder) => workOrder.id === "WO-ARC-12"),
       { today: LIVE_REGISTRY_TODAY },
     ),
     /owner GO is denied or revoked/,

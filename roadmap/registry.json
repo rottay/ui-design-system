@@ -11230,15 +11230,15 @@
     "0": {
      "decisionOwner": "design-system-program",
      "decisionDate": "2026-07-13",
-     "claimState": "open",
-     "openedBy": "owner",
-     "openedAt": "2026-07-14",
-     "claimStateReason": "Wave 0 proof integrity program: execute-item authorities may claim and complete under the recorded owner GO.",
+     "claimState": "locked",
+     "openedBy": null,
+     "openedAt": null,
+     "claimStateReason": "Wave 0 checkpoint discharged: 22/22 execute items complete under 11 done authorities; the 2026-07-14 owner GO stays durable at db861f4cb; phase 1 opened 2026-10-08 per owner ruling with independent checkpoint acceptance.",
      "ownerGo": {
-      "decision": "go",
-      "by": "owner",
-      "at": "2026-07-14",
-      "evidence": "Owner authorization recorded in the Codex task on 2026-07-14 for wave-by-wave implementation."
+      "decision": "pending",
+      "by": null,
+      "at": null,
+      "evidence": null
      },
      "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
      "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
@@ -11258,15 +11258,15 @@
     "1": {
      "decisionOwner": "design-system-architecture",
      "decisionDate": "2026-07-13",
-     "claimState": "locked",
-     "openedBy": null,
-     "openedAt": null,
-     "claimStateReason": "Awaiting the complete Wave-0 checkpoint and explicit owner GO.",
+     "claimState": "open",
+     "openedBy": "owner",
+     "openedAt": "2026-10-08",
+     "claimStateReason": "Phase 1 cascade program: execute-item authorities may claim and complete under the recorded owner GO of 2026-10-08.",
      "ownerGo": {
-      "decision": "pending",
-      "by": null,
-      "at": null,
-      "evidence": null
+      "decision": "go",
+      "by": "owner",
+      "at": "2026-10-08",
+      "evidence": "Owner ruling 2026-10-08 #1 authorizes the phase-1 GO on the verified wave-0 checkpoint (22/22 execute items, 11/11 authorities done, 0 deferred) with independent acceptance: review-phase1-checkpoint.report.txt, Claude Admin Opus session 304b6e7c-e982-4200-8e01-7aa190a96b1e, verdict CHECKPOINT ACCEPT, 2026-10-08."
      },
      "rollback": "Select the prior scoped provider/artifact path without deleting persisted tenant data.",
      "disable": "Disable new provider scoping/layer selection and retain legacy-engine compatibility.",

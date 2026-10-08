@@ -122,7 +122,11 @@ const DS_IMPROVEMENTS_PHASE_INDEX = new Map(
 // each one. dependsOn is part of the fingerprint, so the lock is re-sealed.
 // Items, authorities, sourceIds, programs, phases and phaseControls are
 // unchanged; no execute item was re-routed and no phase was opened or closed.
-const DS_IMPROVEMENTS_PLAN_SHA256 = "712c7352b8166a05b2ef8f3081e8517a015839cc9e2d4c5523d680db51dc7ad4";
+// Owner-approved wave mapping update 2026-10-08: phase 0 locked (checkpoint
+// discharged, GO durable at db861f4cb) and phase 1 opened per the recorded
+// owner GO of 2026-10-08 with independent checkpoint acceptance. Items,
+// authorities, sourceIds and WO topology are unchanged.
+const DS_IMPROVEMENTS_PLAN_SHA256 = "ca61cac3fc76bd321bc97bc267672e3a1db79e5a59339fb07aaa7ba255344d8d";
 const DS_IMPROVEMENTS_SOURCE_REVISION = "8b618ab000b784fc7fa05bca96a1dcc9de80b3b9";
 const DS_IMPROVEMENTS_DOC_ROOT = path.resolve(
   ROOT,
