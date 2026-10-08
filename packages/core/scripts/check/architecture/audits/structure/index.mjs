@@ -29,7 +29,11 @@
  * Usage:
  *   node scripts/check/architecture/audits/structure/index.mjs --check
  *   node scripts/check/architecture/audits/structure/index.mjs --report --details=30
- *   node scripts/check/architecture/audits/structure/index.mjs --write-baseline
+ *   node scripts/check/architecture/audits/structure/index.mjs --update-baseline   (tighten only)
+ *   node scripts/check/architecture/audits/structure/index.mjs --re-anchor         (sighted; unpinned or re-ruled laws)
+ *
+ * The structure laws (line count, single-child folders, empty folders, showroom
+ * loose files, repeated path words) live in ./laws; the producers in ./tighten.
  */
 
 import {
@@ -37,7 +41,6 @@ import {
   readFileSync,
   readdirSync,
   statSync,
-  writeFileSync,
 } from 'node:fs';
 import { basename, dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -1550,7 +1553,8 @@ export function compareStructureBaseline(result, baseline) {
 }
 
 function selectCliMode(argv) {
-  if (argv.includes('--write-baseline')) return 'write-baseline';
+  if (argv.includes('--update-baseline')) return 'update-baseline';
+  if (argv.includes('--re-anchor')) return 're-anchor';
   if (argv.includes('--report')) return 'report';
   if (argv.includes('--check')) return 'check';
   return 'check';
@@ -1570,71 +1574,10 @@ export function parseCliArguments(argv) {
     sourceRoot: resolve(flagValue('--source-root') ?? DEFAULT_SOURCE_ROOT),
     packageRoot: resolve(flagValue('--package-root') ?? DEFAULT_PACKAGE_ROOT),
     baselinePath: resolve(flagValue('--baseline') ?? DEFAULT_BASELINE_PATH),
+    repoRoot: resolve(flagValue('--repo-root') ?? resolve(DEFAULT_PACKAGE_ROOT, '../..')),
   };
 }
 
-function printSummary(result) {
-  const { inventory } = result;
-  console.log([
-    'core-structure-audit',
-    `files=${inventory.totalFiles}`,
-    `source=${inventory.sourceFiles}`,
-    `authored-leaves=${inventory.authoredLeafModules}`,
-    `indexes=${inventory.productionIndexes}`,
-    `barrels=${inventory.barrels}`,
-    `findings=${result.findings.length}`,
-  ].join(' | '));
-  for (const [rule, count] of Object.entries(inventory.findingsByRule)) {
-    console.log(`  ${rule}: ${count}`);
-  }
-}
-
-function runCli() {
-  const options = parseCliArguments(process.argv.slice(2));
-  const result = auditCoreStructure(options);
-  if (options.mode === 'write-baseline') {
-    const baseline = createStructureBaseline(result);
-    writeFileSync(options.baselinePath, `${JSON.stringify(baseline, null, 2)}\n`);
-    printSummary(result);
-    console.log(`baseline written: ${options.baselinePath}`);
-    return;
-  }
-  if (options.mode === 'report') {
-    if (options.json) {
-      console.log(JSON.stringify(result, null, 2));
-      return;
-    }
-    printSummary(result);
-    const limit = Number.isFinite(options.details) ? Math.max(0, options.details) : 20;
-    for (const entry of result.findings.slice(0, limit)) {
-      console.log(`  [${entry.rule}] ${entry.path} — ${entry.message}`);
-    }
-    if (result.findings.length > limit) {
-      console.log(`  ... ${result.findings.length - limit} more; use --json for the complete inventory.`);
-    }
-    return;
-  }
-  if (!existsSync(options.baselinePath)) {
-    throw new Error(`missing core structure baseline: ${options.baselinePath}`);
-  }
-  const baseline = JSON.parse(readFileSync(options.baselinePath, 'utf8'));
-  const comparison = compareStructureBaseline(result, baseline);
-  printSummary(result);
-  if (comparison.added.length > 0) {
-    console.error(`core-structure-audit: ${comparison.added.length} new finding(s):`);
-    for (const id of comparison.added.slice(0, options.details)) console.error(`  + ${id}`);
-    if (comparison.added.length > options.details) {
-      console.error(`  ... ${comparison.added.length - options.details} more`);
-    }
-    process.exitCode = 1;
-    return;
-  }
-  if (comparison.resolved.length > 0) {
-    console.log(`ratchet opportunity: ${comparison.resolved.length} finding(s) resolved; rewrite the baseline after review.`);
-  }
-  console.log('core-structure-audit: passed (no new structural debt).');
-}
-
 if (process.argv[1] && resolve(process.argv[1]) === resolve(SCRIPT_PATH)) {
-  runCli();
+  import('./cli/index.mjs').then(({ runStructureCli }) => runStructureCli());
 }

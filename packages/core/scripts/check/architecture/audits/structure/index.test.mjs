@@ -18,6 +18,8 @@ import {
   parseCliArguments,
 } from './index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import './laws/index.test.mjs';
+import './tighten/index.test.mjs';
 
 function write(path, source) {
   mkdirSync(dirname(path), { recursive: true });
