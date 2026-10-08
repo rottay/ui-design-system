@@ -35,9 +35,7 @@ export type HoverCardSide =
   | 'bottom'
   | 'inline-start'
   | 'inline-end'
-  /** @deprecated Use `inline-start`. */
   | 'left'
-  /** @deprecated Use `inline-end`. */
   | 'right';
 
 /** Alignment of the hover card relative to the trigger */

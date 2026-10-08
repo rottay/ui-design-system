@@ -457,3 +457,12 @@ Con el kit de 29 decisiones más los niveles 2 y 3, dos tenants de BitHire se di
 | DS | un agente (o varios) en `ui-design-system` | olas 2–5 del roadmap detrás del contrato; publica versiones con changesets; sube el indicador de decisiones encendidas | repos de las apps; firmas y esquema de §2–§3 |
 
 Alcance (owner, 2026-09-05): el único carril APP en marcha es app-bithire; app-platform, lo comercial y app-evnto quedan fuera del programa y sus paquetes de migración se difieren. (Corrección de medición, WO-CON-01: los cuatro árboles importan el paquete hoy — §1.7 —; lo que el owner acotó es el alcance de trabajo, no el consumo existente.) Mecanismos de desacople (WO-CON-05): versión fijada por la app y actualizada cuando ella decide; changeset obligatorio para cualquier cambio de superficie pública; una sola vía para pedir capacidades al DS (WO en el roadmap con el test promote-to-DS); sección "contract diff" en STATUS. Un cambio del DS que rompa el fixture de consumidor (WO-CON-04) no se mergea.
+
+## 8. Capacidades canónicas de los motores congelados (D-A, 2026-10-07)
+
+Las 24 props, miembros de unión y grafías físicas que solo implementan Classic
+y Rustic dejaron de ser deprecaciones por la disposición D-A del owner: siguen
+publicados, sin marcador `@deprecated`, y son canónicos para los motores que los
+implementan. La tabla, la evidencia y el alcance excluido (Classic y Rustic no
+pasan a ser productivos) están en
+[`frozen-engine-capabilities/`](frozen-engine-capabilities/index.md).

@@ -92,9 +92,7 @@ export interface SliderProps {
       | 'bottom'
       | 'inline-start'
       | 'inline-end'
-      /** @deprecated Use `inline-start`. */
       | 'left'
-      /** @deprecated Use `inline-end`. */
       | 'right';
     formatter?: ((value?: number) => ReactNode) | null;
   };

@@ -160,7 +160,6 @@ export interface CalendarProps extends BaseComponentProps, EngineAwareProps {
 
   /**
    * Custom render function for date cell content.
-   * @deprecated Use cellRender instead
    * @param date - The date being rendered
    * @returns Custom content to display in the cell
    */
@@ -168,7 +167,6 @@ export interface CalendarProps extends BaseComponentProps, EngineAwareProps {
 
   /**
    * Custom render function for month cell content.
-   * @deprecated Use cellRender instead
    * @param date - The first day of the month being rendered
    * @returns Custom content to display in the cell
    */

@@ -109,17 +109,11 @@ export type TooltipPlacement =
   | "inline-end"
   | "inline-end-start"
   | "inline-end-end"
-  /** @deprecated Use `inline-start`. */
   | "left"
-  /** @deprecated Use `inline-start-start`. */
   | "left-start"
-  /** @deprecated Use `inline-start-end`. */
   | "left-end"
-  /** @deprecated Use `inline-end`. */
   | "right"
-  /** @deprecated Use `inline-end-start`. */
   | "right-start"
-  /** @deprecated Use `inline-end-end`. */
   | "right-end";
 
 /**

@@ -246,10 +246,6 @@ export interface TablePaginationConfig {
   disabled?: boolean;
   /** Simple mode */
   simple?: boolean;
-  /**
-   * @deprecated Ant Design pagination size, kept only because the frozen Classic engine forwards
-   * `pagination` whole to Ant Design. No Modern or Rustic code reads it; it leaves with Classic.
-   */
   size?: 'default' | 'small';
   /** Responsive */
   responsive?: boolean;

@@ -195,16 +195,11 @@ export interface BoxProps
 
   /**
    * Padding on right
-   * @deprecated Physical edge. A public layout API is logical only (WO-FAM-07
-   *   step 4), because `right` does not follow the reading direction: under
-   *   RTL it lands on the wrong edge of the box. Use `paddingInlineEnd` / `pe`.
-   *   Retained because the frozen Classic and Rustic engines still read it.
    */
   paddingRight?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for paddingRight
-   * @deprecated Physical edge; use `pe`. See {@link BoxProps.paddingRight}.
    */
   pr?: ResponsiveValue<BoxSpacing>;
 
@@ -220,16 +215,11 @@ export interface BoxProps
 
   /**
    * Padding on left
-   * @deprecated Physical edge. A public layout API is logical only (WO-FAM-07
-   *   step 4), because `left` does not follow the reading direction: under
-   *   RTL it lands on the wrong edge of the box. Use `paddingInlineStart` / `ps`.
-   *   Retained because the frozen Classic and Rustic engines still read it.
    */
   paddingLeft?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for paddingLeft
-   * @deprecated Physical edge; use `ps`. See {@link BoxProps.paddingLeft}.
    */
   pl?: ResponsiveValue<BoxSpacing>;
 
@@ -300,16 +290,11 @@ export interface BoxProps
 
   /**
    * Margin on right
-   * @deprecated Physical edge. A public layout API is logical only (WO-FAM-07
-   *   step 4), because `right` does not follow the reading direction: under
-   *   RTL it lands on the wrong edge of the box. Use `marginInlineEnd` / `me`.
-   *   Retained because the frozen Classic and Rustic engines still read it.
    */
   marginRight?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for marginRight
-   * @deprecated Physical edge; use `me`. See {@link BoxProps.marginRight}.
    */
   mr?: ResponsiveValue<BoxSpacing>;
 
@@ -325,16 +310,11 @@ export interface BoxProps
 
   /**
    * Margin on left
-   * @deprecated Physical edge. A public layout API is logical only (WO-FAM-07
-   *   step 4), because `left` does not follow the reading direction: under
-   *   RTL it lands on the wrong edge of the box. Use `marginInlineStart` / `ms`.
-   *   Retained because the frozen Classic and Rustic engines still read it.
    */
   marginLeft?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for marginLeft
-   * @deprecated Physical edge; use `ms`. See {@link BoxProps.marginLeft}.
    */
   ml?: ResponsiveValue<BoxSpacing>;
 

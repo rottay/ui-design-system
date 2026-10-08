@@ -203,10 +203,6 @@ export interface BadgeBaseProps
   /** Selection callback. Providing it makes the main label keyboard interactive. */
   onSelectedChange?: (selected: boolean) => void;
 
-  /**
-   * @deprecated Use `removable` with a localized `removeLabel`. Kept for one
-   * compatibility cycle so existing badges do not lose their close control.
-   */
   closable?: boolean;
 
   /**

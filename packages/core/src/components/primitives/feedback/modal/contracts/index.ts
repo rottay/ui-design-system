@@ -460,7 +460,6 @@ export interface ModalProps extends BaseComponentProps, EngineAwareProps {
 
   /**
    * Whether clicking the overlay closes the modal.
-   * @deprecated Use `closeOnBackdropClick` instead.
    * @default true
    */
   closeOnOverlayClick?: boolean;
