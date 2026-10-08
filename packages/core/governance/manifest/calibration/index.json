@@ -1174,7 +1174,7 @@
           "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
           "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/index.ts",
           "packages/core/src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts",
-          "packages/core/src/infrastructure/runtime/foundation/icons/active-profile/index.ts",
+          "packages/core/src/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution/index.ts",
           "packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
           "packages/core/src/graphics/icons/semantic/runtime/create-icon/index.tsx"
         ],

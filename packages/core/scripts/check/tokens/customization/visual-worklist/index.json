@@ -19,7 +19,7 @@
     },
     "rows": {
       "rowCount": 219,
-      "canonicalRowsSha256": "fa550f94639df673268f9f07e9357783e826f7ebaada25454505ada959abaea3",
+      "canonicalRowsSha256": "47d657d01de42e352743503e10d4fb3efaddc50909d5beba6ba8596a15a9cc1e",
       "role": "ROW_IDENTITY",
       "algorithm": "sha256(utf8(JSON.stringify(canonical({A_pendingPartBlocked, B_deliberateDelta})))) where canonical() recursively sorts every OBJECT's keys with Array.prototype.sort() default lexicographic ordering and PRESERVES array order exactly. Applied to a single wrapper object holding both row arrays under their own key names; no whitespace, no separators, no trailing newline. Row order is part of the identity: reordering rows re-signs the hash. Metadata outside these two arrays is deliberately NOT covered, so this digest measures row content alone.",
       "meaning": "Content identity of the 139 + 80 = 219 rows. A field edit, a row swap, a deletion or an insertion re-signs it. The gate recomputes it from the live arrays and compares -- it never trusts the stored value."
@@ -4687,11 +4687,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -4725,11 +4725,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -4763,11 +4763,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -4801,11 +4801,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -4839,11 +4839,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -4877,11 +4877,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -4915,11 +4915,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -4953,11 +4953,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -4991,11 +4991,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -5029,11 +5029,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -5067,11 +5067,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -5105,11 +5105,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -5143,11 +5143,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -5181,11 +5181,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -5219,11 +5219,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -5257,11 +5257,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -5295,11 +5295,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -5333,11 +5333,11 @@
       "blockedReason": "sub-part missing",
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -8954,11 +8954,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9006,11 +9006,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9058,11 +9058,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9110,11 +9110,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9162,11 +9162,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9214,11 +9214,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9266,11 +9266,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9318,11 +9318,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9370,11 +9370,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9422,11 +9422,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9474,11 +9474,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9526,11 +9526,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9578,11 +9578,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },
@@ -9630,11 +9630,11 @@
       "rhythmCrossReference": null,
       "componentTier": "pattern",
       "componentOwner": "PatternDetailPanel (modern engine)",
-      "renderedPart": "data-part=\"tab-panel\" / data-part=\"sidebar\"",
+      "renderedPart": "data-part=\"panel-surface\" / data-part=\"sidebar\"",
       "renderProof": {
         "tsx": "src/components/patterns/data/detail-panel/engines/modern/index.tsx",
-        "part": "tab-panel / sidebar",
-        "tsxLine": 533,
+        "part": "panel-surface / sidebar",
+        "tsxLine": 424,
         "cssShippingOwner": "src/foundation/tokens/css/runtime/engines/modern/skin/detail-panel/index.css:54",
         "verdict": "RENDERED_NODE"
       },

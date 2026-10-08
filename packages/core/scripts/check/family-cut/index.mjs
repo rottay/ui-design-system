@@ -732,6 +732,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
   let stampsVariantAttribute = false;
   const anatomyHandoffs = [];
   const imports = new Map();
+  const composedRenders = [];
 
   const styleObjects = new Set();
   const namedObjects = new Map();
@@ -764,6 +765,18 @@ export function analyzeSource(file, source = ts.createSourceFile(
     }
     if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node))) {
       const tag = node.tagName.getText(source);
+      /* The anchors a skin can name this element by: the parts and classes
+       * the family hands it literally. */
+      if (/^[A-Z]/u.test(tag)) {
+        const attributes = node.attributes.properties.filter(ts.isJsxAttribute);
+        const literals = (name) => attributes.filter((attribute) => attributeName(attribute) === name)
+          .flatMap((attribute) => attributeLiterals(attribute));
+        composedRenders.push({
+          tag,
+          parts: literals('data-part'),
+          classes: literals('className').flatMap((value) => value.split(/\s+/u)).filter(Boolean),
+        });
+      }
       if (SKELETON_WORD.test(tag) && tag !== SKELETON_RENDERER_EXPORT) {
         skeletonSigns.push({ what: `element \`<${tag}>\``, line: lineOf(node) });
       }
@@ -912,6 +925,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
     dynamicParts,
     anatomyHandoffs,
     imports,
+    composedRenders,
     propSpreads: readPropSpreads(source),
     stampsPartAttribute,
     stampsStateAttribute: stampsStateAttribute || usesPartAttributes,
@@ -932,6 +946,12 @@ export function analyzeSkin(file) {
   let selectsVariant = false;
 
   for (const match of text.matchAll(/\[data-part\s*[~^*$|]?=\s*['"]([^'"]+)['"]/gu)) parts.add(match[1]);
+  /* Every part read keeps the parts and classes of the selector that reaches
+   * it: they name the elements the read can sit on or under. */
+  const partReads = [];
+  for (const match of text.matchAll(/\[data-part\s*[~^*$|]?=\s*['"]([^'"]+)['"]\s*\]/gu)) {
+    partReads.push({ part: match[1], ...selectorAnchors(text, match.index, match.index + match[0].length) });
+  }
   /* Every state occurrence keeps the simple-selector-sequence that owns it:
    * whether a state is stamped is a question about the ELEMENT the rule lands
    * on, and only the owning compound names that element. */
@@ -1014,7 +1034,7 @@ export function analyzeSkin(file) {
     skeletonSigns.push({ what: `selector \`${match[0]}\``, line: lineAt(match.index), file });
   }
 
-  return { file, parts, states, stateCompounds, classTokens, components, selectsVariant, variantCompounds, colorLiterals, maskAlphaStops, unpairedPseudo, antReads, skeletonSigns };
+  return { file, parts, partReads, states, stateCompounds, classTokens, components, selectsVariant, variantCompounds, colorLiterals, maskAlphaStops, unpairedPseudo, antReads, skeletonSigns };
 }
 
 /**
@@ -1132,6 +1152,40 @@ function owningCompound(text, index) {
   }
   if (listComma && compound === '') return '';
   return withoutParens(compound);
+}
+
+/**
+ * The parts and classes of one complex selector up to and including the
+ * compound that holds `[start, end)`, the read itself excluded. A `:not()`
+ * group names an element the rule does NOT land on, so it anchors nothing.
+ */
+function selectorAnchors(text, start, end) {
+  let from = start;
+  let depth = 0;
+  while (from > 0) {
+    const char = text[from - 1];
+    if (char === ')') depth += 1;
+    else if (char === '(') depth = Math.max(0, depth - 1);
+    else if (/[{};]/u.test(char) || (char === ',' && depth === 0)) break;
+    from -= 1;
+  }
+  let to = end;
+  depth = 0;
+  while (to < text.length) {
+    const char = text[to];
+    if (char === '(' || char === '[') depth += 1;
+    else if (char === ')' || char === ']') {
+      if (depth === 0) break;
+      depth -= 1;
+    } else if (depth === 0 && /[\s>+~,{]/u.test(char)) break;
+    to += 1;
+  }
+  let selector = `${text.slice(from, start)} ${text.slice(end, to)}`;
+  while (/:not\([^()]*\)/u.test(selector)) selector = selector.replace(/:not\([^()]*\)/gu, '');
+  return {
+    anchorParts: [...selector.matchAll(/\[data-part\s*[~^*$|]?=\s*['"]([^'"]+)['"]/gu)].map((match) => match[1]),
+    anchorClasses: [...selector.matchAll(/\.(-?[_a-zA-Z][\w-]*)/gu)].map((match) => match[1]),
+  };
 }
 
 /** A compound with every parenthesised group removed. */
@@ -1334,6 +1388,39 @@ function composedComponentStampsPart(handoff, specifier, fromFile) {
       : undefined);
   }
   return partKeyedBackerCache.get(key);
+}
+
+const composedPartStampCache = new Map();
+
+/**
+ * The parts a composed DS primitive stamps in its OWN source. `<ModernButton
+ * data-part="event">` renders the Button's anatomy inside the family's element,
+ * so a skin rule `[data-part='event'] > [data-part='content']` reads a stamp the
+ * Button makes -- the part twin of the variant and state credits above. The
+ * credit is exact: the specifier must resolve to ONE module file under
+ * `src/components/primitives/` (a frozen engine never backs it), and only the
+ * literal parts that module stamps are credited. A barrel resolves to a file
+ * that stamps nothing, so it credits nothing.
+ */
+function composedPrimitiveStampedParts(specifier, fromFile, root) {
+  let base;
+  if (specifier.startsWith('.')) base = resolve(dirname(fromFile), specifier);
+  else if (specifier.startsWith('@/')) base = join(root, 'src', specifier.slice(2));
+  else return undefined;
+  const file = [`${base}.tsx`, `${base}.ts`, join(base, 'index.tsx'), join(base, 'index.ts')]
+    .find((candidate) => existsSync(candidate));
+  if (!file) return undefined;
+  const primitives = join(root, 'src', 'components', 'primitives') + sep;
+  if (!file.startsWith(primitives) || FROZEN_ENGINE_SEGMENT.test(toPosix(file)) || !isFamilySource(file)) {
+    return undefined;
+  }
+  if (!composedPartStampCache.has(file)) {
+    const parts = analyzeSource(file).parts;
+    composedPartStampCache.set(file, parts.size > 0
+      ? { name: toPosix(relative(root, file)), parts }
+      : undefined);
+  }
+  return composedPartStampCache.get(file);
 }
 
 const kebabOf = (tag) => tag.replace(/([a-z0-9])([A-Z])/gu, '$1-$2').toLowerCase();
@@ -2246,9 +2333,41 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
   const readNames = new Set(readWithoutProducer.denominator);
 
   const partsStampedNotConsumed = [...stampedParts].filter((part) => !consumedParts.has(part)).sort();
+  /* A part the family does not stamp is credited to a primitive it RENDERS only
+   * when every skin read of it is anchored on that rendered element: the read's
+   * selector names a part or class the family hands the element, and the
+   * primitive's own source stamps the part (see `composedPrimitiveStampedParts`). */
+  const composedInstances = [];
+  for (const entry of sources) {
+    for (const render of entry.composedRenders) {
+      const specifier = entry.imports.get(render.tag);
+      if (!specifier) continue;
+      const backer = composedPrimitiveStampedParts(specifier, entry.file, root);
+      /* The family's root identity and the engine scope sit on every rule of
+       * the skin, so neither names the element the primitive renders. */
+      const classes = render.classes.filter((token) => !ownsClass(token) && !token.startsWith('ds-engine-'));
+      if (backer) composedInstances.push({ backer, parts: new Set(render.parts), classes: new Set(classes) });
+    }
+  }
+  const partReads = skins.flatMap((skin) => skin.partReads);
+  const composedBackerOf = (part) => {
+    const reads = partReads.filter((read) => read.part === part);
+    const backers = reads.map((read) => composedInstances.find((instance) => instance.backer.parts.has(part)
+      && (read.anchorParts.some((anchor) => instance.parts.has(anchor))
+        || read.anchorClasses.some((anchor) => instance.classes.has(anchor)))));
+    return reads.length > 0 && backers.every(Boolean) ? backers[0].backer.name : undefined;
+  };
+  const partsComposedFrom = [...consumedParts]
+    .filter((part) => !stampedParts.has(part))
+    .sort()
+    .map((part) => ({ part, primitive: composedBackerOf(part) }))
+    .filter((entry) => entry.primitive);
+  const composedStampedParts = new Set(partsComposedFrom.map((entry) => entry.part));
   const partsConsumedNotStamped = dynamicParts > 0
     ? []
-    : [...consumedParts].filter((part) => !stampedParts.has(part)).sort();
+    : [...consumedParts]
+      .filter((part) => !stampedParts.has(part) && !composedStampedParts.has(part))
+      .sort();
   const statesConsumedNotStamped = [...consumedStates]
     .filter((state) => !stampedStates.has(state) && !composedStampedStates.has(state))
     .sort();
@@ -2325,6 +2444,7 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
       maskAlphaStops,
       variantComposedFrom: [...variantComposedFrom].sort(),
       stateComposedFrom: [...stateComposedFrom].sort(),
+      partsComposedFrom,
       statesNotComposed,
       stateSides: {
         familyStamps: stampsStateAttribute,

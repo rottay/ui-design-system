@@ -3449,3 +3449,187 @@ test('NEGATIVE: the credit is narrow -- one painted state no declared stamper an
   expectFinding(credit.findings, "hovered ds-list-toolbar[data-part='filter-chip']", 'the uncovered occurrence is named');
   expectFinding(judgeFamily(measured, row), 'BLOCKING `data-state` is on exactly one side', 'the arms stay red');
 });
+
+// ---------------------------------------------------------------------------
+// A composed primitive's PART: the twin of the variant and state credits
+// ---------------------------------------------------------------------------
+
+const BUTTON_MODERN_SPECIFIER = '../../../primitives/inputs/button/engines/modern';
+
+/** calendar-view's chip shape: the family names the host, Button renders inside it. */
+const chipTsx = ({ specifier = BUTTON_MODERN_SPECIFIER, render = true } = {}) => [
+  `import ModernButton from '${specifier}';`,
+  '',
+  'export function PlantedBar({ title }) {',
+  '  return (',
+  '    <div className="ds-planted-bar" data-part="bar">',
+  render
+    ? '      <ModernButton chrome="none" data-part="event">{title}</ModernButton>'
+    : '      <button data-part="event">{title}</button>',
+  '    </div>',
+  '  );',
+  '}',
+  '',
+].join('\n');
+
+const chipSkin = (part = 'content') =>
+  `${BAR_RULE}.ds-planted-bar [data-part='event'] > [data-part='${part}'] { display: block; }\n`;
+
+const BUTTON_CREDIT = { part: 'content', primitive: MODERN_TSX };
+
+test("CONTROL: a part the composed primitive's OWN source stamps is credited to that primitive's module", () => {
+  const measured = measureComposer({ tsx: chipTsx(), skin: chipSkin() });
+  assert.deepEqual(measured.detail.partsConsumedNotStamped, []);
+  assert.deepEqual(measured.detail.partsComposedFrom, [BUTTON_CREDIT]);
+  assert.equal(measured.ratchets.partsConsumedNotStamped, 0);
+  /* The denominators stay the family's own: the credit discharges, it does not stamp. */
+  assert.ok(!measured.detail.partsStampedNotConsumed.includes('content'));
+});
+
+test('PLANT: a part the composed primitive does NOT stamp still reds -- the credit is not a blanket', () => {
+  const measured = measureComposer({
+    tsx: chipTsx(),
+    skin: `${chipSkin()}.ds-planted-bar [data-part='event'] > [data-part='planted-ghost'] { display: block; }\n`,
+  });
+  assert.deepEqual(measured.detail.partsConsumedNotStamped, ['planted-ghost']);
+  assert.deepEqual(measured.detail.partsComposedFrom, [BUTTON_CREDIT], 'the real stamp keeps its credit beside the plant');
+  assert.equal(measured.ratchets.partsConsumedNotStamped, 1);
+});
+
+test('PLANT: the composed primitive must really stamp -- Button without its `content` span does not discharge the part', () => {
+  const measured = measureComposer({
+    tsx: chipTsx(),
+    skin: chipSkin(),
+    edit: (sandbox) => patch(sandbox, MODERN_TSX, (text) => {
+      assert.equal(text.match(/<span data-part="content"/gu)?.length, 3, 'the plant must find every stamp it removes');
+      return text.replaceAll('<span data-part="content"', '<span');
+    }),
+  });
+  assert.deepEqual(measured.detail.partsConsumedNotStamped, ['content']);
+  assert.deepEqual(measured.detail.partsComposedFrom, []);
+});
+
+test('PLANT: an import the family never renders composes nothing', () => {
+  const measured = measureComposer({ tsx: chipTsx({ render: false }), skin: chipSkin() });
+  assert.deepEqual(measured.detail.partsConsumedNotStamped, ['content']);
+  assert.deepEqual(measured.detail.partsComposedFrom, []);
+});
+
+test('GUARD: only a non-frozen module under `src/components/primitives/` backs the credit', () => {
+  /* A barrel resolves to a file that stamps nothing of its own. */
+  const barrel = measureComposer({ tsx: chipTsx({ specifier: '../../../primitives/inputs/button' }), skin: chipSkin() });
+  assert.deepEqual(barrel.detail.partsConsumedNotStamped, ['content'], 'barrel');
+  /* A frozen engine is never a backer, even one planted to stamp the part. */
+  const CLASSIC_TSX = 'src/components/primitives/inputs/button/engines/classic/index.tsx';
+  const frozen = measureComposer({
+    tsx: chipTsx({ specifier: '../../../primitives/inputs/button/engines/classic' }),
+    skin: chipSkin(),
+    edit: (sandbox) => patch(sandbox, CLASSIC_TSX, (text) =>
+      `${text}\nexport const PlantedStamp = () => <span data-part="content" />;\n`),
+  });
+  assert.deepEqual(frozen.detail.partsConsumedNotStamped, ['content'], 'frozen engine');
+  /* Another pattern is not a primitive, however literally it stamps. */
+  const sibling = 'src/components/patterns/data/planted-chip/index.tsx';
+  const pattern = measureComposer({
+    tsx: chipTsx({ specifier: '../planted-chip' }),
+    skin: chipSkin(),
+    edit: (sandbox) => {
+      mkdirSync(dirname(join(sandbox, sibling)), { recursive: true });
+      writeFileSync(join(sandbox, sibling), 'export default function ModernButton() { return <span data-part="content" />; }\n');
+    },
+  });
+  assert.deepEqual(pattern.detail.partsConsumedNotStamped, ['content'], 'pattern module');
+  assert.deepEqual(pattern.detail.partsComposedFrom, []);
+});
+
+test("LIVE: calendar-view's chip `content` is discharged only through the composed modern Button", () => {
+  const measured = measureFamily(resolveFamily('calendar-view', ROOT), { producers: PRODUCERS });
+  assert.deepEqual(measured.detail.partsConsumedNotStamped, []);
+  assert.deepEqual(measured.detail.partsComposedFrom, [BUTTON_CREDIT]);
+});
+
+// ---------------------------------------------------------------------------
+// M1: the part credit is anchored on the rendered element, never on the name
+// ---------------------------------------------------------------------------
+
+test("M1 PLANT: the family's OWN lost stamp reds even when a rendered primitive stamps the same name", () => {
+  const tsx = (ownStamp) => chipTsx().replace(
+    '      <ModernButton',
+    `      <span${ownStamp ? ' data-part="content"' : ''}>{title}</span>\n      <ModernButton`,
+  );
+  const skin = `${chipSkin()}.ds-planted-bar[data-part='bar'] > [data-part='content'] { flex: 1; }\n`;
+  const stamped = measureComposer({ tsx: tsx(true), skin });
+  assert.deepEqual(stamped.detail.partsConsumedNotStamped, []);
+  assert.deepEqual(stamped.detail.partsComposedFrom, [], 'a part the family stamps itself needs no credit');
+  const lost = measureComposer({ tsx: tsx(false), skin });
+  assert.deepEqual(lost.detail.partsConsumedNotStamped, ['content'], 'the read on the family element is not anchored on the Button');
+  assert.deepEqual(lost.detail.partsComposedFrom, []);
+  expectFinding(
+    judgeFamily(lost, { ...stamped.ratchets, denominators: stamped.denominators }),
+    '`partsConsumedNotStamped` GREW from 0 to 1',
+    'the lost stamp GROWS the debt',
+  );
+});
+
+test("M1 GUARD: the family's root identity and the engine scope handed to a primitive anchor nothing", () => {
+  const tsx = chipTsx().replace(
+    '<ModernButton chrome="none" data-part="event">',
+    '<ModernButton chrome="none" className="ds-planted-bar ds-engine-modern">',
+  );
+  const measured = measureComposer({
+    tsx,
+    skin: `${BAR_RULE}.ds-planted-bar.ds-engine-modern [data-part='content'] { display: block; }\n`,
+  });
+  assert.deepEqual(measured.detail.partsConsumedNotStamped, ['content']);
+  assert.deepEqual(measured.detail.partsComposedFrom, []);
+  /* The same Button named by a class the family hands only to it is anchored. */
+  const named = measureComposer({
+    tsx: chipTsx().replace('data-part="event"', 'className="ds-planted-bar__event"'),
+    skin: `${BAR_RULE}.ds-planted-bar .ds-planted-bar__event > [data-part='content'] { display: block; }\n`,
+  });
+  assert.deepEqual(named.detail.partsConsumedNotStamped, []);
+  assert.deepEqual(named.detail.partsComposedFrom, [BUTTON_CREDIT]);
+});
+
+const FILE_MANAGER_SOURCES = [
+  'src/components/patterns/data/file-manager',
+  'src/components/primitives',
+  'src/foundation/tokens/css/runtime/engines/modern/skin/file-manager',
+];
+const FILE_MANAGER_MODERN = 'src/components/patterns/data/file-manager/engines/modern/index.tsx';
+
+function measureFileManager(edit = () => {}) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-m1-'));
+  try {
+    for (const relativePath of FILE_MANAGER_SOURCES) {
+      mkdirSync(dirname(join(sandbox, relativePath)), { recursive: true });
+      cpSync(join(ROOT, relativePath), join(sandbox, relativePath), { recursive: true });
+    }
+    edit(sandbox);
+    return measureFamily(resolveFamily('file-manager', sandbox), { producers: PRODUCERS });
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+test("M1 LIVE: file-manager losing its OWN `root` stamp GROWS the debt and never reads as shrank", () => {
+  const control = measureFileManager();
+  assert.deepEqual(control.detail.partsConsumedNotStamped, []);
+  assert.deepEqual(control.detail.partsComposedFrom, [{ part: 'label', primitive: MODERN_TSX }]);
+  const lost = measureFileManager((sandbox) => patch(sandbox, FILE_MANAGER_MODERN, (text) => {
+    assert.equal(text.match(/ data-part="root"/gu)?.length, 2, 'the plant must find every root stamp it removes');
+    return text.replaceAll(' data-part="root"', '');
+  }));
+  assert.deepEqual(lost.detail.partsConsumedNotStamped, ['root'], 'Button stamps `root` too, but no read of it is anchored on a Button');
+  assert.deepEqual(lost.detail.partsComposedFrom, [{ part: 'label', primitive: MODERN_TSX }], 'the anchored credit survives beside it');
+  expectFinding(
+    judgeFamily(lost, { ...control.ratchets, denominators: control.denominators }),
+    '`partsConsumedNotStamped` GREW from 0 to 1',
+    'against the credited pin the lost stamp GROWS',
+  );
+  expectNoFinding(
+    judgeFamily(lost, readBaseline().families['file-manager']),
+    '`partsConsumedNotStamped` SHRANK',
+    'against the live pin it never reads as shrank (the name-scoped credit read 1 -> 0)',
+  );
+});
