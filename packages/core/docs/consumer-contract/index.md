@@ -471,3 +471,5 @@ Classic y Rustic, que no lee `action`.
 La tabla, la evidencia y el alcance excluido (Classic y Rustic no
 pasan a ser productivos) están en
 [`frozen-engine-capabilities/`](frozen-engine-capabilities/index.md).
+
+Los rellenos estructurales canónicos de `variant` en Badge, Tag y Avatar (D-B, 2026-10-07): [`structural-variant-fills/`](structural-variant-fills/index.md).

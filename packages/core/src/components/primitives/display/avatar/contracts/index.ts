@@ -42,10 +42,7 @@ import type { EngineAwareProps } from '../../../../../foundation/contracts/runti
 /** Avatar size type alias derived from the global Size scale. */
 export type AvatarSize = Size;
 
-/**
- * @deprecated Use {@link Tone} via the `tone` prop instead. Retained for one release so
- * existing values keep compiling.
- */
+/** Structural fill; `secondary` and `gradient` have no `tone` equivalent. */
 export type AvatarVariant = Variant;
 
 /**
@@ -77,14 +74,13 @@ export interface AvatarProps extends BaseComponentProps, EngineAwareProps, WithC
   size?: AvatarSize;
 
   /**
-   * Avatar semantic color. Takes precedence over the deprecated `variant` prop when both
+   * Avatar semantic color. Takes precedence over the `variant` prop when both
    * are given.
    * @default 'neutral'
    */
   tone?: AvatarTone;
 
   /**
-   * @deprecated Use `tone` instead. Avatar color variant.
    * @default 'default'
    */
   variant?: AvatarVariant;

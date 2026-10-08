@@ -38,10 +38,7 @@ import type { EngineAwareProps } from '../../../../../foundation/contracts/runti
 /** Tag size type alias derived from the global Size scale. */
 export type TagSize = Size;
 
-/**
- * @deprecated Legacy color axis; use {@link Tone} via the `tone` prop instead. Retained for
- * one release so existing values keep compiling.
- */
+/** Structural fill; `secondary` has no `tone` equivalent. */
 export type TagVariant = Variant;
 
 /**
@@ -62,14 +59,13 @@ export interface TagProps extends BaseComponentProps, EngineAwareProps, WithChil
   size?: TagSize;
 
   /**
-   * Tag semantic color. Takes precedence over the deprecated `variant` prop when both
+   * Tag semantic color. Takes precedence over the `variant` prop when both
    * are given.
    * @default 'neutral'
    */
   tone?: TagTone;
 
   /**
-   * @deprecated Use `tone` instead. Tag color variant.
    * @default 'default'
    */
   variant?: TagVariant;

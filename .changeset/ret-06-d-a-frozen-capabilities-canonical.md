@@ -28,7 +28,6 @@ silent no-op and `TablePaginationConfig.size` is not read.
 
 ```contract-diff
 signature .#BoxProps — `paddingRight`, `pr`, `paddingLeft`, `pl`, `marginRight`, `mr`, `marginLeft`, `ml` lose the `@deprecated` tag (D-A); types unchanged
-signature .#BadgeBaseProps — `closable` loses the `@deprecated` tag (D-A); type unchanged
 signature .#BadgeProps — `closable` (from `BadgeBaseProps`) loses the `@deprecated` tag (D-A); type unchanged
 signature .#CalendarProps — `dateCellRender` and `monthCellRender` lose the `@deprecated` tag (D-A); types unchanged
 signature .#CardProps — `backgroundColor` loses the `@deprecated` tag (D-A); type unchanged

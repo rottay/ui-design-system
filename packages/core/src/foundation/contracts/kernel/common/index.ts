@@ -83,8 +83,8 @@ export type StatusType = '' | 'error' | 'warning';
  * @deprecated Legacy color axis conflating semantic meaning (primary, success, warning, error)
  * with one structural value (gradient) in a single union. Use {@link Tone} for semantic color;
  * pair it with a component's own structural variant type (e.g. `BadgeStyle`) for rendering
- * style. It is the union behind the deprecated `BadgeVariant`, `TagVariant` and `AvatarVariant`
- * only, and leaves with them.
+ * style. `BadgeVariant`, `TagVariant` and `AvatarVariant` are canonical structural fills
+ * still built on this union; it leaves last, and its terminal disposition awaits the owner.
  */
 export type Variant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'gradient';
 

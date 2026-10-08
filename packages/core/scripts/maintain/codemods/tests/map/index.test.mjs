@@ -371,7 +371,7 @@ test('notice entries and the ledger rows that survive 3.0 correspond in both dir
     named.set(entry.id, row.anchor);
   }
   const notices = map.entries.filter((entry) => entry.notice !== undefined);
-  assert.equal(notices.length, 9, 'the 31 entries of the RET-01 ledger lot plus the Callout and BrandMotion precedents, less the 23 notice entries of the 24 frozen-group rows D-A disposed and the Callout notice of its 25th row (WO-RET-06, 2026-10-07)');
+  assert.equal(notices.length, 3, 'the 31 entries of the RET-01 ledger lot plus the Callout and BrandMotion precedents, less the 23 notice entries of the 24 frozen-group rows D-A disposed, the Callout notice of its 25th row and the six notices of the Badge, Tag and Avatar variant rows D-B made canonical (WO-RET-06, 2026-10-07)');
   for (const entry of notices) {
     assert.ok(named.has(entry.id), `${entry.id}: a notice no surviving row of ${LEDGER} names`);
     assert.ok(surface.exportsOf(entry.subpath).has(entry.symbol), `${entry.id}: a notice is about an export that stays published`);

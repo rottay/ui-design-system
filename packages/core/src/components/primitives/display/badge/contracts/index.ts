@@ -51,10 +51,7 @@ import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/v
 /** Badge size type alias derived from the global Size scale. */
 export type BadgeSize = Size;
 
-/**
- * @deprecated Legacy color axis; use {@link Tone} via the `tone` prop instead. Retained for
- * one release so existing values keep compiling.
- */
+/** Structural fill; `secondary` has no `tone` equivalent. */
 export type BadgeVariant = Variant;
 
 /**
@@ -111,14 +108,13 @@ export interface BadgeBaseProps
   size?: ResponsiveValue<BadgeSize>;
 
   /**
-   * Badge semantic color. Takes precedence over the deprecated `variant` prop when both
+   * Badge semantic color. Takes precedence over the `variant` prop when both
    * are given.
    * @default 'neutral'
    */
   tone?: Tone;
 
   /**
-   * @deprecated Use `tone` instead. Badge color variant.
    * @default 'default'
    */
   variant?: BadgeVariant;
