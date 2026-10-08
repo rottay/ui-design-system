@@ -30,6 +30,7 @@ import type {
   TenantThemeContrastAdjustment,
   TenantThemeArtifactContrastDelta,
   TenantThemeArtifactModeDelta,
+  TenantThemeDeprecationNotice,
   TenantThemeDocument,
   TenantThemeDocumentValidationResult,
   TenantThemeRootAttributes,
@@ -783,6 +784,7 @@ export function compileTenantTheme(
       identity: config,
       verticalEnvelope,
       document: admission.effective,
+      deprecations: admission.deprecations,
     });
   }, config.mode === "advanced" ? "$.visualFoundation" : "$.appearance");
 }
@@ -807,6 +809,8 @@ export interface TenantThemeArtifactAssembly {
    * effective value from the CSS compiled beside it.
    */
   readonly document: TenantThemeDocument;
+  /** Named notices for admitted entries of a retiring capability; carried outside the digest. */
+  readonly deprecations?: readonly TenantThemeDeprecationNotice[];
 }
 
 export function assembleTenantThemeArtifact(
@@ -932,6 +936,9 @@ export function assembleTenantThemeArtifact(
       ...densityScope,
       ...(adjustments.length > 0 ? { adjustments } : {}),
       ...(provenance ? { provenance } : {}),
+      ...(input.deprecations && input.deprecations.length > 0
+        ? { deprecations: input.deprecations }
+        : {}),
       runtime,
       css: renderArtifactCss(identity.verticalKey, identity.slug, variables, digest, {
         modeDeltas,

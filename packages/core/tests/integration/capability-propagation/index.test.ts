@@ -462,21 +462,19 @@ const MUTATORS: Record<string, Mutators> = {
  *    `schemaVersion`, and neither preset does, so the write reaches the
  *    resolved theme and paints no glyph. With `schemaVersion` stated it moves.
  *    Whether those verticals open the expressive family is an owner question.
- *  - `token-overrides` stays ledgered: see its reason and the registration pin.
+ *  - `token-overrides` stays ledgered: R32 Q2 ruled its retirement and its
+ *    execution is measured blocked (F-72) -- see its reason and the pin below.
  */
 const STATIC_UNCOVERED_REASONS: Readonly<Record<string, string>> = {
-  // CAP-3 measured (2026-10-01): every door but v1 refuses it -- the static
-  // door with `unknown key(s) "tokenOverrides"`, v2 with `unsupported decision`
-  // -- because the CATALOG retires it (THEME_CATALOG_RETIRED, replaced by
-  // `overrides.chrome.<family>.<channel>`) while the REGISTRY still says
-  // `status: 'active'`. Deliberately not extended with a v1 legacy leg and not
-  // reconciled here: the mismatch is the owner's ruling (retire the registry
-  // row, or keep v1 as a sanctioned legacy door), routed through WO-EVI-02.
+  // Every door but v1 refuses it; the retirement is ruled and its execution measured blocked (see the reason).
   'token-overrides':
-    'retired in the catalog (THEME_CATALOG_RETIRED, replaced by overrides.chrome.<family>.<channel>) and active '
-    + 'in the registry: the static door refuses `tokenOverrides` as an unknown key and v2 refuses the decision, so '
-    + 'no static write exists. Only the v1 DB path compiles it. Owner ruling pending (WO-EVI-02): retire the '
-    + 'registry row, or keep v1 as a sanctioned legacy door.',
+    'R32 Q2 ruled the raw escape retired in every door, v1 included (registry status: retiring); execution is '
+    + 'measured BLOCKED (F-72): (1) the authoring and the reading door are the same compileTenantThemeConfig, so a '
+    + 'v1 refusal breaks the stored-row reading D-C preserves; (2) 281 of the 292 admitted raw tokens have no '
+    + 'canonical home (raw-override-migration\'s own classification: 265 leaf without a decision, 12 no own leaf, '
+    + '4 closed domain); (3) the stored The Management Miami payload reports `blocked` (41 unrepresentable + 4 '
+    + 'off-allowlist, and over the 512 compiled-variable cap). The static door refuses `tokenOverrides` as an '
+    + 'unknown key and v2/v3 refuse the decision, so no static write exists; only the v1 DB path compiles it.',
 };
 
 const STATIC_UNCOVERED = new Set(Object.keys(STATIC_UNCOVERED_REASONS));
@@ -531,8 +529,9 @@ function consumerSource(relativePath: string): string {
   return source;
 }
 
+// `retiring` is live (the registry law): admitted and consumed, so it keeps every leg here.
 const ACTIVE = TENANT_CAPABILITY_REGISTRY.filter(
-  (capability) => capability.status === 'active'
+  (capability) => capability.status === 'active' || capability.status === 'retiring'
 );
 
 /**
@@ -1091,16 +1090,16 @@ describe('static path — the CAP-3 data legs move what ships', () => {
 });
 
 /**
- * REGISTERED, not resolved (CAP-3): `token-overrides` is retired in the catalog
- * and active in the registry, and only the v1 DB path compiles it. Every half
- * of the mismatch is pinned, so the owner's ruling -- either way -- turns this
- * red and the ledger entry is re-adjudicated, never silently dropped.
+ * RULED, execution blocked (R32 Q2; F-72): `token-overrides` is retired in the
+ * catalog and `retiring` in the registry, and only the v1 DB path compiles it.
+ * Every half is pinned, so the execution of the retirement turns this red and
+ * the ledger entry leaves with it, never silently.
  */
-describe('token-overrides — the measured catalog/registry mismatch (registered)', () => {
-  it('is retired in the catalog, active in the registry, and refused by the static and v2 doors', () => {
+describe('token-overrides — ruled retiring (R32 Q2), execution measured blocked', () => {
+  it('is retired in the catalog, retiring in the registry, and refused by the static and v2 doors', () => {
     expect(THEME_CATALOG_RETIRED.map((entry) => entry.id)).toContain('token-overrides');
     expect(THEME_CONTROL_CATALOG.some((row) => (row.id as string) === 'token-overrides')).toBe(false);
-    expect(TENANT_CAPABILITY_REGISTRY.find((row) => row.id === 'token-overrides')?.status).toBe('active');
+    expect(TENANT_CAPABILITY_REGISTRY.find((row) => row.id === 'token-overrides')?.status).toBe('retiring');
 
     const withOverrides = clone(bithireFlatTheme) as FlatTheme & { tokenOverrides?: Record<string, string> };
     withOverrides.tokenOverrides = { '--ds-color-error': '#00404f' };

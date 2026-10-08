@@ -52,6 +52,10 @@ import { createRequire } from 'node:module';
 import { parseRegistry, parseAllowlist } from '../surface/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 
+/* A `retiring` capability is LIVE (capabilities registry law): it reads as active everywhere, so a ruled
+ * retirement that has not executed narrows nothing. */
+const LIVE_CAPABILITY_STATUSES = new Set(['active', 'retiring']);
+
 const require = createRequire(import.meta.url);
 const postcss = require('postcss');
 
@@ -962,7 +966,7 @@ app contract; reachable only through the capabilities above.
   }`;
 
   // ---- impact-map.md (three-valued, nothing hidden) ----
-  const impactRows = registry.filter((r) => r.status === 'active').map((r) => {
+  const impactRows = registry.filter((r) => LIVE_CAPABILITY_STATUSES.has(r.status)).map((r) => {
     const downstream = transitiveDownstream(r.derivedChannels, edges);
     const exact = r.derivedChannels.filter((c) => rows[c]);
     const unknownSeeds = r.derivedChannels.filter((c) => !rows[c]);
@@ -1225,7 +1229,7 @@ function runChecks(inputs, edges, built, context, { drill, inRepoOnly = false, d
   }
 
   // 3. active capability channels must be known to the census
-  for (const row of registry.filter((r) => r.status === 'active')) {
+  for (const row of registry.filter((r) => LIVE_CAPABILITY_STATUSES.has(r.status))) {
     for (const channel of row.derivedChannels) {
       const known = report.rows[channel] || channel.includes('{');
       if (drill === 'unknown-channel' && row.id === registry[0].id) {

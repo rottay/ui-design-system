@@ -688,6 +688,25 @@ export interface TenantThemeRootAttributes {
   "data-tenant": string;
 }
 
+/** The capabilities a deprecation notice can name: the registry rows whose status is `retiring`. */
+export type TenantThemeRetiringCapability = "token-overrides";
+
+/**
+ * A named deprecation notice for one admitted entry of a RETIRING capability
+ * (owner ruling R32 Q2 for `token-overrides`). The door still admits and
+ * lowers the entry; the notice says, at the entry's own path, that its
+ * retirement is ruled and where the migration is documented.
+ */
+export interface TenantThemeDeprecationNotice {
+  readonly code: "retiring-capability";
+  readonly capability: TenantThemeRetiringCapability;
+  /** The admitted entry, e.g. `$.visualFoundation.advanced.tokenOverrides["--ds-radius-md"]`. */
+  readonly path: string;
+  /** The ruling that retires it. */
+  readonly ruling: string;
+  readonly message: string;
+}
+
 /**
  * One deterministic APCA autocorrect applied by the compiler to keep an
  * authored text/ground pairing readable. Corrections are never silent and
@@ -776,6 +795,14 @@ export interface TenantThemeArtifact {
   adjustments?: readonly TenantThemeContrastAdjustment[];
   /** Present when the compile resolved a decision-provenance ledger. */
   provenance?: TenantThemeArtifactProvenance;
+  /**
+   * Present only when the admitted document carries a RETIRING capability: one
+   * named notice per admitted entry. Like `adjustments`, never silent and never
+   * a rejection -- the stored row is still read (D-C). Unlike `adjustments`, it
+   * is OUTSIDE the digest: a notice changes no output, so every artifact keeps
+   * the digest it had before the notice existed.
+   */
+  deprecations?: readonly TenantThemeDeprecationNotice[];
   /**
    * The NON-CSS half of the same lowering: the personality, token overrides
    * and governed selections a React runtime reads, plus the engine projection

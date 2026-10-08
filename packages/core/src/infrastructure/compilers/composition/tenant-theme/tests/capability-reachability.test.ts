@@ -393,7 +393,8 @@ describe("tenant capability registry reachability", () => {
       const entry = TENANT_CAPABILITY_REGISTRY.find(
         (capability) => capability.id === id
       );
-      expect(entry?.status, id).toBe("active");
+      // A manifest holds the LIVE rows: active, or retiring until the retirement executes.
+      expect(["active", "retiring"], id).toContain(entry?.status);
     }
     // Frontier rows never leak into a rendered manifest.
     for (const capability of TENANT_CAPABILITY_REGISTRY) {
@@ -462,7 +463,7 @@ describe("tenant capability registry reachability", () => {
     );
 
     const activeIds = TENANT_CAPABILITY_REGISTRY.filter(
-      (capability) => capability.status === "active"
+      (capability) => capability.status === "active" || capability.status === "retiring"
     )
       .map((capability) => capability.id)
       .sort();

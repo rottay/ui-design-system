@@ -78,7 +78,9 @@ Flat JSON-serializable tenant configuration. Holds identity (slug, name, plan,
 features, locale, logos) plus compatibility visual fields. Published customer
 visual authority comes from a compiled `TenantThemeDocument` artifact;
 backward-compatible `brandTheme`, `branding`, `personality`, `appearance` and
-`tokenOverrides` fields remain readable at compatibility boundaries.
+`tokenOverrides` fields remain readable at compatibility boundaries. The raw
+`tokenOverrides` escape is retiring (R32 Q2): see
+[Migrating stored `tokenOverrides`](./token-overrides-migration/index.md).
 
 ### DesignTokens (resolved token graph)
 

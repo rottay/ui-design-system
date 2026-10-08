@@ -65,6 +65,8 @@ import {
   censusScrimDoorsV2,
   type ScrimDoorFinding,
 } from "../../../../foundation/scrim-doors";
+import { censusRetiringCapabilitiesV1 } from "../../../../foundation/deprecations";
+import type { TenantThemeDeprecationNotice } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 
 export interface DocumentAdmission {
   /** The version the row was READ as: `1` the persisted transport, `2`/`3` the
@@ -108,6 +110,8 @@ export interface DocumentAdmission {
   styleClaim?: DecisionProvenanceClaim<ThemeDecisionId>;
   /** Authored values that paint a scrim outside the ladder, named; admitted until the Q4 stored-row census reads 0. */
   scrimDoors: readonly ScrimDoorFinding[];
+  /** One named notice per admitted entry of a retiring capability; v2/v3 refuse those entries instead. */
+  deprecations: readonly TenantThemeDeprecationNotice[];
 }
 
 /**
@@ -225,6 +229,7 @@ export function admitDocument(input: {
       effective: expanded.document,
       ledger: v1Ledger(input.document, expanded.claims),
       scrimDoors: censusScrimDoorsV1(input.document),
+      deprecations: censusRetiringCapabilitiesV1(input.document),
     };
   }
   const document = assertTenantThemeDocumentVersioned(input.document);
@@ -280,6 +285,7 @@ export function admitDocument(input: {
       styleClaim: style?.claim,
     }),
     scrimDoors: censusScrimDoorsV2(document.overrides?.chrome),
+    deprecations: [],
     ...(style ? { styleRef: style.ref, styleClaim: style.claim } : {}),
   };
 }

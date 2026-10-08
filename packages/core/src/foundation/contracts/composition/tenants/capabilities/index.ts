@@ -21,6 +21,13 @@
  * - a FRONTIER capability is a declared contract boundary that the schema
  *   must still REJECT: it documents where the surface grows next without
  *   pretending it exists;
+ * - a RETIRING capability is still LIVE -- admitted, read and consumed exactly
+ *   as an active one, so it stays in every manifest and every active-only
+ *   reading (`isLiveCapabilityStatus`) and nothing narrows -- but its
+ *   retirement is ruled: every admission of it emits a named deprecation
+ *   notice, and its `compat` names the ruling, the measured blocker and the
+ *   migration document. It leaves the registry only when the retirement
+ *   executes (explicit refusal at every door);
  * - foundation authorities (`FOUNDATION_AUTHORITIES`) are deliberately NOT
  *   tenant capabilities: tenants move seeds; derivations follow.
  */
@@ -43,7 +50,22 @@ export const CAPABILITY_TIERS = Object.freeze([
 ] as const);
 
 export type CapabilityTier = (typeof CAPABILITY_TIERS)[number];
-export type CapabilityStatus = 'active' | 'declared';
+export type CapabilityStatus = 'active' | 'declared' | 'retiring';
+
+/**
+ * The statuses a capability is LIVE under: admitted by its doors and consumed.
+ * `retiring` is live by construction -- a ruled retirement that has not
+ * executed yet narrows nothing -- so every "active" reading of the registry
+ * reads this set.
+ */
+export const LIVE_CAPABILITY_STATUSES = Object.freeze([
+  'active',
+  'retiring',
+] as const satisfies readonly CapabilityStatus[]);
+
+export function isLiveCapabilityStatus(status: CapabilityStatus): boolean {
+  return (LIVE_CAPABILITY_STATUSES as readonly CapabilityStatus[]).includes(status);
+}
 export type CapabilityValueType =
   | 'color'
   | 'color-set'
@@ -626,7 +648,8 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       id: 'token-overrides',
       version: 1,
       tier: 'pro',
-      status: 'active',
+      // Still read by the v1 door; each admitted entry carries a named deprecation notice.
+      status: 'retiring',
       evidence: {
         consumer: 'src/infrastructure/compilers/composition/tenant-theme/index.ts',
         symbol: 'tokenOverrides',
@@ -659,7 +682,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       derivedChannels: ['--ds-color-error', '--ds-surface-card', '--ds-color-bg-overlay'],
       calibrationChannels: ['--ds-color-error', '--ds-color-bg-overlay'],
       compat:
-        'escape hatch, not the model: every recurring override is a candidate for a real capability',
+        'retiring (R32 Q2): v1 still admits it with a named deprecation notice per entry; v2/v3 refuse it; migration documented in docs/reference/contracts/token-overrides-migration',
     },
     {
       id: 'recipe-profile',
@@ -970,7 +993,7 @@ export type TenantCapabilityEntry = (typeof TENANT_CAPABILITY_REGISTRY)[number];
 export type TenantCapabilityId = TenantCapabilityEntry['id'];
 export type ActiveTenantCapabilityId = Extract<
   TenantCapabilityEntry,
-  { readonly status: 'active' }
+  { readonly status: (typeof LIVE_CAPABILITY_STATUSES)[number] }
 >['id'];
 
 /** Foundation derivation authorities: NOT tenant dials by design. */
@@ -1046,19 +1069,19 @@ export const FOUNDATION_AUTHORITIES: readonly FoundationAuthorityDeclaration[] =
 /** Tier manifests: the id lists an editor renders per access level. */
 export const TENANT_STANDARD_MANIFEST: readonly string[] = Object.freeze(
   TENANT_CAPABILITY_REGISTRY.filter(
-    (capability) => capability.tier === 'standard' && capability.status === 'active'
+    (capability) => capability.tier === 'standard' && isLiveCapabilityStatus(capability.status)
   ).map((capability) => capability.id)
 );
 
 export const TENANT_PRO_MANIFEST: readonly string[] = Object.freeze(
   TENANT_CAPABILITY_REGISTRY.filter(
-    (capability) => capability.tier === 'pro' && capability.status === 'active'
+    (capability) => capability.tier === 'pro' && isLiveCapabilityStatus(capability.status)
   ).map((capability) => capability.id)
 );
 
 /** Internal compatibility controls never rendered in tenant-facing editors. */
 export const TENANT_INTERNAL_MANIFEST: readonly string[] = Object.freeze(
   TENANT_CAPABILITY_REGISTRY.filter(
-    (capability) => capability.tier === 'internal' && capability.status === 'active'
+    (capability) => capability.tier === 'internal' && isLiveCapabilityStatus(capability.status)
   ).map((capability) => capability.id)
 );

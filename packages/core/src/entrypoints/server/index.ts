@@ -363,6 +363,7 @@ export type {
   TenantThemeChromeFamily,
   TenantThemeChrome,
   TenantThemeContrastAdjustment,
+  TenantThemeDeprecationNotice,
   TenantThemeLayoutAnatomy,
   TenantThemeSidebarAnatomy,
   TenantThemeTableAnatomy,

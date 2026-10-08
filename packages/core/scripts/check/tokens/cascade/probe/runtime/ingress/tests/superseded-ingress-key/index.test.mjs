@@ -18,6 +18,10 @@ import { test } from 'node:test';
 import { parseRegistry } from '../../../../../../../../generate/tokens/customization/surface/index.mjs';
 import { buildIngressInput, INGRESS_ARMS, registryIngressPath } from '../../index.mjs';
 
+/* A `retiring` capability is LIVE (capabilities registry law): it reads as active everywhere, so a ruled
+ * retirement that has not executed narrows nothing. */
+const LIVE_CAPABILITY_STATUSES = new Set(['active', 'retiring']);
+
 const ACTIVE_PUBLIC_TIERS = new Set(['standard', 'pro']);
 
 const STATIC_ARM = 'static-brand-theme';
@@ -58,7 +62,7 @@ test('a capability row carrying neither registry key declares no door', () => {
 
 test('the committed capability registry declares its door under the CURRENT registry key', () => {
   const rows = parseRegistry().filter(
-    (entry) => entry.status === 'active' && ACTIVE_PUBLIC_TIERS.has(entry.tier),
+    (entry) => LIVE_CAPABILITY_STATUSES.has(entry.status) && ACTIVE_PUBLIC_TIERS.has(entry.tier),
   );
   assert.ok(rows.length > 0, 'the registry produced no active public control');
   const missing = rows.filter((row) => registryIngressPath(row).path === undefined);

@@ -56,6 +56,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
 
+/* A `retiring` capability is LIVE (capabilities registry law): it reads as active everywhere, so a ruled
+ * retirement that has not executed narrows nothing. */
+const LIVE_CAPABILITY_STATUSES = new Set(['active', 'retiring']);
+
 const require = createRequire(import.meta.url);
 const postcss = require('postcss');
 const ts = require('typescript');
@@ -750,7 +754,7 @@ export function buildReport({ drill } = {}) {
   // from internal variable counts by construction).
   const capabilityEvidence = [];
   for (const row of registry) {
-    if (row.status !== 'active') continue;
+    if (!LIVE_CAPABILITY_STATUSES.has(row.status)) continue;
     const evidence = row.evidence;
     let verdict = 'missing-evidence';
     if (evidence?.consumer && evidence?.symbol) {
@@ -764,8 +768,8 @@ export function buildReport({ drill } = {}) {
   }
 
   const controls = {
-    tenantBasic: registry.filter((r) => r.tier === 'standard' && r.status === 'active').map((r) => r.id),
-    tenantPro: registry.filter((r) => r.tier === 'pro' && r.status === 'active').map((r) => r.id),
+    tenantBasic: registry.filter((r) => r.tier === 'standard' && LIVE_CAPABILITY_STATUSES.has(r.status)).map((r) => r.id),
+    tenantPro: registry.filter((r) => r.tier === 'pro' && LIVE_CAPABILITY_STATUSES.has(r.status)).map((r) => r.id),
     internal: registry.filter((r) => r.tier === 'internal').map((r) => r.id),
     frontier: registry.filter((r) => r.status === 'declared').map((r) => r.id),
     tenantRawAllowlist: allowlist.length,

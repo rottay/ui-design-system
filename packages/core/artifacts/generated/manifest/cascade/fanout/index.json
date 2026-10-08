@@ -44,7 +44,7 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2663,
+    "filesScanned": 2664,
     "channels": 9266,
     "channelsDs": 8575,
     "channelsBridge": 691,
@@ -45453,7 +45453,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/contracts/composition/tenants/capabilities/index.ts",
-          "line": 305,
+          "line": 327,
           "prop": "symbol",
           "scalars": []
         },
@@ -45635,7 +45635,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/contracts/composition/tenants/capabilities/index.ts",
-          "line": 134,
+          "line": 156,
           "prop": "symbol",
           "scalars": []
         },
@@ -195558,7 +195558,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/contracts/composition/tenants/capabilities/index.ts",
-          "line": 479,
+          "line": 501,
           "prop": "symbol",
           "scalars": []
         },
@@ -195849,7 +195849,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/contracts/composition/tenants/capabilities/index.ts",
-          "line": 448,
+          "line": 470,
           "prop": "symbol",
           "scalars": []
         }
@@ -209100,7 +209100,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/contracts/composition/tenants/capabilities/index.ts",
-          "line": 181,
+          "line": 203,
           "prop": "symbol",
           "scalars": []
         }
@@ -294976,7 +294976,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/contracts/composition/tenants/capabilities/index.ts",
-          "line": 404,
+          "line": 426,
           "prop": "symbol",
           "scalars": []
         },
@@ -318277,7 +318277,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/contracts/composition/tenants/capabilities/index.ts",
-          "line": 279,
+          "line": 301,
           "prop": "symbol",
           "scalars": []
         }
@@ -333879,7 +333879,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/contracts/composition/tenants/capabilities/index.ts",
-          "line": 372,
+          "line": 394,
           "prop": "symbol",
           "scalars": []
         },
@@ -354624,7 +354624,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/contracts/composition/tenants/capabilities/index.ts",
-          "line": 499,
+          "line": 521,
           "prop": "symbol",
           "scalars": []
         }
@@ -404411,7 +404411,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/contracts/composition/tenants/capabilities/index.ts",
-          "line": 580,
+          "line": 602,
           "prop": "symbol",
           "scalars": []
         }
