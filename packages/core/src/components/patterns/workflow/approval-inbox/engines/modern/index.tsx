@@ -220,6 +220,7 @@ function InboxItemRow({
               variant="ghost"
               size="sm"
               data-part="item-action-button"
+              className="ds-approval-inbox__item-action-button"
               data-action="approve"
               icon={<ActionConfirmIcon decorative size={14} />}
               pending={pendingAction === 'approve'}
@@ -243,6 +244,7 @@ function InboxItemRow({
               variant="ghost"
               size="sm"
               data-part="item-action-button"
+              className="ds-approval-inbox__item-action-button"
               data-action="reject"
               icon={<ActionCloseIcon decorative size={14} />}
               pending={pendingAction === 'reject'}
@@ -487,6 +489,7 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
             variant="primary"
             size="sm"
             data-part="batch-approve-button"
+            className="ds-approval-inbox__batch-approve-button"
             icon={<ActionConfirmIcon decorative size={14} />}
             pending={batchPending}
             pendingLabel={t('approvalInbox.approving', 'Approving…')}
@@ -498,6 +501,7 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
             variant="ghost"
             size="sm"
             data-part="batch-clear-button"
+            className="ds-approval-inbox__batch-clear-button"
             disabled={batchPending}
             onClick={() => setSelectedIds(new Set())}
           >
@@ -521,6 +525,7 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
                 size="sm"
                 tone="neutral"
                 data-part="group-count"
+                className="ds-approval-inbox__group-count"
                 content={group.items.length}
               />
             </div>

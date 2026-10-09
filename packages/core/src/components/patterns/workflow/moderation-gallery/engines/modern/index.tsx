@@ -184,6 +184,7 @@ function ModerationCard({
                 variant="ghost"
                 size="sm"
                 data-part="card-action-button"
+                className="ds-moderation-gallery__card-action-button"
                 data-action="approve"
                 icon={<ActionConfirmIcon decorative size={14} />}
                 pending={pendingAction === 'approve'}
@@ -200,6 +201,7 @@ function ModerationCard({
                 variant="ghost"
                 size="sm"
                 data-part="card-action-button"
+                className="ds-moderation-gallery__card-action-button"
                 data-action="reject"
                 icon={<ActionCloseIcon decorative size={14} />}
                 pending={pendingAction === 'reject'}
@@ -434,6 +436,7 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
             variant="primary"
             size="sm"
             data-part="bulk-approve-button"
+            className="ds-moderation-gallery__bulk-approve-button"
             icon={<ActionConfirmIcon decorative size={14} />}
             pending={bulkPending}
             pendingLabel={t('moderationGallery.approving', 'Approving…')}
@@ -446,6 +449,7 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
             size="sm"
             danger
             data-part="bulk-reject-button"
+            className="ds-moderation-gallery__bulk-reject-button"
             icon={<ActionCloseIcon decorative size={14} />}
             disabled={bulkPending}
             onClick={() => setConfirmBulkReject(true)}
@@ -456,6 +460,7 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
             variant="ghost"
             size="sm"
             data-part="bulk-clear-button"
+            className="ds-moderation-gallery__bulk-clear-button"
             disabled={bulkPending}
             onClick={() => setSelectedIds(new Set())}
           >

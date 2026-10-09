@@ -205,6 +205,7 @@ export default function ModernShiftMatrix(props: ShiftMatrixProps) {
                         <ModernButton
                           variant="ghost"
                           data-part="cell-button"
+                          className="ds-shift-matrix__cell-button"
                           aria-label={
                             staffRoster
                               ? t(

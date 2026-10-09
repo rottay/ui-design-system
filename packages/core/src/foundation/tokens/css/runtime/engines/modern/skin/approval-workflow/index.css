@@ -41,7 +41,7 @@
 
 /* --- Header --------------------------------------------------------------- */
 
-.ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='entity-badge'] {
+.ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] .ds-approval-workflow__entity-badge {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   color: var(--ds-color-text-secondary);
 }
@@ -83,29 +83,29 @@
 
 /* `pillBadgeSmStyle` still supplies the pill's box (radius, padding, type scale)
    inline; it sets no colour, so nothing here is overwriting a spread. */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='pending'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='pending'] {
   /* alpha-black-100 is declared only by the rottay artifact, so every other tenant needs the
      ink-derived mix or the whole background drops and the status badge paints nothing. */
   background: var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
   color: var(--ds-color-text-primary);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='approved'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='approved'] {
   background: var(--ds-color-success);
   color: var(--ds-color-on-success);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='rejected'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='rejected'] {
   background: var(--ds-color-error);
   color: var(--ds-color-on-error);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='escalated'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='escalated'] {
   background: var(--ds-color-warning);
   color: var(--ds-color-on-warning);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='skipped'] {
   /* alpha-black-100 is declared only by the rottay artifact, so every other tenant needs the
      ink-derived mix or the whole background drops and the status badge paints nothing. */
   background: var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
@@ -131,7 +131,7 @@
 /* The public Button primitive carries the pattern's caller part (P-79), so
    button.css does not paint these: this file is their single paint owner
    (geometry included — it was the engine's shared inline style object). */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button {
   block-size: var(--ds-approval-action-height, 32px);
   padding-block: 0;
   padding-inline: var(--ds-approval-action-padding-inline, 12px);
@@ -145,13 +145,13 @@
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='approve'] {
   background: var(--ds-color-success);
   color: var(--ds-color-on-success);
   border: none;
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='reject'] {
   background: var(--ds-color-error);
   color: var(--ds-color-on-error);
   border: none;
@@ -159,7 +159,7 @@
 
 /* Escalate is the outline (secondary) affordance -- it must not read as a peer of
    approve/reject. */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='escalate'] {
   background: transparent;
   color: var(--ds-color-warning);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-warning);
@@ -264,8 +264,8 @@
 /* Pill geometry for the two composed Badges (transcribed from the drained
    `pillBadgeSmStyle` spread: radius 9999px, padding 1px 6px, 11px/500/16px).
    P-79: the caller part makes this file their single paint owner. */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'],
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='entity-badge'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge,
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__entity-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -278,7 +278,7 @@
 }
 
 /* Skipped de-emphasis (was an inline opacity, the one status with a style). */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='skipped'] {
   opacity: var(--ds-approval-skipped-opacity, 0.5);
 }
 
@@ -326,7 +326,7 @@
 }
 
 /* --- Action states: disabled, coarse floor ------------------------------------ */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:is([data-state~='disabled'], :disabled) {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button:is([data-state~='disabled'], :disabled) {
   opacity: var(--ds-approval-disabled-opacity, var(--ds-state-disabled-opacity));
   cursor: not-allowed;
 }
@@ -334,24 +334,24 @@
 /* --- Action hover/press: the base rules carried no pointer treatment at
         all. Hover law: unguarded `:active` twins here (touch press feedback
         matches), pointer-fine hover inside the guard. ---- */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-success-600);
 }
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-error-600);
 }
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='escalate']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
 }
 
 @media (hover: hover) {
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-success-600);
   }
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-error-600);
   }
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='escalate']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
   }
 }
@@ -362,9 +362,9 @@
         distinguishable by their labels. ---- */
 @media (forced-colors: active) {
   .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'][data-loading],
-  .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='entity-badge'],
+  .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] .ds-approval-workflow__entity-badge,
   .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='footer'],
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate'] {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='escalate'] {
     border-color: ButtonText;
   }
 
@@ -375,7 +375,7 @@
 }
 
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button {
     min-block-size: var(--ds-approval-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
@@ -436,7 +436,7 @@
     animation: none;
   }
 
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button {
     transition: none;
   }
 }

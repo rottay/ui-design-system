@@ -36,7 +36,7 @@ const ITEMS: ModerationItem[] = [
 function rulesNaming(part: string): Array<{ selector: string; body: string }> {
   return [...SKIN.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
     .map((match) => ({ selector: match[1], body: match[2] }))
-    .filter((rule) => rule.selector.includes(`[data-part='${part}']`));
+    .filter((rule) => rule.selector.includes(`.ds-moderation-gallery__${part}`));
 }
 
 const ROOT_FOCUS =
@@ -86,7 +86,9 @@ describe('Modern ModerationGallery — actions wear the Button focus signature',
     // A pattern-level outline matched the Button ring rule's specificity and
     // drew a solid contour over the `underline` and `glow` signatures.
     for (const part of ACTION_PARTS) {
-      for (const rule of rulesNaming(part)) {
+      const named = rulesNaming(part);
+      expect(named.length, part).toBeGreaterThan(0);
+      for (const rule of named) {
         expect(rule.selector).not.toMatch(/focus/);
         expect(rule.body).not.toMatch(/(^|[\s;])outline(-[a-z]+)?\s*:/);
         expect(rule.body).not.toContain('--ds-button-focus-ring');

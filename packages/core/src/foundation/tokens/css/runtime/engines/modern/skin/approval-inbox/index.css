@@ -89,7 +89,7 @@
   overflow-wrap: anywhere;
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='group-count'] {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__group-count {
   color: var(--ds-color-text-secondary);
 }
 
@@ -206,7 +206,7 @@
 
 /* The public Button primitive carries the pattern's caller part (P-79), so
    button.css does not paint these: this file is their single paint owner. */
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'] {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button {
   border-radius: var(--ds-radius-md);
   transition:
     background var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -215,31 +215,31 @@
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve'] {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='approve'] {
   background: var(--ds-color-success);
   color: var(--ds-color-on-success);
   border: none;
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='reject'] {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='reject'] {
   background: var(--ds-color-error);
   color: var(--ds-color-on-error);
   border: none;
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-success-600);
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-error-600);
 }
 
 @media (hover: hover) {
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-success-600);
   }
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-error-600);
   }
 }
@@ -367,9 +367,9 @@
 
 /* --- Touch target floor ------------------------------------------------------------ */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'],
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-approve-button'],
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-clear-button'] {
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button,
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__batch-approve-button,
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__batch-clear-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -406,7 +406,7 @@
     animation: none;
   }
 
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'] {
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button {
     transition: none;
   }
 }

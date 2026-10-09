@@ -182,7 +182,7 @@
 }
 
 /* Overlay action paint (the public Button carries the caller part — P-79). */
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'] {
+.ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button {
   border-radius: var(--ds-radius-md);
   transition:
     background var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -190,31 +190,31 @@
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve'] {
+.ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='approve'] {
   background: var(--ds-color-success);
   color: var(--ds-color-on-success);
   border: none;
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject'] {
+.ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='reject'] {
   background: var(--ds-color-error);
   color: var(--ds-color-on-error);
   border: none;
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-success-600);
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-error-600);
 }
 
 @media (hover: hover) {
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-success-600);
   }
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-error-600);
   }
 }
@@ -325,10 +325,10 @@
 
 /* --- Touch target floor --------------------------------------------------------------------- */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'],
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-approve-button'],
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-reject-button'],
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-clear-button'] {
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button,
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__bulk-approve-button,
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__bulk-reject-button,
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__bulk-clear-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -376,7 +376,7 @@
 
   .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card'],
   .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions'],
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'] {
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button {
     transition: none;
   }
 

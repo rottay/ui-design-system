@@ -95,7 +95,7 @@ describe('Modern ApprovalWorkflow — step actions wear the Button focus signatu
     // the `underline` and `glow` signatures.
     for (const part of BUTTON_PARTS) {
       const named = [...AUTHORED, ...rulesOf(FORCED)].filter((rule) =>
-        rule.selector.includes(`[data-part='${part}']`),
+        rule.selector.includes(`.ds-approval-workflow__${part}`),
       );
       expect(named.length).toBeGreaterThan(0);
       for (const rule of named) {

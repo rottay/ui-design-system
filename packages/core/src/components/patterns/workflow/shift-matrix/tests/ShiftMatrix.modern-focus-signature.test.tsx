@@ -60,7 +60,7 @@ const REGION_HOST =
 const REGION_FOCUS =
   ".ds-pattern-shift-matrix.ds-engine-modern [data-part='table-region']:is([data-state~='focus-visible'], :focus-visible)";
 const CELL_FOCUS =
-  ".ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible)";
+  ".ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button:is([data-state~='focus-visible'], :focus-visible)";
 
 describe('Modern ShiftMatrix — the assignable cell wears the tenant focus signature', () => {
   it('renders the assignable cell as a tab-reachable DS Button inside its table cell', () => {

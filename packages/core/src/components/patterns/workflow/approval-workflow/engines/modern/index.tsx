@@ -122,6 +122,7 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
             tone={STATUS_TONE[step.status]}
             icon={STATUS_ICON[step.status]}
             data-part="step-status-badge"
+            className="ds-approval-workflow__step-status-badge"
             data-status={step.status}
             content={t(`approvalWorkflow.status.${step.status}`, STATUS_FALLBACK[step.status])}
           />
@@ -158,6 +159,7 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
                 variant="ghost"
                 size="sm"
                 data-part="step-action-button"
+                className="ds-approval-workflow__step-action-button"
                 data-action="approve"
                 disabled={actionsDisabled || (pendingAction != null && pendingAction !== 'approve')}
                 pending={pendingAction === 'approve'}
@@ -174,6 +176,7 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
                 variant="ghost"
                 size="sm"
                 data-part="step-action-button"
+                className="ds-approval-workflow__step-action-button"
                 data-action="reject"
                 disabled={actionsDisabled || (pendingAction != null && pendingAction !== 'reject')}
                 pending={pendingAction === 'reject'}
@@ -190,6 +193,7 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
                 variant="ghost"
                 size="sm"
                 data-part="step-action-button"
+                className="ds-approval-workflow__step-action-button"
                 data-action="escalate"
                 disabled={actionsDisabled || (pendingAction != null && pendingAction !== 'escalate')}
                 pending={pendingAction === 'escalate'}
@@ -291,6 +295,7 @@ export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
               size="sm"
               tone="neutral"
               data-part="entity-badge"
+              className="ds-approval-workflow__entity-badge"
             >
               {entity}
             </Badge>

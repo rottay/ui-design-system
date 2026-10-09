@@ -60384,7 +60384,7 @@ html[data-ds-motion='reduced']
 
 /* --- Header --------------------------------------------------------------- */
 
-.ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='entity-badge'] {
+.ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] .ds-approval-workflow__entity-badge {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   color: var(--ds-color-text-secondary);
 }
@@ -60426,29 +60426,29 @@ html[data-ds-motion='reduced']
 
 /* `pillBadgeSmStyle` still supplies the pill's box (radius, padding, type scale)
    inline; it sets no colour, so nothing here is overwriting a spread. */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='pending'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='pending'] {
   /* alpha-black-100 is declared only by the rottay artifact, so every other tenant needs the
      ink-derived mix or the whole background drops and the status badge paints nothing. */
   background: var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
   color: var(--ds-color-text-primary);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='approved'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='approved'] {
   background: var(--ds-color-success);
   color: var(--ds-color-on-success);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='rejected'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='rejected'] {
   background: var(--ds-color-error);
   color: var(--ds-color-on-error);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='escalated'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='escalated'] {
   background: var(--ds-color-warning);
   color: var(--ds-color-on-warning);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='skipped'] {
   /* alpha-black-100 is declared only by the rottay artifact, so every other tenant needs the
      ink-derived mix or the whole background drops and the status badge paints nothing. */
   background: var(--ds-color-alpha-black-100, color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent));
@@ -60474,7 +60474,7 @@ html[data-ds-motion='reduced']
 /* The public Button primitive carries the pattern's caller part (P-79), so
    button.css does not paint these: this file is their single paint owner
    (geometry included — it was the engine's shared inline style object). */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button {
   block-size: var(--ds-approval-action-height, 32px);
   padding-block: 0;
   padding-inline: var(--ds-approval-action-padding-inline, 12px);
@@ -60488,13 +60488,13 @@ html[data-ds-motion='reduced']
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='approve'] {
   background: var(--ds-color-success);
   color: var(--ds-color-on-success);
   border: none;
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='reject'] {
   background: var(--ds-color-error);
   color: var(--ds-color-on-error);
   border: none;
@@ -60502,7 +60502,7 @@ html[data-ds-motion='reduced']
 
 /* Escalate is the outline (secondary) affordance -- it must not read as a peer of
    approve/reject. */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='escalate'] {
   background: transparent;
   color: var(--ds-color-warning);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-warning);
@@ -60607,8 +60607,8 @@ html[data-ds-motion='reduced']
 /* Pill geometry for the two composed Badges (transcribed from the drained
    `pillBadgeSmStyle` spread: radius 9999px, padding 1px 6px, 11px/500/16px).
    P-79: the caller part makes this file their single paint owner. */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'],
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='entity-badge'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge,
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__entity-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -60621,7 +60621,7 @@ html[data-ds-motion='reduced']
 }
 
 /* Skipped de-emphasis (was an inline opacity, the one status with a style). */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped'] {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-status-badge[data-status='skipped'] {
   opacity: var(--ds-approval-skipped-opacity, 0.5);
 }
 
@@ -60669,7 +60669,7 @@ html[data-ds-motion='reduced']
 }
 
 /* --- Action states: disabled, coarse floor ------------------------------------ */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:is([data-state~='disabled'], :disabled) {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button:is([data-state~='disabled'], :disabled) {
   opacity: var(--ds-approval-disabled-opacity, var(--ds-state-disabled-opacity));
   cursor: not-allowed;
 }
@@ -60677,24 +60677,24 @@ html[data-ds-motion='reduced']
 /* --- Action hover/press: the base rules carried no pointer treatment at
         all. Hover law: unguarded `:active` twins here (touch press feedback
         matches), pointer-fine hover inside the guard. ---- */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-success-600);
 }
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-error-600);
 }
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='escalate']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
 }
 
 @media (hover: hover) {
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-success-600);
   }
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-error-600);
   }
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='escalate']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
   }
 }
@@ -60705,9 +60705,9 @@ html[data-ds-motion='reduced']
         distinguishable by their labels. ---- */
 @media (forced-colors: active) {
   .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'][data-loading],
-  .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='entity-badge'],
+  .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] .ds-approval-workflow__entity-badge,
   .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='footer'],
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate'] {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button[data-action='escalate'] {
     border-color: ButtonText;
   }
 
@@ -60718,7 +60718,7 @@ html[data-ds-motion='reduced']
 }
 
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button {
     min-block-size: var(--ds-approval-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
@@ -60779,7 +60779,7 @@ html[data-ds-motion='reduced']
     animation: none;
   }
 
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+  .ds-pattern-approval-workflow.ds-engine-modern .ds-approval-workflow__step-action-button {
     transition: none;
   }
 }
@@ -60877,7 +60877,7 @@ html[data-ds-motion='reduced']
   overflow-wrap: anywhere;
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='group-count'] {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__group-count {
   color: var(--ds-color-text-secondary);
 }
 
@@ -60994,7 +60994,7 @@ html[data-ds-motion='reduced']
 
 /* The public Button primitive carries the pattern's caller part (P-79), so
    button.css does not paint these: this file is their single paint owner. */
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'] {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button {
   border-radius: var(--ds-radius-md);
   transition:
     background var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -61003,31 +61003,31 @@ html[data-ds-motion='reduced']
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve'] {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='approve'] {
   background: var(--ds-color-success);
   color: var(--ds-color-on-success);
   border: none;
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='reject'] {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='reject'] {
   background: var(--ds-color-error);
   color: var(--ds-color-on-error);
   border: none;
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-success-600);
 }
 
-.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-error-600);
 }
 
 @media (hover: hover) {
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-success-600);
   }
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button[data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-error-600);
   }
 }
@@ -61155,9 +61155,9 @@ html[data-ds-motion='reduced']
 
 /* --- Touch target floor ------------------------------------------------------------ */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'],
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-approve-button'],
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-clear-button'] {
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button,
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__batch-approve-button,
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__batch-clear-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -61194,7 +61194,7 @@ html[data-ds-motion='reduced']
     animation: none;
   }
 
-  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'] {
+  .ds-pattern-approval-inbox.ds-engine-modern .ds-approval-inbox__item-action-button {
     transition: none;
   }
 }
@@ -61385,7 +61385,7 @@ html[data-ds-motion='reduced']
 }
 
 /* Overlay action paint (the public Button carries the caller part — P-79). */
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'] {
+.ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button {
   border-radius: var(--ds-radius-md);
   transition:
     background var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -61393,31 +61393,31 @@ html[data-ds-motion='reduced']
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve'] {
+.ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='approve'] {
   background: var(--ds-color-success);
   color: var(--ds-color-on-success);
   border: none;
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject'] {
+.ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='reject'] {
   background: var(--ds-color-error);
   color: var(--ds-color-on-error);
   border: none;
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-success-600);
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-error-600);
 }
 
 @media (hover: hover) {
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-success-600);
   }
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button[data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-error-600);
   }
 }
@@ -61528,10 +61528,10 @@ html[data-ds-motion='reduced']
 
 /* --- Touch target floor --------------------------------------------------------------------- */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'],
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-approve-button'],
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-reject-button'],
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-clear-button'] {
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button,
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__bulk-approve-button,
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__bulk-reject-button,
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__bulk-clear-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -61579,7 +61579,7 @@ html[data-ds-motion='reduced']
 
   .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card'],
   .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions'],
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'] {
+  .ds-pattern-moderation-gallery.ds-engine-modern .ds-moderation-gallery__card-action-button {
     transition: none;
   }
 
@@ -62071,7 +62071,7 @@ html[data-ds-motion='reduced']
    own size rules (P-79: the caller part makes this file the paint owner).
    The 56px floor is single-family geometry: inline, not a custom property. */
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-static'],
-.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62087,7 +62087,7 @@ html[data-ds-motion='reduced']
    the part's paint (P-79), so the primitive's recipe chrome stays pinned off:
    variant bg/border/ink and the hover/press transforms and filters (through
    Button's own public channels) never override the coverage triplet. */
-.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button {
   appearance: none;
   background: none;
   border: none;
@@ -62106,8 +62106,8 @@ html[data-ds-motion='reduced']
 
 /* Ghost state paint (bg/color/border on hovered/pressed) stays off too: the
    coverage triplet owns every state. */
-.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'][data-state~='hovered'],
-.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'][data-state~='pressed'] {
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button[data-state~='hovered'],
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button[data-state~='pressed'] {
   background: none;
   border: none;
   color: inherit;
@@ -62115,14 +62115,14 @@ html[data-ds-motion='reduced']
 
 /* Button wraps children in content/label spans: keep them out of the box
    tree so the cell recipe stacks exactly like the static cell. */
-.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'] [data-part='content'],
-.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'] [data-part='label'] {
+.ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button [data-part='content'],
+.ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button [data-part='label'] {
   display: contents;
 }
 
 /* The cell fills its table cell and the scroll region clips it, so the tenant
    focus signature rides an overlay inset by its own reach. */
-.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+.ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button:is([data-state~='focus-visible'], :focus-visible)::after {
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
   content: '';
@@ -62165,7 +62165,7 @@ html[data-ds-motion='reduced']
 @media (hover: hover) {
   /* Anchored so the family's inset ring outranks the ghost recipe's hovered
      box-shadow channel whatever the facade's source order is. */
-  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button']:is([data-state~='hovered'], :hover) {
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button:is([data-state~='hovered'], :hover) {
     box-shadow: inset 0 0 0 2px var(--ds-color-border-focus, var(--ds-color-primary));
   }
 }
@@ -62265,7 +62265,7 @@ html[data-ds-motion='reduced']
 /* --- Touch target floor (anchored: keeps its historical last-word win over
        the 56px cell floor, so coarse pointers still land on 44px) ------------ */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -62286,17 +62286,17 @@ html[data-ds-motion='reduced']
 
   /* Coverage backgrounds disappear: the icon + sr label keep the state, and
      assignable cells read as ButtonText with a visible boundary. */
-  .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'] {
+  .ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button {
     outline: 1px solid ButtonText;
     outline-offset: -1px;
   }
 
-  .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button:is([data-state~='focus-visible'], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
   }
 
-  .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+  .ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button:is([data-state~='focus-visible'], :focus-visible)::after {
     box-shadow: none;
   }
 
@@ -62318,7 +62318,7 @@ html[data-ds-motion='reduced']
   }
 
   /* Anchored to outrank the composed-Button reset rule's transition. */
-  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button {
     transition: none;
   }
 }

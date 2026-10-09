@@ -174,7 +174,7 @@
    own size rules (P-79: the caller part makes this file the paint owner).
    The 56px floor is single-family geometry: inline, not a custom property. */
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-static'],
-.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -190,7 +190,7 @@
    the part's paint (P-79), so the primitive's recipe chrome stays pinned off:
    variant bg/border/ink and the hover/press transforms and filters (through
    Button's own public channels) never override the coverage triplet. */
-.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button {
   appearance: none;
   background: none;
   border: none;
@@ -209,8 +209,8 @@
 
 /* Ghost state paint (bg/color/border on hovered/pressed) stays off too: the
    coverage triplet owns every state. */
-.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'][data-state~='hovered'],
-.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'][data-state~='pressed'] {
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button[data-state~='hovered'],
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button[data-state~='pressed'] {
   background: none;
   border: none;
   color: inherit;
@@ -218,14 +218,14 @@
 
 /* Button wraps children in content/label spans: keep them out of the box
    tree so the cell recipe stacks exactly like the static cell. */
-.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'] [data-part='content'],
-.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'] [data-part='label'] {
+.ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button [data-part='content'],
+.ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button [data-part='label'] {
   display: contents;
 }
 
 /* The cell fills its table cell and the scroll region clips it, so the tenant
    focus signature rides an overlay inset by its own reach. */
-.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+.ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button:is([data-state~='focus-visible'], :focus-visible)::after {
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
   content: '';
@@ -268,7 +268,7 @@
 @media (hover: hover) {
   /* Anchored so the family's inset ring outranks the ghost recipe's hovered
      box-shadow channel whatever the facade's source order is. */
-  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button']:is([data-state~='hovered'], :hover) {
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button:is([data-state~='hovered'], :hover) {
     box-shadow: inset 0 0 0 2px var(--ds-color-border-focus, var(--ds-color-primary));
   }
 }
@@ -368,7 +368,7 @@
 /* --- Touch target floor (anchored: keeps its historical last-word win over
        the 56px cell floor, so coarse pointers still land on 44px) ------------ */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -389,17 +389,17 @@
 
   /* Coverage backgrounds disappear: the icon + sr label keep the state, and
      assignable cells read as ButtonText with a visible boundary. */
-  .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'] {
+  .ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button {
     outline: 1px solid ButtonText;
     outline-offset: -1px;
   }
 
-  .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button:is([data-state~='focus-visible'], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
   }
 
-  .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+  .ds-pattern-shift-matrix.ds-engine-modern .ds-shift-matrix__cell-button:is([data-state~='focus-visible'], :focus-visible)::after {
     box-shadow: none;
   }
 
@@ -421,7 +421,7 @@
   }
 
   /* Anchored to outrank the composed-Button reset rule's transition. */
-  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] .ds-shift-matrix__cell-button {
     transition: none;
   }
 }
