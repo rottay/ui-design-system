@@ -292,7 +292,7 @@ export function PatternGridView<T>(
         style={style}
       >
         {emptyState ?? (
-          <Text data-part="empty-state">{emptyLabel}</Text>
+          <Text data-part="empty-state" className="ds-grid-view__empty-state">{emptyLabel}</Text>
         )}
       </Box>
     );

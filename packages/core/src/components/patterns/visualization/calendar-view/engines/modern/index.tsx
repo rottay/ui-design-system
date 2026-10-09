@@ -440,6 +440,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
               variant="ghost"
               size="sm"
               data-part="toolbar-action"
+              className="ds-pattern-calendar-view__toolbar-action"
               data-action="previous"
               aria-label={copy.previousMonth}
               onClick={() => navigateMonth(-1)}
@@ -455,6 +456,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
               variant="ghost"
               size="sm"
               data-part="toolbar-action"
+              className="ds-pattern-calendar-view__toolbar-action"
               data-action="next"
               aria-label={copy.nextMonth}
               onClick={() => navigateMonth(1)}
@@ -467,6 +469,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
               variant="ghost"
               size="sm"
               data-part="toolbar-action"
+              className="ds-pattern-calendar-view__toolbar-action"
               data-action="today"
               onClick={() => onDateChange?.(new Date())}
             >
@@ -495,7 +498,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
           event sets. The composed Spinner owns ring and cadence. */}
       {loading ? (
         <div data-part="loading">
-          <ModernSpinner size="md" data-part="spinner" />
+          <ModernSpinner size="md" data-part="spinner" className="ds-pattern-calendar-view__spinner" />
         </div>
       ) : (
         /* Grid geometry and frame are skin-owned through the public anatomy.

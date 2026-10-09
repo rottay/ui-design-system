@@ -534,6 +534,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                         size="sm"
                         tone={isOverLimit ? 'danger' : 'neutral'}
                         data-part="wip-badge"
+                        className="ds-pattern-kanban-board__wip-badge"
                         content={
                           column.limit !== undefined
                             ? `${column.items.length} / ${column.limit}`
@@ -612,6 +613,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                                     variant="text"
                                     size="sm"
                                     data-part="card-move-button"
+                                    className="ds-pattern-kanban-board__card-move-button"
                                     data-move-intent={MOVE_INTENT_STAMP[control.intent]}
                                     aria-label={control.label}
                                     icon={control.icon}
@@ -634,6 +636,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       variant="dashed"
                       size="sm"
                       data-part="add-item"
+                      className="ds-pattern-kanban-board__add-item"
                       icon={<ActionAddIcon decorative size={14} />}
                       onClick={() => onAddItem(column.id)}
                     >

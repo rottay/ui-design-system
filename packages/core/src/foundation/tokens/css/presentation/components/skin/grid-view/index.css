@@ -126,7 +126,7 @@
   background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary)));
 }
 
-.ds-pattern-grid-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state'] {
+.ds-pattern-grid-view .ds-grid-view__empty-state.ds-grid-view__empty-state.ds-grid-view__empty-state.ds-grid-view__empty-state {
   color: var(--ds-color-text-muted);
 }
 

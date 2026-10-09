@@ -90404,7 +90404,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary)));
 }
 
-.ds-pattern-grid-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state'] {
+.ds-pattern-grid-view .ds-grid-view__empty-state.ds-grid-view__empty-state.ds-grid-view__empty-state.ds-grid-view__empty-state {
   color: var(--ds-color-text-muted);
 }
 
@@ -101583,7 +101583,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    never restyled. */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='loading']
-  > [data-part='spinner'] {
+  > .ds-pattern-calendar-view__spinner {
   align-self: center;
 }
 
@@ -101868,7 +101868,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 @media (pointer: coarse) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='toolbar']
-    [data-part='toolbar-action'] {
+    .ds-pattern-calendar-view__toolbar-action {
     min-block-size: var(--ds-calendar-view-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
@@ -102166,7 +102166,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   white-space: nowrap;
 }
 /* Count scans tabular down the header row (the composed Badge owns chrome). */
-.ds-pattern-kanban-board.ds-engine-modern [data-part='wip-badge'] {
+.ds-pattern-kanban-board.ds-engine-modern .ds-pattern-kanban-board__wip-badge {
   font-variant-numeric: tabular-nums;
 }
 
@@ -102333,7 +102333,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* ---- add item: the composed dashed Button stretches to the column ---- */
-.ds-pattern-kanban-board.ds-engine-modern [data-part='add-item'] {
+.ds-pattern-kanban-board.ds-engine-modern .ds-pattern-kanban-board__add-item {
   inline-size: 100%;
   margin-block-start: var(--ds-spacing-2);
 }
@@ -102353,8 +102353,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- coarse pointers: the add-item button and the move rail -- the only two
         controls that exist there -- reach the 44px floor ---- */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-kanban-board.ds-engine-modern [data-part='add-item'],
-  .ds-pattern-kanban-board.ds-engine-modern [data-part='card-move-button'] {
+  .ds-pattern-kanban-board.ds-engine-modern .ds-pattern-kanban-board__add-item,
+  .ds-pattern-kanban-board.ds-engine-modern .ds-pattern-kanban-board__card-move-button {
     min-block-size: var(--ds-kanban-board-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
@@ -102570,13 +102570,13 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   max-block-size: var(--_ds-map-view-list-max-height, none);
   overflow-y: auto;
 }
-.ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-row']:not([data-last='true']) {
+.ds-pattern-map-view.ds-engine-modern[data-part='root'] .ds-pattern-map-view__marker-row:not([data-last='true']) {
   border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ---- marker row: composed Button, whole-row selection target,
         44px coarse floor below ---- */
-.ds-pattern-map-view.ds-engine-modern [data-part='marker-row'] {
+.ds-pattern-map-view.ds-engine-modern .ds-pattern-map-view__marker-row {
   display: block;
   inline-size: 100%;
   padding: var(--ds-spacing-3, 12px);
@@ -102588,7 +102588,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   cursor: pointer;
   transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-pattern-map-view.ds-engine-modern .ds-pattern-map-view__marker-row:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(
     --ds-focus-ring,
@@ -102598,15 +102598,15 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
     )
   );
 }
-.ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:is([data-state~='pressed'], :active) {
+.ds-pattern-map-view.ds-engine-modern .ds-pattern-map-view__marker-row:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 @media (hover: hover) {
-  .ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:is([data-state~='hovered'], :hover):not([data-selected='true']) {
+  .ds-pattern-map-view.ds-engine-modern .ds-pattern-map-view__marker-row:is([data-state~='hovered'], :hover):not([data-selected='true']) {
     background: var(--ds-surface-highlight);
   }
 }
-.ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true'] {
+.ds-pattern-map-view.ds-engine-modern .ds-pattern-map-view__marker-row[data-selected='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
 }
 
@@ -102628,7 +102628,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-map-view.ds-engine-modern [data-part='marker-label'] {
   font-size: var(--ds-font-size-sm, 14px);
 }
-.ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true'] [data-part='marker-label'] {
+.ds-pattern-map-view.ds-engine-modern .ds-pattern-map-view__marker-row[data-selected='true'] [data-part='marker-label'] {
   font-weight: var(--ds-font-weight-semibold, 600);
 }
 .ds-pattern-map-view.ds-engine-modern [data-part='coordinates'] {
@@ -102656,7 +102656,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 /* ---- coarse pointer: rows reach the 44px floor ---- */
 @media (hover: none) and (pointer: coarse) {
-  .ds-pattern-map-view.ds-engine-modern [data-part='marker-row'] {
+  .ds-pattern-map-view.ds-engine-modern .ds-pattern-map-view__marker-row {
     min-block-size: var(--ds-map-view-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
@@ -102671,11 +102671,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
   .ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder'],
   .ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list'],
-  .ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-row']:not([data-last='true']) {
+  .ds-pattern-map-view.ds-engine-modern[data-part='root'] .ds-pattern-map-view__marker-row:not([data-last='true']) {
     border-color: ButtonText;
   }
 
-  .ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true'] {
+  .ds-pattern-map-view.ds-engine-modern .ds-pattern-map-view__marker-row[data-selected='true'] {
     outline: 2px solid Highlight;
     outline-offset: -2px;
   }
@@ -102684,7 +102684,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
    relaid out, or left waiting on an event that never arrives. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-map-view.ds-engine-modern [data-part='marker-row'] {
+  .ds-pattern-map-view.ds-engine-modern .ds-pattern-map-view__marker-row {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
