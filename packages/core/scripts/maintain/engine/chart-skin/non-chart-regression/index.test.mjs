@@ -2768,7 +2768,7 @@ function normalizeSelector(selector) {
 // off the two Modern skins; no expectation is derived from the file under test.
 const CALENDAR_ACCENT_SELECTOR =
   ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']" +
-  " > [data-part='grid'] [data-part='day-cell'] [data-part='event']";
+  " > [data-part='grid'] [data-part='day-cell'] .ds-pattern-calendar-view__event";
 const KANBAN_ACCENT_SELECTOR =
   ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']" +
   " > [data-part='board'] > [data-part='column'] > [data-part='column-header']";
@@ -3259,7 +3259,7 @@ test('visualization skin Calendar Modern crosses the event accent only through a
   // that nothing returns.
   const CALENDAR_DEAD_IIFE =
     `\n                    {((ev: { color?: string }) => {\n` +
-    `                      const dead = <div data-part="${CALENDAR_ACCENT_PART}" style={${CALENDAR_PRODUCER_LITERAL}} />;\n` +
+    `                      const dead = <div data-part="${CALENDAR_ACCENT_PART}" className="ds-pattern-calendar-view__event" style={${CALENDAR_PRODUCER_LITERAL}} />;\n` +
     `                      return null;\n` +
     `                    })(dayEvents[0])}`;
   const deadInChain = withJsxChildSnippet(displaced, path, 'day-cell', CALENDAR_DEAD_IIFE);
@@ -3377,7 +3377,7 @@ test('visualization skin Calendar Modern crosses the event accent only through a
   const CALENDAR_THIS_ARG =
     `\n                    {dayEvents.map(() => null, function deadThisArg() {\n` +
     `                      const ev = dayEvents[0];\n` +
-    `                      return <div data-part="${CALENDAR_ACCENT_PART}" style={${CALENDAR_PRODUCER_LITERAL}} />;\n` +
+    `                      return <div data-part="${CALENDAR_ACCENT_PART}" className="ds-pattern-calendar-view__event" style={${CALENDAR_PRODUCER_LITERAL}} />;\n` +
     `                    })}`;
   const thisArgProducer = withJsxChildSnippet(displaced, path, 'day-cell', CALENDAR_THIS_ARG);
   assert.notEqual(thisArgProducer, displaced, 'the thisArg mutant must actually land in the day cell');
@@ -3752,7 +3752,7 @@ test('visualization skin Calendar Modern crosses the event accent only through a
   const leakedSelector = normalizeSelector(leaked[0].parent.selector);
   assert.ok(
     leakedSelector.includes(".ds-pattern-calendar-view.ds-engine-modern[data-part='root']") &&
-      leakedSelector.includes("[data-part='event']"),
+      leakedSelector.includes('.ds-pattern-calendar-view__event'),
     'the retired `includes` pair stays true on the leaked selector — that is the false green',
   );
   assert.deepEqual(
@@ -4230,27 +4230,47 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   const BLOCK = 'ds-pattern-calendar-view';
   const EVENT_CLASS = `${BLOCK}__${CALENDAR_ACCENT_PART}`;
   const PART_TAIL = `[data-part='${CALENDAR_ACCENT_PART}']`;
-  assert.equal(CALENDAR_ACCENT_SELECTOR.split(PART_TAIL).length - 1, 1, 'the pinned selector must carry the part tail once');
+  const CLASS_TAIL = `.${EVENT_CLASS}`;
+  // Both forms are derived from the pinned constant, WHICHEVER form it spells (S3 moved it to the class form under
+  // H3 (i)); exactly one accent tail form must end it.
+  const liveTails = [PART_TAIL, CLASS_TAIL].filter((tail) => CALENDAR_ACCENT_SELECTOR.endsWith(tail));
+  assert.equal(liveTails.length, 1, 'the pinned selector must end in exactly one accent tail form');
   assert.equal(selectorOwnerBlock(CALENDAR_ACCENT_SELECTOR), BLOCK, 'the owner block is derived from the selector head');
-  const tailed = (tail) => CALENDAR_ACCENT_SELECTOR.replace(PART_TAIL, () => tail);
-  const CLASS_FORM = tailed(`.${EVENT_CLASS}`);
+  const tailed = (tail) => `${CALENDAR_ACCENT_SELECTOR.slice(0, -liveTails[0].length)}${tail}`;
+  const PART_FORM = tailed(PART_TAIL);
+  const CLASS_FORM = tailed(CLASS_TAIL);
 
-  // The owners and the elements a class may be stamped on, located on the live fixture.
-  const alias = liveChannelAlias(text, path, CALENDAR_CHANNEL, 'ev');
+  // The co-stamp drills need chips WITHOUT the class literal. Since S3 the live chips carry it, so the drills run on a
+  // BARE fixture: the live calendar with every className attribute on the two event emitters spliced out (AST
+  // positions, from the end). The live fixture itself is held to the class form below (S2-5g).
+  const liveAlias = liveChannelAlias(text, path, CALENDAR_CHANNEL, 'ev');
+  const cuts = liveAlias.owners
+    .flatMap((owner) => owner.attributes.properties)
+    .filter((attribute) => ts.isJsxAttribute(attribute) && attribute.name.getText() === 'className')
+    .map((attribute) => [attribute.getFullStart(), attribute.getEnd()])
+    .sort((a, b) => b[0] - a[0]);
+  const bare = cuts.reduce((out, [from, to]) => `${out.slice(0, from)}${out.slice(to)}`, text);
+
+  // The owners and the elements a class may be stamped on, located on the BARE fixture.
+  const alias = liveChannelAlias(bare, path, CALENDAR_CHANNEL, 'ev');
+  assert.ok(
+    alias.owners.every((owner) => staticClassNameLiteral(owner) === null),
+    'the bare fixture carries no className on either event emitter',
+  );
   const chip = alias.owners.find((owner) => owner.tagName.getText() === 'EventChip');
   const button = alias.owners.find((owner) => owner.tagName.getText() === 'ModernButton');
-  const gridElement = uniqueElementWithPart(text, path, 'grid').element;
+  const gridElement = uniqueElementWithPart(bare, path, 'grid').element;
   const grid = ts.isJsxElement(gridElement) ? gridElement.openingElement : gridElement;
   const stamp = (opening, className = EVENT_CLASS) => ({ opening, literal: `className="${className}"` });
-  const [owners] = channelProducerOwners(text, path, CALENDAR_CHANNEL, 'ev');
+  const [owners] = channelProducerOwners(bare, path, CALENDAR_CHANNEL, 'ev');
   const line = Object.fromEntries(owners.map(({ tag, line: at }) => [tag, at]));
   const onOwner = (tag, message) => `owner <${tag}> @ line ${line[tag]}: ${message}`;
   const missingClass = (label, className = EVENT_CLASS) =>
     `selector class '.${className}' lands on '${label}', which carries no static className '${className}'`;
 
-  // S2-1 — the PART form (the live constant): all hops by part, the gate green.
+  // S2-1 — the PART form: all hops by part, the live fixture green on it (the literal part is kept).
   assert.deepEqual(
-    selectorSteps(CALENDAR_ACCENT_SELECTOR),
+    selectorSteps(PART_FORM),
     [
       { part: 'root', via: 'part', child: null },
       { part: 'grid', via: 'part', child: true },
@@ -4259,10 +4279,10 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
     ],
     'S2-1: the part form reads four part hops',
   );
-  assert.ok(selectorTailIsPart(CALENDAR_ACCENT_SELECTOR, CALENDAR_ACCENT_PART), 'S2-1: the part tail is the accent part');
-  assert.deepEqual(selectorAncestryDisagreements(CALENDAR_ACCENT_SELECTOR, CALENDAR_ACCENT_ANCESTRY), [], 'S2-1: ancestry agrees');
+  assert.ok(selectorTailIsPart(PART_FORM, CALENDAR_ACCENT_PART), 'S2-1: the part tail is the accent part');
+  assert.deepEqual(selectorAncestryDisagreements(PART_FORM, CALENDAR_ACCENT_ANCESTRY), [], 'S2-1: ancestry agrees');
   assert.deepEqual(
-    producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
+    producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
     [],
     'S2-1: the live DOM satisfies the part form for both owners',
   );
@@ -4304,23 +4324,23 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
 
   // S2-5 — the CO-STAMP, per owner.
   assert.deepEqual(
-    producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
+    producerSelectorPathViolations(bare, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
     [onOwner('EventChip', missingClass('event')), onOwner('ModernButton', missingClass('event'))],
     'S2-5a: no chip carries the class literal, so the class hop reds on BOTH owners',
   );
-  const bothStamped = withStaticClasses(text, [stamp(chip), stamp(button)]);
+  const bothStamped = withStaticClasses(bare, [stamp(chip), stamp(button)]);
   assert.deepEqual(
     producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
     [],
     'S2-5b: both chips co-stamped -> the class form is green for both owners',
   );
   assert.deepEqual(
-    producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
+    producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
     [],
     'S2-5b: and the part form stays green',
   );
   assert.deepEqual(
-    producerSelectorPathViolations(withStaticClasses(text, [stamp(button)]), path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
+    producerSelectorPathViolations(withStaticClasses(bare, [stamp(button)]), path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
     [onOwner('EventChip', missingClass('event'))],
     'S2-5c: only the interactive chip co-stamped -> only the read-only owner reds',
   );
@@ -4335,15 +4355,15 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   );
   assert.deepEqual(
     withCoreFiles(unforwarded, () =>
-      producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
+      producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
     ),
     [],
     'S2-5d: and the part form is untouched by the className proof',
   );
   const WRAPPER_SIGNATURE = 'function EventChip(\n  { children, onFocus, onBlur, ...rest },';
-  assert.equal(text.split(WRAPPER_SIGNATURE).length - 1, 1, 'the live EventChip signature drifted');
+  assert.equal(bare.split(WRAPPER_SIGNATURE).length - 1, 1, 'the live EventChip signature drifted');
   const swallowed = withStaticClasses(
-    text.replace(WRAPPER_SIGNATURE, () => 'function EventChip(\n  { children, onFocus, onBlur, className, ...rest },'),
+    bare.replace(WRAPPER_SIGNATURE, () => 'function EventChip(\n  { children, onFocus, onBlur, className, ...rest },'),
     [],
   );
   const swallowedAlias = liveChannelAlias(swallowed, path, CALENDAR_CHANNEL, 'ev');
@@ -4360,7 +4380,7 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   );
   assert.deepEqual(
     producerSelectorPathViolations(
-      withStaticClasses(text, [{ opening: chip, literal: `className="${EVENT_CLASS}" {...extraProps}` }, stamp(button)]),
+      withStaticClasses(bare, [{ opening: chip, literal: `className="${EVENT_CLASS}" {...extraProps}` }, stamp(button)]),
       path,
       CALENDAR_CHANNEL,
       'ev',
@@ -4368,6 +4388,19 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
     ),
     [onOwner('EventChip', missingClass('event'))],
     'S2-5f: a later spread that may replace className voids the literal',
+  );
+
+  // S2-5g — the LIVE fixture (S3: both emitters co-stamped as static literals) satisfies the class form on both
+  // owners, and the part form as well (the literal part is kept).
+  assert.deepEqual(
+    producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
+    [],
+    'S2-5g: the live chips satisfy the class form for both owners',
+  );
+  assert.deepEqual(
+    producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
+    [],
+    'S2-5g: and the part form',
   );
 
   // S2-6 — mixed forms on different hops: each hop satisfied by its own form.
@@ -4380,7 +4413,7 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   assert.deepEqual(selectorAncestryDisagreements(MIXED, CALENDAR_ACCENT_ANCESTRY), [], 'S2-6: ancestry agrees');
   assert.deepEqual(
     producerSelectorPathViolations(
-      withStaticClasses(text, [stamp(chip), stamp(button), stamp(grid, `${BLOCK}__grid`)]),
+      withStaticClasses(bare, [stamp(chip), stamp(button), stamp(grid, `${BLOCK}__grid`)]),
       path,
       CALENDAR_CHANNEL,
       'ev',

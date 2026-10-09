@@ -162,10 +162,11 @@
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
     },
     {
-      "key": "pattern-calendar-view/index.css :: .ds-pattern-calendar-view.ds-engine-modern :: [data-part='event']",
+      "key": "pattern-calendar-view/index.css :: .ds-pattern-calendar-view.ds-engine-modern :: .ds-pattern-calendar-view__event",
       "kind": "debt",
       "owner": "design-system/D1-floors",
-      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)",
+      "provenance": "re-keyed: ARC-12 S3 (H-EV) 1a token rewrite; same element (P3 class==part); was pattern-calendar-view/index.css :: .ds-pattern-calendar-view.ds-engine-modern :: [data-part='event']"
     },
     {
       "key": "pattern-kanban-board/index.css :: .ds-pattern-kanban-board.ds-engine-modern :: [data-part='card']",

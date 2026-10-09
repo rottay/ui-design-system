@@ -603,7 +603,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                              inert control (and add a tab stop per chip). */
                           if (!eventsInteractive) {
                             return (
-                              <EventChip key={ev.id} {...(accent === undefined ? {} : { style: accent })}>
+                              <EventChip key={ev.id} className="ds-pattern-calendar-view__event" {...(accent === undefined ? {} : { style: accent })}>
                                 {renderEvent ? renderEvent(ev) : ev.title}
                               </EventChip>
                             );
@@ -613,6 +613,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                               key={ev.id}
                               chrome="none"
                               data-part="event"
+                              className="ds-pattern-calendar-view__event"
                               /* APG grid: a widget inside a cell is reached
                                  through the cell (F2), never through its own
                                  tab stop. */

@@ -101788,7 +101788,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell']
-  [data-part='event'] {
+  .ds-pattern-calendar-view__event {
   margin-block-start: 0.125rem;
   padding-inline: var(--ds-spacing-1, 0.25rem);
   overflow: hidden;
@@ -101806,7 +101806,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell']
-  [data-part='event']:where([data-chrome='none']) {
+  .ds-pattern-calendar-view__event:where([data-chrome='none']) {
   --ds-button-hover-transform: none;
   --ds-button-hover-filter: none;
   --ds-button-active-transform: none;
@@ -101828,7 +101828,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell']
-  [data-part='event']:where([data-chrome='none'])
+  .ds-pattern-calendar-view__event:where([data-chrome='none'])
   > [data-part='content'] {
   display: block;
   position: static;
@@ -101843,7 +101843,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event'] {
+    .ds-pattern-calendar-view__event {
     color: contrast-color(var(--ds-calendar-view-entry-accent, var(--ds-color-primary)));
   }
 }
@@ -101851,21 +101851,21 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event']:is([data-state~='hovered'], :hover) {
+    .ds-pattern-calendar-view__event:is([data-state~='hovered'], :hover) {
     filter: brightness(1.06);
   }
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell']
-  [data-part='event']:is([data-state~='pressed'], :active) {
+  .ds-pattern-calendar-view__event:is([data-state~='pressed'], :active) {
   filter: brightness(0.94);
 }
 /* Positioned so the signature paints above the neighbouring chips. */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell']
-  [data-part='event']:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-pattern-calendar-view__event:is([data-state~='focus-visible'], :focus-visible) {
   position: relative;
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
@@ -101898,7 +101898,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event'] {
+    .ds-pattern-calendar-view__event {
     display: inline-flex;
     inline-size: var(--_ds-calendar-view-dot-size, 0.375rem);
     block-size: var(--_ds-calendar-view-dot-size, 0.375rem);
@@ -101927,7 +101927,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event'] {
+    .ds-pattern-calendar-view__event {
     transition: none;
   }
 }
@@ -101987,7 +101987,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event'] {
+    .ds-pattern-calendar-view__event {
     display: block;
     inline-size: auto;
     block-size: auto;
@@ -102001,13 +102001,13 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event']:where([data-chrome='none']) {
+    .ds-pattern-calendar-view__event:where([data-chrome='none']) {
     inline-size: 100%;
   }
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event']:is([data-state~='focus-visible'], :focus-visible) {
+    .ds-pattern-calendar-view__event:is([data-state~='focus-visible'], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
