@@ -173,7 +173,9 @@ describe('Forms-family data-part contract (skin ownership migration checkpoint r
       const root = await waitForPart(container, 'root');
       expect(root.getAttribute('data-loading')).toBe('true');
       if (engine === 'modern') {
-        expect(container.querySelector('[data-part="spinner"]')).not.toBeNull();
+        // P-88: the composed Spinner keeps its own `root` part; it is found by its own class.
+        expect(root.querySelector('.rottay-spinner.rottay-spinner--modern')).not.toBeNull();
+        expect(container.querySelector('[data-part="spinner"]')).toBeNull();
       } else {
         // Rustic's loading state is text-only ("Loading...") -- no spinner
         // element exists to stamp, preserved byte-exact.
@@ -558,7 +560,9 @@ describe('Forms-family data-part contract (skin ownership migration checkpoint r
       expect(root.getAttribute('data-loading')).toBe('true');
 
       if (engine === 'modern') {
-        expect(container.querySelector('[data-part="spinner"]')).not.toBeNull();
+        // P-88: the composed Spinner keeps its own `root` part; it is found by its own class.
+        expect(root.querySelector('.rottay-spinner.rottay-spinner--modern')).not.toBeNull();
+        expect(container.querySelector('[data-part="spinner"]')).toBeNull();
       } else {
         expect(container.querySelector('[data-part="loading-text"]')).not.toBeNull();
       }

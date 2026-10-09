@@ -374,7 +374,9 @@ describe("saved-views -- data-part contract (workspace-chrome anatomy)", () => {
       expect(root.className).toContain("ds-pattern-saved-views");
       expect(root.className).toContain(`ds-engine-${engine}`);
       if (engine === "modern") {
-        expect(q(container, '[data-part="spinner"]')).toHaveLength(1);
+        // P-88: the composed Spinner keeps its own `root` part; it is found by its own class.
+        expect(q(root as HTMLElement, ".rottay-spinner.rottay-spinner--modern")).toHaveLength(1);
+        expect(q(container, '[data-part="spinner"]')).toHaveLength(0);
       } else {
         expect(root.getAttribute("data-loading")).toBe("true");
       }

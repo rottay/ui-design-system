@@ -118,7 +118,7 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
           <div data-part="loading" style={{ height }}>
             {/* Spinner primitive owns ring, cadence (ds-foundation-spin) and
                 the status role -- the hand-rolled CSS spinner is retired. */}
-            <ModernSpinner size="md" data-part="spinner" />
+            <ModernSpinner size="md" />
           </div>
         ) : (
           <>

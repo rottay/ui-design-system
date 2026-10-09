@@ -465,7 +465,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
       >
         {/* Expand/collapse affordance or the governed loading Spinner */}
         {isLoading ? (
-          <LoadingIndicator data-part="loading" size="sm" />
+          <LoadingIndicator anatomy={{ 'data-part': 'loading' }} size="sm" />
         ) : showExpander ? (
           <button
             type="button"

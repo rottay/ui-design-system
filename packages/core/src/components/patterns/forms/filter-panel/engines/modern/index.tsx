@@ -431,7 +431,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
         data-loading="true"
         style={style}
       >
-        <ModernSpinner size="sm" data-part="loading-spinner" />
+        <ModernSpinner size="sm" />
       </div>
     );
   }

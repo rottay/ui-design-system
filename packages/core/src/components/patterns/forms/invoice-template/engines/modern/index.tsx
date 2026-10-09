@@ -134,7 +134,7 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
         className={`ds-pattern-invoice-template ds-engine-modern ${className ?? ''}`}
         style={style}
       >
-        <ModernSpinner data-part="spinner" size="md" />
+        <ModernSpinner size="md" />
       </div>
     );
   }

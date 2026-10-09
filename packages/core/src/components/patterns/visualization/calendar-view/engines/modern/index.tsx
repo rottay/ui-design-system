@@ -498,7 +498,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
           event sets. The composed Spinner owns ring and cadence. */}
       {loading ? (
         <div data-part="loading">
-          <ModernSpinner size="md" data-part="spinner" className="ds-pattern-calendar-view__spinner" />
+          <ModernSpinner size="md" className="ds-pattern-calendar-view__spinner" />
         </div>
       ) : (
         /* Grid geometry and frame are skin-owned through the public anatomy.

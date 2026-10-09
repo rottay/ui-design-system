@@ -655,7 +655,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         {/* No data-part override: the Spinner primitive keeps its own anatomy
             so spinner.css stays its single paint owner; the centering frame
             is skin-owned (the retired Tailwind utilities are drained). */}
-        <ModernSpinner data-part="spinner" size="md" />
+        <ModernSpinner size="md" />
       </div>
     );
   }

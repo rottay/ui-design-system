@@ -64,8 +64,10 @@ describe('PatternTimeline modern — skin ownership', () => {
   it('owns the loading spinner geometry in the skin (no inline size or animation)', () => {
     const { container } = render(<ModernTimeline items={items} loading />);
 
-    const spinner = container.querySelector("[data-part='spinner']") as HTMLElement;
+    // P-88: the composed Spinner keeps its own `root` part; it is found by the family class.
+    const spinner = container.querySelector('.ds-timeline-modern__spinner') as HTMLElement;
     expect(spinner).not.toBeNull();
+    expect(container.querySelector("[data-part='spinner']")).toBeNull();
     expect(spinner.getAttribute('style')).toBeNull();
     expect(container.querySelector("[data-part='root']")?.getAttribute('data-loading')).toBe('true');
   });

@@ -183,7 +183,9 @@ describe('file-manager -- data-part contract (cross-capability anatomy)', () => 
     const loading = renderWithEngine(<PatternFileManager files={[]} folders={[]} viewMode="grid" loading />, engine);
     const loadingRoot = await waitForSelector(loading.container, '[data-part="root"][data-loading="true"][data-view-mode="grid"]');
     expectEngineScope(loadingRoot, 'file-manager', engine);
-    expect(q(loading.container, engine === 'modern' ? '[data-part="spinner"]' : '[data-part="loading-label"]')).toHaveLength(1);
+    // P-88: the composed Spinner keeps its own `root` part; modern finds it by the family class.
+    expect(q(loading.container, engine === 'modern' ? '.ds-file-manager__spinner' : '[data-part="loading-label"]')).toHaveLength(1);
+    expect(q(loading.container, '[data-part="spinner"]')).toHaveLength(0);
   });
 });
 

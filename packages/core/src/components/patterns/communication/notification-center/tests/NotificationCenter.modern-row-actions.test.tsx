@@ -223,7 +223,9 @@ describe('NotificationCenter modern engine busy posture', () => {
     // The bell is a fixed anchor in an app header; unmounting it shifts the row.
     expect(screen.getByTestId('notification-trigger')).toBeTruthy();
     expect(container.querySelector('[data-part="root"]')?.getAttribute('aria-busy')).toBe('true');
-    expect(container.querySelector('[data-part="loading-spinner"]')).toBeTruthy();
+    // P-88: the composed Spinner keeps its own `root` part; it is found by its own class.
+    expect(container.querySelector('[data-part="root"] .rottay-spinner.rottay-spinner--modern')).toBeTruthy();
+    expect(container.querySelector('[data-part="loading-spinner"]')).toBeNull();
   });
 
   it('clears busy on the loaded root rather than dropping the attribute', async () => {

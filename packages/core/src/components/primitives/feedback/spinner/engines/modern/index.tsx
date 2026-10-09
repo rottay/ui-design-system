@@ -70,7 +70,6 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
     size = SPINNER_DEFAULTS.size,
     color,
     label,
-    'data-part': dataPart,
     className = '',
     style,
     children,
@@ -78,7 +77,6 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
 
   return (
     <LoadingIndicator
-      data-part={dataPart ?? 'root'}
       size={size}
       color={color}
       label={label}

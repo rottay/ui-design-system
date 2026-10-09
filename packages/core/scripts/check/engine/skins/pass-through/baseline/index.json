@@ -15,7 +15,7 @@
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 101,
+  "passThroughViolations": 99,
   "callerPartDependents": 833,
   "callerStateDependents": 16
  },
@@ -428,22 +428,6 @@
    "key": "primitives/feedback/skeleton/engines/modern/index.tsx#default#div#root#1",
    "engine": "modern",
    "family": "skeleton",
-   "breach": [
-    "part-replace"
-   ]
-  },
-  {
-   "key": "primitives/feedback/spinner/engines/modern/index.tsx#default#LoadingIndicator#root#0",
-   "engine": "modern",
-   "family": "spinner",
-   "breach": [
-    "part-replace"
-   ]
-  },
-  {
-   "key": "primitives/foundation/loading-indicator/index.tsx#LoadingIndicator#div#root#0",
-   "engine": "all (compound)",
-   "family": "loading-indicator",
    "breach": [
     "part-replace"
    ]
@@ -1801,11 +1785,6 @@
    "part": [],
    "state": []
   },
-  "loading-indicator": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
   "menu": {
    "carrier": false,
    "part": [],
@@ -1843,11 +1822,6 @@
   },
   "space": {
    "carrier": true,
-   "part": [],
-   "state": []
-  },
-  "spinner": {
-   "carrier": false,
    "part": [],
    "state": []
   },
@@ -1982,7 +1956,7 @@
   ]
  },
  "lastMove": {
-  "head": "a0c6d6c3156dcaa6a50704d6b016c604e8680c2f",
+  "head": "4d8559be97f28a613db47392edffdb51ede3aaf1",
   "date": "2026-10-09",
   "note": "lowered to the gate's own measurement through --update-baseline"
  }

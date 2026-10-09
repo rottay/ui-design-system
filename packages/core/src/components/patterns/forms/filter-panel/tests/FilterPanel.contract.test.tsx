@@ -189,7 +189,9 @@ describe('FilterPanel data-part contract', () => {
 
     if (engine === 'modern') {
       expect(root?.getAttribute('data-loading'), 'modern loading root should carry data-loading="true"').toBe('true');
-      expect(container.querySelector('[data-part="loading-spinner"]')).not.toBeNull();
+      // P-88: the composed Spinner keeps its own `root` part; it is found by its own class.
+      expect(root?.querySelector('.rottay-spinner.rottay-spinner--modern')).not.toBeNull();
+      expect(container.querySelector('[data-part="loading-spinner"]')).toBeNull();
     } else {
       expect(container.querySelector('[data-part="loading-text"]')).not.toBeNull();
     }

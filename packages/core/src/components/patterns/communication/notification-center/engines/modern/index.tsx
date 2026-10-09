@@ -309,7 +309,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
       >
         {unreadStatus}
         {triggerButton}
-        <ModernSpinner size="md" data-part="loading-spinner" />
+        <ModernSpinner size="md" />
       </div>
     );
   }

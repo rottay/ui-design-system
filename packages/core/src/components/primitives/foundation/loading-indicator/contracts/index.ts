@@ -7,10 +7,16 @@ import type React from 'react';
 export type LoadingIndicatorSize = 'sm' | 'md' | 'lg' | 'xl';
 
 /**
+ * Anatomy a composing DS primitive hands down for the indicator root, in the
+ * `anatomy` form ResizeHandle uses. Only `data-part` is read.
+ */
+export type LoadingIndicatorAnatomy = Readonly<{ 'data-part'?: string }>;
+
+/**
  * Contract for the engine-neutral LoadingIndicator substrate.
  *
  * @description LoadingIndicator is the ONE busy glyph every primitive family
- * composes (Spinner, Switch, Tree, TreeSelect, AutoComplete, Timeline) so no
+ * composes (Spinner, Tree, TreeSelect, AutoComplete, Timeline) so no
  * family rebuilds a local spinner with private geometry or cadence. Geometry,
  * paint and motion stay owned by the canonical Modern spinner skin; callers
  * stamp semantics only.
@@ -34,6 +40,16 @@ export interface LoadingIndicatorProps {
   children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
-  /** Part name stamped on the root, so a host family can address the slot. */
+  /**
+   * Composition-only: the part a composing DS primitive names its busy slot
+   * with (Tree hands down `loading`, Timeline `spinner`). Without it the root
+   * stamps `root`. Not a consumer hook; consumers compose through `className`.
+   */
+  anatomy?: LoadingIndicatorAnatomy;
+  /**
+   * Accepted but never rendered: the substrate stamps its own `data-part`
+   * (`root`, or the part a composing primitive hands down in `anatomy`);
+   * compose through `className`.
+   */
   'data-part'?: string;
 }

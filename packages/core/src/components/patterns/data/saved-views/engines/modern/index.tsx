@@ -361,7 +361,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         data-loading="true"
         style={style}
       >
-        <ModernSpinner size="sm" data-part="spinner" />
+        <ModernSpinner size="sm" />
       </div>
     );
   }

@@ -300,7 +300,7 @@ export default function ModernFileManager(props: FileManagerProps) {
         data-view-mode={viewMode}
         style={style}
       >
-        <ModernSpinner size="md" data-part="spinner" className="ds-file-manager__spinner" />
+        <ModernSpinner size="md" className="ds-file-manager__spinner" />
       </div>
     );
   }

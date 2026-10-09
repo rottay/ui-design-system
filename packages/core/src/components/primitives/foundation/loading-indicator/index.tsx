@@ -17,7 +17,7 @@ export function LoadingIndicator({
   children,
   className = '',
   style,
-  'data-part': dataPart,
+  anatomy,
 }: LoadingIndicatorProps): React.ReactElement {
   const channelStyle: React.CSSProperties | undefined = color
     ? ({ '--ds-spinner-color': color, ...style } as React.CSSProperties)
@@ -25,7 +25,7 @@ export function LoadingIndicator({
 
   return (
     <div
-      data-part={dataPart ?? 'root'}
+      data-part={anatomy?.['data-part'] ?? 'root'}
       data-size={size}
       className={['rottay-spinner', 'rottay-spinner--modern', className].filter(Boolean).join(' ')}
       style={channelStyle}

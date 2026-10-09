@@ -194,7 +194,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
         <li data-part="item" data-side={pendingSide} data-pending="true" aria-busy="true">
           <hr aria-hidden="true" data-part="connector" data-edge="leading" />
           <div data-part="content" data-side={pendingSide}>
-            <LoadingIndicator size="sm" data-part="spinner" />
+            <LoadingIndicator size="sm" anatomy={{ 'data-part': 'spinner' }} />
             {pending}
           </div>
           <div data-part="dot" data-pending="true">

@@ -68,9 +68,16 @@ describe('LoadingIndicator', () => {
     expect(root.style.getPropertyValue('--ds-spinner-color')).toBe('var(--ds-color-primary)');
   });
 
-  it('lets a host family address the slot through data-part', () => {
-    const { container } = render(<LoadingIndicator data-part="loading" />);
+  it('lets a host family address the slot through its composition-only anatomy', () => {
+    const { container } = render(<LoadingIndicator anatomy={{ 'data-part': 'loading' }} />);
 
     expect(container.querySelector('[data-part="loading"]')).not.toBeNull();
+  });
+
+  it('never renders a caller data-part (P-88): the root keeps its own part', () => {
+    const { container } = render(<LoadingIndicator data-part="caller-part" />);
+
+    expect(container.querySelector('.rottay-spinner')).toHaveAttribute('data-part', 'root');
+    expect(container.querySelector('[data-part="caller-part"]')).toBeNull();
   });
 });

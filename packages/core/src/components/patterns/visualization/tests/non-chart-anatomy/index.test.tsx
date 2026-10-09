@@ -53,7 +53,9 @@ describe('non-chart inert anatomy', () => {
     const loading = render(<Component events={[]} loading />);
     expect(expectScope(loading.container, 'calendar-view', engine)).toHaveAttribute('data-loading', 'true');
     expect(q(loading.container, '[data-part="loading"]')).toHaveLength(1);
-    expect(q(loading.container, '[data-part="spinner"]')).toHaveLength(engine === 'modern' ? 1 : 0);
+    // P-88: the composed Spinner keeps its own `root` part; it is found by the family class.
+    expect(q(loading.container, '.ds-pattern-calendar-view__spinner')).toHaveLength(engine === 'modern' ? 1 : 0);
+    expect(q(loading.container, '[data-part="spinner"]')).toHaveLength(0);
   });
 
   it.each(ENGINES)('pins MapView normal, empty and loading anatomy (%s)', (engine) => {
@@ -90,7 +92,9 @@ describe('non-chart inert anatomy', () => {
     const loading = render(<Component markers={[]} loading />);
     expect(expectScope(loading.container, 'map-view', engine)).toHaveAttribute('data-loading', 'true');
     expect(q(loading.container, '[data-part="loading"]')).toHaveLength(1);
-    expect(q(loading.container, '[data-part="spinner"]')).toHaveLength(engine === 'modern' ? 1 : 0);
+    // P-88: the composed Spinner keeps its own `root` part; it is found by its own class.
+    expect(q(loading.container, '.rottay-spinner.rottay-spinner--modern')).toHaveLength(engine === 'modern' ? 1 : 0);
+    expect(q(loading.container, '[data-part="spinner"]')).toHaveLength(0);
   });
 
   it.each(ENGINES)('pins KanbanBoard finite drag/drop and loading anatomy (%s)', (engine) => {
@@ -190,7 +194,9 @@ describe('non-chart inert anatomy', () => {
 
     const loading = render(<Component items={[]} loading />);
     expect(expectScope(loading.container, 'timeline', engine)).toHaveAttribute('data-loading', 'true');
-    expect(q(loading.container, '[data-part="spinner"]')).toHaveLength(engine === 'modern' ? 1 : 0);
+    // P-88: the composed Spinner keeps its own `root` part; it is found by the family class.
+    expect(q(loading.container, '.ds-timeline-modern__spinner')).toHaveLength(engine === 'modern' ? 1 : 0);
+    expect(q(loading.container, '[data-part="spinner"]')).toHaveLength(0);
   });
 
   it.each(ENGINES)('pins TreeView selection/control and loading anatomy (%s)', (engine) => {

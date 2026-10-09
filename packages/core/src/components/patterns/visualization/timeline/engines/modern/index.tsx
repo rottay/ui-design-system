@@ -236,7 +236,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
     return (
       <div data-part="root" data-loading="true" data-empty="false" data-mode={mode} aria-busy="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
         {header}
-        <ModernSpinner size="md" data-part="spinner" className="ds-timeline-modern__spinner" />
+        <ModernSpinner size="md" className="ds-timeline-modern__spinner" />
         {footer}
       </div>
     );
