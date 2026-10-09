@@ -71,13 +71,13 @@ describe('ListToolbar modern — the control rests the skin declares', () => {
     );
 
   it('the filter dropdown item rests at 2.5rem', () => {
-    expect(declarations(/\.ds-list-toolbar__filter-dropdown-item\[data-part='filter-dropdown-item'\]\.ds-button\[data-variant\]\s*/, 'min-block-size')).toEqual([
+    expect(declarations(/\.ds-list-toolbar__filter-dropdown-item\.ds-list-toolbar__filter-dropdown-item\.ds-button\[data-variant\]\s*/, 'min-block-size')).toEqual([
       '2.5rem',
     ]);
   });
 
   it('the phone primary action rests at 32px on both inline axes', () => {
-    const selector = /\.ds-list-toolbar__primary-action-mobile\[data-part='primary-action-mobile'\]\[data-part='primary-action-mobile'\]\s*/;
+    const selector = /\.ds-list-toolbar__primary-action-mobile\.ds-list-toolbar__primary-action-mobile\.ds-list-toolbar__primary-action-mobile\s*/;
     expect(declarations(selector, 'inline-size')).toEqual(['32px']);
     expect(declarations(selector, 'min-inline-size')).toEqual(['32px']);
   });

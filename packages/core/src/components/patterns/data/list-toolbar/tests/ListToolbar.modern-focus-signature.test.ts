@@ -54,18 +54,18 @@ const KEYBOARD = ":is([data-state~='focus-visible'], :focus-visible)";
 const KEYBOARD_RULES = RULES.filter((rule) => rule.selector.includes('focus-visible'));
 
 const CONTROLS = [
-  ".ds-list-toolbar__icon-button[data-part='icon-button']",
-  ".ds-list-toolbar__filter-trigger[data-part='filter-trigger']",
-  ".ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item']",
-  ".ds-list-toolbar__density-option[data-part='density-option']",
-  ".ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item']",
-  ".ds-list-toolbar__clear-all[data-part='clear-all']",
-  ".ds-list-toolbar__primary-action[data-part='primary-action']",
+  ".ds-list-toolbar__icon-button.ds-list-toolbar__icon-button",
+  ".ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger",
+  ".ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item",
+  ".ds-list-toolbar__density-option.ds-list-toolbar__density-option",
+  ".ds-list-toolbar__mobile-overflow-item.ds-list-toolbar__mobile-overflow-item",
+  ".ds-list-toolbar__clear-all.ds-list-toolbar__clear-all",
+  ".ds-list-toolbar__primary-action.ds-list-toolbar__primary-action",
   '.ds-list-toolbar__primary-action-mobile',
 ];
 
 const CONTROL_FOCUS = `.ds-pattern-list-toolbar.ds-engine-modern :is(${CONTROLS.join(', ')}).ds-button[data-variant]${KEYBOARD}`;
-const TRIGGER_FOCUS = `.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]${KEYBOARD}`;
+const TRIGGER_FOCUS = `.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant]${KEYBOARD}`;
 
 function declarations(rule: SkinRule, property: string): string[] {
   return Array.from(rule.body.matchAll(new RegExp(`(?:^|[;\\s])${property}:\\s*([^;]+);`, 'g')), (match) => match[1]!.trim());

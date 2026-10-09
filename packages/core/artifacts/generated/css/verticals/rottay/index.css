@@ -81228,7 +81228,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Shared controls --------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button.ds-button {
+  .ds-list-toolbar__icon-button.ds-list-toolbar__icon-button.ds-button.ds-button {
   flex: 0 0 auto;
   min-inline-size: var(--ds-button-sm-height, 2rem);
   min-block-size: var(--ds-button-sm-height, 2rem);
@@ -81259,7 +81259,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button.ds-button:is([data-state~='hovered'], :hover) {
+    .ds-list-toolbar__icon-button.ds-list-toolbar__icon-button.ds-button.ds-button:is([data-state~='hovered'], :hover) {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -81279,7 +81279,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    aria-expanded onto the IconButton, and the trigger reads as 'pressed' for
    as long as its panel lives. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button[data-variant][aria-expanded='true'] {
+  .ds-list-toolbar__icon-button.ds-list-toolbar__icon-button.ds-button[data-variant][aria-expanded='true'] {
   background: var(
     --ds-filter-pill-hover-bg,
     var(
@@ -81296,13 +81296,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   :is(
-    .ds-list-toolbar__icon-button[data-part='icon-button'],
-    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
-    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
-    .ds-list-toolbar__density-option[data-part='density-option'],
-    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
-    .ds-list-toolbar__clear-all[data-part='clear-all'],
-    .ds-list-toolbar__primary-action[data-part='primary-action'],
+    .ds-list-toolbar__icon-button.ds-list-toolbar__icon-button,
+    .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger,
+    .ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item,
+    .ds-list-toolbar__density-option.ds-list-toolbar__density-option,
+    .ds-list-toolbar__mobile-overflow-item.ds-list-toolbar__mobile-overflow-item,
+    .ds-list-toolbar__clear-all.ds-list-toolbar__clear-all,
+    .ds-list-toolbar__primary-action.ds-list-toolbar__primary-action,
     .ds-list-toolbar__primary-action-mobile
   ).ds-button[data-variant]:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
@@ -81315,13 +81315,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   :is(
-    .ds-list-toolbar__icon-button[data-part='icon-button'],
-    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
-    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
-    .ds-list-toolbar__density-option[data-part='density-option'],
-    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
-    .ds-list-toolbar__clear-all[data-part='clear-all'],
-    .ds-list-toolbar__primary-action[data-part='primary-action'],
+    .ds-list-toolbar__icon-button.ds-list-toolbar__icon-button,
+    .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger,
+    .ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item,
+    .ds-list-toolbar__density-option.ds-list-toolbar__density-option,
+    .ds-list-toolbar__mobile-overflow-item.ds-list-toolbar__mobile-overflow-item,
+    .ds-list-toolbar__clear-all.ds-list-toolbar__clear-all,
+    .ds-list-toolbar__primary-action.ds-list-toolbar__primary-action,
     .ds-list-toolbar__primary-action-mobile
   ).ds-button[data-variant]:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   transform: scale(var(--ds-toolbar-control-pressed-scale, 0.975));
@@ -81415,7 +81415,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   );
 }
 
-.ds-list-toolbar__settings-empty[data-part='settings-empty'].ds-list-toolbar__settings-empty {
+.ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty {
   padding: var(--ds-spacing-4, 1rem) var(--ds-spacing-3, 0.75rem);
   font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
   font-size: var(--ds-type-supporting-font-size, 0.8125rem);
@@ -81425,7 +81425,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant] {
+  .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant] {
   flex: 0 0 auto;
   white-space: nowrap;
   border-radius: var(
@@ -81461,7 +81461,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-active='true'] {
+  .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -81479,19 +81479,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    dash; an invalid value needs repair, so its frame tightens to a dotted rule
    and the ink shifts to the semantic error role. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='draft'] {
+  .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='draft'] {
   border-style: dashed;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='invalid'] {
+  .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='invalid'] {
   border-style: dotted;
   border-color: var(--ds-color-error);
   color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-open='true'] {
+  .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant][data-open='true'] {
   border-color: var(
     --ds-filter-pill-active-border,
     var(--ds-material-control-border-hover, var(--ds-color-primary))
@@ -81504,7 +81504,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:is([data-state~='hovered'], :hover):not(
+    .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant]:is([data-state~='hovered'], :hover):not(
     [data-active='true']
   ) {
     border-color: var(
@@ -81523,12 +81523,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant]:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(--ds-filter-pill-focus-ring, var(--ds-focus-ring));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-badge[data-part='filter-badge'] {
+  .ds-list-toolbar__filter-badge.ds-list-toolbar__filter-badge {
   border-radius: var(
     --ds-toolbar-count-radius,
     var(--ds-radius-full, 9999px)
@@ -81549,7 +81549,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant] {
+  .ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item.ds-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -81565,7 +81565,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant][data-selected='true'] {
+  .ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item.ds-button[data-variant][data-selected='true'] {
   background: var(
     --ds-filter-pill-active-bg,
     color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
@@ -81582,7 +81582,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant]:is([data-state~='hovered'], :hover):not(
+    .ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item.ds-button[data-variant]:is([data-state~='hovered'], :hover):not(
     [data-selected='true']
   ) {
     background: var(
@@ -81596,12 +81596,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__settings-empty[data-part='settings-empty'].ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty {
+  .ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant] {
+  .ds-list-toolbar__density-option.ds-list-toolbar__density-option.ds-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border-radius: var(
@@ -81615,7 +81615,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant][data-active='true'] {
+  .ds-list-toolbar__density-option.ds-list-toolbar__density-option.ds-button[data-variant][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -81626,7 +81626,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant]:is([data-state~='hovered'], :hover):not(
+    .ds-list-toolbar__density-option.ds-list-toolbar__density-option.ds-button[data-variant]:is([data-state~='hovered'], :hover):not(
     [data-active='true']
   ) {
     border-color: var(
@@ -81656,7 +81656,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-overflow-label[data-part='mobile-overflow-label'].ds-list-toolbar__mobile-overflow-label.ds-list-toolbar__mobile-overflow-label {
+  .ds-list-toolbar__mobile-overflow-label.ds-list-toolbar__mobile-overflow-label.ds-list-toolbar__mobile-overflow-label.ds-list-toolbar__mobile-overflow-label {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
   display: block;
   margin-block-end: var(--ds-spacing-2, 0.5rem);
@@ -81669,7 +81669,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'].ds-button[data-variant] {
+  .ds-list-toolbar__mobile-overflow-item.ds-list-toolbar__mobile-overflow-item.ds-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -81680,7 +81680,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'].ds-button[data-variant]:is([data-state~='hovered'], :hover) {
+    .ds-list-toolbar__mobile-overflow-item.ds-list-toolbar__mobile-overflow-item.ds-button[data-variant]:is([data-state~='hovered'], :hover) {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -81757,7 +81757,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__title[data-part='title'].ds-list-toolbar__title.ds-list-toolbar__title {
+  .ds-list-toolbar__title.ds-list-toolbar__title.ds-list-toolbar__title.ds-list-toolbar__title {
   color: var(--ds-toolbar-color, var(--ds-color-text-primary));
   /* Typography law: family and tracking fall back to the tenant's governed
      section-title role, so an editorial profile (serif heading, wider
@@ -81830,7 +81830,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__primary-action[data-part='primary-action'].ds-button[data-variant],
+  .ds-list-toolbar__primary-action.ds-list-toolbar__primary-action.ds-button[data-variant],
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__primary-action-mobile.ds-button[data-variant] {
   flex: 0 0 auto;
@@ -81876,7 +81876,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-rail
-  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'] {
+  .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger {
   scroll-snap-align: start;
 }
 
@@ -81909,7 +81909,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    redundant route-level primary action to its labelled icon. */
 @container ds-list-toolbar (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__primary-action-mobile[data-part='primary-action-mobile'][data-part='primary-action-mobile'] {
+    .ds-list-toolbar__primary-action-mobile.ds-list-toolbar__primary-action-mobile.ds-list-toolbar__primary-action-mobile {
     /* No absolute control rung is ever produced (the shape plane is a factor). */
     inline-size: 32px;
     min-inline-size: 32px;
@@ -81998,9 +81998,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chips-count[data-part='filter-chips-count'].ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count,
+  .ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count,
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip-label[data-part='filter-chip-label'].ds-list-toolbar__filter-chip-label.ds-list-toolbar__filter-chip-label {
+  .ds-list-toolbar__filter-chip-label.ds-list-toolbar__filter-chip-label.ds-list-toolbar__filter-chip-label.ds-list-toolbar__filter-chip-label {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
   font-family: var(--ds-type-caption-font-family, var(--ds-font-family-base));
   font-size: var(--ds-type-caption-font-size, 0.6875rem);
@@ -82008,7 +82008,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chips-count[data-part='filter-chips-count'].ds-list-toolbar__filter-chips-count {
+  .ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count {
   font-weight: var(--ds-type-label-font-weight, 600);
   white-space: nowrap;
   /* C1: the "N active" summary speaks the same eyebrow voice as the
@@ -82022,7 +82022,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'] {
+  .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip {
   border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-filter-chip-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
   border-radius: var(
@@ -82041,7 +82041,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip']:hover {
+    .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip:hover {
     transform: translateY(-1px);
     border-color: var(
       --ds-filter-pill-hover-border,
@@ -82054,7 +82054,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
   color: var(--ds-toolbar-color, var(--ds-color-text-primary));
   font-family: var(--ds-type-label-font-family, var(--ds-font-family-base));
   font-size: var(--ds-type-label-font-size, 0.75rem);
@@ -82075,31 +82075,31 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    - invalid: error-role frame and ink plus a wavy underline on the value —
      the universal "needs repair" mark that reads without color. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft'] {
+  .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip[data-filter-state='draft'] {
   border-style: dashed;
   background: transparent;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid'] {
+  .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip[data-filter-state='invalid'] {
   border-color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft']
+  .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip[data-filter-state='draft']
   [data-part='icon'] {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
+  .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip[data-filter-state='invalid']
   [data-part='icon'] {
   color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft']
-  .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value {
+  .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip[data-filter-state='draft']
+  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
   /* C1: draft must read at two meters — hollow dashed frame + REGULAR weight
      + quieted ink, so the provisional chip is visibly ghosted next to the
      solid applied chip even before the status glyph registers. */
@@ -82108,15 +82108,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
-  .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value {
+  .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip[data-filter-state='invalid']
+  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
   color: var(--ds-color-error);
   text-decoration: underline wavy var(--ds-color-error);
   text-underline-offset: 0.18em;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant] {
+  .ds-list-toolbar__clear-all.ds-list-toolbar__clear-all.ds-button[data-variant] {
   border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
   border-radius: var(
@@ -82141,7 +82141,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant]:is([data-state~='hovered'], :hover) {
+    .ds-list-toolbar__clear-all.ds-list-toolbar__clear-all.ds-button[data-variant]:is([data-state~='hovered'], :hover) {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -82158,7 +82158,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__count-badge[data-part='count-badge'] {
+  .ds-list-toolbar__count-badge.ds-list-toolbar__count-badge {
   border-radius: var(
     --ds-toolbar-count-radius,
     var(--ds-radius-full, 9999px)
@@ -82288,7 +82288,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__title[data-part='title'].ds-list-toolbar__title {
+    .ds-list-toolbar__title.ds-list-toolbar__title.ds-list-toolbar__title {
     max-inline-size: none;
   }
 
@@ -82320,13 +82320,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 @media (pointer: coarse) {
   .ds-pattern-list-toolbar.ds-engine-modern
     :is(
-      .ds-list-toolbar__icon-button[data-part='icon-button'],
-      .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
-      .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
-      .ds-list-toolbar__density-option[data-part='density-option'],
-      .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
-      .ds-list-toolbar__clear-all[data-part='clear-all'],
-      .ds-list-toolbar__primary-action[data-part='primary-action'],
+      .ds-list-toolbar__icon-button.ds-list-toolbar__icon-button,
+      .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger,
+      .ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item,
+      .ds-list-toolbar__density-option.ds-list-toolbar__density-option,
+      .ds-list-toolbar__mobile-overflow-item.ds-list-toolbar__mobile-overflow-item,
+      .ds-list-toolbar__clear-all.ds-list-toolbar__clear-all,
+      .ds-list-toolbar__primary-action.ds-list-toolbar__primary-action,
       .ds-list-toolbar__primary-action-mobile
     ).ds-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
@@ -82394,19 +82394,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__title-icon[data-part='title-icon'][data-part='title-icon'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'],
+    .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip,
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__segmented-control
     > [data-part='option'],
   .ds-pattern-list-toolbar.ds-engine-modern
     :is(
-      .ds-list-toolbar__icon-button[data-part='icon-button'],
-      .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
-      .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
-      .ds-list-toolbar__density-option[data-part='density-option'],
-      .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
-      .ds-list-toolbar__clear-all[data-part='clear-all'],
-      .ds-list-toolbar__primary-action[data-part='primary-action'],
+      .ds-list-toolbar__icon-button.ds-list-toolbar__icon-button,
+      .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger,
+      .ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item,
+      .ds-list-toolbar__density-option.ds-list-toolbar__density-option,
+      .ds-list-toolbar__mobile-overflow-item.ds-list-toolbar__mobile-overflow-item,
+      .ds-list-toolbar__clear-all.ds-list-toolbar__clear-all,
+      .ds-list-toolbar__primary-action.ds-list-toolbar__primary-action,
       .ds-list-toolbar__primary-action-mobile
     ).ds-button[data-variant] {
     animation: none;
@@ -82427,24 +82427,24 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      the dropdown selection rely on primary-tinted fills, so remap them to the
      system highlight pair and let every control keep a visible border. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant],
+    .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'],
+    .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip,
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button[data-variant],
+    .ds-list-toolbar__icon-button.ds-list-toolbar__icon-button.ds-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant] {
+    .ds-list-toolbar__clear-all.ds-list-toolbar__clear-all.ds-button[data-variant] {
     forced-color-adjust: auto;
     border-color: ButtonText;
     box-shadow: none;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-active='true'],
+    .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant][data-active='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant][data-selected='true'],
+    .ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item.ds-button[data-variant][data-selected='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant][data-active='true'] {
+    .ds-list-toolbar__density-option.ds-list-toolbar__density-option.ds-button[data-variant][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
@@ -82460,44 +82460,44 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      rule (wide enough to render both lines) plus the wavy value underline,
      which forced colors preserves by remapping it to CanvasText. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='draft'],
+    .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='draft'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='draft'] {
+    .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip[data-filter-state='draft'] {
     border-style: dashed;
     background: Canvas;
     color: CanvasText;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='invalid'],
+    .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='invalid'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='invalid'] {
+    .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip[data-filter-state='invalid'] {
     border-color: ButtonText;
     color: CanvasText;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='invalid'] {
+    .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip[data-filter-state='invalid'] {
     border-style: double;
     border-width: 3px;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
-    .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value {
+    .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip[data-filter-state='invalid']
+    .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
     color: CanvasText;
     text-decoration-color: CanvasText;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
     :is(
-      .ds-list-toolbar__icon-button[data-part='icon-button'],
-      .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
-      .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
-      .ds-list-toolbar__density-option[data-part='density-option'],
-      .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
-      .ds-list-toolbar__clear-all[data-part='clear-all'],
-      .ds-list-toolbar__primary-action[data-part='primary-action'],
+      .ds-list-toolbar__icon-button.ds-list-toolbar__icon-button,
+      .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger,
+      .ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item,
+      .ds-list-toolbar__density-option.ds-list-toolbar__density-option,
+      .ds-list-toolbar__mobile-overflow-item.ds-list-toolbar__mobile-overflow-item,
+      .ds-list-toolbar__clear-all.ds-list-toolbar__clear-all,
+      .ds-list-toolbar__primary-action.ds-list-toolbar__primary-action,
       .ds-list-toolbar__primary-action-mobile
     ).ds-button[data-variant]:is([data-state~='focus-visible'], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
@@ -82516,10 +82516,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    below the canonical --ds-touch-target-min channel; fine pointers keep the
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
-  .ds-list-toolbar__icon-button[data-part='icon-button'],
-  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
-  .ds-list-toolbar__density-option[data-part='density-option'],
-  .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'] {
+  .ds-list-toolbar__icon-button.ds-list-toolbar__icon-button,
+  .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger,
+  .ds-list-toolbar__density-option.ds-list-toolbar__density-option,
+  .ds-list-toolbar__filter-dropdown-item.ds-list-toolbar__filter-dropdown-item {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

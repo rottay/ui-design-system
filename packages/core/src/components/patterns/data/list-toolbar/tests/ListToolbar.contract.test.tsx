@@ -284,38 +284,41 @@ describe('PatternListToolbar contract', () => {
     });
   });
 
-  it('keys modern skin paint on parts that reach the DOM (P-79, re-measured)', async () => {
-    /* The 2026-07 reading -- Text and Icon swallow the caller's `data-part`, so
-       those rules must be class-keyed -- no longer holds: both primitives
-       forward it. This asserts the live DOM rather than the skin text, because a
-       string check cannot see a part that stopped being stamped (and the old one
-       searched for a double-quoted attribute this skin never authored). */
+  it('keys modern skin paint on hooks that reach the DOM (P-88, owner ruling 2026-10-06)', async () => {
+    /* P-88 (kernel/common BaseComponentProps): a skinned child keeps its own part,
+       so the owner skin keys a composed child through the documented className
+       door, never through a caller data-part. Icon glyphs have no part of their
+       own and may forward a caller part (structural), so the skin may still key
+       those on the part. This asserts the live DOM, not only the skin text,
+       because a string check cannot see a hook that stopped reaching the DOM. */
     mockMatchMedia(1280);
     renderWithEngine(<PatternListToolbar engine="modern" {...baseProps()} />, 'modern');
     const root = await findToolbarRoot();
-
-    const compoundedParts = [
-      'title',
-      'search-icon',
-      'filter-chips-count',
-      'filter-chips-icon',
-      'filter-chip-label',
-      'filter-chip-value',
-      'icon-button',
-      'filter-trigger',
-      'primary-action',
-      'count-badge',
-    ];
     const skin = readFileSync(MODERN_SKIN_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
-    for (const part of compoundedParts) {
+
+    // P-88 dependents: composed skinned children (Button/Typography/Badge/Tag) keyed by class.
+    const classKeyedParts = [
+      'title', 'filter-chips-count', 'filter-chip-label', 'filter-chip-value',
+      'icon-button', 'filter-trigger', 'primary-action', 'count-badge',
+    ];
+    for (const part of classKeyedParts) {
+      await waitFor(() => {
+        expect(root.querySelector(`.ds-list-toolbar__${part}`), `${part} hook never reached the DOM`).not.toBeNull();
+      });
+      expect(skin, part).toMatch(new RegExp(`\\.ds-list-toolbar__${part}(?![\\w-])`));
+      expect(skin, part).not.toContain(`[data-part='${part}']`);
+      expect(skin, part).not.toContain(`[data-part="${part}"]`);
+    }
+
+    // Structural children (icon glyphs, no part of their own): the part anchor stays lawful.
+    const structuralParts = ['search-icon', 'filter-chips-icon'];
+    for (const part of structuralParts) {
       const node = await waitFor(() => {
         const found = root.querySelector(`[data-part='${part}']`);
         expect(found, `${part} never reached the DOM`).not.toBeNull();
         return found as HTMLElement;
       });
-      // The class the skin compounds with the part sits on the SAME node.
       expect(node.classList.contains(`ds-list-toolbar__${part}`), part).toBe(true);
-      // ...and the skin reads the anatomy, not only the class.
       expect(skin, part).toContain(`.ds-list-toolbar__${part}[data-part='${part}']`);
     }
   });
