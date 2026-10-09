@@ -20,6 +20,7 @@ import {
   chromeEmitterInventory,
   chromeEmitterRoleViolations,
   chromeEmitterSources,
+  chromeEmitterWriterImporters,
   dataOnlyViolations,
   writerViolations,
 } from '../index.mjs';
@@ -351,7 +352,6 @@ test('every shape outside the writer grammar is refused', () => {
     'enum': writerOf(`${DRILL_WRITER}enum Mode { A }\n`),
     'async writer': writerOf('async function setDrillVars(vars: Record<string, string>): Promise<void> {\n  vars["--ds-x"] = "1";\n}\n'),
     'writer calls writer': writerOf(`${DRILL_WRITER}function setMoreVars(vars: Record<string, string>, chrome: BrandChrome): void {\n  setDrillVars(vars, chrome);\n}\n`, 'setDrillVars, setMoreVars'),
-    'template channel key': writerOf('function setDrillVars(vars: Record<string, string>, prefix: string): void {\n  vars[`--ds-${prefix}-bg`] = "1";\n}\n'),
     'template key without substitution': writerOf('function setDrillVars(vars: Record<string, string>): void {\n  vars[`--ds-drill-bg`] = "1";\n}\n'),
   };
   for (const [label, text] of Object.entries(mutants)) {
@@ -429,4 +429,119 @@ test('an identifier is data only when it names an earlier admitted const of the 
     const core = plant({ [`${CHROME_EMITTER_DIR}/tables/index.ts`]: `${TABLES_SOURCE}${body}` });
     assert.throws(() => chromeEmitterSources(core), /data member tables\/index\.ts is not data only/, label);
   }
+});
+
+/* ── template keys in a writer: the two live shapes, nothing else ────────── */
+
+const LIVE_TEMPLATE_WRITERS = () => {
+  const root = readFileSync(join(CORE_ROOT, CHROME_EMITTER_DIR, 'index.ts'), 'utf8');
+  return ['setButtonVariantVars', 'setLegacyButtonHoverBgAlias', 'setControlSizeVars', 'setSegmentedSizeVars', 'setPremiumCardVars'].map(
+    (name) => root.match(new RegExp(`function ${name}\\([\\s\\S]*?\\n}\\n`))[0],
+  );
+};
+
+test('a writer may key a channel by a template whose holes are its parameters or a key-prefix const (the live shapes)', () => {
+  const live = LIVE_TEMPLATE_WRITERS();
+  const names = live.map((body) => /^function (\w+)/.exec(body)[1]);
+  const text = `${WRITER_HEAD}\n${live.join('\n')}\nexport { ${names.join(', ')} };\n`;
+  assert.deepEqual(writerViolations('writers.ts', text), []);
+  const core = plant({
+    [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_SOURCE.replace(
+      'import { setDrillVars } from "./writers";',
+      'import { setDrillVars, setPrefixVars } from "./writers";',
+    ).replace('  setDrillVars(vars, chrome);\n', '  setDrillVars(vars, chrome);\n  setPrefixVars(vars, "primary", "1");\n'),
+    [W]: writerOf(
+      `${DRILL_WRITER}function setPrefixVars(vars: Record<string, string>, variant: string, value: string): void {\n  const prefix = \`--ds-drill-\${variant}\`;\n  vars[\`\${prefix}-bg\`] = value;\n  vars[\`--ds-drill-\${variant}-color\`] = value;\n}\n`,
+      'setDrillVars, setPrefixVars',
+    ),
+  });
+  assert.equal(chromeEmitterSources(core).length, 3);
+});
+
+test('every other template shape in a writer is refused', () => {
+  const fn = (body, params = 'vars: Record<string, string>, prefix: string, value: string') =>
+    writerOf(`function setDrillVars(${params}): void {\n${body}\n}\n`);
+  const mutants = {
+    'whole-key template const': fn('  const key = `--ds-${prefix}-bg`;\n  vars[key] = value;'),
+    'identifier key bound to a template': fn('  const name = `--ds-${prefix}`;\n  vars[name] = value;\n  vars[`${name}-bg`] = value;'),
+    'template passed as an argument': fn('  console.log(`--ds-${prefix}`);'),
+    'template returned': fn('  return `--ds-${prefix}` as never;'),
+    'let-bound template': fn('  let prefixName = `--ds-${prefix}`;\n  vars[`${prefixName}-bg`] = value;'),
+    'var-bound template': fn('  var prefixName = `--ds-${prefix}`;\n  vars[`${prefixName}-bg`] = value;'),
+    'template in a nested function': fn('  [1].forEach(() => {\n    vars[`--ds-${prefix}-bg`] = value;\n  });'),
+    'template object key': fn('  Object.assign(vars, { [`--ds-${prefix}-bg`]: value });'),
+    'template key read, not assigned': fn('  const current = vars[`--ds-${prefix}-bg`];\n  void current;'),
+    'compound assignment': fn('  vars[`--ds-${prefix}-bg`] += value;'),
+    'key on an object other than vars': fn('  const out: Record<string, string> = {};\n  out[`--ds-${prefix}-bg`] = value;'),
+    'member-access hole': fn('  vars[`--ds-${value.length}-bg`] = value;'),
+    'call hole': fn('  vars[`--ds-${String(prefix)}-bg`] = value;'),
+    'hole that is not a parameter': fn('  vars[`--ds-${globalThis}-bg`] = value;'),
+    'shadowed parameter hole': fn('  {\n    const prefix = "x";\n    void prefix;\n  }\n  vars[`--ds-${prefix}-bg`] = value;'),
+    'key-prefix const also used elsewhere': fn('  const head = `--ds-${prefix}`;\n  vars[`${head}-bg`] = value;\n  console.log(head);'),
+    'nested template in a hole': fn('  vars[`--ds-${`${prefix}`}-bg`] = value;'),
+  };
+  for (const [label, text] of Object.entries(mutants)) {
+    assert.notDeepEqual(writerViolations('writers.ts', text), [], label);
+    const core = plant({ [W]: text });
+    assert.throws(() => chromeEmitterSources(core), /writer member writers\/index\.ts is not a writer/, label);
+  }
+});
+
+test('a writer names no other writer: calls, call/apply, aliases, values and a second export specifier are refused', () => {
+  const second = 'function setOtherVars(vars: Record<string, string>): void {\n  vars["--ds-other"] = "1";\n}\n';
+  const mutants = {
+    '.call': `${second}function setMoreVars(vars: Record<string, string>): void {\n  setOtherVars.call(null, vars);\n}\n`,
+    '.apply': `${second}function setMoreVars(vars: Record<string, string>): void {\n  setOtherVars.apply(null, [vars]);\n}\n`,
+    'passed as a value': `${second}function setMoreVars(vars: Record<string, string>): void {\n  [vars].forEach(setOtherVars);\n}\n`,
+    'typeof reference': `${second}function setMoreVars(vars: Record<string, string>): void {\n  vars["--ds-kind"] = typeof setOtherVars;\n}\n`,
+  };
+  for (const [label, body] of Object.entries(mutants)) {
+    const text = writerOf(`${DRILL_WRITER}${body}`, 'setDrillVars, setOtherVars, setMoreVars');
+    assert.match(writerViolations('writers.ts', text).join(' '), /reference to writer setOtherVars|writer calls writer/, label);
+  }
+  assert.match(
+    writerViolations('writers.ts', writerOf(DRILL_WRITER, 'setDrillVars, setDrillVars')).join(' '),
+    /second export specifier for setDrillVars/,
+  );
+});
+
+/* ── privacy: the root is the writer member's only importer ──────────────── */
+
+test('the shipped writer member has exactly one importer: the root', () => {
+  assert.deepEqual(chromeEmitterWriterImporters(CORE_ROOT), [`${CHROME_EMITTER_DIR}/index.ts`]);
+});
+
+test('any literal anywhere in src/ or tests/ that resolves to the writer member is an importer', () => {
+  const rootOnly = plant();
+  assert.deepEqual(chromeEmitterWriterImporters(rootOnly), [`${CHROME_EMITTER_DIR}/index.ts`]);
+  const alias = `@/${CHROME_EMITTER_DIR.slice('src/'.length)}/writers`;
+  const vectors = {
+    'an @/ alias importer in src': ['src/components/other/index.ts', `import { setDrillVars } from "${alias}";\nexport const leak = setDrillVars;\n`, 'src/components/other/index.ts'],
+    'a dynamic import': ['src/components/lazy/index.ts', `export const load = () => import("${alias}");\n`, 'src/components/lazy/index.ts'],
+    'a require': ['src/components/cjs/index.js', `module.exports = require("${alias}");\n`, 'src/components/cjs/index.js'],
+    'a test importer under tests/': ['tests/support/drill/index.ts', `export const target = "../../../${CHROME_EMITTER_DIR}/writers";\n`, 'tests/support/drill/index.ts'],
+    'vi.mock in the emitter tests': [`${CHROME_EMITTER_DIR}/tests/drill.test.ts`, 'vi.mock("../writers", () => ({}));\n', `${CHROME_EMITTER_DIR}/tests/drill.test.ts`],
+    'a specifier with no "writers" in it, inside the writer folder': [`${CHROME_EMITTER_DIR}/writers/tests/drill.test.ts`, 'import * as self from "..";\nvoid self;\n', `${CHROME_EMITTER_DIR}/writers/tests/drill.test.ts`],
+    'a second import declaration in the root': [`${CHROME_EMITTER_DIR}/index.ts`, `${ROOT_SOURCE}import "./writers";\n`, `${CHROME_EMITTER_DIR}/index.ts`],
+  };
+  for (const [label, [path, text, importer]] of Object.entries(vectors)) {
+    const core = plant({ [path]: text });
+    const importers = chromeEmitterWriterImporters(core);
+    assert.notDeepEqual(importers, [`${CHROME_EMITTER_DIR}/index.ts`], label);
+    assert.ok(importers.includes(importer), `${label}: ${JSON.stringify(importers)}`);
+  }
+  const unresolvable = plant({ 'src/components/notes/index.ts': `export const note = "kernel/foundation/css/chrome-variables/writers/index.ts";\n` });
+  assert.deepEqual(chromeEmitterWriterImporters(unresolvable), [`${CHROME_EMITTER_DIR}/index.ts`], 'a path string that does not resolve is not an importer');
+  const declaration = plant({ 'src/types/index.d.ts': `declare module "${alias}";\n` });
+  assert.deepEqual(chromeEmitterWriterImporters(declaration), [`${CHROME_EMITTER_DIR}/index.ts`], '.d.ts is excluded');
+});
+
+test('the root must import its writers without aliases', () => {
+  const core = plant({
+    [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_SOURCE.replace(
+      'import { setDrillVars } from "./writers";',
+      'import { setDrillVars as setAliasVars } from "./writers";\nconst setDrillVars = setAliasVars;',
+    ),
+  });
+  assert.throws(() => chromeEmitterSources(core), /the root imports \[<aliased setDrillVars as setAliasVars>\] from the writer, not its writers \[setDrillVars\]/);
 });

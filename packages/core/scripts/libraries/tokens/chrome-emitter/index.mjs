@@ -28,10 +28,14 @@
  * imports, type declarations, plain function declarations and one trailing
  * `export { … }` naming exactly those functions. A writer imports no value: a
  * writer -> data edge is a sibling-owner dependency the structure law refuses.
- * Every call site stays in the root, and no writer builds a channel name from a
- * template, because the readers that attribute interpolated emissions by
- * `${file}::${fn}` and the census that resolves literal call sites read one file.
- * The root must import exactly the exported writers and may not shadow them.
+ * Every call site stays in the root, and a writer names no other writer. A
+ * template builds a channel name only as the key of `vars[`…`] = value`, or as
+ * a function-local `const` used only inside such keys, and every hole is a
+ * parameter of the writer or such a const: the forms the readers that resolve
+ * a hole from the root's literal call sites can follow. The root must import
+ * exactly the exported writers, without aliases, may not shadow them, and is
+ * the writer member's only importer anywhere in src/ or tests/. The root itself
+ * is not held to the template grammar.
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
@@ -389,20 +393,212 @@ export function writerViolations(file, text) {
     violations.push(`export list [${exported.join(', ')}] is not the declared writers [${functions.join(', ')}]`);
   }
   const writerNames = new Set(functions);
-  const visit = (node) => {
-    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && writerNames.has(node.expression.text)) {
-      violations.push(`:${at(node)} writer calls writer ${node.expression.text}`);
+  const declarationNames = new Set(
+    statements.filter((statement) => ts.isFunctionDeclaration(statement) && statement.name).map((statement) => statement.name),
+  );
+  const exportCounts = new Map();
+  const referenceVisit = (node) => {
+    if (ts.isIdentifier(node) && writerNames.has(node.text) && !declarationNames.has(node)) {
+      const specifier = node.parent;
+      if (exportList?.includes(specifier) && specifier.name === node && !specifier.propertyName) {
+        const seen = (exportCounts.get(node.text) ?? 0) + 1;
+        exportCounts.set(node.text, seen);
+        if (seen > 1) violations.push(`:${at(node)} second export specifier for ${node.text}`);
+      } else if (ts.isCallExpression(specifier) && specifier.expression === node) {
+        violations.push(`:${at(node)} writer calls writer ${node.text}`);
+      } else {
+        violations.push(`:${at(node)} reference to writer ${node.text}`);
+      }
     }
-    if (
-      ts.isElementAccessExpression(node) &&
-      (ts.isTemplateExpression(node.argumentExpression) || ts.isNoSubstitutionTemplateLiteral(node.argumentExpression))
-    ) {
-      violations.push(`:${at(node)} template channel key`);
-    }
-    ts.forEachChild(node, visit);
+    ts.forEachChild(node, referenceVisit);
   };
-  visit(sourceFile);
+  referenceVisit(sourceFile);
+  violations.push(...templateViolations(sourceFile, at));
   return violations;
+}
+
+const isFunctionScope = (node) =>
+  ts.isFunctionDeclaration(node) ||
+  ts.isFunctionExpression(node) ||
+  ts.isArrowFunction(node) ||
+  ts.isMethodDeclaration(node) ||
+  ts.isConstructorDeclaration(node) ||
+  ts.isGetAccessorDeclaration(node) ||
+  ts.isSetAccessorDeclaration(node) ||
+  ts.isClassStaticBlockDeclaration(node);
+
+/** The nearest enclosing function scope of `node`, or null at module level. */
+function enclosingScope(node) {
+  for (let current = node.parent; current; current = current.parent) if (isFunctionScope(current)) return current;
+  return null;
+}
+
+/** `node` is the key of `vars[key] = value` (a plain assignment, never a read or `+=`). */
+const isAssignedVarsKey = (node) => {
+  const access = node.parent;
+  return (
+    ts.isElementAccessExpression(access) &&
+    access.argumentExpression === node &&
+    ts.isIdentifier(access.expression) &&
+    access.expression.text === 'vars' &&
+    ts.isBinaryExpression(access.parent) &&
+    access.parent.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
+    access.parent.left === access
+  );
+};
+
+/** `node` is a `const name = <node>` declared directly in a writer function. */
+const prefixConstOf = (node, writer) => {
+  const declaration = node.parent;
+  if (!ts.isVariableDeclaration(declaration) || declaration.initializer !== node || !ts.isIdentifier(declaration.name)) return null;
+  const list = declaration.parent;
+  if (!ts.isVariableDeclarationList(list) || (list.flags & ts.NodeFlags.Const) === 0 || !ts.isVariableStatement(list.parent)) return null;
+  return enclosingScope(declaration) === writer ? declaration : null;
+};
+
+/**
+ * Template literals in a writer member. Admitted only as (i) the key of a
+ * plain `vars[`…`] = value` or (ii) a function-local `const` initializer every
+ * reference to which is a hole of such a key; every hole is an identifier
+ * naming a parameter of the writer or an admitted (ii) const.
+ */
+function templateViolations(sourceFile, at) {
+  const violations = [];
+  const writers = sourceFile.statements.filter((statement) => ts.isFunctionDeclaration(statement) && statement.body);
+  const templates = [];
+  const collect = (node) => {
+    if (ts.isTemplateExpression(node) || ts.isNoSubstitutionTemplateLiteral(node)) templates.push(node);
+    ts.forEachChild(node, collect);
+  };
+  collect(sourceFile);
+  if (templates.length === 0) return violations;
+
+  const scopeNames = (writer) => {
+    const params = new Set(writer.parameters.filter((p) => ts.isIdentifier(p.name)).map((p) => p.name.text));
+    const locals = new Set();
+    const visit = (node) => {
+      if ((ts.isVariableDeclaration(node) || ts.isParameter(node) || ts.isBindingElement(node)) && ts.isIdentifier(node.name)) {
+        if (!(ts.isParameter(node) && node.parent === writer)) locals.add(node.name.text);
+      }
+      if ((ts.isFunctionDeclaration(node) || ts.isFunctionExpression(node) || ts.isClassDeclaration(node)) && node !== writer && node.name) locals.add(node.name.text);
+      ts.forEachChild(node, visit);
+    };
+    visit(writer);
+    return { params, locals };
+  };
+  const scopes = new Map(writers.map((writer) => [writer, scopeNames(writer)]));
+  const keyTemplate = (template) => ts.isTemplateExpression(template) && isAssignedVarsKey(template);
+
+  const prefixConsts = new Map();
+  for (const template of templates) {
+    const writer = enclosingScope(template);
+    if (!scopes.has(writer) || !ts.isTemplateExpression(template)) continue;
+    const declaration = prefixConstOf(template, writer);
+    if (!declaration) continue;
+    const name = declaration.name.text;
+    let references = 0;
+    let onlyKeyHoles = true;
+    const visit = (node) => {
+      if (ts.isIdentifier(node) && node.text === name && node !== declaration.name) {
+        references += 1;
+        const span = node.parent;
+        const inKeyHole =
+          ts.isTemplateSpan(span) &&
+          span.expression === node &&
+          keyTemplate(span.parent) &&
+          enclosingScope(span.parent) === writer;
+        if (!inKeyHole) onlyKeyHoles = false;
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(writer);
+    const sameNameDeclarations = [];
+    const declarationsVisit = (node) => {
+      if ((ts.isVariableDeclaration(node) || ts.isParameter(node) || ts.isBindingElement(node)) && ts.isIdentifier(node.name) && node.name.text === name) {
+        sameNameDeclarations.push(node);
+      }
+      ts.forEachChild(node, declarationsVisit);
+    };
+    declarationsVisit(writer);
+    if (references > 0 && onlyKeyHoles && sameNameDeclarations.length === 1) prefixConsts.set(template, { writer, name, declaration });
+  }
+
+  const holeAdmitted = (identifier, writer, template) => {
+    const { params, locals } = scopes.get(writer);
+    if (params.has(identifier.text) && !locals.has(identifier.text)) return true;
+    for (const prefix of prefixConsts.values()) {
+      if (prefix.writer === writer && prefix.name === identifier.text && prefix.declaration.getStart() < template.getStart()) return true;
+    }
+    return false;
+  };
+
+  for (const template of templates) {
+    const writer = enclosingScope(template);
+    if (!scopes.has(writer)) {
+      violations.push(`:${at(template)} template outside a writer's own body`);
+      continue;
+    }
+    if (ts.isNoSubstitutionTemplateLiteral(template)) {
+      violations.push(`:${at(template)} template without substitution (use a string literal)`);
+      continue;
+    }
+    if (!keyTemplate(template) && !prefixConsts.has(template)) {
+      violations.push(`:${at(template)} template is neither a vars[…] = key nor a key-prefix const`);
+      continue;
+    }
+    for (const span of template.templateSpans) {
+      if (!ts.isIdentifier(span.expression) || !holeAdmitted(span.expression, writer, template)) {
+        violations.push(`:${at(span.expression)} template hole is not a writer parameter or key-prefix const`);
+      }
+    }
+  }
+  return violations;
+}
+
+const writerImporterCache = new Map();
+const IMPORTER_SOURCE = /\.(?:ts|tsx|mts|cts|js|mjs|cjs|jsx)$/;
+
+/**
+ * Every string literal under src/ and tests/ (declarations excluded) that
+ * starts with "." or "@/" and resolves to the writer member, as the core-relative
+ * file that holds it, once per literal. The law is that this list is exactly
+ * [the root], held by the root's single import declaration.
+ */
+export function chromeEmitterWriterImporters(coreRoot) {
+  if (writerImporterCache.has(coreRoot)) return writerImporterCache.get(coreRoot);
+  const writerRelative = CHROME_EMITTER_FILES.find((entry) => entry.role === 'writer').path;
+  const writerFile = join(coreRoot, CHROME_EMITTER_DIR, writerRelative);
+  const writerDir = dirname(writerFile);
+  const files = [];
+  const walk = (dir) => {
+    if (!existsSync(dir)) return;
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== 'node_modules') walk(full);
+      } else if (IMPORTER_SOURCE.test(entry.name) && !entry.name.endsWith('.d.ts')) {
+        files.push(full);
+      }
+    }
+  };
+  walk(join(coreRoot, 'src'));
+  walk(join(coreRoot, 'tests'));
+  const importers = [];
+  for (const file of files.sort()) {
+    const text = readFileSync(file, 'utf8');
+    if (!text.includes('writers') && !file.startsWith(`${writerDir}${sep}`)) continue;
+    const sourceFile = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, /x$/.test(file) ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+    const visit = (node) => {
+      if ((ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) && /^(?:\.|@\/)/.test(node.text)) {
+        if (resolveSpecifier(coreRoot, file, node.text) === writerFile) importers.push(toPosix(relative(coreRoot, file)));
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sourceFile);
+  }
+  const result = Object.freeze(importers);
+  writerImporterCache.set(coreRoot, result);
+  return result;
 }
 
 /** Names a parsed file value-imports from one absolute target. */
@@ -413,7 +609,10 @@ function importedNamesFrom(sourceFile, resolveImport, target) {
     if (!ts.isStringLiteral(statement.moduleSpecifier) || resolveImport(statement.moduleSpecifier.text) !== target) continue;
     const bindings = statement.importClause?.namedBindings;
     if (bindings && ts.isNamedImports(bindings)) {
-      for (const element of bindings.elements) if (!element.isTypeOnly) names.push((element.propertyName ?? element.name).text);
+      for (const element of bindings.elements) {
+        if (element.isTypeOnly) continue;
+        names.push(element.propertyName ? `<aliased ${element.propertyName.text} as ${element.name.text}>` : element.name.text);
+      }
     } else {
       names.push('<non-named import>');
     }

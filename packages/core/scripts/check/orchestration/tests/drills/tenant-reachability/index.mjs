@@ -281,6 +281,64 @@ export function runDrills() {
       ],
     });
 
+    // ── {calls, defines}: a writer whose emitter is declared in the wrong file ─
+    //
+    // The template writer is planted in the emitter's writer member while its
+    // enumerator still says the root DEFINES it: the attribution key misses and
+    // the emission must surface as unattributed (E0), never as a silent gap.
+    const WRITERS_SOURCE = REACH_CORPUS.find((path) => path.endsWith('chrome-variables/writers/index.ts'));
+    const misdeclared = reachOver(
+      dir,
+      mirrorCorpus(dir, 'corpus-misdeclared', {
+        appendTo: WRITERS_SOURCE,
+        text: 'function setButtonVariantVars(vars, prefix, btn) {\n  if (btn) vars[`--ds-button-${prefix}-planted`] = btn;\n}',
+      }),
+    );
+    const misattributed = misdeclared.unattributed.filter(
+      (entry) => entry.owner === 'setButtonVariantVars' && entry.file === WRITERS_SOURCE,
+    );
+    suite.expectFact({
+      label: 'MIS-DECLARED DEFINES — a template writer living outside the file its enumerator names is unattributed (E0)',
+      ok: misattributed.length > 0,
+      details: [
+        `unattributed after the plant: ${misdeclared.unattributed.length} · in the writer member, owned by setButtonVariantVars: ${misattributed.length}`,
+      ],
+    });
+
+    // ── the reduced-root law: stubs build, they never throw ───────────────
+    const reduced = join(dir, 'corpus-reduced');
+    const constantOnly = new Set([
+      'packages/core/src/foundation/kernel/color/oklch/ramp/index.ts',
+      'packages/core/src/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink/index.ts',
+    ]);
+    // The tenant-theme allowlist is authored, as the producers build fixture does:
+    // its absence is a separate, deliberate refusal, not part of this law.
+    for (const path of REACH_CORPUS.filter((entry) => !constantOnly.has(entry))) {
+      mkdirSync(dirname(join(reduced, path)), { recursive: true });
+      writeFileSync(
+        join(reduced, path),
+        path.endsWith('themes/tenant-theme/index.ts')
+          ? 'export const TENANT_THEME_OVERRIDE_TOKENS = ["--ds-fixture-override"] as const;\n'
+          : 'export const x = 1;\n',
+      );
+    }
+    let reducedModel = null;
+    let reducedError = null;
+    try {
+      reducedModel = reachOver(dir, reduced);
+    } catch (error) {
+      reducedError = error;
+    }
+    suite.expectFact({
+      label: 'REDUCED ROOT — a stubbed corpus without the vocabulary files builds every enumerator without throwing',
+      ok: reducedError === null && reducedModel.enumerators > 0 && reducedModel.unattributed.length === 0,
+      details: [
+        reducedError === null
+          ? `${REACH_CORPUS.length - constantOnly.size} stubs · ${reducedModel.enumerators} enumerators · ${reducedModel.unattributed.length} unattributed`
+          : `threw: ${String(reducedError.message).split('\n')[0]}`,
+      ],
+    });
+
     // The read floor only ever excludes, never invents.
     const floored = JSON.parse(gate('--audit-json', '--min-reads', '1000000').stdout);
     suite.expectFact({

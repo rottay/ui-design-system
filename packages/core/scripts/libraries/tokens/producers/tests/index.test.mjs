@@ -372,3 +372,133 @@ test('LIVE: the tenant workspace-card tile is produced by the chrome compiler th
     '--ds-workspace-card-icon-bg',
   ]);
 });
+
+/* ── The template hole a literal call site binds, ACROSS the chrome emitter ── */
+
+const EMITTER = 'src/infrastructure/compilers/kernel/foundation/css/chrome-variables';
+const EMITTER_WRITERS = `${EMITTER}/writers/index.ts`;
+const EMITTER_TEMPLATE = '`--ds-drill-${prefix}-bg`';
+const EMITTER_WRITER = [
+  'function setDrillVars(vars: Record<string, string>, prefix: string, value: string | undefined): void {',
+  '  if (value) vars[`--ds-drill-${prefix}-bg`] = value;',
+  '}',
+  '',
+  'export { setDrillVars };',
+  '',
+].join('\n');
+const emitterRoot = (body, importLine = 'import { setDrillVars } from "./writers";') =>
+  [
+    'import { DRILL_TABLE } from "./tables";',
+    importLine,
+    '',
+    'export function chromeToVariables(vars: Record<string, string>, chrome: Record<string, string>): void {',
+    '  vars[DRILL_TABLE[0]] = chrome.a;',
+    body,
+    '}',
+    '',
+  ].join('\n');
+const EMITTER_CALLS = '  setDrillVars(vars, "alpha", chrome.a);\n  setDrillVars(vars, "beta", chrome.b);';
+const emitterTree = (overrides = {}) => ({
+  [`${EMITTER}/index.ts`]: emitterRoot(EMITTER_CALLS),
+  [`${EMITTER}/tables/index.ts`]: 'export const DRILL_TABLE = ["--ds-drill-table"] as const;\n',
+  [EMITTER_WRITERS]: EMITTER_WRITER,
+  ...overrides,
+});
+const writerSite = (sandbox) =>
+  census.collectCompilerEmissions({ coreRoot: sandbox }).throughCallSites.find((site) => site.path === EMITTER_WRITERS);
+const writerUnresolved = (sandbox) =>
+  census.collectCompilerEmissions({ coreRoot: sandbox }).unresolved.filter((site) => site.path === EMITTER_WRITERS);
+
+test('EMITTER: a writer-member template whose root call sites all pass literals is produced, path = the writer member', () => {
+  withSandbox(emitterTree(), ({ sandbox }) => {
+    const site = writerSite(sandbox);
+    assert.deepEqual(site && { raw: site.raw, names: site.names }, {
+      raw: EMITTER_TEMPLATE,
+      names: ['--ds-drill-alpha-bg', '--ds-drill-beta-bg'],
+    });
+    assert.deepEqual(writerUnresolved(sandbox), []);
+    assert.ok(census.collectCompilerEmissions({ coreRoot: sandbox }).byKind.kernel.has('--ds-drill-beta-bg'));
+  });
+});
+
+test('EMITTER P2 CONTROL: the same planted tree is unresolved under the single-file resolver alone', () => {
+  withSandbox(emitterTree(), ({ sandbox }) => {
+    const site = writerUnresolvedUnderSingleFile(sandbox);
+    assert.equal(site.raw, EMITTER_TEMPLATE);
+    assert.equal(census.resolveThroughLiteralCallSites(EMITTER_WRITER, site), null);
+    assert.ok(Array.isArray(census.resolveThroughEmitterCallSites({ coreRoot: sandbox, path: EMITTER_WRITERS, sourceText: EMITTER_WRITER, site })));
+  });
+});
+
+function writerUnresolvedUnderSingleFile(sandbox) {
+  const line = EMITTER_WRITER.split('\n').findIndex((text) => text.includes(EMITTER_TEMPLATE.slice(1, -1))) + 1;
+  return { raw: EMITTER_TEMPLATE, line, path: EMITTER_WRITERS, sandbox };
+}
+
+test('EMITTER: every open domain leaves the writer site unresolved, never invented', () => {
+  const cases = {
+    'an importer outside the emitter': {
+      'src/components/other/index.ts': 'import { setDrillVars } from "@/infrastructure/compilers/kernel/foundation/css/chrome-variables/writers";\nexport const leak = setDrillVars;\n',
+    },
+    'a test importer': {
+      'tests/support/drill/index.ts': 'export const writers = "../../../src/infrastructure/compilers/kernel/foundation/css/chrome-variables/writers";\n',
+    },
+    'a vi.mock of the writer member': {
+      [`${EMITTER}/tests/drill.test.ts`]: 'vi.mock("../writers", () => ({}));\n',
+    },
+    'the root passes the writer as a value': {
+      [`${EMITTER}/index.ts`]: emitterRoot(`${EMITTER_CALLS}\n  [vars].forEach((target) => setDrillVars.call(null, target, "gamma", chrome.c));`),
+    },
+    'an identifier argument': {
+      [`${EMITTER}/index.ts`]: emitterRoot('  const which = "alpha";\n  setDrillVars(vars, which, chrome.a);'),
+    },
+    'no call at all': { [`${EMITTER}/index.ts`]: emitterRoot('  void chrome;') },
+    'the hole is written inside the writer': {
+      [EMITTER_WRITERS]: EMITTER_WRITER.replace('if (value) vars', 'prefix = prefix.trim();\n  if (value) vars'),
+    },
+  };
+  for (const [label, overrides] of Object.entries(cases)) {
+    withSandbox(emitterTree(overrides), ({ sandbox }) => {
+      assert.equal(writerSite(sandbox), undefined, label);
+      assert.deepEqual(writerUnresolved(sandbox).map((site) => site.raw), [EMITTER_TEMPLATE], label);
+    });
+  }
+});
+
+test('EMITTER: an aliased or namespace root import makes the emitter invalid, and the census THROWS', () => {
+  for (const importLine of [
+    'import { setDrillVars as setAliasVars } from "./writers";\nconst setDrillVars = setAliasVars;',
+    'import * as writers from "./writers";\nconst setDrillVars = writers.setDrillVars;',
+  ]) {
+    withSandbox(emitterTree({ [`${EMITTER}/index.ts`]: emitterRoot(EMITTER_CALLS, importLine) }), ({ sandbox }) => {
+      assert.throws(() => census.collectCompilerEmissions({ coreRoot: sandbox }), /chrome-emitter: the root imports \[</, importLine);
+    });
+  }
+});
+
+test('EMITTER: an invalid emitter throws only once a single-hole site sits in the declared writer member', () => {
+  const broken = { [`${EMITTER}/index.ts`]: `export function chromeToVariables(vars) { vars["--ds-x"] = "1"; }\n` };
+  withSandbox(emitterTree(broken), ({ sandbox }) => {
+    assert.throws(() => census.collectCompilerEmissions({ coreRoot: sandbox }), /chrome-emitter: .*declared tables\/index\.ts is not imported by the root/);
+  });
+  // No writer-member site to resolve: steps (1)-(2) return before the authority is consulted.
+  withSandbox({ [`${EMITTER}/index.ts`]: `export function chromeToVariables(vars, p) { vars[\`--ds-${'${p}'}-x\`] = "1"; }\n` }, ({ sandbox }) => {
+    assert.doesNotThrow(() => census.collectCompilerEmissions({ coreRoot: sandbox }));
+  });
+  assert.equal(
+    census.resolveThroughEmitterCallSites({ coreRoot: '/nonexistent', path: EMITTER_WRITERS, sourceText: '', site: { raw: 'declaration', line: 1 } }),
+    null,
+  );
+  assert.equal(
+    census.resolveThroughEmitterCallSites({ coreRoot: '/nonexistent', path: `${EMITTER}/index.ts`, sourceText: '', site: { raw: EMITTER_TEMPLATE, line: 1 } }),
+    null,
+  );
+});
+
+test('EMITTER: the resolver validates the tree once per coreRoot', () => {
+  withSandbox(emitterTree(), ({ sandbox, write }) => {
+    assert.ok(writerSite(sandbox));
+    write(`${EMITTER}/orphan/index.ts`, 'export const ORPHAN = 1;\n');
+    assert.ok(writerSite(sandbox), 'memoized: a second census over the same root reuses the validated context');
+  });
+});

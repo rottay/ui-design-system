@@ -36,6 +36,8 @@ export const CHROME_VARIABLES = 'packages/core/src/infrastructure/compilers/kern
 export const CHROME_VARIABLE_SOURCES = Object.freeze(
   CHROME_EMITTER_FILES.map((entry) => `packages/core/${CHROME_EMITTER_DIR}/${entry.path}`),
 );
+/** The chrome emitter's writer member, or undefined when none is declared; only ever a lookup key. */
+export const CHROME_WRITERS = CHROME_VARIABLE_SOURCES[CHROME_EMITTER_FILES.findIndex((entry) => entry.role === 'writer')];
 /**
  * The theme lowering's channel writers: one owner per concern, so a template is
  * attributed to the writer that actually emits it rather than to whichever file
@@ -467,12 +469,14 @@ export function buildEnumerators(root) {
     return null;
   };
 
-  const callSiteEnumerator = (id, fn, positions, holeNames, label, file = CHROME_VARIABLES) => {
-    const sets = callSiteArguments(sources.get(file) ?? chrome, fn, positions);
+  // `calls` is the file whose call sites bind the holes; `defines` is the file
+  // that declares the emitter, which is the `${file}::${fn}` attribution key.
+  const callSiteEnumerator = (id, fn, positions, holeNames, label, { calls, defines }) => {
+    const sets = callSiteArguments(sources.get(calls) ?? chrome, fn, positions);
     const holes = Object.fromEntries(holeNames.map((hole, index) => [hole, sets[index]]));
     return {
       id,
-      file,
+      file: defines,
       functions: [fn],
       holes,
       evidence: `${label}: ${holeNames.map((hole, index) => `${hole} [${sets[index].join(', ')}]`).join(' × ')} — read from ${fn}(…) call sites`,
@@ -480,14 +484,32 @@ export function buildEnumerators(root) {
   };
 
   const enumerators = [
-    callSiteEnumerator('control-size', 'setControlSizeVars', [1, 2], ['family', 'size'], 'control geometry'),
-    callSiteEnumerator('segmented-size', 'setSegmentedSizeVars', [1], ['size'], 'segmented geometry'),
-    callSiteEnumerator('premium-card', 'setPremiumCardVars', [1], ['namespace'], 'premium card namespaces'),
-    callSiteEnumerator('button-variant', 'setButtonVariantVars', [1], ['prefix'], 'button variants'),
-    callSiteEnumerator('button-hover-alias', 'setLegacyButtonHoverBgAlias', [1], ['prefix'], 'button hover aliases'),
+    callSiteEnumerator('control-size', 'setControlSizeVars', [1, 2], ['family', 'size'], 'control geometry', {
+      calls: CHROME_VARIABLES,
+      defines: CHROME_VARIABLES,
+    }),
+    callSiteEnumerator('segmented-size', 'setSegmentedSizeVars', [1], ['size'], 'segmented geometry', {
+      calls: CHROME_VARIABLES,
+      defines: CHROME_VARIABLES,
+    }),
+    callSiteEnumerator('premium-card', 'setPremiumCardVars', [1], ['namespace'], 'premium card namespaces', {
+      calls: CHROME_VARIABLES,
+      defines: CHROME_VARIABLES,
+    }),
+    callSiteEnumerator('button-variant', 'setButtonVariantVars', [1], ['prefix'], 'button variants', {
+      calls: CHROME_VARIABLES,
+      defines: CHROME_VARIABLES,
+    }),
+    callSiteEnumerator('button-hover-alias', 'setLegacyButtonHoverBgAlias', [1], ['prefix'], 'button hover aliases', {
+      calls: CHROME_VARIABLES,
+      defines: CHROME_VARIABLES,
+    }),
     // The tint ramps bind their scale by PARAMETER, and they live in the
     // lowering's tint writer rather than chrome-variables.
-    callSiteEnumerator('tint-ramp', 'setTintRampVariables', [1], ['scale'], 'tint ramp scales', LOWERING_FOUNDATION_TINT),
+    callSiteEnumerator('tint-ramp', 'setTintRampVariables', [1], ['scale'], 'tint ramp scales', {
+      calls: LOWERING_FOUNDATION_TINT,
+      defines: LOWERING_FOUNDATION_TINT,
+    }),
   ];
 
   // Everything else binds its values in a loop inside its own body.

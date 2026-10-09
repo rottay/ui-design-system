@@ -31,8 +31,8 @@
  * un nombre citado en un comentario, un fixture, un test o un artefacto
  * generado. Un conjunto de productores inflado convierte deuda real en verde.
  */
-import { readFileSync, readdirSync } from 'node:fs';
-import { join, relative, sep } from 'node:path';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 
 import ts from 'typescript';
 
@@ -45,6 +45,12 @@ import {
   extractTintRampEmissions,
 } from '../../../check/tokens/cascade/channels/liveness/index.mjs';
 import { packageRoot as findPackageRoot } from '../../repo-root/index.mjs';
+import {
+  CHROME_EMITTER_DIR,
+  CHROME_EMITTER_FILES,
+  chromeEmitterSources,
+  chromeEmitterWriterImporters,
+} from '../chrome-emitter/index.mjs';
 
 const HERE = new URL('.', import.meta.url).pathname;
 const DEFAULT_ROOT = findPackageRoot(HERE);
@@ -305,19 +311,147 @@ export function resolveThroughLiteralCallSites(sourceText, site) {
   };
   walk(file);
 
-  // Dentro de la funcion (parametros y cuerpo), el nombre del hueco debe
-  // denotar SOLO al parametro y nadie debe escribirlo; ante la duda, null.
+  if (paramDomainOpen(owner, position)) closed = false;
+  if (!closed || calls === 0) return null;
+  return [...values].sort().map((value) => `${head}${value}${tail}`);
+}
+
+/**
+ * Dentro de la funcion (parametros y cuerpo), el nombre del hueco debe denotar
+ * SOLO al parametro y nadie debe escribirlo; ante la duda, el dominio esta
+ * abierto: una sombra, una escritura, `arguments` o `eval`.
+ */
+function paramDomainOpen(owner, position) {
   const own = owner.parameters[position].name;
+  const param = own.text;
+  let open = false;
   const scan = (node) => {
     if (ts.isIdentifier(node)) {
-      if (node.text === param && (shadowsParameter(node, own) || writesIdentifier(node))) closed = false;
-      if (node.text === 'arguments' || node.text === 'eval') closed = false;
+      if (node.text === param && (shadowsParameter(node, own) || writesIdentifier(node))) open = true;
+      if (node.text === 'arguments' || node.text === 'eval') open = true;
     }
     ts.forEachChild(node, scan);
   };
   owner.parameters.forEach(scan);
   scan(owner.body);
-  if (!closed || calls === 0) return null;
+  return open;
+}
+
+const SINGLE_HOLE_TEMPLATE = /^`([^$`]*)\$\{\s*([A-Za-z_$][\w$]*)\s*\}([^$`]*)`$/u;
+const CHROME_WRITER_MEMBER = `${CHROME_EMITTER_DIR}/${CHROME_EMITTER_FILES.find((entry) => entry.role === 'writer').path}`;
+const CHROME_ROOT_MEMBER = `${CHROME_EMITTER_DIR}/${CHROME_EMITTER_FILES.find((entry) => entry.role === 'root').path}`;
+const emitterContexts = new Map();
+
+/** El arbol del emisor validado y su raiz parseada, una vez por coreRoot. */
+function emitterContext(coreRoot) {
+  if (emitterContexts.has(coreRoot)) return emitterContexts.get(coreRoot);
+  chromeEmitterSources(coreRoot);
+  const rootPath = join(coreRoot, CHROME_ROOT_MEMBER);
+  const context = {
+    importersPrivate:
+      JSON.stringify(chromeEmitterWriterImporters(coreRoot)) === JSON.stringify([CHROME_ROOT_MEMBER]),
+    rootPath,
+    root: ts.createSourceFile(rootPath, readFileSync(rootPath, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TS),
+  };
+  emitterContexts.set(coreRoot, context);
+  return context;
+}
+
+/** `specifier`, escrito en `fromFile`, nombra al miembro escritor. */
+function namesWriterMember(coreRoot, fromFile, specifier) {
+  let base;
+  if (specifier.startsWith('.')) base = resolve(dirname(fromFile), specifier);
+  else if (specifier.startsWith('@/')) base = join(coreRoot, 'src', specifier.slice(2));
+  else return false;
+  base = base.replace(/\.(?:js|ts)$/u, '');
+  const writer = join(coreRoot, CHROME_WRITER_MEMBER);
+  return [`${base}.ts`, join(base, 'index.ts')].some((candidate) => candidate === writer && existsSync(candidate));
+}
+
+/**
+ * El mismo dominio literal cerrado, pero a traves del emisor de chrome: el
+ * template vive en el miembro escritor y sus call sites en la raiz, que es su
+ * UNICO importador. Devuelve null ante la primera duda, en este orden (lo
+ * barato primero): un template de un solo hueco; la ruta es el miembro escritor
+ * declarado; el emisor valida (uno invalido LANZA); en el escritor, una
+ * declaracion con nombre cuyo hueco es un parametro de dominio cerrado y cuyo
+ * nombre solo aparece en su declaracion y en UN especificador de export sin
+ * alias; la ley de privacidad (el unico importador es la raiz); en la raiz, el
+ * nombre aparece una vez como import con nombre sin alias desde el escritor y
+ * si no, solo como callee directo, cada llamada pasa un literal en esa
+ * posicion y hay al menos una.
+ */
+export function resolveThroughEmitterCallSites({ coreRoot, path, sourceText, site }) {
+  const parts = SINGLE_HOLE_TEMPLATE.exec(site.raw);
+  if (parts === null) return null;
+  if (path !== CHROME_WRITER_MEMBER) return null;
+  const context = emitterContext(coreRoot);
+  const [, head, param, tail] = parts;
+
+  const file = ts.createSourceFile('census.ts', sourceText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const at = file.getPositionOfLineAndCharacter(site.line - 1, 0);
+  let owner = null;
+  const findOwner = (node) => {
+    if (ts.isFunctionDeclaration(node) && node.body && node.getStart(file) <= at && at <= node.end) owner = node;
+    ts.forEachChild(node, findOwner);
+  };
+  findOwner(file);
+  if (owner === null || owner.name === undefined) return null;
+  const position = owner.parameters.findIndex(
+    (parameter) => ts.isIdentifier(parameter.name) && parameter.name.text === param,
+  );
+  if (position < 0 || paramDomainOpen(owner, position)) return null;
+  const fnName = owner.name.text;
+  let exportSpecifiers = 0;
+  let strayWriterReference = false;
+  const writerWalk = (node) => {
+    if (ts.isIdentifier(node) && node.text === fnName && node !== owner.name) {
+      const specifier = node.parent;
+      if (
+        ts.isExportSpecifier(specifier) &&
+        specifier.propertyName === undefined &&
+        !specifier.parent.parent.moduleSpecifier
+      ) {
+        exportSpecifiers += 1;
+      } else strayWriterReference = true;
+    }
+    ts.forEachChild(node, writerWalk);
+  };
+  writerWalk(file);
+  if (strayWriterReference || exportSpecifiers !== 1) return null;
+
+  if (!context.importersPrivate) return null;
+
+  const values = new Set();
+  let imports = 0;
+  let calls = 0;
+  let closed = true;
+  const rootWalk = (node) => {
+    if (ts.isIdentifier(node) && node.text === fnName) {
+      const parent = node.parent;
+      if (ts.isImportSpecifier(parent)) {
+        const declaration = parent.parent.parent.parent;
+        if (
+          parent.propertyName === undefined &&
+          !parent.isTypeOnly &&
+          ts.isImportDeclaration(declaration) &&
+          !declaration.importClause.isTypeOnly &&
+          namesWriterMember(coreRoot, context.rootPath, declaration.moduleSpecifier.text)
+        ) {
+          imports += 1;
+        } else closed = false;
+      } else if (ts.isCallExpression(parent) && parent.expression === node) {
+        calls += 1;
+        const argument = parent.arguments[position];
+        if (argument && (ts.isStringLiteral(argument) || ts.isNoSubstitutionTemplateLiteral(argument))) {
+          values.add(argument.text);
+        } else closed = false;
+      } else closed = false;
+    }
+    ts.forEachChild(node, rootWalk);
+  };
+  rootWalk(context.root);
+  if (!closed || imports !== 1 || calls === 0) return null;
   return [...values].sort().map((value) => `${head}${value}${tail}`);
 }
 
@@ -344,7 +478,10 @@ export function collectCompilerEmissions({ coreRoot = DEFAULT_ROOT, roots = COMP
       const keyed = extractKeyedVarsEmissions(source.text, { file: source.path, coreRoot });
       for (const name of keyed.resolved.keys()) emitted.add(name);
       for (const site of keyed.unresolved) {
-        const names = resolveThroughLiteralCallSites(source.text, site);
+        let names = resolveThroughLiteralCallSites(source.text, site);
+        if (names === null && path === CHROME_WRITER_MEMBER) {
+          names = resolveThroughEmitterCallSites({ coreRoot, path, sourceText: source.text, site });
+        }
         if (names === null) {
           unresolved.push({ kind, path, ...site });
           continue;
