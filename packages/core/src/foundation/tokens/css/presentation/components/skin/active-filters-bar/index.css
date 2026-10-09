@@ -186,7 +186,7 @@
 .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chips"] {
   row-gap: var(--_ds-active-filters-bar-row-gap);
 }
-.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chip"] {
+.ds-structure.ds-active-filters-bar[data-part="root"] .ds-active-filters-bar__chip {
   min-block-size: var(--_ds-active-filters-bar-chip-target);
 }
 
@@ -201,7 +201,7 @@
         properties; the engine discloses the full string via `title`), and a
         logical gap separates label from value without a painted separator. ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"]
+  .ds-active-filters-bar__chip
   [data-part="chip-label"] {
   display: inline-block;
   vertical-align: bottom;
@@ -218,7 +218,7 @@
   text-overflow: ellipsis;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"]
+  .ds-active-filters-bar__chip
   [data-part="chip-value"] {
   display: inline-block;
   vertical-align: bottom;
@@ -245,7 +245,7 @@
         - draft: dashed underline + quieter weight — chosen, not committed;
         - invalid: wavy error underline — the universal "needs repair" mark. ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-filter-state="draft"]
+  .ds-active-filters-bar__chip[data-filter-state="draft"]
   [data-part="chip-value"] {
   /* C1: draft must read at two meters — REGULAR weight + quieted ink under
      the dashed underline, so the provisional chip is visibly ghosted next
@@ -257,24 +257,24 @@
   text-underline-offset: 0.2em;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-filter-state="invalid"]
+  .ds-active-filters-bar__chip[data-filter-state="invalid"]
   [data-part="chip-value"] {
   color: var(--ds-color-error);
   text-decoration: underline wavy var(--ds-color-error);
   text-underline-offset: 0.2em;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-filter-state="invalid"]
+  .ds-active-filters-bar__chip[data-filter-state="invalid"]
   [data-part="chip-label"] {
   color: var(--ds-color-error);
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-filter-state="draft"]
+  .ds-active-filters-bar__chip[data-filter-state="draft"]
   [data-part="icon"] {
   color: var(--ds-color-text-muted);
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-filter-state="invalid"]
+  .ds-active-filters-bar__chip[data-filter-state="invalid"]
   [data-part="icon"] {
   color: var(--ds-color-error);
 }
@@ -312,9 +312,9 @@
      takes the same target the objects beside it take -- a 32px control in a
      row of 40px objects is a mis-sized tap area, not a quieter one. The
      Button primitive still owns its chrome. */
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chip"],
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="more-toggle"],
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="less-toggle"] {
+  .ds-structure.ds-active-filters-bar[data-part="root"] .ds-active-filters-bar__chip,
+  .ds-structure.ds-active-filters-bar[data-part="root"] .ds-active-filters-bar__more-toggle,
+  .ds-structure.ds-active-filters-bar[data-part="root"] .ds-active-filters-bar__less-toggle {
     min-block-size: calc(
       2.5rem * var(--ds-density-effective-scale, 1)
     );
@@ -324,10 +324,10 @@
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
     [data-part="actions"]
-    > [data-part="clear-all"],
+    > .ds-active-filters-bar__clear-all,
   .ds-structure.ds-active-filters-bar[data-part="root"]
     [data-part="actions"]
-    > [data-part="add-filter"] {
+    > .ds-active-filters-bar__add-filter {
     flex: 1 1 0;
   }
 }
@@ -367,26 +367,26 @@
     color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-filter-state="draft"]
+    .ds-active-filters-bar__chip[data-filter-state="draft"]
     [data-part="chip-value"] {
     color: CanvasText;
     text-decoration: underline dashed;
     text-decoration-color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-filter-state="invalid"]
+    .ds-active-filters-bar__chip[data-filter-state="invalid"]
     [data-part="chip-value"] {
     color: CanvasText;
     text-decoration: underline wavy;
     text-decoration-color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-filter-state="invalid"]
+    .ds-active-filters-bar__chip[data-filter-state="invalid"]
     [data-part="chip-label"] {
     color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-filter-state]
+    .ds-active-filters-bar__chip[data-filter-state]
     [data-part="icon"] {
     color: CanvasText;
   }

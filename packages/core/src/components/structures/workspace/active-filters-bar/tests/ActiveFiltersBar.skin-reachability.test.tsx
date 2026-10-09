@@ -169,7 +169,7 @@ describe("ActiveFiltersBar skin reachability", () => {
     const chip = winningDecl(
       rules,
       "min-block-size",
-      (r) => r.selector.endsWith('[data-part="chip"]') && r.conditions === ""
+      (r) => r.selector.endsWith('.ds-active-filters-bar__chip') && r.conditions === ""
     );
     expect(chip!.decls["min-block-size"]).toContain(
       "--_ds-active-filters-bar-chip-target"
@@ -187,7 +187,7 @@ describe("ActiveFiltersBar skin reachability", () => {
     const phone = rules.filter(
       (r) =>
         r.conditions.includes("max-width: 30rem") &&
-        r.selector.includes('[data-part="less-toggle"]') &&
+        r.selector.includes('.ds-active-filters-bar__less-toggle') &&
         "min-block-size" in r.decls
     );
     expect(phone.map((r) => r.decls["min-block-size"]!.replace(/\s+/g, " ").trim())).toEqual([
@@ -238,7 +238,7 @@ describe("ActiveFiltersBar skin reachability", () => {
     expect(eyebrow?.decls["border-inline-end"]).toBe("0");
     // The two affordances become an equal-width decision pair.
     for (const part of ["clear-all", "add-filter"]) {
-      const decided = phone.find((r) => r.selector.includes(`[data-part="${part}"]`));
+      const decided = phone.find((r) => r.selector.includes(`.ds-active-filters-bar__${part}`));
       expect(decided?.decls.flex, part).toBe("1 1 0");
       expect(container.querySelector(decided!.selector), part).not.toBeNull();
     }

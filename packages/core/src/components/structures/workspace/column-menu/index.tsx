@@ -700,10 +700,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
           <Box data-part="header">
             <Flex align="start" justify="between" gap={12}>
               <Box data-part="header-copy">
-                <Text data-part="header-title" size="sm" weight="medium">
+                <Text data-part="header-title" className="ds-column-menu__header-title" size="sm" weight="medium">
                   {tOr("columnMenu.headerTitle", "Table columns")}
                 </Text>
-                <Text data-part="description" size="xs">
+                <Text data-part="description" className="ds-column-menu__description" size="xs">
                   {tOr(
                     "columnMenu.headerDescription",
                     "Configure the table surface before applying."
@@ -716,6 +716,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                   variant="ghost"
                   size="sm"
                   data-part="reset"
+                  className="ds-column-menu__reset"
                   onClick={handleReset}
                   icon={<ActionUndoIcon size={12} decorative />}
                 >
@@ -764,6 +765,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             variant="ghost"
                             size="xs"
                             data-part="drag-handle"
+                            className="ds-column-menu__drag-handle"
                             data-drag-target={isDragTarget}
                             data-dragging={isDragging}
                             // A keyboard drop returns focus here, to the handle
@@ -793,6 +795,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             <Flex align="center" gap={6}>
                               <Text
                                 data-part="title"
+                                className="ds-column-menu__title"
                                 data-visible={isVisible}
                                 size="sm"
                               >
@@ -801,6 +804,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               {isPinned && (
                                 <Text
                                   data-part="pin-badge"
+                                  className="ds-column-menu__pin-badge"
                                   data-pinned={true}
                                   size="xs"
                                   aria-label={
@@ -824,6 +828,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             <Flex data-part="row-meta" align="center" gap={6}>
                               <Text
                                 data-part="description"
+                                className="ds-column-menu__description"
                                 data-visible={isVisible}
                                 size="xs"
                               >
@@ -845,6 +850,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                     variant="ghost"
                                     size="xs"
                                     data-part="width-badge"
+                                    className="ds-column-menu__width-badge"
                                     onClick={() =>
                                       setEditingWidthKey(column.key)
                                     }
@@ -1026,6 +1032,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           size="sm"
                           block
                           data-part="group-toggle"
+                          className="ds-column-menu__group-toggle"
                           aria-expanded={!isCollapsed}
                           onClick={() => handleToggleGroup(section.groupKey)}
                           icon={
@@ -1038,6 +1045,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                         >
                           <Text
                             data-part="group-toggle-label"
+                            className="ds-column-menu__group-toggle-label"
                             size="xs"
                             weight="medium"
                           >
@@ -1078,12 +1086,13 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     <Box data-part="action-section-copy">
                       <Text
                         data-part="action-section-label"
+                        className="ds-column-menu__action-section-label"
                         size="xs"
                         weight="medium"
                       >
                         {tOr("columnMenu.rowActionsLabel", "Row actions")}
                       </Text>
-                      <Text data-part="description" size="xs">
+                      <Text data-part="description" className="ds-column-menu__description" size="xs">
                         {tOr(
                           "columnMenu.rowActionsDescription",
                           "Choose which quick actions stay visible in the table."
@@ -1129,6 +1138,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               <Box data-part="action-row-copy">
                                 <Text
                                   data-part="title"
+                                  className="ds-column-menu__title"
                                   data-visible={isVisible}
                                   size="sm"
                                 >
@@ -1136,6 +1146,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 </Text>
                                 <Text
                                   data-part="description"
+                                  className="ds-column-menu__description"
                                   data-visible={isVisible}
                                   size="xs"
                                 >
@@ -1167,7 +1178,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
           </Box>
 
           <Flex align="center" justify="between" gap={12} data-part="footer">
-            <Text data-part="footer-hint" size="xs">
+            <Text data-part="footer-hint" className="ds-column-menu__footer-hint" size="xs">
               {tOr(
                 "columnMenu.footerHint",
                 "Column widths are also adjustable directly from the table header."
@@ -1177,6 +1188,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
               variant="primary"
               size="md"
               data-part="apply"
+              className="ds-column-menu__apply"
               onClick={handleApply}
             >
               {tOr("columnMenu.apply", "Apply columns")}
@@ -1278,6 +1290,7 @@ function IconButton({
       variant="ghost"
       size="xs"
       data-part="icon-button"
+      className="ds-column-menu__icon-button"
       data-disabled={!!disabled}
       aria-label={label}
       aria-pressed={pressed}
