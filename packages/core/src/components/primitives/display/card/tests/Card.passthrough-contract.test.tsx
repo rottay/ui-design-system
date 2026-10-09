@@ -8,7 +8,7 @@
  */
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 
 import ClassicCard from '../engines/classic';
 import ModernCard from '../engines/modern';
@@ -80,6 +80,42 @@ describe('Card pass-through honesty law', () => {
     expect(root).toHaveAttribute('aria-label', 'Caller label');
     expect(root).toHaveAttribute('data-custom', 'caller-data');
     expect(root).toHaveAttribute('data-part', 'root');
+  });
+
+  // P-88 state arm (kernel/common BaseComponentProps): a caller data-state cannot
+  // replace the engine-stamped data-state on the root the engine owns.
+  it('modern: a caller data-state does not replace the engine-stamped root state (P-88)', () => {
+    const { container } = render(
+      <ModernCard title="Modern" disabled data-state="caller-state-attempt">
+        Content
+      </ModernCard>
+    );
+
+    const root = container.querySelector('.ds-card--modern') as HTMLElement;
+    expect(root).toHaveAttribute('data-state', 'disabled');
+  });
+
+  it('rustic: a caller data-state does not replace the engine-stamped root state (P-88)', () => {
+    const { container } = render(
+      <RusticCard title="Rustic" data-state="caller-state-attempt">
+        Content
+      </RusticCard>
+    );
+
+    const root = container.querySelector('.rottay-card--rustic') as HTMLElement;
+    fireEvent.pointerEnter(root);
+    expect(root).toHaveAttribute('data-state', 'hovered');
+  });
+
+  it.fails('KNOWN DEBT (ARC-12): classic: a caller data-state does not replace the engine-owned root state (P-88, D1)', () => {
+    const { container } = render(
+      <ClassicCard title="Classic" data-state="caller-state-attempt">
+        Content
+      </ClassicCard>
+    );
+
+    const root = container.querySelector('.rottay-card--classic') as HTMLElement;
+    expect(root).not.toHaveAttribute('data-state', 'caller-state-attempt');
   });
 
   it('never leaks non-DOM contract props (selection/extension fields) as attributes', () => {
