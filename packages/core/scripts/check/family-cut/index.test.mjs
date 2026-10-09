@@ -12,7 +12,7 @@
  */
 
 import assert from 'node:assert/strict';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, sep } from 'node:path';
 import test from 'node:test';
@@ -43,6 +43,7 @@ import {
   readBaseline,
   resolveFamily,
 } from './index.mjs';
+import { callerPartIndex } from './p88/index.mjs';
 
 const ROOT = findPackageRoot(new URL('.', import.meta.url).pathname);
 const PRODUCERS = collectChannelProducers().producers;
@@ -2663,12 +2664,18 @@ test('LIVE: guided-draft-form is measured, not inverted', () => {
   // stamped on a family that stamps 53 of them. Post-cut (sub-lot F,
   // 2026-09-18): 51 parts stamped (two retired skeleton stamps), every
   // stamped part consumed and every consumed part stamped.
+  // G1 (ARC-12): every one of those 51 parts is handed to a composed skinned DS child (Box/Flex/
+  // Stack/Text), so they are P-88 caller parts, measured in `p88CallerParts`, and the anatomy
+  // denominator reads 0. The walk is still not blind: all 51 names are seen, as caller parts.
   const measured = measureFamily(
     resolveFamily('guided-draft-form', ROOT, readBaseline().families['guided-draft-form']),
     { producers: PRODUCERS },
   );
   assert.equal(measured.denominators.sourceFiles, 1);
-  assert.equal(measured.denominators.partsStamped, 51);
+  assert.equal(measured.denominators.partsStamped, 0);
+  const callerNames = new Set(measured.detail.p88CallerParts.map((row) => row.split('> ')[1].split(' (->')[0]));
+  assert.equal(callerNames.size, 51, 'the 51 stamped parts are all seen, as P-88 caller parts');
+  assert.equal(measured.ratchets.p88CallerParts, readBaseline().families['guided-draft-form'].p88CallerParts);
   assert.equal(measured.ratchets.partsConsumedNotStamped, 0);
   assert.equal(measured.ratchets.partsStampedNotConsumed, 0);
 });
@@ -3632,4 +3639,120 @@ test("M1 LIVE: file-manager losing its OWN `root` stamp GROWS the debt and never
     '`partsConsumedNotStamped` SHRANK',
     'against the live pin it never reads as shrank (the name-scoped credit read 1 -> 0)',
   );
+});
+
+// ---------------------------------------------------------------------------
+// G1 (WO-ARC-12, review-arc12-rfc §3): P-88 caller parts leave the anatomy arms for their own
+// decrease-only arm. The classification is the pass-through census's caller enumeration, so these
+// drills plant a WORKSPACE-shaped sandbox (`<ws>/packages/core`) the census itself can sweep: a
+// skinned DS child `zz-child` and an owner family `zz-owner` that composes it. Nothing here
+// hand-classifies an element; every verdict below is the real census plus the real gate.
+// ---------------------------------------------------------------------------
+
+const G1_CHILD_ENGINE = [
+  'export default function ZzChild(props) {',
+  '  const { className, ...rest } = props;',
+  "  return <span className={`ds-zz-child ${className ?? ''}`} data-part=\"root\" {...rest} />;",
+  '}',
+  '',
+].join('\n');
+const g1Owner = (extra = '') => [
+  "import { ZzChild } from '../../../primitives/display/zz-child';",
+  '',
+  'export function ZzOwner() {',
+  '  return (',
+  '    <div className="ds-zz-owner" data-part="root">',
+  '      <ZzChild data-part="handed" />',
+  ...(extra ? [`      ${extra}`] : []),
+  '    </div>',
+  '  );',
+  '}',
+  '',
+].join('\n');
+const G1_OWNER_FILE = 'src/components/patterns/data/zz-owner/index.tsx';
+
+/** A workspace-shaped sandbox; `run` gets a measure() that re-runs the census and the gate. */
+function withG1Sandbox(extra, run) {
+  const workspace = mkdtempSync(join(tmpdir(), 'family-cut-g1-'));
+  const core = join(workspace, 'packages/core');
+  const put = (relativePath, text) => {
+    const target = join(core, relativePath);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, text);
+  };
+  try {
+    mkdirSync(core, { recursive: true });
+    cpSync(join(ROOT, 'package.json'), join(core, 'package.json'));
+    symlinkSync(join(ROOT, 'node_modules'), join(core, 'node_modules'));
+    put('src/components/primitives/display/zz-child/index.tsx', "export { default as ZzChild } from './engines/modern';\n");
+    put('src/components/primitives/display/zz-child/engines/modern/index.tsx', G1_CHILD_ENGINE);
+    put('src/foundation/tokens/css/runtime/engines/modern/skin/zz-child/index.css', ".ds-zz-child[data-part='root'] { display: inline-block; }\n");
+    put('src/foundation/tokens/css/runtime/engines/modern/skin/zz-owner/index.css', ".ds-zz-owner[data-part='root'] { display: block; }\n");
+    put(G1_OWNER_FILE, g1Owner(extra));
+    const measure = () => measureFamily(resolveFamily('zz-owner', core), {
+      producers: PRODUCERS,
+      callerParts: callerPartIndex(core, { fresh: true }),
+    });
+    run({ core, put, measure });
+  } finally {
+    rmSync(workspace, { recursive: true, force: true });
+  }
+}
+
+/** A row pinned at a measurement, so a drill's growth is judged against the gate's own numbers. */
+const pinnedAt = (measured) => ({ cut: 'G1-drill', denominators: { ...measured.denominators }, ...measured.ratchets });
+
+test('G1 (ii): a caller part on a skinned DS child moves p88CallerParts, never the anatomy arm', () => {
+  withG1Sandbox('', ({ core, measure }) => {
+    const measured = measure();
+    assert.equal(measured.detail.p88Census, true, 'the census swept the sandbox');
+    assert.equal(measured.ratchets.p88CallerParts, 1);
+    assert.match(measured.detail.p88CallerParts[0], /^src\/components\/patterns\/data\/zz-owner\/index\.tsx:6 <ZzChild> handed \(-> zz-child\)$/);
+    assert.ok(!measured.detail.partsStampedNotConsumed.includes('handed'), 'the caller part is not counted as dead anatomy');
+    /* Control: the same tree read WITHOUT the census enumeration counts it as anatomy -- the
+     * very growth G1 re-classifies, proving the arm (not an accident) is what moved it. */
+    const blind = measureFamily(resolveFamily('zz-owner', core), {
+      producers: PRODUCERS,
+      callerParts: { workspace: null, measured: false, elements: new Map() },
+    });
+    assert.ok(blind.detail.partsStampedNotConsumed.includes('handed'));
+    assert.equal(blind.ratchets.p88CallerParts, 0);
+  });
+});
+
+test('G1 (i): a dead native stamp (intrinsic element, no rule) still turns partsStampedNotConsumed red', () => {
+  withG1Sandbox('', ({ put, measure }) => {
+    const pin = pinnedAt(measure());
+    put(G1_OWNER_FILE, g1Owner('<i data-part="dead-native" />'));
+    const measured = measure();
+    assert.deepEqual(measured.detail.partsStampedNotConsumed, ['dead-native']);
+    assert.equal(measured.ratchets.p88CallerParts, 1, 'the native stamp is not a caller part');
+    const findings = judgeFamily(measured, pin);
+    expectFinding(findings, '`partsStampedNotConsumed` GREW from 0 to 1', 'the dead native stamp is red');
+    expectNoFinding(findings, '`p88CallerParts` GREW', 'and it does not move the caller-part arm');
+  });
+});
+
+test('G1 (iii) anti-gaming: a class written beside a dead native literal does NOT exempt it', () => {
+  withG1Sandbox('', ({ put, measure }) => {
+    const pin = pinnedAt(measure());
+    put(G1_OWNER_FILE, g1Owner('<i className="ds-zz-owner__dead" data-part="dead-native" />'));
+    const measured = measure();
+    assert.deepEqual(measured.detail.partsStampedNotConsumed, ['dead-native'], 'the discriminator is the TARGET ELEMENT, not a class beside the literal');
+    assert.equal(measured.ratchets.p88CallerParts, 1);
+    expectFinding(judgeFamily(measured, pin), '`partsStampedNotConsumed` GREW from 0 to 1', 'still red with the class');
+  });
+});
+
+test('G1 (iv): a new P-88 caller part added to a family grows p88CallerParts (red)', () => {
+  withG1Sandbox('', ({ put, measure }) => {
+    const pin = pinnedAt(measure());
+    put(G1_OWNER_FILE, g1Owner('<ZzChild data-part="handed-two" />'));
+    const measured = measure();
+    assert.equal(measured.ratchets.p88CallerParts, 2);
+    assert.ok(measured.detail.p88CallerParts.some((row) => /<ZzChild> handed-two \(-> zz-child\)$/.test(row)));
+    const findings = judgeFamily(measured, pin);
+    expectFinding(findings, '`p88CallerParts` GREW from 1 to 2', 'a new caller part is red');
+    expectNoFinding(findings, '`partsStampedNotConsumed` GREW', 'and never surfaces as dead anatomy');
+  });
 });

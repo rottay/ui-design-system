@@ -75,6 +75,7 @@ import {
   readLayoutSensitiveFamilies,
   readPostureVocabulary,
 } from './adapt-slot/index.mjs';
+import { callerElementOf, callerPartIndex } from './p88/index.mjs';
 import { classifyReadWithoutProducer } from '../engine/read-without-producer/index.mjs';
 import { collectSkinFiles } from '../../libraries/engine/skins/files/index.mjs';
 import { packageRoot as findPackageRoot } from '../../libraries/repo-root/index.mjs';
@@ -733,6 +734,12 @@ export function analyzeSource(file, source = ts.createSourceFile(
   const anatomyHandoffs = [];
   const imports = new Map();
   const composedRenders = [];
+  /* G1: the same `parts`, split by where the literal is written. A JSX `data-part` attribute is
+   * kept with its element's coordinates so it can be matched against the pass-through census's
+   * caller enumeration; every other channel (partAttributes, a spread object's property) can
+   * never be a caller-part element and is native anatomy by construction. */
+  const partOccurrences = [];
+  const nonElementParts = new Set();
 
   const styleObjects = new Set();
   const namedObjects = new Map();
@@ -837,6 +844,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
           const found = literalsIn(first);
           if (found.length === 0) dynamicParts += 1;
           for (const value of found) parts.add(value);
+          for (const value of found) nonElementParts.add(value);
         }
       }
     }
@@ -851,6 +859,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
         const found = literalsIn(node.initializer);
         if (found.length === 0) dynamicParts += 1;
         for (const value of found) parts.add(value);
+        for (const value of found) nonElementParts.add(value);
       } else if (key === 'data-state') {
         stampsStateAttribute = true;
         for (const value of literalsIn(node.initializer)) {
@@ -868,6 +877,13 @@ export function analyzeSource(file, source = ts.createSourceFile(
         const found = attributeLiterals(node);
         if (found.length === 0) dynamicParts += 1;
         for (const value of found) parts.add(value);
+        const element = node.parent?.parent;
+        if (element && (ts.isJsxOpeningElement(element) || ts.isJsxSelfClosingElement(element))) {
+          const at = { line: lineOf(element), tag: element.tagName.getText(source) };
+          for (const value of found) partOccurrences.push({ ...at, part: value });
+        } else {
+          for (const value of found) nonElementParts.add(value);
+        }
       } else if (name === 'data-state') {
         stampsStateAttribute = true;
         for (const value of attributeLiterals(node)) {
@@ -914,6 +930,8 @@ export function analyzeSource(file, source = ts.createSourceFile(
   return {
     file,
     parts,
+    partOccurrences,
+    nonElementParts,
     states,
     variants,
     classTokens,
@@ -2195,7 +2213,7 @@ export function measureDragAndDropArm(resolved, parsed) {
   };
 }
 
-export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
+export function measureFamily(resolved, { producers, compiled, scopes, callerParts } = {}) {
   const { family, root } = resolved;
   const measured = producers && compiled ? null : sharedChannelProducers();
   const producerSet = producers ?? measured.producers;
@@ -2238,6 +2256,36 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
     .filter((anchor) => consumedComponents.has(anchor.component))
     .map((anchor) => anchor.part));
   const consumedParts = new Set([...union(skins, 'parts'), ...anchoredParts]);
+  /* G1 (WO-ARC-12, review-arc12-rfc §3): a `data-part` this family stamps on a COMPOSED SKINNED DS
+   * CHILD is a P-88 caller part, not this family's anatomy. Which elements those are is the
+   * pass-through census's caller enumeration, imported (./p88), never re-derived here. The four
+   * anatomy values below (stamped, consumed and their two differences) exclude them; the
+   * occurrences are counted, by file:line, in their own decrease-only arm `p88CallerParts`,
+   * which the 1b engine lots drain to 0. Native anatomy -- intrinsic elements, partAttributes,
+   * spread objects, and any child the census does not resolve to a skinned family -- is
+   * unchanged. The BLOCKING arms keep reading the full sets. */
+  const p88Index = callerParts ?? callerPartIndex(root);
+  const callerOccurrences = [];
+  const anatomyStamped = new Set();
+  for (const entry of sources) {
+    for (const value of entry.nonElementParts) anatomyStamped.add(value);
+    for (const occurrence of entry.partOccurrences) {
+      const use = callerElementOf(p88Index, entry.file, occurrence);
+      if (use) callerOccurrences.push({ ...occurrence, file: toPosix(relative(root, entry.file)), childFamily: use.childFamily });
+      else anatomyStamped.add(occurrence.part);
+    }
+  }
+  for (const part of stampedParts) {
+    if (!anatomyStamped.has(part) && !callerOccurrences.some((occurrence) => occurrence.part === part)) {
+      throw new Error(`family-cut: G1 lost track of the stamped part \`${part}\` in ${family}`);
+    }
+  }
+  const callerOnlyParts = new Set(callerOccurrences.map((occurrence) => occurrence.part)
+    .filter((part) => !anatomyStamped.has(part)));
+  const anatomyConsumed = new Set([...consumedParts].filter((part) => !callerOnlyParts.has(part)));
+  const p88CallerParts = callerOccurrences
+    .map((occurrence) => `${occurrence.file}:${occurrence.line} <${occurrence.tag}> ${occurrence.part} (-> ${occurrence.childFamily})`)
+    .sort();
   const consumedStates = union(skins, 'states');
   const skinSelectsVariant = skins.some((skin) => skin.selectsVariant);
   const ownsClass = (token) => {
@@ -2332,7 +2380,7 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
   const readWithoutProducer = classifyReadWithoutProducer(resolved.skins, reachableProducers);
   const readNames = new Set(readWithoutProducer.denominator);
 
-  const partsStampedNotConsumed = [...stampedParts].filter((part) => !consumedParts.has(part)).sort();
+  const partsStampedNotConsumed = [...anatomyStamped].filter((part) => !anatomyConsumed.has(part)).sort();
   /* A part the family does not stamp is credited to a primitive it RENDERS only
    * when every skin read of it is anchored on that rendered element: the read's
    * selector names a part or class the family hands the element, and the
@@ -2357,16 +2405,16 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
         || read.anchorClasses.some((anchor) => instance.classes.has(anchor)))));
     return reads.length > 0 && backers.every(Boolean) ? backers[0].backer.name : undefined;
   };
-  const partsComposedFrom = [...consumedParts]
-    .filter((part) => !stampedParts.has(part))
+  const partsComposedFrom = [...anatomyConsumed]
+    .filter((part) => !anatomyStamped.has(part))
     .sort()
     .map((part) => ({ part, primitive: composedBackerOf(part) }))
     .filter((entry) => entry.primitive);
   const composedStampedParts = new Set(partsComposedFrom.map((entry) => entry.part));
   const partsConsumedNotStamped = dynamicParts > 0
     ? []
-    : [...consumedParts]
-      .filter((part) => !stampedParts.has(part) && !composedStampedParts.has(part))
+    : [...anatomyConsumed]
+      .filter((part) => !anatomyStamped.has(part) && !composedStampedParts.has(part))
       .sort();
   const statesConsumedNotStamped = [...consumedStates]
     .filter((state) => !stampedStates.has(state) && !composedStampedStates.has(state))
@@ -2399,8 +2447,8 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
       sourceFiles: resolved.sources.length,
       channelsRead: readWithoutProducer.denominator.length,
       classTokens: ownClassTokens.length,
-      partsStamped: stampedParts.size,
-      partsConsumed: consumedParts.size,
+      partsStamped: anatomyStamped.size,
+      partsConsumed: anatomyConsumed.size,
     },
     blocking: {
       inlineStyleViolations,
@@ -2432,8 +2480,11 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
       fanOutUnreached: fanOut.filter((row) => row.unreached).length,
       dndTransportOwners: dnd.transportOwners.length,
       dndDropZoneOwners: dnd.dropZoneOwners.length,
+      p88CallerParts: p88CallerParts.length,
     },
     detail: {
+      p88CallerParts,
+      p88Census: p88Index.measured,
       vocabularies,
       legacyNamespaceClasses,
       partsStampedNotConsumed,
@@ -2493,6 +2544,7 @@ const RATCHET_LABEL = Object.freeze({
   fanOutUnreached: 'catalog controls that declare this family and reach none of its channels',
   dndTransportOwners: 'files carrying their own HTML5 drag transport instead of the shared kernel (F-69)',
   dndDropZoneOwners: 'files carrying their own external-file drop zone instead of the shared kernel (F-69)',
+  p88CallerParts: 'P-88 caller parts: literal `data-part` values handed to a skinned DS child (G1, owner WO-ARC-12; the 1b engine lots drain it to 0)',
 });
 
 /**
