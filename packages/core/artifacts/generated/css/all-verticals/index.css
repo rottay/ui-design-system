@@ -96481,11 +96481,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 /* ---- field chrome (was inline) ---- */
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__field-label[data-part='field-label'][data-part='field-label'][data-part='field-label'][data-part='field-label'] {
+  .ds-pattern-brand-studio__field-label.ds-pattern-brand-studio__field-label.ds-pattern-brand-studio__field-label.ds-pattern-brand-studio__field-label.ds-pattern-brand-studio__field-label {
   display: block;
   margin-block-end: var(--ds-spacing-1);
 }
-.ds-pattern-brand-studio .ds-pattern-brand-studio__field-input[data-part='field-input'] {
+.ds-pattern-brand-studio .ds-pattern-brand-studio__field-input.rottay-select:where(:not(.rottay-select--rustic)) {
   inline-size: 100%;
 }
 .ds-pattern-brand-studio
@@ -96495,17 +96495,17 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   flex-shrink: 0;
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__section-title[data-part='section-title'][data-part='section-title'][data-part='section-title'][data-part='section-title'],
+  .ds-pattern-brand-studio__section-title.ds-pattern-brand-studio__section-title.ds-pattern-brand-studio__section-title.ds-pattern-brand-studio__section-title.ds-pattern-brand-studio__section-title,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__editor-heading[data-part='editor-heading'][data-part='editor-heading'][data-part='editor-heading'],
+  .ds-pattern-brand-studio__editor-heading.ds-pattern-brand-studio__editor-heading.ds-pattern-brand-studio__editor-heading.ds-pattern-brand-studio__editor-heading,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-heading[data-part='preview-heading'][data-part='preview-heading'][data-part='preview-heading'],
+  .ds-pattern-brand-studio__preview-heading.ds-pattern-brand-studio__preview-heading.ds-pattern-brand-studio__preview-heading.ds-pattern-brand-studio__preview-heading,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-panel-title[data-part='preview-panel-title'][data-part='preview-panel-title'][data-part='preview-panel-title'][data-part='preview-panel-title'],
+  .ds-pattern-brand-studio__preview-panel-title.ds-pattern-brand-studio__preview-panel-title.ds-pattern-brand-studio__preview-panel-title.ds-pattern-brand-studio__preview-panel-title.ds-pattern-brand-studio__preview-panel-title,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__action-title[data-part='action-title'][data-part='action-title'][data-part='action-title'][data-part='action-title'],
+  .ds-pattern-brand-studio__action-title.ds-pattern-brand-studio__action-title.ds-pattern-brand-studio__action-title.ds-pattern-brand-studio__action-title.ds-pattern-brand-studio__action-title,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__violation-pair[data-part='violation-pair'][data-part='violation-pair'][data-part='violation-pair'][data-part='violation-pair'] {
+  .ds-pattern-brand-studio__violation-pair.ds-pattern-brand-studio__violation-pair.ds-pattern-brand-studio__violation-pair.ds-pattern-brand-studio__violation-pair.ds-pattern-brand-studio__violation-pair {
   display: block;
 }
 .ds-pattern-brand-studio
@@ -96529,13 +96529,13 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   padding: var(--ds-spacing-3);
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__contrast-label[data-part='contrast-label'][data-part='contrast-label'][data-part='contrast-label'] {
+  .ds-pattern-brand-studio__contrast-label.ds-pattern-brand-studio__contrast-label.ds-pattern-brand-studio__contrast-label.ds-pattern-brand-studio__contrast-label {
   display: block;
   text-transform: uppercase;
   letter-spacing: var(--ds-letter-spacing-widest);
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__contrast-message[data-part='contrast-message'][data-part='contrast-message'][data-part='contrast-message'] {
+  .ds-pattern-brand-studio__contrast-message.ds-pattern-brand-studio__contrast-message.ds-pattern-brand-studio__contrast-message.ds-pattern-brand-studio__contrast-message {
   display: block;
   margin-block-start: var(--ds-spacing-2);
 }
@@ -96549,12 +96549,12 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   padding-inline: var(--ds-spacing-3);
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__violation-ratio[data-part='violation-ratio'][data-part='violation-ratio'][data-part='violation-ratio'] {
+  .ds-pattern-brand-studio__violation-ratio.ds-pattern-brand-studio__violation-ratio.ds-pattern-brand-studio__violation-ratio.ds-pattern-brand-studio__violation-ratio {
   display: block;
   font-variant-numeric: tabular-nums;
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__violation-detail[data-part='violation-detail'][data-part='violation-detail'][data-part='violation-detail'] {
+  .ds-pattern-brand-studio__violation-detail.ds-pattern-brand-studio__violation-detail.ds-pattern-brand-studio__violation-detail.ds-pattern-brand-studio__violation-detail {
   display: block;
   margin-block-start: var(--ds-spacing-1);
 }
@@ -96616,33 +96616,33 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__field-label[data-part='field-label'][data-part='field-label'][data-part='field-label'],
+  .ds-pattern-brand-studio__field-label.ds-pattern-brand-studio__field-label.ds-pattern-brand-studio__field-label.ds-pattern-brand-studio__field-label,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__contrast-label[data-part='contrast-label'][data-part='contrast-label'][data-part='contrast-label'],
+  .ds-pattern-brand-studio__contrast-label.ds-pattern-brand-studio__contrast-label.ds-pattern-brand-studio__contrast-label.ds-pattern-brand-studio__contrast-label,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__violation-detail[data-part='violation-detail'][data-part='violation-detail'][data-part='violation-detail'],
+  .ds-pattern-brand-studio__violation-detail.ds-pattern-brand-studio__violation-detail.ds-pattern-brand-studio__violation-detail.ds-pattern-brand-studio__violation-detail,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__action-helper[data-part='action-helper'][data-part='action-helper'][data-part='action-helper'] {
+  .ds-pattern-brand-studio__action-helper.ds-pattern-brand-studio__action-helper.ds-pattern-brand-studio__action-helper.ds-pattern-brand-studio__action-helper {
   color: var(--ds-color-text-muted);
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__contrast-message[data-part='contrast-message'][data-part='contrast-message'][data-part='contrast-message'],
+  .ds-pattern-brand-studio__contrast-message.ds-pattern-brand-studio__contrast-message.ds-pattern-brand-studio__contrast-message.ds-pattern-brand-studio__contrast-message,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-fallback[data-part='preview-fallback'][data-part='preview-fallback'][data-part='preview-fallback'],
+  .ds-pattern-brand-studio__preview-fallback.ds-pattern-brand-studio__preview-fallback.ds-pattern-brand-studio__preview-fallback.ds-pattern-brand-studio__preview-fallback,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__tenant-preview-fallback[data-part='tenant-preview-fallback'][data-part='tenant-preview-fallback'][data-part='tenant-preview-fallback'],
+  .ds-pattern-brand-studio__tenant-preview-fallback.ds-pattern-brand-studio__tenant-preview-fallback.ds-pattern-brand-studio__tenant-preview-fallback.ds-pattern-brand-studio__tenant-preview-fallback,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__description[data-part='description'][data-part='description'][data-part='description'],
+  .ds-pattern-brand-studio__description.ds-pattern-brand-studio__description.ds-pattern-brand-studio__description.ds-pattern-brand-studio__description,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__editor-heading[data-part='editor-heading'][data-part='editor-heading'][data-part='editor-heading'],
+  .ds-pattern-brand-studio__editor-heading.ds-pattern-brand-studio__editor-heading.ds-pattern-brand-studio__editor-heading.ds-pattern-brand-studio__editor-heading,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-heading[data-part='preview-heading'][data-part='preview-heading'][data-part='preview-heading'] {
+  .ds-pattern-brand-studio__preview-heading.ds-pattern-brand-studio__preview-heading.ds-pattern-brand-studio__preview-heading.ds-pattern-brand-studio__preview-heading {
   color: var(--ds-color-text-secondary);
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__violation-ratio[data-part='violation-ratio'][data-part='violation-ratio'][data-part='violation-ratio'] {
+  .ds-pattern-brand-studio__violation-ratio.ds-pattern-brand-studio__violation-ratio.ds-pattern-brand-studio__violation-ratio.ds-pattern-brand-studio__violation-ratio {
   color: var(--ds-color-error);
 }
 
@@ -96689,7 +96689,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-report-title[data-part='preview-report-title'][data-part='preview-report-title'][data-part='preview-report-title'] {
+  .ds-pattern-brand-studio__preview-report-title.ds-pattern-brand-studio__preview-report-title.ds-pattern-brand-studio__preview-report-title.ds-pattern-brand-studio__preview-report-title {
   display: block;
   text-transform: uppercase;
   /* canonical step (the retired literal 0.08em tracked nothing) */
@@ -96702,22 +96702,22 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-report-lead[data-part='preview-report-lead'][data-part='preview-report-lead'][data-part='preview-report-lead'],
+  .ds-pattern-brand-studio__preview-report-lead.ds-pattern-brand-studio__preview-report-lead.ds-pattern-brand-studio__preview-report-lead.ds-pattern-brand-studio__preview-report-lead,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-issue-message[data-part='preview-issue-message'][data-part='preview-issue-message'][data-part='preview-issue-message'],
+  .ds-pattern-brand-studio__preview-issue-message.ds-pattern-brand-studio__preview-issue-message.ds-pattern-brand-studio__preview-issue-message.ds-pattern-brand-studio__preview-issue-message,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-adjustment-detail[data-part='preview-adjustment-detail'][data-part='preview-adjustment-detail'][data-part='preview-adjustment-detail'],
+  .ds-pattern-brand-studio__preview-adjustment-detail.ds-pattern-brand-studio__preview-adjustment-detail.ds-pattern-brand-studio__preview-adjustment-detail.ds-pattern-brand-studio__preview-adjustment-detail,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-pack-warning-detail[data-part='preview-pack-warning-detail'][data-part='preview-pack-warning-detail'][data-part='preview-pack-warning-detail'] {
+  .ds-pattern-brand-studio__preview-pack-warning-detail.ds-pattern-brand-studio__preview-pack-warning-detail.ds-pattern-brand-studio__preview-pack-warning-detail.ds-pattern-brand-studio__preview-pack-warning-detail {
   display: block;
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-issue-message[data-part='preview-issue-message'][data-part='preview-issue-message'][data-part='preview-issue-message'],
+  .ds-pattern-brand-studio__preview-issue-message.ds-pattern-brand-studio__preview-issue-message.ds-pattern-brand-studio__preview-issue-message.ds-pattern-brand-studio__preview-issue-message,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-adjustment-detail[data-part='preview-adjustment-detail'][data-part='preview-adjustment-detail'][data-part='preview-adjustment-detail'],
+  .ds-pattern-brand-studio__preview-adjustment-detail.ds-pattern-brand-studio__preview-adjustment-detail.ds-pattern-brand-studio__preview-adjustment-detail.ds-pattern-brand-studio__preview-adjustment-detail,
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-pack-warning-detail[data-part='preview-pack-warning-detail'][data-part='preview-pack-warning-detail'][data-part='preview-pack-warning-detail'] {
+  .ds-pattern-brand-studio__preview-pack-warning-detail.ds-pattern-brand-studio__preview-pack-warning-detail.ds-pattern-brand-studio__preview-pack-warning-detail.ds-pattern-brand-studio__preview-pack-warning-detail {
   margin-block-start: var(--ds-spacing-1);
   /* same muted detail role as violation-detail */
   color: var(--ds-color-text-muted);
