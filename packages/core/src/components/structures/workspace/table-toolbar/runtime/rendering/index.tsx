@@ -202,6 +202,7 @@ export function TableToolbar({
                   variant="ghost"
                   size="sm"
                   data-part="clear-filters"
+                  className="ds-table-toolbar__clear-filters"
                   icon={<ActionCloseIcon decorative size="xs" />}
                   onClick={onResetFilters}
                 >
@@ -224,6 +225,7 @@ export function TableToolbar({
             {primaryAction && (
               <Button
                 data-part="primary-action"
+                className="ds-table-toolbar__primary-action"
                 href={primaryAction.href}
                 onClick={primaryAction.onClick}
                 icon={primaryAction.icon ?? <ActionAddIcon decorative size="sm" />}

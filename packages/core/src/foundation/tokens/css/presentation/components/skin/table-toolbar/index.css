@@ -108,7 +108,7 @@
         The composed ghost Button keeps its own chrome. ---- */
 .ds-structure.ds-table-toolbar[data-part='root']
   .ds-table-toolbar__filters[data-part='filters']
-  [data-part='clear-filters'] {
+  .ds-table-toolbar__clear-filters {
   flex-shrink: 0;
 }
 
@@ -175,7 +175,7 @@
    focus-within, which reaches the affix as a descendant. */
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field[data-part='search-field']
-  [data-part='search-input']
+  :where(.ds-table-toolbar__search-input) > .ds-input-shell
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   inline-size: var(--ds-icon-sm-size, 1rem);
   block-size: var(--ds-icon-sm-size, 1rem);
@@ -184,7 +184,7 @@
 }
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field[data-part='search-field']:focus-within
-  [data-part='search-input']
+  :where(.ds-table-toolbar__search-input) > .ds-input-shell
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   color: var(--ds-toolbar-color, var(--ds-color-text-secondary));
 }
@@ -229,7 +229,7 @@
   }
   .ds-structure.ds-table-toolbar[data-part='root']
     .ds-table-toolbar__actions[data-part='actions']
-    [data-part='primary-action'] {
+    .ds-table-toolbar__primary-action {
     flex: 1 1 auto;
   }
   .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
@@ -253,7 +253,7 @@
   }
   .ds-structure.ds-table-toolbar
     .ds-table-toolbar__search-field[data-part='search-field']
-    [data-part='search-input']
+    :where(.ds-table-toolbar__search-input) > .ds-input-shell
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     color: CanvasText;
   }
@@ -263,7 +263,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-table-toolbar
     .ds-table-toolbar__search-field[data-part='search-field']
-    [data-part='search-input']
+    :where(.ds-table-toolbar__search-input) > .ds-input-shell
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     transition: none;
   }

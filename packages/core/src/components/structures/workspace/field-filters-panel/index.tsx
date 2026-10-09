@@ -253,6 +253,7 @@ function PresetChip({
       size="xs"
       shape="round"
       data-part="preset-chip"
+      className="ds-field-filters-panel__preset-chip"
       onClick={onClick}
       icon={
         <Box as="span" data-part="preset-chip-icon">

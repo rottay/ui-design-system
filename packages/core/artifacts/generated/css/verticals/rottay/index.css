@@ -24383,7 +24383,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
    transitions, hover timing and the focus ring. Channel values stay
    <color>-shaped (background-color never takes a gradient). --------------- */
 
-.ds-structure.ds-field-filters-panel [data-part='preset-chip'] {
+.ds-structure.ds-field-filters-panel .ds-field-filters-panel__preset-chip {
   --ds-button-ghost-bg: color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-elevated) 8%);
   --ds-button-ghost-border: color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
   --ds-button-ghost-color: var(--ds-color-text-secondary);
@@ -24569,7 +24569,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'],
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'],
   .ds-structure.ds-field-filters-panel [data-part='signal'],
-  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip'],
+  .ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__preset-chip,
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip-icon'],
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card'],
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-icon'] {
@@ -25098,7 +25098,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   padding-block: 18px 16px;
   padding-inline: 18px;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='close'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-close {
   inline-size: 34px;
   min-inline-size: 34px;
   padding: 0;
@@ -84460,7 +84460,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         the hook for those two, and it is what let the family stop forcing
         `engine="modern"` on its own composed controls to keep this rule
         alive. ---- */
-.ds-structure.ds-export-button-panel[data-part='panel'] [data-part='menu-item'],
+.ds-structure.ds-export-button-panel[data-part='panel'] .ds-export-button-item,
 .ds-structure.ds-export-button-panel[data-part='panel'] .ds-export-button-item {
   inline-size: 100%;
   justify-content: flex-start;
@@ -85584,7 +85584,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   background: var(--ds-search-command-bar-input-bg, var(--ds-surface-panel));
   border: var(--ds-search-command-bar-input-border, 1px solid var(--ds-color-border-subtle));
   border-radius: var(--ds-search-command-bar-input-radius, var(--ds-radius-xl, 16px));
@@ -85593,32 +85593,32 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   background: var(--ds-search-command-bar-input-embedded-bg, color-mix(in srgb, var(--ds-surface-panel) 84%, transparent));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   border-radius: var(--ds-search-command-bar-input-editorial-radius, calc(var(--ds-radius-lg, 12px) * 1.5));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   background: var(--ds-search-command-bar-input-editorial-bg, color-mix(in srgb, var(--ds-surface-panel) 78%, transparent));
   border: var(--ds-search-command-bar-input-editorial-border, 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 58%, transparent));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   border: var(--ds-search-command-bar-active-border, 1px solid var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   border: var(--ds-search-command-bar-error-border, 1px solid var(--ds-color-error));
 }
 
@@ -85641,7 +85641,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         and the focus ring) ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__clear[data-part='clear'] {
+  > .ds-search-command-bar__clear.ds-search-command-bar__clear {
   --ds-button-ghost-bg: var(--ds-search-command-bar-control-bg, var(--ds-surface-panel));
   --ds-button-ghost-border: var(--ds-search-command-bar-control-border, var(--ds-color-border-subtle));
   --ds-button-ghost-color: var(--ds-search-command-bar-control-color, var(--ds-color-text-secondary));
@@ -85651,27 +85651,27 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'] {
+  > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle {
   --ds-button-ghost-bg: var(--ds-search-command-bar-control-bg, var(--ds-surface-panel));
   --ds-button-ghost-border: var(--ds-search-command-bar-control-border, var(--ds-color-border-subtle));
   --ds-button-ghost-color: var(--ds-search-command-bar-control-color, var(--ds-color-text-secondary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle']:not([data-voice-active='true']) {
+  > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle:not([data-voice-active='true']) {
   --ds-button-ghost-bg-hover: var(--ds-search-command-bar-voice-toggle-bg-hover, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-panel)));
   --ds-button-ghost-color-hover: var(--ds-search-command-bar-voice-toggle-color-hover, var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-active='true'] {
+  > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle[data-voice-active='true'] {
   --ds-button-ghost-bg: var(--ds-search-command-bar-voice-toggle-active-bg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card)));
   --ds-button-ghost-border: var(--ds-search-command-bar-voice-toggle-active-border, var(--ds-color-primary));
   --ds-button-ghost-color: var(--ds-search-command-bar-voice-toggle-active-color, var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='error'] {
+  > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle[data-voice-status='error'] {
   --ds-button-ghost-bg: var(--ds-search-command-bar-voice-toggle-error-bg, color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card)));
   --ds-button-ghost-border: var(--ds-search-command-bar-voice-toggle-error-border, var(--ds-color-error));
   --ds-button-ghost-color: var(--ds-search-command-bar-voice-toggle-error-color, var(--ds-color-error));
@@ -85680,7 +85680,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* the listening pulse: keyed on the stamped state, never inline */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='listening'] {
+  > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle[data-voice-status='listening'] {
   animation: ds-search-command-bar-pulse var(--ds-search-command-bar-pulse-duration, calc(var(--ds-motion-glacial) * 3.2))
     var(--ds-search-command-bar-pulse-easing, ease-out) infinite;
 }
@@ -85824,7 +85824,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    action, the cancel as the escape). */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-close[data-part='close'] {
+  .ds-search-command-bar__voice-help-close.ds-search-command-bar__voice-help-close {
   --ds-button-ghost-bg: transparent;
   --ds-button-ghost-border: var(--ds-search-command-bar-quiet-border, var(--ds-color-border-subtle));
   --ds-button-ghost-color: var(--ds-search-command-bar-quiet-color, var(--ds-color-text-secondary));
@@ -85833,7 +85833,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel'] {
+  .ds-search-command-bar__voice-help-cancel.ds-search-command-bar__voice-help-cancel {
   --ds-button-ghost-bg: transparent;
   --ds-button-ghost-border: var(--ds-search-command-bar-quiet-border, var(--ds-color-border-subtle));
   --ds-button-ghost-color: var(--ds-search-command-bar-quiet-color, var(--ds-color-text-secondary));
@@ -85921,7 +85921,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- suggestion chips: composed Buttons painted through ghost channels ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestions[data-part='suggestions']
-  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip'] {
+  .ds-search-command-bar__suggestion-chip.ds-search-command-bar__suggestion-chip {
   --ds-button-ghost-bg: var(--ds-search-command-bar-control-bg, var(--ds-surface-panel));
   --ds-button-ghost-border: var(--ds-search-command-bar-control-border, var(--ds-color-border-subtle));
   --ds-button-ghost-color: var(--ds-search-command-bar-control-color, var(--ds-color-text-secondary));
@@ -85973,7 +85973,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-search-command-bar
     .ds-search-command-bar__voice-controls
-    > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='listening'] {
+    > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle[data-voice-status='listening'] {
     animation: none;
   }
   .ds-structure.ds-search-command-bar
@@ -86319,7 +86319,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         The composed ghost Button keeps its own chrome. ---- */
 .ds-structure.ds-table-toolbar[data-part='root']
   .ds-table-toolbar__filters[data-part='filters']
-  [data-part='clear-filters'] {
+  .ds-table-toolbar__clear-filters {
   flex-shrink: 0;
 }
 
@@ -86386,7 +86386,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    focus-within, which reaches the affix as a descendant. */
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field[data-part='search-field']
-  [data-part='search-input']
+  :where(.ds-table-toolbar__search-input) > .ds-input-shell
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   inline-size: var(--ds-icon-sm-size, 1rem);
   block-size: var(--ds-icon-sm-size, 1rem);
@@ -86395,7 +86395,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field[data-part='search-field']:focus-within
-  [data-part='search-input']
+  :where(.ds-table-toolbar__search-input) > .ds-input-shell
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   color: var(--ds-toolbar-color, var(--ds-color-text-secondary));
 }
@@ -86440,7 +86440,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
   .ds-structure.ds-table-toolbar[data-part='root']
     .ds-table-toolbar__actions[data-part='actions']
-    [data-part='primary-action'] {
+    .ds-table-toolbar__primary-action {
     flex: 1 1 auto;
   }
   .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
@@ -86464,7 +86464,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
   .ds-structure.ds-table-toolbar
     .ds-table-toolbar__search-field[data-part='search-field']
-    [data-part='search-input']
+    :where(.ds-table-toolbar__search-input) > .ds-input-shell
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     color: CanvasText;
   }
@@ -86474,7 +86474,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-table-toolbar
     .ds-table-toolbar__search-field[data-part='search-field']
-    [data-part='search-input']
+    :where(.ds-table-toolbar__search-input) > .ds-input-shell
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     transition: none;
   }

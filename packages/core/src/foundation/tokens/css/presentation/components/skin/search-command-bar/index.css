@@ -210,7 +210,7 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   background: var(--ds-search-command-bar-input-bg, var(--ds-surface-panel));
   border: var(--ds-search-command-bar-input-border, 1px solid var(--ds-color-border-subtle));
   border-radius: var(--ds-search-command-bar-input-radius, var(--ds-radius-xl, 16px));
@@ -219,32 +219,32 @@
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   background: var(--ds-search-command-bar-input-embedded-bg, color-mix(in srgb, var(--ds-surface-panel) 84%, transparent));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   border-radius: var(--ds-search-command-bar-input-editorial-radius, calc(var(--ds-radius-lg, 12px) * 1.5));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true'][data-editorial-tech='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   background: var(--ds-search-command-bar-input-editorial-bg, color-mix(in srgb, var(--ds-surface-panel) 78%, transparent));
   border: var(--ds-search-command-bar-input-editorial-border, 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 58%, transparent));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   border: var(--ds-search-command-bar-active-border, 1px solid var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
-  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern[data-part='input']) {
+  + .ds-search-command-bar__input:has(> .ds-input-shell.ds-input-shell--modern.ds-input-shell--modern) {
   border: var(--ds-search-command-bar-error-border, 1px solid var(--ds-color-error));
 }
 
@@ -267,7 +267,7 @@
         and the focus ring) ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__clear[data-part='clear'] {
+  > .ds-search-command-bar__clear.ds-search-command-bar__clear {
   --ds-button-ghost-bg: var(--ds-search-command-bar-control-bg, var(--ds-surface-panel));
   --ds-button-ghost-border: var(--ds-search-command-bar-control-border, var(--ds-color-border-subtle));
   --ds-button-ghost-color: var(--ds-search-command-bar-control-color, var(--ds-color-text-secondary));
@@ -277,27 +277,27 @@
 
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'] {
+  > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle {
   --ds-button-ghost-bg: var(--ds-search-command-bar-control-bg, var(--ds-surface-panel));
   --ds-button-ghost-border: var(--ds-search-command-bar-control-border, var(--ds-color-border-subtle));
   --ds-button-ghost-color: var(--ds-search-command-bar-control-color, var(--ds-color-text-secondary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle']:not([data-voice-active='true']) {
+  > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle:not([data-voice-active='true']) {
   --ds-button-ghost-bg-hover: var(--ds-search-command-bar-voice-toggle-bg-hover, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-panel)));
   --ds-button-ghost-color-hover: var(--ds-search-command-bar-voice-toggle-color-hover, var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-active='true'] {
+  > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle[data-voice-active='true'] {
   --ds-button-ghost-bg: var(--ds-search-command-bar-voice-toggle-active-bg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card)));
   --ds-button-ghost-border: var(--ds-search-command-bar-voice-toggle-active-border, var(--ds-color-primary));
   --ds-button-ghost-color: var(--ds-search-command-bar-voice-toggle-active-color, var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='error'] {
+  > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle[data-voice-status='error'] {
   --ds-button-ghost-bg: var(--ds-search-command-bar-voice-toggle-error-bg, color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card)));
   --ds-button-ghost-border: var(--ds-search-command-bar-voice-toggle-error-border, var(--ds-color-error));
   --ds-button-ghost-color: var(--ds-search-command-bar-voice-toggle-error-color, var(--ds-color-error));
@@ -306,7 +306,7 @@
 /* the listening pulse: keyed on the stamped state, never inline */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='listening'] {
+  > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle[data-voice-status='listening'] {
   animation: ds-search-command-bar-pulse var(--ds-search-command-bar-pulse-duration, calc(var(--ds-motion-glacial) * 3.2))
     var(--ds-search-command-bar-pulse-easing, ease-out) infinite;
 }
@@ -450,7 +450,7 @@
    action, the cancel as the escape). */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-close[data-part='close'] {
+  .ds-search-command-bar__voice-help-close.ds-search-command-bar__voice-help-close {
   --ds-button-ghost-bg: transparent;
   --ds-button-ghost-border: var(--ds-search-command-bar-quiet-border, var(--ds-color-border-subtle));
   --ds-button-ghost-color: var(--ds-search-command-bar-quiet-color, var(--ds-color-text-secondary));
@@ -459,7 +459,7 @@
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel'] {
+  .ds-search-command-bar__voice-help-cancel.ds-search-command-bar__voice-help-cancel {
   --ds-button-ghost-bg: transparent;
   --ds-button-ghost-border: var(--ds-search-command-bar-quiet-border, var(--ds-color-border-subtle));
   --ds-button-ghost-color: var(--ds-search-command-bar-quiet-color, var(--ds-color-text-secondary));
@@ -547,7 +547,7 @@
 /* ---- suggestion chips: composed Buttons painted through ghost channels ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestions[data-part='suggestions']
-  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip'] {
+  .ds-search-command-bar__suggestion-chip.ds-search-command-bar__suggestion-chip {
   --ds-button-ghost-bg: var(--ds-search-command-bar-control-bg, var(--ds-surface-panel));
   --ds-button-ghost-border: var(--ds-search-command-bar-control-border, var(--ds-color-border-subtle));
   --ds-button-ghost-color: var(--ds-search-command-bar-control-color, var(--ds-color-text-secondary));
@@ -599,7 +599,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-search-command-bar
     .ds-search-command-bar__voice-controls
-    > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='listening'] {
+    > .ds-search-command-bar__voice-toggle.ds-search-command-bar__voice-toggle[data-voice-status='listening'] {
     animation: none;
   }
   .ds-structure.ds-search-command-bar

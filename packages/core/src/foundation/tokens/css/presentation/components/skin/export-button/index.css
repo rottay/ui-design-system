@@ -109,7 +109,7 @@
         the hook for those two, and it is what let the family stop forcing
         `engine="modern"` on its own composed controls to keep this rule
         alive. ---- */
-.ds-structure.ds-export-button-panel[data-part='panel'] [data-part='menu-item'],
+.ds-structure.ds-export-button-panel[data-part='panel'] .ds-export-button-item,
 .ds-structure.ds-export-button-panel[data-part='panel'] .ds-export-button-item {
   inline-size: 100%;
   justify-content: flex-start;

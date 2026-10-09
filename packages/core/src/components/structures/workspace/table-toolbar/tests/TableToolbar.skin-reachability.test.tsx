@@ -228,7 +228,7 @@ describe("TableToolbar skin reachability", () => {
       phone.find((r) => r.selector.includes("__right"))?.decls["justify-content"]
     ).toBe("flex-start");
     const primary = phone.find((r) =>
-      r.selector.includes("[data-part='primary-action']")
+      r.selector.includes(".ds-table-toolbar__primary-action")
     );
     expect(primary?.decls.flex).toBe("1 1 auto");
     expect(container.querySelector(primary!.selector)).not.toBeNull();

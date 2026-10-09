@@ -162,7 +162,7 @@ describe('FieldFiltersPanel skin — structural contract', () => {
 
   it('hands the preset chip the tenant focus signature over its resting highlight', () => {
     const declarations = rules
-      .filter(({ selector }) => selector.endsWith("[data-part='preset-chip']"))
+      .filter(({ selector }) => selector.endsWith('.ds-field-filters-panel__preset-chip'))
       .flatMap(({ body }) => body.split(';').map((declaration) => declaration.trim()));
     const ring = declarations.filter((declaration) =>
       declaration.startsWith('--ds-button-focus-ring:')

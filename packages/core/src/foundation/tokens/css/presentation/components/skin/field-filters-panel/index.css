@@ -186,7 +186,7 @@
    transitions, hover timing and the focus ring. Channel values stay
    <color>-shaped (background-color never takes a gradient). --------------- */
 
-.ds-structure.ds-field-filters-panel [data-part='preset-chip'] {
+.ds-structure.ds-field-filters-panel .ds-field-filters-panel__preset-chip {
   --ds-button-ghost-bg: color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-elevated) 8%);
   --ds-button-ghost-border: color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
   --ds-button-ghost-color: var(--ds-color-text-secondary);
@@ -372,7 +372,7 @@
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'],
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'],
   .ds-structure.ds-field-filters-panel [data-part='signal'],
-  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip'],
+  .ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__preset-chip,
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip-icon'],
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card'],
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-icon'] {

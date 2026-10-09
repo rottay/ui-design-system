@@ -335,6 +335,7 @@ export function SelectionPreviewRail<T extends object>({
                 variant="ghost"
                 size="sm"
                 data-part="close"
+                className="ds-selection-preview-rail__identity-close"
                 icon={<ActionCloseIcon size={16} decorative />}
                 aria-label={tOr('selectionPreviewRail.closePreview', 'Close preview')}
                 onClick={onClose}
