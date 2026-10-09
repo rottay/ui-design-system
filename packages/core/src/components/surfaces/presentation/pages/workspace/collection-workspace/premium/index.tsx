@@ -262,7 +262,7 @@ export function renderCollectionStickyDock<T extends object>(input: CollectionSt
         >
           {workspace.hasSelection && (
             <Text
-              className="ds-collection-workspace__muted-text"
+              className="ds-collection-workspace__muted-text ds-collection-workspace__dock-selection-count"
               size="sm"
               color="muted"
               aria-live="polite"

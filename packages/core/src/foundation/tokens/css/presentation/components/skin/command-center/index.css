@@ -155,7 +155,7 @@
 
 /* Visually-hidden loading announcement (aria-busy companion; same sr-only
    idiom as decision-inbox.css / record-workbench.css). */
-.ds-surface.ds-command-center .ds-command-center__loading-label[data-part='loading-label'] {
+.ds-surface.ds-command-center .ds-command-center__loading-label.ds-command-center__loading-label {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;

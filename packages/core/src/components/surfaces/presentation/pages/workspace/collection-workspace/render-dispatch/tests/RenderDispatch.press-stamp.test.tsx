@@ -99,13 +99,13 @@ describe('CollectionRenderDispatch card press stamp', () => {
   /* ---- the fallback card's own open link: its keyboard ring ---- */
 
   it('pairs the open-link ring with the stamped state', () => {
-    expect(skin).toContain('[data-part="fallback-open-link"]:is(');
+    expect(skin).toContain('.ds-collection-render-dispatch__fallback-open-link:is(');
     expect(skin).toContain('[data-state~="focus-visible"]');
     expect(skin).toMatch(
-      /a\.ds-collection-render-dispatch__fallback-open-link\[data-part="fallback-open-link"\]:is\(\s*\[data-state~="focus-visible"\],\s*:focus-visible\s*\)\s*\{\s*outline: var\(--ds-focus-ring-width\) solid transparent;\s*outline-offset: var\(--ds-focus-ring-offset\);\s*box-shadow: var\(--ds-focus-ring\);\s*\}/u,
+      /a\.ds-collection-render-dispatch__fallback-open-link\.ds-collection-render-dispatch__fallback-open-link:is\(\s*\[data-state~="focus-visible"\],\s*:focus-visible\s*\)\s*\{\s*outline: var\(--ds-focus-ring-width\) solid transparent;\s*outline-offset: var\(--ds-focus-ring-offset\);\s*box-shadow: var\(--ds-focus-ring\);\s*\}/u,
     );
     expect(skin).not.toMatch(/outline:[^;]*solid\s+var\(--ds-focus-ring-color/u);
-    expect(skin).not.toMatch(/\[data-part="fallback-open-link"\]:focus-visible\s*\{/u);
+    expect(skin).not.toMatch(/\.ds-collection-render-dispatch__fallback-open-link:focus-visible\s*\{/u);
   });
 
   it('leaves the open link silent at rest and stamps focus-visible for a keyboard focus', async () => {

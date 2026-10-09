@@ -168,7 +168,7 @@ export function renderFallbackCard<T extends object>({
     >
       <Box className="ds-collection-render-dispatch__fallback-heading">
         <Text
-          className="ds-collection-render-dispatch__muted-text"
+          className="ds-collection-render-dispatch__muted-text ds-collection-render-dispatch__fallback-label"
           data-part="fallback-label"
           size="xs"
         >
@@ -192,7 +192,7 @@ export function renderFallbackCard<T extends object>({
         {detailColumns.slice(0, 4).map((column) => (
           <Box key={column.key} className="ds-collection-render-dispatch__fallback-field">
             <Text
-              className="ds-collection-render-dispatch__muted-text"
+              className="ds-collection-render-dispatch__muted-text ds-collection-render-dispatch__fallback-label"
               data-part="fallback-label"
               size="xs"
             >

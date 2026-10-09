@@ -91130,7 +91130,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 /* Drained geometry + typography (was inline). */
 .ds-surface.ds-collection-workspace
-  .ds-collection-page-size-control__summary[data-part="page-size-summary"] {
+  .ds-collection-page-size-control__summary.ds-collection-page-size-control__summary {
   font-size: var(--ds-font-size-xs, 12px);
   font-weight: var(--ds-font-weight-semibold, 600);
   font-variant-numeric: tabular-nums;
@@ -91164,7 +91164,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-page-size-control__range[data-part="page-size-range"] {
+  .ds-collection-page-size-control__range.ds-collection-page-size-control__range {
   font-size: var(--ds-font-size-xs, 12px);
   font-weight: var(--ds-font-weight-semibold, 600);
   line-height: 1;
@@ -91205,9 +91205,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-page-size-control__unit[data-part="page-size-unit"],
+  .ds-collection-page-size-control__unit.ds-collection-page-size-control__unit,
 .ds-surface.ds-collection-workspace
-  .ds-collection-page-size-control__suffix[data-part="page-size-suffix"] {
+  .ds-collection-page-size-control__suffix.ds-collection-page-size-control__suffix {
   font-size: var(--ds-font-size-xs, 12px);
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: 0;
@@ -91215,12 +91215,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-page-size-control__unit[data-part="page-size-unit"] {
+  .ds-collection-page-size-control__unit.ds-collection-page-size-control__unit {
   text-transform: uppercase;
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-page-size-control__value[data-part="page-size-value"] {
+  .ds-collection-page-size-control__value.ds-collection-page-size-control__value {
   font-size: var(--ds-font-size-xs, 12px);
   font-weight: var(--ds-font-weight-extrabold, 800);
   line-height: 1;
@@ -91252,7 +91252,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    square + active tint and the 44px coarse-pointer hit area.
    ------------------------------------------------------------------------- */
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__utility-icon-toggle[data-part="utility-icon-toggle"] {
+  .ds-collection-workspace__utility-icon-toggle.ds-collection-workspace__utility-icon-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -91263,14 +91263,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__utility-icon-toggle[data-part="utility-icon-toggle"][data-active="false"] {
+  .ds-collection-workspace__utility-icon-toggle.ds-collection-workspace__utility-icon-toggle[data-active="false"] {
   border: 1px solid transparent;
   background: transparent;
   color: var(--ds-color-text-muted);
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__utility-icon-toggle[data-part="utility-icon-toggle"][data-active="true"] {
+  .ds-collection-workspace__utility-icon-toggle.ds-collection-workspace__utility-icon-toggle[data-active="true"] {
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   color: var(--ds-color-primary);
@@ -91278,7 +91278,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (pointer: coarse) {
   .ds-surface.ds-collection-workspace
-    .ds-collection-workspace__utility-icon-toggle[data-part="utility-icon-toggle"] {
+    .ds-collection-workspace__utility-icon-toggle.ds-collection-workspace__utility-icon-toggle {
     min-inline-size: var(--ds-size-touch-target, 44px);
     min-block-size: var(--ds-size-touch-target, 44px);
   }
@@ -91416,7 +91416,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__shortcut-label[data-part="shortcut-label"] {
+  .ds-collection-workspace__shortcut-label.ds-collection-workspace__shortcut-label {
   font-size: var(--ds-font-size-xs, 12px);
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: 0.12em;
@@ -91725,7 +91725,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__filter-reset[data-part="filter-reset"] {
+  .ds-collection-workspace__filter-reset.ds-collection-workspace__filter-reset {
   flex-shrink: 0;
 }
 
@@ -91849,7 +91849,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__muted-text[data-part="dock-selection-count"] {
+  .ds-collection-workspace__muted-text.ds-collection-workspace__dock-selection-count {
   flex-shrink: 1;
   white-space: nowrap;
 }
@@ -91860,7 +91860,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__toolbar-primary-action[data-part="toolbar-primary-action"] {
+  .ds-collection-workspace__toolbar-primary-action.ds-collection-workspace__toolbar-primary-action {
   flex: 0 0 auto;
   min-inline-size: max-content;
   white-space: nowrap;
@@ -91910,7 +91910,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 
   .ds-surface.ds-collection-workspace
-    .ds-collection-workspace__utility-icon-toggle[data-part="utility-icon-toggle"][data-active="true"] {
+    .ds-collection-workspace__utility-icon-toggle.ds-collection-workspace__utility-icon-toggle[data-active="true"] {
     border-color: Highlight;
     color: Highlight;
     background: Canvas;
@@ -92003,7 +92003,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* Visually-hidden loading announcement (aria-busy companion). */
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__loading-label[data-part="loading-label"] {
+  .ds-collection-render-dispatch__loading-label.ds-collection-render-dispatch__loading-label {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -92063,7 +92063,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__muted-text[data-part="fallback-label"] {
+  .ds-collection-render-dispatch__muted-text.ds-collection-render-dispatch__fallback-label {
   display: block;
   margin-block-end: var(--ds-spacing-1, 4px);
   font-size: var(--ds-font-size-xs, 12px);
@@ -92074,14 +92074,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-surface.ds-collection-render-dispatch
   .ds-collection-render-dispatch__fallback-grid[data-part="fallback-grid"]
-  .ds-collection-render-dispatch__muted-text[data-part="fallback-label"] {
+  .ds-collection-render-dispatch__muted-text.ds-collection-render-dispatch__fallback-label {
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: 0.04em;
   margin-block-end: calc(var(--ds-spacing-1, 4px) * 0.75);
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__fallback-title[data-part="title"] {
+  .ds-collection-render-dispatch__fallback-title.ds-collection-render-dispatch__fallback-title {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -92104,7 +92104,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__fallback-value[data-part="fallback-value"] {
+  .ds-collection-render-dispatch__fallback-value.ds-collection-render-dispatch__fallback-value {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -92125,7 +92125,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* Screen-reader activation overlay on activatable cards (Link or Button). */
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible) {
+  .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation:focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: calc(-1 * var(--ds-focus-ring-width));
 }
@@ -92133,7 +92133,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The card sits flush in the grid and covers its item, so the tenant focus
    signature rides an overlay inset by its own reach, above the card. */
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible)::after {
+  .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation:focus-visible)::after {
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
   z-index: var(--ds-z-index-relative-above, 1);
@@ -92150,7 +92150,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__card-activation[data-part="card-activation"] {
+  .ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -92167,7 +92167,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The button overlay is a Button for behaviour only: this layer sorts above
    the Button skin, so its chrome is withdrawn and its wrappers unboxed. */
 .ds-surface.ds-collection-render-dispatch
-  .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"] {
+  .ds-button.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation {
   display: inline-block;
   min-block-size: 0;
   max-inline-size: none;
@@ -92192,12 +92192,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"]::before {
+  .ds-button.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation::before {
   display: unset;
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"]
+  .ds-button.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation
   :is([data-part="content"], [data-part="label"]) {
   display: contents;
   font-variant-numeric: inherit;
@@ -92234,7 +92234,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    as the native anchor or as the DS Button replacement. The anchor wears the
    tenant focus signature here; the Button keeps its own. */
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"] {
+  .ds-collection-render-dispatch__fallback-open-link.ds-collection-render-dispatch__fallback-open-link {
   display: inline-flex;
   align-items: center;
   min-block-size: var(--ds-size-touch-target, 44px);
@@ -92251,7 +92251,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-render-dispatch
-  a.ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is(
+  a.ds-collection-render-dispatch__fallback-open-link.ds-collection-render-dispatch__fallback-open-link:is(
     [data-state~="focus-visible"],
     :focus-visible
   ) {
@@ -92320,32 +92320,32 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
-  .ds-collection-render-dispatch__incremental-count[data-part="incremental-count"],
+  .ds-collection-render-dispatch__incremental-count.ds-collection-render-dispatch__incremental-count,
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
-  .ds-collection-render-dispatch__incremental-end[data-part="incremental-end"] {
+  .ds-collection-render-dispatch__incremental-end.ds-collection-render-dispatch__incremental-end {
   font-size: var(--ds-font-size-xs, 12px);
 }
 
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
-  .ds-collection-render-dispatch__incremental-count[data-part="incremental-count"] {
+  .ds-collection-render-dispatch__incremental-count.ds-collection-render-dispatch__incremental-count {
   font-variant-numeric: tabular-nums;
 }
 
 /* Forced colors: surface-owned affordances re-keyed to system colors. */
 @media (forced-colors: active) {
   .ds-surface.ds-collection-render-dispatch
-    .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible) {
+    .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation:focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
   }
 
   .ds-surface.ds-collection-render-dispatch
-    .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible)::after {
+    .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation:focus-visible)::after {
     box-shadow: none;
   }
 
   .ds-surface.ds-collection-render-dispatch
-    a.ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is(
+    a.ds-collection-render-dispatch__fallback-open-link.ds-collection-render-dispatch__fallback-open-link:is(
       [data-state~="focus-visible"],
       :focus-visible
     ) {
@@ -92355,7 +92355,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 
   .ds-surface.ds-collection-render-dispatch
-    .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"] {
+    .ds-collection-render-dispatch__fallback-open-link.ds-collection-render-dispatch__fallback-open-link {
     color: LinkText;
   }
 
@@ -92534,7 +92534,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* Visually-hidden loading announcement (aria-busy companion; same sr-only
    idiom as decision-inbox.css / record-workbench.css). */
-.ds-surface.ds-command-center .ds-command-center__loading-label[data-part='loading-label'] {
+.ds-surface.ds-command-center .ds-command-center__loading-label.ds-command-center__loading-label {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -92595,8 +92595,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* UA heading margins are neutralized; the surface stack owns the rhythm
    (same idiom as command-center.css). */
-.ds-surface.ds-decision-inbox .ds-decision-inbox__title[data-part='title'],
-.ds-surface.ds-decision-inbox .ds-decision-inbox__review-title[data-part='review-title'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__title.ds-decision-inbox__title,
+.ds-surface.ds-decision-inbox .ds-decision-inbox__review-title.ds-decision-inbox__review-title {
   margin-block: 0;
 }
 
@@ -92606,7 +92606,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* Visually-hidden live label beside aria-busy (sr-only idiom, same as
    collection-workspace-render-dispatch.css). */
-.ds-surface.ds-decision-inbox .ds-decision-inbox__loading-label[data-part='loading-label'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__loading-label.ds-decision-inbox__loading-label {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -92938,7 +92938,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 /* UA heading margins are neutralized; the surface stack owns the rhythm
    (same idiom as command-center.css). */
-.ds-surface.ds-record-workbench .ds-record-workbench__title[data-part='title'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__title.ds-record-workbench__title {
   margin-block: 0;
 }
 
@@ -93074,7 +93074,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   border-inline-start: 1px solid var(--ds-color-border-secondary);
 }
 
-.ds-surface.ds-record-workbench .ds-record-workbench__sidebar-title[data-part='sidebar-title'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__sidebar-title.ds-record-workbench__sidebar-title {
   display: block;
   margin-block: 0 var(--ds-spacing-md, 16px);
 }
@@ -93096,7 +93096,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* as decision-inbox.css)                                                      */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-record-workbench .ds-record-workbench__loading-label[data-part='loading-label'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__loading-label.ds-record-workbench__loading-label {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;

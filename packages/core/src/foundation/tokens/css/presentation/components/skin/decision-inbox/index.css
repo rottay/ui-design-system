@@ -33,8 +33,8 @@
 
 /* UA heading margins are neutralized; the surface stack owns the rhythm
    (same idiom as command-center.css). */
-.ds-surface.ds-decision-inbox .ds-decision-inbox__title[data-part='title'],
-.ds-surface.ds-decision-inbox .ds-decision-inbox__review-title[data-part='review-title'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__title.ds-decision-inbox__title,
+.ds-surface.ds-decision-inbox .ds-decision-inbox__review-title.ds-decision-inbox__review-title {
   margin-block: 0;
 }
 
@@ -44,7 +44,7 @@
 
 /* Visually-hidden live label beside aria-busy (sr-only idiom, same as
    collection-workspace-render-dispatch.css). */
-.ds-surface.ds-decision-inbox .ds-decision-inbox__loading-label[data-part='loading-label'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__loading-label.ds-decision-inbox__loading-label {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;

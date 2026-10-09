@@ -98,7 +98,7 @@ const PINS: Record<string, unknown> = {
     "shell": "741f066ae617c3fd6ae60b95513d2fe4b0bad922bb6f7f5db21c70f02de9a8d2",
     "dropdown": "11b34463fd523f269e38cffe0c8386a0ea67b7381b0c9563cb34b5bfa8064ecb",
     "frozen": "5df25de20f7d8fd892f8b503bf70350107ea191e7bc439fcb423461b1497d474",
-    "phone": "7be88f207d6f80b7a40ec8df3e93a33fdb98756cd581bf781855e3c45bdfe5df",
+    "phone": "dd7d3c87a222ca92d31f72b7d798c1e2d53fbc341406b7d9c356a280af4b4002",
     "accordion": "0358b8d58dad23bc81dcd1720fbcf69b7858f3a28340909aef6bbc04c2732db2",
     "rtl": "7525c0dbc2fb14d720e163d4efb4ee821b2a72d15ebf201e655145bb6ecc0e15"
   },

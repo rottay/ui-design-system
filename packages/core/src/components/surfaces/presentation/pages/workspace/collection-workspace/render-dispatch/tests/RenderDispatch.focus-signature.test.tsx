@@ -61,10 +61,10 @@ const focusRulesOf = (rules: Rule[]) =>
     .map((rule): [string, string[]] => [rule.selector, declarations(rule.body)]);
 
 const ROOT = '.ds-surface.ds-collection-render-dispatch';
-const CARD_HOST = `${ROOT} .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible)`;
-const ACTIVATION = `${ROOT} .ds-collection-render-dispatch__card-activation[data-part="card-activation"]`;
-const BUTTON_ACTIVATION = `${ROOT} .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"]`;
-const OPEN_LINK = `${ROOT} a.ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is( [data-state~="focus-visible"], :focus-visible )`;
+const CARD_HOST = `${ROOT} .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation:focus-visible)`;
+const ACTIVATION = `${ROOT} .ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation`;
+const BUTTON_ACTIVATION = `${ROOT} .ds-button.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation`;
+const OPEN_LINK = `${ROOT} a.ds-collection-render-dispatch__fallback-open-link.ds-collection-render-dispatch__fallback-open-link:is( [data-state~="focus-visible"], :focus-visible )`;
 
 interface Row {
   id: string;

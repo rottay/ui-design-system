@@ -59,7 +59,7 @@
 
 /* Visually-hidden loading announcement (aria-busy companion). */
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__loading-label[data-part="loading-label"] {
+  .ds-collection-render-dispatch__loading-label.ds-collection-render-dispatch__loading-label {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -119,7 +119,7 @@
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__muted-text[data-part="fallback-label"] {
+  .ds-collection-render-dispatch__muted-text.ds-collection-render-dispatch__fallback-label {
   display: block;
   margin-block-end: var(--ds-spacing-1, 4px);
   font-size: var(--ds-font-size-xs, 12px);
@@ -130,14 +130,14 @@
 
 .ds-surface.ds-collection-render-dispatch
   .ds-collection-render-dispatch__fallback-grid[data-part="fallback-grid"]
-  .ds-collection-render-dispatch__muted-text[data-part="fallback-label"] {
+  .ds-collection-render-dispatch__muted-text.ds-collection-render-dispatch__fallback-label {
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: 0.04em;
   margin-block-end: calc(var(--ds-spacing-1, 4px) * 0.75);
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__fallback-title[data-part="title"] {
+  .ds-collection-render-dispatch__fallback-title.ds-collection-render-dispatch__fallback-title {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -160,7 +160,7 @@
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__fallback-value[data-part="fallback-value"] {
+  .ds-collection-render-dispatch__fallback-value.ds-collection-render-dispatch__fallback-value {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -181,7 +181,7 @@
 
 /* Screen-reader activation overlay on activatable cards (Link or Button). */
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible) {
+  .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation:focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: calc(-1 * var(--ds-focus-ring-width));
 }
@@ -189,7 +189,7 @@
 /* The card sits flush in the grid and covers its item, so the tenant focus
    signature rides an overlay inset by its own reach, above the card. */
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible)::after {
+  .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation:focus-visible)::after {
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
   z-index: var(--ds-z-index-relative-above, 1);
@@ -206,7 +206,7 @@
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__card-activation[data-part="card-activation"] {
+  .ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -223,7 +223,7 @@
 /* The button overlay is a Button for behaviour only: this layer sorts above
    the Button skin, so its chrome is withdrawn and its wrappers unboxed. */
 .ds-surface.ds-collection-render-dispatch
-  .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"] {
+  .ds-button.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation {
   display: inline-block;
   min-block-size: 0;
   max-inline-size: none;
@@ -248,12 +248,12 @@
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"]::before {
+  .ds-button.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation::before {
   display: unset;
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-button.ds-collection-render-dispatch__card-activation[data-part="card-activation"]
+  .ds-button.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation
   :is([data-part="content"], [data-part="label"]) {
   display: contents;
   font-variant-numeric: inherit;
@@ -290,7 +290,7 @@
    as the native anchor or as the DS Button replacement. The anchor wears the
    tenant focus signature here; the Button keeps its own. */
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"] {
+  .ds-collection-render-dispatch__fallback-open-link.ds-collection-render-dispatch__fallback-open-link {
   display: inline-flex;
   align-items: center;
   min-block-size: var(--ds-size-touch-target, 44px);
@@ -307,7 +307,7 @@
 }
 
 .ds-surface.ds-collection-render-dispatch
-  a.ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is(
+  a.ds-collection-render-dispatch__fallback-open-link.ds-collection-render-dispatch__fallback-open-link:is(
     [data-state~="focus-visible"],
     :focus-visible
   ) {
@@ -376,32 +376,32 @@
 }
 
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
-  .ds-collection-render-dispatch__incremental-count[data-part="incremental-count"],
+  .ds-collection-render-dispatch__incremental-count.ds-collection-render-dispatch__incremental-count,
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
-  .ds-collection-render-dispatch__incremental-end[data-part="incremental-end"] {
+  .ds-collection-render-dispatch__incremental-end.ds-collection-render-dispatch__incremental-end {
   font-size: var(--ds-font-size-xs, 12px);
 }
 
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
-  .ds-collection-render-dispatch__incremental-count[data-part="incremental-count"] {
+  .ds-collection-render-dispatch__incremental-count.ds-collection-render-dispatch__incremental-count {
   font-variant-numeric: tabular-nums;
 }
 
 /* Forced colors: surface-owned affordances re-keyed to system colors. */
 @media (forced-colors: active) {
   .ds-surface.ds-collection-render-dispatch
-    .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible) {
+    .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation:focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
   }
 
   .ds-surface.ds-collection-render-dispatch
-    .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible)::after {
+    .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation:focus-visible)::after {
     box-shadow: none;
   }
 
   .ds-surface.ds-collection-render-dispatch
-    a.ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is(
+    a.ds-collection-render-dispatch__fallback-open-link.ds-collection-render-dispatch__fallback-open-link:is(
       [data-state~="focus-visible"],
       :focus-visible
     ) {
@@ -411,7 +411,7 @@
   }
 
   .ds-surface.ds-collection-render-dispatch
-    .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"] {
+    .ds-collection-render-dispatch__fallback-open-link.ds-collection-render-dispatch__fallback-open-link {
     color: LinkText;
   }
 
