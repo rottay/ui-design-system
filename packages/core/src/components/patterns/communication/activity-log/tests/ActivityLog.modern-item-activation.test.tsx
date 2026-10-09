@@ -59,7 +59,7 @@ describe('ActivityLog modern item activation is a composed chrome-less Button', 
   it('stretches the activation over the body in a corner-clipped frame', () => {
     expect(SKIN).toMatch(/\[data-part='item-body'\]\[data-interactive='true'\] \{\s*position: relative;/);
     expect(SKIN).toMatch(/\[data-part='item-body'\] > \[data-part='item-hit'\] \{\s*position: absolute;\s*z-index: var\(--ds-z-index-relative-above\);\s*inset: 0;\s*border-radius: inherit;\s*clip-path: border-box;\s*\}/);
-    expect(SKIN).toMatch(/\[data-part='item-hit'\] > \[data-part='item-activate'\] \{\s*position: absolute;\s*inset: -4%;\s*max-inline-size: none;\s*\}/);
+    expect(SKIN).toMatch(/\[data-part='item-hit'\] > \.ds-activity-log__item-activate \{\s*position: absolute;\s*inset: -4%;\s*max-inline-size: none;\s*\}/);
   });
 
   it('lifts the truncated names and the timestamp text above the frame so their title tooltips stay reachable', async () => {

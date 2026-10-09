@@ -178,11 +178,12 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
                 rows={2}
               />
               <div data-part="form-actions">
-                <ModernButton data-part="save" variant="primary" size="xs" onClick={handleEdit}>
+                <ModernButton data-part="save" className="ds-comment-thread__save" variant="primary" size="xs" onClick={handleEdit}>
                   {tOr('comment_thread.save', 'Save')}
                 </ModernButton>
                 <ModernButton
                   data-part="cancel"
+                  className="ds-comment-thread__cancel"
                   variant="ghost"
                   size="xs"
                   onClick={() => { setEditText(comment.content); closeEdit(); }}
@@ -205,6 +206,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
                 <ModernButton
                   key={r.emoji}
                   data-part="reaction"
+                  className="ds-comment-thread__reaction"
                   data-active={r.active ? "true" : "false"}
                   aria-pressed={r.active}
                   variant={r.active ? 'primary' : 'ghost'}
@@ -224,6 +226,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               <ModernButton
                 ref={replyButtonRef}
                 data-part="reply"
+                className="ds-comment-thread__reply"
                 variant="ghost"
                 size="xs"
                 aria-expanded={replyVisible}
@@ -236,6 +239,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               <ModernButton
                 ref={editButtonRef}
                 data-part="edit"
+                className="ds-comment-thread__edit"
                 variant="ghost"
                 size="xs"
                 aria-expanded={editing}
@@ -245,7 +249,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               </ModernButton>
             )}
             {isOwner && onDelete && (
-              <ModernButton data-part="delete" variant="danger" size="xs" onClick={() => onDelete(comment.id)}>
+              <ModernButton data-part="delete" className="ds-comment-thread__delete" variant="danger" size="xs" onClick={() => onDelete(comment.id)}>
                 {tOr('comment_thread.delete', 'Delete')}
               </ModernButton>
             )}
@@ -269,10 +273,10 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
                 placeholder={tOr('comment_thread.reply_placeholder', 'Write a reply...')}
               />
               <div data-part="form-actions">
-                <ModernButton data-part="reply-submit" variant="primary" size="xs" onClick={handleReply} disabled={!replyText.trim()}>
+                <ModernButton data-part="reply-submit" className="ds-comment-thread__reply-submit" variant="primary" size="xs" onClick={handleReply} disabled={!replyText.trim()}>
                   {tOr('comment_thread.reply', 'Reply')}
                 </ModernButton>
-                <ModernButton data-part="reply-cancel" variant="ghost" size="xs" onClick={closeReply}>
+                <ModernButton data-part="reply-cancel" className="ds-comment-thread__reply-cancel" variant="ghost" size="xs" onClick={closeReply}>
                   {tOr('comment_thread.cancel', 'Cancel')}
                 </ModernButton>
               </div>
@@ -405,7 +409,7 @@ export default function ModernCommentThread(props: CommentThreadProps) {
               placeholder={placeholder}
             />
             <div data-part="form-actions">
-              <ModernButton data-part="submit" variant="primary" size="sm" onClick={handleAdd} disabled={!newComment.trim()}>
+              <ModernButton data-part="submit" className="ds-comment-thread__submit" variant="primary" size="sm" onClick={handleAdd} disabled={!newComment.trim()}>
                 {tOr('comment_thread.submit', 'Comment')}
               </ModernButton>
             </div>

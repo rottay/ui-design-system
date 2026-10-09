@@ -122,9 +122,9 @@ describe('NotificationCenter modern engine keyboard state contract', () => {
 
   it('reveals the quiet row actions when keyboard focus reaches the row', () => {
     for (const part of ['mark-read', 'dismiss']) {
-      expect(MODERN_SKIN).toContain(`[data-part='row']:focus-within [data-part='${part}']`);
+      expect(MODERN_SKIN).toContain(`[data-part='row']:focus-within .ds-notification-center__${part}`);
       expect(MODERN_SKIN).toContain(
-        `[data-part='${part}']:is([data-state~='focus-visible'], :focus-visible)`,
+        `.ds-notification-center__${part}:is([data-state~='focus-visible'], :focus-visible)`,
       );
     }
   });

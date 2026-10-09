@@ -229,6 +229,7 @@ export function PresenceBar({
         >
           <Text
             data-part="overflow-badge-count"
+            className="ds-presence__overflow-badge-count"
             weight="semibold"
             style={{
               fontSize: dims.font,
@@ -299,7 +300,7 @@ export function PresenceTypingIndicator({
               <Box key={index} data-part="typing-dot" />
             ))}
           </Box>
-          <Text data-part="label">
+          <Text data-part="label" className="ds-presence__label">
             {buildTypingLabel(users, maxNames, (key, floor, params) =>
               i18n?.tOr(key, floor, params) ?? floor, i18n?.locale)}
           </Text>

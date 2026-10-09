@@ -189,15 +189,15 @@
         reaction pills) reach the 44px floor via min-block-size -- min-* wins
         over the primitive's density height without touching fine pointers. ---- */
 @media (hover: none) and (pointer: coarse) {
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='reply'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='edit'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='delete'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='reaction'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='save'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='cancel'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='reply-submit'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='reply-cancel'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='submit'] {
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__reply,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__edit,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__delete,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__reaction,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__save,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__cancel,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__reply-submit,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__reply-cancel,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__submit {
     min-block-size: var(--ds-comment-thread-touch-target-min, 44px);
   }
 }

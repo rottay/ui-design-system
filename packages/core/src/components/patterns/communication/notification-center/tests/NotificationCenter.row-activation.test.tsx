@@ -60,7 +60,7 @@ describe('NotificationCenter modern row activation is a composed chrome-less But
 
   it('stretches the activation over the row in the skin, and lifts the timestamp so its title stays reachable', () => {
     expect(MODERN_SKIN).toMatch(/\[data-part='row'\] \{\s*position: relative;/);
-    expect(MODERN_SKIN).toMatch(/\[data-part='row'\] > \[data-part='row-activate'\] \{\s*position: absolute;\s*inset: 0;\s*\}/);
+    expect(MODERN_SKIN).toMatch(/\[data-part='row'\] > \.ds-notification-center__row-activate \{\s*position: absolute;\s*inset: 0;\s*\}/);
     expect(MODERN_SKIN).toMatch(/\[data-part='row-timestamp'\] \{\s*position: relative;\s*\}/);
   });
 });

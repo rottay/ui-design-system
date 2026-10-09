@@ -390,7 +390,7 @@ export function ToolCallCard({
                   <Box />
                 )}
                 {duration ? (
-                  <Text data-part="tool-card" data-tone={tone} size="sm">
+                  <Text data-part="tool-card" className="ds-assistant__tool-card" data-tone={tone} size="sm">
                     {duration}
                   </Text>
                 ) : null}
@@ -497,11 +497,11 @@ export function PreviewDiffCard({
                 auto-mirroring forward icon (flips in RTL), never a Unicode
                 arrow glyph. */}
             <Box data-part="diff-spacer" />
-            <Text data-part="diff-head-cell" data-diff-side="before" size="xs" color="muted">
+            <Text data-part="diff-head-cell" className="ds-assistant__diff-head-cell" data-diff-side="before" size="xs" color="muted">
               {resolvedBeforeLabel}
             </Text>
             <Box data-part="diff-arrow" aria-hidden="true" />
-            <Text data-part="diff-head-cell" data-diff-side="after" size="xs" color="muted">
+            <Text data-part="diff-head-cell" className="ds-assistant__diff-head-cell" data-diff-side="after" size="xs" color="muted">
               {resolvedAfterLabel}
             </Text>
           </Stack>
@@ -515,13 +515,14 @@ export function PreviewDiffCard({
                 spacing="sm"
                 align="center"
               >
-                <Text data-part="diff-label" size="sm" weight="semibold">
+                <Text data-part="diff-label" className="ds-assistant__diff-label" size="sm" weight="semibold">
                   {row.label}
                 </Text>
                 <Box data-part="diff-cell-wrap" data-diff-side="before">
                   {row.before !== undefined ? (
                     <Text
                       data-part="preview-cell"
+                      className="ds-assistant__preview-cell"
                       data-diff-side="before"
                       data-change={change}
                       size="sm"
@@ -537,6 +538,7 @@ export function PreviewDiffCard({
                   {row.after !== undefined ? (
                     <Text
                       data-part="preview-cell"
+                      className="ds-assistant__preview-cell"
                       data-diff-side="after"
                       data-change={change}
                       size="sm"
@@ -727,6 +729,7 @@ export function MessageBubble({
                       silently); a node author carries its own reveal. */}
                   <Text
                     data-part="author"
+                    className="ds-assistant__author"
                     weight="bold"
                     title={typeof author === 'string' ? author : undefined}
                   >
@@ -756,7 +759,7 @@ export function MessageBubble({
             {timestamp || status || meta ? (
               <Stack spacing="xs">
                 {timestamp ? (
-                  <Text data-part="timestamp" size="xs">
+                  <Text data-part="timestamp" className="ds-assistant__timestamp" size="xs">
                     {timestamp}
                   </Text>
                 ) : null}

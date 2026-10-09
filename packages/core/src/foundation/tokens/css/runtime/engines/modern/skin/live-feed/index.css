@@ -103,7 +103,7 @@
 
 /* refresh button (geometry was inline; P-79: the caller part makes this file
    the button's single paint owner) */
-.ds-pattern-live-feed.ds-engine-modern [data-part='refresh'] {
+.ds-pattern-live-feed.ds-engine-modern .ds-live-feed__refresh {
   inline-size: var(--ds-live-feed-refresh-size, 32px);
   block-size: var(--ds-live-feed-refresh-size, 32px);
   padding: 0;
@@ -118,7 +118,7 @@
    former glow shadow is removed (no-glow law). Geometry was inline. The
    authored height is a FLOOR (min-block-size): a long localized label
    ("{count} new items") may grow the banner instead of clipping. */
-.ds-pattern-live-feed.ds-engine-modern [data-part='banner'] {
+.ds-pattern-live-feed.ds-engine-modern .ds-live-feed__banner {
   inline-size: 100%;
   min-block-size: var(--ds-live-feed-banner-height, 32px);
   gap: var(--ds-live-feed-banner-gap, 8px);
@@ -174,7 +174,7 @@
   text-align: center;
 }
 
-.ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+.ds-pattern-live-feed.ds-engine-modern .ds-live-feed__load-more {
   gap: var(--ds-live-feed-load-more-gap, 6px);
   block-size: var(--ds-live-feed-control-height, 32px);
   padding-block: 0;
@@ -199,13 +199,13 @@
    needs the floor as much as its block axis (the full-width banner already
    clears the inline floor by construction) */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-live-feed.ds-engine-modern [data-part='refresh'],
-  .ds-pattern-live-feed.ds-engine-modern [data-part='banner'],
-  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__refresh,
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__banner,
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__load-more {
     min-block-size: var(--ds-live-feed-touch-target-min, var(--ds-touch-target-min, 44px));
   }
-  .ds-pattern-live-feed.ds-engine-modern [data-part='refresh'],
-  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__refresh,
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__load-more {
     min-inline-size: var(--ds-live-feed-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
@@ -224,7 +224,7 @@
     border-color: ButtonText;
   }
 
-  .ds-pattern-live-feed.ds-engine-modern [data-part='banner'] {
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__banner {
     background: Highlight;
     color: HighlightText;
   }

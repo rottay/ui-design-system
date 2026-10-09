@@ -310,6 +310,7 @@ function ItemBody({
         <ModernButton
           chrome="none"
           data-part="item-activate"
+          className="ds-activity-log__item-activate"
           aria-labelledby={id}
           onClick={onActivate}
           onKeyDown={(event) => {

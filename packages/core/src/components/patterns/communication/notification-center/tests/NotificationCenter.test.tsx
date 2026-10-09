@@ -140,7 +140,7 @@ describe('PatternNotificationCenter', () => {
       expect(trigger).toHaveAttribute('data-part', 'trigger');
       expect(trigger.getAttribute('style') ?? '').not.toMatch(/(?:height|width|padding)/);
       const triggerRule = MODERN_SKIN.match(
-        /\[data-part=['"]trigger['"]\]\s*\{[^}]*\}/,
+        /\.ds-notification-center__trigger\s*\{[^}]*\}/,
       )?.[0] ?? '';
       expect(triggerRule).toContain('block-size: 40px');
       expect(triggerRule).toContain('inline-size: 40px');

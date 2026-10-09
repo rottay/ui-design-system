@@ -166,19 +166,19 @@
  * default branch, kept for completeness though unreachable today.
  * ==========================================================================*/
 
-.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'] {
+.ds-assistant-tool-call-card .ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card {
   color: var(--ds-color-text-muted);
 }
-.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='success'] {
+.ds-assistant-tool-call-card .ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card[data-tone='success'] {
   color: var(--ds-color-success);
 }
-.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='warning'] {
+.ds-assistant-tool-call-card .ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card[data-tone='warning'] {
   color: var(--ds-color-warning);
 }
-.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='danger'] {
+.ds-assistant-tool-call-card .ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card[data-tone='danger'] {
   color: var(--ds-color-error);
 }
-.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='info'] {
+.ds-assistant-tool-call-card .ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card[data-tone='info'] {
   color: var(--ds-color-info);
 }
 
@@ -251,7 +251,7 @@
   flex: 2;
   min-inline-size: 0;
 }
-.ds-assistant-preview-diff-card [data-part='diff-head-cell'] {
+.ds-assistant-preview-diff-card .ds-assistant__diff-head-cell {
   flex: 3;
   min-inline-size: 0;
 }
@@ -263,7 +263,7 @@
   justify-content: center;
   color: var(--ds-color-text-muted);
 }
-.ds-assistant-preview-diff-card [data-part='diff-label'][data-part='diff-label'] {
+.ds-assistant-preview-diff-card .ds-assistant__diff-label.ds-assistant__diff-label {
   flex: 2;
   min-inline-size: 0;
   /* long field labels (localized strings) wrap inside their column instead
@@ -276,8 +276,8 @@
 }
 /* long values wrap inside their cell (overflow-wrap is not inherited, so it
    lands on the Text part itself, not the wrapper) */
-.ds-assistant-preview-diff-card [data-part='preview-cell'],
-.ds-assistant-preview-diff-card [data-part='diff-head-cell'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell,
+.ds-assistant-preview-diff-card .ds-assistant__diff-head-cell {
   overflow-wrap: anywhere;
 }
 
@@ -287,27 +287,27 @@
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='before'] {
   color: var(--ds-color-text-muted);
 }
 /* The strikethrough is the before-cell's superseded-value channel (survives
    forced colors, never colour-alone); drained from the engine's inline
    style and keyed on the same data-change states it used. */
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='removed'],
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='updated'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='before'][data-change='removed'],
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='before'][data-change='updated'] {
   text-decoration: line-through;
 }
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='removed'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='before'][data-change='removed'] {
   color: var(--ds-color-error);
 }
 
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='added'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='after'][data-change='added'] {
   color: var(--ds-color-success);
 }
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='updated'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='after'][data-change='updated'] {
   color: var(--ds-color-success);
 }
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='removed'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='after'][data-change='removed'] {
   color: var(--ds-color-text-muted);
 }
 
@@ -351,7 +351,7 @@
 /* author name: a long display name yields with ellipsis inside the header
    row (the engine mirrors a string author on `title`); the delivery badge
    never gets pushed off-card */
-.ds-assistant-message-bubble [data-part='author'][data-part='author'] {
+.ds-assistant-message-bubble .ds-assistant__author.ds-assistant__author {
   min-inline-size: 0;
   max-inline-size: 100%;
   overflow: hidden;
@@ -359,7 +359,7 @@
   white-space: nowrap;
 }
 
-.ds-assistant-message-bubble [data-part='timestamp'][data-part='timestamp'][data-part='timestamp'][data-part='timestamp'] {
+.ds-assistant-message-bubble .ds-assistant__timestamp.ds-assistant__timestamp.ds-assistant__timestamp.ds-assistant__timestamp {
   color: var(--ds-color-text-muted);
 }
 

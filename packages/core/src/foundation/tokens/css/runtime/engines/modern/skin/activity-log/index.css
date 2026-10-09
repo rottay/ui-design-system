@@ -76,7 +76,7 @@
   border-radius: inherit;
   clip-path: border-box;
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='item-hit'] > [data-part='item-activate'] {
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-hit'] > .ds-activity-log__item-activate {
   position: absolute;
   inset: -4%;
   max-inline-size: none;

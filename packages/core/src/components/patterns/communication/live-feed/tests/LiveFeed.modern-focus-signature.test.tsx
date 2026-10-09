@@ -101,7 +101,7 @@ describe('LiveFeed modern engine — composed controls wear the Button focus sig
   it('paints no focus indicator of its own on the composed Buttons', () => {
     for (const part of BUTTON_PARTS) {
       const named = [...AUTHORED, ...rulesOf(FORCED)].filter((rule) =>
-        rule.selector.includes(`[data-part='${part}']`),
+        rule.selector.includes(`.ds-live-feed__${part}`),
       );
       expect(named.length).toBeGreaterThan(0);
       for (const rule of named) {

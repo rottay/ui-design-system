@@ -67104,15 +67104,15 @@ html[data-ds-motion='reduced']
         reaction pills) reach the 44px floor via min-block-size -- min-* wins
         over the primitive's density height without touching fine pointers. ---- */
 @media (hover: none) and (pointer: coarse) {
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='reply'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='edit'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='delete'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='reaction'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='save'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='cancel'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='reply-submit'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='reply-cancel'],
-  .ds-pattern-comment-thread.ds-engine-modern [data-part='submit'] {
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__reply,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__edit,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__delete,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__reaction,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__save,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__cancel,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__reply-submit,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__reply-cancel,
+  .ds-pattern-comment-thread.ds-engine-modern .ds-comment-thread__submit {
     min-block-size: var(--ds-comment-thread-touch-target-min, 44px);
   }
 }
@@ -67180,7 +67180,7 @@ html[data-ds-motion='reduced']
         exactly this); the composed Button keeps its chrome/states, the
         pattern owns only this local frame. Coarse pointers lift it to the
         canonical touch floor in the media query at the end of the file. ---- */
-.ds-pattern-notification-center.ds-engine-modern [data-part='trigger'] {
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__trigger {
   block-size: 40px;
   inline-size: 40px;
   padding: 0;
@@ -67198,7 +67198,7 @@ html[data-ds-motion='reduced']
 }
 
 /* ---- trigger badge: position only (the composed Badge owns its paint) ---- */
-.ds-pattern-notification-center.ds-engine-modern [data-part='badge'] {
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__badge {
   position: absolute;
   inset-block-start: -0.25rem;
   inset-inline-end: -0.25rem;
@@ -67330,7 +67330,7 @@ html[data-ds-motion='reduced']
 }
 /* The row's activation is a chrome-less Button stretched over the row; the composed action Buttons paint
    above it in source order, and the timestamp is lifted so its full-date title stays reachable. */
-.ds-pattern-notification-center.ds-engine-modern [data-part='row'] > [data-part='row-activate'] {
+.ds-pattern-notification-center.ds-engine-modern [data-part='row'] > .ds-notification-center__row-activate {
   position: absolute;
   inset: 0;
 }
@@ -67424,22 +67424,22 @@ html[data-ds-motion='reduced']
         keep their chrome and focus rings; the pattern owns only the reveal).
         The reveal fires EARLY on row hover/focus-within (saved-views
         precedent): keyboard users see the actions before reaching them. ---- */
-.ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
-.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read,
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss {
   opacity: 0.3;
   transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
-.ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within [data-part='mark-read'],
-.ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within [data-part='dismiss'],
-.ds-pattern-notification-center.ds-engine-modern [data-part='mark-read']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within .ds-notification-center__mark-read,
+.ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within .ds-notification-center__dismiss,
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read:is([data-state~='focus-visible'], :focus-visible),
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss:is([data-state~='focus-visible'], :focus-visible) {
   opacity: 1;
 }
 @media (hover: hover) {
-  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) [data-part='dismiss'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read']:is([data-state~='hovered'], :hover),
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:is([data-state~='hovered'], :hover) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) .ds-notification-center__mark-read,
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) .ds-notification-center__dismiss,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read:is([data-state~='hovered'], :hover),
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss:is([data-state~='hovered'], :hover) {
     opacity: 1;
   }
 }
@@ -67455,18 +67455,18 @@ html[data-ds-motion='reduced']
 /* ---- coarse pointers: the pattern's action chrome reaches the physical
         44px floor via block-size only (the composed Buttons keep density) ---- */
 @media (pointer: coarse) {
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-all-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='clear-all'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='action'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-all-read,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__clear-all,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__action,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss {
     min-block-size: var(--ds-notification-center-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss {
     transition: none;
   }
 }
@@ -67505,8 +67505,8 @@ html[data-ds-motion='reduced']
     color: CanvasText;
   }
   /* Quiet actions must never stay dim in forced colours. */
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss {
     opacity: 1;
   }
 }
@@ -67516,12 +67516,12 @@ html[data-ds-motion='reduced']
    authored size untouched. The trigger is authored 40x40, so it joins the
    floor on both axes (its paint stays the quiet ghost icon button). */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='trigger'] {
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__trigger {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
-  .ds-pattern-notification-center.ds-engine-modern [data-part='trigger'] {
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__trigger {
     min-inline-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -67606,7 +67606,7 @@ html[data-ds-motion='reduced']
   border-radius: inherit;
   clip-path: border-box;
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='item-hit'] > [data-part='item-activate'] {
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-hit'] > .ds-activity-log__item-activate {
   position: absolute;
   inset: -4%;
   max-inline-size: none;
@@ -67935,7 +67935,7 @@ html[data-ds-motion='reduced']
 
 /* refresh button (geometry was inline; P-79: the caller part makes this file
    the button's single paint owner) */
-.ds-pattern-live-feed.ds-engine-modern [data-part='refresh'] {
+.ds-pattern-live-feed.ds-engine-modern .ds-live-feed__refresh {
   inline-size: var(--ds-live-feed-refresh-size, 32px);
   block-size: var(--ds-live-feed-refresh-size, 32px);
   padding: 0;
@@ -67950,7 +67950,7 @@ html[data-ds-motion='reduced']
    former glow shadow is removed (no-glow law). Geometry was inline. The
    authored height is a FLOOR (min-block-size): a long localized label
    ("{count} new items") may grow the banner instead of clipping. */
-.ds-pattern-live-feed.ds-engine-modern [data-part='banner'] {
+.ds-pattern-live-feed.ds-engine-modern .ds-live-feed__banner {
   inline-size: 100%;
   min-block-size: var(--ds-live-feed-banner-height, 32px);
   gap: var(--ds-live-feed-banner-gap, 8px);
@@ -68006,7 +68006,7 @@ html[data-ds-motion='reduced']
   text-align: center;
 }
 
-.ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+.ds-pattern-live-feed.ds-engine-modern .ds-live-feed__load-more {
   gap: var(--ds-live-feed-load-more-gap, 6px);
   block-size: var(--ds-live-feed-control-height, 32px);
   padding-block: 0;
@@ -68031,13 +68031,13 @@ html[data-ds-motion='reduced']
    needs the floor as much as its block axis (the full-width banner already
    clears the inline floor by construction) */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-live-feed.ds-engine-modern [data-part='refresh'],
-  .ds-pattern-live-feed.ds-engine-modern [data-part='banner'],
-  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__refresh,
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__banner,
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__load-more {
     min-block-size: var(--ds-live-feed-touch-target-min, var(--ds-touch-target-min, 44px));
   }
-  .ds-pattern-live-feed.ds-engine-modern [data-part='refresh'],
-  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__refresh,
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__load-more {
     min-inline-size: var(--ds-live-feed-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
@@ -68056,7 +68056,7 @@ html[data-ds-motion='reduced']
     border-color: ButtonText;
   }
 
-  .ds-pattern-live-feed.ds-engine-modern [data-part='banner'] {
+  .ds-pattern-live-feed.ds-engine-modern .ds-live-feed__banner {
     background: Highlight;
     color: HighlightText;
   }
@@ -80570,19 +80570,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * default branch, kept for completeness though unreachable today.
  * ==========================================================================*/
 
-.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'] {
+.ds-assistant-tool-call-card .ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card {
   color: var(--ds-color-text-muted);
 }
-.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='success'] {
+.ds-assistant-tool-call-card .ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card[data-tone='success'] {
   color: var(--ds-color-success);
 }
-.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='warning'] {
+.ds-assistant-tool-call-card .ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card[data-tone='warning'] {
   color: var(--ds-color-warning);
 }
-.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='danger'] {
+.ds-assistant-tool-call-card .ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card[data-tone='danger'] {
   color: var(--ds-color-error);
 }
-.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='info'] {
+.ds-assistant-tool-call-card .ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card.ds-assistant__tool-card[data-tone='info'] {
   color: var(--ds-color-info);
 }
 
@@ -80655,7 +80655,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   flex: 2;
   min-inline-size: 0;
 }
-.ds-assistant-preview-diff-card [data-part='diff-head-cell'] {
+.ds-assistant-preview-diff-card .ds-assistant__diff-head-cell {
   flex: 3;
   min-inline-size: 0;
 }
@@ -80667,7 +80667,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   justify-content: center;
   color: var(--ds-color-text-muted);
 }
-.ds-assistant-preview-diff-card [data-part='diff-label'][data-part='diff-label'] {
+.ds-assistant-preview-diff-card .ds-assistant__diff-label.ds-assistant__diff-label {
   flex: 2;
   min-inline-size: 0;
   /* long field labels (localized strings) wrap inside their column instead
@@ -80680,8 +80680,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 /* long values wrap inside their cell (overflow-wrap is not inherited, so it
    lands on the Text part itself, not the wrapper) */
-.ds-assistant-preview-diff-card [data-part='preview-cell'],
-.ds-assistant-preview-diff-card [data-part='diff-head-cell'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell,
+.ds-assistant-preview-diff-card .ds-assistant__diff-head-cell {
   overflow-wrap: anywhere;
 }
 
@@ -80691,27 +80691,27 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='before'] {
   color: var(--ds-color-text-muted);
 }
 /* The strikethrough is the before-cell's superseded-value channel (survives
    forced colors, never colour-alone); drained from the engine's inline
    style and keyed on the same data-change states it used. */
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='removed'],
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='updated'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='before'][data-change='removed'],
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='before'][data-change='updated'] {
   text-decoration: line-through;
 }
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='removed'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='before'][data-change='removed'] {
   color: var(--ds-color-error);
 }
 
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='added'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='after'][data-change='added'] {
   color: var(--ds-color-success);
 }
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='updated'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='after'][data-change='updated'] {
   color: var(--ds-color-success);
 }
-.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='removed'] {
+.ds-assistant-preview-diff-card .ds-assistant__preview-cell.ds-assistant__preview-cell[data-diff-side='after'][data-change='removed'] {
   color: var(--ds-color-text-muted);
 }
 
@@ -80755,7 +80755,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* author name: a long display name yields with ellipsis inside the header
    row (the engine mirrors a string author on `title`); the delivery badge
    never gets pushed off-card */
-.ds-assistant-message-bubble [data-part='author'][data-part='author'] {
+.ds-assistant-message-bubble .ds-assistant__author.ds-assistant__author {
   min-inline-size: 0;
   max-inline-size: 100%;
   overflow: hidden;
@@ -80763,7 +80763,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   white-space: nowrap;
 }
 
-.ds-assistant-message-bubble [data-part='timestamp'][data-part='timestamp'][data-part='timestamp'][data-part='timestamp'] {
+.ds-assistant-message-bubble .ds-assistant__timestamp.ds-assistant__timestamp.ds-assistant__timestamp.ds-assistant__timestamp {
   color: var(--ds-color-text-muted);
 }
 
@@ -80907,7 +80907,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'][data-part='overflow-badge'] {
   border: var(--ds-presence-badge-ring) solid var(--ds-color-border);
 }
-.ds-presence-bar [data-part='overflow-badge-count'][data-part='overflow-badge-count'][data-part='overflow-badge-count'][data-part='overflow-badge-count'] {
+.ds-presence-bar .ds-presence__overflow-badge-count.ds-presence__overflow-badge-count.ds-presence__overflow-badge-count.ds-presence__overflow-badge-count {
   line-height: 1;
   user-select: none;
   color: var(--ds-color-text-secondary);
@@ -80940,7 +80940,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(3) {
   animation-delay: calc(var(--_ds-presence-dot-duration, calc(var(--ds-motion-glacial) * 2.4)) * 0.25);
 }
-.ds-presence-typing-indicator [data-part='label'][data-part='label'][data-part='label'][data-part='label'] {
+.ds-presence-typing-indicator .ds-presence__label.ds-presence__label.ds-presence__label.ds-presence__label {
   font-size: var(--ds-font-size-sm);
   color: var(--ds-color-text-secondary);
 }
@@ -81017,7 +81017,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'] {
     background: ButtonText;
   }
-  .ds-presence-bar [data-part='overflow-badge-count'][data-part='overflow-badge-count'][data-part='overflow-badge-count'][data-part='overflow-badge-count'] {
+  .ds-presence-bar .ds-presence__overflow-badge-count.ds-presence__overflow-badge-count.ds-presence__overflow-badge-count.ds-presence__overflow-badge-count {
     color: Canvas;
   }
   .ds-presence-live-cursor [data-part='cursor-badge'][data-part='cursor-badge'] {

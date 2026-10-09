@@ -50,7 +50,7 @@
         exactly this); the composed Button keeps its chrome/states, the
         pattern owns only this local frame. Coarse pointers lift it to the
         canonical touch floor in the media query at the end of the file. ---- */
-.ds-pattern-notification-center.ds-engine-modern [data-part='trigger'] {
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__trigger {
   block-size: 40px;
   inline-size: 40px;
   padding: 0;
@@ -68,7 +68,7 @@
 }
 
 /* ---- trigger badge: position only (the composed Badge owns its paint) ---- */
-.ds-pattern-notification-center.ds-engine-modern [data-part='badge'] {
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__badge {
   position: absolute;
   inset-block-start: -0.25rem;
   inset-inline-end: -0.25rem;
@@ -200,7 +200,7 @@
 }
 /* The row's activation is a chrome-less Button stretched over the row; the composed action Buttons paint
    above it in source order, and the timestamp is lifted so its full-date title stays reachable. */
-.ds-pattern-notification-center.ds-engine-modern [data-part='row'] > [data-part='row-activate'] {
+.ds-pattern-notification-center.ds-engine-modern [data-part='row'] > .ds-notification-center__row-activate {
   position: absolute;
   inset: 0;
 }
@@ -294,22 +294,22 @@
         keep their chrome and focus rings; the pattern owns only the reveal).
         The reveal fires EARLY on row hover/focus-within (saved-views
         precedent): keyboard users see the actions before reaching them. ---- */
-.ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
-.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read,
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss {
   opacity: 0.3;
   transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
-.ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within [data-part='mark-read'],
-.ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within [data-part='dismiss'],
-.ds-pattern-notification-center.ds-engine-modern [data-part='mark-read']:is([data-state~='focus-visible'], :focus-visible),
-.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within .ds-notification-center__mark-read,
+.ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within .ds-notification-center__dismiss,
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read:is([data-state~='focus-visible'], :focus-visible),
+.ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss:is([data-state~='focus-visible'], :focus-visible) {
   opacity: 1;
 }
 @media (hover: hover) {
-  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) [data-part='dismiss'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read']:is([data-state~='hovered'], :hover),
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:is([data-state~='hovered'], :hover) {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) .ds-notification-center__mark-read,
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) .ds-notification-center__dismiss,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read:is([data-state~='hovered'], :hover),
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss:is([data-state~='hovered'], :hover) {
     opacity: 1;
   }
 }
@@ -325,18 +325,18 @@
 /* ---- coarse pointers: the pattern's action chrome reaches the physical
         44px floor via block-size only (the composed Buttons keep density) ---- */
 @media (pointer: coarse) {
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-all-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='clear-all'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='action'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-all-read,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__clear-all,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__action,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss {
     min-block-size: var(--ds-notification-center-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss {
     transition: none;
   }
 }
@@ -375,8 +375,8 @@
     color: CanvasText;
   }
   /* Quiet actions must never stay dim in forced colours. */
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss {
     opacity: 1;
   }
 }
@@ -386,12 +386,12 @@
    authored size untouched. The trigger is authored 40x40, so it joins the
    floor on both axes (its paint stays the quiet ghost icon button). */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='trigger'] {
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__dismiss,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__mark-read,
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__trigger {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
-  .ds-pattern-notification-center.ds-engine-modern [data-part='trigger'] {
+  .ds-pattern-notification-center.ds-engine-modern .ds-notification-center__trigger {
     min-inline-size: var(--ds-touch-target-min, 44px);
   }
 }
