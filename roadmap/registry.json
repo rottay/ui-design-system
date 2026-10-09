@@ -2679,7 +2679,7 @@
    "lane": "architecture",
    "order": 12,
    "size": "S",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2694,9 +2694,15 @@
    ],
    "phase": "1",
    "notes": "ABSORBED by WO-FAM-00 (audit F-67): the per-family cut gate censuses the TSX-to-skin contract and therefore covers stamped attributes that nothing reads. Original spec: Landed by W1 (commits 09367145, 1c5d58c7, W1.2 classic stampDataPart); done at the cascade open-1 step with that evidence.",
-   "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "progressLog": [
+    {
+     "at": "2026-10-08 21:19",
+     "by": "kimi-dt",
+     "note": "Scope corrected per the 2026-10-06 owner ruling (P-88 wins, roadmap/owner-decisions-2026-10-06.md + bb6b0525f): this WO is a fleet fix + ratchet over 49 violating sites (36 engine + 13 compound; census from bb6b0525f delivery evidence or re-run), NOT the stale W1-certification reading. The passthrough-contract state arm found real breaches: classic Card/Button stamp no data-state and forward the caller's (D1/D2); modern/rustic forward a resting caller data-state (D3, executed); the Button caller-wins data-part tests are stale law. L1 integrated 8b93e2402 (test-only debt registration, 2 paths): classic state blocks converted to it.fails bodies-byte-identical, 3 new D3 pins, the 4 caller-wins tests split into plain-it forwarding expectations (current law) + it.fails P-88 pins, header + const comment cite P-88. 21 KNOWN DEBT (ARC-12) pins live (Card 1, Button 8, rerun-inherited 8, PassThroughLaw 4); 4-file suite 49/49 green. Independent adjudications: 304b6e7c rounds 1-2 (P-88 governs; family-cut red NOT the gate, attributed pre-existing unrelated) and L1 delta ACCEPT. The fresh receipt stands for the other arms: passthrough 15/15 all engines, handler guards 103/103, dead-parts = 0 at e3745be41. Closure requires (i-vi): the 49-site fleet fix (dependent skins to documented hooks first, then engines with classic STRIP-ONLY as a frozen engine), every ARC-12 it.fails promoted green, committed ratchet at 0, Button tests reconciled, dead-parts 0 + suites green, stale spec notes amended. L2 next: recover or re-run the 49-site census, then dependent skins. NOT closed; no pins moved outside the 2 L1 paths."
+    }
+   ],
+   "claimedBy": "kimi-dt",
+   "claimedAt": "2026-10-08",
    "doneAt": null,
    "evidence": null,
    "execution": {
