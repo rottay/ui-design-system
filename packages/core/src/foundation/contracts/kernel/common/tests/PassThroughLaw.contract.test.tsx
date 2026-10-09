@@ -74,4 +74,9 @@ describe('P-88 pass-through law', () => {
     const { container } = render(<ModernSelect data-state={CALLER_STATE} options={OPTIONS} />);
     expect(container.querySelector('select')).not.toHaveAttribute('data-state', CALLER_STATE);
   });
+
+  it.fails('KNOWN DEBT (ARC-12): modern Select should not forward a resting caller data-state to its custom trigger', () => {
+    const { container } = render(<ModernSelect data-state={CALLER_STATE} searchable options={OPTIONS} />);
+    expect(container.querySelector('[role="combobox"]')).not.toHaveAttribute('data-state', CALLER_STATE);
+  });
 });
