@@ -6751,6 +6751,11 @@
      "at": "2026-10-08 23:57",
      "by": "kimi-dt",
      "note": "TS4058 build breakage FIXED (W7a residue, found by the L02 visual window): UseCollectionWorkspaceReturn was a non-exported interface at runtime/collection-workspace/index.ts:33 while two exported hooks returned it - the official core build died at tsc since the W7a split. Fix d36e7c32: one word (export), type-only and runtime-erased. tsc --noEmit: 1 error (exactly TS4058) -> 0 errors, nothing new. Build body (tsc -> vite -> ... -> stamp) passes end-to-end. Public name set UNCHANGED (the barrel named-re-exports the function only; no d.ts match; public-entrypoints check exit 0), so no docs update. Independent delta ACCEPT (304b6e7c) with a confirmed correction: the hooks:check MANIFEST_STALE is componentFiles-count-only (1301 -> 1317 from 383368e13/32409b080/0b8730d3a against a contract last generated 7ba9dc177), NOT an ARC-12 skin effect (L01/L02 added no hook entries; the step-1 class hooks do not create manifest entries). The official pnpm build still exits 1 at prebuild hooks:check, whose attributed housekeeping regen is routed as its own bounded lot."
+    },
+    {
+     "at": "2026-10-09 00:37",
+     "by": "kimi-dt",
+     "note": "cascade:root-aliases staleness RESOLVED by attributed housekeeping (one-line digest re-table 90cbe72dc): the table's stored edges digest lagged the edges artifact regenerated in the W7a era; the re-derived 2390 aliases are byte-identical in content (zero semantic delta), so this is provenance-only. It was red at 47df9783a (before all of this session's lots). With hooks:check (a7a5177fa) and TS4058 (504dcd020) also fixed, all THREE pre-existing official-build blockers found during the step-1 visual windows are now cleared and attributed; a full pnpm build verification runs in the next free window."
     }
    ]
   },
