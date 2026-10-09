@@ -30,7 +30,7 @@ interface UseCollectionWorkspaceOptions<T> {
   mobileBreakpoint?: ResponsiveBreakpointKey;
 }
 
-interface UseCollectionWorkspaceReturn<T> {
+export interface UseCollectionWorkspaceReturn<T> {
   /** Resolved active view mode (respects mobile fallback). */
   activeViewMode: string;
   /** Change view mode (delegates to controls.viewMode.onChange if provided). */
