@@ -8,9 +8,11 @@
  *     descendant `[data-part='root']` needs a SECOND root-parted element
  *     nested inside the family; Box stamps none and Flex forwards only what
  *     the caller passes);
- *   - a rule whose predicate the caller's own props defeat — passing
- *     `data-part='search-input'` to a primitive REPLACES its default `root`,
- *     so `:has(> …[data-part='root'])` can never hold.
+ *   - a rule predicated on a part the caller passes to a skinned primitive
+ *     that keeps its own part under P-88 (Input and Select today; each other
+ *     family as its engine lot lands) — such a primitive never forwards a
+ *     caller `data-part`, so `:has(> …[data-part='search-input'])` can never
+ *     hold; a family reaches it through its className hook.
  * Neither is visible in the file. Both are obvious the moment you ask the
  * rendered DOM.
  *

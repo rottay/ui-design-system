@@ -85607,9 +85607,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* ---- input paint per engine (P-88 rustic specificity ladder, unchanged).
-        The modern predicate reads `[data-part='input']`, not `'root'`: Input
-        writes `data-part={caller ?? 'root'}` on its painted node, so passing a
-        part REPLACES the default and `'root'` can never hold here. ---- */
+        The modern arm keys on classes only: the family's `__input` hook
+        holding the modern Input shell as its direct child. That shell stamps
+        its own `root` part, so no part predicate is needed here. ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -86262,15 +86262,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *    the sibling `active-filters-bar.css` already used throughout.
  *
  * 2. The modern search surface was keyed on
- *    `:has(> .ds-input-shell--modern[data-part='root'])`, but this family passes
- *    `data-part='search-input'` to the Input and the modern primitive writes
- *    `data-part={caller ?? 'root'}` — the caller's part REPLACES the default,
- *    so the predicate could never hold. Same root cause as (1) in a second
- *    guise. The family no longer paints that node at all (see below).
- *    NOTE: the rustic arm never had this defect. Rustic hardcodes
- *    `partAttributes('root', …)` (`Input/engines/rustic/index.tsx:351`) and
- *    puts the caller's className on that same node, so the caller's part
- *    never reaches it and its `[data-part='root']` predicate is live.
+ *    `:has(> .ds-input-shell--modern[data-part='root'])`. The family does not
+ *    paint that node at all (see below). It reaches the composed Input only
+ *    through its own class hook, `:where(.ds-table-toolbar__search-input) >
+ *    .ds-input-shell`, whose `:where()` keeps each rule's weight unchanged.
+ *    No Input engine takes a caller part: the modern and rustic shells stamp
+ *    their own `root`, so no part on that node is the family's to key on.
  *
  * 3. The family used to hand-tune the Input it composes. It cannot: this file
  *    is `rottay-components` and the Input skin is `rottay-engines`, a later

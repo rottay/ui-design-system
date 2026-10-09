@@ -140,7 +140,10 @@ export type InputType =
  * ```
  */
 export interface InputProps extends EngineAwareProps {
-  /** Caller-owned root anatomy hook (P-79). */
+  /**
+   * Accepted but never rendered: no engine reads it. The modern and rustic shells stamp their
+   * own `data-part="root"`; compose through `className`.
+   */
   'data-part'?: string;
   /**
    * Input size. Accepts a plain value or a responsive breakpoint object.
