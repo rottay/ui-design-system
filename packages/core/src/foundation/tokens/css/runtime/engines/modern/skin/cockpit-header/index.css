@@ -108,7 +108,7 @@
 
 /* ---- breadcrumb crumb: interactive <a> (muted, secondary on hover) and
         static <span> (last=secondary, otherwise muted). ---- */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true'] {
   color: var(--ds-color-text-muted);
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='breadcrumb'] {
@@ -122,14 +122,14 @@
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   scrollbar-width: none;
 }
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:active,
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='pressed'] {
+.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true']:active,
+.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true'][data-state~='pressed'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
+.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='false'][data-last='true'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
+.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='false'][data-last='false'] {
   color: var(--ds-color-text-muted);
 }
 
@@ -283,11 +283,11 @@
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
 }
 
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'] {
+.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb {
   font-weight: 500;
 }
 
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true'] {
   cursor: pointer;
   text-decoration: none;
   border-radius: var(--ds-radius-sm);
@@ -296,14 +296,14 @@
 
 /* Keyboard users get the tenant focus signature on crumb links;
    hover/active keep their color-only cue. */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible,
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='focus-visible'] {
+.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true']:focus-visible,
+.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true'][data-state~='focus-visible'] {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
 }
 
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-last='true'] {
+.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-last='true'] {
   font-weight: 600;
 }
 
@@ -469,8 +469,8 @@
     transform: translateY(-1px) scale(1.025);
   }
 
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover,
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='hovered'] {
+  .ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true']:hover,
+  .ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true'][data-state~='hovered'] {
     color: var(--ds-color-text-secondary);
   }
 }
@@ -489,8 +489,8 @@
 
   .ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible,
   .ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb'][data-state~='focus-visible'],
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible,
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='focus-visible'] {
+  .ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true']:focus-visible,
+  .ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true'][data-state~='focus-visible'] {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;
@@ -511,7 +511,7 @@
    authored size untouched. The crumb link is a bare inline <a>, so the floor
    only holds once it is an inline-flex box. */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+  .ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true'] {
     display: inline-flex;
     align-items: center;
     min-block-size: var(--ds-touch-target-min, 44px);

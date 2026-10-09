@@ -377,7 +377,7 @@
   line-height: var(--ds-line-height-body);
 }
 
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'] {
+.ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb {
   /* C0-07: crumbs never wrap mid-trail — when the trail exceeds the pill,
      the overflow becomes the pill's governed horizontal scroll (the pill
      already carries overflow-x: auto), not an accidental second line. */
@@ -386,7 +386,7 @@
   font-weight: var(--ds-font-weight-medium, 500);
   white-space: nowrap;
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+.ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb[data-interactive='true'] {
   color: var(--ds-color-text-muted);
   cursor: pointer;
   text-decoration: none;
@@ -395,23 +395,23 @@
 }
 /* Keyboard users get the governed ring on crumb links (the UA default was
    the only indicator before); hover/active keep their color-only cue. */
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb[data-interactive='true']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 @media (hover: hover) {
-  .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:is([data-state~='hovered'], :hover) {
+  .ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb[data-interactive='true']:is([data-state~='hovered'], :hover) {
     color: var(--ds-color-text-secondary);
   }
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:is([data-state~='pressed'], :active) {
+.ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb[data-interactive='true']:is([data-state~='pressed'], :active) {
   color: var(--ds-color-text-primary);
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
+.ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb[data-interactive='false'][data-last='true'] {
   color: var(--ds-color-text-secondary);
   font-weight: var(--ds-font-weight-semibold, 600);
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
+.ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb[data-interactive='false'][data-last='false'] {
   color: var(--ds-color-text-muted);
 }
 
@@ -700,7 +700,7 @@
    inline <a>, so the floor only holds once it is an inline-flex box. The tab
    rule needs the root ancestor to reach the base geometry rule's (0,4,0). */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+  .ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb[data-interactive='true'] {
     display: inline-flex;
     align-items: center;
     min-block-size: var(--ds-touch-target-min, 44px);
@@ -720,7 +720,7 @@
   .ds-pattern-page-shell.ds-engine-modern [data-part='header'],
   .ds-pattern-page-shell.ds-engine-modern [data-part='header-icon'],
   .ds-pattern-page-shell.ds-engine-modern [data-part='tab'],
-  .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'] {
+  .ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb {
     transition: none;
   }
 

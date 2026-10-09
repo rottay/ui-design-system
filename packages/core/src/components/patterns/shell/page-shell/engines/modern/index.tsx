@@ -88,6 +88,7 @@ function BreadcrumbItem({
         href={href ?? '#'}
         underline={false}
         data-part="crumb"
+        className="ds-pattern-page-shell__crumb"
         data-interactive="true"
         data-last="false"
         onClick={
@@ -107,6 +108,7 @@ function BreadcrumbItem({
   return (
     <span
       data-part="crumb"
+      className="ds-pattern-page-shell__crumb"
       data-interactive="false"
       data-last={isLast ? 'true' : 'false'}
       /* The terminal crumb is the current page: announce it (APG breadcrumb). */

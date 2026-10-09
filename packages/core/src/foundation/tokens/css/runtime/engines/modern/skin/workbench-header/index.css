@@ -127,7 +127,7 @@
         states the channels the Button reads at rest, on hover and under press, so
         the values this header authored survive without a single rule reaching
         into the Button's internals. ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] {
+.ds-pattern-workbench-header.ds-engine-modern .ds-pattern-workbench-header__action[data-variant='primary'] {
   --ds-button-primary-bg: var(--ds-color-primary);
   --ds-button-primary-color: var(--ds-color-text-on-primary);
   --ds-button-primary-border: var(--ds-color-primary);
@@ -141,7 +141,7 @@
   --ds-button-primary-border-active: var(--ds-color-primary-600);
   --ds-button-primary-shadow-active: var(--ds-elevation-2);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] {
+.ds-pattern-workbench-header.ds-engine-modern .ds-pattern-workbench-header__action[data-variant='danger'] {
   --ds-button-error-bg: transparent;
   --ds-button-error-color: var(--ds-color-error-600);
   --ds-button-error-border: var(--ds-color-error-200);
@@ -152,7 +152,7 @@
   --ds-button-error-color-active: var(--ds-color-error-600);
   --ds-button-error-border-active: var(--ds-color-error-300);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] {
+.ds-pattern-workbench-header.ds-engine-modern .ds-pattern-workbench-header__action[data-variant='default'] {
   --ds-button-default-bg: transparent;
   --ds-button-default-color: var(--ds-color-text-secondary);
   --ds-button-default-border: var(--ds-color-border);
@@ -285,7 +285,7 @@
 
 /* ---- quick action geometry: the Button carries the part, so the rail's
         no-shrink rule lands on the control itself. ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] {
+.ds-pattern-workbench-header.ds-engine-modern .ds-pattern-workbench-header__action {
   flex-shrink: 0;
 }
 

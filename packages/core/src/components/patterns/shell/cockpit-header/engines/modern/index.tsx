@@ -75,6 +75,7 @@ function BreadcrumbLink({
         href={href}
         underline={false}
         data-part="crumb"
+        className="ds-pattern-cockpit-header__crumb"
         data-interactive="true"
         data-last="false"
       >
@@ -88,6 +89,7 @@ function BreadcrumbLink({
   return (
     <span
       data-part="crumb"
+      className="ds-pattern-cockpit-header__crumb"
       data-interactive="false"
       data-last={isLast ? 'true' : 'false'}
       /* The terminal crumb is the current page: announce it (APG breadcrumb). */

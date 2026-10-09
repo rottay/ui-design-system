@@ -156,7 +156,7 @@
 
 /* ---- coarse pointers: the close control meets the physical 44px floor ---- */
 @media (pointer: coarse) {
-  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='close'] {
+  .ds-pattern-shortcuts-overlay.ds-engine-modern .ds-pattern-shortcuts-overlay__close {
     min-inline-size: var(--ds-shortcuts-overlay-close-touch-target, var(--ds-touch-target-min, 44px));
     min-block-size: var(--ds-shortcuts-overlay-close-touch-target, var(--ds-touch-target-min, 44px));
   }

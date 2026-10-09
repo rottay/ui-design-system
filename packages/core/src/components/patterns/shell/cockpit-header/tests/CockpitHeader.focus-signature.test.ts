@@ -27,7 +27,7 @@ interface FocusNode {
 
 const NODES: readonly FocusNode[] = [
   { name: "breadcrumb trail", selector: /\[data-part='breadcrumb'\]/, carrier: false },
-  { name: "crumb link", selector: /\[data-part='crumb'\]\[data-interactive='true'\]/, carrier: false },
+  { name: "crumb link", selector: /\.ds-pattern-cockpit-header__crumb\[data-interactive='true'\]/, carrier: false },
 ];
 
 /** Every innermost rule of `css`, with its selector list on one line. */

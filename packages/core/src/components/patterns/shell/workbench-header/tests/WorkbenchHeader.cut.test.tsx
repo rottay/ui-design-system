@@ -162,6 +162,10 @@ describe('WorkbenchHeader (WO-FAM-10 cut) — the skin owns no other component',
     }
     // The retired rules killed the Button's own focus ring with their own
     // box-shadow; nothing in this file states a box-shadow for a quick action.
+    expect(RULES).not.toContain(".ds-pattern-workbench-header__action[data-variant='primary'] > ");
+    // The quick action is keyed by its class door (P-88, owner ruling 2026-10-06); the tone rule exists,
+    // so the negative above is not vacuous. The caller-part form stays refused as a reintroduction guard.
+    expect(RULES).toContain(".ds-pattern-workbench-header__action[data-variant='primary'] {");
     expect(RULES).not.toContain("[data-part='action'][data-variant='primary'] > ");
   });
 
