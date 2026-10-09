@@ -283,25 +283,24 @@ export function runDrills() {
 
     // ── {calls, defines}: a writer whose emitter is declared in the wrong file ─
     //
-    // The template writer is planted in the emitter's writer member while its
-    // enumerator still says the root DEFINES it: the attribution key misses and
-    // the emission must surface as unattributed (E0), never as a silent gap.
-    const WRITERS_SOURCE = REACH_CORPUS.find((path) => path.endsWith('chrome-variables/writers/index.ts'));
+    // The template writer is planted in the root while its enumerator says the
+    // writer member DEFINES it: the attribution key misses and the emission
+    // must surface as unattributed (E0), never as a silent gap.
     const misdeclared = reachOver(
       dir,
       mirrorCorpus(dir, 'corpus-misdeclared', {
-        appendTo: WRITERS_SOURCE,
+        appendTo: REACH_CORPUS[0],
         text: 'function setButtonVariantVars(vars, prefix, btn) {\n  if (btn) vars[`--ds-button-${prefix}-planted`] = btn;\n}',
       }),
     );
     const misattributed = misdeclared.unattributed.filter(
-      (entry) => entry.owner === 'setButtonVariantVars' && entry.file === WRITERS_SOURCE,
+      (entry) => entry.owner === 'setButtonVariantVars' && entry.file === REACH_CORPUS[0],
     );
     suite.expectFact({
       label: 'MIS-DECLARED DEFINES — a template writer living outside the file its enumerator names is unattributed (E0)',
       ok: misattributed.length > 0,
       details: [
-        `unattributed after the plant: ${misdeclared.unattributed.length} · in the writer member, owned by setButtonVariantVars: ${misattributed.length}`,
+        `unattributed after the plant: ${misdeclared.unattributed.length} · in the root, owned by setButtonVariantVars: ${misattributed.length}`,
       ],
     });
 

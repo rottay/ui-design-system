@@ -434,9 +434,9 @@ test('an identifier is data only when it names an earlier admitted const of the 
 /* ── template keys in a writer: the two live shapes, nothing else ────────── */
 
 const LIVE_TEMPLATE_WRITERS = () => {
-  const root = readFileSync(join(CORE_ROOT, CHROME_EMITTER_DIR, 'index.ts'), 'utf8');
+  const writers = readFileSync(join(CORE_ROOT, CHROME_EMITTER_DIR, 'writers/index.ts'), 'utf8');
   return ['setButtonVariantVars', 'setLegacyButtonHoverBgAlias', 'setControlSizeVars', 'setSegmentedSizeVars', 'setPremiumCardVars'].map(
-    (name) => root.match(new RegExp(`function ${name}\\([\\s\\S]*?\\n}\\n`))[0],
+    (name) => writers.match(new RegExp(`function ${name}\\([\\s\\S]*?\\n}\\n`))[0],
   );
 };
 

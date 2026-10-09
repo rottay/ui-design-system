@@ -486,23 +486,23 @@ export function buildEnumerators(root) {
   const enumerators = [
     callSiteEnumerator('control-size', 'setControlSizeVars', [1, 2], ['family', 'size'], 'control geometry', {
       calls: CHROME_VARIABLES,
-      defines: CHROME_VARIABLES,
+      defines: CHROME_WRITERS,
     }),
     callSiteEnumerator('segmented-size', 'setSegmentedSizeVars', [1], ['size'], 'segmented geometry', {
       calls: CHROME_VARIABLES,
-      defines: CHROME_VARIABLES,
+      defines: CHROME_WRITERS,
     }),
     callSiteEnumerator('premium-card', 'setPremiumCardVars', [1], ['namespace'], 'premium card namespaces', {
       calls: CHROME_VARIABLES,
-      defines: CHROME_VARIABLES,
+      defines: CHROME_WRITERS,
     }),
     callSiteEnumerator('button-variant', 'setButtonVariantVars', [1], ['prefix'], 'button variants', {
       calls: CHROME_VARIABLES,
-      defines: CHROME_VARIABLES,
+      defines: CHROME_WRITERS,
     }),
     callSiteEnumerator('button-hover-alias', 'setLegacyButtonHoverBgAlias', [1], ['prefix'], 'button hover aliases', {
       calls: CHROME_VARIABLES,
-      defines: CHROME_VARIABLES,
+      defines: CHROME_WRITERS,
     }),
     // The tint ramps bind their scale by PARAMETER, and they live in the
     // lowering's tint writer rather than chrome-variables.

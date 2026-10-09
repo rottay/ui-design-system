@@ -14,9 +14,6 @@
 import type {
   BrandChrome,
   BrandBadgeChrome,
-  BrandButtonVariantChrome,
-  BrandControlSizeChrome,
-  BrandPremiumCardChrome,
   BrandSidebarChrome,
   FlatThemeMode,
   TenantAppearanceGeneral,
@@ -42,6 +39,11 @@ import {
   setListVars,
   setDetailVars,
   setSurfaceChromeVars,
+  setButtonVariantVars,
+  setLegacyButtonHoverBgAlias,
+  setControlSizeVars,
+  setSegmentedSizeVars,
+  setPremiumCardVars,
 } from "./writers";
 
 /** Compile-time context this emitter needs beyond the chrome object itself. */
@@ -251,162 +253,6 @@ function setBadgeChromeVars(
       vars[BADGE_CHROME_VARIABLES[key]] = String(value);
     }
   }
-}
-
-/** Map authored button chrome to the engine-consumed variable names. */
-function setButtonVariantVars(
-  vars: Record<string, string>,
-  prefix: string,
-  btn: Partial<BrandButtonVariantChrome> | undefined
-): void {
-  if (!btn) return;
-
-  if (btn.bg) vars[`--ds-button-${prefix}-bg`] = btn.bg;
-  if (btn.bgHover) vars[`--ds-button-${prefix}-bg-hover`] = btn.bgHover;
-  if (btn.bgActive) vars[`--ds-button-${prefix}-bg-active`] = btn.bgActive;
-  const color = btn.color ?? btn.text;
-  if (color) vars[`--ds-button-${prefix}-color`] = color;
-  if (btn.colorHover)
-    vars[`--ds-button-${prefix}-color-hover`] = btn.colorHover;
-  if (btn.colorActive)
-    vars[`--ds-button-${prefix}-color-active`] = btn.colorActive;
-  if (btn.border) vars[`--ds-button-${prefix}-border`] = btn.border;
-  if (btn.borderHover)
-    vars[`--ds-button-${prefix}-border-hover`] = btn.borderHover;
-  if (btn.borderActive)
-    vars[`--ds-button-${prefix}-border-active`] = btn.borderActive;
-  if (btn.shadow) vars[`--ds-button-${prefix}-shadow`] = btn.shadow;
-  if (btn.shadowHover)
-    vars[`--ds-button-${prefix}-shadow-hover`] = btn.shadowHover;
-  if (btn.shadowActive)
-    vars[`--ds-button-${prefix}-shadow-active`] = btn.shadowActive;
-}
-
-/**
- * Reversed-order spelling of `bgHover`. The rustic skin reads `-hover-bg` as
- * its PRIMARY name (not as a fallback), so one authored field has to reach
- * both vocabularies or that engine silently drops to its hard-coded literal.
- * Same shape as the sidebar width pair further down.
- *
- * This is an alias vocabulary, not a channel family: it is emitted only for
- * the variants a Core engine actually reads under that name. Adding a variant
- * here without a real `var(--ds-button-<variant>-hover-bg)` reader would ship
- * a dead custom property into every tenant artifact.
- */
-function setLegacyButtonHoverBgAlias(
-  vars: Record<string, string>,
-  prefix: string,
-  btn: Partial<BrandButtonVariantChrome> | undefined
-): void {
-  if (btn?.bgHover) vars[`--ds-button-${prefix}-hover-bg`] = btn.bgHover;
-}
-
-/** Map one authored control size onto an existing component token family. */
-function setControlSizeVars(
-  vars: Record<string, string>,
-  family: "button" | "input",
-  size: "xs" | "sm" | "md" | "lg" | "xl",
-  value: BrandControlSizeChrome | undefined
-): void {
-  if (!value) return;
-  const prefix = `--ds-${family}-${size}`;
-  if (value.height) vars[`${prefix}-height`] = value.height;
-  if (value.paddingX) vars[`${prefix}-padding-x`] = value.paddingX;
-  if (value.paddingY) vars[`${prefix}-padding-y`] = value.paddingY;
-  if (value.fontSize) vars[`${prefix}-font-size`] = value.fontSize;
-  if (value.lineHeight) vars[`${prefix}-line-height`] = value.lineHeight;
-  if (value.iconSize) vars[`${prefix}-icon-size`] = value.iconSize;
-  if (value.gap) vars[`${prefix}-gap`] = value.gap;
-  if (value.radius) vars[`${prefix}-radius`] = value.radius;
-}
-
-/**
- * Segmented sizes emit only the channels the segmented skin consumes. The
- * control exposes sm/md/lg (no xs/xl posture) and derives vertical rhythm from
- * height, so paddingY has no destination here by design.
- */
-function setSegmentedSizeVars(
-  vars: Record<string, string>,
-  size: "sm" | "md" | "lg",
-  value: BrandControlSizeChrome | undefined
-): void {
-  if (!value) return;
-  const prefix = `--ds-segmented-${size}`;
-  if (value.height) vars[`${prefix}-height`] = value.height;
-  if (value.paddingX) vars[`${prefix}-padding-x`] = value.paddingX;
-  if (value.fontSize) vars[`${prefix}-font-size`] = value.fontSize;
-  if (value.lineHeight) vars[`${prefix}-line-height`] = value.lineHeight;
-  if (value.iconSize) vars[`${prefix}-icon-size`] = value.iconSize;
-  if (value.gap) vars[`${prefix}-gap`] = value.gap;
-  if (value.radius) vars[`${prefix}-radius`] = value.radius;
-}
-
-/** Map shared premium card chrome to a namespaced --ds-* variable family. */
-function setPremiumCardVars(
-  vars: Record<string, string>,
-  namespace: string,
-  card: Partial<BrandPremiumCardChrome> | undefined
-): void {
-  if (!card) return;
-
-  if (card.bg) vars[`--ds-${namespace}-bg`] = card.bg;
-  if (card.bgHover) vars[`--ds-${namespace}-bg-hover`] = card.bgHover;
-  if (card.border) vars[`--ds-${namespace}-border`] = card.border;
-  if (card.borderHover)
-    vars[`--ds-${namespace}-border-hover`] = card.borderHover;
-  if (card.selectedBorder)
-    vars[`--ds-${namespace}-selected-border`] = card.selectedBorder;
-  if (card.selectedRing)
-    vars[`--ds-${namespace}-selected-ring`] = card.selectedRing;
-  if (card.shadow) vars[`--ds-${namespace}-shadow`] = card.shadow;
-  if (card.shadowHover)
-    vars[`--ds-${namespace}-shadow-hover`] = card.shadowHover;
-  if (card.radius) vars[`--ds-${namespace}-radius`] = card.radius;
-  if (card.padding) vars[`--ds-${namespace}-padding`] = card.padding;
-  if (card.gap) vars[`--ds-${namespace}-gap`] = card.gap;
-  if (card.minHeight) vars[`--ds-${namespace}-min-height`] = card.minHeight;
-  if (card.glassBg) vars[`--ds-${namespace}-glass-bg`] = card.glassBg;
-  if (card.gridSize) vars[`--ds-${namespace}-grid-size`] = card.gridSize;
-  if (card.gridLine) vars[`--ds-${namespace}-grid-line`] = card.gridLine;
-  if (card.gridBg) vars[`--ds-${namespace}-grid-bg`] = card.gridBg;
-  if (card.overlay) vars[`--ds-${namespace}-overlay`] = card.overlay;
-  if (card.sheen) vars[`--ds-${namespace}-sheen`] = card.sheen;
-  if (card.depth) vars[`--ds-${namespace}-depth`] = card.depth;
-  if (card.hoverTransform)
-    vars[`--ds-${namespace}-hover-transform`] = card.hoverTransform;
-  if (card.transition) vars[`--ds-${namespace}-transition`] = card.transition;
-  if (card.iconBg) vars[`--ds-${namespace}-icon-bg`] = card.iconBg;
-  if (card.iconBorder) vars[`--ds-${namespace}-icon-border`] = card.iconBorder;
-  if (card.iconColor) vars[`--ds-${namespace}-icon-color`] = card.iconColor;
-  if (card.titleColor) vars[`--ds-${namespace}-title-color`] = card.titleColor;
-  if (card.bodyColor) vars[`--ds-${namespace}-body-color`] = card.bodyColor;
-  if (card.labelColor) vars[`--ds-${namespace}-label-color`] = card.labelColor;
-  if (card.valueColor) vars[`--ds-${namespace}-value-color`] = card.valueColor;
-  if (card.valueHoverColor)
-    vars[`--ds-${namespace}-value-color-hover`] = card.valueHoverColor;
-  if (card.footerBg) vars[`--ds-${namespace}-footer-bg`] = card.footerBg;
-  if (card.footerBorder)
-    vars[`--ds-${namespace}-footer-border`] = card.footerBorder;
-  if (card.footerColor)
-    vars[`--ds-${namespace}-footer-color`] = card.footerColor;
-  if (card.statusBg) vars[`--ds-${namespace}-status-bg`] = card.statusBg;
-  if (card.statusBorder)
-    vars[`--ds-${namespace}-status-border`] = card.statusBorder;
-  if (card.statusColor)
-    vars[`--ds-${namespace}-status-color`] = card.statusColor;
-  if (card.actionBg) vars[`--ds-${namespace}-action-bg`] = card.actionBg;
-  if (card.actionBorder)
-    vars[`--ds-${namespace}-action-border`] = card.actionBorder;
-  if (card.actionColor)
-    vars[`--ds-${namespace}-action-color`] = card.actionColor;
-  if (card.meterTrack) vars[`--ds-${namespace}-meter-track`] = card.meterTrack;
-  if (card.meterTrackBorder)
-    vars[`--ds-${namespace}-meter-track-border`] = card.meterTrackBorder;
-  if (card.meterFill) vars[`--ds-${namespace}-meter-fill`] = card.meterFill;
-  if (card.numberMinWidth)
-    vars[`--ds-${namespace}-number-min-width`] = card.numberMinWidth;
-  if (card.numberFontVariant)
-    vars[`--ds-${namespace}-number-font-variant`] = card.numberFontVariant;
 }
 
 /**

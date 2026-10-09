@@ -361,7 +361,7 @@ test('LIVE: the tenant workspace-card tile is produced by the chrome compiler th
   assert.ok(!LIVE.declared.has('--ds-workspace-card-icon-bg'), 'no authored CSS declares it: the producer is the compiler');
   const { throughCallSites } = census.collectCompilerEmissions();
   const site = throughCallSites.find((entry) => entry.raw === '`--ds-${namespace}-icon-bg`');
-  assert.ok(site?.path.endsWith('kernel/foundation/css/chrome-variables/index.ts'), JSON.stringify(site));
+  assert.ok(site?.path.endsWith('kernel/foundation/css/chrome-variables/writers/index.ts'), JSON.stringify(site));
   assert.deepEqual(site.names, [
     '--ds-collection-card-icon-bg',
     '--ds-compact-card-icon-bg',

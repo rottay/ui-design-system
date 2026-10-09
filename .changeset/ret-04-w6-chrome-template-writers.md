@@ -1,0 +1,5 @@
+---
+"@rottay/design-system": patch
+---
+
+Internal restructure: the chrome CSS variable emitter (`infrastructure/compilers/kernel/foundation/css/chrome-variables`) moves its five interpolating writers (`setButtonVariantVars`, `setLegacyButtonHoverBgAlias`, `setControlSizeVars`, `setSegmentedSizeVars`, `setPremiumCardVars`) into its internal `writers` module, next to the seven template-free writers already there. Every call site stays in the emitter entry point, `setBadgeChromeVars` stays there too, and no package subpath is added. `chromeToVariables`, `sidebarToneToVariables`, `PRODUCER_RANK`, `FROZEN_ENGINE_COMPAT_CHANNELS` and every other export keep their declarations, and the emitted variable names, values and insertion order are unchanged. Tenant reach now attributes those five emitters to the writer member while reading their call sites from the entry point, and the channel-producer census resolves their template holes across the two files. The published package API does not change.
