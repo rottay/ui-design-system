@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-08",
+ "updated": "2026-10-09",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -2729,6 +2729,11 @@
      "at": "2026-10-08 23:44",
      "by": "kimi-dt",
      "note": "L02 INTEGRATED 271ba7585 (9 paths): environment-toggle + workspace-switcher migrated (1a REAL - 9 className inserts; 57 tokens across 2 modern skins; rustic skins + frozen embeds untouched). Census 1113 -> 1084 (-9; state 16; sites 108). Independent delta ACCEPT (304b6e7c): 1a verified at HEAD (no className on the opening tags), R1-R3 exact (260 comparisons 0 mismatches across 10 states), the amended pin's lookahead widening is stricter-not-weaker and green, P4 13/13 navigation-patterns-batch pixel-identical with fresh dist JS (the stale-JS contrast failed exactly the 2 modern rest shots = the arm sees the lot, and the run was L03-free by 6 seconds), mirrors 4/4 diff-equal with 0 L03 tokens. Integration sequenced N1: L02 committed FIRST; L03 regenerates the mirrors on top of this commit. Routed notes: (N-B) the HEAD core build is red on TWO pre-existing causes - hooks:check MANIFEST_STALE (+16 componentFiles, housekeeping lot routed) and tsc TS4058 at collection-workspace/resolution:156 (W7a residue; a finite fix lot is dispatched separately, NOT ARC-12); (N-C) any lot with real 1a inserts must show fresh dist JS carrying its classes; (N-D) for the button engine lot (1b): focus-return querySelector('[data-part=trigger]') readers in env :132 / ws :104 and the DOM queries in WorkspaceSwitcher.modern-button-focus :80 / NavigationPatternsBatch.contract must move to the class hooks inside that lot. Baseline now 108 / 1084 / 16."
+    },
+    {
+     "at": "2026-10-09 00:02",
+     "by": "kimi-dt",
+     "note": "L03 INTEGRATED c4e104e24 (16 paths): approval-workflow, approval-inbox, moderation-gallery, shift-matrix migrated (1a ADDS 16 className lines; 61 tokens across 4 modern skins; rustic skins + frozen embeds untouched). Census 1084 -> 1068 (-16: button 13, badge 3; state 16; sites 108). Independent delta ACCEPT (304b6e7c): insert pairing scripted 0 mismatches; R1-R3 exact with non-roster parts preserved count-for-count; P3 across 9 states incl. rustic/classic 0 matches before and after; P4 record-batch renders PatternApprovalWorkflow under modern AND rustic 4/4 pixel-identical (scratch justified - a shared-tree build would have rewritten L02's then-uncommitted mirrors); P5 18 files 93/93; mirrors 4/4 diff-equal with the precomputed sha matching, css-build --check green, facade/artifact-runtime byte-identical. D1 RATIFIED and adopted as H3 rule (v): every amended text pin that quantifies over a filtered rule set must carry a non-vacuity guard (the sibling shape expect(set.length).toBeGreaterThan(0)), and the writer must show the ORIGINAL-test-plus-candidate outcome to expose vacuous greens. D3 RULED into ONE finite comment-only prose lot after L15 covering every step-1 owner's stale P-79/caller-part-keying comments (tsx + skins; mirrors regenerated only if the comments are emitted into them). Baseline now 108 / 1068 / 16. Badge remaining: 2 dependents (notification-center -> L05, kanban-board -> L15)."
     }
    ],
    "claimedBy": "kimi-dt",
