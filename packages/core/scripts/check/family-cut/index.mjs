@@ -773,16 +773,19 @@ export function analyzeSource(file, source = ts.createSourceFile(
     if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node))) {
       const tag = node.tagName.getText(source);
       /* The anchors a skin can name this element by: the parts and classes
-       * the family hands it literally. */
+       * the family hands it literally (a part handed down in `anatomy` joins
+       * these parts below). */
+      let composedRender;
       if (/^[A-Z]/u.test(tag)) {
         const attributes = node.attributes.properties.filter(ts.isJsxAttribute);
         const literals = (name) => attributes.filter((attribute) => attributeName(attribute) === name)
           .flatMap((attribute) => attributeLiterals(attribute));
-        composedRenders.push({
+        composedRender = {
           tag,
           parts: literals('data-part'),
           classes: literals('className').flatMap((value) => value.split(/\s+/u)).filter(Boolean),
-        });
+        };
+        composedRenders.push(composedRender);
       }
       if (SKELETON_WORD.test(tag) && tag !== SKELETON_RENDERER_EXPORT) {
         skeletonSigns.push({ what: `element \`<${tag}>\``, line: lineOf(node) });
@@ -809,6 +812,10 @@ export function analyzeSource(file, source = ts.createSourceFile(
               decidesState: keyed.has('data-state'),
               line: lineOf(node),
             });
+            /* The composed component stamps the handed-down part on the element
+             * it renders, exactly where an attribute literal lands, so it anchors
+             * THIS instance's composed-part credit too. */
+            composedRender.parts.push(part);
           }
         }
       }

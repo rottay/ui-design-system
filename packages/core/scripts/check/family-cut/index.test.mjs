@@ -3758,3 +3758,72 @@ test('G1 (iv): a new P-88 caller part added to a family grows p88CallerParts (re
     expectNoFinding(findings, '`partsStampedNotConsumed` GREW', 'and never surfaces as dead anatomy');
   });
 });
+
+// ---------------------------------------------------------------------------
+// A part handed DOWN in `anatomy` anchors the composed-part credit like an attribute literal
+// ---------------------------------------------------------------------------
+
+const LOADING_INDICATOR = 'src/components/primitives/foundation/loading-indicator';
+const RESIZE_HANDLE = 'src/components/primitives/foundation/resize-handle';
+const LOADING_INDICATOR_TSX = `${LOADING_INDICATOR}/index.tsx`;
+const copyIntoSandbox = (...paths) => (sandbox) => {
+  for (const relativePath of paths) {
+    mkdirSync(dirname(join(sandbox, relativePath)), { recursive: true });
+    cpSync(join(ROOT, relativePath), join(sandbox, relativePath), { recursive: true });
+  }
+};
+
+/** tree's busy row in miniature: the family names the slot through LoadingIndicator's `anatomy` hand-down. */
+const busyRowTsx = (...elements) => [
+  "import { LoadingIndicator } from '../../../primitives/foundation/loading-indicator';",
+  "import { ResizeHandle } from '../../../primitives/foundation/resize-handle';",
+  '',
+  'export function PlantedBar() {',
+  '  return (',
+  '    <div className="ds-planted-bar" data-part="bar">',
+  ...elements.map((element) => `      ${element}`),
+  '    </div>',
+  '  );',
+  '}',
+  '',
+].join('\n');
+const busyRowSkin = `${BAR_RULE}.ds-planted-bar [data-part='loading'] > [data-part='indicator'] { display: block; }\n`;
+const INDICATOR_CREDIT = { part: 'indicator', primitive: LOADING_INDICATOR_TSX };
+
+test("CONTROL: a part handed down in `anatomy` anchors the composed primitive's own part exactly like an attribute literal", () => {
+  const measure = (element) => measureComposer({
+    tsx: busyRowTsx(element),
+    skin: busyRowSkin,
+    edit: copyIntoSandbox(LOADING_INDICATOR),
+  });
+  const literal = measure('<LoadingIndicator data-part="loading" size="sm" />');
+  const handedDown = measure("<LoadingIndicator anatomy={{ 'data-part': 'loading' }} size=\"sm\" />");
+  for (const [label, measured] of [['attribute literal', literal], ['anatomy hand-off', handedDown]]) {
+    assert.deepEqual(measured.detail.partsConsumedNotStamped, [], label);
+    assert.deepEqual(measured.detail.partsComposedFrom, [INDICATOR_CREDIT], label);
+    assert.equal(measured.ratchets.partsConsumedNotStamped, 0, label);
+  }
+});
+
+test('PLANT: with neither an attribute nor a hand-off naming the slot, the read part stays red', () => {
+  const measured = measureComposer({
+    tsx: busyRowTsx('<LoadingIndicator size="sm" />'),
+    skin: busyRowSkin,
+    edit: copyIntoSandbox(LOADING_INDICATOR),
+  });
+  assert.ok(measured.detail.partsConsumedNotStamped.includes('indicator'), JSON.stringify(measured.detail.partsConsumedNotStamped));
+  assert.deepEqual(measured.detail.partsComposedFrom, []);
+});
+
+test("PLANT: a hand-off credits ONLY the instance that carries it, never a sibling composed element", () => {
+  /* The slot is named on a ResizeHandle (which stamps no `indicator`); the LoadingIndicator beside it names nothing.
+   * Pooling hand-off parts across instances would anchor the read on the LoadingIndicator and discharge it. */
+  const measured = measureComposer({
+    /* The bare LoadingIndicator comes FIRST, so a pooling credit cannot hide behind source order. */
+    tsx: busyRowTsx('<LoadingIndicator size="sm" />', "<ResizeHandle orientation=\"vertical\" anatomy={{ 'data-part': 'loading' }} />"),
+    skin: busyRowSkin,
+    edit: copyIntoSandbox(LOADING_INDICATOR, RESIZE_HANDLE),
+  });
+  assert.ok(measured.detail.partsConsumedNotStamped.includes('indicator'), JSON.stringify(measured.detail.partsConsumedNotStamped));
+  assert.deepEqual(measured.detail.partsComposedFrom, []);
+});
