@@ -91,6 +91,8 @@ function ClearButton({ onClick }: { onClick: () => void }) {
  * chrome-free passthrough. In the plain branch the `<input>` itself is both
  * the shell and the focusable control. Both branches carry the same class
  * set and the same `data-*` contract, so one stylesheet paints either shape.
+ * P-88: the shell always stamps its own `root` part; a caller `data-part` is
+ * never forwarded (callers compose through `className`).
  */
 const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
@@ -134,7 +136,6 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     autoComplete,
     autoFocus,
     'data-testid': dataTestId,
-    'data-part': dataPart,
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
     'aria-invalid': ariaInvalid,
@@ -330,7 +331,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         aria-required={ariaRequired ?? (required || undefined)}
         className={className}
         style={style}
-        data-part={dataPart ?? 'root'}
+        data-part="root"
         data-testid={dataTestId}
         onChange={handleChange}
       />
@@ -450,7 +451,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           }}
           onPointerEnter={interactionHandlers.onPointerEnter}
           onPointerLeave={interactionHandlers.onPointerLeave}
-          {...partAttributes(dataPart ?? 'root', interaction)}
+          {...partAttributes('root', interaction)}
           {...skinAttributes}
           {...responsiveAttrs}
           style={{ ...responsive.channels }}
@@ -492,7 +493,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         className={shellClassName}
         onPointerEnter={interactionHandlers.onPointerEnter}
         onPointerLeave={interactionHandlers.onPointerLeave}
-        {...partAttributes(dataPart ?? 'root', interaction)}
+        {...partAttributes('root', interaction)}
         {...skinAttributes}
       />
       {messages}

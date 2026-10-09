@@ -110,8 +110,15 @@ describe('file-manager -- data-part contract (cross-capability anatomy)', () => 
 
     const root = await waitForSelector(container, '[data-part="root"][data-loading="false"][data-view-mode="list"]');
     expectEngineScope(root, 'file-manager', engine);
-    for (const part of ['toolbar', 'breadcrumb', 'view-toggle', 'file-input', 'content', 'row', 'checkbox', 'folder-icon', 'file-icon', 'folder-link', 'file-name', 'item-action']) {
+    for (const part of ['toolbar', 'breadcrumb', 'view-toggle', 'content', 'row', 'checkbox', 'folder-icon', 'file-icon', 'folder-link', 'file-name', 'item-action']) {
       expect(q(container, `[data-part="${part}"]`).length, `${engine}: ${part}`).toBeGreaterThanOrEqual(1);
+    }
+    if (engine === 'modern') {
+      // P-88: the picker composes the Input primitive, which keeps its own `root` part, so it is found by its class door.
+      expect(q(container, 'input[type="file"].ds-file-manager__file-input').length, `${engine}: file-input`).toBeGreaterThanOrEqual(1);
+      expect(q(container, '[data-part="file-input"]')).toHaveLength(0);
+    } else {
+      expect(q(container, '[data-part="file-input"]').length, `${engine}: file-input`).toBeGreaterThanOrEqual(1);
     }
     if (engine === 'modern') {
       expect(q(container, '[data-part="breadcrumb"] button[data-part="crumb"]')).toHaveLength(2);

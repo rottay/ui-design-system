@@ -113,8 +113,9 @@ for (const fixture of FIXTURES) {
     await expect(sandbox).toHaveCount(1);
     // The sandbox composes real primitives, which keep their own anatomy: the
     // Button and Badge roots carry their own part and `data-variant` (the Badge
-    // `danger` tone stamps `error`), the error Input stamps `data-invalid`, and
-    // Card drops a consumer part, so the elevated card is found by its class.
+    // `danger` tone stamps `error`), the error Input stamps `data-invalid` on its
+    // shell (found by its class; P-88: no consumer part lands on it), and Card
+    // drops a consumer part, so the elevated card is found by its class.
     const buttons = sandbox.locator('[data-part="surface"][data-state="buttons"]');
     for (const variant of ['primary', 'secondary', 'default', 'ghost']) {
       await expect(buttons.locator(`button.ds-button[data-variant="${variant}"]`)).toHaveCount(1);
@@ -123,7 +124,9 @@ for (const fixture of FIXTURES) {
     for (const variant of ['success', 'warning', 'error', 'info']) {
       await expect(badges.locator(`[data-kind="badge"][data-variant="${variant}"]`)).toBeVisible();
     }
-    await expect(sandbox.locator('[data-part="input"][data-invalid="true"]')).toHaveCount(1);
+    const inputs = sandbox.locator('[data-part="surface"][data-state="inputs"]');
+    await expect(inputs.locator('.ds-input-shell[data-invalid="true"]')).toHaveCount(1);
+    await expect(sandbox.locator('[data-part="input"]')).toHaveCount(0);
     await expect(sandbox.locator('.ds-branding-preview-sandbox__card[data-state="elevated"]')).toHaveCount(1);
     await expect(sandbox.locator('[data-part="table"]')).toHaveCount(1);
 

@@ -146,7 +146,6 @@ export function TableToolbar({
               aria-label={resolvedSearchLabel}
             >
               <Input
-                data-part="search-input"
                 className="ds-table-toolbar__search-input"
                 /* The glyph rides the primitive's own affix slot. Positioning
                    it absolutely over the field required a padding well on the

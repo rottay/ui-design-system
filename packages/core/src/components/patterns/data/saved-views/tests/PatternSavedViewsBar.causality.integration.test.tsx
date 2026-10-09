@@ -206,9 +206,11 @@ describe('saved-views declared consumes', () => {
  * a tenant statement on the Input's own channel must reach them.
  * ------------------------------------------------------------------------ */
 
+// P-88: the composed Input keeps its own root part, so each field's shell is
+// reached through the class door (the caller class lands on the field wrapper).
 const FIELD_TARGETS = {
-  rename: "#rename [data-part='rename-input']",
-  create: "#create [data-part='create-input']",
+  rename: '#rename .ds-saved-views__input > .ds-input-shell',
+  create: '#create .ds-saved-views__create-input > .ds-input-shell',
   plain: '#plain input',
 } as const;
 

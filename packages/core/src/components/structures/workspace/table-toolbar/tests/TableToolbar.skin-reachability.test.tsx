@@ -177,11 +177,13 @@ describe("TableToolbar skin reachability", () => {
       "var(--ds-toolbar-control-color, var(--ds-color-text-primary))"
     );
 
-    // The glyph rides the primitive's affix slot, so it sits INSIDE the shell.
+    // The glyph rides the primitive's affix slot, so it sits INSIDE the shell
+    // (reached by the class door: P-88, the Input keeps its own root part).
     const glyph = container.querySelector(
-      '[data-part="search-input"] [data-part="search-icon"]'
+      '.ds-table-toolbar__search-input > .ds-input-shell [data-part="search-icon"]'
     );
     expect(glyph, "the glyph must sit inside the field, not over it").not.toBeNull();
+    expect(container.querySelector('[data-part="search-input"]')).toBeNull();
   });
 
   it("reads ground, rule and rhythm through the shared region channels", () => {

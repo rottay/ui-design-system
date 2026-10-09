@@ -343,7 +343,19 @@ describe("saved-views -- data-part contract (workspace-chrome anatomy)", () => {
       '[data-part="create-button"]'
     )[0] as HTMLElement;
     fireEvent.click(createButton);
-    await waitForPart(container, "create-input");
+    if (engine === "modern") {
+      // P-88: modern composes the Input primitive, which keeps its own `root`
+      // part, so the create field is found by its class door.
+      await waitFor(() =>
+        expect(
+          q(container, ".ds-saved-views__create-input > .ds-input-shell")
+        ).toHaveLength(1)
+      );
+      expect(q(container, '[data-part="create-input"]')).toHaveLength(0);
+    } else {
+      // Rustic keeps the frozen pattern-local part on its native input.
+      await waitForPart(container, "create-input");
+    }
   });
 
   it.each(ENGINES)(
@@ -1245,7 +1257,7 @@ describe("table-toolbar -- data-part contract (workspace-chrome anatomy)", () =>
       );
       const searchInputPaintNode = container.querySelector(
         engine === "modern"
-          ? '[data-part="search-input"]'
+          ? ".ds-table-toolbar__search-input > .ds-input-shell"
           : ".ds-table-toolbar__search-input"
       ) as HTMLElement;
       expect(searchInputPaintNode).not.toBeNull();
@@ -1253,6 +1265,9 @@ describe("table-toolbar -- data-part contract (workspace-chrome anatomy)", () =>
         expect(
           searchInputPaintNode.matches(".ds-input-shell.ds-input-shell--modern")
         ).toBe(true);
+        // P-88: the composed Input keeps its own part; no caller part lands.
+        expect(searchInputPaintNode.getAttribute("data-part")).toBe("root");
+        expect(q(container, '[data-part="search-input"]')).toHaveLength(0);
       } else {
         expect(
           searchInputPaintNode.matches(
@@ -1327,13 +1342,16 @@ describe("search-command-bar -- data-part contract (workspace-chrome anatomy)", 
         expect(container.querySelector("input")).not.toBeNull()
       );
       const commandInputPaintNode = container.querySelector(
-        '[data-part="input"]'
+        ".ds-search-command-bar__input > .ds-input-shell, .ds-search-command-bar__input.rottay-input"
       ) as HTMLElement;
       expect(commandInputPaintNode).not.toBeNull();
       if (engine === "modern") {
         expect(
           commandInputPaintNode.matches(".ds-input-shell.ds-input-shell--modern")
         ).toBe(true);
+        // P-88: the composed Input keeps its own part; no caller part lands.
+        expect(commandInputPaintNode.getAttribute("data-part")).toBe("root");
+        expect(q(container, '[data-part="input"]')).toHaveLength(0);
       } else {
         expect(
           commandInputPaintNode.matches(

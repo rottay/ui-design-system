@@ -287,12 +287,10 @@ export function BrandingPreviewSandbox({
         )}
         <Box data-part="surface" data-state="inputs">
           <Input
-            data-part="input"
             placeholder={t('brandingPreview.input.placeholder', 'Text input...')}
             readOnly
           />
           <Input
-            data-part="input"
             status="error"
             placeholder={t('brandingPreview.input.errorPlaceholder', 'Error state')}
             readOnly

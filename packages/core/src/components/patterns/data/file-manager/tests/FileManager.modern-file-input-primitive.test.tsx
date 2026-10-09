@@ -34,7 +34,8 @@ describe('ModernFileManager hidden picker composes the Input primitive', () => {
     expect(picker.type).toBe('file');
     expect(picker.multiple).toBe(true);
     expect(picker).toHaveClass('ds-file-manager__file-input');
-    expect(picker.getAttribute('data-part')).toBe('file-input');
+    // P-88: the primitive keeps its own root part; the caller 'file-input' part never lands.
+    expect(picker.getAttribute('data-part')).toBe('root');
     expect(picker.className).not.toMatch(/ds-input-shell/);
     expect(picker.closest('.ds-input-field')).toBeNull();
   });

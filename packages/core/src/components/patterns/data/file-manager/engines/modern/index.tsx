@@ -359,7 +359,6 @@ export default function ModernFileManager(props: FileManagerProps) {
                   type="file"
                   multiple
                   className="ds-file-manager__file-input"
-                  data-part="file-input"
                   onChange={(_value, event) => handleUploadChange(event)}
                   data-testid="file-input"
                 />

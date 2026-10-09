@@ -413,7 +413,6 @@ export function SearchCommandBar({
               </Box>
               <Input
                 id={COMMAND_INPUT_ID}
-                data-part="input"
                 className="ds-search-command-bar__input"
                 data-voice-status={voiceStatusForSkin}
                 data-voice-active={isVoiceActive}

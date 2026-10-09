@@ -709,7 +709,6 @@ function ColorField({
         />
         <Input
           className="ds-pattern-brand-studio__field-input"
-          data-part="field-input"
           value={value ?? ''}
           placeholder="#000000"
           /* the visible FieldLabel is not programmatically associated; the
@@ -738,7 +737,6 @@ function TextField({
       <FieldLabel>{label}</FieldLabel>
       <Input
         className="ds-pattern-brand-studio__field-input"
-        data-part="field-input"
         value={value ?? ''}
         placeholder={placeholder}
         aria-label={label}
@@ -764,7 +762,6 @@ function NumberField({
       <FieldLabel>{label}</FieldLabel>
       <Input
         className="ds-pattern-brand-studio__field-input"
-        data-part="field-input"
         value={value == null ? '' : String(value)}
         placeholder={placeholder}
         aria-label={label}

@@ -154,7 +154,11 @@ describe('ModernSavedViewsBar — the rename and create fields wear the Input fo
       expect(field.tagName).toBe('INPUT');
       expect(field).toHaveClass('ds-input-shell', 'ds-input-shell--modern');
       expect(field).toHaveAttribute('data-variant', 'unstyled');
-      expect(field).toHaveAttribute('data-part', part);
+      // P-88: the primitive keeps its own root part; the caller part never lands,
+      // and the field is reached through its class anchor.
+      expect(field).toHaveAttribute('data-part', 'root');
+      expect(field).not.toHaveAttribute('data-part', part);
+      expect(field.matches(FIELD_ANCHORS[part])).toBe(true);
     }
     // The Input skin selects this stamp; the field took focus on mount.
     expect(create).toHaveFocus();

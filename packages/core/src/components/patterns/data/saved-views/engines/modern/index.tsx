@@ -478,7 +478,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
               <Input
                 variant="unstyled"
                 size="sm"
-                data-part="rename-input"
                 className="ds-saved-views__input"
                 value={editingName}
                 onChange={(value) => setEditingName(value)}
@@ -570,7 +569,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
           <Input
             variant="unstyled"
             size="sm"
-            data-part="create-input"
             className="ds-saved-views__create-input"
             placeholder={newViewPlaceholder}
             value={newViewName}

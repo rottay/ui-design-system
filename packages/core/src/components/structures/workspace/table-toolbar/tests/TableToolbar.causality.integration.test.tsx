@@ -85,10 +85,10 @@ const markup = `<div id="toolbar" style="inline-size:80rem">${toolbar}</div>`;
 const ROOT = "#toolbar [data-part='root']";
 const LEFT = "#toolbar [data-part='left']";
 const FIELD = "#toolbar [data-part='search-field']";
-/** The Input's SHELL: the caller's `search-input` part replaces the
-    primitive's own root part (P-79), and the shell is what the primitive
-    paints. */
-const SHELL = "#toolbar [data-part='search-input']";
+/** The Input's SHELL: the primitive keeps its own root part (P-88), so the
+    shell is reached through the class door -- the field wrapper carries the
+    caller class -- and the shell is what the primitive paints. */
+const SHELL = "#toolbar .ds-table-toolbar__search-input > .ds-input-shell";
 const ICON = "#toolbar [data-part='search-icon']";
 const DIVIDER = "#toolbar [data-part='divider']";
 const PRIMARY = "#toolbar [data-part='primary-action']";
@@ -159,12 +159,14 @@ describe('table-toolbar causality surface', () => {
       'actions',
       'divider',
       'search-field',
-      'search-input',
       'search-icon',
       'primary-action',
     ]) {
       expect(toolbar, part).toContain(`data-part="${part}"`);
     }
+    // P-88: the composed Input keeps its own root part; the caller part never lands.
+    expect(toolbar).toContain('ds-table-toolbar__search-input');
+    expect(toolbar).not.toContain('data-part="search-input"');
   });
 
   /**

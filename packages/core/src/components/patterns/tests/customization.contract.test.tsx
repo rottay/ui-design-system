@@ -198,8 +198,11 @@ describe('BrandingPreviewSandbox customization anatomy createElement anatomy', (
     for (const variant of ['primary', 'secondary', 'default', 'ghost']) {
       expect(queryAll(root, `.ds-button--modern[data-variant="${variant}"]`)).toHaveLength(1);
     }
-    expect(queryAll(root, '.ds-input-shell--modern[data-part="input"]')).toHaveLength(2);
-    expect(queryAll(root, '.ds-input-shell--modern[data-part="input"][data-invalid="true"]')).toHaveLength(1);
+    // P-88: the composed Input keeps its own `root` part, so the two fields are found by the shell class.
+    const inputs = '[data-part="surface"][data-state="inputs"] .ds-input-shell--modern';
+    expect(queryAll(root, inputs)).toHaveLength(2);
+    expect(queryAll(root, `${inputs}[data-invalid="true"]`)).toHaveLength(1);
+    expect(queryAll(root, '[data-part="input"]')).toHaveLength(0);
     for (const variant of ['outlined', 'elevated']) {
       expect(queryAll(root, `.ds-card--modern[data-variant="${variant}"]`)).toHaveLength(1);
     }
