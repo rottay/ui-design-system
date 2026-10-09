@@ -8075,6 +8075,11 @@
      "at": "2026-10-08 20:16",
      "by": "kimi-dt",
      "note": "Motion status-filter-pills delegation amendment integrated 5fcde0068 (4 population paths): the pill's motion is published NOT APPLICABLE, delegated to the canonical Button it composes since 464d5cf52 (engine=modern chrome=none; ungated .ds-button--modern[data-variant] root transition, equivalent-or-stronger reduced-motion arms). Lawful delegated subtraction via the existing exclusions kind (precedent 2cc901cdd): baseline axes.motion 204->203, notApplicable.motion 0->1, full shortcutsOverlayDelegation-mirroring provenance incl. isolated-archive membership diff proving the pills are the ONLY leaver (no +1/-1 swap) and ownerFacingNote quoting ruling 2026-10-08 #2 verbatim (Spanish original + labelled DT rendering). population --check green (motion 203, 1 N/A; other axes unchanged); tests 77/79 with the ONLY 2 reds the pre-existing B3 states pins (the 4 motion-floor reds red at HEAD are cleared, no new red); 11/11 P2 plants behave. Independent reviews: cause ACCEPT (26677a24), implementation HOLD-then-ACCEPT with F1 verbatim-quote correction (0c368e9b, delta check discharged). OWED elsewhere: P1 real-browser proof of the composed motion (root window), B2 roster re-seat (ea8eb830e) before any indicator-7 republish, B3 owner ruling (9 states-unobservable: pills + locale-switcher). The indicator reading (~170/203) stays UNCLAIMED until measured; no WO closure."
+    },
+    {
+     "at": "2026-10-09 00:08",
+     "by": "kimi-dt",
+     "note": "hooks:check MANIFEST_STALE RESOLVED by attributed housekeeping (contracts/css/hooks/index.json republished via pnpm hooks:generate only): the drift was exactly counts.componentFiles 1301 -> 1317 from 383368e13/32409b080/0b8730d3a (contract last generated 7ba9dc177), zero hook-entry changes, verified by three independent re-derivations before the regen. hooks:check green ('published contract is current'); hooks suite 60/60 (was 57 + the MANIFEST_STALE trio). The official core build now passes the hooks:check prebuild; with TS4058 fixed at 504dcd020 the full build chain is green end-to-end for the first time since the W7a split. The step-1 migration's class hooks do not create manifest entries (verified), so the contract stays current through the remaining lots."
     }
    ]
   },
