@@ -254,6 +254,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             variant="ghost"
             size="sm"
             data-part="trigger"
+            className="ds-environment-toggle__trigger"
             onClick={() => setDropdownOpen(!dropdownOpen)}
             data-testid="env-toggle-trigger"
             disabled={loading}
@@ -293,6 +294,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
                   variant="ghost"
                   size="sm"
                   data-part="option"
+                  className="ds-environment-toggle__option"
                   data-active={env.id === activeEnvironment}
                   /* The check glyph is decorative, so without aria-checked the
                      active environment reached assistive tech as nothing. */
@@ -337,6 +339,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
               variant="ghost"
               size="sm"
               data-part="option"
+              className="ds-environment-toggle__option"
               data-active={env.id === activeEnvironment}
               role="radio"
               aria-checked={env.id === activeEnvironment}
@@ -374,6 +377,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             variant="ghost"
             size="sm"
             data-part="option"
+            className="ds-environment-toggle__option"
             data-active={env.id === activeEnvironment}
             data-position={idx === 0 ? 'first' : idx === environments.length - 1 ? 'last' : 'middle'}
             role="radio"

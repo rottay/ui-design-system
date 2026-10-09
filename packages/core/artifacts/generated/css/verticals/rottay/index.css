@@ -65732,16 +65732,16 @@ html[data-ds-motion='reduced']
 /* ---- dropdown options: full-width start-aligned rows (the composed Button
         keeps its chrome; the pattern owns row layout + the active highlight) ---- */
 
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'] {
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] .ds-environment-toggle__option {
   inline-size: 100%;
   justify-content: flex-start;
 }
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'] [data-part='option-name'] {
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] .ds-environment-toggle__option [data-part='option-name'] {
   flex: 1 1 auto;
   min-inline-size: 0;
   text-align: start;
 }
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'][data-active='true'] {
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] .ds-environment-toggle__option[data-active='true'] {
   background: var(--ds-surface-inset);
   font-weight: var(--ds-font-weight-semibold);
 }
@@ -65755,11 +65755,11 @@ html[data-ds-motion='reduced']
 
 /* ---- pills variant: active option rides the accent hatch ---- */
 
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-active='true'] {
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] .ds-environment-toggle__option[data-active='true'] {
   background: var(--ds-envtoggle-accent);
   color: var(--ds-color-text-on-primary);
 }
-.ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-variant='pills'] [data-part='option'][data-active='true'] {
+.ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-variant='pills'] .ds-environment-toggle__option[data-active='true'] {
   border: 1px solid var(--ds-envtoggle-accent);
 }
 
@@ -65774,29 +65774,29 @@ html[data-ds-motion='reduced']
 /* ---- segmented (default toggle) variant: joined corners on LOGICAL radii,
         so the first/last segment mirrors under RTL ---- */
 
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active] {
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] .ds-environment-toggle__option[data-active] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true'] {
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] .ds-environment-toggle__option[data-active='true'] {
   background: var(--ds-envtoggle-accent);
   color: var(--ds-color-text-on-primary);
 }
-.ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-variant='toggle'] [data-part='option'][data-active='true'] {
+.ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-variant='toggle'] .ds-environment-toggle__option[data-active='true'] {
   border: 1px solid var(--ds-envtoggle-accent);
 }
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='first'] {
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] .ds-environment-toggle__option[data-position='first'] {
   border-start-start-radius: var(--ds-radius-md);
   border-end-start-radius: var(--ds-radius-md);
   border-start-end-radius: 0;
   border-end-end-radius: 0;
 }
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='last'] {
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] .ds-environment-toggle__option[data-position='last'] {
   border-start-start-radius: 0;
   border-end-start-radius: 0;
   border-start-end-radius: var(--ds-radius-md);
   border-end-end-radius: var(--ds-radius-md);
 }
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='middle'] {
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] .ds-environment-toggle__option[data-position='middle'] {
   border-radius: 0;
 }
 
@@ -65836,8 +65836,8 @@ html[data-ds-motion='reduced']
 /* ---- coarse pointers: the pattern's option chrome reaches the physical
         44px floor via block-size only (the composed Buttons keep density) ---- */
 @media (pointer: coarse) {
-  .ds-pattern-environment-toggle.ds-engine-modern [data-part='trigger'],
-  .ds-pattern-environment-toggle.ds-engine-modern [data-part='option'] {
+  .ds-pattern-environment-toggle.ds-engine-modern .ds-environment-toggle__trigger,
+  .ds-pattern-environment-toggle.ds-engine-modern .ds-environment-toggle__option {
     min-block-size: var(
       --ds-environment-toggle-touch-target,
       var(--ds-touch-target-min, 44px)
@@ -65863,13 +65863,13 @@ html[data-ds-motion='reduced']
    system-colour frames; the dropdown panel re-frames; the banner underline
    degrades to a neutral ButtonText hairline. */
 @media (forced-colors: active) {
-  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-active='true'],
-  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true'] {
+  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] .ds-environment-toggle__option[data-active='true'],
+  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] .ds-environment-toggle__option[data-active='true'] {
     border-color: Highlight;
     background: Highlight;
     color: HighlightText;
   }
-  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'][data-active='true'] {
+  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] .ds-environment-toggle__option[data-active='true'] {
     outline: 1px solid Highlight;
     outline-offset: -1px;
     background: Canvas;
@@ -65919,11 +65919,11 @@ html[data-ds-motion='reduced']
     color: contrast-color(var(--ds-envtoggle-accent));
   }
 
-  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-active='true'] {
+  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] .ds-environment-toggle__option[data-active='true'] {
     color: contrast-color(var(--ds-envtoggle-accent));
   }
 
-  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true'] {
+  .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] .ds-environment-toggle__option[data-active='true'] {
     color: contrast-color(var(--ds-envtoggle-accent));
   }
 }
@@ -65971,7 +65971,7 @@ html[data-ds-motion='reduced']
  * Values transcribed verbatim from engines/modern.tsx.
  */
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'] {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__trigger {
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
@@ -65982,9 +65982,9 @@ html[data-ds-motion='reduced']
 /* Trigger/create/settings had NO hover or press state (the pattern skin is
    their single paint owner, P-79). Hover rides the (hover: hover) guard with
    an unguarded :active twin (house hover law). */
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:is([data-state~='pressed'], :active),
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:is([data-state~='pressed'], :active),
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:is([data-state~='pressed'], :active) {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__trigger:is([data-state~='pressed'], :active),
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__create:is([data-state~='pressed'], :active),
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__settings:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-inset);
 }
 
@@ -66044,12 +66044,12 @@ html[data-ds-motion='reduced']
   background: var(--ds-color-success);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='badge'] {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__badge {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__settings {
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
@@ -66060,13 +66060,13 @@ html[data-ds-motion='reduced']
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__create {
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='create'] {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-workspace-switcher__create {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
@@ -66082,7 +66082,7 @@ html[data-ds-motion='reduced']
   position: relative;
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'] {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__trigger {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-workspace-switcher-trigger-gap, 8px);
@@ -66092,7 +66092,7 @@ html[data-ds-motion='reduced']
   cursor: pointer;
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] [data-part='trigger'] {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] .ds-workspace-switcher__trigger {
   inline-size: 100%;
   justify-content: flex-start;
 }
@@ -66239,7 +66239,7 @@ html[data-ds-motion='reduced']
   transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'] {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__item {
   position: static;
   display: flex;
   flex: 1 1 auto;
@@ -66252,7 +66252,7 @@ html[data-ds-motion='reduced']
 
 /* The row control is a Button for behaviour only: its chrome is unset and its
    wrappers unboxed, so the row frame and this module stay the painters. */
-.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item'] {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button.ds-workspace-switcher__item {
   --ds-button-hover-transform: none;
   --ds-button-hover-filter: none;
   --ds-button-active-transform: none;
@@ -66287,18 +66287,18 @@ html[data-ds-motion='reduced']
   transition: unset;
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item'] > [data-part='content'],
-.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item'] > [data-part='content'] > [data-part='label'] {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button.ds-workspace-switcher__item > [data-part='content'],
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button.ds-workspace-switcher__item > [data-part='content'] > [data-part='label'] {
   display: contents;
   font-variant-numeric: unset;
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item']::before {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button.ds-workspace-switcher__item::before {
   display: unset;
   opacity: unset;
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item'] [data-part='badge'] :is([data-part='content'], [data-part='label']) {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button.ds-workspace-switcher__item .ds-workspace-switcher__badge :is([data-part='content'], [data-part='label']) {
   z-index: unset;
   translate: unset;
   font-variant-numeric: unset;
@@ -66317,12 +66317,12 @@ html[data-ds-motion='reduced']
     );
   }
 
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:is([data-state~='hovered'], :hover) [data-part='settings'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:is([data-state~='hovered'], :hover) .ds-workspace-switcher__settings {
     opacity: 1;
   }
 
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:is([data-state~='hovered'], :hover),
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:is([data-state~='hovered'], :hover) {
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__trigger:is([data-state~='hovered'], :hover),
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__create:is([data-state~='hovered'], :hover) {
     /* `--ds-surface-highlight` is #18181C under BOTH first-party themes, so the
        bare token painted near-black under dark ink (measured 1.18:1). */
     background: color-mix(
@@ -66333,7 +66333,7 @@ html[data-ds-motion='reduced']
     color: var(--ds-color-text-primary);
   }
 
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:is([data-state~='hovered'], :hover) {
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__settings:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
   }
 }
@@ -66398,7 +66398,7 @@ html[data-ds-motion='reduced']
 
 /* ---- settings gear: 24px box, revealed on row hover / virtual focus / own
         focus (the reveal was an inline opacity ternary). ---- */
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__settings {
   inline-size: 24px;
   block-size: 24px;
   padding: 0;
@@ -66411,8 +66411,8 @@ html[data-ds-motion='reduced']
 }
 
 /* Keyboard reveals (virtual focus + own focus ring) -- never hover-gated. */
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'][data-focused='true'],
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__settings[data-focused='true'],
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__settings:is([data-state~='focus-visible'], :focus-visible) {
   opacity: 1;
 }
 
@@ -66422,7 +66422,7 @@ html[data-ds-motion='reduced']
   padding-inline: 12px;
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__create {
   gap: 4px;
   inline-size: 100%;
   block-size: 32px;
@@ -66483,13 +66483,13 @@ html[data-ds-motion='reduced']
 
 /* The row control now takes REAL focus. Its ring draws INSIDE the box: the
    list scrolls and the panel clips, so an outset ring would be shaved off. */
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__item:is([data-state~='focus-visible'], :focus-visible) {
   position: relative;
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: calc(-1 * var(--ds-focus-ring-width));
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible)::after {
+.ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__item:is([data-state~='focus-visible'], :focus-visible)::after {
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
   content: '';
@@ -66500,19 +66500,19 @@ html[data-ds-motion='reduced']
 /* ---- coarse pointers: 44px floors; the gear grows a transparent hit area
         (and is always visible on touch, where there is no hover). ---- */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'],
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__trigger,
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'],
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'],
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__item,
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__create {
     min-block-size: var(--ds-workspace-switcher-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__settings {
     position: relative;
     opacity: 1;
   }
 
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']::after {
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__settings::after {
     content: '';
     position: absolute;
     inset: -10px;
@@ -66521,10 +66521,10 @@ html[data-ds-motion='reduced']
 
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row'],
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'],
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'],
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__trigger,
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__create,
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='chevron'],
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__settings {
     transition: none;
   }
 
@@ -66565,11 +66565,11 @@ html[data-ds-motion='reduced']
     outline-offset: -1px;
     background: Canvas;
   }
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__item:is([data-state~='focus-visible'], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
   }
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible)::after {
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__item:is([data-state~='focus-visible'], :focus-visible)::after {
     box-shadow: none;
   }
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='check'] {
@@ -66578,10 +66578,10 @@ html[data-ds-motion='reduced']
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='online-dot'] {
     background: ButtonText;
   }
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__settings {
     opacity: 1;
   }
-  .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='create'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-workspace-switcher__create {
     border-color: ButtonText;
   }
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'] {

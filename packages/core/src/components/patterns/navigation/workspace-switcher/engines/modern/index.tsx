@@ -349,6 +349,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
         variant="ghost"
         size="sm"
         data-part="trigger"
+        className="ds-workspace-switcher__trigger"
         onClick={() => setOpen(!open)}
         data-testid="workspace-trigger"
         aria-label={switchLabel}
@@ -442,6 +443,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                     aria-checked={isActive}
                     tabIndex={idx === rovingIndex ? 0 : -1}
                     data-part="item"
+                    className="ds-workspace-switcher__item"
                     data-active={isActive}
                     data-focused={isFocused}
                     data-testid={`workspace-item-${ws.id}`}
@@ -485,6 +487,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                           size="sm"
                           tone="primary"
                           data-part="badge"
+                          className="ds-workspace-switcher__badge"
                           count={ws.unreadCount}
                         />
                       )}
@@ -499,6 +502,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       role="menuitem"
                       tabIndex={idx === rovingIndex ? 0 : -1}
                       data-part="settings"
+                      className="ds-workspace-switcher__settings"
                       data-focused={isFocused}
                       icon={<NavigationSettingsIcon decorative size={14} />}
                       onClick={() => onSettings(ws.id)}
@@ -524,6 +528,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   variant="ghost"
                   size="sm"
                   data-part="create"
+                  className="ds-workspace-switcher__create"
                   icon={<ActionAddIcon decorative size={14} />}
                   onClick={() => {
                     onCreate();

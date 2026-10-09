@@ -93,7 +93,7 @@ describe('ModernWorkspaceSwitcher — composed controls wear the Button focus si
   it('paints no focus indicator of its own on the composed Buttons', () => {
     for (const part of BUTTON_PARTS) {
       const named = [...AUTHORED, ...rulesOf(FORCED)].filter((rule) =>
-        new RegExp(`\\[data-part='${part}'\\](?![^,]*\\[data-part=)`).test(rule.selector),
+        new RegExp(`\\.ds-workspace-switcher__${part}(?![^,]*\\[data-part=)`).test(rule.selector),
       );
       expect(named.length).toBeGreaterThan(0);
       for (const rule of named) {
@@ -104,7 +104,7 @@ describe('ModernWorkspaceSwitcher — composed controls wear the Button focus si
 
   it('carries the row focus signature on an overlay inset by its reach', () => {
     const ITEM_FOCUS =
-      ".ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible)";
+      ".ds-pattern-workspace-switcher.ds-engine-modern .ds-workspace-switcher__item:is([data-state~='focus-visible'], :focus-visible)";
     const itemRules = AUTHORED.filter((rule) => rule.selector.startsWith(ITEM_FOCUS));
     expect(itemRules.filter(paintsSolidOutline)).toEqual([]);
     expect(SKIN).not.toContain('--ds-focus-ring-color');
@@ -146,14 +146,14 @@ describe('ModernWorkspaceSwitcher — composed controls wear the Button focus si
 
   it('still reveals the gear when it takes keyboard focus', () => {
     const reveal = AUTHORED.find(
-      (rule) => rule.selector.includes("[data-part='settings']:is([data-state~='focus-visible'], :focus-visible)"),
+      (rule) => rule.selector.includes(".ds-workspace-switcher__settings:is([data-state~='focus-visible'], :focus-visible)"),
     );
     expect(reveal && declarations(reveal.body)).toEqual(['opacity: 1']);
   });
 });
 
 describe('ModernWorkspaceSwitcher — the row control rides the Button primitive', () => {
-  const ROW = ".ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button[data-part='item']";
+  const ROW = ".ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] .ds-button.ds-workspace-switcher__item";
 
   const openMenu = async (onSwitch = vi.fn()) => {
     const view = render(
