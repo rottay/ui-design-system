@@ -126,10 +126,10 @@
 .ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='true'][data-state~='pressed'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='false'][data-last='true'] {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-cockpit-header.ds-engine-modern .ds-pattern-cockpit-header__crumb[data-interactive='false'][data-last='false'] {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
   color: var(--ds-color-text-muted);
 }
 

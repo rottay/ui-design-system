@@ -407,11 +407,11 @@
 .ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb[data-interactive='true']:is([data-state~='pressed'], :active) {
   color: var(--ds-color-text-primary);
 }
-.ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb[data-interactive='false'][data-last='true'] {
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
   color: var(--ds-color-text-secondary);
   font-weight: var(--ds-font-weight-semibold, 600);
 }
-.ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb[data-interactive='false'][data-last='false'] {
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
   color: var(--ds-color-text-muted);
 }
 
