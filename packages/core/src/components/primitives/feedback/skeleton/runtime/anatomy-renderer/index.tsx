@@ -1024,6 +1024,27 @@ export function resolvePartRole(part: string): SkeletonPartRole {
   return SKELETON_PART_ROLES[part] ?? UNKNOWN_PART_ROLE;
 }
 
+/** An owner's class hook, `ds-<owner>__<part>`; a BEM modifier (`--`) is not a hook. */
+const OWNER_CLASS_HOOK = /^ds-[a-z0-9]+(?:-[a-z0-9]+)*__([a-z0-9]+(?:-[a-z0-9]+)*)$/;
+
+/**
+ * The part a stamped element is drawn as. Under P-88 a composed primitive keeps
+ * its own canonical part (a crumb Link stamps `root`), and the owner names it
+ * through its class hook instead (`ds-pattern-cockpit-header__crumb`). When the
+ * element's hooks name exactly one part this renderer has a role for, that part
+ * decides; with no hook, an unknown hook part, or hooks naming different parts,
+ * the element's own `data-part` decides, as before. Only stamped elements reach
+ * here: a hook on an element with no `data-part` still draws nothing.
+ */
+export function resolveBonePart(element: Element, stampedPart: string): string {
+  const hooked = new Set<string>();
+  for (const token of Array.from(element.classList)) {
+    const part = OWNER_CLASS_HOOK.exec(token)?.[1];
+    if (part && Object.prototype.hasOwnProperty.call(SKELETON_PART_ROLES, part)) hooked.add(part);
+  }
+  return hooked.size === 1 ? [...hooked][0] : stampedPart;
+}
+
 /** One painted bone, positioned against the source layer's box. */
 export interface AnatomyBone {
   part: string;
@@ -1045,6 +1066,7 @@ interface AnatomyReading {
 /**
  * Reads the stamped anatomy under `source`, in document order.
  * Elements without a `data-part` are transparent: their parts are still read.
+ * A stamped element is drawn as {@link resolveBonePart} names it.
  */
 function readAnatomy(source: HTMLElement): AnatomyReading {
   const origin = source.getBoundingClientRect();
@@ -1053,7 +1075,8 @@ function readAnatomy(source: HTMLElement): AnatomyReading {
   const measured: Element[] = [];
 
   const visit = (element: Element) => {
-    const part = element.getAttribute('data-part');
+    const stamped = element.getAttribute('data-part');
+    const part = stamped === null ? null : resolveBonePart(element, stamped);
     const role = part === null ? 'pass' : resolvePartRole(part);
     if (role === 'omit') return;
     measured.push(element);

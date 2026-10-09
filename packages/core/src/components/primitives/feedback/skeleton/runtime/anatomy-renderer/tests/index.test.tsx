@@ -14,6 +14,7 @@ import {
   SKELETON_ANCESTOR_INVALIDATION_ATTRIBUTES,
   SKELETON_PART_ROLES,
   readAnatomyBones,
+  resolveBonePart,
   resolvePartRole,
 } from '..';
 
@@ -882,5 +883,52 @@ describe('the shell, command and search vocabulary (WO-FAM-11)', () => {
     // is the role that collapses to the shortest side, which is why a wide
     // text chip is not one.
     expect(boneWidth(container, 'suggestion-chip')).toBe('132px');
+  });
+});
+
+describe('AnatomySkeleton reads a composed primitive by its owner class hook (P-88)', () => {
+  const bonesOf = (markup: string) => {
+    const host = document.createElement('div');
+    host.innerHTML = markup;
+    document.body.appendChild(host);
+    const bones = readAnatomyBones(host).map((bone) => `${bone.part}:${bone.role}`);
+    host.remove();
+    return bones;
+  };
+
+  it('draws a composed Link that keeps its own root as the part its owner hook names', () => {
+    // The crumb Link stamps its canonical `root` (a frame the walker would descend);
+    // the owner's `__crumb` hook names the part, so the bone stays one crumb block.
+    expect(
+      bonesOf(
+        "<a data-part='root' class='rottay-link-shell ds-pattern-cockpit-header__crumb'><span data-part='external-icon'></span></a>",
+      ),
+    ).toEqual(['crumb:block']);
+    expect(resolveBonePart(Object.assign(document.createElement('a'), { className: 'ds-pattern-page-shell__crumb' }), 'root')).toBe(
+      'crumb',
+    );
+  });
+
+  it('keeps the stamped part when the hook names a part the renderer has no role for', () => {
+    expect(bonesOf("<div data-part='title' class='ds-probe-owner__not-a-skeleton-part'></div>")).toEqual(['title:line']);
+  });
+
+  it('keeps the stamped part when the hooks name different parts', () => {
+    expect(bonesOf("<a data-part='root' class='ds-owner__crumb ds-owner__title'><span data-part='label'></span></a>")).toEqual([
+      'root:frame',
+      'label:line',
+    ]);
+  });
+
+  it('does not read a BEM modifier as a hook', () => {
+    expect(bonesOf("<a data-part='root' class='ds-owner__crumb--current'></a>")).toEqual(['root:frame']);
+  });
+
+  it('never bones an unstamped element because it carries a hook', () => {
+    expect(bonesOf("<span class='ds-pattern-cockpit-header__crumb'>Home</span>")).toEqual([]);
+  });
+
+  it('is neutral where the hook and the stamp already agree', () => {
+    expect(bonesOf("<span data-part='crumb' class='ds-pattern-cockpit-header__crumb'>Detail</span>")).toEqual(['crumb:block']);
   });
 });
