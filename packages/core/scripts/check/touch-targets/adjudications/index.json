@@ -99,18 +99,6 @@
       "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
     },
     {
-      "key": "date-picker/index.css :: .ds-date-picker-range.ds-date-picker-range--modern :: [data-part='clear-button']",
-      "kind": "debt",
-      "owner": "design-system/D1-floors",
-      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
-    },
-    {
-      "key": "date-picker/index.css :: .ds-date-picker.ds-date-picker--modern :: [data-part='clear-button']",
-      "kind": "debt",
-      "owner": "design-system/D1-floors",
-      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
-    },
-    {
       "key": "file-manager/index.css :: .ds-pattern-file-manager.ds-engine-modern :: [data-part='grid-card']",
       "kind": "exempt",
       "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"

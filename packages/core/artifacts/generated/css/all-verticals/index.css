@@ -37333,6 +37333,12 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
     min-block-size: max(var(--ds-date-picker-trigger-height, var(--ds-input-md-height)), var(--ds-date-picker-touch-target-min, var(--ds-touch-target-min)));
   }
 
+  .ds-date-picker.ds-date-picker--modern [data-part='clear-button'],
+  .ds-date-picker-range.ds-date-picker-range--modern [data-part='clear-button'] {
+    min-inline-size: var(--ds-date-picker-touch-target-min, var(--ds-touch-target-min));
+    min-block-size: var(--ds-date-picker-touch-target-min, var(--ds-touch-target-min));
+  }
+
   .ds-date-picker-panel[data-mode='date'] {
     inline-size: max-content;
     max-inline-size: calc(100dvw - var(--ds-spacing-4));
