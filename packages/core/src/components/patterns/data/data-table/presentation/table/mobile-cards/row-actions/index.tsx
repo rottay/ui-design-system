@@ -35,6 +35,7 @@ export function RowActionsMenu({
         aria-label={label}
         icon={<MoreHorizontalIcon size={16} aria-hidden />}
         data-part="row-actions-trigger"
+        className="ds-data-table__row-actions-trigger"
       />
     </Popover>
   );
@@ -102,6 +103,7 @@ export function SwipeActionsRecord({
           icon={<MoreHorizontalIcon size={16} aria-hidden />}
           onClick={() => setRevealed((current) => !current)}
           data-part="swipe-actions-toggle"
+          className="ds-data-table__swipe-actions-toggle"
         />
       </Flex>
     </Box>

@@ -63,6 +63,6 @@ describe('StatsGrid modern card activation is a composed chrome-less Button', ()
 
   it('stretches the activation over the card in a corner-clipped frame', () => {
     expect(SKIN).toMatch(/\.ds-stats-grid__card > \[data-part="card-hit"\] \{\s*position: absolute;\s*z-index: var\(--ds-z-index-relative-above\);\s*inset: 0;\s*border-radius: inherit;\s*clip-path: border-box;\s*\}/);
-    expect(SKIN).toMatch(/\[data-part="card-hit"\] > \[data-part="card-activate"\] \{\s*position: absolute;\s*inset: -4%;\s*max-inline-size: none;\s*\}/);
+    expect(SKIN).toMatch(/\[data-part="card-hit"\] > \.ds-stats-grid__card-activate \{\s*position: absolute;\s*inset: -4%;\s*max-inline-size: none;\s*\}/);
   });
 });

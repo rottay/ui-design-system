@@ -175,9 +175,9 @@ describe('FileManager modern grid card skin keeps the carrier non-painting (T2)'
   });
 
   it('places the carrier and never touches its paint or kept arms', () => {
-    const placement = all.find((rule) => /\[data-part='grid-card-hit'\] > \[data-part='grid-card-activate'\]$/.test(rule.selector));
+    const placement = all.find((rule) => /\[data-part='grid-card-hit'\] > \.ds-file-manager__grid-card-activate$/.test(rule.selector));
     expect(placement && declared(placement.body)).toEqual(['position', 'inset', 'max-inline-size']);
-    const onCarrier = all.filter((rule) => rule.selector.split(',').some((part) => /\[data-part='grid-card-activate'\][^\s>+~]*$/.test(part.trim())));
+    const onCarrier = all.filter((rule) => rule.selector.split(',').some((part) => /\.ds-file-manager__grid-card-activate[^\s>+~]*$/.test(part.trim())));
     expect(onCarrier.length).toBeGreaterThan(0);
     for (const rule of onCarrier) expect(declared(rule.body).filter((property) => CHROME.test(property))).toEqual([]);
   });

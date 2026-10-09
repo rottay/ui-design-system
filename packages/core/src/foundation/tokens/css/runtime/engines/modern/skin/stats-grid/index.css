@@ -118,7 +118,7 @@
   border-radius: inherit;
   clip-path: border-box;
 }
-.ds-pattern-stats-grid.ds-engine-modern [data-part="card-hit"] > [data-part="card-activate"] {
+.ds-pattern-stats-grid.ds-engine-modern [data-part="card-hit"] > .ds-stats-grid__card-activate {
   position: absolute;
   inset: -4%;
   max-inline-size: none;

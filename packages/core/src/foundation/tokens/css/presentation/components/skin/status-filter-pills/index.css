@@ -43,11 +43,11 @@
 }
 
 /* The selected label shifts weight as a non-color cue beside border + ink. */
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-label[data-part='pill-label'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label {
   font-size: inherit;
   font-weight: 400;
 }
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-label[data-part='pill-label'][data-selected='true'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label[data-selected='true'] {
   font-weight: 500;
 }
 
@@ -67,7 +67,7 @@
 
 /* Count figures read as data: mono family + tabular numerals, one rung below
    the label size. */
-.ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text {
   font-family: var(--ds-font-family-mono, monospace);
   font-size: calc(1em - var(--ds-edge-hairline-width, 1px));
   font-variant-numeric: tabular-nums;
@@ -127,12 +127,12 @@
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'] {
+  .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-selected='true'] {
+  .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label[data-selected='true'] {
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
@@ -152,12 +152,12 @@
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'] {
+  .ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-selected='true'] {
+  .ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text[data-selected='true'] {
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
@@ -193,9 +193,9 @@
   .ds-pattern-status-filter-pills
     .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'][data-selected='true'],
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'],
+    .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label,
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-selected='true'] {
+    .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label[data-selected='true'] {
     color: inherit;
   }
 
@@ -210,9 +210,9 @@
   }
 
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'],
+    .ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text,
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-selected='true'] {
+    .ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text[data-selected='true'] {
     color: inherit;
   }
 }

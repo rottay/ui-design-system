@@ -75,7 +75,7 @@
    owns about it: where it sits. Ring, size and cadence stay the primitive's
    (composition law above) -- the slot is placed, never restyled. */
 .ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='true']
-  > [data-part='spinner'] {
+  > .ds-file-manager__spinner {
   align-self: center;
 }
 
@@ -109,7 +109,7 @@
 /* ---- behavior-only file picker (Input's bare file branch): the className hides
         it; the part arm only mirrors the stamped anatomy and is never load-bearing ---- */
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-input,
-.ds-pattern-file-manager.ds-engine-modern [data-part='file-input'] {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-input {
   display: none;
 }
 
@@ -141,7 +141,7 @@
         from, so tenant white-labelling is unchanged. The repeated engine
         class keeps these resets above the primitive's link/pressed state
         rules without depending on bundle order. ---- */
-.ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] {
+.ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link {
   appearance: none;
   padding: 0;
   border: 0;
@@ -164,17 +164,17 @@
 /* Underline reveals only where hovering is a real input mode. */
 @media (hover: hover) {
   .ds-pattern-file-manager.ds-engine-modern
-    .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='hovered'], :hover) {
+    .ds-file-manager__folder-link.ds-file-manager__folder-link:is([data-state~='hovered'], :hover) {
     color: var(--ds-file-manager-link-hover-color, var(--ds-color-link-hover, var(--ds-color-primary-hover)));
     text-decoration-line: underline;
   }
 }
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='focused'], :focus) {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link:is([data-state~='focused'], :focus) {
   outline-style: none;
 }
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   /* The focus SIGNATURE is a decision, so the ring reads it first (the
      materials idiom every cut family uses). --ds-focus-ring always resolves,
@@ -188,8 +188,8 @@
    compact link treatment for mouse/trackpad users. Both selector shapes are
    named because the reset's repeated engine class is deliberate specificity. */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'],
-  .ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link,
+  .ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -197,7 +197,7 @@
 /* The composed Button wraps the caption in its own label part; inside the
    folder link that wrapper renders as plain inline text — no optical offset
    and no truncation, exactly as the raw button's anonymous text rendered. */
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] [data-part='label'] {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link [data-part='label'] {
   overflow: visible;
   text-overflow: clip;
   translate: none;
@@ -206,7 +206,7 @@
 /* ---- item-action tones: the composed ghost Buttons keep their chrome; the
         pattern owns only the neutral rename tone. The destructive action asks
         the Button for `danger`, so its ink is the governed quiet-danger one. ---- */
-.ds-pattern-file-manager.ds-engine-modern [data-part='item-action'][data-action='rename'] {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action[data-action='rename'] {
   color: var(--ds-color-text-primary);
 }
 
@@ -412,7 +412,7 @@
   clip-path: border-box;    /* not overflow: clip -- Chromium does not round a descendant's hit-test for overflow clips */
   opacity: 0;
 }
-.ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-hit'] > [data-part='grid-card-activate'] {
+.ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-hit'] > .ds-file-manager__grid-card-activate {
   position: absolute;
   inset: -4%;               /* keeps hit coverage under the kernel press scale */
   max-inline-size: none;
@@ -442,9 +442,9 @@
 /* ---- coarse pointers: the pattern's own action chrome reaches the physical
         44px floor via block-size only (the composed Buttons keep density) ---- */
 @media (pointer: coarse) {
-  .ds-pattern-file-manager.ds-engine-modern [data-part='toolbar-action'],
-  .ds-pattern-file-manager.ds-engine-modern [data-part='view-toggle'],
-  .ds-pattern-file-manager.ds-engine-modern [data-part='item-action'] {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action,
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__view-toggle,
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action {
     min-block-size: var(--ds-file-manager-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
@@ -452,7 +452,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-file-manager.ds-engine-modern [data-part='content'],
   .ds-pattern-file-manager.ds-engine-modern [data-part='row'],
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'],
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link,
   .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'] {
     transition: none;
   }
@@ -486,7 +486,7 @@
   .ds-pattern-file-manager.ds-engine-modern
     .ds-file-manager__grid-card[data-part='grid-card']:is([data-state~='focus-visible'], :focus-visible),
   .ds-pattern-file-manager.ds-engine-modern
-    .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='focus-visible'], :focus-visible) {
+    .ds-file-manager__folder-link.ds-file-manager__folder-link:is([data-state~='focus-visible'], :focus-visible) {
     outline: var(--ds-focus-ring-width, 2px) solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
@@ -516,8 +516,8 @@
    below the canonical --ds-touch-target-min channel; fine pointers keep the
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-file-manager.ds-engine-modern [data-part='toolbar-action'],
-  .ds-pattern-file-manager.ds-engine-modern [data-part='item-action'] {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action,
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

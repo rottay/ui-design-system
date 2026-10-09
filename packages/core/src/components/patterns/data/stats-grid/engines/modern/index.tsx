@@ -238,6 +238,7 @@ function StatCard({
           <ModernButton
             chrome="none"
             data-part="card-activate"
+            className="ds-stats-grid__card-activate"
             aria-labelledby={cardId}
             onClick={onClick}
             onKeyDown={(e) => {

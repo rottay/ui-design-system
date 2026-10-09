@@ -89,7 +89,7 @@ describe('ModernSavedViewsBar — composed controls wear the Button focus signat
   it('paints no focus indicator of its own on the composed Buttons', () => {
     for (const part of BUTTON_PARTS) {
       const named = [...AUTHORED, ...rulesOf(FORCED)].filter((rule) =>
-        rule.selector.includes(`[data-part='${part}']`),
+        rule.selector.includes(`.ds-saved-views__${part}`),
       );
       expect(named.length).toBeGreaterThan(0);
       for (const rule of named) {
@@ -100,7 +100,7 @@ describe('ModernSavedViewsBar — composed controls wear the Button focus signat
 
   it('keeps the pill focus corner on its tenant channel so the signature follows it', () => {
     const pillFocus = AUTHORED.filter(
-      (rule) => rule.selector.includes("[data-part='pill-select']") && /focus-visible/.test(rule.selector),
+      (rule) => rule.selector.includes('.ds-saved-views__pill-select') && /focus-visible/.test(rule.selector),
     );
     expect(pillFocus.map((rule) => declarations(rule.body))).toEqual([
       ['border-radius: var(--ds-saved-views-focus-ring-radius, var(--ds-radius-sm))'],
@@ -110,6 +110,12 @@ describe('ModernSavedViewsBar — composed controls wear the Button focus signat
 
 describe('ModernSavedViewsBar — the rename and create fields wear the Input focus signature', () => {
   const FIELD_PARTS = ['rename-input', 'create-input'];
+  // P-88 (owner ruling 2026-10-06): the Input className lands on the field wrapper, not on the shell that carries
+  // the caller part, so the skin keys each control as the wrapper's direct child shell.
+  const FIELD_ANCHORS: Record<string, string> = {
+    'rename-input': ".ds-saved-views__input[data-part='field'] > .ds-input-shell",
+    'create-input': ".ds-saved-views__create-input[data-part='field'] > .ds-input-shell",
+  };
 
   it('renders both fields as the unstyled DS Input, stamped by its own engine', () => {
     const props = {
@@ -158,7 +164,7 @@ describe('ModernSavedViewsBar — the rename and create fields wear the Input fo
   it('states no focus rule, outline or shadow of its own on the composed Input', () => {
     for (const part of FIELD_PARTS) {
       const named = [...AUTHORED, ...rulesOf(FORCED)].filter((rule) =>
-        rule.selector.includes(`[data-part='${part}']`),
+        rule.selector.includes(FIELD_ANCHORS[part]),
       );
       expect(named.length).toBeGreaterThan(0);
       for (const rule of named) {

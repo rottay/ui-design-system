@@ -28619,7 +28619,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--ds-table-row-border, var(--ds-color-border-subtle));
 }
 
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-bulk-count"] {
+.ds-pattern-data-table.ds-data-table--mobile .ds-data-table__mobile-bulk-count {
   font-size: var(--ds-type-supporting-font-size, 0.8125rem);
   font-weight: var(--ds-type-label-font-weight, 600);
 }
@@ -28663,9 +28663,9 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
-  [data-part="mobile-pagination-range"],
+  .ds-data-table__mobile-pagination-range,
 .ds-pattern-data-table.ds-data-table--mobile
-  [data-part="mobile-pagination-page"] {
+  .ds-data-table__mobile-pagination-page {
   font-size: var(--ds-type-supporting-font-size, 0.8125rem);
   font-variant-numeric: tabular-nums;
 }
@@ -28800,9 +28800,9 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   min-inline-size: 9rem;
 }
 
-.ds-pattern-data-table.ds-data-table--mobile [data-part="row-actions-trigger"],
+.ds-pattern-data-table.ds-data-table--mobile .ds-data-table__row-actions-trigger,
 .ds-pattern-data-table.ds-data-table--mobile
-  [data-part="swipe-actions-toggle"] {
+  .ds-data-table__swipe-actions-toggle {
   flex-shrink: 0;
 }
 
@@ -82752,7 +82752,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- the select Button inside the pill: chrome-free, fills the surface so
         the whole pill stays clickable; the ink follows the shell. ---- */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill [data-part='pill-select'] {
+  .ds-saved-views__pill .ds-saved-views__pill-select {
   display: inline-flex;
   flex: 1 1 auto;
   min-inline-size: 0;
@@ -82772,14 +82772,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill [data-part='pill-select'][data-active='true'] {
+  .ds-saved-views__pill .ds-saved-views__pill-select[data-active='true'] {
   font-weight: var(--ds-saved-views-pill-font-weight-active, var(--ds-font-weight-semibold, 600));
 }
 
 /* Long view names truncate with the "…" affordance instead of stretching the
    bar (content-integrity law; the root scroll stays the many-views one). */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill [data-part='pill-select'] [data-part='label'] {
+  .ds-saved-views__pill .ds-saved-views__pill-select [data-part='label'] {
   min-inline-size: 0;
   max-inline-size: var(--ds-saved-views-pill-label-max-width, 14rem);
   overflow: hidden;
@@ -82787,7 +82787,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill [data-part='pill-select']:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-saved-views__pill .ds-saved-views__pill-select:is([data-state~='focus-visible'], :focus-visible) {
   border-radius: var(--ds-saved-views-focus-ring-radius, var(--ds-radius-sm));
 }
 
@@ -82867,7 +82867,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- menu trigger: icon Button, revealed on pill hover / while open (the
         reveal is skin paint now — the engine no longer tracks hover state). ---- */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger'] {
+  .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -82888,7 +82888,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__pill:is([data-state~='hovered'], :hover) .ds-saved-views__menu-trigger[data-part='menu-trigger'] {
+    .ds-saved-views__pill:is([data-state~='hovered'], :hover) .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger {
     opacity: 1;
   }
 }
@@ -82896,31 +82896,31 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    takes focus (the hidden-action law: keyboard users must see the affordance
    before reaching it, not only when they land on it). */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill:focus-within .ds-saved-views__menu-trigger[data-part='menu-trigger'],
+  .ds-saved-views__pill:focus-within .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-open='true'],
+  .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger[data-open='true'],
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger']:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger:is([data-state~='focus-visible'], :focus-visible) {
   opacity: 1;
 }
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:is([data-state~='hovered'], :hover) {
+    .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger[data-active='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:is([data-state~='hovered'], :hover) {
+    .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger[data-active='true']:is([data-state~='hovered'], :hover) {
     background: var(--ds-color-alpha-white-20);
   }
 }
 /* Touch/active equivalents of the hover washes. */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:is([data-state~='pressed'], :active) {
+  .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger[data-active='false']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:is([data-state~='pressed'], :active) {
+  .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger[data-active='true']:is([data-state~='pressed'], :active) {
   background: var(--ds-color-alpha-white-20);
 }
 
@@ -82935,9 +82935,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] [data-part='rename-input'],
+  .ds-saved-views__input[data-part='field'] > .ds-input-shell,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] [data-part='create-input'] {
+  .ds-saved-views__create-input[data-part='field'] > .ds-input-shell {
   box-sizing: border-box;
   inline-size: 100%;
   block-size: var(--ds-saved-views-input-height, 26px);
@@ -82953,9 +82953,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] [data-part='rename-input'].ds-input-shell--modern,
+  .ds-saved-views__input[data-part='field'] > .ds-input-shell.ds-input-shell--modern,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] [data-part='create-input'].ds-input-shell--modern {
+  .ds-saved-views__create-input[data-part='field'] > .ds-input-shell.ds-input-shell--modern {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
@@ -82971,7 +82971,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* ---- create button: the dashed quiet affordance. ---- */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part='create-button'] {
+  .ds-saved-views__create-button.ds-saved-views__create-button {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -83000,19 +83000,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part='create-button'][type='button'] {
+  .ds-saved-views__create-button.ds-saved-views__create-button[type='button'] {
   border: var(--ds-edge-hairline-width, 1px) dashed var(--ds-color-border);
 }
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-button[data-part='create-button']:is([data-state~='hovered'], :hover) {
+    .ds-saved-views__create-button.ds-saved-views__create-button:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
 }
 /* Touch/active equivalent of the hover wash. */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part='create-button']:is([data-state~='pressed'], :active) {
+  .ds-saved-views__create-button.ds-saved-views__create-button:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 
@@ -83023,19 +83023,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-saved-views.ds-engine-modern
     .ds-saved-views__pill[data-part='pill'],
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-button[data-part='create-button'] {
+    .ds-saved-views__create-button.ds-saved-views__create-button {
     min-block-size: var(--ds-saved-views-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__menu-trigger[data-part='menu-trigger'] {
+    .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger {
     position: relative;
     /* A hidden trigger is useless on touch: always visible on coarse. */
     opacity: 1;
   }
 
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__menu-trigger[data-part='menu-trigger']::after {
+    .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger::after {
     content: '';
     position: absolute;
     inset: calc((var(--ds-saved-views-menu-trigger-size, 20px) - var(--ds-saved-views-touch-target-min, var(--ds-touch-target-min, 44px))) / 2);
@@ -83047,13 +83047,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-saved-views.ds-engine-modern
     .ds-saved-views__pill[data-part='pill'],
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__menu-trigger[data-part='menu-trigger'],
+    .ds-saved-views__menu-trigger.ds-saved-views__menu-trigger,
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-button[data-part='create-button'],
+    .ds-saved-views__create-button.ds-saved-views__create-button,
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__input[data-part='field'] [data-part='rename-input'],
+    .ds-saved-views__input[data-part='field'] > .ds-input-shell,
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-input[data-part='field'] [data-part='create-input'] {
+    .ds-saved-views__create-input[data-part='field'] > .ds-input-shell {
     transition: none;
   }
 }
@@ -83063,7 +83063,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-saved-views.ds-engine-modern
     .ds-saved-views__pill[data-part='pill'][data-active],
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-button[data-part='create-button'][type='button'] {
+    .ds-saved-views__create-button.ds-saved-views__create-button[type='button'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
   }
@@ -86056,11 +86056,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* The selected label shifts weight as a non-color cue beside border + ink. */
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-label[data-part='pill-label'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label {
   font-size: inherit;
   font-weight: 400;
 }
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-label[data-part='pill-label'][data-selected='true'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label[data-selected='true'] {
   font-weight: 500;
 }
 
@@ -86080,7 +86080,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* Count figures read as data: mono family + tabular numerals, one rung below
    the label size. */
-.ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text {
   font-family: var(--ds-font-family-mono, monospace);
   font-size: calc(1em - var(--ds-edge-hairline-width, 1px));
   font-variant-numeric: tabular-nums;
@@ -86140,12 +86140,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'] {
+  .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-selected='true'] {
+  .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label[data-selected='true'] {
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
@@ -86165,12 +86165,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'] {
+  .ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-selected='true'] {
+  .ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text[data-selected='true'] {
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
@@ -86206,9 +86206,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-status-filter-pills
     .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'][data-selected='true'],
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'],
+    .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label,
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-selected='true'] {
+    .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label[data-selected='true'] {
     color: inherit;
   }
 
@@ -86223,9 +86223,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'],
+    .ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text,
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-selected='true'] {
+    .ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text.ds-status-filter-pills__count-badge-text[data-selected='true'] {
     color: inherit;
   }
 }
@@ -86783,7 +86783,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    owns about it: where it sits. Ring, size and cadence stay the primitive's
    (composition law above) -- the slot is placed, never restyled. */
 .ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='true']
-  > [data-part='spinner'] {
+  > .ds-file-manager__spinner {
   align-self: center;
 }
 
@@ -86817,7 +86817,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- behavior-only file picker (Input's bare file branch): the className hides
         it; the part arm only mirrors the stamped anatomy and is never load-bearing ---- */
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-input,
-.ds-pattern-file-manager.ds-engine-modern [data-part='file-input'] {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-input {
   display: none;
 }
 
@@ -86849,7 +86849,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         from, so tenant white-labelling is unchanged. The repeated engine
         class keeps these resets above the primitive's link/pressed state
         rules without depending on bundle order. ---- */
-.ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] {
+.ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link {
   appearance: none;
   padding: 0;
   border: 0;
@@ -86872,17 +86872,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Underline reveals only where hovering is a real input mode. */
 @media (hover: hover) {
   .ds-pattern-file-manager.ds-engine-modern
-    .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='hovered'], :hover) {
+    .ds-file-manager__folder-link.ds-file-manager__folder-link:is([data-state~='hovered'], :hover) {
     color: var(--ds-file-manager-link-hover-color, var(--ds-color-link-hover, var(--ds-color-primary-hover)));
     text-decoration-line: underline;
   }
 }
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='focused'], :focus) {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link:is([data-state~='focused'], :focus) {
   outline-style: none;
 }
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   /* The focus SIGNATURE is a decision, so the ring reads it first (the
      materials idiom every cut family uses). --ds-focus-ring always resolves,
@@ -86896,8 +86896,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    compact link treatment for mouse/trackpad users. Both selector shapes are
    named because the reset's repeated engine class is deliberate specificity. */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'],
-  .ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link,
+  .ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -86905,7 +86905,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The composed Button wraps the caption in its own label part; inside the
    folder link that wrapper renders as plain inline text — no optical offset
    and no truncation, exactly as the raw button's anonymous text rendered. */
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] [data-part='label'] {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link [data-part='label'] {
   overflow: visible;
   text-overflow: clip;
   translate: none;
@@ -86914,7 +86914,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- item-action tones: the composed ghost Buttons keep their chrome; the
         pattern owns only the neutral rename tone. The destructive action asks
         the Button for `danger`, so its ink is the governed quiet-danger one. ---- */
-.ds-pattern-file-manager.ds-engine-modern [data-part='item-action'][data-action='rename'] {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action[data-action='rename'] {
   color: var(--ds-color-text-primary);
 }
 
@@ -87120,7 +87120,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   clip-path: border-box;    /* not overflow: clip -- Chromium does not round a descendant's hit-test for overflow clips */
   opacity: 0;
 }
-.ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-hit'] > [data-part='grid-card-activate'] {
+.ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-hit'] > .ds-file-manager__grid-card-activate {
   position: absolute;
   inset: -4%;               /* keeps hit coverage under the kernel press scale */
   max-inline-size: none;
@@ -87150,9 +87150,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- coarse pointers: the pattern's own action chrome reaches the physical
         44px floor via block-size only (the composed Buttons keep density) ---- */
 @media (pointer: coarse) {
-  .ds-pattern-file-manager.ds-engine-modern [data-part='toolbar-action'],
-  .ds-pattern-file-manager.ds-engine-modern [data-part='view-toggle'],
-  .ds-pattern-file-manager.ds-engine-modern [data-part='item-action'] {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action,
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__view-toggle,
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action {
     min-block-size: var(--ds-file-manager-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
@@ -87160,7 +87160,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-file-manager.ds-engine-modern [data-part='content'],
   .ds-pattern-file-manager.ds-engine-modern [data-part='row'],
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'],
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link.ds-file-manager__folder-link,
   .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'] {
     transition: none;
   }
@@ -87194,7 +87194,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-file-manager.ds-engine-modern
     .ds-file-manager__grid-card[data-part='grid-card']:is([data-state~='focus-visible'], :focus-visible),
   .ds-pattern-file-manager.ds-engine-modern
-    .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='focus-visible'], :focus-visible) {
+    .ds-file-manager__folder-link.ds-file-manager__folder-link:is([data-state~='focus-visible'], :focus-visible) {
     outline: var(--ds-focus-ring-width, 2px) solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
@@ -87224,8 +87224,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    below the canonical --ds-touch-target-min channel; fine pointers keep the
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-file-manager.ds-engine-modern [data-part='toolbar-action'],
-  .ds-pattern-file-manager.ds-engine-modern [data-part='item-action'] {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action,
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -88671,7 +88671,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-radius: inherit;
   clip-path: border-box;
 }
-.ds-pattern-stats-grid.ds-engine-modern [data-part="card-hit"] > [data-part="card-activate"] {
+.ds-pattern-stats-grid.ds-engine-modern [data-part="card-hit"] > .ds-stats-grid__card-activate {
   position: absolute;
   inset: -4%;
   max-inline-size: none;
@@ -89213,7 +89213,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- grip: persistent affordance (visible at rest), keyboard-sortable.
         The cursor is `pointer`: these are move-up/move-down buttons, and no
         drag gesture exists to justify a grab/grabbing hand. ---- */
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'] {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -89232,19 +89232,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     color: var(--ds-color-text-primary);
     opacity: 1;
   }
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   color: var(--ds-color-text-primary);
   opacity: 1;
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip:is([data-state~='focus-visible'], :focus-visible) {
   opacity: 1;
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='disabled'], :disabled) {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip:is([data-state~='disabled'], :disabled) {
   cursor: default;
   opacity: calc(0.5 * var(--ds-state-disabled-opacity));
 }
@@ -89273,7 +89273,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* A pinned row reads at a glance: the toggle takes the primary ink through the
    Button's own ghost channel. The icon swap and the pin-side letter already
    carry the state as shape; the hue is a third cue, never the only one. */
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'][data-pinned] [data-part='pin-toggle'] {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'][data-pinned] .ds-column-settings__pin-toggle {
   --ds-button-ghost-color: var(--ds-color-primary);
 }
 
@@ -89314,7 +89314,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     min-block-size: 44px;
   }
 
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'] {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip {
     min-inline-size: 44px;
     min-block-size: 44px;
   }
@@ -89338,7 +89338,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- reduced motion: every state change is instant. ---- */
 @media (prefers-reduced-motion: reduce) {
   .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'],
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'],
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip,
   .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='label'] {
     transition: none;
   }
@@ -89362,12 +89362,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    authored size untouched. The pin toggle joins the grip here -- the skin
    documented the 44px-under-coarse intent but never implemented it. */
 @media (hover: none), (pointer: coarse) {
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'],
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='pin-toggle'] {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip,
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__pin-toggle {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='pin-toggle'] {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__pin-toggle {
     min-inline-size: var(--ds-touch-target-min, 44px);
   }
 }

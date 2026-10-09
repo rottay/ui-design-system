@@ -109,7 +109,7 @@
 /* ---- grip: persistent affordance (visible at rest), keyboard-sortable.
         The cursor is `pointer`: these are move-up/move-down buttons, and no
         drag gesture exists to justify a grab/grabbing hand. ---- */
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'] {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -128,19 +128,19 @@
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     color: var(--ds-color-text-primary);
     opacity: 1;
   }
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   color: var(--ds-color-text-primary);
   opacity: 1;
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip:is([data-state~='focus-visible'], :focus-visible) {
   opacity: 1;
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='disabled'], :disabled) {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip:is([data-state~='disabled'], :disabled) {
   cursor: default;
   opacity: calc(0.5 * var(--ds-state-disabled-opacity));
 }
@@ -169,7 +169,7 @@
 /* A pinned row reads at a glance: the toggle takes the primary ink through the
    Button's own ghost channel. The icon swap and the pin-side letter already
    carry the state as shape; the hue is a third cue, never the only one. */
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'][data-pinned] [data-part='pin-toggle'] {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'][data-pinned] .ds-column-settings__pin-toggle {
   --ds-button-ghost-color: var(--ds-color-primary);
 }
 
@@ -210,7 +210,7 @@
     min-block-size: 44px;
   }
 
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'] {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip {
     min-inline-size: 44px;
     min-block-size: 44px;
   }
@@ -234,7 +234,7 @@
 /* ---- reduced motion: every state change is instant. ---- */
 @media (prefers-reduced-motion: reduce) {
   .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'],
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'],
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip,
   .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='label'] {
     transition: none;
   }
@@ -258,12 +258,12 @@
    authored size untouched. The pin toggle joins the grip here -- the skin
    documented the 44px-under-coarse intent but never implemented it. */
 @media (hover: none), (pointer: coarse) {
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'],
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='pin-toggle'] {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__grip,
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__pin-toggle {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='pin-toggle'] {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] .ds-column-settings__pin-toggle {
     min-inline-size: var(--ds-touch-target-min, 44px);
   }
 }

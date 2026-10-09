@@ -18,7 +18,7 @@ describe('ColumnSettings modern skin — the grip cursor tells the truth', () =>
     expect(SKIN).not.toContain('cursor: grab');
     expect(SKIN).not.toContain('cursor: grabbing');
 
-    const grip = SKIN.slice(SKIN.indexOf("[data-part='grip'] {"));
+    const grip = SKIN.slice(SKIN.indexOf('.ds-column-settings__grip {'));
     expect(grip.slice(0, grip.indexOf('}'))).toContain('cursor: pointer');
   });
 });
@@ -40,7 +40,7 @@ describe('ColumnSettings modern skin — the move buttons wear the Button focus 
   const CSS = SKIN.replace(/\/\*[\s\S]*?\*\//g, '');
   const gripRules = [...CSS.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
     .map((match) => ({ selector: match[1].trim(), body: match[2] }))
-    .filter((rule) => rule.selector.includes("[data-part='grip']"));
+    .filter((rule) => rule.selector.includes('.ds-column-settings__grip'));
 
   it('paints no focus indicator of its own on the composed Buttons', () => {
     // A family outline tied the Button ring rule and drew a solid contour over
@@ -68,12 +68,12 @@ describe('ColumnSettings modern skin — the disabled grip dims by the tenant di
         .map((declaration) => declaration.trim().replace(/\s+/g, ' '))
         .filter(Boolean),
     }))
-    .filter((rule) => rule.selector.includes("[data-part='grip']"));
+    .filter((rule) => rule.selector.includes('.ds-column-settings__grip'));
   const opacityOf = (declarations: string[]) =>
     declarations.find((declaration) => declaration.startsWith('opacity:'))?.slice('opacity:'.length).trim();
 
   it('multiplies the resting grip strength by the states dial instead of a literal', () => {
-    const rest = gripRules.find((rule) => rule.selector.endsWith("[data-part='grip']"));
+    const rest = gripRules.find((rule) => rule.selector.endsWith('.ds-column-settings__grip'));
     const disabled = gripRules.filter((rule) => rule.selector.endsWith(":is([data-state~='disabled'], :disabled)"));
 
     expect(opacityOf(rest?.declarations ?? [])).toBe('0.5');
