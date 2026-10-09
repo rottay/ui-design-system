@@ -795,6 +795,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       virtual: _virtual,
       tokenSeparators: _tokenSeparators,
       forceCustomDropdown: _forceCustomDropdown,
+      // P-88: the trigger keeps its own anatomy; a caller data-part/data-state is never forwarded.
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       ...htmlProps
     } = rest as any;
 
@@ -894,6 +897,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     virtual: _customVirtual,
     tokenSeparators: _customTokenSeparators,
     forceCustomDropdown: _customForceCustomDropdown,
+    // P-88: the trigger keeps its own anatomy; a caller data-part/data-state is never forwarded.
+    'data-part': _customCallerDataPart,
+    'data-state': _customCallerDataState,
     ...triggerHtmlProps
   } = rest as any;
 

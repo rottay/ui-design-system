@@ -800,7 +800,6 @@ function SelectField<T extends string>({
       <FieldLabel>{label}</FieldLabel>
       <Select
         className="ds-pattern-brand-studio__field-input"
-        data-part="field-input"
         value={value}
         options={options}
         placeholder={inheritPlaceholder}
