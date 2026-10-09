@@ -66,6 +66,7 @@ export function RecordSummaryStrip({
         <Stack key={item.label} data-part="summary-item" spacing={4}>
           <Text
             data-part="summary-item-label"
+            className="ds-record__summary-item-label"
             size="xs"
             weight="bold"
           >
@@ -73,6 +74,7 @@ export function RecordSummaryStrip({
           </Text>
           <Text
             data-part="summary-item-value"
+            className="ds-record__summary-item-value"
             data-mono={item.mono ? 'true' : undefined}
             size={variant === 'metrics' ? 'md' : 'sm'}
             weight="medium"
@@ -80,7 +82,7 @@ export function RecordSummaryStrip({
             {item.value}
           </Text>
           {item.helper ? (
-            <Text data-part="summary-item-helper" size="xs">
+            <Text data-part="summary-item-helper" className="ds-record__summary-item-helper" size="xs">
               {item.helper}
             </Text>
           ) : null}

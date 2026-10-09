@@ -70440,7 +70440,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='title-copy'] [data-part='title'] {
+.ds-surface.ds-guided-draft-form [data-part='title-copy'] .ds-guided-draft-form__title {
   margin-block-end: var(--ds-spacing-1);
   /* The Modern engine paints these two headings' weight inline off the
      governed section-title role; the family retunes that channel onto its own
@@ -70448,7 +70448,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   --ds-type-section-title-font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
 }
 
-.ds-surface.ds-guided-draft-form [data-part='subtitle'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__subtitle {
   /* Collapses with the title's own spacing-1 block-end, so the rest gap is
      unchanged; declares the subtitle's rhythm on the spacing plane. */
   margin-block-start: var(--ds-spacing-1);
@@ -70463,7 +70463,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='progress-count'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__progress-count {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
@@ -70507,7 +70507,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-color-error);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='draft-status-label'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-status-label {
   white-space: nowrap;
 }
 
@@ -70520,7 +70520,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    size/weight Texts never stamp. The weight rides the family's
    heading-weight channel (the personality profile bias), not the caption
    role the tier would otherwise bind to. */
-.ds-surface.ds-guided-draft-form [data-part='section-nav-label'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-label {
   display: block;
   margin-block-end: var(--ds-spacing-2);
   font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
@@ -70555,7 +70555,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   align-self: flex-start;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] [data-part='section-nav-label'] {
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-label {
   margin-block-end: var(--ds-spacing-3);
   padding-inline-start: var(--ds-spacing-3);
 }
@@ -70626,7 +70626,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav-item-label'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item-label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -70683,12 +70683,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-primary);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='template-card-title'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card-title {
   font-weight: var(--ds-font-weight-semibold, 600);
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='template-card-description'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card-description {
   min-inline-size: 0;
 }
 
@@ -70717,11 +70717,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-inline-size: 12ch;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='draft-recovery-title'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery-title {
   font-weight: var(--ds-font-weight-medium, 500);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='draft-recovery-description'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery-description {
   /* Collapses with the title's reset trailing margin, so the rest gap is
      unchanged; declares the supporting line's rhythm on the spacing plane. */
   margin-block-start: var(--ds-spacing-1);
@@ -70795,7 +70795,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The Modern engine reads the governed section-title role for this heading
    inline; the family retunes that channel onto its heading-weight channel
    (same contract as the page title above). */
-.ds-surface.ds-guided-draft-form [data-part='section-card-title'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card-title {
   --ds-type-section-title-font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
   min-inline-size: 0;
 }
@@ -70810,7 +70810,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   margin-inline-start: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-card-description'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card-description {
   margin-block-start: var(--ds-spacing-1);
 }
 
@@ -70830,7 +70830,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='validation-summary-title'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary-title {
   font-weight: var(--ds-font-weight-semibold, 600);
   min-inline-size: 0;
 }
@@ -70843,16 +70843,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='validation-issue-message'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-issue-message {
   flex: 1;
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='validation-issue-field'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-issue-field {
   font-weight: var(--ds-font-weight-medium, 500);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='validation-issue-overflow'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-issue-overflow {
   min-inline-size: 0;
 }
 
@@ -70920,12 +70920,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   flex: 1;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='submit-bar-progress'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-bar-progress {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
-.ds-surface.ds-guided-draft-form[data-mobile='true'] [data-part='submit-bar-progress'] {
+.ds-surface.ds-guided-draft-form[data-mobile='true'] .ds-guided-draft-form__submit-bar-progress {
   text-align: center;
 }
 
@@ -71214,21 +71214,21 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    sits on, whose sign follows the mode by construction. The value keeps the
    full reading ink, so the label stays subordinate. The editorial and
    governance wells are gradients and keep their own authored tints. */
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] [data-part='summary-item-label'],
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] [data-part='summary-item-label'],
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-item-label'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] .ds-record__summary-item-label,
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] .ds-record__summary-item-label,
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] .ds-record__summary-item-label {
   color: var(--ds-record-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary)));
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'] [data-part='summary-item-label'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'] .ds-record__summary-item-label {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'] [data-part='summary-item-label'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'] .ds-record__summary-item-label {
   color: color-mix(in srgb, var(--ds-color-text-primary) 26%, var(--ds-color-text-muted) 74%);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-label'] {
+.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item-label {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.12em;
   /* Personality channel: BitHire's authored `sentence` shield and The
@@ -71237,7 +71237,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-value'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-value {
   color: var(--ds-color-text-primary);
   word-break: break-word;
   /* Numeric posture channel: technical profiles read tabular lining figures,
@@ -71246,18 +71246,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-value'][data-mono='true'] {
+.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item-value[data-mono='true'] {
   font-family: var(--ds-font-family-mono, monospace);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-item-value'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] .ds-record__summary-item-value {
   font-size: var(--ds-record-heading-font-size, var(--ds-font-size-lg));
   /* The metrics strip reads as a stat row: tabular figures keep aligned
      values from jittering when the data refreshes. */
   font-variant-numeric: tabular-nums;
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-helper'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-helper {
   color: var(--ds-record-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary)));
   line-height: 1.5;
 }
@@ -71439,7 +71439,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    at (0,4,0) via `[data-color='default']`): the chain reaches (0,5,0) from
    the two scope classes + field + data-error + field-error — no repeated
    attribute (4th-tanda law). */
-.ds-structure.ds-record[data-part='field'][data-error='true'] [data-part='field-error'] {
+.ds-structure.ds-record[data-part='field'][data-error='true'] .ds-record__field-error {
   color: var(--ds-color-error);
   line-height: 1.4;
 }
@@ -71447,11 +71447,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The ledger's field labels are the canvas-side arm of the same quiet rung:
    the cells paint no well, so their ink is graded against the canvas the grid
    rests on rather than against a page role fixed for a light one. */
-.ds-structure.ds-record[data-part='field'][data-empty] > * > [data-part='field-label'] {
+.ds-structure.ds-record[data-part='field'][data-empty] > * > .ds-record__field-label {
   color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
-.ds-structure.ds-record[data-part='field'] [data-part='field-label'] {
+.ds-structure.ds-record[data-part='field'] .ds-record__field-label {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.12em;
   /* Personality channel (see the summary-item-label note): tenant label
@@ -71465,15 +71465,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   flex: 1;
 }
 
-.ds-structure.ds-record[data-part='field'][data-empty='false'] [data-part='field-value'] {
+.ds-structure.ds-record[data-part='field'][data-empty='false'] .ds-record__field-value {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-record[data-part='field'][data-empty='true'] [data-part='field-value'] {
+.ds-structure.ds-record[data-part='field'][data-empty='true'] .ds-record__field-value {
   color: var(--ds-color-text-tertiary);
 }
 
-.ds-structure.ds-record[data-part='field'] [data-part='field-value'] {
+.ds-structure.ds-record[data-part='field'] .ds-record__field-value {
   line-height: 1.6;
   word-break: break-word;
   /* Numeric posture channel: tabular lining under a technical profile,
@@ -71481,20 +71481,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
 }
 
-.ds-structure.ds-record[data-part='field'][data-mono='true'] [data-part='field-value'] {
+.ds-structure.ds-record[data-part='field'][data-mono='true'] .ds-record__field-value {
   font-family: var(--ds-font-family-mono, monospace);
   word-break: break-all;
 }
 
-.ds-structure.ds-record[data-part='field'][data-empty] > * > [data-part='field-helper'] {
+.ds-structure.ds-record[data-part='field'][data-empty] > * > .ds-record__field-helper {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-structure.ds-record[data-part='field'] [data-part='field-helper'] {
+.ds-structure.ds-record[data-part='field'] .ds-record__field-helper {
   line-height: 1.5;
 }
 
-.ds-structure.ds-record[data-part='field'] [data-part='field-copy'] {
+.ds-structure.ds-record[data-part='field'] .ds-record__field-copy {
   flex-shrink: 0;
 }
 
@@ -71609,21 +71609,21 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* The meta label/text pair renders only when `meta` is a string, so no consumer
    node can sit on this path. */
-.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-label'] {
+.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] .ds-record__action-bar-meta-label {
   color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
-.ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-meta-label'] {
+.ds-structure.ds-record[data-part='action-bar'] .ds-record__action-bar-meta-label {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.12em;
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
-.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-text'] {
+.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] .ds-record__action-bar-meta-text {
   color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
-.ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-meta-text'] {
+.ds-structure.ds-record[data-part='action-bar'] .ds-record__action-bar-meta-text {
   line-height: 1.6;
 }
 
@@ -71711,19 +71711,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     background-image: none;
   }
 
-  .ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-value'],
-  .ds-structure.ds-record[data-part='field'][data-empty='false'] [data-part='field-value'],
+  .ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-value,
+  .ds-structure.ds-record[data-part='field'][data-empty='false'] .ds-record__field-value,
   .ds-structure.ds-record[data-part='field'] [data-part='field-link-icon'] {
     color: CanvasText;
   }
 
-  .ds-structure.ds-record[data-part='field'][data-empty='true'] [data-part='field-value'],
-  .ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-helper'],
-  .ds-structure.ds-record[data-part='field'][data-empty] > * > [data-part='field-helper'] {
+  .ds-structure.ds-record[data-part='field'][data-empty='true'] .ds-record__field-value,
+  .ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-helper,
+  .ds-structure.ds-record[data-part='field'][data-empty] > * > .ds-record__field-helper {
     color: GrayText;
   }
 
-  .ds-structure.ds-record[data-part='field'][data-error='true'] [data-part='field-error'],
+  .ds-structure.ds-record[data-part='field'][data-error='true'] .ds-record__field-error,
   .ds-structure.ds-record[data-part='field'][data-error='true'] [data-part='field-error-icon'] {
     color: CanvasText;
   }

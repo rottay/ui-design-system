@@ -65,7 +65,7 @@
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='title-copy'] [data-part='title'] {
+.ds-surface.ds-guided-draft-form [data-part='title-copy'] .ds-guided-draft-form__title {
   margin-block-end: var(--ds-spacing-1);
   /* The Modern engine paints these two headings' weight inline off the
      governed section-title role; the family retunes that channel onto its own
@@ -73,7 +73,7 @@
   --ds-type-section-title-font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
 }
 
-.ds-surface.ds-guided-draft-form [data-part='subtitle'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__subtitle {
   /* Collapses with the title's own spacing-1 block-end, so the rest gap is
      unchanged; declares the subtitle's rhythm on the spacing plane. */
   margin-block-start: var(--ds-spacing-1);
@@ -88,7 +88,7 @@
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='progress-count'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__progress-count {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
@@ -132,7 +132,7 @@
   background: var(--ds-color-error);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='draft-status-label'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-status-label {
   white-space: nowrap;
 }
 
@@ -145,7 +145,7 @@
    size/weight Texts never stamp. The weight rides the family's
    heading-weight channel (the personality profile bias), not the caption
    role the tier would otherwise bind to. */
-.ds-surface.ds-guided-draft-form [data-part='section-nav-label'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-label {
   display: block;
   margin-block-end: var(--ds-spacing-2);
   font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
@@ -180,7 +180,7 @@
   align-self: flex-start;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] [data-part='section-nav-label'] {
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-label {
   margin-block-end: var(--ds-spacing-3);
   padding-inline-start: var(--ds-spacing-3);
 }
@@ -251,7 +251,7 @@
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav-item-label'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item-label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -308,12 +308,12 @@
   color: var(--ds-color-primary);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='template-card-title'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card-title {
   font-weight: var(--ds-font-weight-semibold, 600);
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='template-card-description'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card-description {
   min-inline-size: 0;
 }
 
@@ -342,11 +342,11 @@
   min-inline-size: 12ch;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='draft-recovery-title'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery-title {
   font-weight: var(--ds-font-weight-medium, 500);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='draft-recovery-description'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery-description {
   /* Collapses with the title's reset trailing margin, so the rest gap is
      unchanged; declares the supporting line's rhythm on the spacing plane. */
   margin-block-start: var(--ds-spacing-1);
@@ -420,7 +420,7 @@
 /* The Modern engine reads the governed section-title role for this heading
    inline; the family retunes that channel onto its heading-weight channel
    (same contract as the page title above). */
-.ds-surface.ds-guided-draft-form [data-part='section-card-title'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card-title {
   --ds-type-section-title-font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
   min-inline-size: 0;
 }
@@ -435,7 +435,7 @@
   margin-inline-start: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-card-description'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card-description {
   margin-block-start: var(--ds-spacing-1);
 }
 
@@ -455,7 +455,7 @@
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='validation-summary-title'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary-title {
   font-weight: var(--ds-font-weight-semibold, 600);
   min-inline-size: 0;
 }
@@ -468,16 +468,16 @@
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='validation-issue-message'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-issue-message {
   flex: 1;
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='validation-issue-field'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-issue-field {
   font-weight: var(--ds-font-weight-medium, 500);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='validation-issue-overflow'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-issue-overflow {
   min-inline-size: 0;
 }
 
@@ -545,12 +545,12 @@
   flex: 1;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='submit-bar-progress'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-bar-progress {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
-.ds-surface.ds-guided-draft-form[data-mobile='true'] [data-part='submit-bar-progress'] {
+.ds-surface.ds-guided-draft-form[data-mobile='true'] .ds-guided-draft-form__submit-bar-progress {
   text-align: center;
 }
 

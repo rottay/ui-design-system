@@ -186,6 +186,7 @@ export function RecordField({
   const valueNode = primitiveValue ? (
     <Text
       data-part="field-value"
+      className="ds-record__field-value"
       size="sm"
       weight="medium"
     >
@@ -248,6 +249,7 @@ export function RecordField({
     <Stack spacing={6}>
       <Text
         data-part="field-label"
+        className="ds-record__field-label"
         size="xs"
         weight="bold"
       >
@@ -263,6 +265,7 @@ export function RecordField({
               size="sm"
               onClick={handleCopy}
               data-part="field-copy"
+              className="ds-record__field-copy"
               aria-label={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}
             >
               <CopyToCheck copied={copied} size={13} />
@@ -272,7 +275,7 @@ export function RecordField({
       </Flex>
 
       {helper ? (
-        <Text data-part="field-helper" size="xs">
+        <Text data-part="field-helper" className="ds-record__field-helper" size="xs">
           {helper}
         </Text>
       ) : null}
@@ -282,7 +285,7 @@ export function RecordField({
           {/* Decorative: the adjacent copy carries the error meaning;
               the icon is the non-colour shape cue. */}
           <StatusErrorIcon decorative size={13} data-part="field-error-icon" />
-          <Text data-part="field-error" size="xs">
+          <Text data-part="field-error" className="ds-record__field-error" size="xs">
             {error}
           </Text>
         </Flex>

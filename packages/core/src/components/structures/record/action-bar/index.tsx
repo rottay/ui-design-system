@@ -103,12 +103,13 @@ export function RecordActionBar({
           <Stack spacing={4}>
             <Text
               data-part="action-bar-meta-label"
+              className="ds-record__action-bar-meta-label"
               size="xs"
               weight="bold"
             >
               {tOr('record.actionRail', 'Action rail')}
             </Text>
-            <Text data-part="action-bar-meta-text" size="sm">
+            <Text data-part="action-bar-meta-text" className="ds-record__action-bar-meta-text" size="sm">
               {meta}
             </Text>
           </Stack>
