@@ -226,7 +226,7 @@
    below are COMPOSITION geometry (full-width row, content split) plus the
    disclosure hairline -- the button's own interactive paint (hover, focus
    ring, states) stays with the button skin. */
-.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'] {
+.ds-pattern-form-builder.ds-engine-modern .ds-form-builder__section-header {
   inline-size: 100%;
   justify-content: space-between;
   padding-block-end: var(--ds-form-builder-section-header-padding, 14px);
@@ -234,10 +234,10 @@
   text-align: start;
   transition: margin-block-end var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-collapsed='true'] {
+.ds-pattern-form-builder.ds-engine-modern .ds-form-builder__section-header[data-collapsed='true'] {
   margin-block-end: 0;
 }
-.ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='section-header'] {
+.ds-pattern-form-builder.ds-engine-modern[data-part='root'] .ds-form-builder__section-header {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
@@ -264,13 +264,13 @@
   transform: rotate(0deg);
   transition: transform var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-collapsed='true'] [data-part='section-chevron'] {
+.ds-pattern-form-builder.ds-engine-modern .ds-form-builder__section-header[data-collapsed='true'] [data-part='section-chevron'] {
   transform: rotate(-90deg);
 }
 /* RTL: the collapsed chevron must point at the INLINE-START edge (left under
    RTL), so the quarter-turn mirrors — `:dir()` follows the nearest authored
    direction, no explicit dir ancestor required (collapse.css's idiom). */
-.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-collapsed='true'] [data-part='section-chevron']:dir(rtl) {
+.ds-pattern-form-builder.ds-engine-modern .ds-form-builder__section-header[data-collapsed='true'] [data-part='section-chevron']:dir(rtl) {
   transform: rotate(90deg);
 }
 
@@ -343,9 +343,9 @@
 }
 
 @media (hover: none) and (pointer: coarse) {
-  .ds-pattern-form-builder.ds-engine-modern [data-part='section-header'],
-  .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-prev-button'],
-  .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-next-button'] {
+  .ds-pattern-form-builder.ds-engine-modern .ds-form-builder__section-header,
+  .ds-pattern-form-builder.ds-engine-modern .ds-form-builder__wizard-prev-button,
+  .ds-pattern-form-builder.ds-engine-modern .ds-form-builder__wizard-next-button {
     min-block-size: var(--ds-form-builder-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
@@ -356,7 +356,7 @@
   }
   .ds-pattern-form-builder.ds-engine-modern [data-part='section-content'],
   .ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'],
-  .ds-pattern-form-builder.ds-engine-modern [data-part='section-header'] {
+  .ds-pattern-form-builder.ds-engine-modern .ds-form-builder__section-header {
     transition: none;
   }
 }
@@ -374,7 +374,7 @@
     background: ButtonText;
   }
 
-  .ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='section-header'],
+  .ds-pattern-form-builder.ds-engine-modern[data-part='root'] .ds-form-builder__section-header,
   .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav']:has(> div),
   .ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='action-bar'] {
     border-color: ButtonText;

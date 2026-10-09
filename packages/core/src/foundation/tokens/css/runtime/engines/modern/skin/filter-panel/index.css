@@ -93,16 +93,16 @@
         transform on the element itself is never fought). The glyph is the
         governed NavigationDownIcon — a disclosure chevron, not the old
         expand-arrows glyph that read as "fullscreen". ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] [data-part='icon'] {
+.ds-pattern-filter-panel.ds-engine-modern .ds-pattern-filter-panel__collapse-toggle [data-part='icon'] {
   transition: transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
-.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'][data-collapsed='true'] [data-part='icon'] {
+.ds-pattern-filter-panel.ds-engine-modern .ds-pattern-filter-panel__collapse-toggle[data-collapsed='true'] [data-part='icon'] {
   transform: rotate(-90deg);
 }
 /* RTL: the collapsed chevron points at the inline-start edge (left under
    RTL), so the quarter-turn mirrors — `:dir()` follows the nearest authored
    direction (collapse.css's idiom). */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'][data-collapsed='true'] [data-part='icon']:dir(rtl) {
+.ds-pattern-filter-panel.ds-engine-modern .ds-pattern-filter-panel__collapse-toggle[data-collapsed='true'] [data-part='icon']:dir(rtl) {
   transform: rotate(90deg);
 }
 
@@ -113,7 +113,7 @@
         sits inside the same (hover: hover) guard, its press arm outside it --
         so the panel states the two washes here instead of taking a second
         decision of its own. ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button'] {
+.ds-pattern-filter-panel.ds-engine-modern .ds-pattern-filter-panel__reset-button {
   --ds-button-ghost-color-hover: var(--ds-color-error);
   --ds-button-ghost-bg-hover: var(--ds-surface-highlight);
   --ds-button-ghost-color-active: var(--ds-color-error);
@@ -250,9 +250,9 @@
 /* ---- coarse pointers: the pattern's own action chrome reaches the physical
         44px floor via block-size only (the composed Button keeps its density) ---- */
 @media (pointer: coarse) {
-  .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'],
-  .ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button'],
-  .ds-pattern-filter-panel.ds-engine-modern [data-part='apply-button'] {
+  .ds-pattern-filter-panel.ds-engine-modern .ds-pattern-filter-panel__collapse-toggle,
+  .ds-pattern-filter-panel.ds-engine-modern .ds-pattern-filter-panel__reset-button,
+  .ds-pattern-filter-panel.ds-engine-modern .ds-pattern-filter-panel__apply-button {
     min-block-size: var(--ds-filter-panel-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
@@ -260,7 +260,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-filter-panel.ds-engine-modern [data-part='content'],
   .ds-pattern-filter-panel.ds-engine-modern [data-part='content'][data-collapsed='true'],
-  .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] [data-part='icon'] {
+  .ds-pattern-filter-panel.ds-engine-modern .ds-pattern-filter-panel__collapse-toggle [data-part='icon'] {
     transition: none;
   }
 }

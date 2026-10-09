@@ -892,6 +892,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             {hasSectionHeader && (
               <ModernButton
                 data-part="section-header"
+                className="ds-form-builder__section-header"
                 data-collapsed={isCollapsed}
                 variant="ghost"
                 size="md"
@@ -939,6 +940,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             {currentStep > 0 && (
               <ModernButton
                 data-part="wizard-prev-button"
+                className="ds-form-builder__wizard-prev-button"
                 variant="outline"
                 size="md"
                 disabled={currentStep === 0}
@@ -959,6 +961,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             {currentStep < stepLabels.length - 1 && (
               <ModernButton
                 data-part="wizard-next-button"
+                className="ds-form-builder__wizard-next-button"
                 variant="primary"
                 size="md"
                 onClick={() => handleStepChange(currentStep + 1)}

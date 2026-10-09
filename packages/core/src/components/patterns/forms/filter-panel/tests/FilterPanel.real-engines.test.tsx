@@ -152,10 +152,10 @@ describe.each(['modern', 'rustic'] as const)(
       const RESET_TONE: Record<'modern' | 'rustic', RegExp[]> =
         {
           modern: [
-            /\[data-part='reset-button'\][^{]*\{[^}]*--ds-button-ghost-color-hover/,
-            /\[data-part='reset-button'\][^{]*\{[^}]*--ds-button-ghost-bg-hover/,
-            /\[data-part='reset-button'\][^{]*\{[^}]*--ds-button-ghost-color-active/,
-            /\[data-part='reset-button'\][^{]*\{[^}]*--ds-button-ghost-bg-active/,
+            /\.ds-pattern-filter-panel__reset-button[^{]*\{[^}]*--ds-button-ghost-color-hover/,
+            /\.ds-pattern-filter-panel__reset-button[^{]*\{[^}]*--ds-button-ghost-bg-hover/,
+            /\.ds-pattern-filter-panel__reset-button[^{]*\{[^}]*--ds-button-ghost-color-active/,
+            /\.ds-pattern-filter-panel__reset-button[^{]*\{[^}]*--ds-button-ghost-bg-active/,
           ],
           rustic: [/\[data-part='reset-button'\][^{]*:hover/],
         };
@@ -171,9 +171,15 @@ describe.each(['modern', 'rustic'] as const)(
       /* The tone moved to the primitive's channels precisely so the panel stops
          deciding a state the composed Button already decides (F-37). Rustic is
          frozen: its own rule is the decision there. */
+      // P-88 (owner ruling 2026-10-06): the modern skin keys the composed Button by
+      // its class door; the literal-part arm stays as a reintroduction guard.
+      const RESET = /\.ds-pattern-filter-panel__reset-button(?![\w-])|\[data-part='reset-button'\]/;
+      if (engine === 'modern') {
+        expect(rules.filter(({ selector }) => RESET.test(selector)).length).toBeGreaterThan(0);
+      }
       const second = engine === 'modern'
         ? rules.filter(({ selector }) =>
-            /\[data-part='reset-button'\]/.test(selector) && /:hover|:active/.test(selector))
+            RESET.test(selector) && /:hover|:active/.test(selector))
         : [];
       expect(
         second.map((rule) => rule.selector),

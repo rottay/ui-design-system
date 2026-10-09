@@ -477,6 +477,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         <div data-part="rule-actions">
           <ModernButton
             data-part="remove-button"
+            className="ds-filter-builder__remove-button"
             icon={<ActionDeleteIcon decorative size={14} />}
             variant="ghost"
             size={buttonSize}
@@ -507,6 +508,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
           <div data-part="group-header">
             <ModernButton
               data-part="logic-toggle"
+              className="ds-filter-builder__logic-toggle"
               data-logic={group.logic}
               variant={group.logic === 'and' ? 'primary' : 'outline'}
               size={buttonSize}
@@ -517,6 +519,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
             </ModernButton>
             <ModernButton
               data-part="remove-button"
+              className="ds-filter-builder__remove-button"
               icon={<ActionDeleteIcon decorative size={14} />}
               variant="ghost"
               size={buttonSize}
@@ -543,6 +546,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         <div data-part="group-actions">
           <ModernButton
             data-part="add-rule-button"
+            className="ds-filter-builder__add-rule-button"
             icon={<ActionAddIcon decorative size={14} />}
             variant="dashed"
             size={buttonSize}
@@ -554,6 +558,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
           {canNest && (
             <ModernButton
               data-part="add-group-button"
+              className="ds-filter-builder__add-group-button"
               icon={<ActionAddIcon decorative size={14} />}
               variant="dashed"
               size={buttonSize}
@@ -568,6 +573,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
               <ModernButton
                 ref={addFilterTriggerRef}
                 data-part="add-filter-trigger"
+                className="ds-filter-builder__add-filter-trigger"
                 data-open={addFilterOpen ? "true" : "false"}
                 icon={<ActionAddIcon decorative size={14} />}
                 variant="outline"
@@ -598,6 +604,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
                     <ModernButton
                       key={f.key}
                       data-part="add-filter-option"
+                      className="ds-filter-builder__add-filter-option"
                       variant="ghost"
                       size={buttonSize}
                       role="option"

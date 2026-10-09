@@ -210,10 +210,10 @@
         (min-* wins over the Button's density height, fine pointers
         untouched). The Steps primitive owns its own coarse floors. ---- */
 @media (hover: none) and (pointer: coarse) {
-  .ds-pattern-step-wizard.ds-engine-modern [data-part='prev-button'],
-  .ds-pattern-step-wizard.ds-engine-modern [data-part='skip-button'],
-  .ds-pattern-step-wizard.ds-engine-modern [data-part='next-button'],
-  .ds-pattern-step-wizard.ds-engine-modern [data-part='complete-button'] {
+  .ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__prev-button,
+  .ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__skip-button,
+  .ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__next-button,
+  .ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__complete-button {
     min-block-size: var(--ds-step-wizard-touch-target-min, 44px);
   }
 }

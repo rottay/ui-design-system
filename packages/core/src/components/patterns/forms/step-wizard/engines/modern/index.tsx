@@ -256,6 +256,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
       <div>
         <ModernButton
           data-part="prev-button"
+          className="ds-step-wizard__prev-button"
           variant="outline"
           size="md"
           disabled={current === 0 || navDisabled}
@@ -273,6 +274,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         {allowSkip && currentDef?.optional && !isLast && (
           <ModernButton
             data-part="skip-button"
+            className="ds-step-wizard__skip-button"
             variant="text"
             size="md"
             disabled={navDisabled}
@@ -286,6 +288,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
           showCompleteAction ? (
             <ModernButton
               data-part="complete-button"
+              className="ds-step-wizard__complete-button"
               variant="primary"
               size="md"
               disabled={navDisabled || completeDisabled}
@@ -298,6 +301,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         ) : (
           <ModernButton
             data-part="next-button"
+            className="ds-step-wizard__next-button"
             variant="primary"
             size="md"
             disabled={navDisabled}
