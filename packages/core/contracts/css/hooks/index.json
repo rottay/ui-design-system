@@ -68,7 +68,7 @@
     "unadjudicatedReads": 1196,
     "promoted": 107,
     "styleFiles": 498,
-    "componentFiles": 1301
+    "componentFiles": 1317
   },
   "declaredSlots": {
     "--ds-command-grid-opacity": {
