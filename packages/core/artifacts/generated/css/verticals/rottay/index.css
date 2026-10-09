@@ -29695,7 +29695,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     box-shadow var(--ds-tag-input-transition-duration, var(--ds-motion-fast)) var(--ds-tag-input-transition-timing, var(--ds-motion-ease-out));
 }
 
-.ds-tag-input.ds-tag-input--modern[data-part='root'] > [data-part='tag-chip'] {
+.ds-tag-input.ds-tag-input--modern[data-part='root'] > .ds-tag-input__tag-chip {
   max-inline-size: 100%;
 }
 
@@ -43176,7 +43176,7 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
     align-items: stretch;
   }
 
-  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='footer'] > [data-part='action'] {
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='footer'] > .ds-alert-dialog__action {
     inline-size: 100%;
   }
 }
@@ -44044,7 +44044,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
     align-items: stretch;
   }
 
-  .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] [data-part='footer'] > [data-part='action'] {
+  .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] [data-part='footer'] > .ds-confirm-dialog__action {
     inline-size: 100%;
   }
 }
@@ -87297,7 +87297,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   clip-path: border-box;
   opacity: 0;
 }
-.ds-pattern-user-profile-card.ds-engine-modern [data-part='card-hit'] > [data-part='card-activate'] {
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='card-hit'] > .ds-user-profile-card__card-activate {
   position: absolute;
   inset: -4%;
   max-inline-size: none;
@@ -87532,7 +87532,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   margin-block-start: var(--ds-spacing-3, 12px);
 }
 
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-spacing-1, 4px);
@@ -87548,19 +87548,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] .ds-user-profile-card__action-button[data-part='action-button'] {
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] .ds-user-profile-card__action-button.ds-user-profile-card__action-button {
   block-size: 24px;
   padding-inline: var(--ds-spacing-2, 8px);
   font-size: var(--ds-font-size-xs, 12px);
 }
-.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'] .ds-user-profile-card__action-button[data-part='action-button'] {
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'] .ds-user-profile-card__action-button.ds-user-profile-card__action-button {
   block-size: 36px;
   padding-inline: var(--ds-spacing-4, 16px);
   font-size: var(--ds-font-size-sm, 14px);
 }
 /* The action is a Button for behaviour only: its skin is withdrawn to the
    layers below and its wrappers are unboxed, so this module stays the painter. */
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button[data-part='action-button'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button.ds-user-profile-card__action-button {
   --ds-button-hover-transform: none;
   --ds-button-hover-filter: none;
   --ds-button-active-transform: none;
@@ -87586,7 +87586,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   box-shadow: revert-layer;
   outline-offset: revert-layer;
 }
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button[data-part='action-button']::before {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button.ds-user-profile-card__action-button::before {
   content: revert-layer;
 }
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button :is([data-part='content'], [data-part='prefix'], [data-part='label']) {
@@ -87594,7 +87594,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-variant-numeric: revert-layer;
   translate: revert-layer;
 }
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(
     --ds-focus-ring,
@@ -87604,7 +87604,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     )
   );
 }
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-disabled='true'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-disabled='true'] {
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -87613,36 +87613,36 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   flex-shrink: 0;
 }
 
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='primary'] {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
 }
 
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='danger'] {
   background: var(--ds-color-error);
   color: var(--ds-color-on-error);
 }
 
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='default'] {
   background: transparent;
   color: var(--ds-color-text-primary);
 }
 
 @media (hover: hover) {
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='primary']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 88%, var(--ds-color-text-primary));
   }
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='danger']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-error) 88%, var(--ds-color-text-primary));
   }
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='default']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
   }
 }
 
 /* ---- coarse pointers: action buttons meet the physical 44px floor ---- */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'] {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -87659,7 +87659,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   /* Both focus rings above are box-shadows, which the OS drops here: without
      these the card and its actions focus invisibly in high contrast. */
   .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button:is([data-state~='focus-visible'], :focus-visible) {
     outline: var(--ds-focus-ring-width, 2px) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset, 2px);
   }
@@ -87686,12 +87686,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     outline: 1px solid ButtonText;
   }
 
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'] {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button {
     background: Canvas;
     color: ButtonText;
     outline: 1px solid ButtonText;
   }
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-disabled='true'] {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-disabled='true'] {
     color: GrayText;
     outline-color: GrayText;
   }
@@ -87705,7 +87705,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
    relaid out, or left waiting on an event that never arrives. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'],
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button,
   .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true']::after,
   .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true'] {
     transition-duration: 0.01ms !important;
@@ -90219,7 +90219,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-color-bg-secondary);
 }
 
-.ds-pattern-gallery-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state'] {
+.ds-pattern-gallery-view .ds-gallery-view__empty-state.ds-gallery-view__empty-state.ds-gallery-view__empty-state.ds-gallery-view__empty-state {
   color: var(--ds-color-text-muted);
 }
 
@@ -96265,12 +96265,12 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-branding-preview-sandbox[data-part='root'][data-state='compact'] .ds-branding-preview-sandbox__card {
   inline-size: 12.5rem;
 }
-.ds-pattern-branding-preview-sandbox [data-part='preview-card-title'][data-part='preview-card-title'] {
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__preview-card-title.ds-branding-preview-sandbox__preview-card-title {
   display: block;
   margin-block-end: var(--ds-spacing-1);
   color: var(--ds-card-title-color, var(--ds-color-text-primary));
 }
-.ds-pattern-branding-preview-sandbox [data-part='preview-card-body'][data-part='preview-card-body'] {
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__preview-card-body.ds-branding-preview-sandbox__preview-card-body {
   display: block;
   color: var(--ds-card-body-color, var(--ds-color-text-muted));
 }
@@ -96344,17 +96344,17 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* ---- typography sample rhythm (Heading/Text own their paint) ---- */
-.ds-pattern-branding-preview-sandbox [data-part='title'][data-part='title'] {
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__title.ds-branding-preview-sandbox__title {
   margin-block-end: var(--ds-spacing-1);
   color: var(--ds-color-text-primary);
 }
-.ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='body'] {
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__subtitle[data-variant='body'] {
   display: block;
   margin-block-start: var(--ds-spacing-1);
   line-height: var(--ds-line-height-body);
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='code'] {
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__subtitle[data-variant='code'] {
   display: block;
   margin-block-start: var(--ds-spacing-1);
   font-family: var(--ds-font-family-mono);
@@ -103010,7 +103010,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 /* The composed Spinner is a direct child of the loading frame and carries no
    private class of this family, so the child combinator scopes the rule. */
-.ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true'] > [data-part='spinner'] {
+.ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true'] > .ds-timeline-modern__spinner {
   align-self: center;
 }
 

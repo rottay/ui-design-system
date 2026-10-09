@@ -147,6 +147,7 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
       <Button
         chrome="none"
         data-part="card-activate"
+        className="ds-user-profile-card__card-activate"
         aria-labelledby={nameId}
         aria-describedby={roleId}
         title={user.name}

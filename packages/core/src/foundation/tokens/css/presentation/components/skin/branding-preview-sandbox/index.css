@@ -70,12 +70,12 @@
 .ds-pattern-branding-preview-sandbox[data-part='root'][data-state='compact'] .ds-branding-preview-sandbox__card {
   inline-size: 12.5rem;
 }
-.ds-pattern-branding-preview-sandbox [data-part='preview-card-title'][data-part='preview-card-title'] {
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__preview-card-title.ds-branding-preview-sandbox__preview-card-title {
   display: block;
   margin-block-end: var(--ds-spacing-1);
   color: var(--ds-card-title-color, var(--ds-color-text-primary));
 }
-.ds-pattern-branding-preview-sandbox [data-part='preview-card-body'][data-part='preview-card-body'] {
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__preview-card-body.ds-branding-preview-sandbox__preview-card-body {
   display: block;
   color: var(--ds-card-body-color, var(--ds-color-text-muted));
 }
@@ -149,17 +149,17 @@
 }
 
 /* ---- typography sample rhythm (Heading/Text own their paint) ---- */
-.ds-pattern-branding-preview-sandbox [data-part='title'][data-part='title'] {
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__title.ds-branding-preview-sandbox__title {
   margin-block-end: var(--ds-spacing-1);
   color: var(--ds-color-text-primary);
 }
-.ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='body'] {
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__subtitle[data-variant='body'] {
   display: block;
   margin-block-start: var(--ds-spacing-1);
   line-height: var(--ds-line-height-body);
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='code'] {
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__subtitle[data-variant='code'] {
   display: block;
   margin-block-start: var(--ds-spacing-1);
   font-family: var(--ds-font-family-mono);

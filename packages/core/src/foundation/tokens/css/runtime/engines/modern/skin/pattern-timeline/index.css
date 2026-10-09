@@ -315,7 +315,7 @@
 
 /* The composed Spinner is a direct child of the loading frame and carries no
    private class of this family, so the child combinator scopes the rule. */
-.ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true'] > [data-part='spinner'] {
+.ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true'] > .ds-timeline-modern__spinner {
   align-self: center;
 }
 

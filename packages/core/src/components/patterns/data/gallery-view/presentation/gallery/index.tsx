@@ -499,7 +499,7 @@ export function PatternGalleryView<T extends object>(
         style={style}
       >
         {emptyState ?? (
-          <Text data-part="empty-state">{emptyLabel}</Text>
+          <Text data-part="empty-state" className="ds-gallery-view__empty-state">{emptyLabel}</Text>
         )}
       </Box>
     );

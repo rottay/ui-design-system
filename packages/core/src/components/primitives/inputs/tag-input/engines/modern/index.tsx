@@ -215,6 +215,7 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
           <Tag
             key={`${tag}-${index}`}
             data-part="tag-chip"
+            className="ds-tag-input__tag-chip"
             size={size}
             tone="primary"
             closable={!disabled}

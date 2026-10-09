@@ -197,10 +197,15 @@ describe('UserProfileCard modern skin keeps the carrier non-painting (T2)', () =
   });
 
   it('places the carrier and never touches its paint or kept arms', () => {
-    const placement = all.find((rule) => /\[data-part='card-hit'\] > \[data-part='card-activate'\]$/.test(rule.selector));
+    const placement = all.find((rule) => /\[data-part='card-hit'\] > \.ds-user-profile-card__card-activate$/.test(rule.selector));
     expect(placement && declared(placement.body)).toEqual(['position', 'inset', 'max-inline-size']);
-    const onCarrier = all.filter((rule) => rule.selector.split(',').some((part) => /\[data-part='card-activate'\][^\s>+~]*$/.test(part.trim())));
+    // The activation Button is keyed by its class door (P-88, owner ruling 2026-10-06); the placement rule names it,
+    // so the sweep is never vacuous. The caller-part sweep stays as the reintroduction guard.
+    const onCarrier = all.filter((rule) => rule.selector.split(',').some((part) => /\.ds-user-profile-card__card-activate[^\s>+~]*$/.test(part.trim())));
+    expect(onCarrier.length).toBeGreaterThan(0);
     for (const rule of onCarrier) expect(declared(rule.body).filter((property) => CHROME.test(property))).toEqual([]);
+    const onCarrierPart = all.filter((rule) => rule.selector.split(',').some((part) => /\[data-part='card-activate'\][^\s>+~]*$/.test(part.trim())));
+    for (const rule of onCarrierPart) expect(declared(rule.body).filter((property) => CHROME.test(property))).toEqual([]);
   });
 
   it('lifts the nested controls and the email above the frame', () => {

@@ -315,10 +315,10 @@ export function BrandingPreviewSandbox({
             variant="outlined"
           >
             <Card.Body>
-              <Text data-part="preview-card-title" weight="semibold">
+              <Text data-part="preview-card-title" className="ds-branding-preview-sandbox__preview-card-title" weight="semibold">
                 {t('brandingPreview.card.title', 'Card Title')}
               </Text>
-              <Text data-part="preview-card-body" size="sm">
+              <Text data-part="preview-card-body" className="ds-branding-preview-sandbox__preview-card-body" size="sm">
                 {t('brandingPreview.card.body', 'Card body text with secondary color.')}
               </Text>
             </Card.Body>
@@ -326,10 +326,10 @@ export function BrandingPreviewSandbox({
           {!compact && (
             <Card className="ds-branding-preview-sandbox__card" data-state="elevated" variant="elevated">
               <Card.Body>
-                <Text data-part="preview-card-title" weight="semibold">
+                <Text data-part="preview-card-title" className="ds-branding-preview-sandbox__preview-card-title" weight="semibold">
                   {t('brandingPreview.card.elevatedTitle', 'Elevated Card')}
                 </Text>
-                <Text data-part="preview-card-body" size="sm">
+                <Text data-part="preview-card-body" className="ds-branding-preview-sandbox__preview-card-body" size="sm">
                   {t('brandingPreview.card.elevatedBody', 'With hover shadow applied.')}
                 </Text>
               </Card.Body>
@@ -409,16 +409,16 @@ export function BrandingPreviewSandbox({
               </Box>
             )}
             <Box data-part="surface" data-state="typography">
-              <Heading level="h3" data-part="title">
+              <Heading level="h3" data-part="title" className="ds-branding-preview-sandbox__title">
                 {t('brandingPreview.typography.heading', 'Heading Text')}
               </Heading>
-              <Text data-part="subtitle" data-variant="body">
+              <Text data-part="subtitle" className="ds-branding-preview-sandbox__subtitle" data-variant="body">
                 {t(
                   'brandingPreview.typography.body',
                   'Body text in the base font family. This is how paragraph text will look with the selected fonts and colors.'
                 )}
               </Text>
-              <Text data-part="subtitle" data-variant="code">
+              <Text data-part="subtitle" className="ds-branding-preview-sandbox__subtitle" data-variant="code">
                 {'const monospace = "code preview";'}
               </Text>
             </Box>

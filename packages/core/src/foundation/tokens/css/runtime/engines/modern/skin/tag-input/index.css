@@ -28,7 +28,7 @@
     box-shadow var(--ds-tag-input-transition-duration, var(--ds-motion-fast)) var(--ds-tag-input-transition-timing, var(--ds-motion-ease-out));
 }
 
-.ds-tag-input.ds-tag-input--modern[data-part='root'] > [data-part='tag-chip'] {
+.ds-tag-input.ds-tag-input--modern[data-part='root'] > .ds-tag-input__tag-chip {
   max-inline-size: 100%;
 }
 

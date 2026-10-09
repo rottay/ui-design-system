@@ -158,7 +158,7 @@
     align-items: stretch;
   }
 
-  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='footer'] > [data-part='action'] {
+  .ds-alert-dialog.ds-alert-dialog--modern[data-part='root'] [data-part='footer'] > .ds-alert-dialog__action {
     inline-size: 100%;
   }
 }

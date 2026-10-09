@@ -170,7 +170,7 @@
     align-items: stretch;
   }
 
-  .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] [data-part='footer'] > [data-part='action'] {
+  .ds-confirm-dialog.ds-confirm-dialog--modern[data-part='root'] [data-part='footer'] > .ds-confirm-dialog__action {
     inline-size: 100%;
   }
 }

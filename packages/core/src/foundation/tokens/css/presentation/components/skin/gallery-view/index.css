@@ -204,7 +204,7 @@
   background: var(--ds-color-bg-secondary);
 }
 
-.ds-pattern-gallery-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state'] {
+.ds-pattern-gallery-view .ds-gallery-view__empty-state.ds-gallery-view__empty-state.ds-gallery-view__empty-state.ds-gallery-view__empty-state {
   color: var(--ds-color-text-muted);
 }
 

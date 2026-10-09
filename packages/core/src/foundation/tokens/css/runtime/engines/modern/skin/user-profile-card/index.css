@@ -86,7 +86,7 @@
   clip-path: border-box;
   opacity: 0;
 }
-.ds-pattern-user-profile-card.ds-engine-modern [data-part='card-hit'] > [data-part='card-activate'] {
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='card-hit'] > .ds-user-profile-card__card-activate {
   position: absolute;
   inset: -4%;
   max-inline-size: none;
@@ -321,7 +321,7 @@
   margin-block-start: var(--ds-spacing-3, 12px);
 }
 
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-spacing-1, 4px);
@@ -337,19 +337,19 @@
     color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] .ds-user-profile-card__action-button[data-part='action-button'] {
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] .ds-user-profile-card__action-button.ds-user-profile-card__action-button {
   block-size: 24px;
   padding-inline: var(--ds-spacing-2, 8px);
   font-size: var(--ds-font-size-xs, 12px);
 }
-.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'] .ds-user-profile-card__action-button[data-part='action-button'] {
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'] .ds-user-profile-card__action-button.ds-user-profile-card__action-button {
   block-size: 36px;
   padding-inline: var(--ds-spacing-4, 16px);
   font-size: var(--ds-font-size-sm, 14px);
 }
 /* The action is a Button for behaviour only: its skin is withdrawn to the
    layers below and its wrappers are unboxed, so this module stays the painter. */
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button[data-part='action-button'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button.ds-user-profile-card__action-button {
   --ds-button-hover-transform: none;
   --ds-button-hover-filter: none;
   --ds-button-active-transform: none;
@@ -375,7 +375,7 @@
   box-shadow: revert-layer;
   outline-offset: revert-layer;
 }
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button[data-part='action-button']::before {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button.ds-user-profile-card__action-button::before {
   content: revert-layer;
 }
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-button :is([data-part='content'], [data-part='prefix'], [data-part='label']) {
@@ -383,7 +383,7 @@
   font-variant-numeric: revert-layer;
   translate: revert-layer;
 }
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(
     --ds-focus-ring,
@@ -393,7 +393,7 @@
     )
   );
 }
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-disabled='true'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-disabled='true'] {
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -402,36 +402,36 @@
   flex-shrink: 0;
 }
 
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='primary'] {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
 }
 
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='danger'] {
   background: var(--ds-color-error);
   color: var(--ds-color-on-error);
 }
 
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default'] {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='default'] {
   background: transparent;
   color: var(--ds-color-text-primary);
 }
 
 @media (hover: hover) {
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='primary']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 88%, var(--ds-color-text-primary));
   }
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='danger']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-error) 88%, var(--ds-color-text-primary));
   }
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-variant='default']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
   }
 }
 
 /* ---- coarse pointers: action buttons meet the physical 44px floor ---- */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'] {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -448,7 +448,7 @@
   /* Both focus rings above are box-shadows, which the OS drops here: without
      these the card and its actions focus invisibly in high contrast. */
   .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button:is([data-state~='focus-visible'], :focus-visible) {
     outline: var(--ds-focus-ring-width, 2px) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset, 2px);
   }
@@ -475,12 +475,12 @@
     outline: 1px solid ButtonText;
   }
 
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'] {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button {
     background: Canvas;
     color: ButtonText;
     outline: 1px solid ButtonText;
   }
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-disabled='true'] {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button[data-disabled='true'] {
     color: GrayText;
     outline-color: GrayText;
   }
@@ -494,7 +494,7 @@
 /* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
    relaid out, or left waiting on an event that never arrives. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'],
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button.ds-user-profile-card__action-button,
   .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true']::after,
   .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true'] {
     transition-duration: 0.01ms !important;

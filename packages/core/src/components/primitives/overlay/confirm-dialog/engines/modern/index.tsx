@@ -236,6 +236,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                     variant="ghost"
                     size="sm"
                     data-part="action"
+                    className="ds-confirm-dialog__action"
                     data-action="cancel"
                     onClick={onCancel}
                     disabled={loading}
@@ -246,6 +247,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                     variant={VARIANT_BUTTON_MAP[variant]}
                     size="sm"
                     data-part="action"
+                    className="ds-confirm-dialog__action"
                     data-action="confirm"
                     data-loading={loading ? 'true' : 'false'}
                     pending={loading}
