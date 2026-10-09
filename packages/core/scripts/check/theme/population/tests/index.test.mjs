@@ -74,6 +74,9 @@ const MODAL_SKIN = `${SKIN_ROOT}/modal/index.css`;
 const SO_SOURCE = 'src/components/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx';
 // Mover: W23-POPX 2026-10-04 -- shortcuts-overlay/shape is published N/A, delegated to modal (shape 214 -> 213, N/A 4 -> 5).
 const SHAPE_NOT_APPLICABLE = ['chart-line', 'chart-pie', 'radio', 'shortcuts-overlay', 'table-toolbar'];
+// Mover: EVI02-MOTION 2026-10-08 (owner ruling 2026-10-08 #2) -- status-filter-pills/motion is published N/A, delegated to button (motion 204 -> 203, N/A 0 -> 1).
+const SFP_SOURCE = 'src/components/patterns/data/status-filter-pills/index.tsx';
+const SFP_REVIEW = 'WO-EVI-02 EVI02-MOTION delegation amendment 2026-10-08 (owner ruling 2026-10-08 #2; delegation debrief session 99d09055 + independent cause review session 26677a24 ACCEPT CAUSE + AMENDMENT SHAPE with C1-C7, adopted by the DT (Kimi); writer claude-opus-5-5, patch mode; independent lot review and the P1 real-browser proof owed before integration; Codex outside the loop by owner restriction 2026-09-19)';
 const PHYSICAL_CORNERS = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius'];
 
 const sandboxes = [];
@@ -92,8 +95,10 @@ function sandbox() {
   mkdirSync(join(dir, 'src/contracts/theme/runtime/catalog'), { recursive: true });
   cpSync(join(ROOT, CATALOG), join(dir, CATALOG));
   // A delegated entry reads the family's component source for the composition it was reviewed with.
-  mkdirSync(join(dir, dirname(SO_SOURCE)), { recursive: true });
-  cpSync(join(ROOT, SO_SOURCE), join(dir, SO_SOURCE));
+  for (const source of [SO_SOURCE, SFP_SOURCE]) {
+    mkdirSync(join(dir, dirname(source)), { recursive: true });
+    cpSync(join(ROOT, source), join(dir, source));
+  }
   return dir;
 }
 
@@ -294,10 +299,12 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
       { family: 'chart-pie', axis: 'shape' },
       { family: 'table-toolbar', axis: 'shape' },
       { family: 'shortcuts-overlay', axis: 'shape' },
+      { family: 'status-filter-pills', axis: 'motion' },
     ]);
     assert.deepEqual(registry.entries.map((entry) => [entry.family, entry.axis, entry.path, entry.review]),
       [['radio', 'shape', 'byProperty', REVIEW], ['chart-line', 'shape', 'byProperty', CHART_LINE_REVIEW], ['chart-pie', 'shape', 'byProperty', CHART_REVIEW],
-        ['table-toolbar', 'shape', 'byProperty', TT_REVIEW], ['shortcuts-overlay', 'shape', 'delegated', SO_REVIEW]]);
+        ['table-toolbar', 'shape', 'byProperty', TT_REVIEW], ['shortcuts-overlay', 'shape', 'delegated', SO_REVIEW],
+        ['status-filter-pills', 'motion', 'delegated', SFP_REVIEW]]);
     assert.deepEqual(checkExclusionRegistry().failures, []);
   });
 
@@ -328,7 +335,9 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     for (const entry of report.axes) {
       assert.ok(entry.families.every((family) => !entry.notApplicable.some((withdrawn) => withdrawn.family === family)),
         `${entry.axis}: applicable and not-applicable sets must be disjoint`);
-      if (entry.axis !== 'shape') assert.equal(entry.notApplicableCount, 0, `${entry.axis}: no exclusion is reviewed there`);
+      // Mover: EVI02-MOTION 2026-10-08 -- motion carries exactly the status-filter-pills delegation.
+      if (entry.axis === 'motion') assert.deepEqual(entry.notApplicable.map((withdrawn) => withdrawn.family), ['status-filter-pills']);
+      else if (entry.axis !== 'shape') assert.equal(entry.notApplicableCount, 0, `${entry.axis}: no exclusion is reviewed there`);
     }
     // Mover: CL104 -- chart-line is in shape on a shadowed declaration and its entry is published INEFFECTIVE by name.
     assert.deepEqual(report.exclusions.ineffective, CHART_LINE_INEFFECTIVE);
@@ -337,7 +346,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const line = populationLine();
     assert.match(line, /shape 213 \(5 N\/A\)/);
     assert.match(line, /typography 184 \(0 N\/A\)/);
-    assert.match(line, /exclusions [0-9a-f]{16} \(5 reviewed\)/);
+    assert.match(line, /exclusions [0-9a-f]{16} \(6 reviewed\)/);
 
     const pilot = pilotPopulation();
     assert.deepEqual(pilot.families.radio, ['typography', 'rhythm', 'depth', 'states', 'motion']);
@@ -697,6 +706,7 @@ describe('theme population — the reviewed chart-marks exclusions on shape and 
       [entry.family, [...new Set((entry.declarations ?? []).flatMap((declaration) => privateChannelsRead(declaration.value)))]]));
     assert.deepEqual(reads, {
       radio: [], 'chart-line': ['--_ds-line-marker-radius'], 'chart-pie': ['--_ds-pie-marker-radius'], 'table-toolbar': [], 'shortcuts-overlay': [],
+      'status-filter-pills': [],
     });
     const producers = privateChannelProducers(ROOT, ['--_ds-line-marker-radius', '--_ds-pie-marker-radius']);
     assert.deepEqual(Object.fromEntries(producers), { '--_ds-line-marker-radius': [], '--_ds-pie-marker-radius': [] });
@@ -919,7 +929,8 @@ describe('theme population — a delegated shape surface: shortcuts-overlay pain
     assert.deepEqual(checkbox.notApplicable, {});
     assert.ok(shapeOf(dir, path).families.includes('checkbox'));
     assert.ok(populationReport(dir, catalogIn(dir), path).exclusions.ineffective.some((entry) => entry.family === 'checkbox'));
-    has(checkExclusionRegistry(dir, path).failures, 'entry 5 (checkbox/shape): STALE — checkbox declares shape again');
+    // The plant is appended after the six reviewed entries (EVI02-MOTION 2026-10-08 added the sixth).
+    has(checkExclusionRegistry(dir, path).failures, 'entry 6 (checkbox/shape): STALE — checkbox declares shape again');
   });
 
   it('MUTANT (R8): every malformed delegated entry is refused by name, on the registry and through the floor gate', () => {
@@ -1321,9 +1332,10 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
       // typography 182 -> 184, rhythm 224 -> 226 (2026-10-04, OWN-8 chart chrome): chart-bullet, chart-treemap,
       // chart-area enter on the scale-token reads their drained skins gained; no leaver, no corpus move.
       // shape 214 -> 213, N/A 4 -> 5 (OWNSO 9789b3469 + W23-POPX): shortcuts-overlay's shape is delegated to modal.
-      { shape: 213, typography: 184, rhythm: 226, depth: 199, motion: 204 });
+      // motion 204 -> 203, N/A 0 -> 1 (WO-ARC-22 L6 464d5cf52 + EVI02-MOTION, owner ruling 2026-10-08 #2): status-filter-pills' motion is delegated to button.
+      { shape: 213, typography: 184, rhythm: 226, depth: 199, motion: 203 });
     assert.deepEqual(Object.fromEntries(report.axes.map((entry) => [entry.axis, entry.notApplicableCount])),
-      { shape: 5, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
+      { shape: 5, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 1 });
     // The two ruled-out alternatives, measured: the twin clause keeps out
     // exactly filter-panel (a reviewed delegation, its selector paint-free),
     // and counting a gate inside :not() would admit nobody.
