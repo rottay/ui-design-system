@@ -467,3 +467,83 @@ describe('touch-target negative drills (each fails for a NAMED cause)', () => {
     ).not.toBeNull();
   });
 });
+
+describe('co-class acceptance (a part-bearing element floored through the class it co-stamps)', () => {
+  // A rewrite keeps `data-part` on the element and ADDS the BEM class, then
+  // keys the skin's floor on that class. The floor still paints the element;
+  // the prover must see it without the discriminator (the adjudication key)
+  // moving off the part.
+  const tsxFile = 'src/components/patterns/forms/x-bar/engines/modern/index.tsx';
+  const skinFile = 'x-bar/index.css';
+  const floored = (klass: string) => `
+    .x--modern .${klass} { cursor: pointer; }
+    @media (pointer: coarse) {
+      .x--modern .${klass} { min-block-size: var(--ds-touch-target-min, 44px); }
+    }`;
+  const audit = (css: string, jsx: string) =>
+    auditTouchTargetsMechanical(
+      [{ name: skinFile, content: css }],
+      [],
+      [{ name: tsxFile, content: `export const X = () => <>${jsx}</>;` }]
+    );
+
+  it('drill G2-i: part + co-stamped class with a class-keyed floor is proven', () => {
+    const jsx = "<button data-part='filter' className='x__filter'>f</button>";
+    const [row] = discoverTsxTouchTargets([
+      { name: tsxFile, content: `export const X = () => <>${jsx}</>;` },
+    ]);
+    expect(row.discriminator).toBe("[data-part='filter']");
+    expect(row.coClasses).toEqual(['x__filter']);
+    const result = audit(floored('x__filter'), jsx);
+    expect(result.violations).toEqual([]);
+    expect(result.tsxProven).toBe(1);
+  });
+
+  it('drill G2-ii: part + class with NO floor anywhere is still a violation', () => {
+    const result = audit(
+      '.x--modern .x__other { color: red; }',
+      "<button data-part='filter' className='x__filter'>f</button>"
+    );
+    expect(result.tsxProven).toBe(0);
+    expect(result.violations).toHaveLength(1);
+    expect(result.violations[0]).toContain('TSX interactive element WITHOUT floor proof');
+    expect(result.violations[0]).toContain("<button> [data-part='filter']");
+  });
+
+  it('drill G2-iii: a floor on a shared-prefix class proves nothing', () => {
+    // `.x__filter-chip` is a different box from `.x__filter`; a substring test
+    // would let one prove the other, through either branch.
+    const result = audit(
+      floored('x__filter-chip'),
+      [
+        "<button data-part='filter' className='x__filter'>f</button>",
+        "<button className='x__filter'>g</button>",
+      ].join('')
+    );
+    expect(result.tsxProven).toBe(0);
+    expect([...result.violations].sort()).toEqual([
+      `${tsxFile}: TSX interactive element WITHOUT floor proof or adjudication: <button> .x__filter [tsx-native]`,
+      `${tsxFile}: TSX interactive element WITHOUT floor proof or adjudication: <button> [data-part='filter'] [tsx-native]`,
+    ]);
+  });
+
+  it('drill G2-iv: a dynamic className records no co-classes and behaves as before', () => {
+    const jsx = [
+      "<button data-part='filter' className={cn('x__filter', active)}>f</button>",
+      "<button className={cn('x__filter', active)}>g</button>",
+    ].join('');
+    const rows = discoverTsxTouchTargets([
+      { name: tsxFile, content: `export const X = () => <>${jsx}</>;` },
+    ]);
+    expect(rows.map((row) => [row.discriminator, row.coClasses])).toEqual([
+      ["[data-part='filter']", []],
+      ['dynamic', []],
+    ]);
+    const result = audit(floored('x__filter'), jsx);
+    expect(result.tsxProven).toBe(0);
+    expect([...result.violations].sort()).toEqual([
+      `${tsxFile}: TSX interactive element WITHOUT floor proof or adjudication: <button> [data-part='filter'] [tsx-native]`,
+      `${tsxFile}: TSX interactive element WITHOUT floor proof or adjudication: <button> dynamic [tsx-native]`,
+    ]);
+  });
+});

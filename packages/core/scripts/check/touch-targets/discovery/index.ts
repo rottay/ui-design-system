@@ -546,6 +546,14 @@ export interface DiscoveredTsxTarget {
    * These decide whether the SHARED base floor reaches the element.
    */
   readonly signals?: readonly string[];
+  /**
+   * The element's STATIC `className` tokens (string literal only; a dynamic
+   * className records none). The discriminator stays part-first so the
+   * adjudication key never churns, but a part-bearing element is still
+   * painted by a floor keyed on a class it co-stamps — these let the prover
+   * see that floor.
+   */
+  readonly coClasses?: readonly string[];
 }
 
 function loadTypeScript(): typeof import('typescript') {
@@ -690,10 +698,11 @@ export function discoverTsxTouchTargets(
         if (interaction) {
           const part = attributes.get('data-part');
           const className = attributes.get('className');
+          const coClasses = className ? className.trim().split(/\s+/).filter(Boolean) : [];
           const discriminator = part
             ? `[data-part='${part}']`
             : className
-              ? `.${className.trim().split(/\s+/).join('.')}`
+              ? `.${coClasses.join('.')}`
               : 'dynamic';
           // The facts the SHARED floor selects on. Retained because a row's
           // element alone cannot decide it: `input[type='checkbox']` is
@@ -709,6 +718,7 @@ export function discoverTsxTouchTargets(
             discriminator,
             interaction,
             signals: [...signals].sort(),
+            coClasses,
           };
           rows.set(tsxTargetKey(row), row);
         }
@@ -796,7 +806,8 @@ const PART_ATTR = /\[data-part\s*([~|^$*]?)=\s*['"]?([^'"\]]+)['"]?\]/;
 /**
  * A TSX row is covered by the SHARED base floor when the element's own tag and
  * static facts fall inside that unlayered block, otherwise when its own skin
- * carries a VALID floor on the same discriminator. Skin scope is the
+ * carries a VALID floor whose final compound names the same part or one of
+ * the element's static classes as a whole token. Skin scope is the
  * component's file, never the whole corpus: `[data-part='root']` exists in
  * ninety skins and proves nothing on its own.
  */
@@ -816,24 +827,37 @@ export function proveTsxCoverage(
   const candidates = new Set(resolveSkinFilesForTsx(row.file, skinCorpus));
   if (candidates.size === 0) return null;
 
+  // A part-bearing row is ALSO painted by a floor keyed on a class the same
+  // element co-stamps (class and part on one element — the census's co-stamp
+  // rule, so both instruments take one measurement). A class alone proves
+  // nothing: it still needs a valid floor in the element's own skin.
   const part = row.discriminator.match(PART_ATTR)?.[2] ?? null;
   const classes = part
-    ? []
-    : row.discriminator.split('.').filter(Boolean).map((token) => `.${token}`);
+    ? (row.coClasses ?? [])
+    : row.discriminator.split('.').filter(Boolean);
+  const classTokens = classes.map(wholeClassToken);
 
   for (const floor of floors) {
     if (!candidates.has(floor.file) || !floorMediaIsValid(floor.media)) continue;
     const compound = finalCompound(floor.selector);
     if (part !== null) {
       const match = compound.match(PART_ATTR);
-      if (!match) continue;
-      const [, operator, value] = match;
-      if (operator === '^' ? part.startsWith(value) : part === value) return floor;
-      continue;
+      if (match) {
+        const [, operator, value] = match;
+        if (operator === '^' ? part.startsWith(value) : part === value) return floor;
+      }
     }
-    if (classes.some((token) => compound.includes(token))) return floor;
+    if (classTokens.some((token) => token.test(compound))) return floor;
   }
   return null;
+}
+
+/**
+ * `.token` as a WHOLE class: `.x__filter` must not prove `.x__filter-chip`,
+ * which a substring test would.
+ */
+function wholeClassToken(token: string): RegExp {
+  return new RegExp(`\\.${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w-])`);
 }
 
 // ---------------------------------------------------------------------------
@@ -851,6 +875,12 @@ export interface TouchAdjudication {
   readonly reason: string;
   /** REQUIRED for debt: who owns flooring or culling this target. */
   readonly owner?: string;
+  /**
+   * Set when a row was RE-KEYED 1:1 because the same element's selector text
+   * changed (e.g. a part literal rewritten to its co-stamped class). It names
+   * the previous key; the adjudication itself is unchanged, not a new one.
+   */
+  readonly provenance?: string;
 }
 
 export interface MechanicalTouchAudit {

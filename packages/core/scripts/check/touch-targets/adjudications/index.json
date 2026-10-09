@@ -188,9 +188,10 @@
       "reason": "visually-hidden native control: the input is clipped to 1px (sr-only) and carries semantics only; the tap target is the painted sibling part, adjudicated on its own row"
     },
     {
-      "key": "saved-views/index.css :: .ds-pattern-saved-views.ds-engine-modern :: [data-part='pill-select']",
+      "key": "saved-views/index.css :: .ds-pattern-saved-views.ds-engine-modern :: .ds-saved-views__pill-select",
       "kind": "exempt",
-      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction",
+      "provenance": "re-keyed: ARC-12 L08 1a token rewrite; same element (P3 class==part); was saved-views/index.css :: .ds-pattern-saved-views.ds-engine-modern :: [data-part='pill-select']"
     },
     {
       "key": "scroll-area/index.css :: .rottay-scroll-area.rottay-scroll-area--modern :: [data-part='root']",
@@ -709,9 +710,10 @@
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
     },
     {
-      "key": "workspace-switcher/index.css :: .ds-pattern-workspace-switcher.ds-engine-modern :: [data-part='settings']",
+      "key": "workspace-switcher/index.css :: .ds-pattern-workspace-switcher.ds-engine-modern :: .ds-workspace-switcher__settings",
       "kind": "exempt",
-      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)",
+      "provenance": "re-keyed: ARC-12 L02 1a token rewrite; same element (P3 class==part); was workspace-switcher/index.css :: .ds-pattern-workspace-switcher.ds-engine-modern :: [data-part='settings']"
     }
   ]
 }
