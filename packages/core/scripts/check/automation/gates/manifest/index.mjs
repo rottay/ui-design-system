@@ -392,6 +392,25 @@ export const CI_GATES = Object.freeze([
     drillId: 'engine-token-audit-drill',
     ratchet: 'scripts/check/engine/tokens/audit/baseline/index.json',
   },
+  // WO-ARC-12 (P-88): the pass-through fleet ratchet. The census lives in
+  // scripts/libraries/engine/skins/pass-through and is read, never re-derived, here, by the
+  // three engine-token-audit rows and by family-cut G1. Closed line-free roster, tripwires and
+  // per-family dependent sets (the engine-lot preconditions); decrease-only to 0.
+  {
+    id: 'engine-skins-pass-through-drill',
+    run: ['node', '--test', 'scripts/check/engine/skins/pass-through/index.test.mjs'],
+    blocking: true,
+    phase: 'pre-build',
+    drillFor: ['engine-skins-pass-through'],
+  },
+  {
+    id: 'engine-skins-pass-through',
+    run: ['node', 'scripts/check/engine/skins/pass-through/index.mjs', '--check'],
+    blocking: true,
+    phase: 'pre-build',
+    drillId: 'engine-skins-pass-through-drill',
+    ratchet: 'scripts/check/engine/skins/pass-through/baseline/index.json',
+  },
   // ARCHITECTURE §1.6: "a per-component channel with no path to any root is
   // debt, and the orphan count is a decrease-only ratchet". Este es ese
   // contador -- no existia. Drill primero, como en todo el archivo: el gate

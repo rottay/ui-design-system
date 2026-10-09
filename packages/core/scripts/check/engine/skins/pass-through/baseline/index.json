@@ -1,0 +1,2053 @@
+{
+ "schemaVersion": 1,
+ "law": "P-88 (packages/core/src/foundation/contracts/kernel/common/index.ts, owner ruling 2026-10-06): a component with a skin of its own keeps its canonical data-part/data-state on its root and trigger; a caller value can neither replace them nor be forwarded to an element the component paints. Composition goes through the documented className/slot hooks; only a structural component with no part of its own may forward.",
+ "purpose": "The WO-ARC-12 fleet ratchet. It closes the roster of elements where a caller data-part/data-state still lands (passThroughViolations), and the per-family sets of callers whose owner skins would lose paint the day a child family strips caller parts/states (callerPartDependents / callerStateDependents). Those sets are the step-2 engine-lot preconditions, as machine-readable rows.",
+ "policy": "decrease-only to 0, the family-cut ledger policy: every count may shrink and must then be lowered here, and none may ever grow. The only door is `node scripts/check/engine/skins/pass-through/index.mjs --update-baseline`. It writes the gate's own measurement, keeps the routing prose of surviving held entries, and refuses if anything grew. A pin is never hand-computed and never raised.",
+ "owner": "WO-ARC-12",
+ "lastMoveKind": "initial",
+ "measuredFrom": {
+  "head": "9f1651c67",
+  "census": "v7, adopted by the DT 2026-10-09 (arc12/l2-tools: census 1937b947 / post 2632ae59 / report 44b91e89 / attribution 7ab151e9)",
+  "measurement": "scripts/libraries/engine/skins/pass-through (the v7 tools ported with verbatim bodies; parity at this head is byte-identical on raw, classified and census)"
+ },
+ "keys": "Line-free. Sites and tripwires: <file>#<owning component>#<tag>#<canonical part|none>#<ordinal>. Dependents: <file>#<child component>#<caller part|none>#<ordinal>. The ordinal counts elements sharing the first four fields in source order, so a line shift elsewhere never churns a key.",
+ "eligibilityRule": "A child family's part-strip engine lot is eligible iff its `part` set is empty; its state-strip lot iff its `state` set is empty. Layout carriers (carrier: true) wait on the owner's carrier ruling (\u00a76) whatever their sets say. A held entry names its routing; the typography engine lot's ruled precondition is exactly its held set.",
+ "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
+ "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
+ "counters": {
+  "passThroughViolations": 108,
+  "callerPartDependents": 834,
+  "callerStateDependents": 16
+ },
+ "roster": [
+  {
+   "key": "primitives/display/avatar/engines/modern/index.tsx#default#div#root#0",
+   "engine": "modern",
+   "family": "avatar",
+   "breach": [
+    "part-replace"
+   ]
+  },
+  {
+   "key": "primitives/display/badge/engines/modern/index.tsx#default#span#root#0",
+   "engine": "modern",
+   "family": "badge",
+   "breach": [
+    "part-replace",
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/display/badge/engines/modern/index.tsx#default#span#anchor#0",
+   "engine": "modern",
+   "family": "badge",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/badge/engines/modern/index.tsx#default#span#anchor#1",
+   "engine": "modern",
+   "family": "badge",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/card/compound/body/index.tsx#CardBody#div#body#0",
+   "engine": "all (compound)",
+   "family": "card",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/card/compound/footer/index.tsx#CardFooter#div#footer#0",
+   "engine": "all (compound)",
+   "family": "card",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/card/compound/header/index.tsx#CardHeader#div#header#0",
+   "engine": "all (compound)",
+   "family": "card",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/card/compound/image/index.tsx#CardImage#div#image#0",
+   "engine": "all (compound)",
+   "family": "card",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/card/engines/classic/index.tsx#default#AntCard#root#0",
+   "engine": "classic",
+   "family": "card",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/card/engines/modern/index.tsx#default#div#root#0",
+   "engine": "modern",
+   "family": "card",
+   "breach": [
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/display/card/engines/rustic/index.tsx#default#div#root#0",
+   "engine": "rustic",
+   "family": "card",
+   "breach": [
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/display/descriptions/engines/modern/index.tsx#ModernDescriptions#div#root#0",
+   "engine": "modern",
+   "family": "descriptions",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/empty/engines/modern/index.tsx#ModernEmpty#div#root#0",
+   "engine": "modern",
+   "family": "empty",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/image/compound/fallback/index.tsx#ImageFallback#div#fallback#0",
+   "engine": "all (compound)",
+   "family": "image",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/image/compound/skeleton/index.tsx#ImageSkeleton#div#skeleton#0",
+   "engine": "all (compound)",
+   "family": "image",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/image/engines/modern/index.tsx#default#div#root#0",
+   "engine": "modern",
+   "family": "image",
+   "breach": [
+    "part-replace",
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/display/list/engines/modern/index.tsx#Meta#div#meta#0",
+   "engine": "modern",
+   "family": "list",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/list/engines/modern/index.tsx#Item#li#item#0",
+   "engine": "modern",
+   "family": "list",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/list/engines/modern/index.tsx#List#div#root#0",
+   "engine": "modern",
+   "family": "list",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/list/engines/modern/index.tsx#List#div#root#1",
+   "engine": "modern",
+   "family": "list",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/qr-code/engines/modern/index.tsx#default#div#root#0",
+   "engine": "modern",
+   "family": "qr-code",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/tag/compound/group/index.tsx#TagGroup#div#group#0",
+   "engine": "all (compound)",
+   "family": "tag",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/tag/engines/classic/index.tsx#default#AntTag#none#0",
+   "engine": "classic",
+   "family": "tag",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/tag/engines/modern/index.tsx#default#span#root#0",
+   "engine": "modern",
+   "family": "tag",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/tag/engines/rustic/index.tsx#default#span#root#0",
+   "engine": "rustic",
+   "family": "tag",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/timeline/engines/modern/index.tsx#ModernTimeline#ol#root#0",
+   "engine": "modern",
+   "family": "timeline",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/tooltip/compound/content/index.tsx#TooltipContent#div#content#0",
+   "engine": "all (compound)",
+   "family": "tooltip",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/tooltip/compound/trigger/index.tsx#TooltipTrigger#span#none#0",
+   "engine": "all (compound)",
+   "family": "tooltip",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/classic/index.tsx#ClassicHeading#h6#root#0",
+   "engine": "classic",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/classic/index.tsx#ClassicHeading#Title#root#0",
+   "engine": "classic",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/classic/index.tsx#ClassicText#TextElement#root#0",
+   "engine": "classic",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/classic/index.tsx#ClassicText#AntText#root#0",
+   "engine": "classic",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/classic/index.tsx#ClassicParagraph#AntParagraph#root#0",
+   "engine": "classic",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/classic/index.tsx#ClassicLink#AntLink#root#0",
+   "engine": "classic",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/modern/index.tsx#ModernHeading#Component#root#0",
+   "engine": "modern",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/modern/index.tsx#ModernText#Component#root#0",
+   "engine": "modern",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/modern/index.tsx#ModernParagraph#p#root#0",
+   "engine": "modern",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/modern/index.tsx#ModernLink#a#root#0",
+   "engine": "modern",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/rustic/index.tsx#ApolloHeading#HeadingElement#root#0",
+   "engine": "rustic",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/rustic/index.tsx#ApolloText#TextElement#root#0",
+   "engine": "rustic",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/rustic/index.tsx#ApolloParagraph#p#root#0",
+   "engine": "rustic",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/display/typography/engines/rustic/index.tsx#ApolloLink#a#root#0",
+   "engine": "rustic",
+   "family": "typography",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/feedback/foundation/notifier/presentation/stack/index.tsx#NotifierStack#div#stack#0",
+   "engine": "all (compound)",
+   "family": "stack",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/feedback/rate/engines/modern/index.tsx#Rate#div#root#0",
+   "engine": "modern",
+   "family": "rate",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/feedback/rate/engines/rustic/index.tsx#Rate#div#root#0",
+   "engine": "rustic",
+   "family": "rate",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/feedback/skeleton/engines/modern/index.tsx#default#div#root#0",
+   "engine": "modern",
+   "family": "skeleton",
+   "breach": [
+    "part-replace"
+   ]
+  },
+  {
+   "key": "primitives/feedback/skeleton/engines/modern/index.tsx#default#div#root#1",
+   "engine": "modern",
+   "family": "skeleton",
+   "breach": [
+    "part-replace"
+   ]
+  },
+  {
+   "key": "primitives/feedback/spinner/engines/modern/index.tsx#default#LoadingIndicator#root#0",
+   "engine": "modern",
+   "family": "spinner",
+   "breach": [
+    "part-replace"
+   ]
+  },
+  {
+   "key": "primitives/foundation/loading-indicator/index.tsx#LoadingIndicator#div#root#0",
+   "engine": "all (compound)",
+   "family": "loading-indicator",
+   "breach": [
+    "part-replace"
+   ]
+  },
+  {
+   "key": "primitives/inputs/button/engines/classic/index.tsx#ClassicButton#AntButton#trigger#0",
+   "engine": "classic",
+   "family": "button",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/inputs/button/engines/modern/index.tsx#ModernButton#a#trigger#0",
+   "engine": "modern",
+   "family": "button",
+   "breach": [
+    "part-replace",
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/inputs/button/engines/modern/index.tsx#ModernButton#button#trigger#0",
+   "engine": "modern",
+   "family": "button",
+   "breach": [
+    "part-replace",
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/inputs/button/engines/rustic/index.tsx#RusticButton#a#trigger#0",
+   "engine": "rustic",
+   "family": "button",
+   "breach": [
+    "part-replace",
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/inputs/button/engines/rustic/index.tsx#RusticButton#button#trigger#0",
+   "engine": "rustic",
+   "family": "button",
+   "breach": [
+    "part-replace",
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/inputs/input/engines/modern/index.tsx#ModernInput#input#root#0",
+   "engine": "modern",
+   "family": "input",
+   "breach": [
+    "part-replace"
+   ]
+  },
+  {
+   "key": "primitives/inputs/input/engines/modern/index.tsx#ModernInput#div#root#0",
+   "engine": "modern",
+   "family": "input",
+   "breach": [
+    "part-replace"
+   ]
+  },
+  {
+   "key": "primitives/inputs/input/engines/modern/index.tsx#ModernInput#input#root#1",
+   "engine": "modern",
+   "family": "input",
+   "breach": [
+    "part-replace"
+   ]
+  },
+  {
+   "key": "primitives/inputs/select/engines/classic/index.tsx#ClassicSelect#AntSelect#none#0",
+   "engine": "classic",
+   "family": "select",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/inputs/select/engines/modern/index.tsx#ModernSelect#select#trigger#0",
+   "engine": "modern",
+   "family": "select",
+   "breach": [
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/inputs/select/engines/modern/index.tsx#ModernSelect#div#trigger#0",
+   "engine": "modern",
+   "family": "select",
+   "breach": [
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0",
+   "engine": "classic",
+   "family": "textarea",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/inputs/textarea/engines/modern/index.tsx#ModernTextarea#textarea#root#0",
+   "engine": "modern",
+   "family": "textarea",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/inputs/textarea/engines/rustic/index.tsx#default#textarea#root#0",
+   "engine": "rustic",
+   "family": "textarea",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/inputs/toggle/engines/modern/index.tsx#ModernToggle#input#none#0",
+   "engine": "modern",
+   "family": "toggle",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/inputs/toggle/engines/rustic/index.tsx#default#label#root#0",
+   "engine": "rustic",
+   "family": "toggle",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/inputs/voice-input-button/index.tsx#VoiceInputButton#Box#root#0",
+   "engine": "all (compound)",
+   "family": "voice-input-button",
+   "breach": [
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/layout/aspect-ratio/engines/modern/index.tsx#ModernAspectRatio#div#root#0",
+   "engine": "modern",
+   "family": "aspect-ratio",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/box/engines/classic/index.tsx#ClassicBox#createElement(ElementType)#none#0",
+   "engine": "classic",
+   "family": "box",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/box/engines/classic/index.tsx#ClassicBox#createElement(ElementType)#none#1",
+   "engine": "classic",
+   "family": "box",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/box/engines/modern/index.tsx#ModernBox#createElement(ElementType)#box-surface#0",
+   "engine": "modern",
+   "family": "box",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/box/engines/modern/index.tsx#ModernBox#createElement(ElementType)#box-surface#1",
+   "engine": "modern",
+   "family": "box",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/box/engines/rustic/index.tsx#RusticBox#createElement(ElementType)#none#0",
+   "engine": "rustic",
+   "family": "box",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/box/engines/rustic/index.tsx#RusticBox#createElement(ElementType)#none#1",
+   "engine": "rustic",
+   "family": "box",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/container/engines/classic/index.tsx#Container#div#none#0",
+   "engine": "classic",
+   "family": "container",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/container/engines/modern/index.tsx#Container#div#root#0",
+   "engine": "modern",
+   "family": "container",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0",
+   "engine": "rustic",
+   "family": "container",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0",
+   "engine": "classic",
+   "family": "divider",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1",
+   "engine": "classic",
+   "family": "divider",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/divider/engines/modern/index.tsx#ModernDivider#div#root#0",
+   "engine": "modern",
+   "family": "divider",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/divider/engines/modern/index.tsx#ModernDivider#div#root#1",
+   "engine": "modern",
+   "family": "divider",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/divider/engines/rustic/index.tsx#RusticDivider#div#root#0",
+   "engine": "rustic",
+   "family": "divider",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/divider/engines/rustic/index.tsx#RusticDivider#div#root#1",
+   "engine": "rustic",
+   "family": "divider",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/flex/engines/classic/index.tsx#Flex#AntFlex#none#0",
+   "engine": "classic",
+   "family": "flex",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/flex/engines/modern/index.tsx#Flex#div#root#0",
+   "engine": "modern",
+   "family": "flex",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/flex/engines/rustic/index.tsx#Flex#div#none#0",
+   "engine": "rustic",
+   "family": "flex",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/grid/compound/index.ts#GridItem#createElement(ElementType)#grid-cell#0",
+   "engine": "all (compound)",
+   "family": "grid",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/grid/engines/modern/index.tsx#ModernGrid#createElement(ElementType)#root#0",
+   "engine": "modern",
+   "family": "grid",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/grid/engines/modern/index.tsx#ModernGridItem#createElement(ElementType)#grid-cell#0",
+   "engine": "modern",
+   "family": "grid",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/semantic-surface/index.tsx#SemanticSurface#Component#root#0",
+   "engine": "all (compound)",
+   "family": "semantic-surface",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/semantic-surface/index.tsx#SemanticSurfaceSupport#span#support#0",
+   "engine": "all (compound)",
+   "family": "semantic-surface",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0",
+   "engine": "classic",
+   "family": "space",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/space/engines/modern/index.tsx#Space#div#root#0",
+   "engine": "modern",
+   "family": "space",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0",
+   "engine": "rustic",
+   "family": "space",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/stack/engines/classic/index.tsx#TitanStack#createElement(ElementType)#none#0",
+   "engine": "classic",
+   "family": "stack",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/stack/engines/modern/index.tsx#HermesStack#createElement(ElementType)#root#0",
+   "engine": "modern",
+   "family": "stack",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/stack/engines/rustic/index.tsx#ApolloStack#createElement(ElementType)#none#0",
+   "engine": "rustic",
+   "family": "stack",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
+   "engine": "classic",
+   "family": "link",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/navigation/link/engines/modern/index.tsx#default#a#root#0",
+   "engine": "modern",
+   "family": "link",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/navigation/link/engines/rustic/index.tsx#default#a#root#0",
+   "engine": "rustic",
+   "family": "link",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/navigation/menu/compound/divider/index.tsx#MenuDivider#li#divider#0",
+   "engine": "all (compound)",
+   "family": "menu",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/navigation/menu/compound/group/index.tsx#MenuGroup#li#group#0",
+   "engine": "all (compound)",
+   "family": "menu",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/navigation/menu/compound/item/index.tsx#MenuItem#li#item#0",
+   "engine": "all (compound)",
+   "family": "menu",
+   "breach": [
+    "part-replace",
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/navigation/menu/compound/sub-menu/index.tsx#MenuSubMenu#li#none#0",
+   "engine": "all (compound)",
+   "family": "menu",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/navigation/menu/engines/modern/index.tsx#default#ul#root#0",
+   "engine": "modern",
+   "family": "menu",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/navigation/segmented/engines/modern/index.tsx#Segmented#div#root#0",
+   "engine": "modern",
+   "family": "segmented",
+   "breach": [
+    "part-replace"
+   ]
+  },
+  {
+   "key": "primitives/navigation/stepper/compound/content/index.tsx#StepperContent#div#panel#0",
+   "engine": "all (compound)",
+   "family": "stepper",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/navigation/stepper/compound/step/index.tsx#StepperStep#div#item#0",
+   "engine": "all (compound)",
+   "family": "stepper",
+   "breach": [
+    "state-rest"
+   ]
+  },
+  {
+   "key": "primitives/navigation/stepper/engines/modern/index.tsx#default#ul#root#0",
+   "engine": "modern",
+   "family": "stepper",
+   "breach": [
+    "part-replace"
+   ]
+  }
+ ],
+ "tripwires": [
+  {
+   "key": "primitives/display/timeline/compound/item/index.tsx#TimelineItem#div#none#0",
+   "atBaseline": "primitives/display/timeline/compound/item/index.tsx:69",
+   "why": "<div ref={ref} {...rest}>: no class, no part, no style"
+  },
+  {
+   "key": "primitives/navigation/stepper/engines/modern/index.tsx#default#nav#none#0",
+   "atBaseline": "primitives/navigation/stepper/engines/modern/index.tsx:384",
+   "why": "caller-only className={className || undefined} and style={style}; every stepper selector anchors the inner <ul> (counted) or .ds-stepper-step"
+  }
+ ],
+ "families": {
+  "aspect-ratio": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "avatar": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "badge": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "box": {
+   "carrier": true,
+   "part": [
+    "patterns/communication/assistant/index.tsx#Box#diff-arrow#0",
+    "patterns/communication/assistant/index.tsx#Box#diff-arrow#1",
+    "patterns/communication/assistant/index.tsx#Box#diff-cell-wrap#0",
+    "patterns/communication/assistant/index.tsx#Box#diff-cell-wrap#1",
+    "patterns/communication/assistant/index.tsx#Box#diff-spacer#0",
+    "patterns/communication/assistant/index.tsx#Box#dot#0",
+    "patterns/communication/assistant/index.tsx#Box#dots#0",
+    "patterns/communication/assistant/index.tsx#Box#root#0",
+    "patterns/communication/assistant/index.tsx#Box#root#1",
+    "patterns/communication/assistant/index.tsx#Box#root#2",
+    "patterns/communication/assistant/index.tsx#Box#root#3",
+    "patterns/communication/assistant/index.tsx#Box#typing-dot#0",
+    "patterns/communication/presence/index.tsx#Box#avatar#0",
+    "patterns/communication/presence/index.tsx#Box#cursor-badge#0",
+    "patterns/communication/presence/index.tsx#Box#dots#0",
+    "patterns/communication/presence/index.tsx#Box#overflow-badge#0",
+    "patterns/communication/presence/index.tsx#Box#root#0",
+    "patterns/communication/presence/index.tsx#Box#root#1",
+    "patterns/communication/presence/index.tsx#Box#root#2",
+    "patterns/communication/presence/index.tsx#Box#typing-dot#0",
+    "patterns/customization/brand-studio/index.tsx#Box#color-swatch#0",
+    "patterns/customization/brand-studio/index.tsx#Box#contrast-summary#0",
+    "patterns/customization/brand-studio/index.tsx#Box#editor-grid#0",
+    "patterns/customization/brand-studio/index.tsx#Box#preview-content#0",
+    "patterns/customization/brand-studio/index.tsx#Box#preview-grid#0",
+    "patterns/customization/brand-studio/index.tsx#Box#section#0",
+    "patterns/customization/brand-studio/index.tsx#Box#tenant-preview-scope#0",
+    "patterns/customization/brand-studio/index.tsx#Box#violation#0",
+    "patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx#Box#preview-adjustment#0",
+    "patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx#Box#preview-adjustments#0",
+    "patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx#Box#preview-issue#0",
+    "patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx#Box#preview-issues#0",
+    "patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx#Box#preview-pack-warning#0",
+    "patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx#Box#preview-pack-warnings#0",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#header#0",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#header#1",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#header#2",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#header#3",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#header#4",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#header#5",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#preview-table-cell#0",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#preview-table-cell#1",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#preview-table-cell#2",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#preview-table-cell#3",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#preview-table-cell#4",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#preview-table-cell#5",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#subtitle#0",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#0",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#1",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#2",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#3",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#4",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#5",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#table#0",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#table-head#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-card-summary-label#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-card-summary-label#1",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-card-summary-value#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-card-summary-value#1",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-card-title#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-state-panel#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-state-panel#1",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-state-panel#2",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#state-icon-tile#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#state-icon-tile#1",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#mobile-card-actions#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#mobile-card-actions#1",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#mobile-card-custom#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#mobile-card-selection#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#mobile-card-summary-label#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#mobile-card-summary-value#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#mobile-card-summary-value#1",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#mobile-card-title#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#mobile-card-title#1",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#record-list-item#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#record-meta-value#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/row-actions/index.tsx#Box#swipe-actions#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/row-actions/index.tsx#Box#swipe-record#0",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#caption#0",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#caption#1",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#caption-text#0",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#card#0",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#checkbox#0",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#image-frame#0",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#image-frame#1",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#root#0",
+    "patterns/data/grid-view/presentation/grid/index.tsx#Box#card-content#0",
+    "patterns/data/grid-view/presentation/grid/index.tsx#Box#card-shell#0",
+    "patterns/data/grid-view/presentation/grid/index.tsx#Box#cell#0",
+    "patterns/data/grid-view/presentation/grid/index.tsx#Box#checkbox-overlay#0",
+    "patterns/data/grid-view/presentation/grid/index.tsx#Box#root#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#divider#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#divider#1",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#divider#2",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#filter-checkmark#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#filter-menu#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#filter-rail#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#primary-action-mobile-label#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#root#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#saved-views#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#search-section#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#search-section#1",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#settings-panel#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#title-icon#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Box#title-icon#1",
+    "patterns/data/status-filter-pills/index.tsx#Box#count-badge#0",
+    "patterns/forms/step-wizard/runtime/sticky-actions/index.tsx#Box#root#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#actions-footer#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#activity-bar#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#circuit-pattern#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#content#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#content#1",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#content#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#content#3",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#corner-bracket#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#corner-bracket#1",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#corner-bracket#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#corner-bracket#3",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#corner-bracket#4",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#corner-bracket#5",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#cursor#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#flow-line#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#grid-texture#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#header-icon-box#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#header-icon-box#1",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#header-icon-box#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#heartbeat-dot#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#live-dot#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#live-pulse-ring#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#live-ring#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#matrix-texture#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#node-dot#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#node-dot#1",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#node-dot#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#node-dot-live#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#progress-fill#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#progress-section#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#progress-section#1",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#progress-section#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#progress-shimmer#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#progress-slot#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#progress-track#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#prompt-header#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#quick-action#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#root#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#root#1",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#root#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#root#3",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#root#4",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#scan-line#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#section-divider#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#section-divider#1",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#section-divider#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#stat-item#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#stats-grid#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#stats-grid#1",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#stats-grid#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#stats-panel#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#status-badge#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#status-dot#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#terminal-bar#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#terminal-dot#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#terminal-dot#1",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#terminal-dot#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#trend-badge#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#value-section#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#value-section#1",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#value-section#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#value-section#3",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#value-section#4",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#badge#0",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#bell-box#0",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#item#0",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#item-dot#0",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#item-icon-box#0",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#item-time#0",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#root#0",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#scroll-area#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#badge#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#bell-box#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#item#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#item-dot#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#item-icon-box#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#item-time#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#root#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#scroll-area#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#badge#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#bell-box#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#item-icon-box#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#item-time#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#item-type-dot#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#live-dot#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#progress-fill#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#progress-track#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#root#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#ticker-body#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#ticker-content#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#badge#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#bell-box#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#connector#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item-content#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item-dot#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item-icon-box#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item-time#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#live-dot#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#root#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#scroll-area#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#change-badge#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#footer#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#live-badge#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#live-dot#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#meter-fill#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#meter-track#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#metric-card#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#metric-icon-box#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#panel-icon-box#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#root#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Box#scroll-area#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Box#live-dot#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Box#meter-fill#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Box#meter-track#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Box#metric-icon-box#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Box#metric-row#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Box#panel-icon-box#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Box#root#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Box#scroll-area#0",
+    "structures/dashboard/insights/presentation/metrics/minimal/index.tsx#Box#live-badge#0",
+    "structures/dashboard/insights/presentation/metrics/minimal/index.tsx#Box#live-dot#0",
+    "structures/dashboard/insights/presentation/metrics/minimal/index.tsx#Box#meter-fill#0",
+    "structures/dashboard/insights/presentation/metrics/minimal/index.tsx#Box#meter-track#0",
+    "structures/dashboard/insights/presentation/metrics/minimal/index.tsx#Box#metric-icon-box#0",
+    "structures/dashboard/insights/presentation/metrics/minimal/index.tsx#Box#metric-row#0",
+    "structures/dashboard/insights/presentation/metrics/minimal/index.tsx#Box#panel-icon-box#0",
+    "structures/dashboard/insights/presentation/metrics/minimal/index.tsx#Box#root#0",
+    "structures/dashboard/insights/presentation/metrics/minimal/index.tsx#Box#scroll-area#0",
+    "structures/dashboard/insights/presentation/metrics/rows/index.tsx#Box#live-badge#0",
+    "structures/dashboard/insights/presentation/metrics/rows/index.tsx#Box#live-dot#0",
+    "structures/dashboard/insights/presentation/metrics/rows/index.tsx#Box#metric-icon-box#0",
+    "structures/dashboard/insights/presentation/metrics/rows/index.tsx#Box#metric-row#0",
+    "structures/dashboard/insights/presentation/metrics/rows/index.tsx#Box#panel-icon-box#0",
+    "structures/dashboard/insights/presentation/metrics/rows/index.tsx#Box#root#0",
+    "structures/dashboard/insights/presentation/metrics/rows/index.tsx#Box#scroll-area#0",
+    "structures/dashboard/insights/presentation/metrics/rows/index.tsx#Box#shimmer#0",
+    "structures/dashboard/stats-header/runtime/rendering/index.tsx#Box#card-glow#0",
+    "structures/dashboard/stats-header/runtime/rendering/index.tsx#Box#root#0",
+    "structures/dashboard/stats-header/runtime/rendering/index.tsx#Box#spark-dot#0",
+    "structures/dashboard/stats-header/runtime/rendering/index.tsx#Box#stat-icon#0",
+    "structures/feedback/capability-anatomy/index.tsx#Box#capability#0",
+    "structures/feedback/capability-anatomy/index.tsx#Box#capability-anatomy#0",
+    "structures/feedback/capability-anatomy/index.tsx#Box#capability-list#0",
+    "structures/feedback/loading-overlay/index.tsx#Box#logo#0",
+    "structures/feedback/loading-overlay/index.tsx#Box#root#0",
+    "structures/headers/collection/index.tsx#Box#action-divider#0",
+    "structures/headers/collection/index.tsx#Box#editorial-tech-rule#0",
+    "structures/headers/collection/index.tsx#Box#eyebrow#0",
+    "structures/headers/collection/index.tsx#Box#identity#0",
+    "structures/headers/collection/index.tsx#Box#meta-item#0",
+    "structures/headers/collection/index.tsx#Box#quick-action-icon#0",
+    "structures/headers/collection/index.tsx#Box#secondary-rail#0",
+    "structures/headers/collection/index.tsx#Box#secondary-rail#1",
+    "structures/headers/collection/index.tsx#Box#shortcut-pill#0",
+    "structures/headers/collection/index.tsx#Box#shortcut-pill#1",
+    "structures/headers/collection/index.tsx#Box#shortcuts-label#0",
+    "structures/headers/collection/index.tsx#Box#subtitle#0",
+    "structures/headers/collection/index.tsx#Box#subtitle#1",
+    "structures/headers/collection/index.tsx#Box#subtitle-divider#0",
+    "structures/headers/collection/index.tsx#Box#title#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#avatar#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#avatar#1",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#breadcrumb-divider#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#context-rail#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#hero-panel#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#hero-spine#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#metadata-card#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#metadata-card-children#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#metadata-chip-icon#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#root#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#tab-count#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#tab-rail#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#tab-strip#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#title#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#top-bar#0",
+    "structures/headers/edit/index.tsx#Box#breadcrumb-divider#0",
+    "structures/headers/edit/index.tsx#Box#context-card#0",
+    "structures/headers/edit/index.tsx#Box#context-card-children#0",
+    "structures/headers/edit/index.tsx#Box#context-rail#0",
+    "structures/headers/edit/index.tsx#Box#dirty-chip#0",
+    "structures/headers/edit/index.tsx#Box#dirty-dot#0",
+    "structures/headers/edit/index.tsx#Box#hero-panel#0",
+    "structures/headers/edit/index.tsx#Box#icon-badge#0",
+    "structures/headers/edit/index.tsx#Box#root#0",
+    "structures/headers/edit/index.tsx#Box#status-pill#0",
+    "structures/headers/edit/index.tsx#Box#title#0",
+    "structures/headers/edit/index.tsx#Box#top-bar#0",
+    "structures/headers/form/index.tsx#Box#breadcrumb-divider#0",
+    "structures/headers/form/index.tsx#Box#context-card#0",
+    "structures/headers/form/index.tsx#Box#context-card-children#0",
+    "structures/headers/form/index.tsx#Box#context-rail#0",
+    "structures/headers/form/index.tsx#Box#hero-panel#0",
+    "structures/headers/form/index.tsx#Box#icon-badge#0",
+    "structures/headers/form/index.tsx#Box#root#0",
+    "structures/headers/form/index.tsx#Box#title#0",
+    "structures/headers/form/index.tsx#Box#top-bar#0",
+    "structures/headers/mobile-header/runtime/rendering/index.tsx#Box#body#0",
+    "structures/headers/mobile-header/runtime/rendering/index.tsx#Box#center#0",
+    "structures/headers/mobile-header/runtime/rendering/index.tsx#Box#label#0",
+    "structures/headers/mobile-header/runtime/rendering/index.tsx#Box#left#0",
+    "structures/headers/mobile-header/runtime/rendering/index.tsx#Box#right#0",
+    "structures/headers/mobile-header/runtime/rendering/index.tsx#Box#root#0",
+    "structures/record/action-bar/index.tsx#Box#action-bar-meta#0",
+    "structures/record/edit-fields/index.tsx#Box#control#0",
+    "structures/record/edit-fields/index.tsx#Box#editor#0",
+    "structures/record/edit-fields/index.tsx#Box#editor-icon#0",
+    "structures/record/edit-fields/index.tsx#Box#field#0",
+    "structures/record/edit-fields/index.tsx#Box#field-icon#0",
+    "structures/record/edit-fields/index.tsx#Box#field-label#0",
+    "structures/record/edit-fields/index.tsx#Box#field-label-row#0",
+    "structures/record/edit-fields/index.tsx#Box#field-requirement-dot#0",
+    "structures/record/edit-fields/index.tsx#Box#footer-impact-preview#0",
+    "structures/record/edit-fields/index.tsx#Box#grid#0",
+    "structures/record/edit-fields/index.tsx#Box#section#0",
+    "structures/record/edit-fields/index.tsx#Box#section-content#0",
+    "structures/record/edit-fields/index.tsx#Box#section-icon#0",
+    "structures/record/edit-fields/index.tsx#Box#toggle#0",
+    "structures/record/field-grid/index.tsx#Box#field-grid#0",
+    "structures/record/field/index.tsx#Box#field-body#0",
+    "structures/record/form-sections/index.tsx#Box#facts-card#0",
+    "structures/record/form-sections/index.tsx#Box#facts-card-body#0",
+    "structures/record/form-sections/index.tsx#Box#facts-card-title#0",
+    "structures/record/form-sections/index.tsx#Box#section#0",
+    "structures/record/form-sections/index.tsx#Box#section-chip#0",
+    "structures/record/form-sections/index.tsx#Box#section-clip#0",
+    "structures/record/form-sections/index.tsx#Box#section-content#0",
+    "structures/record/form-sections/index.tsx#Box#section-grid#0",
+    "structures/record/form-sections/index.tsx#Box#section-header#0",
+    "structures/record/form-sections/index.tsx#Box#section-index#0",
+    "structures/record/form-sections/index.tsx#Box#section-summary#0",
+    "structures/record/form-sections/index.tsx#Box#section-toggle#0",
+    "structures/record/panel/index.tsx#Box#panel#0",
+    "structures/record/summary-strip/index.tsx#Box#summary-grid#0",
+    "structures/record/summary-strip/index.tsx#Box#summary-strip#0",
+    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#badge#0",
+    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#badge-text#0",
+    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#icon#0",
+    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#icon-wrap#0",
+    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#label#0",
+    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#root#0",
+    "structures/shell/navigation/sidebar-surface/index.tsx#Box#main#0",
+    "structures/shell/navigation/sidebar-surface/index.tsx#Box#navigation#0",
+    "structures/shell/navigation/sidebar-surface/index.tsx#Box#panel-body#0",
+    "structures/shell/navigation/sidebar-surface/index.tsx#Box#root#0",
+    "structures/shell/page-shell-surface/index.tsx#Box#body#0",
+    "structures/shell/workspace-shell/index.tsx#Box#content#0",
+    "structures/shell/workspace-shell/index.tsx#Box#overlay#0",
+    "structures/shell/workspace-shell/index.tsx#Box#particle-field-static-fallback#0",
+    "structures/shell/workspace-shell/index.tsx#Box#root#0",
+    "structures/workspace/action-dock/runtime/rendering/index.tsx#Box#root#0",
+    "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Box#chip-label#0",
+    "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Box#chip-value#0",
+    "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Box#chips-region#0",
+    "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Box#pill#0",
+    "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Box#root#0",
+    "structures/workspace/column-menu/index.tsx#Box#action-row-copy#0",
+    "structures/workspace/column-menu/index.tsx#Box#action-section#0",
+    "structures/workspace/column-menu/index.tsx#Box#action-section-copy#0",
+    "structures/workspace/column-menu/index.tsx#Box#count-pill#0",
+    "structures/workspace/column-menu/index.tsx#Box#header#0",
+    "structures/workspace/column-menu/index.tsx#Box#header-copy#0",
+    "structures/workspace/column-menu/index.tsx#Box#row-copy#0",
+    "structures/workspace/column-menu/index.tsx#Box#scroll-region#0",
+    "structures/workspace/export-button/index.tsx#Box#panel#0",
+    "structures/workspace/export-button/index.tsx#Box#root#0",
+    "structures/workspace/export-button/index.tsx#Box#toast#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#control-slot#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#filter-card#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#filter-card-copy#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#filter-card-icon#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#grid#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#header-copy#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#preset-chip-icon#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#presets-region#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#root#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#signal#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#signals#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#active-card#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#active-card-copy#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#anchor#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#backdrop#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#checkmark#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#count-pill#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#empty-state#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#empty-state#1",
+    "structures/workspace/saved-views-menu/index.tsx#Box#empty-state-copy#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#glyph#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#header#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#header-copy#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#list#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#panel#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#section#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#section-header#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#status-pill#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#trigger-icon#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#view-item-copy#0",
+    "structures/workspace/scope-switcher/index.tsx#Box#root#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#actions-slot#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#bar-row#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#divider#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#frame#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#input-column#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#root#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#search-icon#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#search-shell#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#side-cluster#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#suggestions#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#top-rail#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-badge#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-controls#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-help#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-help-copy#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-help-list#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-help-step#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-help-step#1",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-help-step#2",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-help-step#3",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-help-step#4",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-help-step#5",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#custom-content#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#custom-sticky-card#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#identity-card#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#identity-card-accent#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#identity-card-body#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#match-reason-panel#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#root#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#root#1",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#snapshot-body#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#snapshot-card#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#snapshot-empty-frame#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#snapshot-header#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#snapshot-row#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#sticky#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#sticky#1",
+    "structures/workspace/table-toolbar/runtime/rendering/index.tsx#Box#divider#0",
+    "structures/workspace/table-toolbar/runtime/rendering/index.tsx#Box#root#0",
+    "structures/workspace/table-toolbar/runtime/rendering/index.tsx#Box#search-field#0",
+    "structures/workspace/table-toolbar/runtime/rendering/index.tsx#Box#spacer#0",
+    "structures/workspace/view-mode-switcher/index.tsx#Box#root#0",
+    "surfaces/presentation/pages/data/compare/index.tsx#Box#compare-skeleton-block#0",
+    "surfaces/presentation/pages/data/compare/index.tsx#Box#compare-skeleton-block#1",
+    "surfaces/presentation/pages/data/compare/index.tsx#Box#divider#0",
+    "surfaces/presentation/pages/data/compare/index.tsx#Box#table-viewport#0",
+    "surfaces/presentation/pages/data/dashboard/index.tsx#Box#dashboard-skeleton-block#0",
+    "surfaces/presentation/pages/data/dashboard/index.tsx#Box#dashboard-skeleton-block#1",
+    "surfaces/presentation/pages/data/dashboard/index.tsx#Box#dashboard-skeleton-block#2",
+    "surfaces/presentation/pages/data/dashboard/index.tsx#Box#dashboard-skeleton-block#3",
+    "surfaces/presentation/pages/data/detail/index.tsx#Box#detail-frame#0",
+    "surfaces/presentation/pages/data/detail/index.tsx#Box#root#0",
+    "surfaces/presentation/pages/data/detail/index.tsx#Box#root#1",
+    "surfaces/presentation/pages/data/detail/index.tsx#Box#root#2",
+    "surfaces/presentation/pages/data/list/index.tsx#Box#filters-plain#0",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#0",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#1",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#10",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#11",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#12",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#13",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#14",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#15",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#16",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#17",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#18",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#2",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#3",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#4",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#5",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#6",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#7",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#8",
+    "surfaces/presentation/pages/data/report/index.tsx#Box#report-skeleton-block#9",
+    "surfaces/presentation/pages/data/search/index.tsx#Box#empty-state#0",
+    "surfaces/presentation/pages/data/search/index.tsx#Box#empty-state#1",
+    "surfaces/presentation/pages/data/search/index.tsx#Box#result-custom#0",
+    "surfaces/presentation/pages/data/search/index.tsx#Box#search-skeleton-block#0",
+    "surfaces/presentation/pages/data/search/index.tsx#Box#search-skeleton-block#1",
+    "surfaces/presentation/pages/data/search/index.tsx#Box#search-skeleton-block#2",
+    "surfaces/presentation/pages/data/search/index.tsx#Box#search-skeleton-block#3",
+    "surfaces/presentation/pages/data/search/index.tsx#Box#search-skeleton-block#4",
+    "surfaces/presentation/pages/data/search/index.tsx#Box#search-skeleton-block#5",
+    "surfaces/presentation/pages/data/visualization/index.tsx#Box#visualization-skeleton-block#0",
+    "surfaces/presentation/pages/data/visualization/index.tsx#Box#visualization-skeleton-block#1",
+    "surfaces/presentation/pages/data/visualization/index.tsx#Box#visualization-skeleton-block#2",
+    "surfaces/presentation/pages/data/visualization/index.tsx#Box#visualization-skeleton-block#3",
+    "surfaces/presentation/pages/data/visualization/index.tsx#Box#visualization-skeleton-block#4",
+    "surfaces/presentation/pages/data/visualization/index.tsx#Box#visualization-skeleton-block#5",
+    "surfaces/presentation/pages/data/visualization/index.tsx#Box#visualization-skeleton-block#6",
+    "surfaces/presentation/pages/data/visualization/index.tsx#Box#visualization-view#0",
+    "surfaces/presentation/pages/experience/auth/index.tsx#Box#auth-skeleton-cta#0",
+    "surfaces/presentation/pages/experience/auth/index.tsx#Box#auth-skeleton-field#0",
+    "surfaces/presentation/pages/experience/auth/index.tsx#Box#auth-skeleton-field#1",
+    "surfaces/presentation/pages/experience/auth/index.tsx#Box#auth-skeleton-hero#0",
+    "surfaces/presentation/pages/experience/auth/index.tsx#Box#root#0",
+    "surfaces/presentation/pages/experience/chat/index.tsx#Box#chat-skeleton-block#0",
+    "surfaces/presentation/pages/experience/chat/index.tsx#Box#chat-skeleton-block#1",
+    "surfaces/presentation/pages/experience/chat/index.tsx#Box#chat-skeleton-bubble#0",
+    "surfaces/presentation/pages/experience/chat/index.tsx#Box#chat-skeleton-bubble#1",
+    "surfaces/presentation/pages/experience/chat/index.tsx#Box#chat-skeleton-bubble#2",
+    "surfaces/presentation/pages/experience/chat/index.tsx#Box#composer#0",
+    "surfaces/presentation/pages/experience/editor/index.tsx#Box#editor-skeleton-block#0",
+    "surfaces/presentation/pages/experience/editor/index.tsx#Box#editor-skeleton-block#1",
+    "surfaces/presentation/pages/experience/editor/index.tsx#Box#editor-skeleton-block#2",
+    "surfaces/presentation/pages/experience/editor/index.tsx#Box#status-bar#0",
+    "surfaces/presentation/pages/experience/empty-state/index.tsx#Box#content#0",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#hero#0",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-cta#0",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-cta#1",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-eyebrow#0",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-feature#0",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-feature#1",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-feature#2",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-hero#0",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-lede#0",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-lede#1",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-title#0",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#marketing-skeleton-title#1",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Box#root#0",
+    "surfaces/presentation/pages/experience/media/index.tsx#Box#media-skeleton-card#0",
+    "surfaces/presentation/pages/experience/media/index.tsx#Box#media-skeleton-line#0",
+    "surfaces/presentation/pages/experience/media/index.tsx#Box#media-skeleton-line#1",
+    "surfaces/presentation/pages/experience/media/index.tsx#Box#media-skeleton-line#2",
+    "surfaces/presentation/pages/experience/media/index.tsx#Box#media-skeleton-line#3",
+    "surfaces/presentation/pages/experience/media/index.tsx#Box#media-skeleton-preview#0",
+    "surfaces/presentation/pages/experience/media/index.tsx#Box#media-skeleton-thumb#0",
+    "surfaces/presentation/pages/experience/notification/index.tsx#Box#icon#0",
+    "surfaces/presentation/pages/experience/notification/index.tsx#Box#item-action#0",
+    "surfaces/presentation/pages/experience/notification/index.tsx#Box#notification-skeleton-item#0",
+    "surfaces/presentation/pages/experience/notification/index.tsx#Box#notification-skeleton-item#1",
+    "surfaces/presentation/pages/experience/notification/index.tsx#Box#notification-skeleton-item#2",
+    "surfaces/presentation/pages/experience/notification/index.tsx#Box#notification-skeleton-preferences#0",
+    "surfaces/presentation/pages/experience/pricing/index.tsx#Box#pricing-skeleton-plan#0",
+    "surfaces/presentation/pages/experience/pricing/index.tsx#Box#pricing-skeleton-plan#1",
+    "surfaces/presentation/pages/experience/pricing/index.tsx#Box#pricing-skeleton-plan#2",
+    "surfaces/presentation/pages/experience/pricing/index.tsx#Box#pricing-skeleton-plans#0",
+    "surfaces/presentation/pages/experience/pricing/index.tsx#Box#pricing-skeleton-row#0",
+    "surfaces/presentation/pages/experience/pricing/index.tsx#Box#pricing-skeleton-row#1",
+    "surfaces/presentation/pages/experience/pricing/index.tsx#Box#pricing-skeleton-row#2",
+    "surfaces/presentation/pages/experience/pricing/index.tsx#Box#pricing-skeleton-row#3",
+    "surfaces/presentation/pages/experience/pricing/index.tsx#Box#pricing-skeleton-toggle#0",
+    "surfaces/presentation/pages/forms/detail-form/index.tsx#Box#error-banner#0",
+    "surfaces/presentation/pages/forms/form/index.tsx#Box#error-banner#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#content-body#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#content-body#1",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#draft-recovery-copy#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#draft-recovery-icon#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#draft-status-dot#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#progress-bar#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-card-header#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-card-icon#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav#1",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav#2",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav-item-error-dot#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav-item-error-dot#1",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav-item-icon#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav-item-icon#1",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav-select#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#submit-bar#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#submit-bar-panel#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#submit-bar-progress-placeholder#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#template-card-icon#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#template-picker#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#title-copy#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#validation-issue#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#validation-issue-dot#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#validation-issue-list#0",
+    "surfaces/presentation/pages/forms/wizard/index.tsx#Box#error-banner#0",
+    "surfaces/presentation/pages/operations/kanban/index.tsx#Box#kanban-skeleton-block#0",
+    "surfaces/presentation/pages/operations/kanban/index.tsx#Box#kanban-skeleton-block#1",
+    "surfaces/presentation/pages/operations/kanban/index.tsx#Box#kanban-skeleton-block#2",
+    "surfaces/presentation/pages/operations/kanban/index.tsx#Box#kanban-skeleton-block#3",
+    "surfaces/presentation/pages/operations/kanban/index.tsx#Box#kanban-skeleton-board#0",
+    "surfaces/presentation/pages/operations/kanban/index.tsx#Box#kanban-skeleton-column#0",
+    "surfaces/presentation/pages/operations/operational/index.tsx#Box#operational-skeleton-block#0",
+    "surfaces/presentation/pages/operations/operational/index.tsx#Box#operational-skeleton-block#1",
+    "surfaces/presentation/pages/operations/operational/index.tsx#Box#operational-skeleton-block#2",
+    "surfaces/presentation/pages/operations/scheduler/index.tsx#Box#scheduler-skeleton-block#0",
+    "surfaces/presentation/pages/operations/scheduler/index.tsx#Box#scheduler-skeleton-block#1",
+    "surfaces/presentation/pages/operations/scheduler/index.tsx#Box#scheduler-skeleton-block#2",
+    "surfaces/presentation/pages/operations/scheduler/index.tsx#Box#scheduler-skeleton-block#3",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#body#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#collection#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#collection#1",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#controls-rail#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#filter-count#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#filters-eyebrow-text#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#filters-strip#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#masthead#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#root#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#stats-slot#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#strip-host#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#toolbar-row#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#filter-dropdown-content#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#filter-sheet-content#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#preview-accordion#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#preview-accordion-content#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#preview-sheet-content#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#context-slot#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#divider#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#saved-views-host#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#selection-count#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#shortcut#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#smart-selection#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#smart-sets-label#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#views-strip#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/preview-rail/index.tsx#Box#preview-rail#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/preview-rail/index.tsx#Box#preview-rail-resize#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/preview-rail/index.tsx#Box#preview-rail-resize-bar#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/cards/index.tsx#Box#fallback-actions#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/cards/index.tsx#Box#fallback-card#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/cards/index.tsx#Box#fallback-grid#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/error-anatomy/index.tsx#Box#root#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/footers/index.tsx#Box#incremental-footer#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/footers/index.tsx#Box#page-size#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/footers/index.tsx#Box#pagination#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/footers/index.tsx#Box#pagination-controls#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#1",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#2",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#3",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#skeleton-card#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/toolbar-utilities/index.tsx#Box#density-glyph#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/toolbar-utilities/index.tsx#Box#page-size-control#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/toolbar-utilities/index.tsx#Box#page-size-picker#0",
+    "surfaces/presentation/pages/workspace/command-center/index.tsx#Box#quick-action-icon#0",
+    "surfaces/presentation/pages/workspace/decision-inbox/index.tsx#Box#divider#0",
+    "surfaces/presentation/pages/workspace/decision-inbox/index.tsx#Box#divider#1",
+    "surfaces/presentation/pages/workspace/decision-inbox/index.tsx#Box#queue#0",
+    "surfaces/presentation/pages/workspace/decision-inbox/index.tsx#Box#review-rail#0",
+    "surfaces/presentation/pages/workspace/record-workbench/index.tsx#Box#related#0",
+    "surfaces/presentation/pages/workspace/record-workbench/index.tsx#Box#sidebar#0",
+    "surfaces/presentation/pages/workspace/record-workbench/index.tsx#Box#tabpanel#0"
+   ],
+   "state": [
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#0",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#1",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#2",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#3",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#4",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#5",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-state-panel#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-state-panel#1",
+    "primitives/inputs/voice-input-button/index.tsx#Box#none#0",
+    "surfaces/presentation/pages/data/detail/index.tsx#Box#root#0",
+    "surfaces/presentation/pages/data/detail/index.tsx#Box#root#1",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/error-anatomy/index.tsx#Box#root#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#1",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#2",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#3"
+   ]
+  },
+  "button": {
+   "carrier": false,
+   "part": [
+    {
+     "key": "patterns/forms/filter-builder/engines/modern/index.tsx#ModernButton#clear-button#0",
+     "atBaseline": "patterns/forms/filter-builder/engines/modern/index.tsx:630",
+     "routing": "H-CB: waits on D1-floors (the modern Select + DatePicker own coarse clear-affix floors), then the NARROW migration. The button engine lot is eligible the day this set is empty."
+    }
+   ],
+   "state": []
+  },
+  "card": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "container": {
+   "carrier": true,
+   "part": [],
+   "state": []
+  },
+  "descriptions": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "divider": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "empty": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "flex": {
+   "carrier": true,
+   "part": [
+    "patterns/customization/brand-studio/index.tsx#Flex#preview-header#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-bulk-actions#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-card-summary-row#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-card-summary-row#1",
+    "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-pagination#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-pagination-actions#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Flex#mobile-card-summary-row#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Flex#record-list-open#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Flex#record-meta#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/row-actions/index.tsx#Flex#row-actions-menu#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/row-actions/index.tsx#Flex#swipe-actions-bar#0",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Flex#image-placeholder#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Flex#controls#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Flex#filter-chips-strip#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Flex#filter-rail#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Flex#main-row#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Flex#mobile-actions#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Flex#mobile-header#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Flex#mobile-layout#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Flex#mobile-overflow-panel#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Flex#title-section#0",
+    "patterns/data/list-toolbar/engines/modern/index.tsx#Flex#title-section#1",
+    "patterns/data/status-filter-pills/index.tsx#Flex#root#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Flex#footer#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Flex#stat-header#0",
+    "structures/dashboard/data-terminal-card/index.tsx#Flex#trend-row#0",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Flex#header#0",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Flex#view-all-link#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Flex#header#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Flex#view-all-link#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Flex#controls#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Flex#header#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Flex#item-presenter#0",
+    "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Flex#view-all-link#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Flex#header#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Flex#view-all-link#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Flex#header#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Flex#header#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Flex#live-badge#0",
+    "structures/dashboard/insights/presentation/metrics/chart/index.tsx#Flex#progress-row#0",
+    "structures/dashboard/insights/presentation/metrics/minimal/index.tsx#Flex#header#0",
+    "structures/dashboard/insights/presentation/metrics/rows/index.tsx#Flex#header#0",
+    "structures/dashboard/stats-header/runtime/rendering/index.tsx#Flex#change-indicator#0",
+    "structures/dashboard/stats-header/runtime/rendering/index.tsx#Flex#change-row#0",
+    "structures/dashboard/stats-header/runtime/rendering/index.tsx#Flex#spark-dots#0",
+    "structures/feedback/loading-overlay/index.tsx#Flex#content#0",
+    "structures/feedback/loading-overlay/index.tsx#Flex#status#0",
+    "structures/feedback/surface-lifecycle/states/index.tsx#Flex#banner#0",
+    "structures/headers/collection/index.tsx#Flex#subtitle-row#0",
+    "structures/headers/collection/index.tsx#Flex#subtitle-row#1",
+    "structures/headers/detail/runtime/rendering/index.tsx#Flex#actions#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Flex#breadcrumb-trail#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Flex#hero-cluster#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Flex#metadata-chip#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Flex#tab-list#0",
+    "structures/headers/edit/index.tsx#Flex#actions#0",
+    "structures/headers/edit/index.tsx#Flex#hero-copy#0",
+    "structures/headers/edit/index.tsx#Flex#hero-row#0",
+    "structures/headers/form/index.tsx#Flex#actions#0",
+    "structures/headers/form/index.tsx#Flex#hero-cluster#0",
+    "structures/headers/form/index.tsx#Flex#hero-row#0",
+    "structures/headers/mobile-header/runtime/rendering/index.tsx#Flex#bar#0",
+    "structures/record/action-bar/index.tsx#Flex#action-bar#0",
+    "structures/record/action-bar/index.tsx#Flex#action-bar-actions#0",
+    "structures/record/edit-fields/index.tsx#Flex#editor-actions#0",
+    "structures/record/edit-fields/index.tsx#Flex#editor-header#0",
+    "structures/record/edit-fields/index.tsx#Flex#editor-lead#0",
+    "structures/record/edit-fields/index.tsx#Flex#field-error-row#0",
+    "structures/record/edit-fields/index.tsx#Flex#field-requirement#0",
+    "structures/record/edit-fields/index.tsx#Flex#footer#0",
+    "structures/record/edit-fields/index.tsx#Flex#footer-actions#0",
+    "structures/record/edit-fields/index.tsx#Flex#section-actions#0",
+    "structures/record/edit-fields/index.tsx#Flex#section-header#0",
+    "structures/record/edit-fields/index.tsx#Flex#section-lead#0",
+    "structures/record/field/index.tsx#Flex#field-error-row#0",
+    "structures/record/form-sections/index.tsx#Flex#facts-card-item#0",
+    "structures/record/form-sections/index.tsx#Flex#section-error#0",
+    "structures/record/form-sections/index.tsx#Flex#section-lead#0",
+    "structures/record/form-sections/index.tsx#Flex#section-trailing#0",
+    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Flex#list#0",
+    "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Flex#actions#0",
+    "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Flex#chips#0",
+    "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Flex#rail#0",
+    "structures/workspace/column-menu/index.tsx#Flex#action-row-content#0",
+    "structures/workspace/column-menu/index.tsx#Flex#action-row-main#0",
+    "structures/workspace/column-menu/index.tsx#Flex#action-section-header#0",
+    "structures/workspace/column-menu/index.tsx#Flex#footer#0",
+    "structures/workspace/column-menu/index.tsx#Flex#group-content#0",
+    "structures/workspace/column-menu/index.tsx#Flex#row-actions#0",
+    "structures/workspace/column-menu/index.tsx#Flex#row-content#0",
+    "structures/workspace/column-menu/index.tsx#Flex#row-main#0",
+    "structures/workspace/column-menu/index.tsx#Flex#row-meta#0",
+    "structures/workspace/field-filters-panel/index.tsx#Flex#filter-card-head#0",
+    "structures/workspace/field-filters-panel/index.tsx#Flex#header#0",
+    "structures/workspace/field-filters-panel/index.tsx#Flex#presets-row#0",
+    "structures/workspace/field-filters-panel/index.tsx#Flex#title-group#0",
+    "structures/workspace/saved-views-menu/index.tsx#Flex#active-card-actions#0",
+    "structures/workspace/saved-views-menu/index.tsx#Flex#active-card-lead#0",
+    "structures/workspace/saved-views-menu/index.tsx#Flex#section-bar#0",
+    "structures/workspace/saved-views-menu/index.tsx#Flex#trigger-body#0",
+    "structures/workspace/saved-views-menu/index.tsx#Flex#view-item-lead#0",
+    "structures/workspace/search-command-bar/index.tsx#Flex#status-row#0",
+    "structures/workspace/search-command-bar/index.tsx#Flex#voice-help-actions#0",
+    "structures/workspace/search-command-bar/index.tsx#Flex#voice-help-footer#0",
+    "structures/workspace/table-toolbar/runtime/rendering/index.tsx#Flex#actions#0",
+    "structures/workspace/table-toolbar/runtime/rendering/index.tsx#Flex#controls#0",
+    "structures/workspace/table-toolbar/runtime/rendering/index.tsx#Flex#filters#0",
+    "structures/workspace/table-toolbar/runtime/rendering/index.tsx#Flex#left#0",
+    "structures/workspace/table-toolbar/runtime/rendering/index.tsx#Flex#row#0",
+    "surfaces/presentation/pages/experience/notification/index.tsx#Flex#preference-row#0",
+    "surfaces/presentation/pages/forms/form/index.tsx#Flex#actions#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#content#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#draft-recovery-actions#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#draft-status#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#progress#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#section-card-complete#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#section-card-errors#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#section-nav-item-main#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#section-nav-item-row#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#section-nav-list#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#submit-bar-actions#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#submit-bar-secondary#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#title-bar#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Flex#validation-summary-header#0",
+    "surfaces/presentation/pages/operations/activity/index.tsx#Flex#pagination#0",
+    "surfaces/presentation/pages/operations/kanban/index.tsx#Flex#mobile-lane-navigation#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Flex#body-content#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Flex#content#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Flex#controls-row#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Flex#filter-dropdown-actions#0",
+    "surfaces/presentation/pages/workspace/decision-inbox/index.tsx#Flex#content#0",
+    "surfaces/presentation/pages/workspace/decision-inbox/index.tsx#Flex#divider#0",
+    "surfaces/presentation/pages/workspace/decision-inbox/index.tsx#Flex#divider#1",
+    "surfaces/presentation/pages/workspace/record-workbench/index.tsx#Flex#content#0",
+    "surfaces/presentation/pages/workspace/record-workbench/index.tsx#Flex#tab-list#0"
+   ],
+   "state": []
+  },
+  "grid": {
+   "carrier": true,
+   "part": [
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Grid#root#0",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Grid#root#1",
+    "patterns/data/grid-view/presentation/grid/index.tsx#Grid#root#0",
+    "patterns/data/grid-view/presentation/grid/index.tsx#Grid#root#1",
+    "patterns/data/stats-grid/engines/modern/index.tsx#Grid#root#0",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Grid#cards-grid#0",
+    "surfaces/presentation/pages/admin/settings/index.tsx#Grid#root#0",
+    "surfaces/presentation/pages/forms/detail-form/index.tsx#Grid#root#0",
+    "surfaces/presentation/pages/forms/form/index.tsx#Grid#root#0",
+    "surfaces/presentation/pages/forms/wizard/index.tsx#Grid#root#0"
+   ],
+   "state": []
+  },
+  "image": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "input": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "link": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "list": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "loading-indicator": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "menu": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "qr-code": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "rate": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "segmented": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "select": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "semantic-surface": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "skeleton": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "space": {
+   "carrier": true,
+   "part": [],
+   "state": []
+  },
+  "spinner": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "stack": {
+   "carrier": true,
+   "part": [
+    "patterns/communication/assistant/index.tsx#Stack#diff-row#0",
+    "patterns/customization/brand-studio/index.tsx#Stack#preview-header#0",
+    "patterns/customization/brand-studio/index.tsx#Stack#violations#0",
+    "patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx#Stack#preview-report-list#0",
+    "patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx#Stack#preview-report-list#1",
+    "patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx#Stack#preview-report-list#2",
+    "patterns/data/data-table/presentation/table/index.tsx#Stack#mobile-root#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Stack#toolbar-stack#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Stack#mobile-card-primary#0",
+    "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Stack#record-list|record-cards#0",
+    "patterns/data/widget-board/engines/foundation/index.tsx#Stack#card-content#0",
+    "patterns/data/widget-board/engines/foundation/index.tsx#Stack#card-content#1",
+    "structures/dashboard/insights/presentation/metrics/cards/index.tsx#Stack#body#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Stack#hero-copy#0",
+    "structures/headers/form/index.tsx#Stack#hero-copy#0",
+    "structures/headers/header-surface/index.tsx#Stack#root#0",
+    "structures/record/edit-fields/index.tsx#Stack#editor-copy#0",
+    "structures/record/edit-fields/index.tsx#Stack#footer-support#0",
+    "structures/record/edit-fields/index.tsx#Stack#group#0",
+    "structures/record/edit-fields/index.tsx#Stack#section-copy#0",
+    "structures/record/form-sections/index.tsx#Stack#facts-card-item-copy#0",
+    "structures/record/form-sections/index.tsx#Stack#facts-card-items#0",
+    "structures/record/form-sections/index.tsx#Stack#root#0",
+    "structures/record/form-sections/index.tsx#Stack#section-copy#0",
+    "structures/record/summary-strip/index.tsx#Stack#summary-item#0",
+    "surfaces/presentation/pages/admin/audit/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/admin/billing/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/admin/billing/index.tsx#Stack#root#1",
+    "surfaces/presentation/pages/admin/import-export/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/admin/integration/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/admin/integration/index.tsx#Stack#root#1",
+    "surfaces/presentation/pages/data/compare/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/data/list/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/experience/auth/index.tsx#Stack#container#0",
+    "surfaces/presentation/pages/experience/chat/index.tsx#Stack#transcript#0",
+    "surfaces/presentation/pages/experience/empty-state/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/experience/marketing/index.tsx#Stack#container#0",
+    "surfaces/presentation/pages/experience/notification/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/experience/notification/index.tsx#Stack#root#1",
+    "surfaces/presentation/pages/forms/detail-form/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Stack#content#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Stack#section-nav-list#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Stack#content#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Stack#root#0",
+    "surfaces/presentation/pages/workspace/record-workbench/index.tsx#Stack#metadata-list#0"
+   ],
+   "state": []
+  },
+  "stepper": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "tag": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "textarea": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "timeline": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "toggle": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "tooltip": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
+  "typography": {
+   "carrier": false,
+   "part": [
+    {
+     "key": "patterns/data/gallery-view/presentation/gallery/index.tsx#Text#caption-text#0",
+     "atBaseline": "patterns/data/gallery-view/presentation/gallery/index.tsx:129",
+     "routing": "HOLD-G: resolved in the typography engine lot (G1-G5 two-arm re-key; Box :477 untouched pending section-6), same precondition set as H-ET."
+    },
+    {
+     "key": "structures/feedback/surface-lifecycle/states/index.tsx#Text#title#0",
+     "atBaseline": "structures/feedback/surface-lifecycle/states/index.tsx:224",
+     "routing": "H-ET: ruled into the typography engine lot, which carries H-ET C1-C6 + G1-G5. That lot's precondition is exactly this held set {states :224, gallery :129}; it migrates them itself."
+    }
+   ],
+   "state": []
+  },
+  "voice-input-button": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  }
+ },
+ "c4": {
+  "unresolved": 0,
+  "crossRosterRule": "closed set (skin file#selector): a new CROSS-scope selector is red until added through review; one that leaves is lowered through the door",
+  "crossRoster": [
+   "runtime/engines/modern/skin/avatar/index.css#.rottay-avatar-group[data-part='root'] > [data-part='surplus']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'] > [data-part='stack-item']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-depth='1']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-depth='2']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'] > [data-part='stack-item'][data-open='false']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack']:is([data-placement='top'], [data-placement='bottom'])",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'][data-placement$='end']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'][data-placement$='start']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'][data-placement^='bottom']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'][data-placement^='top']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'][data-variant='message']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'][data-variant='notification']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'][data-variant='toast']",
+   "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack'][data-variant='toast'][data-placement^='bottom']",
+   "runtime/engines/modern/skin/widget-board/index.css#.ds-pattern-widget-board[data-part='root'][data-moving='true'][data-loading]",
+   "runtime/engines/modern/skin/widget-board/index.css#.ds-pattern-widget-board[data-part='root'][data-moving='true'][data-loading]\n  *",
+   "runtime/engines/modern/skin/widget-board/index.css#.ds-widget-board__catalog-surface[data-part='surface'][data-open='true'][data-placement='right'][role='dialog']",
+   "runtime/engines/modern/skin/widget-board/index.css#:is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)\n  .ds-widget-board__catalog-empty[data-part='catalog-no-results']",
+   "runtime/engines/modern/skin/widget-board/index.css#:is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)\n  .ds-widget-board__catalog-search[data-part='catalog-search']"
+  ]
+ }
+}

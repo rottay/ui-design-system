@@ -6,6 +6,7 @@ import {
 } from '../../../../../libraries/engine/corpus/index.mjs';
 import { countDaisyClassConsumers } from '../../../../../libraries/engine/consumers/daisy-classes/index.mjs';
 import { countSkinExemptionBreaches } from '../../../../../libraries/engine/skins/exemptions/index.mjs';
+import { measurePassThrough } from '../../../../../libraries/engine/skins/pass-through/index.mjs';
 import { collectSourceFiles as collectRuntimeSvgSourceFiles } from '../../../css/paint/runtime-svg/index.mjs';
 import { countDeadParts } from '../../../skins/dead-parts/index.mjs';
 import {
@@ -69,6 +70,16 @@ import { applyEvasionFixture, applyThemeCssConsumerFixture } from '../seams/inde
  */
 const modernFiles = modernEngineFiles;
 const modernColorFiles = modernEngineColorFiles;
+
+/** The three P-88 fleet aggregates (WO-ARC-12), from the shared pass-through census. */
+function passThroughCounters() {
+  const { totals } = measurePassThrough({ repoRoot }).census;
+  return {
+    'skins.passThroughViolations': totals.sites,
+    'skins.callerPartDependents': totals.callerPartDependents,
+    'skins.callerStateDependents': totals.callerStateDependents,
+  };
+}
 
 /** Every counter in emission order, plus the audit records the report modes print. */
 function collectAuditState() {
@@ -206,6 +217,11 @@ function collectAuditState() {
     // reaches nobody. Static, exact-0: every part a skin selects for must be
     // stamped somewhere in the components tree.
     'skins.deadParts': countDeadParts(),
+    // WO-ARC-12 (P-88): the pass-through fleet ratchet's three aggregates, read from the ONE
+    // census the engine/skins/pass-through gate reads (that gate owns the roster and the
+    // per-family sets). Ordinary decrease-only ceilings, never folded into skins.deadParts:
+    // dead-parts counts a caller literal as a stamp, so it cannot see a dependent's rules die.
+    ...passThroughCounters(),
     // WO-ARC-09: per-file inline-paint ratchet over the six workspace-tier
     // components' migratable files. Decrease-only; each checkpoint's exit is its
     // files at 0. See countArc09PaintInFile()'s doc for the paint-vs-layout rule.
