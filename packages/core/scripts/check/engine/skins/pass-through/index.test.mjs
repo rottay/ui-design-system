@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 import { repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
 import { measurePassThrough } from '../../../../libraries/engine/skins/pass-through/index.mjs';
-import { eligibility, evaluatePassThrough, projectMeasurement, readLedger, tightenLedger } from './index.mjs';
+import { BASELINE_PATH, eligibility, evaluatePassThrough, headCommit, projectMeasurement, readLedger, serializeLedger, tightenLedger } from './index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = findRepoRoot(HERE);
@@ -127,6 +127,89 @@ describe('engine/skins/pass-through -- comparison drills (one move each)', () =>
   });
 });
 
+describe('engine/skins/pass-through -- carrier classification (audit, Defect A)', () => {
+  const WAITS = 'owner carrier ruling (§6): layout carriers are not scheduled by this gate';
+
+  it('flipping a layout carrier to carrier=false is red, and eligibility still holds it on the owner ruling', () => {
+    const l = clone(ledger);
+    assert.equal(l.families.container.carrier, true, 'container is a layout carrier in the committed ledger');
+    l.families.container.carrier = false;
+    const findings = evaluatePassThrough(view, l);
+    assert.deepEqual(kinds(findings), ['carrier/fail']);
+    assert.match(findings[0].detail, /^container: the ledger says carrier=false, canonical LAYOUT_CARRIERS says true$/);
+    const e = eligibility(l).container;
+    assert.equal(e.partStripEligible, false);
+    assert.equal(e.stateStripEligible, false);
+    assert.equal(e.waitsOn, WAITS);
+    assert.equal(tightenLedger(l, view).ok, false, 'the door refuses a tampered classification');
+  });
+
+  it('a missing carrier key is red', () => {
+    const l = clone(ledger);
+    delete l.families.container.carrier;
+    assert.deepEqual(kinds(evaluatePassThrough(view, l)), ['carrier/fail']);
+    assert.equal(eligibility(l).container.waitsOn, WAITS);
+  });
+
+  it('a non-boolean carrier is red', () => {
+    const l = clone(ledger);
+    l.families.box.carrier = 'true';
+    const findings = evaluatePassThrough(view, l);
+    assert.deepEqual(kinds(findings), ['carrier/fail']);
+    assert.match(findings[0].detail, /^box: carrier must be a boolean/);
+  });
+
+  it('a non-carrier falsely flagged carrier=true is red too (the check is symmetric)', () => {
+    const l = clone(ledger);
+    assert.equal(l.families.select.carrier, false);
+    l.families.select.carrier = true;
+    const findings = evaluatePassThrough(view, l);
+    assert.deepEqual(kinds(findings), ['carrier/fail']);
+    assert.match(findings[0].detail, /^select: the ledger says carrier=true, canonical LAYOUT_CARRIERS says false$/);
+    const e = eligibility(l).select;
+    assert.equal(e.partStripEligible, true, 'eligibility reads the canonical fact, not the false flag');
+    assert.equal(e.waitsOn, undefined);
+  });
+
+  it('a non-carrier family with empty held sets stays fully eligible (the legitimate positive)', () => {
+    assert.deepEqual(evaluatePassThrough(view, ledger), []);
+    const e = eligibility(ledger).select;
+    assert.deepEqual(e, { partStripEligible: true, stateStripEligible: true, heldPart: [], heldState: [] });
+    for (const carrier of ['box', 'flex', 'stack', 'grid', 'container', 'space']) {
+      if (ledger.families[carrier]) assert.equal(eligibility(ledger)[carrier].waitsOn, WAITS, carrier);
+    }
+  });
+});
+
+describe('engine/skins/pass-through -- door fidelity (F-1)', () => {
+  it('a lower keeps the c4 prose and records a non-null head', () => {
+    const l = clone(ledger);
+    l.c4.crossRosterRule = 'closed set (skin file#selector): drill prose that must survive a lower';
+    const tripKeys = new Set(l.tripwires.map((t) => t.key));
+    const v = clone(view);
+    v.roster.splice(v.roster.findIndex((r) => !tripKeys.has(r.key)), 1);
+    v.counters.passThroughViolations -= 1;
+    const head = headCommit();
+    assert.match(head ?? '', /^[0-9a-f]{40}$/, 'HEAD resolves');
+    const door = tightenLedger(l, v, { head, date: 'drill' });
+    assert.equal(door.ok, true);
+    assert.equal(door.ledger.c4.crossRosterRule, l.c4.crossRosterRule);
+    assert.equal(door.ledger.lastMove.head, head);
+    assert.deepEqual(door.ledger.c4.crossRoster, v.c4.crossRoster);
+  });
+
+  it('a lower is byte-minimal: it keeps the file\'s own escaping style', () => {
+    const doc = { a: 'layout carriers (§6)', n: 1 };
+    const raw = serializeLedger(doc, '{\n "x": "(§6)"\n}\n');
+    const escapedPrev = '{\n "x": "(\\u00a7)"\n}\n';
+    assert.equal(raw, `${JSON.stringify(doc, null, 1)}\n`);
+    assert.ok(serializeLedger(doc, escapedPrev).includes('(\\u00a76)'));
+    assert.deepEqual(JSON.parse(serializeLedger(doc, escapedPrev)), doc);
+    const current = readFileSync(BASELINE_PATH, 'utf8');
+    assert.equal(serializeLedger(JSON.parse(current), current), current, 'a no-op rewrite of the committed ledger changes no byte');
+  });
+});
+
 describe('engine/skins/pass-through -- source drills (the census itself turns the gate red)', () => {
   let ws;
   const core = () => join(ws, 'packages/core');
@@ -170,7 +253,8 @@ describe('engine/skins/pass-through -- source drills (the census itself turns th
     try {
       const v = measureCopy();
       const findings = evaluatePassThrough(v, ledger);
-      assert.deepEqual(kinds(findings), ['counter/grew', 'site/grew']);
+      // The new family zz-drill also has no ledger carrier classification (Defect A's check).
+      assert.deepEqual(kinds(findings), ['carrier/fail', 'counter/grew', 'site/grew']);
       assert.match(findings.find((f) => f.kind === 'site').detail, /NEW violating site primitives\/display\/zz-drill\/engines\/modern\/index\.tsx#default#div#root#0 \[part-replace, state-forward\]/);
     } finally {
       rmSync(join(core(), 'src/components/primitives/display/zz-drill'), { recursive: true, force: true });

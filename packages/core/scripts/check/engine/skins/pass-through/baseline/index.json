@@ -2020,6 +2020,7 @@
  },
  "c4": {
   "unresolved": 0,
+  "crossRosterRule": "closed set (skin file#selector): a new CROSS-scope selector is red until added through review; one that leaves is lowered through the door",
   "crossRoster": [
    "runtime/engines/modern/skin/avatar/index.css#.rottay-avatar-group[data-part='root'] > [data-part='surplus']",
    "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack']",

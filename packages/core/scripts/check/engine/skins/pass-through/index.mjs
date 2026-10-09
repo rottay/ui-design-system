@@ -10,7 +10,7 @@
  * WHAT THIS GATE HOLDS. The measurement is NOT here: it is the census in
  * scripts/libraries/engine/skins/pass-through (ONE MEASUREMENT, shared with the engine-token-audit
  * rows and family-cut G1). This gate compares that measurement with its own ledger,
- * baseline/index.json, and refuses five moves:
+ * baseline/index.json, and refuses six moves:
  *
  *   1. a counter that GROWS (passThroughViolations, callerPartDependents, callerStateDependents);
  *   2. a violating SITE the closed roster does not name, or a site whose breach classes grow.
@@ -21,11 +21,18 @@
  *   4. a caller-part or caller-state DEPENDENT the per-family held sets do not name. These are the
  *      per-family preconditions: a family's engine lot is eligible only when its set is empty;
  *   5. a C4 ENGINE-SCOPE selector that resolves to no scope (fail-closed, no door), or a CROSS
- *      selector outside the closed CROSS roster.
+ *      selector outside the closed CROSS roster;
+ *   6. a family whose ledger `carrier` claim is missing, not a boolean, or different from the
+ *      canonical LAYOUT_CARRIERS (the library's single authority). The claim is cross-checked,
+ *      never trusted: eligibility() reads LAYOUT_CARRIERS itself, so no ledger edit can schedule a
+ *      layout carrier for stripping past the owner's carrier ruling (§6).
  *
  * DECREASE-ONLY. A count that SHRINKS is also red until the ledger is lowered through the one
  * door, `--update-baseline`. The door writes the gate's own measurement and refuses outright if
- * anything grew. A pin is never hand-computed and never raised.
+ * anything grew. A pin is never hand-computed and never raised. The door keeps the ledger's prose
+ * (including the c4 prose), records the HEAD the tree was measured on (`git rev-parse HEAD`; it
+ * refuses rather than record none), and keeps the file's own character-escaping style so a
+ * lower is byte-minimal.
  *
  * Usage:
  *   node scripts/check/engine/skins/pass-through/index.mjs [--check]   exit 1 on any finding
@@ -33,6 +40,7 @@
  *   node scripts/check/engine/skins/pass-through/index.mjs --update-baseline   lower the ledger (tighten only)
  *   node scripts/check/engine/skins/pass-through/index.mjs --emit      print the candidate ledger (review aid; writes nothing)
  */
+import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -117,6 +125,13 @@ export function evaluatePassThrough(view, ledger) {
   for (const key of trip.added) push('tripwire', 'grew', `NEW unpainted wrapper ${key}: a site may not leave the count by shedding its paint`);
   const famNames = new Set([...Object.keys(ledger.families), ...Object.keys(view.families)]);
   for (const fam of [...famNames].sort()) {
+    // The carrier claim is checked against the canonical authority, never believed: a ledger that
+    // calls a layout carrier a plain family (or the reverse) is red, whatever else it says.
+    const canonical = CARRIERS.has(fam);
+    const entry = ledger.families[fam];
+    if (!entry || !Object.hasOwn(entry, 'carrier')) push('carrier', 'fail', `${fam}: the ledger has no carrier classification (canonical LAYOUT_CARRIERS: ${canonical})`);
+    else if (typeof entry.carrier !== 'boolean') push('carrier', 'fail', `${fam}: carrier must be a boolean, the ledger has ${JSON.stringify(entry.carrier)} (canonical LAYOUT_CARRIERS: ${canonical})`);
+    else if (entry.carrier !== canonical) push('carrier', 'fail', `${fam}: the ledger says carrier=${entry.carrier}, canonical LAYOUT_CARRIERS says ${canonical}`);
     const pinned = ledger.families[fam] ?? { part: [], state: [] };
     const now = view.families[fam] ?? { part: [], state: [] };
     for (const arm of ['part', 'state']) {
@@ -132,15 +147,21 @@ export function evaluatePassThrough(view, ledger) {
   return findings;
 }
 
-/** Per-family eligibility, as the step-2 engine lots read it (design §4, now machine-readable). */
+/**
+ * Per-family eligibility, as the step-2 engine lots read it (design §4, now machine-readable).
+ * The carrier fact comes from LAYOUT_CARRIERS, never from the ledger's (cross-checked) claim.
+ */
 export function eligibility(ledger) {
-  return Object.fromEntries(Object.entries(ledger.families).map(([fam, f]) => [fam, {
-    partStripEligible: !f.carrier && f.part.length === 0,
-    stateStripEligible: !f.carrier && f.state.length === 0,
-    heldPart: f.part.map((h) => (typeof h === 'string' ? h : h.key)),
-    heldState: f.state.map((h) => (typeof h === 'string' ? h : h.key)),
-    ...(f.carrier ? { waitsOn: 'owner carrier ruling (§6): layout carriers are not scheduled by this gate' } : {}),
-  }]));
+  return Object.fromEntries(Object.entries(ledger.families).map(([fam, f]) => {
+    const carrier = CARRIERS.has(fam);
+    return [fam, {
+      partStripEligible: !carrier && f.part.length === 0,
+      stateStripEligible: !carrier && f.state.length === 0,
+      heldPart: f.part.map((h) => (typeof h === 'string' ? h : h.key)),
+      heldState: f.state.map((h) => (typeof h === 'string' ? h : h.key)),
+      ...(carrier ? { waitsOn: 'owner carrier ruling (§6): layout carriers are not scheduled by this gate' } : {}),
+    }];
+  }));
 }
 
 /**
@@ -168,9 +189,28 @@ export function tightenLedger(ledger, view, { head = null, date = null } = {}) {
     roster: view.roster,
     tripwires: view.tripwires.map((key) => tripReason.get(key) ?? { key }),
     families,
-    c4: { unresolved: 0, crossRoster: view.c4.crossRoster },
+    c4: { ...ledger.c4, unresolved: view.c4.unresolved, crossRoster: view.c4.crossRoster },
   };
   return { ok: true, ledger: next };
+}
+
+/**
+ * Serialize a ledger the way its file already is, so a lower changes only what moved. When the
+ * previous text spelled non-ASCII as `\uXXXX` escapes (and carried no raw non-ASCII), keep that.
+ */
+export function serializeLedger(ledger, previousText = '') {
+  const text = `${JSON.stringify(ledger, null, 1)}\n`;
+  const escaped = /\\u[0-9a-fA-F]{4}/.test(previousText) && !/[^\x00-\x7f]/.test(previousText);
+  return escaped ? text.replace(/[\u0080-\uffff]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`) : text;
+}
+
+/** The commit the tree was measured on (the lowering lot lands on top of it), or null. */
+export function headCommit(cwd = HERE) {
+  try {
+    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd, encoding: 'utf8' }).trim() || null;
+  } catch {
+    return null;
+  }
 }
 
 export function readLedger(path = BASELINE_PATH) {
@@ -187,13 +227,18 @@ function main() {
   if (args.has('--emit')) { process.stdout.write(`${JSON.stringify(view, null, 1)}\n`); return; }
   const ledger = readLedger();
   if (args.has('--update-baseline')) {
-    const res = tightenLedger(ledger, view, { date: new Date().toISOString().slice(0, 10) });
+    const head = headCommit();
+    if (!head) {
+      console.error('engine/skins/pass-through --update-baseline REFUSED: cannot resolve HEAD (git rev-parse HEAD); a lower records the commit it was measured on');
+      process.exit(1);
+    }
+    const res = tightenLedger(ledger, view, { head, date: new Date().toISOString().slice(0, 10) });
     if (!res.ok) {
       console.error('engine/skins/pass-through --update-baseline REFUSED (the door only lowers):');
       for (const f of res.refusals) console.error(`  ${f.kind} ${f.direction}: ${f.detail}`);
       process.exit(1);
     }
-    writeFileSync(BASELINE_PATH, `${JSON.stringify(res.ledger, null, 1)}\n`);
+    writeFileSync(BASELINE_PATH, serializeLedger(res.ledger, readFileSync(BASELINE_PATH, 'utf8')));
     console.log(`engine/skins/pass-through: ledger lowered (${COUNTERS.map((c) => `${c} ${res.ledger.counters[c]}`).join(', ')})`);
     return;
   }
