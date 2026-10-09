@@ -102,7 +102,9 @@ describe('PatternPageShell — the FAM-11 cut', () => {
 
   it('decides press and the ring on the crumb link and on the tab', () => {
     const { container } = render(<ModernPageShell {...buildProps()} />);
-    const crumb = container.querySelector('[data-part="crumb"][data-interactive="true"]') as HTMLElement;
+    // P-88: the crumb link keeps the Link's own part; it is found by the family class.
+    const crumb = container.querySelector('.ds-pattern-page-shell__crumb[data-interactive="true"]') as HTMLElement;
+    expect(container.querySelector('a[data-part="crumb"]')).toBeNull();
     const tab = container.querySelectorAll('[data-part="tab"]')[1] as HTMLElement;
 
     fireEvent.pointerDown(crumb);

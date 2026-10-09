@@ -121,7 +121,6 @@ function FallbackOpenLink({
   return (
     <NavLink
       className="ds-collection-render-dispatch__fallback-open-link"
-      data-part="fallback-open-link"
       underline={false}
       href={href}
       aria-label={label}

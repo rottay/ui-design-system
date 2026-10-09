@@ -51,7 +51,9 @@ describe('PatternPageShell modern — wave R2+R3 craft contract', () => {
     const { container } = render(<ModernPageShell {...buildProps()} />);
     const title = container.querySelector('[data-part="title"]') as HTMLElement;
     const subtitle = container.querySelector('[data-part="subtitle"]') as HTMLElement;
-    const crumb = container.querySelector('[data-part="crumb"]') as HTMLElement;
+    // P-88: the crumb link keeps the Link's own part; it is found by the family class.
+    const crumb = container.querySelector('.ds-pattern-page-shell__crumb[data-interactive="true"]') as HTMLElement;
+    expect(container.querySelector('a[data-part="crumb"]')).toBeNull();
     const tab = screen.getByRole('tab', { name: 'Activity' });
 
     expect(title.style.fontSize).toBe('');

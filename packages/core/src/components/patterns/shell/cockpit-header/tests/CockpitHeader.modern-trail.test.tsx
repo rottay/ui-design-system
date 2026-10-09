@@ -79,7 +79,9 @@ describe('CockpitHeader modern — bidi isolation', () => {
     for (const part of ['title', 'subtitle', 'status']) {
       expect(container.querySelector(`[data-part="${part}"] bdi`)).toBeInTheDocument();
     }
-    expect(container.querySelectorAll('[data-part="crumb"] bdi')).toHaveLength(3);
+    // P-88: the crumb links keep the Link's own part, so every crumb is found by the family class.
+    expect(container.querySelectorAll('.ds-pattern-cockpit-header__crumb bdi')).toHaveLength(3);
+    expect(container.querySelectorAll('a[data-part="crumb"]')).toHaveLength(0);
   });
 });
 

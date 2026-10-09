@@ -87,7 +87,6 @@ function BreadcrumbItem({
       <Link
         href={href ?? '#'}
         underline={false}
-        data-part="crumb"
         className="ds-pattern-page-shell__crumb"
         data-interactive="true"
         data-last="false"

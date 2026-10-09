@@ -74,7 +74,6 @@ function BreadcrumbLink({
       <Link
         href={href}
         underline={false}
-        data-part="crumb"
         className="ds-pattern-cockpit-header__crumb"
         data-interactive="true"
         data-last="false"

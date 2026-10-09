@@ -110,11 +110,13 @@ describe('CollectionRenderDispatch card press stamp', () => {
 
   it('leaves the open link silent at rest and stamps focus-visible for a keyboard focus', async () => {
     const { container } = renderLinkedCards();
+    // P-88: the open link is a composed NavLink that keeps its own `root` part, so it is found by its class.
     await waitFor(() =>
-      expect(container.querySelectorAll('[data-part="fallback-open-link"]')).toHaveLength(rows.length),
+      expect(container.querySelectorAll('a.ds-collection-render-dispatch__fallback-open-link')).toHaveLength(rows.length),
     );
+    expect(container.querySelectorAll('a[data-part="fallback-open-link"]')).toHaveLength(0);
 
-    const link = container.querySelector<HTMLAnchorElement>('[data-part="fallback-open-link"]')!;
+    const link = container.querySelector<HTMLAnchorElement>('a.ds-collection-render-dispatch__fallback-open-link')!;
     expect(link.tagName).toBe('A');
     expect(link.getAttribute('href')).toBe('/records/1');
     expect(link.getAttribute('aria-label')).toBe('Open record');
@@ -130,10 +132,11 @@ describe('CollectionRenderDispatch card press stamp', () => {
   it('withholds the open-link ring from a pointer-driven focus', async () => {
     const { container } = renderLinkedCards();
     await waitFor(() =>
-      expect(container.querySelector('[data-part="fallback-open-link"]')).not.toBeNull(),
+      expect(container.querySelector('a.ds-collection-render-dispatch__fallback-open-link')).not.toBeNull(),
     );
+    expect(container.querySelector('a[data-part="fallback-open-link"]')).toBeNull();
 
-    const link = container.querySelector<HTMLElement>('[data-part="fallback-open-link"]')!;
+    const link = container.querySelector<HTMLElement>('a.ds-collection-render-dispatch__fallback-open-link')!;
     fireEvent.pointerDown(link);
     fireEvent.focus(link);
     expect(link.getAttribute('data-state')?.split(' ') ?? []).not.toContain('focus-visible');

@@ -83,8 +83,11 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
     onClick,
     target,
     rel,
+    // P-88: the anchor keeps its own anatomy; a caller data-part/data-state is never forwarded.
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...rest
-  } = props;
+  } = props as LinkProps & { 'data-part'?: string; 'data-state'?: string };
 
   /**
    * Handle click events on the link.

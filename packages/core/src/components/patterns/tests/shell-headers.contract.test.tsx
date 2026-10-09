@@ -185,7 +185,10 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
       await partsOf(container);
 
       // Two href'd, non-last crumbs render as <a>; the terminal crumb as <span>.
-      expect(container.querySelectorAll('[data-part="crumb"][data-interactive="true"]')).toHaveLength(2);
+      // P-88: the crumb links are composed Links that keep their own `root` part,
+      // so they are found by the family class; only the native span stamps `crumb`.
+      expect(container.querySelectorAll('.ds-pattern-cockpit-header__crumb[data-interactive="true"]')).toHaveLength(2);
+      expect(container.querySelectorAll('a[data-part="crumb"]')).toHaveLength(0);
       expect(container.querySelector('[data-part="crumb"][data-last="true"]')).not.toBeNull();
       expect(partCount(container, 'separator')).toBe(2);
     });
@@ -334,7 +337,9 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
       expect(partCount(container, 'skeleton')).toBe(0);
       const stand = container.querySelector('[data-part="source"]') as HTMLElement;
       expect(stand).not.toBeNull();
-      expect(stand.querySelectorAll('[data-part="crumb"]')).toHaveLength(3);
+      // P-88: the two crumb links keep the Link's own part; the family class finds all three crumbs.
+      expect(stand.querySelectorAll('.ds-pattern-page-shell__crumb')).toHaveLength(3);
+      expect(stand.querySelectorAll('a[data-part="crumb"]')).toHaveLength(0);
       expect(stand.querySelectorAll('[data-part="tab"]')).toHaveLength(2);
       // The bones ARE the header's own anatomy: three crumbs, the back
       // button's trigger, the title and the subtitle.

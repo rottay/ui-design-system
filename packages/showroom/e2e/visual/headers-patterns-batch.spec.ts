@@ -326,7 +326,9 @@ test('rottay (dark) / headers-patterns / modern: cockpit breadcrumb link hovered
 
   const container = await openProbe(page, 'rottay', 'modern');
   const crumbs = band(container, 'cockpit').locator("[data-part='breadcrumb']").first();
-  const link = crumbs.locator("[data-part='crumb'][data-interactive='true']").first();
+  // P-88: the crumb link keeps the Link's own part; it is found by the family class.
+  const link = crumbs.locator(".ds-pattern-cockpit-header__crumb[data-interactive='true']").first();
+  await expect(crumbs.locator("a[data-part='crumb']")).toHaveCount(0);
   await link.hover();
   await waitForSettled(page, link);
 
@@ -338,7 +340,9 @@ test('rottay (dark) / headers-patterns / modern: page-shell breadcrumb link hove
 
   const container = await openProbe(page, 'rottay', 'modern');
   const crumbs = band(container, 'page-shell').locator("[data-part='breadcrumb']").first();
-  const link = crumbs.locator("[data-part='crumb'][data-interactive='true']").first();
+  // P-88: the crumb link keeps the Link's own part; it is found by the family class.
+  const link = crumbs.locator(".ds-pattern-page-shell__crumb[data-interactive='true']").first();
+  await expect(crumbs.locator("a[data-part='crumb']")).toHaveCount(0);
   await link.hover();
   await waitForSettled(page, link);
 

@@ -441,7 +441,6 @@ export function CollectionRenderDispatch<T extends object>(
                 href ? (
                   <NavLink
                     className="ds-collection-render-dispatch__card-activation"
-                    data-part="card-activation"
                     underline={false}
                     href={href}
                     aria-label={activationLabel}
