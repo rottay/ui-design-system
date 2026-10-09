@@ -40,7 +40,7 @@
 }
 
 .ds-surface.ds-scheduler
-  .ds-scheduler__agenda-event[data-part='agenda-event'] {
+  .ds-scheduler__agenda-event.ds-scheduler__agenda-event {
   display: grid;
   grid-template-columns: minmax(4.5rem, auto) minmax(0, 1fr);
   align-items: center;
@@ -62,7 +62,7 @@
 }
 
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event'] {
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event {
   position: static;
   inset: auto;
   max-inline-size: none;
@@ -82,7 +82,7 @@
 }
 
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event']::before {
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event::before {
   display: unset;
   opacity: 1;
 }
@@ -90,10 +90,10 @@
 /* Button's wrappers are unboxed so the time and the content stay the row's
    two grid items. */
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event']
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event
   > [data-part='content'],
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event']
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event
   > [data-part='content']
   > [data-part='label'] {
   display: contents;
@@ -103,18 +103,18 @@
 /* Hover is pointer-fine only; `:active` below is the touch equivalent. */
 @media (hover: hover) {
   .ds-surface.ds-scheduler
-    button.ds-scheduler__agenda-event[data-part='agenda-event']:hover {
+    button.ds-scheduler__agenda-event.ds-scheduler__agenda-event:hover {
     background: var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary));
   }
 }
 
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event']:active {
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event:active {
   background: var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary));
 }
 
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event']:focus-visible {
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event:focus-visible {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
@@ -172,17 +172,17 @@
    neutral skeleton fills need no re-keying. */
 @media (forced-colors: active) {
   .ds-surface.ds-scheduler
-    .ds-scheduler__agenda-event[data-part='agenda-event'] {
+    .ds-scheduler__agenda-event.ds-scheduler__agenda-event {
     border-color: CanvasText;
   }
 
   .ds-surface.ds-scheduler
-    button.ds-scheduler__agenda-event[data-part='agenda-event'] {
+    button.ds-scheduler__agenda-event.ds-scheduler__agenda-event {
     border-color: ButtonBorder;
   }
 
   .ds-surface.ds-scheduler
-    button.ds-scheduler__agenda-event[data-part='agenda-event']:focus-visible {
+    button.ds-scheduler__agenda-event.ds-scheduler__agenda-event:focus-visible {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;

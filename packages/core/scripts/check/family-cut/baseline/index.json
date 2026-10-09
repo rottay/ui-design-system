@@ -2251,13 +2251,13 @@
     "channelsRead": 31,
     "classTokens": 2,
     "partsStamped": 8,
-    "partsConsumed": 13
+    "partsConsumed": 11
    },
    "readWithoutProducer": 4,
    "classVocabularies": 1,
    "legacyNamespaceClasses": 0,
    "partsStampedNotConsumed": 0,
-   "partsConsumedNotStamped": 5,
+   "partsConsumedNotStamped": 3,
    "statesConsumedNotStamped": 0,
    "unpairedStatePseudoSelectors": 0,
    "colorLiteralsInSkin": 0,

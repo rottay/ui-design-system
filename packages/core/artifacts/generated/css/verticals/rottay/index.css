@@ -89670,7 +89670,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-info-border, color-mix(in srgb, var(--ds-color-info) 20%, transparent));
 }
 
-.ds-surface.ds-stale-banner > [data-part='description'][data-part='description'][data-part='description'] {
+.ds-surface.ds-stale-banner > .ds-stale-banner__description.ds-stale-banner__description.ds-stale-banner__description {
   flex: 1 1 auto;
   color: inherit;
 }
@@ -89685,7 +89685,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   gap: var(--ds-spacing-2, 8px);
 }
 
-.ds-surface.ds-capability-anatomy [data-part='capability-anatomy-label'][data-part='capability-anatomy-label'][data-part='capability-anatomy-label'] {
+.ds-surface.ds-capability-anatomy .ds-capability-anatomy__capability-anatomy-label.ds-capability-anatomy__capability-anatomy-label.ds-capability-anatomy__capability-anatomy-label {
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: var(--ds-capability-anatomy-label-tracking, 0.06em);
   text-transform: uppercase;
@@ -89709,7 +89709,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   opacity: var(--ds-capability-disabled-opacity, 0.5);
 }
 
-.ds-surface.ds-capability-anatomy [data-part='capability-label'][data-part='capability-label'][data-part='capability-label'] {
+.ds-surface.ds-capability-anatomy .ds-capability-anatomy__capability-label.ds-capability-anatomy__capability-label.ds-capability-anatomy__capability-label {
   font-weight: var(--ds-font-weight-semibold, 600);
 }
 
@@ -94837,7 +94837,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-scheduler
-  .ds-scheduler__agenda-event[data-part='agenda-event'] {
+  .ds-scheduler__agenda-event.ds-scheduler__agenda-event {
   display: grid;
   grid-template-columns: minmax(4.5rem, auto) minmax(0, 1fr);
   align-items: center;
@@ -94859,7 +94859,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event'] {
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event {
   position: static;
   inset: auto;
   max-inline-size: none;
@@ -94879,7 +94879,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event']::before {
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event::before {
   display: unset;
   opacity: 1;
 }
@@ -94887,10 +94887,10 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Button's wrappers are unboxed so the time and the content stay the row's
    two grid items. */
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event']
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event
   > [data-part='content'],
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event']
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event
   > [data-part='content']
   > [data-part='label'] {
   display: contents;
@@ -94900,18 +94900,18 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Hover is pointer-fine only; `:active` below is the touch equivalent. */
 @media (hover: hover) {
   .ds-surface.ds-scheduler
-    button.ds-scheduler__agenda-event[data-part='agenda-event']:hover {
+    button.ds-scheduler__agenda-event.ds-scheduler__agenda-event:hover {
     background: var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary));
   }
 }
 
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event']:active {
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event:active {
   background: var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary));
 }
 
 .ds-surface.ds-scheduler
-  button.ds-scheduler__agenda-event[data-part='agenda-event']:focus-visible {
+  button.ds-scheduler__agenda-event.ds-scheduler__agenda-event:focus-visible {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
@@ -94969,17 +94969,17 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    neutral skeleton fills need no re-keying. */
 @media (forced-colors: active) {
   .ds-surface.ds-scheduler
-    .ds-scheduler__agenda-event[data-part='agenda-event'] {
+    .ds-scheduler__agenda-event.ds-scheduler__agenda-event {
     border-color: CanvasText;
   }
 
   .ds-surface.ds-scheduler
-    button.ds-scheduler__agenda-event[data-part='agenda-event'] {
+    button.ds-scheduler__agenda-event.ds-scheduler__agenda-event {
     border-color: ButtonBorder;
   }
 
   .ds-surface.ds-scheduler
-    button.ds-scheduler__agenda-event[data-part='agenda-event']:focus-visible {
+    button.ds-scheduler__agenda-event.ds-scheduler__agenda-event:focus-visible {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;

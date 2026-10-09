@@ -59,7 +59,7 @@ const paintsSolidOutline = (rule: Rule) =>
   );
 
 const AGENDA_EVENT =
-  ".ds-surface.ds-scheduler button.ds-scheduler__agenda-event[data-part='agenda-event']";
+  ".ds-surface.ds-scheduler button.ds-scheduler__agenda-event.ds-scheduler__agenda-event";
 const AGENDA_EVENT_FOCUS = `${AGENDA_EVENT}:focus-visible`;
 
 function buildConfig(onEventClick?: () => void): SchedulerSurfaceConfig {

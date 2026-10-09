@@ -268,7 +268,7 @@ export function SurfaceStaleBanner({
 
   return (
     <Flex className="ds-surface ds-stale-banner" data-part="banner" data-refreshing={refreshing ? 'true' : 'false'} gap={3} align="center">
-      <Text data-part="description">{message ?? tSurface('states.stale_message')}</Text>
+      <Text className="ds-stale-banner__description" data-part="description">{message ?? tSurface('states.stale_message')}</Text>
       {onRefresh && (
         <Button className="ds-stale-banner__refresh" variant="ghost" size="sm" onClick={onRefresh} pending={refreshing}>
           {tSurface('states.refresh')}
