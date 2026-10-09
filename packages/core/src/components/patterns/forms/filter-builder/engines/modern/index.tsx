@@ -629,6 +629,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
           <div data-part="clear-row">
             <ModernButton
               data-part="clear-button"
+              className="ds-filter-builder__clear-button"
               variant="text"
               size={buttonSize}
               onClick={onClear}

@@ -4,19 +4,19 @@
  "purpose": "The WO-ARC-12 fleet ratchet. It closes the roster of elements where a caller data-part/data-state still lands (passThroughViolations), and the per-family sets of callers whose owner skins would lose paint the day a child family strips caller parts/states (callerPartDependents / callerStateDependents). Those sets are the step-2 engine-lot preconditions, as machine-readable rows.",
  "policy": "decrease-only to 0, the family-cut ledger policy: every count may shrink and must then be lowered here, and none may ever grow. The only door is `node scripts/check/engine/skins/pass-through/index.mjs --update-baseline`. It writes the gate's own measurement, keeps the routing prose of surviving held entries, and refuses if anything grew. A pin is never hand-computed and never raised.",
  "owner": "WO-ARC-12",
- "lastMoveKind": "initial",
+ "lastMoveKind": "decrease",
  "measuredFrom": {
   "head": "9f1651c67",
   "census": "v7, adopted by the DT 2026-10-09 (arc12/l2-tools: census 1937b947 / post 2632ae59 / report 44b91e89 / attribution 7ab151e9)",
   "measurement": "scripts/libraries/engine/skins/pass-through (the v7 tools ported with verbatim bodies; parity at this head is byte-identical on raw, classified and census)"
  },
  "keys": "Line-free. Sites and tripwires: <file>#<owning component>#<tag>#<canonical part|none>#<ordinal>. Dependents: <file>#<child component>#<caller part|none>#<ordinal>. The ordinal counts elements sharing the first four fields in source order, so a line shift elsewhere never churns a key.",
- "eligibilityRule": "A child family's part-strip engine lot is eligible iff its `part` set is empty; its state-strip lot iff its `state` set is empty. Layout carriers (carrier: true) wait on the owner's carrier ruling (\u00a76) whatever their sets say. A held entry names its routing; the typography engine lot's ruled precondition is exactly its held set.",
+ "eligibilityRule": "A child family's part-strip engine lot is eligible iff its `part` set is empty; its state-strip lot iff its `state` set is empty. Layout carriers (carrier: true) wait on the owner's carrier ruling (§6) whatever their sets say. A held entry names its routing; the typography engine lot's ruled precondition is exactly its held set.",
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
   "passThroughViolations": 108,
-  "callerPartDependents": 834,
+  "callerPartDependents": 833,
   "callerStateDependents": 16
  },
  "roster": [
@@ -1659,13 +1659,7 @@
   },
   "button": {
    "carrier": false,
-   "part": [
-    {
-     "key": "patterns/forms/filter-builder/engines/modern/index.tsx#ModernButton#clear-button#0",
-     "atBaseline": "patterns/forms/filter-builder/engines/modern/index.tsx:630",
-     "routing": "H-CB: waits on D1-floors (the modern Select + DatePicker own coarse clear-affix floors), then the NARROW migration. The button engine lot is eligible the day this set is empty."
-    }
-   ],
+   "part": [],
    "state": []
   },
   "card": {
@@ -2026,7 +2020,6 @@
  },
  "c4": {
   "unresolved": 0,
-  "crossRosterRule": "closed set (skin file#selector): a new CROSS-scope selector is red until added through review; one that leaves is lowered through the door",
   "crossRoster": [
    "runtime/engines/modern/skin/avatar/index.css#.rottay-avatar-group[data-part='root'] > [data-part='surplus']",
    "runtime/engines/modern/skin/notifier/index.css#.ds-notifier-stack[data-part='stack']",
@@ -2049,5 +2042,10 @@
    "runtime/engines/modern/skin/widget-board/index.css#:is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)\n  .ds-widget-board__catalog-empty[data-part='catalog-no-results']",
    "runtime/engines/modern/skin/widget-board/index.css#:is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)\n  .ds-widget-board__catalog-search[data-part='catalog-search']"
   ]
+ },
+ "lastMove": {
+  "head": null,
+  "date": "2026-10-09",
+  "note": "lowered to the gate's own measurement through --update-baseline"
  }
 }

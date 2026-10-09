@@ -62579,7 +62579,7 @@ html[data-ds-motion='reduced']
   .ds-pattern-filter-builder.ds-engine-modern .ds-filter-builder__add-group-button,
   .ds-pattern-filter-builder.ds-engine-modern .ds-filter-builder__add-filter-trigger,
   .ds-pattern-filter-builder.ds-engine-modern .ds-filter-builder__add-filter-option,
-  .ds-pattern-filter-builder.ds-engine-modern [data-part='clear-button'],
+  .ds-pattern-filter-builder.ds-engine-modern .ds-filter-builder__clear-button,
   .ds-pattern-filter-builder.ds-engine-modern .ds-filter-builder__logic-toggle {
     min-block-size: var(
       --ds-filter-builder-touch-target-min,

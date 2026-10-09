@@ -91,17 +91,20 @@ describe('engine/skins/pass-through -- comparison drills (one move each)', () =>
   });
 
   it('a held entry that clears makes its family eligible only after the door lowers it, keeping the others\' routing', () => {
-    assert.equal(eligibility(ledger).button.partStripEligible, false);
     const v = clone(view);
-    v.families.button.part = [];
-    v.counters.callerPartDependents -= 1;
-    assert.deepEqual(kinds(evaluatePassThrough(v, ledger)), ['counter/shrank', 'part-dependent/shrank']);
-    const door = tightenLedger(ledger, v);
+    assert.deepEqual(v.families.button.part, [], 'the drill seeds its own held entry on a family the tree measures empty');
+    const l = clone(ledger);
+    l.families.button.part = [{ key: 'patterns/drill/index.tsx#ModernButton#drill-part#0', atBaseline: 'patterns/drill/index.tsx:1', routing: 'drill' }];
+    l.counters.callerPartDependents += 1;
+    assert.equal(eligibility(l).button.partStripEligible, false);
+    assert.deepEqual(kinds(evaluatePassThrough(v, l)), ['counter/shrank', 'part-dependent/shrank']);
+    const door = tightenLedger(l, v);
     assert.equal(door.ok, true);
     const e = eligibility(door.ledger);
     assert.equal(e.button.partStripEligible, true);
     assert.equal(e.typography.partStripEligible, false);
     assert.equal(e.box.partStripEligible, false, 'a layout carrier waits on the owner carrier ruling whatever its set says');
+    assert.ok(door.ledger.families.typography.part.length > 0, 'a surviving held set exists to check');
     assert.ok(door.ledger.families.typography.part.every((h) => typeof h === 'object' && h.routing), 'surviving held entries keep their routing');
   });
 
