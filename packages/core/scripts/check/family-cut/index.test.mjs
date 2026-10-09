@@ -3221,8 +3221,10 @@ test('LIVE: list-toolbar holds the states arm only through the composed Button, 
    * the skin no longer selects a data-state no component writes on it. */
   assert.deepEqual(measured.detail.statesNotComposed, []);
   const skin = readFileSync(join(ROOT, SKIN_ROOT, 'list-toolbar', 'index.css'), 'utf8');
-  assert.match(skin, /\.ds-list-toolbar__filter-chip\[data-part='filter-chip'\]:hover \{/);
-  assert.doesNotMatch(skin, /\.ds-list-toolbar__filter-chip\[data-part='filter-chip'\][^{]*data-state/);
+  assert.match(skin, /\.ds-list-toolbar__filter-chip\.ds-list-toolbar__filter-chip:hover \{/);
+  assert.doesNotMatch(skin, /\.ds-list-toolbar__filter-chip\.ds-list-toolbar__filter-chip[^{]*data-state/);
+  // L01 re-keyed the chip to its class door (P-88); the retired part form stays out (reintroduction guard).
+  assert.doesNotMatch(skin, /\.ds-list-toolbar__filter-chip\[data-part='filter-chip'\]/);
 });
 
 /* How much these six still owe is the product packets' number and moves while
