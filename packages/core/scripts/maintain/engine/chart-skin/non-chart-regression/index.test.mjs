@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { dirname, join, posix, relative, sep } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
@@ -459,24 +459,335 @@ function owningJsxElementOfSpreadStamp(styleObject, property) {
   return element;
 }
 
+// ---------------------------------------------------------------------------
+// The HOISTED CONDITIONAL ALIAS (EVI-02 re-arm, the shape 042d10aa2 landed).
+//
+// A family whose one publication must reach TWO mutually exclusive owners — the
+// read-only chip and the interactive one — cannot write the literal twice
+// without publishing twice. So it hoists the literal ONCE into a `const` and
+// hands the identifier to each branch:
+//
+//   const accent = ev.color === undefined ? undefined : ({ '<channel>': ev.color } as …);
+//   if (!interactive) return <EventChip {...(accent === undefined ? {} : { style: accent })}>…;
+//   return <ModernButton data-part="event" style={accent}>…;
+//
+// The collectors above only ever see a literal standing IN a style position, so
+// this shape read as ZERO publishers for a family that publishes correctly. The
+// admission is ONE binding hop and nothing wider, each condition what keeps it a
+// mirror of the literal forms rather than general data flow:
+//
+//   * the binding is a `const` in a variable statement, its initializer a
+//     conditional (through the transparent wrappers) whose arms are each either
+//     `undefined` or an object literal — every object-literal arm is a style
+//     object, so a conditional with TWO literal arms is two publications, never
+//     one;
+//   * EVERY reference to the binding in its enclosing block is one of exactly
+//     three positions: `style={<id>}`, the `style: <id>` payload of a JSX spread
+//     `{...(<id> === undefined ? {} : { style: <id> })}`, or that spread's own
+//     `<id> === undefined` guard. Any other reference — a prop, a second `const`
+//     re-binding it, a shorthand property — refuses the WHOLE alias, by name,
+//     and its literal counts as nothing: a value that escapes to where this file
+//     cannot follow it is not a publication this gate can certify;
+//   * the owners are the SET of elements the style positions sit on. Every
+//     downstream clause is then asked of each owner in turn, never of one picked
+//     owner.
+//
+// Stated scope: exclusivity of the branches is not evaluated; a non-exclusive
+// pair would publish the SAME literal on two elements that each have to pass
+// every clause independently, so no clause is weakened by not proving it.
+function unwrapTransparent(expression) {
+  let node = expression;
+  while (
+    ts.isParenthesizedExpression(node) ||
+    ts.isAsExpression(node) ||
+    ts.isSatisfiesExpression(node) ||
+    ts.isNonNullExpression(node) ||
+    ts.isTypeAssertionExpression(node)
+  ) {
+    node = node.expression;
+  }
+  return node;
+}
+
+function isUndefinedIdentifier(node) {
+  return ts.isIdentifier(node) && node.text === 'undefined';
+}
+
+function lineOf(node) {
+  const sourceFile = node.getSourceFile();
+  return sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line + 1;
+}
+
+// An identifier that NAMES something (a property key, an attribute name, a
+// member name) is not a reference to the binding.
+function isReferencePosition(identifier) {
+  const parent = identifier.parent;
+  if (ts.isPropertyAccessExpression(parent) && parent.name === identifier) return false;
+  if (ts.isPropertyAssignment(parent) && parent.name === identifier) return false;
+  if (ts.isJsxAttribute(parent) && parent.name === identifier) return false;
+  if (ts.isQualifiedName(parent) && parent.right === identifier) return false;
+  if (
+    (ts.isPropertySignature(parent) || ts.isPropertyDeclaration(parent) || ts.isMethodDeclaration(parent)) &&
+    parent.name === identifier
+  ) {
+    return false;
+  }
+  return true;
+}
+
+// `<id> === undefined`, spelled exactly that way round.
+function isUndefinedGuardOf(expression, name) {
+  const node = unwrapTransparent(expression);
+  return (
+    ts.isBinaryExpression(node) &&
+    node.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken &&
+    ts.isIdentifier(node.left) &&
+    node.left.text === name &&
+    isUndefinedIdentifier(node.right)
+  );
+}
+
+// The `{ style: <id> }` payload of `{...(<id> === undefined ? {} : { style: <id> })}`.
+// The payload must be the ONLY property of the FALSE arm, the TRUE arm must be an
+// empty object, and the guard must name the same binding.
+function isGuardedSpreadPayload(property, name) {
+  const payload = property.parent;
+  if (!payload || !ts.isObjectLiteralExpression(payload) || payload.properties.length !== 1) return false;
+  let arm = payload;
+  while (arm.parent && !ts.isConditionalExpression(arm.parent) && transparentParentOf(arm)) {
+    arm = arm.parent;
+  }
+  const conditional = arm.parent;
+  if (!conditional || !ts.isConditionalExpression(conditional) || conditional.whenFalse !== arm) return false;
+  const empty = unwrapTransparent(conditional.whenTrue);
+  return (
+    isUndefinedGuardOf(conditional.condition, name) &&
+    ts.isObjectLiteralExpression(empty) &&
+    empty.properties.length === 0
+  );
+}
+
+// The JSX element a reference stamps as its `style`, or null.
+function aliasStyleOwner(reference) {
+  const parent = reference.parent;
+  if (ts.isJsxExpression(parent) && parent.expression === reference) {
+    const attribute = parent.parent;
+    if (
+      !attribute ||
+      !ts.isJsxAttribute(attribute) ||
+      attribute.initializer !== parent ||
+      !ts.isIdentifier(attribute.name) ||
+      attribute.name.text !== 'style'
+    ) {
+      return null;
+    }
+    const element = attribute.parent?.parent;
+    if (!element || (!ts.isJsxOpeningElement(element) && !ts.isJsxSelfClosingElement(element))) return null;
+    return element;
+  }
+  if (ts.isPropertyAssignment(parent) && parent.initializer === reference) {
+    if (!isGuardedSpreadPayload(parent, reference.text)) return null;
+    return owningJsxElementOfSpreadStamp(reference, parent);
+  }
+  return null;
+}
+
+// The `<id> === undefined` guard of an ADMITTED spread stamp — the only
+// non-style reference the alias may carry.
+function isAdmittedSpreadGuard(reference) {
+  const guard = reference.parent;
+  if (!ts.isBinaryExpression(guard) || guard.left !== reference || !isUndefinedGuardOf(guard, reference.text)) {
+    return false;
+  }
+  const conditional = guard.parent;
+  if (!conditional || !ts.isConditionalExpression(conditional) || conditional.condition !== guard) return false;
+  const payload = unwrapTransparent(conditional.whenFalse);
+  if (!ts.isObjectLiteralExpression(payload) || payload.properties.length !== 1) return false;
+  const [property] = payload.properties;
+  return (
+    ts.isPropertyAssignment(property) &&
+    ts.isIdentifier(property.initializer) &&
+    property.initializer.text === reference.text &&
+    aliasStyleOwner(property.initializer) !== null
+  );
+}
+
+function aliasScopeOf(statement) {
+  for (let node = statement.parent; node; node = node.parent) {
+    if (
+      ts.isBlock(node) ||
+      ts.isSourceFile(node) ||
+      ts.isModuleBlock(node) ||
+      ts.isCaseClause(node) ||
+      ts.isDefaultClause(node)
+    ) {
+      return node;
+    }
+  }
+  return statement.getSourceFile();
+}
+
+const HOISTED_STYLE_ALIASES = new WeakMap();
+
+function hoistedStyleAliases(sourceFile) {
+  const cached = HOISTED_STYLE_ALIASES.get(sourceFile);
+  if (cached) return cached;
+
+  const aliases = [];
+  const visit = (node) => {
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      node.initializer &&
+      ts.isVariableDeclarationList(node.parent) &&
+      (node.parent.flags & ts.NodeFlags.Const) !== 0 &&
+      ts.isVariableStatement(node.parent.parent)
+    ) {
+      const conditional = unwrapTransparent(node.initializer);
+      if (ts.isConditionalExpression(conditional)) {
+        const arms = [conditional.whenTrue, conditional.whenFalse].map(unwrapTransparent);
+        const literals = arms.filter((arm) => ts.isObjectLiteralExpression(arm));
+        if (
+          literals.length > 0 &&
+          arms.every((arm) => isUndefinedIdentifier(arm) || ts.isObjectLiteralExpression(arm))
+        ) {
+          aliases.push(judgeHoistedAlias(node, literals));
+        }
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+
+  HOISTED_STYLE_ALIASES.set(sourceFile, aliases);
+  return aliases;
+}
+
+function judgeHoistedAlias(declaration, literals) {
+  const name = declaration.name.text;
+  const references = [];
+  const collect = (node) => {
+    if (ts.isIdentifier(node) && node.text === name && node !== declaration.name && isReferencePosition(node)) {
+      references.push(node);
+    }
+    ts.forEachChild(node, collect);
+  };
+  collect(aliasScopeOf(declaration.parent.parent));
+
+  const owners = [];
+  const refusals = [];
+  for (const reference of references) {
+    const owner = aliasStyleOwner(reference);
+    if (owner) {
+      owners.push(owner);
+      continue;
+    }
+    if (isAdmittedSpreadGuard(reference)) continue;
+
+    let value = reference;
+    for (let parent = transparentParentOf(value); parent; parent = transparentParentOf(value)) value = parent;
+    const binder = value.parent;
+    if (binder && ts.isVariableDeclaration(binder) && binder.initializer === value) {
+      refusals.push(
+        `the alias '${name}' is re-bound by const '${binder.name.getText()}' @ line ${lineOf(binder)}; only one const hop is followed`,
+      );
+      continue;
+    }
+    refusals.push(
+      `the alias '${name}' is used outside a style position (${ts.SyntaxKind[reference.parent.kind]} @ line ${lineOf(reference)})`,
+    );
+  }
+  if (owners.length === 0 && refusals.length === 0) refusals.push(`the alias '${name}' reaches no style position`);
+
+  return { name, declaration, literals, owners, refusals };
+}
+
+// Every style object this gate can attribute to an owner: the literals standing
+// in a style position (one owner each, or none when the chain breaks), and the
+// literal arms of an ADMITTED hoisted alias (the alias's owner set). A refused
+// alias contributes nothing.
+function styleObjectRecords(sourceFile) {
+  const records = styleObjectLiterals(sourceFile).map((object) => {
+    const owner = owningJsxElement(object);
+    return { object, owners: owner ? [owner] : [] };
+  });
+  for (const alias of hoistedStyleAliases(sourceFile)) {
+    if (alias.refusals.length > 0) continue;
+    for (const object of alias.literals) records.push({ object, owners: alias.owners });
+  }
+  return records;
+}
+
+function isChannelProducer(property, channel, datum) {
+  if (!ts.isPropertyAssignment(property)) return false;
+  const key = propertyKey(property.name);
+  return key.quoted && key.text === channel && isDatumColor(property.initializer, datum);
+}
+
+// The refusals of every hoisted alias whose literal carries the channel — the
+// reason a hoisted publication reads as zero, by name.
+function channelAliasRefusals(text, path, channel, datum) {
+  return hoistedStyleAliases(parseTsx(text, path))
+    .filter((alias) =>
+      alias.literals.some((object) => object.properties.some((property) => isChannelProducer(property, channel, datum))),
+    )
+    .flatMap((alias) => alias.refusals);
+}
+
 // The channel producer in its one canonical form: a QUOTED channel key on a
 // style object, initialized by the datum's `.color` and nothing else. A renamed
 // channel, a computed key, a wrapped or defaulted value all read as zero — the
 // gate then names the missing publication rather than passing on a near-miss.
-// Each hit is recorded WITH its owning element; the count is the length of that
-// record list, so every v2 count fact is unchanged by construction.
+// Each hit is recorded WITH the set of JSX elements that own it — one for a
+// literal in a style position, the branch set for a hoisted alias. The count is
+// the length of the record list, one per LITERAL, so every v2 count fact is
+// unchanged by construction.
 function collectChannelProducers(text, path, channel, datum) {
   const producers = [];
-  for (const object of styleObjectLiterals(parseTsx(text, path))) {
+  for (const { object, owners } of styleObjectRecords(parseTsx(text, path))) {
     for (const property of object.properties) {
-      if (!ts.isPropertyAssignment(property)) continue;
-      const key = propertyKey(property.name);
-      if (!key.quoted || key.text !== channel) continue;
-      if (!isDatumColor(property.initializer, datum)) continue;
-      producers.push({ property, owner: owningJsxElement(object) });
+      if (!isChannelProducer(property, channel, datum)) continue;
+      producers.push({ property, owners });
     }
   }
   return producers;
+}
+
+// Every owner-level clause below runs through here: the count is the shared
+// precondition, and the clause is then judged for EACH owner of the one
+// producer. A single owner reports its violations exactly as before; with
+// several, each violation is prefixed by the owner it belongs to, so a red on
+// one branch can never be read as the other's.
+//
+// The STYLE_HOSTS admission (below) is decided here, once per owner, and handed
+// to the judge explicitly. It is never looked up from inside a walk: that is what
+// keeps it scoped to the producer's OWN element (H5) — the same component met as
+// an intermediate hop is a different node, and it is never handed an admission.
+function judgeEachProducerOwner(text, path, channel, datum, judge) {
+  const producers = collectChannelProducers(text, path, channel, datum);
+  if (producers.length !== 1) return [`the channel carries ${producers.length} producers, not 1`];
+
+  const { owners } = producers[0];
+  if (owners.length === 0) return ['the producer style object never reaches a JSX element'];
+
+  const violations = [];
+  for (const owner of owners) {
+    const found = judge(owner, styleHostAdmission(owner, channel));
+    if (owners.length === 1) violations.push(...found);
+    else violations.push(...found.map((violation) => `${ownerLabel(owner)}: ${violation}`));
+  }
+  return violations;
+}
+
+function ownerLabel(owner) {
+  return `owner <${owner.tagName.getText()}> @ line ${lineOf(owner)}`;
+}
+
+// The owner set of each producer, for the evidence: tag, line and part.
+function channelProducerOwners(text, path, channel, datum) {
+  return collectChannelProducers(text, path, channel, datum).map(({ owners }) =>
+    owners.map((owner) => ({ tag: owner.tagName.getText(), line: lineOf(owner), part: literalDataPart(owner).value })),
+  );
 }
 
 function countChannelProducers(text, path, channel, datum) {
@@ -644,21 +955,17 @@ function literalDataPart(element) {
 // purpose: each names its own defect, so a misidentified owner and a
 // disconnected owner never collapse into one indistinguishable failure.
 function producerPlacementViolations(text, path, channel, datum, part) {
-  const producers = collectChannelProducers(text, path, channel, datum);
-  if (producers.length !== 1) return [`the channel carries ${producers.length} producers, not 1`];
-
-  const owner = producers[0].owner;
-  if (!owner) return ['the producer style object never reaches a JSX element'];
-
-  const dataPart = literalDataPart(owner);
-  if (dataPart.count !== 1) {
-    return [`the producer element carries ${dataPart.count} data-part attributes, not 1`];
-  }
-  if (dataPart.value === null) return ['the producer element data-part is not a string literal'];
-  if (dataPart.value !== part) {
-    return [`the producer element is data-part '${dataPart.value}', not '${part}'`];
-  }
-  return [];
+  return judgeEachProducerOwner(text, path, channel, datum, (owner) => {
+    const dataPart = literalDataPart(owner);
+    if (dataPart.count !== 1) {
+      return [`the producer element carries ${dataPart.count} data-part attributes, not 1`];
+    }
+    if (dataPart.value === null) return ['the producer element data-part is not a string literal'];
+    if (dataPart.value !== part) {
+      return [`the producer element is data-part '${dataPart.value}', not '${part}'`];
+    }
+    return [];
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -725,17 +1032,13 @@ function ownerAncestryParts(owner) {
 }
 
 function producerAncestryViolations(text, path, channel, datum, ancestry) {
-  const producers = collectChannelProducers(text, path, channel, datum);
-  if (producers.length !== 1) return [`the channel carries ${producers.length} producers, not 1`];
-
-  const owner = producers[0].owner;
-  if (!owner) return ['the producer style object never reaches a JSX element'];
-
-  const actual = ownerAncestryParts(owner);
-  if (actual.length !== ancestry.length || actual.some((part, index) => part !== ancestry[index])) {
-    return [`the producer ancestry is ${actual.join(' -> ') || '(none)'}, not ${ancestry.join(' -> ')}`];
-  }
-  return [];
+  return judgeEachProducerOwner(text, path, channel, datum, (owner) => {
+    const actual = ownerAncestryParts(owner);
+    if (actual.length !== ancestry.length || actual.some((part, index) => part !== ancestry[index])) {
+      return [`the producer ancestry is ${actual.join(' -> ') || '(none)'}, not ${ancestry.join(' -> ')}`];
+    }
+    return [];
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -898,6 +1201,873 @@ function classifyTag(opening) {
   return { kind: 'intrinsic', label: `<${tag.text}>` };
 }
 
+// ---------------------------------------------------------------------------
+// STYLE HOSTS (EVI-02 S1': the HOLD-1 (i) ruling, with H2/H4 as amended by the
+// H4 ruling).
+//
+// Since 042d10aa2 the interactive calendar chip is `<ModernButton
+// data-part="event" style={accent}>`: the accent is a PROP of a component this
+// file cannot see, and `classifyTag` rightly calls that opaque. ModernButton
+// does in fact apply the caller's `style` and `data-part` to the one DOM element
+// it renders, so the refusal is a visibility limit of this gate, not a defect of
+// the source. This table is the one, narrow way past that limit, and it admits
+// by PROOF, never by name:
+//
+//   * the table is CLOSED. Adding an entry, or widening one, is a reviewed
+//     instrument change with its own drills — never a convenience;
+//   * A2 — the owner's tag resolves through ITS OWN FILE's default import to
+//     exactly `module`; a local re-binding, another path or a namespace member
+//     is refused (the owner stays opaque);
+//   * every proof is RE-PARSED from the real files on every run (no pinned
+//     hash: parses are memoised per process by content only), and any shape the
+//     proof does not recognise REFUSES. Each refusal names its clause;
+//   * H1 the default export is a `forwardRef`/function whose EVERY return is one
+//     intrinsic element, alone or as the sole child of a fragment;
+//   * H2 each root's `style` is an object literal reaching the destructured
+//     caller `style` (directly or through ONE same-function const) and nothing
+//     after it may set the channel: a literal key other than the channel, or a
+//     `trailingSpreads` entry proven by T2'-T4 (write sites, returns, host use);
+//   * H3 `style` is destructured out of props;
+//   * H4 the caller's `data-part` reaches each root UNMODIFIED: T0 the part
+//     source resolves through named re-exports only and returns literal objects
+//     keyed by its first parameter (PART_KEYS = their keys); T1 exactly one
+//     `...partAttributes(<the caller binding> ?? '<literal>', …)` member in the
+//     one const spread onto the root, followed only by literal non-part keys or
+//     `trailingPartSpreads` entries proven by T2-T4, and nothing on the root
+//     after that spread sets a part key;
+//   * H5 the admission is handed ONLY to the producer's own element (see
+//     `judgeEachProducerOwner`). The same component met as an intermediate hop
+//     stays opaque, and so does every component not in this table.
+//
+// Effect (A4): an admitted owner is modelled as its root intrinsic tag(s)
+// carrying the caller's static `data-part`; every OTHER clause still runs on it.
+//
+// Fail-closed additions this file makes beyond the rulings' text (each holds on
+// the source it was written against, and each only ever refuses): the caller
+// `style` binding, the style-chain const and the part-carrying const may be
+// referenced ONLY at the positions the proof admits, and no spread may follow a
+// root's `style` attribute. Without them a later
+// `interactiveStyle['<channel>'] = …` would pass the proof silently.
+const STYLE_HOSTS = [
+  {
+    name: 'ModernButton',
+    module: 'src/components/primitives/inputs/button/engines/modern/index.tsx',
+    partSource: { fn: 'partAttributes', module: 'src/foundation/behavior/kernel/anatomy/index.ts' },
+    trailingSpreads: {
+      'responsive.channels': {
+        producer: {
+          fn: 'generateResponsiveCSS',
+          module: 'src/infrastructure/runtime/responsive/runtime/style-properties/index.ts',
+          member: 'channels',
+        },
+        keyFn: { fn: 'responsiveChannelVariable', module: 'src/foundation/contracts/kernel/responsive/channels/index.ts' },
+        keyPrefix: '--_ds-rsp-',
+      },
+    },
+    trailingPartSpreads: {
+      'responsive.attrs': {
+        producer: {
+          fn: 'generateResponsiveCSS',
+          module: 'src/infrastructure/runtime/responsive/runtime/style-properties/index.ts',
+          member: 'attrs',
+        },
+        keyConsts: { module: 'src/foundation/contracts/kernel/responsive/channels/index.ts' },
+      },
+    },
+  },
+];
+
+// The injected file-reader. Drills override files IN MEMORY through
+// `withCoreFiles`; nothing on disk is ever written.
+let coreFileOverlay = null;
+
+function readCoreFile(rel) {
+  if (coreFileOverlay?.has(rel)) return coreFileOverlay.get(rel);
+  const full = join(packageRoot, rel);
+  if (!existsSync(full) || !statSync(full).isFile()) return null;
+  return readFileSync(full, 'utf8');
+}
+
+function withCoreFiles(overrides, run) {
+  const previous = coreFileOverlay;
+  coreFileOverlay = new Map([...(previous ?? new Map()), ...Object.entries(overrides)]);
+  try {
+    return run();
+  } finally {
+    coreFileOverlay = previous;
+  }
+}
+
+const CORE_PARSES = new Map();
+
+function parseCoreFile(rel) {
+  const text = readCoreFile(rel);
+  if (text === null) return null;
+  const key = `${rel}\u0000${text}`;
+  let parsed = CORE_PARSES.get(key);
+  if (!parsed) {
+    const kind = rel.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
+    parsed = ts.createSourceFile(rel, text, ts.ScriptTarget.Latest, true, kind);
+    CORE_PARSES.set(key, parsed);
+  }
+  return parsed;
+}
+
+function coreRelOf(fileName) {
+  return relative(packageRoot, fileName).split(sep).join('/');
+}
+
+function shortSite(rel, node) {
+  return `${rel.split('/').at(-2)} :${lineOf(node)}`;
+}
+
+// `@/` is `src/`; a relative specifier is resolved from the importing file. The
+// file must exist in exactly ONE of the candidate spellings — two is ambiguity.
+function resolveCoreModule(fromRel, specifier) {
+  let base;
+  if (specifier.startsWith('@/')) base = `src/${specifier.slice(2)}`;
+  else if (specifier.startsWith('./') || specifier.startsWith('../')) {
+    base = posix.normalize(posix.join(posix.dirname(fromRel), specifier));
+  } else return { error: `'${specifier}' is not a module path this gate resolves` };
+  const candidates = [base, `${base}.ts`, `${base}.tsx`, `${base}/index.ts`, `${base}/index.tsx`].filter(
+    (candidate) => readCoreFile(candidate) !== null,
+  );
+  if (candidates.length !== 1) return { error: `'${specifier}' resolves to ${candidates.length} files, not 1` };
+  return { rel: candidates[0] };
+}
+
+// How `name` is imported into `sourceFile`: default or named, never renamed or a
+// namespace member. Two imports of one name are ambiguity.
+function importOf(sourceFile, name) {
+  const found = [];
+  for (const statement of sourceFile.statements) {
+    if (!ts.isImportDeclaration(statement) || !statement.importClause || statement.importClause.isTypeOnly) continue;
+    const clause = statement.importClause;
+    const specifier = statement.moduleSpecifier.text;
+    if (clause.name?.text === name) found.push({ kind: 'default', specifier });
+    const bindings = clause.namedBindings;
+    if (bindings && ts.isNamespaceImport(bindings) && bindings.name.text === name) {
+      found.push({ error: `'${name}' is a namespace import` });
+    }
+    if (bindings && ts.isNamedImports(bindings)) {
+      for (const element of bindings.elements) {
+        if (element.name.text !== name || element.isTypeOnly) continue;
+        if (element.propertyName && element.propertyName.text !== name) {
+          found.push({ error: `'${name}' is a renamed import of '${element.propertyName.text}'` });
+        } else found.push({ kind: 'named', specifier });
+      }
+    }
+  }
+  if (found.length !== 1) return { error: `'${name}' is imported ${found.length} times, not once` };
+  return found[0];
+}
+
+// Every value binding of `name` in the file other than its import.
+function localRebinds(sourceFile, name) {
+  const found = [];
+  const visit = (node) => {
+    if (
+      (ts.isVariableDeclaration(node) ||
+        ts.isFunctionDeclaration(node) ||
+        ts.isClassDeclaration(node) ||
+        ts.isParameter(node) ||
+        ts.isBindingElement(node) ||
+        ts.isFunctionExpression(node) ||
+        ts.isClassExpression(node) ||
+        ts.isEnumDeclaration(node) ||
+        ts.isImportEqualsDeclaration(node)) &&
+      node.name &&
+      ts.isIdentifier(node.name) &&
+      node.name.text === name
+    ) {
+      found.push(node);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return found;
+}
+
+// `name` imported into the file at `fromRel` and resolving to exactly `module`.
+function importResolvesTo(sourceFile, fromRel, name, module) {
+  const imported = importOf(sourceFile, name);
+  if (imported.error) return imported.error;
+  if (imported.kind !== 'named') return `'${name}' is not a named import`;
+  const resolved = resolveCoreModule(fromRel, imported.specifier);
+  if (resolved.error) return resolved.error;
+  if (resolved.rel !== module) return `'${name}' resolves to ${resolved.rel}, not ${module}`;
+  const rebinds = localRebinds(sourceFile, name);
+  if (rebinds.length > 0) return `'${name}' is re-bound locally @ line ${lineOf(rebinds[0])}`;
+  return null;
+}
+
+function exportedFunction(sourceFile, name) {
+  const found = sourceFile.statements.filter(
+    (statement) =>
+      ts.isFunctionDeclaration(statement) &&
+      statement.name?.text === name &&
+      statement.body &&
+      (statement.modifiers ?? []).some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword),
+  );
+  if (found.length !== 1 || localRebinds(sourceFile, name).length !== 1) return null;
+  return found[0];
+}
+
+// The returns that belong to `fn` itself, never to a nested function.
+function functionReturns(fn) {
+  const returns = [];
+  const visit = (node) => {
+    if (node !== fn && ts.isFunctionLike(node)) return;
+    if (ts.isReturnStatement(node)) returns.push(node);
+    ts.forEachChild(node, visit);
+  };
+  visit(fn);
+  return returns;
+}
+
+function referencesIn(scope, name, declarationName) {
+  const found = [];
+  const visit = (node) => {
+    if (ts.isIdentifier(node) && node.text === name && node !== declarationName && isReferencePosition(node)) {
+      found.push(node);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(scope);
+  return found;
+}
+
+// The top-level `const` bindings of a function body.
+function functionConsts(fn) {
+  const consts = new Map();
+  for (const statement of fn.body.statements) {
+    if (!ts.isVariableStatement(statement) || (statement.declarationList.flags & ts.NodeFlags.Const) === 0) continue;
+    for (const declaration of statement.declarationList.declarations) {
+      if (ts.isIdentifier(declaration.name) && declaration.initializer) consts.set(declaration.name.text, declaration);
+    }
+  }
+  return consts;
+}
+
+function literalKeyText(name) {
+  if (ts.isIdentifier(name) || ts.isStringLiteral(name) || ts.isNumericLiteral(name)) return name.text;
+  return null;
+}
+
+function unwrapFrozen(expression) {
+  let node = unwrapTransparent(expression);
+  if (
+    ts.isCallExpression(node) &&
+    node.arguments.length === 1 &&
+    ts.isPropertyAccessExpression(node.expression) &&
+    node.expression.getText() === 'Object.freeze'
+  ) {
+    node = unwrapTransparent(node.arguments[0]);
+  }
+  return node;
+}
+
+function isEmptyObjectInitializer(expression) {
+  const node = unwrapFrozen(expression);
+  return ts.isObjectLiteralExpression(node) && node.properties.length === 0;
+}
+
+function isReturnedBy(node, fn) {
+  let value = node;
+  while (value.parent && (ts.isParenthesizedExpression(value.parent) || ts.isAsExpression(value.parent))) {
+    value = value.parent;
+  }
+  return ts.isReturnStatement(value.parent) && value.parent.expression === value && nearestFunctionOf(value.parent) === fn;
+}
+
+// H1: the default-exported component function.
+function hostComponentFunction(host, refuse) {
+  const defaults = host.statements.filter(
+    (statement) =>
+      (ts.isExportAssignment(statement) && !statement.isExportEquals) ||
+      (ts.isFunctionDeclaration(statement) &&
+        (statement.modifiers ?? []).some((modifier) => modifier.kind === ts.SyntaxKind.DefaultKeyword)),
+  );
+  if (defaults.length !== 1) return refuse('H1', `the host has ${defaults.length} default exports, not 1`);
+  const [exported] = defaults;
+  if (ts.isFunctionDeclaration(exported)) return exported.body ? exported : refuse('H1', 'the default export has no body');
+  if (!ts.isIdentifier(exported.expression)) return refuse('H1', 'the default export is not a binding');
+
+  const name = exported.expression.text;
+  const declarations = localRebinds(host, name);
+  if (declarations.length !== 1 || !ts.isVariableDeclaration(declarations[0])) {
+    return refuse('H1', `'${name}' is bound ${declarations.length} times, not as one const`);
+  }
+  const [declaration] = declarations;
+  if (
+    !ts.isVariableStatement(declaration.parent.parent) ||
+    declaration.parent.parent.parent !== host ||
+    (declaration.parent.flags & ts.NodeFlags.Const) === 0
+  ) {
+    return refuse('H1', `'${name}' is not a top-level const`);
+  }
+  const call = unwrapTransparent(declaration.initializer);
+  if (!ts.isCallExpression(call)) return refuse('H1', `'${name}' is not a forwardRef call`);
+  const callee = call.expression;
+  const viaNamed =
+    ts.isIdentifier(callee) &&
+    callee.text === 'forwardRef' &&
+    importOf(host, 'forwardRef').specifier === 'react' &&
+    importOf(host, 'forwardRef').kind === 'named';
+  const viaDefault =
+    ts.isPropertyAccessExpression(callee) &&
+    ts.isIdentifier(callee.expression) &&
+    callee.name.text === 'forwardRef' &&
+    importOf(host, callee.expression.text).specifier === 'react' &&
+    importOf(host, callee.expression.text).kind === 'default';
+  if (!viaNamed && !viaDefault) return refuse('H1', `'${name}' is not React's forwardRef`);
+  const fn = call.arguments.length === 1 ? unwrapTransparent(call.arguments[0]) : null;
+  if (!fn || !(ts.isArrowFunction(fn) || ts.isFunctionExpression(fn)) || !ts.isBlock(fn.body)) {
+    return refuse('H1', `'${name}' does not wrap one block-bodied render function`);
+  }
+  return fn;
+}
+
+// H1: every return is ONE intrinsic, non-void element.
+function hostRoots(fn, refuse) {
+  const roots = [];
+  const returns = functionReturns(fn);
+  if (returns.length === 0) refuse('H1', 'the render function never returns');
+  for (const statement of returns) {
+    if (!statement.expression) {
+      refuse('H1', `return @ line ${lineOf(statement)} returns nothing`);
+      continue;
+    }
+    let element = unwrapParens(statement.expression);
+    if (ts.isJsxFragment(element)) {
+      const children = element.children.filter((child) => !(ts.isJsxText(child) && child.containsOnlyTriviaWhiteSpaces));
+      if (children.length !== 1) {
+        refuse('H1', `return @ line ${lineOf(statement)} is a fragment with ${children.length} children, not 1`);
+        continue;
+      }
+      [element] = children;
+    }
+    const opening = ts.isJsxElement(element) ? element.openingElement : ts.isJsxSelfClosingElement(element) ? element : null;
+    if (!opening || classifyTag(opening).kind !== 'intrinsic' || localPartWrapperOf(opening)) {
+      refuse('H1', `return @ line ${lineOf(statement)} is not one intrinsic element`);
+      continue;
+    }
+    roots.push(opening);
+  }
+  return roots;
+}
+
+// H3 (and the data-part half of H4-T1): the destructured props.
+function hostPropBindings(fn, refuse) {
+  const [props] = fn.parameters;
+  if (!props || !ts.isIdentifier(props.name)) {
+    refuse('H3', 'the render function has no `props` parameter');
+    return { style: null, dataPart: null, declarations: new Set() };
+  }
+  const patterns = fn.body.statements.flatMap((statement) =>
+    ts.isVariableStatement(statement)
+      ? statement.declarationList.declarations.filter(
+          (declaration) =>
+            ts.isObjectBindingPattern(declaration.name) &&
+            declaration.initializer &&
+            ts.isIdentifier(declaration.initializer) &&
+            declaration.initializer.text === props.name.text,
+        )
+      : [],
+  );
+  if (patterns.length !== 1) {
+    refuse('H3', `props are destructured ${patterns.length} times, not once`);
+    return { style: null, dataPart: null, declarations: new Set() };
+  }
+  const named = (key) =>
+    patterns[0].name.elements.find(
+      (element) =>
+        !element.dotDotDotToken &&
+        literalKeyText(element.propertyName ?? element.name) === key &&
+        ts.isIdentifier(element.name),
+    )?.name ?? null;
+  const style = named('style');
+  const dataPart = named('data-part');
+  const bindings = {
+    style: style?.text ?? null,
+    dataPart: dataPart?.text ?? null,
+    declarations: new Set([style, dataPart].filter(Boolean)),
+  };
+  if (!bindings.style) refuse('H3', '`style` is not destructured out of props');
+  if (!bindings.dataPart) refuse('H4-T1', '`data-part` is not destructured out of props');
+  return bindings;
+}
+
+// H4-T0: the part source, through named re-exports only.
+function provePartSource(entry, host, refuse) {
+  const { fn, module } = entry.partSource;
+  const imported = importOf(host, fn);
+  if (imported.error) return refuse('H4-T0', imported.error);
+  if (imported.kind !== 'named') return refuse('H4-T0', `'${fn}' is not a named import`);
+  if (localRebinds(host, fn).length > 0) return refuse('H4-T0', `'${fn}' is re-bound in the host`);
+
+  let resolved = resolveCoreModule(entry.module, imported.specifier);
+  for (let hop = 0; hop < 8; hop += 1) {
+    if (resolved.error) return refuse('H4-T0', resolved.error);
+    const sourceFile = parseCoreFile(resolved.rel);
+    const local = exportedFunction(sourceFile, fn);
+    const reexports = sourceFile.statements.flatMap((statement) =>
+      ts.isExportDeclaration(statement) && statement.moduleSpecifier && statement.exportClause && ts.isNamedExports(statement.exportClause)
+        ? statement.exportClause.elements
+            .filter((element) => element.name.text === fn)
+            .map((element) => ({ element, specifier: statement.moduleSpecifier.text }))
+        : [],
+    );
+    if (reexports.some(({ element }) => element.propertyName && element.propertyName.text !== fn)) {
+      return refuse('H4-T0', `'${fn}' is a renamed re-export in ${resolved.rel}`);
+    }
+    if (local && reexports.length === 0) {
+      if (resolved.rel !== module) return refuse('H4-T0', `'${fn}' is declared in ${resolved.rel}, not ${module}`);
+      return partKeysOf(local, sourceFile, refuse);
+    }
+    if (local || reexports.length !== 1) {
+      return refuse('H4-T0', `'${fn}' reaches ${resolved.rel} through ${reexports.length} named re-exports${local ? ' and a local declaration' : ''} (export * is not followed)`);
+    }
+    resolved = resolveCoreModule(resolved.rel, reexports[0].specifier);
+  }
+  return refuse('H4-T0', `'${fn}' re-exports more than 8 hops deep`);
+}
+
+function partKeysOf(fn, sourceFile, refuse) {
+  const [part] = fn.parameters;
+  if (!part || !ts.isIdentifier(part.name)) return refuse('H4-T0', 'the part source has no first parameter');
+  const keys = new Set();
+  const objectsOf = (expression, site) => {
+    const node = unwrapParens(expression);
+    if (ts.isConditionalExpression(node)) return objectsOf(node.whenTrue, site) && objectsOf(node.whenFalse, site);
+    if (!ts.isObjectLiteralExpression(node)) return refuse('H4-T0', `the part source returns a non-literal @ ${site}`) ?? false;
+    let carriesPart = false;
+    for (const member of node.properties) {
+      const key = ts.isPropertyAssignment(member) ? literalKeyText(member.name) : null;
+      if (key === null) return refuse('H4-T0', `the part source returns a non-literal key @ ${site}`) ?? false;
+      keys.add(key);
+      if (key === 'data-part') {
+        carriesPart = ts.isIdentifier(member.initializer) && member.initializer.text === part.name.text;
+      }
+    }
+    if (!carriesPart) return refuse('H4-T0', `the part source's 'data-part' is not its first parameter @ ${site}`) ?? false;
+    return true;
+  };
+  const returns = functionReturns(fn);
+  if (returns.length === 0) return refuse('H4-T0', 'the part source never returns');
+  for (const statement of returns) {
+    if (!statement.expression || !objectsOf(statement.expression, shortSite(coreRelOf(sourceFile.fileName), statement))) {
+      return null;
+    }
+  }
+  return keys;
+}
+
+// `name` in `sourceFile` resolves to `export const name = '<literal>'` in `module`.
+function constKeyValue(sourceFile, fromRel, name, module) {
+  const importError = importResolvesTo(sourceFile, fromRel, name, module);
+  if (importError) return { error: importError };
+  const keys = parseCoreFile(module);
+  const declarations = localRebinds(keys, name);
+  const [declaration] = declarations;
+  if (
+    declarations.length !== 1 ||
+    !ts.isVariableDeclaration(declaration) ||
+    !ts.isVariableStatement(declaration.parent.parent) ||
+    declaration.parent.parent.parent !== keys ||
+    (declaration.parent.flags & ts.NodeFlags.Const) === 0 ||
+    !(declaration.parent.parent.modifiers ?? []).some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword) ||
+    !declaration.initializer ||
+    !(ts.isStringLiteral(declaration.initializer) || ts.isNoSubstitutionTemplateLiteral(declaration.initializer))
+  ) {
+    return { error: `'${name}' is not one exported string-literal const in ${module}` };
+  }
+  return { value: declaration.initializer.text };
+}
+
+// T2/T2', T3: the producer's own writes and returns for one member. The clause
+// family is H4 for the attribute side and H2 for the style side.
+function proveProducerMember(spec, mode, channel, partKeys, refuse, facts) {
+  const tag = mode === 'attrs' ? 'H4-T' : 'H2-T';
+  const t2 = mode === 'attrs' ? 'H4-T2' : "H2-T2'";
+  const { fn: fnName, module, member } = spec.producer;
+  const producer = parseCoreFile(module);
+  const fn = producer ? exportedFunction(producer, fnName) : null;
+  if (!fn) return refuse(t2, `'${fnName}' is not one exported function in ${module}`);
+
+  const local = functionConsts(fn).get(member);
+  const initial = local ? unwrapTransparent(local.initializer) : null;
+  if (!initial || !ts.isObjectLiteralExpression(initial) || initial.properties.length !== 0) {
+    return refuse(t2, `'${member}' is not a const initialised to {} in '${fnName}'`);
+  }
+
+  if (mode === 'channels') {
+    const prefix = spec.keyPrefix;
+    if (prefix.startsWith(channel) || channel.startsWith(prefix)) {
+      refuse(t2, `the key prefix '${prefix}' and the channel '${channel}' overlap`);
+    }
+    const keyError = importResolvesTo(producer, module, spec.keyFn.fn, spec.keyFn.module);
+    if (keyError) refuse(t2, keyError);
+    const keyFn = exportedFunction(parseCoreFile(spec.keyFn.module), spec.keyFn.fn);
+    if (!keyFn) refuse(t2, `'${spec.keyFn.fn}' is not one exported function in ${spec.keyFn.module}`);
+    else {
+      const returns = functionReturns(keyFn);
+      if (returns.length === 0) refuse(t2, `'${spec.keyFn.fn}' never returns`);
+      for (const statement of returns) {
+        const value = statement.expression ? unwrapParens(statement.expression) : null;
+        const head = !value
+          ? null
+          : ts.isTemplateExpression(value)
+            ? value.head.text
+            : ts.isNoSubstitutionTemplateLiteral(value) || ts.isStringLiteral(value)
+              ? value.text
+              : null;
+        if (head === null || !head.startsWith(prefix)) {
+          refuse(t2, `'${spec.keyFn.fn}' returns a key outside '${prefix}' @ ${shortSite(spec.keyFn.module, statement)}`);
+        }
+      }
+      facts.channelKeyPrefix = prefix;
+    }
+  }
+
+  for (const reference of referencesIn(fn, member, local.name)) {
+    const parent = reference.parent;
+    const site = shortSite(module, reference);
+    if (ts.isElementAccessExpression(parent) && parent.expression === reference) {
+      const write = parent.parent;
+      if (!ts.isBinaryExpression(write) || write.operatorToken.kind !== ts.SyntaxKind.EqualsToken || write.left !== parent) {
+        refuse(t2, `${member} escapes at ${site} (${ts.SyntaxKind[write.kind]})`);
+        continue;
+      }
+      const key = parent.argumentExpression;
+      if (mode === 'attrs') {
+        const resolved = ts.isStringLiteral(key)
+          ? { value: key.text }
+          : ts.isIdentifier(key)
+            ? constKeyValue(producer, module, key.text, spec.keyConsts.module)
+            : { error: `the key ${key.getText()} is neither a string literal nor an imported const` };
+        if (resolved.error) refuse(t2, `attrs[${key.getText()}] @ ${site}: ${resolved.error}`);
+        else if (partKeys.has(resolved.value)) refuse(t2, `attrs key '${resolved.value}' @ ${site} is a part key`);
+        else facts.attrsKeys.push(resolved.value);
+      } else if (
+        !ts.isCallExpression(key) ||
+        !ts.isIdentifier(key.expression) ||
+        key.expression.text !== spec.keyFn.fn
+      ) {
+        refuse(t2, `channels[${key.getText()}] @ ${site} is not keyed by '${spec.keyFn.fn}'`);
+      }
+      continue;
+    }
+    // T2(b): `attrs` only as the shorthand member, `channels` only as
+    // `channels: channels` with an optional type assertion — each side exactly
+    // as ruled, and no other wrapper (a `||`/`??` operand is not the local).
+    const shorthand = mode === 'attrs' && ts.isShorthandPropertyAssignment(parent) && parent.name === reference;
+    let value = reference;
+    while (
+      value.parent &&
+      (ts.isAsExpression(value.parent) || ts.isSatisfiesExpression(value.parent) || ts.isParenthesizedExpression(value.parent)) &&
+      value.parent.expression === value
+    ) {
+      value = value.parent;
+    }
+    const named =
+      mode === 'channels' &&
+      ts.isPropertyAssignment(value.parent) &&
+      value.parent.initializer === value &&
+      literalKeyText(value.parent.name) === member;
+    const holder = shorthand ? parent.parent : named ? value.parent.parent : null;
+    if (holder && ts.isObjectLiteralExpression(holder) && isReturnedBy(holder, fn)) continue;
+    refuse(t2, `${member} escapes at ${site} (${ts.SyntaxKind[parent.kind]})`);
+  }
+
+  // T3: what the producer hands back.
+  for (const statement of functionReturns(fn)) {
+    const site = shortSite(module, statement);
+    const value = statement.expression ? unwrapTransparent(statement.expression) : null;
+    if (value && ts.isObjectLiteralExpression(value)) {
+      if (value.properties.some((property) => ts.isSpreadAssignment(property))) {
+        refuse(`${tag}3`, `the return @ ${site} spreads into its projection`);
+        continue;
+      }
+      const members = value.properties.filter((property) => property.name && literalKeyText(property.name) === member);
+      const handsBack =
+        members.length === 1 &&
+        (mode === 'attrs'
+          ? ts.isShorthandPropertyAssignment(members[0])
+          : ts.isPropertyAssignment(members[0]) &&
+            ts.isIdentifier(unwrapTransparent(members[0].initializer)) &&
+            unwrapTransparent(members[0].initializer).text === member);
+      if (!handsBack) refuse(`${tag}3`, `the return @ ${site} does not hand back the local '${member}'`);
+      continue;
+    }
+    if (value && ts.isIdentifier(value)) {
+      const declarations = localRebinds(producer, value.text);
+      const [declaration] = declarations;
+      const shape =
+        declarations.length === 1 &&
+        ts.isVariableDeclaration(declaration) &&
+        declaration.parent.parent.parent === producer &&
+        (declaration.parent.flags & ts.NodeFlags.Const) !== 0 &&
+        declaration.initializer
+          ? unwrapFrozen(declaration.initializer)
+          : null;
+      const empty =
+        shape &&
+        ts.isObjectLiteralExpression(shape) &&
+        shape.properties.length === 2 &&
+        ['attrs', 'channels'].every((key) =>
+          shape.properties.some(
+            (property) =>
+              ts.isPropertyAssignment(property) &&
+              literalKeyText(property.name) === key &&
+              isEmptyObjectInitializer(property.initializer),
+          ),
+        );
+      const onlyReturned = referencesIn(producer, value.text, declaration?.name).every((reference) => isReturnedBy(reference, fn));
+      if (!empty || !onlyReturned) refuse(`${tag}3`, `the return @ ${site} is not the empty projection`);
+      continue;
+    }
+    refuse(`${tag}3`, `the return @ ${site} is neither the projection literal nor the empty projection`);
+  }
+  return true;
+}
+
+// The one proof. Every clause is evaluated and every refusal collected, so a
+// drill reports the exact clause set its mutant breaks.
+function proveStyleHost(entry, channel) {
+  const refusals = [];
+  const refuse = (clause, message) => {
+    refusals.push(`${clause}: ${message}`);
+    return null;
+  };
+  const facts = { rootTags: [], partKeys: [], attrsKeys: [], channelKeyPrefix: null };
+  const done = () => ({ refusals: [...new Set(refusals)], facts });
+
+  const host = parseCoreFile(entry.module);
+  if (!host) {
+    refuse('H1', `the host module ${entry.module} is missing`);
+    return done();
+  }
+  const fn = hostComponentFunction(host, refuse);
+  if (!fn) return done();
+  const roots = hostRoots(fn, refuse);
+  // H1 is the precondition of every other clause: they are asked of a PROVEN
+  // root set, and an unproven one would only multiply its own refusal.
+  if (refusals.length > 0) return done();
+  facts.rootTags = [...new Set(roots.map((root) => root.tagName.text))];
+  const bindings = hostPropBindings(fn, refuse);
+  const consts = functionConsts(fn);
+  const partKeys = provePartSource(entry, host, refuse);
+  facts.partKeys = partKeys ? [...partKeys].sort() : [];
+  const keysForPart = partKeys ?? new Set(['data-part']);
+
+  const admittedSpreads = new Set();
+  const admittedReferences = new Set();
+  const policed = new Map([
+    [bindings.style, 'H2'],
+    [bindings.dataPart, 'H4-T1'],
+  ]);
+  const proven = new Map();
+  const proveTrailing = (spec, mode) => {
+    const key = `${mode}:${spec.producer.module}:${spec.producer.fn}`;
+    if (!proven.has(key)) proven.set(key, proveProducerMember(spec, mode, channel, keysForPart, refuse, facts));
+  };
+
+  for (const root of roots) {
+    const site = `root <${root.tagName.text}> @ line ${lineOf(root)}`;
+    const attributes = root.attributes.properties;
+
+    // H2 — the caller style, and nothing after it that may set the channel.
+    const styles = attributes.filter((attribute) => ts.isJsxAttribute(attribute) && attribute.name.getText() === 'style');
+    if (styles.length !== 1) refuse('H2', `${site} carries ${styles.length} style attributes, not 1`);
+    else {
+      const at = attributes.indexOf(styles[0]);
+      if (attributes.slice(at + 1).some((attribute) => ts.isJsxSpreadAttribute(attribute))) {
+        refuse('H2', `${site} spreads after its style attribute`);
+      }
+      const object = styles[0].initializer?.expression ? unwrapTransparent(styles[0].initializer.expression) : null;
+      if (!object || !ts.isObjectLiteralExpression(object)) refuse('H2', `${site} style is not an object literal`);
+      else {
+        const afterStyle = (members, where) => {
+          for (const member of members) {
+            if (ts.isSpreadAssignment(member)) {
+              const text = member.expression.getText();
+              const spec = entry.trailingSpreads?.[text];
+              if (!spec) {
+                refuse('H2', `'...${text}' after the caller style in ${where} is neither a literal key nor a proven trailing spread`);
+                continue;
+              }
+              admittedSpreads.add(member);
+              proveTrailing(spec, 'channels');
+              continue;
+            }
+            const key =
+              (ts.isPropertyAssignment(member) || ts.isShorthandPropertyAssignment(member)) && literalKeyText(member.name);
+            if (!key) refuse('H2', `a non-literal member after the caller style in ${where}`);
+            else if (key === channel) refuse('H2', `'${key}' after the caller style in ${where} sets the channel`);
+          }
+        };
+        const reaching = [];
+        object.properties.forEach((member, index) => {
+          if (!ts.isSpreadAssignment(member) || !ts.isIdentifier(member.expression)) return;
+          const name = member.expression.text;
+          if (name === bindings.style) {
+            reaching.push(index);
+            admittedReferences.add(member.expression);
+            return;
+          }
+          const chain = consts.get(name);
+          const inner = chain ? unwrapTransparent(chain.initializer) : null;
+          if (!inner || !ts.isObjectLiteralExpression(inner)) return;
+          const spreads = inner.properties.filter(
+            (property) => ts.isSpreadAssignment(property) && ts.isIdentifier(property.expression) && property.expression.text === bindings.style,
+          );
+          if (spreads.length !== 1) return;
+          reaching.push(index);
+          policed.set(name, 'H2');
+          admittedReferences.add(member.expression);
+          admittedReferences.add(spreads[0].expression);
+          afterStyle(inner.properties.slice(inner.properties.indexOf(spreads[0]) + 1), `'${name}'`);
+        });
+        if (reaching.length !== 1) refuse('H2', `${site} style reaches the caller style ${reaching.length} times, not once`);
+        else afterStyle(object.properties.slice(reaching[0] + 1), `${site} style`);
+      }
+    }
+
+    // H4-T1 — the caller part, and nothing after it that may set a part key.
+    const carriers = attributes.filter((attribute) => {
+      if (!ts.isJsxSpreadAttribute(attribute) || !ts.isIdentifier(attribute.expression)) return false;
+      const carrier = consts.get(attribute.expression.text);
+      const object = carrier ? unwrapTransparent(carrier.initializer) : null;
+      return (
+        object &&
+        ts.isObjectLiteralExpression(object) &&
+        object.properties.some(
+          (member) =>
+            ts.isSpreadAssignment(member) &&
+            ts.isCallExpression(member.expression) &&
+            ts.isIdentifier(member.expression.expression) &&
+            member.expression.expression.text === entry.partSource.fn,
+        )
+      );
+    });
+    if (carriers.length !== 1) {
+      refuse('H4-T1', `${site} receives the part through ${carriers.length} const spreads, not 1`);
+      continue;
+    }
+    const carrier = carriers[0];
+    policed.set(carrier.expression.text, 'H4-T1');
+    admittedReferences.add(carrier.expression);
+    const object = unwrapTransparent(consts.get(carrier.expression.text).initializer);
+    const parts = object.properties.filter(
+      (member) =>
+        ts.isSpreadAssignment(member) &&
+        ts.isCallExpression(member.expression) &&
+        ts.isIdentifier(member.expression.expression) &&
+        member.expression.expression.text === entry.partSource.fn,
+    );
+    if (parts.length !== 1) refuse('H4-T1', `'${carrier.expression.text}' spreads ${entry.partSource.fn} ${parts.length} times, not once`);
+    else {
+      const [first] = parts[0].expression.arguments;
+      const forwardsCaller =
+        first &&
+        ts.isBinaryExpression(first) &&
+        first.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken &&
+        ts.isIdentifier(first.left) &&
+        first.left.text === bindings.dataPart &&
+        ts.isStringLiteral(first.right);
+      if (!forwardsCaller) {
+        refuse('H4-T1', `${entry.partSource.fn}(…) in '${carrier.expression.text}' does not take the caller's data-part`);
+      } else admittedReferences.add(first.left);
+      for (const member of object.properties.slice(object.properties.indexOf(parts[0]) + 1)) {
+        if (ts.isSpreadAssignment(member)) {
+          const text = member.expression.getText();
+          const spec = entry.trailingPartSpreads?.[text];
+          if (!spec) {
+            refuse('H4-T1', `'...${text}' after the part in '${carrier.expression.text}' is neither a literal key nor a proven trailing spread`);
+            continue;
+          }
+          admittedSpreads.add(member);
+          proveTrailing(spec, 'attrs');
+          continue;
+        }
+        const key =
+          (ts.isPropertyAssignment(member) || ts.isShorthandPropertyAssignment(member)) && literalKeyText(member.name);
+        if (!key) refuse('H4-T1', `a non-literal member after the part in '${carrier.expression.text}'`);
+        else if (keysForPart.has(key)) refuse('H4-T1', `'${key}' after the part in '${carrier.expression.text}' sets a part key`);
+      }
+    }
+    for (const attribute of attributes.slice(attributes.indexOf(carrier) + 1)) {
+      if (ts.isJsxSpreadAttribute(attribute)) refuse('H4-T1', `${site} spreads after the part`);
+      else if (keysForPart.has(attribute.name.getText())) refuse('H4-T1', `${site} sets '${attribute.name.getText()}' after the part`);
+    }
+  }
+
+  // The fail-closed reference law: the caller bindings and the consts the proof
+  // walked are read ONLY where the proof read them.
+  for (const [name, clause] of policed) {
+    if (!name) continue;
+    for (const reference of referencesIn(fn, name, consts.get(name)?.name)) {
+      // The destructuring site that DECLARES a caller binding is not a read.
+      if (admittedReferences.has(reference) || bindings.declarations.has(reference)) continue;
+      refuse(clause, `'${name}' is referenced outside the proven chain @ line ${lineOf(reference)}`);
+    }
+  }
+
+  // T4 — how the host consumes each producer binding.
+  const trailing = [
+    ...Object.entries(entry.trailingSpreads ?? {}).map(([text, spec]) => [text, spec, 'H2-T4']),
+    ...Object.entries(entry.trailingPartSpreads ?? {}).map(([text, spec]) => [text, spec, 'H4-T4']),
+  ];
+  for (const [text, spec, clause] of trailing) {
+    const [binding] = text.split('.');
+    const declaration = consts.get(binding);
+    const call = declaration ? unwrapTransparent(declaration.initializer) : null;
+    if (!call || !ts.isCallExpression(call) || !ts.isIdentifier(call.expression) || call.expression.text !== spec.producer.fn) {
+      refuse(clause, `'${binding}' is not a const initialised by '${spec.producer.fn}'`);
+      continue;
+    }
+    const importError = importResolvesTo(host, entry.module, spec.producer.fn, spec.producer.module);
+    if (importError) refuse(clause, importError);
+    for (const reference of referencesIn(fn, binding, declaration.name)) {
+      const access = reference.parent;
+      const member = ts.isPropertyAccessExpression(access) && access.expression === reference ? access.name.text : null;
+      const admitted = member !== null && ts.isSpreadAssignment(access.parent) && admittedSpreads.has(access.parent);
+      if (admitted) continue;
+      const owns = member === null || text.endsWith(`.${member}`) || !trailing.some(([other]) => other.endsWith(`.${member}`));
+      if (owns) refuse(clause, `'${binding}' is used outside its admitted spreads @ line ${lineOf(reference)} (${ts.SyntaxKind[access.kind]})`);
+    }
+  }
+
+  facts.attrsKeys = [...new Set(facts.attrsKeys)].sort();
+  return done();
+}
+
+// A2 + the proof, for one owner element. Null when the owner is not a table host.
+function styleHostAdmission(owner, channel) {
+  const tag = owner.tagName;
+  if (!ts.isIdentifier(tag) || localPartWrapperOf(owner)) return null;
+  const entry = STYLE_HOSTS.find((host) => host.name === tag.text);
+  if (!entry) return null;
+
+  const sourceFile = owner.getSourceFile();
+  const imported = importOf(sourceFile, tag.text);
+  let a2 = null;
+  if (imported.error) a2 = imported.error;
+  else if (imported.kind !== 'default') a2 = `'${tag.text}' is not the host's default import`;
+  else {
+    const resolved = resolveCoreModule(coreRelOf(sourceFile.fileName), imported.specifier);
+    if (resolved.error) a2 = resolved.error;
+    else if (resolved.rel !== entry.module) a2 = `'${tag.text}' resolves to ${resolved.rel}, not ${entry.module}`;
+  }
+  const rebinds = localRebinds(sourceFile, tag.text);
+  if (!a2 && rebinds.length > 0) a2 = `'${tag.text}' is re-bound locally @ line ${lineOf(rebinds[0])}`;
+  if (a2) return { admitted: false, refusals: [`A2: ${a2}`], facts: null };
+
+  const proof = proveStyleHost(entry, channel);
+  return { admitted: proof.refusals.length === 0, refusals: proof.refusals, facts: proof.facts };
+}
+
 // Every branch below moves `node` strictly toward the file root — to a parent,
 // or to the function enclosing a parent — so the walk terminates at the
 // SourceFile even on input this gate has never seen.
@@ -909,7 +2079,7 @@ function classifyTag(opening) {
 // component that renders `null` — read as rendered while the tree mounts
 // nothing at all. A fragment and an element are NOT the same hop and are now
 // asked separately.
-function renderPathViolation(owner) {
+function renderPathViolation(owner, admission = null) {
   // The producer's OWN element is judged by the same classification, before the
   // walk starts. A style object handed to a component is a PROP, not a paint:
   // the component decides whether that object ever reaches a DOM node, or
@@ -921,9 +2091,15 @@ function renderPathViolation(owner) {
   // DOM node that applies its own `style`. `<input style={producer} />` paints.
   // The void verdict belongs to the crossing branch, where children are what is
   // at stake — not here, where they are not.
+  //
+  // The one exception is a STYLE_HOSTS admission, re-proven this run from the
+  // host's own source (A4): the owner is then modelled as its root intrinsic
+  // element(s). A table host that fails its proof keeps the opacity verdict and
+  // names the failed clauses, so a refusal is never silent.
   const ownerTag = classifyTag(owner);
-  if (ownerTag.kind === 'opaque') {
-    return `the producer is a style prop of '${ownerTag.label}', which may not apply it to DOM`;
+  if (ownerTag.kind === 'opaque' && admission?.admitted !== true) {
+    const refused = admission ? ` (STYLE_HOSTS refused: ${admission.refusals.join('; ')})` : '';
+    return `the producer is a style prop of '${ownerTag.label}', which may not apply it to DOM${refused}`;
   }
 
   let node = ts.isJsxOpeningElement(owner) ? owner.parent : owner;
@@ -1046,14 +2222,10 @@ function renderPathViolation(owner) {
 }
 
 function producerRenderPathViolations(text, path, channel, datum) {
-  const producers = collectChannelProducers(text, path, channel, datum);
-  if (producers.length !== 1) return [`the channel carries ${producers.length} producers, not 1`];
-
-  const owner = producers[0].owner;
-  if (!owner) return ['the producer style object never reaches a JSX element'];
-
-  const violation = renderPathViolation(owner);
-  return violation ? [violation] : [];
+  return judgeEachProducerOwner(text, path, channel, datum, (owner, admission) => {
+    const violation = renderPathViolation(owner, admission);
+    return violation ? [violation] : [];
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -1106,7 +2278,7 @@ function producerRenderPathViolations(text, path, channel, datum) {
 // `selectorAncestryDisagreements` stays and keeps its own separate job —
 // proving the two pinned constants agree — because a drifted pin and a drifted
 // DOM are different defects and must not collapse into one message.
-function physicalPathStep(opening) {
+function physicalPathStep(opening, admission = null) {
   // The opacity verdict is NOT restated here. It is read from `classifyTag`,
   // the same function the render-path walk consults, so an element this gate
   // calls opaque in one clause cannot be transparent in the other.
@@ -1118,14 +2290,19 @@ function physicalPathStep(opening) {
   // combinator may step over. What it cannot do is HOST the producer, and that
   // is a render-path fact, reported once, by the clause that owns it. A void
   // ancestor must never be described here as a component whose DOM is unknown.
+  //
+  // An ADMITTED style host (A4) is the one opaque element this clause may see
+  // through, and only when it is the producer's own element: it is modelled as
+  // its root intrinsic tag(s), carrying the caller's static `data-part`.
   const classified = classifyTag(opening);
-  if (classified.kind === 'opaque') return { part: null, opaque: true, label: classified.label };
+  const admitted = classified.kind === 'opaque' && admission?.admitted === true;
+  if (classified.kind === 'opaque' && !admitted) return { part: null, opaque: true, label: classified.label };
 
   // Everything below is a real DOM element authored in this file. Its part may
   // be unknown, but its existence and its arity are not: exactly one node is
   // emitted here. That is what a descendant combinator is allowed to step over,
   // and it is why only the opaque branch above is refused.
-  const tag = opening.tagName;
+  const tag = { text: admitted ? admission.facts.rootTags.join('|') : opening.tagName.text };
   const dataPart = literalDataPart(opening);
   if (dataPart.count > 1) {
     return { part: null, opaque: false, label: `<${tag.text}: ${dataPart.count} data-part attributes>` };
@@ -1137,7 +2314,7 @@ function physicalPathStep(opening) {
   return { part: null, opaque: false, label: `<${tag.text}: no data-part>` };
 }
 
-function ownerPhysicalJsxPath(owner) {
+function ownerPhysicalJsxPath(owner, admission = null) {
   const steps = [];
 
   for (let node = ts.isJsxOpeningElement(owner) ? owner.parent : owner; node; node = node.parent) {
@@ -1145,20 +2322,21 @@ function ownerPhysicalJsxPath(owner) {
     if (ts.isJsxSelfClosingElement(node)) opening = node;
     else if (ts.isJsxElement(node)) opening = node.openingElement;
     if (!opening) continue;
-    steps.push(physicalPathStep(opening));
+    // The admission rides with the OWNER's own node and nothing else (H5).
+    steps.push(physicalPathStep(opening, opening === owner ? admission : null));
   }
 
   return steps;
 }
 
 function producerSelectorPathViolations(text, path, channel, datum, selector) {
-  const producers = collectChannelProducers(text, path, channel, datum);
-  if (producers.length !== 1) return [`the channel carries ${producers.length} producers, not 1`];
+  return judgeEachProducerOwner(text, path, channel, datum, (owner, admission) =>
+    ownerSelectorPathViolations(owner, selector, admission),
+  );
+}
 
-  const owner = producers[0].owner;
-  if (!owner) return ['the producer style object never reaches a JSX element'];
-
-  const outward = ownerPhysicalJsxPath(owner).reverse();
+function ownerSelectorPathViolations(owner, selector, admission = null) {
+  const outward = ownerPhysicalJsxPath(owner, admission).reverse();
   const violations = [];
   let cursor = -1;
 
@@ -1320,7 +2498,9 @@ function collectDirectPaints(text, path, paintProps, datum) {
     return found;
   };
 
-  for (const object of styleObjectLiterals(sourceFile)) {
+  // The admitted hoisted-alias literals are style objects too: a paint written
+  // into the alias reaches the DOM exactly as one written in `style={…}` does.
+  for (const { object } of styleObjectRecords(sourceFile)) {
     for (const property of object.properties) {
       if (!ts.isPropertyAssignment(property)) continue;
       const key = propertyKey(property.name);
@@ -1496,6 +2676,29 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     1,
     'the Modern calendar must publish the event accent exactly once',
   );
+
+  // HOLD-2: since the hoisted alias, the one publication has TWO owners, so
+  // every owner-level message below is one finding per owner, prefixed by it.
+  // The owner lines are read ONCE from the gate's own owner record on the
+  // unmutated fixture — never typed — and the prefix is spelled HERE, by a
+  // test-side template, not by the gate's formatter: a drift in either reds.
+  const [calendarOwners, ...extraProducers] = channelProducerOwners(text, path, CALENDAR_CHANNEL, 'ev');
+  assert.equal(extraProducers.length, 0, 'the calendar owner record must describe exactly one producer');
+  assert.deepEqual(
+    calendarOwners.map(({ tag }) => tag),
+    ['EventChip', 'ModernButton'],
+    'the calendar producer owners must be exactly the read-only chip and the interactive chip, in source order',
+  );
+  const ownerLine = Object.fromEntries(calendarOwners.map(({ tag, line }) => [tag, line]));
+  assert.notEqual(ownerLine.EventChip, ownerLine.ModernButton, 'the two owners must sit on distinct lines');
+  const perOwner = (message) => [
+    `owner <EventChip> @ line ${ownerLine.EventChip}: ${message}`,
+    `owner <ModernButton> @ line ${ownerLine.ModernButton}: ${message}`,
+  ];
+  const assertPerOwner = (actual, message, why) => {
+    assert.equal(actual.length, 2, `${why} — exactly one finding per owner, never vacuous`);
+    assert.deepEqual(actual, perOwner(message), why);
+  };
   assert.ok(
     CALENDAR_ACCENT_SELECTOR.endsWith(`[data-part='${CALENDAR_ACCENT_PART}']`),
     'the pinned part must be the tail of the pinned sink selector',
@@ -1892,9 +3095,9 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     [],
     'the wrapped chip is still returned into the rendered tree — the render path stays green',
   );
-  assert.deepEqual(
+  assertPerOwner(
     producerSelectorPathViolations(wrappedGrid, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
-    ["selector spells 'root' > 'grid' but the live DOM inserts '<div: no data-part>'"],
+    "selector spells 'root' > 'grid' but the live DOM inserts '<div: no data-part>'",
     'ONLY the live selector-path clause may reject the anonymous wrapper, and it must name it',
   );
 
@@ -2020,17 +3223,15 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     [],
     'a component claims no part, so the named ancestry is byte-identical — the v4 clause stays green',
   );
-  assert.deepEqual(
+  assertPerOwner(
     producerRenderPathViolations(opaqueHop, path, CALENDAR_CHANNEL, 'ev'),
-    ["render path crosses '<DropChildren: component, DOM unknown>', which may not render its children"],
+    "render path crosses '<DropChildren: component, DOM unknown>', which may not render its children",
     'the day cell is inside a component that renders null — the render path must reject it too',
   );
-  assert.deepEqual(
+  assertPerOwner(
     producerSelectorPathViolations(opaqueHop, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
-    [
-      "selector hops 'grid' to 'day-cell' across '<DropChildren: component, DOM unknown>'," +
-        ' whose emitted DOM this file cannot see',
-    ],
+    "selector hops 'grid' to 'day-cell' across '<DropChildren: component, DOM unknown>'," +
+      ' whose emitted DOM this file cannot see',
     'the live selector-path clause keeps its OWN causality for an opaque DESCENDANT hop',
   );
 
@@ -2096,9 +3297,9 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     [],
     'the component sits ABOVE the selector head, which that clause has never examined — it stays green',
   );
-  assert.deepEqual(
+  assertPerOwner(
     producerRenderPathViolations(rootOpaque, path, CALENDAR_CHANNEL, 'ev'),
-    ["render path crosses '<DropChildren: component, DOM unknown>', which may not render its children"],
+    "render path crosses '<DropChildren: component, DOM unknown>', which may not render its children",
     'ONLY the render-path clause may reject the root-opaque component, and it must name it',
   );
 
@@ -2235,12 +3436,10 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     [],
     'the physical clause keeps the void element as KNOWN DOM above the selector head — never as a component whose DOM is unknown',
   );
-  assert.deepEqual(
+  assertPerOwner(
     producerRenderPathViolations(rootVoid, path, CALENDAR_CHANNEL, 'ev'),
-    [
-      "render path crosses '<input: void element, renders no children>'," +
-        ' which the TSX parser accepts but no DOM ever mounts',
-    ],
+    "render path crosses '<input: void element, renders no children>'," +
+      ' which the TSX parser accepts but no DOM ever mounts',
     'ONLY the render-path clause may reject the void wrapper, and it must say that the parse proves nothing',
   );
 
@@ -2268,17 +3467,15 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     [],
     'the in-chain void mutant must be real TSX, not a parse failure',
   );
-  assert.deepEqual(
+  assertPerOwner(
     producerSelectorPathViolations(wrappedGridVoid, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
-    ["selector spells 'root' > 'grid' but the live DOM inserts '<input: no data-part>'"],
+    "selector spells 'root' > 'grid' but the live DOM inserts '<input: no data-part>'",
     'the physical clause names a void element by its OWN tag as inserted DOM — never as a component whose DOM it cannot see',
   );
-  assert.deepEqual(
+  assertPerOwner(
     producerRenderPathViolations(wrappedGridVoid, path, CALENDAR_CHANNEL, 'ev'),
-    [
-      "render path crosses '<input: void element, renders no children>'," +
-        ' which the TSX parser accepts but no DOM ever mounts',
-    ],
+    "render path crosses '<input: void element, renders no children>'," +
+      ' which the TSX parser accepts but no DOM ever mounts',
     'the render path reports the one fact that separates this from the Class F div — and it is the only clause that may',
   );
 
@@ -2305,6 +3502,452 @@ test('visualization skin Calendar Modern crosses the event accent only through a
       `the sink selector is ${CALENDAR_ACCENT_SELECTOR}, .ds-leak`,
     ],
     'the identity check must reject the unscoped alternative on both counts',
+  );
+});
+
+// The live hoisted alias, located as an AST fact: exactly one alias in the file
+// carries the channel, or the drills below no longer describe the source.
+function liveChannelAlias(text, path, channel, datum) {
+  const carrying = hoistedStyleAliases(parseTsx(text, path)).filter((alias) =>
+    alias.literals.some((object) => object.properties.some((property) => isChannelProducer(property, channel, datum))),
+  );
+  assert.equal(carrying.length, 1, 'exactly one hoisted alias must carry the channel');
+  return carrying[0];
+}
+
+// The JSX attribute `name={<alias>}` on the owner with the given tag.
+function aliasAttributeOn(alias, tag, name) {
+  const owner = alias.owners.find((element) => element.tagName.getText() === tag);
+  assert.ok(owner, `the alias must have a <${tag}> owner`);
+  const found = owner.attributes.properties.filter(
+    (attribute) => ts.isJsxAttribute(attribute) && ts.isIdentifier(attribute.name) && attribute.name.text === name,
+  );
+  assert.equal(found.length, 1, `<${tag}> must carry exactly one ${name} attribute`);
+  return found[0];
+}
+
+function spliceNode(text, node, replacement) {
+  return `${text.slice(0, node.getStart())}${replacement}${text.slice(node.getEnd())}`;
+}
+
+test('visualization skin Calendar Modern follows the hoisted conditional accent alias to each exclusive owner', () => {
+  const path = pathFor(FILES.calendarModern);
+  const text = source(FILES.calendarModern);
+  const alias = liveChannelAlias(text, path, CALENDAR_CHANNEL, 'ev');
+
+  // The live shape, measured: one literal, two branch owners, both the sink's part.
+  assert.deepEqual(alias.refusals, [], 'the live alias must be admitted');
+  assert.equal(
+    countChannelProducers(text, path, CALENDAR_CHANNEL, 'ev'),
+    1,
+    'the hoisted alias is ONE publication, however many branches receive it',
+  );
+  assert.deepEqual(
+    channelProducerOwners(text, path, CALENDAR_CHANNEL, 'ev').map((owners) =>
+      owners.map(({ tag, part }) => ({ tag, part })),
+    ),
+    [
+      [
+        { tag: 'EventChip', part: CALENDAR_ACCENT_PART },
+        { tag: 'ModernButton', part: CALENDAR_ACCENT_PART },
+      ],
+    ],
+    'the owners are the read-only chip and the interactive chip, each stamping the sink part',
+  );
+  assert.deepEqual(
+    producerPlacementViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    [],
+    'BOTH owners must carry the part the sink selects',
+  );
+  assert.deepEqual(
+    producerAncestryViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    [],
+    'BOTH owners must sit inside the live grid',
+  );
+  // The read-only branch is proven end to end. The interactive branch is judged
+  // by the same clauses and reported under its own owner prefix — whatever those
+  // clauses say of it is asserted by the calendar channel test above, never here.
+  const readOnlyBranch = (violations) => violations.filter((violation) => violation.startsWith('owner <EventChip>'));
+  assert.deepEqual(
+    readOnlyBranch(producerRenderPathViolations(text, path, CALENDAR_CHANNEL, 'ev')),
+    [],
+    'the read-only chip must be RETURNED into the rendered tree',
+  );
+  assert.deepEqual(
+    readOnlyBranch(
+      producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
+    ),
+    [],
+    'the live DOM path down to the read-only chip must satisfy the sink selector hop for hop',
+  );
+
+  // M1 — BOTH arms literal: two publications, never one.
+  const undefinedArm = [
+    unwrapTransparent(alias.declaration.initializer).whenTrue,
+    unwrapTransparent(alias.declaration.initializer).whenFalse,
+  ].filter((arm) => isUndefinedIdentifier(unwrapTransparent(arm)));
+  assert.equal(undefinedArm.length, 1, 'the live alias must carry exactly one undefined arm');
+  const bothArms = spliceNode(text, undefinedArm[0], `(${CALENDAR_PRODUCER_LITERAL})`);
+  assert.deepEqual(tsxSyntaxDiagnostics(bothArms, path), [], 'the both-arms mutant must be real TSX');
+  assert.equal(
+    countChannelProducers(bothArms, path, CALENDAR_CHANNEL, 'ev'),
+    2,
+    'a conditional whose BOTH arms carry the channel is two producers',
+  );
+  assert.deepEqual(
+    channelAliasRefusals(bothArms, path, CALENDAR_CHANNEL, 'ev'),
+    [],
+    'the both-arms alias is still admitted — it is the COUNT that rejects it',
+  );
+  assert.deepEqual(
+    producerPlacementViolations(bothArms, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    ['the channel carries 2 producers, not 1'],
+    'the owner clauses must refuse two producers before judging any owner',
+  );
+
+  // M2 — the alias ALSO used outside style: the interactive chip's `style` becomes
+  // a `title`. The read-only spread is still legal, and the whole alias is refused.
+  const outsideStyle = spliceNode(text, aliasAttributeOn(alias, 'ModernButton', 'style').name, 'title');
+  assert.deepEqual(tsxSyntaxDiagnostics(outsideStyle, path), [], 'the outside-style mutant must be real TSX');
+  const outsideRefusals = channelAliasRefusals(outsideStyle, path, CALENDAR_CHANNEL, 'ev');
+  assert.equal(outsideRefusals.length, 1, 'exactly one refusal for one escaping reference');
+  assert.match(
+    outsideRefusals[0],
+    /^the alias 'accent' is used outside a style position \(JsxExpression @ line \d+\)$/,
+    'the refusal must name the alias and the escaping position',
+  );
+  assert.equal(
+    countChannelProducers(outsideStyle, path, CALENDAR_CHANNEL, 'ev'),
+    0,
+    'an alias that escapes a style position is not a producer',
+  );
+
+  // M3 — a SECOND const alias: one binding hop is followed, never two.
+  const statement = alias.declaration.parent.parent;
+  const rebound = spliceNode(
+    spliceNode(text, aliasAttributeOn(alias, 'ModernButton', 'style').initializer, '{chipAccent}'),
+    statement,
+    `${statement.getText()}\n                          const chipAccent = accent;`,
+  );
+  assert.deepEqual(tsxSyntaxDiagnostics(rebound, path), [], 'the second-alias mutant must be real TSX');
+  const reboundRefusals = channelAliasRefusals(rebound, path, CALENDAR_CHANNEL, 'ev');
+  assert.equal(reboundRefusals.length, 1, 'exactly one refusal for one re-binding');
+  assert.match(
+    reboundRefusals[0],
+    /^the alias 'accent' is re-bound by const 'chipAccent' @ line \d+; only one const hop is followed$/,
+    'the refusal must name the second binding',
+  );
+  assert.equal(
+    countChannelProducers(rebound, path, CALENDAR_CHANNEL, 'ev'),
+    0,
+    'a second const alias is refused, so the publication reads as zero',
+  );
+
+  // M4 — a branch owner WITHOUT the sink part: the interactive chip loses its
+  // `data-part`. The count and the admission do not move; placement names the
+  // owner by its branch.
+  const unlabelled = spliceNode(text, aliasAttributeOn(alias, 'ModernButton', 'data-part'), '');
+  assert.deepEqual(tsxSyntaxDiagnostics(unlabelled, path), [], 'the unlabelled-owner mutant must be real TSX');
+  assert.equal(
+    countChannelProducers(unlabelled, path, CALENDAR_CHANNEL, 'ev'),
+    1,
+    'dropping a branch owner part leaves the publication count at one',
+  );
+  assert.deepEqual(channelAliasRefusals(unlabelled, path, CALENDAR_CHANNEL, 'ev'), [], 'and the alias admitted');
+  const unlabelledPlacement = producerPlacementViolations(
+    unlabelled,
+    path,
+    CALENDAR_CHANNEL,
+    'ev',
+    CALENDAR_ACCENT_PART,
+  );
+  assert.equal(unlabelledPlacement.length, 1, 'exactly one owner fails placement');
+  assert.match(
+    unlabelledPlacement[0],
+    /^owner <ModernButton> @ line \d+: the producer element carries 0 data-part attributes, not 1$/,
+    'placement must name the unlabelled branch owner, not the other one',
+  );
+});
+
+// The STYLE_HOSTS drills build their mutants IN MEMORY: each edit is an exact,
+// unique anchor in the real file (the uniqueness assertion is the drift alarm),
+// handed to the proof through the injected reader. No file on disk is touched.
+const STYLE_HOST_FILES = {
+  host: 'src/components/primitives/inputs/button/engines/modern/index.tsx',
+  producer: 'src/infrastructure/runtime/responsive/runtime/style-properties/index.ts',
+  keys: 'src/foundation/contracts/kernel/responsive/channels/index.ts',
+  anatomy: 'src/foundation/behavior/kernel/anatomy/index.ts',
+  barrel: 'src/foundation/behavior/index.ts',
+};
+
+function coreEdits(file, edits) {
+  let text = readCoreFile(STYLE_HOST_FILES[file]);
+  for (const [anchor, replacement] of edits) {
+    assert.equal(text.split(anchor).length - 1, 1, `the drill anchor drifted in ${file}: ${anchor}`);
+    text = text.replace(anchor, () => replacement);
+  }
+  return { [STYLE_HOST_FILES[file]]: text };
+}
+
+function refusedClauses(refusals) {
+  return [...new Set(refusals.map((refusal) => refusal.slice(0, refusal.indexOf(':'))))].sort();
+}
+
+test('visualization skin Calendar Modern admits the ModernButton style host by proof only (STYLE_HOSTS drills)', () => {
+  const path = pathFor(FILES.calendarModern);
+  const text = source(FILES.calendarModern);
+  const [host] = STYLE_HOSTS;
+  assert.equal(STYLE_HOSTS.length, 1, 'the style-host table is closed at one reviewed entry');
+
+  // G0 / D1 — the real files: admitted, with the proven facts named.
+  const head = proveStyleHost(host, CALENDAR_CHANNEL);
+  assert.deepEqual(head.refusals, [], 'the HEAD host must be admitted by proof');
+  assert.deepEqual(
+    head.facts,
+    {
+      rootTags: ['a', 'button'],
+      partKeys: ['data-part', 'data-state'],
+      attrsKeys: ['data-ds-responsive', 'data-ds-responsive-hard'],
+      channelKeyPrefix: '--_ds-rsp-',
+    },
+    'G0 must report the proven roots, part keys, attribute keys and channel key prefix',
+  );
+  assert.deepEqual(
+    producerRenderPathViolations(text, path, CALENDAR_CHANNEL, 'ev'),
+    [],
+    'D1: with the host admitted, both chips are rendered owners',
+  );
+  assert.deepEqual(
+    producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
+    [],
+    'D1: with the host admitted, both chips satisfy the sink selector hop for hop',
+  );
+
+  const P = "    ...partAttributes(dataPart ?? 'trigger', interaction),\n";
+  const ATTRS_WRITE = "  if (tokens.length > 0) attrs[RESPONSIVE_CHANNEL_ATTRIBUTE] = tokens.join(' ');\n";
+  const CHANNELS_WRITE = '      channels[responsiveChannelVariable(channel, breakpoint)] = value;\n';
+  const PROJECTION = '  return { attrs, channels: channels as CSSProperties };';
+  const drills = [
+    // Attribute side (H4).
+    ['A-1', coreEdits('producer', [[ATTRS_WRITE, `${ATTRS_WRITE}  attrs['data-part'] = 'x';\n`]]), ['H4-T2']],
+    [
+      'A-2',
+      coreEdits('keys', [
+        ["export const RESPONSIVE_CHANNEL_ATTRIBUTE = 'data-ds-responsive';", "export const RESPONSIVE_CHANNEL_ATTRIBUTE = 'data-part';"],
+      ]),
+      ['H4-T2'],
+    ],
+    ['A-3', coreEdits('producer', [[ATTRS_WRITE, `${ATTRS_WRITE}  attrs['data-state'] = 'x';\n`]]), ['H4-T2']],
+    [
+      'A-4',
+      coreEdits('producer', [[ATTRS_WRITE, `${ATTRS_WRITE}  const someLocal = 'k';\n  attrs[someLocal] = 'x';\n`]]),
+      ['H4-T2'],
+    ],
+    ['A-5 assign', coreEdits('producer', [[ATTRS_WRITE, `${ATTRS_WRITE}  Object.assign(attrs, extra);\n`]]), ['H4-T2']],
+    ['A-5 alias', coreEdits('producer', [[ATTRS_WRITE, `${ATTRS_WRITE}  const a2 = attrs;\n`]]), ['H4-T2']],
+    [
+      'A-6',
+      coreEdits('producer', [[PROJECTION, '  return { attrs: { ...attrs, ...more }, channels: channels as CSSProperties };']]),
+      ['H4-T2', 'H4-T3'],
+    ],
+    [
+      'A-7',
+      coreEdits('producer', [
+        ['  attrs: Object.freeze({}) as Record<string, string>,\n', "  attrs: Object.freeze({ 'data-part': 'x' }) as Record<string, string>,\n"],
+      ]),
+      ['H2-T3', 'H4-T3'],
+    ],
+    ['A-8', coreEdits('host', [[P, `${P}    'data-part': 'x',\n`]]), ['H4-T1']],
+    ['A-9', coreEdits('host', [[P, `${P}    ...extraAttrs,\n`]]), ['H4-T1']],
+    [
+      'A-10 write',
+      coreEdits('host', [
+        [
+          '  const responsive = generateResponsiveCSS(responsiveEntries);\n',
+          "  const responsive = generateResponsiveCSS(responsiveEntries);\n  responsive.attrs['data-part'] = 'x';\n",
+        ],
+      ]),
+      ['H4-T4'],
+    ],
+    [
+      'A-10 escape',
+      coreEdits('host', [
+        [
+          '  const responsive = generateResponsiveCSS(responsiveEntries);\n',
+          '  const responsive = generateResponsiveCSS(responsiveEntries);\n  track(responsive);\n',
+        ],
+      ]),
+      ['H2-T4', 'H4-T4'],
+    ],
+    [
+      'A-11',
+      coreEdits('host', [
+        [
+          'import {\n  generateResponsiveCSS,\n',
+          "import { generateResponsiveCSS } from '@/foundation/contracts/kernel/responsive/channels';\nimport {\n",
+        ],
+      ]),
+      ['H2-T4', 'H4-T4'],
+    ],
+    ['A-12', coreEdits('anatomy', [["    ? { 'data-part': part }\n", "    ? { 'data-part': 'trigger' }\n"]]), ['H4-T0']],
+    [
+      'A-13 export *',
+      coreEdits('barrel', [
+        ["export { serializeState, partAttributes } from './kernel/anatomy';", "export * from './kernel/anatomy';"],
+      ]),
+      ['H4-T0'],
+    ],
+    [
+      'A-13 rename',
+      coreEdits('barrel', [
+        [
+          "export { serializeState, partAttributes } from './kernel/anatomy';",
+          "export { serializeState, anatomyPart as partAttributes } from './kernel/anatomy';",
+        ],
+      ]),
+      ['H4-T0'],
+    ],
+    ['A-14', coreEdits('host', [['        aria-busy={busy}\n', '        aria-busy={busy}\n        data-state="x"\n']]), ['H4-T1']],
+    // Non-over-refusal: both ADMIT.
+    [
+      'A-15',
+      coreEdits('host', [
+        ["    'data-variant': effectiveVariant,\n", ''],
+        [P, `${P}    'data-variant': effectiveVariant,\n`],
+      ]),
+      [],
+    ],
+    [
+      'A-16',
+      {
+        ...coreEdits('keys', [
+          [
+            "export const RESPONSIVE_CHANNEL_ATTRIBUTE = 'data-ds-responsive';\n",
+            "export const RESPONSIVE_CHANNEL_ATTRIBUTE = 'data-ds-responsive';\nexport const RESPONSIVE_CHANNEL_EXTRA_ATTRIBUTE = 'data-ds-responsive-x';\n",
+          ],
+        ]),
+        ...coreEdits('producer', [
+          [
+            '  RESPONSIVE_CHANNEL_PRIORITY_ATTRIBUTE,\n  isPriorityResponsiveChannel,\n',
+            '  RESPONSIVE_CHANNEL_PRIORITY_ATTRIBUTE,\n  RESPONSIVE_CHANNEL_EXTRA_ATTRIBUTE,\n  isPriorityResponsiveChannel,\n',
+          ],
+          [ATTRS_WRITE, `${ATTRS_WRITE}  attrs[RESPONSIVE_CHANNEL_EXTRA_ATTRIBUTE] = 'x';\n`],
+        ]),
+      },
+      [],
+    ],
+    // Style side (H2).
+    [
+      'S-1',
+      coreEdits('producer', [[CHANNELS_WRITE, `${CHANNELS_WRITE}      channels['${CALENDAR_CHANNEL}'] = value;\n`]]),
+      ["H2-T2'"],
+    ],
+    ['S-2', coreEdits('producer', [[CHANNELS_WRITE, `${CHANNELS_WRITE}      channels[otherFn(channel)] = value;\n`]]), ["H2-T2'"]],
+    ['S-3', coreEdits('keys', [['return `--_ds-rsp-${', 'return `--ds-calendar-${']]), ["H2-T2'"]],
+    [
+      'S-4',
+      coreEdits('producer', [
+        [
+          '  channels: Object.freeze({}) as CSSProperties,\n',
+          `  channels: Object.freeze({ '${CALENDAR_CHANNEL}': 'x' }) as CSSProperties,\n`,
+        ],
+      ]),
+      ['H2-T3', 'H4-T3'],
+    ],
+    ['S-5', coreEdits('producer', [[PROJECTION, '  return { attrs, channels: { ...channels, ...x } };']]), ["H2-T2'", 'H2-T3']],
+    // HOLD-1 host drills.
+    ['D2', coreEdits('host', [['  if (href && !isInert) {\n', "  if (pending === 'x') return <span />;\n  if (href && !isInert) {\n"]]), ['H2', 'H4-T1']],
+    ['D3', coreEdits('host', [['    ...style,\n  } as React.CSSProperties;', '    ...style,\n    ...nativeButtonProps,\n  } as React.CSSProperties;']]), ['H2']],
+    ['D5', coreEdits('host', [[P, "    ...partAttributes('trigger', interaction),\n"]]), ['H4-T1']],
+    ['D6', coreEdits('host', [['      </button>\n    </>', '      </button>\n      <span />\n    </>']]), ['H1']],
+  ];
+
+  for (const [name, overrides, expected] of drills) {
+    const proof = withCoreFiles(overrides, () => proveStyleHost(host, CALENDAR_CHANNEL));
+    assert.deepEqual(
+      refusedClauses(proof.refusals),
+      expected,
+      `${name} must ${expected.length === 0 ? 'be ADMITTED' : `refuse by exactly ${expected.join(', ')}`}: ${proof.refusals.join(' | ')}`,
+    );
+    const rendered = withCoreFiles(overrides, () => producerRenderPathViolations(text, path, CALENDAR_CHANNEL, 'ev'));
+    if (expected.length === 0) {
+      assert.deepEqual(rendered, [], `${name}: an admitted host leaves both chips rendered`);
+    } else {
+      assert.equal(rendered.length, 1, `${name}: exactly the interactive chip falls back to opacity`);
+      assert.ok(
+        rendered[0].startsWith('owner <ModernButton> @ line ') &&
+          rendered[0].includes("the producer is a style prop of '<ModernButton: component, DOM unknown>'") &&
+          expected.every((clause) => rendered[0].includes(`${clause}:`)),
+        `${name}: the refused host keeps the opacity red and names its clauses: ${rendered[0]}`,
+      );
+    }
+  }
+  assert.ok(
+    withCoreFiles(drills.find(([name]) => name === 'A-16')[1], () => proveStyleHost(host, CALENDAR_CHANNEL)).facts.attrsKeys.includes(
+      'data-ds-responsive-x',
+    ),
+    'A-16: a new non-part attribute const is admitted AND reported',
+  );
+
+  // The interactive chip, located on the live fixture.
+  const alias = liveChannelAlias(text, path, CALENDAR_CHANNEL, 'ev');
+  const button = alias.owners.find((owner) => owner.tagName.getText() === 'ModernButton');
+  const buttonElement = button.parent;
+  assert.ok(ts.isJsxElement(buttonElement), 'the interactive chip must have a closing tag');
+
+  // D7 — a component NOT in the table keeps the opacity red as it always had.
+  const other = spliceNode(spliceNode(text, buttonElement.closingElement.tagName, 'OtherButton'), button.tagName, 'OtherButton');
+  const otherRender = producerRenderPathViolations(other, path, CALENDAR_CHANNEL, 'ev');
+  assert.equal(otherRender.length, 1, 'D7: only the unlisted owner is refused');
+  assert.match(
+    otherRender[0],
+    /^owner <OtherButton> @ line \d+: the producer is a style prop of '<OtherButton: component, DOM unknown>', which may not apply it to DOM$/,
+    'D7: an unlisted component is opaque, with no STYLE_HOSTS clause in play',
+  );
+
+  // D8 — the right name from the wrong module, or re-bound locally: A2 refuses.
+  const BUTTON_IMPORT = "import ModernButton from '../../../../../primitives/inputs/button/engines/modern';";
+  assert.equal(text.split(BUTTON_IMPORT).length - 1, 1, 'the live host import drifted');
+  for (const [variant, mutant, reason] of [
+    [
+      'another path',
+      text.replace(BUTTON_IMPORT, () => BUTTON_IMPORT.replace('/engines/modern', '/engines/rustic')),
+      /A2: 'ModernButton' resolves to src\/components\/primitives\/inputs\/button\/engines\/rustic\/index\.tsx, not /,
+    ],
+    ['a local shadow', `${text}\nfunction shadow() {\n  const ModernButton = null;\n  return ModernButton;\n}\n`, /A2: 'ModernButton' is re-bound locally @ line \d+/],
+  ]) {
+    const rendered = producerRenderPathViolations(mutant, path, CALENDAR_CHANNEL, 'ev');
+    assert.equal(rendered.length, 1, `D8 (${variant}): only the interactive chip is refused`);
+    assert.match(rendered[0], reason, `D8 (${variant}): A2 must name the refusal`);
+  }
+
+  // D9 — a component that renders null above the day cell is NOT masked: both
+  // chips are still refused by the render path, each by the crossing.
+  const opaqueDayCell = `${withWrapperElement(text, path, 'day-cell', 'DropChildren')}\nfunction DropChildren({ children }: { children?: React.ReactNode }) {\n  return null;\n}\n`;
+  const opaqueRender = producerRenderPathViolations(opaqueDayCell, path, CALENDAR_CHANNEL, 'ev');
+  assert.equal(opaqueRender.length, 2, 'D9: both owners are refused');
+  assert.ok(
+    opaqueRender.every((violation) => violation.endsWith("render path crosses '<DropChildren: component, DOM unknown>', which may not render its children")),
+    'D9: the admission never masks an opaque crossing',
+  );
+
+  // D10 — ModernButton met as an INTERMEDIATE hop stays opaque (H5).
+  const buttonHop = withWrapperElement(text, path, 'day-cell', 'ModernButton');
+  const hopRender = producerRenderPathViolations(buttonHop, path, CALENDAR_CHANNEL, 'ev');
+  const hopSelector = producerSelectorPathViolations(buttonHop, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR);
+  assert.equal(hopRender.length, 2, 'D10: both owners are refused at the crossing');
+  assert.ok(
+    hopRender.every((violation) => violation.endsWith("render path crosses '<ModernButton: component, DOM unknown>', which may not render its children")),
+    'D10: the admitted host is opaque as a hop',
+  );
+  assert.equal(hopSelector.length, 2, 'D10: the selector path refuses the hop for both owners');
+  assert.ok(
+    hopSelector.every((violation) =>
+      violation.endsWith(
+        "selector hops 'grid' to 'day-cell' across '<ModernButton: component, DOM unknown>', whose emitted DOM this file cannot see",
+      ),
+    ),
+    'D10: the selector path names the opaque host hop',
   );
 });
 
