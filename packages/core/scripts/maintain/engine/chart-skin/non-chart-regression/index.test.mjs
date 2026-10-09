@@ -907,11 +907,106 @@ function localPartWrappers(sourceFile) {
     collectReturns(body);
     if (roots.length === 0 || roots.some((root) => root !== stamped)) continue;
 
-    wrappers.set(name, { part: stamps[0].part, tag: tag.text });
+    wrappers.set(name, { part: stamps[0].part, tag: tag.text, classNameForwarded: wrapperForwardsClassName(body, opening) });
   }
 
   LOCAL_PART_WRAPPERS.set(sourceFile, wrappers);
   return wrappers;
+}
+
+// EVI-02 S2: does a local part wrapper hand the caller's `className` to the one
+// element it stamps? Proven in THIS file: the render function's props pattern
+// leaves `className` in its rest binding (never destructures it out), the
+// stamped element spreads that rest binding, writes no `className` of its own,
+// and every spread AFTER the rest spread is either the wrapper's single
+// `partAttributes(…)` stamp or `<x>.handlers` of a `useInteractionState()`
+// const. Stated residual, the same trust this gate has extended to the wrapper's
+// `style` since S1: the keys of `useInteractionState().handlers` are not proven
+// here. Anything else records no forwarding, and a class hop then fails closed.
+function wrapperForwardsClassName(body, opening) {
+  let fn = body;
+  if (ts.isCallExpression(fn)) fn = fn.arguments.length > 0 ? unwrapTransparent(fn.arguments[0]) : null;
+  if (!fn || !(ts.isArrowFunction(fn) || ts.isFunctionExpression(fn) || ts.isFunctionDeclaration(fn))) return false;
+  const [props] = fn.parameters;
+  if (!props || !ts.isObjectBindingPattern(props.name)) return false;
+  const rest = props.name.elements.find((element) => element.dotDotDotToken && ts.isIdentifier(element.name));
+  const destructured = props.name.elements.some(
+    (element) => !element.dotDotDotToken && literalKeyText(element.propertyName ?? element.name) === 'className',
+  );
+  if (!rest || destructured) return false;
+
+  const attributes = opening.attributes.properties;
+  const restSpread = attributes.findIndex(
+    (attribute) =>
+      ts.isJsxSpreadAttribute(attribute) &&
+      ts.isIdentifier(attribute.expression) &&
+      attribute.expression.text === rest.name.text,
+  );
+  if (restSpread === -1) return false;
+  if (attributes.some((attribute) => ts.isJsxAttribute(attribute) && attribute.name.getText() === 'className')) {
+    return false;
+  }
+  const interactionConsts = new Set();
+  const collectConsts = (node) => {
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      node.initializer &&
+      ts.isCallExpression(node.initializer) &&
+      ts.isIdentifier(node.initializer.expression) &&
+      node.initializer.expression.text === 'useInteractionState'
+    ) {
+      interactionConsts.add(node.name.text);
+    }
+    ts.forEachChild(node, collectConsts);
+  };
+  collectConsts(fn);
+  return attributes.slice(restSpread + 1).every((attribute) => {
+    if (!ts.isJsxSpreadAttribute(attribute)) return true;
+    const spread = attribute.expression;
+    if (ts.isCallExpression(spread) && ts.isIdentifier(spread.expression) && spread.expression.text === 'partAttributes') {
+      return true;
+    }
+    return (
+      ts.isPropertyAccessExpression(spread) &&
+      spread.name.text === 'handlers' &&
+      ts.isIdentifier(spread.expression) &&
+      interactionConsts.has(spread.expression.text)
+    );
+  });
+}
+
+// A spread that provably sets none of `key`: object literals only (through
+// parentheses, assertions and conditional arms), with literal keys, none `key`.
+function spreadCannotSet(expression, key) {
+  const node = unwrapTransparent(expression);
+  if (ts.isConditionalExpression(node)) {
+    return spreadCannotSet(node.whenTrue, key) && spreadCannotSet(node.whenFalse, key);
+  }
+  if (!ts.isObjectLiteralExpression(node)) return false;
+  return node.properties.every((member) => {
+    if (!(ts.isPropertyAssignment(member) || ts.isShorthandPropertyAssignment(member))) return false;
+    const name = literalKeyText(member.name);
+    return name !== null && name !== key;
+  });
+}
+
+// The element's STATIC className at the call site: exactly one `className`
+// attribute whose value is a string literal, and no later spread that could
+// replace it — unless that spread provably sets no `className`. Null otherwise.
+function staticClassNameLiteral(opening) {
+  const attributes = opening.attributes.properties;
+  const named = attributes.filter((attribute) => ts.isJsxAttribute(attribute) && attribute.name.getText() === 'className');
+  if (named.length !== 1) return null;
+  const later = attributes.slice(attributes.indexOf(named[0]) + 1);
+  if (later.some((attribute) => ts.isJsxSpreadAttribute(attribute) && !spreadCannotSet(attribute.expression, 'className'))) {
+    return null;
+  }
+  const value = named[0].initializer;
+  if (value && ts.isStringLiteral(value)) return value.text;
+  const inner = value && ts.isJsxExpression(value) ? value.expression : null;
+  if (inner && (ts.isStringLiteral(inner) || ts.isNoSubstitutionTemplateLiteral(inner))) return inner.text;
+  return null;
 }
 
 function localPartWrapperOf(element) {
@@ -1253,6 +1348,8 @@ const STYLE_HOSTS = [
     name: 'ModernButton',
     module: 'src/components/primitives/inputs/button/engines/modern/index.tsx',
     partSource: { fn: 'partAttributes', module: 'src/foundation/behavior/kernel/anatomy/index.ts' },
+    // S2 (H6): the recipe whose `root` slot carries the caller className.
+    classSource: { fn: 'defineRecipe', module: 'src/infrastructure/runtime/foundation/recipes/engine/index.ts', slot: 'root' },
     trailingSpreads: {
       'responsive.channels': {
         producer: {
@@ -1562,7 +1659,7 @@ function hostPropBindings(fn, refuse) {
   const [props] = fn.parameters;
   if (!props || !ts.isIdentifier(props.name)) {
     refuse('H3', 'the render function has no `props` parameter');
-    return { style: null, dataPart: null, declarations: new Set() };
+    return { style: null, dataPart: null, className: null, classNameDeclaration: null, declarations: new Set() };
   }
   const patterns = fn.body.statements.flatMap((statement) =>
     ts.isVariableStatement(statement)
@@ -1577,7 +1674,7 @@ function hostPropBindings(fn, refuse) {
   );
   if (patterns.length !== 1) {
     refuse('H3', `props are destructured ${patterns.length} times, not once`);
-    return { style: null, dataPart: null, declarations: new Set() };
+    return { style: null, dataPart: null, className: null, classNameDeclaration: null, declarations: new Set() };
   }
   const named = (key) =>
     patterns[0].name.elements.find(
@@ -1588,9 +1685,12 @@ function hostPropBindings(fn, refuse) {
     )?.name ?? null;
   const style = named('style');
   const dataPart = named('data-part');
+  const className = named('className');
   const bindings = {
     style: style?.text ?? null,
     dataPart: dataPart?.text ?? null,
+    className: className?.text ?? null,
+    classNameDeclaration: className,
     declarations: new Set([style, dataPart].filter(Boolean)),
   };
   if (!bindings.style) refuse('H3', '`style` is not destructured out of props');
@@ -1840,7 +1940,14 @@ function proveStyleHost(entry, channel) {
     refusals.push(`${clause}: ${message}`);
     return null;
   };
-  const facts = { rootTags: [], partKeys: [], attrsKeys: [], channelKeyPrefix: null };
+  const facts = {
+    rootTags: [],
+    partKeys: [],
+    attrsKeys: [],
+    channelKeyPrefix: null,
+    classNameForwarded: false,
+    classRefusals: [],
+  };
   const done = () => ({ refusals: [...new Set(refusals)], facts });
 
   const host = parseCoreFile(entry.module);
@@ -2038,6 +2145,89 @@ function proveStyleHost(entry, channel) {
       if (owns) refuse(clause, `'${binding}' is used outside its admitted spreads @ line ${lineOf(reference)} (${ts.SyntaxKind[access.kind]})`);
     }
   }
+
+  // H6 (EVI-02 S2) — the caller's static className reaches each root, re-proven
+  // like H4: `className` destructured out of props; ONE same-function const
+  // `<recipe>.resolve(<selection>, { <slot>: <className> }).<slot>` where
+  // `<recipe>` is a top-level const built by classSource.fn imported from
+  // classSource.module; exactly one `className={<that const>}` on each root with
+  // no spread after it; the binding and the const read ONLY there. A failure is
+  // recorded apart from the admission: the style/part model stands, and the
+  // admitted host simply carries NO static className, so a class hop on it fails
+  // closed rather than the part form being revoked.
+  const classRefuse = (message) => {
+    facts.classRefusals.push(`H6: ${message}`);
+    return null;
+  };
+  const classProof = (() => {
+    const source = entry.classSource;
+    if (!source) return classRefuse('the table entry names no classSource');
+    if (!bindings.className) return classRefuse('`className` is not destructured out of props');
+    const carriers = new Set();
+    for (const root of roots) {
+      const attributes = root.attributes.properties;
+      const named = attributes.filter((attribute) => ts.isJsxAttribute(attribute) && attribute.name.getText() === 'className');
+      if (named.length !== 1) return classRefuse(`root <${root.tagName.text}> @ line ${lineOf(root)} carries ${named.length} className attributes, not 1`);
+      if (attributes.slice(attributes.indexOf(named[0]) + 1).some((attribute) => ts.isJsxSpreadAttribute(attribute))) {
+        return classRefuse(`root <${root.tagName.text}> @ line ${lineOf(root)} spreads after its className`);
+      }
+      const value = named[0].initializer && ts.isJsxExpression(named[0].initializer) ? named[0].initializer.expression : null;
+      if (!value || !ts.isIdentifier(value) || !consts.has(value.text)) {
+        return classRefuse(`root <${root.tagName.text}> @ line ${lineOf(root)} className is not a same-function const`);
+      }
+      carriers.add(value.text);
+    }
+    if (carriers.size !== 1) return classRefuse(`the roots read ${carriers.size} className consts, not 1`);
+    const [carrier] = carriers;
+    const read = unwrapTransparent(consts.get(carrier).initializer);
+    const call = ts.isPropertyAccessExpression(read) && read.name.text === source.slot ? unwrapTransparent(read.expression) : null;
+    const resolve =
+      call && ts.isCallExpression(call) && ts.isPropertyAccessExpression(call.expression) && call.expression.name.text === 'resolve'
+        ? call.expression
+        : null;
+    if (!resolve || call.arguments.length !== 2 || !ts.isIdentifier(resolve.expression)) {
+      return classRefuse(`'${carrier}' is not <recipe>.resolve(<selection>, <extras>).${source.slot}`);
+    }
+    const extras = unwrapTransparent(call.arguments[1]);
+    const slotMember = ts.isObjectLiteralExpression(extras) && extras.properties.length === 1 ? extras.properties[0] : null;
+    const fed =
+      slotMember &&
+      ts.isPropertyAssignment(slotMember) &&
+      literalKeyText(slotMember.name) === source.slot &&
+      ts.isIdentifier(slotMember.initializer) &&
+      slotMember.initializer.text === bindings.className;
+    if (!fed) return classRefuse(`the recipe '${source.slot}' slot of '${carrier}' is not fed by the caller '${bindings.className}' alone`);
+
+    const recipe = resolve.expression.text;
+    const declarations = localRebinds(host, recipe);
+    const [declaration] = declarations;
+    const built =
+      declarations.length === 1 &&
+      ts.isVariableDeclaration(declaration) &&
+      declaration.parent.parent.parent === host &&
+      (declaration.parent.flags & ts.NodeFlags.Const) !== 0 &&
+      declaration.initializer &&
+      ts.isCallExpression(unwrapTransparent(declaration.initializer)) &&
+      ts.isIdentifier(unwrapTransparent(declaration.initializer).expression) &&
+      unwrapTransparent(declaration.initializer).expression.text === source.fn;
+    if (!built) return classRefuse(`'${recipe}' is not one top-level const built by '${source.fn}'`);
+    const importError = importResolvesTo(host, entry.module, source.fn, source.module);
+    if (importError) return classRefuse(importError);
+
+    for (const reference of referencesIn(fn, bindings.className, bindings.classNameDeclaration)) {
+      if (reference !== slotMember.initializer) {
+        return classRefuse(`'${bindings.className}' is referenced outside the recipe slot @ line ${lineOf(reference)}`);
+      }
+    }
+    for (const reference of referencesIn(fn, carrier, consts.get(carrier).name)) {
+      const attribute = reference.parent?.parent;
+      if (!(ts.isJsxExpression(reference.parent) && attribute && ts.isJsxAttribute(attribute) && roots.includes(attribute.parent.parent))) {
+        return classRefuse(`'${carrier}' is referenced outside the root className attributes @ line ${lineOf(reference)}`);
+      }
+    }
+    return true;
+  })();
+  facts.classNameForwarded = classProof === true;
 
   facts.attrsKeys = [...new Set(facts.attrsKeys)].sort();
   return done();
@@ -2296,22 +2486,32 @@ function physicalPathStep(opening, admission = null) {
   // its root intrinsic tag(s), carrying the caller's static `data-part`.
   const classified = classifyTag(opening);
   const admitted = classified.kind === 'opaque' && admission?.admitted === true;
-  if (classified.kind === 'opaque' && !admitted) return { part: null, opaque: true, label: classified.label };
+  if (classified.kind === 'opaque' && !admitted) {
+    return { part: null, opaque: true, label: classified.label, className: null };
+  }
 
   // Everything below is a real DOM element authored in this file. Its part may
   // be unknown, but its existence and its arity are not: exactly one node is
   // emitted here. That is what a descendant combinator is allowed to step over,
   // and it is why only the opaque branch above is refused.
+  //
+  // S2: the element's static className rides along for the class-hop co-stamp.
+  // It is the call-site literal, and for a component it counts only when that
+  // component is PROVEN to hand it to its DOM element: an admitted host through
+  // H6, a local part wrapper through `wrapperForwardsClassName`. Otherwise null.
+  const wrapper = localPartWrapperOf(opening);
+  const forwards = admitted ? admission.facts.classNameForwarded === true : wrapper ? wrapper.classNameForwarded : true;
+  const className = forwards ? staticClassNameLiteral(opening) : null;
   const tag = { text: admitted ? admission.facts.rootTags.join('|') : opening.tagName.text };
   const dataPart = literalDataPart(opening);
   if (dataPart.count > 1) {
-    return { part: null, opaque: false, label: `<${tag.text}: ${dataPart.count} data-part attributes>` };
+    return { part: null, opaque: false, label: `<${tag.text}: ${dataPart.count} data-part attributes>`, className };
   }
   if (dataPart.count === 1 && dataPart.value === null) {
-    return { part: null, opaque: false, label: `<${tag.text}: non-literal data-part>` };
+    return { part: null, opaque: false, label: `<${tag.text}: non-literal data-part>`, className };
   }
-  if (dataPart.count === 1) return { part: dataPart.value, opaque: false, label: dataPart.value };
-  return { part: null, opaque: false, label: `<${tag.text}: no data-part>` };
+  if (dataPart.count === 1) return { part: dataPart.value, opaque: false, label: dataPart.value, className };
+  return { part: null, opaque: false, label: `<${tag.text}: no data-part>`, className };
 }
 
 function ownerPhysicalJsxPath(owner, admission = null) {
@@ -2352,6 +2552,15 @@ function ownerSelectorPathViolations(owner, selector, admission = null) {
     if (found === -1) {
       violations.push(`selector part '${step.part}' is absent from the live physical path`);
       return violations;
+    }
+
+    // S2, the co-stamp (the G2 rule): a CLASS hop is satisfied only by an element
+    // carrying the part AND the exact class token as a static literal. A part
+    // match without the literal class is a violation, never a name-only match.
+    if (step.via === 'class' && !(outward[found].className ?? '').split(/\s+/).includes(step.className)) {
+      violations.push(
+        `selector class '.${step.className}' lands on '${outward[found].label}', which carries no static className '${step.className}'`,
+      );
     }
 
     const crossed = outward.slice(cursor + 1, found);
@@ -2589,21 +2798,72 @@ const KANBAN_ACCENT_ANCESTRY = ['column-header', 'column', 'board', 'root'];
 
 const SELECTOR_PART_PATTERN = /\[data-part='([^']+)'\]/g;
 
+// EVI-02 S2 (the H-EV §3 class-hop amendment). A hop is spelled EITHER
+// `[data-part='p']` OR the owner element class `.<ownerBlock>__p`. The owner
+// block is DERIVED from the selector's head — the first class of its first
+// compound (`ds-pattern-calendar-view`) — never read from a free-form list, so a
+// class of ANOTHER block (`.ds-other__event`) is not a hop at all: it stays
+// opaque text and names no part. The class is matched as a WHOLE token: the part
+// runs to the end of the `[\w-]` run and must then be followed by the end of the
+// selector or one of `[ : . whitespace > + ~ ,`, so `__event-extra` is the part
+// `event-extra`, never `event`, and a token followed by anything else (`)` of a
+// functional pseudo-class, `#`) is not a hop either.
+function selectorOwnerBlock(selector) {
+  const head = selector.trimStart().split(/[\s>+~,]/)[0];
+  return head.match(/\.(-?[_a-zA-Z][\w-]*)/)?.[1] ?? null;
+}
+
+function selectorHopPattern(selector) {
+  const block = selectorOwnerBlock(selector);
+  const parts = SELECTOR_PART_PATTERN.source;
+  if (block === null) return new RegExp(parts, 'g');
+  const escaped = block.replace(/[.*+?^${}()|[\]\\-]/g, '\\$&');
+  return new RegExp(`${parts}|\\.(${escaped}__([\\w-]+))(?=$|[\\[:.\\s>+~,])`, 'g');
+}
+
 // The pinned selector read as an ordered list of parts, each carrying the
 // combinator that precedes it: `>` is a CHILD hop, anything else a descendant
 // hop. This reads the pinned CONSTANT, never a source file — the ancestry
 // contract itself is an exact array comparison and never a text match.
+//
+// Each step records `{ part, child, via: 'part' | 'class', className? }`. Two
+// hops in ONE compound (no whitespace or combinator between them) are one
+// element: the same part spelled both ways is one step that must satisfy the
+// stricter class form; two different parts on one element name no part at all.
 function selectorSteps(selector) {
   const steps = [];
   let previousEnd = null;
 
-  for (const match of selector.matchAll(SELECTOR_PART_PATTERN)) {
+  for (const match of selector.matchAll(selectorHopPattern(selector))) {
     const gap = previousEnd === null ? null : selector.slice(previousEnd, match.index);
-    steps.push({ part: match[1], child: gap === null ? null : gap.includes('>') });
+    const hop =
+      match[1] !== undefined
+        ? { part: match[1], via: 'part' }
+        : { part: match[3], via: 'class', className: match[2] };
     previousEnd = match.index + match[0].length;
+
+    if (gap !== null && !/[\s>+~,]/.test(gap)) {
+      const previous = steps.at(-1);
+      if (previous.part !== hop.part) {
+        previous.part = `<${previous.part} & ${hop.part}: two parts on one element>`;
+      } else if (hop.via === 'class') {
+        previous.via = 'class';
+        previous.className = hop.className;
+      }
+      continue;
+    }
+    steps.push({ ...hop, child: gap === null ? null : gap.includes('>') });
   }
 
   return steps;
+}
+
+// C — the tail of the pinned sink selector is the accent part, by EITHER form.
+function selectorTailIsPart(selector, part) {
+  const block = selectorOwnerBlock(selector);
+  const spelled =
+    selector.endsWith(`[data-part='${part}']`) || (block !== null && selector.endsWith(`.${block}__${part}`));
+  return spelled && selectorSteps(selector).at(-1)?.part === part;
 }
 
 // Do the two pinned constants describe ONE element? Every part the selector
@@ -2700,8 +2960,8 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     assert.deepEqual(actual, perOwner(message), why);
   };
   assert.ok(
-    CALENDAR_ACCENT_SELECTOR.endsWith(`[data-part='${CALENDAR_ACCENT_PART}']`),
-    'the pinned part must be the tail of the pinned sink selector',
+    selectorTailIsPart(CALENDAR_ACCENT_SELECTOR, CALENDAR_ACCENT_PART),
+    'the pinned part must be the tail of the pinned sink selector, by either form',
   );
   assert.deepEqual(
     producerPlacementViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
@@ -3709,8 +3969,10 @@ test('visualization skin Calendar Modern admits the ModernButton style host by p
       partKeys: ['data-part', 'data-state'],
       attrsKeys: ['data-ds-responsive', 'data-ds-responsive-hard'],
       channelKeyPrefix: '--_ds-rsp-',
+      classNameForwarded: true,
+      classRefusals: [],
     },
-    'G0 must report the proven roots, part keys, attribute keys and channel key prefix',
+    'G0 must report the proven roots, part keys, attribute keys, channel key prefix and className forwarding (H6)',
   );
   assert.deepEqual(
     producerRenderPathViolations(text, path, CALENDAR_CHANNEL, 'ev'),
@@ -3949,6 +4211,221 @@ test('visualization skin Calendar Modern admits the ModernButton style host by p
     ),
     'D10: the selector path names the opaque host hop',
   );
+});
+
+// S2 drills: static `className` literals spliced onto JSX elements located as AST
+// facts, applied from the end of the text so earlier positions stay valid.
+function withStaticClasses(text, stamps) {
+  let out = text;
+  for (const { opening, literal } of [...stamps].sort((a, b) => b.opening.tagName.getEnd() - a.opening.tagName.getEnd())) {
+    const at = opening.tagName.getEnd();
+    out = `${out.slice(0, at)} ${literal}${out.slice(at)}`;
+  }
+  return out;
+}
+
+test('visualization skin Calendar Modern reads a sink hop by part OR owner class, co-stamped per owner (S2 drills)', () => {
+  const path = pathFor(FILES.calendarModern);
+  const text = source(FILES.calendarModern);
+  const BLOCK = 'ds-pattern-calendar-view';
+  const EVENT_CLASS = `${BLOCK}__${CALENDAR_ACCENT_PART}`;
+  const PART_TAIL = `[data-part='${CALENDAR_ACCENT_PART}']`;
+  assert.equal(CALENDAR_ACCENT_SELECTOR.split(PART_TAIL).length - 1, 1, 'the pinned selector must carry the part tail once');
+  assert.equal(selectorOwnerBlock(CALENDAR_ACCENT_SELECTOR), BLOCK, 'the owner block is derived from the selector head');
+  const tailed = (tail) => CALENDAR_ACCENT_SELECTOR.replace(PART_TAIL, () => tail);
+  const CLASS_FORM = tailed(`.${EVENT_CLASS}`);
+
+  // The owners and the elements a class may be stamped on, located on the live fixture.
+  const alias = liveChannelAlias(text, path, CALENDAR_CHANNEL, 'ev');
+  const chip = alias.owners.find((owner) => owner.tagName.getText() === 'EventChip');
+  const button = alias.owners.find((owner) => owner.tagName.getText() === 'ModernButton');
+  const gridElement = uniqueElementWithPart(text, path, 'grid').element;
+  const grid = ts.isJsxElement(gridElement) ? gridElement.openingElement : gridElement;
+  const stamp = (opening, className = EVENT_CLASS) => ({ opening, literal: `className="${className}"` });
+  const [owners] = channelProducerOwners(text, path, CALENDAR_CHANNEL, 'ev');
+  const line = Object.fromEntries(owners.map(({ tag, line: at }) => [tag, at]));
+  const onOwner = (tag, message) => `owner <${tag}> @ line ${line[tag]}: ${message}`;
+  const missingClass = (label, className = EVENT_CLASS) =>
+    `selector class '.${className}' lands on '${label}', which carries no static className '${className}'`;
+
+  // S2-1 — the PART form (the live constant): all hops by part, the gate green.
+  assert.deepEqual(
+    selectorSteps(CALENDAR_ACCENT_SELECTOR),
+    [
+      { part: 'root', via: 'part', child: null },
+      { part: 'grid', via: 'part', child: true },
+      { part: 'day-cell', via: 'part', child: false },
+      { part: 'event', via: 'part', child: false },
+    ],
+    'S2-1: the part form reads four part hops',
+  );
+  assert.ok(selectorTailIsPart(CALENDAR_ACCENT_SELECTOR, CALENDAR_ACCENT_PART), 'S2-1: the part tail is the accent part');
+  assert.deepEqual(selectorAncestryDisagreements(CALENDAR_ACCENT_SELECTOR, CALENDAR_ACCENT_ANCESTRY), [], 'S2-1: ancestry agrees');
+  assert.deepEqual(
+    producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
+    [],
+    'S2-1: the live DOM satisfies the part form for both owners',
+  );
+
+  // S2-2 — the CLASS form (the transformed constant): the same parts, the tail via class.
+  for (const selector of [CLASS_FORM, `${CLASS_FORM}:hover`]) {
+    const steps = selectorSteps(selector);
+    assert.deepEqual(
+      steps.at(-1),
+      { part: 'event', via: 'class', className: EVENT_CLASS, child: false },
+      `S2-2: the class tail is the event part via class (${selector})`,
+    );
+    assert.deepEqual(steps.map(({ part }) => part), ['root', 'grid', 'day-cell', 'event'], 'S2-2: the same four parts');
+    assert.deepEqual(selectorAncestryDisagreements(selector, CALENDAR_ACCENT_ANCESTRY), [], 'S2-2: ancestry agrees');
+  }
+  assert.ok(selectorTailIsPart(CLASS_FORM, CALENDAR_ACCENT_PART), 'S2-2 / C: the class tail is the accent part');
+
+  // S2-3 — a class of ANOTHER block is no hop: the ancestry outruns the selector.
+  const OTHER = tailed('.ds-other__event');
+  assert.deepEqual(selectorSteps(OTHER).map(({ part }) => part), ['root', 'grid', 'day-cell'], 'S2-3: no fourth hop');
+  assert.deepEqual(
+    selectorAncestryDisagreements(OTHER, CALENDAR_ACCENT_ANCESTRY),
+    ['the ancestry continues past the selector tail with event'],
+    'S2-3: an unknown block reds with the ancestry message',
+  );
+  assert.equal(selectorTailIsPart(OTHER, CALENDAR_ACCENT_PART), false, 'S2-3: and fails the tail check');
+
+  // S2-4 — a shared prefix is a different, whole token; a token closed by `)` is no hop.
+  const PREFIX = tailed(`.${EVENT_CLASS}-extra`);
+  assert.equal(selectorSteps(PREFIX).at(-1).part, 'event-extra', 'S2-4: __event-extra is the part event-extra');
+  assert.deepEqual(
+    selectorAncestryDisagreements(PREFIX, CALENDAR_ACCENT_ANCESTRY),
+    ["selector part 'event-extra' is absent from the ancestry"],
+    'S2-4: the shared prefix is never event',
+  );
+  assert.equal(selectorTailIsPart(PREFIX, CALENDAR_ACCENT_PART), false, 'S2-4: and fails the tail check');
+  const FUNCTIONAL = tailed(`:is(.${EVENT_CLASS})`);
+  assert.deepEqual(selectorSteps(FUNCTIONAL).map(({ part }) => part), ['root', 'grid', 'day-cell'], 'S2-4: a token closed by ) is no hop');
+
+  // S2-5 — the CO-STAMP, per owner.
+  assert.deepEqual(
+    producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
+    [onOwner('EventChip', missingClass('event')), onOwner('ModernButton', missingClass('event'))],
+    'S2-5a: no chip carries the class literal, so the class hop reds on BOTH owners',
+  );
+  const bothStamped = withStaticClasses(text, [stamp(chip), stamp(button)]);
+  assert.deepEqual(
+    producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
+    [],
+    'S2-5b: both chips co-stamped -> the class form is green for both owners',
+  );
+  assert.deepEqual(
+    producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
+    [],
+    'S2-5b: and the part form stays green',
+  );
+  assert.deepEqual(
+    producerSelectorPathViolations(withStaticClasses(text, [stamp(button)]), path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
+    [onOwner('EventChip', missingClass('event'))],
+    'S2-5c: only the interactive chip co-stamped -> only the read-only owner reds',
+  );
+  const unforwarded = coreEdits('host', [['    { root: className }\n', "    { root: 'fixed' }\n"]]);
+  const hostProof = withCoreFiles(unforwarded, () => proveStyleHost(STYLE_HOSTS[0], CALENDAR_CHANNEL));
+  assert.deepEqual(hostProof.refusals, [], 'S2-5d: a host that drops the caller className keeps its style/part admission');
+  assert.equal(hostProof.facts.classNameForwarded, false, 'S2-5d: but forwards no className');
+  assert.deepEqual(
+    withCoreFiles(unforwarded, () => producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM)),
+    [onOwner('ModernButton', missingClass('event'))],
+    'S2-5d: the call-site literal is not trusted past a host that drops it — the class hop fails closed on that owner',
+  );
+  assert.deepEqual(
+    withCoreFiles(unforwarded, () =>
+      producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_SELECTOR),
+    ),
+    [],
+    'S2-5d: and the part form is untouched by the className proof',
+  );
+  const WRAPPER_SIGNATURE = 'function EventChip(\n  { children, onFocus, onBlur, ...rest },';
+  assert.equal(text.split(WRAPPER_SIGNATURE).length - 1, 1, 'the live EventChip signature drifted');
+  const swallowed = withStaticClasses(
+    text.replace(WRAPPER_SIGNATURE, () => 'function EventChip(\n  { children, onFocus, onBlur, className, ...rest },'),
+    [],
+  );
+  const swallowedAlias = liveChannelAlias(swallowed, path, CALENDAR_CHANNEL, 'ev');
+  assert.deepEqual(
+    producerSelectorPathViolations(
+      withStaticClasses(swallowed, swallowedAlias.owners.map((owner) => stamp(owner))),
+      path,
+      CALENDAR_CHANNEL,
+      'ev',
+      CLASS_FORM,
+    ).map((violation) => violation.replace(/@ line \d+/, '@ line L')),
+    [`owner <EventChip> @ line L: ${missingClass('event')}`],
+    'S2-5e: a wrapper that destructures className out never forwards it — its class hop fails closed',
+  );
+  assert.deepEqual(
+    producerSelectorPathViolations(
+      withStaticClasses(text, [{ opening: chip, literal: `className="${EVENT_CLASS}" {...extraProps}` }, stamp(button)]),
+      path,
+      CALENDAR_CHANNEL,
+      'ev',
+      CLASS_FORM,
+    ),
+    [onOwner('EventChip', missingClass('event'))],
+    'S2-5f: a later spread that may replace className voids the literal',
+  );
+
+  // S2-6 — mixed forms on different hops: each hop satisfied by its own form.
+  const MIXED = `.${BLOCK}.ds-engine-modern[data-part='root'] > .${BLOCK}__grid [data-part='day-cell'] .${EVENT_CLASS}`;
+  assert.deepEqual(
+    selectorSteps(MIXED).map(({ part, via }) => `${via}:${part}`),
+    ['part:root', 'class:grid', 'part:day-cell', 'class:event'],
+    'S2-6: the mixed selector reads each hop by its own form',
+  );
+  assert.deepEqual(selectorAncestryDisagreements(MIXED, CALENDAR_ACCENT_ANCESTRY), [], 'S2-6: ancestry agrees');
+  assert.deepEqual(
+    producerSelectorPathViolations(
+      withStaticClasses(text, [stamp(chip), stamp(button), stamp(grid, `${BLOCK}__grid`)]),
+      path,
+      CALENDAR_CHANNEL,
+      'ev',
+      MIXED,
+    ),
+    [],
+    'S2-6: green when every class hop is co-stamped',
+  );
+  assert.deepEqual(
+    producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', MIXED),
+    [
+      onOwner('EventChip', missingClass('grid', `${BLOCK}__grid`)),
+      onOwner('ModernButton', missingClass('grid', `${BLOCK}__grid`)),
+    ],
+    'S2-6: red on the one hop whose element lacks its class literal',
+  );
+
+  // S2-7 — both forms in ONE compound are one element, held to the class form.
+  const COMPOUND = tailed(`${PART_TAIL}.${EVENT_CLASS}`);
+  assert.deepEqual(
+    selectorSteps(COMPOUND).at(-1),
+    { part: 'event', via: 'class', className: EVENT_CLASS, child: false },
+    'S2-7: one compound is one step, via class',
+  );
+  assert.equal(selectorSteps(COMPOUND).length, 4, 'S2-7: four steps, not five');
+  assert.deepEqual(selectorAncestryDisagreements(COMPOUND, CALENDAR_ACCENT_ANCESTRY), [], 'S2-7: ancestry agrees');
+
+  // H6 — the admitted host's className proof, each break named and isolated
+  // from the style/part admission.
+  for (const [name, edits, reason] of [
+    ['slot fed by a literal', [['    { root: className }\n', "    { root: 'fixed' }\n"]], /^H6: the recipe 'root' slot of 'classes' is not fed by the caller 'className' alone$/],
+    ['slot not alone', [['    { root: className }\n', '    { root: className, extra: 1 }\n']], /^H6: the recipe 'root' slot of 'classes' is not fed/],
+    ['binding read elsewhere', [['  ).root;\n', '  ).root;\n  const echo = className;\n']], /^H6: 'className' is referenced outside the recipe slot @ line \d+$/],
+    [
+      'root className not the const',
+      [['        className={classes}\n        disabled=', '        className={`${classes}`}\n        disabled=']],
+      /^H6: root <button> @ line \d+ className is not a same-function const$/,
+    ],
+  ]) {
+    const proof = withCoreFiles(coreEdits('host', edits), () => proveStyleHost(STYLE_HOSTS[0], CALENDAR_CHANNEL));
+    assert.deepEqual(proof.refusals, [], `H6 (${name}): the style/part admission stands`);
+    assert.equal(proof.facts.classNameForwarded, false, `H6 (${name}): no className is forwarded`);
+    assert.equal(proof.facts.classRefusals.length, 1, `H6 (${name}): exactly one H6 refusal`);
+    assert.match(proof.facts.classRefusals[0], reason, `H6 (${name}): the refusal names the break`);
+  }
 });
 
 const KANBAN_PRODUCER_LITERAL = "{ '--ds-kanban-board-column-accent': column.color } as React.CSSProperties";
