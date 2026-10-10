@@ -296,18 +296,18 @@ export function InlineEditor({
             <Stack spacing={4} data-part="editor-copy">
               {eyebrow ? (
                 <Text
-                  data-part="editor-eyebrow"
+                  className="ds-edit-fields__editor-eyebrow" data-part="editor-eyebrow"
                   size="xs"
                   weight="bold"
                 >
                   {eyebrow}
                 </Text>
               ) : null}
-              <Text data-part="editor-title" weight="bold">
+              <Text className="ds-edit-fields__editor-title" data-part="editor-title" weight="bold">
                 {title}
               </Text>
               {description ? (
-                <Text data-part="editor-description" size="sm">
+                <Text className="ds-edit-fields__editor-description" data-part="editor-description" size="sm">
                   {description}
                 </Text>
               ) : null}
@@ -415,19 +415,19 @@ export function InlineEditSection({
             <Flex align="center" gap={8} wrap="wrap">
               {sectionNumber ? (
                 <Text
-                  data-part="section-number"
+                  className="ds-edit-fields__section-number" data-part="section-number"
                   size="xs"
                   weight="bold"
                 >
                   {copy.sectionNumber(sectionNumber)}
                 </Text>
               ) : null}
-              <Text data-part="section-title" size="sm" weight="bold">
+              <Text className="ds-edit-fields__section-title" data-part="section-title" size="sm" weight="bold">
                 {title}
               </Text>
             </Flex>
             {description ? (
-              <Text data-part="section-description" size="xs">
+              <Text className="ds-edit-fields__section-description" data-part="section-description" size="xs">
                 {description}
               </Text>
             ) : null}
@@ -524,7 +524,7 @@ export function InlineEditField({
         <Flex align="center" gap={8} wrap="wrap">
           {fieldNumber ? (
             <Text
-              data-part="field-number"
+              className="ds-edit-fields__field-number" data-part="field-number"
               aria-hidden
               size="xs"
             >
@@ -557,7 +557,7 @@ export function InlineEditField({
                   data-part="field-requirement-dot"
                   aria-hidden
                 />
-                <Text data-part="field-requirement-copy" size="xs" weight="bold">
+                <Text className="ds-edit-fields__field-requirement-copy" data-part="field-requirement-copy" size="xs" weight="bold">
                   {requirementCopy}
                 </Text>
               </Flex>
@@ -565,7 +565,7 @@ export function InlineEditField({
           ) : null}
         </Flex>
         {hint ? (
-          <Text data-part="field-hint" id={resolvedHintId} size="xs">
+          <Text className="ds-edit-fields__field-hint" data-part="field-hint" id={resolvedHintId} size="xs">
             {hint}
           </Text>
         ) : null}
@@ -580,7 +580,7 @@ export function InlineEditField({
               non-colour shape cue of the field error grammar. */}
           <StatusErrorIcon decorative size={13} data-part="field-error-icon" />
           <Text
-            data-part="field-error"
+            className="ds-edit-fields__field-error" data-part="field-error"
             id={resolvedErrorId}
             size="xs"
           >
@@ -691,17 +691,17 @@ export function InlineEditFooter({
       {hasFooterSupport ? (
         <Stack data-part="footer-support" spacing={2}>
           {summary && error ? (
-            <Text data-part="footer-note" size="xs">
+            <Text className="ds-edit-fields__footer-note" data-part="footer-note" size="xs">
               {summary}
             </Text>
           ) : null}
           {footerSummary ? (
-            <Text data-part="footer-summary" size="xs">
+            <Text className="ds-edit-fields__footer-summary" data-part="footer-summary" size="xs">
               {footerSummary}
             </Text>
           ) : null}
           {dirtySummary && hiddenDirtySummary ? (
-            <Text data-part="footer-hidden-summary" size="xs">
+            <Text className="ds-edit-fields__footer-hidden-summary" data-part="footer-hidden-summary" size="xs">
               {hiddenDirtySummary}
             </Text>
           ) : null}

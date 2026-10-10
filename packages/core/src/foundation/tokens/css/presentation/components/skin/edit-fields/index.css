@@ -124,7 +124,7 @@
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-eyebrow'] {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-eyebrow {
   color: var(--ds-color-text-muted);
   letter-spacing: 0.08em;
   line-height: 1;
@@ -133,11 +133,11 @@
   text-transform: var(--ds-page-header-eyebrow-text-transform, var(--ds-typography-label-transform, uppercase));
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-title'] {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-title {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-description'] {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-description {
   color: var(--ds-color-text-secondary);
   line-height: 1.45;
 }
@@ -212,22 +212,22 @@
   display: flex;
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-number'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-number {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.08em;
 }
 
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-icon'],
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-number'],
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-number,
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-description {
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-description {
   line-height: 1.4;
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-title'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-title {
   color: var(--ds-color-text-primary);
 }
 
@@ -293,7 +293,7 @@
   gap: 3px;
 }
 
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-number'] {
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] .ds-edit-fields__field-number {
   font-family: var(--ds-font-family-mono, monospace);
   line-height: 1;
 }
@@ -315,24 +315,24 @@
   display: inline-flex;
 }
 
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-copy'] {
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] .ds-edit-fields__field-requirement-copy {
   letter-spacing: 0.06em;
   /* Personality channel: tenant label casing reaches the requirement pill;
      absent a personality the exact pre-wave uppercase stands (C-12). */
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-hint'] {
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] .ds-edit-fields__field-hint {
   min-inline-size: 0;
   line-height: 1.35;
 }
 
 /* `field-label-row` carries no consumer slot: every node under it is rendered by
    this component, so the descendant hops below cannot escape. */
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-number'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] .ds-edit-fields__field-number,
 .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-icon'],
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-copy'],
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] > [data-part='field-hint'] {
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] .ds-edit-fields__field-requirement-copy,
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] > .ds-edit-fields__field-hint {
   color: var(--ds-color-text-muted);
 }
 
@@ -393,7 +393,7 @@
   color: var(--ds-color-error);
 }
 
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error-row'] [data-part='field-error'][id] {
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error-row'] .ds-edit-fields__field-error[id] {
   color: var(--ds-color-error);
   line-height: 1.4;
 }
@@ -488,15 +488,15 @@
   min-inline-size: 0;
 }
 
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-note'],
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-summary'],
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-hidden-summary'] {
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-note,
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary,
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-hidden-summary {
   color: var(--ds-color-text-muted);
 }
 
 /* The footer summary slot is the error channel when one is present -- the footer
    root reports it on `data-error`. */
-.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > [data-part='footer-summary'] {
+.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary {
   color: var(--ds-color-error);
 }
 

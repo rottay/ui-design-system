@@ -16,7 +16,7 @@
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
   "passThroughViolations": 92,
-  "callerPartDependents": 938,
+  "callerPartDependents": 915,
   "callerStateDependents": 16
  },
  "roster": [
@@ -2189,121 +2189,6 @@
      "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
     },
     {
-     "key": "structures/record/edit-fields/index.tsx#Text#editor-description#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:310",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#editor-eyebrow#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:298",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#editor-title#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:306",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#field-error#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:582",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#field-hint#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:568",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#field-number#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:526",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#field-requirement-copy#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:560",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#footer-hidden-summary#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:704",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#footer-note#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:694",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#footer-summary#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:699",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#section-description#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:430",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#section-number#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:417",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/edit-fields/index.tsx#Text#section-title#0",
-     "atBaseline": "structures/record/edit-fields/index.tsx:425",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/form-sections/index.tsx#Text#facts-card-description#0",
-     "atBaseline": "structures/record/form-sections/index.tsx:411",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/form-sections/index.tsx#Text#facts-card-eyebrow#0",
-     "atBaseline": "structures/record/form-sections/index.tsx:398",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/form-sections/index.tsx#Text#facts-card-item-helper#0",
-     "atBaseline": "structures/record/form-sections/index.tsx:435",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/form-sections/index.tsx#Text#facts-card-item-label#0",
-     "atBaseline": "structures/record/form-sections/index.tsx:427",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/form-sections/index.tsx#Text#facts-card-item-value#0",
-     "atBaseline": "structures/record/form-sections/index.tsx:442",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/form-sections/index.tsx#Text#section-chip-label#0",
-     "atBaseline": "structures/record/form-sections/index.tsx:481",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/form-sections/index.tsx#Text#section-description#0",
-     "atBaseline": "structures/record/form-sections/index.tsx:250",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/form-sections/index.tsx#Text#section-error-copy#0",
-     "atBaseline": "structures/record/form-sections/index.tsx:237",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/form-sections/index.tsx#Text#section-summary-text#0",
-     "atBaseline": "structures/record/form-sections/index.tsx:271",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/record/form-sections/index.tsx#Text#section-title#0",
-     "atBaseline": "structures/record/form-sections/index.tsx:223",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
      "key": "surfaces/presentation/pages/data/compare/index.tsx#Heading#section-title#0",
      "atBaseline": "surfaces/presentation/pages/data/compare/index.tsx:220",
      "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
@@ -2409,7 +2294,7 @@
   ]
  },
  "lastMove": {
-  "head": "bb52847fd6a7cce880cb67a2332deb1fdb2e90b7",
+  "head": "1880d92396bbef4376e9fb73b77840cfb7d04287",
   "date": "2026-10-10",
   "note": "lowered to the gate's own measurement through --update-baseline"
  }

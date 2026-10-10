@@ -69064,7 +69064,7 @@ html[data-ds-motion='reduced']
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-eyebrow'] {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-eyebrow {
   color: var(--ds-color-text-muted);
   letter-spacing: 0.08em;
   line-height: 1;
@@ -69073,11 +69073,11 @@ html[data-ds-motion='reduced']
   text-transform: var(--ds-page-header-eyebrow-text-transform, var(--ds-typography-label-transform, uppercase));
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-title'] {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-title {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-description'] {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-description {
   color: var(--ds-color-text-secondary);
   line-height: 1.45;
 }
@@ -69152,22 +69152,22 @@ html[data-ds-motion='reduced']
   display: flex;
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-number'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-number {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.08em;
 }
 
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-icon'],
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-number'],
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-number,
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-description {
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-description {
   line-height: 1.4;
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-title'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-title {
   color: var(--ds-color-text-primary);
 }
 
@@ -69233,7 +69233,7 @@ html[data-ds-motion='reduced']
   gap: 3px;
 }
 
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-number'] {
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] .ds-edit-fields__field-number {
   font-family: var(--ds-font-family-mono, monospace);
   line-height: 1;
 }
@@ -69255,24 +69255,24 @@ html[data-ds-motion='reduced']
   display: inline-flex;
 }
 
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-copy'] {
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] .ds-edit-fields__field-requirement-copy {
   letter-spacing: 0.06em;
   /* Personality channel: tenant label casing reaches the requirement pill;
      absent a personality the exact pre-wave uppercase stands (C-12). */
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-hint'] {
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] .ds-edit-fields__field-hint {
   min-inline-size: 0;
   line-height: 1.35;
 }
 
 /* `field-label-row` carries no consumer slot: every node under it is rendered by
    this component, so the descendant hops below cannot escape. */
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-number'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] .ds-edit-fields__field-number,
 .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-icon'],
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-copy'],
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] > [data-part='field-hint'] {
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] .ds-edit-fields__field-requirement-copy,
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] > .ds-edit-fields__field-hint {
   color: var(--ds-color-text-muted);
 }
 
@@ -69333,7 +69333,7 @@ html[data-ds-motion='reduced']
   color: var(--ds-color-error);
 }
 
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error-row'] [data-part='field-error'][id] {
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error-row'] .ds-edit-fields__field-error[id] {
   color: var(--ds-color-error);
   line-height: 1.4;
 }
@@ -69428,15 +69428,15 @@ html[data-ds-motion='reduced']
   min-inline-size: 0;
 }
 
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-note'],
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-summary'],
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-hidden-summary'] {
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-note,
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary,
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-hidden-summary {
   color: var(--ds-color-text-muted);
 }
 
 /* The footer summary slot is the error channel when one is present -- the footer
    root reports it on `data-error`. */
-.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > [data-part='footer-summary'] {
+.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary {
   color: var(--ds-color-error);
 }
 
@@ -69868,7 +69868,7 @@ html[data-ds-motion='reduced']
    tight=1.25), so the cadence stays private to this family with the exact
    fallback. Size/weight stay with the node (default `md` role + the
    `bold` weight class). */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-title'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-title {
   color: var(--ds-color-text-primary);
   line-height: var(--_ds-form-sections-title-line-height, 1.15);
 }
@@ -69876,7 +69876,7 @@ html[data-ds-motion='reduced']
 /* Description rhythm + measure drained from the engine: 1.55 sits between
    the `normal` (1.5) and `body` (1.6) roles, so it stays private to this
    family; the 720px measure is local geometry. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-description {
   color: var(--ds-color-text-secondary);
   line-height: var(--_ds-form-sections-description-line-height, 1.55);
   max-inline-size: 720px;
@@ -69898,7 +69898,7 @@ html[data-ds-motion='reduced']
   background: var(--ds-form-sections-badge-bg, var(--ds-color-bg-secondary));
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary-text'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-summary-text {
   color: var(--ds-color-text-primary);
 }
 
@@ -69916,7 +69916,7 @@ html[data-ds-motion='reduced']
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] > [data-part='section-chip-label'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] > .ds-form-sections__section-chip-label {
   color: var(--ds-color-text-primary);
 }
 
@@ -69925,14 +69925,14 @@ html[data-ds-motion='reduced']
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] > [data-part='section-chip-label'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] > .ds-form-sections__section-chip-label {
   color: var(--ds-color-text-secondary);
 }
 
 /* Chip label type drained from the engine: unit line-height resolves through
    the canonical `none` role; tracking + case are local literals (the family's
    existing eyebrow vocabulary). */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] > [data-part='section-chip-label'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] > .ds-form-sections__section-chip-label {
   line-height: var(--ds-line-height-none, 1);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -69950,11 +69950,11 @@ html[data-ds-motion='reduced']
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-icon'],
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-copy'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
   color: var(--ds-color-error);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-copy'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
   line-height: var(--ds-line-height-none, 1);
 }
 
@@ -70094,7 +70094,7 @@ html[data-ds-motion='reduced']
 
   /* The section error keeps its icon shape + copy (never paint alone). */
   .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-icon'],
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-copy'] {
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
     color: CanvasText;
   }
 }
@@ -70141,8 +70141,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   padding-block: calc(10px * var(--_ds-form-sections-density, 1));
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-eyebrow'][data-size],
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-label'][data-size] {
+.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-eyebrow[data-size],
+.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-label[data-size] {
   color: var(--ds-color-text-muted);
 }
 
@@ -70156,12 +70156,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'][data-size] {
+.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-value[data-size] {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-description'][data-size],
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-helper'][data-size] {
+.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-description[data-size],
+.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-helper[data-size] {
   color: var(--ds-color-text-secondary);
 }
 
@@ -70169,7 +70169,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    description rhythm (family-private, exact 1.55 fallback), the
    copy stack's flex survival hook, and the value column's measure,
    end-alignment and break strategy — all formerly inline in the engine. */
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-eyebrow'] {
+.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-eyebrow {
   letter-spacing: 0.14em;
   /* Personality channel: tenant label casing reaches the facts eyebrow;
      absent a personality the exact pre-wave uppercase stands (C-12). */
@@ -70177,7 +70177,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-family: var(--ds-font-family-mono, monospace);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-description'] {
+.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-description {
   line-height: var(--_ds-form-sections-description-line-height, 1.55);
 }
 
@@ -70186,13 +70186,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-inline-size: 0;
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-label'] {
+.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-label {
   letter-spacing: 0.12em;
   text-transform: var(--ds-typography-label-transform, uppercase);
   font-family: var(--ds-font-family-mono, monospace);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'] {
+.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-value {
   /* Ledger measure: scales with the card instead of a dead 180px cap — no
      squeezed values at 390px, no absurd wraps in wide cards (C-12). */
   max-inline-size: min(52%, 15rem);
@@ -70203,7 +70203,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'][data-mono='true'] {
+.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-value[data-mono='true'] {
   font-family: var(--ds-font-family-mono, monospace);
 }
 
@@ -70229,7 +70229,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     row-gap: 2px;
   }
 
-  div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'] {
+  div.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-value {
     max-inline-size: none;
     text-align: start;
   }
