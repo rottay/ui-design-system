@@ -21,6 +21,11 @@
  * The four sub-modules are the census v7 tools adopted by the DT on 2026-10-09
  * (arc12/l2-tools: census 1937b947 / post 2632ae59 / report 44b91e89 / attribution 7ab151e9),
  * ported with their bodies verbatim; each file names its provenance sha.
+ *
+ * v7.1 (2026-10-10; census 3ca4db81 / report d66a34b2, post and attribution unchanged): a caller
+ * tag is also resolved THROUGH a barrel by its lexical re-export chain (Text/Heading ->
+ * typography, the one family whose tag is not its name), and no opener is skipped in silence:
+ * what does not resolve is listed, classified and counted in `census.unresolvedCallers`.
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';

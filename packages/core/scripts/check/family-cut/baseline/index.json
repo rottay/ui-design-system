@@ -1827,8 +1827,8 @@
     "sourceFiles": 1,
     "channelsRead": 37,
     "classTokens": 3,
-    "partsStamped": 14,
-    "partsConsumed": 14
+    "partsStamped": 6,
+    "partsConsumed": 6
    },
    "readWithoutProducer": 0,
    "classVocabularies": 1,
@@ -1841,8 +1841,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 24,
-   "cutNote": "WO-FAM-08 (B9): the saved-views-menu structure measured on the B9 lot tree over HEAD be69bb75e. Every blocking arm is clean: inlineStyleViolations 0, visualLiterals 0, antReads 0, one owner (src/components/structures/workspace/saved-views-menu), stampsAnatomy/skinReadsAnatomy/variantContract/stateContract/stateGoverned all true, skeleton by the shared anatomy renderer with no hand-made part and no part without a role, a11y 1 probe / 2 assertions (the gate's counter does not pick up the new causality suite). NO NEW DERIVER, AND NOT AN EXTENSION OF chrome/saved-views EITHER -- the adjudication, stated in full because the lot brief named both options: of the six unproduced reads, three were --ds-saved-views-menu-panel-{top,left,width}, which the render MEASURES against the viewport and stamps per instance. A measurement is not a decision, so it does not belong in a deriver's resting output; it belongs where virtual-list's three windowing channels were put in B7 -- a RESTING DECLARATION on the family's own panel rule (0, 0, 26.25rem, exactly the values the reads used to fall through to), inherited by nothing and outranked by the inline stamp exactly as an inline declaration outranks a rule. That keeps one owner for the whole --ds-saved-views-* prefix (chrome/saved-views already emits --ds-saved-views-menu-trigger-size) instead of splitting a namespace across two derivers, and it keeps the write set inside this family. readWithoutProducer 6 -> 3. RESIDUE, pinned by CATEGORY and not owned: --ds-material-overlay-border, --ds-material-overlay-shadow and --ds-material-raised-shadow-hover are the MATERIALS vocabulary, owned by derivation/materials, which emits neither. Same ruling as column-menu in this lot and as file-manager's link vocabulary in B6. STATE DECIDED ONCE (F-37, 16 -> 0): five parts became stateful -- the trigger (the component's own body), and view-item, view-item-select, delete (three kernels inside ViewItem) and action-button (a new ActionButton wrapper for the three active-card actions). Sixteen bare pseudo-classes across the trigger's hover and ring, the select surface's ring, the four action-button hover arms, its ring, its two press arms, the two view-item hover arms, the two delete hover arms, the delete ring and the shared forced-colors ring are each paired with the kernel token they stand for. The pairing is specificity-neutral: :is([data-state~='x'], :pseudo) weighs exactly what the bare pseudo weighed, so not one cascade order moved. At rest the kernel serializes nothing, so [data-state] never matches a resting node. ANATOMY: already 0/0 at HEAD and still 0/0; partsStamped 37 == partsConsumed 37. ADAPT: saved-views-menu is NOT declared in LAYOUT_SENSITIVE_FAMILIES, so the adaptSlot arm is vacuously clean. CAUSALITY: the decision-causality suite is src/components/structures/workspace/saved-views-menu/tests/SavedViewsMenu.causality.integration.test.tsx (10 tests, Chromium). The panel is portalled and mounts only while the menu is open, so the suite opens the REAL menu in the DOM runner and keeps the family's own two roots, the anchor and the panel. With no deriver there is no consumes list to discharge, so it probes what actually reaches the family's own paint, each with a negative control -- palette.seeds (the active view's tinted card), shape.radius-scale (the panel corner), typography.scale (the count pill, which is the family's OWN Box and not a composed Text), states.focus-style (the trigger's ring, measured through the kernel stamp) and motion.dial (the panel entrance, which rides --ds-motion-disclosure and is therefore bent by the dial) -- with the header band's px rhythm as the control. It reads the three measured channels back at their resting declaration and at the stamped instance, proves both hover arms arrive through [data-state~='hovered'] on nodes no pointer touched, and mirrors the row cluster under dir=rtl through the delete affordance's margin-inline-end landing on the opposite physical edge with the row's measure unchanged. MEASUREMENT NOTE for whoever edits the suite: the DOM runner that captures the markup lays nothing out, so its stamped clamp is a zero-width viewport reading; every case that measures a BOX strips the inline stamp and measures the resting declaration instead, and only the channel read-back uses the stamped markup. AXE: CLEAN in all four gated scopes -- no serious or critical finding, so the debt pin is {} and any new finding is red. BLIND SPOT of readWithoutProducer: one skin, so 3 is a total, not a floor. 2026-09-19 (DT, materials-facets lot): readWithoutProducer falls to 0 -- derivation/materials now emits the overlay/raised facet roots this family reads (expansions of the measured read chains, byte-equal at rest; the four conflicted facets are emitted as 'initial' so each family's own fallback keeps winning while the channel stays authorable). Fable-reviewed: 2026-09-19-materials-facets-review-davila.md. channelsRead 35 -> 36 (2026-09-30 re-read): 616278cf6 (W3b: hairline edge-dial reads). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt"
+   "p88CallerParts": 34,
+   "cutNote": "WO-FAM-08 (B9): the saved-views-menu structure measured on the B9 lot tree over HEAD be69bb75e. Every blocking arm is clean: inlineStyleViolations 0, visualLiterals 0, antReads 0, one owner (src/components/structures/workspace/saved-views-menu), stampsAnatomy/skinReadsAnatomy/variantContract/stateContract/stateGoverned all true, skeleton by the shared anatomy renderer with no hand-made part and no part without a role, a11y 1 probe / 2 assertions (the gate's counter does not pick up the new causality suite). NO NEW DERIVER, AND NOT AN EXTENSION OF chrome/saved-views EITHER -- the adjudication, stated in full because the lot brief named both options: of the six unproduced reads, three were --ds-saved-views-menu-panel-{top,left,width}, which the render MEASURES against the viewport and stamps per instance. A measurement is not a decision, so it does not belong in a deriver's resting output; it belongs where virtual-list's three windowing channels were put in B7 -- a RESTING DECLARATION on the family's own panel rule (0, 0, 26.25rem, exactly the values the reads used to fall through to), inherited by nothing and outranked by the inline stamp exactly as an inline declaration outranks a rule. That keeps one owner for the whole --ds-saved-views-* prefix (chrome/saved-views already emits --ds-saved-views-menu-trigger-size) instead of splitting a namespace across two derivers, and it keeps the write set inside this family. readWithoutProducer 6 -> 3. RESIDUE, pinned by CATEGORY and not owned: --ds-material-overlay-border, --ds-material-overlay-shadow and --ds-material-raised-shadow-hover are the MATERIALS vocabulary, owned by derivation/materials, which emits neither. Same ruling as column-menu in this lot and as file-manager's link vocabulary in B6. STATE DECIDED ONCE (F-37, 16 -> 0): five parts became stateful -- the trigger (the component's own body), and view-item, view-item-select, delete (three kernels inside ViewItem) and action-button (a new ActionButton wrapper for the three active-card actions). Sixteen bare pseudo-classes across the trigger's hover and ring, the select surface's ring, the four action-button hover arms, its ring, its two press arms, the two view-item hover arms, the two delete hover arms, the delete ring and the shared forced-colors ring are each paired with the kernel token they stand for. The pairing is specificity-neutral: :is([data-state~='x'], :pseudo) weighs exactly what the bare pseudo weighed, so not one cascade order moved. At rest the kernel serializes nothing, so [data-state] never matches a resting node. ANATOMY: already 0/0 at HEAD and still 0/0; partsStamped 37 == partsConsumed 37. ADAPT: saved-views-menu is NOT declared in LAYOUT_SENSITIVE_FAMILIES, so the adaptSlot arm is vacuously clean. CAUSALITY: the decision-causality suite is src/components/structures/workspace/saved-views-menu/tests/SavedViewsMenu.causality.integration.test.tsx (10 tests, Chromium). The panel is portalled and mounts only while the menu is open, so the suite opens the REAL menu in the DOM runner and keeps the family's own two roots, the anchor and the panel. With no deriver there is no consumes list to discharge, so it probes what actually reaches the family's own paint, each with a negative control -- palette.seeds (the active view's tinted card), shape.radius-scale (the panel corner), typography.scale (the count pill, which is the family's OWN Box and not a composed Text), states.focus-style (the trigger's ring, measured through the kernel stamp) and motion.dial (the panel entrance, which rides --ds-motion-disclosure and is therefore bent by the dial) -- with the header band's px rhythm as the control. It reads the three measured channels back at their resting declaration and at the stamped instance, proves both hover arms arrive through [data-state~='hovered'] on nodes no pointer touched, and mirrors the row cluster under dir=rtl through the delete affordance's margin-inline-end landing on the opposite physical edge with the row's measure unchanged. MEASUREMENT NOTE for whoever edits the suite: the DOM runner that captures the markup lays nothing out, so its stamped clamp is a zero-width viewport reading; every case that measures a BOX strips the inline stamp and measures the resting declaration instead, and only the channel read-back uses the stamped markup. AXE: CLEAN in all four gated scopes -- no serious or critical finding, so the debt pin is {} and any new finding is red. BLIND SPOT of readWithoutProducer: one skin, so 3 is a total, not a floor. 2026-09-19 (DT, materials-facets lot): readWithoutProducer falls to 0 -- derivation/materials now emits the overlay/raised facet roots this family reads (expansions of the measured read chains, byte-equal at rest; the four conflicted facets are emitted as 'initial' so each family's own fallback keeps winning while the channel stays authorable). Fable-reviewed: 2026-09-19-materials-facets-review-davila.md. channelsRead 35 -> 36 (2026-09-30 re-read): 616278cf6 (W3b: hairline edge-dial reads). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "field-filters-panel": {
    "cut": "WO-FAM-08",
@@ -1851,8 +1851,8 @@
     "sourceFiles": 1,
     "channelsRead": 15,
     "classTokens": 1,
-    "partsStamped": 6,
-    "partsConsumed": 6
+    "partsStamped": 0,
+    "partsConsumed": 0
    },
    "readWithoutProducer": 1,
    "classVocabularies": 1,
@@ -1865,8 +1865,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 16,
-   "cutNote": "WO-FAM-08 (B9): the field-filters-panel structure measured on the B9 lot tree over HEAD be69bb75e. Every blocking arm is clean: inlineStyleViolations 0, visualLiterals 0, antReads 0, one owner (src/components/structures/workspace/field-filters-panel), stampsAnatomy/skinReadsAnatomy/variantContract/stateContract/stateGoverned all true, skeleton by the shared anatomy renderer, a11y 1 probe / 3 assertions. SKELETON (1 finding -> 0): the family draws NO loading state and never did -- no `loading` prop, no skeleton branch, no skeleton rule or keyframe -- so there was nothing to retire onto AnatomySkeleton, exactly as with virtual-list in B7. The single finding was a stamped part the shared renderer had no role for: `presets-row` is now 'pass' in SKELETON_PART_ROLES, beside `presets-region`, because the quick-slice pill and the chips it holds are drawn and the wrapping lane itself is not. NO DERIVER, DELIBERATELY: the family's only unproduced read is --ds-material-control-highlight, which is the MATERIALS vocabulary owned by derivation/materials; a chrome/field-filters-panel that produced it would be a second owner of another family's channel. readWithoutProducer stays 1 and is named residue for the materials family, not a gap here. Every other name the skin reads is a cascade root or a --ds-button-*/--ds-input-* relay it hands a composed primitive, and all of those have producers. ANATOMY (2 orphans -> 0): title-group and presets-row were stamped and painted by nobody. Both are wrapping flex lanes holding free-form copy, so both now state min-inline-size: 0 -- the same floor header-copy and filter-card-copy already state for the same reason, and without it a long subtitle or a long preset label pushed its lane past the panel instead of wrapping inside it. unpairedStatePseudoSelectors STAYS AT 1 and is the one pin this row carries above 0; it is adjudicated, never fabricated away. The family's single state-bearing part is `preset-chip`, which IS the composed Button primitive: that primitive runs the interaction kernel itself and spreads partAttributes(dataPart ?? 'trigger', interaction) AFTER the caller's props, so its stamp is authoritative and a caller-supplied data-state is silently dropped. State is therefore already decided ONCE for this part, and the skin could pair the selector truthfully -- but the gate's stateGoverned arm is spelled `skin reads [data-state] implies the FAMILY's own source calls partAttributes`, so pairing alone would turn a BLOCKING arm red, and satisfying that arm would mean installing a second interaction kernel on a node the primitive already governs, which is F-37 itself. Pairing was therefore NOT done and the pin stands with the mechanism written down; the gate-proxy question is escalated to the owner with the measurement above. Retiring the family's Box-as-button chip in favour of the primitive was a premium-wave decision this cut does not reverse. ADAPT: field-filters-panel is NOT declared in LAYOUT_SENSITIVE_FAMILIES, so the adaptSlot arm is vacuously clean; the family answers narrow compositions with an auto-fit 230px card grid instead of a posture. CAUSALITY: the decision-causality suite is src/components/structures/workspace/field-filters-panel/tests/FieldFiltersPanel.causality.integration.test.tsx (7 tests, Chromium). With no deriver there is no consumes list to discharge, so it probes what actually reaches the family's own paint, each with a negative control -- palette.seeds (the live filter count's ink and the chip glyph's ground), typography.scale and density.mode (the composed chip's type step and its target, measured where they LAND rather than where they are written, per the table-toolbar ruling) -- with the card's px corner as the control. It also pins, EXECUTABLY, the three decisions that reach none of this family's paint: shape.radius-scale (every corner it owns is a px literal and the chip is a `round` Button on the full rung), motion.dial (the panel entrance reads --ds-motion-normal, an alias of the cadence step the theme's entrance duration sets and the dial does not bend) and states.focus-style (delivered under :focus-visible, a platform state no static probe can enter). Each is asserted to leave every reading identical, so the day one of them starts to reach the family the inventory is re-adjudicated instead of silently outgrown. REPAIRED BY THIS CUT, not pinned: the axe `aria-input-field-name` findings. Every filter's Select/Input rendered with no accessible name -- the card's label Text was never associated with the control it labelled -- so each control now carries its filter's own name. AXE: CLEAN in all four gated scopes afterwards, so the debt pin is {}. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. Re-pin 2026-09-20 (DT, wave window): channelsRead 13 -> 14 = the 8e6b7e57b motion swap net 0 and +--ds-radius-lg (1cd0e6245 shape exposure lot 3: the four 12px sites wired to the named rung, +1)., measured by the gate; every move named with its lot. channelsRead 14 -> 15 (2026-09-30 re-read): 616278cf6 (W3b). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt"
+   "p88CallerParts": 22,
+   "cutNote": "WO-FAM-08 (B9): the field-filters-panel structure measured on the B9 lot tree over HEAD be69bb75e. Every blocking arm is clean: inlineStyleViolations 0, visualLiterals 0, antReads 0, one owner (src/components/structures/workspace/field-filters-panel), stampsAnatomy/skinReadsAnatomy/variantContract/stateContract/stateGoverned all true, skeleton by the shared anatomy renderer, a11y 1 probe / 3 assertions. SKELETON (1 finding -> 0): the family draws NO loading state and never did -- no `loading` prop, no skeleton branch, no skeleton rule or keyframe -- so there was nothing to retire onto AnatomySkeleton, exactly as with virtual-list in B7. The single finding was a stamped part the shared renderer had no role for: `presets-row` is now 'pass' in SKELETON_PART_ROLES, beside `presets-region`, because the quick-slice pill and the chips it holds are drawn and the wrapping lane itself is not. NO DERIVER, DELIBERATELY: the family's only unproduced read is --ds-material-control-highlight, which is the MATERIALS vocabulary owned by derivation/materials; a chrome/field-filters-panel that produced it would be a second owner of another family's channel. readWithoutProducer stays 1 and is named residue for the materials family, not a gap here. Every other name the skin reads is a cascade root or a --ds-button-*/--ds-input-* relay it hands a composed primitive, and all of those have producers. ANATOMY (2 orphans -> 0): title-group and presets-row were stamped and painted by nobody. Both are wrapping flex lanes holding free-form copy, so both now state min-inline-size: 0 -- the same floor header-copy and filter-card-copy already state for the same reason, and without it a long subtitle or a long preset label pushed its lane past the panel instead of wrapping inside it. unpairedStatePseudoSelectors STAYS AT 1 and is the one pin this row carries above 0; it is adjudicated, never fabricated away. The family's single state-bearing part is `preset-chip`, which IS the composed Button primitive: that primitive runs the interaction kernel itself and spreads partAttributes(dataPart ?? 'trigger', interaction) AFTER the caller's props, so its stamp is authoritative and a caller-supplied data-state is silently dropped. State is therefore already decided ONCE for this part, and the skin could pair the selector truthfully -- but the gate's stateGoverned arm is spelled `skin reads [data-state] implies the FAMILY's own source calls partAttributes`, so pairing alone would turn a BLOCKING arm red, and satisfying that arm would mean installing a second interaction kernel on a node the primitive already governs, which is F-37 itself. Pairing was therefore NOT done and the pin stands with the mechanism written down; the gate-proxy question is escalated to the owner with the measurement above. Retiring the family's Box-as-button chip in favour of the primitive was a premium-wave decision this cut does not reverse. ADAPT: field-filters-panel is NOT declared in LAYOUT_SENSITIVE_FAMILIES, so the adaptSlot arm is vacuously clean; the family answers narrow compositions with an auto-fit 230px card grid instead of a posture. CAUSALITY: the decision-causality suite is src/components/structures/workspace/field-filters-panel/tests/FieldFiltersPanel.causality.integration.test.tsx (7 tests, Chromium). With no deriver there is no consumes list to discharge, so it probes what actually reaches the family's own paint, each with a negative control -- palette.seeds (the live filter count's ink and the chip glyph's ground), typography.scale and density.mode (the composed chip's type step and its target, measured where they LAND rather than where they are written, per the table-toolbar ruling) -- with the card's px corner as the control. It also pins, EXECUTABLY, the three decisions that reach none of this family's paint: shape.radius-scale (every corner it owns is a px literal and the chip is a `round` Button on the full rung), motion.dial (the panel entrance reads --ds-motion-normal, an alias of the cadence step the theme's entrance duration sets and the dial does not bend) and states.focus-style (delivered under :focus-visible, a platform state no static probe can enter). Each is asserted to leave every reading identical, so the day one of them starts to reach the family the inventory is re-adjudicated instead of silently outgrown. REPAIRED BY THIS CUT, not pinned: the axe `aria-input-field-name` findings. Every filter's Select/Input rendered with no accessible name -- the card's label Text was never associated with the control it labelled -- so each control now carries its filter's own name. AXE: CLEAN in all four gated scopes afterwards, so the debt pin is {}. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named. Re-pin 2026-09-20 (DT, wave window): channelsRead 13 -> 14 = the 8e6b7e57b motion swap net 0 and +--ds-radius-lg (1cd0e6245 shape exposure lot 3: the four 12px sites wired to the named rung, +1)., measured by the gate; every move named with its lot. channelsRead 14 -> 15 (2026-09-30 re-read): 616278cf6 (W3b). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "form-header": {
    "cut": "WO-FAM-10",
@@ -1881,8 +1881,8 @@
     "sourceFiles": 1,
     "channelsRead": 80,
     "classTokens": 1,
-    "partsStamped": 7,
-    "partsConsumed": 7
+    "partsStamped": 4,
+    "partsConsumed": 4
    },
    "readWithoutProducer": 1,
    "classVocabularies": 1,
@@ -1895,8 +1895,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 13,
-   "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt, not as a pass. 10 of its 47 channels have no producer, 4 of them read through the shared hero skin; the one source colour literal is the `color-mix(...)` secondary arm of `getVariantTone`, whose second byte-identical copy lives in `edit-header` -- extracting the contract once clears both. 2026-09-18: sub-lot C (the header contract) landed — the openCut debt drains to the named residuals (the --ds-material-inset-highlight name the material vocabulary never had, routed; the focus-visible arm awaiting the NavigationLink contract). Re-pin 2026-09-20 (DT, wave window): channelsRead 77 -> 78 = the 8e6b7e57b motion swap net 0 and +--ds-radius-2xl (1cd0e6245 shape exposure, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 1 -> 0 — every bare pseudo now pairs with its kernel-token twin via af9289c04 states lot (the back-chip/anchor stamp twins); decrease-only, the pin follows the tree down. channelsRead 78 -> 79 (2026-09-30 re-read): ef868058f (EVI-02: form-header radius literal onto the dial). channelsRead 79 -> 80 (2026-09-30 re-read): 616278cf6 (W3b). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | F1 (ARC-12): anatomy stamps gated on consumption evidence; the (c) occurrence(s) :213 MainIcon (icon prop) and :256 resolveSharedHeaderActionIcon - static evidence: runtime-valued icon tag, unproven; the (c) owner fix lot re-reads this denominator upward when the part becomes backed; the pcns pin stays 0 | icon (c) fix (ARC-12, 2026-10-10): icon-badge-glyph and action-icon are stamped on the header's own slot elements (index.tsx <span data-part=…>) around the icon prop and the resolved action icon; the part no longer depends on the runtime icon value. partsStamped 5 -> 7 re-read upward by measurement (F-B1 (e)); partsConsumedNotStamped measures 0 against its pin 0"
+   "p88CallerParts": 16,
+   "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt, not as a pass. 10 of its 47 channels have no producer, 4 of them read through the shared hero skin; the one source colour literal is the `color-mix(...)` secondary arm of `getVariantTone`, whose second byte-identical copy lives in `edit-header` -- extracting the contract once clears both. 2026-09-18: sub-lot C (the header contract) landed — the openCut debt drains to the named residuals (the --ds-material-inset-highlight name the material vocabulary never had, routed; the focus-visible arm awaiting the NavigationLink contract). Re-pin 2026-09-20 (DT, wave window): channelsRead 77 -> 78 = the 8e6b7e57b motion swap net 0 and +--ds-radius-2xl (1cd0e6245 shape exposure, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 1 -> 0 — every bare pseudo now pairs with its kernel-token twin via af9289c04 states lot (the back-chip/anchor stamp twins); decrease-only, the pin follows the tree down. channelsRead 78 -> 79 (2026-09-30 re-read): ef868058f (EVI-02: form-header radius literal onto the dial). channelsRead 79 -> 80 (2026-09-30 re-read): 616278cf6 (W3b). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | F1 (ARC-12): anatomy stamps gated on consumption evidence; the (c) occurrence(s) :213 MainIcon (icon prop) and :256 resolveSharedHeaderActionIcon - static evidence: runtime-valued icon tag, unproven; the (c) owner fix lot re-reads this denominator upward when the part becomes backed; the pcns pin stays 0 | icon (c) fix (ARC-12, 2026-10-10): icon-badge-glyph and action-icon are stamped on the header's own slot elements (index.tsx <span data-part=…>) around the icon prop and the resolved action icon; the part no longer depends on the runtime icon value. partsStamped 5 -> 7 re-read upward by measurement (F-B1 (e)); partsConsumedNotStamped measures 0 against its pin 0 | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "edit-header": {
    "cut": "WO-FAM-10",
@@ -1911,8 +1911,8 @@
     "sourceFiles": 1,
     "channelsRead": 81,
     "classTokens": 1,
-    "partsStamped": 13,
-    "partsConsumed": 13
+    "partsStamped": 4,
+    "partsConsumed": 4
    },
    "readWithoutProducer": 1,
    "classVocabularies": 1,
@@ -1925,8 +1925,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 15,
-   "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt. Same shared hero skin and the same single `getVariantTone` colour literal as `form-header`; 4 of its 5 unpaired state pseudo-selectors are the shared skin's. 2026-09-18: sub-lot C (the header contract) landed — the openCut debt drains to the named residuals (the --ds-material-inset-highlight name the material vocabulary never had, routed; the focus-visible arm awaiting the NavigationLink contract). Re-pin 2026-09-20 (DT, wave window): channelsRead 78 -> 79 = the 8e6b7e57b motion swap net 0 and +--ds-radius-2xl (1cd0e6245 shape exposure, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 2 -> 1 — every bare pseudo now pairs with its kernel-token twin via af9289c04 states lot (the back-chip/anchor stamp twins); decrease-only, the pin follows the tree down. channelsRead 79 -> 80 (2026-09-30 re-read): 34a7b69cb (EVI-02: edit-header, the form-header twin). channelsRead 80 -> 81 (2026-09-30 re-read): 616278cf6 (W3b). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | F1 (ARC-12): anatomy stamps gated on consumption evidence; the (c) occurrence(s) :271 Icon - static evidence: runtime-valued icon tag, unproven; the (c) owner fix lot re-reads this denominator upward when the part becomes backed; the pcns pin stays 0 | icon (c) fix (ARC-12, 2026-10-10): icon-badge-glyph is stamped on the header's own slot element (index.tsx <span data-part=\"icon-badge-glyph\">) around the icon prop; the three action-icon sites stamp the same owned slot; the part no longer depends on the runtime icon value. partsStamped 12 -> 13 re-read upward by measurement (F-B1 (e)); partsConsumedNotStamped measures 0 against its pin 0"
+   "p88CallerParts": 24,
+   "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt. Same shared hero skin and the same single `getVariantTone` colour literal as `form-header`; 4 of its 5 unpaired state pseudo-selectors are the shared skin's. 2026-09-18: sub-lot C (the header contract) landed — the openCut debt drains to the named residuals (the --ds-material-inset-highlight name the material vocabulary never had, routed; the focus-visible arm awaiting the NavigationLink contract). Re-pin 2026-09-20 (DT, wave window): channelsRead 78 -> 79 = the 8e6b7e57b motion swap net 0 and +--ds-radius-2xl (1cd0e6245 shape exposure, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 2 -> 1 — every bare pseudo now pairs with its kernel-token twin via af9289c04 states lot (the back-chip/anchor stamp twins); decrease-only, the pin follows the tree down. channelsRead 79 -> 80 (2026-09-30 re-read): 34a7b69cb (EVI-02: edit-header, the form-header twin). channelsRead 80 -> 81 (2026-09-30 re-read): 616278cf6 (W3b). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | F1 (ARC-12): anatomy stamps gated on consumption evidence; the (c) occurrence(s) :271 Icon - static evidence: runtime-valued icon tag, unproven; the (c) owner fix lot re-reads this denominator upward when the part becomes backed; the pcns pin stays 0 | icon (c) fix (ARC-12, 2026-10-10): icon-badge-glyph is stamped on the header's own slot element (index.tsx <span data-part=\"icon-badge-glyph\">) around the icon prop; the three action-icon sites stamp the same owned slot; the part no longer depends on the runtime icon value. partsStamped 12 -> 13 re-read upward by measurement (F-B1 (e)); partsConsumedNotStamped measures 0 against its pin 0 | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "collection-header": {
    "cut": "WO-FAM-10",
@@ -1989,8 +1989,8 @@
     "sourceFiles": 3,
     "channelsRead": 81,
     "classTokens": 1,
-    "partsStamped": 12,
-    "partsConsumed": 12
+    "partsStamped": 4,
+    "partsConsumed": 4
    },
    "readWithoutProducer": 2,
    "classVocabularies": 1,
@@ -2003,8 +2003,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 21,
-   "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 31 of 79 channels have no producer -- the highest unproduced share in the cut. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact. Re-pin 2026-09-20 (DT, wave window): channelsRead 83 -> 81 = three rungs collapsing onto one intent (8e6b7e57b, -2)., measured by the gate; every move named with its lot. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | F1 (ARC-12): anatomy stamps gated on consumption evidence; the (c) occurrence(s) :145 tab.icon - static evidence: runtime-valued icon tag, unproven; the (c) owner fix lot re-reads this denominator upward when the part becomes backed; the pcns pin stays 0 | icon (c) fix (ARC-12, 2026-10-10): tab-icon is stamped on the tab's own slot element (runtime/rendering/index.tsx <span data-part=\"tab-icon\">) around tab.icon; the part no longer depends on the runtime icon value. partsStamped 11 -> 12 re-read upward by measurement (F-B1 (e)); partsConsumedNotStamped measures 0 against its pin 0"
+   "p88CallerParts": 29,
+   "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 31 of 79 channels have no producer -- the highest unproduced share in the cut. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact. Re-pin 2026-09-20 (DT, wave window): channelsRead 83 -> 81 = three rungs collapsing onto one intent (8e6b7e57b, -2)., measured by the gate; every move named with its lot. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | F1 (ARC-12): anatomy stamps gated on consumption evidence; the (c) occurrence(s) :145 tab.icon - static evidence: runtime-valued icon tag, unproven; the (c) owner fix lot re-reads this denominator upward when the part becomes backed; the pcns pin stays 0 | icon (c) fix (ARC-12, 2026-10-10): tab-icon is stamped on the tab's own slot element (runtime/rendering/index.tsx <span data-part=\"tab-icon\">) around tab.icon; the part no longer depends on the runtime icon value. partsStamped 11 -> 12 re-read upward by measurement (F-B1 (e)); partsConsumedNotStamped measures 0 against its pin 0 | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "header-surface": {
    "cut": "WO-FAM-10",
@@ -2070,8 +2070,8 @@
     "sourceFiles": 4,
     "channelsRead": 58,
     "classTokens": 1,
-    "partsStamped": 8,
-    "partsConsumed": 9
+    "partsStamped": 5,
+    "partsConsumed": 6
    },
    "readWithoutProducer": 0,
    "classVocabularies": 1,
@@ -2084,8 +2084,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 7,
-   "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 12 unpaired state pseudo-selectors, the cut's second largest F-37 debt, and no executable a11y assertion of its own. channelsRead 57 -> 58 (2026-09-30 re-read): 7da38d1f4 (W3d: hairline edge-dial read). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt"
+   "p88CallerParts": 10,
+   "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 12 unpaired state pseudo-selectors, the cut's second largest F-37 debt, and no executable a11y assertion of its own. channelsRead 57 -> 58 (2026-09-30 re-read): 7da38d1f4 (W3d: hairline edge-dial read). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "section-frame": {
    "cut": "WO-FAM-10",
@@ -2166,13 +2166,13 @@
     "sourceFiles": 8,
     "channelsRead": 36,
     "classTokens": 1,
-    "partsStamped": 28,
+    "partsStamped": 7,
     "partsConsumed": 4
    },
    "readWithoutProducer": 0,
    "classVocabularies": 1,
    "legacyNamespaceClasses": 0,
-   "partsStampedNotConsumed": 24,
+   "partsStampedNotConsumed": 3,
    "partsConsumedNotStamped": 0,
    "statesConsumedNotStamped": 0,
    "unpairedStatePseudoSelectors": 0,
@@ -2180,8 +2180,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 68,
-   "cutNote": "WO-FAM-10 sub-lot F, cut as ONE family. `summary-strip`, `field-grid`, `field`, `action-bar` and `panel` are blocks of it, not families: every block root stamps `data-structure='record'` and all static geometry lives in the single `skin/record/index.css`. Measured as five families, each of them resolves zero skins and fails `skinReadsAnatomy` for that reason alone. The prefix siblings `record-facts` and `record-workbench` are excluded by the foreign-compound filter with their reasons printed, so no pin is needed here. Re-pin 2026-09-20 (DT, FAM-08/FAM-10 contrast drain lot, Fable ACCEPT): channelsRead 33 -> 35 = +--ds-record-quiet-ink +--ds-record-canvas-quiet-ink, the family's quiet inks stated in its deriver as color-mix(72% primary into the part's actual ground); their fallback grounds were already read. The fleet's governed quiet weight (72%, from the data-table repair) binds WCAG at 64% on the routed residue, measured by the lot's drill. Record's AXE_DEBT map in Record.causality.integration.test.tsx is now empty by identity; its quiet roles collapse onto one compliant rung with the rank recorded in the suite docblock. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt"
+   "p88CallerParts": 91,
+   "cutNote": "WO-FAM-10 sub-lot F, cut as ONE family. `summary-strip`, `field-grid`, `field`, `action-bar` and `panel` are blocks of it, not families: every block root stamps `data-structure='record'` and all static geometry lives in the single `skin/record/index.css`. Measured as five families, each of them resolves zero skins and fails `skinReadsAnatomy` for that reason alone. The prefix siblings `record-facts` and `record-workbench` are excluded by the foreign-compound filter with their reasons printed, so no pin is needed here. Re-pin 2026-09-20 (DT, FAM-08/FAM-10 contrast drain lot, Fable ACCEPT): channelsRead 33 -> 35 = +--ds-record-quiet-ink +--ds-record-canvas-quiet-ink, the family's quiet inks stated in its deriver as color-mix(72% primary into the part's actual ground); their fallback grounds were already read. The fleet's governed quiet weight (72%, from the data-table repair) binds WCAG at 64% on the routed residue, measured by the lot's drill. Record's AXE_DEBT map in Record.causality.integration.test.tsx is now empty by identity; its quiet roles collapse onto one compliant rung with the rank recorded in the suite docblock. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "form-sections": {
    "cut": "WO-FAM-10",
@@ -2190,8 +2190,8 @@
     "sourceFiles": 1,
     "channelsRead": 43,
     "classTokens": 1,
-    "partsStamped": 13,
-    "partsConsumed": 13
+    "partsStamped": 3,
+    "partsConsumed": 3
    },
    "readWithoutProducer": 0,
    "classVocabularies": 1,
@@ -2204,8 +2204,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 20,
-   "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 43 channels read, 1 without a producer, 8 hand-made skeleton constructs. 2026-09-19 (DT, materials-facets lot): readWithoutProducer falls to 0 -- derivation/materials now emits the overlay/raised facet roots this family reads (expansions of the measured read chains, byte-equal at rest; the four conflicted facets are emitted as 'initial' so each family's own fallback keeps winning while the channel stays authorable). Fable-reviewed: 2026-09-19-materials-facets-review-davila.md. channelsRead 42 -> 43 (2026-09-30 re-read): 616278cf6 (W3b). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt"
+   "p88CallerParts": 30,
+   "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 43 channels read, 1 without a producer, 8 hand-made skeleton constructs. 2026-09-19 (DT, materials-facets lot): readWithoutProducer falls to 0 -- derivation/materials now emits the overlay/raised facet roots this family reads (expansions of the measured read chains, byte-equal at rest; the four conflicted facets are emitted as 'initial' so each family's own fallback keeps winning while the channel stays authorable). Fable-reviewed: 2026-09-19-materials-facets-review-davila.md. channelsRead 42 -> 43 (2026-09-30 re-read): 616278cf6 (W3b). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "edit-fields": {
    "cut": "WO-FAM-10",
@@ -2214,8 +2214,8 @@
     "sourceFiles": 1,
     "channelsRead": 30,
     "classTokens": 1,
-    "partsStamped": 14,
-    "partsConsumed": 14
+    "partsStamped": 1,
+    "partsConsumed": 1
    },
    "readWithoutProducer": 0,
    "classVocabularies": 1,
@@ -2228,8 +2228,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 28,
-   "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 8 inline paints and 34 parts with no skeleton role. channelsRead 29 -> 30 (2026-09-30 re-read): 616278cf6 (W3b). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt"
+   "p88CallerParts": 41,
+   "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 8 inline paints and 34 parts with no skeleton role. channelsRead 29 -> 30 (2026-09-30 re-read): 616278cf6 (W3b). | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "form-surface": {
    "cut": "WO-FAM-10",
@@ -2240,8 +2240,8 @@
     "sourceFiles": 1,
     "channelsRead": 11,
     "classTokens": 2,
-    "partsStamped": 1,
-    "partsConsumed": 1
+    "partsStamped": 0,
+    "partsConsumed": 0
    },
    "readWithoutProducer": 0,
    "classVocabularies": 1,
@@ -2254,8 +2254,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 3,
-   "cutNote": "WO-FAM-10 sub-lot F, and one of the four owners S1 made visible. Its skin selects classes and never `[data-part]`: a near-empty shell reading 3 channels, so the anatomy contract has to be built rather than drained. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt"
+   "p88CallerParts": 4,
+   "cutNote": "WO-FAM-10 sub-lot F, and one of the four owners S1 made visible. Its skin selects classes and never `[data-part]`: a near-empty shell reading 3 channels, so the anatomy contract has to be built rather than drained. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "wizard-surface": {
    "cut": "WO-FAM-10",
@@ -2266,8 +2266,8 @@
     "sourceFiles": 1,
     "channelsRead": 9,
     "classTokens": 0,
-    "partsStamped": 1,
-    "partsConsumed": 1
+    "partsStamped": 0,
+    "partsConsumed": 0
    },
    "readWithoutProducer": 0,
    "classVocabularies": 0,
@@ -2280,8 +2280,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 2,
-   "cutNote": "WO-FAM-10 sub-lot F, S1-visible. A near-empty shell: 2 channels, no `[data-part]` in the skin. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt"
+   "p88CallerParts": 3,
+   "cutNote": "WO-FAM-10 sub-lot F, S1-visible. A near-empty shell: 2 channels, no `[data-part]` in the skin. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "detail-form-surface": {
    "cut": "WO-FAM-10",
@@ -2483,8 +2483,8 @@
     "sourceFiles": 1,
     "channelsRead": 173,
     "classTokens": 1,
-    "partsStamped": 6,
-    "partsConsumed": 6
+    "partsStamped": 0,
+    "partsConsumed": 0
    },
    "readWithoutProducer": 0,
    "classVocabularies": 1,
@@ -2497,8 +2497,8 @@
    "fanOutUnreached": 0,
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
-   "p88CallerParts": 30,
-   "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 is a FALSE GREEN and is recorded as such: the family reads no channel in its own namespace at all -- its 22 reads are root tokens, `--ds-search-command-bar-*` has 0 producers and 0 readers, and the namespace has to be created before it can be drained. The pin is the gate's measurement, and the work is larger than the number. Re-pin 2026-09-20 (DT, wave window): channelsRead 167 -> 173 = +6 root reads from the FAM-11 shell-cluster wiring lot 82bffda11 (--ds-border-width-1, --ds-font-weight-bold, --ds-font-weight-semibold, --ds-line-height-normal, --ds-radius-lg, --ds-text-eyebrow-letter-spacing — 16 channels wired to governed roots, six of those root reads new names in this skin); the ccb6b784d motion swap is net 0., measured by the gate; every move named with its lot. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 173 -> 174 = bc1f738ed (WO-EVI-02 search-command-bar wiring: --ds-motion-glacial) -- coverage. Denominator re-read 2026-10-03 (census re-read per the gate instruction; the mover's skin diff read against the gate's live read set): channelsRead 174 -> 173 = ebd2585b5 (fix(search-command-bar): composed buttons follow the tenant focus signature): the composed buttons' focus ring stops being assembled in the skin from --ds-focus-ring-width and --ds-focus-ring-color and reads the composed --ds-focus-ring instead -- two names left the set, one joined, and the --ds-color-primary read on the same declaration is still read elsewhere in the skin. readWithoutProducer stays 0; no ratchet moved. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt"
+   "p88CallerParts": 36,
+   "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 is a FALSE GREEN and is recorded as such: the family reads no channel in its own namespace at all -- its 22 reads are root tokens, `--ds-search-command-bar-*` has 0 producers and 0 readers, and the namespace has to be created before it can be drained. The pin is the gate's measurement, and the work is larger than the number. Re-pin 2026-09-20 (DT, wave window): channelsRead 167 -> 173 = +6 root reads from the FAM-11 shell-cluster wiring lot 82bffda11 (--ds-border-width-1, --ds-font-weight-bold, --ds-font-weight-semibold, --ds-line-height-normal, --ds-radius-lg, --ds-text-eyebrow-letter-spacing — 16 channels wired to governed roots, six of those root reads new names in this skin); the ccb6b784d motion swap is net 0., measured by the gate; every move named with its lot. Re-pin 2026-09-25 (census re-read per the gate instruction; each mover measured by the gate's own per-commit census): channelsRead 173 -> 174 = bc1f738ed (WO-EVI-02 search-command-bar wiring: --ds-motion-glacial) -- coverage. Denominator re-read 2026-10-03 (census re-read per the gate instruction; the mover's skin diff read against the gate's live read set): channelsRead 174 -> 173 = ebd2585b5 (fix(search-command-bar): composed buttons follow the tenant focus signature): the composed buttons' focus ring stops being assembled in the skin from --ds-focus-ring-width and --ds-focus-ring-color and reads the composed --ds-focus-ring instead -- two names left the set, one joined, and the --ds-color-primary read on the same declaration is still read elsewhere in the skin. readWithoutProducer stays 0; no ratchet moved. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
   },
   "command-palette": {
    "cut": "WO-FAM-11",

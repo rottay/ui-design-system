@@ -8,7 +8,8 @@
  * family-cut G1 all read. The body below is the adopted census.mjs verbatim; only its CLI shell
  * (argv, the JSON write, console output) is replaced by this function's parameters and return.
  */
-// Provenance: arc12/l2-tools/census.mjs sha256 1937b947ace1623c079a11fdc8b038f052d9aee6255475b8f121ddabc91e3b56 (census v7, adopted by the DT 2026-10-09).
+// Provenance: arc12/l2-tools/census.mjs sha256 3ca4db81466ecdb962b4feaa417397e8df81e5696b80e44f1e13cfabd5b6d3d2 (census v7.1, 2026-10-10: the lexical
+// re-export chain and the unresolved-caller report; v7 was 1937b947, adopted by the DT 2026-10-09).
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, relative, dirname, resolve } from 'node:path';
 import { createRequire } from 'node:module';
@@ -410,6 +411,22 @@ function analyzeFile(file) {
     return 'imported-component';
   };
   for (const st of sites) st.tagKind = tagKind(st.tag);
+  // v7.1: what a caller tag IS when its family does not resolve (tagKind), and -- for a local
+  // binding -- its initializer. A tag bound to a string/template literal is an intrinsic element.
+  const localInits = new Map();
+  const scanInits = (n) => {
+    if (ts.isVariableDeclaration(n) && ts.isIdentifier(n.name) && n.initializer) localInits.set(n.name.text, unwrap(n.initializer));
+    ts.forEachChild(n, scanInits);
+  };
+  scanInits(sf);
+  const intrinsicInit = (e) => Boolean(e) && (ts.isStringLiteralLike(e) || ts.isTemplateExpression(e)
+    || (ts.isConditionalExpression(e) && intrinsicInit(unwrap(e.whenTrue)) && intrinsicInit(unwrap(e.whenFalse))));
+  for (const u of compoundUses) {
+    const init = localInits.get(u.tag.split('.')[0]);
+    u.tagKind = tagKind(u.tag);
+    u.localInit = init ? textOf(sf, init).replace(/\s+/g, ' ').slice(0, 120) : null;
+    u.localIntrinsic = intrinsicInit(init);
+  }
   const native = new Set();
   const lits = (t) => [...t.matchAll(/["'`]([a-z0-9-]+)["'`]/g)].map((m) => m[1]);
   const scanNative = (n) => {
@@ -527,29 +544,152 @@ for (const r of engineSites) {
   if (r.state === 'state-rest') b.stateRest.add(r.engine);
 }
 const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+// v7.1 (ARC-12): the LEXICAL re-export chain. v7 attributed a caller by its import path landing
+// INSIDE a family dir, else by kebab(tag) being a family name. `import { Text } from
+// '@/components/primitives'` lands in no family dir and 'text' is no family ('typography' is), so
+// every barrel-imported Text/Heading was skipped in silence. The chain follows the imported name
+// through `export { A as B } from`, `export * from`, import-then-export and `export const B = A`
+// to the module that declares it; the caller counts as the FIRST family dir on that proven path.
+// Fail-closed: a chain that does not reach a declaration resolves nothing and is REPORTED.
+const ALIASES = [['@/', SRC], ['@ui/', COMPONENTS]]; // packages/core/tsconfig.json `paths`
+const specBase = (file, spec) => {
+  if (spec.startsWith('.')) return resolve(dirname(file), spec);
+  for (const [prefix, dir] of ALIASES) if (spec.startsWith(prefix)) return join(dir, spec.slice(prefix.length));
+  return null; // a package
+};
+const familyOfPath = (p) => { for (const [dir, fam] of familyDirs) if (p === dir || p.startsWith(dir + '/')) return fam; return null; };
+const isFile = (p) => existsSync(p) && statSync(p).isFile();
+const moduleFile = (base) => [base, `${base}.tsx`, `${base}.ts`, join(base, 'index.tsx'), join(base, 'index.ts')].find(isFile) ?? null;
+const exportTables = new Map();
+function exportTable(file) {
+  if (exportTables.has(file)) return exportTables.get(file);
+  const sf = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, file.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+  const table = { imports: new Map(), named: new Map(), stars: [], locals: new Map() };
+  const has = (st, kind) => (ts.canHaveModifiers(st) ? ts.getModifiers(st) ?? [] : []).some((m) => m.kind === kind);
+  const declare = (st, name, aliasOf) => {
+    table.locals.set(name, aliasOf);
+    if (has(st, ts.SyntaxKind.ExportKeyword)) table.named.set(has(st, ts.SyntaxKind.DefaultKeyword) ? 'default' : name, { local: name });
+  };
+  for (const st of sf.statements) {
+    if (ts.isImportDeclaration(st) && st.importClause) {
+      const spec = st.moduleSpecifier.text; const ic = st.importClause;
+      if (ic.name) table.imports.set(ic.name.text, { spec, imported: 'default' });
+      if (ic.namedBindings && ts.isNamedImports(ic.namedBindings)) for (const el of ic.namedBindings.elements) table.imports.set(el.name.text, { spec, imported: (el.propertyName ?? el.name).text });
+      if (ic.namedBindings && ts.isNamespaceImport(ic.namedBindings)) table.imports.set(ic.namedBindings.name.text, { spec, imported: '*' });
+    } else if (ts.isExportDeclaration(st)) {
+      const spec = st.moduleSpecifier ? st.moduleSpecifier.text : null;
+      if (!st.exportClause) table.stars.push(spec);
+      else if (ts.isNamespaceExport(st.exportClause)) table.named.set(st.exportClause.name.text, { spec, imported: '*' });
+      else for (const el of st.exportClause.elements) table.named.set(el.name.text, spec ? { spec, imported: (el.propertyName ?? el.name).text } : { local: (el.propertyName ?? el.name).text });
+    } else if (ts.isExportAssignment(st)) {
+      table.named.set('default', ts.isIdentifier(st.expression) ? { local: st.expression.text } : { here: true });
+    } else if ((ts.isFunctionDeclaration(st) || ts.isClassDeclaration(st)) && st.name) {
+      declare(st, st.name.text, null);
+    } else if ((ts.isFunctionDeclaration(st) || ts.isClassDeclaration(st)) && has(st, ts.SyntaxKind.DefaultKeyword)) {
+      table.named.set('default', { here: true });
+    } else if (ts.isVariableStatement(st)) {
+      for (const d of st.declarationList.declarations) {
+        if (!ts.isIdentifier(d.name)) continue;
+        let init = d.initializer;
+        while (init && (ts.isParenthesizedExpression(init) || ts.isAsExpression(init) || ts.isNonNullExpression(init) || ts.isSatisfiesExpression(init))) init = init.expression;
+        declare(st, d.name.text, init && ts.isIdentifier(init) ? init.text : null);
+      }
+    }
+  }
+  exportTables.set(file, table);
+  return table;
+}
+// -> { family } | { definedIn } (declared outside every family dir) | { thirdParty } | { broken }
+function followExport(file, name, seen, path) {
+  const key = `${file}\0${name}`;
+  if (seen.has(key)) return { broken: `re-export cycle at ${rel(file)}#${name}` };
+  seen.add(key);
+  const here = [...path, file];
+  const settle = (r) => (r.broken || r.family ? r : { ...r, family: here.map(familyOfPath).find(Boolean) ?? null });
+  const hop = (spec, imported) => {
+    const base = specBase(file, spec);
+    if (!base) return settle({ thirdParty: spec });
+    const target = moduleFile(base);
+    if (!target) return { broken: `module not found: ${spec} (from ${rel(file)})` };
+    if (imported === '*') return settle({ definedIn: rel(target), family: familyOfPath(target) ?? undefined });
+    return followExport(target, imported, seen, here);
+  };
+  const table = exportTable(file);
+  const local = (id, depth = 0) => {
+    if (table.imports.has(id)) { const im = table.imports.get(id); return hop(im.spec, im.imported); }
+    if (!table.locals.has(id)) return { broken: `no binding '${id}' in ${rel(file)}` };
+    const aliasOf = table.locals.get(id);
+    if (aliasOf && aliasOf !== id && depth < 8 && (table.imports.has(aliasOf) || table.locals.has(aliasOf))) return local(aliasOf, depth + 1);
+    return settle({ definedIn: rel(file) });
+  };
+  const entry = table.named.get(name);
+  if (entry) return entry.here ? settle({ definedIn: rel(file) }) : entry.spec ? hop(entry.spec, entry.imported) : local(entry.local);
+  if (name !== 'default') for (const spec of table.stars) {
+    const base = spec && specBase(file, spec);
+    const target = base && moduleFile(base);
+    if (!target) continue;
+    const r = followExport(target, name, seen, here);
+    if (!r.broken) return r;
+  }
+  return { broken: `no export '${name}' in ${rel(file)}` };
+}
 function resolveFamily(file, tag, imp) {
   const name = tag.split('.')[0];
   const cand = kebab(name);
+  let chain = null;
   if (imp) {
-    let base = null;
-    if (imp.spec.startsWith('.')) base = resolve(dirname(file), imp.spec);
-    else if (imp.spec.startsWith('@/')) base = join(SRC, imp.spec.slice(2));
+    const base = specBase(file, imp.spec);
     if (base) {
       for (const [dir, fam] of familyDirs) if (base === dir || base.startsWith(dir + '/')) return { family: fam, how: 'import-path' };
-    }
+      const target = moduleFile(base);
+      chain = target ? followExport(target, imp.imported, new Set(), []) : { broken: `module not found: ${imp.spec}` };
+      if (chain.family) return { family: chain.family, how: 're-export-chain' };
+    } else chain = { thirdParty: imp.spec };
   }
   const dirs = familyByName.get(cand);
-  if (dirs && dirs.length) return { family: cand, how: 'tag-name' };
-  return null;
+  // The tag-name fallback is kept for tag == family. `chain` rides along so a fallback taken
+  // AGAINST a proven non-family chain is auditable (tagNameOverChain).
+  if (dirs && dirs.length) return { family: cand, how: 'tag-name', chain };
+  return { family: null, chain };
 }
 const NATIVE_PARTS = new Set(); for (const r of fileResults.values()) for (const x of r.native) NATIVE_PARTS.add(x);
 const compoundSites = [];
+// v7.1: NO SILENT SKIP. Every opener with a literal data-part/data-state whose family does not
+// resolve is reported with the evidence that classifies it:
+//   local-intrinsic-variable  the tag is a local binding initialised to a string/template literal
+//                             (an intrinsic element, e.g. `h${level}`), never a DS component
+//   local-component           the tag is a function/forwardRef/memo component declared in the file
+//   third-party               the tag is imported from a package (antd, rc-*, ...)
+//   non-family-component      the chain reaches a declaration outside every family dir (no engines/)
+//   local-dynamic-binding     a local non-literal binding: the element type is not statically known
+//   unresolvable              no import and no local binding, or a chain that breaks
+// The last two are the GENUINELY UNRESOLVABLE set: it must be empty or individually justified.
+const unresolvedCallers = [];
+const tagNameOverChain = [];
+const nonBreachingCallers = {}; // family -> openers resolved to a family whose engines let no caller part/state land
 for (const [f, r] of fileResults) {
   for (const u of r.compoundUses) {
-    const res = resolveFamily(f, u.tag, r.imports.get(u.tag.split('.')[0]));
-    if (!res) continue;
+    const imp = r.imports.get(u.tag.split('.')[0]);
+    const res = resolveFamily(f, u.tag, imp);
+    if (!res.family) {
+      const ch = res.chain;
+      const cls = u.tagKind === 'ant' || (ch && ch.thirdParty) ? 'third-party'
+        : ch && ch.definedIn ? 'non-family-component'
+        : ch ? 'unresolvable'
+        : u.tagKind === 'local-component' ? 'local-component'
+        : u.tagKind === 'dynamic' ? (u.localIntrinsic ? 'local-intrinsic-variable' : 'local-dynamic-binding')
+        : 'unresolvable';
+      const evidence = ch ? (ch.thirdParty ? `package ${ch.thirdParty}` : ch.definedIn ? `declared in ${ch.definedIn}` : ch.broken)
+        : u.localInit ? `local binding = ${u.localInit}` : `tagKind ${u.tagKind}, no import`;
+      unresolvedCallers.push({ file: rel(f), line: u.line, tag: u.tag, callerPart: u.part, callerState: u.state, class: cls, importSpec: imp ? imp.spec : null, evidence });
+      continue;
+    }
+    if (res.how === 'tag-name' && (!imp || (res.chain && !res.chain.family))) {
+      const ch = res.chain;
+      tagNameOverChain.push({ file: rel(f), line: u.line, tag: u.tag, family: res.family, importSpec: imp ? imp.spec : null, chain: !ch ? `no import (tagKind ${u.tagKind})` : ch.thirdParty ? `package ${ch.thirdParty}` : ch.definedIn ? `declared in ${ch.definedIn}` : ch.broken });
+    }
     const b = breachingFamilies.get(res.family);
-    if (!b) continue;
+    if (!b) { nonBreachingCallers[res.family] = (nonBreachingCallers[res.family] ?? 0) + 1; continue; }
     const parts = (u.part ?? '').split('|').filter(Boolean);
     // v2 owner-skin attribution: nearest ancestor skin family, plus skin families named by a
     // hyphen-join of contiguous ancestor dirs (collection-workspace/render-dispatch ->
@@ -607,5 +747,5 @@ for (const [f, r] of fileResults) {
 
 const nativeParts = new Set(); for (const r of fileResults.values()) for (const x of r.native) nativeParts.add(x);
 for (const c of compoundSites) c.callerPartNativelyStamped = (c.callerPart ?? '').split('|').filter(Boolean).some((x) => nativeParts.has(x));
-return { nativeParts: [...nativeParts].sort(), engineSites, structuralSites, compoundSites, familiesWithSkin: [...familiesWithSkin].sort(), engineFileCount: [...fileResults.keys()].filter((f) => /\/engines\/(classic|modern|rustic)\/index\.tsx$/.test(f)).length, skinSelectorCount: skinSelectors.length };
+return { nativeParts: [...nativeParts].sort(), engineSites, structuralSites, compoundSites, unresolvedCallers, tagNameOverChain, nonBreachingCallers, familiesWithSkin: [...familiesWithSkin].sort(), engineFileCount: [...fileResults.keys()].filter((f) => /\/engines\/(classic|modern|rustic)\/index\.tsx$/.test(f)).length, skinSelectorCount: skinSelectors.length };
 }

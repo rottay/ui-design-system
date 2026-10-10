@@ -105,7 +105,9 @@ describe('engine/skins/pass-through -- comparison drills (one move each)', () =>
     assert.equal(e.typography.partStripEligible, false);
     assert.equal(e.box.partStripEligible, false, 'a layout carrier waits on the owner carrier ruling whatever its set says');
     assert.ok(door.ledger.families.typography.part.length > 0, 'a surviving held set exists to check');
-    assert.ok(door.ledger.families.typography.part.every((h) => typeof h === 'object' && h.routing), 'surviving held entries keep their routing');
+    // A held entry carries its routing, or -- newly visible under census v7.1 -- its cutNote.
+    assert.ok(door.ledger.families.typography.part.every((h) => typeof h === 'object' && (h.routing || h.cutNote)), 'surviving held entries keep their routing or cutNote');
+    assert.deepEqual(door.ledger.families.typography.part, ledger.families.typography.part, 'the door rewrites no surviving held entry');
   });
 
   it('a site that sheds its paint to leave the count is refused (a NEW unpainted row)', () => {
@@ -259,5 +261,129 @@ describe('engine/skins/pass-through -- source drills (the census itself turns th
     } finally {
       rmSync(join(core(), 'src/components/primitives/display/zz-drill'), { recursive: true, force: true });
     }
+  });
+
+  // census v7.1: a caller tag is resolved THROUGH a barrel by its lexical re-export chain, and an
+  // opener whose family does not resolve is reported, never skipped.
+  it('resolves a caller through the barrel, and reports what it cannot resolve', () => {
+    const dir = join(core(), 'src/components/structures/zz-resolver-drill');
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'index.tsx'), [
+      "import React from 'react';",
+      "import { Card as AntCard } from 'antd';",
+      "import { Box, Heading, Nope, Text } from '@/components/primitives';",
+      "import { Text as DeepText } from '../../primitives';",
+      "import { Text as CompoundText } from '@ui/primitives/display/typography/compound/text';",
+      'export function ZzResolverDrill({ level }: { level: 2 | 3 }) {',
+      '  const LocalHeading = `h${level}`;',
+      '  return (',
+      '    <div data-part="zz-intrinsic">',
+      '      <Text data-part="zz-barrel" />',
+      '      <DeepText data-part="zz-deep-relative" />',
+      '      <Heading data-part="zz-heading" />',
+      '      <CompoundText data-part="zz-compound-import" />',
+      '      <Box data-part="zz-tag-is-family" />',
+      '      <LocalHeading data-part="zz-local-intrinsic" />',
+      '      <AntCard data-part="zz-third-party" />',
+      '      <Mystery data-part="zz-unknown" />',
+      '      <Nope data-part="zz-broken-chain" />',
+      '    </div>',
+      '  );',
+      '}',
+      '',
+    ].join('\n'));
+    try {
+      const { raw, census } = measurePassThrough({ repoRoot: ws, fresh: true });
+      const mine = (row) => row.file.endsWith('structures/zz-resolver-drill/index.tsx');
+      const resolved = Object.fromEntries(raw.compoundSites.filter(mine).map((c) => [c.callerPart, `${c.childFamily} (${c.resolvedBy})`]));
+      assert.deepEqual(resolved, {
+        'zz-barrel': 'typography (re-export-chain)',
+        'zz-deep-relative': 'typography (re-export-chain)',
+        'zz-heading': 'typography (re-export-chain)',
+        'zz-compound-import': 'typography (import-path)',
+        'zz-tag-is-family': 'box (re-export-chain)',
+      });
+      const reported = Object.fromEntries(census.unresolvedCallers.rows.filter(mine).map((u) => [u.callerPart, u.class]));
+      assert.deepEqual(reported, {
+        'zz-local-intrinsic': 'local-intrinsic-variable',
+        'zz-third-party': 'third-party',
+        'zz-unknown': 'unresolvable',
+        'zz-broken-chain': 'unresolvable',
+      });
+      const everywhere = [...raw.compoundSites, ...census.unresolvedCallers.rows].filter(mine).map((r) => r.callerPart);
+      assert.ok(!everywhere.includes('zz-intrinsic'), 'an intrinsic element is not a caller');
+      assert.deepEqual(census.unresolvedCallers.genuinelyUnresolvable.filter(mine).map((u) => u.callerPart).sort(), ['zz-broken-chain', 'zz-unknown']);
+      assert.match(census.unresolvedCallers.rows.find((u) => u.callerPart === 'zz-broken-chain').evidence, /no export 'Nope'/);
+      // The four typography callers are dependents of nothing here (no owner skin), so the gate
+      // stays green on counters; the callers themselves are in the enumeration G1 reads.
+      assert.equal(census.totals.unresolvedCallersGenuine, JUSTIFIED_UNRESOLVED.length + 2);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+});
+
+/**
+ * The openers whose element type is not statically known, each justified. Closed: a new one is
+ * red until it is resolved or justified here. Keys are line-free: <file>#<tag>#<literal part>.
+ */
+const JUSTIFIED_UNRESOLVED = [
+  // A slot override defaulting to an intrinsic element (`modernSlots?.CatalogGrid ?? "div"`).
+  'patterns/data/widget-board/engines/foundation/index.tsx#CatalogGrid#catalog-grid',
+  // A ternary over semantic icons (no family); the part is a computed marker, not a literal.
+  'patterns/foundation/active-filter-state-glyph/index.tsx#Glyph#data-part',
+  // The polymorphic `as` prop: the opener is the component's OWN root and stamps its own part.
+  'primitives/display/crop-marks/index.tsx#As#root',
+  'primitives/display/texture-backdrop/index.tsx#As#root',
+  'primitives/display/typewriter/index.tsx#As#root',
+  'primitives/layout/ascii-frame/index.tsx#As#root',
+  'primitives/layout/invert-section/index.tsx#As#root',
+  'primitives/layout/semantic-surface/index.tsx#Component#root',
+  'structures/headers/section-frame/index.tsx#As#root',
+  // The typography engines' own roots (`as` / Tag): counted as violating SITES, not as callers.
+  'primitives/display/typography/engines/classic/index.tsx#TextElement#root',
+  'primitives/display/typography/engines/modern/index.tsx#Component#root',
+  'primitives/display/typography/engines/modern/index.tsx#Component#root',
+  'primitives/display/typography/engines/rustic/index.tsx#HeadingElement#root',
+  'primitives/display/typography/engines/rustic/index.tsx#TextElement#root',
+  // An icon component handed in as a prop (`icon: Icon`); icons are not an engine family.
+  'structures/dashboard/data-terminal-card/index.tsx#Icon#header-icon',
+  'structures/dashboard/data-terminal-card/index.tsx#Icon#header-icon',
+  'structures/dashboard/data-terminal-card/index.tsx#Icon#header-icon',
+  'structures/dashboard/data-terminal-card/index.tsx#Icon#prompt-icon',
+  'structures/dashboard/data-terminal-card/index.tsx#Icon#quick-action-icon',
+  'structures/dashboard/data-terminal-card/index.tsx#Icon#stat-icon',
+  // A heading-level prop used as the tag (`const Heading = headingLevel`, 'h2' by default).
+  'structures/headers/section-frame/index.tsx#Heading#title',
+];
+
+describe('engine/skins/pass-through -- census v7.1: no caller is skipped in silence', () => {
+  let census;
+  before(() => {
+    ({ census } = measurePassThrough({ repoRoot: REPO }));
+  });
+  const short = (file) => file.replace('packages/core/src/components/', '');
+
+  it('typography callers imported through a barrel are in the enumeration', () => {
+    const typography = census.perFamilyPrecondition.byChildFamily.typography;
+    assert.ok(typography, 'typography has a precondition row');
+    assert.equal(typography.callerPartDependents, ledger.families.typography.part.length);
+  });
+
+  it('every unresolved opener is classified, and the statically-unknown set is the justified roster', () => {
+    const { rows, total, byClass, genuinelyUnresolvable } = census.unresolvedCallers;
+    assert.equal(total, rows.length);
+    assert.equal(census.totals.unresolvedCallers, rows.length);
+    assert.equal(Object.values(byClass).reduce((a, n) => a + n, 0), rows.length);
+    const known = ['local-intrinsic-variable', 'local-component', 'third-party', 'non-family-component', 'local-dynamic-binding', 'unresolvable'];
+    for (const u of rows) {
+      assert.ok(known.includes(u.class), `${u.file}:${u.line} has class ${u.class}`);
+      assert.ok(u.evidence, `${u.file}:${u.line} carries its evidence`);
+    }
+    assert.deepEqual(genuinelyUnresolvable.filter((u) => u.class === 'unresolvable'), [], 'no opener is plainly unresolvable');
+    assert.deepEqual(
+      genuinelyUnresolvable.map((u) => `${short(u.file)}#${u.tag}#${u.callerPart}`).sort(),
+      [...JUSTIFIED_UNRESOLVED].sort(),
+    );
   });
 });

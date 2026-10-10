@@ -4,7 +4,8 @@
  * the tripwire marker). READ-ONLY, pure. The body is the adopted report.mjs verbatim; its CLI
  * shell, the out-of-repo tool shas, the `generated` date and the markdown fragment are dropped.
  */
-// Provenance: arc12/l2-tools/report.mjs sha256 44b91e8972f015ac40c154cfe4a832f0a3af49b37984207ffcf810bc671e3580 (census v7, adopted by the DT 2026-10-09).
+// Provenance: arc12/l2-tools/report.mjs sha256 d66a34b2a499886d915a007dbb740ad27865876c03d3af90bf3a921590615225 (census v7.1, 2026-10-10: the
+// unresolved-caller section; v7 was 44b91e89, adopted by the DT 2026-10-09).
 
 /** @param {object} d  classifyPassThrough() output. @param {object} raw  sweepPassThrough() output. */
 export function summarizePassThrough(d, raw, { head = null } = {}) {
@@ -103,6 +104,15 @@ totals.callerPartDependentsCarrier = count(deps, (c) => c.contingentOnCarrierRul
 totals.nonCarrierRuleAttributions = deps.filter((c) => !c.contingentOnCarrierRuling).reduce((a, c) => a + c.skinRulesSelectingCallerPart, 0);
 totals.v4Delta = { left: d.v4delta.left.length, entered: d.v4delta.entered.length, enteredNonCarrier: d.v4delta.entered.filter((id) => !CARRIERS.has(d.callers.find((c) => c.id === id).childFamily)).length, enteredCarrier: d.v4delta.entered.filter((id) => CARRIERS.has(d.callers.find((c) => c.id === id).childFamily)).length, existingGainingRules: d.v4delta.gainedRules.length };
 totals.c4AssertionViolations = d.c4Assertion.unresolved.length;
+// v7.1: openers with a literal data-part/data-state whose family the sweep could not resolve.
+// Never silent: counted here, listed in `unresolvedCallers`. A sweep without the list is refused.
+if (!Array.isArray(raw.unresolvedCallers)) throw new Error('pass-through summary: the sweep carries no unresolvedCallers list (census v7.1 requires it)');
+const GENUINE_UNRESOLVED = ['local-dynamic-binding', 'unresolvable'];
+const unresolvedByClass = {};
+for (const u of raw.unresolvedCallers) unresolvedByClass[u.class] = (unresolvedByClass[u.class] ?? 0) + 1;
+const genuinelyUnresolvable = raw.unresolvedCallers.filter((u) => GENUINE_UNRESOLVED.includes(u.class));
+totals.unresolvedCallers = raw.unresolvedCallers.length;
+totals.unresolvedCallersGenuine = genuinelyUnresolvable.length;
 // v6: C7 compound-satisfiability (review-arc12-l05-h1 §2)
 totals.c7 = { leave: d.c7.leave.length, reduced: d.c7.reduced.length, rulesStruck: d.c7.rulesStruck, rulesStruckNonCarrier: d.callers.filter((c) => c.attribution && !CARRIERS.has(c.childFamily)).reduce((a, c) => a + c.attribution.c7Struck, 0), rulesStruckCarrier: d.callers.filter((c) => c.attribution && CARRIERS.has(c.childFamily)).reduce((a, c) => a + c.attribution.c7Struck, 0), stateCallersWithStruckRule: d.c7.stateCallersWithStruckRule.length }; // v5: UNRESOLVED count (the only failing class)
 totals.c4EngineScope = { total: d.c4Assertion.partSelectingEngineRules, marked: d.c4Assertion.marked, anchored: d.c4Assertion.anchored, anchoredByDataAttribute: d.c4Assertion.anchoredByAttr, crossRows: d.c4Assertion.crossRows, crossDistinct: d.c4Assertion.crossDistinct, unresolved: d.c4Assertion.unresolved.length, passes: d.c4Assertion.passes };
@@ -148,6 +158,7 @@ const out = {
     skinRuleCount: 'comma-split selectors in the engine skin set (modern -> modern+presentation, rustic -> rustic+presentation, classic -> presentation, compound -> all three) of the same family that select the canonical part; stateRules = those also selecting [data-state]',
   },
   totals,
+  unresolvedCallers: { note: 'v7.1: every opener with a literal data-part/data-state on a capitalised tag whose family did not resolve (import path, lexical re-export chain, tag name). The classes local-intrinsic-variable, local-component, third-party and non-family-component are proven by the evidence column; the GENUINELY UNRESOLVABLE set (local-dynamic-binding, unresolvable) must be empty or individually justified.', total: raw.unresolvedCallers.length, byClass: unresolvedByClass, genuinelyUnresolvable, rows: raw.unresolvedCallers, tagNameOverChain: raw.tagNameOverChain ?? [], resolvedToNonBreachingFamily: raw.nonBreachingCallers ?? {} },
   sites,
   paths: pathList,
   pinCheck: d.pinCheck,
