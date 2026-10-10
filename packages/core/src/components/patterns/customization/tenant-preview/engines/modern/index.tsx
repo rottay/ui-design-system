@@ -423,13 +423,13 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 <div>
                   <div data-part="sub-label">{copy.badges}</div>
                   <div data-part="sample-row">
-                    <ModernBadge variant="primary" data-part="badge" data-status="active">
+                    <ModernBadge variant="primary" data-status="active">
                       {copy.badgeActive}
                     </ModernBadge>
-                    <ModernBadge variant="warning" data-part="badge" data-status="pending">
+                    <ModernBadge variant="warning" data-status="pending">
                       {copy.badgePending}
                     </ModernBadge>
-                    <ModernBadge variant="default" data-part="badge" data-status="draft">
+                    <ModernBadge variant="default" data-status="draft">
                       {copy.badgeDraft}
                     </ModernBadge>
                   </div>
@@ -467,7 +467,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         <tr>
                           <td data-part="preview-table-cell">{copy.sampleRowNameA}</td>
                           <td data-part="preview-table-cell">
-                            <ModernBadge variant="primary" data-part="badge" data-status="active">
+                            <ModernBadge variant="primary" data-status="active">
                               {copy.badgeActive}
                             </ModernBadge>
                           </td>
@@ -476,7 +476,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         <tr>
                           <td data-part="preview-table-cell">{copy.sampleRowNameB}</td>
                           <td data-part="preview-table-cell">
-                            <ModernBadge variant="default" data-part="badge" data-status="pending">
+                            <ModernBadge variant="default" data-status="pending">
                               {copy.badgePending}
                             </ModernBadge>
                           </td>

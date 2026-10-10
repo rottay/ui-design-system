@@ -121,7 +121,6 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
             size="sm"
             tone={STATUS_TONE[step.status]}
             icon={STATUS_ICON[step.status]}
-            data-part="step-status-badge"
             className="ds-approval-workflow__step-status-badge"
             data-status={step.status}
             content={t(`approvalWorkflow.status.${step.status}`, STATUS_FALLBACK[step.status])}
@@ -294,7 +293,6 @@ export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
               kind="pill"
               size="sm"
               tone="neutral"
-              data-part="entity-badge"
               className="ds-approval-workflow__entity-badge"
             >
               {entity}

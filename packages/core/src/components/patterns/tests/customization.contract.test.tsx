@@ -163,9 +163,12 @@ describe.each([
     expect(queryAll(root, '[data-part="accent-bar"]')).toHaveLength(0);
     expect(queryAll(root, '[data-part="preview-table-cell"]')).toHaveLength(9);
     expect(queryAll(root, '[data-part="personality-tile"]')).toHaveLength(8);
-    expect(queryAll(root, '[data-part="badge"][data-status="active"]')).toHaveLength(2);
-    expect(queryAll(root, '[data-part="badge"][data-status="pending"]')).toHaveLength(2);
-    expect(queryAll(root, '[data-part="badge"][data-status="draft"]')).toHaveLength(1);
+    // P-88: the modern samples are composed Badges that keep their own `root` part; they are found by the primitive's class.
+    const badge = engine === 'modern' ? '.rottay-badge.rottay-badge--modern' : '[data-part="badge"]';
+    expect(queryAll(root, `${badge}[data-status="active"]`)).toHaveLength(2);
+    expect(queryAll(root, `${badge}[data-status="pending"]`)).toHaveLength(2);
+    expect(queryAll(root, `${badge}[data-status="draft"]`)).toHaveLength(1);
+    if (engine === 'modern') expect(queryAll(root, '[data-part="badge"]')).toHaveLength(0);
 
     const generatedCss = root.querySelector('style')?.textContent ?? '';
     expect(generatedCss).toContain('ck-h1-preview');

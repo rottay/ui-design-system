@@ -138,9 +138,11 @@ describe("list-toolbar -- data-part contract (workspace-chrome anatomy)", () => 
     expect(
       q(container, '[data-part="search-icon"]').length
     ).toBeGreaterThanOrEqual(1);
+    // P-88: the composed Badges keep their own `root` part; they are found by the family classes.
     expect(
-      q(container, '[data-part="count-badge"]').length
+      q(container, ".ds-list-toolbar__count-badge").length
     ).toBeGreaterThanOrEqual(1);
+    expect(q(container, '[data-part="count-badge"]')).toHaveLength(0);
     // one active filter pill, one inactive
     expect(
       q(container, '[data-part="filter-trigger"][data-active="true"]')
@@ -148,7 +150,8 @@ describe("list-toolbar -- data-part contract (workspace-chrome anatomy)", () => 
     expect(
       q(container, '[data-part="filter-trigger"][data-active="false"]')
     ).toHaveLength(1);
-    expect(q(container, '[data-part="filter-badge"]')).toHaveLength(1);
+    expect(q(container, ".ds-list-toolbar__filter-badge")).toHaveLength(1);
+    expect(q(container, '[data-part="filter-badge"]')).toHaveLength(0);
     expect(q(container, ".ds-list-toolbar__filter-trigger")).toHaveLength(2);
     // The view switch uses the canonical DS Segmented anatomy. The toolbar class
     // identifies ownership while root/option/data-selected stay component-owned.

@@ -138,7 +138,9 @@ describe('ModernFilterPanel active count', () => {
   it('names the active-count badge instead of announcing a bare numeral', () => {
     const { container } = renderPanel({ activeCount: 6, title: 'Filters' });
 
-    const badge = container.querySelector<HTMLElement>('[data-part="active-count-badge"]')!;
+    // P-88: the composed Badge keeps its own `root` part; it is found by the primitive's class.
+    const badge = container.querySelector<HTMLElement>('.rottay-badge.rottay-badge--modern')!;
     expect(badge.getAttribute('aria-label')).toBe('Active filters');
+    expect(container.querySelector('[data-part="active-count-badge"]')).toBeNull();
   });
 });

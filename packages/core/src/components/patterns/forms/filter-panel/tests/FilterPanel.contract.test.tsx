@@ -109,11 +109,16 @@ describe('FilterPanel data-part contract', () => {
     expect(root?.getAttribute('data-sidebar'), `${engine}: root should carry data-sidebar="false"`).toBe('false');
 
     for (const [part, minCount] of Object.entries(SHARED_MIN_PART_COUNTS)) {
-      const nodes = container.querySelectorAll(`[data-part="${part}"]`);
+      // P-88: the modern active count is a composed Badge that keeps its own `root` part; found by the primitive's class.
+      const selector = engine === 'modern' && part === 'active-count-badge'
+        ? '.ds-pattern-filter-panel .rottay-badge.rottay-badge--modern'
+        : `[data-part="${part}"]`;
+      const nodes = container.querySelectorAll(selector);
       expect(nodes.length, `${engine}: data-part="${part}" did not reach the DOM`).toBeGreaterThanOrEqual(minCount);
     }
 
     if (engine === 'modern') {
+      expect(container.querySelectorAll('[data-part="active-count-badge"]')).toHaveLength(0);
       expect(container.querySelectorAll('[data-part="content"]').length).toBeGreaterThanOrEqual(1);
     } else {
       expect(container.querySelectorAll('[data-part="select"]').length).toBeGreaterThanOrEqual(1);

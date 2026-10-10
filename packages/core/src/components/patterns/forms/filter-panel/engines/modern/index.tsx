@@ -474,7 +474,6 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
                 count={activeCount}
                 variant="primary"
                 size="xs"
-                data-part="active-count-badge"
                 aria-label={tOr('filter_panel.active_count', 'Active filters')}
               />
             )}

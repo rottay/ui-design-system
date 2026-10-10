@@ -304,15 +304,17 @@ describe('workspace-switcher -- data-part contract (navigation-pattern anatomy)'
     await partsOf(container);
     await openPanel(container, 'workspace-trigger');
     if (engine === 'modern') {
+      // P-88: the composed Badge keeps its own `root` part; it is found by the family class.
       await waitFor(() => {
-        expect(container.querySelector('[data-part="badge"]')).not.toBeNull();
+        expect(container.querySelector('.ds-workspace-switcher__badge')).not.toBeNull();
       });
+      expect(container.querySelector('[data-part="badge"]')).toBeNull();
     }
 
     const parts = new Set(
       Array.from(container.querySelectorAll('[data-part]')).map((el) => el.getAttribute('data-part') as string),
     );
-    const common = ['root', 'trigger', 'panel', 'header', 'item', 'check', 'online-dot', 'badge', 'settings', 'divider', 'create'];
+    const common = ['root', 'trigger', 'panel', 'header', 'item', 'check', 'online-dot', ...(engine === 'modern' ? [] : ['badge']), 'settings', 'divider', 'create'];
     for (const part of common) {
       expect(parts, `workspace-switcher/${engine} must stamp data-part="${part}"`).toContain(part);
     }

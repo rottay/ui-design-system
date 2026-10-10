@@ -486,7 +486,6 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                           engine="modern"
                           size="sm"
                           tone="primary"
-                          data-part="badge"
                           className="ds-workspace-switcher__badge"
                           count={ws.unreadCount}
                         />

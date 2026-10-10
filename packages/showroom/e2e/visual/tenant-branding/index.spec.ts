@@ -93,9 +93,12 @@ for (const fixture of FIXTURES) {
       for (const variant of ['primary', 'outlined', 'default']) {
         await expect(preview.locator(`[data-part="button"][${sampleAttribute}="${variant}"]`)).toHaveCount(1);
       }
+      // P-88: modern samples are composed Badges that keep their own `root` part; found by the primitive's class.
+      const badge = engine === 'modern' ? '.rottay-badge.rottay-badge--modern' : '[data-part="badge"]';
       for (const status of ['active', 'pending', 'draft']) {
-        await expect(preview.locator(`[data-part="badge"][data-status="${status}"]`).first()).toBeVisible();
+        await expect(preview.locator(`${badge}[data-status="${status}"]`).first()).toBeVisible();
       }
+      if (engine === 'modern') await expect(preview.locator('[data-part="badge"]')).toHaveCount(0);
 
       await waitForSettled(page, band);
       await expect(band).toHaveScreenshot(`${fixture.id}-tenant-branding-${engine}-tenant-preview-prestep.png`, {

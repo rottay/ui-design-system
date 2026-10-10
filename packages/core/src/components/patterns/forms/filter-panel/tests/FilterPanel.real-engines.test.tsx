@@ -269,11 +269,11 @@ const VALUES: Record<string, unknown> = {
 // the skin, per engine. Every filter-panel part is a native element (no DS Text),
 // so `color` moved to the skin for every painted part too.
 const NO_PAINT_PARTS: Record<'modern' | 'rustic', readonly string[]> = {
+  // P-88: the modern active count is a composed Badge (its own `root`); checked through the primitive's class below.
   modern: [
     'root',
     'collapse-toggle',
     'title',
-    'active-count-badge',
     'reset-button',
     'field-label',
     'input',
@@ -348,6 +348,15 @@ describe.each(['modern', 'rustic'] as const)(
       // The modern collapse-toggle rotate is a state transform that moved to the
       // skin (`[data-part='collapse-toggle'][data-collapsed]`); no inline transform.
       if (engine === 'modern') {
+        const badges = [...container.querySelectorAll<HTMLElement>('.rottay-badge.rottay-badge--modern')];
+        expect(badges.length, 'modern: the active-count Badge did not render').toBeGreaterThan(0);
+        badges.forEach((el) => {
+          expect(el.style.background, 'modern: active-count badge paints background inline').toBe('');
+          expect(el.style.border, 'modern: active-count badge paints border inline').toBe('');
+          expect(el.style.boxShadow, 'modern: active-count badge paints box-shadow inline').toBe('');
+          expect(el.style.borderRadius, 'modern: active-count badge paints border-radius inline').toBe('');
+        });
+        expect(container.querySelectorAll('[data-part="active-count-badge"]')).toHaveLength(0);
         const toggle = container.querySelector<HTMLElement>('[data-part="collapse-toggle"]');
         expect(toggle?.style.transform, 'modern: collapse-toggle paints transform inline').toBe('');
       }

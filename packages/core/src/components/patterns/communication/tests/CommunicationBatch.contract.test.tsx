@@ -193,7 +193,13 @@ describe('notification-center -- data-part contract (communication-pattern anato
     expect(root.className).toContain('ds-pattern-notification-center');
     expect(root.className).toContain(`ds-engine-${engine}`);
     expect(q(container, '[data-part="trigger"]')).toHaveLength(1);
-    expect(q(container, '[data-part="badge"]')).toHaveLength(1);
+    if (engine === 'modern') {
+      // P-88: the composed Badge keeps its own `root` part; it is found by the family class.
+      expect(q(container, '.ds-notification-center__badge')).toHaveLength(1);
+      expect(q(container, '[data-part="badge"]')).toHaveLength(0);
+    } else {
+      expect(q(container, '[data-part="badge"]')).toHaveLength(1);
+    }
 
     fireEvent.click(container.querySelector('[data-testid="notification-trigger"]') as Element);
     await waitForPart(container, 'panel');

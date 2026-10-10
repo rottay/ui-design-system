@@ -183,7 +183,6 @@ function InboxItemRow({
               size="sm"
               tone={RISK_TONE[item.risk]}
               icon={RISK_ICON[item.risk]}
-              data-part="item-risk-badge"
               data-risk={item.risk}
               content={t(`approvalInbox.risk.${item.risk}`, item.risk.toUpperCase())}
             />
@@ -524,7 +523,6 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
                 kind="pill"
                 size="sm"
                 tone="neutral"
-                data-part="group-count"
                 className="ds-approval-inbox__group-count"
                 content={group.items.length}
               />

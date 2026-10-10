@@ -287,7 +287,6 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
               count={displayCount}
               variant="primary"
               size="xs"
-              data-part="badge"
               className="ds-notification-center__badge"
             />
           )}

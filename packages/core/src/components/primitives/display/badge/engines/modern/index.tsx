@@ -158,9 +158,10 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     engine: _engine,
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
-    // P-79: an explicit caller data-part wins over the default anatomy part
-    // ('root' / 'anchor'); the default applies only when the caller passed none.
-    'data-part': dataPart,
+    // P-88: the badge keeps its own anatomy ('root' / 'anchor'); a caller
+    // data-part/data-state is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...rootProps
   } = props;
 
@@ -297,7 +298,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
       <>
         <span
           {...rootProps}
-          {...partAttributes(dataPart ?? 'root', interaction)}
+          {...partAttributes('root', interaction)}
           {...responsive.attrs}
           className={`rottay-badge rottay-badge--modern ${className}`.trim()}
           data-kind={kind}
@@ -361,7 +362,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
 
   if (!shouldShowOverlay) {
     return (
-      <span {...rootProps} className={className} style={style} data-part={dataPart ?? "anchor"}>
+      <span {...rootProps} className={className} style={style} data-part="anchor">
         {children}
       </span>
     );
@@ -395,7 +396,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
 
   return (
     <>
-      <span {...rootProps} className={`rottay-badge-anchor ${className}`.trim()} data-part={dataPart ?? "anchor"} style={style}>
+      <span {...rootProps} className={`rottay-badge-anchor ${className}`.trim()} data-part="anchor" style={style}>
         {isInteractive ? (
           <button
             {...indicatorProps}

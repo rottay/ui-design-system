@@ -156,7 +156,6 @@ function ModerationCard({
             size="sm"
             tone={STATUS_TONE[item.status]}
             icon={STATUS_ICON[item.status]}
-            data-part="card-status-badge"
             data-status={item.status}
             content={t(`moderationGallery.status.${item.status}`, STATUS_FLOOR[item.status])}
           />

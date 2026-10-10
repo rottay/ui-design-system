@@ -322,7 +322,6 @@ function FilterButton({
             badgeStyle='soft'
             size='xs'
             content={1}
-            data-part='filter-badge'
             className='ds-list-toolbar__filter-badge'
           />
         )}
@@ -1243,7 +1242,6 @@ function FilterCountBadge({ count }: { count: number }) {
       badgeStyle='solid'
       size='xs'
       count={count}
-      data-part='count-badge'
       className='ds-list-toolbar__count-badge'
     />
   );

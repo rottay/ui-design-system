@@ -533,7 +533,6 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       <ModernBadge
                         size="sm"
                         tone={isOverLimit ? 'danger' : 'neutral'}
-                        data-part="wip-badge"
                         className="ds-pattern-kanban-board__wip-badge"
                         content={
                           column.limit !== undefined
