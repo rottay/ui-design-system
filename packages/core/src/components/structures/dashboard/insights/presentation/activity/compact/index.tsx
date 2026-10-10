@@ -80,7 +80,7 @@ function CompactItem({
         <Stack spacing="none" style={{ flex: 1, minWidth: 0 }}>
           <Text
             size="xs"
-            data-part="item-text"
+            className="ds-activity-compact__item-text" data-part="item-text"
             style={{
               whiteSpace: 'nowrap',
               overflow: 'hidden',
@@ -132,16 +132,16 @@ export function ActivityCompact({
             <Box
               data-part="badge"
             >
-              <Text data-part="badge-count" style={{ fontSize: 8, fontWeight: 700 }}>
+              <Text className="ds-activity-compact__badge-count" data-part="badge-count" style={{ fontSize: 8, fontWeight: 700 }}>
                 {items.length}
               </Text>
             </Box>
           </Box>
           <Stack spacing="none">
-            <Text weight="bold" data-part="title">
+            <Text weight="bold" className="ds-activity-compact__title" data-part="title">
               {tOr('activity.compactTitle', 'Recent Activity')}
             </Text>
-            <Text size="xs" data-part="update-count">
+            <Text size="xs" className="ds-activity-compact__update-count" data-part="update-count">
               {tOr('activity.updatesCount', `${items.length} UPDATES`, { count: items.length })}
             </Text>
           </Stack>
@@ -154,7 +154,7 @@ export function ActivityCompact({
               className="view-all-link"
               data-part="view-all-link"
             >
-              <Text size="xs" weight="medium" data-part="view-all-label">
+              <Text size="xs" weight="medium" className="ds-activity-compact__view-all-label" data-part="view-all-label">
                 {resolvedViewAllLabel}
               </Text>
               <ExternalLink style={{ width: 10, height: 10 }} />

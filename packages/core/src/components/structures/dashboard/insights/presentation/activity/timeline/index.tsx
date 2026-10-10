@@ -99,7 +99,7 @@ function ActivityItem({
       >
         <Flex align="center" justify="between" gap={10}>
           <Stack spacing="none" style={{ flex: 1 }}>
-            <Text size="xs" weight="medium" data-part="item-text" style={{ lineHeight: 1.3 }}>
+            <Text size="xs" weight="medium" className="ds-activity-timeline__item-text" data-part="item-text" style={{ lineHeight: 1.3 }}>
               {item.text}
             </Text>
             <Flex align="center" gap={4}>
@@ -145,18 +145,18 @@ export function ActivityTimeline({
             <Box
               data-part="badge"
             >
-              <Text data-part="badge-count" style={{ fontSize: 8, fontWeight: 700 }}>
+              <Text className="ds-activity-timeline__badge-count" data-part="badge-count" style={{ fontSize: 8, fontWeight: 700 }}>
                 {items.length}
               </Text>
             </Box>
           </Box>
           <Stack spacing="none">
-            <Text weight="bold" data-part="title">
+            <Text weight="bold" className="ds-activity-timeline__title" data-part="title">
               {tOr('activity.timelineTitle', 'Activity')}
             </Text>
             <Flex align="center" gap={4}>
               <Box className="live-indicator" data-part="live-dot" />
-              <Text size="xs" data-part="live-label">
+              <Text size="xs" className="ds-activity-timeline__live-label" data-part="live-label">
                 {tOr('activity.streaming', 'STREAMING')}
               </Text>
             </Flex>
@@ -170,7 +170,7 @@ export function ActivityTimeline({
               className="view-all-link"
               data-part="view-all-link"
             >
-              <Text size="xs" weight="medium" data-part="view-all-label">
+              <Text size="xs" weight="medium" className="ds-activity-timeline__view-all-label" data-part="view-all-label">
                 {resolvedViewAllLabel}
               </Text>
               <ExternalLink style={{ width: 12, height: 12 }} />

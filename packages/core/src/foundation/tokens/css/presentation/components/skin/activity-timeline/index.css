@@ -96,13 +96,13 @@
 .ds-activity-timeline.ds-activity-timeline [data-part='badge'][data-part='badge'] {
   border: 2px solid var(--ds-color-bg-secondary);
 }
-.ds-activity-timeline.ds-activity-timeline [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+.ds-activity-timeline.ds-activity-timeline .ds-activity-timeline__badge-count.ds-activity-timeline__badge-count.ds-activity-timeline__badge-count {
   color: white;
 }
 
 /* title + live indicator ---------------------------------------------------- */
 
-.ds-activity-timeline.ds-activity-timeline [data-part='title'][data-part='title'][data-part='title'] {
+.ds-activity-timeline.ds-activity-timeline .ds-activity-timeline__title.ds-activity-timeline__title.ds-activity-timeline__title {
   color: var(--ds-color-text-primary);
 }
 .ds-activity-timeline.ds-activity-timeline [data-part='live-dot'] {
@@ -112,7 +112,7 @@
   border-radius: 50%;
   background: var(--ds-color-success);
 }
-.ds-activity-timeline.ds-activity-timeline [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+.ds-activity-timeline.ds-activity-timeline .ds-activity-timeline__live-label.ds-activity-timeline__live-label.ds-activity-timeline__live-label {
   color: var(--ds-color-success);
   font-family: var(--ds-font-family-mono, monospace);
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
@@ -151,7 +151,7 @@
 .ds-activity-timeline.ds-activity-timeline [data-part='view-all-link'][data-part='view-all-link'] {
   border: 1px solid var(--ds-color-primary-200);
 }
-.ds-activity-timeline.ds-activity-timeline [data-part='view-all-label'][data-part='view-all-label'][data-part='view-all-label'] {
+.ds-activity-timeline.ds-activity-timeline .ds-activity-timeline__view-all-label.ds-activity-timeline__view-all-label.ds-activity-timeline__view-all-label {
   color: var(--ds-color-primary);
 }
 
@@ -239,7 +239,7 @@
 .ds-activity-timeline.ds-activity-timeline [data-part='item-content'][data-type='warning'] { color: var(--ds-color-warning); }
 .ds-activity-timeline.ds-activity-timeline [data-part='item-content'][data-type='error']   { color: var(--ds-color-error); }
 
-.ds-activity-timeline.ds-activity-timeline [data-part='item-text'][data-part='item-text'][data-part='item-text'] {
+.ds-activity-timeline.ds-activity-timeline .ds-activity-timeline__item-text.ds-activity-timeline__item-text.ds-activity-timeline__item-text {
   color: var(--ds-color-text-primary);
 }
 
@@ -341,7 +341,7 @@
     background: Canvas;
     outline: 1px solid ButtonText;
   }
-  .ds-activity-timeline.ds-activity-timeline [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+  .ds-activity-timeline.ds-activity-timeline .ds-activity-timeline__badge-count.ds-activity-timeline__badge-count.ds-activity-timeline__badge-count {
     color: ButtonText;
   }
   .ds-activity-timeline.ds-activity-timeline [data-part='live-dot'],

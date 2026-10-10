@@ -114,13 +114,13 @@
 .ds-activity-ticker.ds-activity-ticker [data-part='badge'][data-part='badge'] {
   border: 2px solid var(--ds-color-bg-secondary);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__badge-count.ds-activity-ticker__badge-count.ds-activity-ticker__badge-count {
   color: white;
 }
 
 /* title + live indicator ---------------------------------------------------- */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='title'][data-part='title'][data-part='title'] {
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__title.ds-activity-ticker__title.ds-activity-ticker__title {
   color: var(--ds-color-text-primary);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='live-dot'] {
@@ -130,7 +130,7 @@
   border-radius: 50%;
   background: var(--ds-color-success);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__live-label.ds-activity-ticker__live-label.ds-activity-ticker__live-label {
   color: var(--ds-color-success);
   font-family: var(--ds-font-family-mono, monospace);
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
@@ -169,7 +169,7 @@
 .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'][data-part='view-all-link'] {
   border: 1px solid var(--ds-color-primary-200);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='view-all-label'][data-part='view-all-label'][data-part='view-all-label'] {
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__view-all-label.ds-activity-ticker__view-all-label.ds-activity-ticker__view-all-label {
   color: var(--ds-color-primary);
 }
 
@@ -203,7 +203,7 @@
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-content'] {
   text-align: center;
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='item-text'] {
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-text {
   margin-block-end: 10px;
   font-size: calc(var(--ds-font-size-base) * 0.9375);
   line-height: 1.6;
@@ -232,7 +232,7 @@
 .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='warning'] { border: 2px solid var(--ds-color-warning); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='error']   { border: 2px solid var(--ds-color-error); }
 
-.ds-activity-ticker.ds-activity-ticker [data-part='item-text'][data-part='item-text'][data-part='item-text'] {
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-text.ds-activity-ticker__item-text.ds-activity-ticker__item-text {
   color: var(--ds-color-text-primary);
 }
 
@@ -265,7 +265,7 @@
   margin-block-start: 24px;
 }
 
-.ds-activity-ticker.ds-activity-ticker [data-part='ticker-counter'][data-part='ticker-counter'][data-part='ticker-counter'] {
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-counter.ds-activity-ticker__ticker-counter.ds-activity-ticker__ticker-counter {
   font-family: var(--ds-font-family-mono, monospace);
   font-size: calc(var(--ds-font-size-2xs) * 0.909091);
 }
@@ -299,7 +299,7 @@
 [dir='rtl'] .ds-activity-ticker.ds-activity-ticker [data-part='nav-button'] svg {
   transform: scaleX(-1);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='ticker-counter'][data-part='ticker-counter'][data-part='ticker-counter'] {
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-counter.ds-activity-ticker__ticker-counter.ds-activity-ticker__ticker-counter {
   color: var(--ds-color-text-muted);
 }
 
@@ -400,7 +400,7 @@
     background: Canvas;
     outline: 1px solid ButtonText;
   }
-  .ds-activity-ticker.ds-activity-ticker [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__badge-count.ds-activity-ticker__badge-count.ds-activity-ticker__badge-count {
     color: ButtonText;
   }
   .ds-activity-ticker.ds-activity-ticker [data-part='live-dot'],

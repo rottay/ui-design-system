@@ -81,7 +81,7 @@ function ActivityCard({
           <Text
             size="xs"
             weight="medium"
-            data-part="item-text"
+            className="ds-activity-cards__item-text" data-part="item-text"
             style={{
               lineHeight: 1.3,
               whiteSpace: 'nowrap',
@@ -140,12 +140,12 @@ export function ActivityCards({
             <Box
               data-part="badge"
             >
-              <Text data-part="badge-count" style={{ fontSize: 7, fontWeight: 700 }}>
+              <Text className="ds-activity-cards__badge-count" data-part="badge-count" style={{ fontSize: 7, fontWeight: 700 }}>
                 {items.length}
               </Text>
             </Box>
           </Box>
-          <Text weight="bold" size="sm" data-part="title">
+          <Text weight="bold" size="sm" className="ds-activity-cards__title" data-part="title">
             {tOr('activity.cardsTitle', 'Activity')}
           </Text>
         </Flex>
@@ -157,7 +157,7 @@ export function ActivityCards({
               className="view-all-link"
               data-part="view-all-link"
             >
-              <Text size="xs" weight="medium" data-part="view-all-label" style={{ fontSize: 10 }}>
+              <Text size="xs" weight="medium" className="ds-activity-cards__view-all-label" data-part="view-all-label" style={{ fontSize: 10 }}>
                 {resolvedViewAllLabel}
               </Text>
               <ExternalLink style={{ width: 9, height: 9 }} />

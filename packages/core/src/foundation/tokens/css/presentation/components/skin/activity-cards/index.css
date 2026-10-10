@@ -86,13 +86,13 @@
 .ds-activity-cards.ds-activity-cards [data-part='badge'][data-part='badge'] {
   border: 2px solid var(--ds-color-bg-secondary);
 }
-.ds-activity-cards.ds-activity-cards [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+.ds-activity-cards.ds-activity-cards .ds-activity-cards__badge-count.ds-activity-cards__badge-count.ds-activity-cards__badge-count {
   color: white;
 }
 
 /* title --------------------------------------------------------------------- */
 
-.ds-activity-cards.ds-activity-cards [data-part='title'][data-part='title'][data-part='title'] {
+.ds-activity-cards.ds-activity-cards .ds-activity-cards__title.ds-activity-cards__title.ds-activity-cards__title {
   color: var(--ds-color-text-primary);
 }
 
@@ -129,7 +129,7 @@
 .ds-activity-cards.ds-activity-cards [data-part='view-all-link'][data-part='view-all-link'] {
   border: 1px solid var(--ds-color-primary-200);
 }
-.ds-activity-cards.ds-activity-cards [data-part='view-all-label'][data-part='view-all-label'][data-part='view-all-label'] {
+.ds-activity-cards.ds-activity-cards .ds-activity-cards__view-all-label.ds-activity-cards__view-all-label.ds-activity-cards__view-all-label {
   color: var(--ds-color-primary);
 }
 
@@ -173,7 +173,7 @@
 .ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-part='item-icon-box'][data-type='warning'] { border: 1px solid var(--ds-color-warning-200); }
 .ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-part='item-icon-box'][data-type='error']   { border: 1px solid var(--ds-color-error-200); }
 
-.ds-activity-cards.ds-activity-cards [data-part='item-text'][data-part='item-text'][data-part='item-text'] {
+.ds-activity-cards.ds-activity-cards .ds-activity-cards__item-text.ds-activity-cards__item-text.ds-activity-cards__item-text {
   color: var(--ds-color-text-primary);
 }
 
@@ -277,7 +277,7 @@
     background: Canvas;
     outline: 1px solid ButtonText;
   }
-  .ds-activity-cards.ds-activity-cards [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+  .ds-activity-cards.ds-activity-cards .ds-activity-cards__badge-count.ds-activity-cards__badge-count.ds-activity-cards__badge-count {
     color: ButtonText;
   }
   .ds-activity-cards.ds-activity-cards [data-part='item-dot'] {

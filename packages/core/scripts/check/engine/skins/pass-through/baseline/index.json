@@ -16,7 +16,7 @@
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
   "passThroughViolations": 92,
-  "callerPartDependents": 872,
+  "callerPartDependents": 852,
   "callerStateDependents": 16
  },
  "roster": [
@@ -1844,106 +1844,6 @@
      "routing": "HOLD-G: resolved in the typography engine lot (G1-G5 two-arm re-key; Box :477 untouched pending section-6), same precondition set as H-ET."
     },
     {
-     "key": "structures/dashboard/insights/presentation/activity/cards/index.tsx#Text#badge-count#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/cards/index.tsx:143",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/cards/index.tsx#Text#item-text#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/cards/index.tsx:81",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/cards/index.tsx#Text#title#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/cards/index.tsx:148",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/cards/index.tsx#Text#view-all-label#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/cards/index.tsx:160",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/compact/index.tsx#Text#badge-count#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/compact/index.tsx:135",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/compact/index.tsx#Text#item-text#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/compact/index.tsx:81",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/compact/index.tsx#Text#title#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/compact/index.tsx:141",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/compact/index.tsx#Text#update-count#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/compact/index.tsx:144",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/compact/index.tsx#Text#view-all-label#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/compact/index.tsx:157",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Text#badge-count#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/ticker/index.tsx:221",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Text#item-text#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/ticker/index.tsx:283",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Text#live-label#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/ticker/index.tsx:232",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Text#ticker-counter#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/ticker/index.tsx:319",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Text#title#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/ticker/index.tsx:227",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Text#view-all-label#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/ticker/index.tsx:246",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Text#badge-count#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/timeline/index.tsx:148",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Text#item-text#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/timeline/index.tsx:102",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Text#live-label#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/timeline/index.tsx:159",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Text#title#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/timeline/index.tsx:154",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Text#view-all-label#0",
-     "atBaseline": "structures/dashboard/insights/presentation/activity/timeline/index.tsx:173",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
      "key": "structures/dashboard/stats-header/runtime/rendering/index.tsx#Text#change-period#0",
      "atBaseline": "structures/dashboard/stats-header/runtime/rendering/index.tsx:109",
      "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
@@ -2079,7 +1979,7 @@
   ]
  },
  "lastMove": {
-  "head": "895d7ee4455064074e6fb1b20ea8ee7a75dd9b8e",
+  "head": "db709ce15347efb223e2cecf27546a2fefc8c76b",
   "date": "2026-10-10",
   "note": "lowered to the gate's own measurement through --update-baseline"
  }
