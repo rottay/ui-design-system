@@ -189,7 +189,6 @@ export function ActiveFiltersBar({
                 key={filter.key}
                 tone="primary"
                 closable
-                data-part="chip"
                 className="ds-active-filters-bar__chip"
                 data-filter-state={state !== "applied" ? state : undefined}
                 onClose={() => onRemoveFilter(filter.key)}

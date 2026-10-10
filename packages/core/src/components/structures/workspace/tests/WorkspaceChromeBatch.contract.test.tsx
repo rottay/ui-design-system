@@ -177,7 +177,9 @@ describe("list-toolbar -- data-part contract (workspace-chrome anatomy)", () => 
     // active-filter-chips strip (hasActiveFilters)
     expect(q(container, '[data-part="filter-chips-strip"]')).toHaveLength(1);
     expect(q(container, '[data-part="clear-all"]')).toHaveLength(1);
-    expect(q(container, '[data-part="filter-chip"]')).toHaveLength(1);
+    // P-88: the composed Tag keeps its own `root` part; it is found by the family class.
+    expect(q(container, '.ds-list-toolbar__filter-chip[data-part="root"]')).toHaveLength(1);
+    expect(q(container, '[data-part="filter-chip"]')).toHaveLength(0);
     expect(q(container, '[data-part="filter-chip-label"]')).toHaveLength(1);
     expect(q(container, '[data-part="filter-chip-value"]')).toHaveLength(1);
   });
@@ -896,7 +898,7 @@ describe("export-button -- data-part contract (workspace-chrome anatomy), portal
 // ===========================================================================
 describe("active-filters-bar -- data-part contract (workspace-chrome anatomy)", () => {
   it.each(["modern"] as const)(
-    "stamps root/pill/chip/chip-label/chip-value/chip-remove/clear-all/add-filter (%s)",
+    "stamps root/pill/chip-label/chip-value/close/clear-all/add-filter and names the chip by class (%s)",
     async (engine) => {
       const { container } = renderWithEngine(
         <ActiveFiltersBar
@@ -921,7 +923,6 @@ describe("active-filters-bar -- data-part contract (workspace-chrome anatomy)", 
 
       for (const part of [
         "pill",
-        "chip",
         "chip-label",
         "chip-value",
         "close",
@@ -933,6 +934,11 @@ describe("active-filters-bar -- data-part contract (workspace-chrome anatomy)", 
           `must stamp "${part}"`
         ).toBeGreaterThanOrEqual(1);
       }
+      // P-88: the composed Tag keeps its own `root` part; the chip is found by the family class.
+      expect(
+        q(container, '.ds-active-filters-bar__chip[data-part="root"]')
+      ).toHaveLength(1);
+      expect(q(container, '[data-part="chip"]')).toHaveLength(0);
     }
   );
 

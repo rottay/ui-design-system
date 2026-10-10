@@ -101,9 +101,9 @@ describe('tag-input geometry, direction, language and accessibility in a real br
       markup: field,
       arms: { base: {} },
       targets: [
-        { id: 'ltrChip', selector: "[data-part='tag-chip']", property: '@rect.left', dir: 'ltr' },
+        { id: 'ltrChip', selector: '.ds-tag-input__tag-chip', property: '@rect.left', dir: 'ltr' },
         { id: 'ltrInput', selector: "[data-part='input']", property: '@rect.left', dir: 'ltr' },
-        { id: 'rtlChip', selector: "[data-part='tag-chip']", property: '@rect.left', dir: 'rtl' },
+        { id: 'rtlChip', selector: '.ds-tag-input__tag-chip', property: '@rect.left', dir: 'rtl' },
         { id: 'rtlInput', selector: "[data-part='input']", property: '@rect.left', dir: 'rtl' },
       ],
     });
@@ -128,7 +128,9 @@ describe('tag-input geometry, direction, language and accessibility in a real br
       </AnatomySkeleton>,
     );
     expect(loading).toContain('data-part="source"');
-    expect(loading).toContain('data-part="tag-chip"');
+    // P-88: the composed Tag keeps its own `root` part; the chip is named by the family class.
+    expect(loading).toContain('ds-tag-input__tag-chip');
+    expect(loading).not.toContain('data-part="tag-chip"');
   });
 
   it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {

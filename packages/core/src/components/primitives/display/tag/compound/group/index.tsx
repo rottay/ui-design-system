@@ -102,6 +102,10 @@ export const TagGroup = forwardRef<HTMLDivElement, TagGroupProps>(
       align = 'start',
       className = '',
       style = {},
+      // P-88: the group keeps its own anatomy ('group'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       ...restProps
     } = props;
 

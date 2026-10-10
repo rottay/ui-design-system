@@ -86,10 +86,11 @@ const markup = `<div id="rail" style="inline-size:64rem">${rail}</div>`;
 
 const ROOT = "#rail [data-part='root']";
 const PILL = "#rail [data-part='pill']";
-const CHIP = "#rail [data-part='chip']";
+// P-88: the composed Tag keeps its own `root` part; the chip is found by the family class.
+const CHIP = '#rail .ds-active-filters-bar__chip';
 const LABEL = "#rail [data-part='chip-label']";
 const VALUE = "#rail [data-part='chip-value']";
-const INVALID = "#rail [data-part='chip'][data-filter-state='invalid'] [data-part='chip-value']";
+const INVALID = `${CHIP}[data-filter-state='invalid'] [data-part='chip-value']`;
 
 describeCausality({
   family: 'active-filters-bar',
@@ -159,7 +160,8 @@ describe('active-filters-bar causality surface', () => {
     expect(rail).toContain('data-part="rail"');
     expect(rail).toContain('data-part="chips"');
     expect(rail).toContain('data-part="pill"');
-    expect(rail).toContain('data-part="chip"');
+    expect(rail).toContain('ds-active-filters-bar__chip');
+    expect(rail).not.toContain('data-part="chip"');
     expect(rail).toContain('data-part="chip-label"');
     expect(rail).toContain('data-part="chip-value"');
     expect(rail).toContain('data-part="more-toggle"');
@@ -183,7 +185,7 @@ describe('active-filters-bar causality surface', () => {
         { id: 'invalidLine', selector: INVALID, property: 'text-decoration-style' },
         {
           id: 'draftLine',
-          selector: "#rail [data-part='chip'][data-filter-state='draft'] [data-part='chip-value']",
+          selector: `${CHIP}[data-filter-state='draft'] [data-part='chip-value']`,
           property: 'text-decoration-style',
         },
         { id: 'appliedLine', selector: VALUE, property: 'text-decoration-line' },

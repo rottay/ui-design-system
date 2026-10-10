@@ -145,15 +145,24 @@ describe('Tag modern state stamp', () => {
     expect(root.hasAttribute('data-state')).toBe(false);
   });
 
-  it('keeps the stamp when a composing family renames the part', () => {
-    // list-toolbar's filter chip is a Tag that renames its root part; the
-    // rename must not cost the family its state producer.
+  it('keeps its own part and the stamp when a composing family names the chip', () => {
+    // A composing family names its chip through className; a caller data-part
+    // or data-state never replaces the tag's own part or its state producer.
     const { container } = render(
-      <ModernTag clickable onClick={vi.fn()} data-part="filter-chip">
+      <ModernTag
+        clickable
+        onClick={vi.fn()}
+        className="ds-list-toolbar__filter-chip"
+        data-part="filter-chip"
+        data-state="selected"
+      >
         Status: open
       </ModernTag>,
     );
-    const root = container.querySelector<HTMLElement>("[data-part='filter-chip']")!;
+    expect(container.querySelector("[data-part='filter-chip']")).toBeNull();
+    const root = container.querySelector<HTMLElement>('.ds-list-toolbar__filter-chip')!;
+    expect(root.matches(CLICKABLE_ROOT)).toBe(true);
+    expect(root.hasAttribute('data-state')).toBe(false);
     fireEvent.pointerEnter(root);
     expect(root.getAttribute('data-state')).toBe('hovered');
   });

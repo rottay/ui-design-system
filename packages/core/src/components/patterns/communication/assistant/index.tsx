@@ -227,7 +227,7 @@ export function AssistantStatusBadge({
   tone = 'neutral',
 }: AssistantStatusBadgeProps): React.ReactElement {
   return (
-    <Tag className="ds-assistant-status-badge" data-part="root" variant={toneToVariant(tone)} outlined size="sm">
+    <Tag className="ds-assistant-status-badge" variant={toneToVariant(tone)} outlined size="sm">
       {label}
     </Tag>
   );

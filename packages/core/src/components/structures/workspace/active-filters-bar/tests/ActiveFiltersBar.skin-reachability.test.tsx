@@ -115,7 +115,12 @@ describe("ActiveFiltersBar skin reachability", () => {
     expect(eyebrow.textContent).toContain("3 active");
 
     // The objects are the certified Tag primitive, each with a named control.
-    for (const chip of container.querySelectorAll('[data-part="chip"]')) {
+    // P-88: each keeps its own `root` part and is found by the family class.
+    const chips = container.querySelectorAll(".ds-active-filters-bar__chip");
+    expect(chips.length).toBeGreaterThan(0);
+    expect(container.querySelector('[data-part="chip"]')).toBeNull();
+    for (const chip of chips) {
+      expect(chip.getAttribute("data-part")).toBe("root");
       expect(chip.className).toContain("rottay-tag-shell");
       const close = chip.querySelector('[data-part="close"]') as HTMLElement;
       expect(close.tagName).toBe("BUTTON");
@@ -259,7 +264,8 @@ describe("ActiveFiltersBar anatomy", () => {
   it("expands in place and offers the way back", async () => {
     const container = await renderRail({ maxVisible: 2 });
     fireEvent.click(container.querySelector('[data-part="more-toggle"]') as HTMLElement);
-    expect(container.querySelectorAll('[data-part="chip"]')).toHaveLength(3);
+    expect(container.querySelectorAll(".ds-active-filters-bar__chip")).toHaveLength(3);
+    expect(container.querySelector('[data-part="chip"]')).toBeNull();
     expect(
       (container.querySelector('[data-part="less-toggle"]') as HTMLElement).getAttribute(
         "aria-expanded"

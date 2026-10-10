@@ -15,7 +15,7 @@
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 96,
+  "passThroughViolations": 93,
   "callerPartDependents": 833,
   "callerStateDependents": 16
  },
@@ -175,38 +175,11 @@
    ]
   },
   {
-   "key": "primitives/display/tag/compound/group/index.tsx#TagGroup#div#group#0",
-   "engine": "all (compound)",
-   "family": "tag",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
    "key": "primitives/display/tag/engines/classic/index.tsx#default#AntTag#none#0",
    "engine": "classic",
    "family": "tag",
    "breach": [
     "part-forward",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/tag/engines/modern/index.tsx#default#span#root#0",
-   "engine": "modern",
-   "family": "tag",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/tag/engines/rustic/index.tsx#default#span#root#0",
-   "engine": "rustic",
-   "family": "tag",
-   "breach": [
-    "part-replace",
     "state-forward"
    ]
   },
@@ -1924,8 +1897,8 @@
   ]
  },
  "lastMove": {
-  "head": "f9d5844eb658889920b9e9c3e368301c763115c4",
-  "date": "2026-10-09",
+  "head": "4142593ba121cbd711525f81f87c3e84af6742ea",
+  "date": "2026-10-10",
   "note": "lowered to the gate's own measurement through --update-baseline"
  }
 }

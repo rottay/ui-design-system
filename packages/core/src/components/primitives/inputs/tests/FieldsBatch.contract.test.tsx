@@ -186,7 +186,13 @@ describe('Field family data-part contract (WO-SKIN-02 checkpoint A)', () => {
         engine,
       );
       await waitForPart(container, 'root');
-      expect(container.querySelectorAll('[data-part="tag-chip"]')).toHaveLength(2);
+      if (engine === 'modern') {
+        // P-88: the composed Tags keep their own `root` part; the chips are found by the family class.
+        expect(container.querySelectorAll('.ds-tag-input__tag-chip[data-part="root"]')).toHaveLength(2);
+        expect(container.querySelectorAll('[data-part="tag-chip"]')).toHaveLength(0);
+      } else {
+        expect(container.querySelectorAll('[data-part="tag-chip"]')).toHaveLength(2);
+      }
       expect(
         container.querySelectorAll(
           engine === 'modern' ? '[data-part="close"]' : '[data-part="tag-remove"]',

@@ -80,6 +80,10 @@ export default function ModernTag(props: TagProps): React.ReactElement {
     onClick,
     className = '',
     style = {},
+    // P-88: the tag keeps its own anatomy ('root'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...restProps
   } = props;
 

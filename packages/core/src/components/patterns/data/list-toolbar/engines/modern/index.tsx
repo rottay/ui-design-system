@@ -1172,7 +1172,6 @@ export default function ModernListToolbar({
           {activeFilterChips.map((chip) => (
             <Tag
               key={chip.key}
-              data-part='filter-chip'
               className='ds-list-toolbar__filter-chip'
               data-filter-state={chip.state !== 'applied' ? chip.state : undefined}
               closable

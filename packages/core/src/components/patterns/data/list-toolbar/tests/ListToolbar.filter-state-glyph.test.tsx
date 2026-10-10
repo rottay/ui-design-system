@@ -54,9 +54,12 @@ async function renderChip(state: ActiveFilterState): Promise<HTMLElement> {
     'modern',
   );
   const chip = (await screen.findAllByText('Live'))[0].closest(
-    '[data-part="filter-chip"]',
+    '.ds-list-toolbar__filter-chip',
   ) as HTMLElement;
   expect(chip).not.toBeNull();
+  // P-88: the composed Tag keeps its own `root` part; the chip is found by the family class.
+  expect(chip.getAttribute('data-part')).toBe('root');
+  expect(document.querySelector('[data-part="filter-chip"]')).toBeNull();
   return chip;
 }
 
