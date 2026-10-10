@@ -67,7 +67,7 @@ const SITES = {
     properties: ["width", "height"],
   },
   "--ds-stats-header-insight-margin-block-start": {
-    site: "[data-part='stat-insight']",
+    site: ".ds-stats-header__stat-insight",
     declarations: ["margin-block-start"],
     properties: ["margin-top"],
   },
@@ -115,7 +115,7 @@ function header(rootStyle = ""): string {
     `<div data-part="stat-top"><div data-part="statistic">42</div></div>`,
     `<div data-part="spark-dots" aria-hidden="true">`,
     `<div data-part="spark-dot" data-accent="primary" data-dot-index="0"></div></div>`,
-    `<div data-part="stat-insight">Trending up</div>`,
+    `<div class="ds-stats-header__stat-insight" data-part="stat-insight">Trending up</div>`,
     `<div data-part="card-glow" aria-hidden="true"></div>`,
     `</div>`,
     `<div data-part="stat-card" data-accent="success" data-clickable="false">Second</div>`,
@@ -242,6 +242,7 @@ describe("chrome/stats-header channels under a local scope", () => {
     for (const part of ["root", "card-grid", "spark-dot", "stat-insight", "card-glow"]) {
       expect(ENGINE).toContain(`data-part="${part}"`);
     }
+    expect(ENGINE).toContain(`className="ds-stats-header__stat-insight"`);
     expect(ENGINE).toContain("partAttributes('stat-card'");
     expect(ENGINE).toContain("data-accent={accent}");
   });

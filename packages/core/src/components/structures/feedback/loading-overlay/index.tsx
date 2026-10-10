@@ -77,7 +77,7 @@ export function LoadingOverlay({ visible, message: messageProp, logo }: LoadingO
         )}
         <Flex align="center" data-part="status">
           <Text
-            data-part="message"
+            className="ds-loading-overlay__message" data-part="message"
             size="sm"
           >
             {message}
@@ -85,7 +85,7 @@ export function LoadingOverlay({ visible, message: messageProp, logo }: LoadingO
           {[0, 1, 2].map((i) => (
             <Text
               key={i}
-              data-part="dot"
+              className="ds-loading-overlay__dot" data-part="dot"
               data-dot-index={i}
               size="sm"
               aria-hidden="true"

@@ -160,25 +160,25 @@
 .ds-stats-header[data-part='root'] [data-part='change-row'] {
   gap: var(--ds-stats-header-change-column-gap, 3px);
 }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value'] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value {
   font-size: var(--ds-stats-header-label-font-size, var(--ds-font-size-sm));
   font-weight: var(--ds-font-weight-semibold, 600);
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 .ds-stats-header[data-part='root'] [data-part='change-row'][data-change='increase'],
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value'][data-change='increase'] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value[data-change='increase'] {
   color: var(--ds-color-success);
 }
 .ds-stats-header[data-part='root'] [data-part='change-row'][data-change='decrease'],
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value'][data-change='decrease'] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value[data-change='decrease'] {
   color: var(--ds-color-error);
 }
 .ds-stats-header[data-part='root'] [data-part='change-row'][data-change='neutral'],
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value'][data-change='neutral'] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value[data-change='neutral'] {
   color: var(--ds-color-text-muted);
 }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-period'] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-period {
   color: var(--ds-color-text-muted);
   font-size: var(--ds-stats-header-kicker-font-size, var(--ds-font-size-2xs));
   font-weight: var(--ds-font-weight-medium, 500);
@@ -236,7 +236,7 @@
 }
 
 /* ---- insight ---- */
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-insight'] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__stat-insight {
   margin-block-start: var(--ds-stats-header-insight-margin-block-start, var(--ds-spacing-2, 8px));
   color: var(--ds-color-text-muted);
   font-size: var(--ds-stats-header-meta-font-size, var(--ds-font-size-2xs));

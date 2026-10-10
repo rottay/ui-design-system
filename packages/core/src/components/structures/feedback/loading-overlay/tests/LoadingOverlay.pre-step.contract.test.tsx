@@ -38,8 +38,8 @@ describe('LoadingOverlay skin contract', () => {
     expect(SKIN).toContain('--_ds-loading-overlay-pulse-duration');
     expect(SKIN).toContain('animation: ds-loading-overlay-dots');
     expect(SKIN).toContain('--_ds-loading-overlay-dots-duration');
-    expect(SKIN).toContain("[data-part='dot'][data-dot-index='1']");
-    expect(SKIN).toContain("[data-part='dot'][data-dot-index='2']");
+    expect(SKIN).toContain(".ds-loading-overlay__dot[data-dot-index='1']");
+    expect(SKIN).toContain(".ds-loading-overlay__dot[data-dot-index='2']");
     expect(SKIN).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*animation: none/);
   });
 

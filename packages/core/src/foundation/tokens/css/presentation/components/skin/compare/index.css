@@ -43,7 +43,7 @@
 
 /* ---- text hierarchy (typography drained from the engine's inline
         fontWeight styles) ---- */
-.ds-surface.ds-compare[data-part="root"] [data-part="row-label"],
+.ds-surface.ds-compare[data-part="root"] .ds-compare__row-label,
 .ds-surface.ds-compare[data-part="root"] .ds-compare__row-label {
   font-weight: var(
     --ds-compare-row-label-weight,
@@ -51,8 +51,8 @@
   );
 }
 
-.ds-surface.ds-compare[data-part="root"] [data-part="subject-label"],
-.ds-surface.ds-compare[data-part="root"] [data-part="section-title"],
+.ds-surface.ds-compare[data-part="root"] .ds-compare__subject-label,
+.ds-surface.ds-compare[data-part="root"] .ds-compare__section-title,
 .ds-surface.ds-compare[data-part="root"] .ds-compare__subject-label,
 .ds-surface.ds-compare[data-part="root"] .ds-compare__section-title {
   font-weight: var(
@@ -61,7 +61,7 @@
   );
 }
 
-.ds-surface.ds-compare[data-part="root"] [data-part="muted-text"],
+.ds-surface.ds-compare[data-part="root"] .ds-compare__muted-text,
 .ds-surface.ds-compare[data-part="root"] .ds-compare__muted-text {
   color: var(--ds-compare-muted-color, var(--ds-color-text-muted));
 }

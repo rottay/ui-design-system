@@ -450,7 +450,7 @@ function DashboardSurfaceContent({
                                 )}
                                 {section.description && (
                                   <Text
-                                    className="ds-dashboard__muted-text"
+                                    className="ds-dashboard__muted-text ds-dashboard__section-description"
                                     data-part="section-description"
                                   >
                                     {section.description}
