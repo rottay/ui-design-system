@@ -213,7 +213,7 @@ function FormSurfaceContent({ config, loading = false, error, onRetry, adapt }: 
           <Card.Body>
             <Stack spacing={sectionSpacing}>
               {config.presentation.description && (
-                <SurfacePostureSlot name="description" asChild><Text data-part="description" as="p" size="sm" color="subtle">
+                <SurfacePostureSlot name="description" asChild><Text className="ds-form-surface__description" data-part="description" as="p" size="sm" color="subtle">
                   {config.presentation.description}
                 </Text></SurfacePostureSlot>
               )}

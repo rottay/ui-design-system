@@ -70342,6 +70342,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* The description's trailing rhythm: the Stack spacing above it is
    profile-driven and stays in the TSX, so the channel rests at 0. */
+.ds-surface.ds-form-surface[data-part='root'] .ds-form-surface__description,
 .ds-surface.ds-form-surface[data-part='root'] [data-part='description'] {
   margin-block-end: var(--ds-form-surface-description-margin-block-end, var(--ds-spacing-0, 0));
 }
@@ -71811,6 +71812,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* The description's trailing rhythm: the Stack spacing above it is
    profile-driven and stays in the TSX, so the channel rests at 0. */
+.ds-surface.ds-wizard[data-part='root'] .ds-wizard__description,
 .ds-surface.ds-wizard[data-part='root'] [data-part='description'] {
   margin-block-end: var(--ds-wizard-surface-description-margin-block-end, var(--ds-spacing-0, 0));
 }
