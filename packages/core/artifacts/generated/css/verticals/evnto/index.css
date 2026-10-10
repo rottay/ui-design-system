@@ -83594,6 +83594,32 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-block-size: var(--_ds-active-filters-bar-chip-target);
 }
 
+/* ---- chip ground: the chip composes a Tag, and the bar keeps its
+        rail-blended chip through the class hook (the composition door). The
+        chip carries no fill, frame or pill geometry: the label and the value
+        read in the rail's inks on the rail's ground. `[data-size]` is the
+        composed Tag's own stamp, so the rule holds while the chip is that
+        primitive. ---- */
+.ds-structure.ds-active-filters-bar[data-part="root"][data-embedded]
+  [data-part="chips"]
+  .ds-active-filters-bar__chip[data-size] {
+  display: inline;
+  max-inline-size: none;
+  block-size: auto;
+  overflow: visible;
+  padding-inline: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-variant-numeric: inherit;
+  line-height: inherit;
+  white-space: inherit;
+}
+
 /* ---- the overflow affordance is an ACTION: the Button primitive owns its
         chrome, its type ramp and its focus ring. A link-style toggle is the
         `link` variant, never a text-decoration re-stated here ---- */
@@ -109531,7 +109557,7 @@ html[lang]:lang(ar) {
   --ds-tag-input-border-focus: var(--ds-color-primary);
   --ds-tag-input-border-hover: var(--ds-material-control-border-hover);
   --ds-tag-input-caret: var(--ds-input-border-focus);
-  --ds-tag-input-chip-ink: var(--ds-color-white);
+  --ds-tag-input-chip-ink: var(--ds-color-text-on-primary);
   --ds-tag-input-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-tag-input-error-border: var(--ds-color-error);
   --ds-tag-input-error-font-weight: var(--ds-input-error-message-font-weight);

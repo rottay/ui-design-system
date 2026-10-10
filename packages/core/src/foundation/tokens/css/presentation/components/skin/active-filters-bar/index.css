@@ -190,6 +190,32 @@
   min-block-size: var(--_ds-active-filters-bar-chip-target);
 }
 
+/* ---- chip ground: the chip composes a Tag, and the bar keeps its
+        rail-blended chip through the class hook (the composition door). The
+        chip carries no fill, frame or pill geometry: the label and the value
+        read in the rail's inks on the rail's ground. `[data-size]` is the
+        composed Tag's own stamp, so the rule holds while the chip is that
+        primitive. ---- */
+.ds-structure.ds-active-filters-bar[data-part="root"][data-embedded]
+  [data-part="chips"]
+  .ds-active-filters-bar__chip[data-size] {
+  display: inline;
+  max-inline-size: none;
+  block-size: auto;
+  overflow: visible;
+  padding-inline: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-variant-numeric: inherit;
+  line-height: inherit;
+  white-space: inherit;
+}
+
 /* ---- the overflow affordance is an ACTION: the Button primitive owns its
         chrome, its type ramp and its focus ring. A link-style toggle is the
         `link` variant, never a text-decoration re-stated here ---- */

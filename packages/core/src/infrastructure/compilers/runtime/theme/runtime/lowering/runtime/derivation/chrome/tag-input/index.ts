@@ -54,7 +54,7 @@ export function deriveTagInputChannels(): Record<string, string> {
   vars["--ds-tag-input-caret"] = "var(--ds-input-border-focus)";
   vars["--ds-tag-input-placeholder"] = "var(--ds-input-color-placeholder)";
   vars["--ds-tag-input-placeholder-opacity"] = "var(--ds-input-placeholder-opacity)";
-  vars["--ds-tag-input-chip-ink"] = "var(--ds-color-white)";
+  vars["--ds-tag-input-chip-ink"] = "var(--ds-color-text-on-primary)";
   vars["--ds-tag-input-sm-font-size"] = "var(--ds-input-sm-font-size)";
   vars["--ds-tag-input-md-font-size"] = "var(--ds-input-md-font-size)";
   vars["--ds-tag-input-lg-font-size"] = "var(--ds-input-lg-font-size)";

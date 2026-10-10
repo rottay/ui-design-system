@@ -2510,7 +2510,7 @@
   --ds-tag-input-border-focus: var(--ds-color-primary);
   --ds-tag-input-border-hover: var(--ds-material-control-border-hover);
   --ds-tag-input-caret: var(--ds-input-border-focus);
-  --ds-tag-input-chip-ink: var(--ds-color-white);
+  --ds-tag-input-chip-ink: var(--ds-color-text-on-primary);
   --ds-tag-input-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-tag-input-error-border: var(--ds-color-error);
   --ds-tag-input-error-font-weight: var(--ds-input-error-message-font-weight);
