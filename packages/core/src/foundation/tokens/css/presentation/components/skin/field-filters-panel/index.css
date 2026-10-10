@@ -131,7 +131,7 @@
 
 /* header pill + quick-slices pill ----------------------------------------- */
 
-.ds-structure.ds-field-filters-panel [data-part='title-pill'] {
+.ds-structure.ds-field-filters-panel .ds-field-filters-panel__title-pill {
   display: inline-flex;
   align-items: center;
   min-block-size: 22px;
@@ -140,11 +140,11 @@
   background: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__title-pill {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel [data-part='presets-pill'] {
+.ds-structure.ds-field-filters-panel .ds-field-filters-panel__presets-pill {
   display: inline-flex;
   align-items: center;
   min-block-size: 20px;
@@ -153,7 +153,7 @@
   background: color-mix(in srgb, var(--ds-color-bg-primary) 48%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__presets-pill {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
@@ -325,20 +325,20 @@
 --------------------------------------------------------------------------- */
 
 /* header eyebrow + subtitle */
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__title-pill[data-size] {
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='subtitle'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__subtitle[data-size] {
   line-height: 1.45;
 }
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__presets-pill[data-size] {
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
 
 /* inline signal — tabular-nums so the live count never jitters */
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='signal-label'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__signal-label[data-size] {
   letter-spacing: 0.09em;
   line-height: 1;
   text-transform: uppercase;
@@ -347,12 +347,12 @@
 
 /* filter card eyebrow + description: two composed Texts render as inline
    spans, so without the block reads they set on ONE line. */
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-label'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__filter-card-label[data-size] {
   display: block;
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-description'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__filter-card-description[data-size] {
   display: block;
   margin-block-start: 3px;
   line-height: 1.35;
@@ -369,8 +369,8 @@
         active filter count already reads by its label text. ---- */
 @media (forced-colors: active) {
   .ds-structure.ds-field-filters-panel[data-part='root'][data-active-count],
-  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'],
-  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'],
+  .ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__title-pill,
+  .ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__presets-pill,
   .ds-structure.ds-field-filters-panel [data-part='signal'],
   .ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__preset-chip,
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip-icon'],

@@ -181,7 +181,7 @@
   border-bottom: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__header-description {
   color: var(--ds-color-text-muted);
 }
 
@@ -202,7 +202,7 @@
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='active-card-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__active-card-description {
   color: var(--ds-color-text-muted);
 }
 
@@ -277,11 +277,11 @@
   border-color: color-mix(in srgb, var(--ds-color-primary) 28%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='view-item-label'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__view-item-label {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='view-item-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__view-item-description {
   color: var(--ds-color-text-muted);
 }
 
@@ -365,7 +365,7 @@
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='empty-state-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__empty-state-description {
   color: var(--ds-color-text-muted);
 }
 
@@ -377,12 +377,12 @@
 --------------------------------------------------------------------------- */
 
 /* header + section eyebrows */
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-title'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__header-title {
   font-size: var(--ds-font-size-sm);
 }
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-description'],
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='active-card-description'],
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='view-item-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__header-description,
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__active-card-description,
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__view-item-description {
   font-size: var(--ds-font-size-xs);
 }
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='section-header'] {
@@ -562,18 +562,18 @@
 .ds-structure.ds-saved-views-menu-panel [data-part='empty-state-copy'] {
   min-inline-size: 0;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='header-title'],
-.ds-structure.ds-saved-views-menu-panel [data-part='header-description'],
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card-label'],
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card-description'],
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-title'],
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-description'],
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item-description'] {
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__header-title,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__header-description,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__active-card-label,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__active-card-description,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__empty-state-title,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__empty-state-description,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__view-item-description {
   display: block;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='header-description'],
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card-description'],
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-description'] {
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__header-description,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__active-card-description,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__empty-state-description {
   margin-block-start: 4px;
 }
 
@@ -633,13 +633,13 @@
   flex: 1;
   min-inline-size: 0;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item-label'] {
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__view-item-label {
   max-inline-size: var(--ds-saved-views-menu-view-item-label-measure, 180px);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item-description'] {
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__view-item-description {
   margin-block-start: 5px;
 }
 

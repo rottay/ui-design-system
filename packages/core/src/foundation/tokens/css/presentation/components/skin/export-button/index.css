@@ -58,7 +58,7 @@
   animation: ds-export-toast-fade 1.8s ease forwards;
 }
 
-.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] [data-part='toast-label'] {
+.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] .ds-export-button__toast-label {
   color: inherit;
   font-size: var(--ds-font-size-xs);
   font-weight: 600;

@@ -1589,7 +1589,7 @@ describe("workspace chrome skins — R2 structural contract", () => {
       "snapshot-row-label",
       "fallback-empty",
     ]) {
-      expect(css).toContain(`[data-part='${part}']`);
+      expect(css).toContain(`.ds-selection-preview-rail__${part}`);
     }
     expect(css).toContain("text-transform: uppercase");
     expect(css).toContain("font-style: italic");

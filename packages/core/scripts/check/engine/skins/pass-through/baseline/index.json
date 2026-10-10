@@ -16,7 +16,7 @@
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
   "passThroughViolations": 92,
-  "callerPartDependents": 969,
+  "callerPartDependents": 938,
   "callerStateDependents": 16
  },
  "roster": [
@@ -2304,161 +2304,6 @@
      "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
     },
     {
-     "key": "structures/workspace/export-button/index.tsx#Text#toast-label#0",
-     "atBaseline": "structures/workspace/export-button/index.tsx:318",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/field-filters-panel/index.tsx#Text#filter-card-description#0",
-     "atBaseline": "structures/workspace/field-filters-panel/index.tsx:317",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/field-filters-panel/index.tsx#Text#filter-card-label#0",
-     "atBaseline": "structures/workspace/field-filters-panel/index.tsx:310",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/field-filters-panel/index.tsx#Text#presets-pill#0",
-     "atBaseline": "structures/workspace/field-filters-panel/index.tsx:141",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/field-filters-panel/index.tsx#Text#signal-label#0",
-     "atBaseline": "structures/workspace/field-filters-panel/index.tsx:281",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/field-filters-panel/index.tsx#Text#subtitle#0",
-     "atBaseline": "structures/workspace/field-filters-panel/index.tsx:123",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/field-filters-panel/index.tsx#Text#title-pill#0",
-     "atBaseline": "structures/workspace/field-filters-panel/index.tsx:116",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/saved-views-menu/index.tsx#Text#active-card-description#0",
-     "atBaseline": "structures/workspace/saved-views-menu/index.tsx:577",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/saved-views-menu/index.tsx#Text#active-card-label#0",
-     "atBaseline": "structures/workspace/saved-views-menu/index.tsx:574",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/saved-views-menu/index.tsx#Text#empty-state-description#0",
-     "atBaseline": "structures/workspace/saved-views-menu/index.tsx:691",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/saved-views-menu/index.tsx#Text#empty-state-description#1",
-     "atBaseline": "structures/workspace/saved-views-menu/index.tsx:711",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/saved-views-menu/index.tsx#Text#empty-state-title#0",
-     "atBaseline": "structures/workspace/saved-views-menu/index.tsx:688",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/saved-views-menu/index.tsx#Text#empty-state-title#1",
-     "atBaseline": "structures/workspace/saved-views-menu/index.tsx:708",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/saved-views-menu/index.tsx#Text#header-description#0",
-     "atBaseline": "structures/workspace/saved-views-menu/index.tsx:552",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/saved-views-menu/index.tsx#Text#header-title#0",
-     "atBaseline": "structures/workspace/saved-views-menu/index.tsx:549",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/saved-views-menu/index.tsx#Text#view-item-description#0",
-     "atBaseline": "structures/workspace/saved-views-menu/index.tsx:797",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/saved-views-menu/index.tsx#Text#view-item-label#0",
-     "atBaseline": "structures/workspace/saved-views-menu/index.tsx:786",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/search-command-bar/index.tsx#Text#status#0",
-     "atBaseline": "structures/workspace/search-command-bar/index.tsx:622",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/search-command-bar/index.tsx#Text#suggestions-label#0",
-     "atBaseline": "structures/workspace/search-command-bar/index.tsx:645",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/search-command-bar/index.tsx#Text#voice-badge-label#0",
-     "atBaseline": "structures/workspace/search-command-bar/index.tsx:457",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/search-command-bar/index.tsx#Text#voice-help-description#0",
-     "atBaseline": "structures/workspace/search-command-bar/index.tsx:510",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/search-command-bar/index.tsx#Text#voice-help-hint#0",
-     "atBaseline": "structures/workspace/search-command-bar/index.tsx:563",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/search-command-bar/index.tsx#Text#voice-help-title#0",
-     "atBaseline": "structures/workspace/search-command-bar/index.tsx:505",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/selection-preview-rail/index.tsx#Text#fallback-empty#0",
-     "atBaseline": "structures/workspace/selection-preview-rail/index.tsx:139",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/selection-preview-rail/index.tsx#Text#fallback-string#0",
-     "atBaseline": "structures/workspace/selection-preview-rail/index.tsx:158",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/selection-preview-rail/index.tsx#Text#identity-subtitle#0",
-     "atBaseline": "structures/workspace/selection-preview-rail/index.tsx:357",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/selection-preview-rail/index.tsx#Text#identity-title#0",
-     "atBaseline": "structures/workspace/selection-preview-rail/index.tsx:346",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/selection-preview-rail/index.tsx#Text#match-reason-body#0",
-     "atBaseline": "structures/workspace/selection-preview-rail/index.tsx:405",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/selection-preview-rail/index.tsx#Text#match-reason-eyebrow#0",
-     "atBaseline": "structures/workspace/selection-preview-rail/index.tsx:393",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/selection-preview-rail/index.tsx#Text#snapshot-empty#0",
-     "atBaseline": "structures/workspace/selection-preview-rail/index.tsx:532",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/workspace/selection-preview-rail/index.tsx#Text#snapshot-row-label#0",
-     "atBaseline": "structures/workspace/selection-preview-rail/index.tsx:513",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
      "key": "surfaces/presentation/pages/data/compare/index.tsx#Heading#section-title#0",
      "atBaseline": "surfaces/presentation/pages/data/compare/index.tsx:220",
      "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
@@ -2564,7 +2409,7 @@
   ]
  },
  "lastMove": {
-  "head": "9ed2674a4cf499f1ad318df9f92a0f1841340316",
+  "head": "bb52847fd6a7cce880cb67a2332deb1fdb2e90b7",
   "date": "2026-10-10",
   "note": "lowered to the gate's own measurement through --update-baseline"
  }

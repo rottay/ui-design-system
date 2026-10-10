@@ -502,7 +502,7 @@ export function SearchCommandBar({
                 >
                   <Flex align="start" justify="between" gap={10}>
                     <Box data-part="voice-help-copy">
-                      <Text data-part="voice-help-title" size="sm" weight="medium">
+                      <Text className="ds-search-command-bar__voice-help-title" data-part="voice-help-title" size="sm" weight="medium">
                         {isVoicePermissionBlocked
                           ? tOr('searchCommandBar.enableMicrophone', 'Enable microphone')
                           : tOr('searchCommandBar.allowMicrophoneAccess', 'Allow microphone access')}

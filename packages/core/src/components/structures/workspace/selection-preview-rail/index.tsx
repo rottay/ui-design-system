@@ -139,7 +139,7 @@ function renderFallbackValue(
       <Text
         size="sm"
         color="subtle"
-        data-part="fallback-empty"
+        className="ds-selection-preview-rail__fallback-empty" data-part="fallback-empty"
       >
         {labels.noData}
       </Text>
@@ -157,7 +157,7 @@ function renderFallbackValue(
   return (
     <Text
       size="sm"
-      data-part="fallback-string"
+      className="ds-selection-preview-rail__fallback-string" data-part="fallback-string"
     >
       {String(value)}
     </Text>
@@ -346,7 +346,7 @@ export function SelectionPreviewRail<T extends object>({
               <Text
                 size="xl"
                 weight="semibold"
-                data-part="identity-title"
+                className="ds-selection-preview-rail__identity-title" data-part="identity-title"
                 style={{
                   display: 'block',
                 }}
@@ -357,7 +357,7 @@ export function SelectionPreviewRail<T extends object>({
                 <Text
                   size="sm"
                   color="secondary"
-                  data-part="identity-subtitle"
+                  className="ds-selection-preview-rail__identity-subtitle" data-part="identity-subtitle"
                   style={{
                     display: 'block',
                     marginTop: 6,
@@ -394,7 +394,7 @@ export function SelectionPreviewRail<T extends object>({
                         size="xs"
                         weight="medium"
                         color="subtle"
-                        data-part="match-reason-eyebrow"
+                        className="ds-selection-preview-rail__match-reason-eyebrow" data-part="match-reason-eyebrow"
                         style={{
                           display: 'block',
                         }}
@@ -405,7 +405,7 @@ export function SelectionPreviewRail<T extends object>({
                     <Text
                       size="sm"
                       color="secondary"
-                      data-part="match-reason-body"
+                      className="ds-selection-preview-rail__match-reason-body" data-part="match-reason-body"
                       style={{
                         display: 'block',
                         marginTop: 6,
@@ -514,7 +514,7 @@ export function SelectionPreviewRail<T extends object>({
                     size="xs"
                     weight="medium"
                     color="subtle"
-                    data-part="snapshot-row-label"
+                    className="ds-selection-preview-rail__snapshot-row-label" data-part="snapshot-row-label"
                     style={{
                       display: 'block',
                       marginBottom: 6,
@@ -532,7 +532,7 @@ export function SelectionPreviewRail<T extends object>({
                 <Text
                   size="sm"
                   color="subtle"
-                  data-part="snapshot-empty"
+                  className="ds-selection-preview-rail__snapshot-empty" data-part="snapshot-empty"
                 >
                   {tOr('selectionPreviewRail.snapshotEmpty', 'No preview fields are available for this record.')}
                 </Text>

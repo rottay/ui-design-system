@@ -114,14 +114,14 @@ export function FieldFiltersPanel({
         <Box data-part="header-copy">
           <Flex align="center" gap={8} wrap="wrap" data-part="title-group">
             <Text
-              data-part="title-pill"
+              className="ds-field-filters-panel__title-pill" data-part="title-pill"
               size="xs"
               color="subtle"
             >
               {panelLabel}
             </Text>
             <Text
-              data-part="subtitle"
+              className="ds-field-filters-panel__subtitle" data-part="subtitle"
               size="xs"
               color="secondary"
             >
@@ -139,7 +139,7 @@ export function FieldFiltersPanel({
         <Box data-part="presets-region">
           <Flex align="center" gap={10} wrap="wrap" data-part="presets-row">
             <Text
-              data-part="presets-pill"
+              className="ds-field-filters-panel__presets-pill" data-part="presets-pill"
               size="xs"
               color="subtle"
             >
@@ -279,7 +279,7 @@ function InlineSignal({
       data-tone={tone}
     >
       <Text
-        data-part="signal-label"
+        className="ds-field-filters-panel__signal-label" data-part="signal-label"
         size="xs"
         color="inherit"
       >
@@ -308,14 +308,14 @@ function FilterCard({
         </Box>
         <Box data-part="filter-card-copy">
           <Text
-            data-part="filter-card-label"
+            className="ds-field-filters-panel__filter-card-label" data-part="filter-card-label"
             size="xs"
             color="subtle"
           >
             {label}
           </Text>
           <Text
-            data-part="filter-card-description"
+            className="ds-field-filters-panel__filter-card-description" data-part="filter-card-description"
             size="xs"
             color="secondary"
           >

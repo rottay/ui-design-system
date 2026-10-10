@@ -4151,6 +4151,8 @@ const measureFactoryIcon = ({
   pin = 'present',
   element = '<PlantedMark data-part="loading" />',
   wrapper,
+  wrapperParams = 'props',
+  wrapperCall,
 } = {}) => measureComposer({
   tsx: plantedMarkTsx(element),
   skin: busyRowSkin,
@@ -4161,15 +4163,17 @@ const measureFactoryIcon = ({
     };
     put(PLANTED_FACTORY_TSX, `${PLANTED_FACTORY[factory].join('\n')}\n`);
     put(PLANTED_MARK_TSX, [
+      "import { createElement } from 'react';",
       "import { OtherGlyph, PlantedGlyph } from '@planted/glyphs';",
       "import { createPlantedIcon } from './factory';",
-      /* `wrapper`: PlantedMark is a component that renders the factory icon with these attributes. */
-      ...(wrapper === undefined
+      /* `wrapper`: PlantedMark is a component that renders the factory icon with these attributes
+       * (`wrapperParams` its parameter list); `wrapperCall`: the same through `createElement(…, <props>)`. */
+      ...(wrapper === undefined && wrapperCall === undefined
         ? [`export const PlantedMark = createPlantedIcon(${glyph});`]
         : [
           `const PlantedInner = createPlantedIcon(${glyph});`,
-          'export function PlantedMark(props) {',
-          `  return <PlantedInner ${wrapper} />;`,
+          `export function PlantedMark(${wrapperParams}) {`,
+          wrapperCall === undefined ? `  return <PlantedInner ${wrapper} />;` : `  return createElement(PlantedInner, ${wrapperCall});`,
           '}',
         ]),
       '',
@@ -4251,6 +4255,160 @@ test('PLANT N1: a wrapper that renders the guarded icon answers at ITS call site
 
 test('CONTROL N1: an icon with no such guard needs neither -- the rule binds only a component that can render nothing', () => {
   assertLoadingStamped(measureFactoryIcon({ factory: 'forwards' }), 'unguarded factory icon');
+});
+
+// N1 gap (2026-10-10 audit, item 1): the guard reads the props the component RECEIVES. The call site's
+// setters are taken in order and, per name, the LAST one decides; a label that statically reduces to
+// nothing is no name. Each shape is drilled at the family's call site, through a wrapper's JSX and
+// through a wrapper's createElement.
+const gatedAt = {
+  /** The family's own call site (the composed-tag reader). */
+  family: (attributes) => measureFactoryIcon({ factory: 'gated', element: `<PlantedMark data-part="loading" ${attributes} />` }),
+  /** A wrapper component's JSX (the component reader): its props carry the caller's `data-part`. */
+  wrapper: (attributes) => measureFactoryIcon({ factory: 'gated', wrapper: `data-part={props['data-part']} ${attributes}` }),
+};
+/** A wrapper's `createElement(PlantedInner, { … })`. */
+const gatedCall = (members) => measureFactoryIcon({ factory: 'gated', wrapperCall: `{ 'data-part': props['data-part'], ${members} }` });
+
+test('CONTROL N1 gap: `decorative` alone keeps its credit at every call-site form (the audit\'s Valid)', () => {
+  assertLoadingStamped(gatedAt.family('decorative'), 'family JSX');
+  assertLoadingStamped(gatedAt.wrapper('decorative'), 'wrapper JSX');
+  assertLoadingStamped(gatedCall('decorative: true'), 'wrapper createElement');
+});
+
+test('PLANT N1 gap: a later spread that overwrites `decorative` with false is unbacked (the audit\'s Overwritten)', () => {
+  assertLoadingUnstamped(gatedAt.family('decorative {...{ decorative: false }}'), 'family JSX');
+  assertLoadingUnstamped(gatedAt.wrapper('decorative {...{ decorative: false }}'), 'wrapper JSX');
+  assertLoadingUnstamped(gatedCall('decorative: true, ...{ decorative: false }'), 'wrapper createElement');
+});
+
+test('PLANT N1 gap: a label that statically evaluates to nothing is no name (the audit\'s EmptyDynamic)', () => {
+  assertLoadingUnstamped(gatedAt.family("label={false ? 'Named' : undefined}"), 'family JSX');
+  assertLoadingUnstamped(gatedAt.wrapper("label={false ? 'Named' : undefined}"), 'wrapper JSX');
+  assertLoadingUnstamped(gatedCall("label: false ? 'Named' : undefined"), 'wrapper createElement');
+});
+
+test('CONTROL N1 gap: an explicit `decorative` AFTER the spread wins and keeps its credit (the audit\'s ValidLast)', () => {
+  assertLoadingStamped(gatedAt.family('{...{ decorative: false }} decorative'), 'family JSX');
+  assertLoadingStamped(gatedAt.wrapper('{...{ decorative: false }} decorative'), 'wrapper JSX');
+  assertLoadingStamped(gatedCall('...{ decorative: false }, decorative: true'), 'wrapper createElement');
+});
+
+test('N1 gap: per name, the LAST setter decides -- the last-setter matrix', () => {
+  const stamped = [
+    /* decorative */
+    '{...{ decorative: true }}',
+    'decorative={false} {...{ decorative: true }}',
+    '{...PLANTED_EXTRA} decorative',
+    /* label */
+    "{...{ label: 'Loading' }}",
+    "{...{ label: '' }} label=\"Loading\"",
+    '{...PLANTED_EXTRA} label="Loading"',
+    /* one name cleared by a later setter leaves exactly the other */
+    'decorative label="Loading" {...{ label: undefined }}',
+    'label="Loading" decorative {...{ decorative: false }}',
+  ];
+  const unstamped = [
+    /* decorative */
+    '{...{ decorative: true }} decorative={false}',
+    '{...{ decorative: false }}',
+    /* label */
+    "label=\"Loading\" {...{ label: '' }}",
+    "{...{ label: 'Loading' }} label=\"\"",
+    /* a later setter that adds the OTHER name leaves both: the guard renders nothing */
+    "decorative {...{ label: 'Loading' }}",
+    'label="Loading" {...{ decorative: true }}',
+    /* a spread nobody can read, as the LAST setter of a name, proves nothing for it (fail closed) */
+    'decorative {...PLANTED_EXTRA}',
+    'label="Loading" {...PLANTED_EXTRA}',
+    'decorative {...{ ...PLANTED_EXTRA }}',
+    "decorative {...{ [PLANTED_KEY]: 'x' }}",
+  ];
+  for (const attributes of stamped) assertLoadingStamped(gatedAt.family(attributes), attributes);
+  for (const attributes of unstamped) assertLoadingUnstamped(gatedAt.family(attributes), attributes);
+});
+
+test('N1 gap: the last-setter rule holds through createElement, whose props object is read member by member', () => {
+  for (const members of [
+    "label: 'Loading'",
+    "...{ label: '' }, label: 'Loading'",
+    '...PLANTED_EXTRA, decorative: true',
+    "decorative: true, label: 'Loading', ...{ label: undefined }",
+  ]) {
+    assertLoadingStamped(gatedCall(members), members);
+  }
+  for (const members of [
+    'decorative: false',
+    "label: ''",
+    "decorative: true, label: 'Loading'",
+    "label: 'Loading', ...{ label: '' }",
+    'decorative: true, ...PLANTED_EXTRA',
+  ]) {
+    assertLoadingUnstamped(gatedCall(members), members);
+  }
+  /* A props object the reader cannot open at all proves nothing. */
+  assertLoadingUnstamped(measureFactoryIcon({ factory: 'gated', wrapperCall: 'props' }), 'createElement(PlantedInner, props)');
+});
+
+test('N1 gap: the props rest sets a name only when that name was not destructured out of it', () => {
+  /* `rest` provably carries neither name: the explicit `decorative` stands. */
+  assertLoadingStamped(
+    measureFactoryIcon({ factory: 'gated', wrapperParams: '{ label, decorative, ...rest }', wrapper: 'decorative {...rest}' }),
+    'both names destructured out of the rest',
+  );
+  /* `rest` may still carry `decorative`: as its last setter it proves nothing. */
+  assertLoadingUnstamped(
+    measureFactoryIcon({ factory: 'gated', wrapperParams: '{ label, ...rest }', wrapper: 'decorative {...rest}' }),
+    'decorative left in the rest',
+  );
+  /* The same rest BEFORE the explicit attribute: the explicit one decides. */
+  assertLoadingStamped(
+    measureFactoryIcon({ factory: 'gated', wrapperParams: '{ label, ...rest }', wrapper: '{...rest} decorative' }),
+    'explicit decorative after the rest',
+  );
+});
+
+test('N1 gap: a label expression is evaluated statically; what reduces to nothing is no name', () => {
+  for (const label of [
+    'false',
+    'void 0',
+    "null ?? ''",
+    "'' || undefined",
+    "true && '   '",
+    '(undefined as unknown as string)',
+    "!PLANTED_FLAG ? '' : undefined",
+    "true ? (false ? 'Named' : null) : 'Named'",
+  ]) {
+    assertLoadingUnstamped(gatedAt.family(`label={${label}}`), label);
+  }
+  for (const label of [
+    "true ? 'Named' : undefined",
+    "'' || 'Named'",
+    "null ?? 'Named'",
+    "PLANTED_FLAG ? 'Open' : 'Closed'",
+  ]) {
+    assertLoadingStamped(gatedAt.family(`label={${label}}`), label);
+  }
+});
+
+test('N1 gap (direction, documented): a label only the runtime can settle counts as supplied', () => {
+  /* The call site hands a name expression; whether it is empty at runtime is the component's own guard
+   * to catch. Reading these as "no name" would un-credit every translated label in the tree. A future
+   * tightening flips this drill on purpose: update it with the change, never silently. */
+  for (const label of ['PLANTED_LABEL', "PLANTED_FLAG ? 'Named' : undefined", 't(PLANTED_KEY)', '`${PLANTED_LABEL}`']) {
+    assertLoadingStamped(gatedAt.family(`label={${label}}`), label);
+  }
+  /* ...but a runtime label BESIDE a proven `decorative` is both, and renders nothing. */
+  assertLoadingUnstamped(gatedAt.family('decorative label={PLANTED_LABEL}'), 'decorative + runtime label');
+});
+
+test('N1 gap: `decorative` is supplied only when it is provably true', () => {
+  for (const decorative of ['!false', 'true || PLANTED_FLAG', 'false ? false : true']) {
+    assertLoadingStamped(gatedAt.family(`decorative={${decorative}}`), decorative);
+  }
+  for (const decorative of ['!true', 'false ? true : false', 'PLANTED_FLAG', "'true'", '1']) {
+    assertLoadingUnstamped(gatedAt.family(`decorative={${decorative}}`), decorative);
+  }
 });
 
 test('LIVE N1: the real semantic icon is unbacked bare and backed once the call site declares it decorative', () => {

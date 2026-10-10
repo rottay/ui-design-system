@@ -546,11 +546,11 @@ export function SavedViewsMenu({
             <Box data-part="header">
               <Flex align="start" justify="between" gap={12}>
                 <Box data-part="header-copy">
-                  <Text data-part="header-title" size="sm" weight="medium">
+                  <Text className="ds-saved-views-menu__header-title" data-part="header-title" size="sm" weight="medium">
                     {labels.headerTitle}
                   </Text>
                   <Text
-                    data-part="header-description"
+                    className="ds-saved-views-menu__header-description" data-part="header-description"
                     size="xs"
                   >
                     {labels.headerDescription}
@@ -571,11 +571,11 @@ export function SavedViewsMenu({
                     <Flex data-part="active-card-lead" align="start" gap={10}>
                       <ViewGlyph isSystem={activeView.isSystem} active />
                       <Box data-part="active-card-copy">
-                        <Text data-part="active-card-label" size="sm" weight="medium">
+                        <Text className="ds-saved-views-menu__active-card-label" data-part="active-card-label" size="sm" weight="medium">
                           {activeView.label}
                         </Text>
                         <Text
-                          data-part="active-card-description"
+                          className="ds-saved-views-menu__active-card-description" data-part="active-card-description"
                           size="xs"
                         >
                           {describeView(activeView, labels)}
@@ -685,11 +685,11 @@ export function SavedViewsMenu({
                   <Flex align="start" gap={10}>
                     <Sparkles data-part="empty-state-icon" />
                     <Box data-part="empty-state-copy">
-                      <Text data-part="empty-state-title" size="sm" weight="medium">
+                      <Text className="ds-saved-views-menu__empty-state-title" data-part="empty-state-title" size="sm" weight="medium">
                         {labels.noPersonaTitle}
                       </Text>
                       <Text
-                        data-part="empty-state-description"
+                        className="ds-saved-views-menu__empty-state-description" data-part="empty-state-description"
                         size="xs"
                       >
                         {labels.noPersonaDescription}
@@ -705,11 +705,11 @@ export function SavedViewsMenu({
                   data-empty-state="all"
                 >
                   <Sparkles data-part="empty-state-icon" />
-                  <Text data-part="empty-state-title" size="sm" weight="medium">
+                  <Text className="ds-saved-views-menu__empty-state-title" data-part="empty-state-title" size="sm" weight="medium">
                     {labels.noViewsTitle}
                   </Text>
                   <Text
-                    data-part="empty-state-description"
+                    className="ds-saved-views-menu__empty-state-description" data-part="empty-state-description"
                     size="xs"
                   >
                     {labels.noViewsDescription}
@@ -784,7 +784,7 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
               <Box data-part="view-item-copy">
                 <Flex align="center" gap={6} wrap="wrap">
                   <Text
-                    data-part="view-item-label"
+                    className="ds-saved-views-menu__view-item-label" data-part="view-item-label"
                     size="sm"
                     weight={isActive ? 'medium' : undefined}
                   >
@@ -795,7 +795,7 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
                   <StatusPill label={kindLabel} tone="neutral" />
                 </Flex>
                 <Text
-                  data-part="view-item-description"
+                  className="ds-saved-views-menu__view-item-description" data-part="view-item-description"
                   size="xs"
                 >
                   {describeView(view, labels)}

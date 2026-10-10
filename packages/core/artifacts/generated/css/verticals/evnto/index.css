@@ -24351,7 +24351,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 /* header pill + quick-slices pill ----------------------------------------- */
 
-.ds-structure.ds-field-filters-panel [data-part='title-pill'] {
+.ds-structure.ds-field-filters-panel .ds-field-filters-panel__title-pill {
   display: inline-flex;
   align-items: center;
   min-block-size: 22px;
@@ -24360,11 +24360,11 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__title-pill {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel [data-part='presets-pill'] {
+.ds-structure.ds-field-filters-panel .ds-field-filters-panel__presets-pill {
   display: inline-flex;
   align-items: center;
   min-block-size: 20px;
@@ -24373,7 +24373,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 48%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__presets-pill {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
@@ -24545,20 +24545,20 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 --------------------------------------------------------------------------- */
 
 /* header eyebrow + subtitle */
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__title-pill[data-size] {
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='subtitle'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__subtitle[data-size] {
   line-height: 1.45;
 }
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__presets-pill[data-size] {
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
 
 /* inline signal — tabular-nums so the live count never jitters */
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='signal-label'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__signal-label[data-size] {
   letter-spacing: 0.09em;
   line-height: 1;
   text-transform: uppercase;
@@ -24567,12 +24567,12 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 /* filter card eyebrow + description: two composed Texts render as inline
    spans, so without the block reads they set on ONE line. */
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-label'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__filter-card-label[data-size] {
   display: block;
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-description'][data-size] {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__filter-card-description[data-size] {
   display: block;
   margin-block-start: 3px;
   line-height: 1.35;
@@ -24589,8 +24589,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
         active filter count already reads by its label text. ---- */
 @media (forced-colors: active) {
   .ds-structure.ds-field-filters-panel[data-part='root'][data-active-count],
-  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'],
-  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'],
+  .ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__title-pill,
+  .ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__presets-pill,
   .ds-structure.ds-field-filters-panel [data-part='signal'],
   .ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__preset-chip,
   .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip-icon'],
@@ -25213,31 +25213,31 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
    reads as data.
 --------------------------------------------------------------------------- */
 
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-title'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-title[data-size] {
   letter-spacing: -0.02em;
   line-height: 1.12;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-subtitle'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-subtitle[data-size] {
   line-height: 1.4;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-eyebrow'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__match-reason-eyebrow[data-size] {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-body'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__match-reason-body[data-size] {
   line-height: 1.5;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row-label'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__snapshot-row-label[data-size] {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-empty'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__snapshot-empty[data-size] {
   line-height: 1.45;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='fallback-empty'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__fallback-empty[data-size] {
   font-style: italic;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='fallback-string'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__fallback-string[data-size] {
   line-height: 1.45;
 }
 
@@ -84493,7 +84493,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   animation: ds-export-toast-fade 1.8s ease forwards;
 }
 
-.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] [data-part='toast-label'] {
+.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] .ds-export-button__toast-label {
   color: inherit;
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
@@ -84772,7 +84772,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-bottom: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__header-description {
   color: var(--ds-color-text-muted);
 }
 
@@ -84793,7 +84793,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='active-card-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__active-card-description {
   color: var(--ds-color-text-muted);
 }
 
@@ -84868,11 +84868,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-color: color-mix(in srgb, var(--ds-color-primary) 28%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='view-item-label'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__view-item-label {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='view-item-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__view-item-description {
   color: var(--ds-color-text-muted);
 }
 
@@ -84956,7 +84956,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='empty-state-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__empty-state-description {
   color: var(--ds-color-text-muted);
 }
 
@@ -84968,12 +84968,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 --------------------------------------------------------------------------- */
 
 /* header + section eyebrows */
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-title'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__header-title {
   font-size: var(--ds-font-size-sm);
 }
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-description'],
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='active-card-description'],
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='view-item-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__header-description,
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__active-card-description,
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__view-item-description {
   font-size: var(--ds-font-size-xs);
 }
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='section-header'] {
@@ -85153,18 +85153,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-saved-views-menu-panel [data-part='empty-state-copy'] {
   min-inline-size: 0;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='header-title'],
-.ds-structure.ds-saved-views-menu-panel [data-part='header-description'],
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card-label'],
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card-description'],
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-title'],
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-description'],
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item-description'] {
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__header-title,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__header-description,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__active-card-label,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__active-card-description,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__empty-state-title,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__empty-state-description,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__view-item-description {
   display: block;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='header-description'],
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card-description'],
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-description'] {
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__header-description,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__active-card-description,
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__empty-state-description {
   margin-block-start: 4px;
 }
 
@@ -85224,13 +85224,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   flex: 1;
   min-inline-size: 0;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item-label'] {
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__view-item-label {
   max-inline-size: var(--ds-saved-views-menu-view-item-label-measure, 180px);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item-description'] {
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__view-item-description {
   margin-block-start: 5px;
 }
 
@@ -85817,7 +85817,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-badge
-  > .ds-search-command-bar__voice-badge-label[data-part='voice-badge-label'][data-part='voice-badge-label'][data-part='voice-badge-label'] {
+  > .ds-search-command-bar__voice-badge-label.ds-search-command-bar__voice-badge-label.ds-search-command-bar__voice-badge-label.ds-search-command-bar__voice-badge-label {
   color: inherit;
   font-size: var(--ds-search-command-bar-badge-label-font-size, var(--ds-font-size-2xs, var(--ds-font-size-xs)));
   font-weight: var(--ds-search-command-bar-badge-label-font-weight, var(--ds-font-weight-semibold, 600));
@@ -85854,13 +85854,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
-  [data-part='voice-help-title'][data-part='voice-help-title'][data-part='voice-help-title'] {
+  .ds-search-command-bar__voice-help-title.ds-search-command-bar__voice-help-title.ds-search-command-bar__voice-help-title {
   display: block;
   font-size: var(--ds-search-command-bar-voice-help-title-font-size, var(--ds-font-size-sm));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-description[data-part='voice-help-description'][data-part='voice-help-description'][data-part='voice-help-description'] {
+  .ds-search-command-bar__voice-help-description.ds-search-command-bar__voice-help-description.ds-search-command-bar__voice-help-description.ds-search-command-bar__voice-help-description {
   display: block;
   margin-block-start: var(--ds-search-command-bar-voice-help-description-margin, 4px);
   color: var(--ds-search-command-bar-voice-help-description-color, var(--ds-color-text-secondary));
@@ -85891,7 +85891,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-hint[data-part='voice-help-hint'][data-part='voice-help-hint'][data-part='voice-help-hint'] {
+  .ds-search-command-bar__voice-help-hint.ds-search-command-bar__voice-help-hint.ds-search-command-bar__voice-help-hint.ds-search-command-bar__voice-help-hint {
   flex: 1 1 auto;
   color: var(--ds-search-command-bar-voice-help-hint-color, var(--ds-color-text-muted));
   font-size: var(--ds-search-command-bar-voice-help-hint-font-size, var(--ds-font-size-2xs, var(--ds-font-size-xs)));
@@ -85930,21 +85930,21 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   margin-block-start: var(--ds-search-command-bar-status-row-margin, 6px);
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'] {
+  .ds-search-command-bar__status.ds-search-command-bar__status.ds-search-command-bar__status.ds-search-command-bar__status {
   color: var(--ds-search-command-bar-status-color, var(--ds-color-text-muted));
   font-size: var(--ds-search-command-bar-status-font-size, var(--ds-font-size-2xs, var(--ds-font-size-xs)));
   line-height: var(--ds-search-command-bar-status-line-height, 1.45);
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'][data-voice-status='error'] {
+  .ds-search-command-bar__status.ds-search-command-bar__status.ds-search-command-bar__status.ds-search-command-bar__status[data-voice-status='error'] {
   color: var(--ds-search-command-bar-status-error-color, var(--ds-color-error));
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'][data-voice-status='listening'] {
+  .ds-search-command-bar__status.ds-search-command-bar__status.ds-search-command-bar__status.ds-search-command-bar__status[data-voice-status='listening'] {
   color: var(--ds-search-command-bar-status-listening-color, var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'][data-voice-status='transcribing'] {
+  .ds-search-command-bar__status.ds-search-command-bar__status.ds-search-command-bar__status.ds-search-command-bar__status[data-voice-status='transcribing'] {
   color: var(--ds-search-command-bar-status-transcribing-color, var(--ds-color-warning));
 }
 
@@ -85988,7 +85988,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestions
-  > .ds-search-command-bar__suggestions-label[data-part='suggestions-label'][data-part='suggestions-label'][data-part='suggestions-label'] {
+  > .ds-search-command-bar__suggestions-label.ds-search-command-bar__suggestions-label.ds-search-command-bar__suggestions-label.ds-search-command-bar__suggestions-label {
   color: var(--ds-search-command-bar-suggestions-label-color, var(--ds-color-text-muted));
   font-size: var(--ds-search-command-bar-suggestions-label-font-size, var(--ds-font-size-2xs, var(--ds-font-size-xs)));
   font-weight: var(--ds-search-command-bar-suggestions-label-font-weight, var(--ds-font-weight-bold, 700));

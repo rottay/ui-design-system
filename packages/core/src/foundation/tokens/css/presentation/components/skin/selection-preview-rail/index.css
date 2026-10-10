@@ -270,31 +270,31 @@
    reads as data.
 --------------------------------------------------------------------------- */
 
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-title'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-title[data-size] {
   letter-spacing: -0.02em;
   line-height: 1.12;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-subtitle'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-subtitle[data-size] {
   line-height: 1.4;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-eyebrow'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__match-reason-eyebrow[data-size] {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-body'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__match-reason-body[data-size] {
   line-height: 1.5;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row-label'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__snapshot-row-label[data-size] {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-empty'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__snapshot-empty[data-size] {
   line-height: 1.45;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='fallback-empty'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__fallback-empty[data-size] {
   font-style: italic;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='fallback-string'][data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__fallback-string[data-size] {
   line-height: 1.45;
 }
 

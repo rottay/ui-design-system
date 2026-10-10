@@ -1817,33 +1817,138 @@ function rendersOnlyNamedOrDecorative(target) {
   return gated;
 }
 
+/** A value no static reading settles: the runtime owns it. */
+const UNSETTLED = Symbol('unsettled');
+
+/**
+ * The constant an expression evaluates to, or UNSETTLED. Literals, `undefined`,
+ * `void x`, `!x`, a conditional whose test is constant, and `||` / `&&` / `??`
+ * whose left side is constant are settled; everything else is the runtime's.
+ */
+function settledValue(expression) {
+  const node = expression && unwrapTransparent(expression);
+  if (!node) return undefined;
+  if (ts.isStringLiteralLike(node)) return node.text;
+  if (ts.isNumericLiteral(node)) return Number(node.text);
+  if (node.kind === ts.SyntaxKind.TrueKeyword) return true;
+  if (node.kind === ts.SyntaxKind.FalseKeyword) return false;
+  if (node.kind === ts.SyntaxKind.NullKeyword) return null;
+  if (ts.isIdentifier(node) && node.text === 'undefined') return undefined;
+  if (ts.isVoidExpression(node)) return undefined;
+  if (ts.isPrefixUnaryExpression(node) && node.operator === ts.SyntaxKind.ExclamationToken) {
+    const operand = settledValue(node.operand);
+    return operand === UNSETTLED ? UNSETTLED : !operand;
+  }
+  if (ts.isConditionalExpression(node)) {
+    const test = settledValue(node.condition);
+    return test === UNSETTLED ? UNSETTLED : settledValue(test ? node.whenTrue : node.whenFalse);
+  }
+  if (ts.isBinaryExpression(node)) {
+    const operator = node.operatorToken.kind;
+    const left = settledValue(node.left);
+    if (left === UNSETTLED) return UNSETTLED;
+    if (operator === ts.SyntaxKind.BarBarToken) return left ? left : settledValue(node.right);
+    if (operator === ts.SyntaxKind.AmpersandAmpersandToken) return left ? settledValue(node.right) : left;
+    if (operator === ts.SyntaxKind.QuestionQuestionToken) return left === null || left === undefined ? settledValue(node.right) : left;
+  }
+  return UNSETTLED;
+}
+
+/** `decorative` is supplied only when it is provably `true`: the guard reads `=== true`. */
+const declaresDecorative = (expression) => settledValue(expression) === true;
+
+/**
+ * `label` as the guard reads it: 'named', 'empty' or -- when no static reading
+ * settles it -- 'runtime'. A conditional whose test is the runtime's still
+ * settles when both arms agree (`open ? '' : undefined` is empty either way).
+ */
+function labelReading(expression) {
+  const value = settledValue(expression);
+  if (value !== UNSETTLED) return typeof value === 'string' && value.trim().length > 0 ? 'named' : 'empty';
+  const node = unwrapTransparent(expression);
+  if (ts.isConditionalExpression(node)) {
+    const [whenTrue, whenFalse] = [labelReading(node.whenTrue), labelReading(node.whenFalse)];
+    if (whenTrue === whenFalse) return whenTrue;
+  }
+  return 'runtime';
+}
+
 /**
  * Whether a call site gives such a component what it needs to render: EXACTLY
- * ONE of `decorative` (bare or `{true}`) and a `label` that is not statically
- * empty. A literal `''`, `undefined`, `null` or `false` label is no name; any
- * other label expression is taken as supplied. Attributes hidden in a spread
- * prove nothing (fail closed).
+ * ONE of `decorative` and a name, read off the props the component RECEIVES.
+ * The setters are taken in source order and, per name, the LAST one decides: an
+ * explicit attribute after a spread wins, and a spread after an explicit
+ * attribute wins for the names it carries. `setters` is that ordered list --
+ * `{ name, value }` for an attribute (`value` undefined for a bare attribute or
+ * an empty `{}`; `bare` true for the former) and `{ spread }` for a spread or a
+ * `createElement` props object. `kindOf` is the enclosing component's lexical
+ * reader, when there is one.
+ *
+ *   decorative  supplied only when its last setter is provably `true`.
+ *   label       'named' or 'empty' when its last setter settles statically
+ *               (`''`, blank, `undefined`, `null`, `false`, `{}` and any
+ *               constant expression reducing to one are NO name). A label
+ *               only the runtime can settle counts as SUPPLIED: the call
+ *               site did hand a name expression, and an authored name that
+ *               happens to be empty at runtime is the component's own guard
+ *               to catch, not anatomy this gate can prove dead.
+ *   a spread    an object literal sets exactly the names it writes, in order.
+ *               The props rest sets a name only if that name was not
+ *               destructured out of it. Any other spread may set either name
+ *               to anything, so a name whose LAST setter is such a spread is
+ *               UNPROVEN and counts as not supplied (fail closed).
  */
-function suppliesNameOrDecorative(attributes) {
-  let decorative = false;
-  let labeled = false;
-  for (const attribute of attributes) {
-    if (!attribute || !ts.isJsxAttribute(attribute)) continue;
-    const name = attributeName(attribute);
-    const initializer = attribute.initializer;
-    const value = initializer && ts.isJsxExpression(initializer) ? initializer.expression && unwrapTransparent(initializer.expression) : initializer;
-    if (name === 'decorative') {
-      decorative = !initializer || value?.kind === ts.SyntaxKind.TrueKeyword;
-    } else if (name === 'label') {
-      labeled = Boolean(value) && !(
-        (ts.isStringLiteralLike(value) && value.text.trim() === '')
-        || value.kind === ts.SyntaxKind.NullKeyword
-        || value.kind === ts.SyntaxKind.FalseKeyword
-        || (ts.isIdentifier(value) && value.text === 'undefined')
-      );
+function suppliesNameOrDecorative(setters, kindOf) {
+  const state = { decorative: false, label: 'empty' };
+  const unproven = (names) => {
+    if (names.includes('decorative')) state.decorative = false;
+    if (names.includes('label')) state.label = 'empty';
+  };
+  const assign = (name, value, bare = false) => {
+    if (name === 'decorative') state.decorative = bare || declaresDecorative(value);
+    else if (name === 'label') state.label = bare ? 'empty' : labelReading(value);
+  };
+  const spread = (expression) => {
+    const node = expression && unwrapTransparent(expression);
+    if (node && ts.isObjectLiteralExpression(node)) {
+      for (const member of node.properties) {
+        if (ts.isSpreadAssignment(member)) {
+          spread(member.expression);
+        } else if (member.name && ts.isComputedPropertyName(member.name) && !ts.isStringLiteralLike(member.name.expression)) {
+          unproven(['decorative', 'label']);
+        } else if (ts.isPropertyAssignment(member)) {
+          assign(keyText(member.name), member.initializer);
+        } else if (ts.isShorthandPropertyAssignment(member)) {
+          assign(member.name.text, member.name);
+        } else if (member.name) {
+          /* A method or an accessor under one of the two names is a value only the runtime settles. */
+          if (keyText(member.name) === 'decorative') state.decorative = false;
+          else if (keyText(member.name) === 'label') state.label = 'runtime';
+        }
+      }
+      return;
     }
+    const rest = node && kindOf?.(node)?.rest;
+    unproven(rest ? ['decorative', 'label'].filter((name) => !rest.has(name)) : ['decorative', 'label']);
+  };
+  for (const setter of setters) {
+    if ('spread' in setter) spread(setter.spread);
+    else assign(setter.name, setter.value, setter.bare);
   }
-  return decorative !== labeled;
+  return state.decorative !== (state.label !== 'empty');
+}
+
+/** A JSX element's attributes as the ordered setters {@link suppliesNameOrDecorative} reads. */
+function jsxSetters(attributes) {
+  return attributes.map((attribute) => {
+    if (ts.isJsxSpreadAttribute(attribute)) return { spread: attribute.expression };
+    const initializer = attribute.initializer;
+    return {
+      name: attributeName(attribute),
+      value: initializer && ts.isJsxExpression(initializer) ? initializer.expression : initializer,
+      bare: !initializer,
+    };
+  });
 }
 
 /**
@@ -1870,13 +1975,13 @@ function functionConsumption(target, root, active = new Set()) {
     if (setter === 'direct') result.direct = true;
     else if (setter?.startsWith('prop:')) result.props.add(setter.slice(5));
   };
-  /** Records one rendered element: its attributes in source order as [name | undefined (spread), expression, node]. */
-  const element = (tag, attributes) => {
+  /** Records one rendered element: its attributes in source order as [name | undefined (spread), expression], and its N1 setters. */
+  const element = (tag, attributes, setters) => {
     const kind = tagOf(tag);
     if (!kind) return;
     /* A child that renders nothing without a name or `decorative` stamps nothing unless this call site supplies one. */
     if (kind !== 'intrinsic' && !kind.pinned && rendersOnlyNamedOrDecorative(kind)
-      && !suppliesNameOrDecorative(attributes.map(([, , node]) => node))) {
+      && !suppliesNameOrDecorative(setters, kindOf)) {
       return;
     }
     let last;
@@ -1909,14 +2014,14 @@ function functionConsumption(target, root, active = new Set()) {
   const stamp = (node) => {
     if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
       element(node.tagName, node.attributes.properties.map((attribute) => (ts.isJsxSpreadAttribute(attribute)
-        ? [undefined, attribute.expression, attribute]
+        ? [undefined, attribute.expression]
         : [attributeName(attribute), attribute.initializer && ts.isJsxExpression(attribute.initializer)
           ? attribute.initializer.expression
-          : undefined, attribute])));
+          : undefined])), jsxSetters(node.attributes.properties));
     }
     /* `createElement(tag, props)` renders its props object exactly like a JSX element. */
     if (ts.isCallExpression(node) && /(^|\.)createElement$/u.test(node.expression.getText()) && node.arguments[1]) {
-      element(node.arguments[0], [[undefined, node.arguments[1]]]);
+      element(node.arguments[0], [[undefined, node.arguments[1]]], [{ spread: node.arguments[1] }]);
     }
     ts.forEachChild(node, stamp);
   };
@@ -2129,12 +2234,13 @@ export function composedConsumption(file, name = 'default', root = DEFAULT_ROOT)
 function composedTagConsumption(file, element, root) {
   let enclosing;
   for (let node = element.parent; node; node = node.parent) if (ts.isFunctionLike(node)) enclosing = node;
-  const kind = componentScope({ file, fn: enclosing }, root).tagOf(element.tagName);
+  const scope = componentScope({ file, fn: enclosing }, root);
+  const kind = scope.tagOf(element.tagName);
   if (kind === 'intrinsic') return kind;
   if (!kind) return NO_CONSUMPTION;
   /* A semantic icon handed neither a name nor `decorative` renders nothing: its stamp is not rendered anatomy. */
   if (!kind.pinned && rendersOnlyNamedOrDecorative(kind)
-    && !suppliesNameOrDecorative(element.attributes.properties)) {
+    && !suppliesNameOrDecorative(jsxSetters(element.attributes.properties), scope.kindOf)) {
     return NO_CONSUMPTION;
   }
   return functionConsumption(kind, root);
