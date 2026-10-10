@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-09",
+ "updated": "2026-10-10",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -2764,6 +2764,41 @@
      "at": "2026-10-09 02:19",
      "by": "kimi-dt",
      "note": "L08 INTEGRATED ec7955f23 (19 paths): saved-views, file-manager, column-settings, status-filter-pills, data-table(-mobile), stats-grid migrated (16 adds + 8 reuse + 2 Input wrapper re-anchors; 99 tokens; rule (vi) co-stamp ratified with the 21/21 emitter sweep). Census exact at three anchors (982->957, 951->926, 922->897; -25; state 16; sites 108). Independent delta ACCEPT (e0a8b76f): per-line transform verification 0 failures; rule (vi) wording recommended (admissible when a fleet sweep proves every emitter co-stamps the identical part on the same element, OR the rule carries an excluding engine anchor; otherwise rename); P4 wiring independently verified (41/41 with the Build-identity guard); the Input door matches the L04-ratified shape with affix/control/loading exclusions proven. F1 (its programme finding, converging with the R-FC ruling): the family-cut suite's test 165 (guided-draft-form pin) went red with L07's commit - the L07 pre-scan didn't join measurement pins and its review didn't run family-cut; corrected by adding family-cut (gate + tests) to every lot's mandatory P5 and the H3 pre-scan scope, and by the binding P6-FC check per lot (recorded in this commit's body: the 4 pre-existing rows unchanged with owners; each family's delta set-equal to its kept-literal roster; nothing else moves). The R-FC adjudication (304b6e7c) rules the structural fix: G1 instrument correction - P-88 caller parts measured in their own decrease-only p88CallerParts arm (owner ARC-12, exit at 1b), landing WITH or AFTER the pass-through gate module (it imports the caller enumeration - ONE MEASUREMENT, NEVER TWO); until G1, no pin is raised (a known, attributed, owned red is lawful; a raised ceiling is not). CI note: family-cut is a blocking gates:ci gate and was red BEFORE step 1; clearing lawfully needs the pre-existing rows by their owners (select/data-table denominator re-pin; the column-settings W7a two-owner resolution - routed to the DT) plus G1. Baseline now 108 / 926 / 16 (input 2 -> L10, spinner 2 -> L13/L15)."
+    },
+    {
+     "at": "2026-10-10 13:10",
+     "by": "kimi-dt",
+     "note": "Step-1 COMPLETE 15/15 + step-2 engine lots E1-E7 integrated; census adopted at v7 then corrected to v7.1/v7.1.1 (the barrel blind spot + the tag-name fallback removed; proof-only attribution). Commits: L10 a2b2c3135, L11 5ab5101d2, G2 f2898a3c1 (touch-targets prover co-class), L12 26c5caf05, L15 d6ce7d4c0, L14 eea5e06f0, L13 780224a07, S1' 4953f0e3a, S2 6a316611f (chart-skin gate), S3 9f1651c67 (H-EV closed). The pass-through GATE integrated a59625a7e (the 108-site line-free roster + per-family preconditions; the ONE measurement library shared with the census + family-cut G1)."
+    },
+    {
+     "at": "2026-10-10 13:10",
+     "by": "kimi-dt",
+     "note": "D1-floors 701e15c04 (the DatePicker clear-affix own coarse floor; touch debt rows 74 -> 72). H-CB NARROW d96ae14f9 (the filter-builder :630 footer clear-button class hook; BUTTON family cleared; 8 families at 0). External-audit gate fix 474204621: the carrier classification is validated against the canonical LAYOUT_CARRIERS (a hand-edited ledger flag can no longer schedule a carrier) + the door records the head and keeps the c4 prose. Baseline then: 108/834/16."
+    },
+    {
+     "at": "2026-10-10 13:10",
+     "by": "kimi-dt",
+     "note": "G1 0a28d1c16 (the RFC (b') instrument correction: the p88CallerParts decrease-only arm; P-88 caller parts out of the anatomy ratchets; family-cut findings 54 -> 7, the rest foreign-owned or routed). Follow-ups: bba207382 (the drill #200 class-form pin) + 3f4bf3648 (the cockpit-header/page-shell native crumb re-keys, H3-e of L12 per FA-1; the crumb literals stay - load-bearing for the AnatomySkeleton bones + the calendar keyboard walk; the EventChip literal kept, its ruling routed). family-cut = 5 rows (4 foreign + calendar-view)."
+    },
+    {
+     "at": "2026-10-10 13:10",
+     "by": "kimi-dt",
+     "note": "Step-2 engine lots (the 1a/1b end state per family; the design packet arc12-step2-engine-design): E1 select bfe7d5f89 (108 -> 106; 2 it.fails promoted per D-PIN (A)), E2 input 3c466551f (106 -> 103; 10 drops; 11 readers), F4 prose a0c6d6c31, the skeleton bone-role fix aef4cb5da (the owner class hook resolves the bone - resolves the E3 HOLD, neutral at HEAD), E3 link 4d8559be9 (103 -> 101; the first INTENDED visual delta: the canonical link hover underline reaches the crumbs; 2 shots await the owner's baseline approval). E4 spinner f9d5844eb (101 -> 99; option A: the LoadingIndicator substrate split via the anatomy hand-down convention; 4 shots await approval)."
+    },
+    {
+     "at": "2026-10-10 13:10",
+     "by": "kimi-dt",
+     "note": "The family-cut consumption arc (the owner quality correction 2026-10-09): f5d13665a (anatomy hand-offs feed the composed-instance anchors) + 5d1628c45 (the anchor credit requires consumption + stamping evidence; the H1 correction: caller props bind only for component functions, stamps only on intrinsic elements) + F1 4142593ba (the caller-part-A gating: a composed tag's literal/hand-off counts as a family stamp only when the corrected consumption analysis backs it; the icon class resolved by B-evidence - the committed runtime pin caller-part-pin.contract.test.tsx proves every exported semantic+catalog icon stamps the caller part on the svg). (c) icon fix 69b274746: the 6 runtime-valued icon occurrences in 4 families fixed in-owner (the intrinsic slot carries the part, a11y decorative per site with reasons); the N1 rule (a guarded icon backs the part only with EXACTLY ONE of decorative / non-empty label - the runtime is XOR). family-cut = exactly the 5 foreign-owned rows."
+    },
+    {
+     "at": "2026-10-10 13:10",
+     "by": "kimi-dt",
+     "note": "E5 badge e148b16fa (99 -> 96; the state callers proven inert: 0 rules, 0 readers, LOST 0). E6 tag 8d0efc5de (96 -> 93; the HOLD was 2 legibility regressions exposed by the re-activated Tag paint: the tag-input chip ink (static white -> the text-on-primary role, 1.26 -> 14.23:1) + the active-filters-bar chip ground (the owner-skin opt-out preserving the inherited rail-blended appearance), both landed FIRST inert-at-HEAD in 65f9f8b80; the E6 delta reduced to 4 shots awaiting the owner's approval). E7 avatar 76d1a390b (93 -> 92; P4 pixel-identical 42/42; 0 bones moved)."
+    },
+    {
+     "at": "2026-10-10 13:10",
+     "by": "kimi-dt",
+     "note": "The E8 typography HOLD found the census blind spot (barrel-imported Text/Heading: kebab('Text') != 'typography' -> silently skipped; the TRUE typography surface is 307 callers / 173 dependents, not 130/2). Census v7.1 33734df84 (the lexical re-export-chain resolution, fail-closed, no silent skips; the instrument-coverage re-pins: callerPartDependents 833 -> 1004 across all three ledgers; the E1-E7 families byte-identical) + v7.1.1 9ed2674a4 (the tag-name fallback removed: it fired on 2 rows, both wrong - the antd Card and the local Grid; proof-only attribution now). The E8 lot was rolled back with its evidence preserved (arc12/e8-typography/held-lot.diff); the recovery plan (DT ruling (b)): the typography 1a wave (7 owner lots T01-T07, 171 rows, class doors + skin re-keys, inert while the engine forwards) then E8 v2. T01 data-terminal-card eac27db05 (1004 -> 969). The account transition 2026-10-10T04:24-04:00: the executor is now Claude NORMAL daniel.avila@rottay.com (the dispatch-normal.sh route; the Admin account retired at ~4% quota; the E6 Admin dispatch died on a network ENOTFOUND - the partial state was preserved and the continuation completed on the normal account)."
     }
    ],
    "claimedBy": "kimi-dt",
