@@ -773,8 +773,9 @@ export function analyzeSource(file, source = ts.createSourceFile(
     if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node))) {
       const tag = node.tagName.getText(source);
       /* The anchors a skin can name this element by: the parts and classes
-       * the family hands it literally (a part handed down in `anatomy` joins
-       * these parts below). */
+       * the family hands it literally, and the parts it hands down in an object
+       * prop. A part becomes an anchor only once the composed component's own
+       * source is shown to read it and stamp it (see `composedConsumption`). */
       let composedRender;
       if (/^[A-Z]/u.test(tag)) {
         const attributes = node.attributes.properties.filter(ts.isJsxAttribute);
@@ -783,6 +784,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
         composedRender = {
           tag,
           parts: literals('data-part'),
+          handoffs: [],
           classes: literals('className').flatMap((value) => value.split(/\s+/u)).filter(Boolean),
         };
         composedRenders.push(composedRender);
@@ -812,10 +814,9 @@ export function analyzeSource(file, source = ts.createSourceFile(
               decidesState: keyed.has('data-state'),
               line: lineOf(node),
             });
-            /* The composed component stamps the handed-down part on the element
-             * it renders, exactly where an attribute literal lands, so it anchors
-             * THIS instance's composed-part credit too. */
-            composedRender.parts.push(part);
+            /* Kept on THIS instance only; it anchors the composed-part credit
+             * once the component is shown to read this prop and stamp the part. */
+            composedRender.handoffs.push({ prop: attributeName(attribute), part });
           }
         }
       }
@@ -1416,6 +1417,213 @@ function composedComponentStampsPart(handoff, specifier, fromFile) {
 }
 
 const composedPartStampCache = new Map();
+const consumptionCache = new Map();
+
+/**
+ * What a composed component's OWN source does with the anatomy a caller hands
+ * it: `direct` when a caller `data-part` reaches a DOM `data-part` (read from
+ * the props and stamped, or carried by a rest/props spread that is the last
+ * part setter on its element), and `props` naming every object prop whose
+ * `'data-part'` it reads and stamps (`anatomy?.['data-part']`, or the object
+ * spread onto an element as its last part setter). A prop the component never
+ * reads, or reads without stamping, is absent: an accepted-but-unrendered part
+ * anchors nothing. Aliases (`const part = dataPart ?? 'root'`) and object
+ * carriers (`const attrs = { ...partAttributes(part, s) }`) are followed.
+ * Caller props bind only to the exported top-level component function, and
+ * only an intrinsic element is a stamp: a nested callback, a handler, a helper
+ * or a composed child (`<Item {...item} />`, `createElement(Item, props)`) is
+ * closed, so what cannot be followed earns no credit.
+ */
+export function composedConsumption(file) {
+  if (consumptionCache.has(file)) return consumptionCache.get(file);
+  const result = { direct: false, props: new Set() };
+  if (!existsSync(file)) {
+    consumptionCache.set(file, result);
+    return result;
+  }
+  const source = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const keyOf = (name) => name.getText(source).replace(/^['"]|['"]$/gu, '');
+  const DIRECT = 'direct';
+  /** identifier -> what it carries: DIRECT (the caller part), `prop:<name>` (a handed object or its part). */
+  const values = new Map();
+  /** identifier -> part-setter kind of an object it holds (spread onto an element). */
+  const carriers = new Map();
+  const parameters = new Set();
+  const isPartKey = (node) => node && (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) && node.text === 'data-part';
+
+  /** The kind a value expression carries into a `data-part` slot, or undefined (own literal / unknown). */
+  const valueKind = (expression) => {
+    let kind;
+    const walk = (node) => {
+      if (kind) return;
+      if (ts.isElementAccessExpression(node) && isPartKey(node.argumentExpression)) {
+        const target = unwrapTransparent(node.expression);
+        if (ts.isIdentifier(target)) {
+          const held = values.get(target.text);
+          if (held?.startsWith('object:')) { kind = `prop:${held.slice(7)}`; return; }
+          if (parameters.has(target.text)) { kind = DIRECT; return; }
+        }
+        /* `props.anatomy?.['data-part']`: the prop read straight off the props object. */
+        if (ts.isPropertyAccessExpression(target) && ts.isIdentifier(target.expression) && parameters.has(target.expression.text)) {
+          kind = `prop:${target.name.text}`;
+          return;
+        }
+      }
+      if (ts.isIdentifier(node)) {
+        const held = values.get(node.text);
+        if (held === DIRECT || held?.startsWith('prop:')) { kind = held; return; }
+      }
+      ts.forEachChild(node, walk);
+    };
+    walk(expression);
+    return kind;
+  };
+  /** The part-setter kind a spread expression contributes: DIRECT, `prop:<name>`, OWN, or undefined (sets no part). */
+  const spreadKind = (expression) => {
+    const node = unwrapTransparent(expression);
+    if (ts.isIdentifier(node)) {
+      if (carriers.has(node.text)) return carriers.get(node.text);
+      const held = values.get(node.text);
+      if (held === 'rest' || parameters.has(node.text)) return DIRECT;
+      if (held?.startsWith('object:')) return `prop:${held.slice(7)}`;
+      return undefined;
+    }
+    if (ts.isCallExpression(node)) {
+      const callee = node.expression.getText(source);
+      if ((callee === 'partAttributes' || callee.endsWith('.partAttributes')) && node.arguments[0]) {
+        return valueKind(node.arguments[0]) ?? 'own';
+      }
+      return undefined;
+    }
+    if (ts.isObjectLiteralExpression(node)) return objectKind(node);
+    return undefined;
+  };
+  /** The last part setter of an object literal's members, in order. */
+  const objectKind = (object) => {
+    let last;
+    for (const member of object.properties) {
+      if (ts.isSpreadAssignment(member)) last = spreadKind(member.expression) ?? last;
+      else if (ts.isPropertyAssignment(member) && keyOf(member.name) === 'data-part') last = valueKind(member.initializer) ?? 'own';
+    }
+    return last;
+  };
+
+  /* The COMPONENT functions whose parameters are the caller's props: an exported top-level
+   * function declaration, or an exported top-level const whose initializer is a function or a
+   * forwardRef/memo render callback (`export default X` and `export { X }` count). A nested
+   * callback, a handler or a non-exported helper never binds caller props. */
+  const renderCallback = (expression) => {
+    const node = expression && unwrapTransparent(expression);
+    if (!node) return undefined;
+    if (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) return node;
+    if (ts.isCallExpression(node) && /(^|\.)(forwardRef|memo)$/u.test(node.expression.getText(source))) {
+      return renderCallback(node.arguments[0]);
+    }
+    return undefined;
+  };
+  const isExportedStatement = (statement) => statement.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword);
+  const exportedNames = new Set();
+  const components = new Set();
+  for (const statement of source.statements) {
+    if (ts.isExportAssignment(statement)) {
+      const expression = unwrapTransparent(statement.expression);
+      if (ts.isIdentifier(expression)) exportedNames.add(expression.text);
+      else if (renderCallback(expression)) components.add(renderCallback(expression));
+    } else if (ts.isExportDeclaration(statement) && !statement.moduleSpecifier && statement.exportClause
+      && ts.isNamedExports(statement.exportClause)) {
+      for (const element of statement.exportClause.elements) exportedNames.add((element.propertyName ?? element.name).text);
+    }
+  }
+  for (const statement of source.statements) {
+    if (ts.isFunctionDeclaration(statement) && statement.body
+      && (isExportedStatement(statement) || (statement.name && exportedNames.has(statement.name.text)))) {
+      components.add(statement);
+    } else if (ts.isVariableStatement(statement)) {
+      for (const declaration of statement.declarationList.declarations) {
+        const callback = ts.isIdentifier(declaration.name) && renderCallback(declaration.initializer);
+        if (callback && (isExportedStatement(statement) || exportedNames.has(declaration.name.text))) components.add(callback);
+      }
+    }
+  }
+
+  /* Bindings first, to a fixpoint: destructured props, rest carriers, aliases and object carriers. */
+  const bind = (node) => {
+    if (components.has(node)) {
+      for (const parameter of node.parameters) if (ts.isIdentifier(parameter.name)) parameters.add(parameter.name.text);
+    }
+    /* Only a destructure of the component's OWN props binds caller props: a parameter
+     * pattern, or `const { … } = props`. A hook result (`{ handlers } = useX()`) does not. */
+    const ofProps = ts.isObjectBindingPattern(node) && ((ts.isParameter(node.parent) && components.has(node.parent.parent))
+      || (ts.isVariableDeclaration(node.parent) && node.parent.initializer
+        && ts.isIdentifier(unwrapTransparent(node.parent.initializer))
+        && parameters.has(unwrapTransparent(node.parent.initializer).text)));
+    if (ofProps) {
+      const keys = node.elements.map((element) => (element.propertyName ? keyOf(element.propertyName)
+        : ts.isIdentifier(element.name) ? element.name.text : undefined));
+      const bindsPart = keys.includes('data-part');
+      node.elements.forEach((element, index) => {
+        if (!ts.isIdentifier(element.name)) return;
+        if (element.dotDotDotToken) {
+          if (!bindsPart) values.set(element.name.text, 'rest');
+          return;
+        }
+        values.set(element.name.text, keys[index] === 'data-part' ? DIRECT : `object:${keys[index]}`);
+      });
+    }
+    ts.forEachChild(node, bind);
+  };
+  bind(source);
+  for (let pass = 0, changed = true; changed && pass < 8; pass += 1) {
+    changed = false;
+    const alias = (node) => {
+      if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+        const initializer = unwrapTransparent(node.initializer);
+        const name = node.name.text;
+        if (ts.isObjectLiteralExpression(initializer)) {
+          const kind = objectKind(initializer);
+          if (kind && carriers.get(name) !== kind) { carriers.set(name, kind); changed = true; }
+        } else if (!values.has(name)) {
+          const kind = valueKind(initializer);
+          if (kind) { values.set(name, kind); changed = true; }
+        }
+      }
+      ts.forEachChild(node, alias);
+    };
+    alias(source);
+  }
+  /* Then the stamps: the LAST part setter on each element decides what reaches the DOM. */
+  const record = (last) => {
+    if (last === DIRECT) result.direct = true;
+    else if (last?.startsWith('prop:')) result.props.add(last.slice(5));
+  };
+  /* Only an INTRINSIC element is a DOM stamp. A part handed to a composed child (`<Item {...item} />`,
+   * `createElement(Item, props)`, a polymorphic `ElementType`) is closed: it is not followed into the child. */
+  const isIntrinsicTag = (tag) => ts.isIdentifier(tag) && /^[a-z]/u.test(tag.text);
+  const stamp = (node) => {
+    /* `createElement('tag', props)` stamps its props object exactly like an intrinsic JSX element. */
+    if (ts.isCallExpression(node) && /(^|\.)createElement$/u.test(node.expression.getText(source)) && node.arguments[1]
+      && ts.isStringLiteralLike(node.arguments[0])) {
+      record(spreadKind(node.arguments[1]));
+    }
+    if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) && isIntrinsicTag(node.tagName)) {
+      let last;
+      for (const attribute of node.attributes.properties) {
+        if (ts.isJsxSpreadAttribute(attribute)) last = spreadKind(attribute.expression) ?? last;
+        else if (ts.isJsxAttribute(attribute) && attributeName(attribute) === 'data-part') {
+          const initializer = attribute.initializer;
+          last = initializer && ts.isJsxExpression(initializer) && initializer.expression
+            ? (valueKind(initializer.expression) ?? 'own')
+            : 'own';
+        }
+      }
+      record(last);
+    }
+    ts.forEachChild(node, stamp);
+  };
+  stamp(source);
+  consumptionCache.set(file, result);
+  return result;
+}
 
 /**
  * The parts a composed DS primitive stamps in its OWN source. `<ModernButton
@@ -2401,7 +2609,17 @@ export function measureFamily(resolved, { producers, compiled, scopes, callerPar
       /* The family's root identity and the engine scope sit on every rule of
        * the skin, so neither names the element the primitive renders. */
       const classes = render.classes.filter((token) => !ownsClass(token) && !token.startsWith('ds-engine-'));
-      if (backer) composedInstances.push({ backer, parts: new Set(render.parts), classes: new Set(classes) });
+      if (!backer) continue;
+      /* Evidence, not the prop list: a literal anchors only when the component
+       * consumes and stamps a caller `data-part`, a hand-off only when it reads
+       * THAT prop and stamps the handed part. A P-88-closed component that
+       * stamps its own canonical part anchors nothing on the caller's literal. */
+      const consumed = composedConsumption(join(root, backer.name));
+      const parts = [
+        ...(consumed.direct ? render.parts : []),
+        ...render.handoffs.filter((handoff) => consumed.props.has(handoff.prop)).map((handoff) => handoff.part),
+      ];
+      composedInstances.push({ backer, parts: new Set(parts), classes: new Set(classes) });
     }
   }
   const partReads = skins.flatMap((skin) => skin.partReads);

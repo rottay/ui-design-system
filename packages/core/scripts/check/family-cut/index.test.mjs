@@ -3760,7 +3760,7 @@ test('G1 (iv): a new P-88 caller part added to a family grows p88CallerParts (re
 });
 
 // ---------------------------------------------------------------------------
-// A part handed DOWN in `anatomy` anchors the composed-part credit like an attribute literal
+// A caller part anchors the composed-part credit only where the composed component CONSUMES and STAMPS it
 // ---------------------------------------------------------------------------
 
 const LOADING_INDICATOR = 'src/components/primitives/foundation/loading-indicator';
@@ -3790,19 +3790,193 @@ const busyRowTsx = (...elements) => [
 const busyRowSkin = `${BAR_RULE}.ds-planted-bar [data-part='loading'] > [data-part='indicator'] { display: block; }\n`;
 const INDICATOR_CREDIT = { part: 'indicator', primitive: LOADING_INDICATOR_TSX };
 
-test("CONTROL: a part handed down in `anatomy` anchors the composed primitive's own part exactly like an attribute literal", () => {
+/* A planted primitive whose OWN source decides what happens to the caller's anatomy:
+ * every variant stamps the literal `indicator` part, only some stamp the caller's part. */
+const PLANTED_MARK_TSX = 'src/components/primitives/foundation/planted-mark/index.tsx';
+const PLANTED_MARK_CREDIT = { part: 'indicator', primitive: PLANTED_MARK_TSX };
+const PLANTED_MARK = {
+  /** Declares `anatomy`, reads its `data-part` and stamps it on the root. */
+  consumesAnatomy: [
+    "export interface PlantedMarkProps { anatomy?: { 'data-part'?: string }; ignored?: { 'data-part'?: string } }",
+    'export function PlantedMark({ anatomy }: PlantedMarkProps) {',
+    "  return <span data-part={anatomy?.['data-part'] ?? 'root'}><span data-part=\"indicator\" /></span>;",
+    '}',
+  ],
+  /** Declares and reads `anatomy`, but its part never reaches a `data-part`. */
+  readsAnatomyNeverStamps: [
+    "export interface PlantedMarkProps { anatomy?: { 'data-part'?: string } }",
+    'export function PlantedMark({ anatomy }: PlantedMarkProps) {',
+    "  const label = anatomy?.['data-part'] ?? 'root';",
+    '  return <span data-part="root" title={label}><span data-part="indicator" /></span>;',
+    '}',
+  ],
+  /** Reads the caller `data-part` and stamps it on the root. */
+  consumesDataPart: [
+    "export interface PlantedMarkProps { 'data-part'?: string }",
+    "export function PlantedMark({ 'data-part': dataPart }: PlantedMarkProps) {",
+    "  return <span data-part={dataPart ?? 'root'}><span data-part=\"indicator\" /></span>;",
+    '}',
+  ],
+  /** P-88: accepts a `data-part` it never reads and stamps its canonical part. */
+  ignoresDataPart: [
+    "export interface PlantedMarkProps { className?: string; 'data-part'?: string }",
+    'export function PlantedMark({ className }: PlantedMarkProps) {',
+    '  return <span className={className} data-part="root"><span data-part="indicator" /></span>;',
+    '}',
+  ],
+  /** Spreads the caller's props, then stamps its canonical part LAST: the caller part never reaches the DOM. */
+  spreadsThenStampsOwn: [
+    "export interface PlantedMarkProps { className?: string; 'data-part'?: string }",
+    'export function PlantedMark(props: PlantedMarkProps) {',
+    '  return <span {...props} data-part="root"><span data-part="indicator" /></span>;',
+    '}',
+  ],
+  /** H1: a NESTED callback's parameter is not the caller's props; spreading it is no caller stamp. */
+  nestedCallbackRest: [
+    "export interface PlantedMarkProps { 'data-part'?: string; items?: object[] }",
+    "export function PlantedMark({ 'data-part': _part, items = [{}] }: PlantedMarkProps) {",
+    '  return <span data-part="root">{items.map((item) => <span {...item} />)}<span data-part="indicator" /></span>;',
+    '}',
+  ],
+  /** H1: an inner handler reading ITS argument's `data-part` into an element is no caller stamp. */
+  innerHandlerRead: [
+    "export interface PlantedMarkProps { 'data-part'?: string }",
+    'export function PlantedMark(_props: PlantedMarkProps) {',
+    "  const renderSlot = (slot: Record<string, string>) => <span data-part={slot['data-part']} />;",
+    '  return <span data-part="root">{renderSlot({})}<span data-part="indicator" /></span>;',
+    '}',
+  ],
+  /** H1: a top-level helper's rest is not the exported component's props; the export is P-88 closed. */
+  topLevelHelperRest: [
+    'function Inner({ ...rest }) {',
+    '  return <i {...rest} />;',
+    '}',
+    "export interface PlantedMarkProps { className?: string; 'data-part'?: string }",
+    'export function PlantedMark({ className }: PlantedMarkProps) {',
+    '  return <span className={className} data-part="root"><Inner title="mark" /><span data-part="indicator" /></span>;',
+    '}',
+  ],
+  /** H1: the caller's props spread onto a COMPOSED child are not a DOM stamp of this component. */
+  spreadOntoComposedChild: [
+    "import { PlantedFrame } from './frame';",
+    "export interface PlantedMarkProps { 'data-part'?: string }",
+    'export function PlantedMark(props: PlantedMarkProps) {',
+    '  return <span data-part="root"><PlantedFrame {...props} /><span data-part="indicator" /></span>;',
+    '}',
+  ],
+  /** H1: `createElement(Component, props)` hands the props to a composed child, not to the DOM. */
+  createElementOntoComponent: [
+    "import { createElement } from 'react';",
+    "import { PlantedFrame } from './frame';",
+    "export interface PlantedMarkProps { 'data-part'?: string }",
+    'export function PlantedMark(props: PlantedMarkProps) {',
+    '  return <span data-part="root">{createElement(PlantedFrame, props)}<span data-part="indicator" /></span>;',
+    '}',
+  ],
+};
+const plantedMarkTsx = (...elements) => [
+  "import { PlantedMark } from '../../../primitives/foundation/planted-mark';",
+  '',
+  'export function PlantedBar() {',
+  '  return (',
+  '    <div className="ds-planted-bar" data-part="bar">',
+  ...elements.map((element) => `      ${element}`),
+  '    </div>',
+  '  );',
+  '}',
+  '',
+].join('\n');
+const measurePlantedMark = (variant, ...elements) => measureComposer({
+  tsx: plantedMarkTsx(...elements),
+  skin: busyRowSkin,
+  edit: (sandbox) => {
+    mkdirSync(dirname(join(sandbox, PLANTED_MARK_TSX)), { recursive: true });
+    writeFileSync(join(sandbox, PLANTED_MARK_TSX), `${PLANTED_MARK[variant].join('\n')}\n`);
+  },
+});
+const assertIndicatorCredited = (measured, label) => {
+  assert.deepEqual(measured.detail.partsConsumedNotStamped, [], label);
+  assert.deepEqual(measured.detail.partsComposedFrom, [PLANTED_MARK_CREDIT], label);
+  assert.equal(measured.ratchets.partsConsumedNotStamped, 0, label);
+};
+const assertIndicatorRed = (measured, label) => {
+  assert.ok(measured.detail.partsConsumedNotStamped.includes('indicator'),
+    `${label}: ${JSON.stringify(measured.detail.partsConsumedNotStamped)}`);
+  assert.deepEqual(measured.detail.partsComposedFrom, [], label);
+};
+
+test('CONTROL (i): a hand-off the composed component DECLARES, READS and STAMPS anchors its own part', () => {
+  assertIndicatorCredited(
+    measurePlantedMark('consumesAnatomy', "<PlantedMark anatomy={{ 'data-part': 'loading' }} />"),
+    'consumed anatomy hand-off',
+  );
+});
+
+test('PLANT (ii): a hand-off on a prop the component never reads anchors nothing, even beside a consumed `anatomy`', () => {
+  /* Same component as (i): it reads `anatomy`, never `ignored`. Credit must follow the prop NAME it reads. */
+  assertIndicatorRed(
+    measurePlantedMark('consumesAnatomy', "<PlantedMark ignored={{ 'data-part': 'loading' }} />"),
+    'ignored hand-off',
+  );
+});
+
+test('PLANT (iii): a hand-off the component reads but never stamps (accepted, not rendered) anchors nothing', () => {
+  assertIndicatorRed(
+    measurePlantedMark('readsAnatomyNeverStamps', "<PlantedMark anatomy={{ 'data-part': 'loading' }} />"),
+    'accepted-but-not-rendered hand-off',
+  );
+});
+
+test('CONTROL (iv): a direct `data-part` the composed component reads and stamps anchors its own part', () => {
+  assertIndicatorCredited(
+    measurePlantedMark('consumesDataPart', '<PlantedMark data-part="loading" />'),
+    'consumed direct attribute',
+  );
+});
+
+test('PLANT (v): a direct `data-part` the component ignores (canonical part kept) is no anchor', () => {
+  assertIndicatorRed(
+    measurePlantedMark('ignoresDataPart', '<PlantedMark data-part="loading" />'),
+    'never-read direct attribute',
+  );
+  /* The props DO reach the element, but the canonical part is the last setter: still no anchor. */
+  assertIndicatorRed(
+    measurePlantedMark('spreadsThenStampsOwn', '<PlantedMark data-part="loading" />'),
+    'spread then overwritten direct attribute',
+  );
+});
+
+test('PLANT (H1): a nested callback parameter spread onto an element is no caller stamp -> NO anchor', () => {
+  assertIndicatorRed(measurePlantedMark('nestedCallbackRest', '<PlantedMark data-part="loading" />'), 'nested-callback rest');
+});
+
+test("PLANT (H1): an inner handler reading its own argument's `data-part` into an element -> NO anchor", () => {
+  assertIndicatorRed(measurePlantedMark('innerHandlerRead', '<PlantedMark data-part="loading" />'), 'inner handler read');
+});
+
+test("PLANT (H1): a top-level helper's rest beside a P-88-closed export -> NO anchor", () => {
+  assertIndicatorRed(measurePlantedMark('topLevelHelperRest', '<PlantedMark data-part="loading" />'), 'top-level helper rest');
+});
+
+test('PLANT (H1): caller props handed to a COMPOSED child (JSX spread or createElement) are not a DOM stamp -> NO anchor', () => {
+  assertIndicatorRed(measurePlantedMark('spreadOntoComposedChild', '<PlantedMark data-part="loading" />'), 'spread onto composed child');
+  assertIndicatorRed(measurePlantedMark('createElementOntoComponent', '<PlantedMark data-part="loading" />'), 'createElement onto component');
+});
+
+test("CONTROL: on the real LoadingIndicator the `anatomy` hand-off anchors `indicator`, the ignored attribute literal does not", () => {
+  /* The owner's counterexample: `data-part="loading"` renders `root`; `anatomy` renders `loading`. */
   const measure = (element) => measureComposer({
     tsx: busyRowTsx(element),
     skin: busyRowSkin,
     edit: copyIntoSandbox(LOADING_INDICATOR),
   });
-  const literal = measure('<LoadingIndicator data-part="loading" size="sm" />');
   const handedDown = measure("<LoadingIndicator anatomy={{ 'data-part': 'loading' }} size=\"sm\" />");
-  for (const [label, measured] of [['attribute literal', literal], ['anatomy hand-off', handedDown]]) {
-    assert.deepEqual(measured.detail.partsConsumedNotStamped, [], label);
-    assert.deepEqual(measured.detail.partsComposedFrom, [INDICATOR_CREDIT], label);
-    assert.equal(measured.ratchets.partsConsumedNotStamped, 0, label);
-  }
+  assert.deepEqual(handedDown.detail.partsConsumedNotStamped, []);
+  assert.deepEqual(handedDown.detail.partsComposedFrom, [INDICATOR_CREDIT]);
+  assert.equal(handedDown.ratchets.partsConsumedNotStamped, 0);
+  const literal = measure('<LoadingIndicator data-part="loading" size="sm" />');
+  assert.ok(literal.detail.partsConsumedNotStamped.includes('indicator'), JSON.stringify(literal.detail.partsConsumedNotStamped));
+  assert.deepEqual(literal.detail.partsComposedFrom, []);
 });
 
 test('PLANT: with neither an attribute nor a hand-off naming the slot, the read part stays red', () => {
@@ -3815,7 +3989,7 @@ test('PLANT: with neither an attribute nor a hand-off naming the slot, the read 
   assert.deepEqual(measured.detail.partsComposedFrom, []);
 });
 
-test("PLANT: a hand-off credits ONLY the instance that carries it, never a sibling composed element", () => {
+test("PLANT (vi): a hand-off credits ONLY the instance that carries it, never a sibling composed element", () => {
   /* The slot is named on a ResizeHandle (which stamps no `indicator`); the LoadingIndicator beside it names nothing.
    * Pooling hand-off parts across instances would anchor the read on the LoadingIndicator and discharge it. */
   const measured = measureComposer({
