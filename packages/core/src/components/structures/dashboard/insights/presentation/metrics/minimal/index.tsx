@@ -76,7 +76,7 @@ function MetricRow({
         <Box style={{ flex: 1, minWidth: 0 }}>
           <Flex align="center" justify="between" style={{ marginBottom: 8 }}>
             <Stack spacing="none">
-              <Text size="sm" weight="medium" data-part="metric-label">
+              <Text size="sm" weight="medium" className="ds-metrics-minimal__metric-label" data-part="metric-label">
                 {metric.label}
               </Text>
               <Flex align="center" gap={6}>
@@ -85,13 +85,13 @@ function MetricRow({
                 ) : (
                   <TrendingDown data-part="trend-icon" style={{ width: 12, height: 12 }} />
                 )}
-                <Text size="xs" data-part="metric-change" style={{ fontFamily: METRIC_MONO_FONT }}>
+                <Text size="xs" className="ds-metrics-minimal__metric-change" data-part="metric-change" style={{ fontFamily: METRIC_MONO_FONT }}>
                   {metric.change}
                 </Text>
               </Flex>
             </Stack>
             <Text
-              data-part="metric-value"
+              className="ds-metrics-minimal__metric-value" data-part="metric-value"
               style={{
                 // The figure's measure rides the family channel the skin's
                 // narrow cut writes; 28px unset is the exact previous render.
@@ -161,10 +161,10 @@ export function MetricsMinimal({ metrics }: MetricsProps) {
             <Activity data-part="panel-icon" style={{ width: 16, height: 16 }} />
           </Box>
           <Stack spacing="none">
-            <Text weight="bold" data-part="title">
+            <Text weight="bold" className="ds-metrics-minimal__title" data-part="title">
               {tOr('metrics.panelTitle', 'Key Metrics')}
             </Text>
-            <Text size="xs" data-part="subtitle" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
+            <Text size="xs" className="ds-metrics-minimal__subtitle" data-part="subtitle" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
               {tOr('metrics.realtimeData', 'REAL-TIME DATA')}
             </Text>
           </Stack>
@@ -172,7 +172,7 @@ export function MetricsMinimal({ metrics }: MetricsProps) {
         <Box data-part="live-badge">
           <Flex align="center" gap={6}>
             <Box className="live-dot" data-part="live-dot" />
-            <Text size="xs" weight="bold" data-part="live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
+            <Text size="xs" weight="bold" className="ds-metrics-minimal__live-label" data-part="live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
               {tOr('metrics.live', 'LIVE')}
             </Text>
           </Flex>

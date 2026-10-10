@@ -73,7 +73,7 @@
 .ds-metrics-chart.ds-metrics-chart [data-part='panel-icon'] {
   color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='title'][data-part='title'][data-part='title'] {
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__title.ds-metrics-chart__title.ds-metrics-chart__title {
   color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
 }
 .ds-metrics-chart.ds-metrics-chart [data-part='live-badge'] {
@@ -91,7 +91,7 @@
   border-radius: 50%;
   background: var(--ds-signal-card-badge-color, var(--ds-color-success));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__live-label.ds-metrics-chart__live-label.ds-metrics-chart__live-label {
   color: var(--ds-signal-card-badge-color, var(--ds-color-success));
 }
 
@@ -126,7 +126,7 @@
 
 /* label + trend + change ---------------------------------------------------- */
 
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-label.ds-metrics-chart__metric-label.ds-metrics-chart__metric-label {
   color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
 }
 .ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
@@ -135,10 +135,10 @@
 .ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] .ds-metrics-chart__metric-change.ds-metrics-chart__metric-change.ds-metrics-chart__metric-change {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] .ds-metrics-chart__metric-change.ds-metrics-chart__metric-change.ds-metrics-chart__metric-change {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
 
@@ -146,12 +146,12 @@
    drained from the engine's inline transition; hover gated to hover-capable
    pointers so touch never leaves a stuck accent) ------------------------- */
 
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-value.ds-metrics-chart__metric-value.ds-metrics-chart__metric-value {
   color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
   transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease);
 }
 @media (hover: hover) {
-  .ds-metrics-chart.ds-metrics-chart [data-part='metric-row']:hover [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+  .ds-metrics-chart.ds-metrics-chart [data-part='metric-row']:hover .ds-metrics-chart__metric-value.ds-metrics-chart__metric-value.ds-metrics-chart__metric-value {
     color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
   }
 }
@@ -194,13 +194,13 @@
 
 /* progress row — label static, percent 3-tone (success / warning) ----------- */
 
-.ds-metrics-chart.ds-metrics-chart [data-part='progress-label'][data-part='progress-label'][data-part='progress-label'] {
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__progress-label.ds-metrics-chart__progress-label.ds-metrics-chart__progress-label {
   color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='progress-percent'][data-part='progress-percent'][data-part='progress-percent'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] .ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='progress-percent'][data-part='progress-percent'][data-part='progress-percent'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] .ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent {
   color: var(--ds-metric-card-trend-color-warning, var(--ds-color-warning));
 }
 
@@ -215,7 +215,7 @@
 /* reduced motion: the value colour fade and the fill cadence go quiet; the
    slide-in and live-glow loops are silenced in the interactions skin. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-metrics-chart.ds-metrics-chart [data-part='metric-value'],
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-value,
   .ds-metrics-chart.ds-metrics-chart [data-part='meter-fill'] {
     transition: none;
   }

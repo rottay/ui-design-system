@@ -101,7 +101,7 @@
 .ds-metrics-cards.ds-metrics-cards [data-part='panel-icon'] {
   color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
 }
-.ds-metrics-cards.ds-metrics-cards [data-part='title'][data-part='title'][data-part='title'] {
+.ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__title.ds-metrics-cards__title.ds-metrics-cards__title {
   color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='live-badge'] {
@@ -119,7 +119,7 @@
   border-radius: 50%;
   background: var(--ds-signal-card-badge-color, var(--ds-color-success));
 }
-.ds-metrics-cards.ds-metrics-cards [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+.ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__live-label.ds-metrics-cards__live-label.ds-metrics-cards__live-label {
   color: var(--ds-signal-card-badge-color, var(--ds-color-success));
 }
 
@@ -129,7 +129,7 @@
    lines in every card — labels render fully up to two lines, and the value
    row lands at the same optical height across a row of cards whether a
    card's eyebrow uses one line or two. */
-.ds-metrics-cards.ds-metrics-cards [data-part='metric-label'] {
+.ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__metric-label {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -229,10 +229,10 @@
 
 /* value + label ------------------------------------------------------------- */
 
-.ds-metrics-cards.ds-metrics-cards [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+.ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__metric-value.ds-metrics-cards__metric-value.ds-metrics-cards__metric-value {
   color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
 }
-.ds-metrics-cards.ds-metrics-cards [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
+.ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__metric-label.ds-metrics-cards__metric-label.ds-metrics-cards__metric-label {
   color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
 }
 
@@ -267,13 +267,13 @@
   inline-size: 10px;
   block-size: 10px;
 }
-.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] .ds-metrics-cards__metric-change.ds-metrics-cards__metric-change.ds-metrics-cards__metric-change {
   color: var(--ds-metric-card-status-color, var(--ds-metric-card-trend-color, var(--ds-color-success)));
 }
-.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] .ds-metrics-cards__metric-change.ds-metrics-cards__metric-change.ds-metrics-cards__metric-change {
   color: var(--ds-metric-card-status-color, var(--ds-metric-card-trend-color-error, var(--ds-color-error)));
 }
-.ds-metrics-cards.ds-metrics-cards [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+.ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__metric-change.ds-metrics-cards__metric-change.ds-metrics-cards__metric-change {
   font-family: var(--ds-font-family-mono, monospace);
 }
 

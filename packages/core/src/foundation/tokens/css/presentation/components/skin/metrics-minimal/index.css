@@ -102,10 +102,10 @@
 .ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon'] {
   color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='title'][data-part='title'][data-part='title'] {
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__title.ds-metrics-minimal__title.ds-metrics-minimal__title {
   color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__subtitle.ds-metrics-minimal__subtitle.ds-metrics-minimal__subtitle {
   color: var(--ds-signal-card-body-color, var(--ds-color-text-muted));
 }
 .ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'] {
@@ -121,7 +121,7 @@
   border-radius: 50%;
   background: var(--ds-signal-card-badge-color, var(--ds-color-success));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__live-label.ds-metrics-minimal__live-label.ds-metrics-minimal__live-label {
   color: var(--ds-signal-card-badge-color, var(--ds-color-success));
 }
 
@@ -168,7 +168,7 @@
 
 /* label + trend + change — 2-tone trend colour ------------------------------ */
 
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-label.ds-metrics-minimal__metric-label.ds-metrics-minimal__metric-label {
   color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
 }
 /* The CAPTION yields; the FIGURE never does. The label and the tabular figure
@@ -180,7 +180,7 @@
    own) — measured by rendering. So the truncation is live under modern and
    inert, never harmful, under the other two; it becomes universal the day the
    primitive honours a caller part. */
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-label'] {
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-label {
   min-inline-size: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -192,22 +192,22 @@
 .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] .ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] .ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
 
 /* big value — rest colour, hover swaps to the accent (the colour fade is
    drained from the engine's inline transition) ------------------------ */
 
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-value.ds-metrics-minimal__metric-value.ds-metrics-minimal__metric-value {
   color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
   transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover .ds-metrics-minimal__metric-value.ds-metrics-minimal__metric-value.ds-metrics-minimal__metric-value {
     color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
   }
 }
@@ -301,7 +301,7 @@
    live-glow loops are silenced in the interactions skin. */
 @media (prefers-reduced-motion: reduce) {
   .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'],
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-value'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-value,
   .ds-metrics-minimal.ds-metrics-minimal [data-part='meter-fill'],
   .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-chevron'] {
     transition: none;

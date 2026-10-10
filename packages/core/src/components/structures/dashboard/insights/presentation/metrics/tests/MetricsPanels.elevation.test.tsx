@@ -103,6 +103,18 @@ function declarationsFor(root: Root, part: string, prop: string): string[] {
   return values;
 }
 
+/** Declarations of `prop` on rules whose selector names the class hook `hook`. */
+function declarationsForHook(root: Root, hook: string, prop: string): string[] {
+  const values: string[] = [];
+  root.walkRules((rule) => {
+    if (!rule.selector.includes(`.${hook}`)) return;
+    rule.walkDecls(prop, (decl) => {
+      values.push(decl.value);
+    });
+  });
+  return values;
+}
+
 describe('metrics panel elevation', () => {
   it.each(LEAVES)('$name pins its icon wells against flex squash', ({ file }) => {
     const root = parseSkin(file);
@@ -184,10 +196,15 @@ describe('metrics panel elevation', () => {
 
   it.each(TRUNCATING_LEAVES)('%s truncates the caption so the figure survives the clip', (file) => {
     const root = parseSkin(file);
+    // The caption is a caller-stamped Text, so the skin keys it by the
+    // family's class hook rather than by the part.
+    const caption = `ds-${file.replace('/index.css', '')}__metric-label`;
 
-    expect(declarationsFor(root, 'metric-label', 'text-overflow')).toContain('ellipsis');
-    expect(declarationsFor(root, 'metric-label', 'white-space')).toContain('nowrap');
-    expect(declarationsFor(root, 'metric-label', 'min-inline-size')).toContain('0');
+    expect(declarationsForHook(root, caption, 'text-overflow')).toContain('ellipsis');
+    expect(declarationsForHook(root, caption, 'white-space')).toContain('nowrap');
+    expect(declarationsForHook(root, caption, 'min-inline-size')).toContain('0');
+    // POSITIVE CONTROL — same reader, a hook no skin names.
+    expect(declarationsForHook(root, `${caption}-no-such-hook`, 'text-overflow')).toEqual([]);
   });
 
   it.each(ENGINES)('renders every leaf with reachable Box anatomy under %s', async (engine) => {

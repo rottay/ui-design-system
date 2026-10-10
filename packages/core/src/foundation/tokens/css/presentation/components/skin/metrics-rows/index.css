@@ -96,7 +96,7 @@
 .ds-metrics-rows.ds-metrics-rows [data-part='panel-icon'] {
   color: var(--ds-metric-card-icon-color, var(--ds-signal-card-accent, var(--ds-color-primary)));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='title'][data-part='title'][data-part='title'] {
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__title.ds-metrics-rows__title.ds-metrics-rows__title {
   color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='live-badge'] {
@@ -112,7 +112,7 @@
   border-radius: 50%;
   background: var(--ds-signal-card-badge-color, var(--ds-color-success));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__live-label.ds-metrics-rows__live-label.ds-metrics-rows__live-label {
   color: var(--ds-signal-card-badge-color, var(--ds-color-success));
 }
 
@@ -176,7 +176,7 @@
 
 /* label (VALUE_COLOR — the asymmetry), trend + change (2-tone) --------------- */
 
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-label.ds-metrics-rows__metric-label.ds-metrics-rows__metric-label {
   color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
 }
 /* The CAPTION yields; the FIGURE never does. The row is a fixed-rhythm
@@ -189,7 +189,7 @@
    own) — measured by rendering. So the truncation is live under modern and
    inert, never harmful, under the other two; it becomes universal the day the
    primitive honours a caller part. */
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-label'] {
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-label {
   min-inline-size: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -201,17 +201,17 @@
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='true'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='true'] .ds-metrics-rows__metric-change.ds-metrics-rows__metric-change.ds-metrics-rows__metric-change {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='false'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='false'] .ds-metrics-rows__metric-change.ds-metrics-rows__metric-change.ds-metrics-rows__metric-change {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
 
 /* big value — rest colour; the hover swap is owned by the interactions skin
    (`dashboard-metrics-interactions.css`), suppressed at rest by this (0,5,0) - */
 
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-value.ds-metrics-rows__metric-value.ds-metrics-rows__metric-value {
   color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
 }
 
@@ -253,7 +253,7 @@
    the entrance/glow/shimmer loops are silenced in the interactions skin. */
 @media (prefers-reduced-motion: reduce) {
   .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'],
-  .ds-metrics-rows.ds-metrics-rows [data-part='metric-value'] {
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-value {
     transition: none;
   }
 }
