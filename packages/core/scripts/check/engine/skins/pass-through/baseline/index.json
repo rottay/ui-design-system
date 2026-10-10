@@ -4,7 +4,7 @@
  "purpose": "The WO-ARC-12 fleet ratchet. It closes the roster of elements where a caller data-part/data-state still lands (passThroughViolations), and the per-family sets of callers whose owner skins would lose paint the day a child family strips caller parts/states (callerPartDependents / callerStateDependents). Those sets are the step-2 engine-lot preconditions, as machine-readable rows.",
  "policy": "decrease-only to 0, the family-cut ledger policy: every count may shrink and must then be lowered here, and none may ever grow. The only door is `node scripts/check/engine/skins/pass-through/index.mjs --update-baseline`. It writes the gate's own measurement, keeps the routing prose of surviving held entries, and refuses if anything grew. A pin is never hand-computed. A pin follows the tree down; an instrument-coverage re-pin to the gate's own measurement, with a cutNote and independent review, is the only lawful raise.",
  "owner": "WO-ARC-12",
- "lastMoveKind": "instrument-coverage",
+ "lastMoveKind": "decrease",
  "measuredFrom": {
   "head": "76d1a390b1db36da019e9e2d4142dbd887e7cd51",
   "census": "v7.1.1, 2026-10-10 (arc12/l2-tools: census be21d40e / post 2632ae59 / report 8a8ca98c / attribution 7ab151e9): the tag-name fallback removed; no ledger value moved (the two rows it claimed fed no rule). v7.1 (census 3ca4db81 / report d66a34b2) is kept at arc12/l2-tools-v7.1-snapshot, v7 at arc12/l2-tools-v7-snapshot",
@@ -16,7 +16,7 @@
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
   "passThroughViolations": 92,
-  "callerPartDependents": 1004,
+  "callerPartDependents": 969,
   "callerStateDependents": 16
  },
  "roster": [
@@ -1844,181 +1844,6 @@
      "routing": "HOLD-G: resolved in the typography engine lot (G1-G5 two-arm re-key; Box :477 untouched pending section-6), same precondition set as H-ET."
     },
     {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#change-value#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:335",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#change-value#1",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:456",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#change-value#2",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:575",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#change-value#3",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:674",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#change-value#4",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:796",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#completion-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:471",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#completion-value#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:474",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#datapoint-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:646",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#details-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:483",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#details-label#1",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:700",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#header-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:427",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#header-label#1",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:547",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#header-label#2",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:649",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#live-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:172",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#metric-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:544",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#period-value#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:341",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#period-value#1",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:461",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#period-value#2",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:581",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#period-value#3",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:680",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#prompt-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:312",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#prompt-symbol#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:308",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#quick-action-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:212",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#stat-item-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:252",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#stat-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:780",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#status-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:435",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#target-value#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:346",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#target-value#1",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:586",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#target-value#2",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:685",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#terminal-filename#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:293",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#tracking-label#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:424",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#value#0",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:321",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#value#1",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:445",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#value#2",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:561",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#value#3",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:660",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/dashboard/data-terminal-card/index.tsx#Text#value#4",
-     "atBaseline": "structures/dashboard/data-terminal-card/index.tsx:787",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
      "key": "structures/dashboard/insights/presentation/activity/cards/index.tsx#Text#badge-count#0",
      "atBaseline": "structures/dashboard/insights/presentation/activity/cards/index.tsx:143",
      "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
@@ -2739,8 +2564,8 @@
   ]
  },
  "lastMove": {
-  "head": "76d1a390b1db36da019e9e2d4142dbd887e7cd51",
+  "head": "9ed2674a4cf499f1ad318df9f92a0f1841340316",
   "date": "2026-10-10",
-  "note": "instrument-coverage re-pin, not a lowering and not through the door: callerPartDependents 833 -> 1004 (+171 typography caller-part dependents). census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible. No source moved; the sites roster, the tripwires, the state dependents and every other family are unchanged."
+  "note": "lowered to the gate's own measurement through --update-baseline"
  }
 }

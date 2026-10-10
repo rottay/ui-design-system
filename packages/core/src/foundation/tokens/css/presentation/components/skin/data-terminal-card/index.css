@@ -150,8 +150,8 @@
  * ==========================================================================*/
 
 /* value (Text) — all four bodies + stat, always text-primary, tabular. */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='value'],
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='value'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__value,
+.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__value {
   color: var(--ds-color-text);
   font-variant-numeric: tabular-nums;
 }
@@ -167,38 +167,38 @@
 }
 
 /* change-value (Text) — binary on data-trend, all five bodies. */
-.ds-data-terminal-card[data-part='root'][data-trend='up'][data-band] [data-part='change-value'],
-.ds-data-terminal-stat[data-part='root'][data-trend='up'][data-band] [data-part='change-value'] {
+.ds-data-terminal-card[data-part='root'][data-trend='up'][data-band] .ds-data-terminal-card__change-value,
+.ds-data-terminal-stat[data-part='root'][data-trend='up'][data-band] .ds-data-terminal-card__change-value {
   color: var(--ds-color-success);
   font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-part='root'][data-trend='down'][data-band] [data-part='change-value'],
-.ds-data-terminal-stat[data-part='root'][data-trend='down'][data-band] [data-part='change-value'] {
+.ds-data-terminal-card[data-part='root'][data-trend='down'][data-band] .ds-data-terminal-card__change-value,
+.ds-data-terminal-stat[data-part='root'][data-trend='down'][data-band] .ds-data-terminal-card__change-value {
   color: var(--ds-color-error);
   font-variant-numeric: tabular-nums;
 }
 
 /* target-value (Text) — threshold bucket on the root's data-band. Command/Circuit/Matrix. */
-.ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] [data-part='target-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] .ds-data-terminal-card__target-value {
   color: var(--ds-color-success);
   font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] [data-part='target-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] .ds-data-terminal-card__target-value {
   color: var(--ds-color-warning);
   font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] [data-part='target-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] .ds-data-terminal-card__target-value {
   color: var(--ds-color-error);
   font-variant-numeric: tabular-nums;
 }
 
 /* period-value (Text) — text-secondary in Command/Circuit/Matrix, text-subtle in HUD. */
-.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] [data-part='period-value'],
-.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] [data-part='period-value'],
-.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] [data-part='period-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] .ds-data-terminal-card__period-value,
+.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] .ds-data-terminal-card__period-value,
+.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] .ds-data-terminal-card__period-value {
   color: var(--ds-color-text-secondary);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='period-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__period-value {
   color: var(--ds-color-text-subtle);
 }
 
@@ -216,12 +216,12 @@
 }
 
 /* header-label (Text) — HUD/Circuit/Matrix, text-secondary. */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='header-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__header-label {
   color: var(--ds-color-text-secondary);
 }
 
 /* details-label (Text) — HUD/Matrix, text-muted. */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='details-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__details-label {
   color: var(--ds-color-text-muted);
 }
 
@@ -252,7 +252,7 @@
   border-radius: 50%;
   background: var(--ds-dtc-live);
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='live-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__live-label {
   color: var(--ds-color-text-muted);
 }
 
@@ -285,12 +285,12 @@
 .ds-data-terminal-card[data-part='root'] [data-part='quick-action-icon'] {
   color: var(--ds-color-text-muted);
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='quick-action-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__quick-action-label {
   color: var(--ds-color-text-muted);
 }
 
 /* StatItem label (Text) — Command/Circuit/Matrix, text-subtle. */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='stat-item-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__stat-item-label {
   color: var(--ds-color-text-subtle);
 }
 
@@ -361,7 +361,7 @@
   background: var(--ds-color-success);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] [data-part='terminal-filename'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] .ds-data-terminal-card__terminal-filename {
   color: var(--ds-color-text-muted);
 }
 
@@ -385,13 +385,13 @@
 .ds-data-terminal-card[data-part='root'][data-variant] [data-part='prompt-header'] {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='prompt-symbol'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__prompt-symbol {
   color: var(--ds-color-success);
 }
 .ds-data-terminal-card[data-part='root'] [data-part='prompt-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='prompt-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__prompt-label {
   color: var(--ds-color-text-secondary);
 }
 .ds-data-terminal-card[data-part='root'] [data-part='cursor'] {
@@ -460,7 +460,7 @@
   animation-delay: var(--ds-dtc-duration-heartbeat, calc(var(--ds-motion-glacial, 500ms) * 3));
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='tracking-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__tracking-label {
   color: var(--ds-color-text-subtle);
 }
 
@@ -496,13 +496,13 @@
 }
 
 /* status-label (Text) — band colour. */
-.ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] [data-part='status-label'] {
+.ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] .ds-data-terminal-card__status-label {
   color: var(--ds-color-success);
 }
-.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] [data-part='status-label'] {
+.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] .ds-data-terminal-card__status-label {
   color: var(--ds-color-warning);
 }
-.ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] [data-part='status-label'] {
+.ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] .ds-data-terminal-card__status-label {
   color: var(--ds-color-error);
 }
 
@@ -525,20 +525,20 @@
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='completion-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__completion-label {
   color: var(--ds-color-text-subtle);
 }
 
 /* completion-value (Text) — band colour. */
-.ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] [data-part='completion-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] .ds-data-terminal-card__completion-value {
   color: var(--ds-color-success);
   font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] [data-part='completion-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] .ds-data-terminal-card__completion-value {
   color: var(--ds-color-warning);
   font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] [data-part='completion-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] .ds-data-terminal-card__completion-value {
   color: var(--ds-color-error);
   font-variant-numeric: tabular-nums;
 }
@@ -605,7 +605,7 @@
   background: var(--ds-color-error);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] [data-part='metric-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] .ds-data-terminal-card__metric-label {
   color: var(--ds-color-text-subtle);
 }
 
@@ -627,7 +627,7 @@
     linear infinite;
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] [data-part='datapoint-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] .ds-data-terminal-card__datapoint-label {
   color: var(--ds-color-text-subtle);
 }
 
@@ -685,7 +685,7 @@
   color: var(--ds-color-text-secondary);
 }
 
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='stat-label'] {
+.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__stat-label {
   color: var(--ds-color-text-secondary);
 }
 
@@ -822,26 +822,26 @@
  * exactly where the defect lives, and becomes universal the day the primitive
  * honours a caller part.
  * ---- */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='value'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__value {
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 900;
   line-height: 1;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'] .ds-data-terminal-card__value {
   font-size: min(calc(var(--ds-font-size-6xl) * 1.166667), var(--_ds-dtc-value-cap, 18cqi));
   letter-spacing: -0.02em;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'] [data-part='value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'] .ds-data-terminal-card__value {
   font-size: min(calc(var(--ds-font-size-6xl) * 1.333333), var(--_ds-dtc-value-cap, 18cqi));
 }
-.ds-data-terminal-card[data-part='root'][data-variant='3'] [data-part='value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='3'] .ds-data-terminal-card__value {
   font-size: min(calc(var(--ds-font-size-6xl) * 1.166667), var(--_ds-dtc-value-cap, 18cqi));
 }
-.ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='4'] .ds-data-terminal-card__value {
   font-size: min(calc(var(--ds-font-size-6xl) * 1.416667), var(--_ds-dtc-value-cap, 18cqi));
   letter-spacing: -0.03em;
 }
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='value'] {
+.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__value {
   font-family: var(--ds-font-family-mono, monospace);
   font-size: min(calc(var(--ds-font-size-3xl) * 1.166667), var(--_ds-dtc-stat-value-cap, 16cqi));
   font-weight: 800;
@@ -849,44 +849,44 @@
 }
 
 /* ---- stat readouts: change / period / target (Text) ---- */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='change-value'],
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='change-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__change-value,
+.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__change-value {
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 700;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='change-value'],
-.ds-data-terminal-card[data-part='root'][data-variant='3'] [data-part='change-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'] .ds-data-terminal-card__change-value,
+.ds-data-terminal-card[data-part='root'][data-variant='3'] .ds-data-terminal-card__change-value {
   font-size: var(--ds-font-size-sm);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'] [data-part='change-value'],
-.ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='change-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'] .ds-data-terminal-card__change-value,
+.ds-data-terminal-card[data-part='root'][data-variant='4'] .ds-data-terminal-card__change-value {
   font-size: calc(var(--ds-font-size-xs) * 1.083333);
 }
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='change-value'] {
+.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__change-value {
   font-size: var(--ds-font-size-2xs);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='period-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__period-value {
   font-family: var(--ds-font-family-mono, monospace);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='period-value'],
-.ds-data-terminal-card[data-part='root'][data-variant='2'] [data-part='period-value'],
-.ds-data-terminal-card[data-part='root'][data-variant='3'] [data-part='period-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'] .ds-data-terminal-card__period-value,
+.ds-data-terminal-card[data-part='root'][data-variant='2'] .ds-data-terminal-card__period-value,
+.ds-data-terminal-card[data-part='root'][data-variant='3'] .ds-data-terminal-card__period-value {
   font-size: var(--ds-font-size-xs);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='period-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='4'] .ds-data-terminal-card__period-value {
   font-size: var(--ds-font-size-2xs);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='target-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__target-value {
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 700;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='target-value'],
-.ds-data-terminal-card[data-part='root'][data-variant='3'] [data-part='target-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'] .ds-data-terminal-card__target-value,
+.ds-data-terminal-card[data-part='root'][data-variant='3'] .ds-data-terminal-card__target-value {
   font-size: var(--ds-font-size-sm);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='target-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='4'] .ds-data-terminal-card__target-value {
   font-size: calc(var(--ds-font-size-xs) * 1.083333);
 }
 
@@ -917,7 +917,7 @@
   position: absolute;
   inset: 0;
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='live-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__live-label {
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.05em;
@@ -947,7 +947,7 @@
   inline-size: 11px;
   block-size: 11px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='quick-action-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__quick-action-label {
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.05em;
@@ -959,7 +959,7 @@
   flex-direction: column;
   gap: 4px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='stat-item-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__stat-item-label {
   display: block;
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
@@ -996,7 +996,7 @@
   block-size: 10px;
   opacity: 0.8;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] [data-part='terminal-filename'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] .ds-data-terminal-card__terminal-filename {
   font-size: var(--ds-font-size-2xs);
   font-family: var(--ds-font-family-mono, monospace);
 }
@@ -1008,7 +1008,7 @@
   padding-block-end: 12px;
   margin-block-end: 16px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] [data-part='prompt-symbol'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] .ds-data-terminal-card__prompt-symbol {
   font-size: var(--ds-font-size-xs);
   font-family: var(--ds-font-family-mono, monospace);
 }
@@ -1016,7 +1016,7 @@
   inline-size: 14px;
   block-size: 14px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] [data-part='prompt-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] .ds-data-terminal-card__prompt-label {
   font-size: var(--ds-font-size-xs);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.05em;
@@ -1112,21 +1112,21 @@
   inline-size: 14px;
   block-size: 14px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='tracking-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__tracking-label {
   display: block;
   margin-block-end: 4px;
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.15em;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='header-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__header-label {
   display: block;
   font-size: calc(var(--ds-font-size-xs) * 1.083333);
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 700;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] [data-part='header-label'],
-.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] [data-part='header-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] .ds-data-terminal-card__header-label,
+.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] .ds-data-terminal-card__header-label {
   display: block;
   font-size: var(--ds-font-size-xs);
   font-family: var(--ds-font-family-mono, monospace);
@@ -1140,7 +1140,7 @@
   inline-size: 6px;
   block-size: 6px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='status-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__status-label {
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 700;
@@ -1155,14 +1155,14 @@
 .ds-data-terminal-card[data-variant='2'] [data-part='stats-panel'] {
   padding: 14px 16px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='completion-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__completion-label {
   display: block;
   margin-block-end: 6px;
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.1em;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='completion-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__completion-value {
   display: block;
   font-size: var(--ds-font-size-xl);
   font-family: var(--ds-font-family-mono, monospace);
@@ -1177,12 +1177,12 @@
   inline-size: 14px;
   block-size: 14px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='details-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__details-label {
   font-size: var(--ds-font-size-2xs);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.05em;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] [data-part='details-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] .ds-data-terminal-card__details-label {
   font-size: calc(var(--ds-font-size-2xs) * 0.909091);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.05em;
@@ -1231,7 +1231,7 @@
   inset-block-start: 12px;
   inset-inline-end: 12px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] [data-part='metric-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] .ds-data-terminal-card__metric-label {
   display: block;
   margin-block-end: 2px;
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
@@ -1257,7 +1257,7 @@
   opacity: 0.35;
   pointer-events: none;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] [data-part='datapoint-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] .ds-data-terminal-card__datapoint-label {
   display: block;
   margin-block-end: 2px;
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
@@ -1289,7 +1289,7 @@
   inline-size: 12px;
   block-size: 12px;
 }
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='stat-label'] {
+.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__stat-label {
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 600;
@@ -1411,12 +1411,12 @@
      specificity so these win inside forced colors): shape (up/down arrow)
      and the label text carry trend and band; the UA forces any remaining
      ink to system values regardless. */
-  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='change-value'],
-  .ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='change-value'],
-  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='target-value'],
-  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='completion-value'],
-  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='status-label'],
-  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='prompt-symbol'],
+  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__change-value,
+  .ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__change-value,
+  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__target-value,
+  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__completion-value,
+  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__status-label,
+  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__prompt-symbol,
   .ds-data-terminal-card[data-part='root'] [data-part='trend-icon'],
   .ds-data-terminal-stat[data-part='root'] [data-part='trend-icon'],
   .ds-data-terminal-card[data-part='root'] [data-part='details-icon'] {

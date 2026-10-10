@@ -43,7 +43,7 @@ function parseSkin(): Root {
 function heroFontSizes(root: Root): string[] {
   const values: string[] = [];
   root.walkRules((rule) => {
-    if (!rule.selector.includes("[data-part='value']")) return;
+    if (!rule.selector.includes('.ds-data-terminal-card__value')) return;
     rule.walkDecls('font-size', (decl) => {
       values.push(decl.value);
     });

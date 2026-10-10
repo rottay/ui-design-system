@@ -169,7 +169,7 @@ function LiveIndicator({ color = DS.success }: { color?: string }) {
         <Box data-part="live-pulse-ring" />
         <Box data-part="live-ring" />
       </Box>
-      <Text data-part="live-label">
+      <Text className="ds-data-terminal-card__live-label" data-part="live-label">
         {tOr('dataTerminalCard.live', 'LIVE')}
       </Text>
     </Flex>
@@ -209,7 +209,7 @@ function QuickAction({ icon: Icon, label }: { icon: DataTerminalIcon; label: str
       }}
     >
       <Icon data-part="quick-action-icon" />
-      <Text data-part="quick-action-label">
+      <Text className="ds-data-terminal-card__quick-action-label" data-part="quick-action-label">
         {label}
       </Text>
     </Box>
@@ -249,7 +249,7 @@ function ProgressBar({ progress, height = 4 }: { progress: number; height?: numb
 function StatItem({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <Box data-part="stat-item">
-      <Text data-part="stat-item-label">
+      <Text className="ds-data-terminal-card__stat-item-label" data-part="stat-item-label">
         {label}
       </Text>
       <Box>{children}</Box>
@@ -290,7 +290,7 @@ function CommandCard({
               <Box data-part="terminal-dot" />
               <Box data-part="terminal-dot" />
             </Flex>
-            <Text data-part="terminal-filename">
+            <Text className="ds-data-terminal-card__terminal-filename" data-part="terminal-filename">
               {label.toLowerCase().replace(/\s+/g, '_')}.sys
             </Text>
           </Flex>
@@ -305,11 +305,11 @@ function CommandCard({
           {/* Command prompt header */}
           <Box data-part="prompt-header">
             <Flex align="center" gap={8}>
-              <Text data-part="prompt-symbol">
+              <Text className="ds-data-terminal-card__prompt-symbol" data-part="prompt-symbol">
                 $
               </Text>
               <Icon data-part="prompt-icon" />
-              <Text data-part="prompt-label">
+              <Text className="ds-data-terminal-card__prompt-label" data-part="prompt-label">
                 {label.toUpperCase()}
               </Text>
               <Box data-part="cursor" />
@@ -318,7 +318,7 @@ function CommandCard({
 
           {/* Main value section */}
           <Box data-part="value-section">
-            <Text data-part="value">
+            <Text className="ds-data-terminal-card__value" data-part="value">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
@@ -332,18 +332,18 @@ function CommandCard({
                 ) : (
                   <TrendingDown data-part="trend-icon" />
                 )}
-                <Text data-part="change-value">
+                <Text className="ds-data-terminal-card__change-value" data-part="change-value">
                   {change || '--'}
                 </Text>
               </Flex>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statPeriod', 'PERIOD')}>
-              <Text data-part="period-value">
+              <Text className="ds-data-terminal-card__period-value" data-part="period-value">
                 {subtitle || tOr('dataTerminalCard.periodDefaultWeek', 'This week')}
               </Text>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statTarget', 'TARGET')}>
-              <Text data-part="target-value">
+              <Text className="ds-data-terminal-card__target-value" data-part="target-value">
                 {progress}%
               </Text>
             </StatItem>
@@ -421,10 +421,10 @@ function HUDCard({
                   <Icon data-part="header-icon" />
                 </Box>
                 <Box>
-                  <Text data-part="tracking-label">
+                  <Text className="ds-data-terminal-card__tracking-label" data-part="tracking-label">
                     {tOr('dataTerminalCard.tracking', 'TRACKING')}
                   </Text>
-                  <Text data-part="header-label">
+                  <Text className="ds-data-terminal-card__header-label" data-part="header-label">
                     {label.toUpperCase()}
                   </Text>
                 </Box>
@@ -432,7 +432,7 @@ function HUDCard({
               <Box data-part="status-badge">
                 <Flex align="center" gap={6}>
                   <Box data-part="status-dot" />
-                  <Text data-part="status-label">
+                  <Text className="ds-data-terminal-card__status-label" data-part="status-label">
                     {statusLabel}
                   </Text>
                 </Flex>
@@ -442,7 +442,7 @@ function HUDCard({
 
           {/* Main value section */}
           <Box data-part="value-section">
-            <Text data-part="value">
+            <Text className="ds-data-terminal-card__value" data-part="value">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
             <Flex align="center" gap={12} data-part="trend-row">
@@ -453,12 +453,12 @@ function HUDCard({
                   ) : (
                     <TrendingDown data-part="trend-icon" />
                   )}
-                  <Text data-part="change-value">
+                  <Text className="ds-data-terminal-card__change-value" data-part="change-value">
                     {change || '--'}
                   </Text>
                 </Flex>
               </Box>
-              <Text data-part="period-value">
+              <Text className="ds-data-terminal-card__period-value" data-part="period-value">
                 {subtitle || tOr('dataTerminalCard.periodDefaultPeriod', 'this period')}
               </Text>
             </Flex>
@@ -468,10 +468,10 @@ function HUDCard({
           <Box data-part="stats-panel">
             <Flex align="center" justify="between">
               <Box>
-                <Text data-part="completion-label">
+                <Text className="ds-data-terminal-card__completion-label" data-part="completion-label">
                   {tOr('dataTerminalCard.completion', 'COMPLETION')}
                 </Text>
-                <Text data-part="completion-value">
+                <Text className="ds-data-terminal-card__completion-value" data-part="completion-value">
                   {progress}%
                 </Text>
               </Box>
@@ -480,7 +480,7 @@ function HUDCard({
               </Box>
               <Flex align="center" gap={8}>
                 <Activity data-part="details-icon" />
-                <Text data-part="details-label">
+                <Text className="ds-data-terminal-card__details-label" data-part="details-label">
                   {tOr('dataTerminalCard.details', 'DETAILS')}
                 </Text>
                 <ArrowRight data-part="details-arrow" />
@@ -541,10 +541,10 @@ function CircuitCard({
                   <Icon data-part="header-icon" />
                 </Box>
                 <Box>
-                  <Text data-part="metric-label">
+                  <Text className="ds-data-terminal-card__metric-label" data-part="metric-label">
                     {tOr('dataTerminalCard.metric', 'METRIC')}
                   </Text>
-                  <Text data-part="header-label">
+                  <Text className="ds-data-terminal-card__header-label" data-part="header-label">
                     {label.toUpperCase()}
                   </Text>
                 </Box>
@@ -558,7 +558,7 @@ function CircuitCard({
 
           {/* Main value section */}
           <Box data-part="value-section">
-            <Text data-part="value">
+            <Text className="ds-data-terminal-card__value" data-part="value">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
@@ -572,18 +572,18 @@ function CircuitCard({
                 ) : (
                   <TrendingDown data-part="trend-icon" />
                 )}
-                <Text data-part="change-value">
+                <Text className="ds-data-terminal-card__change-value" data-part="change-value">
                   {change || '--'}
                 </Text>
               </Flex>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statPeriod', 'PERIOD')}>
-              <Text data-part="period-value">
+              <Text className="ds-data-terminal-card__period-value" data-part="period-value">
                 {subtitle || tOr('dataTerminalCard.periodDefaultWeek', 'This week')}
               </Text>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statTarget', 'TARGET')}>
-              <Text data-part="target-value">
+              <Text className="ds-data-terminal-card__target-value" data-part="target-value">
                 {progress}%
               </Text>
             </StatItem>
@@ -643,10 +643,10 @@ function MatrixCard({
                   <Icon data-part="header-icon" />
                 </Box>
                 <Box>
-                  <Text data-part="datapoint-label">
+                  <Text className="ds-data-terminal-card__datapoint-label" data-part="datapoint-label">
                     {tOr('dataTerminalCard.dataPoint', 'DATA POINT')}
                   </Text>
-                  <Text data-part="header-label">
+                  <Text className="ds-data-terminal-card__header-label" data-part="header-label">
                     {label.toUpperCase()}
                   </Text>
                 </Box>
@@ -657,7 +657,7 @@ function MatrixCard({
 
           {/* Main value section */}
           <Box data-part="value-section">
-            <Text data-part="value">
+            <Text className="ds-data-terminal-card__value" data-part="value">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
@@ -671,18 +671,18 @@ function MatrixCard({
                 ) : (
                   <TrendingDown data-part="trend-icon" />
                 )}
-                <Text data-part="change-value">
+                <Text className="ds-data-terminal-card__change-value" data-part="change-value">
                   {change || '--'}
                 </Text>
               </Flex>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statPeriod', 'PERIOD')}>
-              <Text data-part="period-value">
+              <Text className="ds-data-terminal-card__period-value" data-part="period-value">
                 {subtitle || tOr('dataTerminalCard.periodDefaultWeek', 'This week')}
               </Text>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statTarget', 'TARGET')}>
-              <Text data-part="target-value">
+              <Text className="ds-data-terminal-card__target-value" data-part="target-value">
                 {progress}%
               </Text>
             </StatItem>
@@ -697,7 +697,7 @@ function MatrixCard({
           <Flex align="center" justify="between" data-part="footer">
             <ActivityIndicator />
             <Flex align="center" gap={6}>
-              <Text data-part="details-label">
+              <Text className="ds-data-terminal-card__details-label" data-part="details-label">
                 {tOr('dataTerminalCard.viewDetails', 'VIEW DETAILS')}
               </Text>
               <ArrowRight data-part="details-arrow" />
@@ -777,14 +777,14 @@ export function DataTerminalStat({
 
       <Flex align="center" gap={6} data-part="stat-header">
         <Icon data-part="stat-icon" />
-        <Text data-part="stat-label">
+        <Text className="ds-data-terminal-card__stat-label" data-part="stat-label">
           {label.toUpperCase()}
         </Text>
       </Flex>
 
       <Box data-part="value-section">
         <Flex align="baseline" gap={6}>
-          <Text data-part="value">
+          <Text className="ds-data-terminal-card__value" data-part="value">
             {typeof value === 'number' ? value.toLocaleString(locale) : value}
           </Text>
           <Flex align="center" gap={3}>
@@ -793,7 +793,7 @@ export function DataTerminalStat({
             ) : (
               <TrendingDown data-part="trend-icon" />
             )}
-            <Text data-part="change-value">
+            <Text className="ds-data-terminal-card__change-value" data-part="change-value">
               {change || '--'}
             </Text>
           </Flex>
