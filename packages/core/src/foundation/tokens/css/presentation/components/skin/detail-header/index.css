@@ -271,7 +271,7 @@
 /* the back glyph is the governed `navigation.back` icon with autoMirror —
    it flips itself under RTL; the old manual scaleX(-1) rule is retired (it
    double-flipped the governed icon) */
-.ds-structure.ds-detail-header [data-part='back-label'][data-part='back-label'][data-part='back-label'] {
+.ds-structure.ds-detail-header .ds-detail-header__back-label.ds-detail-header__back-label.ds-detail-header__back-label {
   color: var(--ds-color-text-secondary);
 }
 .ds-structure.ds-detail-header [data-part='breadcrumb-divider'] {
@@ -331,14 +331,14 @@
   block-size: 100%;
   object-fit: cover;
 }
-.ds-structure.ds-detail-header [data-part='avatar-initials'][data-part='avatar-initials'][data-part='avatar-initials'] {
+.ds-structure.ds-detail-header .ds-detail-header__avatar-initials.ds-detail-header__avatar-initials.ds-detail-header__avatar-initials {
   font-size: var(--ds-detail-header-avatar-initials-size, var(--ds-font-size-3xl, 24px));
   font-weight: 700;
 }
 
 /* ─── hero copy: eyebrow / title (Box as h1) / subtitle ────────────────────── */
 
-.ds-structure.ds-detail-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
+.ds-structure.ds-detail-header .ds-detail-header__eyebrow.ds-detail-header__eyebrow.ds-detail-header__eyebrow {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: var(--ds-detail-header-eyebrow-tracking, 0.14em);
@@ -391,7 +391,7 @@
     calc(var(--ds-type-page-title-font-size, 32px) * 0.9375)
   );
 }
-.ds-structure.ds-detail-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+.ds-structure.ds-detail-header .ds-detail-header__subtitle.ds-detail-header__subtitle.ds-detail-header__subtitle {
   color: var(--ds-color-text-secondary);
   line-height: var(--ds-detail-header-subtitle-leading, 1.65);
   /* measure, not width: a character cap follows the type scale, a pixel cap
@@ -512,20 +512,20 @@
   inline-size: 100%;
   block-size: 100%;
 }
-.ds-structure.ds-detail-header [data-part='metadata-chip-label'][data-part='metadata-chip-label'][data-part='metadata-chip-label'] {
+.ds-structure.ds-detail-header .ds-detail-header__metadata-chip-label.ds-detail-header__metadata-chip-label.ds-detail-header__metadata-chip-label {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: var(--ds-detail-header-metadata-chip-label-tracking, 0.12em);
   /* Label personality channel (fallback keeps the pre-wave uppercase). */
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
-.ds-structure.ds-detail-header [data-part='metadata-chip-value'][data-part='metadata-chip-value'][data-part='metadata-chip-value'] {
+.ds-structure.ds-detail-header .ds-detail-header__metadata-chip-value.ds-detail-header__metadata-chip-value.ds-detail-header__metadata-chip-value {
   word-break: break-word;
 }
 /* mono values are machine data (ids, hashes, dates): monospace + tabular
    figures keep columns of digits aligned, break-all keeps long ids inside the
    chip */
-.ds-structure.ds-detail-header [data-part='metadata-chip-value'][data-part='metadata-chip-value'][data-part='metadata-chip-value'][data-mono='true'] {
+.ds-structure.ds-detail-header .ds-detail-header__metadata-chip-value.ds-detail-header__metadata-chip-value.ds-detail-header__metadata-chip-value[data-mono='true'] {
   font-family: var(--ds-font-family-mono, monospace);
   font-variant-numeric: tabular-nums;
   word-break: break-all;
@@ -642,10 +642,10 @@
 .ds-structure.ds-detail-header [data-part='tab-icon'][data-active='false'] {
   color: var(--ds-color-text-muted);
 }
-.ds-structure.ds-detail-header [data-part='tab-label'][data-part='tab-label'][data-part='tab-label'][data-active='true'] {
+.ds-structure.ds-detail-header .ds-detail-header__tab-label.ds-detail-header__tab-label.ds-detail-header__tab-label[data-active='true'] {
   color: var(--ds-color-text-primary);
 }
-.ds-structure.ds-detail-header [data-part='tab-label'][data-part='tab-label'][data-part='tab-label'][data-active='false'] {
+.ds-structure.ds-detail-header .ds-detail-header__tab-label.ds-detail-header__tab-label.ds-detail-header__tab-label[data-active='false'] {
   color: var(--ds-color-text-secondary);
 }
 .ds-structure.ds-detail-header [data-part='tab-count'] {
@@ -656,13 +656,13 @@
 .ds-structure.ds-detail-header [data-part='tab'][data-active='true'] [data-part='tab-count'] {
   background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
 }
-.ds-structure.ds-detail-header [data-part='tab-count-text'][data-part='tab-count-text'][data-part='tab-count-text'] {
+.ds-structure.ds-detail-header .ds-detail-header__tab-count-text.ds-detail-header__tab-count-text.ds-detail-header__tab-count-text {
   font-variant-numeric: tabular-nums;
 }
-.ds-structure.ds-detail-header [data-part='tab-count-text'][data-part='tab-count-text'][data-part='tab-count-text'][data-active='true'] {
+.ds-structure.ds-detail-header .ds-detail-header__tab-count-text.ds-detail-header__tab-count-text.ds-detail-header__tab-count-text[data-active='true'] {
   color: var(--ds-color-text-primary);
 }
-.ds-structure.ds-detail-header [data-part='tab-count-text'][data-part='tab-count-text'][data-part='tab-count-text'][data-active='false'] {
+.ds-structure.ds-detail-header .ds-detail-header__tab-count-text.ds-detail-header__tab-count-text.ds-detail-header__tab-count-text[data-active='false'] {
   color: var(--ds-color-text-secondary);
 }
 

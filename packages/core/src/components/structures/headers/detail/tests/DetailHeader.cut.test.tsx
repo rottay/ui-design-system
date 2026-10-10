@@ -123,16 +123,29 @@ const FAMILY_PARTS = [
 ] as const;
 
 /**
+ * The composed `Text` parts. The skin reaches them through a class door,
+ * `.ds-detail-header__<part>`, stamped beside the part on the same element;
+ * every other family part stays keyed on `[data-part]`.
+ */
+const TEXT_PARTS: readonly string[] = [
+  'back-label',
+  'avatar-initials',
+  'eyebrow',
+  'subtitle',
+  'metadata-chip-label',
+  'metadata-chip-value',
+  'tab-label',
+  'tab-count-text',
+];
+
+const textHook = (part: string) => `ds-detail-header__${part}`;
+
+/**
  * Parts stamped on the family's own layout primitives. Composed `Text` parts
  * resolve their ink and weight through the typography system inline (the
  * skin's own header says so), which is composition, not family paint.
  */
-const LAYOUT_PARTS = new Set(
-  FAMILY_PARTS.filter(
-    (part) =>
-      !['back-label', 'avatar-initials', 'eyebrow', 'subtitle', 'metadata-chip-label', 'metadata-chip-value', 'tab-label', 'tab-count-text'].includes(part),
-  ),
-);
+const LAYOUT_PARTS = new Set(FAMILY_PARTS.filter((part) => !TEXT_PARTS.includes(part)));
 
 /** Non-custom-property declarations in an element's style attribute. */
 function inlinePaint(element: HTMLElement): string[] {
@@ -147,6 +160,7 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
     // The initials variant stamps `avatar-initials`; the image variant stamps
     // the portrait instead. Union the two renders for the stamped side.
     const stamped = new Set<string>();
+    const hooked = new Set<string>();
     for (const avatar of ['AC', '/acme.png'] as const) {
       const { container, unmount } = renderWithEngine(
         <DetailHeader {...fullProps()} avatar={avatar} />,
@@ -154,6 +168,13 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
       );
       await waitForPart(container, 'root');
       for (const part of stampedParts(container)) stamped.add(part);
+      // The class door and the part name the same elements, in both directions.
+      for (const part of TEXT_PARTS) {
+        const byPart = Array.from(container.querySelectorAll(`[data-part="${part}"]`));
+        const byHook = Array.from(container.querySelectorAll(`.${textHook(part)}`));
+        expect(byHook, `.${textHook(part)} sits on [data-part="${part}"]`).toEqual(byPart);
+        if (byHook.length > 0) hooked.add(part);
+      }
       unmount();
     }
 
@@ -164,10 +185,19 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
     // (Breadcrumb crumbs, Button, Tooltip, …), whose anatomy those families
     // own; the family's own vocabulary is exactly the list above.
 
-    const consumed = new Set(
+    expect([...hooked].sort()).toEqual([...TEXT_PARTS].sort());
+
+    // The skin consumes each family part through exactly one door: the layout
+    // parts by `[data-part]`, the `Text` parts by their class hook.
+    const consumedByPart = new Set(
       [...SKIN.matchAll(/\[data-part='([a-z-]+)'\]/g)].map((match) => match[1]),
     );
-    expect([...consumed].sort()).toEqual([...FAMILY_PARTS].sort());
+    const consumedByHook = new Set(
+      [...SKIN.matchAll(/\.ds-detail-header__([a-z-]+)/g)].map((match) => match[1]),
+    );
+    expect([...consumedByHook].sort()).toEqual([...TEXT_PARTS].sort());
+    expect([...consumedByPart].sort()).toEqual([...LAYOUT_PARTS].sort());
+    expect([...consumedByPart, ...consumedByHook].sort()).toEqual([...FAMILY_PARTS].sort());
   });
 
   it('carries no inline paint on the family layout parts: only --ds-* custom properties travel', async () => {

@@ -288,7 +288,9 @@ describe('Headers-family (structures) data-part contract (structure-header anato
       const breadcrumbLink = container.querySelector('[data-part="breadcrumb-link"]');
       expect(breadcrumbLink).not.toBeNull();
       // §4: the dead `breadcrumb-link` className hook was deleted with the <style> block.
-      expect(breadcrumbLink?.className ?? '').not.toContain('breadcrumb-link');
+      // The skin's class door is a different, namespaced token on the same element.
+      expect(Array.from(breadcrumbLink?.classList ?? [])).not.toContain('breadcrumb-link');
+      expect(breadcrumbLink?.classList.contains('ds-edit-header__breadcrumb-link')).toBe(true);
 
       expect(container.querySelector('[data-part="breadcrumb-separator"]')).not.toBeNull();
       expect(container.querySelector('[data-part="breadcrumb-item"]')).not.toBeNull();

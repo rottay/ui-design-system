@@ -16,7 +16,7 @@
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
   "passThroughViolations": 92,
-  "callerPartDependents": 892,
+  "callerPartDependents": 872,
   "callerStateDependents": 16
  },
  "roster": [
@@ -1974,106 +1974,6 @@
      "routing": "H-ET: ruled into the typography engine lot, which carries H-ET C1-C6 + G1-G5. That lot's precondition is exactly this held set {states :224, gallery :129}; it migrates them itself."
     },
     {
-     "key": "structures/headers/detail/runtime/rendering/index.tsx#Text#avatar-initials#0",
-     "atBaseline": "structures/headers/detail/runtime/rendering/index.tsx:74",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/detail/runtime/rendering/index.tsx#Text#back-label#0",
-     "atBaseline": "structures/headers/detail/runtime/rendering/index.tsx:238",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/detail/runtime/rendering/index.tsx#Text#eyebrow#0",
-     "atBaseline": "structures/headers/detail/runtime/rendering/index.tsx:295",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/detail/runtime/rendering/index.tsx#Text#metadata-chip-label#0",
-     "atBaseline": "structures/headers/detail/runtime/rendering/index.tsx:340",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/detail/runtime/rendering/index.tsx#Text#metadata-chip-value#0",
-     "atBaseline": "structures/headers/detail/runtime/rendering/index.tsx:343",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/detail/runtime/rendering/index.tsx#Text#subtitle#0",
-     "atBaseline": "structures/headers/detail/runtime/rendering/index.tsx:308",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/detail/runtime/rendering/index.tsx#Text#tab-count-text#0",
-     "atBaseline": "structures/headers/detail/runtime/rendering/index.tsx:163",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/detail/runtime/rendering/index.tsx#Text#tab-label#0",
-     "atBaseline": "structures/headers/detail/runtime/rendering/index.tsx:152",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/edit/index.tsx#Text#back-label#0",
-     "atBaseline": "structures/headers/edit/index.tsx:214",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/edit/index.tsx#Text#breadcrumb-item#0",
-     "atBaseline": "structures/headers/edit/index.tsx:238",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/edit/index.tsx#Text#breadcrumb-link#0",
-     "atBaseline": "structures/headers/edit/index.tsx:233",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/edit/index.tsx#Text#breadcrumb-separator#0",
-     "atBaseline": "structures/headers/edit/index.tsx:228",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/edit/index.tsx#Text#dirty-label#0",
-     "atBaseline": "structures/headers/edit/index.tsx:306",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/edit/index.tsx#Text#entity-id#0",
-     "atBaseline": "structures/headers/edit/index.tsx:251",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/edit/index.tsx#Text#eyebrow#0",
-     "atBaseline": "structures/headers/edit/index.tsx:280",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/edit/index.tsx#Text#status-pill-text#0",
-     "atBaseline": "structures/headers/edit/index.tsx:298",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/edit/index.tsx#Text#subtitle#0",
-     "atBaseline": "structures/headers/edit/index.tsx:313",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/form/index.tsx#Text#back-label#0",
-     "atBaseline": "structures/headers/form/index.tsx:193",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/form/index.tsx#Text#eyebrow#0",
-     "atBaseline": "structures/headers/form/index.tsx:221",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "structures/headers/form/index.tsx#Text#subtitle#0",
-     "atBaseline": "structures/headers/form/index.tsx:237",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
      "key": "surfaces/presentation/pages/data/compare/index.tsx#Heading#section-title#0",
      "atBaseline": "surfaces/presentation/pages/data/compare/index.tsx:220",
      "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
@@ -2179,7 +2079,7 @@
   ]
  },
  "lastMove": {
-  "head": "51cd074ede0e5ab28f09532fc2d57e6cf401caf6",
+  "head": "895d7ee4455064074e6fb1b20ea8ee7a75dd9b8e",
   "date": "2026-10-10",
   "note": "lowered to the gate's own measurement through --update-baseline"
  }

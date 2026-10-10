@@ -72117,7 +72117,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* the back glyph is the governed `navigation.back` icon with autoMirror —
    it flips itself under RTL; the old manual scaleX(-1) rule is retired (it
    double-flipped the governed icon) */
-.ds-structure.ds-detail-header [data-part='back-label'][data-part='back-label'][data-part='back-label'] {
+.ds-structure.ds-detail-header .ds-detail-header__back-label.ds-detail-header__back-label.ds-detail-header__back-label {
   color: var(--ds-color-text-secondary);
 }
 .ds-structure.ds-detail-header [data-part='breadcrumb-divider'] {
@@ -72177,14 +72177,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   block-size: 100%;
   object-fit: cover;
 }
-.ds-structure.ds-detail-header [data-part='avatar-initials'][data-part='avatar-initials'][data-part='avatar-initials'] {
+.ds-structure.ds-detail-header .ds-detail-header__avatar-initials.ds-detail-header__avatar-initials.ds-detail-header__avatar-initials {
   font-size: var(--ds-detail-header-avatar-initials-size, var(--ds-font-size-3xl, 24px));
   font-weight: 700;
 }
 
 /* ─── hero copy: eyebrow / title (Box as h1) / subtitle ────────────────────── */
 
-.ds-structure.ds-detail-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
+.ds-structure.ds-detail-header .ds-detail-header__eyebrow.ds-detail-header__eyebrow.ds-detail-header__eyebrow {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: var(--ds-detail-header-eyebrow-tracking, 0.14em);
@@ -72237,7 +72237,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     calc(var(--ds-type-page-title-font-size, 32px) * 0.9375)
   );
 }
-.ds-structure.ds-detail-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+.ds-structure.ds-detail-header .ds-detail-header__subtitle.ds-detail-header__subtitle.ds-detail-header__subtitle {
   color: var(--ds-color-text-secondary);
   line-height: var(--ds-detail-header-subtitle-leading, 1.65);
   /* measure, not width: a character cap follows the type scale, a pixel cap
@@ -72358,20 +72358,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   inline-size: 100%;
   block-size: 100%;
 }
-.ds-structure.ds-detail-header [data-part='metadata-chip-label'][data-part='metadata-chip-label'][data-part='metadata-chip-label'] {
+.ds-structure.ds-detail-header .ds-detail-header__metadata-chip-label.ds-detail-header__metadata-chip-label.ds-detail-header__metadata-chip-label {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: var(--ds-detail-header-metadata-chip-label-tracking, 0.12em);
   /* Label personality channel (fallback keeps the pre-wave uppercase). */
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
-.ds-structure.ds-detail-header [data-part='metadata-chip-value'][data-part='metadata-chip-value'][data-part='metadata-chip-value'] {
+.ds-structure.ds-detail-header .ds-detail-header__metadata-chip-value.ds-detail-header__metadata-chip-value.ds-detail-header__metadata-chip-value {
   word-break: break-word;
 }
 /* mono values are machine data (ids, hashes, dates): monospace + tabular
    figures keep columns of digits aligned, break-all keeps long ids inside the
    chip */
-.ds-structure.ds-detail-header [data-part='metadata-chip-value'][data-part='metadata-chip-value'][data-part='metadata-chip-value'][data-mono='true'] {
+.ds-structure.ds-detail-header .ds-detail-header__metadata-chip-value.ds-detail-header__metadata-chip-value.ds-detail-header__metadata-chip-value[data-mono='true'] {
   font-family: var(--ds-font-family-mono, monospace);
   font-variant-numeric: tabular-nums;
   word-break: break-all;
@@ -72488,10 +72488,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-detail-header [data-part='tab-icon'][data-active='false'] {
   color: var(--ds-color-text-muted);
 }
-.ds-structure.ds-detail-header [data-part='tab-label'][data-part='tab-label'][data-part='tab-label'][data-active='true'] {
+.ds-structure.ds-detail-header .ds-detail-header__tab-label.ds-detail-header__tab-label.ds-detail-header__tab-label[data-active='true'] {
   color: var(--ds-color-text-primary);
 }
-.ds-structure.ds-detail-header [data-part='tab-label'][data-part='tab-label'][data-part='tab-label'][data-active='false'] {
+.ds-structure.ds-detail-header .ds-detail-header__tab-label.ds-detail-header__tab-label.ds-detail-header__tab-label[data-active='false'] {
   color: var(--ds-color-text-secondary);
 }
 .ds-structure.ds-detail-header [data-part='tab-count'] {
@@ -72502,13 +72502,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-detail-header [data-part='tab'][data-active='true'] [data-part='tab-count'] {
   background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
 }
-.ds-structure.ds-detail-header [data-part='tab-count-text'][data-part='tab-count-text'][data-part='tab-count-text'] {
+.ds-structure.ds-detail-header .ds-detail-header__tab-count-text.ds-detail-header__tab-count-text.ds-detail-header__tab-count-text {
   font-variant-numeric: tabular-nums;
 }
-.ds-structure.ds-detail-header [data-part='tab-count-text'][data-part='tab-count-text'][data-part='tab-count-text'][data-active='true'] {
+.ds-structure.ds-detail-header .ds-detail-header__tab-count-text.ds-detail-header__tab-count-text.ds-detail-header__tab-count-text[data-active='true'] {
   color: var(--ds-color-text-primary);
 }
-.ds-structure.ds-detail-header [data-part='tab-count-text'][data-part='tab-count-text'][data-part='tab-count-text'][data-active='false'] {
+.ds-structure.ds-detail-header .ds-detail-header__tab-count-text.ds-detail-header__tab-count-text.ds-detail-header__tab-count-text[data-active='false'] {
   color: var(--ds-color-text-secondary);
 }
 
@@ -73071,7 +73071,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-edit-header [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='back-label'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__back-label {
   color: var(--ds-color-text-secondary);
 }
 
@@ -73079,7 +73079,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    anchor lives HERE rather than in `header-hero-shared.css`: FormHeader composes the
    Breadcrumb primitive and never stamps `breadcrumb-link`, so a shared rule was paint
    with a stamp in only one of the two families. */
-.ds-structure.ds-edit-header a:has(> [data-part='breadcrumb-link']) {
+.ds-structure.ds-edit-header a:has(> .ds-edit-header__breadcrumb-link) {
   text-decoration: none;
 }
 .ds-structure.ds-edit-header [data-part='breadcrumb-divider'] {
@@ -73087,18 +73087,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   block-size: 16px;
   background: var(--ds-color-border-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='breadcrumb-separator'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-separator {
   color: var(--ds-color-text-muted);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='breadcrumb-link'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-link {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='breadcrumb-item'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-item {
   color: var(--ds-color-text-secondary);
 }
 
 /* entity id chip */
-.ds-structure.ds-edit-header [data-part='entity-id'] {
+.ds-structure.ds-edit-header .ds-edit-header__entity-id {
   padding-block: 4px;
   padding-inline: 10px;
   border-radius: 999px;
@@ -73108,10 +73108,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-family: var(--ds-type-code-font-family, var(--ds-font-family-mono, monospace));
   font-variant-numeric: var(--ds-type-code-font-variant-numeric, normal);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='entity-id'] {
+.ds-structure.ds-edit-header[data-part='root'] .ds-edit-header__entity-id {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='entity-id'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__entity-id {
   color: var(--ds-color-text-secondary);
 }
 
@@ -73163,7 +73163,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   inline-size: 100%;
   block-size: 100%;
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='eyebrow'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__eyebrow {
   color: var(--ds-color-text-muted);
   /* the eyebrow is a micro-label, so it reads the `code` role's family (the
      tenant's mono choice) and the foundation tracking rung — the old literal
@@ -73185,7 +73185,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   letter-spacing: var(--ds-type-page-title-letter-spacing, var(--ds-letter-spacing-tight));
   overflow-wrap: break-word;
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='subtitle'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__subtitle {
   color: var(--ds-color-text-secondary);
   font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
   letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));
@@ -73229,7 +73229,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-edit-header-status-tone-bd, var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary)));
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='status-pill-text'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__status-pill-text {
   color: var(--ds-edit-header-status-tone-fg, var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary)));
   letter-spacing: 0.04em;
   text-transform: capitalize;
@@ -73254,7 +73254,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-radius: 50%;
   background: var(--ds-color-warning);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='dirty-label'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__dirty-label {
   color: color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%);
 }
 
@@ -73353,7 +73353,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-structure.ds-edit-header[data-part='root'][data-loading],
   .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'],
   .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button'],
-  .ds-structure.ds-edit-header[data-part='root'] [data-part='entity-id'],
+  .ds-structure.ds-edit-header[data-part='root'] .ds-edit-header__entity-id,
   .ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'],
   .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'],
   .ds-structure.ds-edit-header[data-part='root'] [data-part='dirty-chip'],
@@ -73369,8 +73369,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 
   .ds-structure.ds-edit-header [data-part='icon-badge'],
-  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='status-pill-text'],
-  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='dirty-label'] {
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__status-pill-text,
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__dirty-label {
     color: CanvasText;
   }
 
@@ -73531,7 +73531,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] [data-part='back-label'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] .ds-form-header__back-label {
   color: var(--ds-color-text-secondary);
 }
 
@@ -73605,7 +73605,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-copy'] {
   min-inline-size: 0;
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='eyebrow'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__eyebrow {
   color: var(--ds-color-text-muted);
   /* the eyebrow is a micro-label, so it reads the `code` role's family (the
      tenant's mono choice) and the foundation tracking rung — never a literal */
@@ -73626,7 +73626,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   letter-spacing: var(--ds-type-page-title-letter-spacing, var(--ds-letter-spacing-tight));
   overflow-wrap: break-word;
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='subtitle'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__subtitle {
   color: var(--ds-color-text-secondary);
   font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
   letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));

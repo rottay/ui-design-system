@@ -141,7 +141,7 @@
 .ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] [data-part='back-label'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] .ds-form-header__back-label {
   color: var(--ds-color-text-secondary);
 }
 
@@ -215,7 +215,7 @@
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-copy'] {
   min-inline-size: 0;
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='eyebrow'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__eyebrow {
   color: var(--ds-color-text-muted);
   /* the eyebrow is a micro-label, so it reads the `code` role's family (the
      tenant's mono choice) and the foundation tracking rung — never a literal */
@@ -236,7 +236,7 @@
   letter-spacing: var(--ds-type-page-title-letter-spacing, var(--ds-letter-spacing-tight));
   overflow-wrap: break-word;
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='subtitle'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__subtitle {
   color: var(--ds-color-text-secondary);
   font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
   letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));

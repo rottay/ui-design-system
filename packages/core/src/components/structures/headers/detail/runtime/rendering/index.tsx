@@ -71,7 +71,7 @@ function renderAvatarNode(avatar: string | ReactNode) {
 
     return (
       <Box data-part="avatar" data-variant="initials">
-        <Text data-part="avatar-initials">{avatar}</Text>
+        <Text className="ds-detail-header__avatar-initials" data-part="avatar-initials">{avatar}</Text>
       </Box>
     );
   }
@@ -150,7 +150,7 @@ function DetailTab({
           </span>
         ) : null}
         <Text
-          data-part="tab-label"
+          className="ds-detail-header__tab-label" data-part="tab-label"
           data-active={isActive}
           size="sm"
           weight={isActive ? 'medium' : undefined}
@@ -160,7 +160,7 @@ function DetailTab({
         </Text>
         {tab.count !== undefined ? (
           <Box data-part="tab-count">
-            <Text data-part="tab-count-text" data-active={isActive} size="xs" weight="medium" color={isActive ? undefined : 'secondary'}>
+            <Text className="ds-detail-header__tab-count-text" data-part="tab-count-text" data-active={isActive} size="xs" weight="medium" color={isActive ? undefined : 'secondary'}>
               {tab.count}
             </Text>
           </Box>
@@ -235,7 +235,7 @@ export function DetailHeader({
                     mirroring contract. The chip's visible label makes the
                     glyph decorative. */}
                 <NavigationBackIcon data-part="back-icon" decorative size={14} />
-                <Text data-part="back-label" size="xs" color="secondary">
+                <Text className="ds-detail-header__back-label" data-part="back-label" size="xs" color="secondary">
                   {resolvedBackLabel}
                 </Text>
               </Flex>,
@@ -292,7 +292,7 @@ export function DetailHeader({
 
             <Stack data-part="hero-copy" spacing="sm">
               {eyebrow ? (
-                <Text data-part="eyebrow" size="xs" weight="bold" color="subtle">
+                <Text className="ds-detail-header__eyebrow" data-part="eyebrow" size="xs" weight="bold" color="subtle">
                   {eyebrow}
                 </Text>
               ) : null}
@@ -305,7 +305,7 @@ export function DetailHeader({
               </Flex>
 
               {subtitle ? (
-                <Text data-part="subtitle" size="sm" color="secondary">
+                <Text className="ds-detail-header__subtitle" data-part="subtitle" size="sm" color="secondary">
                   {subtitle}
                 </Text>
               ) : null}
@@ -337,11 +337,11 @@ export function DetailHeader({
                         <item.icon />
                       </Box>
                     ) : null}
-                    <Text data-part="metadata-chip-label" size="xs" weight="bold" color="subtle">
+                    <Text className="ds-detail-header__metadata-chip-label" data-part="metadata-chip-label" size="xs" weight="bold" color="subtle">
                       {item.label}
                     </Text>
                     <Text
-                      data-part="metadata-chip-value"
+                      className="ds-detail-header__metadata-chip-value" data-part="metadata-chip-value"
                       data-mono={item.mono ? 'true' : 'false'}
                       size="sm"
                       weight="medium"

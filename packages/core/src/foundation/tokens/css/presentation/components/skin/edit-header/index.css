@@ -162,7 +162,7 @@
 .ds-structure.ds-edit-header [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='back-label'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__back-label {
   color: var(--ds-color-text-secondary);
 }
 
@@ -170,7 +170,7 @@
    anchor lives HERE rather than in `header-hero-shared.css`: FormHeader composes the
    Breadcrumb primitive and never stamps `breadcrumb-link`, so a shared rule was paint
    with a stamp in only one of the two families. */
-.ds-structure.ds-edit-header a:has(> [data-part='breadcrumb-link']) {
+.ds-structure.ds-edit-header a:has(> .ds-edit-header__breadcrumb-link) {
   text-decoration: none;
 }
 .ds-structure.ds-edit-header [data-part='breadcrumb-divider'] {
@@ -178,18 +178,18 @@
   block-size: 16px;
   background: var(--ds-color-border-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='breadcrumb-separator'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-separator {
   color: var(--ds-color-text-muted);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='breadcrumb-link'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-link {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='breadcrumb-item'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-item {
   color: var(--ds-color-text-secondary);
 }
 
 /* entity id chip */
-.ds-structure.ds-edit-header [data-part='entity-id'] {
+.ds-structure.ds-edit-header .ds-edit-header__entity-id {
   padding-block: 4px;
   padding-inline: 10px;
   border-radius: 999px;
@@ -199,10 +199,10 @@
   font-family: var(--ds-type-code-font-family, var(--ds-font-family-mono, monospace));
   font-variant-numeric: var(--ds-type-code-font-variant-numeric, normal);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='entity-id'] {
+.ds-structure.ds-edit-header[data-part='root'] .ds-edit-header__entity-id {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='entity-id'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__entity-id {
   color: var(--ds-color-text-secondary);
 }
 
@@ -254,7 +254,7 @@
   inline-size: 100%;
   block-size: 100%;
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='eyebrow'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__eyebrow {
   color: var(--ds-color-text-muted);
   /* the eyebrow is a micro-label, so it reads the `code` role's family (the
      tenant's mono choice) and the foundation tracking rung — the old literal
@@ -276,7 +276,7 @@
   letter-spacing: var(--ds-type-page-title-letter-spacing, var(--ds-letter-spacing-tight));
   overflow-wrap: break-word;
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='subtitle'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__subtitle {
   color: var(--ds-color-text-secondary);
   font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
   letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));
@@ -320,7 +320,7 @@
 .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-edit-header-status-tone-bd, var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary)));
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='status-pill-text'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__status-pill-text {
   color: var(--ds-edit-header-status-tone-fg, var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary)));
   letter-spacing: 0.04em;
   text-transform: capitalize;
@@ -345,7 +345,7 @@
   border-radius: 50%;
   background: var(--ds-color-warning);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='dirty-label'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__dirty-label {
   color: color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%);
 }
 
@@ -444,7 +444,7 @@
   .ds-structure.ds-edit-header[data-part='root'][data-loading],
   .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'],
   .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button'],
-  .ds-structure.ds-edit-header[data-part='root'] [data-part='entity-id'],
+  .ds-structure.ds-edit-header[data-part='root'] .ds-edit-header__entity-id,
   .ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'],
   .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'],
   .ds-structure.ds-edit-header[data-part='root'] [data-part='dirty-chip'],
@@ -460,8 +460,8 @@
   }
 
   .ds-structure.ds-edit-header [data-part='icon-badge'],
-  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='status-pill-text'],
-  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='dirty-label'] {
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__status-pill-text,
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__dirty-label {
     color: CanvasText;
   }
 
