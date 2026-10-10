@@ -264,18 +264,21 @@ describe('engine/skins/pass-through -- source drills (the census itself turns th
   });
 
   // census v7.1: a caller tag is resolved THROUGH a barrel by its lexical re-export chain, and an
-  // opener whose family does not resolve is reported, never skipped.
+  // opener whose family does not resolve is reported, never skipped. v7.1.1: a tag that only
+  // SHARES a family's name (antd's Card, a local element variable called Grid, an unimported
+  // Stack) is not that family's caller -- the name guess is gone.
   it('resolves a caller through the barrel, and reports what it cannot resolve', () => {
     const dir = join(core(), 'src/components/structures/zz-resolver-drill');
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, 'index.tsx'), [
       "import React from 'react';",
-      "import { Card as AntCard } from 'antd';",
+      "import { Card, Card as AntCard } from 'antd';",
       "import { Box, Heading, Nope, Text } from '@/components/primitives';",
       "import { Text as DeepText } from '../../primitives';",
       "import { Text as CompoundText } from '@ui/primitives/display/typography/compound/text';",
       'export function ZzResolverDrill({ level }: { level: 2 | 3 }) {',
       '  const LocalHeading = `h${level}`;',
+      "  const Grid: 'dl' | 'div' = level === 2 ? 'div' : 'dl';",
       '  return (',
       '    <div data-part="zz-intrinsic">',
       '      <Text data-part="zz-barrel" />',
@@ -285,6 +288,9 @@ describe('engine/skins/pass-through -- source drills (the census itself turns th
       '      <Box data-part="zz-tag-is-family" />',
       '      <LocalHeading data-part="zz-local-intrinsic" />',
       '      <AntCard data-part="zz-third-party" />',
+      '      <Card data-part="zz-antd-named-like-a-family" />',
+      '      <Grid data-part="zz-local-named-like-a-family" />',
+      '      <Stack data-part="zz-unimported-named-like-a-family" />',
       '      <Mystery data-part="zz-unknown" />',
       '      <Nope data-part="zz-broken-chain" />',
       '    </div>',
@@ -307,16 +313,20 @@ describe('engine/skins/pass-through -- source drills (the census itself turns th
       assert.deepEqual(reported, {
         'zz-local-intrinsic': 'local-intrinsic-variable',
         'zz-third-party': 'third-party',
+        'zz-antd-named-like-a-family': 'third-party',
+        'zz-local-named-like-a-family': 'local-intrinsic-variable',
+        'zz-unimported-named-like-a-family': 'unresolvable',
         'zz-unknown': 'unresolvable',
         'zz-broken-chain': 'unresolvable',
       });
       const everywhere = [...raw.compoundSites, ...census.unresolvedCallers.rows].filter(mine).map((r) => r.callerPart);
       assert.ok(!everywhere.includes('zz-intrinsic'), 'an intrinsic element is not a caller');
-      assert.deepEqual(census.unresolvedCallers.genuinelyUnresolvable.filter(mine).map((u) => u.callerPart).sort(), ['zz-broken-chain', 'zz-unknown']);
+      assert.deepEqual(census.unresolvedCallers.genuinelyUnresolvable.filter(mine).map((u) => u.callerPart).sort(), ['zz-broken-chain', 'zz-unimported-named-like-a-family', 'zz-unknown']);
+      assert.deepEqual(raw.compoundSites.filter(mine).filter((c) => ['card', 'grid', 'stack'].includes(c.childFamily)), [], 'a shared name attributes nothing');
       assert.match(census.unresolvedCallers.rows.find((u) => u.callerPart === 'zz-broken-chain').evidence, /no export 'Nope'/);
       // The four typography callers are dependents of nothing here (no owner skin), so the gate
       // stays green on counters; the callers themselves are in the enumeration G1 reads.
-      assert.equal(census.totals.unresolvedCallersGenuine, JUSTIFIED_UNRESOLVED.length + 2);
+      assert.equal(census.totals.unresolvedCallersGenuine, JUSTIFIED_UNRESOLVED.length + 3);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
@@ -358,9 +368,10 @@ const JUSTIFIED_UNRESOLVED = [
 ];
 
 describe('engine/skins/pass-through -- census v7.1: no caller is skipped in silence', () => {
+  let raw;
   let census;
   before(() => {
-    ({ census } = measurePassThrough({ repoRoot: REPO }));
+    ({ raw, census } = measurePassThrough({ repoRoot: REPO }));
   });
   const short = (file) => file.replace('packages/core/src/components/', '');
 
@@ -368,6 +379,18 @@ describe('engine/skins/pass-through -- census v7.1: no caller is skipped in sile
     const typography = census.perFamilyPrecondition.byChildFamily.typography;
     assert.ok(typography, 'typography has a precondition row');
     assert.equal(typography.callerPartDependents, ledger.families.typography.part.length);
+  });
+
+  it('a family is attributed by proof only: no caller is resolved by its tag name (v7.1.1)', () => {
+    const how = new Set(raw.compoundSites.map((c) => c.resolvedBy));
+    assert.deepEqual([...how].sort(), ['import-path', 're-export-chain']);
+    // The two rows the name guess used to claim, at this tree: reported, with their evidence.
+    const reported = (file, tag) => census.unresolvedCallers.rows.filter((u) => short(u.file) === file && u.tag === tag).map((u) => u.class);
+    assert.deepEqual(reported('patterns/visualization/kanban-board/engines/classic/index.tsx', 'Card'), ['third-party']);
+    assert.deepEqual(reported('patterns/data/record-facts/engines/foundation/index.tsx', 'Grid'), ['local-intrinsic-variable']);
+    const claimed = raw.compoundSites.filter((c) => (short(c.file) === 'patterns/visualization/kanban-board/engines/classic/index.tsx' && c.tag === 'Card')
+      || (short(c.file) === 'patterns/data/record-facts/engines/foundation/index.tsx' && c.tag === 'Grid'));
+    assert.deepEqual(claimed, []);
   });
 
   it('every unresolved opener is classified, and the statically-unknown set is the justified roster', () => {

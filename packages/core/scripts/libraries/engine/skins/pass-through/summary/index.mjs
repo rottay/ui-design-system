@@ -4,8 +4,8 @@
  * the tripwire marker). READ-ONLY, pure. The body is the adopted report.mjs verbatim; its CLI
  * shell, the out-of-repo tool shas, the `generated` date and the markdown fragment are dropped.
  */
-// Provenance: arc12/l2-tools/report.mjs sha256 d66a34b2a499886d915a007dbb740ad27865876c03d3af90bf3a921590615225 (census v7.1, 2026-10-10: the
-// unresolved-caller section; v7 was 44b91e89, adopted by the DT 2026-10-09).
+// Provenance: arc12/l2-tools/report.mjs sha256 8a8ca98cba3b6dab6637a9245ddcbab1cf59eb3ed220b6e65c630329afcb8696 (census v7.1.1, 2026-10-10: the
+// tag-name audit list dropped with the fallback; v7.1 was d66a34b2 -- the unresolved-caller section; v7 was 44b91e89).
 
 /** @param {object} d  classifyPassThrough() output. @param {object} raw  sweepPassThrough() output. */
 export function summarizePassThrough(d, raw, { head = null } = {}) {
@@ -158,7 +158,7 @@ const out = {
     skinRuleCount: 'comma-split selectors in the engine skin set (modern -> modern+presentation, rustic -> rustic+presentation, classic -> presentation, compound -> all three) of the same family that select the canonical part; stateRules = those also selecting [data-state]',
   },
   totals,
-  unresolvedCallers: { note: 'v7.1: every opener with a literal data-part/data-state on a capitalised tag whose family did not resolve (import path, lexical re-export chain, tag name). The classes local-intrinsic-variable, local-component, third-party and non-family-component are proven by the evidence column; the GENUINELY UNRESOLVABLE set (local-dynamic-binding, unresolvable) must be empty or individually justified.', total: raw.unresolvedCallers.length, byClass: unresolvedByClass, genuinelyUnresolvable, rows: raw.unresolvedCallers, tagNameOverChain: raw.tagNameOverChain ?? [], resolvedToNonBreachingFamily: raw.nonBreachingCallers ?? {} },
+  unresolvedCallers: { note: 'v7.1: every opener with a literal data-part/data-state on a capitalised tag whose family did not resolve (import path or lexical re-export chain; v7.1.1: a tag name alone proves nothing). The classes local-intrinsic-variable, local-component, third-party and non-family-component are proven by the evidence column; the GENUINELY UNRESOLVABLE set (local-dynamic-binding, unresolvable) must be empty or individually justified.', total: raw.unresolvedCallers.length, byClass: unresolvedByClass, genuinelyUnresolvable, rows: raw.unresolvedCallers, resolvedToNonBreachingFamily: raw.nonBreachingCallers ?? {} },
   sites,
   paths: pathList,
   pinCheck: d.pinCheck,

@@ -26,6 +26,10 @@
  * tag is also resolved THROUGH a barrel by its lexical re-export chain (Text/Heading ->
  * typography, the one family whose tag is not its name), and no opener is skipped in silence:
  * what does not resolve is listed, classified and counted in `census.unresolvedCallers`.
+ *
+ * v7.1.1 (2026-10-10; census be21d40e / report 8a8ca98c): the tag-name fallback is removed. A family
+ * is attributed by proof only (import path or re-export chain); a tag that merely shares a
+ * family's name (antd's Card, a local `Grid` element variable) is reported, never counted.
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';

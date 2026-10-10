@@ -8,8 +8,8 @@
  * family-cut G1 all read. The body below is the adopted census.mjs verbatim; only its CLI shell
  * (argv, the JSON write, console output) is replaced by this function's parameters and return.
  */
-// Provenance: arc12/l2-tools/census.mjs sha256 3ca4db81466ecdb962b4feaa417397e8df81e5696b80e44f1e13cfabd5b6d3d2 (census v7.1, 2026-10-10: the lexical
-// re-export chain and the unresolved-caller report; v7 was 1937b947, adopted by the DT 2026-10-09).
+// Provenance: arc12/l2-tools/census.mjs sha256 be21d40e863aeaedd6462b429f9ea1269b46ac49b1ccc9a766e726fc8d5b0587 (census v7.1.1, 2026-10-10: the tag-name
+// fallback removed; v7.1 was 3ca4db81 -- the lexical re-export chain and the unresolved-caller report; v7 was 1937b947).
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, relative, dirname, resolve } from 'node:path';
 import { createRequire } from 'node:module';
@@ -83,11 +83,6 @@ const familyDirs = new Map(); // abs dir -> family name
 for (const f of allFiles) {
   const m = f.match(/^(.*)\/engines\/(classic|modern|rustic)\/index\.tsx$/);
   if (m) familyDirs.set(m[1], m[1].split('/').pop());
-}
-const familyByName = new Map();
-for (const [dir, name] of familyDirs) {
-  if (!familyByName.has(name)) familyByName.set(name, []);
-  familyByName.get(name).push(dir);
 }
 
 // ---------- AST helpers ----------
@@ -543,7 +538,6 @@ for (const r of engineSites) {
   if (r.state === 'state-forward') b.state.add(r.engine);
   if (r.state === 'state-rest') b.stateRest.add(r.engine);
 }
-const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 // v7.1 (ARC-12): the LEXICAL re-export chain. v7 attributed a caller by its import path landing
 // INSIDE a family dir, else by kebab(tag) being a family name. `import { Text } from
 // '@/components/primitives'` lands in no family dir and 'text' is no family ('typography' is), so
@@ -633,9 +627,12 @@ function followExport(file, name, seen, path) {
   }
   return { broken: `no export '${name}' in ${rel(file)}` };
 }
-function resolveFamily(file, tag, imp) {
-  const name = tag.split('.')[0];
-  const cand = kebab(name);
+// v7.1.1: the kebab(tag)-is-a-family-name fallback is GONE. Once the chain existed it fired on two
+// rows and was wrong on both (antd's Card counted as `card`; a local `"dl" | "div"` variable named
+// Grid counted as `grid`): a name guess beating a proven path. A family is now attributed by
+// proof only -- the import path or the chain -- and a tag that merely shares a family's name is
+// reported like any other unresolved opener.
+function resolveFamily(file, imp) {
   let chain = null;
   if (imp) {
     const base = specBase(file, imp.spec);
@@ -646,10 +643,6 @@ function resolveFamily(file, tag, imp) {
       if (chain.family) return { family: chain.family, how: 're-export-chain' };
     } else chain = { thirdParty: imp.spec };
   }
-  const dirs = familyByName.get(cand);
-  // The tag-name fallback is kept for tag == family. `chain` rides along so a fallback taken
-  // AGAINST a proven non-family chain is auditable (tagNameOverChain).
-  if (dirs && dirs.length) return { family: cand, how: 'tag-name', chain };
   return { family: null, chain };
 }
 const NATIVE_PARTS = new Set(); for (const r of fileResults.values()) for (const x of r.native) NATIVE_PARTS.add(x);
@@ -665,12 +658,11 @@ const compoundSites = [];
 //   unresolvable              no import and no local binding, or a chain that breaks
 // The last two are the GENUINELY UNRESOLVABLE set: it must be empty or individually justified.
 const unresolvedCallers = [];
-const tagNameOverChain = [];
 const nonBreachingCallers = {}; // family -> openers resolved to a family whose engines let no caller part/state land
 for (const [f, r] of fileResults) {
   for (const u of r.compoundUses) {
     const imp = r.imports.get(u.tag.split('.')[0]);
-    const res = resolveFamily(f, u.tag, imp);
+    const res = resolveFamily(f, imp);
     if (!res.family) {
       const ch = res.chain;
       const cls = u.tagKind === 'ant' || (ch && ch.thirdParty) ? 'third-party'
@@ -683,10 +675,6 @@ for (const [f, r] of fileResults) {
         : u.localInit ? `local binding = ${u.localInit}` : `tagKind ${u.tagKind}, no import`;
       unresolvedCallers.push({ file: rel(f), line: u.line, tag: u.tag, callerPart: u.part, callerState: u.state, class: cls, importSpec: imp ? imp.spec : null, evidence });
       continue;
-    }
-    if (res.how === 'tag-name' && (!imp || (res.chain && !res.chain.family))) {
-      const ch = res.chain;
-      tagNameOverChain.push({ file: rel(f), line: u.line, tag: u.tag, family: res.family, importSpec: imp ? imp.spec : null, chain: !ch ? `no import (tagKind ${u.tagKind})` : ch.thirdParty ? `package ${ch.thirdParty}` : ch.definedIn ? `declared in ${ch.definedIn}` : ch.broken });
     }
     const b = breachingFamilies.get(res.family);
     if (!b) { nonBreachingCallers[res.family] = (nonBreachingCallers[res.family] ?? 0) + 1; continue; }
@@ -747,5 +735,5 @@ for (const [f, r] of fileResults) {
 
 const nativeParts = new Set(); for (const r of fileResults.values()) for (const x of r.native) nativeParts.add(x);
 for (const c of compoundSites) c.callerPartNativelyStamped = (c.callerPart ?? '').split('|').filter(Boolean).some((x) => nativeParts.has(x));
-return { nativeParts: [...nativeParts].sort(), engineSites, structuralSites, compoundSites, unresolvedCallers, tagNameOverChain, nonBreachingCallers, familiesWithSkin: [...familiesWithSkin].sort(), engineFileCount: [...fileResults.keys()].filter((f) => /\/engines\/(classic|modern|rustic)\/index\.tsx$/.test(f)).length, skinSelectorCount: skinSelectors.length };
+return { nativeParts: [...nativeParts].sort(), engineSites, structuralSites, compoundSites, unresolvedCallers, nonBreachingCallers, familiesWithSkin: [...familiesWithSkin].sort(), engineFileCount: [...fileResults.keys()].filter((f) => /\/engines\/(classic|modern|rustic)\/index\.tsx$/.test(f)).length, skinSelectorCount: skinSelectors.length };
 }
