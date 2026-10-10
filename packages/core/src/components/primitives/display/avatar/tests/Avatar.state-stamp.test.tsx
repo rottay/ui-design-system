@@ -90,11 +90,15 @@ describe('Avatar modern state stamp', () => {
     expect(root.hasAttribute('data-state')).toBe(false);
   });
 
-  it('keeps the stamp when a composing family renames the part', () => {
+  it('keeps its own part and the stamp when a composing family names the avatar', () => {
+    // A composing family names its avatar through className; a caller data-part
+    // never replaces the avatar's own part or its state producer.
     const { container } = render(
-      <ModernAvatar name="Ada Lovelace" clickable data-part="assignee" />,
+      <ModernAvatar name="Ada Lovelace" clickable className="ds-planted__assignee" data-part="assignee" />,
     );
-    const root = container.querySelector<HTMLElement>("[data-part='assignee']")!;
+    expect(container.querySelector("[data-part='assignee']")).toBeNull();
+    const root = container.querySelector<HTMLElement>('.ds-planted__assignee')!;
+    expect(root.getAttribute('data-part')).toBe('root');
     fireEvent.pointerEnter(root);
     expect(root.getAttribute('data-state')).toBe('hovered');
   });

@@ -218,7 +218,7 @@ function ModerationCard({
 
       <div data-part="card-footer">
         <span data-part="card-uploader">
-          <ModernAvatar name={item.uploadedBy} size="xs" data-part="card-avatar" />
+          <ModernAvatar name={item.uploadedBy} size="xs" />
           <span data-part="card-uploader-name">{item.uploadedBy}</span>
         </span>
         <span data-part="card-meta">

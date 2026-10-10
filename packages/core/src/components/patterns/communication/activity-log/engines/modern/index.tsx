@@ -498,7 +498,7 @@ export default function ModernActivityLog(props: ActivityLogProps) {
                     <>
                       {/* Header: composed Avatar + name + composed Tag badge + entity */}
                       <div data-part="item-header">
-                        <ModernAvatar data-part="avatar" name={activity.user.name} src={activity.user.avatar} size="sm" />
+                        <ModernAvatar name={activity.user.name} src={activity.user.avatar} size="sm" />
                         {/* title mirrors the full string: the skin truncates
                             long names/entities with ellipsis (truncation must
                             never eat content silently). */}

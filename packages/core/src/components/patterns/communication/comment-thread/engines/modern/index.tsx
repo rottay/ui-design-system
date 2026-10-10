@@ -151,7 +151,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
     <div data-part="comment">
       <div data-part="comment-row">
         <div data-part="avatar-col">
-          <ModernAvatar data-part="avatar" size="sm" src={comment.author.avatar} name={comment.author.name} />
+          <ModernAvatar size="sm" src={comment.author.avatar} name={comment.author.name} />
         </div>
         <div data-part="comment-main">
           <div data-part="comment-head">
@@ -395,7 +395,7 @@ export default function ModernCommentThread(props: CommentThreadProps) {
       {onAdd && currentUser && (
         <div data-part="composer-row">
           <div data-part="avatar-col">
-            <ModernAvatar data-part="avatar" size="sm" src={currentUser.avatar} name={currentUser.name} />
+            <ModernAvatar size="sm" src={currentUser.avatar} name={currentUser.name} />
           </div>
           <div
             data-part="composer-main"

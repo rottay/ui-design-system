@@ -15,19 +15,11 @@
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 93,
+  "passThroughViolations": 92,
   "callerPartDependents": 833,
   "callerStateDependents": 16
  },
  "roster": [
-  {
-   "key": "primitives/display/avatar/engines/modern/index.tsx#default#div#root#0",
-   "engine": "modern",
-   "family": "avatar",
-   "breach": [
-    "part-replace"
-   ]
-  },
   {
    "key": "primitives/display/card/compound/body/index.tsx#CardBody#div#body#0",
    "engine": "all (compound)",
@@ -852,11 +844,6 @@
  ],
  "families": {
   "aspect-ratio": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
-  "avatar": {
    "carrier": false,
    "part": [],
    "state": []
@@ -1897,7 +1884,7 @@
   ]
  },
  "lastMove": {
-  "head": "4142593ba121cbd711525f81f87c3e84af6742ea",
+  "head": "69b2747463863c0e29982c22086c23bb021495e9",
   "date": "2026-10-10",
   "note": "lowered to the gate's own measurement through --update-baseline"
  }

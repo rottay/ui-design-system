@@ -88,7 +88,6 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     ringColor,
     className = "",
     style,
-    'data-part': dataPart,
   } = props;
 
   // tone (semantic) takes precedence over the deprecated variant prop; the skin's
@@ -216,7 +215,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
   return (
     <div
       className={containerClass}
-      {...partAttributes(dataPart ?? "root", isInteractive ? interaction : {})}
+      {...partAttributes("root", isInteractive ? interaction : {})}
       data-variant={variant}
       data-shape={shape}
       data-size={size}

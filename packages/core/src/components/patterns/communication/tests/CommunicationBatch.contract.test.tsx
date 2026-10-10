@@ -115,8 +115,12 @@ describe('comment-thread -- data-part contract (communication-pattern anatomy)',
     expect(root.className).toContain('ds-pattern-comment-thread');
     expect(root.className).toContain(`ds-engine-${engine}`);
 
-    // avatar reused for both the composer and each rendered comment
-    expect(q(container, '[data-part="avatar"]').length).toBeGreaterThanOrEqual(2);
+    // avatar reused for both the composer and each rendered comment. P-88: the
+    // composed Avatar keeps its own `root` part; it is found in the family's avatar column.
+    expect(
+      q(container, '[data-part="avatar-col"] > .rottay-avatar.rottay-avatar--modern[data-part="root"]').length,
+    ).toBeGreaterThanOrEqual(2);
+    expect(q(container, '[data-part="avatar"]')).toHaveLength(0);
     // reaction pill state, both values present
     expect(q(container, '[data-part="reaction"][data-active="true"]')).toHaveLength(1);
     expect(q(container, '[data-part="reaction"][data-active="false"]')).toHaveLength(1);
@@ -288,7 +292,15 @@ describe('activity-log -- data-part contract (communication-pattern anatomy)', (
     }
 
     // avatar: image branch (Bob) + fallback-initial branch (Ana, Cid)
-    expect(q(container, '[data-part="avatar"]')).toHaveLength(3);
+    if (engine === 'modern') {
+      // P-88: the composed Avatar keeps its own `root` part; it is found in the item header.
+      expect(
+        q(container, '[data-part="item-header"] > .rottay-avatar.rottay-avatar--modern[data-part="root"]'),
+      ).toHaveLength(3);
+      expect(q(container, '[data-part="avatar"]')).toHaveLength(0);
+    } else {
+      expect(q(container, '[data-part="avatar"]')).toHaveLength(3);
+    }
     expect(q(container, '[data-part="badge"]')).toHaveLength(3);
     expect(q(container, '[data-part="entity"]')).toHaveLength(1);
     expect(q(container, '[data-part="timestamp"]')).toHaveLength(3);
