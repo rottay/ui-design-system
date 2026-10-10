@@ -740,6 +740,11 @@ export function analyzeSource(file, source = ts.createSourceFile(
    * never be a caller-part element and is native anatomy by construction. */
   const partOccurrences = [];
   const nonElementParts = new Set();
+  /* F1: the `'data-part'` property of an object handed to a COMPOSED tag is the composed
+   * component's to stamp, so it is not native anatomy by construction (see measureFamily). */
+  const handoffPartProperties = new Set();
+  /* Non-enumerable, so the measured shapes never carry a syntax node. */
+  const withElement = (entry, element) => Object.defineProperty(entry, 'element', { value: element });
 
   const styleObjects = new Set();
   const namedObjects = new Map();
@@ -781,12 +786,12 @@ export function analyzeSource(file, source = ts.createSourceFile(
         const attributes = node.attributes.properties.filter(ts.isJsxAttribute);
         const literals = (name) => attributes.filter((attribute) => attributeName(attribute) === name)
           .flatMap((attribute) => attributeLiterals(attribute));
-        composedRender = {
+        composedRender = withElement({
           tag,
           parts: literals('data-part'),
           handoffs: [],
           classes: literals('className').flatMap((value) => value.split(/\s+/u)).filter(Boolean),
-        };
+        }, node);
         composedRenders.push(composedRender);
       }
       if (SKELETON_WORD.test(tag) && tag !== SKELETON_RENDERER_EXPORT) {
@@ -806,14 +811,15 @@ export function analyzeSource(file, source = ts.createSourceFile(
             .map((property) => [property.name.getText(source).replace(/^['"]|['"]$/gu, ''), property]));
           const partProperty = keyed.get('data-part');
           if (!partProperty) continue;
+          handoffPartProperties.add(partProperty);
           for (const part of literalsIn(partProperty.initializer)) {
-            anatomyHandoffs.push({
+            anatomyHandoffs.push(withElement({
               part,
               tag,
               prop: attributeName(attribute),
               decidesState: keyed.has('data-state'),
               line: lineOf(node),
-            });
+            }, node));
             /* Kept on THIS instance only; it anchors the composed-part credit
              * once the component is shown to read this prop and stamp the part. */
             composedRender.handoffs.push({ prop: attributeName(attribute), part });
@@ -867,7 +873,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
         const found = literalsIn(node.initializer);
         if (found.length === 0) dynamicParts += 1;
         for (const value of found) parts.add(value);
-        for (const value of found) nonElementParts.add(value);
+        if (!handoffPartProperties.has(node)) for (const value of found) nonElementParts.add(value);
       } else if (key === 'data-state') {
         stampsStateAttribute = true;
         for (const value of literalsIn(node.initializer)) {
@@ -888,7 +894,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
         const element = node.parent?.parent;
         if (element && (ts.isJsxOpeningElement(element) || ts.isJsxSelfClosingElement(element))) {
           const at = { line: lineOf(element), tag: element.tagName.getText(source) };
-          for (const value of found) partOccurrences.push({ ...at, part: value });
+          for (const value of found) partOccurrences.push(withElement({ ...at, part: value }, element));
         } else {
           for (const value of found) nonElementParts.add(value);
         }
@@ -1418,211 +1424,624 @@ function composedComponentStampsPart(handoff, specifier, fromFile) {
 
 const composedPartStampCache = new Map();
 const consumptionCache = new Map();
+const moduleSourceCache = new Map();
+
+/** The parsed TSX of a module file, or undefined when it does not exist. */
+function moduleSource(file) {
+  if (!moduleSourceCache.has(file)) {
+    moduleSourceCache.set(file, existsSync(file)
+      ? ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
+      : undefined);
+  }
+  return moduleSourceCache.get(file);
+}
+
+/** The module file a specifier names: relative, `@/` (src) or `@ui/` (src/components). A package is not followed. */
+function resolveModuleSpecifier(specifier, fromFile, root) {
+  let base;
+  if (specifier.startsWith('.')) base = resolve(dirname(fromFile), specifier);
+  else if (specifier.startsWith('@/')) base = join(root, 'src', specifier.slice(2));
+  else if (specifier.startsWith('@ui/')) base = join(root, 'src', 'components', specifier.slice(4));
+  else return undefined;
+  return [`${base}.tsx`, `${base}.ts`, join(base, 'index.tsx'), join(base, 'index.ts')]
+    .find((candidate) => existsSync(candidate));
+}
+
+const hasModifier = (node, kind) => node.modifiers?.some((modifier) => modifier.kind === kind) ?? false;
+const isExportedStatement = (node) => hasModifier(node, ts.SyntaxKind.ExportKeyword);
+
+/** The identifier a binding name declares as `name`, searching through destructuring patterns. */
+function bindingNamed(nameNode, name) {
+  if (!nameNode) return undefined;
+  if (ts.isIdentifier(nameNode)) return nameNode.text === name ? nameNode : undefined;
+  if (ts.isObjectBindingPattern(nameNode) || ts.isArrayBindingPattern(nameNode)) {
+    for (const element of nameNode.elements) {
+      const found = ts.isBindingElement(element) ? bindingNamed(element.name, name) : undefined;
+      if (found) return found;
+    }
+  }
+  return undefined;
+}
 
 /**
- * What a composed component's OWN source does with the anatomy a caller hands
- * it: `direct` when a caller `data-part` reaches a DOM `data-part` (read from
- * the props and stamped, or carried by a rest/props spread that is the last
- * part setter on its element), and `props` naming every object prop whose
- * `'data-part'` it reads and stamps (`anatomy?.['data-part']`, or the object
- * spread onto an element as its last part setter). A prop the component never
- * reads, or reads without stamping, is absent: an accepted-but-unrendered part
- * anchors nothing. Aliases (`const part = dataPart ?? 'root'`) and object
- * carriers (`const attrs = { ...partAttributes(part, s) }`) are followed.
- * Caller props bind only to the exported top-level component function, and
- * only an intrinsic element is a stamp: a nested callback, a handler, a helper
- * or a composed child (`<Item {...item} />`, `createElement(Item, props)`) is
- * closed, so what cannot be followed earns no credit.
+ * The LEXICAL declaration `name` resolves to from `from`: the innermost
+ * parameter, variable, function or import that declares it. Returns the
+ * declaring identifier, so a nested callback's `item` never resolves to the
+ * component's props and a shadowing name hides the outer one.
  */
-export function composedConsumption(file) {
-  if (consumptionCache.has(file)) return consumptionCache.get(file);
-  const result = { direct: false, props: new Set() };
-  if (!existsSync(file)) {
-    consumptionCache.set(file, result);
-    return result;
-  }
-  const source = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
-  const keyOf = (name) => name.getText(source).replace(/^['"]|['"]$/gu, '');
-  const DIRECT = 'direct';
-  /** identifier -> what it carries: DIRECT (the caller part), `prop:<name>` (a handed object or its part). */
-  const values = new Map();
-  /** identifier -> part-setter kind of an object it holds (spread onto an element). */
-  const carriers = new Map();
-  const parameters = new Set();
-  const isPartKey = (node) => node && (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) && node.text === 'data-part';
-
-  /** The kind a value expression carries into a `data-part` slot, or undefined (own literal / unknown). */
-  const valueKind = (expression) => {
-    let kind;
-    const walk = (node) => {
-      if (kind) return;
-      if (ts.isElementAccessExpression(node) && isPartKey(node.argumentExpression)) {
-        const target = unwrapTransparent(node.expression);
-        if (ts.isIdentifier(target)) {
-          const held = values.get(target.text);
-          if (held?.startsWith('object:')) { kind = `prop:${held.slice(7)}`; return; }
-          if (parameters.has(target.text)) { kind = DIRECT; return; }
+function declarationOf(name, from) {
+  for (let node = from.parent; node; node = node.parent) {
+    if (ts.isFunctionLike(node) && node.parameters) {
+      for (const parameter of node.parameters) {
+        const found = bindingNamed(parameter.name, name);
+        if (found) return found;
+      }
+    }
+    const statements = ts.isSourceFile(node) || ts.isBlock(node) || ts.isModuleBlock(node)
+      || ts.isCaseClause(node) || ts.isDefaultClause(node) ? node.statements : undefined;
+    if (!statements) continue;
+    for (const statement of statements) {
+      if (ts.isVariableStatement(statement)) {
+        for (const declaration of statement.declarationList.declarations) {
+          const found = bindingNamed(declaration.name, name);
+          if (found) return found;
         }
-        /* `props.anatomy?.['data-part']`: the prop read straight off the props object. */
-        if (ts.isPropertyAccessExpression(target) && ts.isIdentifier(target.expression) && parameters.has(target.expression.text)) {
-          kind = `prop:${target.name.text}`;
-          return;
+      } else if ((ts.isFunctionDeclaration(statement) || ts.isClassDeclaration(statement)) && statement.name?.text === name) {
+        return statement.name;
+      } else if (ts.isImportDeclaration(statement) && statement.importClause && !statement.importClause.isTypeOnly) {
+        const clause = statement.importClause;
+        if (clause.name?.text === name) return clause.name;
+        if (clause.namedBindings && ts.isNamedImports(clause.namedBindings)) {
+          const element = clause.namedBindings.elements.find((entry) => entry.name.text === name);
+          if (element) return element.name;
         }
       }
-      if (ts.isIdentifier(node)) {
-        const held = values.get(node.text);
-        if (held === DIRECT || held?.startsWith('prop:')) { kind = held; return; }
+    }
+  }
+  return undefined;
+}
+
+/** `{ file, node }` for an EXPORTED name of a module, through `export { … } from`, `export *` and `export default X`. */
+function resolveExport(file, name, root, seen = new Set()) {
+  const key = `${file}\0${name}`;
+  if (seen.has(key)) return undefined;
+  seen.add(key);
+  const source = moduleSource(file);
+  if (!source) return undefined;
+  for (const statement of source.statements) {
+    if (name === 'default' && ts.isExportAssignment(statement) && !statement.isExportEquals) {
+      const expression = unwrapTransparent(statement.expression);
+      return ts.isIdentifier(expression) ? resolveModuleName(file, expression.text, root, seen) : { file, node: expression };
+    }
+    if (ts.isFunctionDeclaration(statement) && isExportedStatement(statement)) {
+      const isDefault = hasModifier(statement, ts.SyntaxKind.DefaultKeyword);
+      if (name === 'default' ? isDefault : !isDefault && statement.name?.text === name) return { file, node: statement };
+    }
+    if (ts.isVariableStatement(statement) && isExportedStatement(statement) && name !== 'default') {
+      const declaration = statement.declarationList.declarations
+        .find((entry) => ts.isIdentifier(entry.name) && entry.name.text === name);
+      if (declaration) return { file, node: declaration };
+    }
+    if (ts.isExportDeclaration(statement) && !statement.isTypeOnly && statement.exportClause
+      && ts.isNamedExports(statement.exportClause)) {
+      const element = statement.exportClause.elements.find((entry) => entry.name.text === name && !entry.isTypeOnly);
+      if (!element) continue;
+      const local = (element.propertyName ?? element.name).text;
+      if (!statement.moduleSpecifier) return resolveModuleName(file, local, root, seen);
+      const target = resolveModuleSpecifier(statement.moduleSpecifier.text, file, root);
+      return target ? resolveExport(target, local, root, seen) : undefined;
+    }
+  }
+  if (name === 'default') return undefined;
+  for (const statement of source.statements) {
+    if (ts.isExportDeclaration(statement) && statement.moduleSpecifier && !statement.exportClause && !statement.isTypeOnly) {
+      const target = resolveModuleSpecifier(statement.moduleSpecifier.text, file, root);
+      const found = target && resolveExport(target, name, root, seen);
+      if (found) return found;
+    }
+  }
+  return undefined;
+}
+
+/** `{ file, node }` for a MODULE-scope name: its top-level declaration, or the export its import names. */
+function resolveModuleName(file, name, root, seen = new Set()) {
+  const source = moduleSource(file);
+  if (!source) return undefined;
+  const declared = declarationOf(name, source.statements[0] ?? source);
+  return declared ? resolveDeclared(file, declared, root, seen) : undefined;
+}
+
+/** `{ file, node }` for a declaring identifier at module scope: a local declaration, or the import's target export. */
+function resolveDeclared(file, identifier, root, seen = new Set()) {
+  const holder = identifier.parent;
+  if (ts.isFunctionDeclaration(holder)) return { file, node: holder };
+  if (ts.isVariableDeclaration(holder) && holder.name === identifier && ts.isSourceFile(holder.parent.parent.parent)) {
+    return { file, node: holder };
+  }
+  const importDeclaration = ts.isImportClause(holder) ? holder.parent
+    : ts.isImportSpecifier(holder) ? holder.parent.parent.parent : undefined;
+  if (!importDeclaration || !ts.isStringLiteral(importDeclaration.moduleSpecifier)) return undefined;
+  const target = resolveModuleSpecifier(importDeclaration.moduleSpecifier.text, file, root);
+  if (!target) return undefined;
+  const exported = ts.isImportClause(holder) ? 'default' : (holder.propertyName ?? holder.name).text;
+  return resolveExport(target, exported, root, seen);
+}
+
+/** The object literal an expression holds, directly or through a module-scope const. */
+function objectLiteralOf(file, expression, root) {
+  const node = expression && unwrapTransparent(expression);
+  if (!node) return undefined;
+  if (ts.isObjectLiteralExpression(node)) return { file, object: node };
+  if (!ts.isIdentifier(node)) return undefined;
+  const resolved = resolveModuleName(file, node.text, root);
+  const initializer = resolved && ts.isVariableDeclaration(resolved.node) && resolved.node.initializer
+    && unwrapTransparent(resolved.node.initializer);
+  return initializer && ts.isObjectLiteralExpression(initializer) ? { file: resolved.file, object: initializer } : undefined;
+}
+
+const propertyNamed = (object, name) => object.properties
+  .find((property) => (ts.isPropertyAssignment(property) || ts.isShorthandPropertyAssignment(property))
+    && property.name.getText().replace(/^['"]|['"]$/gu, '') === name);
+
+/**
+ * The render function a resolved component binding stands for, followed
+ * through `forwardRef`/`memo`, `Object.assign`, an alias, and the engine
+ * factories down to the MODERN implementation (`createSyncEngineComponent(n,
+ * { modern: X })`, `createEngineComponent(n, { modern: () => import('…') })`).
+ * A frozen engine, a loader it cannot read, or any other shape is undefined:
+ * not followed, no consumption.
+ */
+function componentTarget(resolved, root, seen = new Set(), bindings = undefined) {
+  if (!resolved || FROZEN_ENGINE_SEGMENT.test(toPosix(resolved.file))) return undefined;
+  const { file, node } = resolved;
+  if (seen.has(node)) return undefined;
+  seen.add(node);
+  const bound = (fn) => ({ file, fn, bindings, key: bindings ? `${toPosix(file)}:${fn.pos}|${bindings.key}` : fn });
+  if (ts.isFunctionDeclaration(node)) return node.body ? bound(node) : undefined;
+  const expression = unwrapTransparent(ts.isVariableDeclaration(node) ? node.initializer : node);
+  if (!expression) return undefined;
+  if (ts.isArrowFunction(expression) || ts.isFunctionExpression(expression)) return bound(expression);
+  if (ts.isIdentifier(expression)) {
+    const declared = declarationOf(expression.text, expression);
+    /* Inside a factory, the returned component is a LOCAL const: follow it with the same bindings. */
+    if (declared && ts.isVariableDeclaration(declared.parent) && !ts.isSourceFile(declared.parent.parent.parent)) {
+      return componentTarget({ file, node: declared.parent }, root, seen, bindings);
+    }
+    return componentTarget(resolveModuleName(file, expression.text, root), root, seen);
+  }
+  if (!ts.isCallExpression(expression)) return undefined;
+  const callee = expression.expression.getText();
+  const [first, second] = expression.arguments;
+  if (/(^|\.)(forwardRef|memo)$/u.test(callee) || callee === 'Object.assign') {
+    return componentTarget({ file, node: first }, root, seen, bindings);
+  }
+  if (/(^|\.)(createSyncEngineComponent|createEngineComponent)$/u.test(callee)) {
+    const holder = objectLiteralOf(file, second, root);
+    const modern = holder && propertyNamed(holder.object, 'modern');
+    if (!modern) return undefined;
+    const value = ts.isShorthandPropertyAssignment(modern) ? modern.name : unwrapTransparent(modern.initializer);
+    if (ts.isIdentifier(value)) return componentTarget(resolveModuleName(holder.file, value.text, root), root, seen);
+    /* `() => import('./engines/modern')`, optionally `.then((m) => ({ default: m.X }))`. */
+    if (!ts.isArrowFunction(value) || ts.isBlock(value.body)) return undefined;
+    let call = unwrapTransparent(value.body);
+    let exported = 'default';
+    if (ts.isCallExpression(call) && ts.isPropertyAccessExpression(call.expression) && call.expression.name.text === 'then') {
+      const mapper = call.arguments[0];
+      const mapped = mapper && ts.isArrowFunction(mapper) && !ts.isBlock(mapper.body) && unwrapTransparent(mapper.body);
+      const picked = mapped && ts.isObjectLiteralExpression(mapped) && propertyNamed(mapped, 'default');
+      const access = picked && ts.isPropertyAssignment(picked) && unwrapTransparent(picked.initializer);
+      if (!access || !ts.isPropertyAccessExpression(access)) return undefined;
+      exported = access.name.text;
+      call = unwrapTransparent(call.expression.expression);
+    }
+    if (!ts.isCallExpression(call) || call.expression.kind !== ts.SyntaxKind.ImportKeyword
+      || !call.arguments[0] || !ts.isStringLiteralLike(call.arguments[0])) {
+      return undefined;
+    }
+    const target = resolveModuleSpecifier(call.arguments[0].text, holder.file, root);
+    return target ? componentTarget(resolveExport(target, exported, root), root, seen) : undefined;
+  }
+  /* A component FACTORY (`createSemanticIcon(SsrGlyph, …)`): an in-repo module function whose
+   * `return` is a component. Its render function is read with the factory's parameters BOUND
+   * to this call's arguments, so `const Glyph = glyph` resolves to the caller's `SsrGlyph`. */
+  if (ts.isIdentifier(expression.expression)) {
+    const factory = resolveModuleName(file, expression.expression.text, root);
+    const factoryFn = factory && (ts.isFunctionDeclaration(factory.node) ? factory.node
+      : ts.isVariableDeclaration(factory.node) && factory.node.initializer
+        && [unwrapTransparent(factory.node.initializer)].find((value) => ts.isArrowFunction(value) || ts.isFunctionExpression(value)));
+    if (!factoryFn?.body || !ts.isBlock(factoryFn.body) || FROZEN_ENGINE_SEGMENT.test(toPosix(factory.file))) return undefined;
+    const parameters = new Map();
+    factoryFn.parameters.forEach((parameter, index) => {
+      if (ts.isIdentifier(parameter.name) && expression.arguments[index]) {
+        parameters.set(parameter.name, { file, expression: expression.arguments[index] });
+      }
+    });
+    const returned = factoryFn.body.statements.filter(ts.isReturnStatement).map((statement) => statement.expression);
+    if (returned.length !== 1 || !returned[0]) return undefined;
+    const factoryBindings = { parameters, key: `${toPosix(file)}:${expression.pos}` };
+    return componentTarget({ file: factory.file, node: returned[0] }, root, seen, factoryBindings);
+  }
+  return undefined;
+}
+
+/**
+ * The COMMITTED RUNTIME PIN that admits a package component as a stamp: the
+ * icon system's contract test renders every exported semantic and catalog icon
+ * and every package glyph it enumerates with a caller `data-part` and asserts
+ * it lands on the rendered `<svg>`. A package hop counts as consumed only for a
+ * glyph the manifest enumerates (`specifier#export`), and only while BOTH the
+ * manifest and its contract test exist: no pin, no evidence, no stamp.
+ */
+export const CALLER_PART_PIN = 'src/graphics/icons/tests/caller-part-pin.json';
+export const CALLER_PART_PIN_CONTRACT = 'src/graphics/icons/tests/caller-part-pin.contract.test.tsx';
+const callerPartPinCache = new Map();
+function pinnedPackageGlyphs(root) {
+  if (!callerPartPinCache.has(root)) {
+    let glyphs = new Set();
+    const manifest = join(root, CALLER_PART_PIN);
+    if (existsSync(manifest) && existsSync(join(root, CALLER_PART_PIN_CONTRACT))) {
+      try {
+        const parsed = JSON.parse(readFileSync(manifest, 'utf8'));
+        if (Array.isArray(parsed.glyphs)) glyphs = new Set(parsed.glyphs.filter((entry) => typeof entry === 'string'));
+      } catch {
+        glyphs = new Set();
+      }
+    }
+    callerPartPinCache.set(root, glyphs);
+  }
+  return callerPartPinCache.get(root);
+}
+
+/**
+ * What a factory-parameter tag is bound to at the call site: an in-repo
+ * component target, `{ pinned }` for a package export the runtime pin
+ * enumerates, or undefined (an unpinned package, or anything unresolvable).
+ */
+function boundComponent(argument, root) {
+  const value = unwrapTransparent(argument.expression);
+  if (!ts.isIdentifier(value)) return undefined;
+  const declared = declarationOf(value.text, value);
+  if (!declared) return undefined;
+  const holder = declared.parent;
+  const importDeclaration = ts.isImportClause(holder) ? holder.parent
+    : ts.isImportSpecifier(holder) ? holder.parent.parent.parent : undefined;
+  const specifier = importDeclaration && ts.isStringLiteral(importDeclaration.moduleSpecifier)
+    ? importDeclaration.moduleSpecifier.text
+    : undefined;
+  if (specifier && !resolveModuleSpecifier(specifier, argument.file, root)) {
+    if (specifier.startsWith('.') || specifier.startsWith('@/') || specifier.startsWith('@ui/')) return undefined;
+    const exported = ts.isImportClause(holder) ? 'default' : (holder.propertyName ?? holder.name).text;
+    const key = `${specifier}#${exported}`;
+    return pinnedPackageGlyphs(root).has(key) ? { pinned: key } : undefined;
+  }
+  return componentTarget(resolveDeclared(argument.file, declared, root), root);
+}
+
+const NO_CONSUMPTION = Object.freeze({ direct: false, props: new Set() });
+
+/**
+ * The literal a constant expression evaluates to, through const aliases,
+ * imports and object-literal member paths (`TYPOGRAPHY_DEFAULTS.text.as`), or
+ * undefined when any step is not a constant this reader can see.
+ */
+function constantOf(expression, root, depth = 0) {
+  const node = expression && unwrapTransparent(expression);
+  if (!node || depth > 8) return undefined;
+  if (ts.isStringLiteralLike(node) || ts.isObjectLiteralExpression(node)) return node;
+  if (ts.isIdentifier(node)) {
+    const declared = declarationOf(node.text, node);
+    if (!declared) return undefined;
+    const holder = declared.parent;
+    if (ts.isVariableDeclaration(holder) && holder.name === declared && holder.initializer) {
+      return constantOf(holder.initializer, root, depth + 1);
+    }
+    if (ts.isImportClause(holder) || ts.isImportSpecifier(holder)) {
+      const resolved = resolveDeclared(node.getSourceFile().fileName, declared, root);
+      return resolved && ts.isVariableDeclaration(resolved.node)
+        ? constantOf(resolved.node.initializer, root, depth + 1)
+        : undefined;
+    }
+    return undefined;
+  }
+  if (ts.isPropertyAccessExpression(node)) {
+    const object = constantOf(node.expression, root, depth + 1);
+    const member = object && ts.isObjectLiteralExpression(object) && propertyNamed(object, node.name.text);
+    return member && ts.isPropertyAssignment(member) ? constantOf(member.initializer, root, depth + 1) : undefined;
+  }
+  return undefined;
+}
+/** `a ?? b`, `a || b`, `a && b` and `c ? a : b` evaluate to one of their operands. */
+const VALUE_CHOICE_OPERATORS = new Set([
+  ts.SyntaxKind.QuestionQuestionToken,
+  ts.SyntaxKind.BarBarToken,
+  ts.SyntaxKind.AmpersandAmpersandToken,
+]);
+const isValueChoice = (node) => ts.isConditionalExpression(node)
+  || (ts.isBinaryExpression(node) && VALUE_CHOICE_OPERATORS.has(node.operatorToken.kind));
+const choices = (node) => (ts.isConditionalExpression(node) ? [node.whenTrue, node.whenFalse] : [node.left, node.right]);
+const keyText = (name) => name.getText().replace(/^['"]|['"]$/gu, '');
+
+/**
+ * What ONE component function does with the anatomy its caller hands it --
+ * `direct` when the caller's `data-part` reaches a DOM `data-part`, `props`
+ * naming each object prop whose `'data-part'` reaches one. Every identifier is
+ * resolved LEXICALLY to its declaration, so only the component's own first
+ * parameter is the caller's props; a nested callback, a handler, a helper or a
+ * shadowing name binds nothing. A stamp is an intrinsic element (a lowercase
+ * tag, a string `createElement` tag, or a polymorphic tag bound to a string or
+ * to a prop with an intrinsic default). A composed child is followed by name
+ * into its own component: the caller's part counts only where that child is
+ * itself shown to stamp it. What cannot be followed earns nothing.
+ */
+function functionConsumption(target, root, active = new Set()) {
+  if (!target) return NO_CONSUMPTION;
+  const cacheKey = target.key ?? target.fn;
+  if (consumptionCache.has(cacheKey)) return consumptionCache.get(cacheKey);
+  if (active.has(cacheKey)) return NO_CONSUMPTION;
+  active.add(cacheKey);
+  const result = { direct: false, props: new Set() };
+  const { tagOf, kindOf, partValue, spreadSetter } = componentScope(target, root);
+  const record = (setter) => {
+    if (setter === 'direct') result.direct = true;
+    else if (setter?.startsWith('prop:')) result.props.add(setter.slice(5));
+  };
+  /** Records one rendered element: its attributes in source order as [name | undefined (spread), expression]. */
+  const element = (tag, attributes) => {
+    const kind = tagOf(tag);
+    if (!kind) return;
+    let last;
+    for (const [name, expression] of attributes) {
+      if (name === undefined) last = spreadSetter(expression) ?? last;
+      else if (name === 'data-part') last = (expression && partValue(expression)) ?? 'own';
+    }
+    if (kind === 'intrinsic') {
+      record(last);
+      return;
+    }
+    /* A pinned package glyph is proven, at runtime, to stamp the caller part on its svg. */
+    const child = kind.pinned ? { direct: true, props: new Set() } : functionConsumption(kind, root, active);
+    if (child.direct) record(last);
+    /* A hand-off reaches the child under the SAME prop name; the last setter wins. */
+    for (const name of child.props) {
+      let carried;
+      for (const [attribute, expression] of attributes) {
+        if (attribute === undefined) {
+          const spread = kindOf(expression);
+          if (spread?.rest) carried = spread.rest.has(name) ? undefined : `prop:${name}`;
+        } else if (attribute === name) {
+          const value = expression && kindOf(expression);
+          carried = value?.object ? `prop:${value.object}` : undefined;
+        }
+      }
+      record(carried);
+    }
+  };
+  const stamp = (node) => {
+    if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+      element(node.tagName, node.attributes.properties.map((attribute) => (ts.isJsxSpreadAttribute(attribute)
+        ? [undefined, attribute.expression]
+        : [attributeName(attribute), attribute.initializer && ts.isJsxExpression(attribute.initializer)
+          ? attribute.initializer.expression
+          : undefined])));
+    }
+    /* `createElement(tag, props)` renders its props object exactly like a JSX element. */
+    if (ts.isCallExpression(node) && /(^|\.)createElement$/u.test(node.expression.getText()) && node.arguments[1]) {
+      element(node.arguments[0], [[undefined, node.arguments[1]]]);
+    }
+    ts.forEachChild(node, stamp);
+  };
+  if (target.fn.parameters[0] && target.fn.body) stamp(target.fn.body);
+  active.delete(cacheKey);
+  consumptionCache.set(cacheKey, result);
+  return result;
+}
+
+/**
+ * The lexical readers of ONE component function: only its first parameter is
+ * the caller's props. `kindOf` says what an expression carries ({ rest } the
+ * props object minus destructured keys, { object } one prop, { direct } the
+ * caller part, { prop } a prop's part, { setter } an attribute object);
+ * `tagOf` says what a tag renders ('intrinsic', a followed component target,
+ * or undefined).
+ */
+function componentScope({ file, fn, bindings }, root) {
+  const props = fn?.parameters?.[0];
+  const visiting = new Set();
+
+  /** What an identifier USE carries: { rest: Set<excluded> } (the props object), { object: key } (a prop), DIRECT, { prop: key }. */
+  const kindOfIdentifier = (use) => {
+    const declared = declarationOf(use.text, use);
+    if (!declared || visiting.has(declared)) return undefined;
+    visiting.add(declared);
+    try {
+      return kindOfDeclared(declared);
+    } finally {
+      visiting.delete(declared);
+    }
+  };
+  const patternSource = (pattern) => {
+    const holder = pattern.parent;
+    if (ts.isParameter(holder)) return holder === props ? { rest: new Set() } : undefined;
+    if (ts.isVariableDeclaration(holder)) return holder.initializer ? kindOf(holder.initializer) : undefined;
+    if (ts.isBindingElement(holder)) return elementKind(holder);
+    return undefined;
+  };
+  const elementKind = (element) => {
+    const pattern = element.parent;
+    if (!ts.isObjectBindingPattern(pattern)) return undefined;
+    const from = patternSource(pattern);
+    if (!from) return undefined;
+    if (element.dotDotDotToken) {
+      if (!from.rest) return undefined;
+      const excluded = new Set(from.rest);
+      for (const sibling of pattern.elements) {
+        if (sibling === element) continue;
+        excluded.add(sibling.propertyName ? keyText(sibling.propertyName) : sibling.name.getText());
+      }
+      return { rest: excluded };
+    }
+    const key = element.propertyName ? keyText(element.propertyName) : element.name.getText();
+    if (from.rest) return from.rest.has(key) ? undefined : key === 'data-part' ? { direct: true } : { object: key };
+    if (from.object && key === 'data-part') return { prop: from.object };
+    return undefined;
+  };
+  const kindOfDeclared = (declared) => {
+    const holder = declared.parent;
+    if (ts.isParameter(holder)) return holder === props ? { rest: new Set() } : undefined;
+    if (ts.isBindingElement(holder)) return elementKind(holder);
+    if (ts.isVariableDeclaration(holder) && holder.initializer) return kindOf(holder.initializer);
+    return undefined;
+  };
+  /** The kind an expression carries (see kindOfIdentifier), or { setter } for an object of part attributes. */
+  const kindOf = (expression) => {
+    const node = unwrapTransparent(expression);
+    if (!node) return undefined;
+    if (ts.isIdentifier(node)) return kindOfIdentifier(node);
+    if (ts.isElementAccessExpression(node) || ts.isPropertyAccessExpression(node)) {
+      const key = ts.isPropertyAccessExpression(node) ? node.name.text
+        : ts.isStringLiteralLike(node.argumentExpression) ? node.argumentExpression.text : undefined;
+      if (key === undefined) return undefined;
+      const base = kindOf(node.expression);
+      if (base?.rest && !base.rest.has(key)) return key === 'data-part' ? { direct: true } : { object: key };
+      if (base?.object && key === 'data-part') return { prop: base.object };
+      return undefined;
+    }
+    if (isValueChoice(node)) return choices(node).map(kindOf).find(Boolean);
+    if (ts.isObjectLiteralExpression(node)) {
+      const setter = objectSetter(node);
+      return setter ? { setter } : undefined;
+    }
+    if (ts.isCallExpression(node)) {
+      const callee = node.expression.getText();
+      if ((callee === 'partAttributes' || callee.endsWith('.partAttributes')) && node.arguments[0]) {
+        return { setter: partValue(node.arguments[0]) ?? 'own' };
+      }
+    }
+    return undefined;
+  };
+  /** What a `data-part` VALUE expression carries: 'direct', `prop:<key>`, or undefined (its own literal / unknown). */
+  const partValue = (expression) => {
+    let found;
+    const walk = (node) => {
+      if (found || ts.isFunctionLike(node)) return;
+      if (ts.isIdentifier(node) || ts.isElementAccessExpression(node) || ts.isPropertyAccessExpression(node)) {
+        const kind = kindOf(node);
+        if (kind?.direct) { found = 'direct'; return; }
+        if (kind?.prop) { found = `prop:${kind.prop}`; return; }
+        if (kind?.setter && kind.setter !== 'own') { found = kind.setter; return; }
       }
       ts.forEachChild(node, walk);
     };
     walk(expression);
-    return kind;
+    return found;
   };
-  /** The part-setter kind a spread expression contributes: DIRECT, `prop:<name>`, OWN, or undefined (sets no part). */
-  const spreadKind = (expression) => {
-    const node = unwrapTransparent(expression);
-    if (ts.isIdentifier(node)) {
-      if (carriers.has(node.text)) return carriers.get(node.text);
-      const held = values.get(node.text);
-      if (held === 'rest' || parameters.has(node.text)) return DIRECT;
-      if (held?.startsWith('object:')) return `prop:${held.slice(7)}`;
-      return undefined;
-    }
-    if (ts.isCallExpression(node)) {
-      const callee = node.expression.getText(source);
-      if ((callee === 'partAttributes' || callee.endsWith('.partAttributes')) && node.arguments[0]) {
-        return valueKind(node.arguments[0]) ?? 'own';
-      }
-      return undefined;
-    }
-    if (ts.isObjectLiteralExpression(node)) return objectKind(node);
-    return undefined;
+  /** The part setter a SPREAD contributes: 'direct', `prop:<key>`, 'own', or undefined (sets no part). */
+  const spreadSetter = (expression) => {
+    const kind = kindOf(expression);
+    if (kind?.rest) return kind.rest.has('data-part') ? undefined : 'direct';
+    if (kind?.object) return `prop:${kind.object}`;
+    return kind?.setter;
   };
-  /** The last part setter of an object literal's members, in order. */
-  const objectKind = (object) => {
+  const objectSetter = (object) => {
     let last;
     for (const member of object.properties) {
-      if (ts.isSpreadAssignment(member)) last = spreadKind(member.expression) ?? last;
-      else if (ts.isPropertyAssignment(member) && keyOf(member.name) === 'data-part') last = valueKind(member.initializer) ?? 'own';
+      if (ts.isSpreadAssignment(member)) last = spreadSetter(member.expression) ?? last;
+      else if (ts.isPropertyAssignment(member) && keyText(member.name) === 'data-part') last = partValue(member.initializer) ?? 'own';
     }
     return last;
   };
-
-  /* The COMPONENT functions whose parameters are the caller's props: an exported top-level
-   * function declaration, or an exported top-level const whose initializer is a function or a
-   * forwardRef/memo render callback (`export default X` and `export { X }` count). A nested
-   * callback, a handler or a non-exported helper never binds caller props. */
-  const renderCallback = (expression) => {
-    const node = expression && unwrapTransparent(expression);
-    if (!node) return undefined;
-    if (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) return node;
-    if (ts.isCallExpression(node) && /(^|\.)(forwardRef|memo)$/u.test(node.expression.getText(source))) {
-      return renderCallback(node.arguments[0]);
+  /** `slots?.Grid`, `props.as`: a member read off a caller prop is itself caller-supplied. */
+  const isPropMember = (node) => (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node))
+    && Boolean(kindOf(node.expression)?.object || kindOf(node.expression)?.rest || isPropMember(unwrapTransparent(node.expression)));
+  /** A polymorphic tag variable whose every value is a string or a caller prop, with a string among them. */
+  const intrinsicValued = (expression, depth = 0) => {
+    const leaves = [];
+    const collect = (node) => {
+      const value = unwrapTransparent(node);
+      if (isValueChoice(value)) for (const operand of choices(value)) collect(operand);
+      else leaves.push(value);
+    };
+    collect(expression);
+    let strings = 0;
+    for (const leaf of leaves) {
+      if (ts.isStringLiteralLike(leaf) || ts.isTemplateExpression(leaf)) { strings += 1; continue; }
+      const constant = constantOf(leaf, root);
+      if (constant && ts.isStringLiteralLike(constant)) { strings += 1; continue; }
+      const kind = kindOf(leaf) ?? (isPropMember(leaf) ? { object: true } : undefined);
+      if (kind?.object) {
+        const declared = ts.isIdentifier(leaf) ? declarationOf(leaf.text, leaf) : undefined;
+        const fallback = declared && ts.isBindingElement(declared.parent) && declared.parent.initializer;
+        if (fallback && depth < 4 && intrinsicValued(fallback, depth + 1)) strings += 1;
+        continue;
+      }
+      if (ts.isIdentifier(leaf) && depth < 4) {
+        const declared = declarationOf(leaf.text, leaf);
+        const initializer = declared && ts.isVariableDeclaration(declared.parent) && declared.parent.initializer;
+        if (initializer && intrinsicValued(initializer, depth + 1)) { strings += 1; continue; }
+      }
+      return false;
+    }
+    return strings > 0;
+  };
+  /** The call-site argument a factory parameter (or a const alias of one: `const Glyph = glyph`) is bound to. */
+  const boundArgument = (identifier, depth = 0) => {
+    const declared = declarationOf(identifier.text, identifier);
+    if (!declared || depth > 4) return undefined;
+    if (bindings?.parameters.has(declared)) return bindings.parameters.get(declared);
+    const holder = declared.parent;
+    const value = ts.isVariableDeclaration(holder) && holder.name === declared && unwrapTransparent(holder.initializer);
+    return value && ts.isIdentifier(value) ? boundArgument(value, depth + 1) : undefined;
+  };
+  /** 'intrinsic', a followed component target, `{ pinned }`, or undefined (not followable). */
+  const tagOf = (tag) => {
+    const node = unwrapTransparent(tag);
+    if (ts.isStringLiteralLike(node)) return 'intrinsic';
+    if (!ts.isIdentifier(node)) return undefined;
+    if (/^[a-z]/u.test(node.text)) return 'intrinsic';
+    const declared = declarationOf(node.text, node);
+    if (!declared) return undefined;
+    const holder = declared.parent;
+    const atModuleScope = ts.isFunctionDeclaration(holder) || ts.isImportClause(holder) || ts.isImportSpecifier(holder)
+      || (ts.isVariableDeclaration(holder) && ts.isSourceFile(holder.parent.parent.parent));
+    if (atModuleScope) return componentTarget(resolveDeclared(file, declared, root), root);
+    const argument = boundArgument(node);
+    if (argument) return boundComponent(argument, root);
+    if (ts.isVariableDeclaration(holder) && holder.initializer && intrinsicValued(holder.initializer)) return 'intrinsic';
+    if (ts.isBindingElement(holder) && holder.initializer && kindOfDeclared(declared)?.object
+      && intrinsicValued(holder.initializer)) {
+      return 'intrinsic';
     }
     return undefined;
   };
-  const isExportedStatement = (statement) => statement.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword);
-  const exportedNames = new Set();
-  const components = new Set();
-  for (const statement of source.statements) {
-    if (ts.isExportAssignment(statement)) {
-      const expression = unwrapTransparent(statement.expression);
-      if (ts.isIdentifier(expression)) exportedNames.add(expression.text);
-      else if (renderCallback(expression)) components.add(renderCallback(expression));
-    } else if (ts.isExportDeclaration(statement) && !statement.moduleSpecifier && statement.exportClause
-      && ts.isNamedExports(statement.exportClause)) {
-      for (const element of statement.exportClause.elements) exportedNames.add((element.propertyName ?? element.name).text);
-    }
-  }
-  for (const statement of source.statements) {
-    if (ts.isFunctionDeclaration(statement) && statement.body
-      && (isExportedStatement(statement) || (statement.name && exportedNames.has(statement.name.text)))) {
-      components.add(statement);
-    } else if (ts.isVariableStatement(statement)) {
-      for (const declaration of statement.declarationList.declarations) {
-        const callback = ts.isIdentifier(declaration.name) && renderCallback(declaration.initializer);
-        if (callback && (isExportedStatement(statement) || exportedNames.has(declaration.name.text))) components.add(callback);
-      }
-    }
-  }
+  return { tagOf, kindOf, partValue, spreadSetter };
+}
 
-  /* Bindings first, to a fixpoint: destructured props, rest carriers, aliases and object carriers. */
-  const bind = (node) => {
-    if (components.has(node)) {
-      for (const parameter of node.parameters) if (ts.isIdentifier(parameter.name)) parameters.add(parameter.name.text);
-    }
-    /* Only a destructure of the component's OWN props binds caller props: a parameter
-     * pattern, or `const { … } = props`. A hook result (`{ handlers } = useX()`) does not. */
-    const ofProps = ts.isObjectBindingPattern(node) && ((ts.isParameter(node.parent) && components.has(node.parent.parent))
-      || (ts.isVariableDeclaration(node.parent) && node.parent.initializer
-        && ts.isIdentifier(unwrapTransparent(node.parent.initializer))
-        && parameters.has(unwrapTransparent(node.parent.initializer).text)));
-    if (ofProps) {
-      const keys = node.elements.map((element) => (element.propertyName ? keyOf(element.propertyName)
-        : ts.isIdentifier(element.name) ? element.name.text : undefined));
-      const bindsPart = keys.includes('data-part');
-      node.elements.forEach((element, index) => {
-        if (!ts.isIdentifier(element.name)) return;
-        if (element.dotDotDotToken) {
-          if (!bindsPart) values.set(element.name.text, 'rest');
-          return;
-        }
-        values.set(element.name.text, keys[index] === 'data-part' ? DIRECT : `object:${keys[index]}`);
-      });
-    }
-    ts.forEachChild(node, bind);
-  };
-  bind(source);
-  for (let pass = 0, changed = true; changed && pass < 8; pass += 1) {
-    changed = false;
-    const alias = (node) => {
-      if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
-        const initializer = unwrapTransparent(node.initializer);
-        const name = node.name.text;
-        if (ts.isObjectLiteralExpression(initializer)) {
-          const kind = objectKind(initializer);
-          if (kind && carriers.get(name) !== kind) { carriers.set(name, kind); changed = true; }
-        } else if (!values.has(name)) {
-          const kind = valueKind(initializer);
-          if (kind) { values.set(name, kind); changed = true; }
-        }
-      }
-      ts.forEachChild(node, alias);
-    };
-    alias(source);
-  }
-  /* Then the stamps: the LAST part setter on each element decides what reaches the DOM. */
-  const record = (last) => {
-    if (last === DIRECT) result.direct = true;
-    else if (last?.startsWith('prop:')) result.props.add(last.slice(5));
-  };
-  /* Only an INTRINSIC element is a DOM stamp. A part handed to a composed child (`<Item {...item} />`,
-   * `createElement(Item, props)`, a polymorphic `ElementType`) is closed: it is not followed into the child. */
-  const isIntrinsicTag = (tag) => ts.isIdentifier(tag) && /^[a-z]/u.test(tag.text);
-  const stamp = (node) => {
-    /* `createElement('tag', props)` stamps its props object exactly like an intrinsic JSX element. */
-    if (ts.isCallExpression(node) && /(^|\.)createElement$/u.test(node.expression.getText(source)) && node.arguments[1]
-      && ts.isStringLiteralLike(node.arguments[0])) {
-      record(spreadKind(node.arguments[1]));
-    }
-    if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) && isIntrinsicTag(node.tagName)) {
-      let last;
-      for (const attribute of node.attributes.properties) {
-        if (ts.isJsxSpreadAttribute(attribute)) last = spreadKind(attribute.expression) ?? last;
-        else if (ts.isJsxAttribute(attribute) && attributeName(attribute) === 'data-part') {
-          const initializer = attribute.initializer;
-          last = initializer && ts.isJsxExpression(initializer) && initializer.expression
-            ? (valueKind(initializer.expression) ?? 'own')
-            : 'own';
-        }
-      }
-      record(last);
-    }
-    ts.forEachChild(node, stamp);
-  };
-  stamp(source);
-  consumptionCache.set(file, result);
-  return result;
+/**
+ * What a composed component does with the anatomy a caller hands it, resolved
+ * PER NAME: `file` is the module the caller imports from and `name` the binding
+ * it imports (`'default'` for a default import), followed through re-exports,
+ * wrappers and the engine factories to the one render function the caller's
+ * tag reaches. A module exporting a consuming `Y` beside a P-88-closed `X`
+ * answers for `X` and `Y` separately. Returns `{ direct, props }` (see
+ * `functionConsumption`); an unresolvable binding consumes nothing.
+ */
+export function composedConsumption(file, name = 'default', root = DEFAULT_ROOT) {
+  return functionConsumption(componentTarget(resolveExport(file, name, root), root), root);
+}
+
+/**
+ * How a COMPOSED tag in a family source treats the caller's anatomy: an
+ * intrinsic element in disguise (a polymorphic `Tag` bound to a string or to
+ * a prop with an intrinsic default) is `'intrinsic'`; a tag resolving by name
+ * to a component gives that component's consumption; anything else gives no
+ * consumption at all (fail closed).
+ */
+function composedTagConsumption(file, element, root) {
+  let enclosing;
+  for (let node = element.parent; node; node = node.parent) if (ts.isFunctionLike(node)) enclosing = node;
+  const kind = componentScope({ file, fn: enclosing }, root).tagOf(element.tagName);
+  if (kind === 'intrinsic') return kind;
+  return kind ? functionConsumption(kind, root) : NO_CONSUMPTION;
 }
 
 /**
@@ -2482,16 +2901,38 @@ export function measureFamily(resolved, { producers, compiled, scopes, callerPar
   const p88Index = callerParts ?? callerPartIndex(root);
   const callerOccurrences = [];
   const anatomyStamped = new Set();
+  /* F1 (WO-ARC-12): a part the family writes on a COMPOSED tag -- an attribute literal, or an
+   * object handed down in a prop -- renders only if that component's own source consumes it.
+   * It joins the anatomy ONLY when `composedConsumption` backs the channel: a literal when the
+   * component stamps the caller `data-part` (`direct`), a hand-off when it stamps THAT prop's
+   * part. A tag that resolves to an intrinsic element (a polymorphic `Tag`) is anatomy as
+   * before; a tag nothing resolves backs nothing. A skin read of an unbacked part therefore
+   * surfaces as consumed-not-stamped. Census caller elements stay with G1 above. */
+  const unbackedParts = new Set();
+  const backingOf = (entry, element) => composedTagConsumption(entry.file, element, root);
   for (const entry of sources) {
     for (const value of entry.nonElementParts) anatomyStamped.add(value);
     for (const occurrence of entry.partOccurrences) {
       const use = callerElementOf(p88Index, entry.file, occurrence);
-      if (use) callerOccurrences.push({ ...occurrence, file: toPosix(relative(root, entry.file)), childFamily: use.childFamily });
-      else anatomyStamped.add(occurrence.part);
+      if (use) {
+        callerOccurrences.push({ ...occurrence, file: toPosix(relative(root, entry.file)), childFamily: use.childFamily });
+        continue;
+      }
+      const tag = occurrence.element?.tagName;
+      const composed = tag && !(ts.isIdentifier(tag) && /^[a-z]/u.test(tag.text));
+      const backing = composed ? backingOf(entry, occurrence.element) : 'intrinsic';
+      if (backing === 'intrinsic' || backing.direct) anatomyStamped.add(occurrence.part);
+      else unbackedParts.add(occurrence.part);
+    }
+    for (const handoff of entry.anatomyHandoffs) {
+      const backing = backingOf(entry, handoff.element);
+      if (backing !== 'intrinsic' && backing.props.has(handoff.prop)) anatomyStamped.add(handoff.part);
+      else unbackedParts.add(handoff.part);
     }
   }
   for (const part of stampedParts) {
-    if (!anatomyStamped.has(part) && !callerOccurrences.some((occurrence) => occurrence.part === part)) {
+    if (!anatomyStamped.has(part) && !unbackedParts.has(part)
+      && !callerOccurrences.some((occurrence) => occurrence.part === part)) {
       throw new Error(`family-cut: G1 lost track of the stamped part \`${part}\` in ${family}`);
     }
   }
@@ -2614,7 +3055,8 @@ export function measureFamily(resolved, { producers, compiled, scopes, callerPar
        * consumes and stamps a caller `data-part`, a hand-off only when it reads
        * THAT prop and stamps the handed part. A P-88-closed component that
        * stamps its own canonical part anchors nothing on the caller's literal. */
-      const consumed = composedConsumption(join(root, backer.name));
+      const backing = composedTagConsumption(entry.file, render.element, root);
+      const consumed = backing === 'intrinsic' ? NO_CONSUMPTION : backing;
       const parts = [
         ...(consumed.direct ? render.parts : []),
         ...render.handoffs.filter((handoff) => consumed.props.has(handoff.prop)).map((handoff) => handoff.part),

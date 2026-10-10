@@ -24,6 +24,8 @@ import { packageRoot as findPackageRoot } from '../../libraries/repo-root/index.
 import { collectChannelProducers } from '../../libraries/tokens/producers/index.mjs';
 import {
   BASELINE_PATH,
+  CALLER_PART_PIN,
+  CALLER_PART_PIN_CONTRACT,
   OWED_ARMS,
   analyzeDragAndDrop,
   analyzeSkin,
@@ -3525,9 +3527,10 @@ test('PLANT: an import the family never renders composes nothing', () => {
 });
 
 test('GUARD: only a non-frozen module under `src/components/primitives/` backs the credit', () => {
-  /* A barrel resolves to a file that stamps nothing of its own. */
+  /* A barrel resolves to a file that stamps nothing of its own. Its default import names no
+   * export at all, so (F1) nothing backs the caller's `event` either: both reads stay red. */
   const barrel = measureComposer({ tsx: chipTsx({ specifier: '../../../primitives/inputs/button' }), skin: chipSkin() });
-  assert.deepEqual(barrel.detail.partsConsumedNotStamped, ['content'], 'barrel');
+  assert.deepEqual(barrel.detail.partsConsumedNotStamped, ['content', 'event'], 'barrel');
   /* A frozen engine is never a backer, even one planted to stamp the part. */
   const CLASSIC_TSX = 'src/components/primitives/inputs/button/engines/classic/index.tsx';
   const frozen = measureComposer({
@@ -3536,7 +3539,8 @@ test('GUARD: only a non-frozen module under `src/components/primitives/` backs t
     edit: (sandbox) => patch(sandbox, CLASSIC_TSX, (text) =>
       `${text}\nexport const PlantedStamp = () => <span data-part="content" />;\n`),
   });
-  assert.deepEqual(frozen.detail.partsConsumedNotStamped, ['content'], 'frozen engine');
+  /* (F1) a frozen engine is never followed, so it backs the caller's `event` no more than the credit. */
+  assert.deepEqual(frozen.detail.partsConsumedNotStamped, ['content', 'event'], 'frozen engine');
   /* Another pattern is not a primitive, however literally it stamps. */
   const sibling = 'src/components/patterns/data/planted-chip/index.tsx';
   const pattern = measureComposer({
@@ -3547,7 +3551,8 @@ test('GUARD: only a non-frozen module under `src/components/primitives/` backs t
       writeFileSync(join(sandbox, sibling), 'export default function ModernButton() { return <span data-part="content" />; }\n');
     },
   });
-  assert.deepEqual(pattern.detail.partsConsumedNotStamped, ['content'], 'pattern module');
+  /* (F1) the planted pattern never reads the caller's `data-part`, so `event` is unbacked too. */
+  assert.deepEqual(pattern.detail.partsConsumedNotStamped, ['content', 'event'], 'pattern module');
   assert.deepEqual(pattern.detail.partsComposedFrom, []);
 });
 
@@ -3873,6 +3878,49 @@ const PLANTED_MARK = {
     '  return <span data-part="root">{createElement(PlantedFrame, props)}<span data-part="indicator" /></span>;',
     '}',
   ],
+  /** N3: a P-88-closed `PlantedClosed` exported BESIDE the consuming `PlantedMark`, in one module. */
+  twoExports: [
+    "export interface PlantedMarkProps { className?: string; 'data-part'?: string }",
+    'export function PlantedClosed({ className }: PlantedMarkProps) {',
+    '  return <span className={className} data-part="root"><span data-part="indicator" /></span>;',
+    '}',
+    "export function PlantedMark({ 'data-part': dataPart }: PlantedMarkProps) {",
+    "  return <span data-part={dataPart ?? 'root'}><span data-part=\"indicator\" /></span>;",
+    '}',
+  ],
+  /** N1: a nested callback parameter SHADOWS the props rest of the same name; spreading it is no caller stamp. */
+  shadowedRest: [
+    "export interface PlantedMarkProps { 'data-part'?: string; items?: object[] }",
+    "export function PlantedMark({ 'data-part': _part, items = [{}], ...rest }: PlantedMarkProps) {",
+    '  return <span data-part="root" title={String(rest)}>{items.map((rest) => <span {...rest} />)}<span data-part="indicator" /></span>;',
+    '}',
+  ],
+  /** N2: a carrier -- a polymorphic `as` with an intrinsic default -- that forwards the caller's props. */
+  carrierForwards: [
+    "export interface PlantedMarkProps { as?: 'div' | 'section'; 'data-part'?: string }",
+    "export function PlantedMark({ as = 'div', ...rest }: PlantedMarkProps) {",
+    '  const Component = as;',
+    '  return <Component {...rest}><span data-part="indicator" /></Component>;',
+    '}',
+  ],
+  /** N2: the same carrier rendering through `createElement(ElementType, …)`, the Box shape. */
+  carrierCreateElement: [
+    "import { createElement } from 'react';",
+    "export interface PlantedMarkProps { as?: 'div' | 'section'; 'data-part'?: string }",
+    'export function PlantedMark(props: PlantedMarkProps) {',
+    "  const { as, ...rest } = props;",
+    "  const ElementType = as ?? 'div';",
+    '  return createElement(ElementType, rest, <span data-part="indicator" />);',
+    '}',
+  ],
+  /** N2: the carrier shape, but its own part is the LAST setter: the caller's part never renders. */
+  carrierOverrides: [
+    "export interface PlantedMarkProps { as?: 'div' | 'section'; 'data-part'?: string }",
+    "export function PlantedMark({ as = 'div', ...rest }: PlantedMarkProps) {",
+    '  const Component = as;',
+    '  return <Component {...rest} data-part="root"><span data-part="indicator" /></Component>;',
+    '}',
+  ],
 };
 const plantedMarkTsx = (...elements) => [
   "import { PlantedMark } from '../../../primitives/foundation/planted-mark';",
@@ -3961,6 +4009,179 @@ test("PLANT (H1): a top-level helper's rest beside a P-88-closed export -> NO an
 test('PLANT (H1): caller props handed to a COMPOSED child (JSX spread or createElement) are not a DOM stamp -> NO anchor', () => {
   assertIndicatorRed(measurePlantedMark('spreadOntoComposedChild', '<PlantedMark data-part="loading" />'), 'spread onto composed child');
   assertIndicatorRed(measurePlantedMark('createElementOntoComponent', '<PlantedMark data-part="loading" />'), 'createElement onto component');
+});
+
+// ---------------------------------------------------------------------------
+// F1: a caller's OWN part on a composed tag is family anatomy only where the component consumes it
+// ---------------------------------------------------------------------------
+
+/** The skin reads the caller part `loading` itself: unbacked, it must surface as consumed-not-stamped. */
+const assertLoadingStamped = (measured, label) => {
+  assert.ok(!measured.detail.partsConsumedNotStamped.includes('loading'),
+    `${label}: ${JSON.stringify(measured.detail.partsConsumedNotStamped)}`);
+};
+const assertLoadingUnstamped = (measured, label) => {
+  assert.ok(measured.detail.partsConsumedNotStamped.includes('loading'),
+    `${label}: ${JSON.stringify(measured.detail.partsConsumedNotStamped)}`);
+};
+const measurePlantedImports = (variant, names, ...elements) => measureComposer({
+  tsx: plantedMarkTsx(...elements).replace('{ PlantedMark }', `{ ${names.join(', ')} }`),
+  skin: busyRowSkin,
+  edit: (sandbox) => {
+    mkdirSync(dirname(join(sandbox, PLANTED_MARK_TSX)), { recursive: true });
+    writeFileSync(join(sandbox, PLANTED_MARK_TSX), `${PLANTED_MARK[variant].join('\n')}\n`);
+  },
+});
+
+test('PLANT F1 (i): an IGNORED attribute literal is not family anatomy -- the skin read of it is consumed-NOT-stamped', () => {
+  const measured = measurePlantedMark('ignoresDataPart', '<PlantedMark data-part="loading" />');
+  assertLoadingUnstamped(measured, 'ignored literal');
+  assert.equal(measured.denominators.partsStamped, 1, 'only the bar root is the family\'s own anatomy');
+});
+
+test('PLANT F1 (ii): an accepted-but-not-rendered hand-off is not family anatomy -- consumed-NOT-stamped', () => {
+  assertLoadingUnstamped(
+    measurePlantedMark('readsAnatomyNeverStamps', "<PlantedMark anatomy={{ 'data-part': 'loading' }} />"),
+    'accepted-not-rendered hand-off',
+  );
+  assertLoadingUnstamped(
+    measurePlantedMark('consumesAnatomy', "<PlantedMark ignored={{ 'data-part': 'loading' }} />"),
+    'hand-off on a prop the component never reads',
+  );
+});
+
+test('CONTROL F1 (iii): a CONSUMED literal or hand-off stays family anatomy, and its credit stands', () => {
+  for (const [variant, element] of [
+    ['consumesDataPart', '<PlantedMark data-part="loading" />'],
+    ['consumesAnatomy', "<PlantedMark anatomy={{ 'data-part': 'loading' }} />"],
+  ]) {
+    const measured = measurePlantedMark(variant, element);
+    assertLoadingStamped(measured, variant);
+    assertIndicatorCredited(measured, variant);
+  }
+});
+
+test('CONTROL F1 (iv): a part written on an INTRINSIC element is always family anatomy', () => {
+  assertLoadingStamped(
+    measurePlantedMark('ignoresDataPart', '<span data-part="loading"><PlantedMark /></span>'),
+    'intrinsic stamp',
+  );
+});
+
+test('PLANT F1 (N3): a module exporting a consuming component beside a closed one answers PER NAME', () => {
+  const closed = measurePlantedImports('twoExports', ['PlantedClosed'], '<PlantedClosed data-part="loading" />');
+  assertLoadingUnstamped(closed, 'closed export');
+  assertIndicatorRed(closed, 'closed export');
+  const consuming = measurePlantedImports('twoExports', ['PlantedMark'], '<PlantedMark data-part="loading" />');
+  assertLoadingStamped(consuming, 'consuming export');
+  assertIndicatorCredited(consuming, 'consuming export');
+});
+
+test('PLANT F1 (N1): a nested parameter shadowing the props rest binds nothing -- the literal is unbacked', () => {
+  const measured = measurePlantedMark('shadowedRest', '<PlantedMark data-part="loading" />');
+  assertLoadingUnstamped(measured, 'shadowed rest');
+  assertIndicatorRed(measured, 'shadowed rest');
+});
+
+test('CONTROL F1 (N2): a polymorphic carrier that forwards the caller part consumes it (JSX and createElement)', () => {
+  for (const variant of ['carrierForwards', 'carrierCreateElement']) {
+    const measured = measurePlantedMark(variant, '<PlantedMark data-part="loading" />');
+    assertLoadingStamped(measured, variant);
+    assertIndicatorCredited(measured, variant);
+  }
+});
+
+test('PLANT F1 (N2): a polymorphic carrier that overrides the caller part with its own does not consume it', () => {
+  const measured = measurePlantedMark('carrierOverrides', '<PlantedMark data-part="loading" />');
+  assertLoadingUnstamped(measured, 'carrier overrides');
+  assertIndicatorRed(measured, 'carrier overrides');
+});
+
+// ---------------------------------------------------------------------------
+// F1 B-evidence: a factory icon's package hop is a stamp only through the committed runtime pin
+// ---------------------------------------------------------------------------
+
+const PLANTED_FACTORY_TSX = 'src/components/primitives/foundation/planted-mark/factory.tsx';
+const PLANTED_FACTORY = {
+  /** Reads the caller `data-part` and hands it to the glyph the factory was called with. */
+  forwards: [
+    "import { forwardRef } from 'react';",
+    'export function createPlantedIcon(glyph) {',
+    '  const Component = forwardRef(function PlantedIcon(props, ref) {',
+    "    const { 'data-part': dataPart } = props;",
+    '    const Glyph = glyph;',
+    '    return <Glyph ref={ref} data-part={dataPart} />;',
+    '  });',
+    '  return Component;',
+    '}',
+  ],
+  /** Strips the caller `data-part` before the glyph ever sees it. */
+  drops: [
+    "import { forwardRef } from 'react';",
+    'export function createPlantedIcon(glyph) {',
+    '  const Component = forwardRef(function PlantedIcon(props, ref) {',
+    "    const { 'data-part': _dropped, ...rest } = props;",
+    '    const Glyph = glyph;',
+    '    return <Glyph ref={ref} {...rest} />;',
+    '  });',
+    '  return Component;',
+    '}',
+  ],
+};
+/** `pin`: 'present' (manifest + contract), 'absent', or 'manifest-only' (the contract test is missing). */
+const measureFactoryIcon = ({ factory = 'forwards', glyph = 'PlantedGlyph', pin = 'present' } = {}) => measureComposer({
+  tsx: plantedMarkTsx('<PlantedMark data-part="loading" />'),
+  skin: busyRowSkin,
+  edit: (sandbox) => {
+    const put = (relativePath, text) => {
+      mkdirSync(dirname(join(sandbox, relativePath)), { recursive: true });
+      writeFileSync(join(sandbox, relativePath), text);
+    };
+    put(PLANTED_FACTORY_TSX, `${PLANTED_FACTORY[factory].join('\n')}\n`);
+    put(PLANTED_MARK_TSX, [
+      "import { OtherGlyph, PlantedGlyph } from '@planted/glyphs';",
+      "import { createPlantedIcon } from './factory';",
+      `export const PlantedMark = createPlantedIcon(${glyph});`,
+      '',
+    ].join('\n'));
+    if (pin !== 'absent') put(CALLER_PART_PIN, `${JSON.stringify({ glyphs: ['@planted/glyphs#PlantedGlyph'] })}\n`);
+    if (pin === 'present') put(CALLER_PART_PIN_CONTRACT, '// the runtime contract that proves the enumerated glyphs\n');
+  },
+});
+
+test('CONTROL B-evidence: a factory icon whose package glyph the runtime pin enumerates stamps the caller part', () => {
+  assertLoadingStamped(measureFactoryIcon(), 'pinned factory icon');
+});
+
+test('PLANT B-evidence: the same factory icon with the pin ABSENT is unbacked (fail closed)', () => {
+  assertLoadingUnstamped(measureFactoryIcon({ pin: 'absent' }), 'no pin');
+  /* The manifest alone is not evidence: its runtime contract must exist beside it. */
+  assertLoadingUnstamped(measureFactoryIcon({ pin: 'manifest-only' }), 'manifest without its contract');
+});
+
+test('PLANT B-evidence: a factory that drops the caller data-part is unbacked, pin or not', () => {
+  assertLoadingUnstamped(measureFactoryIcon({ factory: 'drops' }), 'factory drops data-part');
+});
+
+test('PLANT B-evidence: a package glyph the pin does NOT enumerate is unbacked', () => {
+  assertLoadingUnstamped(measureFactoryIcon({ glyph: 'OtherGlyph' }), 'unenumerated glyph');
+});
+
+test('LIVE B-evidence: the committed pin enumerates the glyphs behind the real semantic and catalog icons', () => {
+  const pin = JSON.parse(readFileSync(join(ROOT, CALLER_PART_PIN), 'utf8'));
+  assert.equal(pin.package, '@phosphor-icons/react');
+  assert.ok(pin.glyphs.includes('@phosphor-icons/react/dist/ssr/XCircle#XCircleIcon'), 'StatusErrorIcon glyph');
+  assert.ok(pin.glyphs.includes('@phosphor-icons/react/dist/ssr/MagnifyingGlass#MagnifyingGlassIcon'), 'SearchIcon glyph');
+  assert.equal(pin.glyphs.length, pin.counts.glyphs);
+});
+
+test('RESIDUAL (N3, documented): `as ?? \'div\'` reads as intrinsic even when the caller hands `as` a component', () => {
+  /* The polymorphic rule lets a caller-prop leaf with no string default ride beside a string sibling.
+   * A future tightening of that rule flips this drill on purpose: update it with the change, never silently. */
+  assertLoadingStamped(
+    measurePlantedMark('carrierCreateElement', '<PlantedMark as={PlantedComponent} data-part="loading" />'),
+    'as ?? div with a component-valued as',
+  );
 });
 
 test("CONTROL: on the real LoadingIndicator the `anatomy` hand-off anchors `indicator`, the ignored attribute literal does not", () => {
