@@ -126,6 +126,20 @@
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
+/* The pill-icon is the family's own slot around the option's icon: it fills
+   the Button's icon well and the glyph fills the slot and takes its ink, so
+   the well decides the size and the slot decides the colour. */
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'] {
+  display: flex;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'] > * {
+  inline-size: 100%;
+  block-size: 100%;
+  color: inherit;
+}
+
 .ds-pattern-status-filter-pills
   .ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label.ds-status-filter-pills__pill-label {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));

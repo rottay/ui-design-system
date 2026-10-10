@@ -72472,8 +72472,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-detail-header [data-part='tab-icon'] {
+  /* The tab-icon is the family's own slot around the tab's icon component: the
+     slot carries the size and the ink below, and the glyph fills it. */
+  display: flex;
   inline-size: 14px;
   block-size: 14px;
+}
+.ds-structure.ds-detail-header [data-part='tab-icon'] > * {
+  inline-size: 100%;
+  block-size: 100%;
 }
 .ds-structure.ds-detail-header [data-part='tab-icon'][data-active='true'] {
   color: var(--ds-color-text-primary);
@@ -73145,6 +73152,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   inline-size: 14px;
   block-size: 14px;
 }
+/* icon-badge-glyph and action-icon are the family's own slots around an icon
+   component: the slot carries the size above and the glyph fills it. */
+.ds-structure.ds-edit-header [data-part='icon-badge-glyph'],
+.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
+  display: flex;
+}
+.ds-structure.ds-edit-header [data-part='icon-badge-glyph'] > *,
+.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > * {
+  inline-size: 100%;
+  block-size: 100%;
+}
 .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='eyebrow'] {
   color: var(--ds-color-text-muted);
   /* the eyebrow is a micro-label, so it reads the `code` role's family (the
@@ -73570,6 +73588,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'] {
   inline-size: var(--ds-form-header-icon-badge-glyph-size, 22px);
   block-size: var(--ds-form-header-icon-badge-glyph-size, 22px);
+}
+/* icon-badge-glyph and action-icon are the family's own slots around an icon
+   component: the slot carries the size and the glyph fills it. */
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'],
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
+  display: flex;
+}
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'] > *,
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > * {
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 /* ---- hero copy: eyebrow / title / subtitle ---- */
@@ -86193,6 +86222,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-pattern-status-filter-pills
   .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'][data-selected='true'] {
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+/* The pill-icon is the family's own slot around the option's icon: it fills
+   the Button's icon well and the glyph fills the slot and takes its ink, so
+   the well decides the size and the slot decides the colour. */
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'] {
+  display: flex;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'] > * {
+  inline-size: 100%;
+  block-size: 100%;
+  color: inherit;
 }
 
 .ds-pattern-status-filter-pills

@@ -626,8 +626,15 @@
 }
 
 .ds-structure.ds-detail-header [data-part='tab-icon'] {
+  /* The tab-icon is the family's own slot around the tab's icon component: the
+     slot carries the size and the ink below, and the glyph fills it. */
+  display: flex;
   inline-size: 14px;
   block-size: 14px;
+}
+.ds-structure.ds-detail-header [data-part='tab-icon'] > * {
+  inline-size: 100%;
+  block-size: 100%;
 }
 .ds-structure.ds-detail-header [data-part='tab-icon'][data-active='true'] {
   color: var(--ds-color-text-primary);

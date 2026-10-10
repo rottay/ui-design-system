@@ -243,6 +243,17 @@
   inline-size: 14px;
   block-size: 14px;
 }
+/* icon-badge-glyph and action-icon are the family's own slots around an icon
+   component: the slot carries the size above and the glyph fills it. */
+.ds-structure.ds-edit-header [data-part='icon-badge-glyph'],
+.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
+  display: flex;
+}
+.ds-structure.ds-edit-header [data-part='icon-badge-glyph'] > *,
+.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > * {
+  inline-size: 100%;
+  block-size: 100%;
+}
 .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='eyebrow'] {
   color: var(--ds-color-text-muted);
   /* the eyebrow is a micro-label, so it reads the `code` role's family (the

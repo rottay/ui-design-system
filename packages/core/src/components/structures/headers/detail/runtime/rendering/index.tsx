@@ -142,7 +142,13 @@ function DetailTab({
       onKeyDown={handleTabKeyDown}
     >
       <Flex align="center" gap={8}>
-        {TabIcon ? <TabIcon data-part="tab-icon" data-active={isActive} /> : null}
+        {/* The tab owns the icon slot; the tab's label names it, so the glyph
+            is decorative. */}
+        {TabIcon ? (
+          <span data-part="tab-icon" data-active={isActive} aria-hidden="true">
+            <TabIcon data-active={isActive} />
+          </span>
+        ) : null}
         <Text
           data-part="tab-label"
           data-active={isActive}

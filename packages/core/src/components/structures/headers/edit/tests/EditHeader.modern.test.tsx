@@ -105,9 +105,14 @@ describe('EditHeader (modern-rescue elevation)', () => {
     expect(title.style.letterSpacing).toBe('');
     expect(title.style.fontFamily).toBe('');
 
-    const glyph = (await waitForPart(container, 'icon-badge-glyph')) as HTMLElement;
-    expect(glyph.style.width).toBe('');
-    expect(glyph.style.height).toBe('');
+    // The header owns the glyph slot; neither it nor the icon inside carries inline geometry.
+    const glyphSlot = (await waitForPart(container, 'icon-badge-glyph')) as HTMLElement;
+    const glyph = glyphSlot.querySelector('[data-testid="edit-icon"]') as HTMLElement;
+    expect(glyph).not.toBeNull();
+    for (const node of [glyphSlot, glyph]) {
+      expect(node.style.width).toBe('');
+      expect(node.style.height).toBe('');
+    }
 
     const railIcons = Array.from(
       container.querySelectorAll<HTMLElement>('[data-part="actions"] svg'),

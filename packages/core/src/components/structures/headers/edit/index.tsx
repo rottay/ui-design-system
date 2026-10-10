@@ -267,8 +267,12 @@ export function EditHeader({
             {Icon && (
               <Box data-part="icon-badge" data-variant={resolveHeaderTone(colorVariant)}>
                 {/* Glyph geometry is skin-owned (the FormHeader posture) so the
-                    container ladder can step it down without a prop. */}
-                <Icon data-part="icon-badge-glyph" />
+                    container ladder can step it down without a prop. The header
+                    owns the glyph slot; the title names the page, so the glyph
+                    is decorative. */}
+                <span data-part="icon-badge-glyph" aria-hidden="true">
+                  <Icon />
+                </span>
               </Box>
             )}
             <Stack spacing="xs">
@@ -326,7 +330,15 @@ export function EditHeader({
                 <Tooltip key={`${action.label}-${index}`} content={resolveSharedHeaderActionTooltip(action)}>
                   <Button
                     variant={resolveSharedHeaderActionVariant(action)}
-                    icon={ActionIcon ? <ActionIcon data-part="action-icon" /> : undefined}
+                    /* The header owns the icon slot; the action's label names it,
+                       so the glyph is decorative. */
+                    icon={
+                      ActionIcon ? (
+                        <span data-part="action-icon" aria-hidden="true">
+                          <ActionIcon />
+                        </span>
+                      ) : undefined
+                    }
                     onClick={action.onClick}
                     href={action.href}
                     pending={action.loading}
@@ -341,7 +353,11 @@ export function EditHeader({
             {onCancel && (
               <Button
                 variant="secondary"
-                icon={<ActionCloseIcon data-part="action-icon" decorative />}
+                icon={
+                  <span data-part="action-icon" aria-hidden="true">
+                    <ActionCloseIcon decorative />
+                  </span>
+                }
                 onClick={onCancel}
               >
                 {cancelLabel}
@@ -350,7 +366,11 @@ export function EditHeader({
             {onSave && (
               <Button
                 variant="primary"
-                icon={<ActionSaveIcon data-part="action-icon" decorative />}
+                icon={
+                  <span data-part="action-icon" aria-hidden="true">
+                    <ActionSaveIcon decorative />
+                  </span>
+                }
                 onClick={onSave}
                 pending={saving}
               >

@@ -84,11 +84,16 @@ export function StatusFilterPills({
             onClick={() => onChange(option.value)}
             icon={
               Icon ? (
-                <Icon
+                // The pill owns the icon slot, so the anatomy renders whatever the option's
+                // icon component renders. The label names the option: the glyph is decorative.
+                <span
                   data-part="pill-icon"
                   className="ds-status-filter-pills__pill-icon"
                   data-selected={isSelected}
-                />
+                  aria-hidden="true"
+                >
+                  <Icon data-selected={isSelected} />
+                </span>
               ) : undefined
             }
             suffix={

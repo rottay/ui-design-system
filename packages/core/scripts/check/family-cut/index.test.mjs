@@ -4115,6 +4115,22 @@ const PLANTED_FACTORY = {
     '  return Component;',
     '}',
   ],
+  /** Forwards the caller `data-part`, but renders nothing unless the caller names it or declares it decorative. */
+  gated: [
+    "import { forwardRef } from 'react';",
+    'export function createPlantedIcon(glyph) {',
+    '  const Component = forwardRef(function PlantedIcon(props, ref) {',
+    "    const { label, decorative, 'data-part': dataPart } = props;",
+    "    const normalizedLabel = typeof label === 'string' ? label.trim() : '';",
+    '    const isLabeled = normalizedLabel.length > 0;',
+    '    const isDecorative = decorative === true;',
+    '    if (isLabeled === isDecorative) return null;',
+    '    const Glyph = glyph;',
+    '    return <Glyph ref={ref} data-part={dataPart} />;',
+    '  });',
+    '  return Component;',
+    '}',
+  ],
   /** Strips the caller `data-part` before the glyph ever sees it. */
   drops: [
     "import { forwardRef } from 'react';",
@@ -4129,8 +4145,14 @@ const PLANTED_FACTORY = {
   ],
 };
 /** `pin`: 'present' (manifest + contract), 'absent', or 'manifest-only' (the contract test is missing). */
-const measureFactoryIcon = ({ factory = 'forwards', glyph = 'PlantedGlyph', pin = 'present' } = {}) => measureComposer({
-  tsx: plantedMarkTsx('<PlantedMark data-part="loading" />'),
+const measureFactoryIcon = ({
+  factory = 'forwards',
+  glyph = 'PlantedGlyph',
+  pin = 'present',
+  element = '<PlantedMark data-part="loading" />',
+  wrapper,
+} = {}) => measureComposer({
+  tsx: plantedMarkTsx(element),
   skin: busyRowSkin,
   edit: (sandbox) => {
     const put = (relativePath, text) => {
@@ -4141,7 +4163,15 @@ const measureFactoryIcon = ({ factory = 'forwards', glyph = 'PlantedGlyph', pin 
     put(PLANTED_MARK_TSX, [
       "import { OtherGlyph, PlantedGlyph } from '@planted/glyphs';",
       "import { createPlantedIcon } from './factory';",
-      `export const PlantedMark = createPlantedIcon(${glyph});`,
+      /* `wrapper`: PlantedMark is a component that renders the factory icon with these attributes. */
+      ...(wrapper === undefined
+        ? [`export const PlantedMark = createPlantedIcon(${glyph});`]
+        : [
+          `const PlantedInner = createPlantedIcon(${glyph});`,
+          'export function PlantedMark(props) {',
+          `  return <PlantedInner ${wrapper} />;`,
+          '}',
+        ]),
       '',
     ].join('\n'));
     if (pin !== 'absent') put(CALLER_PART_PIN, `${JSON.stringify({ glyphs: ['@planted/glyphs#PlantedGlyph'] })}\n`);
@@ -4173,6 +4203,92 @@ test('LIVE B-evidence: the committed pin enumerates the glyphs behind the real s
   assert.ok(pin.glyphs.includes('@phosphor-icons/react/dist/ssr/XCircle#XCircleIcon'), 'StatusErrorIcon glyph');
   assert.ok(pin.glyphs.includes('@phosphor-icons/react/dist/ssr/MagnifyingGlass#MagnifyingGlassIcon'), 'SearchIcon glyph');
   assert.equal(pin.glyphs.length, pin.counts.glyphs);
+});
+
+// ---------------------------------------------------------------------------
+// N1: an icon that renders nothing without a name or `decorative` backs a part only when the call site supplies one
+// ---------------------------------------------------------------------------
+
+test('CONTROL N1: a guarded factory icon the call site declares decorative, or names, stamps the caller part', () => {
+  for (const element of [
+    '<PlantedMark data-part="loading" decorative />',
+    '<PlantedMark data-part="loading" decorative={true} />',
+    '<PlantedMark data-part="loading" label="Loading" />',
+    '<PlantedMark data-part="loading" label={PLANTED_LABEL} />',
+  ]) {
+    assertLoadingStamped(measureFactoryIcon({ factory: 'gated', element }), element);
+  }
+});
+
+test('PLANT N1: the same guarded icon with neither a name nor `decorative` is unbacked, even with the pin', () => {
+  assertLoadingUnstamped(measureFactoryIcon({ factory: 'gated' }), 'neither label nor decorative');
+});
+
+test('PLANT N1: a guarded icon handed both, a false `decorative` or an empty name renders nothing and is unbacked', () => {
+  for (const element of [
+    '<PlantedMark data-part="loading" decorative label="Loading" />',
+    '<PlantedMark data-part="loading" decorative={false} />',
+    '<PlantedMark data-part="loading" label="" />',
+    '<PlantedMark data-part="loading" label="   " />',
+    '<PlantedMark data-part="loading" label={undefined} />',
+    '<PlantedMark data-part="loading" label={null} />',
+  ]) {
+    assertLoadingUnstamped(measureFactoryIcon({ factory: 'gated', element }), element);
+  }
+});
+
+test('PLANT N1: a wrapper that renders the guarded icon answers at ITS call site, not the family\'s', () => {
+  /* The family's own attributes never reach the guard: the wrapper's do. */
+  assertLoadingUnstamped(
+    measureFactoryIcon({ factory: 'gated', wrapper: '{...props}', element: '<PlantedMark data-part="loading" decorative />' }),
+    'wrapper spreads without declaring',
+  );
+  assertLoadingStamped(
+    measureFactoryIcon({ factory: 'gated', wrapper: '{...props} decorative' }),
+    'wrapper declares decorative',
+  );
+});
+
+test('CONTROL N1: an icon with no such guard needs neither -- the rule binds only a component that can render nothing', () => {
+  assertLoadingStamped(measureFactoryIcon({ factory: 'forwards' }), 'unguarded factory icon');
+});
+
+test('LIVE N1: the real semantic icon is unbacked bare and backed once the call site declares it decorative', () => {
+  const SEMANTIC = [
+    'src/graphics/icons/semantic/runtime/create-icon',
+    'src/graphics/icons/semantic/generated/roles/status-error.ts',
+    CALLER_PART_PIN,
+    CALLER_PART_PIN_CONTRACT,
+  ];
+  const measure = (element) => measureComposer({
+    tsx: [
+      "import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';",
+      '',
+      'export function PlantedBar() {',
+      '  return (',
+      '    <div className="ds-planted-bar" data-part="bar">',
+      `      ${element}`,
+      '    </div>',
+      '  );',
+      '}',
+      '',
+    ].join('\n'),
+    skin: `${BAR_RULE}.ds-planted-bar [data-part='loading'] { display: block; }\n`,
+    edit: copyIntoSandbox(...SEMANTIC),
+  });
+  assertLoadingStamped(measure('<StatusErrorIcon data-part="loading" decorative />'), 'decorative semantic icon');
+  assertLoadingStamped(measure('<StatusErrorIcon data-part="loading" label="Failed" />'), 'named semantic icon');
+  assertLoadingUnstamped(measure('<StatusErrorIcon data-part="loading" />'), 'bare semantic icon');
+});
+
+test('LIVE N1: every semantic icon a gated family hands a part to is declared decorative or named', () => {
+  /* With the rule on, each family measures exactly its pinned `partsConsumedNotStamped`: nothing in the
+   * live tree leans on a semantic icon that would render nothing. */
+  for (const family of ['status-filter-pills', 'form-header', 'edit-header', 'detail-header', 'input', 'pagination', 'saved-views-menu']) {
+    const pinned = readBaseline().families[family];
+    const measured = measureFamily(resolveFamily(family, ROOT, pinned), { producers: PRODUCERS });
+    assert.equal(measured.ratchets.partsConsumedNotStamped, pinned.partsConsumedNotStamped, family);
+  }
 });
 
 test('RESIDUAL (N3, documented): `as ?? \'div\'` reads as intrinsic even when the caller hands `as` a component', () => {

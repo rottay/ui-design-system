@@ -199,6 +199,17 @@
   inline-size: var(--ds-form-header-icon-badge-glyph-size, 22px);
   block-size: var(--ds-form-header-icon-badge-glyph-size, 22px);
 }
+/* icon-badge-glyph and action-icon are the family's own slots around an icon
+   component: the slot carries the size and the glyph fills it. */
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'],
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
+  display: flex;
+}
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'] > *,
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > * {
+  inline-size: 100%;
+  block-size: 100%;
+}
 
 /* ---- hero copy: eyebrow / title / subtitle ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-copy'] {

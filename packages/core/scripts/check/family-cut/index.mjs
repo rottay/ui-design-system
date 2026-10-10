@@ -1762,6 +1762,91 @@ const choices = (node) => (ts.isConditionalExpression(node) ? [node.whenTrue, no
 const keyText = (name) => name.getText().replace(/^['"]|['"]$/gu, '');
 
 /**
+ * A component whose render function returns `null` unless its caller names it
+ * or declares it decorative: it destructures `label` and `decorative` from its
+ * props and guards an early `return null` on values derived from BOTH. The
+ * semantic icon is that shape -- an icon with neither (or with both) renders
+ * nothing, so a caller part handed to it lands on no element.
+ */
+const accessibilityGateCache = new Map();
+function rendersOnlyNamedOrDecorative(target) {
+  const fn = target?.fn;
+  if (!fn?.body || !ts.isBlock(fn.body)) return false;
+  if (accessibilityGateCache.has(fn)) return accessibilityGateCache.get(fn);
+  const props = fn.parameters[0];
+  const tainted = { label: new Set(), decorative: new Set() };
+  const seed = (pattern) => {
+    for (const element of pattern.elements) {
+      const key = element.propertyName ? keyText(element.propertyName) : element.name.getText();
+      if ((key === 'label' || key === 'decorative') && ts.isIdentifier(element.name)) tainted[key].add(element.name.text);
+    }
+  };
+  const reads = (node, names) => {
+    let found = false;
+    const visit = (child) => {
+      if (ts.isIdentifier(child) && names.has(child.text)) found = true;
+      else ts.forEachChild(child, visit);
+    };
+    visit(node);
+    return found;
+  };
+  if (props && ts.isObjectBindingPattern(props.name)) seed(props.name);
+  const returnsNull = (statement) => (ts.isReturnStatement(statement)
+    ? statement.expression?.kind === ts.SyntaxKind.NullKeyword
+    : ts.isBlock(statement) && statement.statements.some(returnsNull));
+  let gated = false;
+  for (const statement of fn.body.statements) {
+    if (ts.isVariableStatement(statement)) {
+      for (const declaration of statement.declarationList.declarations) {
+        const fromProps = props && ts.isIdentifier(props.name) && declaration.initializer
+          && ts.isIdentifier(declaration.initializer) && declaration.initializer.text === props.name.text;
+        if (ts.isObjectBindingPattern(declaration.name)) {
+          if (fromProps) seed(declaration.name);
+        } else if (ts.isIdentifier(declaration.name) && declaration.initializer) {
+          for (const key of ['label', 'decorative']) {
+            if (reads(declaration.initializer, tainted[key])) tainted[key].add(declaration.name.text);
+          }
+        }
+      }
+    } else if (ts.isIfStatement(statement) && returnsNull(statement.thenStatement)
+      && reads(statement.expression, tainted.label) && reads(statement.expression, tainted.decorative)) {
+      gated = true;
+    }
+  }
+  accessibilityGateCache.set(fn, gated);
+  return gated;
+}
+
+/**
+ * Whether a call site gives such a component what it needs to render: EXACTLY
+ * ONE of `decorative` (bare or `{true}`) and a `label` that is not statically
+ * empty. A literal `''`, `undefined`, `null` or `false` label is no name; any
+ * other label expression is taken as supplied. Attributes hidden in a spread
+ * prove nothing (fail closed).
+ */
+function suppliesNameOrDecorative(attributes) {
+  let decorative = false;
+  let labeled = false;
+  for (const attribute of attributes) {
+    if (!attribute || !ts.isJsxAttribute(attribute)) continue;
+    const name = attributeName(attribute);
+    const initializer = attribute.initializer;
+    const value = initializer && ts.isJsxExpression(initializer) ? initializer.expression && unwrapTransparent(initializer.expression) : initializer;
+    if (name === 'decorative') {
+      decorative = !initializer || value?.kind === ts.SyntaxKind.TrueKeyword;
+    } else if (name === 'label') {
+      labeled = Boolean(value) && !(
+        (ts.isStringLiteralLike(value) && value.text.trim() === '')
+        || value.kind === ts.SyntaxKind.NullKeyword
+        || value.kind === ts.SyntaxKind.FalseKeyword
+        || (ts.isIdentifier(value) && value.text === 'undefined')
+      );
+    }
+  }
+  return decorative !== labeled;
+}
+
+/**
  * What ONE component function does with the anatomy its caller hands it --
  * `direct` when the caller's `data-part` reaches a DOM `data-part`, `props`
  * naming each object prop whose `'data-part'` reaches one. Every identifier is
@@ -1785,10 +1870,15 @@ function functionConsumption(target, root, active = new Set()) {
     if (setter === 'direct') result.direct = true;
     else if (setter?.startsWith('prop:')) result.props.add(setter.slice(5));
   };
-  /** Records one rendered element: its attributes in source order as [name | undefined (spread), expression]. */
+  /** Records one rendered element: its attributes in source order as [name | undefined (spread), expression, node]. */
   const element = (tag, attributes) => {
     const kind = tagOf(tag);
     if (!kind) return;
+    /* A child that renders nothing without a name or `decorative` stamps nothing unless this call site supplies one. */
+    if (kind !== 'intrinsic' && !kind.pinned && rendersOnlyNamedOrDecorative(kind)
+      && !suppliesNameOrDecorative(attributes.map(([, , node]) => node))) {
+      return;
+    }
     let last;
     for (const [name, expression] of attributes) {
       if (name === undefined) last = spreadSetter(expression) ?? last;
@@ -1819,10 +1909,10 @@ function functionConsumption(target, root, active = new Set()) {
   const stamp = (node) => {
     if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
       element(node.tagName, node.attributes.properties.map((attribute) => (ts.isJsxSpreadAttribute(attribute)
-        ? [undefined, attribute.expression]
+        ? [undefined, attribute.expression, attribute]
         : [attributeName(attribute), attribute.initializer && ts.isJsxExpression(attribute.initializer)
           ? attribute.initializer.expression
-          : undefined])));
+          : undefined, attribute])));
     }
     /* `createElement(tag, props)` renders its props object exactly like a JSX element. */
     if (ts.isCallExpression(node) && /(^|\.)createElement$/u.test(node.expression.getText()) && node.arguments[1]) {
@@ -2041,7 +2131,13 @@ function composedTagConsumption(file, element, root) {
   for (let node = element.parent; node; node = node.parent) if (ts.isFunctionLike(node)) enclosing = node;
   const kind = componentScope({ file, fn: enclosing }, root).tagOf(element.tagName);
   if (kind === 'intrinsic') return kind;
-  return kind ? functionConsumption(kind, root) : NO_CONSUMPTION;
+  if (!kind) return NO_CONSUMPTION;
+  /* A semantic icon handed neither a name nor `decorative` renders nothing: its stamp is not rendered anatomy. */
+  if (!kind.pinned && rendersOnlyNamedOrDecorative(kind)
+    && !suppliesNameOrDecorative(element.attributes.properties)) {
+    return NO_CONSUMPTION;
+  }
+  return functionConsumption(kind, root);
 }
 
 /**

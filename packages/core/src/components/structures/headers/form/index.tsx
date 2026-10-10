@@ -210,7 +210,11 @@ export function FormHeader({
         <Flex data-part="hero-row" justify="between" align="start" wrap="wrap">
           <Flex align="center" gap={16} data-part="hero-cluster">
             <Box data-part="icon-badge" data-variant={resolveHeaderTone(colorVariant)}>
-              <MainIcon data-part="icon-badge-glyph" />
+              {/* The header owns the glyph slot; the title names the page, so
+                  the glyph is decorative. */}
+              <span data-part="icon-badge-glyph" aria-hidden="true">
+                <MainIcon />
+              </span>
             </Box>
             <Stack spacing="xs" data-part="hero-copy">
               {eyebrow ? (
@@ -253,7 +257,15 @@ export function FormHeader({
                   <Tooltip key={`${headerAction.label}-${index}`} content={resolveSharedHeaderActionTooltip(headerAction)}>
                     <Button
                       variant={resolveSharedHeaderActionVariant(headerAction)}
-                      icon={ActionIcon ? <ActionIcon data-part="action-icon" /> : undefined}
+                      /* The header owns the icon slot; the action's label names
+                         it, so the glyph is decorative. */
+                      icon={
+                        ActionIcon ? (
+                          <span data-part="action-icon" aria-hidden="true">
+                            <ActionIcon />
+                          </span>
+                        ) : undefined
+                      }
                       onClick={headerAction.onClick}
                       pending={headerAction.loading}
                       disabled={headerAction.disabled}
