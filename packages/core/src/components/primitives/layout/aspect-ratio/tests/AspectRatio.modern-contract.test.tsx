@@ -5,9 +5,9 @@ import { describe, expect, it } from "vitest";
 import ModernAspectRatio from "../engines/modern";
 
 describe("AspectRatio modern premium contract", () => {
-  it("forwards semantics, ref, and caller-owned anatomy", () => {
+  it("forwards semantics and ref, and keeps its own anatomy over a caller data-part", () => {
     const ref = createRef<HTMLDivElement>();
-    render(
+    const { container } = render(
       <ModernAspectRatio
         ref={ref}
         role="group"
@@ -20,7 +20,8 @@ describe("AspectRatio modern premium contract", () => {
     );
 
     const frame = screen.getByRole("group", { name: "Candidate introduction" });
-    expect(frame).toHaveAttribute("data-part", "consumer-value");
+    expect(frame).toHaveAttribute("data-part", "root");
+    expect(container.querySelector('[data-part="consumer-value"]')).toBeNull();
     expect(frame).toHaveAttribute("lang", "en");
     expect(ref.current).toBe(frame);
   });

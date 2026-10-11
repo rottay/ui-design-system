@@ -97,7 +97,10 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
     className = '',
     style,
     engine: _engine,
-    'data-part': dataPart,
+    // P-88: the timeline keeps its own anatomy ('root'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     // Caller passthrough (id / aria-* / data-* / data-testid): the pass-through
     // honesty law on BaseComponentProps binds every engine to forward it to the
     // root it owns. It spreads BEFORE the engine's own stamps so the skin
@@ -148,7 +151,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
     <ol
       {...rest}
       className={`${SCOPE_CLASSES}${className ? ` ${className}` : ''}`}
-      data-part={dataPart ?? 'root'}
+      data-part="root"
       data-mode={mode}
       data-sides={sides}
       style={style}

@@ -87,7 +87,10 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
     className = '',
     style,
     engine: _engine,
-    'data-part': dataPart,
+    // P-88: the QR code keeps its own anatomy ('root'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     // Caller passthrough (id / aria-* / data-* / data-testid): spreads BEFORE
     // the engine's own stamps so the skin contract always lands last.
     ...rest
@@ -157,7 +160,7 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
       {...rest}
       className={`rottay-qrcode rottay-qrcode--modern ${className}`}
       style={containerInlineStyle}
-      data-part={dataPart ?? 'root'}
+      data-part="root"
       data-status={status}
       data-bordered={bordered ? 'true' : undefined}
     >

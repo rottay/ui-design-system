@@ -1,7 +1,7 @@
 /**
  * The segmented family in a real browser: every decision it consumes moves its
- * paint with a negative control, a composite that renames its part paints like
- * the bare control, and direction and accessibility hold in each vertical.
+ * paint with a negative control, a composite that hooks it by class paints like
+ * the bare control while the control keeps its own root part, and direction and accessibility hold in each vertical.
  */
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -97,10 +97,20 @@ describeCausality({
 const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {};
 
 describe('segmented composition, direction and accessibility in a real browser', () => {
-  it('paints a control a composite renamed exactly like the bare control', async () => {
+  it('keeps its own root part under a composite and paints exactly like the bare control', async () => {
     const named = renderToStaticMarkup(
-      <ModernSegmented ariaLabel="Period" options={OPTIONS} defaultValue="week" data-part="view-mode" />,
+      <ModernSegmented
+        ariaLabel="Period"
+        options={OPTIONS}
+        defaultValue="week"
+        className="view-mode-hook"
+        data-part="view-mode"
+      />,
     );
+    // P-88: the composite reaches the control through its class hook; the
+    // caller part never lands and the control's own root part does.
+    expect(named).not.toContain('data-part="view-mode"');
+    expect(named).toMatch(/<div class="[^"]*view-mode-hook[^"]*"[^>]*data-part="root"/u);
     const targets = [
       { id: 'border', selector: ROOT, property: 'border-top-color' },
       { id: 'padding', selector: ROOT, property: 'padding-top' },

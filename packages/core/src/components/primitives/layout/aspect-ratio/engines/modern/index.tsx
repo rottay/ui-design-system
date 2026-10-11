@@ -61,7 +61,10 @@ const ModernAspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
       style,
       maxWidth,
       "data-testid": dataTestId,
-      "data-part": dataPart,
+      // P-88: the aspect ratio keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      "data-part": _callerDataPart,
+      "data-state": _callerDataState,
       engine: _engine,
       ...rest
     } = props;
@@ -94,7 +97,7 @@ const ModernAspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
         className={`ds-aspect-ratio ds-aspect-ratio--modern ${className}`.trim()}
         style={containerStyle}
         data-testid={dataTestId}
-        data-part={dataPart ?? "root"}
+        data-part="root"
         data-ratio={resolvedRatio}
         data-invalid-ratio={ratioIsValid ? undefined : "true"}
         data-component="aspect-ratio"

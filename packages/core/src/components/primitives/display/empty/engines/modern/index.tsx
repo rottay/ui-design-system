@@ -44,7 +44,10 @@ const ModernEmpty = forwardRef<HTMLDivElement, EmptyProps>((props, ref) => {
     children,
     className = '',
     style,
-    'data-part': dataPart,
+    // P-88: the empty state keeps its own anatomy ('root'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     role,
     'aria-live': ariaLive,
     // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
@@ -76,7 +79,7 @@ const ModernEmpty = forwardRef<HTMLDivElement, EmptyProps>((props, ref) => {
       {...rest}
       ref={ref}
       className={`rottay-empty rottay-empty--modern ${className}`}
-      data-part={dataPart ?? 'root'}
+      data-part="root"
       data-image={imageType}
       data-has-description={Boolean(displayDescription)}
       data-has-footer={Boolean(children)}

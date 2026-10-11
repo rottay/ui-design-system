@@ -191,7 +191,6 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
       ariaLabel,
       className = "",
       style,
-      "data-part": dataPart,
     } = props;
 
     // ---------------------------------------------------------------------------
@@ -404,7 +403,9 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
         ref={setRoot}
         className={`ds-segmented ds-segmented--modern ${className}`.trim()}
         style={style}
-        {...partAttributes(dataPart ?? "root", rootInteraction)}
+        // P-88: the segmented control keeps its own anatomy ('root'); a caller data-part
+        // is never read (callers compose through className).
+        {...partAttributes("root", rootInteraction)}
         onPointerEnter={rootHandlers.onPointerEnter}
         onPointerLeave={rootHandlers.onPointerLeave}
         data-size={size}

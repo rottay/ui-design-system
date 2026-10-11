@@ -5,20 +5,18 @@ import { describe, expect, it } from "vitest";
 import ModernAspectRatio from "../engines/modern";
 
 describe("AspectRatio modern anatomy ownership", () => {
-  it("lets a composing caller's data-part reach the DOM (P-79)", () => {
-    render(
+  it("keeps its own root part when a composing caller passes a data-part (P-88)", () => {
+    const { container } = render(
       <ModernAspectRatio data-part="media-frame" data-testid="frame">
         <img alt="" />
       </ModernAspectRatio>
     );
 
-    expect(screen.getByTestId("frame")).toHaveAttribute(
-      "data-part",
-      "media-frame"
-    );
+    expect(screen.getByTestId("frame")).toHaveAttribute("data-part", "root");
+    expect(container.querySelector('[data-part="media-frame"]')).toBeNull();
   });
 
-  it("stamps the default root part only when the caller passed none", () => {
+  it("stamps the root part when the caller passed none", () => {
     render(
       <ModernAspectRatio data-testid="frame">
         <img alt="" />

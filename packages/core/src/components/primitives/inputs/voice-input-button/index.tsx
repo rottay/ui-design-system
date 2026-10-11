@@ -95,6 +95,10 @@ export function VoiceInputButton({
   ariaLabel,
   className,
   style,
+  // P-88: the voice input button keeps its own anatomy ('root'); a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   ...passthrough
 }: VoiceInputButtonProps) {
   const i18n = useOptionalTranslation('components');
@@ -188,9 +192,8 @@ export function VoiceInputButton({
             toggle inside a form would submit it (Box's own contract flags this
             exact hazard for `as='button'`). The passthrough spreads first so
             every engine-owned hook below wins the tie — the pinned law of the
-            layout sisters. `data-state` is restated after `partAttributes`
-            because that helper OMITS the key at rest, which would otherwise
-            let a caller `data-state` survive and pin the skin's press paint. */}
+            layout sisters. `data-state` is restated after `partAttributes`,
+            which omits the key at rest. */}
         <Box
           as="button"
           type="button"

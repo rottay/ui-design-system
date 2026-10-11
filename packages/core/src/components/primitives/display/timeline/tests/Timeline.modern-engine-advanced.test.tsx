@@ -183,11 +183,12 @@ describe('Timeline modern — pass-through honesty law', () => {
     expect(root).toHaveAttribute('data-custom', 'caller-data');
   });
 
-  it('lets a composing owner name the root part and keeps the default otherwise', () => {
+  it('keeps its own root part whether or not a composing owner passes a data-part', () => {
     const { container: named } = render(
       <ModernTimeline data-part="activity-rail" items={[{ children: 'a' }]} />
     );
-    expect(named.querySelector('ol')).toHaveAttribute('data-part', 'activity-rail');
+    expect(named.querySelector('ol')).toHaveAttribute('data-part', 'root');
+    expect(named.querySelector('[data-part="activity-rail"]')).toBeNull();
 
     const { container: plain } = render(<ModernTimeline items={[{ children: 'a' }]} />);
     expect(plain.querySelector('ol')).toHaveAttribute('data-part', 'root');

@@ -69,8 +69,7 @@ describe('Empty announcement authority', () => {
 
   it('keeps the skin contract winning over the passthrough', () => {
     // Pass-through is for caller semantics, not for the anatomy the skin
-    // selects on: `data-image` stays engine-owned while `data-part` is the one
-    // documented override.
+    // selects on: `data-image` and `data-part` both stay engine-owned (P-88).
     const { container } = renderWithEngine(
       <ModernEmpty
         image="simple"
@@ -82,7 +81,8 @@ describe('Empty announcement authority', () => {
     );
     const root = rootOf(container);
 
-    expect(root).toHaveAttribute('data-part', 'placeholder');
+    expect(root).toHaveAttribute('data-part', 'root');
+    expect(container.querySelector('[data-part="placeholder"]')).toBeNull();
     expect(root).toHaveAttribute('data-image', 'simple');
   });
 });

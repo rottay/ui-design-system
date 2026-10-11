@@ -300,12 +300,13 @@ describe('modern QRCode — pass-through honesty law', () => {
     expect(root).toHaveAttribute('data-part', 'root');
   });
 
-  it('lets a composing owner name the root part and never leaks the engine prop', () => {
+  it('keeps its own root part over a composing owner data-part and never leaks the engine prop', () => {
     const { container } = render(
       <ModernQRCode value="v" engine="modern" data-part="ticket-code" />
     );
     const root = container.querySelector('.rottay-qrcode--modern') as HTMLElement;
-    expect(root).toHaveAttribute('data-part', 'ticket-code');
+    expect(root).toHaveAttribute('data-part', 'root');
+    expect(container.querySelector('[data-part="ticket-code"]')).toBeNull();
     expect(root).not.toHaveAttribute('engine');
   });
 });

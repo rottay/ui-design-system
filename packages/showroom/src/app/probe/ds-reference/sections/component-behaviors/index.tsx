@@ -1107,12 +1107,11 @@ export function ComponentBehaviorScene({ only }: { only: ComponentBehaviorCase }
       )}
 
       {only === 'aspectratio' && (
-        <SpecimenRow axis="ASPECTRATIO - a composing caller owns the anatomy part (P-79)">
+        <SpecimenRow axis="ASPECTRATIO - the frame keeps its own anatomy part (P-88)">
           <div data-testid="lab-aspectratio" style={{ inlineSize: 'min(420px, 100%)' }}>
             <AspectRatio
               engine="modern"
               ratio={16 / 9}
-              data-part="media-frame"
               data-testid="lab-aspectratio-root"
             >
               <div style={{ blockSize: '100%', background: 'var(--ds-color-primary)' }} />
