@@ -76,6 +76,10 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
       side = 'top',
       className = '',
       style,
+      // P-88: the tooltip content keeps its own anatomy ('content'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       ...restProps
     } = props;
 

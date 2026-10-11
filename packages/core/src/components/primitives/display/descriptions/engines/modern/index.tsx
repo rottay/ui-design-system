@@ -121,7 +121,10 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       children,
       className = '',
       style,
-      'data-part': dataPart,
+      // P-88: the descriptions keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       'aria-label': ariaLabel,
       // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
       // the root element. It spreads BEFORE the engine's own stamps so the
@@ -156,7 +159,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
           ...columns.style,
           ...style,
         } as React.CSSProperties}
-        data-part={dataPart ?? 'root'}
+        data-part="root"
         data-engine="modern"
         data-layout={layout}
         data-bordered={bordered ? 'true' : 'false'}

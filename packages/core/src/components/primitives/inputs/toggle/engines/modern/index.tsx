@@ -60,8 +60,12 @@ const ModernToggle = forwardRef<HTMLInputElement, ToggleProps>((props, ref) => {
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
     'aria-describedby': ariaDescribedBy,
+    // P-88: the toggle keeps its own anatomy ('root'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...rest
-  } = props;
+  } = props as ToggleProps & { 'data-part'?: string; 'data-state'?: string };
   void _engine;
 
   const generatedId = useId();

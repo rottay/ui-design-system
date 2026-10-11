@@ -15,7 +15,7 @@
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 80,
+  "passThroughViolations": 71,
   "callerPartDependents": 859,
   "callerStateDependents": 31
  },
@@ -66,15 +66,6 @@
    "family": "card",
    "breach": [
     "state-rest"
-   ]
-  },
-  {
-   "key": "primitives/display/descriptions/engines/modern/index.tsx#ModernDescriptions#div#root#0",
-   "engine": "modern",
-   "family": "descriptions",
-   "breach": [
-    "part-replace",
-    "state-forward"
    ]
   },
   {
@@ -164,24 +155,6 @@
    "family": "timeline",
    "breach": [
     "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/tooltip/compound/content/index.tsx#TooltipContent#div#content#0",
-   "engine": "all (compound)",
-   "family": "tooltip",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/tooltip/compound/trigger/index.tsx#TooltipTrigger#span#none#0",
-   "engine": "all (compound)",
-   "family": "tooltip",
-   "breach": [
-    "part-forward",
     "state-forward"
    ]
   },
@@ -320,24 +293,6 @@
    ]
   },
   {
-   "key": "primitives/feedback/rate/engines/modern/index.tsx#Rate#div#root#0",
-   "engine": "modern",
-   "family": "rate",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/feedback/rate/engines/rustic/index.tsx#Rate#div#root#0",
-   "engine": "rustic",
-   "family": "rate",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
    "key": "primitives/feedback/skeleton/engines/modern/index.tsx#default#div#root#0",
    "engine": "modern",
    "family": "skeleton",
@@ -366,24 +321,6 @@
    "key": "primitives/inputs/textarea/engines/rustic/index.tsx#default#textarea#root#0",
    "engine": "rustic",
    "family": "textarea",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/inputs/toggle/engines/modern/index.tsx#ModernToggle#input#none#0",
-   "engine": "modern",
-   "family": "toggle",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/inputs/toggle/engines/rustic/index.tsx#default#label#root#0",
-   "engine": "rustic",
-   "family": "toggle",
    "breach": [
     "part-replace",
     "state-forward"
@@ -571,23 +508,6 @@
    "key": "primitives/layout/grid/engines/modern/index.tsx#ModernGridItem#createElement(ElementType)#grid-cell#0",
    "engine": "modern",
    "family": "grid",
-   "breach": [
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/semantic-surface/index.tsx#SemanticSurface#Component#root#0",
-   "engine": "all (compound)",
-   "family": "semantic-surface",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/semantic-surface/index.tsx#SemanticSurfaceSupport#span#support#0",
-   "engine": "all (compound)",
-   "family": "semantic-surface",
    "breach": [
     "state-forward"
    ]
@@ -1549,11 +1469,6 @@
    "part": [],
    "state": []
   },
-  "descriptions": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
   "divider": {
    "carrier": false,
    "part": [],
@@ -1762,17 +1677,7 @@
    "part": [],
    "state": []
   },
-  "rate": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
   "segmented": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
-  "semantic-surface": {
    "carrier": false,
    "part": [],
    "state": []
@@ -1854,16 +1759,6 @@
    "part": [],
    "state": []
   },
-  "toggle": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
-  "tooltip": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
   "typography": {
    "carrier": false,
    "part": [
@@ -1928,7 +1823,7 @@
   ]
  },
  "lastMove": {
-  "head": "bbba0a71bdc05a76c952f5e4168315b696a790be",
+  "head": "98953b5f7aa2aebc6dd08c20191e0c6dfd7564b0",
   "date": "2026-10-11",
   "note": "lowered to the gate's own measurement through --update-baseline"
  }

@@ -235,8 +235,12 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       direction = RATE_DEFAULTS.direction,
       // Omit engine prop
       engine: _engine,
+      // P-88: the rate keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       ...restProps
-    } = props;
+    } = props as RateProps & { 'data-part'?: string; 'data-state'?: string };
 
     // -------------------------------------------------------------------------
     // Styles

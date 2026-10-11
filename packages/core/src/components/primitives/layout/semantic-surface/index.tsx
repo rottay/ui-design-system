@@ -18,6 +18,8 @@ import {
   type SemanticSurfaceSupportProps,
 } from './contracts';
 
+type CallerAnatomyAttributes = { 'data-part'?: string; 'data-state'?: string };
+
 export const SemanticSurface = forwardRef<HTMLElement, SemanticSurfaceProps>(
   (props, ref) => {
     const {
@@ -32,8 +34,12 @@ export const SemanticSurface = forwardRef<HTMLElement, SemanticSurfaceProps>(
       type,
       className = '',
       children,
+      // P-88: the semantic surface keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       ...rest
-    } = props;
+    } = props as SemanticSurfaceProps & CallerAnatomyAttributes;
 
     const Component = as as React.ElementType;
     const isInteractive = interactive && !disabled;
@@ -48,9 +54,7 @@ export const SemanticSurface = forwardRef<HTMLElement, SemanticSurfaceProps>(
           : {};
     const busyProps = loading ? { 'aria-busy': true } : {};
 
-    // P-79: the default root part lands BEFORE the `rest` spread so an
-    // explicit caller data-part wins; the skin anchors on the class +
-    // data-surface-role, never on the part.
+    // The skin anchors on the class + data-surface-role, never on the part.
     return (
       <Component
         data-part="root"
@@ -78,16 +82,28 @@ SemanticSurface.displayName = 'SemanticSurface';
 export const SemanticSurfaceSupport = forwardRef<
   HTMLSpanElement,
   SemanticSurfaceSupportProps
->(({ className = '', children, ...rest }, ref) => (
-  <span
-    {...rest}
-    ref={ref}
-    className={`ds-semantic-surface__support ${className}`.trim()}
-    data-part="support"
-  >
-    {children}
-  </span>
-));
+>((props, ref) => {
+  const {
+    className = '',
+    children,
+    // P-88: the semantic surface support keeps its own anatomy ('support'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
+    ...rest
+  } = props as SemanticSurfaceSupportProps & CallerAnatomyAttributes;
+
+  return (
+    <span
+      {...rest}
+      ref={ref}
+      className={`ds-semantic-surface__support ${className}`.trim()}
+      data-part="support"
+    >
+      {children}
+    </span>
+  );
+});
 
 SemanticSurfaceSupport.displayName = 'SemanticSurfaceSupport';
 

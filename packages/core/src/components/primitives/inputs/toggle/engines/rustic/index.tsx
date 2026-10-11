@@ -57,8 +57,12 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
     autoFocus,
     className = '',
     style,
+    // P-88: the toggle keeps its own anatomy ('root'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...rest
-  } = props;
+  } = props as ToggleProps & { 'data-part'?: string; 'data-state'?: string };
 
   const generatedId = useId();
   const inputId = providedId || `toggle-rustic-${generatedId}`;

@@ -73,6 +73,10 @@ export const TooltipTrigger = forwardRef<HTMLElement, TooltipTriggerProps>(
       asChild = false,
       className = '',
       style,
+      // P-88: the tooltip trigger carries no part of its own; a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       ...restProps
     } = props;
 
