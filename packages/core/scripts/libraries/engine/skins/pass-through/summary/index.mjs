@@ -4,8 +4,9 @@
  * the tripwire marker). READ-ONLY, pure. The body is the adopted report.mjs verbatim; its CLI
  * shell, the out-of-repo tool shas, the `generated` date and the markdown fragment are dropped.
  */
-// Provenance: arc12/l2-tools/report.mjs sha256 8a8ca98cba3b6dab6637a9245ddcbab1cf59eb3ed220b6e65c630329afcb8696 (census v7.1.1, 2026-10-10: the
-// tag-name audit list dropped with the fallback; v7.1 was d66a34b2 -- the unresolved-caller section; v7 was 44b91e89).
+// Provenance: arc12/dt3/report.mjs sha256 2f340462f8119abedb77ef8f8dfd16621082207aaf3e0c089bf396e925b3a9e5 (census v7.1.2, 2026-10-11: the two
+// discharged adjudication labels dropped; v7.1.1 was 8a8ca98c -- the tag-name audit list dropped with the fallback;
+// v7.1 was d66a34b2 -- the unresolved-caller section; v7 was 44b91e89).
 
 /** @param {object} d  classifyPassThrough() output. @param {object} raw  sweepPassThrough() output. */
 export function summarizePassThrough(d, raw, { head = null } = {}) {
@@ -19,10 +20,10 @@ for (const s of sites) {
   const twin = seen.find((t) => t.file === s.file && t.owner === s.owner && t.mechanics === s.mechanics && Math.abs(t.line - s.line) <= 2);
   if (twin) { s.twinOf = twin.id; } else { logical += 1; seen.push(s); }
 }
+// v7.1.2: the modern Select custom-trigger and modern Button anchor rows are gone -- both sites keep
+// part and state since E1/E9, so neither is a census site and no it.fails names them.
 const ADJ = {
   'primitives/inputs/toggle/engines/modern/index.tsx:140': 'RULED breach (review 304b6e7c section 8): the input is painted (.ds-toggle.ds-toggle--modern input); strip data-part/data-state from the rest; pin at promotion',
-  'primitives/inputs/select/engines/modern/index.tsx:1010': 'RESOLVED: pinned at b044f9010 (PassThroughLaw custom-trigger resting data-state it.fails)',
-  'primitives/inputs/button/engines/modern/index.tsx:516': 'RESOLVED: pinned at b044f9010 (Button.passthrough-contract modern anchor-path data-part + resting data-state it.fails, x2 with the rerun file)',
 };
 for (const s of sites) {
   const k = short(s.file) + ':' + s.line;

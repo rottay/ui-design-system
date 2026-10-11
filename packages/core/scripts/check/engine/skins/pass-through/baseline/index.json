@@ -7,8 +7,8 @@
  "lastMoveKind": "decrease",
  "measuredFrom": {
   "head": "76d1a390b1db36da019e9e2d4142dbd887e7cd51",
-  "census": "v7.1.1, 2026-10-10 (arc12/l2-tools: census be21d40e / post 2632ae59 / report 8a8ca98c / attribution 7ab151e9): the tag-name fallback removed; no ledger value moved (the two rows it claimed fed no rule). v7.1 (census 3ca4db81 / report d66a34b2) is kept at arc12/l2-tools-v7.1-snapshot, v7 at arc12/l2-tools-v7-snapshot",
-  "measurement": "scripts/libraries/engine/skins/pass-through (the v7.1.1 tools ported with verbatim bodies; parity at this head is byte-identical on raw, classified and census)"
+  "census": "v7.1.2, 2026-10-11 (arc12/dt3: census be21d40e / post d6eb6187 / report 2f340462 / attribution 7ab151e9): the pin inventory re-pinned 16 -> 6 rows after the E1/E9 promotions; no ledger value moved. v7.1.1 (post 2632ae59 / report 8a8ca98c) stays at arc12/l2-tools, v7.1 (census 3ca4db81 / report d66a34b2) at arc12/l2-tools-v7.1-snapshot, v7 at arc12/l2-tools-v7-snapshot",
+  "measurement": "scripts/libraries/engine/skins/pass-through (the v7.1.2 tools ported with verbatim bodies; parity at this head is byte-identical on raw, classified and census)"
  },
  "keys": "Line-free. Sites and tripwires: <file>#<owning component>#<tag>#<canonical part|none>#<ordinal>. Dependents: <file>#<child component>#<caller part|none>#<ordinal>. The ordinal counts elements sharing the first four fields in source order, so a line shift elsewhere never churns a key.",
  "eligibilityRule": "A child family's part-strip engine lot is eligible iff its `part` set is empty; its state-strip lot iff its `state` set is empty. Layout carriers (carrier: true) wait on the owner's carrier ruling (§6) whatever their sets say. A held entry names its routing; the typography engine lot's ruled precondition is exactly its held set.",

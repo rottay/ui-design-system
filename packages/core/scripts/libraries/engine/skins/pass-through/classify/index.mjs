@@ -5,7 +5,8 @@
  * the v7 attribution (v3 owner skins, C4 engine scope, rule 4b, C7..C10 strikes). READ-ONLY.
  * The body is the adopted post.mjs verbatim; only its CLI shell is replaced.
  */
-// Provenance: arc12/l2-tools/post.mjs sha256 2632ae597aa986a795ac5eefe3ca54f349e68f3260deba2c4144eef63ed9c048 (census v7, adopted by the DT 2026-10-09).
+// Provenance: arc12/dt3/post.mjs sha256 d6eb61877b1a08634ae25749b19992362099cbd6b1f0776791119fe9fa302cd1 (census v7.1.2, 2026-10-11: the pin
+// inventory re-pinned to the 8 remaining it.fails; v7 through v7.1.1 was arc12/l2-tools/post.mjs 2632ae59).
 import { buildAttribution, ALL_RULES } from '../attribution/index.mjs';
 
 /** @param {object} raw  sweepPassThrough() output. @param {{ repoRoot: string, rules?: string[] }} options */
@@ -76,25 +77,16 @@ for (const r of all) {
 }
 sites.sort((a, b) => a.id.localeCompare(b.id));
 
-// pin consistency: the 13 distinct pinned behaviours (21 it.fails incl. 8 rerun copies)
+// pin consistency: the 6 distinct pinned behaviours (8 it.fails incl. 2 rerun copies)
+// v7.1.2: 10 rows left with their promotion to passing tests -- the modern Select pair at E1
+// (bfe7d5f89), the modern/rustic Button eight at E9 (28e169406). A row leaves only that way.
 const PINS = [
   { pin: 'Card.passthrough-contract:110 classic data-state (D1)', match: (s) => /display\/card\/engines\/classic/.test(s.file) && s.stateClass === 'state-forward' },
   { pin: 'PassThroughLaw:60 classic Card resting data-state', match: (s) => /display\/card\/engines\/classic/.test(s.file) && s.stateClass },
   { pin: 'PassThroughLaw:60 modern Card resting data-state', match: (s) => /display\/card\/engines\/modern/.test(s.file) && s.stateClass === 'state-rest' },
   { pin: 'PassThroughLaw:60 rustic Card resting data-state', match: (s) => /display\/card\/engines\/rustic/.test(s.file) && s.stateClass === 'state-rest' },
-  { pin: 'PassThroughLaw:73 modern Select resting data-state (native trigger)', match: (s) => /inputs\/select\/engines\/modern/.test(s.file) && s.tag === 'select' && s.stateClass === 'state-rest' },
-  { pin: 'Button.passthrough-contract:40 modern data-part (x2 incl. rerun)', match: (s) => /inputs\/button\/engines\/modern/.test(s.file) && s.tag === 'button' && s.partClass === 'part-replace' },
-  { pin: 'Button.passthrough-contract:66 rustic button-path data-part (x2)', match: (s) => /inputs\/button\/engines\/rustic/.test(s.file) && s.tag === 'button' && s.partClass === 'part-replace' },
-  { pin: 'Button.passthrough-contract:89 rustic anchor-path data-part (x2)', match: (s) => /inputs\/button\/engines\/rustic/.test(s.file) && s.tag === 'a' && s.partClass === 'part-replace' },
-  { pin: 'Button.passthrough-contract:111 classic data-part (x2)', match: (s) => /inputs\/button\/engines\/classic/.test(s.file) && s.partClass === 'part-replace' },
-  { pin: 'Button.passthrough-contract:155 classic data-state D2 (x2)', match: (s) => /inputs\/button\/engines\/classic/.test(s.file) && s.stateClass === 'state-forward' },
-  { pin: 'Button.passthrough-contract:165 modern resting data-state D3 (x2)', match: (s) => /inputs\/button\/engines\/modern/.test(s.file) && s.tag === 'button' && s.stateClass === 'state-rest' },
-  { pin: 'Button.passthrough-contract:172 rustic resting data-state D3 (x2)', match: (s) => /inputs\/button\/engines\/rustic/.test(s.file) && s.tag === 'button' && s.stateClass === 'state-rest' },
-  { pin: 'Button.passthrough-contract:179 rustic anchor resting data-state D3 (x2)', match: (s) => /inputs\/button\/engines\/rustic/.test(s.file) && s.tag === 'a' && s.stateClass === 'state-rest' },
-  // b044f9010 (test-only, 2026-10-08): the P-88 anchor and custom-trigger siblings
-  { pin: 'Button.passthrough-contract (b044f9010) modern anchor-path data-part (x2)', match: (s) => /inputs\/button\/engines\/modern/.test(s.file) && s.tag === 'a' && s.partClass === 'part-replace' },
-  { pin: 'Button.passthrough-contract (b044f9010) modern anchor-path resting data-state (x2)', match: (s) => /inputs\/button\/engines\/modern/.test(s.file) && s.tag === 'a' && s.stateClass === 'state-rest' },
-  { pin: 'PassThroughLaw (b044f9010) modern Select custom-trigger resting data-state', match: (s) => /inputs\/select\/engines\/modern/.test(s.file) && s.tag === 'div' && s.stateClass === 'state-rest' },
+  { pin: 'Button.passthrough-contract:123 classic data-part (x2 incl. rerun)', match: (s) => /inputs\/button\/engines\/classic/.test(s.file) && s.partClass === 'part-replace' },
+  { pin: 'Button.passthrough-contract:167 classic data-state D2 (x2 incl. rerun)', match: (s) => /inputs\/button\/engines\/classic/.test(s.file) && s.stateClass === 'state-forward' },
 ];
 const pinCheck = PINS.map((p) => { const hit = sites.filter(p.match).map((s) => s.id); return { pin: p.pin, censusSites: hit, present: hit.length > 0 }; });
 

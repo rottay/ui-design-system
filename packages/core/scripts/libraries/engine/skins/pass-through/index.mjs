@@ -30,6 +30,11 @@
  * v7.1.1 (2026-10-10; census be21d40e / report 8a8ca98c): the tag-name fallback is removed. A family
  * is attributed by proof only (import path or re-export chain); a tag that merely shares a
  * family's name (antd's Card, a local `Grid` element variable) is reported, never counted.
+ *
+ * v7.1.2 (2026-10-11; arc12/dt3: post d6eb6187 / report 2f340462, census and attribution unchanged):
+ * the pin inventory follows the tree down. 10 of its 16 rows named tests promoted to passing by the
+ * Select and Button engine lots; the 6 left are the 8 remaining it.fails. `pinCheck` is
+ * informational -- no site, dependent or ledger value reads it.
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';
