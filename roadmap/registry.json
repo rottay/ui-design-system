@@ -2814,6 +2814,11 @@
      "at": "2026-10-11 09:59",
      "by": "Kimi",
      "note": "DT-3 tooling re-pin INTEGRATED 94e89de9a (4 paths: classify PINS 16->6 all present after the E1/E9 promotions, summary dead ADJ rows removed, library index header, baseline measuredFrom prose v7.1.2 via the DT ledger door; totals unmoved 88/836/16, pinnedSites 4/84 identical). Writer fresh session 88288092, independent review ACCEPT (7cdfec5b, both receipts verified claude-opus-5-5 NORMAL). Gates at the new HEAD: pass-through --check rc 0, suite 23/23, engine-token-audit --check rc 0 (4264 counters). Registry 138/168 unchanged. In flight: DT-1/2/4 writer (bash-9p9813cs), E8 rendered browser comparison (bash-by3wrag0); E8 typography still HELD on the owner skeleton decision."
+    },
+    {
+     "at": "2026-10-11 10:23",
+     "by": "Kimi",
+     "note": "DT-1/2/4 INTEGRATED fe4ee847f (7 paths via the positive list, sha-verified 7/7): type-identical @deprecated redeclare of data-part/data-state on Button/Tag/Badge/Avatar (the sentence matches the reviewer's 12-engine render matrix; Link/Select untouched — a new prop there is a contract widening, routed to a prose lot), LoadingIndicatorAnatomy exported (ResizeHandleAnatomy precedent; 6 export gates rc-identical), the inert column-menu duplicate selector folded. Review HOLD(D-1 false classic clause) -> comment-only delta -> ACCEPT (7cdfec5b; both receipts verified NORMAL opus-5-5). Post-integration at HEAD: pass-through --check rc 0 (88/836/16), engine-token-audit rc 0, tsc 0 errors. F3 settled: zero Badge data-state consumers (the 4 brand-studio attributes are dead on arrival). Registry 138/168 unchanged. E8 stays HELD: the decision is reformulated with RENDERED evidence (arc12-e8-skeleton-decision-v2.md; 0/129 rows wrapped in the showroom, bone geometry 0/0/0/0, but R-4: the tier ramp moves 74/159 Texts in the LOADED state — E8 v2 must neutralize it per DT ruling; the owner's one question is frame-vs-block paint)."
     }
    ],
    "claimedBy": "kimi-dt",
