@@ -4299,11 +4299,9 @@ test('N1 gap: per name, the LAST setter decides -- the last-setter matrix', () =
     /* decorative */
     '{...{ decorative: true }}',
     'decorative={false} {...{ decorative: true }}',
-    '{...PLANTED_EXTRA} decorative',
     /* label */
     "{...{ label: 'Loading' }}",
     "{...{ label: '' }} label=\"Loading\"",
-    '{...PLANTED_EXTRA} label="Loading"',
     /* one name cleared by a later setter leaves exactly the other */
     'decorative label="Loading" {...{ label: undefined }}',
     'label="Loading" decorative {...{ decorative: false }}',
@@ -4323,6 +4321,11 @@ test('N1 gap: per name, the LAST setter decides -- the last-setter matrix', () =
     'label="Loading" {...PLANTED_EXTRA}',
     'decorative {...{ ...PLANTED_EXTRA }}',
     "decorative {...{ [PLANTED_KEY]: 'x' }}",
+    /* C5 (three states per name): the same spread BEFORE the explicit name leaves the OTHER name unknown. It may
+     * carry it, the guard would then see both and render nothing, so the credit cannot stand. These two rows read
+     * "stamped" when the N1 lot added them: unknown was stored as absent, the favourable guess. */
+    '{...PLANTED_EXTRA} decorative',
+    '{...PLANTED_EXTRA} label="Loading"',
   ];
   for (const attributes of stamped) assertLoadingStamped(gatedAt.family(attributes), attributes);
   for (const attributes of unstamped) assertLoadingUnstamped(gatedAt.family(attributes), attributes);
@@ -4332,7 +4335,6 @@ test('N1 gap: the last-setter rule holds through createElement, whose props obje
   for (const members of [
     "label: 'Loading'",
     "...{ label: '' }, label: 'Loading'",
-    '...PLANTED_EXTRA, decorative: true',
     "decorative: true, label: 'Loading', ...{ label: undefined }",
   ]) {
     assertLoadingStamped(gatedCall(members), members);
@@ -4343,6 +4345,8 @@ test('N1 gap: the last-setter rule holds through createElement, whose props obje
     "decorative: true, label: 'Loading'",
     "label: 'Loading', ...{ label: '' }",
     'decorative: true, ...PLANTED_EXTRA',
+    /* C5: the createElement twin of the flipped matrix row -- an unreadable spread first leaves `label` unknown. */
+    '...PLANTED_EXTRA, decorative: true',
   ]) {
     assertLoadingUnstamped(gatedCall(members), members);
   }
@@ -4356,16 +4360,85 @@ test('N1 gap: the props rest sets a name only when that name was not destructure
     measureFactoryIcon({ factory: 'gated', wrapperParams: '{ label, decorative, ...rest }', wrapper: 'decorative {...rest}' }),
     'both names destructured out of the rest',
   );
-  /* `rest` may still carry `decorative`: as its last setter it proves nothing. */
-  assertLoadingUnstamped(
-    measureFactoryIcon({ factory: 'gated', wrapperParams: '{ label, ...rest }', wrapper: 'decorative {...rest}' }),
-    'decorative left in the rest',
-  );
+  /* `rest` may still carry `decorative` -- but (C3) it carries only what the wrapper's caller handed it, and this
+   * caller hands only `data-part`: `decorative` is provably not in the rest, so the explicit one stands. The N1 lot
+   * read this row as unbacked because it had no caller to ask. */
+  const restAfterDecorative = (element) => measureFactoryIcon({
+    factory: 'gated', wrapperParams: '{ label, ...rest }', wrapper: 'decorative {...rest}', element,
+  });
+  assertLoadingStamped(restAfterDecorative('<PlantedMark data-part="loading" />'), 'decorative left in the rest, caller passes none');
+  /* The same wrapper from a caller that DOES write `decorative` into the rest, or that nobody can read: unbacked. */
+  assertLoadingUnstamped(restAfterDecorative('<PlantedMark data-part="loading" decorative={false} />'), 'the rest carries decorative={false}');
+  assertLoadingUnstamped(restAfterDecorative('<PlantedMark data-part="loading" decorative />'), 'the rest carries a decorative the wrapper cannot vouch for');
+  assertLoadingUnstamped(restAfterDecorative('<PlantedMark data-part="loading" {...PLANTED_EXTRA} />'), 'the caller spreads something unreadable');
   /* The same rest BEFORE the explicit attribute: the explicit one decides. */
   assertLoadingStamped(
     measureFactoryIcon({ factory: 'gated', wrapperParams: '{ label, ...rest }', wrapper: '{...rest} decorative' }),
     'explicit decorative after the rest',
   );
+});
+
+// C1-C6 (the N1 review's contract): three states per name. A name is supplied, proven absent, or unknown; the
+// credit needs exactly one supplied AND the other PROVEN absent. A component's own props or rest prove a name
+// absent only through the call site the gate is judging: the caller's reading is handed down.
+const spreadWrapper = (wrapper, element) => measureFactoryIcon({ factory: 'gated', wrapper, ...(element ? { element } : {}) });
+
+test('CONTROL C4: `{...props} decorative` is backed because its caller provably passes no label', () => {
+  /* The caller hands only `data-part`: the spread carries neither name, and the explicit `decorative` stands alone. */
+  assertLoadingStamped(spreadWrapper('{...props} decorative'), 'caller passes only data-part');
+  assertLoadingStamped(spreadWrapper('{...props} label="Loading"'), 'caller passes only data-part, wrapper names it');
+  assertLoadingStamped(
+    measureFactoryIcon({ factory: 'gated', wrapperCall: '{ ...props, decorative: true }' }),
+    'createElement, caller passes only data-part',
+  );
+  /* A caller that writes the other name EMPTY has proven it absent too. */
+  assertLoadingStamped(spreadWrapper('{...props} decorative', '<PlantedMark data-part="loading" label="" />'), 'caller passes an empty label');
+  assertLoadingStamped(spreadWrapper('{...props} label="Loading"', '<PlantedMark data-part="loading" decorative={false} />'), 'caller passes decorative={false}');
+});
+
+test('PLANT C5: the same wrapper reached from a caller that hands the OTHER name is unbacked', () => {
+  for (const element of [
+    '<PlantedMark data-part="loading" label="x" />',
+    '<PlantedMark data-part="loading" label={PLANTED_LABEL} />',
+    '<PlantedMark data-part="loading" {...PLANTED_EXTRA} />',
+    '<PlantedMark data-part="loading" {...{ label: \'x\' }} />',
+  ]) {
+    assertLoadingUnstamped(spreadWrapper('{...props} decorative', element), element);
+  }
+  for (const element of [
+    '<PlantedMark data-part="loading" decorative />',
+    '<PlantedMark data-part="loading" {...PLANTED_EXTRA} />',
+  ]) {
+    assertLoadingUnstamped(spreadWrapper('{...props} label="Loading"', element), element);
+  }
+  assertLoadingUnstamped(
+    measureFactoryIcon({ factory: 'gated', wrapperCall: '{ ...props, decorative: true }', element: '<PlantedMark data-part="loading" label="x" />' }),
+    'createElement, caller passes a label',
+  );
+});
+
+test('PLANT C5: a spread of anything other than the component\'s props or rest, before an explicit name, is unbacked', () => {
+  /* In a wrapper: the caller's reading says nothing about a foreign object. */
+  assertLoadingUnstamped(spreadWrapper("data-part={props['data-part']} {...PLANTED_EXTRA} decorative"), 'wrapper JSX, foreign spread then decorative');
+  assertLoadingUnstamped(spreadWrapper("data-part={props['data-part']} {...PLANTED_EXTRA} label=\"Loading\""), 'wrapper JSX, foreign spread then label');
+  assertLoadingUnstamped(gatedCall('...PLANTED_EXTRA, decorative: true'), 'wrapper createElement');
+  /* At the family's own call site. */
+  assertLoadingUnstamped(gatedAt.family('{...PLANTED_EXTRA} decorative'), 'family JSX, decorative');
+  assertLoadingUnstamped(gatedAt.family('{...PLANTED_EXTRA} label="Loading"'), 'family JSX, label');
+});
+
+test('C2: unknown on EITHER side is no credit; proven absence on the other side is what earns it', () => {
+  /* decorative supplied: label unset / written empty -> credit; label unknown -> none. */
+  assertLoadingStamped(gatedAt.family('decorative'), 'label unset');
+  assertLoadingStamped(gatedAt.family('{...PLANTED_EXTRA} label="" decorative'), 'label written empty after the spread');
+  assertLoadingUnstamped(gatedAt.family('{...PLANTED_EXTRA} decorative'), 'label unknown');
+  /* label supplied: decorative unset / written false -> credit; decorative unknown -> none. */
+  assertLoadingStamped(gatedAt.family('label="Loading"'), 'decorative unset');
+  assertLoadingStamped(gatedAt.family('{...PLANTED_EXTRA} decorative={false} label="Loading"'), 'decorative written false after the spread');
+  assertLoadingUnstamped(gatedAt.family('{...PLANTED_EXTRA} label="Loading"'), 'decorative unknown');
+  /* Both unknown, and a proven name beside an unknown one written LAST. */
+  assertLoadingUnstamped(gatedAt.family('{...PLANTED_EXTRA}'), 'both unknown');
+  assertLoadingUnstamped(gatedAt.family('decorative label="" {...PLANTED_EXTRA}'), 'both overwritten by the spread');
 });
 
 test('N1 gap: a label expression is evaluated statically; what reduces to nothing is no name', () => {

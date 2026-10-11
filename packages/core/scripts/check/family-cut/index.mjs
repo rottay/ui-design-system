@@ -1874,39 +1874,52 @@ function labelReading(expression) {
 }
 
 /**
- * Whether a call site gives such a component what it needs to render: EXACTLY
- * ONE of `decorative` and a name, read off the props the component RECEIVES.
+ * What a call site hands a component under `decorative` and `label`: the props
+ * the component RECEIVES, one of four readings per name.
+ *
+ *   'unset'     no setter writes the name: it is proven absent.
+ *   'absent'    a setter writes it with a value that is no declaration or no
+ *               name (`decorative={false}`, `label=""`): proven absent, and --
+ *               unlike 'unset' -- it overwrites what an earlier setter wrote
+ *               when the props are spread on.
+ *   'supplied'  `decorative` provably `true`; a `label` that settles to a name
+ *               ('named') or that only the runtime can settle ('runtime': the
+ *               call site did hand a name expression, and an authored name
+ *               that happens to be empty at runtime is the component's own
+ *               guard to catch, not anatomy this gate can prove dead).
+ *   'unknown'   the name's last setter is a spread nobody can read: it may
+ *               carry the name with any value, or not at all.
+ *
  * The setters are taken in source order and, per name, the LAST one decides: an
  * explicit attribute after a spread wins, and a spread after an explicit
  * attribute wins for the names it carries. `setters` is that ordered list --
  * `{ name, value }` for an attribute (`value` undefined for a bare attribute or
  * an empty `{}`; `bare` true for the former) and `{ spread }` for a spread or a
- * `createElement` props object. `kindOf` is the enclosing component's lexical
- * reader, when there is one.
+ * `createElement` props object.
  *
- *   decorative  supplied only when its last setter is provably `true`.
- *   label       'named' or 'empty' when its last setter settles statically
- *               (`''`, blank, `undefined`, `null`, `false`, `{}` and any
- *               constant expression reducing to one are NO name). A label
- *               only the runtime can settle counts as SUPPLIED: the call
- *               site did hand a name expression, and an authored name that
- *               happens to be empty at runtime is the component's own guard
- *               to catch, not anatomy this gate can prove dead.
- *   a spread    an object literal sets exactly the names it writes, in order.
- *               The props rest sets a name only if that name was not
- *               destructured out of it. Any other spread may set either name
- *               to anything, so a name whose LAST setter is such a spread is
- *               UNPROVEN and counts as not supplied (fail closed).
+ * A spread is read as far as it can be proven:
+ *   an object literal   writes exactly the names it writes, in order;
+ *   the props or rest   of the enclosing component (`kindOf`, its lexical
+ *                       reader) carries a name only if it was not destructured
+ *                       out, and then only what THIS component's caller
+ *                       provably did NOT hand it (`received`, the same readings
+ *                       one call site up): 'unset' leaves the name as it
+ *                       stands, 'absent' overwrites it as absent. The caller's
+ *                       state is proof of ABSENCE only -- a name the caller
+ *                       does hand through stays 'unknown', so a component
+ *                       still answers for a name at its own call site. With no
+ *                       known caller the name is 'unknown';
+ *   anything else       leaves both names 'unknown'.
  */
-function suppliesNameOrDecorative(setters, kindOf) {
-  const state = { decorative: false, label: 'empty' };
-  const unproven = (names) => {
-    if (names.includes('decorative')) state.decorative = false;
-    if (names.includes('label')) state.label = 'empty';
-  };
+function receivedNameAndDecorative(setters, kindOf, received) {
+  const state = { decorative: 'unset', label: 'unset' };
   const assign = (name, value, bare = false) => {
-    if (name === 'decorative') state.decorative = bare || declaresDecorative(value);
-    else if (name === 'label') state.label = bare ? 'empty' : labelReading(value);
+    if (name === 'decorative') {
+      state.decorative = bare || declaresDecorative(value) ? 'supplied' : 'absent';
+    } else if (name === 'label') {
+      const reading = bare ? 'empty' : labelReading(value);
+      state.label = reading === 'empty' ? 'absent' : reading;
+    }
   };
   const spread = (expression) => {
     const node = expression && unwrapTransparent(expression);
@@ -1915,27 +1928,46 @@ function suppliesNameOrDecorative(setters, kindOf) {
         if (ts.isSpreadAssignment(member)) {
           spread(member.expression);
         } else if (member.name && ts.isComputedPropertyName(member.name) && !ts.isStringLiteralLike(member.name.expression)) {
-          unproven(['decorative', 'label']);
+          state.decorative = 'unknown';
+          state.label = 'unknown';
         } else if (ts.isPropertyAssignment(member)) {
           assign(keyText(member.name), member.initializer);
         } else if (ts.isShorthandPropertyAssignment(member)) {
           assign(member.name.text, member.name);
         } else if (member.name) {
           /* A method or an accessor under one of the two names is a value only the runtime settles. */
-          if (keyText(member.name) === 'decorative') state.decorative = false;
+          if (keyText(member.name) === 'decorative') state.decorative = 'absent';
           else if (keyText(member.name) === 'label') state.label = 'runtime';
         }
       }
       return;
     }
     const rest = node && kindOf?.(node)?.rest;
-    unproven(rest ? ['decorative', 'label'].filter((name) => !rest.has(name)) : ['decorative', 'label']);
+    for (const name of ['decorative', 'label']) {
+      if (rest?.has(name)) continue;
+      /* The component's own props: a name its caller never wrote is not in the spread at all. */
+      const carried = rest ? received?.[name] : undefined;
+      if (carried !== 'unset') state[name] = carried === 'absent' ? 'absent' : 'unknown';
+    }
   };
   for (const setter of setters) {
     if ('spread' in setter) spread(setter.spread);
     else assign(setter.name, setter.value, setter.bare);
   }
-  return state.decorative !== (state.label !== 'empty');
+  return state;
+}
+
+/**
+ * Whether a call site gives such a component what it needs to render: EXACTLY
+ * ONE of `decorative` and a name is supplied AND the other is PROVEN absent.
+ * 'unknown' on either side is no credit: the guard renders nothing when it is
+ * handed both, so a name that may be there cannot be assumed away.
+ */
+function suppliesNameOrDecorative(setters, kindOf, received) {
+  const { decorative, label } = receivedNameAndDecorative(setters, kindOf, received);
+  const absent = (reading) => reading === 'unset' || reading === 'absent';
+  const named = label === 'named' || label === 'runtime';
+  return (decorative === 'supplied' && absent(label)) || (named && absent(decorative));
 }
 
 /** A JSX element's attributes as the ordered setters {@link suppliesNameOrDecorative} reads. */
@@ -1963,10 +1995,13 @@ function jsxSetters(attributes) {
  * into its own component: the caller's part counts only where that child is
  * itself shown to stamp it. What cannot be followed earns nothing.
  */
-function functionConsumption(target, root, active = new Set()) {
+function functionConsumption(target, root, active = new Set(), received = undefined) {
   if (!target) return NO_CONSUMPTION;
   const cacheKey = target.key ?? target.fn;
-  if (consumptionCache.has(cacheKey)) return consumptionCache.get(cacheKey);
+  /* What the component stamps can turn on what its caller handed it (N1), so the reading is cached per caller state. */
+  const receivedKey = received ? `${received.decorative}|${received.label}` : '';
+  const cached = consumptionCache.get(cacheKey);
+  if (cached?.has(receivedKey)) return cached.get(receivedKey);
   if (active.has(cacheKey)) return NO_CONSUMPTION;
   active.add(cacheKey);
   const result = { direct: false, props: new Set() };
@@ -1981,7 +2016,7 @@ function functionConsumption(target, root, active = new Set()) {
     if (!kind) return;
     /* A child that renders nothing without a name or `decorative` stamps nothing unless this call site supplies one. */
     if (kind !== 'intrinsic' && !kind.pinned && rendersOnlyNamedOrDecorative(kind)
-      && !suppliesNameOrDecorative(setters, kindOf)) {
+      && !suppliesNameOrDecorative(setters, kindOf, received)) {
       return;
     }
     let last;
@@ -1994,7 +2029,9 @@ function functionConsumption(target, root, active = new Set()) {
       return;
     }
     /* A pinned package glyph is proven, at runtime, to stamp the caller part on its svg. */
-    const child = kind.pinned ? { direct: true, props: new Set() } : functionConsumption(kind, root, active);
+    const child = kind.pinned
+      ? { direct: true, props: new Set() }
+      : functionConsumption(kind, root, active, receivedNameAndDecorative(setters, kindOf, received));
     if (child.direct) record(last);
     /* A hand-off reaches the child under the SAME prop name; the last setter wins. */
     for (const name of child.props) {
@@ -2027,7 +2064,8 @@ function functionConsumption(target, root, active = new Set()) {
   };
   if (target.fn.parameters[0] && target.fn.body) stamp(target.fn.body);
   active.delete(cacheKey);
-  consumptionCache.set(cacheKey, result);
+  if (!consumptionCache.has(cacheKey)) consumptionCache.set(cacheKey, new Map());
+  consumptionCache.get(cacheKey).set(receivedKey, result);
   return result;
 }
 
@@ -2243,7 +2281,8 @@ function composedTagConsumption(file, element, root) {
     && !suppliesNameOrDecorative(jsxSetters(element.attributes.properties), scope.kindOf)) {
     return NO_CONSUMPTION;
   }
-  return functionConsumption(kind, root);
+  /* The family's element is the wrapper's caller: hand down what it provably passes. */
+  return functionConsumption(kind, root, new Set(), receivedNameAndDecorative(jsxSetters(element.attributes.properties), scope.kindOf));
 }
 
 /**
