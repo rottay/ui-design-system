@@ -63,6 +63,17 @@ const DEFAULT_BRANCH_PART_COUNTS: Record<string, number> = {
   'fallback-empty': 1,
 };
 
+/** The composed Texts that carry an owner class hook, each found by it. */
+const TEXT_DOORS: Record<string, string> = {
+  'identity-title': '.ds-selection-preview-rail__identity-title',
+  'identity-subtitle': '.ds-selection-preview-rail__identity-subtitle',
+  'match-reason-eyebrow': '.ds-selection-preview-rail__match-reason-eyebrow',
+  'match-reason-body': '.ds-selection-preview-rail__match-reason-body',
+  'snapshot-row-label': '.ds-selection-preview-rail__snapshot-row-label',
+  'fallback-string': '.ds-selection-preview-rail__fallback-string',
+  'fallback-empty': '.ds-selection-preview-rail__fallback-empty',
+};
+
 /**
  * Every render goes through `createEngineComponent`'s Suspense-wrapped lazy
  * engine loader, so a synchronous `container.querySelector(...)` right after
@@ -123,13 +134,13 @@ describe('SelectionPreviewRail data-part contract', () => {
     expect(root.getAttribute('data-preview'), 'default branch must key data-preview="default"').toBe('default');
 
     for (const [part, minCount] of Object.entries(DEFAULT_BRANCH_PART_COUNTS)) {
-      const nodes = container.querySelectorAll(`[data-part="${part}"]`);
+      const nodes = container.querySelectorAll(TEXT_DOORS[part] ?? `[data-part="${part}"]`);
       expect(nodes.length, `data-part="${part}" did not reach the DOM`).toBeGreaterThanOrEqual(minCount);
     }
 
     expect(container.querySelectorAll('.ds-selection-preview-rail__close')).toHaveLength(0);
     expect(container.querySelectorAll('[data-part="custom-sticky-card"]')).toHaveLength(0);
-    expect(container.querySelectorAll('[data-part="snapshot-empty"]')).toHaveLength(0);
+    expect(container.querySelectorAll('.ds-selection-preview-rail__snapshot-empty')).toHaveLength(0);
   });
 
   it.each(ENGINES)(
@@ -149,9 +160,9 @@ describe('SelectionPreviewRail data-part contract', () => {
 
       const root = await waitForRoot(container);
       expect(root.getAttribute('data-preview')).toBe('default');
-      expect(container.querySelectorAll('[data-part="snapshot-empty"]')).toHaveLength(1);
+      expect(container.querySelectorAll('.ds-selection-preview-rail__snapshot-empty')).toHaveLength(1);
       expect(container.querySelectorAll('[data-part="snapshot-row"]')).toHaveLength(0);
-      expect(container.querySelectorAll('[data-part="fallback-string"]')).toHaveLength(0);
+      expect(container.querySelectorAll('.ds-selection-preview-rail__fallback-string')).toHaveLength(0);
       expect(container.querySelectorAll('[data-part="match-reason-panel"]')).toHaveLength(0);
     },
   );

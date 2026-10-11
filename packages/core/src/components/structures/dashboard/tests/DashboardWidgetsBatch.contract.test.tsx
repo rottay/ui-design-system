@@ -86,8 +86,12 @@ describe('DashboardWidgets data-part contract (dashboard anatomy)', () => {
       const root = await waitForPart(container, 'root');
       expect(root.classList.contains('ds-activity-ticker')).toBe(true);
       // header anatomy survived on Box/Text/Flex
-      for (const part of ['bell-box', 'badge', 'badge-count', 'title', 'live-dot', 'live-label', 'view-all-link', 'ticker-body', 'progress-track', 'progress-fill']) {
+      for (const part of ['bell-box', 'badge', 'live-dot', 'view-all-link', 'ticker-body', 'progress-track', 'progress-fill']) {
         expect(q(container, `[data-part="${part}"]`).length).toBeGreaterThanOrEqual(1);
+      }
+      // the composed Texts are reached through the ticker's own class hooks
+      for (const part of ['badge-count', 'title', 'live-label']) {
+        expect(q(container, `.ds-activity-ticker__${part}`).length).toBeGreaterThanOrEqual(1);
       }
       // one ticker-dot per item, each carrying its own data-type -> all five present
       expect(q(container, '[data-part="ticker-dot"]')).toHaveLength(5);
@@ -129,7 +133,7 @@ describe('DashboardWidgets data-part contract (dashboard anatomy)', () => {
         expect(q(container, `[data-part="item-icon-box"][data-type="${t}"]`)).toHaveLength(1);
       }
       expect(q(container, '[data-part="accent-bar"]')).toHaveLength(0);
-      expect(q(container, '[data-part="update-count"]').length).toBe(1);
+      expect(q(container, '.ds-activity-compact__update-count').length).toBe(1);
     });
 
     it.each(ENGINES)('ActivityCards: item-row anchor + every type under %s', async (engine) => {
@@ -174,7 +178,7 @@ describe('DashboardWidgets data-part contract (dashboard anatomy)', () => {
         // painted parts present in ALL four variants survived their primitives
         // (rows has no meter bar, so meter-fill is asserted per-variant below)
         expect(q(container, '[data-part="trend-icon"]').length).toBeGreaterThanOrEqual(2);
-        expect(q(container, '[data-part="metric-value"]').length).toBeGreaterThanOrEqual(2);
+        expect(q(container, `.${scope}__metric-value`).length).toBeGreaterThanOrEqual(2);
         // meter-fill exists in minimal/cards/chart (not rows)
         if (name !== 'MetricsRows') {
           expect(q(container, '[data-part="meter-fill"]').length).toBeGreaterThanOrEqual(2);
@@ -255,7 +259,7 @@ describe('DashboardWidgets data-part contract (dashboard anatomy)', () => {
       expect(root.classList.contains('ds-data-terminal-stat')).toBe(true);
       expect(root.getAttribute('data-trend')).toBe('up');
       expect(q(container, '[data-part="corner-bracket"]')).toHaveLength(2);
-      expect(q(container, '[data-part="value"]').length).toBe(1);
+      expect(q(container, '.ds-data-terminal-card__value').length).toBe(1);
       expect(q(container, '[data-part="trend-icon"]').length).toBe(1);
     });
   });
@@ -280,7 +284,7 @@ describe('DashboardWidgets data-part contract (dashboard anatomy)', () => {
       // every changeType renders (P-80): increase / decrease / neutral
       for (const c of ['increase', 'decrease', 'neutral']) {
         expect(q(container, `[data-part="change-row"][data-change="${c}"]`)).toHaveLength(1);
-        expect(q(container, `[data-part="change-value"][data-change="${c}"]`)).toHaveLength(1);
+        expect(q(container, `.ds-stats-header__change-value[data-change="${c}"]`)).toHaveLength(1);
       }
       // sparkline dots carry data-accent (two stats have sparkDots -> 14 dots)
       expect(q(container, '[data-part="spark-dot"]')).toHaveLength(14);
@@ -289,7 +293,7 @@ describe('DashboardWidgets data-part contract (dashboard anatomy)', () => {
       // structure owns the semantic accent carrier; Progress owns root/fill.
       expect(q(container, '[data-part="stat-progress"][data-accent="warning"] [data-part="fill"]')).toHaveLength(1);
       // insight + accent carrier survived
-      expect(q(container, '[data-part="stat-insight"]')).toHaveLength(2);
+      expect(q(container, '.ds-stats-header__stat-insight')).toHaveLength(2);
       expect(q(container, '[data-part="stat-card"][data-accent="primary"]')).toHaveLength(1);
     });
 

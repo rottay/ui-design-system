@@ -102,8 +102,8 @@ async function serverMarkup(): Promise<string> {
 const rendered = await serverMarkup();
 const markup = `<div id="host" style="inline-size:64rem">${rendered}</div>`;
 
-const TITLE = "#host [data-part='title']";
-const NAV_LABEL = "#host [data-part='section-nav-label']";
+const TITLE = "#host .ds-guided-draft-form__title";
+const NAV_LABEL = "#host .ds-guided-draft-form__section-nav-label";
 const BADGE = "#host [data-part='draft-status']";
 const CARD = '#host .ds-guided-draft-form__section-card';
 const PANEL = "#host [data-part='submit-bar-panel']";
@@ -228,6 +228,18 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   },
 };
 
+/** A composed Text is served through its owner class hook; every other part through its `data-part`. */
+const TEXT_HOOKS: Record<string, string> = {
+  'title': 'ds-guided-draft-form__title',
+  'subtitle': 'ds-guided-draft-form__subtitle',
+  'section-card-title': 'ds-guided-draft-form__section-card-title',
+  'validation-summary-title': 'ds-guided-draft-form__validation-summary-title',
+};
+const servesPart = (markup: string, part: string): boolean =>
+  part in TEXT_HOOKS
+    ? new RegExp(`class="[^"]*\\b${TEXT_HOOKS[part]}[ "]`).test(markup)
+    : markup.includes(`data-part="${part}"`);
+
 describe('guided-draft-form causality surface', () => {
   it('serves the anatomy every probe reads', () => {
     for (const part of [
@@ -244,7 +256,7 @@ describe('guided-draft-form causality surface', () => {
       'submit-bar-panel',
       'submit-bar-actions',
     ]) {
-      expect(rendered, part).toContain(`data-part="${part}"`);
+      expect(servesPart(rendered, part), part).toBe(true);
     }
     // The loading anatomy parts retired with the hand-made skeleton.
     expect(rendered).not.toContain('loading-skeleton');

@@ -118,7 +118,7 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       expect(container.querySelector('[data-part="section-chip"][data-badge-tone="optional"]')).not.toBeNull();
       expect(container.querySelector('[data-part="section-summary"]')).not.toBeNull();
       expect(container.querySelector('[data-part="section-index"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="section-title"]')).not.toBeNull();
+      expect(container.querySelector('.ds-form-sections__section-title')).not.toBeNull();
     });
 
     it('non-collapsible: stamps section-header on a plain Box (not a button)', async () => {
@@ -144,13 +144,13 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       );
 
       await waitForPart(container, 'facts-card');
-      expect(container.querySelector('[data-part="facts-card-eyebrow"]')).not.toBeNull();
+      expect(container.querySelector('.ds-form-sections__facts-card-eyebrow')).not.toBeNull();
       expect(container.querySelector('[data-part="facts-card-title"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="facts-card-description"]')).not.toBeNull();
+      expect(container.querySelector('.ds-form-sections__facts-card-description')).not.toBeNull();
       expect(container.querySelector('[data-part="facts-card-item"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="facts-card-item-label"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="facts-card-item-value"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="facts-card-item-helper"]')).not.toBeNull();
+      expect(container.querySelector('.ds-form-sections__facts-card-item-label')).not.toBeNull();
+      expect(container.querySelector('.ds-form-sections__facts-card-item-value')).not.toBeNull();
+      expect(container.querySelector('.ds-form-sections__facts-card-item-helper')).not.toBeNull();
     });
   });
 
@@ -165,9 +165,9 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
         const root = await waitForPart(container, 'summary-strip');
         expect(root.getAttribute('data-variant')).toBe(variant);
         expect(container.querySelector('[data-part="summary-item"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="summary-item-label"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="summary-item-value"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="summary-item-helper"]')).not.toBeNull();
+        expect(container.querySelector('.ds-record__summary-item-label')).not.toBeNull();
+        expect(container.querySelector('.ds-record__summary-item-value')).not.toBeNull();
+        expect(container.querySelector('.ds-record__summary-item-helper')).not.toBeNull();
       },
     );
   });
@@ -187,10 +187,10 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       expect(container.querySelector('[data-part="field"][data-empty="false"][data-mono="false"]')).not.toBeNull();
       expect(container.querySelector('[data-part="field"][data-mono="true"]')).not.toBeNull();
       expect(container.querySelector('[data-part="field"][data-empty="true"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="field-label"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="field-helper"]')).not.toBeNull();
+      expect(container.querySelector('.ds-record__field-label')).not.toBeNull();
+      expect(container.querySelector('.ds-record__field-helper')).not.toBeNull();
       await waitFor(() => {
-        expect(container.querySelector('[data-part="field-value"]')).not.toBeNull();
+        expect(container.querySelector('.ds-record__field-value')).not.toBeNull();
       });
     });
   });
@@ -232,9 +232,9 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       const editor = await waitForPart(container, 'editor');
       expect(editor.getAttribute('data-headerless')).toBe('false');
       expect(container.querySelector('[data-part="editor-header"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="editor-eyebrow"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="editor-title"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="editor-description"]')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-fields__editor-eyebrow')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-fields__editor-title')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-fields__editor-description')).not.toBeNull();
       expect(container.querySelector('[data-part="editor-actions"]')).not.toBeNull();
     });
 
@@ -320,7 +320,7 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
 
       const field = await waitForPart(container, 'field');
       expect(field.getAttribute('data-error')).toBe('true');
-      expect(container.querySelector('[data-part="field-error"]')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-fields__field-error')).not.toBeNull();
     });
 
     it('MoreFieldsToggle: stamps toggle(data-expanded/data-sticky)', async () => {
@@ -344,7 +344,7 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       expect(footer.getAttribute('data-saving')).toBe('true');
       expect(footer.getAttribute('data-error')).toBe('true');
       expect(container.querySelector('[data-part="footer-support"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="footer-summary"]')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-fields__footer-summary')).not.toBeNull();
     });
   });
 
@@ -458,7 +458,7 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       await waitForClass(container, 'ds-guided-draft-form__section-card--active');
       await waitForClass(container, 'ds-guided-draft-form__section-card--complete');
       await waitForClass(container, 'ds-guided-draft-form__section-card--errors');
-      expect(container.querySelector('[data-part="section-card-title"]')).not.toBeNull();
+      expect(container.querySelector('.ds-guided-draft-form__section-card-title')).not.toBeNull();
       expect(container.querySelector('[data-part="submit-bar"]')).not.toBeNull();
     });
 
@@ -493,7 +493,7 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
 
       await waitForClass(container, 'ds-guided-draft-form__validation-summary');
       await waitForClass(container, 'ds-guided-draft-form__validation-summary--error');
-      expect(container.querySelector('[data-part="validation-summary-title"]')).not.toBeNull();
+      expect(container.querySelector('.ds-guided-draft-form__validation-summary-title')).not.toBeNull();
     });
   });
 

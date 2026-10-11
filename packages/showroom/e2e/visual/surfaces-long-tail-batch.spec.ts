@@ -210,7 +210,7 @@ async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<voi
     nodes.reduce((sum, node) => sum + Number((node as HTMLElement).dataset.sourceCount ?? 0), 0),
   );
   expect(representedSources).toBe(DECLARED_SOURCE_TOTAL);
-  expect(await root.locator('[data-part="section-description"]').count()).toBeGreaterThan(0);
+  expect(await root.locator('.ds-dashboard__section-description').count()).toBeGreaterThan(0);
   expect(await root.locator('button:disabled').count()).toBeGreaterThan(0);
 
   // Compare stamps its divider only in the stacked (phone) layout; at this desktop posture the

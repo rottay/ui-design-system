@@ -142,7 +142,7 @@ describe("list-toolbar -- data-part contract (workspace-chrome anatomy)", () => 
     expect(root.className).toContain("ds-pattern-list-toolbar");
     expect(root.className).toContain("ds-engine-modern");
 
-    expect(q(container, '[data-part="title"]').length).toBeGreaterThanOrEqual(
+    expect(q(container, '.ds-list-toolbar__title').length).toBeGreaterThanOrEqual(
       1
     );
     expect(
@@ -190,8 +190,8 @@ describe("list-toolbar -- data-part contract (workspace-chrome anatomy)", () => 
     // P-88: the composed Tag keeps its own `root` part; it is found by the family class.
     expect(q(container, '.ds-list-toolbar__filter-chip[data-part="root"]')).toHaveLength(1);
     expect(q(container, '[data-part="filter-chip"]')).toHaveLength(0);
-    expect(q(container, '[data-part="filter-chip-label"]')).toHaveLength(1);
-    expect(q(container, '[data-part="filter-chip-value"]')).toHaveLength(1);
+    expect(q(container, '.ds-list-toolbar__filter-chip-label')).toHaveLength(1);
+    expect(q(container, '.ds-list-toolbar__filter-chip-value')).toHaveLength(1);
   });
 
   it("opens a filter dropdown and stamps filter-dropdown-item/filter-checkmark (modern)", async () => {
@@ -428,11 +428,11 @@ describe("status-filter-pills -- data-part contract (workspace-chrome anatomy)",
       expect(
         q(container, '.ds-status-filter-pills__pill[data-chrome="none"][data-selected="false"]')
       ).toHaveLength(1);
-      expect(q(container, '[data-part="pill-label"]')).toHaveLength(2);
+      expect(q(container, '.ds-status-filter-pills__pill-label')).toHaveLength(2);
       expect(
         q(container, '[data-part="count-badge"][data-selected="true"]')
       ).toHaveLength(1);
-      expect(q(container, '[data-part="count-badge-text"]')).toHaveLength(2);
+      expect(q(container, '.ds-status-filter-pills__count-badge-text')).toHaveLength(2);
     }
   );
 });
@@ -607,13 +607,13 @@ describe("column-menu -- canonical Popover composition contract", () => {
         ).not.toBeNull();
       });
       expect(
-        document.querySelector('[data-part="group-toggle-label"]')
+        document.querySelector('.ds-column-menu__group-toggle-label')
       ).not.toBeNull();
       expect(
         document.querySelector('[data-part="action-section"]')
       ).not.toBeNull();
       expect(
-        document.querySelector('[data-part="action-section-label"]')
+        document.querySelector('.ds-column-menu__action-section-label')
       ).not.toBeNull();
       expect(
         document.querySelector('[data-part="action-row"][data-visible="true"]')
@@ -755,10 +755,10 @@ describe("saved-views-menu -- data-part contract (workspace-chrome anatomy), por
       expect(panel.getAttribute("aria-label")).toBe("Saved views");
       // English i18n floor: header title + action buttons render their defaults.
       expect(
-        document.querySelector('[data-part="header-title"]')?.textContent
+        document.querySelector('.ds-saved-views-menu__header-title')?.textContent
       ).toBe("Saved views");
       expect(
-        document.querySelector('[data-part="active-card-label"]')?.textContent
+        document.querySelector('.ds-saved-views-menu__active-card-label')?.textContent
       ).toBe("All");
       // Typography moved to the skin.
       const sectionHeader = document.querySelector(
@@ -797,7 +797,7 @@ describe("saved-views-menu -- data-part contract (workspace-chrome anatomy), por
         document.querySelector('[data-part="empty-state-icon"]')
       ).not.toBeNull();
       expect(
-        document.querySelector('[data-part="empty-state-description"]')
+        document.querySelector('.ds-saved-views-menu__empty-state-description')
       ).not.toBeNull();
     }
   );
@@ -1380,7 +1380,7 @@ describe("search-command-bar -- data-part contract (workspace-chrome anatomy)", 
           )
         ).toBe(true);
       }
-      expect(q(container, '[data-part="status"]')).toHaveLength(1);
+      expect(q(container, '.ds-search-command-bar__status')).toHaveLength(1);
       expect(q(container, '[data-part="actions-slot"]')).toHaveLength(1);
 
       const shell = q(container, '[data-part="search-shell"]')[0];
@@ -1412,7 +1412,7 @@ describe("search-command-bar -- data-part contract (workspace-chrome anatomy)", 
       );
       await waitForPart(container, "root");
       expect(q(container, '[data-part="suggestions"]')).toHaveLength(1);
-      expect(q(container, '[data-part="suggestions-label"]')).toHaveLength(1);
+      expect(q(container, '.ds-search-command-bar__suggestions-label')).toHaveLength(1);
       expect(q(container, '.ds-search-command-bar__suggestion-chip')).toHaveLength(1);
     }
   );
@@ -1439,11 +1439,11 @@ describe("search-command-bar -- data-part contract (workspace-chrome anatomy)", 
       );
       await waitForPart(container, "root");
       expect(
-        q(container, '[data-part="suggestions-label"]')[0].textContent
+        q(container, '.ds-search-command-bar__suggestions-label')[0].textContent
       ).toBe("Smart refine");
       const label = q(
         container,
-        '[data-part="suggestions-label"]'
+        '.ds-search-command-bar__suggestions-label'
       )[0] as HTMLElement;
       expect(label.style.textTransform).toBe("");
       expect(label.style.letterSpacing).toBe("");

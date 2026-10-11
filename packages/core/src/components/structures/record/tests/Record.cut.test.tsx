@@ -228,7 +228,7 @@ describe('Record (WO-FAM-10 cut)', () => {
     // The field root keeps the announcement; the skeleton does not re-announce.
     expect(field.getAttribute('aria-busy')).toBe('true');
     expect(skeletonRoot!.getAttribute('aria-busy')).toBeNull();
-    expect(field.querySelector("[data-part='field-label']")).not.toBeNull();
+    expect(field.querySelector(".ds-record__field-label")).not.toBeNull();
     await waitFor(
       () => {
         if (!field.querySelectorAll("[data-part='bone']").length) {
@@ -259,7 +259,7 @@ describe('Record (WO-FAM-10 cut)', () => {
     expect(skeletonRoot).not.toBeNull();
     expect(strip.getAttribute('aria-busy')).toBe('true');
     expect(skeletonRoot!.getAttribute('aria-busy')).toBeNull();
-    expect(strip.querySelector("[data-part='summary-item-label']")).not.toBeNull();
+    expect(strip.querySelector(".ds-record__summary-item-label")).not.toBeNull();
     await waitFor(
       () => {
         if (!strip.querySelectorAll("[data-part='bone']").length) {

@@ -217,7 +217,7 @@ describeCausality({
     { id: 'bulkBarPad', selector: BULK_BAR, property: 'padding-top' },
     { id: 'sortControlSize', selector: SORT_ICON, property: 'width' },
     { id: 'mobileBulkGround', selector: "#cards [data-part='mobile-bulk-actions']", property: 'background-color' },
-    { id: 'mobileBulkInk', selector: "#cards [data-part='mobile-bulk-count']", property: 'color' },
+    { id: 'mobileBulkInk', selector: "#cards .ds-data-table__mobile-bulk-count", property: 'color' },
   ],
   decisions: {
     // `consumes: palette.*` -- the sort ink, the selected row and bulk-bar
@@ -518,12 +518,12 @@ describe('data-table causality surface', () => {
     const PAIRS = [
       {
         id: 'bulk',
-        ink: "#cards [data-part='mobile-bulk-count']",
+        ink: "#cards .ds-data-table__mobile-bulk-count",
         ground: "#cards [data-part='mobile-bulk-actions']",
       },
       {
         id: 'range',
-        ink: "#cards [data-part='mobile-pagination-range']",
+        ink: "#cards .ds-data-table__mobile-pagination-range",
         ground: "#cards [data-part='mobile-pagination']",
       },
     ] as const;

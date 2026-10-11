@@ -142,9 +142,11 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {}
 
 describe('wizard-surface causality surface', () => {
   it('serves the anatomy every probe reads', () => {
-    for (const part of ['root', 'description', 'error-banner']) {
+    for (const part of ['root', 'error-banner']) {
       expect(rendered, part).toContain(`data-part="${part}"`);
     }
+    // The description is a composed Text, served through the wizard's class hook.
+    expect(rendered).toMatch(/class="[^"]*\bds-wizard__description[ "]/);
     // The ruled alert replaced the retired error card frame.
     expect(rendered).not.toContain('ds-wizard__error-card');
   });

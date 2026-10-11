@@ -182,9 +182,9 @@ for (const engine of ENGINES) {
 
     await openProbe(page, 'rottay', engine);
     const editHeaderRoot = page.locator(EDIT_HEADER_SELECTOR);
-    const breadcrumbLink = editHeaderRoot.locator('[data-part="breadcrumb-link"]').first();
+    const breadcrumbLink = editHeaderRoot.locator('.ds-edit-header__breadcrumb-link').first();
     await breadcrumbLink.hover();
-    await waitForSettled(page, `${EDIT_HEADER_SELECTOR} [data-part="breadcrumb-link"]`);
+    await waitForSettled(page, `${EDIT_HEADER_SELECTOR} .ds-edit-header__breadcrumb-link`);
 
     await expect(breadcrumbLink).toHaveScreenshot(`rottay-headers-structures-editheader-${engine}-breadcrumb-link-hovered.png`);
   });

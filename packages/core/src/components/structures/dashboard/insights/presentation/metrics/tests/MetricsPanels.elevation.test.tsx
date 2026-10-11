@@ -190,7 +190,7 @@ describe('metrics panel elevation', () => {
     // The element the channel has to land on still has to exist.
     const { container, unmount } = renderSurface(<Component metrics={METRICS} />, { engine: 'modern' });
     await screen.findByText('Open roles');
-    expect(container.querySelectorAll('[data-part="metric-value"]')).toHaveLength(METRICS.length);
+    expect(container.querySelectorAll(`.ds-${name}__metric-value`)).toHaveLength(METRICS.length);
     unmount();
   });
 

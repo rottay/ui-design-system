@@ -110,7 +110,7 @@ const BADGE = "#page #primary [data-part='icon-badge']";
 const NEUTRAL_BADGE = "#page #secondary [data-part='icon-badge']";
 const PILL = "#page #primary [data-part='status-pill']";
 const NEUTRAL_PILL = "#page #secondary [data-part='status-pill']";
-const PILL_TEXT = "#page #primary [data-part='status-pill-text']";
+const PILL_TEXT = "#page #primary .ds-edit-header__status-pill-text";
 const TITLE = "#page #primary [data-part='title']";
 const HERO = "#page #primary [data-part='hero-panel']";
 const BACK = "#page #primary [data-part='back-button']";
@@ -187,6 +187,23 @@ describeCausality({
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
+/** A composed Text is served through its owner class hook; every other part through its `data-part`. */
+const TEXT_HOOKS: Record<string, string> = {
+  'back-label': 'ds-edit-header__back-label',
+  'breadcrumb-link': 'ds-edit-header__breadcrumb-link',
+  'breadcrumb-separator': 'ds-edit-header__breadcrumb-separator',
+  'breadcrumb-item': 'ds-edit-header__breadcrumb-item',
+  'entity-id': 'ds-edit-header__entity-id',
+  'eyebrow': 'ds-edit-header__eyebrow',
+  'status-pill-text': 'ds-edit-header__status-pill-text',
+  'dirty-label': 'ds-edit-header__dirty-label',
+  'subtitle': 'ds-edit-header__subtitle',
+};
+const servesPart = (markup: string, part: string): boolean =>
+  part in TEXT_HOOKS
+    ? new RegExp(`class="[^"]*\\b${TEXT_HOOKS[part]}[ "]`).test(markup)
+    : markup.includes(`data-part="${part}"`);
+
 describe('edit-header causality surface', () => {
   it('serves the anatomy every probe reads', () => {
     for (const part of [
@@ -219,7 +236,7 @@ describe('edit-header causality surface', () => {
       'context-rail',
       'context-card-children',
     ]) {
-      expect(rendered, part).toContain(`data-part="${part}"`);
+      expect(servesPart(rendered, part), part).toBe(true);
     }
     // Both toned slots stamp, and the component writes no tone style at all.
     expect(rendered).toContain('data-variant="primary"');

@@ -244,8 +244,15 @@ const VISUALS: Record<string, FieldFilterVisual> = {
 // door; the caller part `preset-chip` never lands.
 const PRESET_CHIP_DOOR = '.ds-field-filters-panel__preset-chip';
 
+// The composed Texts, each found by its owner class hook.
+const TEXT_DOORS: Readonly<Record<string, string>> = {
+  'title-pill': '.ds-field-filters-panel__title-pill',
+  'presets-pill': '.ds-field-filters-panel__presets-pill',
+};
+
 function ownNodes(scope: HTMLElement, part: string): HTMLElement[] {
-  return part === 'preset-chip' ? ownParts(scope, part, PRESET_CHIP_DOOR) : ownParts(scope, part);
+  if (part === 'preset-chip') return ownParts(scope, part, PRESET_CHIP_DOOR);
+  return part in TEXT_DOORS ? ownParts(scope, part, TEXT_DOORS[part]) : ownParts(scope, part);
 }
 
 // Parts that must leave background/border/box-shadow/border-radius to the skin.

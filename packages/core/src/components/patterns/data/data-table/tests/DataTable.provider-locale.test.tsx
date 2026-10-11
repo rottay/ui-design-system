@@ -40,9 +40,9 @@ async function rangeText(locale: 'en' | 'es') {
     { engine: 'modern', responsiveContext: PHONE },
   );
   await waitFor(() => {
-    expect(view.container.querySelector('[data-part="mobile-pagination-range"]')).not.toBeNull();
+    expect(view.container.querySelector('.ds-data-table__mobile-pagination-range')).not.toBeNull();
   });
-  const text = view.container.querySelector('[data-part="mobile-pagination-range"]')?.textContent ?? '';
+  const text = view.container.querySelector('.ds-data-table__mobile-pagination-range')?.textContent ?? '';
   view.unmount();
   return text;
 }
@@ -90,9 +90,9 @@ describe('PatternDataTable — provider locale', () => {
       { engine: 'modern', responsiveContext: PHONE },
     );
     await waitFor(() => {
-      expect(view.container.querySelector('[data-part="mobile-pagination-range"]')).not.toBeNull();
+      expect(view.container.querySelector('.ds-data-table__mobile-pagination-range')).not.toBeNull();
     });
-    const text = view.container.querySelector('[data-part="mobile-pagination-range"]')?.textContent;
+    const text = view.container.querySelector('.ds-data-table__mobile-pagination-range')?.textContent;
     view.unmount();
     expect(text).toBe('1/1/3');
   });

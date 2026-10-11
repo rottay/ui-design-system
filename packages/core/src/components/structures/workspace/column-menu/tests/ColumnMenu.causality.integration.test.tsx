@@ -82,7 +82,7 @@ const markup = `<div id="menu" style="inline-size:36rem">${panel}</div>`;
 
 const SCOPE = `#menu ${SURFACE}`;
 const HEADER = `${SCOPE} [data-part='header']`;
-const TITLE = `${SCOPE} [data-part='header-title']`;
+const TITLE = `${SCOPE} .ds-column-menu__header-title`;
 const BODY = `${SCOPE} [data-part='scroll-region']`;
 const ROW = `${SCOPE} [data-part='row']`;
 /** A row NOT in the stamped visible/draft state: the one the hover arm paints. */

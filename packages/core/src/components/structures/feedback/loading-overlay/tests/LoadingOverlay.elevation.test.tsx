@@ -52,7 +52,7 @@ async function renderFull() {
     const { container } = view;
     expect(container.querySelector('[data-part="content"]')).not.toBeNull();
     expect(container.querySelector('[data-part="status"]')).not.toBeNull();
-    expect(container.querySelectorAll('[data-part="dot"]')).toHaveLength(3);
+    expect(container.querySelectorAll('.ds-loading-overlay__dot')).toHaveLength(3);
   });
   return view;
 }

@@ -164,7 +164,7 @@ describe('DataTerminalCard elevation', () => {
       // which is why the pre-fix failure only ever NAMED "classic" even
       // though rustic's own expectation was equally stale): heroParts=1 for
       // classic, modern AND rustic alike, uniformly.
-      const heroParts = container.querySelectorAll('[data-part="value"]').length;
+      const heroParts = container.querySelectorAll('.ds-data-terminal-card__value').length;
       expect(heroParts, engine).toBe(1);
 
       unmount();
@@ -179,6 +179,6 @@ describe('DataTerminalCard elevation', () => {
     await screen.findByText('98,210');
 
     expect(container.querySelectorAll('.ds-data-terminal-stat[data-part="root"]')).toHaveLength(1);
-    expect(container.querySelectorAll('[data-part="value"]')).toHaveLength(1);
+    expect(container.querySelectorAll('.ds-data-terminal-card__value')).toHaveLength(1);
   });
 });

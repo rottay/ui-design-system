@@ -165,7 +165,7 @@ describe('long-tail anatomy patterns/data anatomy', () => {
       empty.container,
       '.ds-pattern-gallery-view[data-part="root"][data-loading="false"][data-empty="true"]',
     );
-    expect(q(empty.container, '[data-part="empty-state"]')).toHaveLength(1);
+    expect(q(empty.container, '.ds-gallery-view__empty-state')).toHaveLength(1);
   });
 
   it('pins grid selected/unselected shells, BEM checkbox landing, empty and loading roots', async () => {
@@ -211,7 +211,7 @@ describe('long-tail anatomy patterns/data anatomy', () => {
       empty.container,
       '.ds-pattern-grid-view[data-part="root"][data-loading="false"][data-empty="true"]',
     );
-    expect(q(empty.container, '[data-part="empty-state"]')).toHaveLength(1);
+    expect(q(empty.container, '.ds-grid-view__empty-state')).toHaveLength(1);
   });
 
   it.each([

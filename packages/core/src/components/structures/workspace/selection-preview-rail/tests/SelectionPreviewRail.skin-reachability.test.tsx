@@ -84,7 +84,7 @@ async function renderEmptySnapshot() {
     />,
     'modern'
   );
-  await waitForComposedContent(waitFor, result.container, "[data-part='snapshot-empty']");
+  await waitForComposedContent(waitFor, result.container, ".ds-selection-preview-rail__snapshot-empty");
   return result;
 }
 

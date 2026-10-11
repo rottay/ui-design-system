@@ -205,9 +205,9 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
     await waitForPart(container, 'root');
 
     for (const part of LAYOUT_PARTS) {
-      for (const element of Array.from(
-        container.querySelectorAll<HTMLElement>(`[data-part="${part}"]`),
-      )) {
+      // A composed Text is not a layout part, whatever part it stamps: its type role travels inline.
+      const selector = `[data-part="${part}"]:not(.rottay-typography)`;
+      for (const element of Array.from(container.querySelectorAll<HTMLElement>(selector))) {
         expect(inlinePaint(element), `${part} inline paint`).toEqual([]);
       }
     }
@@ -253,7 +253,7 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
     await waitForPart(container, 'root');
     expect((await waitForPart(container, 'avatar')).getAttribute('data-variant')).toBe('initials');
     const monoValues = Array.from(
-      container.querySelectorAll('[data-part="metadata-chip-value"]'),
+      container.querySelectorAll('.ds-detail-header__metadata-chip-value'),
     ).map((element) => element.getAttribute('data-mono'));
     expect(monoValues).toEqual(['true', 'false']);
     const actives = Array.from(container.querySelectorAll('[data-part="tab"]')).map((element) =>

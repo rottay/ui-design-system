@@ -38,7 +38,7 @@ describe('StatusFilterPills -- each pill is the chrome-less Button', () => {
     }
     expect(open).toHaveAttribute('data-selected', 'true');
     expect(open.querySelector("[data-part='icon'] [data-part='pill-icon']")).not.toBeNull();
-    expect(open.querySelector("[data-part='label'] [data-part='pill-label']")).toHaveTextContent('Open');
+    expect(open.querySelector("[data-part='label'] .ds-status-filter-pills__pill-label")).toHaveTextContent('Open');
     expect(open.querySelector("[data-part='suffix'] [data-part='count-badge']")).toHaveTextContent('4');
     fireEvent.click(closed);
     expect(onChange).toHaveBeenCalledWith('closed');

@@ -57,8 +57,8 @@ for (const item of CASES) {
     const { stage, root } = await openCase(page, item.fixture, item.engine, item.ground);
 
     await expect(root.locator('[data-part="logo"]')).toHaveCount(1);
-    await expect(root.locator('[data-part="message"]')).toHaveText('Syncing records');
-    await expect(root.locator('[data-part="dot"]')).toHaveCount(3);
+    await expect(root.locator('.ds-loading-overlay__message')).toHaveText('Syncing records');
+    await expect(root.locator('.ds-loading-overlay__dot')).toHaveCount(3);
     await expect(root.locator('[data-testid="loading-overlay-logo-mark"]')).toHaveCount(1);
 
     await expect(stage.locator(':scope > style')).toHaveCount(0);
@@ -68,8 +68,8 @@ for (const item of CASES) {
     const paint = await root.evaluate((element) => {
       const rootStyle = getComputedStyle(element);
       const veil = getComputedStyle(element, '::before');
-      const message = element.querySelector('[data-part="message"]');
-      const dot = element.querySelector('[data-part="dot"]');
+      const message = element.querySelector('.ds-loading-overlay__message');
+      const dot = element.querySelector('.ds-loading-overlay__dot');
       const logo = element.querySelector('[data-part="logo"]');
       return {
         rootBackground: rootStyle.backgroundColor,
@@ -98,7 +98,7 @@ for (const item of CASES) {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     const animated = await root.evaluate((element) => {
       const logo = element.querySelector('[data-part="logo"]');
-      const dot = element.querySelector('[data-part="dot"]');
+      const dot = element.querySelector('.ds-loading-overlay__dot');
       return {
         logo: logo ? getComputedStyle(logo).animationName : '',
         dot: dot ? getComputedStyle(dot).animationName : '',

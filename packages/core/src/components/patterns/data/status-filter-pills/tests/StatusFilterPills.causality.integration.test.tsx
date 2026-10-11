@@ -95,7 +95,7 @@ const markup =
 const PILL = '#pills .ds-status-filter-pills__pill';
 const SELECTED = "#pills .ds-status-filter-pills__pill[data-selected='true']";
 const UNSELECTED = "#pills .ds-status-filter-pills__pill[data-selected='false']";
-const LABEL = "#pills [data-part='pill-label']";
+const LABEL = "#pills .ds-status-filter-pills__pill-label";
 const BADGE = "#pills [data-part='count-badge']";
 const FOCUSED = "#focused-pills .ds-status-filter-pills__pill[data-state~='focus-visible']";
 
@@ -168,8 +168,12 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {}
 
 describe('status-filter-pills causality surface', () => {
   it('serves the anatomy every probe reads', () => {
-    for (const part of ['root', 'trigger', 'pill-label', 'count-badge', 'count-badge-text']) {
+    for (const part of ['root', 'trigger', 'count-badge']) {
       expect(pills, part).toContain(`data-part="${part}"`);
+    }
+    // The two composed Texts are served through their owner class hooks.
+    for (const hook of ['ds-status-filter-pills__pill-label', 'ds-status-filter-pills__count-badge-text']) {
+      expect(pills, hook).toMatch(new RegExp(`class="[^"]*\\b${hook}[ "]`));
     }
     // Each pill is a chrome-less Button whose kernel decides its state: at rest the pill carries NO
     // `data-state`, so the skin's paired arms fall through to the platform pseudo-class.

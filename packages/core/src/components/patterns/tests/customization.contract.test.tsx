@@ -216,8 +216,10 @@ describe('BrandingPreviewSandbox customization anatomy createElement anatomy', (
     }
     expect(queryAll(root, '[data-part="table"]')).toHaveLength(1);
     expect(queryAll(root, '[data-part="table-head"]')).toHaveLength(1);
-    expect(queryAll(root, '[data-part="title"]')).toHaveLength(1);
-    expect(queryAll(root, '[data-part="subtitle"]')).toHaveLength(3);
+    expect(queryAll(root, '.ds-branding-preview-sandbox__title')).toHaveLength(1);
+    // Two subtitles are the sandbox's own Texts (by their class hook); the third is a native part.
+    expect(queryAll(root, '.ds-branding-preview-sandbox__subtitle')).toHaveLength(2);
+    expect(queryAll(root, '[data-part="subtitle"]:not(.ds-branding-preview-sandbox__subtitle)')).toHaveLength(1);
 
     rerender(
       <StudioHarness engine="modern">
@@ -231,7 +233,7 @@ describe('BrandingPreviewSandbox customization anatomy createElement anatomy', (
     });
     expect(queryAll(compactRoot, '.ds-card--modern[data-variant="elevated"]')).toHaveLength(0);
     expect(queryAll(compactRoot, '[data-part="table"]')).toHaveLength(0);
-    expect(queryAll(compactRoot, '[data-part="title"]')).toHaveLength(0);
+    expect(queryAll(compactRoot, '.ds-branding-preview-sandbox__title')).toHaveLength(0);
 
     unmount();
     expect(container.children).toHaveLength(0);

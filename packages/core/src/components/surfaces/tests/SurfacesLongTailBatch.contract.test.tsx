@@ -640,12 +640,12 @@ describe('long-tail anatomy admin/data thin-tail anatomy (I-4)', () => {
       // their own JSX (data/compare/index.tsx) -- verified against the tree
       // today. "root" here was a copy-paste of the sibling pattern, not this
       // component's own caller-owned value.
-      '.ds-compare__muted-text[data-part="muted-text"]',
+      '.ds-compare__muted-text',
       // CI-1 re-pin: dashboard's muted-text is a conditionally-rendered
       // section description with its own explicit `data-part`
       // ("section-description", not "root") -- verified against
       // data/dashboard/index.tsx today, same class of fix as Compare above.
-      '.ds-dashboard__muted-text[data-part="section-description"]',
+      '.ds-dashboard__muted-text.ds-dashboard__section-description',
       '.ds-list__card-label[data-part="root"]',
       '.ds-list__card-value[data-part="root"]',
       '.ds-report__template-card--selected',

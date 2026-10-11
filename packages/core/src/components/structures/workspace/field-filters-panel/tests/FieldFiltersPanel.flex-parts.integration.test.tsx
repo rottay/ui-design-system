@@ -72,8 +72,8 @@ describe('FieldFiltersPanel Flex rows keep their part and their layout', () => {
           ...Object.entries(ROWS).flatMap(([row, { selector }]) =>
             PROPERTIES.map((property) => ({ id: `${row}:${property}`, selector, property, dir })),
           ),
-          { id: 'firstPresetLeft', selector: "#panel [data-part='presets-pill']", property: '@rect.left', dir },
-          { id: 'firstPresetRight', selector: "#panel [data-part='presets-pill']", property: '@rect.right', dir },
+          { id: 'firstPresetLeft', selector: "#panel .ds-field-filters-panel__presets-pill", property: '@rect.left', dir },
+          { id: 'firstPresetRight', selector: "#panel .ds-field-filters-panel__presets-pill", property: '@rect.right', dir },
           { id: 'rowLeft', selector: ROWS.presetsRow.selector, property: '@rect.left', dir },
           { id: 'rowRight', selector: ROWS.presetsRow.selector, property: '@rect.right', dir },
         ],

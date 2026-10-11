@@ -151,7 +151,7 @@ describe('the guided-draft-form ledger doctrine', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Basic info' })).toBeInTheDocument();
     expect(root.querySelector('[data-part="section-card-complete"]')).not.toBeNull();
     expect(root.querySelector('[data-part="section-card-errors"]')).not.toBeNull();
-    expect(root.querySelector('[data-part="section-card-description"]')).not.toBeNull();
+    expect(root.querySelector('.ds-guided-draft-form__section-card-description')).not.toBeNull();
   });
 
   it('anchors each section so the nav can scroll to it', async () => {

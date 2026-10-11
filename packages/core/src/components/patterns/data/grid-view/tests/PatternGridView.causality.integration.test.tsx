@@ -121,7 +121,7 @@ const SHELL = "#grid [data-part='card-shell']";
 const OVERLAY = "#grid [data-part='checkbox-overlay']";
 const CHECKBOX = '#grid .ds-grid-view__checkbox-control';
 const EMPTY_ROOT = "#empty .ds-pattern-grid-view[data-part='root']";
-const EMPTY_TEXT = "#empty [data-part='empty-state']";
+const EMPTY_TEXT = '#empty .ds-grid-view__empty-state';
 
 describeCausality({
   family: 'grid-view',
@@ -205,7 +205,7 @@ describe('grid-view causality surface', () => {
     expect(grid).toContain('data-part="root"');
     expect(grid).toContain('data-part="card-shell"');
     expect(grid).toContain('data-part="checkbox-overlay"');
-    expect(empty).toContain('data-part="empty-state"');
+    expect(empty).toMatch(/class="[^"]*\bds-grid-view__empty-state[ "]/);
     // The shell is a stateful part decided by the kernel: at rest it carries
     // NO `data-state`, so `[data-state]` never matches a resting shell and the
     // skin's paired hover arm falls through to the platform pseudo-class.

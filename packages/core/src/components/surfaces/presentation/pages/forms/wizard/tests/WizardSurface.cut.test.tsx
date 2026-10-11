@@ -62,7 +62,7 @@ describe('WizardSurface cut', () => {
     expect(root).toHaveAttribute('data-loading', 'false');
     expect(root).not.toHaveAttribute('aria-busy');
 
-    expect(container.querySelector('.ds-wizard [data-part="description"]')).not.toBeNull();
+    expect(container.querySelector('.ds-wizard .ds-wizard__description')).not.toBeNull();
   });
 
   it('stamps the loading contract on the root that survives', async () => {

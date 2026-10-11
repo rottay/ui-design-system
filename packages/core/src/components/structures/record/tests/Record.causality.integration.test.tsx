@@ -99,8 +99,8 @@ const markup = `<div id="page" style="inline-size:64rem">${rendered}</div>`;
 
 const PAGE = '#page';
 const METRICS_STRIP = `${PAGE} [data-part='summary-strip'][data-variant='metrics']`;
-const METRICS_VALUE = `${METRICS_STRIP} [data-part='summary-item-value']`;
-const LABEL = `${PAGE} [data-part='summary-item-label']`;
+const METRICS_VALUE = `${METRICS_STRIP} .ds-record__summary-item-value`;
+const LABEL = `${PAGE} .ds-record__summary-item-label`;
 const LEDGER = `${PAGE} [data-part='field-grid'][data-structure='record']`;
 const FIELD = `${LEDGER} > [data-part='field']`;
 const RAIL = `${PAGE} [data-part='action-bar'][data-structure='record']`;
@@ -201,6 +201,18 @@ describeCausality({
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
+/** A composed Text is served through its owner class hook; every other part through its `data-part`. */
+const TEXT_HOOKS: Record<string, string> = {
+  'summary-item-label': 'ds-record__summary-item-label',
+  'summary-item-value': 'ds-record__summary-item-value',
+  'field-label': 'ds-record__field-label',
+  'field-value': 'ds-record__field-value',
+};
+const servesPart = (markup: string, part: string): boolean =>
+  part in TEXT_HOOKS
+    ? new RegExp(`class="[^"]*\\b${TEXT_HOOKS[part]}[ "]`).test(markup)
+    : markup.includes(`data-part="${part}"`);
+
 describe('record causality surface', () => {
   it('serves the anatomy every probe reads', () => {
     for (const part of [
@@ -217,7 +229,7 @@ describe('record causality surface', () => {
       'action-bar',
       'action-bar-meta',
     ]) {
-      expect(rendered, part).toContain(`data-part="${part}"`);
+      expect(servesPart(rendered, part), part).toBe(true);
     }
     // The span prop lands as a stamp, not inline paint.
     expect(rendered).toContain('data-span="1"');

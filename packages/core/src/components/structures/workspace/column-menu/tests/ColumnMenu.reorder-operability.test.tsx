@@ -64,14 +64,14 @@ async function openMenu(
 
 /** The draft order, read where the user reads it: the order of the rows. */
 function draftOrder(surface: HTMLElement): string[] {
-  return Array.from(surface.querySelectorAll('[data-part="row"] [data-part="title"]')).map(
+  return Array.from(surface.querySelectorAll('[data-part="row"] .ds-column-menu__title')).map(
     (node) => node.textContent ?? '',
   );
 }
 
 function rowFor(surface: HTMLElement, title: string): HTMLElement {
   const row = Array.from(surface.querySelectorAll('[data-part="row"]')).find(
-    (candidate) => candidate.querySelector('[data-part="title"]')?.textContent === title,
+    (candidate) => candidate.querySelector('.ds-column-menu__title')?.textContent === title,
   );
   if (!row) throw new Error(`no column row titled ${title}`);
   return row as HTMLElement;

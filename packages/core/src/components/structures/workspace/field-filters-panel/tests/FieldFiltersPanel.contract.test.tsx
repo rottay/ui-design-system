@@ -12,7 +12,16 @@ import { waitForComposedContent } from '@tests/support/skin-reachability';
 const BUTTON_DOORS: Record<string, string> = {
   'preset-chip': '.ds-field-filters-panel__preset-chip',
 };
-const partSelector = (part: string) => BUTTON_DOORS[part] ?? `[data-part="${part}"]`;
+/** The composed Texts, each found by its owner class hook. */
+const TEXT_DOORS: Record<string, string> = {
+  'title-pill': '.ds-field-filters-panel__title-pill',
+  subtitle: '.ds-field-filters-panel__subtitle',
+  'signal-label': '.ds-field-filters-panel__signal-label',
+  'presets-pill': '.ds-field-filters-panel__presets-pill',
+  'filter-card-label': '.ds-field-filters-panel__filter-card-label',
+  'filter-card-description': '.ds-field-filters-panel__filter-card-description',
+};
+const partSelector = (part: string) => BUTTON_DOORS[part] ?? TEXT_DOORS[part] ?? `[data-part="${part}"]`;
 const ENGINES = ['modern'] as const;
 
 const FILTERS: FieldFilterDefinition[] = [

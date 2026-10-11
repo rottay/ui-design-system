@@ -155,7 +155,11 @@ describe('FormSections (WO-FAM-10 cut)', () => {
       </I18nProvider>,
       'modern',
     );
-    await waitForPart(container, 'section-chip-label');
+    await waitFor(() => {
+      const node = container.querySelector<HTMLElement>('.ds-form-sections__section-chip-label');
+      if (!node) throw new Error('expected .ds-form-sections__section-chip-label');
+      return node;
+    });
     // The catalog's Spanish tier, not the English floor.
     expect(getByText('Requerido')).toBeTruthy();
     expect(getByText('Opcional')).toBeTruthy();
@@ -181,7 +185,11 @@ describe('FormSections (WO-FAM-10 cut)', () => {
       </I18nProvider>,
       'modern',
     );
-    await waitForPart(overridden.container, 'section-chip-label');
+    await waitFor(() => {
+      const node = overridden.container.querySelector<HTMLElement>('.ds-form-sections__section-chip-label');
+      if (!node) throw new Error('expected .ds-form-sections__section-chip-label');
+      return node;
+    });
     expect(overridden.getByText('Obligatorio')).toBeTruthy();
     expect(overridden.getByText('Opcional')).toBeTruthy();
   });
@@ -204,7 +212,7 @@ describe('FormSections (WO-FAM-10 cut)', () => {
     fireEvent.pointerLeave(disclosure);
     await waitFor(() => expect(disclosure.getAttribute('data-state')).toBeNull());
 
-    const chipLabel = container.querySelector('[data-part="section-chip-label"]')!;
+    const chipLabel = container.querySelector('.ds-form-sections__section-chip-label')!;
     expect(within(chipLabel as HTMLElement).getByText('مطلوب')).toBeTruthy();
   });
 });

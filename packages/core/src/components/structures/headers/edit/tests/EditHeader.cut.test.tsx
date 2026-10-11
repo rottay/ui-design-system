@@ -141,7 +141,11 @@ describe('EditHeader (WO-FAM-10 cut)', () => {
       <EditHeader title="X" backHref="/x" dirty />,
       'modern',
     );
-    const label = await waitForPart(container, 'dirty-label');
+    const label = await waitFor(() => {
+      const node = container.querySelector<HTMLElement>('.ds-edit-header__dirty-label');
+      if (!node) throw new Error('expected .ds-edit-header__dirty-label');
+      return node;
+    });
     expect(label.textContent).toBe('Unsaved changes');
     // The dot is decoration beside the sentence, never the sentence itself.
     const dot = await waitForPart(container, 'dirty-dot');

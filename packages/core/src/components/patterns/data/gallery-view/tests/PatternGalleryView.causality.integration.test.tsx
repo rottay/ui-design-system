@@ -131,7 +131,7 @@ const CAPTION_TEXT_PART = '#gallery .ds-gallery-card .ds-gallery-view__caption-t
 const UNSELECTED = "#gallery .ds-gallery-card[data-selected='false']";
 const OVERLAY = `${UNSELECTED} .ds-gallery-checkbox`;
 const EMPTY_ROOT = "#empty .ds-pattern-gallery-view[data-part='root']";
-const EMPTY_TEXT = "#empty [data-part='empty-state']";
+const EMPTY_TEXT = '#empty .ds-gallery-view__empty-state';
 
 describeCausality({
   family: 'gallery-view',
@@ -242,7 +242,7 @@ describe('gallery-view causality surface', () => {
     expect(gallery).toContain('data-part="image-placeholder"');
     expect(gallery).toContain('data-part="caption"');
     expect(gallery).toContain('data-part="checkbox"');
-    expect(empty).toContain('data-part="empty-state"');
+    expect(empty).toMatch(/class="[^"]*\bds-gallery-view__empty-state[ "]/);
     // The card is a stateful part decided by the kernel: at rest it carries NO
     // `data-state`, so `[data-state]` never matches a resting card and the
     // skin's eight paired arms fall through to the platform pseudo-class.

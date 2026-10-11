@@ -177,6 +177,17 @@ describeCausality({
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
+/** A composed Text is served through its owner class hook; every other part through its `data-part`. */
+const TEXT_HOOKS: Record<string, string> = {
+  'section-title': 'ds-form-sections__section-title',
+  'section-description': 'ds-form-sections__section-description',
+  'facts-card-item-value': 'ds-form-sections__facts-card-item-value',
+};
+const servesPart = (markup: string, part: string): boolean =>
+  part in TEXT_HOOKS
+    ? new RegExp(`class="[^"]*\\b${TEXT_HOOKS[part]}[ "]`).test(markup)
+    : markup.includes(`data-part="${part}"`);
+
 describe('form-sections causality surface', () => {
   it('serves the anatomy every probe reads', () => {
     for (const part of [
@@ -191,7 +202,7 @@ describe('form-sections causality surface', () => {
       'facts-card-item',
       'facts-card-item-value',
     ]) {
-      expect(rendered, part).toContain(`data-part="${part}"`);
+      expect(servesPart(rendered, part), part).toBe(true);
     }
     // The hand-made skeleton stamps are gone from the contract.
     expect(rendered).not.toContain('facts-card-item-skeleton-label');
@@ -208,7 +219,7 @@ describe('form-sections causality surface', () => {
       targets: [
         { id: 'editorialSurface', selector: EDITORIAL_SECTION, property: 'background-color' },
         { id: 'headerBg', selector: HEADER, property: 'background-color' },
-        { id: 'titleInk', selector: "#page #card [data-part='section-title']", property: 'color' },
+        { id: 'titleInk', selector: "#page #card .ds-form-sections__section-title", property: 'color' },
         { id: 'gridSize', selector: CARD_SECTION, property: '--ds-form-sections-grid-size' },
         // The corpus control: the hairline ramp DOES move, proving the arm
         // reached and the family's hold is the skin's honest answer.

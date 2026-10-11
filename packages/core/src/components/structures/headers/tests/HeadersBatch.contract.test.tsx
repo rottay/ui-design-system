@@ -116,7 +116,7 @@ describe('Headers-family (structures) data-part contract (structure-header anato
       expect(container.querySelector('[data-part="top-bar"]')).not.toBeNull();
       expect(container.querySelector('[data-part="back-button"]')).not.toBeNull();
       expect(container.querySelector('[data-part="back-icon"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="back-label"]')).not.toBeNull();
+      expect(container.querySelector('.ds-detail-header__back-label')).not.toBeNull();
       expect(container.querySelector('[data-part="breadcrumb-divider"]')).not.toBeNull();
 
       const heroPanel = container.querySelector('[data-part="hero-panel"]');
@@ -124,25 +124,25 @@ describe('Headers-family (structures) data-part contract (structure-header anato
       expect(heroPanel?.getAttribute('data-archetype')).toBe('editorial');
 
       expect(container.querySelector('[data-part="avatar"][data-variant="initials"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="eyebrow"]')).not.toBeNull();
+      expect(container.querySelector('.ds-detail-header__eyebrow')).not.toBeNull();
       expect(container.querySelector('[data-part="title"][data-archetype="editorial"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="subtitle"]')).not.toBeNull();
+      expect(container.querySelector('.ds-detail-header__subtitle')).not.toBeNull();
       expect(container.querySelector('[data-part="context-rail"]')).not.toBeNull();
 
       expect(container.querySelector('[data-part="metadata-card"]')).not.toBeNull();
       expect(container.querySelector('[data-part="metadata-card-children"]')).not.toBeNull();
       expect(container.querySelector('[data-part="metadata-chip"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="metadata-chip-label"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="metadata-chip-value"]')).not.toBeNull();
+      expect(container.querySelector('.ds-detail-header__metadata-chip-label')).not.toBeNull();
+      expect(container.querySelector('.ds-detail-header__metadata-chip-value')).not.toBeNull();
 
       expect(container.querySelector('[data-part="tab-strip"]')).not.toBeNull();
       expect(container.querySelector('[data-part="tab"][data-active="true"]')).not.toBeNull();
       expect(container.querySelector('[data-part="tab"][data-active="false"]')).not.toBeNull();
       expect(container.querySelector('[data-part="tab-icon"]')).toBeNull(); // no tab.icon supplied in this fixture
-      expect(container.querySelector('[data-part="tab-label"][data-active="true"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="tab-label"][data-active="false"]')).not.toBeNull();
+      expect(container.querySelector('.ds-detail-header__tab-label[data-active="true"]')).not.toBeNull();
+      expect(container.querySelector('.ds-detail-header__tab-label[data-active="false"]')).not.toBeNull();
       expect(container.querySelector('[data-part="tab-count"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="tab-count-text"][data-active="true"]')).not.toBeNull();
+      expect(container.querySelector('.ds-detail-header__tab-count-text[data-active="true"]')).not.toBeNull();
     });
 
     it('avatar image variant: stamps avatar[data-variant="image"]', async () => {
@@ -282,28 +282,28 @@ describe('Headers-family (structures) data-part contract (structure-header anato
       expect(backButton?.className ?? '').not.toContain('back-button');
 
       expect(container.querySelector('[data-part="back-icon"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="back-label"]')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-header__back-label')).not.toBeNull();
       expect(container.querySelector('[data-part="breadcrumb-divider"]')).not.toBeNull();
 
-      const breadcrumbLink = container.querySelector('[data-part="breadcrumb-link"]');
+      const breadcrumbLink = container.querySelector('.ds-edit-header__breadcrumb-link');
       expect(breadcrumbLink).not.toBeNull();
       // §4: the dead `breadcrumb-link` className hook was deleted with the <style> block.
       // The skin's class door is a different, namespaced token on the same element.
       expect(Array.from(breadcrumbLink?.classList ?? [])).not.toContain('breadcrumb-link');
       expect(breadcrumbLink?.classList.contains('ds-edit-header__breadcrumb-link')).toBe(true);
 
-      expect(container.querySelector('[data-part="breadcrumb-separator"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="breadcrumb-item"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="entity-id"]')?.textContent).toContain('abc12345');
+      expect(container.querySelector('.ds-edit-header__breadcrumb-separator')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-header__breadcrumb-item')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-header__entity-id')?.textContent).toContain('abc12345');
 
       expect(container.querySelector('[data-part="hero-panel"][data-archetype="technical"]')).not.toBeNull();
       expect(container.querySelector('[data-part="icon-badge"]')).not.toBeNull();
       expect(container.querySelector('[data-part="icon-badge-glyph"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="eyebrow"]')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-header__eyebrow')).not.toBeNull();
       expect(container.querySelector('[data-part="title"]')).not.toBeNull();
       expect(container.querySelector('[data-part="status-pill"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="status-pill-text"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="subtitle"]')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-header__status-pill-text')).not.toBeNull();
+      expect(container.querySelector('.ds-edit-header__subtitle')).not.toBeNull();
       expect(container.querySelector('[data-part="actions"]')).not.toBeNull();
       expect(container.querySelector('[data-part="context-card"]')).not.toBeNull();
       expect(container.querySelector('[data-part="context-rail"]')).not.toBeNull();
@@ -319,8 +319,8 @@ describe('Headers-family (structures) data-part contract (structure-header anato
       await waitForPart(container, 'root');
       // No I18nProvider in this harness: useOptionalTranslation returns null and
       // the documented English floors render instead of raw catalog keys.
-      expect(container.querySelector('[data-part="back-label"]')?.textContent).toBe('Back');
-      expect(container.querySelector('[data-part="entity-id"]')?.textContent).toContain('ID: abcdef12');
+      expect(container.querySelector('.ds-edit-header__back-label')?.textContent).toBe('Back');
+      expect(container.querySelector('.ds-edit-header__entity-id')?.textContent).toContain('ID: abcdef12');
       expect(container.textContent).toContain('Save Changes');
       expect(container.textContent).toContain('Cancel');
       expect(container.textContent).not.toContain('save_changes');
@@ -331,7 +331,7 @@ describe('Headers-family (structures) data-part contract (structure-header anato
         'modern',
       );
       await waitForPart(overridden.container, 'root');
-      expect(overridden.container.querySelector('[data-part="back-label"]')?.textContent).toBe('Retour');
+      expect(overridden.container.querySelector('.ds-edit-header__back-label')?.textContent).toBe('Retour');
       overridden.unmount();
     });
 
@@ -382,15 +382,15 @@ describe('Headers-family (structures) data-part contract (structure-header anato
       expect(container.querySelector('[data-part="top-bar"]')).not.toBeNull();
       expect(container.querySelector('[data-part="back-button"]')).not.toBeNull();
       expect(container.querySelector('[data-part="back-icon"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="back-label"]')).not.toBeNull();
+      expect(container.querySelector('.ds-form-header__back-label')).not.toBeNull();
       expect(container.querySelector('[data-part="breadcrumb-divider"]')).not.toBeNull();
       expect(container.querySelector('[data-part="actions"]')).not.toBeNull();
       expect(container.querySelector('[data-part="hero-panel"][data-archetype="governance"]')).not.toBeNull();
       expect(container.querySelector('[data-part="icon-badge"]')).not.toBeNull();
       expect(container.querySelector('[data-part="icon-badge-glyph"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="eyebrow"]')).not.toBeNull();
+      expect(container.querySelector('.ds-form-header__eyebrow')).not.toBeNull();
       expect(container.querySelector('[data-part="title"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="subtitle"]')).not.toBeNull();
+      expect(container.querySelector('.ds-form-header__subtitle')).not.toBeNull();
       expect(container.querySelector('[data-part="context-card"]')).not.toBeNull();
       expect(container.querySelector('[data-part="context-rail"]')).not.toBeNull();
       expect(container.querySelector('[data-part="context-card-children"]')).not.toBeNull();

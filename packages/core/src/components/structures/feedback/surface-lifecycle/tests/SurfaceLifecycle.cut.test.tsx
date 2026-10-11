@@ -184,7 +184,7 @@ describe('SurfaceLifecycle (WO-FAM-10 sub-lot G cut)', () => {
       return el;
     })) as HTMLElement;
 
-    expect(banner.querySelector("[data-part='description']")).not.toBeNull();
+    expect(banner.querySelector(".ds-stale-banner__description")).not.toBeNull();
     // The banner root rides runtime `--ds-*` custom properties only (the Flex
     // gap channel); no visual property travels inline.
     const style = banner.getAttribute('style') ?? '';
@@ -202,7 +202,7 @@ describe('SurfaceLifecycle (WO-FAM-10 sub-lot G cut)', () => {
     );
 
     await waitFor(() => expect(container.textContent).toContain('Broken'));
-    expect(container.querySelector('.ds-error-state [data-part="title"]')).not.toBeNull();
+    expect(container.querySelector('.ds-error-state .ds-error-state__title')).not.toBeNull();
     // The Stack this family stamps no longer claims `content`; the part that
     // remains under the error state is the Alert's own anatomy.
     expect(container.querySelector('.ds-error-state__body > [data-part="content"]')).toBeNull();

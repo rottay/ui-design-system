@@ -52,7 +52,7 @@ describe('RecordField copy confirm', () => {
 
     // Wait for the field to render, then assert the copy affordance is absent.
     await waitFor(() => {
-      expect(container.querySelector('[data-part="field-value"]')).not.toBeNull();
+      expect(container.querySelector('.ds-record__field-value')).not.toBeNull();
     });
     expect(container.querySelector('button[aria-label^="Copy"]')).toBeNull();
   });

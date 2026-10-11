@@ -85,7 +85,7 @@ describe('Surface lifecycle state chrome -- R2+R3 ownership contract', () => {
     await waitFor(() => {
       expect(container.querySelector('.ds-empty-state')).not.toBeNull();
       expect(container.querySelector('.ds-loading-skeleton__header-primary')).not.toBeNull();
-      expect(container.querySelector('.ds-error-state [data-part="title"]')).not.toBeNull();
+      expect(container.querySelector('.ds-error-state .ds-error-state__title')).not.toBeNull();
     });
 
     // Every part whose paint/typography moved to surface-states.css no longer
@@ -93,10 +93,10 @@ describe('Surface lifecycle state chrome -- R2+R3 ownership contract', () => {
     // engine-level inline vars -- that is its family's contract, not ours.)
     const drained: Array<[string, string[]]> = [
       ['.ds-stale-banner[data-part="banner"]', ['padding', 'fontSize']],
-      ['.ds-stale-banner [data-part="description"]', ['flex']],
+      ['.ds-stale-banner .ds-stale-banner__description', ['flex']],
       ['.ds-loading-skeleton__header-primary', ['width', 'height']],
       ['.ds-loading-skeleton__header-secondary', ['width', 'height']],
-      ['.ds-error-state [data-part="title"]', ['fontWeight']],
+      ['.ds-error-state .ds-error-state__title', ['fontWeight']],
     ];
     for (const [selector, properties] of drained) {
       const el = container.querySelector(selector) as HTMLElement | null;

@@ -160,7 +160,11 @@ describe('EditFields (WO-FAM-10 cut)', () => {
       </I18nProvider>,
       'modern',
     );
-    const requirement = await waitForPart(container, 'field-requirement-copy');
+    const requirement = await waitFor(() => {
+      const node = container.querySelector<HTMLElement>('.ds-edit-fields__field-requirement-copy');
+      if (!node) throw new Error('expected .ds-edit-fields__field-requirement-copy');
+      return node;
+    });
     expect(requirement.textContent).toBe('Obligatorio');
     await waitFor(() => {
       expect(within(container as HTMLElement).getByRole('button', { name: 'Mostrar más campos' })).toBeTruthy();

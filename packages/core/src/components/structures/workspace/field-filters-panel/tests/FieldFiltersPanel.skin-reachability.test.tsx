@@ -103,8 +103,8 @@ describe('FieldFiltersPanel skin reachability', () => {
     // they set on one line. The control slot is what lands every card's control
     // on a common floor inside the auto-fit grid.
     for (const selector of [
-      ".ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-label'][data-size]",
-      ".ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-description'][data-size]",
+      ".ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__filter-card-label[data-size]",
+      ".ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__filter-card-description[data-size]",
       ".ds-structure.ds-field-filters-panel[data-part='root'] [data-part='control-slot']",
     ]) {
       expect(

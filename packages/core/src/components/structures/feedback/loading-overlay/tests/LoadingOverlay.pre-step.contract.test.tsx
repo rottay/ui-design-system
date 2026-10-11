@@ -73,10 +73,10 @@ describe('LoadingOverlay skin contract', () => {
     expect(logo).not.toBeNull();
     expect(logo).toContainElement(container.querySelector('[data-testid="consumer-logo"]'));
 
-    const message = container.querySelector<HTMLElement>('[data-part="message"]');
+    const message = container.querySelector<HTMLElement>('.ds-loading-overlay__message');
     expect(message).toHaveTextContent('Syncing records');
 
-    const dots = container.querySelectorAll<HTMLElement>('[data-part="dot"]');
+    const dots = container.querySelectorAll<HTMLElement>('.ds-loading-overlay__dot');
     expect(dots).toHaveLength(3);
     expect([...dots].map((dot) => dot.dataset.dotIndex)).toEqual(['0', '1', '2']);
 

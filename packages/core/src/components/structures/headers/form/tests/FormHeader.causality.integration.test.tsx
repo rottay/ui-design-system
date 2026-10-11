@@ -179,6 +179,17 @@ describeCausality({
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
+/** A composed Text is served through its owner class hook; every other part through its `data-part`. */
+const TEXT_HOOKS: Record<string, string> = {
+  'back-label': 'ds-form-header__back-label',
+  'eyebrow': 'ds-form-header__eyebrow',
+  'subtitle': 'ds-form-header__subtitle',
+};
+const servesPart = (markup: string, part: string): boolean =>
+  part in TEXT_HOOKS
+    ? new RegExp(`class="[^"]*\\b${TEXT_HOOKS[part]}[ "]`).test(markup)
+    : markup.includes(`data-part="${part}"`);
+
 describe('form-header causality surface', () => {
   it('serves the anatomy every probe reads', () => {
     for (const part of [
@@ -202,7 +213,7 @@ describe('form-header causality surface', () => {
       'context-rail',
       'context-card-children',
     ]) {
-      expect(rendered, part).toContain(`data-part="${part}"`);
+      expect(servesPart(rendered, part), part).toBe(true);
     }
     // The tone is a stamp now, and the component writes no tone style at all.
     expect(rendered).toContain('data-variant="primary"');

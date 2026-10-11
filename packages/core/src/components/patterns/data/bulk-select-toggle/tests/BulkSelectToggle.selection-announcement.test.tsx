@@ -60,10 +60,11 @@ describe('BulkSelectToggle label foreground', () => {
       'modern',
     );
 
-    // The Text typography node is the innermost data-part="label": the Button
-    // wraps its children in one of its own.
-    const labels = container.querySelectorAll('button [data-part="label"]');
-    const text = labels[labels.length - 1];
+    // The Text typography node, by its owner class hook: the Button wraps its
+    // children in a label part of its own.
+    const labels = container.querySelectorAll('button .ds-bulk-select-toggle__label');
+    expect(labels).toHaveLength(1);
+    const text = labels[0];
 
     // data-color is what the modern typography skin resolves; an omitted color
     // lands on "default", which painted 1.06:1 on the active fill.

@@ -440,7 +440,7 @@ describe('assistant -- data-part contract (communication-pattern anatomy)', () =
     await waitFor(() => expect(container.textContent).toContain('1.2s'));
     const root = await waitForPart(container, 'root');
     expect(root.className).toContain('ds-assistant-tool-call-card');
-    expect(q(container, '[data-part="tool-card"][data-tone="success"]')).toHaveLength(1);
+    expect(q(container, '.ds-assistant__tool-card[data-tone="success"]')).toHaveLength(1);
   });
 
   it.each(ENGINES)('AssistantStatusIndicator: dot carries data-status for every status (%s)', async (engine) => {
@@ -466,10 +466,10 @@ describe('assistant -- data-part contract (communication-pattern anatomy)', () =
     expect(root.className).toContain('ds-assistant-preview-diff-card');
     expect(q(container, '[data-part="diff-row"]')).toHaveLength(3);
     expect(q(container, '[data-part="divider"]')).toHaveLength(0);
-    expect(q(container, '[data-part="preview-cell"][data-diff-side="before"][data-change="updated"]')).toHaveLength(1);
-    expect(q(container, '[data-part="preview-cell"][data-diff-side="after"][data-change="updated"]')).toHaveLength(1);
-    expect(q(container, '[data-part="preview-cell"][data-diff-side="after"][data-change="added"]')).toHaveLength(1);
-    expect(q(container, '[data-part="preview-cell"][data-diff-side="before"][data-change="removed"]')).toHaveLength(1);
+    expect(q(container, '.ds-assistant__preview-cell[data-diff-side="before"][data-change="updated"]')).toHaveLength(1);
+    expect(q(container, '.ds-assistant__preview-cell[data-diff-side="after"][data-change="updated"]')).toHaveLength(1);
+    expect(q(container, '.ds-assistant__preview-cell[data-diff-side="after"][data-change="added"]')).toHaveLength(1);
+    expect(q(container, '.ds-assistant__preview-cell[data-diff-side="before"][data-change="removed"]')).toHaveLength(1);
   });
 
   it.each(ENGINES)('ConfirmActionCard: root only, no internal paint sites (%s)', async (engine) => {
@@ -489,7 +489,7 @@ describe('assistant -- data-part contract (communication-pattern anatomy)', () =
     );
     await waitFor(() => expect(container.textContent).toContain('hi'));
     expect(container.querySelector('.ds-assistant-message-bubble')).not.toBeNull();
-    expect(q(container, '[data-part="timestamp"]')).toHaveLength(1);
+    expect(q(container, '.ds-assistant__timestamp')).toHaveLength(1);
   });
 });
 
@@ -524,7 +524,7 @@ describe('presence -- data-part contract (communication-pattern anatomy)', () =>
     });
     expect(container.textContent).toContain('B');
     expect(q(container, '[data-part="overflow-badge"]')).toHaveLength(1);
-    expect(q(container, '[data-part="overflow-badge-count"]')).toHaveLength(1);
+    expect(q(container, '.ds-presence__overflow-badge-count')).toHaveLength(1);
   });
 
   it.each(ENGINES)('PresenceTypingIndicator: root/typing-dot x3/label (%s)', async (engine) => {
@@ -535,7 +535,7 @@ describe('presence -- data-part contract (communication-pattern anatomy)', () =>
     const root = await waitForPart(container, 'root');
     expect(root.className).toContain('ds-presence-typing-indicator');
     expect(q(container, '[data-part="typing-dot"]')).toHaveLength(3);
-    expect(q(container, '[data-part="label"]')).toHaveLength(1);
+    expect(q(container, '.ds-presence__label')).toHaveLength(1);
   });
 
   it.each(ENGINES)('LiveCursor: root/cursor-badge (%s)', async (engine) => {

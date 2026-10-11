@@ -39,7 +39,7 @@ describe('form-header back-chip focus ring stamp', () => {
     const { container } = renderWithEngine(header(), 'modern');
     await waitFor(() => expect(container.querySelector('[data-part="back-button"]')).not.toBeNull());
     expect(container.querySelector('a[href="/back"]')).not.toBeNull();
-    expect(container.querySelector('[data-part="back-label"]')).not.toBeNull();
+    expect(container.querySelector('.ds-form-header__back-label')).not.toBeNull();
   });
 
   it('pairs the kernel arm on the chip with the platform arm on the anchor', () => {

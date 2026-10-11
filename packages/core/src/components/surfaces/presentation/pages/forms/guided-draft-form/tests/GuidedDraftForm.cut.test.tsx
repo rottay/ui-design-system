@@ -51,10 +51,19 @@ describe('GuidedDraftFormSurface (WO-FAM-10 cut)', () => {
     // its weight inline, so the skin's channel read is the only paint. The
     // two headings are merged with the app-wide personality heading style
     // (merged UNDER any caller style), which the family no longer overrides.
-    const label = await waitForPart(container, 'section-nav-label');
+    const label = await waitFor(() => {
+      const node = container.querySelector<HTMLElement>('.ds-guided-draft-form__section-nav-label');
+      if (!node) throw new Error('expected .ds-guided-draft-form__section-nav-label');
+      return node;
+    });
     expect(label.getAttribute('style') ?? '').not.toContain('font-weight');
     for (const part of ['title', 'section-card-title']) {
-      const element = await waitForPart(container, part);
+      const door = `.ds-guided-draft-form__${part}`;
+      const element = await waitFor(() => {
+        const node = container.querySelector<HTMLElement>(door);
+        if (!node) throw new Error(`expected ${door}`);
+        return node;
+      });
       expect(element.getAttribute('style') ?? '', part).not.toContain('font-weight: 800');
     }
   });
@@ -248,7 +257,11 @@ describe('GuidedDraftFormSurface (WO-FAM-10 cut)', () => {
       'modern',
     );
     expect(getByRole('navigation', { name: 'Form sections' })).toBeTruthy();
-    const label = await waitForPart(container, 'section-nav-label');
+    const label = await waitFor(() => {
+      const node = container.querySelector<HTMLElement>('.ds-guided-draft-form__section-nav-label');
+      if (!node) throw new Error('expected .ds-guided-draft-form__section-nav-label');
+      return node;
+    });
     // The skin flows on logical properties; the family stamps no mirrored
     // transform of its own for either direction.
     expect(label.getAttribute('style') ?? '').not.toContain('scaleX');
@@ -261,7 +274,7 @@ describe('GuidedDraftFormSurface (WO-FAM-10 cut)', () => {
     );
     const scrollRoot = await waitForPart(scroll.container, 'root');
     expect(scrollRoot.getAttribute('data-mode')).toBe('scroll');
-    expect(scroll.container.querySelector('[data-part="section-card-title"]')).not.toBeNull();
+    expect(scroll.container.querySelector('.ds-guided-draft-form__section-card-title')).not.toBeNull();
     scroll.unmount();
 
     const wizard = renderWithEngine(
@@ -276,7 +289,7 @@ describe('GuidedDraftFormSurface (WO-FAM-10 cut)', () => {
     const wizardRoot = await waitForPart(wizard.container, 'root');
     expect(wizardRoot.getAttribute('data-mode')).toBe('wizard');
     // Wizard mode swaps the section stack for the composed step wizard.
-    expect(wizard.container.querySelector('[data-part="section-card-title"]')).toBeNull();
+    expect(wizard.container.querySelector('.ds-guided-draft-form__section-card-title')).toBeNull();
     wizard.unmount();
   });
 });
