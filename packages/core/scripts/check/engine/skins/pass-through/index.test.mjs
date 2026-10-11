@@ -81,27 +81,35 @@ describe('engine/skins/pass-through -- comparison drills (one move each)', () =>
     assert.deepEqual(kinds(door.refusals), ['counter/grew']);
   });
 
-  it('a family held-set violation is red: a new caller-part dependent on button', () => {
+  // The drills borrow a family the tree measures with no held entry. It is found, not named: a family
+  // leaves this view with its last violating site, as button did at the classic strip.
+  const emptyFamily = () => Object.keys(view.families).find((fam) => !view.families[fam].carrier && view.families[fam].part.length === 0 && view.families[fam].state.length === 0);
+
+  it('a family held-set violation is red: a new caller-part dependent on a family with no held entry', () => {
     const v = clone(view);
-    v.families.button.part.push('patterns/drill/index.tsx#ModernButton#drill-part#0');
+    const fam = emptyFamily();
+    assert.ok(fam, 'the tree still measures a non-carrier family with no held entry');
+    v.families[fam].part.push('patterns/drill/index.tsx#DrillChild#drill-part#0');
     v.counters.callerPartDependents += 1;
     const findings = evaluatePassThrough(v, ledger);
     assert.deepEqual(kinds(findings), ['counter/grew', 'part-dependent/grew']);
-    assert.match(findings.find((f) => f.kind === 'part-dependent').detail, /^button: NEW caller-part dependent/);
+    assert.ok(findings.find((f) => f.kind === 'part-dependent').detail.startsWith(`${fam}: NEW caller-part dependent`));
   });
 
   it('a held entry that clears makes its family eligible only after the door lowers it, keeping the others\' routing', () => {
     const v = clone(view);
-    assert.deepEqual(v.families.button.part, [], 'the drill seeds its own held entry on a family the tree measures empty');
+    const fam = emptyFamily();
+    assert.ok(fam, 'the tree still measures a non-carrier family with no held entry');
+    assert.deepEqual(v.families[fam].part, [], 'the drill seeds its own held entry on a family the tree measures empty');
     const l = clone(ledger);
-    l.families.button.part = [{ key: 'patterns/drill/index.tsx#ModernButton#drill-part#0', atBaseline: 'patterns/drill/index.tsx:1', routing: 'drill' }];
+    l.families[fam].part = [{ key: 'patterns/drill/index.tsx#DrillChild#drill-part#0', atBaseline: 'patterns/drill/index.tsx:1', routing: 'drill' }];
     l.counters.callerPartDependents += 1;
-    assert.equal(eligibility(l).button.partStripEligible, false);
+    assert.equal(eligibility(l)[fam].partStripEligible, false);
     assert.deepEqual(kinds(evaluatePassThrough(v, l)), ['counter/shrank', 'part-dependent/shrank']);
     const door = tightenLedger(l, v);
     assert.equal(door.ok, true);
     const e = eligibility(door.ledger);
-    assert.equal(e.button.partStripEligible, true);
+    assert.equal(e[fam].partStripEligible, true);
     assert.equal(e.typography.partStripEligible, false);
     assert.equal(e.box.partStripEligible, false, 'a layout carrier waits on the owner carrier ruling whatever its set says');
     assert.ok(door.ledger.families.typography.part.length > 0, 'a surviving held set exists to check');

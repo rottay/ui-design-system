@@ -4,10 +4,8 @@
  * callers win on `id`, `aria-*`, and every `data-*` attribute other than the
  * anatomy channels. A skinned Button keeps its canonical `data-part="trigger"`
  * and its engine `data-state`; a caller `data-part`/`data-state` cannot replace
- * them and is not forwarded to the trigger. Modern and rustic honour that.
- * Classic does not yet: it lets a caller part win and forwards a caller state
- * (D2). Those two cases are `it.fails` KNOWN DEBT pins that turn red the day the
- * fix lands. The law is documented on `BaseComponentProps` in
+ * them and is not forwarded to the trigger. All three engines honour that. The
+ * law is documented on `BaseComponentProps` in
  * `foundation/contracts/kernel/common`.
  */
 import React from 'react';
@@ -22,7 +20,7 @@ const passthrough = {
   id: 'caller-button-id',
   'aria-label': 'Caller label',
   'data-custom': 'caller-data',
-  // P-88: the caller must NOT win on the part; the classic pin below registers the remaining debt.
+  // P-88: the caller must NOT win on the part.
   'data-part': 'caller-part-attempt',
 } as const;
 
@@ -120,7 +118,7 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('data-custom', 'caller-data');
   });
 
-  it.fails('KNOWN DEBT (ARC-12): classic: the caller data-part does not win and the trigger keeps data-part="trigger" (P-88)', () => {
+  it('classic: the caller data-part does not win and the trigger keeps data-part="trigger" (P-88)', () => {
     const { container } = render(<ClassicButton {...passthrough}>Go</ClassicButton>);
 
     const button = container.querySelector('.rottay-button--classic') as HTMLElement;
@@ -164,7 +162,7 @@ describe('Button pass-through honesty law', () => {
     expect(anchor).toHaveAttribute('data-state', 'hovered');
   });
 
-  it.fails('KNOWN DEBT (ARC-12): classic: a caller data-state does not replace the engine-owned trigger state (P-88, D2)', () => {
+  it('classic: a caller data-state does not replace the engine-owned trigger state (P-88, D2)', () => {
     const { container } = render(
       <ClassicButton data-state="caller-state-attempt">Go</ClassicButton>
     );

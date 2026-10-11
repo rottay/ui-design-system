@@ -41,6 +41,10 @@
  * `{...partAttributes('<part>', <state>)}` spread on an opener is a caller row like the literal
  * attributes -- the part is the first string-literal argument, the state is the serialized
  * (dynamic) interaction state. A part that is not static is reported `unresolvable`, never guessed.
+ *
+ * v7.1.4 (2026-10-11; arc12/census-v714: post 3bf98a0d, census / report / attribution unchanged): the
+ * pin inventory loses the two classic Button rows. The classic Button keeps its part and state
+ * since the step-3 strip, so its site leaves the roster and both it.fails became passing tests.
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';

@@ -5,8 +5,8 @@
  * the v7 attribution (v3 owner skins, C4 engine scope, rule 4b, C7..C10 strikes). READ-ONLY.
  * The body is the adopted post.mjs verbatim; only its CLI shell is replaced.
  */
-// Provenance: arc12/dt3/post.mjs sha256 d6eb61877b1a08634ae25749b19992362099cbd6b1f0776791119fe9fa302cd1 (census v7.1.2, 2026-10-11: the pin
-// inventory re-pinned to the 8 remaining it.fails; v7 through v7.1.1 was arc12/l2-tools/post.mjs 2632ae59).
+// Provenance: arc12/census-v714/post.mjs sha256 3bf98a0d7fa587c05887e77310e336f20167314a9c5dfac411929513b457b02e (census v7.1.4, 2026-10-11: the pin
+// inventory loses the two classic Button rows; v7.1.2 was arc12/dt3/post.mjs d6eb6187, v7 through v7.1.1 arc12/l2-tools/post.mjs 2632ae59).
 import { buildAttribution, ALL_RULES } from '../attribution/index.mjs';
 
 /** @param {object} raw  sweepPassThrough() output. @param {{ repoRoot: string, rules?: string[] }} options */
@@ -77,16 +77,15 @@ for (const r of all) {
 }
 sites.sort((a, b) => a.id.localeCompare(b.id));
 
-// pin consistency: the 6 distinct pinned behaviours (8 it.fails incl. 2 rerun copies)
+// pin consistency: the 4 distinct pinned behaviours (4 it.fails, all Card)
 // v7.1.2: 10 rows left with their promotion to passing tests -- the modern Select pair at E1
 // (bfe7d5f89), the modern/rustic Button eight at E9 (28e169406). A row leaves only that way.
+// v7.1.4: the two classic Button rows left the same way, with the classic strip (step 3, S3-1).
 const PINS = [
   { pin: 'Card.passthrough-contract:110 classic data-state (D1)', match: (s) => /display\/card\/engines\/classic/.test(s.file) && s.stateClass === 'state-forward' },
   { pin: 'PassThroughLaw:60 classic Card resting data-state', match: (s) => /display\/card\/engines\/classic/.test(s.file) && s.stateClass },
   { pin: 'PassThroughLaw:60 modern Card resting data-state', match: (s) => /display\/card\/engines\/modern/.test(s.file) && s.stateClass === 'state-rest' },
   { pin: 'PassThroughLaw:60 rustic Card resting data-state', match: (s) => /display\/card\/engines\/rustic/.test(s.file) && s.stateClass === 'state-rest' },
-  { pin: 'Button.passthrough-contract:123 classic data-part (x2 incl. rerun)', match: (s) => /inputs\/button\/engines\/classic/.test(s.file) && s.partClass === 'part-replace' },
-  { pin: 'Button.passthrough-contract:167 classic data-state D2 (x2 incl. rerun)', match: (s) => /inputs\/button\/engines\/classic/.test(s.file) && s.stateClass === 'state-forward' },
 ];
 const pinCheck = PINS.map((p) => { const hit = sites.filter(p.match).map((s) => s.id); return { pin: p.pin, censusSites: hit, present: hit.length > 0 }; });
 
