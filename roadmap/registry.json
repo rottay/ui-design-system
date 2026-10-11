@@ -2824,6 +2824,11 @@
      "at": "2026-10-11 10:38",
      "by": "Kimi",
      "note": "DT-6 + pin-consistency INTEGRATED b96fe35c8 (2 paths, positive list, sha-verified): the CommunicationBatch :409 title now matches its assertion; ONE new pass-through suite test (24/24) fails by name when a census pin goes stale — the silent 6/16 state found during DT-3 is now gated; both-ways mutant-proven by writer AND independently by the reviewer (ACCEPT, 7cdfec5b, receipts verified NORMAL opus-5-5). No threshold/baseline/snapshot touched. Post-integration: pass-through --check rc 0 (88/836/16). Registry 138/168 unchanged. N-1 routed as prose residue: the describe header comment at CommunicationBatch :403-406 still says 'forwarding' — joins the next prose lot. ARC-12 remaining: E8 (owner decision formulated with rendered evidence), P-1/N3 regen (queued until the tree settles), step-3 classic strip (after E8), 4 Card pins (Card lot), carriers + DT-5 (owner rulings), ratchet to 0 + certification."
+    },
+    {
+     "at": "2026-10-11 12:08",
+     "by": "Kimi",
+     "note": "OWNER DECISION 2026-10-11: E8 skeleton Option A APPROVED — the 125 no-role Text exposures draw 'frame' after the strip; renderer, role table and drill :912 stay byte-identical; hooks on the 4 role-bearing rows (bulk-select-toggle :74, report :64, states :224, render-dispatch/cards :178) keep 'line'. R-4 is owner law: zero loaded-state font-size/geometry movement on any Text (the rendered comparison proved the tier ramp moves 74/159 sampled Texts); rendered parity of the exact candidate + independent review before integration; no snapshot updates. E8 v2.1 dispatched (writer bfc77637, the v2 brief rewritten: G-2 front removed, tools v7.1.2, census re-derived at 86b5b74c9). ARC-15 re-evaluation in flight as a READ-ONLY scoping packet (INV-03 verified DONE 2026-09-22 — an earlier DT note read a stale entry)."
     }
    ],
    "claimedBy": "kimi-dt",
