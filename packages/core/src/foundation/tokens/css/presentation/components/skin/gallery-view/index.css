@@ -82,10 +82,12 @@
   background: var(--ds-color-bg-primary);
 }
 
-/* The caption line, keyed on the part the Text primitive forwards, so the
-   loaded line and the loading bone are the same node contract. The attribute
-   is repeated to the specificity the typography skin's `[data-color]` rule
-   carries; anything lower would lose the colour decision. */
+/* The caption line: the loaded Text by its class hook, the loading bone by its
+   own part. Each arm is repeated to the specificity the typography skin's
+   `[data-color]` rule carries; anything lower would lose the colour decision. */
+.ds-pattern-gallery-view
+  .ds-gallery-card
+  .ds-gallery-view__caption-text.ds-gallery-view__caption-text.ds-gallery-view__caption-text,
 .ds-pattern-gallery-view
   .ds-gallery-card
   [data-part='caption-text'][data-part='caption-text'][data-part='caption-text'] {

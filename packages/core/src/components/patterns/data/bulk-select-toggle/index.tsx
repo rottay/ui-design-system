@@ -71,7 +71,7 @@ export function BulkSelectToggle({
         )}
         {/* The button owns the foreground for its variant; a Text that paints
             its own color lands near-invisible on the active/primary fill. */}
-        <Text data-part="label" size="sm" color="inherit">{active ? doneLabel : selectLabel}</Text>
+        <Text className="ds-bulk-select-toggle__label" data-part="label" size="sm" color="inherit">{active ? doneLabel : selectLabel}</Text>
       </Button>
 
       {active && selectedCount > 0 && (

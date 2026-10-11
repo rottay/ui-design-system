@@ -122,10 +122,9 @@ const FRAME = "#gallery [data-part='image-frame']";
 const PLACEHOLDER = "#gallery [data-part='image-placeholder']";
 const CAPTION = "#gallery .ds-gallery-card [data-part='caption']";
 const CAPTION_TEXT = '#gallery .ds-gallery-view__caption-text';
-/* The SAME node, reached through the part the composed `Text` forwards --
-   which is how the skin keys the caption line, and what the axe node identity
-   below already proves the loaded caption carries. */
-const CAPTION_TEXT_PART = "#gallery .ds-gallery-card [data-part='caption-text']";
+/* The SAME node inside its card, reached through the class hook the skin keys
+   the loaded caption line on. */
+const CAPTION_TEXT_PART = '#gallery .ds-gallery-card .ds-gallery-view__caption-text';
 /* The UNSELECTED card's overlay: a checked checkbox is always visible
    (`:has(input:checked)`), so the selected card's overlay could never measure
    the hover reveal. */

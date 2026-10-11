@@ -221,7 +221,7 @@ export function SurfaceErrorState({
     <Card className="ds-surface ds-error-state" variant="outlined">
       <Card.Body className="ds-error-state__body">
         <Stack spacing="md">
-          <Text data-part="title">
+          <Text className="ds-error-state__title" data-part="title">
             {title ?? tSurface('states.error_title')}
           </Text>
           <Alert

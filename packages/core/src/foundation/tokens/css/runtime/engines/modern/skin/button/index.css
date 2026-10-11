@@ -197,7 +197,8 @@
   max-inline-size: 100%;
 }
 
-.ds-button.ds-button--modern [data-part='label'] {
+.ds-button.ds-button--modern [data-part='label'],
+.ds-button.ds-button--modern .ds-bulk-select-toggle__label {
   min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;

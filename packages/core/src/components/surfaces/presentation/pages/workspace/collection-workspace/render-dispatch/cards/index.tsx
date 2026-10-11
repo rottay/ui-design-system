@@ -176,7 +176,7 @@ export function renderFallbackCard<T extends object>({
             : t('collection_workspace.record_label', 'Record')}
         </Text>
         <Text
-          className="ds-collection-render-dispatch__fallback-title"
+          className="ds-collection-render-dispatch__fallback-title ds-collection-render-dispatch__title"
           data-part="title"
           weight="semibold"
         >

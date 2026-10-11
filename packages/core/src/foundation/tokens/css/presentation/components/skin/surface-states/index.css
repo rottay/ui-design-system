@@ -111,7 +111,8 @@
 }
 
 /* ---- error state: title weight ---- */
-.ds-surface.ds-error-state [data-part='title'][data-part='title'][data-part='title'] {
+.ds-surface.ds-error-state .ds-error-state__title.ds-error-state__title.ds-error-state__title,
+.ds-surface.ds-error-state .ds-error-state__alert [data-part='title'][data-part='title'] {
   font-weight: var(--ds-font-weight-bold, 700);
 }
 

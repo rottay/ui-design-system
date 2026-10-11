@@ -19840,15 +19840,13 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
  * Product code can compose the primitive, but it never needs to restyle its
  * internals for hover, press, focus, busy, touch, RTL or high contrast.
  *
- * THE ROOT ANCHOR IS `[data-variant]`, NOT `data-part`, AND THE DIFFERENCE IS
- * REACHABILITY. P-79 makes the caller's part win on modern (asserted in
- * `Button.passthrough-contract.test.tsx`; classic and rustic keep `trigger`, so
- * only this file was exposed). The 7 root rules here were keyed on
- * `[data-part='trigger']`, and 123 production call sites pass a part of their
- * own — every one of them lost all 47 declarations: layout, geometry, the
- * typography channels, `appearance`, `isolation`, `overflow`, the whole
- * transition list, `forced-color-adjust`, and the print and forced-colors
- * contracts.
+ * THE ROOT ANCHOR IS `[data-variant]`, NOT `data-part`. The engine stamps
+ * `data-part='trigger'` on every root and never forwards a caller part (P-88,
+ * asserted in `Button.passthrough-contract.test.tsx`), so no call site can move
+ * the part. The 7 root rules stay keyed on `[data-variant]`, which carries all
+ * 47 declarations: layout, geometry, the typography channels, `appearance`,
+ * `isolation`, `overflow`, the whole transition list, `forced-color-adjust`,
+ * and the print and forced-colors contracts.
  *
  * `data-variant` is written into `anatomyProps`, which the engine spreads AFTER
  * the caller's props, so the caller cannot reach it; `effectiveVariant` is total
@@ -20033,7 +20031,8 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
   max-inline-size: 100%;
 }
 
-.ds-button.ds-button--modern [data-part='label'] {
+.ds-button.ds-button--modern [data-part='label'],
+.ds-button.ds-button--modern .ds-bulk-select-toggle__label {
   min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -64392,7 +64391,8 @@ html[data-ds-motion='reduced']
   text-transform: var(--ds-page-header-eyebrow-text-transform, uppercase);
 }
 
-.ds-pattern-page-shell.ds-engine-modern [data-part='title'] {
+.ds-pattern-page-shell.ds-engine-modern [data-part='title'],
+.ds-pattern-page-shell.ds-engine-modern .ds-notification__title {
   max-width: var(--ds-page-header-title-max-width, 32ch);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   text-wrap: balance;
@@ -64572,7 +64572,8 @@ html[data-ds-motion='reduced']
 }
 
 /* ---- title / subtitle ---- */
-.ds-pattern-page-shell.ds-engine-modern [data-part='title'] {
+.ds-pattern-page-shell.ds-engine-modern [data-part='title'],
+.ds-pattern-page-shell.ds-engine-modern .ds-notification__title {
   margin: 0;
   color: var(--ds-color-text-primary);
   /* W6-A cqi proof consumer: the fluid ramp only resolves against a
@@ -83438,17 +83439,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    class, which consumers outside this package select on; the migration is
    registered for the consumer-readiness lane, never executed inside a cut. */
 /**
- * ActiveFiltersBar skin — engine-agnostic and deliberately unlayered.
- * Unlayered paint outranks Tailwind preflight while caller inline styles keep
- * their per-instance override precedence.
+ * ActiveFiltersBar skin — engine-agnostic, mounted in `layer(rottay-structures)`
+ * by `facade/entrypoints/base/index.css`. That layer sorts after
+ * `rottay-engines`, so a rule here overrides a composed primitive's skin by layer
+ * order, not by specificity; caller inline styles keep their precedence.
  *
  * COMPOSITION LAW (S16): the filter chips are the certified Tag primitive
- * (`closable`; the caller `data-part='chip'` wins the root anatomy hook per
- * P-79), and clear-all / add-filter are the Button primitive — the retired
+ * (`closable`; it keeps its own `root` part and is reached through the
+ * `ds-active-filters-bar__chip` class hook), and clear-all / add-filter are the
+ * Button primitive — the retired
  * hand-rolled chip chrome (gradient pill, custom remove button), the
  * chip-remove hover/focus/active set and the clear-all/add-filter chrome
- * sets are gone (duplication; each primitive's own skin owns its paint,
- * including forced-colors). What this file owns: the rail's root frame, the
+ * sets are gone (duplication; the Button's own skin owns its paint, including
+ * forced-colors, and the chip is rail-blended: see "chip ground" below). What
+ * this file owns: the rail's root frame, the
  * count eyebrow pill (pattern chrome, NOT a filter chip), the label/value
  * typography INSIDE the composed Tag, the layout geometry drained from the
  * engine's inline styles (logical paddings alone), the entrance transition
@@ -83468,8 +83472,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * variant it has no frame at all, and standalone it carries ONE hairline
  * (`--ds-active-filters-bar-border`). Its own material surface area is a
  * count eyebrow — everything the eye reads as material here belongs to the
- * composed primitives: the filter chips are Tag and the actions are Button,
- * each painting through its own governed channels. An elevated filters bar
+ * composed primitives: the actions are Button, painting through their own
+ * governed channels, and the filter chips are Tag with no chrome of their own
+ * here. An elevated filters bar
  * would stack a second sheet on the toolbar it sits beneath.
  *
  * Its tenant-reachable material decisions are therefore the ground and the
@@ -83485,8 +83490,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * is the Button primitive with `aria-expanded` now); the heading loses its
  * capsule here and becomes a flush eyebrow closed by a hairline leader, with
  * typography — tracking, case, tabular figures — carrying the role instead of
- * a box. The objects keep the Tag primitive's chrome untouched and gain only
- * the hit-target floor a dismissible object owes.
+ * a box. The objects are Tags blended into the rail (no fill, frame or pill
+ * geometry) and gain the hit-target floor a dismissible object owes.
  *
  * CHANNELS (WO-FAM-08): every `--ds-active-filters-bar-*` name below has a
  * producer -- `derivation/chrome/active-filters-bar` emits the ground, the
@@ -83655,8 +83660,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         chrome, its type ramp and its focus ring. A link-style toggle is the
         `link` variant, never a text-decoration re-stated here ---- */
 
-/* ---- chip content typography INSIDE the composed Tag (the primitive owns
-        the chip chrome; the label is the tracked mini-eyebrow, the value is
+/* ---- chip content typography INSIDE the composed Tag (the chip carries
+        no chrome here; the label is the tracked mini-eyebrow, the value is
         the readable payload -- never microscopic body text). Long values
         ellipsize against a governed max-inline-size (RTL-safe logical
         properties; the engine discloses the full string via `title`), and a
@@ -83698,8 +83703,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- filter lifecycle (applied / draft / invalid). The chip CHROME stays
-        the Tag primitive's paint (composition law); the state is expressed
+/* ---- filter lifecycle (applied / draft / invalid). The chip carries no
+        chrome to restate (see "chip ground"); the state is expressed
         on the pattern-owned interior — the icon slot's ink and the value's
         underline grammar — so it reads as form, never as hue alone, and it
         survives forced colors (text-decoration remaps to CanvasText):
@@ -83812,8 +83817,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* forced-colors: the root's gradient hairline is forced away, so the strip
-   and the count pill re-assert in system colors. The composed Tag chips and
-   the clear-all / add-filter Buttons keep their own forced-colors contracts;
+   and the count pill re-assert in system colors. The clear-all / add-filter
+   Buttons keep their own forced-colors contract and the chips carry no chrome;
    the chip label/value text auto-maps (the label's uppercase tracking keeps
    it distinguishable from the value without colour). The lifecycle grammar
    survives by FORM: the dashed/wavy value underlines remap to CanvasText and
@@ -83895,11 +83900,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   z-index: var(--ds-column-menu-trigger-open-z, var(--ds-z-index-popover));
 }
 
-/* Two selectors, because `data-part` reaches this control under modern only:
-   `Button.passthrough-contract` pins the caller's part as winning in modern and
-   overridden to 'trigger' by classic and rustic. The class is the hook for
-   those two. */
-.ds-structure.ds-column-menu .ds-column-menu-control,
+/* The control is a composed Button, which keeps its own `trigger` part, so
+   the class is its hook under every engine. */
 .ds-structure.ds-column-menu .ds-column-menu-control {
   flex: 0 0 auto;
 }
@@ -89742,7 +89744,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* ---- error state: title weight ---- */
-.ds-surface.ds-error-state [data-part='title'][data-part='title'][data-part='title'] {
+.ds-surface.ds-error-state .ds-error-state__title.ds-error-state__title.ds-error-state__title,
+.ds-surface.ds-error-state .ds-error-state__alert [data-part='title'][data-part='title'] {
   font-weight: var(--ds-font-weight-bold, 700);
 }
 
@@ -90194,10 +90197,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-color-bg-primary);
 }
 
-/* The caption line, keyed on the part the Text primitive forwards, so the
-   loaded line and the loading bone are the same node contract. The attribute
-   is repeated to the specificity the typography skin's `[data-color]` rule
-   carries; anything lower would lose the colour decision. */
+/* The caption line: the loaded Text by its class hook, the loading bone by its
+   own part. Each arm is repeated to the specificity the typography skin's
+   `[data-color]` rule carries; anything lower would lose the colour decision. */
+.ds-pattern-gallery-view
+  .ds-gallery-card
+  .ds-gallery-view__caption-text.ds-gallery-view__caption-text.ds-gallery-view__caption-text,
 .ds-pattern-gallery-view
   .ds-gallery-card
   [data-part='caption-text'][data-part='caption-text'][data-part='caption-text'] {

@@ -308,7 +308,8 @@
   text-transform: var(--ds-page-header-eyebrow-text-transform, uppercase);
 }
 
-.ds-pattern-page-shell.ds-engine-modern [data-part='title'] {
+.ds-pattern-page-shell.ds-engine-modern [data-part='title'],
+.ds-pattern-page-shell.ds-engine-modern .ds-notification__title {
   max-width: var(--ds-page-header-title-max-width, 32ch);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   text-wrap: balance;
@@ -488,7 +489,8 @@
 }
 
 /* ---- title / subtitle ---- */
-.ds-pattern-page-shell.ds-engine-modern [data-part='title'] {
+.ds-pattern-page-shell.ds-engine-modern [data-part='title'],
+.ds-pattern-page-shell.ds-engine-modern .ds-notification__title {
   margin: 0;
   color: var(--ds-color-text-primary);
   /* W6-A cqi proof consumer: the fluid ramp only resolves against a

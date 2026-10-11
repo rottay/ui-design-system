@@ -61,7 +61,7 @@ function resolveStatsGridVariant(
 function SectionTitle({ children }: { children: React.ReactNode }): React.ReactElement {
   return (
     // h2: nests under PatternPageShell's own page <h1> (profile precedent).
-    <Heading level="h2" textStyle="sectionTitle" data-part="section-title">
+    <Heading className="ds-report__section-title" level="h2" textStyle="sectionTitle" data-part="section-title">
       {children}
     </Heading>
   );
