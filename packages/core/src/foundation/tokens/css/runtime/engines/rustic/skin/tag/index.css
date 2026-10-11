@@ -1,9 +1,9 @@
 /**
  * Rustic Tag skin (WO-SKIN-05 checkpoint D1).
  *
- * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
- * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
- * and still yields to the caller's inline `style`.
+ * LAYER: `layer(rottay-engines)`, mounted by `runtime/engines/frozen/index.css`.
+ * The structure and surface tiers sort after it and override it by layer order,
+ * whatever the specificity here; the caller's inline `style` still wins.
  *
  * SCOPE ROOT keeps its published BEM classnames and adds `rottay-tag--rustic`
  * (grep-verified free; the existing modifiers are sizes and variants, never an

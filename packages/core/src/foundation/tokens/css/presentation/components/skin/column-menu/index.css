@@ -38,10 +38,9 @@
   z-index: var(--ds-column-menu-trigger-open-z, var(--ds-z-index-popover));
 }
 
-/* Two selectors, because `data-part` reaches this control under modern only:
-   `Button.passthrough-contract` pins the caller's part as winning in modern and
-   overridden to 'trigger' by classic and rustic. The class is the hook for
-   those two. */
+/* The control is a composed Button, which keeps its own `trigger` part, so
+   the class is its hook under every engine. The selector is listed twice; the
+   repeat is inert. */
 .ds-structure.ds-column-menu .ds-column-menu-control,
 .ds-structure.ds-column-menu .ds-column-menu-control {
   flex: 0 0 auto;

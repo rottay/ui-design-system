@@ -103,6 +103,10 @@ export type ButtonHtmlType = 'button' | 'submit' | 'reset';
 
 /**
  * Button component props: the contract the family publishes as `ButtonProps`.
+ *
+ * The inherited `data-part` and a caller `data-state` are accepted but never
+ * stamped by the modern and rustic engines: the Button owns `trigger` and its
+ * own state (P-88). Compose through `className`.
  */
 export interface ButtonPublicProps extends BaseComponentProps, EngineAwareProps, DisableableProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onClick' | 'prefix' | 'dir'> {
   /**

@@ -3,17 +3,20 @@
    class, which consumers outside this package select on; the migration is
    registered for the consumer-readiness lane, never executed inside a cut. */
 /**
- * ActiveFiltersBar skin — engine-agnostic and deliberately unlayered.
- * Unlayered paint outranks Tailwind preflight while caller inline styles keep
- * their per-instance override precedence.
+ * ActiveFiltersBar skin — engine-agnostic, mounted in `layer(rottay-structures)`
+ * by `facade/entrypoints/base/index.css`. That layer sorts after
+ * `rottay-engines`, so a rule here overrides a composed primitive's skin by layer
+ * order, not by specificity; caller inline styles keep their precedence.
  *
  * COMPOSITION LAW (S16): the filter chips are the certified Tag primitive
- * (`closable`; the caller `data-part='chip'` wins the root anatomy hook per
- * P-79), and clear-all / add-filter are the Button primitive — the retired
+ * (`closable`; it keeps its own `root` part and is reached through the
+ * `ds-active-filters-bar__chip` class hook), and clear-all / add-filter are the
+ * Button primitive — the retired
  * hand-rolled chip chrome (gradient pill, custom remove button), the
  * chip-remove hover/focus/active set and the clear-all/add-filter chrome
- * sets are gone (duplication; each primitive's own skin owns its paint,
- * including forced-colors). What this file owns: the rail's root frame, the
+ * sets are gone (duplication; the Button's own skin owns its paint, including
+ * forced-colors, and the chip is rail-blended: see "chip ground" below). What
+ * this file owns: the rail's root frame, the
  * count eyebrow pill (pattern chrome, NOT a filter chip), the label/value
  * typography INSIDE the composed Tag, the layout geometry drained from the
  * engine's inline styles (logical paddings alone), the entrance transition
@@ -33,8 +36,9 @@
  * variant it has no frame at all, and standalone it carries ONE hairline
  * (`--ds-active-filters-bar-border`). Its own material surface area is a
  * count eyebrow — everything the eye reads as material here belongs to the
- * composed primitives: the filter chips are Tag and the actions are Button,
- * each painting through its own governed channels. An elevated filters bar
+ * composed primitives: the actions are Button, painting through their own
+ * governed channels, and the filter chips are Tag with no chrome of their own
+ * here. An elevated filters bar
  * would stack a second sheet on the toolbar it sits beneath.
  *
  * Its tenant-reachable material decisions are therefore the ground and the
@@ -50,8 +54,8 @@
  * is the Button primitive with `aria-expanded` now); the heading loses its
  * capsule here and becomes a flush eyebrow closed by a hairline leader, with
  * typography — tracking, case, tabular figures — carrying the role instead of
- * a box. The objects keep the Tag primitive's chrome untouched and gain only
- * the hit-target floor a dismissible object owes.
+ * a box. The objects are Tags blended into the rail (no fill, frame or pill
+ * geometry) and gain the hit-target floor a dismissible object owes.
  *
  * CHANNELS (WO-FAM-08): every `--ds-active-filters-bar-*` name below has a
  * producer -- `derivation/chrome/active-filters-bar` emits the ground, the
@@ -220,8 +224,8 @@
         chrome, its type ramp and its focus ring. A link-style toggle is the
         `link` variant, never a text-decoration re-stated here ---- */
 
-/* ---- chip content typography INSIDE the composed Tag (the primitive owns
-        the chip chrome; the label is the tracked mini-eyebrow, the value is
+/* ---- chip content typography INSIDE the composed Tag (the chip carries
+        no chrome here; the label is the tracked mini-eyebrow, the value is
         the readable payload -- never microscopic body text). Long values
         ellipsize against a governed max-inline-size (RTL-safe logical
         properties; the engine discloses the full string via `title`), and a
@@ -263,8 +267,8 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- filter lifecycle (applied / draft / invalid). The chip CHROME stays
-        the Tag primitive's paint (composition law); the state is expressed
+/* ---- filter lifecycle (applied / draft / invalid). The chip carries no
+        chrome to restate (see "chip ground"); the state is expressed
         on the pattern-owned interior — the icon slot's ink and the value's
         underline grammar — so it reads as form, never as hue alone, and it
         survives forced colors (text-decoration remaps to CanvasText):
@@ -377,8 +381,8 @@
 }
 
 /* forced-colors: the root's gradient hairline is forced away, so the strip
-   and the count pill re-assert in system colors. The composed Tag chips and
-   the clear-all / add-filter Buttons keep their own forced-colors contracts;
+   and the count pill re-assert in system colors. The clear-all / add-filter
+   Buttons keep their own forced-colors contract and the chips carry no chrome;
    the chip label/value text auto-maps (the label's uppercase tracking keeps
    it distinguishable from the value without colour). The lifecycle grammar
    survives by FORM: the dashed/wavy value underlines remap to CanvasText and

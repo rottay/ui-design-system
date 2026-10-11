@@ -50,6 +50,8 @@ export interface LoadingIndicatorProps {
    * Accepted but never rendered: the substrate stamps its own `data-part`
    * (`root`, or the part a composing primitive hands down in `anatomy`);
    * compose through `className`.
+   *
+   * @deprecated Inert since the P-88 closure; use `className`.
    */
   'data-part'?: string;
 }

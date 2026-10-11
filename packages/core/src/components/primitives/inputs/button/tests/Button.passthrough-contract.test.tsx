@@ -4,11 +4,11 @@
  * callers win on `id`, `aria-*`, and every `data-*` attribute other than the
  * anatomy channels. A skinned Button keeps its canonical `data-part="trigger"`
  * and its engine `data-state`; a caller `data-part`/`data-state` cannot replace
- * them and is not forwarded to the trigger. The runtime does not honour that yet
- * (ARC-12): every engine still lets a caller part win, classic forwards a caller
- * state (D2) and modern/rustic forward a resting caller state (D3). Those cases
- * are `it.fails` KNOWN DEBT pins that turn red the day the fix lands. The law is
- * documented on `BaseComponentProps` in `foundation/contracts/kernel/common`.
+ * them and is not forwarded to the trigger. Modern and rustic honour that.
+ * Classic does not yet: it lets a caller part win and forwards a caller state
+ * (D2). Those two cases are `it.fails` KNOWN DEBT pins that turn red the day the
+ * fix lands. The law is documented on `BaseComponentProps` in
+ * `foundation/contracts/kernel/common`.
  */
 import React from 'react';
 import { describe, expect, it } from 'vitest';
@@ -22,7 +22,7 @@ const passthrough = {
   id: 'caller-button-id',
   'aria-label': 'Caller label',
   'data-custom': 'caller-data',
-  // P-88: the caller must NOT win on the part; the pins below register the ARC-12 debt.
+  // P-88: the caller must NOT win on the part; the classic pin below registers the remaining debt.
   'data-part': 'caller-part-attempt',
 } as const;
 
@@ -37,7 +37,7 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('data-custom', 'caller-data');
   });
 
-  it('KNOWN DEBT (ARC-12): modern: the caller data-part does not win and the trigger keeps data-part="trigger" (P-88)', () => {
+  it('modern: the caller data-part does not win and the trigger keeps data-part="trigger" (P-88)', () => {
     const { container } = render(<ModernButton {...passthrough}>Go</ModernButton>);
 
     const button = container.querySelector('button.ds-button--modern') as HTMLButtonElement;
@@ -45,7 +45,7 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('data-part', 'trigger');
   });
 
-  it('KNOWN DEBT (ARC-12): modern anchor path: the caller data-part does not win and the <a> keeps data-part="trigger" (P-88)', () => {
+  it('modern anchor path: the caller data-part does not win and the <a> keeps data-part="trigger" (P-88)', () => {
     const { container } = render(
       <ModernButton href="/somewhere" {...passthrough}>
         Go
@@ -75,7 +75,7 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('data-custom', 'caller-data');
   });
 
-  it('KNOWN DEBT (ARC-12): rustic button path: the caller data-part does not win and the trigger keeps data-part="trigger" (P-88)', () => {
+  it('rustic button path: the caller data-part does not win and the trigger keeps data-part="trigger" (P-88)', () => {
     const { container } = render(<RusticButton {...passthrough}>Go</RusticButton>);
 
     const button = container.querySelector('button.rottay-button--rustic') as HTMLButtonElement;
@@ -98,7 +98,7 @@ describe('Button pass-through honesty law', () => {
     expect(anchor).toHaveAttribute('data-custom', 'caller-data');
   });
 
-  it('KNOWN DEBT (ARC-12): rustic anchor path: the caller data-part does not win and the <a> keeps data-part="trigger" (P-88)', () => {
+  it('rustic anchor path: the caller data-part does not win and the <a> keeps data-part="trigger" (P-88)', () => {
     const { container } = render(
       <RusticButton href="/somewhere" {...passthrough}>
         Go
@@ -174,14 +174,14 @@ describe('Button pass-through honesty law', () => {
   });
 
   // P-88 D3: at rest the engine stamps no data-state, so a caller value must not appear.
-  it('KNOWN DEBT (ARC-12): modern Button should not forward a resting caller data-state', () => {
+  it('modern Button should not forward a resting caller data-state', () => {
     const { container } = render(<ModernButton data-state="caller-state-attempt">Go</ModernButton>);
 
     const button = container.querySelector('button.ds-button--modern') as HTMLButtonElement;
     expect(button).not.toHaveAttribute('data-state', 'caller-state-attempt');
   });
 
-  it('KNOWN DEBT (ARC-12): modern Button anchor path should not forward a resting caller data-state', () => {
+  it('modern Button anchor path should not forward a resting caller data-state', () => {
     const { container } = render(
       <ModernButton href="/somewhere" data-state="caller-state-attempt">
         Go
@@ -192,14 +192,14 @@ describe('Button pass-through honesty law', () => {
     expect(anchor).not.toHaveAttribute('data-state', 'caller-state-attempt');
   });
 
-  it('KNOWN DEBT (ARC-12): rustic Button should not forward a resting caller data-state', () => {
+  it('rustic Button should not forward a resting caller data-state', () => {
     const { container } = render(<RusticButton data-state="caller-state-attempt">Go</RusticButton>);
 
     const button = container.querySelector('button.rottay-button--rustic') as HTMLButtonElement;
     expect(button).not.toHaveAttribute('data-state', 'caller-state-attempt');
   });
 
-  it('KNOWN DEBT (ARC-12): rustic Button anchor path should not forward a resting caller data-state', () => {
+  it('rustic Button anchor path should not forward a resting caller data-state', () => {
     const { container } = render(
       <RusticButton href="/somewhere" data-state="caller-state-attempt">
         Go

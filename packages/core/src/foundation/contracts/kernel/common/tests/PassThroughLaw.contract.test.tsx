@@ -3,8 +3,8 @@
  * `data-part` everywhere, but only a structural component with no part of its
  * own forwards it. A skinned component keeps its canonical part, and the caller
  * value reaches no element it paints; `className` is the composition door. The
- * same holds for `data-state`, which the runtime does not honour yet: those cases
- * are `it.fails` debt pins that turn red the day the fix lands.
+ * same holds for `data-state`. Card does not honour that yet: its cases are
+ * `it.fails` debt pins that turn red the day the fix lands.
  */
 import React from 'react';
 import { describe, expect, it } from 'vitest';
@@ -70,12 +70,12 @@ describe('P-88 pass-through law', () => {
     expect(container.querySelector(rootSelector)).not.toHaveAttribute('data-state', CALLER_STATE);
   });
 
-  it('KNOWN DEBT (ARC-12): modern Select should not forward a resting caller data-state to its trigger', () => {
+  it('modern Select should not forward a resting caller data-state to its trigger', () => {
     const { container } = render(<ModernSelect data-state={CALLER_STATE} options={OPTIONS} />);
     expect(container.querySelector('select')).not.toHaveAttribute('data-state', CALLER_STATE);
   });
 
-  it('KNOWN DEBT (ARC-12): modern Select should not forward a resting caller data-state to its custom trigger', () => {
+  it('modern Select should not forward a resting caller data-state to its custom trigger', () => {
     const { container } = render(<ModernSelect data-state={CALLER_STATE} searchable options={OPTIONS} />);
     expect(container.querySelector('[role="combobox"]')).not.toHaveAttribute('data-state', CALLER_STATE);
   });

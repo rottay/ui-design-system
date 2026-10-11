@@ -101,11 +101,10 @@ export interface SpinnerProps extends EngineAwareProps {
   children?: ReactNode;
 
   /**
-   * Caller-supplied anatomy hook (P-79 caller-wins law): when a pattern
-   * composes the Spinner as ONE named part of its own anatomy (e.g. the
-   * `spinner` part of a loading branch), the caller's `data-part` replaces
-   * the primitive's default `root` stamp. The default is preserved when
-   * the prop is absent.
+   * Accepted but never rendered: no engine reads it. The Spinner stamps its
+   * own `data-part="root"`; compose through `className`.
+   *
+   * @deprecated Inert since the P-88 closure; use `className`.
    */
   'data-part'?: string;
 }

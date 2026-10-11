@@ -1346,7 +1346,6 @@ const FROZEN_ENGINE_HEADER_DEBT = [
   "runtime/engines/rustic/skin/table/index.css",
   "runtime/engines/rustic/skin/tabs/index.css",
   "runtime/engines/rustic/skin/tag-input/index.css",
-  "runtime/engines/rustic/skin/tag/index.css",
   "runtime/engines/rustic/skin/tenant-preview/index.css",
   "runtime/engines/rustic/skin/textarea/index.css",
   "runtime/engines/rustic/skin/time-picker/index.css",

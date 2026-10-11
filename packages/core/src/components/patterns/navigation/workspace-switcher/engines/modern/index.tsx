@@ -98,7 +98,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   const searchRef = useRef<HTMLInputElement>(null);
 
   /** Returns focus to the composed trigger Button (facade ref forwarding is
-      not guaranteed, so the focus target is queried by its caller part). */
+      not guaranteed, so the focus target is queried by its class hook). */
   const focusTrigger = useCallback(() => {
     containerRef.current
       ?.querySelector<HTMLElement>('.ds-workspace-switcher__trigger')

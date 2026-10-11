@@ -6,15 +6,13 @@
  * Product code can compose the primitive, but it never needs to restyle its
  * internals for hover, press, focus, busy, touch, RTL or high contrast.
  *
- * THE ROOT ANCHOR IS `[data-variant]`, NOT `data-part`, AND THE DIFFERENCE IS
- * REACHABILITY. P-79 makes the caller's part win on modern (asserted in
- * `Button.passthrough-contract.test.tsx`; classic and rustic keep `trigger`, so
- * only this file was exposed). The 7 root rules here were keyed on
- * `[data-part='trigger']`, and 123 production call sites pass a part of their
- * own — every one of them lost all 47 declarations: layout, geometry, the
- * typography channels, `appearance`, `isolation`, `overflow`, the whole
- * transition list, `forced-color-adjust`, and the print and forced-colors
- * contracts.
+ * THE ROOT ANCHOR IS `[data-variant]`, NOT `data-part`. The engine stamps
+ * `data-part='trigger'` on every root and never forwards a caller part (P-88,
+ * asserted in `Button.passthrough-contract.test.tsx`), so no call site can move
+ * the part. The 7 root rules stay keyed on `[data-variant]`, which carries all
+ * 47 declarations: layout, geometry, the typography channels, `appearance`,
+ * `isolation`, `overflow`, the whole transition list, `forced-color-adjust`,
+ * and the print and forced-colors contracts.
  *
  * `data-variant` is written into `anatomyProps`, which the engine spreads AFTER
  * the caller's props, so the caller cannot reach it; `effectiveVariant` is total

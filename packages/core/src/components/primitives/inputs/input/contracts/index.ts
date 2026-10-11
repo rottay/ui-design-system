@@ -143,6 +143,8 @@ export interface InputProps extends EngineAwareProps {
   /**
    * Accepted but never rendered: no engine reads it. The modern and rustic shells stamp their
    * own `data-part="root"`; compose through `className`.
+   *
+   * @deprecated Inert since the P-88 closure; use `className`.
    */
   'data-part'?: string;
   /**
