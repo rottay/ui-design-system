@@ -322,7 +322,7 @@ export function BrandingPreviewSandbox({
             </Card.Body>
           </Card>
           {!compact && (
-            <Card className="ds-branding-preview-sandbox__card" data-state="elevated" variant="elevated">
+            <Card className="ds-branding-preview-sandbox__card" variant="elevated">
               <Card.Body>
                 <Text data-part="preview-card-title" className="ds-branding-preview-sandbox__preview-card-title" weight="semibold">
                   {t('brandingPreview.card.elevatedTitle', 'Elevated Card')}

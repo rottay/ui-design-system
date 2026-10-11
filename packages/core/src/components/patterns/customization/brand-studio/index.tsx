@@ -1745,7 +1745,6 @@ export function PatternBrandStudio({
           <Card
             className="ds-pattern-brand-studio__action-panel"
             data-part="action-panel"
-            data-state={hostileReports ? 'complete' : 'idle'}
           >
             <Stack spacing="sm">
               <Flex align="center" justify="between" gap={8} wrap="wrap">

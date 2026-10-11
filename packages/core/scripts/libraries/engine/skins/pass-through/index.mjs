@@ -45,6 +45,10 @@
  * v7.1.4 (2026-10-11; arc12/census-v714: post 3bf98a0d, census / report / attribution unchanged): the
  * pin inventory loses the two classic Button rows. The classic Button keeps its part and state
  * since the step-3 strip, so its site leaves the roster and both it.fails became passing tests.
+ *
+ * v7.1.5 (2026-10-11; arc12/census-v715: post 4c8ae5ca, census / report / attribution unchanged): the
+ * pin inventory loses the two classic Card rows. The classic Card drops a caller state since its
+ * step-3 strip; the modern and rustic Card rows stay pinned (2 it.fails).
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';

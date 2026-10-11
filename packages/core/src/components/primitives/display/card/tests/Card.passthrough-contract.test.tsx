@@ -107,7 +107,7 @@ describe('Card pass-through honesty law', () => {
     expect(root).toHaveAttribute('data-state', 'hovered');
   });
 
-  it.fails('KNOWN DEBT (ARC-12): classic: a caller data-state does not replace the engine-owned root state (P-88, D1)', () => {
+  it('classic: a caller data-state does not replace the engine-owned root state (P-88, D1)', () => {
     const { container } = render(
       <ClassicCard title="Classic" data-state="caller-state-attempt">
         Content

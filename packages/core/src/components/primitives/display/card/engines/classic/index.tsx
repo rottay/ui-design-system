@@ -118,9 +118,12 @@ export default function ClassicCard(props: CardProps): React.ReactElement {
     onSelect: _onSelect,
     extensions: _extensions,
     engine: _engine,
-    // Caller passthrough (id / aria-* / data-* / data-testid): AntD forwards
-    // unknown props to the root element. It must spread BEFORE the engine's
-    // own stamps so the engine's data-part always lands last.
+    // P-88: the card keeps its own anatomy; a caller data-state is never forwarded
+    // (callers compose through className).
+    'data-state': _callerDataState,
+    // Caller passthrough (id / aria-* / data-testid and every other data-*): AntD
+    // forwards unknown props to the root element. It must spread BEFORE the
+    // engine's own stamps so the engine's data-part always lands last.
     ...rest
   } = props as CardProps & { extensions?: unknown };
 

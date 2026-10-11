@@ -131,7 +131,7 @@ for (const fixture of FIXTURES) {
     const inputs = sandbox.locator('[data-part="surface"][data-state="inputs"]');
     await expect(inputs.locator('.ds-input-shell[data-invalid="true"]')).toHaveCount(1);
     await expect(sandbox.locator('[data-part="input"]')).toHaveCount(0);
-    await expect(sandbox.locator('.ds-branding-preview-sandbox__card[data-state="elevated"]')).toHaveCount(1);
+    await expect(sandbox.locator('.ds-branding-preview-sandbox__card[data-variant="elevated"]')).toHaveCount(1);
     await expect(sandbox.locator('[data-part="table"]')).toHaveCount(1);
 
     await waitForSettled(page, band);
