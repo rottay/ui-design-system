@@ -8,7 +8,8 @@
  *
  * WHAT IT MEASURES (definition: summary/ `out.definition`, binding):
  *   - violating SITES: the elements where a caller data-part/data-state still lands today;
- *   - caller-part DEPENDENTS: callers handing a literal data-part to a skinned child whose
+ *   - caller-part DEPENDENTS: callers handing a data-part (a literal attribute or, since v7.1.3,
+ *     a `partAttributes` spread) to a skinned child whose
  *     owner skin is credited a rule on that part (v7 attribution) -- the rules that would die the
  *     day the child family stops honouring the caller part;
  *   - caller-state DEPENDENTS: the same for data-state;
@@ -35,6 +36,11 @@
  * the pin inventory follows the tree down. 10 of its 16 rows named tests promoted to passing by the
  * Select and Button engine lots; the 6 left are the 8 remaining it.fails. `pinCheck` is
  * informational -- no site, dependent or ledger value reads it.
+ *
+ * v7.1.3 (2026-10-11; arc12/census-v713: census 2f7e0518, post / report / attribution unchanged): a
+ * `{...partAttributes('<part>', <state>)}` spread on an opener is a caller row like the literal
+ * attributes -- the part is the first string-literal argument, the state is the serialized
+ * (dynamic) interaction state. A part that is not static is reported `unresolvable`, never guessed.
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';
@@ -104,7 +110,8 @@ export function dependentKeys(callers) {
 
 /**
  * The caller enumeration family-cut's G1 imports (review-arc12-rfc §3, G1.1): every JSX use in
- * packages/core/src/components that hands a LITERAL data-part to a DS component whose family
+ * packages/core/src/components that hands a LITERAL data-part (as an attribute or, since v7.1.3,
+ * as the first argument of a `partAttributes` spread) to a DS component whose family
  * owns a part or ships a skin, resolved to that child family. This is the sweep's own list,
  * returned as-is: G1 classifies against it and never re-derives it.
  * @returns {Array<{ file: string, line: number, child: string, childFamily: string, callerPart: string }>}

@@ -8,7 +8,8 @@
  * family-cut G1 all read. The body below is the adopted census.mjs verbatim; only its CLI shell
  * (argv, the JSON write, console output) is replaced by this function's parameters and return.
  */
-// Provenance: arc12/l2-tools/census.mjs sha256 be21d40e863aeaedd6462b429f9ea1269b46ac49b1ccc9a766e726fc8d5b0587 (census v7.1.1, 2026-10-10: the tag-name
+// Provenance: arc12/census-v713/census.mjs sha256 2f7e05183ff87ae27d68f60a149a5d5a50532ce4edf8967e8af86cbb9b521c35 (census v7.1.3, 2026-10-11: a
+// `{...partAttributes('<part>', <state>)}` spread is a caller row like the literal attributes; v7.1.1 was be21d40e -- the tag-name
 // fallback removed; v7.1 was 3ca4db81 -- the lexical re-export chain and the unresolved-caller report; v7 was 1937b947).
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, relative, dirname, resolve } from 'node:path';
@@ -311,6 +312,52 @@ function analyzeFile(file) {
     ts.forEachChild(n, visitCreate);
   };
   visitCreate(sf);
+  // v7.1.3 (ARC-12): the NON-LITERAL caller form. `{...partAttributes('<part>', <state>)}` hands an
+  // opener the same data-part/data-state a literal attribute does, and until now only the literal
+  // form made a caller row (22 spread callers onto Box/Flex were absent, step-3 pre-flight D-3 N).
+  // The part is the call's first argument when it is a string literal, or a ternary of them; the
+  // state is `serializeState(<second argument>)`, which is what the helper emits -- a dynamic
+  // state, never read for literals. Fail-closed: a part that is not static is not guessed, it is
+  // reported (class `unresolvable`). The callee is matched by name, as everywhere in this sweep.
+  const partCallInits = new Map(); // name -> initializer that mentions partAttributes(...)
+  const collectPartCalls = (n) => {
+    if (ts.isVariableDeclaration(n) && ts.isIdentifier(n.name) && n.initializer && /\bpartAttributes\s*\(/.test(textOf(sf, n.initializer))) partCallInits.set(n.name.text, n.initializer);
+    ts.forEachChild(n, collectPartCalls);
+  };
+  collectPartCalls(sf);
+  const staticParts = (expr) => {
+    const e = unwrap(expr);
+    if (!e) return null;
+    if (ts.isStringLiteral(e) || ts.isNoSubstitutionTemplateLiteral(e)) return e.text ? [e.text] : null;
+    if (ts.isConditionalExpression(e)) { const a = staticParts(e.whenTrue), b = staticParts(e.whenFalse); return a && b ? [...a, ...b] : null; }
+    return null;
+  };
+  const oneLine = (n) => (n ? textOf(sf, n).replace(/\s+/g, ' ') : '');
+  // -> [{ parts: string[] | null, unresolved: string | null, state: string | null, cond: boolean }] in source order
+  const spreadPartCalls = (expr, cond = false, depth = 0) => {
+    const e = unwrap(expr);
+    if (!e || depth > 4) return [];
+    if (ts.isCallExpression(e) && ts.isIdentifier(e.expression) && e.expression.text === 'partAttributes') {
+      const [partArg, stateArg] = e.arguments;
+      const parts = partArg ? staticParts(partArg) : null;
+      const stateArgU = stateArg ? unwrap(stateArg) : null;
+      const resting = Boolean(stateArgU) && ts.isObjectLiteralExpression(stateArgU) && stateArgU.properties.length === 0;
+      return [{ parts, unresolved: parts ? null : (oneLine(partArg) || '(no argument)'), state: resting ? null : `serializeState(${oneLine(stateArg)})`, cond }];
+    }
+    if (ts.isConditionalExpression(e)) return [...spreadPartCalls(e.whenTrue, true, depth + 1), ...spreadPartCalls(e.whenFalse, true, depth + 1)];
+    if (ts.isBinaryExpression(e)) return spreadPartCalls(e.right, true, depth + 1);
+    if (ts.isObjectLiteralExpression(e)) {
+      const inner = e.properties.filter((pr) => ts.isSpreadAssignment(pr)).flatMap((pr) => spreadPartCalls(pr.expression, cond, depth + 1));
+      // an own data-part key beside the spread decides the part by key order: not resolved here
+      const ownPart = e.properties.some((pr) => !ts.isSpreadAssignment(pr) && propName(pr.name) === 'data-part');
+      return inner.length && ownPart ? inner.map((x) => ({ ...x, parts: null, unresolved: oneLine(e).slice(0, 120) })) : inner;
+    }
+    if (ts.isIdentifier(e)) {
+      if (objects.has(e.text)) return spreadPartCalls(objects.get(e.text), cond, depth + 1);
+      if (partCallInits.has(e.text)) return spreadPartCalls(partCallInits.get(e.text), cond, depth + 1);
+    }
+    return [];
+  };
   const visitJsx = (n) => {
     if (ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n)) {
       const tag = textOf(sf, n.tagName);
@@ -320,12 +367,28 @@ function analyzeFile(file) {
       let componentStyle = false;
       let antPaintClass = false;
       let literalCallerPart = null, literalCallerState = null;
+      let spreadForm = false, spreadState = false, spreadPartUnresolved = null; // v7.1.3
       for (const a of n.attributes.properties) {
-        if (ts.isJsxSpreadAttribute(a)) seq.push(...entriesOfSpread(a.expression));
+        if (ts.isJsxSpreadAttribute(a)) {
+          seq.push(...entriesOfSpread(a.expression));
+          for (const sp of spreadPartCalls(a.expression)) { // v7.1.3
+            spreadForm = true;
+            if (sp.parts) {
+              const merged = sp.cond && literalCallerPart ? [...literalCallerPart.split('|'), ...sp.parts] : sp.parts;
+              literalCallerPart = [...new Set(merged)].join('|');
+              if (!sp.cond) spreadPartUnresolved = null;
+            } else {
+              spreadPartUnresolved = [...(spreadPartUnresolved ?? []), sp.unresolved];
+              if (!sp.cond) literalCallerPart = null;
+            }
+            if (sp.state) { literalCallerState = sp.state; spreadState = true; }
+          }
+        }
         else if (ts.isJsxAttribute(a)) {
           const k = a.name.getText(sf);
           const init = a.initializer && ts.isJsxExpression(a.initializer) ? a.initializer.expression : a.initializer;
           if (k === 'data-part') {
+            spreadPartUnresolved = null;
             seq.push({ kind: 'part', caller: init ? refsCaller(init, callerPartIds, 'data-part') : false, value: init ? textOf(sf, init) : 'true' });
             if (init && ts.isStringLiteral(init)) literalCallerPart = init.text;
             else if (init) {
@@ -336,6 +399,7 @@ function analyzeFile(file) {
           if (k === 'data-state') {
             seq.push({ kind: 'state', cond: isConditionalValue(init), caller: init ? refsCaller(init, callerStateIds, 'data-state') : false, value: init ? textOf(sf, init) : 'true' });
             literalCallerState = init ? textOf(sf, init) : 'true';
+            spreadState = false;
           }
           if (k === 'className') { classNameHook = true; if (init && dsClassIn(textOf(sf, init))) dsClass = true; if (init && antClassIn(textOf(sf, init))) antPaintClass = true; }
           if (k === 'style' && init && authoredStyle(textOf(sf, init))) componentStyle = true;
@@ -349,8 +413,11 @@ function analyzeFile(file) {
         if (imperative.length && /^[A-Z]/.test(tag) && refAttr) for (const im of imperative) seq.push({ kind: 'part', caller: im.caller, value: im.value + ' (imperative stampDataPart L' + im.line + ', post-commit)' });
         sites.push({ line: lineOf(sf, n), tag, seq, classNameHook, dsClass, componentStyle, antPaintClass, intrinsic: /^[a-z]/.test(tag), owner: topName(n) });
       }
-      if (/^[A-Z]/.test(tag) && (literalCallerPart || literalCallerState)) {
-        compoundUses.push({ line: lineOf(sf, n), tag, part: literalCallerPart, state: literalCallerState });
+      if (/^[A-Z]/.test(tag) && (literalCallerPart || literalCallerState || spreadPartUnresolved)) {
+        const use = { line: lineOf(sf, n), tag, part: literalCallerPart, state: literalCallerState };
+        // v7.1.3: a row a partAttributes spread fed carries its form; a literal-only row is unchanged
+        if (spreadForm) use.spread = { state: spreadState, partUnresolved: spreadPartUnresolved };
+        compoundUses.push(use);
       }
     }
     ts.forEachChild(n, visitJsx);
@@ -663,6 +730,9 @@ for (const [f, r] of fileResults) {
   for (const u of r.compoundUses) {
     const imp = r.imports.get(u.tag.split('.')[0]);
     const res = resolveFamily(f, imp);
+    const spreadMark = u.spread ? { callerForm: 'partAttributes-spread', ...(u.spread.partUnresolved ? { callerPartUnresolved: u.spread.partUnresolved } : {}) } : {};
+    // v7.1.3 fail-closed: a spread part that is not static is REPORTED on a known family, never guessed
+    if (res.family && u.spread?.partUnresolved) unresolvedCallers.push({ file: rel(f), line: u.line, tag: u.tag, callerPart: u.part, callerState: u.state, class: 'unresolvable', importSpec: imp ? imp.spec : null, evidence: `partAttributes part is not a static string literal: ${u.spread.partUnresolved.join(' ; ')}`, ...spreadMark });
     if (!res.family) {
       const ch = res.chain;
       const cls = u.tagKind === 'ant' || (ch && ch.thirdParty) ? 'third-party'
@@ -673,7 +743,7 @@ for (const [f, r] of fileResults) {
         : 'unresolvable';
       const evidence = ch ? (ch.thirdParty ? `package ${ch.thirdParty}` : ch.definedIn ? `declared in ${ch.definedIn}` : ch.broken)
         : u.localInit ? `local binding = ${u.localInit}` : `tagKind ${u.tagKind}, no import`;
-      unresolvedCallers.push({ file: rel(f), line: u.line, tag: u.tag, callerPart: u.part, callerState: u.state, class: cls, importSpec: imp ? imp.spec : null, evidence });
+      unresolvedCallers.push({ file: rel(f), line: u.line, tag: u.tag, callerPart: u.part, callerState: u.state, class: cls, importSpec: imp ? imp.spec : null, evidence, ...spreadMark });
       continue;
     }
     const b = breachingFamilies.get(res.family);
@@ -711,7 +781,8 @@ for (const [f, r] of fileResults) {
     // C1: caller-STATE dependents -- owner-skin rules that select the caller's data-state value
     let stateRules = 0; const stateByFile = {}; const stateValues = []; let stateDynamic = false; const stateSelectorsHit = [];
     if (u.state) {
-      const vals = [...String(u.state).matchAll(/["'`]([A-Za-z0-9_-]+)["'`]/g)].map((m) => m[1]);
+      // v7.1.3: a spread state is the serialized interaction state -- dynamic; its text is never read for literals
+      const vals = u.spread?.state ? [] : [...String(u.state).matchAll(/["'`]([A-Za-z0-9_-]+)["'`]/g)].map((m) => m[1]);
       stateDynamic = vals.length === 0;
       stateValues.push(...vals);
       const callerParts = (u.part ?? '').split('|').filter(Boolean);
@@ -728,7 +799,7 @@ for (const [f, r] of fileResults) {
       file: rel(f), line: u.line, tag: u.tag, childFamily: res.family, resolvedBy: res.how,
       callerPart: u.part, callerState: u.state, ownerSkinFamily, ownerSkins: ownerSkinList,
       childPartBreachEngines: [...b.part], childStateForwardEngines: [...b.state], childStateRestEngines: [...b.stateRest],
-      skinRulesSelectingCallerPart: rules, skinFiles: byFile,
+      skinRulesSelectingCallerPart: rules, skinFiles: byFile, ...spreadMark,
     });
   }
 }
