@@ -112,8 +112,11 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     disabled = false,
     adapt,
     engine: _engine,
-    // Caller passthrough (id / aria-* / data-*): spread first so the engine's
-    // own stamps always land last.
+    // P-88: the card keeps its own anatomy; a caller data-state is never forwarded
+    // (callers compose through className).
+    'data-state': _callerDataState,
+    // Caller passthrough (id / aria-* and every other data-*): spread first so
+    // the engine's own stamps always land last.
     ...rest
   } = props;
 

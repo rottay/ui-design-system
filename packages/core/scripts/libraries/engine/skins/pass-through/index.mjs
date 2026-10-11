@@ -49,6 +49,10 @@
  * v7.1.5 (2026-10-11; arc12/census-v715: post 4c8ae5ca, census / report / attribution unchanged): the
  * pin inventory loses the two classic Card rows. The classic Card drops a caller state since its
  * step-3 strip; the modern and rustic Card rows stay pinned (2 it.fails).
+ *
+ * v7.1.6 (2026-10-11; arc12/census-v716: post c23e82f4, census / report / attribution unchanged): the
+ * pin inventory is empty. The modern and rustic Card drop a resting caller state, so their two
+ * rows left with the last two it.fails; a future pin re-enters as a row and is checked as before.
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';

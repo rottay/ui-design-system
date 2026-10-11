@@ -5,8 +5,8 @@
  * the v7 attribution (v3 owner skins, C4 engine scope, rule 4b, C7..C10 strikes). READ-ONLY.
  * The body is the adopted post.mjs verbatim; only its CLI shell is replaced.
  */
-// Provenance: arc12/census-v715/post.mjs sha256 4c8ae5ca3cbe9388d2c4bec2969166e2772b333bbb1b4533dc286fddf006b80e (census v7.1.5, 2026-10-11: the pin
-// inventory loses the two classic Card rows; v7.1.4 was arc12/census-v714/post.mjs 3bf98a0d, v7.1.2 arc12/dt3/post.mjs d6eb6187, v7 through v7.1.1 arc12/l2-tools/post.mjs 2632ae59).
+// Provenance: arc12/census-v716/post.mjs sha256 c23e82f4f3520c5dbff1db86ce0dce748d86885f565ed6cc897047b0b38d2e18 (census v7.1.6, 2026-10-11: the pin
+// inventory is empty, the modern and rustic Card rows left; v7.1.5 was arc12/census-v715/post.mjs 4c8ae5ca, v7.1.4 arc12/census-v714/post.mjs 3bf98a0d, v7.1.2 arc12/dt3/post.mjs d6eb6187, v7 through v7.1.1 arc12/l2-tools/post.mjs 2632ae59).
 import { buildAttribution, ALL_RULES } from '../attribution/index.mjs';
 
 /** @param {object} raw  sweepPassThrough() output. @param {{ repoRoot: string, rules?: string[] }} options */
@@ -77,15 +77,13 @@ for (const r of all) {
 }
 sites.sort((a, b) => a.id.localeCompare(b.id));
 
-// pin consistency: the 2 distinct pinned behaviours (2 it.fails, modern and rustic Card)
+// pin consistency: no pinned behaviour is left (0 it.fails); a new pin is a row here
 // v7.1.2: 10 rows left with their promotion to passing tests -- the modern Select pair at E1
 // (bfe7d5f89), the modern/rustic Button eight at E9 (28e169406). A row leaves only that way.
 // v7.1.4: the two classic Button rows left the same way, with the classic strip (step 3, S3-1).
 // v7.1.5: the two classic Card rows left with theirs (S3-3); the PassThroughLaw table was split there.
-const PINS = [
-  { pin: 'PassThroughLaw:70 modern Card resting data-state', match: (s) => /display\/card\/engines\/modern/.test(s.file) && s.stateClass === 'state-rest' },
-  { pin: 'PassThroughLaw:70 rustic Card resting data-state', match: (s) => /display\/card\/engines\/rustic/.test(s.file) && s.stateClass === 'state-rest' },
-];
+// v7.1.6: the modern and rustic Card rows left with the Card engine lot (O-3). The inventory is empty.
+const PINS = [];
 const pinCheck = PINS.map((p) => { const hit = sites.filter(p.match).map((s) => s.id); return { pin: p.pin, censusSites: hit, present: hit.length > 0 }; });
 
 // ---------- compound dependents (callers passing a part/state to a breaching family) ----------

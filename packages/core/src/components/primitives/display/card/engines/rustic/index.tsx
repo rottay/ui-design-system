@@ -127,9 +127,12 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     onSelect: _onSelect,
     extensions: _extensions,
     engine: _engine,
-    // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
-    // root element. It must spread BEFORE the engine's own stamps so the
-    // engine's data-part and skin contract always land last.
+    // P-88: the card keeps its own anatomy; a caller data-state is never forwarded
+    // (callers compose through className).
+    'data-state': _callerDataState,
+    // Caller passthrough (id / aria-* / data-testid and every other data-*):
+    // forwarded to the root element. It must spread BEFORE the engine's own
+    // stamps so the engine's data-part and skin contract always land last.
     ...rest
   } = props as CardProps & { extensions?: unknown };
 
