@@ -611,7 +611,6 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                                     key={control.intent}
                                     variant="text"
                                     size="sm"
-                                    data-part="card-move-button"
                                     className="ds-pattern-kanban-board__card-move-button"
                                     data-move-intent={MOVE_INTENT_STAMP[control.intent]}
                                     aria-label={control.label}
@@ -634,7 +633,6 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                     <ModernButton
                       variant="dashed"
                       size="sm"
-                      data-part="add-item"
                       className="ds-pattern-kanban-board__add-item"
                       icon={<ActionAddIcon decorative size={14} />}
                       onClick={() => onAddItem(column.id)}

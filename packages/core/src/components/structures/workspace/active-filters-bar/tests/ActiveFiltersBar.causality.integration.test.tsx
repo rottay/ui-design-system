@@ -164,7 +164,8 @@ describe('active-filters-bar causality surface', () => {
     expect(rail).not.toContain('data-part="chip"');
     expect(rail).toContain('data-part="chip-label"');
     expect(rail).toContain('data-part="chip-value"');
-    expect(rail).toContain('data-part="more-toggle"');
+    expect(rail).toContain('ds-active-filters-bar__more-toggle');
+    expect(rail).not.toContain('data-part="more-toggle"');
     // The lifecycle glyph is the family's OWN node in the primitive's icon
     // slot, so the family stamps the part its skin paints.
     expect(rail).toContain('data-filter-state="invalid"');

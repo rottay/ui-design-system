@@ -6,6 +6,14 @@ import { describe, expect, it, vi } from 'vitest';
 
 import ModernWorkspaceSwitcher from '../engines/modern';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, string> = {
+  'create': '.ds-workspace-switcher__create',
+  'settings': '.ds-workspace-switcher__settings',
+  'trigger': '.ds-workspace-switcher__trigger',
+};
+const partSelector = (part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[part]) || `[data-part="${part}"]`;
 const SKIN = readFileSync(
   join(
     __dirname,
@@ -77,7 +85,7 @@ describe('ModernWorkspaceSwitcher — composed controls wear the Button focus si
     await screen.findByTestId('workspace-create');
 
     for (const part of BUTTON_PARTS) {
-      const nodes = [...container.querySelectorAll(`[data-part="${part}"]`)];
+      const nodes = [...container.querySelectorAll(partSelector(part, 'modern'))];
       expect(nodes.length, part).toBeGreaterThan(0);
       for (const node of nodes) {
         expect(node.tagName).toBe('BUTTON');
@@ -86,7 +94,7 @@ describe('ModernWorkspaceSwitcher — composed controls wear the Button focus si
       }
     }
     // One gear per row; the roving row keeps exactly one of them in the tab order.
-    const gears = [...container.querySelectorAll('[data-part="settings"]')];
+    const gears = [...container.querySelectorAll('.ds-workspace-switcher__settings')];
     expect(gears.map((gear) => gear.getAttribute('tabindex'))).toEqual(['0', '-1']);
   });
 
@@ -174,7 +182,7 @@ describe('ModernWorkspaceSwitcher — the row control rides the Button primitive
 
   it('renders each row as a non-submitting DS Button that keeps the menu semantics', async () => {
     const { container } = await openMenu();
-    const rows = [...container.querySelectorAll('[data-part="item"]')];
+    const rows = [...container.querySelectorAll('.ds-workspace-switcher__item')];
 
     expect(rows.length).toBe(2);
     for (const row of rows) {
@@ -183,7 +191,7 @@ describe('ModernWorkspaceSwitcher — the row control rides the Button primitive
       expect(row).toHaveAttribute('type', 'button');
       expect(row).toHaveAttribute('role', 'menuitemradio');
       for (const part of ['avatar-frame', 'item-copy', 'item-controls']) {
-        expect(row.querySelector(`[data-part="${part}"]`), part).not.toBeNull();
+        expect(row.querySelector(partSelector(part, 'modern')), part).not.toBeNull();
       }
     }
     expect(rows.map((row) => row.getAttribute('aria-checked'))).toEqual(['true', 'false']);

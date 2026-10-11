@@ -10,6 +10,13 @@ import { ActiveFiltersBar } from "../index";
 import type { ActiveFilter } from "../contracts";
 import { renderWithEngine } from "@tests/support/engine";
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, string> = {
+  'add-filter': '.ds-active-filters-bar__add-filter',
+  'clear-all': '.ds-active-filters-bar__clear-all',
+};
+const partSelector = (part: string) => BUTTON_DOORS[part] ?? `[data-part="${part}"]`;
 const SKIN =
   "src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css";
 
@@ -93,7 +100,7 @@ describe("ActiveFiltersBar skin reachability", () => {
     const embedded = await renderRail({ surfaceVariant: "embedded" });
     // The collapse affordance only exists once the rail has been expanded.
     const expanded = await renderRail({ maxVisible: 2 });
-    fireEvent.click(expanded.querySelector('[data-part="more-toggle"]') as HTMLElement);
+    fireEvent.click(expanded.querySelector('.ds-active-filters-bar__more-toggle') as HTMLElement);
     const unreachable: string[] = [];
 
     for (const rule of readRules()) {
@@ -128,7 +135,7 @@ describe("ActiveFiltersBar skin reachability", () => {
     }
 
     // The action is a real button with expansion state, never a third pill.
-    const toggle = container.querySelector('[data-part="more-toggle"]') as HTMLElement;
+    const toggle = container.querySelector('.ds-active-filters-bar__more-toggle') as HTMLElement;
     expect(toggle.tagName).toBe("BUTTON");
     expect(toggle.className).not.toContain("rottay-tag");
     expect(toggle.getAttribute("aria-expanded")).toBe("false");
@@ -263,11 +270,11 @@ describe("ActiveFiltersBar skin reachability", () => {
 describe("ActiveFiltersBar anatomy", () => {
   it("expands in place and offers the way back", async () => {
     const container = await renderRail({ maxVisible: 2 });
-    fireEvent.click(container.querySelector('[data-part="more-toggle"]') as HTMLElement);
+    fireEvent.click(container.querySelector('.ds-active-filters-bar__more-toggle') as HTMLElement);
     expect(container.querySelectorAll(".ds-active-filters-bar__chip")).toHaveLength(3);
     expect(container.querySelector('[data-part="chip"]')).toBeNull();
     expect(
-      (container.querySelector('[data-part="less-toggle"]') as HTMLElement).getAttribute(
+      (container.querySelector('.ds-active-filters-bar__less-toggle') as HTMLElement).getAttribute(
         "aria-expanded"
       )
     ).toBe("true");
@@ -297,7 +304,7 @@ describe("ActiveFiltersBar anatomy", () => {
     const container = await renderRail();
     for (const part of ["add-filter", "clear-all"]) {
       const glyph = container.querySelector(
-        `[data-part="${part}"] [data-icon-name]`
+        `${partSelector(part)} [data-icon-name]`
       ) as SVGElement;
       expect(glyph.getAttribute("width")).toContain("var(--ds-icon-");
     }

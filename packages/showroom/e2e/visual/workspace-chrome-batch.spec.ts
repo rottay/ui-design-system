@@ -183,7 +183,7 @@ test('rottay (dark) / workspace / modern: column-menu panel open (portaled)', as
   await openProbe(page, 'rottay', 'modern');
   // ColumnMenu composes Popover: its button is the `control` part inside the
   // Popover's trigger wrapper, and the panel is the Popover `surface`.
-  const trigger = page.locator('[data-testid="probe-workspace-column-menu"] [data-part="control"].ds-column-menu-control');
+  const trigger = page.locator('[data-testid="probe-workspace-column-menu"] .ds-column-menu-control');
   await trigger.click();
   const panel = page.locator('[data-part="surface"].ds-column-menu-panel');
   await panel.waitFor({ state: 'visible' });

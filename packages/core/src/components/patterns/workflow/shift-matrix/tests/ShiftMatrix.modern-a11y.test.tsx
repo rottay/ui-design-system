@@ -41,7 +41,8 @@ describe('Modern ShiftMatrix — assignable cell name', () => {
     // The button's aria-label replaces its content, so the roster rendered in
     // the cell is otherwise never announced.
     const cell = screen.getByRole('button', { name: /Ana, Bob/ });
-    expect(cell).toHaveAttribute('data-part', 'cell-button');
+    expect(cell).toHaveClass('ds-shift-matrix__cell-button');
+    expect(cell).toHaveAttribute('data-part', 'trigger');
   });
 
   it('keeps the roster-free name when the intersection lists no staff', () => {

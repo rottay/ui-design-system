@@ -336,7 +336,6 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
               <Button
                 variant="ghost"
                 size="sm"
-                data-part="action"
                 data-action="cancel"
                 disabled={disabled || loading || okButtonLoading}
                 onClick={handleCancel}
@@ -346,7 +345,6 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
               <Button
                 variant={okType === 'danger' ? 'danger' : okType === 'primary' ? 'primary' : 'default'}
                 size="sm"
-                data-part="action"
                 data-action="confirm"
                 data-ok-type={okType}
                 data-loading={loading || okButtonLoading ? 'true' : 'false'}

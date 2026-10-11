@@ -153,7 +153,6 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
           <div data-part="actions-bar" className="no-print">
             {onPrint && (
               <ModernButton
-                data-part="print-button"
                 variant="ghost"
                 size="sm"
                 onClick={onPrint}
@@ -163,7 +162,6 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
             )}
             {onExport && (
               <ModernButton
-                data-part="export-button"
                 variant="ghost"
                 size="sm"
                 onClick={onExport}

@@ -30,7 +30,8 @@ describe('ModernUserProfileCard — keyboard operability', () => {
     const root = container.querySelector('[data-part="root"]');
     const activation = screen.getByRole('button', { name: 'Jane Doe' });
 
-    expect(activation).toHaveAttribute('data-part', 'card-activate');
+    expect(activation).toHaveClass('ds-user-profile-card__card-activate');
+    expect(activation).toHaveAttribute('data-part', 'trigger');
     expect(root).not.toHaveAttribute('role');
     expect(root).not.toHaveAttribute('tabindex');
   });
@@ -72,7 +73,7 @@ describe('ModernUserProfileCard — keyboard operability', () => {
 
     expect(container.querySelector('[data-part="root"]')).not.toHaveAttribute('role', 'button');
     expect(screen.getByRole('button', { name: 'Message' })).toBeInTheDocument();
-    expect(container.querySelectorAll('[data-part="card-activate"]')).toHaveLength(1);
+    expect(container.querySelectorAll('.ds-user-profile-card__card-activate')).toHaveLength(1);
   });
 
   it('does not swallow a caller header slot behind role="button"', () => {
@@ -83,7 +84,7 @@ describe('ModernUserProfileCard — keyboard operability', () => {
 
     expect(container.querySelector('[data-part="root"]')).not.toHaveAttribute('role', 'button');
     expect(screen.getByRole('button', { name: 'Follow' })).toBeInTheDocument();
-    expect(container.querySelectorAll('[data-part="card-activate"]')).toHaveLength(1);
+    expect(container.querySelectorAll('.ds-user-profile-card__card-activate')).toHaveLength(1);
   });
 });
 
@@ -92,7 +93,7 @@ describe('ModernUserProfileCard — actions ride the Button primitive', () => {
     const { container } = renderModern({
       actions: [{ key: 'msg', label: 'Message', variant: 'primary', icon: <svg />, onClick: vi.fn() }],
     });
-    const action = container.querySelector('[data-part="action-button"]') as HTMLElement;
+    const action = container.querySelector('.ds-user-profile-card__action-button') as HTMLElement;
 
     expect(action).toHaveClass('ds-button', 'ds-button--modern', 'ds-user-profile-card__action-button');
     expect(action).toHaveAttribute('type', 'button');

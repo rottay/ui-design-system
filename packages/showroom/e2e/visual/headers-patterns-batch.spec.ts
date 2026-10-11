@@ -431,7 +431,7 @@ for (const variant of ['primary', 'danger', 'default'] as const) {
 
     const container = await openProbe(page, 'rottay', 'modern');
     const action = band(container, 'workbench')
-      .locator(`[data-part='action'][data-variant='${variant}']`)
+      .locator(`.ds-pattern-workbench-header__action[data-variant='${variant}']`)
       .first();
     await action.hover();
     await waitForSettled(page, action);

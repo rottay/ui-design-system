@@ -7,6 +7,15 @@ import { describe, expect, it } from 'vitest';
 import type { ModerationItem } from '../contracts';
 import ModernModerationGallery from '../engines/modern';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, string> = {
+  'bulk-approve-button': '.ds-moderation-gallery__bulk-approve-button',
+  'bulk-clear-button': '.ds-moderation-gallery__bulk-clear-button',
+  'bulk-reject-button': '.ds-moderation-gallery__bulk-reject-button',
+  'card-action-button': '.ds-moderation-gallery__card-action-button',
+};
+const partSelector = (part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[part]) || `[data-part="${part}"]`;
 const SKIN = readFileSync(
   join(
     __dirname,
@@ -71,7 +80,7 @@ describe('Modern ModerationGallery — actions wear the Button focus signature',
     const { container } = renderWithSelection();
 
     const actions = ACTION_PARTS.flatMap((part) => [
-      ...container.querySelectorAll(`[data-part="${part}"]`),
+      ...container.querySelectorAll(partSelector(part, 'modern')),
     ]);
     expect(actions).toHaveLength(5);
     for (const action of actions) {
@@ -109,7 +118,7 @@ describe('Modern ModerationGallery — actions wear the Button focus signature',
       expect(isButton || isCheckbox).toBe(true);
     }
     for (const part of ['card', 'card-media', 'card-thumbnail']) {
-      expect(container.querySelector(`[data-part="${part}"]`)).not.toHaveAttribute('tabindex');
+      expect(container.querySelector(partSelector(part, 'modern'))).not.toHaveAttribute('tabindex');
     }
   });
 

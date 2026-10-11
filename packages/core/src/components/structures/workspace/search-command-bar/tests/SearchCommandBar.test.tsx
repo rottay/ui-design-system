@@ -14,6 +14,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
 import { SearchCommandBar } from '..';
+import { resolveBonePart, resolvePartRole } from '../../../../primitives/feedback/skeleton/runtime/anatomy-renderer';
 import { renderWithEngine } from '@tests/support/engine';
 
 /**
@@ -136,6 +137,25 @@ describe('SearchCommandBar -- the microphone-permission drawer', () => {
       await screen.findByRole('button', { name: 'Close microphone help' }),
     ).toHaveAccessibleName('Close microphone help');
   });
+
+  it('draws its close control as the round `close` bone, named by its owner hook', async () => {
+    voiceState.isSupported = true;
+    voiceState.permissionState = 'denied';
+    voiceState.status = 'error';
+    voiceState.errorMessage = 'Microphone access is blocked for this site.';
+    renderWithEngine(bar(), 'modern');
+    const toggle = await screen.findByRole('button', { name: 'Start voice input' });
+    await act(async () => {
+      fireEvent.click(toggle);
+    });
+
+    // The skeleton reads a stamped element through its owner hook. This Button keeps its own
+    // part, so the hook is what still says "close": the bone it draws does not change.
+    const close = await screen.findByRole('button', { name: 'Close microphone help' });
+    const bonePart = resolveBonePart(close, close.getAttribute('data-part')!);
+    expect(bonePart).toBe('close');
+    expect(resolvePartRole(bonePart)).toBe('round');
+  });
 });
 
 describe('SearchCommandBar -- the keyboard owner', () => {
@@ -211,11 +231,12 @@ describe('SearchCommandBar -- the composed controls own their focus ring', () =>
     }
     expect(reached.size, 'every composed control is a tab stop').toBe(controls.length);
 
-    expect(controls.map((control) => control.getAttribute('data-part'))).toEqual([
-      'clear',
-      'voice-toggle',
-      'suggestion-chip',
+    expect(controls.map((control) => [...control.classList].find((token) => token.startsWith('ds-search-command-bar__')))).toEqual([
+      'ds-search-command-bar__clear',
+      'ds-search-command-bar__voice-toggle',
+      'ds-search-command-bar__suggestion-chip',
     ]);
+    expect(controls.map((control) => control.getAttribute('data-part'))).toEqual(['trigger', 'trigger', 'trigger']);
     for (const control of controls) {
       expect(control.matches('.ds-button.ds-button--modern[data-variant]')).toBe(true);
       expect(control.style.boxShadow, 'the ring is never painted inline').toBe('');

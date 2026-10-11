@@ -163,7 +163,6 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
             engine="modern"
             variant="ghost"
             size="sm"
-            data-part="close"
             className="ds-pattern-shortcuts-overlay__close"
             icon={<XIcon size={14} />}
             aria-label={closeLabel}

@@ -715,7 +715,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                 <Button
                   variant="ghost"
                   size="sm"
-                  data-part="reset"
                   className="ds-column-menu__reset"
                   onClick={handleReset}
                   icon={<ActionUndoIcon size={12} decorative />}
@@ -764,7 +763,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           <Button
                             variant="ghost"
                             size="xs"
-                            data-part="drag-handle"
                             className="ds-column-menu__drag-handle"
                             data-drag-target={isDragTarget}
                             data-dragging={isDragging}
@@ -849,7 +847,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                   <Button
                                     variant="ghost"
                                     size="xs"
-                                    data-part="width-badge"
                                     className="ds-column-menu__width-badge"
                                     onClick={() =>
                                       setEditingWidthKey(column.key)
@@ -1031,7 +1028,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           variant="ghost"
                           size="sm"
                           block
-                          data-part="group-toggle"
                           className="ds-column-menu__group-toggle"
                           aria-expanded={!isCollapsed}
                           onClick={() => handleToggleGroup(section.groupKey)}
@@ -1187,7 +1183,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
             <Button
               variant="primary"
               size="md"
-              data-part="apply"
               className="ds-column-menu__apply"
               onClick={handleApply}
             >
@@ -1209,7 +1204,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
       <Button
         variant="outline"
         size={compact ? "sm" : "md"}
-        data-part="control"
         data-compact={compact}
         data-open={isOpen}
         className="ds-column-menu-control"
@@ -1289,7 +1283,6 @@ function IconButton({
     <Button
       variant="ghost"
       size="xs"
-      data-part="icon-button"
       className="ds-column-menu__icon-button"
       data-disabled={!!disabled}
       aria-label={label}

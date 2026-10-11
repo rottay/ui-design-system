@@ -6,6 +6,14 @@ import { PatternFilterPanel } from '..';
 import type { FilterDef } from '..';
 import { renderWithEngine } from '@tests/support/engine';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, string> = {
+  'apply-button': '.ds-pattern-filter-panel__apply-button',
+  'collapse-toggle': '.ds-pattern-filter-panel__collapse-toggle',
+  'reset-button': '.ds-pattern-filter-panel__reset-button',
+};
+const partSelector = (part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[part]) || `[data-part="${part}"]`;
 // ---------------------------------------------------------------------------
 // WO-ARC-09 checkpoint 3 -- FilterPanel data-part contract evidence.
 //
@@ -112,7 +120,7 @@ describe('FilterPanel data-part contract', () => {
       // P-88: the modern active count is a composed Badge that keeps its own `root` part; found by the primitive's class.
       const selector = engine === 'modern' && part === 'active-count-badge'
         ? '.ds-pattern-filter-panel .rottay-badge.rottay-badge--modern'
-        : `[data-part="${part}"]`;
+        : partSelector(part, engine);
       const nodes = container.querySelectorAll(selector);
       expect(nodes.length, `${engine}: data-part="${part}" did not reach the DOM`).toBeGreaterThanOrEqual(minCount);
     }

@@ -495,7 +495,7 @@ test('PLANT: dropping `partAttributes` while the skin still reads `[data-state]`
   withPlantedFamily(
     (sandbox) => patch(sandbox, MODERN_TSX, (text) =>
       text
-        .replace('...partAttributes(dataPart ?? \'trigger\', interaction),', "'data-part': 'trigger',")
+        .replace("...partAttributes('trigger', interaction),", "'data-part': 'trigger',")
         .replace(/\bpartAttributes\b/gu, 'partAttributesRemoved')),
     (findings) => expectFinding(
       findings,
@@ -1277,7 +1277,7 @@ test('INJECTION: an anatomy attribute authored as an object property is seen', (
   // attributes would report a family that stamps nothing and pass vacuously.
   const fromObject = analyzeSource(join(ROOT, MODERN_TSX));
   assert.ok(fromObject.stampsVariantAttribute, '`data-variant` is authored as an object property');
-  assert.ok(fromObject.parts.has('trigger'), '`partAttributes(dataPart ?? \'trigger\', …)` stamps `trigger`');
+  assert.ok(fromObject.parts.has('trigger'), '`partAttributes(\'trigger\', …)` stamps `trigger`');
 });
 
 test('the producer set is the SHARED one, never a second measurement', () => {
@@ -3198,7 +3198,7 @@ test('PLANT: the composed primitive must really stamp -- Button without its `par
   const measured = measureComposer({
     skin: `${BAR_RULE}${governedHover('.ds-planted-bar__trigger.ds-button')}`,
     edit: (sandbox) => patch(sandbox, MODERN_TSX, (text) =>
-      text.replace("    ...partAttributes(dataPart ?? 'trigger', interaction),", '')),
+      text.replace("    ...partAttributes('trigger', interaction),", '')),
   });
   assert.deepEqual(measured.detail.statesConsumedNotStamped, ['hovered']);
   assert.deepEqual(measured.detail.stateComposedFrom, []);
@@ -3467,24 +3467,25 @@ test('NEGATIVE: the credit is narrow -- one painted state no declared stamper an
 
 const BUTTON_MODERN_SPECIFIER = '../../../primitives/inputs/button/engines/modern';
 
-/** calendar-view's chip shape: the family names the host, Button renders inside it. */
-const chipTsx = ({ specifier = BUTTON_MODERN_SPECIFIER, render = true } = {}) => [
+/** calendar-view's chip shape: the family names the host by its class hook (P-88: the Button keeps its own
+ *  `trigger` part and never forwards a caller part), Button renders inside it. */
+const chipTsx = ({ specifier = BUTTON_MODERN_SPECIFIER, render = true, host = 'class' } = {}) => [
   `import ModernButton from '${specifier}';`,
   '',
   'export function PlantedBar({ title }) {',
   '  return (',
   '    <div className="ds-planted-bar" data-part="bar">',
   render
-    ? '      <ModernButton chrome="none" data-part="event">{title}</ModernButton>'
-    : '      <button data-part="event">{title}</button>',
+    ? `      <ModernButton chrome="none" ${host === 'class' ? 'className="ds-planted-bar__event"' : 'data-part="event"'}>{title}</ModernButton>`
+    : `      <button ${host === 'class' ? 'className="ds-planted-bar__event"' : 'data-part="event"'}>{title}</button>`,
   '    </div>',
   '  );',
   '}',
   '',
 ].join('\n');
 
-const chipSkin = (part = 'content') =>
-  `${BAR_RULE}.ds-planted-bar [data-part='event'] > [data-part='${part}'] { display: block; }\n`;
+const chipSkin = (part = 'content', host = 'class') =>
+  `${BAR_RULE}.ds-planted-bar ${host === 'class' ? '.ds-planted-bar__event' : "[data-part='event']"} > [data-part='${part}'] { display: block; }\n`;
 
 const BUTTON_CREDIT = { part: 'content', primitive: MODERN_TSX };
 
@@ -3500,7 +3501,7 @@ test("CONTROL: a part the composed primitive's OWN source stamps is credited to 
 test('PLANT: a part the composed primitive does NOT stamp still reds -- the credit is not a blanket', () => {
   const measured = measureComposer({
     tsx: chipTsx(),
-    skin: `${chipSkin()}.ds-planted-bar [data-part='event'] > [data-part='planted-ghost'] { display: block; }\n`,
+    skin: `${chipSkin()}.ds-planted-bar .ds-planted-bar__event > [data-part='planted-ghost'] { display: block; }\n`,
   });
   assert.deepEqual(measured.detail.partsConsumedNotStamped, ['planted-ghost']);
   assert.deepEqual(measured.detail.partsComposedFrom, [BUTTON_CREDIT], 'the real stamp keeps its credit beside the plant');
@@ -3529,13 +3530,13 @@ test('PLANT: an import the family never renders composes nothing', () => {
 test('GUARD: only a non-frozen module under `src/components/primitives/` backs the credit', () => {
   /* A barrel resolves to a file that stamps nothing of its own. Its default import names no
    * export at all, so (F1) nothing backs the caller's `event` either: both reads stay red. */
-  const barrel = measureComposer({ tsx: chipTsx({ specifier: '../../../primitives/inputs/button' }), skin: chipSkin() });
+  const barrel = measureComposer({ tsx: chipTsx({ specifier: '../../../primitives/inputs/button', host: 'part' }), skin: chipSkin('content', 'part') });
   assert.deepEqual(barrel.detail.partsConsumedNotStamped, ['content', 'event'], 'barrel');
   /* A frozen engine is never a backer, even one planted to stamp the part. */
   const CLASSIC_TSX = 'src/components/primitives/inputs/button/engines/classic/index.tsx';
   const frozen = measureComposer({
-    tsx: chipTsx({ specifier: '../../../primitives/inputs/button/engines/classic' }),
-    skin: chipSkin(),
+    tsx: chipTsx({ specifier: '../../../primitives/inputs/button/engines/classic', host: 'part' }),
+    skin: chipSkin('content', 'part'),
     edit: (sandbox) => patch(sandbox, CLASSIC_TSX, (text) =>
       `${text}\nexport const PlantedStamp = () => <span data-part="content" />;\n`),
   });
@@ -3544,8 +3545,8 @@ test('GUARD: only a non-frozen module under `src/components/primitives/` backs t
   /* Another pattern is not a primitive, however literally it stamps. */
   const sibling = 'src/components/patterns/data/planted-chip/index.tsx';
   const pattern = measureComposer({
-    tsx: chipTsx({ specifier: '../planted-chip' }),
-    skin: chipSkin(),
+    tsx: chipTsx({ specifier: '../planted-chip', host: 'part' }),
+    skin: chipSkin('content', 'part'),
     edit: (sandbox) => {
       mkdirSync(dirname(join(sandbox, sibling)), { recursive: true });
       writeFileSync(join(sandbox, sibling), 'export default function ModernButton() { return <span data-part="content" />; }\n');

@@ -91,7 +91,8 @@ for (const fixture of FIXTURES) {
       // outlined); the pattern names its sample on `data-sample-variant`.
       const sampleAttribute = engine === 'modern' ? 'data-sample-variant' : 'data-variant';
       for (const variant of ['primary', 'outlined', 'default']) {
-        await expect(preview.locator(`[data-part="button"][${sampleAttribute}="${variant}"]`)).toHaveCount(1);
+        // P-88: the modern samples are composed Buttons that keep their own `trigger` part.
+        await expect(preview.locator(`[data-part="${engine === 'modern' ? 'trigger' : 'button'}"][${sampleAttribute}="${variant}"]`)).toHaveCount(1);
       }
       // P-88: modern samples are composed Badges that keep their own `root` part; found by the primitive's class.
       const badge = engine === 'modern' ? '.rottay-badge.rottay-badge--modern' : '[data-part="badge"]';

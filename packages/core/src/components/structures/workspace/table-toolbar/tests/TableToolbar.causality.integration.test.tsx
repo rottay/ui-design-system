@@ -91,7 +91,7 @@ const FIELD = "#toolbar [data-part='search-field']";
 const SHELL = "#toolbar .ds-table-toolbar__search-input > .ds-input-shell";
 const ICON = "#toolbar [data-part='search-icon']";
 const DIVIDER = "#toolbar [data-part='divider']";
-const PRIMARY = "#toolbar [data-part='primary-action']";
+const PRIMARY = '#toolbar .ds-table-toolbar__primary-action';
 
 describeCausality({
   family: 'table-toolbar',
@@ -155,18 +155,20 @@ describe('table-toolbar causality surface', () => {
       'spacer',
       'controls',
       'filters',
-      'clear-filters',
       'actions',
       'divider',
       'search-field',
       'search-icon',
-      'primary-action',
     ]) {
       expect(toolbar, part).toContain(`data-part="${part}"`);
     }
-    // P-88: the composed Input keeps its own root part; the caller part never lands.
+    // P-88: the composed Input and Buttons keep their own parts; a caller part never lands.
     expect(toolbar).toContain('ds-table-toolbar__search-input');
     expect(toolbar).not.toContain('data-part="search-input"');
+    for (const part of ['clear-filters', 'primary-action']) {
+      expect(toolbar, part).toContain(`ds-table-toolbar__${part}`);
+      expect(toolbar, part).not.toContain(`data-part="${part}"`);
+    }
   });
 
   /**

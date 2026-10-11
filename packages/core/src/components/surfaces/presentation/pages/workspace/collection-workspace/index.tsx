@@ -613,7 +613,6 @@ function CollectionWorkspaceSurfaceContent<T extends object>(props: CollectionWo
                         variant="ghost"
                         size="sm"
                         className="ds-collection-workspace__filter-reset"
-                        data-part="filter-reset"
                         onClick={clearFilters}
                       >
                         {tSurfaceOr('collection_workspace.reset', 'Reset')}

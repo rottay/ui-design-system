@@ -29,7 +29,8 @@ describe('NotificationCenter modern row activation is a composed chrome-less But
     const { container } = await mount({ onRead });
     for (const [id, title] of [['n1', 'Build passed'], ['n2', 'Upload complete']] as const) {
       const activation = screen.getByRole('button', { name: title });
-      expect(activation).toHaveAttribute('data-part', 'row-activate');
+      expect(activation).toHaveClass('ds-notification-center__row-activate');
+      expect(activation).toHaveAttribute('data-part', 'trigger');
       expect(activation).toHaveAttribute('data-chrome', 'none');
       expect(activation).toHaveClass('ds-button', 'ds-button--modern');
       fireEvent.click(activation);
@@ -39,7 +40,8 @@ describe('NotificationCenter modern row activation is a composed chrome-less But
     fireEvent.click(screen.getByText('CI green on main'));
     expect(onRead).toHaveBeenCalledTimes(2);
     for (const row of container.ownerDocument.querySelectorAll('[data-part="row"]')) {
-      expect(row.firstElementChild).toHaveAttribute('data-part', 'row-activate');
+      expect(row.firstElementChild).toHaveClass('ds-notification-center__row-activate');
+      expect(row.firstElementChild).toHaveAttribute('data-part', 'trigger');
     }
   });
 
@@ -55,7 +57,7 @@ describe('NotificationCenter modern row activation is a composed chrome-less But
 
   it('renders no activation when the caller supplies no onRead', async () => {
     const { container } = await mount();
-    expect(container.ownerDocument.querySelector('[data-part="row-activate"]')).toBeNull();
+    expect(container.ownerDocument.querySelector('.ds-notification-center__row-activate')).toBeNull();
   });
 
   it('stretches the activation over the row in the skin, and lifts the timestamp so its title stays reachable', () => {

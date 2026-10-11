@@ -92,7 +92,7 @@ describe('PatternCalendarView modern — rescue drills', () => {
     ];
     const { container } = render(<ModernCalendarView {...buildProps({ events })} />);
 
-    const chips = Array.from(container.querySelectorAll('[data-part="event"]'));
+    const chips = Array.from(container.querySelectorAll('.ds-pattern-calendar-view__event'));
     expect(chips).toHaveLength(2);
     for (const chip of chips) {
       expect(chip).not.toHaveAttribute('role');
@@ -113,7 +113,7 @@ describe('PatternCalendarView modern — rescue drills', () => {
       <ModernCalendarView {...buildProps({ events, onEventClick })} />,
     );
 
-    const chip = container.querySelector('[data-part="event"]') as HTMLElement;
+    const chip = container.querySelector('.ds-pattern-calendar-view__event') as HTMLElement;
     expect(screen.getByRole('button', { name: 'Standup' })).toBe(chip);
     // APG in-cell interaction mode (elevation wave): a widget inside a
     // gridcell is reached through the cell with F2, so it is programmatically

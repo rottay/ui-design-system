@@ -264,7 +264,6 @@ export function RecordField({
               variant="ghost"
               size="sm"
               onClick={handleCopy}
-              data-part="field-copy"
               className="ds-record__field-copy"
               aria-label={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}
             >

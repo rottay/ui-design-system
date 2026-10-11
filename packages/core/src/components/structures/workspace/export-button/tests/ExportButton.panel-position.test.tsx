@@ -57,7 +57,7 @@ async function openPanel(): Promise<Placed> {
     ({ ...rect, top: 0, left: 0, width: 0, height: 0, x: 0, y: 0, toJSON: () => ({}) }) as DOMRect;
 
   fireEvent.click(container.querySelector('[data-part="trigger"]') as HTMLElement);
-  await waitForPortalContent(waitFor, PANEL, '[data-part="menu-item"]', 1);
+  await waitForPortalContent(waitFor, PANEL, '.ds-export-button-item', 1);
 
   return {
     container,
@@ -99,7 +99,7 @@ describe("ExportButton panel position", () => {
 
     moveTrigger(300, 200);
     fireEvent.click(trigger);
-    await waitForPortalContent(waitFor, PANEL, '[data-part="menu-item"]', 1);
+    await waitForPortalContent(waitFor, PANEL, '.ds-export-button-item', 1);
     expect(panel().style.top).toBe("304px");
   });
 });

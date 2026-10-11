@@ -101,7 +101,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
       not guaranteed, so the focus target is queried by its caller part). */
   const focusTrigger = useCallback(() => {
     containerRef.current
-      ?.querySelector<HTMLElement>('[data-part="trigger"]')
+      ?.querySelector<HTMLElement>('.ds-workspace-switcher__trigger')
       ?.focus();
   }, []);
 
@@ -119,11 +119,11 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   const hasOptions = visibleWorkspaces.length > 0;
 
   /** The menu's two columns in DOM order -- the row controls and their gears.
-      Queried by part for the same reason `focusTrigger` is. */
+      Queried by the owner's class hook for the same reason `focusTrigger` is. */
   const columnNodes = useCallback(
     (part: 'item' | 'settings'): HTMLElement[] =>
       Array.from(
-        containerRef.current?.querySelectorAll<HTMLElement>(`[data-part="${part}"]`) ?? [],
+        containerRef.current?.querySelectorAll<HTMLElement>(`.ds-workspace-switcher__${part}`) ?? [],
       ),
     [],
   );
@@ -348,7 +348,6 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
         engine="modern"
         variant="ghost"
         size="sm"
-        data-part="trigger"
         className="ds-workspace-switcher__trigger"
         onClick={() => setOpen(!open)}
         data-testid="workspace-trigger"
@@ -442,7 +441,6 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                     role="menuitemradio"
                     aria-checked={isActive}
                     tabIndex={idx === rovingIndex ? 0 : -1}
-                    data-part="item"
                     className="ds-workspace-switcher__item"
                     data-active={isActive}
                     data-focused={isFocused}
@@ -500,7 +498,6 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       size="xs"
                       role="menuitem"
                       tabIndex={idx === rovingIndex ? 0 : -1}
-                      data-part="settings"
                       className="ds-workspace-switcher__settings"
                       data-focused={isFocused}
                       icon={<NavigationSettingsIcon decorative size={14} />}
@@ -526,7 +523,6 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   engine="modern"
                   variant="ghost"
                   size="sm"
-                  data-part="create"
                   className="ds-workspace-switcher__create"
                   icon={<ActionAddIcon decorative size={14} />}
                   onClick={() => {

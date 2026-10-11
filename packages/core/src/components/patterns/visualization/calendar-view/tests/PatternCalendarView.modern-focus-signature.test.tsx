@@ -94,7 +94,7 @@ describe('Modern PatternCalendarView — cells and chips wear the tenant focus s
     expect(cells.filter((cell) => cell.tabIndex === 0)).toHaveLength(1);
     expect(cells.every((cell) => cell.getAttribute('role') === 'gridcell')).toBe(true);
 
-    const chips = Array.from(container.querySelectorAll<HTMLElement>('[data-part="event"]'));
+    const chips = Array.from(container.querySelectorAll<HTMLElement>('.ds-pattern-calendar-view__event'));
     expect(chips).toHaveLength(2);
     expect(chips.every((chip) => chip.tabIndex === -1)).toBe(true);
 

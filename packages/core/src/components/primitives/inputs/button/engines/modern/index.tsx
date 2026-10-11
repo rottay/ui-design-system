@@ -191,9 +191,10 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPub
     onKeyUp,
     onFocus,
     onBlur,
-    // P-79: an explicit caller data-part wins over the default root anatomy
-    // part ('trigger'); the default applies only when the caller passed none.
-    'data-part': dataPart,
+    // P-88: the button keeps its own anatomy ('trigger'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...nativeButtonProps
   } = props;
 
@@ -502,7 +503,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPub
     'data-pulse': pulse ? 'true' : undefined,
     'data-bordered': bordered ? 'true' : undefined,
     'data-chrome': chrome === 'none' ? 'none' : undefined,
-    ...partAttributes(dataPart ?? 'trigger', interaction),
+    ...partAttributes('trigger', interaction),
     ...responsive.attrs,
   };
 

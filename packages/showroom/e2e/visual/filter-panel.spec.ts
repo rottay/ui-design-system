@@ -113,7 +113,8 @@ for (const engine of ENGINES) {
 
     const container = await openProbe(page, 'rottay', engine, 1280);
 
-    const resetButton = container.locator('[data-part="reset-button"]').first();
+    // P-88: the modern reset control is a composed Button that keeps its own `trigger` part; found by the owner class hook.
+    const resetButton = container.locator(engine === 'modern' ? '.ds-pattern-filter-panel__reset-button' : '[data-part="reset-button"]').first();
     await resetButton.hover();
     await page.waitForTimeout(300);
 

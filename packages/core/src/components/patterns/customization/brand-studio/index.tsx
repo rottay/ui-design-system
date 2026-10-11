@@ -1763,8 +1763,7 @@ export function PatternBrandStudio({
                 </Box>
                 <Button
                   className="ds-pattern-brand-studio__action"
-                  data-part="action"
-                  data-state={hostileReports ? 'complete' : 'idle'}
+                  data-status={hostileReports ? 'complete' : 'idle'}
                   variant="primary"
                   onClick={runHostileCheck}
                 >

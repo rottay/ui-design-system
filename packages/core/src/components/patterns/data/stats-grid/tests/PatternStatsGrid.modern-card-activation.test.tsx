@@ -29,7 +29,8 @@ describe('StatsGrid modern card activation is a composed chrome-less Button', ()
     const onStatClick = vi.fn();
     await mount({ onStatClick });
     const activation = await screen.findByRole('button', { name: /Revenue.*vs last month/ });
-    expect(activation).toHaveAttribute('data-part', 'card-activate');
+    expect(activation).toHaveClass('ds-stats-grid__card-activate');
+    expect(activation).toHaveAttribute('data-part', 'trigger');
     expect(activation).toHaveAttribute('data-chrome', 'none');
     const card = activation.closest('[data-part="card"]');
     expect(card).toHaveAttribute('id', activation.getAttribute('aria-labelledby'));

@@ -7,6 +7,14 @@ import { describe, expect, it, vi } from 'vitest';
 import ModernLiveFeed from '../engines/modern';
 import type { FeedItem } from '../contracts';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, string> = {
+  'banner': '.ds-live-feed__banner',
+  'load-more': '.ds-live-feed__load-more',
+  'refresh': '.ds-live-feed__refresh',
+};
+const partSelector = (part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[part]) || `[data-part="${part}"]`;
 const SKIN = readFileSync(
   join(
     __dirname,
@@ -91,7 +99,7 @@ describe('LiveFeed modern engine — composed controls wear the Button focus sig
     await settle();
 
     for (const part of BUTTON_PARTS) {
-      const node = container.querySelector(`[data-part="${part}"]`);
+      const node = container.querySelector(partSelector(part, 'modern'));
       expect(node?.tagName, part).toBe('BUTTON');
       expect(node).toHaveClass('ds-button', 'ds-button--modern');
       expect(node).not.toHaveAttribute('tabindex', '-1');

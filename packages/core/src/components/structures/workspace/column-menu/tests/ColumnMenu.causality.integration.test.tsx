@@ -63,7 +63,7 @@ async function openPanelMarkup(): Promise<string> {
     'modern',
   );
   const control = await waitFor(() => {
-    const node = container.querySelector('[data-part="control"]') as HTMLElement;
+    const node = container.querySelector('.ds-column-menu-control') as HTMLElement;
     expect(node).not.toBeNull();
     return node;
   });

@@ -167,7 +167,6 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
                       <ModernButton
                         variant="ghost"
                         size="sm"
-                        data-part="marker-row"
                         className="ds-pattern-map-view__marker-row"
                         data-selected={isSelected}
                         data-last={i === markers.length - 1}

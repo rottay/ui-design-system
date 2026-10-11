@@ -37,7 +37,7 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('data-custom', 'caller-data');
   });
 
-  it.fails('KNOWN DEBT (ARC-12): modern: the caller data-part does not win and the trigger keeps data-part="trigger" (P-88)', () => {
+  it('KNOWN DEBT (ARC-12): modern: the caller data-part does not win and the trigger keeps data-part="trigger" (P-88)', () => {
     const { container } = render(<ModernButton {...passthrough}>Go</ModernButton>);
 
     const button = container.querySelector('button.ds-button--modern') as HTMLButtonElement;
@@ -45,7 +45,7 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('data-part', 'trigger');
   });
 
-  it.fails('KNOWN DEBT (ARC-12): modern anchor path: the caller data-part does not win and the <a> keeps data-part="trigger" (P-88)', () => {
+  it('KNOWN DEBT (ARC-12): modern anchor path: the caller data-part does not win and the <a> keeps data-part="trigger" (P-88)', () => {
     const { container } = render(
       <ModernButton href="/somewhere" {...passthrough}>
         Go
@@ -75,7 +75,7 @@ describe('Button pass-through honesty law', () => {
     expect(button).toHaveAttribute('data-custom', 'caller-data');
   });
 
-  it.fails('KNOWN DEBT (ARC-12): rustic button path: the caller data-part does not win and the trigger keeps data-part="trigger" (P-88)', () => {
+  it('KNOWN DEBT (ARC-12): rustic button path: the caller data-part does not win and the trigger keeps data-part="trigger" (P-88)', () => {
     const { container } = render(<RusticButton {...passthrough}>Go</RusticButton>);
 
     const button = container.querySelector('button.rottay-button--rustic') as HTMLButtonElement;
@@ -98,7 +98,7 @@ describe('Button pass-through honesty law', () => {
     expect(anchor).toHaveAttribute('data-custom', 'caller-data');
   });
 
-  it.fails('KNOWN DEBT (ARC-12): rustic anchor path: the caller data-part does not win and the <a> keeps data-part="trigger" (P-88)', () => {
+  it('KNOWN DEBT (ARC-12): rustic anchor path: the caller data-part does not win and the <a> keeps data-part="trigger" (P-88)', () => {
     const { container } = render(
       <RusticButton href="/somewhere" {...passthrough}>
         Go
@@ -174,14 +174,14 @@ describe('Button pass-through honesty law', () => {
   });
 
   // P-88 D3: at rest the engine stamps no data-state, so a caller value must not appear.
-  it.fails('KNOWN DEBT (ARC-12): modern Button should not forward a resting caller data-state', () => {
+  it('KNOWN DEBT (ARC-12): modern Button should not forward a resting caller data-state', () => {
     const { container } = render(<ModernButton data-state="caller-state-attempt">Go</ModernButton>);
 
     const button = container.querySelector('button.ds-button--modern') as HTMLButtonElement;
     expect(button).not.toHaveAttribute('data-state', 'caller-state-attempt');
   });
 
-  it.fails('KNOWN DEBT (ARC-12): modern Button anchor path should not forward a resting caller data-state', () => {
+  it('KNOWN DEBT (ARC-12): modern Button anchor path should not forward a resting caller data-state', () => {
     const { container } = render(
       <ModernButton href="/somewhere" data-state="caller-state-attempt">
         Go
@@ -192,14 +192,14 @@ describe('Button pass-through honesty law', () => {
     expect(anchor).not.toHaveAttribute('data-state', 'caller-state-attempt');
   });
 
-  it.fails('KNOWN DEBT (ARC-12): rustic Button should not forward a resting caller data-state', () => {
+  it('KNOWN DEBT (ARC-12): rustic Button should not forward a resting caller data-state', () => {
     const { container } = render(<RusticButton data-state="caller-state-attempt">Go</RusticButton>);
 
     const button = container.querySelector('button.rottay-button--rustic') as HTMLButtonElement;
     expect(button).not.toHaveAttribute('data-state', 'caller-state-attempt');
   });
 
-  it.fails('KNOWN DEBT (ARC-12): rustic Button anchor path should not forward a resting caller data-state', () => {
+  it('KNOWN DEBT (ARC-12): rustic Button anchor path should not forward a resting caller data-state', () => {
     const { container } = render(
       <RusticButton href="/somewhere" data-state="caller-state-attempt">
         Go

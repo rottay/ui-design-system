@@ -38,7 +38,7 @@ function Harness(props: Partial<FileManagerProps>) {
 }
 
 const activations = (container: HTMLElement) =>
-  Array.from(container.querySelectorAll<HTMLButtonElement>('[data-part="grid-card"] [data-part="grid-card-activate"]'));
+  Array.from(container.querySelectorAll<HTMLButtonElement>('[data-part="grid-card"] .ds-file-manager__grid-card-activate'));
 
 function rules(css: string): Array<{ selector: string; body: string; forced: boolean }> {
   const out: Array<{ selector: string; body: string; forced: boolean }> = [];
@@ -61,7 +61,7 @@ describe('FileManager modern grid card activation is a stretched chrome-less But
     const cards = Array.from(container.querySelectorAll<HTMLElement>('[data-part="grid-card"]'));
     expect(cards).toHaveLength(3);
     for (const card of cards) {
-      const buttons = card.querySelectorAll('[data-part="grid-card-activate"]');
+      const buttons = card.querySelectorAll('.ds-file-manager__grid-card-activate');
       expect(buttons).toHaveLength(1);
       const button = buttons[0] as HTMLButtonElement;
       expect(button.tagName).toBe('BUTTON');
@@ -199,6 +199,7 @@ describe('FileManager modern grid card skin keeps the carrier non-painting (T2)'
 describe('FileManager modern grid probe names', () => {
   it('reaches the folder through its activation by role and name', () => {
     render(<Harness />);
-    expect(screen.getByRole('button', { name: 'Documents' })).toHaveAttribute('data-part', 'grid-card-activate');
+    expect(screen.getByRole('button', { name: 'Documents' })).toHaveClass('ds-file-manager__grid-card-activate');
+    expect(screen.getByRole('button', { name: 'Documents' })).toHaveAttribute('data-part', 'trigger');
   });
 });

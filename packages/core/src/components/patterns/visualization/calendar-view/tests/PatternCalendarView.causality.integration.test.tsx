@@ -94,7 +94,7 @@ const WEEKDAY = "#calendar [data-part='weekday']";
 const TITLE = "#calendar [data-part='month-title']";
 const CELL = "#calendar [data-part='day-cell'][data-empty='false']";
 const SELECTED = "#calendar [data-part='day-cell'][data-selected='true']";
-const EVENT = "#calendar [data-part='event']";
+const EVENT = '#calendar .ds-pattern-calendar-view__event';
 
 describeCausality({
   family: 'calendar-view',
@@ -222,7 +222,7 @@ describe('calendar-view causality surface', () => {
     expect(calendar).toContain('data-part="month-title"');
     expect(calendar).toContain('data-part="day-cell"');
     expect(calendar).toContain('data-part="date-label"');
-    expect(calendar).toContain('data-part="event"');
+    expect(calendar).toContain('ds-pattern-calendar-view__event');
     // The day cell and the event chip are stateful parts decided by the
     // kernel: at rest they carry NO `data-state`, so `[data-state]` never
     // matches a resting cell and the skin's paired arms fall through to the
@@ -247,7 +247,7 @@ describe('calendar-view causality surface', () => {
         { id: 'themed', selector: EVENT, property: 'background-color' },
         {
           id: 'stated',
-          selector: "#calendar [data-part='event'][style*='--ds-calendar-view-entry-accent']",
+          selector: "#calendar .ds-pattern-calendar-view__event[style*='--ds-calendar-view-entry-accent']",
           property: 'background-color',
         },
         {
@@ -265,7 +265,7 @@ describe('calendar-view causality surface', () => {
   }, 120_000);
 
   it('inks each chip against its own accent, so a stated accent carries its own ink', async () => {
-    const STATED = "#calendar [data-part='event'][style*='--ds-calendar-view-entry-accent']";
+    const STATED = "#calendar .ds-pattern-calendar-view__event[style*='--ds-calendar-view-entry-accent']";
     const readings = await measureArms({
       vertical: 'rottay',
       markup,

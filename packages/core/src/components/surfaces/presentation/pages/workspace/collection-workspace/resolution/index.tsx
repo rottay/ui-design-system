@@ -281,7 +281,6 @@ export function useCollectionWorkspaceChrome<T extends object>(input: Collection
         variant="primary"
         size="sm"
         className="ds-collection-workspace__toolbar-primary-action"
-        data-part="toolbar-primary-action"
         icon={primaryAction.icon}
         disabled={primaryAction.disabled}
         pending={primaryAction.pending ?? primaryAction.loading}

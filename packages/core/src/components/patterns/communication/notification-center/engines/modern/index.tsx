@@ -270,7 +270,6 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
       ref={triggerRef}
       variant="ghost"
       htmlType="button"
-      data-part="trigger"
       className="ds-notification-center__trigger"
       onClick={() => handleOpenChange(!isOpen)}
       data-testid="notification-trigger"
@@ -345,7 +344,6 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                 <Button
                   variant="ghost"
                   size="xs"
-                  data-part="mark-all-read"
                   className="ds-notification-center__mark-all-read"
                   onClick={onReadAll}
                 >
@@ -356,7 +354,6 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                 <Button
                   variant="ghost"
                   size="xs"
-                  data-part="clear-all"
                   className="ds-notification-center__clear-all"
                   onClick={onClearAll}
                 >
@@ -395,7 +392,6 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                       {onRead && (
                         <Button
                           chrome="none"
-                          data-part="row-activate"
                           className="ds-notification-center__row-activate"
                           aria-labelledby={`${rowIdPrefix}-${item.id}-title`}
                           onClick={() => onRead(item.id)}
@@ -426,7 +422,6 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                             <Button
                               variant="ghost"
                               size="xs"
-                              data-part="action"
                               className="ds-notification-center__action"
                               onClick={(e: React.MouseEvent) => { e.stopPropagation(); item.action!.onClick(); }}
                             >
@@ -443,7 +438,6 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                         <Button
                           variant="ghost"
                           size="xs"
-                          data-part="mark-read"
                           className="ds-notification-center__mark-read"
                           icon={<StatusSuccessIcon decorative size={12} />}
                           aria-label={tOr('notificationCenter.markItemAsRead', '{action}: {title}', {
@@ -458,7 +452,6 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                         <Button
                           variant="ghost"
                           size="xs"
-                          data-part="dismiss"
                           className="ds-notification-center__dismiss"
                           icon={<ActionCloseIcon decorative size={12} />}
                           aria-label={tOr('notificationCenter.dismissItem', '{action}: {title}', {

@@ -129,7 +129,7 @@ function overlay(rootStyle = ""): string {
   return [
     `<div class="ds-pattern-shortcuts-overlay ds-engine-modern" data-part="surface" style="${rootStyle}">`,
     `<div data-part="content">`,
-    `<div data-part="header"><h2 data-part="title">Keyboard Shortcuts</h2><button data-part="close">x</button></div>`,
+    `<div data-part="header"><h2 data-part="title">Keyboard Shortcuts</h2><button class="ds-pattern-shortcuts-overlay__close" data-part="trigger">x</button></div>`,
     `<div data-part="search"><input aria-label="Search shortcuts" /></div>`,
     `<div data-part="list">`,
     `<div data-part="group"><div data-part="category-row"><span data-part="category-label">File</span></div>`,
@@ -364,12 +364,15 @@ describe("chrome/shortcuts-overlay channels under a local scope", () => {
 
   it("probes the parts the engine stamps, on the certified Modal it composes", () => {
     const parts = [
-      "content", "header", "title", "close", "search", "list", "group",
+      "content", "header", "title", "search", "list", "group",
       "category-row", "category-label", "item", "description", "chord", "kbd", "empty", "footer",
     ];
     for (const part of parts) {
       expect(ENGINE).toContain(`data-part="${part}"`);
     }
+    // The close control is the certified Button: it keeps its own part and carries the owner's class door.
+    expect(ENGINE).toContain('className="ds-pattern-shortcuts-overlay__close"');
+    expect(ENGINE).not.toContain('data-part="close"');
     expect(ENGINE).toContain("'ds-pattern-shortcuts-overlay', 'ds-engine-modern'");
     expect(ENGINE).toMatch(/<Modal\b/);
     expect(ENGINE).not.toMatch(/data-part="(root|backdrop|dialog)"/);

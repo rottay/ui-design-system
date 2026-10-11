@@ -168,7 +168,6 @@ function CommandSuggestionChip({
       variant="ghost"
       size="xs"
       shape="round"
-      data-part="suggestion-chip"
       className="ds-search-command-bar__suggestion-chip"
       onClick={onClick}
     >
@@ -438,7 +437,6 @@ export function SearchCommandBar({
                       variant="ghost"
                       size="xs"
                       shape="circle"
-                      data-part="clear"
                       className="ds-search-command-bar__clear"
                       onClick={() => handleInputChange('')}
                       aria-label={tOr('searchCommandBar.clearSearch', 'Clear search')}
@@ -468,7 +466,6 @@ export function SearchCommandBar({
                     variant="ghost"
                     size="sm"
                     shape="circle"
-                    data-part="voice-toggle"
                     className="ds-search-command-bar__voice-toggle"
                     data-voice-status={voiceStatusForSkin}
                     data-voice-active={isVoiceActive}
@@ -523,8 +520,7 @@ export function SearchCommandBar({
                       variant="ghost"
                       size="xs"
                       shape="circle"
-                      data-part="close"
-                      className="ds-search-command-bar__voice-help-close"
+                      className="ds-search-command-bar__voice-help-close ds-search-command-bar__close"
                       onClick={() => setShowVoiceHelp(false)}
                       aria-label={tOr('searchCommandBar.closeMicHelp', 'Close microphone help')}
                       icon={<ActionCloseIcon decorative size={14} />}
@@ -575,7 +571,6 @@ export function SearchCommandBar({
                       <Button
                         variant="ghost"
                         size="sm"
-                        data-part="voice-help-cancel"
                         className="ds-search-command-bar__voice-help-cancel"
                         onClick={() => {
                           setShowVoiceHelp(false);

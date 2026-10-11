@@ -107,7 +107,8 @@ describe('ModernActivityLog — the interactive item body wears the tenant focus
     const interactive = render(<ModernActivityLog activities={ACTIVITIES} onActivityClick={vi.fn()} />);
     // The tab stop is the chrome-less Button stretched over the body.
     const activation = await interactive.findByRole('button');
-    expect(activation.getAttribute('data-part')).toBe('item-activate');
+    expect(activation).toHaveClass('ds-activity-log__item-activate');
+    expect(activation.getAttribute('data-part')).toBe('trigger');
     const body = activation.closest('[data-part="item-body"]');
     expect(body?.getAttribute('data-part')).toBe('item-body');
     expect(body?.getAttribute('data-interactive')).toBe('true');

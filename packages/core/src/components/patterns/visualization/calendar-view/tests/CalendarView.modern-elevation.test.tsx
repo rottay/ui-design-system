@@ -51,9 +51,9 @@ describe('PatternCalendarView modern — elevation drills', () => {
 
     // Before: every chip carried tabIndex=0 — 93 tab stops inside a grid that
     // otherwise implements a correct single-stop roving tabindex.
-    expect(container.querySelectorAll('[data-part="event"]').length).toBeGreaterThan(80);
+    expect(container.querySelectorAll('.ds-pattern-calendar-view__event').length).toBeGreaterThan(80);
     expect(container.querySelectorAll('[data-part="grid"] [tabindex="0"]')).toHaveLength(1);
-    for (const chip of container.querySelectorAll('[data-part="event"]')) {
+    for (const chip of container.querySelectorAll('.ds-pattern-calendar-view__event')) {
       expect(chip).toHaveAttribute('tabindex', '-1');
     }
   });
@@ -168,7 +168,7 @@ describe('PatternCalendarView modern — elevation drills', () => {
     render(<ModernCalendarView {...buildProps({ events })} />);
 
     const cell = screen.getByRole('gridcell', { name: /March 10, 2026/ });
-    const chips = Array.from(cell.querySelectorAll('[data-part="event"]')).map(
+    const chips = Array.from(cell.querySelectorAll('.ds-pattern-calendar-view__event')).map(
       (chip) => chip.textContent,
     );
 

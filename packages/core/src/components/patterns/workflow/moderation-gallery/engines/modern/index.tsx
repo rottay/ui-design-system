@@ -182,7 +182,6 @@ function ModerationCard({
                 }}
                 variant="ghost"
                 size="sm"
-                data-part="card-action-button"
                 className="ds-moderation-gallery__card-action-button"
                 data-action="approve"
                 icon={<ActionConfirmIcon decorative size={14} />}
@@ -199,7 +198,6 @@ function ModerationCard({
               <ModernButton
                 variant="ghost"
                 size="sm"
-                data-part="card-action-button"
                 className="ds-moderation-gallery__card-action-button"
                 data-action="reject"
                 icon={<ActionCloseIcon decorative size={14} />}
@@ -434,7 +432,6 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
           <ModernButton
             variant="primary"
             size="sm"
-            data-part="bulk-approve-button"
             className="ds-moderation-gallery__bulk-approve-button"
             icon={<ActionConfirmIcon decorative size={14} />}
             pending={bulkPending}
@@ -447,7 +444,6 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
             variant="ghost"
             size="sm"
             danger
-            data-part="bulk-reject-button"
             className="ds-moderation-gallery__bulk-reject-button"
             icon={<ActionCloseIcon decorative size={14} />}
             disabled={bulkPending}
@@ -458,7 +454,6 @@ export default function ModernModerationGallery(props: ModerationGalleryProps) {
           <ModernButton
             variant="ghost"
             size="sm"
-            data-part="bulk-clear-button"
             className="ds-moderation-gallery__bulk-clear-button"
             disabled={bulkPending}
             onClick={() => setSelectedIds(new Set())}

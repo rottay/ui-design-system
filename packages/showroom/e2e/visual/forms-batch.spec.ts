@@ -153,14 +153,16 @@ for (const engine of ENGINES) {
 
     await openProbe(page, 'rottay', engine);
     const filterBuilderRoot = page.locator(FILTER_BUILDER_SELECTOR);
-    const trigger = filterBuilderRoot.locator('[data-part="add-filter-trigger"]').first();
+    // P-88: on modern the trigger and the options are composed Buttons that keep their own `trigger` part; found by the owner class hooks.
+    const trigger = filterBuilderRoot.locator(engine === 'modern' ? '.ds-filter-builder__add-filter-trigger' : '[data-part="add-filter-trigger"]').first();
     await trigger.click();
 
     const dropdown = filterBuilderRoot.locator('[data-part="add-filter-dropdown"]').first();
     await dropdown.waitFor({ timeout: 10_000 });
-    const option = dropdown.locator('[data-part="add-filter-option"]').first();
+    const optionSelector = engine === 'modern' ? '.ds-filter-builder__add-filter-option' : '[data-part="add-filter-option"]';
+    const option = dropdown.locator(optionSelector).first();
     await option.hover();
-    await waitForSettled(page, '[data-testid="probe-forms-filter-builder"] [data-part="add-filter-dropdown"] [data-part="add-filter-option"]');
+    await waitForSettled(page, `[data-testid="probe-forms-filter-builder"] [data-part="add-filter-dropdown"] ${optionSelector}`);
 
     await expect(dropdown).toHaveScreenshot(`rottay-forms-filter-builder-${engine}-add-filter-option-hovered.png`);
   });

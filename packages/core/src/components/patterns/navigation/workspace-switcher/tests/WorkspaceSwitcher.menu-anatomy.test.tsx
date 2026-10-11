@@ -13,6 +13,13 @@ import { I18nProvider } from '@/infrastructure/runtime/i18n';
 
 import ModernWorkspaceSwitcher from '../engines/modern';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, string> = {
+  'item': '.ds-workspace-switcher__item',
+  'settings': '.ds-workspace-switcher__settings',
+};
+const partSelector = (part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[part]) || `[data-part="${part}"]`;
 function createProps(overrides: Partial<WorkspaceSwitcherProps> = {}): WorkspaceSwitcherProps {
   return {
     workspaces: [
@@ -248,7 +255,7 @@ describe('ModernWorkspaceSwitcher — roving menu navigation', () => {
     await screen.findByTestId('workspace-settings-ws-1');
 
     const tabbable = (part: string) =>
-      Array.from(container.querySelectorAll(`[data-part="${part}"]`)).filter(
+      Array.from(container.querySelectorAll(partSelector(part, 'modern'))).filter(
         (el) => el.getAttribute('tabindex') === '0',
       );
     expect(tabbable('item').length).toBe(1);

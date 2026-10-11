@@ -168,7 +168,7 @@ async function resetAffordanceMarkup(): Promise<string> {
 
 const resetMarkup = await resetAffordanceMarkup();
 
-const RESET = "#probe-host [data-part='reset-button']";
+const RESET = '#probe-host .ds-pattern-filter-panel__reset-button';
 const RESET_LABEL = "#probe-host [data-part='field-label']";
 
 /** `color` at rest and under a real pointer hover, for one compiled arm. */

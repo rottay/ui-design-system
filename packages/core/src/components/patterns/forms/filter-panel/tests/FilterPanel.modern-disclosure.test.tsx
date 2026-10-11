@@ -104,13 +104,13 @@ describe('ModernFilterPanel handler-less actions', () => {
   it('does not paint a reset button without an onReset handler', () => {
     const { container } = renderPanel({ showReset: true, title: 'Filters' });
 
-    expect(container.querySelector('[data-part="reset-button"]')).toBeNull();
+    expect(container.querySelector('.ds-pattern-filter-panel__reset-button')).toBeNull();
   });
 
   it('does not paint an apply button without an onApply handler', () => {
     const { container } = renderPanel({ showApply: true });
 
-    expect(container.querySelector('[data-part="apply-button"]')).toBeNull();
+    expect(container.querySelector('.ds-pattern-filter-panel__apply-button')).toBeNull();
   });
 
   it('paints both actions once their handlers arrive', () => {
@@ -124,8 +124,8 @@ describe('ModernFilterPanel handler-less actions', () => {
       title: 'Filters',
     });
 
-    const reset = container.querySelector<HTMLElement>('[data-part="reset-button"]')!;
-    const apply = container.querySelector<HTMLElement>('[data-part="apply-button"]')!;
+    const reset = container.querySelector<HTMLElement>('.ds-pattern-filter-panel__reset-button')!;
+    const apply = container.querySelector<HTMLElement>('.ds-pattern-filter-panel__apply-button')!;
     fireEvent.click(reset);
     fireEvent.click(apply);
 

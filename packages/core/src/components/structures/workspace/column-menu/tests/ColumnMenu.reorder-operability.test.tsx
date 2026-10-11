@@ -53,7 +53,7 @@ async function openMenu(
     'modern',
   );
   const control = await waitFor(() => {
-    const node = container.querySelector('[data-part="control"]') as HTMLElement;
+    const node = container.querySelector('.ds-column-menu-control') as HTMLElement;
     expect(node).not.toBeNull();
     return node;
   });
@@ -78,13 +78,13 @@ function rowFor(surface: HTMLElement, title: string): HTMLElement {
 }
 
 function handleFor(surface: HTMLElement, title: string): HTMLElement {
-  const handle = rowFor(surface, title).querySelector('[data-part="drag-handle"]');
+  const handle = rowFor(surface, title).querySelector('.ds-column-menu__drag-handle');
   if (!handle) throw new Error(`no drag handle in the row titled ${title}`);
   return handle as HTMLElement;
 }
 
 function applyButton(surface: HTMLElement): HTMLElement {
-  return surface.querySelector('[data-part="apply"]') as HTMLElement;
+  return surface.querySelector('.ds-column-menu__apply') as HTMLElement;
 }
 
 /**
@@ -360,7 +360,7 @@ describe('ColumnMenu keys the reorder protocol must not take', () => {
       extra: { columnWidths: { name: 200 }, onColumnResize: vi.fn() },
     });
     const widthBadge = rowFor(surface, 'Name').querySelector(
-      '[data-part="width-badge"]',
+      '.ds-column-menu__width-badge',
     ) as HTMLElement;
     expect(widthBadge).not.toBeNull();
 

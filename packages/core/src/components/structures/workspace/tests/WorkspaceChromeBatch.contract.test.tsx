@@ -21,6 +21,16 @@ import { StatusFilterPills } from "../../../patterns/data/status-filter-pills";
 import { renderWithEngine } from "@tests/support/engine";
 import { mockMatchMedia } from "@tests/support/browser/match-media";
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, Record<string, string>> = {
+  'active-filters-bar': { 'add-filter': '.ds-active-filters-bar__add-filter', 'clear-all': '.ds-active-filters-bar__clear-all', 'less-toggle': '.ds-active-filters-bar__less-toggle', 'more-toggle': '.ds-active-filters-bar__more-toggle' },
+  'column-menu': { 'apply': '.ds-column-menu__apply', 'drag-handle': '.ds-column-menu__drag-handle', 'group-toggle': '.ds-column-menu__group-toggle', 'icon-button': '.ds-column-menu__icon-button', 'reset': '.ds-column-menu__reset', 'width-badge': '.ds-column-menu__width-badge' },
+  'list-toolbar': { 'clear-all': '.ds-list-toolbar__clear-all', 'density-option': '.ds-list-toolbar__density-option', 'filter-dropdown-item': '.ds-list-toolbar__filter-dropdown-item', 'filter-trigger': '.ds-list-toolbar__filter-trigger', 'icon-button': '.ds-list-toolbar__icon-button', 'mobile-overflow-item': '.ds-list-toolbar__mobile-overflow-item', 'primary-action': '.ds-list-toolbar__primary-action', 'primary-action-mobile': '.ds-list-toolbar__primary-action-mobile' },
+  'saved-views': { 'create-button': '.ds-saved-views__create-button', 'menu-trigger': '.ds-saved-views__menu-trigger', 'pill-select': '.ds-saved-views__pill-select' },
+  'search-command-bar': { 'clear': '.ds-search-command-bar__clear', 'suggestion-chip': '.ds-search-command-bar__suggestion-chip', 'voice-help-cancel': '.ds-search-command-bar__voice-help-cancel', 'voice-toggle': '.ds-search-command-bar__voice-toggle' },
+};
+const partSelector = (owner: string, part: string) => BUTTON_DOORS[owner]?.[part] ?? `[data-part="${part}"]`;
 // ---------------------------------------------------------------------------
 // workspace-chrome anatomy -- the workspace-chrome family (list-toolbar,
 // saved-views, status-filter-pills, column-menu, saved-views-menu,
@@ -145,10 +155,10 @@ describe("list-toolbar -- data-part contract (workspace-chrome anatomy)", () => 
     expect(q(container, '[data-part="count-badge"]')).toHaveLength(0);
     // one active filter pill, one inactive
     expect(
-      q(container, '[data-part="filter-trigger"][data-active="true"]')
+      q(container, '.ds-list-toolbar__filter-trigger[data-active="true"]')
     ).toHaveLength(1);
     expect(
-      q(container, '[data-part="filter-trigger"][data-active="false"]')
+      q(container, '.ds-list-toolbar__filter-trigger[data-active="false"]')
     ).toHaveLength(1);
     expect(q(container, ".ds-list-toolbar__filter-badge")).toHaveLength(1);
     expect(q(container, '[data-part="filter-badge"]')).toHaveLength(0);
@@ -171,12 +181,12 @@ describe("list-toolbar -- data-part contract (workspace-chrome anatomy)", () => 
       )
     ).toHaveLength(1);
     expect(
-      q(container, '[data-part="icon-button"]').length
+      q(container, '.ds-list-toolbar__icon-button').length
     ).toBeGreaterThanOrEqual(1); // export
 
     // active-filter-chips strip (hasActiveFilters)
     expect(q(container, '[data-part="filter-chips-strip"]')).toHaveLength(1);
-    expect(q(container, '[data-part="clear-all"]')).toHaveLength(1);
+    expect(q(container, '.ds-list-toolbar__clear-all')).toHaveLength(1);
     // P-88: the composed Tag keeps its own `root` part; it is found by the family class.
     expect(q(container, '.ds-list-toolbar__filter-chip[data-part="root"]')).toHaveLength(1);
     expect(q(container, '[data-part="filter-chip"]')).toHaveLength(0);
@@ -204,7 +214,7 @@ describe("list-toolbar -- data-part contract (workspace-chrome anatomy)", () => 
     await waitForPart(container, "root");
     const trigger = q(
       container,
-      '[data-part="filter-trigger"]'
+      '.ds-list-toolbar__filter-trigger'
     )[0] as HTMLElement;
     fireEvent.click(trigger);
     // The filter Popover renders its panel through the overlay layer portal
@@ -214,13 +224,13 @@ describe("list-toolbar -- data-part contract (workspace-chrome anatomy)", () => 
     // descendants.
     await waitFor(() => {
       expect(
-        q(document.body, '[data-part="filter-dropdown-item"]').length
+        q(document.body, '.ds-list-toolbar__filter-dropdown-item').length
       ).toBeGreaterThanOrEqual(1);
     });
     expect(
       q(
         document.body,
-        '[data-part="filter-dropdown-item"][data-selected="true"]'
+        '.ds-list-toolbar__filter-dropdown-item[data-selected="true"]'
       ).length
     ).toBeGreaterThanOrEqual(1);
     expect(
@@ -286,7 +296,7 @@ describe("saved-views -- data-part contract (workspace-chrome anatomy)", () => {
             : '[data-part="default-star"][data-default="true"]'
         )
       ).toHaveLength(1);
-      expect(q(container, '[data-part="create-button"]')).toHaveLength(1);
+      expect(q(container, `${engine === 'modern' ? '.ds-saved-views__create-button' : '[data-part="create-button"]'}`)).toHaveLength(1);
 
       // unsaved-dot is a MODERN-only affordance -- grep-confirmed rustic never
       // implements isDirty at all (a real engine asymmetry, not a missed stamp).
@@ -299,7 +309,7 @@ describe("saved-views -- data-part contract (workspace-chrome anatomy)", () => {
       }
 
       // v2 (not default) is the one whose menu can show Delete.
-      const menuTriggers = q(container, '[data-part="menu-trigger"]');
+      const menuTriggers = q(container, `${engine === 'modern' ? '.ds-saved-views__menu-trigger' : '[data-part="menu-trigger"]'}`);
       expect(menuTriggers).toHaveLength(2);
       const v2MenuTrigger = menuTriggers[1] as HTMLElement;
       expect(v2MenuTrigger.getAttribute("data-open")).toBe("false");
@@ -345,7 +355,7 @@ describe("saved-views -- data-part contract (workspace-chrome anatomy)", () => {
     await waitForPart(container, "root");
     const createButton = q(
       container,
-      '[data-part="create-button"]'
+      `${engine === 'modern' ? '.ds-saved-views__create-button' : '[data-part="create-button"]'}`
     )[0] as HTMLElement;
     fireEvent.click(createButton);
     if (engine === "modern") {
@@ -451,7 +461,7 @@ describe("column-menu -- canonical Popover composition contract", () => {
       );
       const trigger = await waitForPart(container, "trigger");
       const control = container.querySelector(
-        '[data-part="control"]'
+        '.ds-column-menu-control'
       ) as HTMLElement;
       expect(trigger.className).toContain("ds-structure");
       expect(trigger.className).toContain("ds-column-menu");
@@ -494,19 +504,19 @@ describe("column-menu -- canonical Popover composition contract", () => {
         document.querySelector('[data-part="row"][data-visible="false"]')
       ).not.toBeNull();
       expect(
-        document.querySelector('[data-part="width-badge"]')
+        document.querySelector('.ds-column-menu__width-badge')
       ).not.toBeNull();
       expect(
-        document.querySelector('[data-part="drag-handle"]')
+        document.querySelector('.ds-column-menu__drag-handle')
       ).not.toBeNull();
-      expect(document.querySelector('[data-part="reset"]')).not.toBeNull();
-      expect(document.querySelector('[data-part="apply"]')).not.toBeNull();
+      expect(document.querySelector('.ds-column-menu__reset')).not.toBeNull();
+      expect(document.querySelector('.ds-column-menu__apply')).not.toBeNull();
       expect(document.querySelector('[data-part="footer"]')).not.toBeNull();
       expect(document.querySelector('[data-part="count-pill"]')).not.toBeNull();
 
       // Click the width badge to reveal the width-input.
       fireEvent.click(
-        document.querySelector('[data-part="width-badge"]') as Element
+        document.querySelector('.ds-column-menu__width-badge') as Element
       );
       await waitFor(() => {
         expect(
@@ -533,7 +543,7 @@ describe("column-menu -- canonical Popover composition contract", () => {
       );
       const trigger = (await waitForPart(container, "trigger")) as HTMLElement;
       const control = container.querySelector(
-        '[data-part="control"]'
+        '.ds-column-menu-control'
       ) as HTMLElement;
       expect(control.getAttribute("aria-haspopup")).toBe("dialog");
       expect(control.getAttribute("aria-expanded")).toBe("false");
@@ -588,12 +598,12 @@ describe("column-menu -- canonical Popover composition contract", () => {
       );
       await waitForPart(container, "trigger");
       const control = container.querySelector(
-        '[data-part="control"]'
+        '.ds-column-menu-control'
       ) as HTMLElement;
       fireEvent.click(control);
       await waitFor(() => {
         expect(
-          document.querySelector('[data-part="group-toggle"]')
+          document.querySelector('.ds-column-menu__group-toggle')
         ).not.toBeNull();
       });
       expect(
@@ -831,7 +841,7 @@ describe("export-button -- data-part contract (workspace-chrome anatomy), portal
       expect(panel.className).toContain("ds-structure");
       expect(panel.className).toContain("ds-export-button-panel");
 
-      const items = document.querySelectorAll('[data-part="menu-item"]');
+      const items = document.querySelectorAll('.ds-export-button-item');
       expect(items.length).toBeGreaterThanOrEqual(1);
       // The pre-existing functional keyboard-nav attribute survives alongside
       // the new anatomy stamp -- not removed, not renamed (contract §2.3).
@@ -839,10 +849,10 @@ describe("export-button -- data-part contract (workspace-chrome anatomy), portal
         expect(item.hasAttribute("data-export-item")).toBe(true)
       );
       expect(
-        document.querySelector('[data-part="menu-item"] [data-part="icon"]')
+        document.querySelector('.ds-export-button-item [data-part="icon"]')
       ).not.toBeNull();
       expect(
-        document.querySelector('[data-part="menu-item"] [data-part="label"]')
+        document.querySelector('.ds-export-button-item [data-part="label"]')
       ).not.toBeNull();
     }
   );
@@ -872,7 +882,7 @@ describe("export-button -- data-part contract (workspace-chrome anatomy), portal
       expect(panel.getAttribute("aria-label")).toBe("Export formats");
       const labels = [
         ...document.querySelectorAll(
-          '[data-part="menu-item"] [data-part="label"]'
+          '.ds-export-button-item [data-part="label"]'
         ),
       ].map((n) => n.textContent);
       expect(labels).toEqual([
@@ -881,12 +891,12 @@ describe("export-button -- data-part contract (workspace-chrome anatomy), portal
         "Copy to clipboard",
       ]);
       const firstItem = document.querySelector(
-        '[data-part="menu-item"]'
+        '.ds-export-button-item'
       ) as HTMLElement;
       expect(firstItem.style.fontSize).toBe("");
       expect(firstItem.style.transition).toBe("");
       const firstLabel = document.querySelector(
-        '[data-part="menu-item"] [data-part="label"]'
+        '.ds-export-button-item [data-part="label"]'
       ) as HTMLElement;
       expect(firstLabel.style.fontSize).toBe("");
     }
@@ -930,7 +940,7 @@ describe("active-filters-bar -- data-part contract (workspace-chrome anatomy)", 
         "add-filter",
       ]) {
         expect(
-          q(container, `[data-part="${part}"]`).length,
+          q(container, partSelector('active-filters-bar', part)).length,
           `must stamp "${part}"`
         ).toBeGreaterThanOrEqual(1);
       }
@@ -967,10 +977,10 @@ describe("active-filters-bar -- data-part contract (workspace-chrome anatomy)", 
       expect(q(container, '[data-part="pill"]')[0].textContent).toContain(
         "1 active"
       );
-      expect(q(container, '[data-part="clear-all"]')[0].textContent).toContain(
+      expect(q(container, '.ds-active-filters-bar__clear-all')[0].textContent).toContain(
         "Clear all"
       );
-      expect(q(container, '[data-part="add-filter"]')[0].textContent).toContain(
+      expect(q(container, '.ds-active-filters-bar__add-filter')[0].textContent).toContain(
         "Add filter"
       );
       expect(
@@ -988,7 +998,7 @@ describe("active-filters-bar -- data-part contract (workspace-chrome anatomy)", 
       expect(chipLabel.style.letterSpacing).toBe("");
       const clearAll = q(
         container,
-        '[data-part="clear-all"]'
+        '.ds-active-filters-bar__clear-all'
       )[0] as HTMLElement;
       expect(clearAll.style.transition).toBe("");
     }
@@ -1403,7 +1413,7 @@ describe("search-command-bar -- data-part contract (workspace-chrome anatomy)", 
       await waitForPart(container, "root");
       expect(q(container, '[data-part="suggestions"]')).toHaveLength(1);
       expect(q(container, '[data-part="suggestions-label"]')).toHaveLength(1);
-      expect(q(container, '[data-part="suggestion-chip"]')).toHaveLength(1);
+      expect(q(container, '.ds-search-command-bar__suggestion-chip')).toHaveLength(1);
     }
   );
 
@@ -1439,7 +1449,7 @@ describe("search-command-bar -- data-part contract (workspace-chrome anatomy)", 
       expect(label.style.letterSpacing).toBe("");
       const chip = q(
         container,
-        '[data-part="suggestion-chip"]'
+        '.ds-search-command-bar__suggestion-chip'
       )[0] as HTMLElement;
       expect(chip.style.fontSize).toBe("");
       expect(chip.style.transition).toBe("");
@@ -1471,7 +1481,7 @@ describe("search-command-bar -- data-part contract (workspace-chrome anatomy)", 
       // clear only renders when voiceSupported -- gated the same way as the
       // voice badge/toggle. Assert its ABSENCE is consistent with that gate
       // rather than asserting presence (honest to the hardware-gate note above).
-      expect(q(container, '[data-part="clear"]')).toHaveLength(0);
+      expect(q(container, '.ds-search-command-bar__clear')).toHaveLength(0);
     }
   );
 });

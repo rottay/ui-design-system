@@ -252,7 +252,6 @@ function PresetChip({
       variant="ghost"
       size="xs"
       shape="round"
-      data-part="preset-chip"
       className="ds-field-filters-panel__preset-chip"
       onClick={onClick}
       icon={

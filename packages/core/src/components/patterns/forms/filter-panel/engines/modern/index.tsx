@@ -454,7 +454,6 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
               <ModernButton
                 variant="ghost"
                 size="sm"
-                data-part="collapse-toggle"
                 className="ds-pattern-filter-panel__collapse-toggle"
                 data-collapsed={collapsed ? 'true' : 'false'}
                 icon={<NavigationDownIcon decorative size={14} />}
@@ -484,7 +483,6 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
             <ModernButton
               variant="ghost"
               size="sm"
-              data-part="reset-button"
               className="ds-pattern-filter-panel__reset-button"
               icon={<ActionCloseIcon decorative size={12} />}
               onClick={onReset}
@@ -514,7 +512,6 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
             <ModernButton
               variant="primary"
               size="sm"
-              data-part="apply-button"
               className="ds-pattern-filter-panel__apply-button"
               onClick={() => onApply?.(values)}
             >

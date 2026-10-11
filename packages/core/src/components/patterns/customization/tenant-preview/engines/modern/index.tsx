@@ -374,13 +374,13 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 <div>
                   <div data-part="sub-label">{copy.buttons}</div>
                   <div data-part="sample-row">
-                    <ModernButton variant="primary" size="sm" data-part="button" data-sample-variant="primary">
+                    <ModernButton variant="primary" size="sm" data-sample-variant="primary">
                       {copy.primary}
                     </ModernButton>
-                    <ModernButton variant="outline" size="sm" data-part="button" data-sample-variant="outlined">
+                    <ModernButton variant="outline" size="sm" data-sample-variant="outlined">
                       {copy.outlined}
                     </ModernButton>
-                    <ModernButton variant="default" size="sm" data-part="button" data-sample-variant="default">
+                    <ModernButton variant="default" size="sm" data-sample-variant="default">
                       {copy.default}
                     </ModernButton>
                   </div>

@@ -45,7 +45,7 @@ async function openMenu(): Promise<HTMLElement> {
     "modern"
   );
   const control = await waitFor(() => {
-    const node = container.querySelector('[data-part="control"]') as HTMLElement;
+    const node = container.querySelector('.ds-column-menu-control') as HTMLElement;
     expect(node).not.toBeNull();
     return node;
   });
@@ -77,7 +77,7 @@ describe("ColumnMenu skin reachability", () => {
       "modern"
     );
     const control = await waitFor(() => {
-      const node = container.querySelector('[data-part="control"]') as HTMLElement;
+      const node = container.querySelector('.ds-column-menu-control') as HTMLElement;
       expect(node).not.toBeNull();
       return node;
     });

@@ -127,7 +127,7 @@ describe('SchedulerSurface', () => {
     });
 
     const eventLabel = await screen.findByText('Launch planning', undefined, { timeout: 15000 });
-    const event = eventLabel.closest('[data-part="agenda-event"]');
+    const event = eventLabel.closest('.ds-scheduler__agenda-event');
     if (!(event instanceof HTMLElement)) throw new Error('Agenda event not found');
     fireEvent.click(event);
     expect(onEventClick).toHaveBeenCalledWith(expect.objectContaining({ id: 'evt-1' }));

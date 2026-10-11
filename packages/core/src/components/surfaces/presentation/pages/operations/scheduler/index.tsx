@@ -290,7 +290,6 @@ function SchedulerSurfaceContent({
                             {config.behavior.onEventClick ? (
                               <Button
                                 className="ds-scheduler__agenda-event"
-                                data-part="agenda-event"
                                 variant="ghost"
                                 onClick={() => config.behavior.onEventClick?.(event)}
                               >

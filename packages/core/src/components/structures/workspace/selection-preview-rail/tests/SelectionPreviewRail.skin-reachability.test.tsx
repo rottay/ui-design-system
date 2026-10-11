@@ -51,7 +51,7 @@ async function renderDefault() {
     />,
     'modern'
   );
-  await waitForComposedContent(waitFor, result.container, "[data-part='close']");
+  await waitForComposedContent(waitFor, result.container, '.ds-selection-preview-rail__identity-close');
   return result;
 }
 

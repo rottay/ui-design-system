@@ -786,7 +786,12 @@ function ownerLabel(owner) {
 // The owner set of each producer, for the evidence: tag, line and part.
 function channelProducerOwners(text, path, channel, datum) {
   return collectChannelProducers(text, path, channel, datum).map(({ owners }) =>
-    owners.map((owner) => ({ tag: owner.tagName.getText(), line: lineOf(owner), part: literalDataPart(owner).value })),
+    owners.map((owner) => ({
+      tag: owner.tagName.getText(),
+      line: lineOf(owner),
+      part: literalDataPart(owner).value,
+      className: staticClassNameLiteral(owner),
+    })),
   );
 }
 
@@ -1036,6 +1041,45 @@ function literalDataPart(element) {
   return { count: 1, value: null };
 }
 
+// ---------------------------------------------------------------------------
+// The ADMITTED HOST owner (P-88, DT ruling 2026-10-11, R-b / R-c).
+//
+// A style host is admitted by the proof that it stamps its OWN literal part and
+// that the caller's `data-part` can never land (H4-T1). So the call site of an
+// admitted host carries NO `data-part` at all, and the owner names the element
+// through its class hook instead: one static `<block>__<part>` token, counted
+// only when the host is PROVEN to hand the caller's className to its root (H6).
+// This is the one place a class identifies an element without a part beside it;
+// everywhere else the co-stamp (part AND class) stays the rule.
+const OWNER_CLASS_TOKEN = /^(ds-[a-z0-9]+(?:-[a-z0-9]+)*)__([a-z0-9]+(?:-[a-z0-9]+)*)$/;
+
+function hostOwnerIdentity(owner, admission) {
+  if (admission?.admitted !== true) return null;
+  const dataPart = literalDataPart(owner);
+  if (dataPart.count !== 0) {
+    return {
+      refused: `the producer element carries ${dataPart.count} data-part attributes, not 0: an admitted host stamps its own part and a caller part never lands`,
+      callerPart: true,
+      tokens: [],
+      hooks: [],
+    };
+  }
+  if (admission.facts.classNameForwarded !== true) {
+    return {
+      refused: 'the admitted host is not proven to forward the caller className, so no class names it',
+      callerPart: false,
+      tokens: [],
+      hooks: [],
+    };
+  }
+  const tokens = (staticClassNameLiteral(owner) ?? '').split(/\s+/).filter(Boolean);
+  const hooks = tokens.flatMap((token) => {
+    const match = OWNER_CLASS_TOKEN.exec(token);
+    return match ? [{ token, part: match[2] }] : [];
+  });
+  return { refused: null, callerPart: false, tokens, hooks };
+}
+
 // The placement clause, self-contained: the channel is published exactly once in
 // the file — so a duplicate or a second, misplaced publication fails here as
 // well as at the count — and that one publication sits on the element the skin
@@ -1049,8 +1093,21 @@ function literalDataPart(element) {
 // elements and compares the whole chain. The two clauses stay separate on
 // purpose: each names its own defect, so a misidentified owner and a
 // disconnected owner never collapse into one indistinguishable failure.
-function producerPlacementViolations(text, path, channel, datum, part) {
-  return judgeEachProducerOwner(text, path, channel, datum, (owner) => {
+function producerPlacementViolations(text, path, channel, datum, part, hostClass = null) {
+  return judgeEachProducerOwner(text, path, channel, datum, (owner, admission) => {
+    // R-c: an admitted host is identified by the exact owner class token alone, with NO data-part.
+    const host = hostOwnerIdentity(owner, admission);
+    if (host) {
+      if (host.refused) return [host.refused];
+      const naming = host.hooks.filter((hook) => hook.part === part);
+      if (naming.length !== 1) {
+        return [`the admitted host carries ${naming.length} static class hooks naming '${part}', not 1`];
+      }
+      if (hostClass !== null && naming[0].token !== hostClass) {
+        return [`the admitted host is named by '.${naming[0].token}', not '.${hostClass}'`];
+      }
+      return [];
+    }
     const dataPart = literalDataPart(owner);
     if (dataPart.count !== 1) {
       return [`the producer element carries ${dataPart.count} data-part attributes, not 1`];
@@ -1108,7 +1165,7 @@ function producerPlacementViolations(text, path, channel, datum, part) {
 // All four stay separate functions on purpose: a misidentified owner, a
 // disconnected owner, a dead owner and a wrapper-broken hop are four different
 // defects, and each has to be able to name its own.
-function ownerAncestryParts(owner) {
+function ownerAncestryParts(owner, admission = null, hostClass = null) {
   const parts = [];
 
   for (let node = ts.isJsxOpeningElement(owner) ? owner.parent : owner; node; node = node.parent) {
@@ -1116,6 +1173,16 @@ function ownerAncestryParts(owner) {
     if (ts.isJsxSelfClosingElement(node)) opening = node;
     else if (ts.isJsxElement(node)) opening = node.openingElement;
     if (!opening) continue;
+
+    // R-c: the admitted host owner (and only the owner's own node, H5) is named by its class hook.
+    const host = opening === owner ? hostOwnerIdentity(owner, admission) : null;
+    if (host) {
+      if (host.refused) parts.push(host.callerPart ? '<admitted host: a caller data-part>' : '<admitted host: className not forwarded>');
+      else if (host.hooks.length !== 1) parts.push(`<admitted host: ${host.hooks.length} class hooks>`);
+      else if (hostClass !== null && host.hooks[0].token !== hostClass) parts.push(`<admitted host: '.${host.hooks[0].token}'>`);
+      else parts.push(host.hooks[0].part);
+      continue;
+    }
 
     const dataPart = literalDataPart(opening);
     if (dataPart.count > 1) parts.push(`<${dataPart.count} data-part attributes>`);
@@ -1126,9 +1193,9 @@ function ownerAncestryParts(owner) {
   return parts;
 }
 
-function producerAncestryViolations(text, path, channel, datum, ancestry) {
-  return judgeEachProducerOwner(text, path, channel, datum, (owner) => {
-    const actual = ownerAncestryParts(owner);
+function producerAncestryViolations(text, path, channel, datum, ancestry, hostClass = null) {
+  return judgeEachProducerOwner(text, path, channel, datum, (owner, admission) => {
+    const actual = ownerAncestryParts(owner, admission, hostClass);
     if (actual.length !== ancestry.length || actual.some((part, index) => part !== ancestry[index])) {
       return [`the producer ancestry is ${actual.join(' -> ') || '(none)'}, not ${ancestry.join(' -> ')}`];
     }
@@ -2075,17 +2142,14 @@ function proveStyleHost(entry, channel) {
     );
     if (parts.length !== 1) refuse('H4-T1', `'${carrier.expression.text}' spreads ${entry.partSource.fn} ${parts.length} times, not once`);
     else {
+      // R-a (P-88, DT ruling 2026-10-11): the host stamps its OWN literal part. The caller's `data-part` is
+      // destructured out (H3 above) and, having no admitted reference, any read of it is refused by the
+      // reference law below: the caller's part can never land.
       const [first] = parts[0].expression.arguments;
-      const forwardsCaller =
-        first &&
-        ts.isBinaryExpression(first) &&
-        first.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken &&
-        ts.isIdentifier(first.left) &&
-        first.left.text === bindings.dataPart &&
-        ts.isStringLiteral(first.right);
-      if (!forwardsCaller) {
-        refuse('H4-T1', `${entry.partSource.fn}(…) in '${carrier.expression.text}' does not take the caller's data-part`);
-      } else admittedReferences.add(first.left);
+      const stampsOwnPart = first && ts.isStringLiteral(first);
+      if (!stampsOwnPart) {
+        refuse('H4-T1', `${entry.partSource.fn}(…) in '${carrier.expression.text}' does not stamp the host's own literal part`);
+      } else facts.ownPart = first.text;
       for (const member of object.properties.slice(object.properties.indexOf(parts[0]) + 1)) {
         if (ts.isSpreadAssignment(member)) {
           const text = member.expression.getText();
@@ -2483,7 +2547,8 @@ function physicalPathStep(opening, admission = null) {
   //
   // An ADMITTED style host (A4) is the one opaque element this clause may see
   // through, and only when it is the producer's own element: it is modelled as
-  // its root intrinsic tag(s), carrying the caller's static `data-part`.
+  // its root intrinsic tag(s), carrying NO caller part (H4-T1: the host stamps
+  // its own) and the class tokens it is proven to forward (H6).
   const classified = classifyTag(opening);
   const admitted = classified.kind === 'opaque' && admission?.admitted === true;
   if (classified.kind === 'opaque' && !admitted) {
@@ -2503,6 +2568,13 @@ function physicalPathStep(opening, admission = null) {
   const forwards = admitted ? admission.facts.classNameForwarded === true : wrapper ? wrapper.classNameForwarded : true;
   const className = forwards ? staticClassNameLiteral(opening) : null;
   const tag = { text: admitted ? admission.facts.rootTags.join('|') : opening.tagName.text };
+  // R-b: the admitted host stamps its OWN part; the step carries no caller part, only the class tokens the
+  // host is proven to forward. A caller `data-part` on an admitted host never lands, so it names nothing.
+  if (admitted) {
+    const host = hostOwnerIdentity(opening, admission);
+    if (host.callerPart) return { part: null, opaque: false, label: `<${tag.text}: a caller data-part on an admitted host>`, className: null };
+    return { part: null, opaque: false, label: `<${tag.text}: admitted host>`, className, host: true, hostClassTokens: host.tokens };
+  }
   const dataPart = literalDataPart(opening);
   if (dataPart.count > 1) {
     return { part: null, opaque: false, label: `<${tag.text}: ${dataPart.count} data-part attributes>`, className };
@@ -2540,17 +2612,29 @@ function ownerSelectorPathViolations(owner, selector, admission = null) {
   const violations = [];
   let cursor = -1;
 
-  for (const step of selectorSteps(selector)) {
+  const steps = selectorSteps(selector);
+  for (const step of steps) {
     let found = -1;
     for (let index = cursor + 1; index < outward.length; index += 1) {
-      if (outward[index].part === step.part) {
+      // R-b, the one new arm: a CLASS hop is also satisfied by an ADMITTED HOST step carrying the exact class
+      // token. A part hop never is, and no other element is ever matched by its class alone.
+      const hostHop = step.via === 'class' && (outward[index].hostClassTokens ?? []).includes(step.className);
+      if (outward[index].part === step.part || hostHop) {
         found = index;
         break;
       }
     }
 
     if (found === -1) {
-      violations.push(`selector part '${step.part}' is absent from the live physical path`);
+      // An admitted host that does not carry the exact token is the TAIL class hop's landing, named as such:
+      // the same co-stamp message, never a match.
+      const tail = step === steps.at(-1) && step.via === 'class';
+      const host = tail && outward.at(-1)?.host === true && cursor < outward.length - 1 ? outward.at(-1) : undefined;
+      violations.push(
+        host
+          ? `selector class '.${step.className}' lands on '${host.label}', which carries no static className '${step.className}'`
+          : `selector part '${step.part}' is absent from the live physical path`,
+      );
       return violations;
     }
 
@@ -2779,6 +2863,8 @@ const KANBAN_ACCENT_SELECTOR =
 // tail of its selector, so the placement expectation and the sink expectation
 // are provably about one element rather than two hopeful constants.
 const CALENDAR_ACCENT_PART = 'event';
+// R-c: the admitted-host owner (the interactive chip) is named by this exact owner class token and no part.
+const CALENDAR_ACCENT_HOST_CLASS = 'ds-pattern-calendar-view__event';
 const KANBAN_ACCENT_PART = 'column-header';
 
 // The exact JSX ancestry of each producer's owner, nearest-to-outer, read off
@@ -2963,8 +3049,12 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     selectorTailIsPart(CALENDAR_ACCENT_SELECTOR, CALENDAR_ACCENT_PART),
     'the pinned part must be the tail of the pinned sink selector, by either form',
   );
+  assert.ok(
+    CALENDAR_ACCENT_SELECTOR.endsWith(` .${CALENDAR_ACCENT_HOST_CLASS}`),
+    'the pinned host class must be the exact tail token of the pinned sink selector',
+  );
   assert.deepEqual(
-    producerPlacementViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the Modern calendar must publish the accent ON the event chip the skin selects',
   );
@@ -2974,7 +3064,7 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     'the pinned ancestry and the pinned sink selector must describe one element',
   );
   assert.deepEqual(
-    producerAncestryViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    producerAncestryViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the Modern calendar chip carrying the accent must be the one inside the live grid',
   );
@@ -3146,12 +3236,12 @@ test('visualization skin Calendar Modern crosses the event accent only through a
       `a producer ${site} paints nothing directly either — the ban stays green`,
     );
     assert.deepEqual(
-      producerPlacementViolations(moved, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+      producerPlacementViolations(moved, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
       [violation],
       `the placement clause must reject a producer ${site}`,
     );
     assert.equal(
-      producerAncestryViolations(moved, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY).length,
+      producerAncestryViolations(moved, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS).length,
       1,
       `the ancestry clause must reject a producer ${site} as well`,
     );
@@ -3176,6 +3266,7 @@ test('visualization skin Calendar Modern crosses the event accent only through a
       CALENDAR_CHANNEL,
       'ev',
       CALENDAR_ACCENT_PART,
+      CALENDAR_ACCENT_HOST_CLASS,
     ),
     ['the channel carries 2 producers, not 1'],
     'a correctly-placed SECOND producer must still fail the placement clause',
@@ -3222,12 +3313,12 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     'the disconnected owner paints nothing directly either — the ban stays green',
   );
   assert.deepEqual(
-    producerPlacementViolations(orphanedProducer, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(orphanedProducer, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the disconnected owner carries the sink part exactly — the v3 clause stays green',
   );
   assert.deepEqual(
-    producerAncestryViolations(orphanedProducer, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    producerAncestryViolations(orphanedProducer, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
     [
       `the producer ancestry is ${CALENDAR_ACCENT_PART}, not ${CALENDAR_ACCENT_ANCESTRY.join(' -> ')}`,
     ],
@@ -3286,12 +3377,12 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     'the dead producer paints nothing directly either — the ban stays green',
   );
   assert.deepEqual(
-    producerPlacementViolations(deadInChain, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(deadInChain, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the dead producer carries the sink part exactly — the v3 clause stays green',
   );
   assert.deepEqual(
-    producerAncestryViolations(deadInChain, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    producerAncestryViolations(deadInChain, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the dead producer has the WHOLE lexical chain — the v4 clause stays green, and that is the point',
   );
@@ -3341,12 +3432,12 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     'the wrapper paints nothing directly either — the ban stays green',
   );
   assert.deepEqual(
-    producerPlacementViolations(wrappedGrid, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(wrappedGrid, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the wrapper leaves the owner part exactly as it was — the v3 clause stays green',
   );
   assert.deepEqual(
-    producerAncestryViolations(wrappedGrid, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    producerAncestryViolations(wrappedGrid, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'an unlabelled wrapper is invisible to the named ancestry — the v4 clause stays green',
   );
@@ -3403,12 +3494,12 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     'the thisArg producer paints nothing directly either — the ban stays green',
   );
   assert.deepEqual(
-    producerPlacementViolations(thisArgProducer, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(thisArgProducer, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the thisArg producer carries the sink part exactly — the v3 clause stays green',
   );
   assert.deepEqual(
-    producerAncestryViolations(thisArgProducer, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    producerAncestryViolations(thisArgProducer, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the thisArg producer has the WHOLE lexical chain — the v4 clause stays green',
   );
@@ -3474,12 +3565,12 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     'the opaque component paints nothing directly either — the ban stays green',
   );
   assert.deepEqual(
-    producerPlacementViolations(opaqueHop, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(opaqueHop, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the opaque component leaves the owner part exactly as it was — the v3 clause stays green',
   );
   assert.deepEqual(
-    producerAncestryViolations(opaqueHop, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    producerAncestryViolations(opaqueHop, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'a component claims no part, so the named ancestry is byte-identical — the v4 clause stays green',
   );
@@ -3543,12 +3634,12 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     'the root-opaque component paints nothing directly either — the ban stays green',
   );
   assert.deepEqual(
-    producerPlacementViolations(rootOpaque, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(rootOpaque, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the root-opaque component leaves the owner part exactly as it was — the v3 clause stays green',
   );
   assert.deepEqual(
-    producerAncestryViolations(rootOpaque, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    producerAncestryViolations(rootOpaque, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'a component claims no part, so the named ancestry is byte-identical — the v4 clause stays green',
   );
@@ -3620,12 +3711,12 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     'the owner component paints nothing directly either — the ban stays green',
   );
   assert.deepEqual(
-    producerPlacementViolations(ownerComponent, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(ownerComponent, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the owner component carries the sink part exactly — the v3 clause reads the attribute, not the tag',
   );
   assert.deepEqual(
-    producerAncestryViolations(ownerComponent, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    producerAncestryViolations(ownerComponent, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the LEXICAL chain is complete `event -> day-cell -> week-row -> grid -> root` — the v4 clause stays green',
   );
@@ -3682,12 +3773,12 @@ test('visualization skin Calendar Modern crosses the event accent only through a
     'the void wrapper paints nothing directly either — the ban stays green',
   );
   assert.deepEqual(
-    producerPlacementViolations(rootVoid, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(rootVoid, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'the void wrapper leaves the owner part exactly as it was — the v3 clause stays green',
   );
   assert.deepEqual(
-    producerAncestryViolations(rootVoid, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    producerAncestryViolations(rootVoid, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'a void element claims no part, so the named ancestry is byte-identical — the v4 clause stays green',
   );
@@ -3804,23 +3895,23 @@ test('visualization skin Calendar Modern follows the hoisted conditional accent 
   );
   assert.deepEqual(
     channelProducerOwners(text, path, CALENDAR_CHANNEL, 'ev').map((owners) =>
-      owners.map(({ tag, part }) => ({ tag, part })),
+      owners.map(({ tag, part, className }) => ({ tag, part, className })),
     ),
     [
       [
-        { tag: 'EventChip', part: CALENDAR_ACCENT_PART },
-        { tag: 'ModernButton', part: CALENDAR_ACCENT_PART },
+        { tag: 'EventChip', part: CALENDAR_ACCENT_PART, className: CALENDAR_ACCENT_HOST_CLASS },
+        { tag: 'ModernButton', part: null, className: CALENDAR_ACCENT_HOST_CLASS },
       ],
     ],
-    'the owners are the read-only chip and the interactive chip, each stamping the sink part',
+    'the owners are the read-only chip (the sink part AND the class) and the interactive chip (the class alone, no part)',
   );
   assert.deepEqual(
-    producerPlacementViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
-    'BOTH owners must carry the part the sink selects',
+    'BOTH owners must be the element the sink selects: the chip by its part, the admitted host by its exact class',
   );
   assert.deepEqual(
-    producerAncestryViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY),
+    producerAncestryViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
     [],
     'BOTH owners must sit inside the live grid',
   );
@@ -3860,7 +3951,7 @@ test('visualization skin Calendar Modern follows the hoisted conditional accent 
     'the both-arms alias is still admitted — it is the COUNT that rejects it',
   );
   assert.deepEqual(
-    producerPlacementViolations(bothArms, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART),
+    producerPlacementViolations(bothArms, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     ['the channel carries 2 producers, not 1'],
     'the owner clauses must refuse two producers before judging any owner',
   );
@@ -3903,30 +3994,66 @@ test('visualization skin Calendar Modern follows the hoisted conditional accent 
     'a second const alias is refused, so the publication reads as zero',
   );
 
-  // M4 — a branch owner WITHOUT the sink part: the interactive chip loses its
-  // `data-part`. The count and the admission do not move; placement names the
-  // owner by its branch.
-  const unlabelled = spliceNode(text, aliasAttributeOn(alias, 'ModernButton', 'data-part'), '');
-  assert.deepEqual(tsxSyntaxDiagnostics(unlabelled, path), [], 'the unlabelled-owner mutant must be real TSX');
-  assert.equal(
-    countChannelProducers(unlabelled, path, CALENDAR_CHANNEL, 'ev'),
-    1,
-    'dropping a branch owner part leaves the publication count at one',
-  );
-  assert.deepEqual(channelAliasRefusals(unlabelled, path, CALENDAR_CHANNEL, 'ev'), [], 'and the alias admitted');
-  const unlabelledPlacement = producerPlacementViolations(
-    unlabelled,
-    path,
-    CALENDAR_CHANNEL,
-    'ev',
-    CALENDAR_ACCENT_PART,
-  );
-  assert.equal(unlabelledPlacement.length, 1, 'exactly one owner fails placement');
-  assert.match(
-    unlabelledPlacement[0],
-    /^owner <ModernButton> @ line \d+: the producer element carries 0 data-part attributes, not 1$/,
-    'placement must name the unlabelled branch owner, not the other one',
-  );
+  // M4 — a branch owner WITHOUT its identity. The admitted host is named by its exact class and carries no part
+  // (R-c), so the interactive chip is unlabelled when it loses that class, mis-labelled when it carries another
+  // block's hook, and refused BY NAME when it is handed the sink part (R-d: the part form on this owner is a
+  // must-be-red negative). The count and the admission never move; placement names the owner by its branch.
+  const hostClassAttribute = aliasAttributeOn(alias, 'ModernButton', 'className');
+  for (const [name, mutant, reason] of [
+    [
+      'no class',
+      spliceNode(text, hostClassAttribute, ''),
+      /^owner <ModernButton> @ line \d+: the admitted host carries 0 static class hooks naming 'event', not 1$/,
+    ],
+    [
+      "another block's hook",
+      spliceNode(text, hostClassAttribute, 'className="ds-other__event"'),
+      /^owner <ModernButton> @ line \d+: the admitted host is named by '\.ds-other__event', not '\.ds-pattern-calendar-view__event'$/,
+    ],
+    [
+      'a longer token',
+      spliceNode(text, hostClassAttribute, `className="${CALENDAR_ACCENT_HOST_CLASS}-extra"`),
+      /^owner <ModernButton> @ line \d+: the admitted host carries 0 static class hooks naming 'event', not 1$/,
+    ],
+    [
+      'a dynamic class',
+      spliceNode(text, hostClassAttribute, 'className={eventClassName}'),
+      /^owner <ModernButton> @ line \d+: the admitted host carries 0 static class hooks naming 'event', not 1$/,
+    ],
+    [
+      'the sink part handed to the host',
+      spliceNode(text, hostClassAttribute, `${hostClassAttribute.getText()} data-part="${CALENDAR_ACCENT_PART}"`),
+      /^owner <ModernButton> @ line \d+: the producer element carries 1 data-part attributes, not 0: an admitted host stamps its own part and a caller part never lands$/,
+    ],
+    [
+      'the sink part instead of the class',
+      spliceNode(text, hostClassAttribute, `data-part="${CALENDAR_ACCENT_PART}"`),
+      /^owner <ModernButton> @ line \d+: the producer element carries 1 data-part attributes, not 0: an admitted host stamps its own part and a caller part never lands$/,
+    ],
+  ]) {
+    assert.deepEqual(tsxSyntaxDiagnostics(mutant, path), [], `M4 (${name}): the mutant must be real TSX`);
+    assert.equal(countChannelProducers(mutant, path, CALENDAR_CHANNEL, 'ev'), 1, `M4 (${name}): the publication count stays at one`);
+    assert.deepEqual(channelAliasRefusals(mutant, path, CALENDAR_CHANNEL, 'ev'), [], `M4 (${name}): and the alias admitted`);
+    const placement = producerPlacementViolations(
+      mutant,
+      path,
+      CALENDAR_CHANNEL,
+      'ev',
+      CALENDAR_ACCENT_PART,
+      CALENDAR_ACCENT_HOST_CLASS,
+    );
+    assert.equal(placement.length, 1, `M4 (${name}): exactly one owner fails placement`);
+    assert.match(placement[0], reason, `M4 (${name}): placement must name the interactive branch owner, not the other one`);
+    const ancestry = producerAncestryViolations(mutant, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS);
+    assert.equal(ancestry.length, 1, `M4 (${name}): exactly one owner fails the ancestry`);
+    assert.match(
+      ancestry[0],
+      /^owner <ModernButton> @ line \d+: the producer ancestry is <admitted host: [^>]+> -> day-cell -> week-row -> grid -> root, not event -> day-cell -> week-row -> grid -> root$/,
+      `M4 (${name}): the ancestry never names an unidentified host 'event'`,
+    );
+  }
+  // The live interactive chip itself: no caller part at all.
+  assert.equal(literalDataPart(alias.owners.find((owner) => owner.tagName.getText() === 'ModernButton')).count, 0, 'the live host carries no data-part');
 });
 
 // The STYLE_HOSTS drills build their mutants IN MEMORY: each edit is an exact,
@@ -3971,8 +4098,9 @@ test('visualization skin Calendar Modern admits the ModernButton style host by p
       channelKeyPrefix: '--_ds-rsp-',
       classNameForwarded: true,
       classRefusals: [],
+      ownPart: 'trigger',
     },
-    'G0 must report the proven roots, part keys, attribute keys, channel key prefix and className forwarding (H6)',
+    'G0 must report the proven roots, part keys, attribute keys, channel key prefix, className forwarding (H6) and the own literal part (H4-T1)',
   );
   assert.deepEqual(
     producerRenderPathViolations(text, path, CALENDAR_CHANNEL, 'ev'),
@@ -3985,7 +4113,10 @@ test('visualization skin Calendar Modern admits the ModernButton style host by p
     'D1: with the host admitted, both chips satisfy the sink selector hop for hop',
   );
 
-  const P = "    ...partAttributes(dataPart ?? 'trigger', interaction),\n";
+  // R-a: the pinned line is the host stamping its OWN literal part; `CALLER_PART` is the destructured caller
+  // binding the proof requires to have zero references.
+  const P = "    ...partAttributes('trigger', interaction),\n";
+  const CALLER_PART = "    'data-part': _callerDataPart,\n";
   const ATTRS_WRITE = "  if (tokens.length > 0) attrs[RESPONSIVE_CHANNEL_ATTRIBUTE] = tokens.join(' ');\n";
   const CHANNELS_WRITE = '      channels[responsiveChannelVariable(channel, breakpoint)] = value;\n';
   const PROJECTION = '  return { attrs, channels: channels as CSSProperties };';
@@ -4120,7 +4251,13 @@ test('visualization skin Calendar Modern admits the ModernButton style host by p
     // HOLD-1 host drills.
     ['D2', coreEdits('host', [['  if (href && !isInert) {\n', "  if (pending === 'x') return <span />;\n  if (href && !isInert) {\n"]]), ['H2', 'H4-T1']],
     ['D3', coreEdits('host', [['    ...style,\n  } as React.CSSProperties;', '    ...style,\n    ...nativeButtonProps,\n  } as React.CSSProperties;']]), ['H2']],
-    ['D5', coreEdits('host', [[P, "    ...partAttributes('trigger', interaction),\n"]]), ['H4-T1']],
+    // D5 — the caller's part may never land (R-a). The admitted form is the pinned line itself (G0 above); each
+    // shape that lets the caller's part through, or leaves it reachable, is refused.
+    ['D5 caller part taken', coreEdits('host', [[P, "    ...partAttributes(_callerDataPart ?? 'trigger', interaction),\n"]]), ['H4-T1']],
+    ['D5 caller part alone', coreEdits('host', [[P, '    ...partAttributes(_callerDataPart, interaction),\n']]), ['H4-T1']],
+    ['D5 non-literal part', coreEdits('host', [[P, '    ...partAttributes(OWN_PART, interaction),\n']]), ['H4-T1']],
+    ['D5 caller part read', coreEdits('host', [[P, `${P}    'data-caller': _callerDataPart,\n`]]), ['H4-T1']],
+    ['D5 caller part not destructured', coreEdits('host', [[CALLER_PART, '']]), ['H4-T1']],
     ['D6', coreEdits('host', [['      </button>\n    </>', '      </button>\n      <span />\n    </>']]), ['H1']],
   ];
 
@@ -4143,6 +4280,20 @@ test('visualization skin Calendar Modern admits the ModernButton style host by p
         `${name}: the refused host keeps the opacity red and names its clauses: ${rendered[0]}`,
       );
     }
+  }
+  // D5, each refusal by its own words (the clause alone would not tell the five shapes apart).
+  for (const [name, reason] of [
+    ['D5 caller part taken', /^H4-T1: partAttributes\(…\) in 'anatomyProps' does not stamp the host's own literal part$/],
+    ['D5 caller part alone', /^H4-T1: partAttributes\(…\) in 'anatomyProps' does not stamp the host's own literal part$/],
+    ['D5 non-literal part', /^H4-T1: partAttributes\(…\) in 'anatomyProps' does not stamp the host's own literal part$/],
+    ['D5 caller part read', /^H4-T1: '_callerDataPart' is referenced outside the proven chain @ line \d+$/],
+    ['D5 caller part not destructured', /^H4-T1: `data-part` is not destructured out of props$/],
+  ]) {
+    const proof = withCoreFiles(drills.find(([drill]) => drill === name)[1], () => proveStyleHost(host, CALENDAR_CHANNEL));
+    assert.ok(
+      proof.refusals.some((refusal) => reason.test(refusal)),
+      `${name} must be refused in these words: ${proof.refusals.join(' | ')}`,
+    );
   }
   assert.ok(
     withCoreFiles(drills.find(([name]) => name === 'A-16')[1], () => proveStyleHost(host, CALENDAR_CHANNEL)).facts.attrsKeys.includes(
@@ -4267,8 +4418,17 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   const onOwner = (tag, message) => `owner <${tag}> @ line ${line[tag]}: ${message}`;
   const missingClass = (label, className = EVENT_CLASS) =>
     `selector class '.${className}' lands on '${label}', which carries no static className '${className}'`;
+  // R-b / R-d: the admitted host carries no part, so every PART-form assertion on it is a must-be-red negative,
+  // by name; its class hop lands on the host step itself.
+  const HOST = '<a|button: admitted host>';
+  const noPart = (part = CALENDAR_ACCENT_PART) => `selector part '${part}' is absent from the live physical path`;
+  const [liveOwners] = channelProducerOwners(text, path, CALENDAR_CHANNEL, 'ev');
+  const liveLine = Object.fromEntries(liveOwners.map(({ tag, line: at }) => [tag, at]));
+  const onLiveOwner = (tag, message) => `owner <${tag}> @ line ${liveLine[tag]}: ${message}`;
+  assert.equal(EVENT_CLASS, CALENDAR_ACCENT_HOST_CLASS, 'the host class is the owner block hook of the accent part');
 
-  // S2-1 — the PART form: all hops by part, the live fixture green on it (the literal part is kept).
+  // S2-1 — the PART form: all hops by part. The read-only chip satisfies it (its native part); the admitted host
+  // must NOT (R-d): it carries no part, and no class is read by a part hop.
   assert.deepEqual(
     selectorSteps(PART_FORM),
     [
@@ -4283,8 +4443,8 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   assert.deepEqual(selectorAncestryDisagreements(PART_FORM, CALENDAR_ACCENT_ANCESTRY), [], 'S2-1: ancestry agrees');
   assert.deepEqual(
     producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
-    [],
-    'S2-1: the live DOM satisfies the part form for both owners',
+    [onLiveOwner('ModernButton', noPart())],
+    'S2-1: the live read-only chip satisfies the part form; the admitted host is red on it BY NAME',
   );
 
   // S2-2 — the CLASS form (the transformed constant): the same parts, the tail via class.
@@ -4325,7 +4485,7 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   // S2-5 — the CO-STAMP, per owner.
   assert.deepEqual(
     producerSelectorPathViolations(bare, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
-    [onOwner('EventChip', missingClass('event')), onOwner('ModernButton', missingClass('event'))],
+    [onOwner('EventChip', missingClass('event')), onOwner('ModernButton', missingClass(HOST))],
     'S2-5a: no chip carries the class literal, so the class hop reds on BOTH owners',
   );
   const bothStamped = withStaticClasses(bare, [stamp(chip), stamp(button)]);
@@ -4336,13 +4496,18 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   );
   assert.deepEqual(
     producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
-    [],
-    'S2-5b: and the part form stays green',
+    [onOwner('ModernButton', noPart())],
+    'S2-5b: and the part form stays green on the read-only chip, red BY NAME on the admitted host',
   );
   assert.deepEqual(
     producerSelectorPathViolations(withStaticClasses(bare, [stamp(button)]), path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
     [onOwner('EventChip', missingClass('event'))],
     'S2-5c: only the interactive chip co-stamped -> only the read-only owner reds',
+  );
+  assert.deepEqual(
+    producerSelectorPathViolations(withStaticClasses(bare, [stamp(chip)]), path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
+    [onOwner('ModernButton', missingClass(HOST))],
+    'S2-5c: only the read-only chip co-stamped -> only the admitted host reds',
   );
   const unforwarded = coreEdits('host', [['    { root: className }\n', "    { root: 'fixed' }\n"]]);
   const hostProof = withCoreFiles(unforwarded, () => proveStyleHost(STYLE_HOSTS[0], CALENDAR_CHANNEL));
@@ -4350,15 +4515,34 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   assert.equal(hostProof.facts.classNameForwarded, false, 'S2-5d: but forwards no className');
   assert.deepEqual(
     withCoreFiles(unforwarded, () => producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM)),
-    [onOwner('ModernButton', missingClass('event'))],
+    [onOwner('ModernButton', missingClass(HOST))],
     'S2-5d: the call-site literal is not trusted past a host that drops it — the class hop fails closed on that owner',
   );
   assert.deepEqual(
     withCoreFiles(unforwarded, () =>
       producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
     ),
-    [],
-    'S2-5d: and the part form is untouched by the className proof',
+    [onOwner('ModernButton', noPart())],
+    'S2-5d: and the part form is untouched by the className proof: green on the read-only chip, red BY NAME on the host',
+  );
+  assert.deepEqual(
+    withCoreFiles(unforwarded, () =>
+      producerPlacementViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
+    ),
+    [onOwner('ModernButton', 'the admitted host is not proven to forward the caller className, so no class names it')],
+    'S2-5d: nor does that literal identify the producer: placement fails closed on the host that drops it',
+  );
+  assert.deepEqual(
+    withCoreFiles(unforwarded, () =>
+      producerAncestryViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
+    ),
+    [
+      onOwner(
+        'ModernButton',
+        `the producer ancestry is <admitted host: className not forwarded> -> day-cell -> week-row -> grid -> root, not ${CALENDAR_ACCENT_ANCESTRY.join(' -> ')}`,
+      ),
+    ],
+    'S2-5d: and the ancestry never names it event',
   );
   const WRAPPER_SIGNATURE = 'function EventChip(\n  { children, onFocus, onBlur, ...rest },';
   assert.equal(bare.split(WRAPPER_SIGNATURE).length - 1, 1, 'the live EventChip signature drifted');
@@ -4390,8 +4574,8 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
     'S2-5f: a later spread that may replace className voids the literal',
   );
 
-  // S2-5g — the LIVE fixture (S3: both emitters co-stamped as static literals) satisfies the class form on both
-  // owners, and the part form as well (the literal part is kept).
+  // S2-5g — the LIVE fixture (S3: both emitters carry the class as a static literal) satisfies the class form on
+  // both owners. The part form is green on the read-only chip only; on the admitted host it must be red (R-d).
   assert.deepEqual(
     producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
     [],
@@ -4399,9 +4583,82 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   );
   assert.deepEqual(
     producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
-    [],
-    'S2-5g: and the part form',
+    [onLiveOwner('ModernButton', noPart())],
+    'S2-5g: and the part form on the read-only chip alone; the admitted host is red on it BY NAME',
   );
+
+  // S2-5h — the one new arm is exactly as wide as the ruling (R-b): an ADMITTED host, the EXACT owner token,
+  // NO literal data-part. Every neighbouring shape stays red, each by name.
+  for (const [name, fixture, form, expected] of [
+    [
+      'a caller part beside the class on the host',
+      withStaticClasses(bare, [stamp(chip), { opening: button, literal: `className="${EVENT_CLASS}" data-part="${CALENDAR_ACCENT_PART}"` }]),
+      CLASS_FORM,
+      [onOwner('ModernButton', noPart())],
+    ],
+    [
+      'a caller part alone on the host, read by the part form',
+      withStaticClasses(bare, [stamp(chip), { opening: button, literal: `data-part="${CALENDAR_ACCENT_PART}"` }]),
+      PART_FORM,
+      [onOwner('ModernButton', noPart())],
+    ],
+    [
+      "another block's hook on the host",
+      withStaticClasses(bare, [stamp(chip), stamp(button, 'ds-other__event')]),
+      CLASS_FORM,
+      [onOwner('ModernButton', missingClass(HOST))],
+    ],
+    [
+      'a longer token on the host',
+      withStaticClasses(bare, [stamp(chip), stamp(button, `${EVENT_CLASS}-extra`)]),
+      CLASS_FORM,
+      [onOwner('ModernButton', missingClass(HOST))],
+    ],
+    [
+      'a dynamic class on the host',
+      withStaticClasses(bare, [stamp(chip), { opening: button, literal: 'className={eventClassName}' }]),
+      CLASS_FORM,
+      [onOwner('ModernButton', missingClass(HOST))],
+    ],
+  ]) {
+    assert.deepEqual(tsxSyntaxDiagnostics(fixture, path), [], `S2-5h (${name}): the mutant must be real TSX`);
+    assert.deepEqual(producerSelectorPathViolations(fixture, path, CALENDAR_CHANNEL, 'ev', form), expected, `S2-5h (${name})`);
+  }
+  // The exact token among others still names the host: a whole-token match, never a substring.
+  assert.deepEqual(
+    producerSelectorPathViolations(
+      withStaticClasses(bare, [stamp(chip), stamp(button, `extra ${EVENT_CLASS}`)]),
+      path,
+      CALENDAR_CHANNEL,
+      'ev',
+      CLASS_FORM,
+    ),
+    [],
+    'S2-5h: the exact token among other static tokens is the same hop',
+  );
+  // A component that is NOT an admitted host is never matched by its class: the name-only match stays forbidden.
+  const unlisted = withStaticClasses(bare, [stamp(chip), stamp(button)]).replaceAll('ModernButton', 'OtherButton');
+  const unlistedSelector = producerSelectorPathViolations(unlisted, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM);
+  assert.equal(unlistedSelector.length, 1, `S2-5h: only the unlisted owner is refused: ${unlistedSelector.join(' | ')}`);
+  assert.match(
+    unlistedSelector[0],
+    /^owner <OtherButton> @ line \d+: selector part 'event' is absent from the live physical path$/,
+    'S2-5h: a class on an unlisted component is no hop',
+  );
+  // And the read-only chip keeps its native-part arm exact: without its part, its class alone is no hop.
+  const CHIP_PART = "      {...partAttributes('event', interaction.state)}\n";
+  assert.equal(bare.split(CHIP_PART).length - 1, 1, 'the live EventChip part line drifted');
+  const partless = withStaticClasses(bare.replace(CHIP_PART, () => ''), []);
+  const partlessAlias = liveChannelAlias(partless, path, CALENDAR_CHANNEL, 'ev');
+  const partlessSelector = producerSelectorPathViolations(
+    withStaticClasses(partless, partlessAlias.owners.map((owner) => stamp(owner))),
+    path,
+    CALENDAR_CHANNEL,
+    'ev',
+    CLASS_FORM,
+  );
+  assert.equal(partlessSelector.length, 1, `S2-5h: only the partless chip is refused: ${partlessSelector.join(' | ')}`);
+  assert.match(partlessSelector[0], /^owner <EventChip> @ line \d+: /, 'S2-5h: a class without the native part never names the chip');
 
   // S2-6 — mixed forms on different hops: each hop satisfied by its own form.
   const MIXED = `.${BLOCK}.ds-engine-modern[data-part='root'] > .${BLOCK}__grid [data-part='day-cell'] .${EVENT_CLASS}`;
@@ -4429,6 +4686,20 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
       onOwner('ModernButton', missingClass('grid', `${BLOCK}__grid`)),
     ],
     'S2-6: red on the one hop whose element lacks its class literal',
+  );
+
+  // S2-6, the name-only match (G2, unchanged by R-b): an element that is NOT an admitted host is never matched by
+  // its class alone. The grid keeps its class and loses its part -> the class hop finds no element at all.
+  const gridPart = grid.attributes.properties.filter(
+    (attribute) => ts.isJsxAttribute(attribute) && attribute.name.getText() === 'data-part',
+  );
+  assert.equal(gridPart.length, 1, 'the live grid must carry exactly one data-part attribute');
+  const classOnlyGrid = spliceNode(withStaticClasses(bare, [stamp(chip), stamp(button)]), gridPart[0], `className="${BLOCK}__grid"`);
+  assert.deepEqual(tsxSyntaxDiagnostics(classOnlyGrid, path), [], 'S2-6: the class-only grid mutant must be real TSX');
+  assert.deepEqual(
+    producerSelectorPathViolations(classOnlyGrid, path, CALENDAR_CHANNEL, 'ev', MIXED),
+    [onOwner('EventChip', noPart('grid')), onOwner('ModernButton', noPart('grid'))],
+    'S2-6: a class without its part names nothing — the name-only match stays forbidden',
   );
 
   // S2-7 — both forms in ONE compound are one element, held to the class form.

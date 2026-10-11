@@ -155,7 +155,6 @@ function ColumnRow({
         }}
         variant="ghost"
         size="sm"
-        data-part="grip"
         className="ds-column-settings__grip"
         data-direction="up"
         disabled={reorderDisabled || index === 0}
@@ -171,7 +170,6 @@ function ColumnRow({
         }}
         variant="ghost"
         size="sm"
-        data-part="grip"
         className="ds-column-settings__grip"
         data-direction="down"
         disabled={reorderDisabled || index === count - 1}
@@ -197,7 +195,6 @@ function ColumnRow({
         <Button
           variant="ghost"
           size="sm"
-          data-part="pin-toggle"
           className="ds-column-settings__pin-toggle"
           aria-pressed={pinSide !== null}
           onClick={handlePinCycle}

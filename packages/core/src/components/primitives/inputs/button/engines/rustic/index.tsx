@@ -173,7 +173,10 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       href,
       target,
       onClick,
-      'data-part': dataPart,
+      // P-88: the button keeps its own anatomy ('trigger'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className = '',
       style = {},
       ...rest
@@ -326,7 +329,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
             {...interactionHandlers}
             {...skinAttributes}
             {...responsiveAttrs}
-            {...partAttributes(dataPart ?? 'trigger', interaction)}
+            {...partAttributes('trigger', interaction)}
           >
             {loading && <LoadingSpinner size={size} />}
             {!loading && iconPosition === 'start' && renderIcon}
@@ -354,7 +357,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
           aria-disabled={disabled || loading}
           aria-busy={loading}
           {...responsiveAttrs}
-          {...partAttributes(dataPart ?? 'trigger', interaction)}
+          {...partAttributes('trigger', interaction)}
         >
           {loading && <LoadingSpinner size={size} />}
           {!loading && iconPosition === 'start' && renderIcon}

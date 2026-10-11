@@ -222,7 +222,8 @@ test('rottay (dark) / communication / modern: notification-center dismiss hover 
 
   const container = await openProbe(page, 'rottay', 'modern');
   const band = notifBand(container);
-  const dismiss = band.locator("[data-part='dismiss']").first();
+  // P-88: the modern dismiss control is a composed Button that keeps its own `trigger` part; found by the owner class hook.
+  const dismiss = band.locator('.ds-notification-center__dismiss').first();
   await dismiss.hover();
   await waitForSettled(page, dismiss);
 

@@ -76,7 +76,7 @@ describe('Modern ApprovalWorkflow — step actions wear the Button focus signatu
     // The public Button is lazy: the first render is its Suspense fallback.
     await screen.findByRole('button', { name: 'Approve Finance' });
 
-    const actions = [...container.querySelectorAll('[data-part="step-action-button"]')];
+    const actions = [...container.querySelectorAll('.ds-approval-workflow__step-action-button')];
     expect(actions.map((action) => action.getAttribute('data-action'))).toEqual([
       'approve',
       'reject',

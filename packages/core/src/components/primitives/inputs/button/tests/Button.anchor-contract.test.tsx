@@ -56,10 +56,10 @@ describe('modern Button root anchor', () => {
     }
   });
 
-  it('lets the caller keep its part while the engine keeps the anchor', async () => {
+  it('keeps its own part whatever the caller hands it (P-88) while the engine keeps the anchor', async () => {
     const container = await renderButton({ ...HOSTILE });
     const root = container.querySelector('.ds-button.ds-button--modern')!;
-    expect(root.getAttribute('data-part')).toBe('toolbar-action');
+    expect(root.getAttribute('data-part')).toBe('trigger');
     expect(root.getAttribute('data-variant')).toBe('primary');
     expect(root.getAttribute('data-size')).toBe('md');
     expect(root.getAttribute('data-shape')).toBe('default');

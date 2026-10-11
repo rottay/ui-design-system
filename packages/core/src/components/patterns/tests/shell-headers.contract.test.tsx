@@ -481,12 +481,18 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
         'exception',
         'subtitle',
         'actions',
-        'action',
         'tabs',
         'tab',
       ]) {
         expect(parts, `workbench-header must stamp data-part="${part}"`).toContain(part);
       }
+      // P-88: a quick action is a composed Button. It keeps its own part and is reached by the owner's class
+      // door; the caller part `action` never lands.
+      expect(
+        container.querySelectorAll('.ds-pattern-workbench-header__action[data-part="trigger"]'),
+        'workbench-header must stamp one class door per quick action',
+      ).toHaveLength(ALL_ACTION_VARIANTS.length);
+      expect(parts, 'workbench-header must not stamp the caller part "action"').not.toContain('action');
     });
 
     it('stamps all three quick-action variants (the variantStyles map is 3-way)', async () => {
@@ -495,7 +501,7 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
 
       for (const variant of ALL_ACTION_VARIANTS) {
         expect(
-          container.querySelector(`[data-part="action"][data-variant="${variant}"]`),
+          container.querySelector(`.ds-pattern-workbench-header__action[data-variant="${variant}"]`),
           `quick-action variant "${variant}" must reach the DOM`,
         ).not.toBeNull();
       }

@@ -255,7 +255,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
           steps, so the nav bar keeps its geometry). */}
       <div>
         <ModernButton
-          data-part="prev-button"
           className="ds-step-wizard__prev-button"
           variant="outline"
           size="md"
@@ -273,7 +272,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
         {/* Skip: shown for optional steps that are not the final step */}
         {allowSkip && currentDef?.optional && !isLast && (
           <ModernButton
-            data-part="skip-button"
             className="ds-step-wizard__skip-button"
             variant="text"
             size="md"
@@ -287,7 +285,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
         {isLast ? (
           showCompleteAction ? (
             <ModernButton
-              data-part="complete-button"
               className="ds-step-wizard__complete-button"
               variant="primary"
               size="md"
@@ -300,7 +297,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
           ) : null
         ) : (
           <ModernButton
-            data-part="next-button"
             className="ds-step-wizard__next-button"
             variant="primary"
             size="md"

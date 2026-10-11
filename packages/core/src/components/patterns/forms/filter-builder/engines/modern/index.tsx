@@ -146,7 +146,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     if (!addFilterOpen || !focusFirstOptionRef.current) return;
     focusFirstOptionRef.current = false;
     addFilterDropdownRef.current
-      ?.querySelector<HTMLElement>("[data-part='add-filter-option']")
+      ?.querySelector<HTMLElement>('.ds-filter-builder__add-filter-option')
       ?.focus();
   }, [addFilterOpen]);
 
@@ -175,7 +175,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       event.preventDefault();
       const options = Array.from(
         addFilterDropdownRef.current?.querySelectorAll<HTMLElement>(
-          "[data-part='add-filter-option']"
+          '.ds-filter-builder__add-filter-option'
         ) ?? []
       );
       if (options.length === 0) return;
@@ -476,7 +476,6 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
 
         <div data-part="rule-actions">
           <ModernButton
-            data-part="remove-button"
             className="ds-filter-builder__remove-button"
             icon={<ActionDeleteIcon decorative size={14} />}
             variant="ghost"
@@ -507,7 +506,6 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         {!isRoot && (
           <div data-part="group-header">
             <ModernButton
-              data-part="logic-toggle"
               className="ds-filter-builder__logic-toggle"
               data-logic={group.logic}
               variant={group.logic === 'and' ? 'primary' : 'outline'}
@@ -518,7 +516,6 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
               {logicLabel(group.logic)}
             </ModernButton>
             <ModernButton
-              data-part="remove-button"
               className="ds-filter-builder__remove-button"
               icon={<ActionDeleteIcon decorative size={14} />}
               variant="ghost"
@@ -545,7 +542,6 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
 
         <div data-part="group-actions">
           <ModernButton
-            data-part="add-rule-button"
             className="ds-filter-builder__add-rule-button"
             icon={<ActionAddIcon decorative size={14} />}
             variant="dashed"
@@ -557,7 +553,6 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
           </ModernButton>
           {canNest && (
             <ModernButton
-              data-part="add-group-button"
               className="ds-filter-builder__add-group-button"
               icon={<ActionAddIcon decorative size={14} />}
               variant="dashed"
@@ -572,7 +567,6 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
             <div data-part="add-filter">
               <ModernButton
                 ref={addFilterTriggerRef}
-                data-part="add-filter-trigger"
                 className="ds-filter-builder__add-filter-trigger"
                 data-open={addFilterOpen ? "true" : "false"}
                 icon={<ActionAddIcon decorative size={14} />}
@@ -603,7 +597,6 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
                        returns focus to the trigger. */
                     <ModernButton
                       key={f.key}
-                      data-part="add-filter-option"
                       className="ds-filter-builder__add-filter-option"
                       variant="ghost"
                       size={buttonSize}
@@ -628,7 +621,6 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         {isRoot && showClear && onClear && group.rules.length > 0 && (
           <div data-part="clear-row">
             <ModernButton
-              data-part="clear-button"
               className="ds-filter-builder__clear-button"
               variant="text"
               size={buttonSize}

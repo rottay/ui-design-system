@@ -62,6 +62,19 @@ import { renderWithEngine } from '@tests/support/engine';
 
 const ENGINES = ['modern', 'rustic'] as const;
 
+// P-88: under modern the dialog actions are composed Buttons, which keep their own part (`trigger`) and are
+// reached through the owner's class door. Popconfirm has no class hook, so its door is the footer child.
+// Rustic stamps the native `action` part.
+const ACTION_DOORS = {
+  'confirm-dialog': { modern: '.ds-confirm-dialog__action', rustic: "[data-part='action']" },
+  'alert-dialog': { modern: '.ds-alert-dialog__action', rustic: "[data-part='action']" },
+  popconfirm: { modern: "[data-part='footer'] > .ds-button[data-part='trigger']", rustic: "[data-part='action']" },
+} as const;
+
+function expectNoCallerActionPart(surface: Element, engine: (typeof ENGINES)[number]) {
+  if (engine === 'modern') expect(surface.querySelectorAll("[data-part='action']")).toHaveLength(0);
+}
+
 async function waitForPart(container: HTMLElement, part: string): Promise<HTMLElement> {
   await waitFor(() => {
     expect(container.querySelector(`[data-part="${part}"]`)).not.toBeNull();
@@ -287,10 +300,12 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         expect(surface.querySelectorAll("[data-part='title']")).toHaveLength(1);
         expect(surface.querySelectorAll("[data-part='description']")).toHaveLength(1);
 
-        const actions = surface.querySelectorAll("[data-part='action']");
+        const actionDoor = ACTION_DOORS['confirm-dialog'][engine];
+        const actions = surface.querySelectorAll(actionDoor);
         expect(actions).toHaveLength(2);
+        expectNoCallerActionPart(surface, engine);
         expect(Array.from(actions).map((el) => el.getAttribute('data-action')).sort()).toEqual(['cancel', 'confirm']);
-        const confirmAction = surface.querySelector("[data-part='action'][data-action='confirm']") as HTMLElement;
+        const confirmAction = surface.querySelector(`${actionDoor}[data-action='confirm']`) as HTMLElement;
         expect(confirmAction.getAttribute('data-loading')).toBe('false');
       },
     );
@@ -307,7 +322,10 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         engine === 'modern'
           ? await waitForDocumentSurface(".ds-confirm-dialog--modern [data-part='surface']")
           : await waitForPart(container, 'surface');
-      const confirmAction = surface.querySelector("[data-part='action'][data-action='confirm']") as HTMLElement;
+      const confirmAction = surface.querySelector(
+        `${ACTION_DOORS['confirm-dialog'][engine]}[data-action='confirm']`,
+      ) as HTMLElement;
+      expectNoCallerActionPart(surface, engine);
       expect(confirmAction.getAttribute('data-loading')).toBe('true');
       // The Button's width-stable pending posture stacks two rows in one grid
       // cell: the LIVE busy row and an aria-hidden RESERVE copy that only
@@ -403,8 +421,9 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         expect(surface.querySelectorAll("[data-part='title']")).toHaveLength(1);
         expect(surface.querySelectorAll("[data-part='description']")).toHaveLength(1);
         expect(surface.querySelectorAll("[data-part='footer']")).toHaveLength(1);
-        const cancelAction = surface.querySelectorAll("[data-part='action'][data-action='cancel']");
+        const cancelAction = surface.querySelectorAll(`${ACTION_DOORS['alert-dialog'][engine]}[data-action='cancel']`);
         expect(cancelAction).toHaveLength(1);
+        expectNoCallerActionPart(surface, engine);
       },
     );
   });
@@ -449,9 +468,12 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
         expect(surface.querySelectorAll("[data-part='title']")).toHaveLength(1);
         expect(surface.querySelectorAll("[data-part='description']")).toHaveLength(1);
 
-        const actions = surface.querySelectorAll("[data-part='action']");
+        const actionDoor = ACTION_DOORS.popconfirm[engine];
+        const actions = surface.querySelectorAll(actionDoor);
         expect(actions).toHaveLength(2);
-        const confirmAction = surface.querySelector("[data-part='action'][data-action='confirm']") as HTMLElement;
+        expectNoCallerActionPart(surface, engine);
+        expect(Array.from(actions).map((el) => el.getAttribute('data-action')).sort()).toEqual(['cancel', 'confirm']);
+        const confirmAction = surface.querySelector(`${actionDoor}[data-action='confirm']`) as HTMLElement;
         expect(confirmAction.getAttribute('data-ok-type')).toBe('danger');
         expect(confirmAction.getAttribute('data-loading')).toBe('false');
       },

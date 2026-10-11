@@ -204,7 +204,6 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
                   <Button
                     variant="ghost"
                     size="sm"
-                    data-part="action"
                     className="ds-alert-dialog__action"
                     data-action="cancel"
                     onClick={handleCancel}

@@ -13,6 +13,14 @@ import type { ShortcutDisplayItem } from '../shortcuts-overlay';
 import { PatternLocaleSwitcher, DEFAULT_LOCALES } from '../locale-switcher';
 import { renderWithEngine } from '@tests/support/engine';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, Record<string, string>> = {
+  'environment-toggle': { 'option': '.ds-environment-toggle__option', 'trigger': '.ds-environment-toggle__trigger' },
+  'shortcuts-overlay': { 'close': '.ds-pattern-shortcuts-overlay__close' },
+  'workspace-switcher': { 'create': '.ds-workspace-switcher__create', 'item': '.ds-workspace-switcher__item', 'settings': '.ds-workspace-switcher__settings', 'trigger': '.ds-workspace-switcher__trigger' },
+};
+const partSelector = (owner: string, part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[owner]?.[part]) || `[data-part="${part}"]`;
 // ---------------------------------------------------------------------------
 // navigation-pattern anatomy -- the patterns/navigation family
 // (CommandPalette, EnvironmentToggle, WorkspaceSwitcher, ShortcutsOverlay,
@@ -191,17 +199,17 @@ describe('environment-toggle -- data-part contract (navigation-pattern anatomy)'
 
     const toggle = container.querySelector('[data-part="toggle"]') as HTMLElement;
     expect(toggle.getAttribute('data-variant')).toBe('toggle');
-    expect(container.querySelectorAll('[data-part="option"][data-active="true"]')).toHaveLength(1);
-    expect(container.querySelectorAll('[data-part="option"][data-active="false"]')).toHaveLength(2);
+    expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-environment-toggle__option' : '[data-part="option"]'}[data-active="true"]`)).toHaveLength(1);
+    expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-environment-toggle__option' : '[data-part="option"]'}[data-active="false"]`)).toHaveLength(2);
     // Engine asymmetry, preserved: modern's segmented buttons carry per-button
     // border-radius selected by position (first/middle/last), so they are
     // stamped data-position; rustic shares the radius via the container's
     // overflow:hidden and its buttons have NO border-radius, hence no
     // data-position. The migration must not invent one for rustic.
     if (engine === 'modern') {
-      expect(container.querySelector('[data-part="option"][data-position="first"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="option"][data-position="middle"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="option"][data-position="last"]')).not.toBeNull();
+      expect(container.querySelector(`${engine === 'modern' ? '.ds-environment-toggle__option' : '[data-part="option"]'}[data-position="first"]`)).not.toBeNull();
+      expect(container.querySelector(`${engine === 'modern' ? '.ds-environment-toggle__option' : '[data-part="option"]'}[data-position="middle"]`)).not.toBeNull();
+      expect(container.querySelector(`${engine === 'modern' ? '.ds-environment-toggle__option' : '[data-part="option"]'}[data-position="last"]`)).not.toBeNull();
     } else {
       expect(container.querySelector('[data-part="option"][data-position]')).toBeNull();
     }
@@ -215,7 +223,7 @@ describe('environment-toggle -- data-part contract (navigation-pattern anatomy)'
     await partsOf(container);
     const toggle = container.querySelector('[data-part="toggle"]') as HTMLElement;
     expect(toggle.getAttribute('data-variant')).toBe('pills');
-    expect(container.querySelectorAll('[data-part="option"][data-active="true"]')).toHaveLength(1);
+    expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-environment-toggle__option' : '[data-part="option"]'}[data-active="true"]`)).toHaveLength(1);
   });
 
   it.each(ENGINES)('stamps the dropdown variant + its panel/dot/badge/check on open (%s)', async (engine) => {
@@ -228,11 +236,16 @@ describe('environment-toggle -- data-part contract (navigation-pattern anatomy)'
     const parts = new Set(
       Array.from(container.querySelectorAll('[data-part]')).map((el) => el.getAttribute('data-part') as string),
     );
-    for (const part of ['toggle', 'trigger', 'dot', 'badge', 'panel', 'option', 'check']) {
+    // P-88: the modern options are composed Buttons that keep their own `trigger` part; found by the owner class hook.
+    for (const part of ['toggle', 'trigger', 'dot', 'badge', 'panel', ...(engine === 'modern' ? [] : ['option']), 'check']) {
       expect(parts, `env-toggle/${engine} dropdown must stamp data-part="${part}"`).toContain(part);
     }
+    if (engine === 'modern') {
+      expect(container.querySelectorAll('.ds-environment-toggle__option').length, 'env-toggle/modern options carry the class hook').toBeGreaterThanOrEqual(1);
+      expect(parts, 'env-toggle/modern: a composed Button never stamps a caller part').not.toContain('option');
+    }
     // The active env's option carries the check + data-active="true".
-    expect(container.querySelectorAll('[data-part="option"][data-active="true"]')).toHaveLength(1);
+    expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-environment-toggle__option' : '[data-part="option"]'}[data-active="true"]`)).toHaveLength(1);
   });
 
   it.each(ENGINES)('stamps the production confirm modal when a guarded switch fires (%s)', async (engine) => {
@@ -261,8 +274,10 @@ describe('environment-toggle -- data-part contract (navigation-pattern anatomy)'
       });
       expect(document.querySelector('[data-part="root"][data-overlay-kind="modal"]')).not.toBeNull();
       expect(document.querySelector('[data-part="backdrop"]')).not.toBeNull();
-      expect(document.querySelector('[data-part="action"][data-action="cancel"]')).not.toBeNull();
-      expect(document.querySelector('[data-part="action"][data-action="confirm"]')).not.toBeNull();
+      // P-88: the dialog's actions are composed Buttons that keep their own `trigger` part; found by the owner class hook.
+      expect(document.querySelector('.ds-confirm-dialog__action[data-action="cancel"]')).not.toBeNull();
+      expect(document.querySelector('.ds-confirm-dialog__action[data-action="confirm"]')).not.toBeNull();
+      expect(document.querySelector('[data-part="action"]')).toBeNull();
     } else {
       await waitFor(() => {
         expect(container.querySelector('[data-part="confirm-dialog"]')).not.toBeNull();
@@ -314,19 +329,27 @@ describe('workspace-switcher -- data-part contract (navigation-pattern anatomy)'
     const parts = new Set(
       Array.from(container.querySelectorAll('[data-part]')).map((el) => el.getAttribute('data-part') as string),
     );
-    const common = ['root', 'trigger', 'panel', 'header', 'item', 'check', 'online-dot', ...(engine === 'modern' ? [] : ['badge']), 'settings', 'divider', 'create'];
+    // P-88: on modern the rows, their gears and the create action are composed Buttons that keep their own `trigger` part.
+    const composed = ['item', 'settings', 'create'];
+    const common = ['root', 'trigger', 'panel', 'header', 'check', 'online-dot', ...(engine === 'modern' ? [] : ['badge', ...composed]), 'divider'];
     for (const part of common) {
       expect(parts, `workspace-switcher/${engine} must stamp data-part="${part}"`).toContain(part);
+    }
+    if (engine === 'modern') {
+      for (const part of composed) {
+        expect(container.querySelectorAll(`.ds-workspace-switcher__${part}`).length, `workspace-switcher/modern ${part} carries the class hook`).toBeGreaterThanOrEqual(1);
+        expect(parts, `workspace-switcher/modern: a composed Button never stamps "${part}"`).not.toContain(part);
+      }
     }
 
     // Active vs inactive row, and the keyboard/hover focus discriminator that
     // must coexist with active selection.
-    expect(container.querySelectorAll('[data-part="item"][data-active="true"]')).toHaveLength(1);
-    expect(container.querySelectorAll('[data-part="item"][data-active="false"]')).toHaveLength(1);
-    expect(container.querySelectorAll('[data-part="item"][data-focused="false"]')).toHaveLength(2);
+    expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-workspace-switcher__item' : '[data-part="item"]'}[data-active="true"]`)).toHaveLength(1);
+    expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-workspace-switcher__item' : '[data-part="item"]'}[data-active="false"]`)).toHaveLength(1);
+    expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-workspace-switcher__item' : '[data-part="item"]'}[data-focused="false"]`)).toHaveLength(2);
     fireEvent.mouseEnter(container.querySelector('[data-testid="workspace-item-w2"]') as Element);
     await waitFor(() => {
-      expect(container.querySelector('[data-part="item"][data-focused="true"]')).not.toBeNull();
+      expect(container.querySelector(`${engine === 'modern' ? '.ds-workspace-switcher__item' : '[data-part="item"]'}[data-focused="true"]`)).not.toBeNull();
     });
 
     // Engine asymmetry: Modern composes Avatar (root + fallback) inside an
@@ -372,11 +395,16 @@ describe('shortcuts-overlay -- data-part contract (navigation-pattern anatomy)',
     // The chamber is Modal's anatomy on modern (root/backdrop/surface/body, then
     // the pattern's own content root) and
     // the hand-rolled frame on the frozen rustic engine (root/backdrop/dialog).
-    const expectedParts = ['root', 'backdrop', 'header', 'close', 'search', 'category-label', 'item', 'kbd', 'footer'];
-    if (engine === 'rustic') expectedParts.push('dialog', 'input');
+    // P-88: the modern close control is a composed Button that keeps its own `trigger` part; found by the owner class hook.
+    const expectedParts = ['root', 'backdrop', 'header', 'search', 'category-label', 'item', 'kbd', 'footer'];
+    if (engine === 'rustic') expectedParts.push('close', 'dialog', 'input');
     if (engine === 'modern') expectedParts.push('surface', 'body', 'content');
     for (const part of expectedParts) {
       expect(parts, `shortcuts-overlay/${engine} must stamp data-part="${part}"`).toContain(part);
+    }
+    if (engine === 'modern') {
+      expect(scope.querySelectorAll('.ds-pattern-shortcuts-overlay__close'), 'shortcuts-overlay/modern close carries the class hook').toHaveLength(1);
+      expect(parts, 'shortcuts-overlay/modern: a composed Button never stamps "close"').not.toContain('close');
     }
     if (engine === 'modern') {
       expect(parts).not.toContain('dialog');

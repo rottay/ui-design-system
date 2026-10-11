@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { waitFor } from '@testing-library/react';
 
+import { resolveBonePart, resolvePartRole } from '../../../../primitives/feedback/skeleton/runtime/anatomy-renderer';
 import { SelectionPreviewRail } from '..';
 import type { SelectionPreviewRailColumn } from '..';
 import { Button } from '../../../../primitives';
@@ -76,6 +77,32 @@ async function waitForRoot(container: HTMLElement): Promise<Element> {
 }
 
 describe('SelectionPreviewRail data-part contract', () => {
+  it.each(ENGINES)('draws the identity close control as the round `close` bone, named by its owner hook (%s)', async (engine) => {
+    const { container } = renderWithEngine(
+      <SelectionPreviewRail
+        item={FULL_ITEM}
+        itemKey={FULL_ITEM.id}
+        itemIndex={0}
+        columns={FULL_COLUMNS}
+        onClose={() => undefined}
+        mode="selection"
+      />,
+      engine,
+    );
+    await waitForRoot(container);
+
+    // The skeleton reads a stamped element through its owner hook. This Button keeps its own
+    // part, so the hook is what still says "close": the bone it draws does not change.
+    let close: Element | null = null;
+    await waitFor(() => {
+      close = container.querySelector('.ds-selection-preview-rail__identity-close');
+      expect(close).not.toBeNull();
+    });
+    const bonePart = resolveBonePart(close as unknown as Element, (close as unknown as Element).getAttribute('data-part')!);
+    expect(bonePart).toBe('close');
+    expect(resolvePartRole(bonePart)).toBe('round');
+  });
+
   it.each(ENGINES)('stamps the default-branch anatomy hooks under the %s engine', async (engine) => {
     const { container } = renderWithEngine(
       <SelectionPreviewRail
@@ -174,7 +201,7 @@ describe('SelectionPreviewRail data-part contract', () => {
   );
 
   it.each(ENGINES)(
-    'Button preserves a caller-supplied data-part under the %s engine',
+    'Button keeps its own part whatever the caller supplies under the %s engine (P-88)',
     async (engine) => {
       const { container } = renderWithEngine(
         <Button variant="ghost" size="sm" data-part="caller-supplied-part">
@@ -189,9 +216,9 @@ describe('SelectionPreviewRail data-part contract', () => {
         expect(button).not.toBeNull();
       });
 
-      // P-79 caller-wins law: composed patterns can expose their own public
-      // anatomy without bypassing the canonical Button primitive.
-      const expectedDataPart = 'caller-supplied-part';
+      // P-88 (2026-10-06): the Button keeps its own `trigger`; a caller part is
+      // never forwarded.
+      const expectedDataPart = 'trigger';
       expect((button as unknown as Element).getAttribute('data-part')).toBe(expectedDataPart);
     },
   );

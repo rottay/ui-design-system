@@ -7,6 +7,14 @@ import { describe, expect, it } from 'vitest';
 import type { ApprovalGroup } from '../contracts';
 import ModernApprovalInbox from '../engines/modern';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, string> = {
+  'batch-approve-button': '.ds-approval-inbox__batch-approve-button',
+  'batch-clear-button': '.ds-approval-inbox__batch-clear-button',
+  'item-action-button': '.ds-approval-inbox__item-action-button',
+};
+const partSelector = (part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[part]) || `[data-part="${part}"]`;
 const SKIN = readFileSync(
   join(
     __dirname,
@@ -61,7 +69,7 @@ describe('Modern ApprovalInbox — actions wear the Button focus signature', () 
     const { container } = renderWithSelection();
 
     const actions = ACTION_PARTS.flatMap((part) => [
-      ...container.querySelectorAll(`[data-part="${part}"]`),
+      ...container.querySelectorAll(partSelector(part, 'modern')),
     ]);
     expect(actions).toHaveLength(4);
     for (const action of actions) {

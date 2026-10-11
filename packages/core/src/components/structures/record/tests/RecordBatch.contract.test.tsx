@@ -401,9 +401,12 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
         );
 
         await waitForPart(container, 'step-actions');
-        expect(container.querySelector('[data-part="step-action-button"][data-action="approve"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="step-action-button"][data-action="reject"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="step-action-button"][data-action="escalate"]')).not.toBeNull();
+        // P-88: modern composes Button (its own part; the owner's class door); rustic stamps the native part.
+        const door = engine === 'modern' ? '.ds-approval-workflow__step-action-button' : '[data-part="step-action-button"]';
+        expect(container.querySelector(`${door}[data-action="approve"]`)).not.toBeNull();
+        expect(container.querySelector(`${door}[data-action="reject"]`)).not.toBeNull();
+        expect(container.querySelector(`${door}[data-action="escalate"]`)).not.toBeNull();
+        if (engine === 'modern') expect(container.querySelectorAll('[data-part="step-action-button"]')).toHaveLength(0);
       },
     );
 

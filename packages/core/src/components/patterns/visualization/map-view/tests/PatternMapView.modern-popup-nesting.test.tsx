@@ -49,7 +49,7 @@ describe('PatternMapView modern — popup disclosure is not nested in the row bu
     ) as HTMLElement;
 
     expect(link.closest('button')).toBeNull();
-    expect(nestedButton.closest('[data-part="marker-row"]')).toBeNull();
+    expect(nestedButton.closest('.ds-pattern-map-view__marker-row')).toBeNull();
   });
 
   it('does not re-toggle the marker when popup content is clicked', () => {
@@ -82,7 +82,7 @@ describe('PatternMapView modern — popup disclosure is not nested in the row bu
       />,
     );
 
-    const rows = container.querySelectorAll('[data-part="marker-row"]');
+    const rows = container.querySelectorAll('.ds-pattern-map-view__marker-row');
     const selectedRow = rows[0] as HTMLElement;
     const unselectedRow = rows[1] as HTMLElement;
     const popup = container.querySelector('[data-part="popup"]') as HTMLElement;

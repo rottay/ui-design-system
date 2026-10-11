@@ -32,7 +32,7 @@ async function openPanel(): Promise<HTMLElement> {
   await waitForPortalContent(
     waitFor,
     ".ds-export-button-panel",
-    '[data-part="menu-item"]',
+    '.ds-export-button-item',
     1
   );
   return container;

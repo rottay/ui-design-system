@@ -42,11 +42,11 @@ describe('non-chart inert anatomy', () => {
     const root = expectScope(normal.container, 'calendar-view', engine);
     expect(root).toHaveAttribute('data-loading', 'false');
     expect(root).toHaveAttribute('data-view-mode', 'week');
-    expect(q(normal.container, '[data-part="toolbar-action"]')).toHaveLength(3);
+    expect(q(normal.container, `${engine === 'modern' ? '.ds-pattern-calendar-view__toolbar-action' : '[data-part="toolbar-action"]'}`)).toHaveLength(3);
     expect(q(normal.container, '[data-part="weekday"]')).toHaveLength(7);
     expect(q(normal.container, '[data-part="day-cell"][data-today="true"]')).toHaveLength(1);
     expect(q(normal.container, '[data-part="day-cell"][data-last-column="true"]').length).toBeGreaterThan(0);
-    expect(q(normal.container, '[data-part="event"]')).toHaveLength(3);
+    expect(q(normal.container, `${engine === 'modern' ? '.ds-pattern-calendar-view__event' : '[data-part="event"]'}`)).toHaveLength(3);
     expect(q(normal.container, '[data-part="overflow-count"]')).toHaveLength(1);
     normal.unmount();
 
@@ -77,9 +77,9 @@ describe('non-chart inert anatomy', () => {
     expect(root).toHaveAttribute('data-loading', 'false');
     expect(root).toHaveAttribute('data-empty', 'false');
     expect(q(normal.container, '[data-part="placeholder-label"]')).toHaveLength(3);
-    expect(q(normal.container, '[data-part="marker-row"]')).toHaveLength(2);
-    expect(q(normal.container, '[data-part="marker-row"][data-selected="true"]')).toHaveLength(1);
-    expect(q(normal.container, '[data-part="marker-row"][data-last="true"]')).toHaveLength(1);
+    expect(q(normal.container, `${engine === 'modern' ? '.ds-pattern-map-view__marker-row' : '[data-part="marker-row"]'}`)).toHaveLength(2);
+    expect(q(normal.container, `${engine === 'modern' ? '.ds-pattern-map-view__marker-row' : '[data-part="marker-row"]'}[data-selected="true"]`)).toHaveLength(1);
+    expect(q(normal.container, `${engine === 'modern' ? '.ds-pattern-map-view__marker-row' : '[data-part="marker-row"]'}[data-last="true"]`)).toHaveLength(1);
     expect(q(normal.container, '[data-part="marker-color"]')).toHaveLength(1);
     expect(q(normal.container, '[data-part="coordinates"]')).toHaveLength(2);
     normal.unmount();

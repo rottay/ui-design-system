@@ -93,7 +93,7 @@ describe('WorkbenchHeader (WO-FAM-10 cut) — the quick action IS the Button', (
       />,
     );
 
-    const actions = Array.from(container.querySelectorAll('[data-part="action"]'));
+    const actions = Array.from(container.querySelectorAll('.ds-pattern-workbench-header__action'));
     expect(actions.map((el) => el.tagName)).toEqual(['BUTTON', 'BUTTON', 'BUTTON']);
     // The closed prop domain is the Button's own, so the tone this header states
     // and the tone the Button resolves are the same attribute, never two.

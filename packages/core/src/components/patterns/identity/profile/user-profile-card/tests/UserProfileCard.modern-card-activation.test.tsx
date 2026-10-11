@@ -36,7 +36,7 @@ const root = (container: HTMLElement) => container.querySelector('[data-part="ro
 function tabOrder(container: HTMLElement): string[] {
   return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE))
     .filter((node) => node.tabIndex >= 0 && !(node as HTMLButtonElement).disabled)
-    .map((node) => (node.getAttribute('data-part') === 'card-activate' ? 'card-activate' : node.textContent ?? ''));
+    .map((node) => (node.classList.contains('ds-user-profile-card__card-activate') ? 'card-activate' : node.textContent ?? ''));
 }
 
 function keyboardActivations(onClick: ReturnType<typeof vi.fn>) {
@@ -100,7 +100,7 @@ describe('UserProfileCard modern card activation: the keyboard parity matrix (T1
   it('P4 compact + actions: actions are full-only and never demote the activation', async () => {
     const onClick = vi.fn();
     const { container } = render({ variant: 'compact', onClick, actions: ACTIONS() });
-    expect(container.querySelectorAll('[data-part="action-button"]')).toHaveLength(0);
+    expect(container.querySelectorAll('.ds-user-profile-card__action-button')).toHaveLength(0);
     expect(tabOrder(container)).toEqual(['card-activate']);
     keyboardActivations(onClick);
     expect(await nestedInteractive(container)).toEqual([]);
@@ -126,7 +126,7 @@ describe('UserProfileCard modern card activation: the keyboard parity matrix (T1
   ] as const)('P6 %s without onClick: a static card with no activation and no state', (variant, extras) => {
     const { container } = render({ variant, ...extras });
     expect(container.querySelector('[data-part="card-hit"]')).toBeNull();
-    expect(container.querySelector('[data-part="card-activate"]')).toBeNull();
+    expect(container.querySelector('.ds-user-profile-card__card-activate')).toBeNull();
     // Composed action Buttons stamp their own state; the card itself stays stateless.
     expect(Array.from(container.querySelectorAll('[data-state]')).filter((node) => !node.closest('.ds-button'))).toEqual([]);
     expect(root(container)).toHaveAttribute('data-interactive', 'false');
@@ -143,7 +143,7 @@ describe('UserProfileCard modern card activation: the keyboard parity matrix (T1
 
   it.each([['full'], ['compact']] as const)('names the %s activation by the user and describes it by the role', (variant) => {
     const { container } = render({ variant, onClick: vi.fn() });
-    const activation = container.querySelector('[data-part="card-activate"]') as HTMLElement;
+    const activation = container.querySelector('.ds-user-profile-card__card-activate') as HTMLElement;
     expect(activation.tagName).toBe('BUTTON');
     expect(activation).toHaveAttribute('data-chrome', 'none');
     expect(activation.parentElement).toHaveAttribute('data-part', 'card-hit');

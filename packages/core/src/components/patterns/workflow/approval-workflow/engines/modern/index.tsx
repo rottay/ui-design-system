@@ -157,7 +157,6 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
                 engine="modern"
                 variant="ghost"
                 size="sm"
-                data-part="step-action-button"
                 className="ds-approval-workflow__step-action-button"
                 data-action="approve"
                 disabled={actionsDisabled || (pendingAction != null && pendingAction !== 'approve')}
@@ -174,7 +173,6 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
                 engine="modern"
                 variant="ghost"
                 size="sm"
-                data-part="step-action-button"
                 className="ds-approval-workflow__step-action-button"
                 data-action="reject"
                 disabled={actionsDisabled || (pendingAction != null && pendingAction !== 'reject')}
@@ -191,7 +189,6 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
                 engine="modern"
                 variant="ghost"
                 size="sm"
-                data-part="step-action-button"
                 className="ds-approval-workflow__step-action-button"
                 data-action="escalate"
                 disabled={actionsDisabled || (pendingAction != null && pendingAction !== 'escalate')}

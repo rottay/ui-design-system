@@ -146,7 +146,6 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
     <div data-part="card-hit">
       <Button
         chrome="none"
-        data-part="card-activate"
         className="ds-user-profile-card__card-activate"
         aria-labelledby={nameId}
         aria-describedby={roleId}
@@ -255,7 +254,6 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
               <Button
                 key={action.key}
                 className="ds-user-profile-card__action-button"
-                data-part="action-button"
                 variant={action.variant ?? 'default'}
                 disabled={action.disabled}
                 onClick={(e) => { e.stopPropagation(); action.onClick(); }}

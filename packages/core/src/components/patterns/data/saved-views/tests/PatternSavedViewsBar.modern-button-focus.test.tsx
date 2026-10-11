@@ -6,6 +6,14 @@ import { describe, expect, it, vi } from 'vitest';
 
 import ModernSavedViewsBar from '../engines/modern';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, string> = {
+  'create-button': '.ds-saved-views__create-button',
+  'menu-trigger': '.ds-saved-views__menu-trigger',
+  'pill-select': '.ds-saved-views__pill-select',
+};
+const partSelector = (part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[part]) || `[data-part="${part}"]`;
 const SKIN = readFileSync(
   join(
     __dirname,
@@ -75,7 +83,7 @@ describe('ModernSavedViewsBar — composed controls wear the Button focus signat
     );
 
     for (const part of BUTTON_PARTS) {
-      const nodes = [...container.querySelectorAll(`[data-part="${part}"]`)];
+      const nodes = [...container.querySelectorAll(partSelector(part, 'modern'))];
       expect(nodes.length, part).toBeGreaterThan(0);
       for (const node of nodes) {
         expect(node.tagName).toBe('BUTTON');

@@ -19,12 +19,12 @@ import { renderWithEngine } from '@tests/support/engine';
  * structurally: a node belongs to THIS component iff no other `data-part="root"`
  * sits between it and this component's root.
  */
-function ownParts(scope: HTMLElement, part: string): HTMLElement[] {
+function ownParts(scope: HTMLElement, part: string, selector = `[data-part="${part}"]`): HTMLElement[] {
   // This component's OWN root is the outermost `data-part="root"` in the tree.
   const own = scope.querySelector('[data-part="root"]') as HTMLElement | null;
   if (!own) return [];
   if (part === 'root') return [own];
-  const all = own.querySelectorAll(`[data-part="${part}"]`) as NodeListOf<HTMLElement>;
+  const all = own.querySelectorAll(selector) as NodeListOf<HTMLElement>;
   return [...all].filter((el) => {
     // Anything under a NESTED root belongs to a component this one is built FROM
     // (a Badge, a Card, an Input) -- and that component paints inline legitimately
@@ -265,6 +265,19 @@ const VALUES: Record<string, unknown> = {
   capacity: [10, 50],
 };
 
+// P-88: the modern panel's three controls are composed Buttons. Each keeps its own part and is reached through
+// the owner's class door; the caller part never lands.
+const MODERN_BUTTON_DOORS: Readonly<Record<string, string>> = {
+  'collapse-toggle': '.ds-pattern-filter-panel__collapse-toggle',
+  'reset-button': '.ds-pattern-filter-panel__reset-button',
+  'apply-button': '.ds-pattern-filter-panel__apply-button',
+};
+
+function ownNodes(scope: HTMLElement, engine: 'modern' | 'rustic', part: string): HTMLElement[] {
+  const door = engine === 'modern' ? MODERN_BUTTON_DOORS[part] : undefined;
+  return door ? ownParts(scope, part, door) : ownParts(scope, part);
+}
+
 // Stamped parts that must leave background/border/box-shadow/border-radius to
 // the skin, per engine. Every filter-panel part is a native element (no DS Text),
 // so `color` moved to the skin for every painted part too.
@@ -327,7 +340,7 @@ describe.each(['modern', 'rustic'] as const)(
       expect(await screen.findByText('Filters')).toBeInTheDocument();
 
       for (const part of NO_PAINT_PARTS[engine]) {
-        const nodes = ownParts(container, part);
+        const nodes = ownNodes(container, engine, part);
         expect(nodes.length, `${engine}: data-part="${part}" did not render`).toBeGreaterThan(0);
         nodes.forEach((el) => {
           expect(el.style.background, `${engine}: ${part} paints background inline`).toBe('');
@@ -339,7 +352,7 @@ describe.each(['modern', 'rustic'] as const)(
       }
 
       for (const part of NO_COLOR_PARTS[engine]) {
-        const nodes = ownParts(container, part);
+        const nodes = ownNodes(container, engine, part);
         nodes.forEach((el) => {
           expect(el.style.color, `${engine}: ${part} paints color inline`).toBe('');
         });
@@ -357,8 +370,12 @@ describe.each(['modern', 'rustic'] as const)(
           expect(el.style.borderRadius, 'modern: active-count badge paints border-radius inline').toBe('');
         });
         expect(container.querySelectorAll('[data-part="active-count-badge"]')).toHaveLength(0);
-        const toggle = container.querySelector<HTMLElement>('[data-part="collapse-toggle"]');
+        const toggle = container.querySelector<HTMLElement>(MODERN_BUTTON_DOORS['collapse-toggle']);
+        expect(toggle, 'modern: the collapse-toggle door did not render').not.toBeNull();
         expect(toggle?.style.transform, 'modern: collapse-toggle paints transform inline').toBe('');
+        for (const part of Object.keys(MODERN_BUTTON_DOORS)) {
+          expect(container.querySelectorAll(`[data-part="${part}"]`), `modern: caller part "${part}" landed`).toHaveLength(0);
+        }
       }
     });
   },

@@ -9,6 +9,14 @@ import { PatternEmptyState } from '../feedback/empty-state';
 import { TokenInspector } from '../customization/token-inspector';
 import { renderWithEngine } from '@tests/support/engine';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, Record<string, string>> = {
+  'empty-state': { 'action': '.ds-empty-state__action', 'secondary-action': '.ds-empty-state__secondary-action' },
+  'file-manager': { 'folder-link': '.ds-file-manager__folder-link', 'grid-card-activate': '.ds-file-manager__grid-card-activate', 'item-action': '.ds-file-manager__item-action', 'toolbar-action': '.ds-file-manager__toolbar-action', 'view-toggle': '.ds-file-manager__view-toggle' },
+  'user-profile-card': { 'action-button': '.ds-user-profile-card__action-button', 'card-activate': '.ds-user-profile-card__card-activate' },
+};
+const partSelector = (owner: string, part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[owner]?.[part]) || `[data-part="${part}"]`;
 // ---------------------------------------------------------------------------
 // cross-capability anatomy -- cross-capability pattern anatomy contract.
 //
@@ -111,7 +119,7 @@ describe('file-manager -- data-part contract (cross-capability anatomy)', () => 
     const root = await waitForSelector(container, '[data-part="root"][data-loading="false"][data-view-mode="list"]');
     expectEngineScope(root, 'file-manager', engine);
     for (const part of ['toolbar', 'breadcrumb', 'view-toggle', 'content', 'row', 'checkbox', 'folder-icon', 'file-icon', 'folder-link', 'file-name', 'item-action']) {
-      expect(q(container, `[data-part="${part}"]`).length, `${engine}: ${part}`).toBeGreaterThanOrEqual(1);
+      expect(q(container, partSelector('file-manager', part, engine)).length, `${engine}: ${part}`).toBeGreaterThanOrEqual(1);
     }
     if (engine === 'modern') {
       // P-88: the picker composes the Input primitive, which keeps its own `root` part, so it is found by its class door.
@@ -137,10 +145,10 @@ describe('file-manager -- data-part contract (cross-capability anatomy)', () => 
     for (const kind of ['image', 'pdf', 'text', 'other']) {
       expect(q(container, `[data-part="file-icon"][data-file-kind="${kind}"]`)).toHaveLength(1);
     }
-    expect(q(container, '[data-part="toolbar-action"][data-action="delete-selected"]')).toHaveLength(1);
-    expect(q(container, '[data-part="toolbar-action"][data-action="upload"]')).toHaveLength(1);
-    expect(q(container, '[data-part="item-action"][data-action="rename"]')).toHaveLength(5);
-    expect(q(container, '[data-part="item-action"][data-action="delete"]')).toHaveLength(5);
+    expect(q(container, `${engine === 'modern' ? '.ds-file-manager__toolbar-action' : '[data-part="toolbar-action"]'}[data-action="delete-selected"]`)).toHaveLength(1);
+    expect(q(container, `${engine === 'modern' ? '.ds-file-manager__toolbar-action' : '[data-part="toolbar-action"]'}[data-action="upload"]`)).toHaveLength(1);
+    expect(q(container, `${engine === 'modern' ? '.ds-file-manager__item-action' : '[data-part="item-action"]'}[data-action="rename"]`)).toHaveLength(5);
+    expect(q(container, `${engine === 'modern' ? '.ds-file-manager__item-action' : '[data-part="item-action"]'}[data-action="delete"]`)).toHaveLength(5);
 
     if (engine === 'rustic') {
       expect(q(container, '[data-part="column-header"][data-selected="false"]')).toHaveLength(1);
@@ -211,7 +219,7 @@ describe('user-profile-card -- data-part contract (cross-capability anatomy)', (
       expectEngineScope(root, 'user-profile-card', engine);
     }
     for (const part of ['avatar-container', 'avatar', 'presence-dot', 'name', 'role', 'department-badge', 'email', 'status-badge']) {
-      expect(q(container, `[data-part="${part}"]`).length, `${engine}: ${part}`).toBeGreaterThanOrEqual(4);
+      expect(q(container, partSelector('user-profile-card', part, engine)).length, `${engine}: ${part}`).toBeGreaterThanOrEqual(4);
     }
     // Modern wraps fallback initials in their own painted child; rustic paints
     // the raw initial directly on the avatar element.
@@ -222,10 +230,10 @@ describe('user-profile-card -- data-part contract (cross-capability anatomy)', (
       expect(q(container, `[data-part="status-badge"][data-status="${status}"]`)).toHaveLength(1);
     }
     for (const variant of ['primary', 'default', 'danger']) {
-      expect(q(container, `[data-part="action-button"][data-variant="${variant}"]`)).toHaveLength(1);
+      expect(q(container, `${engine === 'modern' ? '.ds-user-profile-card__action-button' : '[data-part="action-button"]'}[data-variant="${variant}"]`)).toHaveLength(1);
     }
-    expect(q(container, '[data-part="action-button"][data-disabled="true"]')).toHaveLength(1);
-    expect(q(container, '[data-part="action-button"]:not([data-disabled="true"])')).toHaveLength(2);
+    expect(q(container, `${engine === 'modern' ? '.ds-user-profile-card__action-button' : '[data-part="action-button"]'}[data-disabled="true"]`)).toHaveLength(1);
+    expect(q(container, `${engine === 'modern' ? '.ds-user-profile-card__action-button' : '[data-part="action-button"]'}:not([data-disabled="true"])`)).toHaveLength(2);
   });
 
   it.each(ENGINES)('pins compact online/offline roots (%s)', async (engine) => {
@@ -328,10 +336,10 @@ describe('empty-state -- data-part contract (cross-capability anatomy)', () => {
     const root = await waitForSelector(container, '[data-part="root"][data-loading="false"]');
     expectEngineScope(root, 'empty-state', engine);
     for (const part of ['icon', 'title', 'description']) {
-      expect(q(container, `[data-part="${part}"]`)).toHaveLength(1);
+      expect(q(container, partSelector('empty-state', part, engine))).toHaveLength(1);
     }
-    expect(q(container, '[data-part="action"][data-variant="primary"]')).toHaveLength(1);
-    expect(q(container, '[data-part="secondary-action"][data-variant="default"]')).toHaveLength(1);
+    expect(q(container, `${engine === 'modern' ? '.ds-empty-state__action' : '[data-part="action"]'}[data-variant="primary"]`)).toHaveLength(1);
+    expect(q(container, `${engine === 'modern' ? '.ds-empty-state__secondary-action' : '[data-part="secondary-action"]'}[data-variant="default"]`)).toHaveLength(1);
   });
 
   it.each(ENGINES)('pins default action and image branches (%s)', async (engine) => {
@@ -340,7 +348,7 @@ describe('empty-state -- data-part contract (cross-capability anatomy)', () => {
       engine,
     );
     await waitForSelector(defaultAction.container, '[data-part="root"][data-loading="false"]');
-    expect(q(defaultAction.container, '[data-part="action"][data-variant="default"]')).toHaveLength(1);
+    expect(q(defaultAction.container, `${engine === 'modern' ? '.ds-empty-state__action' : '[data-part="action"]'}[data-variant="default"]`)).toHaveLength(1);
     defaultAction.unmount();
 
     const image = renderWithEngine(<PatternEmptyState title="No image" image="/fixture.png" />, engine);

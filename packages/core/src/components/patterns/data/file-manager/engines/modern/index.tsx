@@ -102,7 +102,7 @@ const GridCard = React.forwardRef<HTMLButtonElement, StatefulProps<HTMLDivElemen
     return (
       <div {...rest} {...interaction.handlers} {...partAttributes('grid-card', interaction.state)} data-interactive="true">
         <div data-part="grid-card-hit">
-          <ModernButton chrome="none" data-part="grid-card-activate" className="ds-file-manager__grid-card-activate" ref={ref} {...activate} />
+          <ModernButton chrome="none" className="ds-file-manager__grid-card-activate" ref={ref} {...activate} />
         </div>
         {children}
       </div>
@@ -344,7 +344,6 @@ export default function ModernFileManager(props: FileManagerProps) {
               <ModernButton
                 variant="danger"
                 size="sm"
-                data-part="toolbar-action"
                 className="ds-file-manager__toolbar-action"
                 data-action="delete-selected"
                 onClick={() => onDelete(selectedItems)}
@@ -365,7 +364,6 @@ export default function ModernFileManager(props: FileManagerProps) {
                 <ModernButton
                   variant="primary"
                   size="sm"
-                  data-part="toolbar-action"
                   className="ds-file-manager__toolbar-action"
                   data-action="upload"
                   onClick={() => fileInputRef.current?.click()}
@@ -377,7 +375,6 @@ export default function ModernFileManager(props: FileManagerProps) {
             <ModernButton
               variant="ghost"
               size="sm"
-              data-part="view-toggle"
               className="ds-file-manager__view-toggle"
               data-action="toggle-view"
               data-view-mode={viewMode}
@@ -478,7 +475,6 @@ export default function ModernFileManager(props: FileManagerProps) {
                               size="sm"
                               shape="default"
                               htmlType="button"
-                              data-part="folder-link"
                               data-action="navigate-folder"
                               className="ds-file-manager__folder-link"
                               id={`${rowIdBase}-${item.id}-name`}
@@ -500,7 +496,6 @@ export default function ModernFileManager(props: FileManagerProps) {
                             <ModernButton
                               variant="ghost"
                               size="xs"
-                              data-part="item-action"
                               className="ds-file-manager__item-action"
                               data-action="rename"
                               id={`${rowIdBase}-${item.id}-rename`}
@@ -518,7 +513,6 @@ export default function ModernFileManager(props: FileManagerProps) {
                               variant="ghost"
                               danger
                               size="xs"
-                              data-part="item-action"
                               className="ds-file-manager__item-action"
                               data-action="delete"
                               id={`${rowIdBase}-${item.id}-delete`}

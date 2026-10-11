@@ -294,7 +294,6 @@ export function ExportButton<T = unknown>({
         ref={setTriggerRef}
       >
         <Button
-          data-part="trigger"
           variant="ghost"
           size={size}
           disabled={disabled || data.length === 0}
@@ -365,7 +364,6 @@ export function ExportButton<T = unknown>({
                   // item under classic and rustic. Without it the family had
                   // to force `engine="modern"` here to keep its own layout.
                   className="ds-export-button-item"
-                  data-part="menu-item"
                   role="menuitem"
                   tabIndex={-1}
                   icon={meta.icon}

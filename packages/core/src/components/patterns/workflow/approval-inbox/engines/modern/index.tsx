@@ -218,7 +218,6 @@ function InboxItemRow({
               }}
               variant="ghost"
               size="sm"
-              data-part="item-action-button"
               className="ds-approval-inbox__item-action-button"
               data-action="approve"
               icon={<ActionConfirmIcon decorative size={14} />}
@@ -242,7 +241,6 @@ function InboxItemRow({
               }
               variant="ghost"
               size="sm"
-              data-part="item-action-button"
               className="ds-approval-inbox__item-action-button"
               data-action="reject"
               icon={<ActionCloseIcon decorative size={14} />}
@@ -487,7 +485,6 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
           <ModernButton
             variant="primary"
             size="sm"
-            data-part="batch-approve-button"
             className="ds-approval-inbox__batch-approve-button"
             icon={<ActionConfirmIcon decorative size={14} />}
             pending={batchPending}
@@ -499,7 +496,6 @@ export default function ModernApprovalInbox(props: ApprovalInboxProps) {
           <ModernButton
             variant="ghost"
             size="sm"
-            data-part="batch-clear-button"
             className="ds-approval-inbox__batch-clear-button"
             disabled={batchPending}
             onClick={() => setSelectedIds(new Set())}

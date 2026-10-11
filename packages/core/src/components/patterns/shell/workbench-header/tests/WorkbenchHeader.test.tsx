@@ -317,6 +317,6 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
     for (const part of ['header-icon', 'title', 'subtitle', 'actions', 'tabs']) {
       expect(source.querySelector(`[data-part="${part}"]`), part).not.toBeNull();
     }
-    expect(source.querySelectorAll('[data-part="action"]')).toHaveLength(2);
+    expect(source.querySelectorAll('.ds-pattern-workbench-header__action')).toHaveLength(2);
   });
 });

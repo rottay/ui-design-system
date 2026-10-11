@@ -92,10 +92,10 @@ describe('CollectionRenderDispatch — card and open link wear the tenant focus 
       { engine: 'modern' },
     );
     await waitFor(() =>
-      expect(container.querySelectorAll('[data-part="card-activation"]')).toHaveLength(rows.length),
+      expect(container.querySelectorAll('.ds-collection-render-dispatch__card-activation')).toHaveLength(rows.length),
     );
 
-    const activation = container.querySelector<HTMLElement>('[data-part="card-activation"]');
+    const activation = container.querySelector<HTMLElement>('.ds-collection-render-dispatch__card-activation');
     expect(activation?.tagName).toBe('BUTTON');
     expect(activation).toHaveClass('ds-button');
     expect(activation).toHaveAttribute('type', 'button');
@@ -150,10 +150,10 @@ describe('CollectionRenderDispatch — card and open link wear the tenant focus 
       { engine: 'modern' },
     );
     await waitFor(() =>
-      expect(container.querySelectorAll('[data-part="fallback-open-link"]')).toHaveLength(rows.length),
+      expect(container.querySelectorAll('.ds-collection-render-dispatch__fallback-open-link')).toHaveLength(rows.length),
     );
 
-    const open = container.querySelector<HTMLElement>('[data-part="fallback-open-link"]');
+    const open = container.querySelector<HTMLElement>('.ds-collection-render-dispatch__fallback-open-link');
     expect(open?.tagName).toBe('BUTTON');
     expect(open).toHaveClass('ds-button');
   });

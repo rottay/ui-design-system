@@ -224,7 +224,6 @@ export function renderFallbackCard<T extends object>({
               variant="ghost"
               size="sm"
               className="ds-collection-render-dispatch__fallback-open-link"
-              data-part="fallback-open-link"
               aria-label={activationLabel}
               onClick={onActivate}
             >

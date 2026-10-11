@@ -93,7 +93,7 @@ describe('ModernFileManager metadata resilience', () => {
 describe('ModernFileManager grid roving tab stop', () => {
   // Each card's roving stop is the chrome-less Button stretched over it.
   const gridCards = (container: HTMLElement) =>
-    Array.from(container.querySelectorAll<HTMLElement>('[data-part="grid-card"] [data-part="grid-card-activate"]'));
+    Array.from(container.querySelectorAll<HTMLElement>('[data-part="grid-card"] .ds-file-manager__grid-card-activate'));
 
   it('exposes exactly one tab stop for the whole grid', () => {
     const { container } = render(

@@ -115,7 +115,7 @@ const BODY = "#fm-list [data-part='body']";
 const CONTENT = "#fm-list [data-part='content']";
 const TABLE = "#fm-list [data-part='list-table']";
 const ROW_SELECTED = "#fm-list [data-part='row'][data-selected='true']";
-const LINK = "#fm-list [data-part='folder-link']";
+const LINK = '#fm-list .ds-file-manager__folder-link';
 const CARD = "#fm-grid [data-part='grid-card']";
 const CARD_SELECTED = "#fm-grid [data-part='grid-card'][data-selected='true']";
 const ITEM_NAME = "#fm-grid [data-part='item-name']";
@@ -278,7 +278,8 @@ describe('file-manager causality surface', () => {
     expect(list).toContain('data-part="content"');
     expect(list).toContain('data-part="list-table"');
     expect(list).toContain('data-part="row"');
-    expect(list).toContain('data-part="folder-link"');
+    expect(list).toContain('ds-file-manager__folder-link');
+    expect(list).not.toContain('data-part="folder-link"');
     expect(grid).toContain('data-part="grid-card"');
     expect(grid).toContain('data-part="item-name"');
     // The row and the card are stateful parts decided by the kernel: at rest

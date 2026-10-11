@@ -522,7 +522,7 @@ const CARDS_WITH_MENU_ACTIONS = Object.fromEntries(
 
 function DataTableCoverage() {
   useClickUntil(
-    "[data-testid='probe-skin-coverage-datatable-cards-selected'] [data-part='row-actions-trigger']",
+    "[data-testid='probe-skin-coverage-datatable-cards-selected'] .ds-data-table__row-actions-trigger",
     "[data-part='row-actions-menu']",
   );
   return (

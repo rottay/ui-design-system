@@ -57,7 +57,6 @@ function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
 
   return (
     <Button
-      data-part="action"
       className="ds-pattern-workbench-header__action"
       /* The tone is this header's decision, stated here and keyed by the skin.
          The closed prop domain is exactly the Button's own three, so the Button

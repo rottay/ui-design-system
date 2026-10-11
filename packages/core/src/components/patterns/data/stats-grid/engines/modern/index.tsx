@@ -237,7 +237,6 @@ function StatCard({
         <div data-part="card-hit">
           <ModernButton
             chrome="none"
-            data-part="card-activate"
             className="ds-stats-grid__card-activate"
             aria-labelledby={cardId}
             onClick={onClick}

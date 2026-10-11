@@ -7,6 +7,12 @@ import type { FieldFilterDefinition, FieldFilterPreset, FieldFilterVisual } from
 import { renderWithEngine } from '@tests/support/engine';
 import { waitForComposedContent } from '@tests/support/skin-reachability';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, string> = {
+  'preset-chip': '.ds-field-filters-panel__preset-chip',
+};
+const partSelector = (part: string) => BUTTON_DOORS[part] ?? `[data-part="${part}"]`;
 const ENGINES = ['modern'] as const;
 
 const FILTERS: FieldFilterDefinition[] = [
@@ -117,7 +123,7 @@ describe('FieldFiltersPanel data-part contract', () => {
     expect(root?.className).toContain('ds-field-filters-panel');
 
     for (const [part, minCount] of Object.entries(EXPECTED_PART_COUNTS)) {
-      const nodes = container.querySelectorAll(`[data-part="${part}"]`);
+      const nodes = container.querySelectorAll(partSelector(part));
       expect(nodes.length, `data-part="${part}" did not reach the DOM`).toBeGreaterThanOrEqual(minCount);
     }
 

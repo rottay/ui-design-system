@@ -49,7 +49,7 @@ const markup = renderToStaticMarkup(
 );
 
 const ACTIVE = "[data-testid='view-tab-all']";
-const MENU = `${ACTIVE} [data-part='menu-trigger']`;
+const MENU = `${ACTIVE} .ds-saved-views__menu-trigger`;
 
 describeCausality({
   family: 'saved-views',
@@ -122,8 +122,8 @@ interface FocusReading {
 }
 
 const FOCUS_TARGETS = {
-  pill: "[data-testid='view-tab-all'] [data-part='pill-select']",
-  trigger: "[data-testid='view-tab-all'] [data-part='menu-trigger']",
+  pill: "[data-testid='view-tab-all'] .ds-saved-views__pill-select",
+  trigger: "[data-testid='view-tab-all'] .ds-saved-views__menu-trigger",
 } as const;
 
 async function focusReadings(

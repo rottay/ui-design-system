@@ -365,7 +365,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
      returns to the cell; Up/Down walk the stack. Enter/Space stay bound to
      `onDateClick` on EVERY cell, so the documented callback is untouched. */
   const enterCell = (cellNode: HTMLElement): boolean => {
-    const firstChip = cellNode.querySelector<HTMLElement>('[data-part="event"]');
+    const firstChip = cellNode.querySelector<HTMLElement>('.ds-pattern-calendar-view__event');
     if (!firstChip) return false;
     firstChip.focus();
     return true;
@@ -392,7 +392,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
       e.stopPropagation();
       const sibling =
         e.key === 'ArrowDown' ? chip.nextElementSibling : chip.previousElementSibling;
-      if (sibling instanceof HTMLElement && sibling.dataset.part === 'event') sibling.focus();
+      if (sibling instanceof HTMLElement && sibling.classList.contains('ds-pattern-calendar-view__event')) sibling.focus();
     }
   };
 
@@ -439,7 +439,6 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
             <ModernButton
               variant="ghost"
               size="sm"
-              data-part="toolbar-action"
               className="ds-pattern-calendar-view__toolbar-action"
               data-action="previous"
               aria-label={copy.previousMonth}
@@ -455,7 +454,6 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
             <ModernButton
               variant="ghost"
               size="sm"
-              data-part="toolbar-action"
               className="ds-pattern-calendar-view__toolbar-action"
               data-action="next"
               aria-label={copy.nextMonth}
@@ -468,7 +466,6 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
             <ModernButton
               variant="ghost"
               size="sm"
-              data-part="toolbar-action"
               className="ds-pattern-calendar-view__toolbar-action"
               data-action="today"
               onClick={() => onDateChange?.(new Date())}
@@ -612,7 +609,6 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                             <ModernButton
                               key={ev.id}
                               chrome="none"
-                              data-part="event"
                               className="ds-pattern-calendar-view__event"
                               /* APG grid: a widget inside a cell is reached
                                  through the cell (F2), never through its own

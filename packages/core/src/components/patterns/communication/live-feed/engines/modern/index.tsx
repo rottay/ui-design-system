@@ -146,7 +146,6 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
           engine="modern"
           variant="ghost"
           size="sm"
-          data-part="refresh"
           className="ds-live-feed__refresh"
           icon={loading ? <ModernSpinner size="sm" /> : <ActionRefreshIcon size={14} decorative />}
           aria-label={refreshLabel}
@@ -205,7 +204,6 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             engine="modern"
             variant="ghost"
             size="sm"
-            data-part="banner"
             className="ds-live-feed__banner"
             onClick={handleShowNewItems}
           >
@@ -266,7 +264,6 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
               engine="modern"
               variant="ghost"
               size="sm"
-              data-part="load-more"
               className="ds-live-feed__load-more"
               icon={loading ? <ModernSpinner size="sm" /> : undefined}
               onClick={onLoadMore}

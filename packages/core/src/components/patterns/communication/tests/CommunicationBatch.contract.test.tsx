@@ -23,6 +23,15 @@ import {
 import { PresenceBar, PresenceTypingIndicator, LiveCursor } from '../presence';
 import { renderWithEngine } from '@tests/support/engine';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, Record<string, string>> = {
+  'activity-log': { 'item-activate': '.ds-activity-log__item-activate' },
+  'comment-thread': { 'cancel': '.ds-comment-thread__cancel', 'delete': '.ds-comment-thread__delete', 'edit': '.ds-comment-thread__edit', 'reaction': '.ds-comment-thread__reaction', 'reply': '.ds-comment-thread__reply', 'reply-cancel': '.ds-comment-thread__reply-cancel', 'reply-submit': '.ds-comment-thread__reply-submit', 'save': '.ds-comment-thread__save', 'submit': '.ds-comment-thread__submit' },
+  'live-feed': { 'banner': '.ds-live-feed__banner', 'load-more': '.ds-live-feed__load-more', 'refresh': '.ds-live-feed__refresh' },
+  'notification-center': { 'action': '.ds-notification-center__action', 'clear-all': '.ds-notification-center__clear-all', 'dismiss': '.ds-notification-center__dismiss', 'mark-all-read': '.ds-notification-center__mark-all-read', 'mark-read': '.ds-notification-center__mark-read', 'row-activate': '.ds-notification-center__row-activate', 'trigger': '.ds-notification-center__trigger' },
+};
+const partSelector = (owner: string, part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[owner]?.[part]) || `[data-part="${part}"]`;
 // ---------------------------------------------------------------------------
 // communication-pattern anatomy -- the patterns/communication family
 // (CommentThread, NotificationCenter, ActivityLog, LiveFeed, assistant's 8
@@ -122,34 +131,34 @@ describe('comment-thread -- data-part contract (communication-pattern anatomy)',
     ).toBeGreaterThanOrEqual(2);
     expect(q(container, '[data-part="avatar"]')).toHaveLength(0);
     // reaction pill state, both values present
-    expect(q(container, '[data-part="reaction"][data-active="true"]')).toHaveLength(1);
-    expect(q(container, '[data-part="reaction"][data-active="false"]')).toHaveLength(1);
+    expect(q(container, '.ds-comment-thread__reaction[data-active="true"]')).toHaveLength(1);
+    expect(q(container, '.ds-comment-thread__reaction[data-active="false"]')).toHaveLength(1);
     // isOwner (currentUser.name === 'Ana') unlocks edit/delete on the owned comment
-    expect(q(container, '[data-part="reply"]').length).toBeGreaterThanOrEqual(1);
-    expect(q(container, '[data-part="edit"]').length).toBeGreaterThanOrEqual(1);
-    expect(q(container, '[data-part="delete"]').length).toBeGreaterThanOrEqual(1);
+    expect(q(container, '.ds-comment-thread__reply').length).toBeGreaterThanOrEqual(1);
+    expect(q(container, '.ds-comment-thread__edit').length).toBeGreaterThanOrEqual(1);
+    expect(q(container, '.ds-comment-thread__delete').length).toBeGreaterThanOrEqual(1);
     // nested reply renders the threading line
     expect(q(container, '[data-part="nested-line"]')).toHaveLength(1);
     // Modern exposes the composed row/main anatomy; Rustic remains on its
     // frozen single composer wrapper.
     expect(q(container, `[data-part="${engine === 'modern' ? 'composer-row' : 'composer'}"]`)).toHaveLength(1);
-    expect(q(container, '[data-part="submit"]')).toHaveLength(1);
+    expect(q(container, '.ds-comment-thread__submit')).toHaveLength(1);
 
     // Edit branch: clicking the owned comment's "edit" part reveals
     // edit-textarea/save/cancel.
-    fireEvent.click(q(container, '[data-part="edit"]')[0]);
+    fireEvent.click(q(container, '.ds-comment-thread__edit')[0]);
     await waitForPart(container, 'edit-form');
     expect(q(container, '[data-part="edit-form"] textarea')).toHaveLength(1);
-    expect(q(container, '[data-part="save"]')).toHaveLength(1);
-    expect(q(container, '[data-part="cancel"]')).toHaveLength(1);
+    expect(q(container, '.ds-comment-thread__save')).toHaveLength(1);
+    expect(q(container, '.ds-comment-thread__cancel')).toHaveLength(1);
 
     // Reply branch: clicking "reply" on the top-level comment reveals
     // reply-textarea/reply-submit/reply-cancel.
-    fireEvent.click(q(container, '[data-part="reply"]')[0]);
+    fireEvent.click(q(container, '.ds-comment-thread__reply')[0]);
     await waitForPart(container, 'reply-form');
     expect(q(container, '[data-part="reply-form"] textarea')).toHaveLength(1);
-    expect(q(container, '[data-part="reply-submit"]')).toHaveLength(1);
-    expect(q(container, '[data-part="reply-cancel"]')).toHaveLength(1);
+    expect(q(container, '.ds-comment-thread__reply-submit')).toHaveLength(1);
+    expect(q(container, '.ds-comment-thread__reply-cancel')).toHaveLength(1);
   });
 
   it.each(ENGINES)('stamps the loading branch as its own root (%s)', async (engine) => {
@@ -196,7 +205,7 @@ describe('notification-center -- data-part contract (communication-pattern anato
     const root = await waitForPart(container, 'root');
     expect(root.className).toContain('ds-pattern-notification-center');
     expect(root.className).toContain(`ds-engine-${engine}`);
-    expect(q(container, '[data-part="trigger"]')).toHaveLength(1);
+    expect(q(container, '.ds-notification-center__trigger')).toHaveLength(1);
     if (engine === 'modern') {
       // P-88: the composed Badge keeps its own `root` part; it is found by the family class.
       expect(q(container, '.ds-notification-center__badge')).toHaveLength(1);
@@ -209,7 +218,7 @@ describe('notification-center -- data-part contract (communication-pattern anato
     await waitForPart(container, 'panel');
 
     for (const part of ['header', 'mark-all-read', 'clear-all', 'row', 'icon', 'dismiss', 'action']) {
-      expect(q(container, `[data-part="${part}"]`).length, `${engine} must stamp "${part}"`).toBeGreaterThanOrEqual(1);
+      expect(q(container, partSelector('notification-center', part, engine)).length, `${engine} must stamp "${part}"`).toBeGreaterThanOrEqual(1);
     }
     // one read row, one unread row
     expect(q(container, '[data-part="row"][data-unread="true"]')).toHaveLength(1);
@@ -364,10 +373,10 @@ describe('live-feed -- data-part contract (communication-pattern anatomy)', () =
     const root = await waitForPart(container, 'root');
     expect(root.className).toContain('ds-pattern-live-feed');
     expect(root.className).toContain(`ds-engine-${engine}`);
-    expect(q(container, '[data-part="refresh"]')).toHaveLength(1);
-    expect(q(container, '[data-part="banner"]')).toHaveLength(1);
+    expect(q(container, '.ds-live-feed__refresh')).toHaveLength(1);
+    expect(q(container, '.ds-live-feed__banner')).toHaveLength(1);
     expect(q(container, '[data-part="badge"]')).toHaveLength(1);
-    expect(q(container, '[data-part="load-more"]')).toHaveLength(1);
+    expect(q(container, '.ds-live-feed__load-more')).toHaveLength(1);
   });
 
   it.each(ENGINES)('stamps the loading skeleton as its own root (%s)', async (engine) => {

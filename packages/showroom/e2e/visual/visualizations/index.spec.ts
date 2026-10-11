@@ -120,7 +120,8 @@ for (const fixture of FIXTURES) {
       }
       await expect(band.locator('.ds-pattern-kanban-board [data-part="column"][data-empty="true"]')).toHaveCount(0);
       await expect(band.locator('.ds-pattern-kanban-board [data-part="column-body"][data-empty="true"]')).toHaveCount(1);
-      await expect(band.locator('.ds-pattern-map-view [data-part="marker-row"][data-selected="true"]')).toHaveCount(1);
+      // P-88: the modern marker rows are composed Buttons that keep their own `trigger` part; found by the owner class hook.
+      await expect(band.locator(`.ds-pattern-map-view ${engine === 'modern' ? '.ds-pattern-map-view__marker-row' : '[data-part="marker-row"]'}[data-selected="true"]`)).toHaveCount(1);
       // Modern composes the Tree primitive, whose selection lives on the
       // treeitem `row` (the `node` part is its layout wrapper); rustic keeps it
       // on `node`.

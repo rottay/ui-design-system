@@ -97,11 +97,11 @@ describe('ModernEmptyState — action hierarchy and live-region scope', () => {
     });
     await screen.findByRole('button', { name: 'Create' });
 
-    expect(container.querySelector('[data-part="action"]')).toHaveAttribute(
+    expect(container.querySelector('.ds-empty-state__action')).toHaveAttribute(
       'data-variant',
       'primary',
     );
-    expect(container.querySelector('[data-part="secondary-action"]')).toHaveAttribute(
+    expect(container.querySelector('.ds-empty-state__secondary-action')).toHaveAttribute(
       'data-variant',
       'default',
     );
@@ -113,7 +113,7 @@ describe('ModernEmptyState — action hierarchy and live-region scope', () => {
     });
     await screen.findByRole('button', { name: 'Create' });
 
-    expect(container.querySelector('[data-part="action"]')).toHaveAttribute(
+    expect(container.querySelector('.ds-empty-state__action')).toHaveAttribute(
       'data-variant',
       'default',
     );

@@ -144,7 +144,6 @@ export default function ModernEmptyState(props: EmptyStateProps) {
                    defaults to primary and outranks the secondary beside it. */
                 variant={action.variant ?? 'primary'}
                 className="ds-empty-state__action"
-                data-part="action"
                 data-variant={action.variant ?? 'primary'}
                 onClick={action.onClick}
               >
@@ -157,7 +156,6 @@ export default function ModernEmptyState(props: EmptyStateProps) {
                 htmlType="button"
                 variant="default"
                 className="ds-empty-state__secondary-action"
-                data-part="secondary-action"
                 data-variant="default"
                 onClick={secondaryAction.onClick}
               >

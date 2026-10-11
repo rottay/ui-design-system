@@ -54,7 +54,6 @@ export function CollectionPaginationFooter({
           variant="default"
           size="sm"
           className="ds-collection-render-dispatch__pagination-prev"
-          data-part="pagination-prev"
           data-disabled={canGoBack ? 'false' : 'true'}
           disabled={!canGoBack}
           onClick={() => pagination.onChange(current - 1, pageSize)}
@@ -75,7 +74,6 @@ export function CollectionPaginationFooter({
           variant="default"
           size="sm"
           className="ds-collection-render-dispatch__pagination-next"
-          data-part="pagination-next"
           data-disabled={canGoForward ? 'false' : 'true'}
           disabled={!canGoForward}
           onClick={() => pagination.onChange(current + 1, pageSize)}
@@ -184,7 +182,6 @@ export function CardsIncrementalFooter({
           variant="default"
           size="sm"
           className="ds-collection-render-dispatch__load-more"
-          data-part="load-more"
           onClick={loadMore}
         >
           {tSurfaceOr('collection_workspace.load_more', 'Load more')}

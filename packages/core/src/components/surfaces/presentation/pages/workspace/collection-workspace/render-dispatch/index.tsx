@@ -451,7 +451,6 @@ export function CollectionRenderDispatch<T extends object>(
                 ) : (
                   <Button
                     className="ds-collection-render-dispatch__card-activation"
-                    data-part="card-activation"
                     variant="ghost"
                     aria-label={activationLabel}
                     onClick={(event) => {

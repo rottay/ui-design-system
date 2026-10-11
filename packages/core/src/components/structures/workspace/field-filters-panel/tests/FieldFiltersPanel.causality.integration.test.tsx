@@ -63,7 +63,7 @@ const markup = `<div id="ffp" style="inline-size:60rem">${panel}</div>`;
 
 const ROOT = `#ffp ${ROOT_SELECTOR}`;
 const SIGNAL_PRIMARY = `${ROOT} [data-part='signal'][data-tone='primary']`;
-const CHIP = `${ROOT} [data-part='preset-chip']`;
+const CHIP = `${ROOT} .ds-field-filters-panel__preset-chip`;
 const CHIP_ICON = `${ROOT} [data-part='preset-chip-icon']`;
 const CARD = `${ROOT} [data-part='filter-card']`;
 const TITLE_GROUP = `${ROOT} [data-part='title-group']`;
@@ -128,7 +128,8 @@ describe('field-filters-panel causality surface', () => {
   it('serves the anatomy every probe reads', () => {
     expect(panel).toContain('data-part="title-group"');
     expect(panel).toContain('data-part="presets-row"');
-    expect(panel).toContain('data-part="preset-chip"');
+    expect(panel).toContain('ds-field-filters-panel__preset-chip');
+    expect(panel).not.toContain('data-part="preset-chip"');
     expect(panel).toContain('data-part="filter-card"');
     // The family paints nothing from the TSX.
     expect(panel).not.toContain('style="background');

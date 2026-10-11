@@ -497,7 +497,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 }}
                 variant="ghost"
                 size="sm"
-                data-part="pill-select"
                 className="ds-saved-views__pill-select"
                 data-active={isActive}
                 aria-current={isActive ? 'page' : undefined}
@@ -550,7 +549,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 <Button
                   variant="ghost"
                   size="xs"
-                  data-part="menu-trigger"
                   className="ds-saved-views__menu-trigger"
                   data-open={isMenuOpen}
                   data-active={isActive}
@@ -599,7 +597,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             ref={createButtonRef}
             variant="dashed"
             size="sm"
-            data-part="create-button"
             className="ds-saved-views__create-button"
             icon={<ActionAddIcon decorative size={14} />}
             onClick={() => setIsCreating(true)}

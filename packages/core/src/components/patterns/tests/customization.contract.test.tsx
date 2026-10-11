@@ -146,7 +146,9 @@ describe.each([
 
     for (const variant of ['primary', 'outlined', 'default']) {
       const variantAttribute = engine === 'modern' ? 'data-sample-variant' : 'data-variant';
-      expect(queryAll(root, `[data-part="button"][${variantAttribute}="${variant}"]`)).toHaveLength(1);
+      // P-88: the modern samples are composed Buttons that keep their own `trigger` part.
+      const samplePart = engine === 'modern' ? 'trigger' : 'button';
+      expect(queryAll(root, `[data-part="${samplePart}"][${variantAttribute}="${variant}"]`)).toHaveLength(1);
     }
     for (const part of [
       'sample-card',
@@ -355,7 +357,7 @@ describe('PatternBrandStudio customization anatomy anatomy and behavior', () => 
 
     fireEvent.click(await screen.findByRole('button', { name: 'Run check' }));
     await waitFor(() => expect(root).toHaveAttribute('data-state', 'checked'));
-    expect(queryAll(root, '.ds-pattern-brand-studio__action[data-state="complete"]')).toHaveLength(1);
+    expect(queryAll(root, '.ds-pattern-brand-studio__action[data-status="complete"]')).toHaveLength(1);
     expect(queryAll(root, '[data-part="violation"][data-severity="error"]').length).toBeGreaterThan(0);
 
     unmount();

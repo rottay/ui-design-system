@@ -21,12 +21,12 @@ import { waitForComposedContent } from '@tests/support/skin-reachability';
  * structurally: a node belongs to THIS component iff no other `data-part="root"`
  * sits between it and this component's root.
  */
-function ownParts(scope: HTMLElement, part: string): HTMLElement[] {
+function ownParts(scope: HTMLElement, part: string, selector = `[data-part="${part}"]`): HTMLElement[] {
   // This component's OWN root is the outermost `data-part="root"` in the tree.
   const own = scope.querySelector('[data-part="root"]') as HTMLElement | null;
   if (!own) return [];
   if (part === 'root') return [own];
-  const all = own.querySelectorAll(`[data-part="${part}"]`) as NodeListOf<HTMLElement>;
+  const all = own.querySelectorAll(selector) as NodeListOf<HTMLElement>;
   return [...all].filter((el) => {
     // Anything under a NESTED root belongs to a component this one is built FROM
     // (a Badge, a Card, an Input) -- and that component paints inline legitimately
@@ -240,6 +240,14 @@ const VISUALS: Record<string, FieldFilterVisual> = {
   status: { icon: <span data-testid="status-icon" />, description: 'Filter by lifecycle status.' },
 };
 
+// P-88: the preset chip is a composed Button. It keeps its own part and is reached through the owner's class
+// door; the caller part `preset-chip` never lands.
+const PRESET_CHIP_DOOR = '.ds-field-filters-panel__preset-chip';
+
+function ownNodes(scope: HTMLElement, part: string): HTMLElement[] {
+  return part === 'preset-chip' ? ownParts(scope, part, PRESET_CHIP_DOOR) : ownParts(scope, part);
+}
+
 // Parts that must leave background/border/box-shadow/border-radius to the skin.
 const NO_PAINT_PARTS = [
   'root',
@@ -275,7 +283,7 @@ describe.each(['modern'] as const)(
       // Select/Input — each behind its own `<Suspense fallback={null}>`, so
       // the panel's own tree (title included) renders while they are absent.
       // Gate on the composed parts this test asserts, never on the title.
-      await waitForComposedContent(waitFor, container, '[data-part="preset-chip"]', PRESETS.length);
+      await waitForComposedContent(waitFor, container, PRESET_CHIP_DOOR, PRESETS.length);
       await waitForComposedContent(
         waitFor,
         container,
@@ -284,7 +292,7 @@ describe.each(['modern'] as const)(
       );
 
       for (const part of NO_PAINT_PARTS) {
-        const nodes = ownParts(container, part);
+        const nodes = ownNodes(container, part);
         expect(nodes.length, `data-part="${part}" did not render`).toBeGreaterThan(0);
         nodes.forEach((el) => {
           expect(el.style.background, `${part} paints background inline`).toBe('');
@@ -295,7 +303,7 @@ describe.each(['modern'] as const)(
       }
 
       for (const part of NO_COLOR_PARTS) {
-        const nodes = ownParts(container, part);
+        const nodes = ownNodes(container, part);
         nodes.forEach((el) => {
           expect(el.style.color, `${part} (Box) paints color inline`).toBe('');
         });
@@ -312,10 +320,11 @@ describe.each(['modern'] as const)(
         />,
         engine
       );
-      await waitForComposedContent(waitFor, container, '[data-part="preset-chip"]', PRESETS.length);
+      await waitForComposedContent(waitFor, container, PRESET_CHIP_DOOR, PRESETS.length);
 
-      const chips = ownParts(container, 'preset-chip');
+      const chips = ownNodes(container, 'preset-chip');
       expect(chips).toHaveLength(PRESETS.length);
+      expect(container.querySelectorAll('[data-part="preset-chip"]')).toHaveLength(0);
       const user = userEvent.setup();
       const reached = new Set<Element>();
       for (let step = 0; step < 40 && reached.size < chips.length; step += 1) {

@@ -143,7 +143,8 @@ for (const engine of ENGINES) {
     await expect(fullProfiles.locator('[data-part="presence-dot"][data-online="true"]').first()).toBeVisible();
     await expect(fullProfiles.locator('[data-part="presence-dot"][data-online="false"]').first()).toBeVisible();
     for (const variant of ['primary', 'default', 'danger']) {
-      await expect(fullProfiles.locator(`[data-part="action-button"][data-variant="${variant}"]`)).toHaveCount(1);
+      // P-88: the modern profile actions are composed Buttons that keep their own `trigger` part; found by the owner class hook.
+      await expect(fullProfiles.locator(`${engine === 'modern' ? '.ds-user-profile-card__action-button' : '[data-part="action-button"]'}[data-variant="${variant}"]`)).toHaveCount(1);
     }
 
     for (const cycle of ['monthly', 'yearly']) {

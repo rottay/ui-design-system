@@ -74,7 +74,8 @@ describe('Modern ShiftMatrix — the assignable cell wears the tenant focus sign
     );
 
     const cell = screen.getByRole('button', { name: /Bartender, 18:00-21:00/ });
-    expect(cell).toHaveAttribute('data-part', 'cell-button');
+    expect(cell).toHaveClass('ds-shift-matrix__cell-button');
+    expect(cell).toHaveAttribute('data-part', 'trigger');
     expect(cell).toHaveClass('ds-button', 'ds-button--modern');
     expect(cell).not.toHaveAttribute('tabindex', '-1');
     expect(cell.parentElement?.tagName).toBe('TD');

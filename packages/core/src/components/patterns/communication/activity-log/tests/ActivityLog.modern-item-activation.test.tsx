@@ -28,7 +28,8 @@ describe('ActivityLog modern item activation is a composed chrome-less Button', 
     const onActivityClick = vi.fn();
     await mount({ onActivityClick });
     const activation = screen.getByRole('button', { name: /Ann Lee/ });
-    expect(activation).toHaveAttribute('data-part', 'item-activate');
+    expect(activation).toHaveClass('ds-activity-log__item-activate');
+    expect(activation).toHaveAttribute('data-part', 'trigger');
     expect(activation).toHaveAttribute('data-chrome', 'none');
     expect(activation).toHaveClass('ds-button', 'ds-button--modern');
     expect(activation.closest('[data-part="item-body"]')).toHaveAttribute('id', activation.getAttribute('aria-labelledby'));

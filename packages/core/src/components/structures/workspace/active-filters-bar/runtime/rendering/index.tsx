@@ -238,7 +238,6 @@ export function ActiveFiltersBar({
               <Button
                 variant="text"
                 size="sm"
-                data-part="more-toggle"
                 className="ds-active-filters-bar__more-toggle"
                 aria-expanded={false}
                 onClick={() => setExpanded(true)}
@@ -252,7 +251,6 @@ export function ActiveFiltersBar({
               <Button
                 variant="text"
                 size="sm"
-                data-part="less-toggle"
                 className="ds-active-filters-bar__less-toggle"
                 aria-expanded
                 onClick={() => setExpanded(false)}
@@ -276,7 +274,6 @@ export function ActiveFiltersBar({
           <Button
             variant="ghost"
             size="sm"
-            data-part="clear-all"
             className="ds-active-filters-bar__clear-all"
             icon={<ActionCloseIcon decorative size="xs" />}
             onClick={onClearAll}
@@ -288,7 +285,6 @@ export function ActiveFiltersBar({
             <Button
               variant="outline"
               size="sm"
-              data-part="add-filter"
               className="ds-active-filters-bar__add-filter"
               icon={<ActionAddIcon decorative size="xs" />}
               onClick={onAddFilter}

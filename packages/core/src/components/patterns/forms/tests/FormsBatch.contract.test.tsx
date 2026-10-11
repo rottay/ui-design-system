@@ -12,6 +12,14 @@ import { PatternInvoiceTemplate } from '../invoice-template';
 import type { InvoiceData } from '../invoice-template';
 import { renderWithEngine } from '@tests/support/engine';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, Record<string, string>> = {
+  'filter-builder': { 'add-filter-option': '.ds-filter-builder__add-filter-option', 'add-filter-trigger': '.ds-filter-builder__add-filter-trigger', 'add-group-button': '.ds-filter-builder__add-group-button', 'add-rule-button': '.ds-filter-builder__add-rule-button', 'clear-button': '.ds-filter-builder__clear-button', 'logic-toggle': '.ds-filter-builder__logic-toggle', 'remove-button': '.ds-filter-builder__remove-button' },
+  'form-builder': { 'section-header': '.ds-form-builder__section-header', 'wizard-next-button': '.ds-form-builder__wizard-next-button', 'wizard-prev-button': '.ds-form-builder__wizard-prev-button' },
+  'step-wizard': { 'complete-button': '.ds-step-wizard__complete-button', 'next-button': '.ds-step-wizard__next-button', 'prev-button': '.ds-step-wizard__prev-button', 'skip-button': '.ds-step-wizard__skip-button' },
+};
+const partSelector = (owner: string, part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[owner]?.[part]) || `[data-part="${part}"]`;
 // ---------------------------------------------------------------------------
 // skin ownership migration checkpoint record anatomy/F -- the patterns/forms family (FilterBuilder,
 // FormBuilder, StepWizard, InvoiceTemplate) data-part contract evidence.
@@ -103,7 +111,7 @@ describe('Forms-family data-part contract (skin ownership migration checkpoint r
         expect(container.querySelector('[data-part="group"][data-root="true"]')).not.toBeNull();
         expect(container.querySelector('[data-part="group"]:not([data-root])')).not.toBeNull();
 
-        const logicToggle = container.querySelector('[data-part="logic-toggle"]');
+        const logicToggle = container.querySelector(`${engine === 'modern' ? '.ds-filter-builder__logic-toggle' : '[data-part="logic-toggle"]'}`);
         expect(logicToggle, `${engine}: nested group logic-toggle missing`).not.toBeNull();
         expect(logicToggle?.getAttribute('data-logic')).toBe('or');
 
@@ -125,15 +133,15 @@ describe('Forms-family data-part contract (skin ownership migration checkpoint r
           expect(fieldTypes.has(type), `${engine}: missing value-input for field-type "${type}"`).toBe(true);
         }
 
-        expect(container.querySelectorAll('[data-part="remove-button"]').length).toBeGreaterThanOrEqual(5);
-        expect(container.querySelectorAll('[data-part="add-rule-button"]').length).toBe(2);
-        expect(container.querySelectorAll('[data-part="add-group-button"]').length).toBeGreaterThanOrEqual(1);
+        expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-filter-builder__remove-button' : '[data-part="remove-button"]'}`).length).toBeGreaterThanOrEqual(5);
+        expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-filter-builder__add-rule-button' : '[data-part="add-rule-button"]'}`).length).toBe(2);
+        expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-filter-builder__add-group-button' : '[data-part="add-group-button"]'}`).length).toBeGreaterThanOrEqual(1);
 
-        const addFilterTrigger = container.querySelector('[data-part="add-filter-trigger"]');
+        const addFilterTrigger = container.querySelector(`${engine === 'modern' ? '.ds-filter-builder__add-filter-trigger' : '[data-part="add-filter-trigger"]'}`);
         expect(addFilterTrigger).not.toBeNull();
         expect(addFilterTrigger?.getAttribute('data-open')).toBe('false');
 
-        expect(container.querySelector('[data-part="clear-button"]')).not.toBeNull();
+        expect(container.querySelector(`${engine === 'modern' ? '.ds-filter-builder__clear-button' : '[data-part="clear-button"]'}`)).not.toBeNull();
       },
     );
 
@@ -148,7 +156,12 @@ describe('Forms-family data-part contract (skin ownership migration checkpoint r
         engine,
       );
 
-      const trigger = await waitForPart(container, 'add-filter-trigger');
+      // P-88: the modern trigger is a composed Button that keeps its own `trigger` part; found by the owner class hook.
+      const triggerSelector = engine === 'modern' ? '.ds-filter-builder__add-filter-trigger' : '[data-part="add-filter-trigger"]';
+      await waitFor(() => {
+        expect(container.querySelector(triggerSelector)).not.toBeNull();
+      });
+      const trigger = container.querySelector(triggerSelector) as Element;
       fireEvent.click(trigger);
 
       await waitFor(() => {
@@ -156,7 +169,7 @@ describe('Forms-family data-part contract (skin ownership migration checkpoint r
       });
       expect(trigger.getAttribute('data-open')).toBe('true');
       expect(container.querySelector('[data-part="add-filter-dropdown"]')?.getAttribute('data-open')).toBe('true');
-      expect(container.querySelectorAll('[data-part="add-filter-option"]').length).toBe(fields.length);
+      expect(container.querySelectorAll(`${engine === 'modern' ? '.ds-filter-builder__add-filter-option' : '[data-part="add-filter-option"]'}`).length).toBe(fields.length);
     });
 
     it.each(ENGINES)('stamps the loading root(data-loading)/spinner under the %s engine', async (engine) => {
@@ -226,8 +239,8 @@ describe('Forms-family data-part contract (skin ownership migration checkpoint r
           expect(tabs[2].getAttribute('data-active')).toBe('false');
         }
 
-        expect(container.querySelector('[data-part="wizard-prev-button"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="wizard-next-button"]')).not.toBeNull();
+        expect(container.querySelector(`${engine === 'modern' ? '.ds-form-builder__wizard-prev-button' : '[data-part="wizard-prev-button"]'}`)).not.toBeNull();
+        expect(container.querySelector(`${engine === 'modern' ? '.ds-form-builder__wizard-next-button' : '[data-part="wizard-next-button"]'}`)).not.toBeNull();
       },
     );
 
@@ -387,10 +400,10 @@ describe('Forms-family data-part contract (skin ownership migration checkpoint r
           expect(container.querySelector('[data-part="progress-track"]')).not.toBeNull();
           expect(container.querySelector('[data-part="progress-fill"]')).not.toBeNull();
         }
-        expect(container.querySelector('[data-part="prev-button"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="skip-button"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="next-button"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="complete-button"]')).toBeNull();
+        expect(container.querySelector(`${engine === 'modern' ? '.ds-step-wizard__prev-button' : '[data-part="prev-button"]'}`)).not.toBeNull();
+        expect(container.querySelector(`${engine === 'modern' ? '.ds-step-wizard__skip-button' : '[data-part="skip-button"]'}`)).not.toBeNull();
+        expect(container.querySelector(`${engine === 'modern' ? '.ds-step-wizard__next-button' : '[data-part="next-button"]'}`)).not.toBeNull();
+        expect(container.querySelector(`${engine === 'modern' ? '.ds-step-wizard__complete-button' : '[data-part="complete-button"]'}`)).toBeNull();
       },
     );
 
@@ -406,9 +419,9 @@ describe('Forms-family data-part contract (skin ownership migration checkpoint r
       );
 
       await waitForPart(container, 'root');
-      expect(container.querySelector('[data-part="complete-button"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="next-button"]')).toBeNull();
-      expect(container.querySelector('[data-part="prev-button"]')).not.toBeNull();
+      expect(container.querySelector(`${engine === 'modern' ? '.ds-step-wizard__complete-button' : '[data-part="complete-button"]'}`)).not.toBeNull();
+      expect(container.querySelector(`${engine === 'modern' ? '.ds-step-wizard__next-button' : '[data-part="next-button"]'}`)).toBeNull();
+      expect(container.querySelector(`${engine === 'modern' ? '.ds-step-wizard__prev-button' : '[data-part="prev-button"]'}`)).not.toBeNull();
     });
 
     it.each(ENGINES)('vertical orientation: stamps step-rail/step-label-group/step-description under the %s engine', async (engine) => {
@@ -490,8 +503,14 @@ describe('Forms-family data-part contract (skin ownership migration checkpoint r
 
         await waitForPart(container, 'root');
         expect(container.querySelector('[data-part="actions-bar"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="print-button"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="export-button"]')).not.toBeNull();
+        if (engine === 'modern') {
+          // P-88: the modern print/export actions are composed Buttons that keep their own `trigger` part.
+          expect(container.querySelectorAll('[data-part="actions-bar"] > .ds-button[data-part="trigger"]')).toHaveLength(2);
+          expect(container.querySelector('[data-part="print-button"], [data-part="export-button"]')).toBeNull();
+        } else {
+          expect(container.querySelector('[data-part="print-button"]')).not.toBeNull();
+          expect(container.querySelector('[data-part="export-button"]')).not.toBeNull();
+        }
         expect(container.querySelector('[data-part="header"]')).not.toBeNull();
         expect(container.querySelector('[data-part="company-name"]')?.textContent).toBe('Rottay Inc.');
         expect(container.querySelectorAll('[data-part="company-address-line"]').length).toBe(4);

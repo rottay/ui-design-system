@@ -50,7 +50,6 @@ function UtilityIcon({
       size="sm"
       icon={icon}
       className="ds-collection-workspace__utility-icon-toggle"
-      data-part="utility-icon-toggle"
       data-active={active ? 'true' : 'false'}
       onClick={onClick}
       title={label}
@@ -391,7 +390,6 @@ export function renderToolbarUtilities<T extends object>(input: CollectionToolba
                 aria-label={primaryAction.ariaLabel}
                 onClick={primaryAction.onClick}
                 className="ds-collection-workspace__toolbar-primary-action"
-                data-part="toolbar-primary-action"
               >
                 {primaryAction.label}
               </Button>

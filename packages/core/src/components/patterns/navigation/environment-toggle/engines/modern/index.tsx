@@ -129,7 +129,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
     const root = rootRef.current;
     if (!root) return;
     const target =
-      root.querySelector<HTMLElement>('[data-part="trigger"]') ??
+      root.querySelector<HTMLElement>('.ds-environment-toggle__trigger') ??
       root.querySelector<HTMLElement>('[role="radio"][tabindex="0"]');
     target?.focus();
   }, []);
@@ -253,7 +253,6 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
           <ModernButton
             variant="ghost"
             size="sm"
-            data-part="trigger"
             className="ds-environment-toggle__trigger"
             onClick={() => setDropdownOpen(!dropdownOpen)}
             data-testid="env-toggle-trigger"
@@ -293,7 +292,6 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
                   key={env.id}
                   variant="ghost"
                   size="sm"
-                  data-part="option"
                   className="ds-environment-toggle__option"
                   data-active={env.id === activeEnvironment}
                   /* The check glyph is decorative, so without aria-checked the
@@ -338,7 +336,6 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
               key={env.id}
               variant="ghost"
               size="sm"
-              data-part="option"
               className="ds-environment-toggle__option"
               data-active={env.id === activeEnvironment}
               role="radio"
@@ -376,7 +373,6 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             key={env.id}
             variant="ghost"
             size="sm"
-            data-part="option"
             className="ds-environment-toggle__option"
             data-active={env.id === activeEnvironment}
             data-position={idx === 0 ? 'first' : idx === environments.length - 1 ? 'last' : 'middle'}

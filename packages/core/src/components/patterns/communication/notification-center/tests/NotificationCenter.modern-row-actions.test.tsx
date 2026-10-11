@@ -7,6 +7,17 @@ import { describe, expect, it, vi } from 'vitest';
 import ModernNotificationCenter from '../engines/modern';
 import type { Notification, NotificationCenterProps } from '../contracts';
 
+
+/** P-88: these controls are composed Buttons that keep their own `trigger` part; each is found by its owner class hook. */
+const BUTTON_DOORS: Record<string, string> = {
+  'action': '.ds-notification-center__action',
+  'clear-all': '.ds-notification-center__clear-all',
+  'dismiss': '.ds-notification-center__dismiss',
+  'mark-all-read': '.ds-notification-center__mark-all-read',
+  'mark-read': '.ds-notification-center__mark-read',
+  'trigger': '.ds-notification-center__trigger',
+};
+const partSelector = (part: string, engine: string) => (engine === 'modern' && BUTTON_DOORS[part]) || `[data-part="${part}"]`;
 function notification(overrides: Partial<Notification> = {}): Notification {
   return {
     id: 'n1',
@@ -111,7 +122,7 @@ describe('NotificationCenter modern engine keyboard state contract', () => {
     await settle();
 
     for (const part of ['trigger', 'mark-all-read', 'clear-all', 'action', 'mark-read', 'dismiss']) {
-      const control = container.querySelector<HTMLElement>(`[data-part="${part}"]`);
+      const control = container.querySelector<HTMLElement>(partSelector(part, 'modern'));
       expect(control, part).toBeTruthy();
       expect(control!.tagName, part).toBe('BUTTON');
       expect(control!.matches(BUTTON_SKIN_STATE_HOST), part).toBe(true);

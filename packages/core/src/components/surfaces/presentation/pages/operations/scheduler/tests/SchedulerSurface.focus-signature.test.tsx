@@ -91,10 +91,10 @@ describe('SchedulerSurface — the agenda row wears the tenant focus signature',
     });
     await screen.findByText('Schedule');
     await waitFor(() =>
-      expect(container.querySelector('button[data-part="agenda-event"]')).not.toBeNull(),
+      expect(container.querySelector('button.ds-scheduler__agenda-event')).not.toBeNull(),
     );
 
-    const row = container.querySelector<HTMLElement>('[data-part="agenda-event"]');
+    const row = container.querySelector<HTMLElement>('.ds-scheduler__agenda-event');
     expect(row?.tagName).toBe('BUTTON');
     expect(row).toHaveClass('ds-scheduler__agenda-event');
     expect(row).toHaveClass('ds-button');
@@ -141,7 +141,7 @@ describe('SchedulerSurface — the agenda row wears the tenant focus signature',
     });
     await screen.findByText('Schedule');
 
-    const row = container.querySelector<HTMLElement>('[data-part="agenda-event"]');
+    const row = container.querySelector<HTMLElement>('.ds-scheduler__agenda-event');
     expect(row?.tagName).toBe('DIV');
     expect(row).not.toHaveAttribute('tabindex');
   });

@@ -204,7 +204,6 @@ export default function ModernShiftMatrix(props: ShiftMatrixProps) {
                            family paint over the caller part (P-79). */
                         <ModernButton
                           variant="ghost"
-                          data-part="cell-button"
                           className="ds-shift-matrix__cell-button"
                           aria-label={
                             staffRoster

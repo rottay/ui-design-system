@@ -223,7 +223,6 @@ function IconButton({
       variant='ghost'
       size='sm'
       icon={children}
-      data-part='icon-button'
       className='ds-list-toolbar__icon-button'
       onClick={onClick}
       aria-label={ariaLabel}
@@ -305,7 +304,6 @@ function FilterButton({
       <Button
         variant='ghost'
         size='sm'
-        data-part='filter-trigger'
         className='ds-list-toolbar__filter-trigger'
         data-active={!!isActive}
         data-open={open}
@@ -347,7 +345,6 @@ function FilterDropdownItem({
       variant='ghost'
       size='sm'
       fullWidth
-      data-part='filter-dropdown-item'
       className='ds-list-toolbar__filter-dropdown-item'
       data-selected={selected}
       onClick={onClick}
@@ -549,7 +546,6 @@ function DensityOptionRow({
       variant='ghost'
       size='sm'
       fullWidth
-      data-part='density-option'
       className='ds-list-toolbar__density-option'
       data-active={active}
       onClick={onClick}
@@ -674,7 +670,6 @@ function MobileOverflowItem({
       variant='ghost'
       size='sm'
       fullWidth
-      data-part='mobile-overflow-item'
       className='ds-list-toolbar__mobile-overflow-item'
       onClick={onClick}
       icon={icon}
@@ -901,7 +896,6 @@ export default function ModernListToolbar({
                 <Button
                   aria-label={primaryAction.label}
                   className='ds-list-toolbar__primary-action-mobile'
-                  data-part='primary-action-mobile'
                   variant='primary'
                   size='sm'
                   onClick={primaryAction.onClick}
@@ -1122,7 +1116,6 @@ export default function ModernListToolbar({
                   variant='primary'
                   size='sm'
                   className='ds-list-toolbar__primary-action'
-                  data-part='primary-action'
                   onClick={primaryAction.onClick}
                   icon={primaryAction.icon ?? <Plus size={15} />}
                 >
@@ -1209,7 +1202,6 @@ export default function ModernListToolbar({
               <Button
                 variant='ghost'
                 size='xs'
-                data-part='clear-all'
                 className='ds-list-toolbar__clear-all'
                 onClick={onClearFilters}
                 icon={<X size={12} aria-hidden='true' />}

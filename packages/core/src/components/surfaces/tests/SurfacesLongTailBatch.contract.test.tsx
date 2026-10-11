@@ -389,7 +389,7 @@ describe('long-tail anatomy layout and workspace anatomy (I-3)', () => {
     expect(q(container, '.ds-collection-workspace__collection[data-part="collection"]')).toHaveLength(1);
     expect(q(container, '.ds-collection-render-dispatch__card-item[data-part="card-item"]')).toHaveLength(3);
     expect(q(container, '.ds-collection-render-dispatch__card-item[data-lone-final="true"]')).toHaveLength(1);
-    expect(q(container, '[data-part="pagination-prev"][data-disabled="true"]')).toHaveLength(1);
+    expect(q(container, '.ds-collection-render-dispatch__pagination-prev[data-disabled="true"]')).toHaveLength(1);
     const paginationNext = q(container, '.ds-collection-render-dispatch__pagination-next');
     expect(paginationNext).toHaveLength(1);
     expect(paginationNext[0]).not.toBeDisabled();

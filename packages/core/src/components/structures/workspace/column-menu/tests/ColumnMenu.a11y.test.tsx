@@ -27,7 +27,7 @@ async function openMenu(): Promise<void> {
   );
   // The engine resolves its primitives lazily; the control appears after it.
   const control = await waitFor(() => {
-    const node = container.querySelector('[data-part="control"]') as HTMLElement;
+    const node = container.querySelector('.ds-column-menu-control') as HTMLElement;
     expect(node).not.toBeNull();
     return node;
   });
@@ -54,7 +54,7 @@ describe("ColumnMenu accessibility", () => {
 
     fireEvent.keyDown(document, { key: "Escape" });
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
-    fireEvent.click(document.querySelector('[data-part="control"]') as HTMLElement);
+    fireEvent.click(document.querySelector('.ds-column-menu-control') as HTMLElement);
     const reopened = await screen.findByRole("dialog");
     await waitFor(() =>
       expect(document.activeElement).toBe(
@@ -68,7 +68,7 @@ describe("ColumnMenu accessibility", () => {
     const panel = await screen.findByRole("dialog");
 
     const toggle = await waitFor(() => {
-      const node = panel.querySelector('[data-part="group-toggle"]') as HTMLElement;
+      const node = panel.querySelector('.ds-column-menu__group-toggle') as HTMLElement;
       expect(node).not.toBeNull();
       return node;
     });
