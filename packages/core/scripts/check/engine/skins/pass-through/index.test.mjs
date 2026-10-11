@@ -409,4 +409,17 @@ describe('engine/skins/pass-through -- census v7.1: no caller is skipped in sile
       [...JUSTIFIED_UNRESOLVED].sort(),
     );
   });
+
+  it('every pin of the census inventory names a live site', () => {
+    const { pinCheck } = census;
+    assert.ok(pinCheck.length > 0, 'the pin inventory is not empty');
+    for (const row of pinCheck) {
+      assert.equal(row.present, row.censusSites.length > 0, `${row.pin}: present agrees with its census sites`);
+    }
+    assert.deepEqual(
+      pinCheck.filter((row) => row.present !== true).map((row) => row.pin),
+      [],
+      'a pin with no census site is stale: remove the row or re-aim its predicate',
+    );
+  });
 });

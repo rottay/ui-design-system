@@ -406,7 +406,7 @@ describe('live-feed -- data-part contract (communication-pattern anatomy)', () =
 // forwarding behavior per primitive, not an assumed one.
 // ===========================================================================
 describe('assistant -- data-part contract (communication-pattern anatomy)', () => {
-  it.each(ENGINES)('AssistantStatusBadge: root scope class on Tag -- Tag forwards a custom data-part (%s)', async (engine) => {
+  it.each(ENGINES)('AssistantStatusBadge: root scope class lands on Tag (%s)', async (engine) => {
     const { container } = renderWithEngine(<AssistantStatusBadge label="Done" tone="success" />, engine);
     await waitFor(() => expect(container.textContent).toContain('Done'));
     const root = await waitForPart(container, 'root');
