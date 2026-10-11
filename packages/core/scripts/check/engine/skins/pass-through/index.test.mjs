@@ -163,19 +163,19 @@ describe('engine/skins/pass-through -- carrier classification (audit, Defect A)'
 
   it('a non-carrier falsely flagged carrier=true is red too (the check is symmetric)', () => {
     const l = clone(ledger);
-    assert.equal(l.families.select.carrier, false);
-    l.families.select.carrier = true;
+    assert.equal(l.families.card.carrier, false);
+    l.families.card.carrier = true;
     const findings = evaluatePassThrough(view, l);
     assert.deepEqual(kinds(findings), ['carrier/fail']);
-    assert.match(findings[0].detail, /^select: the ledger says carrier=true, canonical LAYOUT_CARRIERS says false$/);
-    const e = eligibility(l).select;
+    assert.match(findings[0].detail, /^card: the ledger says carrier=true, canonical LAYOUT_CARRIERS says false$/);
+    const e = eligibility(l).card;
     assert.equal(e.partStripEligible, true, 'eligibility reads the canonical fact, not the false flag');
     assert.equal(e.waitsOn, undefined);
   });
 
   it('a non-carrier family with empty held sets stays fully eligible (the legitimate positive)', () => {
     assert.deepEqual(evaluatePassThrough(view, ledger), []);
-    const e = eligibility(ledger).select;
+    const e = eligibility(ledger).card;
     assert.deepEqual(e, { partStripEligible: true, stateStripEligible: true, heldPart: [], heldState: [] });
     for (const carrier of ['box', 'flex', 'stack', 'grid', 'container', 'space']) {
       if (ledger.families[carrier]) assert.equal(eligibility(ledger)[carrier].waitsOn, WAITS, carrier);

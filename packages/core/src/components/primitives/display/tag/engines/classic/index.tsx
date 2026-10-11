@@ -90,6 +90,10 @@ export default function ClassicTag(props: TagProps): React.ReactElement {
     onClick,
     className = '',
     style = {},
+    // P-88: a caller data-part/data-state is never forwarded (callers compose
+    // through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...restProps
   } = props;
 

@@ -85,8 +85,12 @@ export default function ClassicTextarea(props: TextareaProps): React.ReactElemen
     id,
     autoComplete,
     autoFocus,
+    // P-88: a caller data-part/data-state is never forwarded (callers compose
+    // through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...rest
-  } = props;
+  } = props as TextareaProps & { 'data-part'?: string; 'data-state'?: string };
 
   // Normalize onChange to DS convention: (value, event) instead of just (event)
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

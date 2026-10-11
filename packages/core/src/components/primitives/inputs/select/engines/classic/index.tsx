@@ -276,6 +276,10 @@ const ClassicSelect = forwardRef<any, SelectProps>((props, ref) => {
     prefix: _prefix,
     suffix: _suffix,
     children: _children,
+    // P-88: a caller data-part/data-state is never forwarded (callers compose
+    // through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...antProps
   } = rest as any;
 

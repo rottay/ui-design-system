@@ -65,6 +65,10 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
       className = "",
       style = {},
       "data-testid": testId,
+      // P-88: a caller data-part/data-state is never forwarded (callers compose
+      // through className).
+      "data-part": _callerDataPart,
+      "data-state": _callerDataState,
       ...rest
     } = props;
 

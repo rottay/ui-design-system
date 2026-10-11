@@ -120,8 +120,12 @@ export default function ClassicLink(props: LinkProps): React.ReactElement {
     className,
     style,
     onClick,
+    // P-88: a caller data-part/data-state is never forwarded (callers compose
+    // through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...rest
-  } = props;
+  } = props as LinkProps & { 'data-part'?: string; 'data-state'?: string };
 
   // externalIcon is consumed by the modern engine only; swallowed here so it
   // never leaks onto the DOM through rest.

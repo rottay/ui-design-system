@@ -4,7 +4,7 @@
  "purpose": "The WO-ARC-12 fleet ratchet. It closes the roster of elements where a caller data-part/data-state still lands (passThroughViolations), and the per-family sets of callers whose owner skins would lose paint the day a child family strips caller parts/states (callerPartDependents / callerStateDependents). Those sets are the step-2 engine-lot preconditions, as machine-readable rows.",
  "policy": "decrease-only to 0, the family-cut ledger policy: every count may shrink and must then be lowered here, and none may ever grow. The only door is `node scripts/check/engine/skins/pass-through/index.mjs --update-baseline`. It writes the gate's own measurement, keeps the routing prose of surviving held entries, and refuses if anything grew. A pin is never hand-computed. A pin follows the tree down; an instrument-coverage re-pin to the gate's own measurement, with a cutNote and independent review, is the only lawful raise.",
  "owner": "WO-ARC-12",
- "lastMoveKind": "instrument-coverage",
+ "lastMoveKind": "decrease",
  "measuredFrom": {
   "head": "27273599d9919310b98424e13ab993361356961a",
   "census": "v7.1.3, 2026-10-11 (arc12/census-v713: census 2f7e0518 / post d6eb6187 / report 2f340462 / attribution 7ab151e9): the partAttributes-spread callers counted (finding N); 23 new dependent rows, 1 re-keyed. v7.1.2 (post d6eb6187 / report 2f340462) at arc12/dt3, v7.1.1 at arc12/l2-tools, v7.1 at arc12/l2-tools-v7.1-snapshot, v7 at arc12/l2-tools-v7-snapshot",
@@ -15,7 +15,7 @@
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 88,
+  "passThroughViolations": 82,
   "callerPartDependents": 859,
   "callerStateDependents": 31
  },
@@ -163,15 +163,6 @@
    "family": "qr-code",
    "breach": [
     "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/tag/engines/classic/index.tsx#default#AntTag#none#0",
-   "engine": "classic",
-   "family": "tag",
-   "breach": [
-    "part-forward",
     "state-forward"
    ]
   },
@@ -380,24 +371,6 @@
    ]
   },
   {
-   "key": "primitives/inputs/select/engines/classic/index.tsx#ClassicSelect#AntSelect#none#0",
-   "engine": "classic",
-   "family": "select",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0",
-   "engine": "classic",
-   "family": "textarea",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
    "key": "primitives/inputs/textarea/engines/modern/index.tsx#ModernTextarea#textarea#root#0",
    "engine": "modern",
    "family": "textarea",
@@ -525,24 +498,6 @@
    "key": "primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0",
    "engine": "rustic",
    "family": "container",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0",
-   "engine": "classic",
-   "family": "divider",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1",
-   "engine": "classic",
-   "family": "divider",
    "breach": [
     "part-forward",
     "state-forward"
@@ -708,15 +663,6 @@
    ]
   },
   {
-   "key": "primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
-   "engine": "classic",
-   "family": "link",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
    "key": "primitives/navigation/menu/compound/divider/index.tsx#MenuDivider#li#divider#0",
    "engine": "all (compound)",
    "family": "menu",
@@ -868,8 +814,8 @@
     "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#3",
     "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#4",
     "patterns/customization/branding-preview-sandbox/index.tsx#Box#surface#5",
-    "patterns/customization/branding-preview-sandbox/index.tsx#Box#table-head#0",
     "patterns/customization/branding-preview-sandbox/index.tsx#Box#table#0",
+    "patterns/customization/branding-preview-sandbox/index.tsx#Box#table-head#0",
     "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-card-summary-label#0",
     "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-card-summary-label#1",
     "patterns/data/data-table/presentation/table/index.tsx#Box#mobile-card-summary-value#0",
@@ -893,9 +839,9 @@
     "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Box#record-meta-value#0",
     "patterns/data/data-table/presentation/table/mobile-cards/row-actions/index.tsx#Box#swipe-actions#0",
     "patterns/data/data-table/presentation/table/mobile-cards/row-actions/index.tsx#Box#swipe-record#0",
-    "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#caption-text#0",
     "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#caption#0",
     "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#caption#1",
+    "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#caption-text#0",
     {
      "key": "patterns/data/gallery-view/presentation/gallery/index.tsx#Box#card#0",
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
@@ -958,10 +904,10 @@
     "structures/dashboard/data-terminal-card/index.tsx#Box#live-pulse-ring#0",
     "structures/dashboard/data-terminal-card/index.tsx#Box#live-ring#0",
     "structures/dashboard/data-terminal-card/index.tsx#Box#matrix-texture#0",
-    "structures/dashboard/data-terminal-card/index.tsx#Box#node-dot-live#0",
     "structures/dashboard/data-terminal-card/index.tsx#Box#node-dot#0",
     "structures/dashboard/data-terminal-card/index.tsx#Box#node-dot#1",
     "structures/dashboard/data-terminal-card/index.tsx#Box#node-dot#2",
+    "structures/dashboard/data-terminal-card/index.tsx#Box#node-dot-live#0",
     "structures/dashboard/data-terminal-card/index.tsx#Box#progress-fill#0",
     "structures/dashboard/data-terminal-card/index.tsx#Box#progress-section#0",
     "structures/dashboard/data-terminal-card/index.tsx#Box#progress-section#1",
@@ -999,18 +945,18 @@
     "structures/dashboard/data-terminal-card/index.tsx#Box#value-section#4",
     "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#badge#0",
     "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#bell-box#0",
+    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#item#0",
     "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#item-dot#0",
     "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#item-icon-box#0",
     "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#item-time#0",
-    "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#item#0",
     "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#root#0",
     "structures/dashboard/insights/presentation/activity/cards/index.tsx#Box#scroll-area#0",
     "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#badge#0",
     "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#bell-box#0",
+    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#item#0",
     "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#item-dot#0",
     "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#item-icon-box#0",
     "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#item-time#0",
-    "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#item#0",
     "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#root#0",
     "structures/dashboard/insights/presentation/activity/compact/index.tsx#Box#scroll-area#0",
     "structures/dashboard/insights/presentation/activity/ticker/index.tsx#Box#badge#0",
@@ -1035,11 +981,11 @@
     "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#badge#0",
     "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#bell-box#0",
     "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#connector#0",
+    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item#0",
     "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item-content#0",
     "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item-dot#0",
     "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item-icon-box#0",
     "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item-time#0",
-    "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#item#0",
     "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#live-dot#0",
     "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#root#0",
     "structures/dashboard/insights/presentation/activity/timeline/index.tsx#Box#scroll-area#0",
@@ -1087,9 +1033,9 @@
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
     },
     "structures/dashboard/stats-header/runtime/rendering/index.tsx#Box#stat-icon#0",
+    "structures/feedback/capability-anatomy/index.tsx#Box#capability#0",
     "structures/feedback/capability-anatomy/index.tsx#Box#capability-anatomy#0",
     "structures/feedback/capability-anatomy/index.tsx#Box#capability-list#0",
-    "structures/feedback/capability-anatomy/index.tsx#Box#capability#0",
     "structures/feedback/loading-overlay/index.tsx#Box#logo#0",
     "structures/feedback/loading-overlay/index.tsx#Box#root#0",
     "structures/headers/collection/index.tsx#Box#action-divider#0",
@@ -1111,9 +1057,9 @@
     "structures/headers/collection/index.tsx#Box#shortcut-pill#0",
     "structures/headers/collection/index.tsx#Box#shortcut-pill#1",
     "structures/headers/collection/index.tsx#Box#shortcuts-label#0",
-    "structures/headers/collection/index.tsx#Box#subtitle-divider#0",
     "structures/headers/collection/index.tsx#Box#subtitle#0",
     "structures/headers/collection/index.tsx#Box#subtitle#1",
+    "structures/headers/collection/index.tsx#Box#subtitle-divider#0",
     "structures/headers/collection/index.tsx#Box#title#0",
     "structures/headers/detail/runtime/rendering/index.tsx#Box#avatar#0",
     "structures/headers/detail/runtime/rendering/index.tsx#Box#avatar#1",
@@ -1121,22 +1067,22 @@
     "structures/headers/detail/runtime/rendering/index.tsx#Box#context-rail#0",
     "structures/headers/detail/runtime/rendering/index.tsx#Box#hero-panel#0",
     "structures/headers/detail/runtime/rendering/index.tsx#Box#hero-spine#0",
-    "structures/headers/detail/runtime/rendering/index.tsx#Box#metadata-card-children#0",
     "structures/headers/detail/runtime/rendering/index.tsx#Box#metadata-card#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#metadata-card-children#0",
     "structures/headers/detail/runtime/rendering/index.tsx#Box#metadata-chip-icon#0",
     "structures/headers/detail/runtime/rendering/index.tsx#Box#root#0",
-    "structures/headers/detail/runtime/rendering/index.tsx#Box#tab-count#0",
-    "structures/headers/detail/runtime/rendering/index.tsx#Box#tab-rail#0",
-    "structures/headers/detail/runtime/rendering/index.tsx#Box#tab-strip#0",
     {
      "key": "structures/headers/detail/runtime/rendering/index.tsx#Box#tab#0",
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
     },
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#tab-count#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#tab-rail#0",
+    "structures/headers/detail/runtime/rendering/index.tsx#Box#tab-strip#0",
     "structures/headers/detail/runtime/rendering/index.tsx#Box#title#0",
     "structures/headers/detail/runtime/rendering/index.tsx#Box#top-bar#0",
     "structures/headers/edit/index.tsx#Box#breadcrumb-divider#0",
-    "structures/headers/edit/index.tsx#Box#context-card-children#0",
     "structures/headers/edit/index.tsx#Box#context-card#0",
+    "structures/headers/edit/index.tsx#Box#context-card-children#0",
     "structures/headers/edit/index.tsx#Box#context-rail#0",
     "structures/headers/edit/index.tsx#Box#dirty-chip#0",
     "structures/headers/edit/index.tsx#Box#dirty-dot#0",
@@ -1147,8 +1093,8 @@
     "structures/headers/edit/index.tsx#Box#title#0",
     "structures/headers/edit/index.tsx#Box#top-bar#0",
     "structures/headers/form/index.tsx#Box#breadcrumb-divider#0",
-    "structures/headers/form/index.tsx#Box#context-card-children#0",
     "structures/headers/form/index.tsx#Box#context-card#0",
+    "structures/headers/form/index.tsx#Box#context-card-children#0",
     "structures/headers/form/index.tsx#Box#context-rail#0",
     "structures/headers/form/index.tsx#Box#hero-panel#0",
     "structures/headers/form/index.tsx#Box#icon-badge#0",
@@ -1167,28 +1113,29 @@
     },
     "structures/record/action-bar/index.tsx#Box#action-bar-meta#0",
     "structures/record/edit-fields/index.tsx#Box#control#0",
-    "structures/record/edit-fields/index.tsx#Box#editor-icon#0",
     "structures/record/edit-fields/index.tsx#Box#editor#0",
-    "structures/record/edit-fields/index.tsx#Box#field-icon#0",
-    "structures/record/edit-fields/index.tsx#Box#field-label-row#0",
-    "structures/record/edit-fields/index.tsx#Box#field-label#0",
-    "structures/record/edit-fields/index.tsx#Box#field-requirement-dot#0",
+    "structures/record/edit-fields/index.tsx#Box#editor-icon#0",
     "structures/record/edit-fields/index.tsx#Box#field#0",
+    "structures/record/edit-fields/index.tsx#Box#field-icon#0",
+    "structures/record/edit-fields/index.tsx#Box#field-label#0",
+    "structures/record/edit-fields/index.tsx#Box#field-label-row#0",
+    "structures/record/edit-fields/index.tsx#Box#field-requirement-dot#0",
     "structures/record/edit-fields/index.tsx#Box#footer-impact-preview#0",
     "structures/record/edit-fields/index.tsx#Box#grid#0",
+    "structures/record/edit-fields/index.tsx#Box#section#0",
     "structures/record/edit-fields/index.tsx#Box#section-content#0",
     "structures/record/edit-fields/index.tsx#Box#section-icon#0",
-    "structures/record/edit-fields/index.tsx#Box#section#0",
     "structures/record/edit-fields/index.tsx#Box#toggle#0",
     "structures/record/field-grid/index.tsx#Box#field-grid#0",
-    "structures/record/field/index.tsx#Box#field-body#0",
     {
      "key": "structures/record/field/index.tsx#Box#field#0",
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
     },
+    "structures/record/field/index.tsx#Box#field-body#0",
+    "structures/record/form-sections/index.tsx#Box#facts-card#0",
     "structures/record/form-sections/index.tsx#Box#facts-card-body#0",
     "structures/record/form-sections/index.tsx#Box#facts-card-title#0",
-    "structures/record/form-sections/index.tsx#Box#facts-card#0",
+    "structures/record/form-sections/index.tsx#Box#section#0",
     "structures/record/form-sections/index.tsx#Box#section-chip#0",
     "structures/record/form-sections/index.tsx#Box#section-clip#0",
     "structures/record/form-sections/index.tsx#Box#section-content#0",
@@ -1197,14 +1144,13 @@
     "structures/record/form-sections/index.tsx#Box#section-index#0",
     "structures/record/form-sections/index.tsx#Box#section-summary#0",
     "structures/record/form-sections/index.tsx#Box#section-toggle#0",
-    "structures/record/form-sections/index.tsx#Box#section#0",
     "structures/record/panel/index.tsx#Box#panel#0",
     "structures/record/summary-strip/index.tsx#Box#summary-grid#0",
     "structures/record/summary-strip/index.tsx#Box#summary-strip#0",
-    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#badge-text#0",
     "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#badge#0",
-    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#icon-wrap#0",
+    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#badge-text#0",
     "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#icon#0",
+    "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#icon-wrap#0",
     "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#label#0",
     "structures/shell/bottom-tab-bar/runtime/rendering/index.tsx#Box#root#0",
     {
@@ -1226,33 +1172,33 @@
     "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Box#chips-region#0",
     "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Box#pill#0",
     "structures/workspace/active-filters-bar/runtime/rendering/index.tsx#Box#root#0",
-    "structures/workspace/column-menu/index.tsx#Box#action-row-copy#0",
     {
      "key": "structures/workspace/column-menu/index.tsx#Box#action-row#0",
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
     },
-    "structures/workspace/column-menu/index.tsx#Box#action-section-copy#0",
+    "structures/workspace/column-menu/index.tsx#Box#action-row-copy#0",
     "structures/workspace/column-menu/index.tsx#Box#action-section#0",
+    "structures/workspace/column-menu/index.tsx#Box#action-section-copy#0",
     "structures/workspace/column-menu/index.tsx#Box#count-pill#0",
-    "structures/workspace/column-menu/index.tsx#Box#header-copy#0",
     "structures/workspace/column-menu/index.tsx#Box#header#0",
+    "structures/workspace/column-menu/index.tsx#Box#header-copy#0",
     {
      "key": "structures/workspace/column-menu/index.tsx#Box#panel#0",
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
     },
-    "structures/workspace/column-menu/index.tsx#Box#row-copy#0",
     {
      "key": "structures/workspace/column-menu/index.tsx#Box#row#0",
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
     },
+    "structures/workspace/column-menu/index.tsx#Box#row-copy#0",
     "structures/workspace/column-menu/index.tsx#Box#scroll-region#0",
     "structures/workspace/export-button/index.tsx#Box#panel#0",
     "structures/workspace/export-button/index.tsx#Box#root#0",
     "structures/workspace/export-button/index.tsx#Box#toast#0",
     "structures/workspace/field-filters-panel/index.tsx#Box#control-slot#0",
+    "structures/workspace/field-filters-panel/index.tsx#Box#filter-card#0",
     "structures/workspace/field-filters-panel/index.tsx#Box#filter-card-copy#0",
     "structures/workspace/field-filters-panel/index.tsx#Box#filter-card-icon#0",
-    "structures/workspace/field-filters-panel/index.tsx#Box#filter-card#0",
     "structures/workspace/field-filters-panel/index.tsx#Box#grid#0",
     "structures/workspace/field-filters-panel/index.tsx#Box#header-copy#0",
     "structures/workspace/field-filters-panel/index.tsx#Box#preset-chip-icon#0",
@@ -1264,33 +1210,33 @@
      "key": "structures/workspace/saved-views-menu/index.tsx#Box#action-button#0",
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
     },
-    "structures/workspace/saved-views-menu/index.tsx#Box#active-card-copy#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#active-card#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#active-card-copy#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#anchor#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#backdrop#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#checkmark#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#count-pill#0",
-    "structures/workspace/saved-views-menu/index.tsx#Box#empty-state-copy#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#empty-state#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#empty-state#1",
+    "structures/workspace/saved-views-menu/index.tsx#Box#empty-state-copy#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#glyph#0",
-    "structures/workspace/saved-views-menu/index.tsx#Box#header-copy#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#header#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#header-copy#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#list#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#panel#0",
-    "structures/workspace/saved-views-menu/index.tsx#Box#section-header#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#section#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#section-header#0",
     "structures/workspace/saved-views-menu/index.tsx#Box#status-pill#0",
-    "structures/workspace/saved-views-menu/index.tsx#Box#trigger-icon#0",
     {
      "key": "structures/workspace/saved-views-menu/index.tsx#Box#trigger#0",
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
     },
-    "structures/workspace/saved-views-menu/index.tsx#Box#view-item-copy#0",
+    "structures/workspace/saved-views-menu/index.tsx#Box#trigger-icon#0",
     {
      "key": "structures/workspace/saved-views-menu/index.tsx#Box#view-item#0",
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
     },
+    "structures/workspace/saved-views-menu/index.tsx#Box#view-item-copy#0",
     "structures/workspace/scope-switcher/index.tsx#Box#root#0",
     "structures/workspace/search-command-bar/index.tsx#Box#actions-slot#0",
     "structures/workspace/search-command-bar/index.tsx#Box#bar-row#0",
@@ -1305,6 +1251,7 @@
     "structures/workspace/search-command-bar/index.tsx#Box#top-rail#0",
     "structures/workspace/search-command-bar/index.tsx#Box#voice-badge#0",
     "structures/workspace/search-command-bar/index.tsx#Box#voice-controls#0",
+    "structures/workspace/search-command-bar/index.tsx#Box#voice-help#0",
     "structures/workspace/search-command-bar/index.tsx#Box#voice-help-copy#0",
     "structures/workspace/search-command-bar/index.tsx#Box#voice-help-list#0",
     "structures/workspace/search-command-bar/index.tsx#Box#voice-help-step#0",
@@ -1313,12 +1260,11 @@
     "structures/workspace/search-command-bar/index.tsx#Box#voice-help-step#3",
     "structures/workspace/search-command-bar/index.tsx#Box#voice-help-step#4",
     "structures/workspace/search-command-bar/index.tsx#Box#voice-help-step#5",
-    "structures/workspace/search-command-bar/index.tsx#Box#voice-help#0",
     "structures/workspace/selection-preview-rail/index.tsx#Box#custom-content#0",
     "structures/workspace/selection-preview-rail/index.tsx#Box#custom-sticky-card#0",
+    "structures/workspace/selection-preview-rail/index.tsx#Box#identity-card#0",
     "structures/workspace/selection-preview-rail/index.tsx#Box#identity-card-accent#0",
     "structures/workspace/selection-preview-rail/index.tsx#Box#identity-card-body#0",
-    "structures/workspace/selection-preview-rail/index.tsx#Box#identity-card#0",
     "structures/workspace/selection-preview-rail/index.tsx#Box#match-reason-panel#0",
     "structures/workspace/selection-preview-rail/index.tsx#Box#root#0",
     "structures/workspace/selection-preview-rail/index.tsx#Box#root#1",
@@ -1444,23 +1390,23 @@
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#progress-bar#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-card-header#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-card-icon#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav#1",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav#2",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav-item-error-dot#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav-item-error-dot#1",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav-item-icon#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav-item-icon#1",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav-select#0",
-    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav#0",
-    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav#1",
-    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#section-nav#2",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#submit-bar#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#submit-bar-panel#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#submit-bar-progress-placeholder#0",
-    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#submit-bar#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#template-card-icon#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#template-picker#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#title-copy#0",
+    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#validation-issue#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#validation-issue-dot#0",
     "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#validation-issue-list#0",
-    "surfaces/presentation/pages/forms/guided-draft-form/index.tsx#Box#validation-issue#0",
     "surfaces/presentation/pages/forms/wizard/index.tsx#Box#error-banner#0",
     "surfaces/presentation/pages/operations/kanban/index.tsx#Box#kanban-skeleton-block#0",
     "surfaces/presentation/pages/operations/kanban/index.tsx#Box#kanban-skeleton-block#1",
@@ -1489,8 +1435,8 @@
     "surfaces/presentation/pages/workspace/collection-workspace/index.tsx#Box#toolbar-row#0",
     "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#filter-dropdown-content#0",
     "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#filter-sheet-content#0",
-    "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#preview-accordion-content#0",
     "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#preview-accordion#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#preview-accordion-content#0",
     "surfaces/presentation/pages/workspace/collection-workspace/overlays/index.tsx#Box#preview-sheet-content#0",
     "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#context-slot#0",
     "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#divider#0",
@@ -1500,9 +1446,9 @@
     "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#smart-selection#0",
     "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#smart-sets-label#0",
     "surfaces/presentation/pages/workspace/collection-workspace/premium/index.tsx#Box#views-strip#0",
-    "surfaces/presentation/pages/workspace/collection-workspace/preview-rail/index.tsx#Box#preview-rail-resize-bar#0",
-    "surfaces/presentation/pages/workspace/collection-workspace/preview-rail/index.tsx#Box#preview-rail-resize#0",
     "surfaces/presentation/pages/workspace/collection-workspace/preview-rail/index.tsx#Box#preview-rail#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/preview-rail/index.tsx#Box#preview-rail-resize#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/preview-rail/index.tsx#Box#preview-rail-resize-bar#0",
     {
      "key": "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/cards/index.tsx#Box#card-item#0",
      "cutNote": "instrument-coverage v7.1.3 (2026-10-11): the caller hands its part/state through a partAttributes(...) spread; invisible to the census before the sweep extension (step-3 pre-flight finding N). Not new debt."
@@ -1513,8 +1459,8 @@
     "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/error-anatomy/index.tsx#Box#root#0",
     "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/footers/index.tsx#Box#incremental-footer#0",
     "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/footers/index.tsx#Box#page-size#0",
-    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/footers/index.tsx#Box#pagination-controls#0",
     "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/footers/index.tsx#Box#pagination#0",
+    "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/footers/index.tsx#Box#pagination-controls#0",
     "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#0",
     "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#1",
     "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#2",
@@ -1647,8 +1593,8 @@
     "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-bulk-actions#0",
     "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-card-summary-row#0",
     "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-card-summary-row#1",
-    "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-pagination-actions#0",
     "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-pagination#0",
+    "patterns/data/data-table/presentation/table/index.tsx#Flex#mobile-pagination-actions#0",
     "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Flex#mobile-card-summary-row#0",
     "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Flex#record-list-open#0",
     "patterns/data/data-table/presentation/table/mobile-cards/index.tsx#Flex#record-meta#0",
@@ -1717,15 +1663,15 @@
     "structures/headers/form/index.tsx#Flex#hero-cluster#0",
     "structures/headers/form/index.tsx#Flex#hero-row#0",
     "structures/headers/mobile-header/runtime/rendering/index.tsx#Flex#bar#0",
-    "structures/record/action-bar/index.tsx#Flex#action-bar-actions#0",
     "structures/record/action-bar/index.tsx#Flex#action-bar#0",
+    "structures/record/action-bar/index.tsx#Flex#action-bar-actions#0",
     "structures/record/edit-fields/index.tsx#Flex#editor-actions#0",
     "structures/record/edit-fields/index.tsx#Flex#editor-header#0",
     "structures/record/edit-fields/index.tsx#Flex#editor-lead#0",
     "structures/record/edit-fields/index.tsx#Flex#field-error-row#0",
     "structures/record/edit-fields/index.tsx#Flex#field-requirement#0",
-    "structures/record/edit-fields/index.tsx#Flex#footer-actions#0",
     "structures/record/edit-fields/index.tsx#Flex#footer#0",
+    "structures/record/edit-fields/index.tsx#Flex#footer-actions#0",
     "structures/record/edit-fields/index.tsx#Flex#section-actions#0",
     "structures/record/edit-fields/index.tsx#Flex#section-header#0",
     "structures/record/edit-fields/index.tsx#Flex#section-lead#0",
@@ -1823,11 +1769,6 @@
    "part": [],
    "state": []
   },
-  "link": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
   "list": {
    "carrier": false,
    "part": [],
@@ -1849,11 +1790,6 @@
    "state": []
   },
   "segmented": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
-  "select": {
    "carrier": false,
    "part": [],
    "state": []
@@ -1926,11 +1862,6 @@
    "state": []
   },
   "stepper": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
-  "tag": {
    "carrier": false,
    "part": [],
    "state": []
@@ -2019,8 +1950,8 @@
   ]
  },
  "lastMove": {
-  "head": "27273599d9919310b98424e13ab993361356961a",
+  "head": "190decd372a0e359e006a1197fb7c0652af084a8",
   "date": "2026-10-11",
-  "note": "re-pinned to the gate's own v7.1.3 measurement: callerPartDependents 836 -> 859, callerStateDependents 16 -> 31 (the 23 partAttributes-spread callers, step-3 pre-flight finding N; 39 keys added with cutNotes, 1 re-keyed: voice-input-button state #Box#none#0 -> #Box#root#0; no site moved, 88 unchanged). The state counter is a FLOOR for spread-form rows: the state arm credits owner skins only (the 7 part-credited/zero-state rows are recorded in review-arc12-census-v713 section 9) and the arm must be aligned by its own measured lot before any box/flex state-strip is declared eligible. Independent review: ACCEPT (7cdfec5b)."
+  "note": "lowered to the gate's own measurement through --update-baseline"
  }
 }
