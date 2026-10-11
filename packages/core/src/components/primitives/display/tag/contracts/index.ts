@@ -53,6 +53,14 @@ export type TagTone = Exclude<Tone, 'info'>;
  */
 export interface TagProps extends BaseComponentProps, EngineAwareProps, WithChildren {
   /**
+   * @deprecated Modern and rustic ignore a caller part since ARC-12 step 2 (P-88); classic honors it until step 3. Use `className`.
+   */
+  'data-part'?: string;
+  /**
+   * @deprecated Modern and rustic ignore a caller state since ARC-12 step 2 (P-88); classic honors it until step 3. Use `className`.
+   */
+  'data-state'?: string | number | boolean | undefined;
+  /**
    * Tag size.
    * @default 'md'
    */

@@ -46,4 +46,4 @@ export function LoadingIndicator({
   );
 }
 
-export type { LoadingIndicatorProps, LoadingIndicatorSize } from './contracts';
+export type { LoadingIndicatorAnatomy, LoadingIndicatorProps, LoadingIndicatorSize } from './contracts';

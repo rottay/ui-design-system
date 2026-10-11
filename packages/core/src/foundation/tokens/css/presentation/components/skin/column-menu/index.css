@@ -39,9 +39,7 @@
 }
 
 /* The control is a composed Button, which keeps its own `trigger` part, so
-   the class is its hook under every engine. The selector is listed twice; the
-   repeat is inert. */
-.ds-structure.ds-column-menu .ds-column-menu-control,
+   the class is its hook under every engine. */
 .ds-structure.ds-column-menu .ds-column-menu-control {
   flex: 0 0 auto;
 }

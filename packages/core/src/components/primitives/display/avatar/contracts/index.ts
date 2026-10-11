@@ -68,6 +68,14 @@ export type AvatarStatus = 'online' | 'offline' | 'away' | 'busy';
  */
 export interface AvatarProps extends BaseComponentProps, EngineAwareProps, WithChildren, BorderedProps {
   /**
+   * @deprecated No engine renders a caller part for this component (P-88, ARC-12). Use `className`.
+   */
+  'data-part'?: string;
+  /**
+   * @deprecated No engine renders a caller state for this component (P-88, ARC-12). Use `className`.
+   */
+  'data-state'?: string | number | boolean | undefined;
+  /**
    * Avatar size.
    * @default 'md'
    */
