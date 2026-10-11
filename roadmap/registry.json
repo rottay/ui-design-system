@@ -2854,6 +2854,11 @@
      "at": "2026-10-11 18:14",
      "by": "Kimi",
      "note": "S3-3 INTEGRATED fd3a79e70 (10 paths): the classic Card drops the caller data-state (honesty forwards intact, rendered proof 4/4 vs 0/4); the 2 dead caller state literals dropped (reviewer-ruled caller-side cleanup, paint-neutral on all 3 engines; the tenant-branding spec re-keyed to data-variant, stronger); the PassThroughLaw table split (classic promotes, modern/rustic stay it.fails for the Card engine lot); pins 4 -> 2 via v7.1.5 (predicates byte-identical). Ledger 81 -> 80 via the door on a HEAD+lot tree; eta follows; suite 24/24. Review ACCEPT (7cdfec5b). Step-3 remaining: S3-4 typography (after E8-b, which waits on the owner's R4-SCOPE). In flight: O-4 batch 1 (11 tail families). Registry 138/168 unchanged."
+    },
+    {
+     "at": "2026-10-11 18:59",
+     "by": "Kimi",
+     "note": "O-4 batch 1 INTEGRATED b02e74875 (11 paths): descriptions, rate, toggle, tooltip, semantic-surface stop honoring caller part/state (9 sites; compound files per the design's :72 rule; local casts, public contracts untouched). The roster 80 -> 71 through the door on a HEAD+lot tree; the new contract test (10 rows, red-first + mutants) staged as the REVIEWED bytes via hash-object/update-index — the batch-1b lane's in-flight extension of the same file was NOT staged (the reviewer's one integration condition honored exactly). Reviewer ACCEPT (7cdfec5b). Post-integration on the committed tree: gates rc 0, the new contract 10/10. Registry 138/168 unchanged."
     }
    ],
    "claimedBy": "kimi-dt",
