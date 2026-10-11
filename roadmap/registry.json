@@ -2829,6 +2829,11 @@
      "at": "2026-10-11 12:08",
      "by": "Kimi",
      "note": "OWNER DECISION 2026-10-11: E8 skeleton Option A APPROVED — the 125 no-role Text exposures draw 'frame' after the strip; renderer, role table and drill :912 stay byte-identical; hooks on the 4 role-bearing rows (bulk-select-toggle :74, report :64, states :224, render-dispatch/cards :178) keep 'line'. R-4 is owner law: zero loaded-state font-size/geometry movement on any Text (the rendered comparison proved the tier ramp moves 74/159 sampled Texts); rendered parity of the exact candidate + independent review before integration; no snapshot updates. E8 v2.1 dispatched (writer bfc77637, the v2 brief rewritten: G-2 front removed, tools v7.1.2, census re-derived at 86b5b74c9). ARC-15 re-evaluation in flight as a READ-ONLY scoping packet (INV-03 verified DONE 2026-09-22 — an earlier DT note read a stale entry)."
+    },
+    {
+     "at": "2026-10-11 14:01",
+     "by": "Kimi",
+     "note": "E8-a caller-side inert lot INTEGRATED 2d9e75af1 (14 paths: the 9-file candidate + 5 regenerated CSS mirrors via the official builder, freshness rc 0; the mirrors also absorbed the pending D3/DT-4 source deltas — verified selector-by-selector). The 4 skeleton hooks land (line preserved post-strip, resolver-proven on both builds, states :224 rendered line->line), the P-a/P-b cross-family doors (two-arm, match sets enumerated identical per engine), the adjudicated H-ET/HOLD-G re-keys. INERT at HEAD: reviewer's own builds + own captures, 0 computed/rect/bone/PNG deltas; census 88/836/16 unmoved; independent ACCEPT (7cdfec5b). Post-integration gates: pass-through rc 0, engine-token-audit rc 0. The R-4 residue (tier-ramp movement post-strip) is the owner's pending question (arc12-e8-r4-scope-decision.md) and gates E8-b only. Registry 138/168 unchanged."
     }
    ],
    "claimedBy": "kimi-dt",
