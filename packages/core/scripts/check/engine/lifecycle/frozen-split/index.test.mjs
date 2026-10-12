@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import test from 'node:test';
@@ -72,6 +72,13 @@ test('base importing a frozen stylesheet is refused', () => {
 test('a frozen-engine selector in a shared base sheet is refused', () => {
   const failures = run({ sharedCss: MODERN_RULE + RUSTIC_RULE.replace('ds-x', 'ds-y').replace('ds-x--', 'ds-y--') });
   assert.ok(failures.some((f) => f.includes('ships a frozen-engine selector')), failures.join('\n'));
+});
+
+test('the brand-studio skin anchors its Select without naming a frozen engine, not even inside a negation', () => {
+  const skin = readFileSync(join(packageRoot, 'src/foundation/tokens/css/presentation/components/skin/brand-studio/index.css'), 'utf8');
+  assert.match(skin, /__field-input\.rottay-select/, 'the Select anchor is still authored, so the audit below is not vacuous');
+  const failures = run({ sharedCss: skin });
+  assert.deepEqual(failures, [], failures.join('\n'));
 });
 
 test('a frozen stylesheet the mount does not reach is refused', () => {
