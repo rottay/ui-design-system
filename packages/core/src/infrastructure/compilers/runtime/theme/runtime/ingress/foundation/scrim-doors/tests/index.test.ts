@@ -83,7 +83,7 @@ describe("the scrim-door census on the admission", () => {
       expect(doorsOf(VERTICAL_THEME_PRESETS[vertical].document), vertical).toEqual([]);
     }
     for (const row of APP_PLATFORM_TENANT_ROWS) {
-      expect(doorsOf(row.document), row.slug).toEqual([]);
+      expect(doorsOf(row.document), row.tenant).toEqual([]);
     }
   });
 });

@@ -58,7 +58,7 @@ describe('P-88 pass-through law: tail families with empty held sets', () => {
     ['Toggle', 'modern', <ModernToggle key="toggle-modern" {...caller} />, ".ds-toggle--modern[data-part='root']"],
     ['Toggle', 'rustic', <RusticToggle key="toggle-rustic" {...caller} />, ".ds-toggle--rustic[data-part='root']"],
     ['Tooltip content', 'modern', <TooltipContent key="tooltip-content" {...caller}>Hint</TooltipContent>, ".ds-tooltip-content[data-part='content']"],
-    ['Tooltip trigger', 'modern', <TooltipTrigger key="tooltip-trigger" {...caller}>Open</TooltipTrigger>, '.ds-tooltip-trigger:not([data-part])'],
+    ['Tooltip trigger', 'modern', <TooltipTrigger key="tooltip-trigger" {...caller}><button type="button">Open</button></TooltipTrigger>, '.ds-tooltip-trigger:not([data-part])'],
     [
       'Tooltip trigger (asChild)',
       'modern',
