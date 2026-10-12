@@ -154,6 +154,19 @@ jobs:
           echo "app-bithire corpus SHA: $(git rev-parse HEAD)"
           echo "app-bithire corpus ref: 8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f"
 
+      # The consumer half of the app-shell supersession window. The unit suite
+      # holds the in-repo half and reads no sibling; this step is the receiver
+      # that reads app-bithire, from the checkout above and nowhere else. The
+      # gate has no sibling fallback: it is red when APP_BITHIRE_ROOT is
+      # undeclared, when the checkout is absent, when its HEAD is not the
+      # revision pinned in SURFACE_CAPABILITY_PINS
+      # (scripts/libraries/taxonomy/surfaces/index.mjs), and when the `ref`
+      # above drifts from that pin. It reads committed bytes only.
+      - name: Supersession window receiver (cross-repo, pinned app-bithire)
+        env:
+          APP_BITHIRE_ROOT: ${{ github.workspace }}/.corpora/app-bithire
+        run: node packages/core/scripts/check/boundaries/applications/supersession-window/index.mjs --check
+
       - name: Checkout WO-GAT-07 documentation evidence
         uses: actions/checkout@v4
         with:

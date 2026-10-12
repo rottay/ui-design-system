@@ -1,6 +1,6 @@
 /**
- * The app-shell supersession window, and the end trigger that closes it.
- * The window is a read arm on fourteen public hook names, never a second emission.
+ * The app-shell supersession window, in-repo half: producer, skin arms, public hooks.
+ * The consumer read and the end trigger belong to the `supersession-window` gate.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -24,65 +24,8 @@ const HOOKS = readFileSync(resolve(process.cwd(), 'scripts/libraries/hooks/index
 
 const PAIRS = Object.entries(SHELL_SUPERSEDED_HOOK_CHANNELS);
 
-interface RosterEntry {
-  readonly id: string;
-  readonly repo: string;
-  readonly path: string;
-}
-
-/** Each rostered consumer names its sibling repository root and the file that proves it. */
-const NAMED_CONSUMERS: readonly RosterEntry[] = [
-  {
-    id: 'app-bithire/vertical shell app-layout',
-    repo: '../../../app-bithire',
-    path: '../../../app-bithire/src/vertical/surface/shell/app-layout/styles/index.css',
-  },
-];
-
-type RosterReading =
-  | { readonly state: 'absent'; readonly detail: string }
-  | { readonly state: 'present'; readonly source: string };
-
-/**
- * A missing repository and a missing file inside a present repository both read
- * ABSENT: a consumer that moved cannot be mistaken for a consumer that migrated.
- */
-const readConsumer = ({ repo, path }: Pick<RosterEntry, 'repo' | 'path'>): RosterReading => {
-  if (!existsSync(resolve(process.cwd(), repo, 'package.json'))) {
-    return { state: 'absent', detail: 'sibling repository not checked out' };
-  }
-  const file = resolve(process.cwd(), path);
-  if (!existsSync(file)) {
-    return { state: 'absent', detail: 'rostered file missing from a checked-out repository' };
-  }
-  return { state: 'present', source: readFileSync(file, 'utf8') };
-};
-
-const WINDOW_OPEN = 'window open';
-
-/**
- * Three readings, three verdicts: unreadable roster, window open, trigger passed.
- * Only the middle one is green, so both ends of the window fail closed.
- */
-const readRoster = (read: (entry: RosterEntry) => RosterReading): string => {
-  const absent: string[] = [];
-  const authored: string[] = [];
-  for (const entry of NAMED_CONSUMERS) {
-    const reading = read(entry);
-    if (reading.state === 'absent') {
-      absent.push(`${entry.id}: ABSENT (${reading.detail})`);
-      continue;
-    }
-    for (const [superseded] of PAIRS) {
-      if (reading.source.includes(superseded)) authored.push(`${entry.id}: ${superseded}`);
-    }
-  }
-  if (absent.length > 0) {
-    return `roster UNREADABLE — re-roster the consumer at its current path; the window stays open: ${absent.join(', ')}`;
-  }
-  if (authored.length > 0) return WINDOW_OPEN;
-  return 'window trigger PASSED — every named consumer authors the canonical spelling; close the window';
-};
+/** The consumer read is cross-repo, so it lives in this gate and its CI step, not here. */
+const RECEIVER = 'scripts/check/boundaries/applications/supersession-window/index.mjs';
 
 /** `--ds-shell-x` must not match inside `--ds-shell-x-inline-end`. */
 const channelBoundary = '(?![a-z0-9-])';
@@ -144,32 +87,12 @@ describe('the app-shell supersession window', () => {
     }
   });
 
-  it('states the end trigger: a named consumer still authors the old spelling', () => {
-    // END TRIGGER, and it fires by going GREEN-to-RED on good news: when the
-    // last consumer migrates, delete SHELL_SUPERSEDED_HOOK_CHANNELS, the first
-    // arm of each skin read, the fourteen superseded hook rows and this suite.
-    expect(readRoster(readConsumer)).toBe(WINDOW_OPEN);
-  });
-
-  it('reports ABSENT, never migrated, when a rostered consumer is not on disk', () => {
-    const entry = NAMED_CONSUMERS[0]!;
-    const movedFile = readConsumer({ repo: entry.repo, path: `${entry.path}.moved` });
-    const missingRepo = readConsumer({ repo: `${entry.repo}-not-checked-out`, path: entry.path });
-    expect([movedFile.state, missingRepo.state]).toEqual(['absent', 'absent']);
-
-    for (const reading of [movedFile, missingRepo]) {
-      const verdict = readRoster(() => reading);
-      expect(verdict).not.toBe(WINDOW_OPEN);
-      expect(verdict).toContain('ABSENT');
-      expect(verdict).not.toContain('trigger PASSED');
-    }
-
-    // The other red, with the other reading: present and fully migrated.
-    const migrated = readRoster(() => ({
-      state: 'present',
-      source: ':root{--ds-app-shell-header-radius:0}',
-    }));
-    expect(migrated).toContain('trigger PASSED');
+  it('hands the consumer read and its end trigger to the named cross-repo receiver', () => {
+    // END TRIGGER: the receiver goes GREEN-to-RED on good news, when the last
+    // named consumer migrates at the pinned revision. Then delete this suite too.
+    expect(existsSync(resolve(process.cwd(), RECEIVER))).toBe(true);
+    const workflow = readFileSync(resolve(process.cwd(), '../../.github/workflows/ci.yml'), 'utf8');
+    expect(workflow).toContain(`run: node packages/core/${RECEIVER} --check`);
   });
 
   it('fails when a window read loses its canonical arm', () => {
