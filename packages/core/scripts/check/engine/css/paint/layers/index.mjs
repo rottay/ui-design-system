@@ -1201,7 +1201,6 @@ const UNLAYERED_HEADER_DEBT = [
   "presentation/components/skin/activity-timeline/index.css",
   "presentation/components/skin/adaptive-overlay/index.css",
   "presentation/components/skin/app-shell/index.css",
-  "presentation/components/skin/assistant/index.css",
   "presentation/components/skin/avatar-compounds/index.css",
   "presentation/components/skin/bottom-tab-bar/index.css",
   "presentation/components/skin/branding-preview-sandbox/index.css",
