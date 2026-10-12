@@ -2963,7 +2963,7 @@
    "lane": "architecture",
    "order": 14,
    "size": "XL",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2986,8 +2986,8 @@
    "phase": "1",
    "notes": "REFORMULATED by WO-EMI-02 + WO-CAT-02: mount and identity move to the single mount law (provider-scoped identity contradicts mountTenantTheme) and the anatomy manifest becomes a derived view of the typed catalog instead of an authored file. Original spec: W4 landlord family: provider scoping, identity split, anatomy manifest, portal bridge, generated skin imports.",
    "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "Kimi DT",
+   "claimedAt": "2026-10-12",
    "doneAt": null,
    "evidence": null,
    "execution": {
@@ -8257,6 +8257,11 @@
      "at": "2026-10-12 13:10",
      "by": "Kimi DT",
      "note": "2026-10-12: the published six-axis indicator of 2026-10-05 (commit 99a867a3a, 6/6 met) is HISTORICAL and does NOT certify the current candidate: the repaired axis-difference instrument measures depth 79.5% (159/200 declared) and states 79.6% (121/152 declared), RED vs the 80% floor (evidence: .tmp/ds-codex-2026-10-08/quality-2026-10-12/axis-roster/logs/probe-threshold80.log; the reading was taken with the two HELD HK-POP population files present in the candidate). The history is preserved; the red measurement stands. Diagnosis of the lost movers (locale-switcher, status-filter-pills, collection-workspace, detail-panel, compare) dispatched per the owner directive of 2026-10-12; no threshold, denominator or acceptance change is made or implied."
+    },
+    {
+     "at": "2026-10-12 15:36",
+     "by": "Kimi DT",
+     "note": "2026-10-12: OFFICIAL axis-difference reading on a fresh build of a56cb7907 + the population re-pin (now integrated as 8edbf2ca8), singleton window, drill 361/361 run first: 6/6 axes at or above 80% on the declared basis (shape 173/214=80.84%, typography 181/184=98.37%, rhythm 190/226=84.07%, depth 160/200=80.00% exact, states 122/152=80.26%, motion 170/203=83.74%); both negative controls 0% on every evidential cell (palette-only 36/36, states-emphasis-only 12/12). Depth clears with ZERO margin — a fleet fact on record. The instrument-scope correction (a56cb7907, reviewed) restored observation of the real composed renders (locale-switcher, detail-panel, compare); the 2026-10-05 indicator stays HISTORICAL; the indicator is NOT republished (stale digest; republication is a named follow-up after the remaining owner decisions). EVI-02 is NOT closed: B3, the delegate-paint states reading, the carrier-read law candidate, the A1 exclusions and the full blocking battery at the milestone remain. Evidence: .tmp/ds-codex-2026-10-08/quality-2026-10-12/official-run/clone/probe-official.log + .json."
     }
    ]
   },
