@@ -2990,6 +2990,11 @@
      "at": "2026-10-12 16:38",
      "by": "Kimi DT",
      "note": "2026-10-12: closure verification window on the exact candidate 8edbf2ca8 (clean clone, fresh build): build RC 0 (exports-artifact-gate OK, 66 targets), css-layer-paint PASS, engine-token-audit --check OK (4264 counters, no counter regresses). NOT CLOSABLE: the unit suite is RED — 14 failed / 18513 passed. Attribution: 13 fail identically at ce1e2bec6 (pre-existing, unrecorded; none of today's lots touches their sources); the 14th (CollectionWorkspace tablet-filters projection) is a load-dependent flake, 3/3 green isolated at the candidate. The substance step map (recon a-arc.report.md:78-125, reformulated by EMI-02+CAT-02) stands verified; the 'build and unit green' arm fails on the 13 pre-existing reds. Diagnosis dispatched (per-failure first-red commit, classification, owning WO, lawful repair). ARC-14 closes when unit is green on a fresh candidate."
+    },
+    {
+     "at": "2026-10-12 19:09",
+     "by": "Kimi DT",
+     "note": "2026-10-12 (final window, candidate fa39e96fc, clean clone + sibling app-bithire linked): build RC 0, FULL unit 18527 passed / 2 failed / 17 skipped — the only two reds are the owner-queued decisions: container-emission budget +134.5 kB (UNIT-BUDGET-239DD6306) and the theme-iso light-dark( law breach (LIGHT-DARK-LAW-AXE-NAV). The 12 repairable reds are fixed and integrated (URA f41f387e6, URB f66614ab3, URD 2ddd666c0 + the Popover race fix, URE 649c4e4d8, URE-2 fa39e96fc; all independently reviewed). The load-dependent flakes are closed at the root (Popover guard) or awaited (fixtures). ARC-14 remains claimed, blocked on exactly those two owner decisions for its 'unit green' arm; the substance step map stands verified. Also registered: pack-inventory gate is red at HEAD (72 findings; its baseline is stale vs the 2026-10-09 dist — CollectionWorkspace split modules; re-seed with named growth owed at the next in-repo build window; NOT in the CI blocking manifest) and the popover engine dist byte pin moves on the next rebuild (URD)."
     }
    ],
    "claimedBy": "Kimi DT",
