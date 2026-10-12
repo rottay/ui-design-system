@@ -78,6 +78,10 @@ export function CardBody({
   padding = 'md',
   className = '',
   style,
+  // P-88: the card body keeps its own anatomy ('body'); a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   ...rest
 }: CardBodyProps): React.ReactElement {
   const renderedChildren = React.Children.toArray(children);

@@ -33,7 +33,7 @@
   "skins.unwired": 0,
   "skins.exemptionsBreached": 0,
   "skins.deadParts": 0,
-  "skins.passThroughViolations": 63,
+  "skins.passThroughViolations": 59,
   "skins.callerPartDependents": 859,
   "skins.callerStateDependents": 31,
   "arc09.inlinePaint.primitives/display/table/engines/modern/index.tsx": 0,

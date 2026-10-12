@@ -96,6 +96,10 @@ export function CardHeader({
   children,
   className = '',
   style,
+  // P-88: the card header keeps its own anatomy ('header'); a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   ...rest
 }: CardHeaderProps): React.ReactElement {
   const hasTextContent = eyebrow || title || subtitle;

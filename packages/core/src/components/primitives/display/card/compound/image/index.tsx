@@ -73,6 +73,10 @@ export function CardImage({
   onError,
   className = '',
   style,
+  // P-88: the card image keeps its own anatomy ('image'); a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   ...rest
 }: CardImageProps): React.ReactElement {
   const [imageError, setImageError] = useState(false);

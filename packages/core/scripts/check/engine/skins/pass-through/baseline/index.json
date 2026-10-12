@@ -15,43 +15,11 @@
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 63,
+  "passThroughViolations": 59,
   "callerPartDependents": 859,
   "callerStateDependents": 31
  },
  "roster": [
-  {
-   "key": "primitives/display/card/compound/body/index.tsx#CardBody#div#body#0",
-   "engine": "all (compound)",
-   "family": "card",
-   "breach": [
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/card/compound/footer/index.tsx#CardFooter#div#footer#0",
-   "engine": "all (compound)",
-   "family": "card",
-   "breach": [
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/card/compound/header/index.tsx#CardHeader#div#header#0",
-   "engine": "all (compound)",
-   "family": "card",
-   "breach": [
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/card/compound/image/index.tsx#CardImage#div#image#0",
-   "engine": "all (compound)",
-   "family": "card",
-   "breach": [
-    "state-forward"
-   ]
-  },
   {
    "key": "primitives/display/image/compound/fallback/index.tsx#ImageFallback#div#fallback#0",
    "engine": "all (compound)",
@@ -1386,11 +1354,6 @@
     "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#3"
    ]
   },
-  "card": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
   "container": {
    "carrier": true,
    "part": [],
@@ -1725,8 +1688,8 @@
   ]
  },
  "lastMove": {
-  "head": "b0de819c44a4fa3bdea1eb13c26012f5ebe4a5c2",
-  "date": "2026-10-11",
+  "head": "3f95d78360a95239c1937e197d559e39d6b7a48f",
+  "date": "2026-10-12",
   "note": "lowered to the gate's own measurement through --update-baseline"
  }
 }

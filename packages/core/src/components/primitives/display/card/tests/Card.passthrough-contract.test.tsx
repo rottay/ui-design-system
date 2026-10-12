@@ -10,6 +10,7 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { fireEvent, render } from '@testing-library/react';
 
+import { CardBody, CardFooter, CardHeader, CardImage } from '../compound';
 import ClassicCard from '../engines/classic';
 import ModernCard from '../engines/modern';
 import RusticCard from '../engines/rustic';
@@ -116,6 +117,27 @@ describe('Card pass-through honesty law', () => {
 
     const root = container.querySelector('.rottay-card--classic') as HTMLElement;
     expect(root).not.toHaveAttribute('data-state', 'caller-state-attempt');
+  });
+
+  // P-88 compound arm: the sub-parts serve every engine and spread the caller's
+  // rest themselves, so each one drops the caller data-part/data-state on its own.
+  it.each([
+    ['Card.Body', <CardBody key="body" {...passthrough} className="caller-hook" data-state="caller-state-attempt">Content</CardBody>, ".ds-card-body[data-part='body']"],
+    ['Card.Footer', <CardFooter key="footer" {...passthrough} className="caller-hook" data-state="caller-state-attempt">Content</CardFooter>, ".ds-card-footer[data-part='footer']"],
+    ['Card.Header', <CardHeader key="header" title="Title" {...passthrough} className="caller-hook" data-state="caller-state-attempt" />, ".ds-card-header[data-part='header']"],
+    ['Card.Image', <CardImage key="image" src="/cover.png" alt="Cover" {...passthrough} className="caller-hook" data-state="caller-state-attempt" />, ".ds-card-image[data-part='image']"],
+  ] as const)('%s drops the caller data-part/data-state, keeps its own part and still forwards id/aria-label/data-*/className', (_name, ui, ownAnatomy) => {
+    const { container } = render(ui);
+
+    expect(container.querySelector('[data-part="caller-part-attempt"]')).toBeNull();
+    expect(container.querySelector('[data-state]')).toBeNull();
+
+    const root = container.querySelector(ownAnatomy) as HTMLElement;
+    expect(root).toBeTruthy();
+    expect(root).toHaveAttribute('id', 'caller-card-id');
+    expect(root).toHaveAttribute('aria-label', 'Caller label');
+    expect(root).toHaveAttribute('data-custom', 'caller-data');
+    expect(root).toHaveClass('caller-hook');
   });
 
   it('never leaks non-DOM contract props (selection/extension fields) as attributes', () => {

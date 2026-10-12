@@ -93,6 +93,10 @@ export function CardFooter({
   align = 'end',
   className = '',
   style,
+  // P-88: the card footer keeps its own anatomy ('footer'); a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   ...rest
 }: CardFooterProps): React.ReactElement {
   return (

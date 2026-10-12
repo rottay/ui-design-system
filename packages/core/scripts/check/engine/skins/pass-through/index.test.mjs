@@ -139,6 +139,13 @@ describe('engine/skins/pass-through -- comparison drills (one move each)', () =>
 
 describe('engine/skins/pass-through -- carrier classification (audit, Defect A)', () => {
   const WAITS = 'owner carrier ruling (§6): layout carriers are not scheduled by this gate';
+  // The exemplar is read from the ledger, never named: a family leaves `families` once its
+  // last roster row is stripped, so a named one would turn these drills red on its own lot.
+  const emptyHeldNonCarrier = (l) => {
+    const family = Object.keys(l.families).sort().find((k) => l.families[k].carrier === false && l.families[k].part.length === 0 && l.families[k].state.length === 0);
+    assert.ok(family, 'the ledger holds a non-carrier family with empty held sets to drill');
+    return family;
+  };
 
   it('flipping a layout carrier to carrier=false is red, and eligibility still holds it on the owner ruling', () => {
     const l = clone(ledger);
@@ -171,19 +178,20 @@ describe('engine/skins/pass-through -- carrier classification (audit, Defect A)'
 
   it('a non-carrier falsely flagged carrier=true is red too (the check is symmetric)', () => {
     const l = clone(ledger);
-    assert.equal(l.families.card.carrier, false);
-    l.families.card.carrier = true;
+    const family = emptyHeldNonCarrier(l);
+    assert.equal(l.families[family].carrier, false);
+    l.families[family].carrier = true;
     const findings = evaluatePassThrough(view, l);
     assert.deepEqual(kinds(findings), ['carrier/fail']);
-    assert.match(findings[0].detail, /^card: the ledger says carrier=true, canonical LAYOUT_CARRIERS says false$/);
-    const e = eligibility(l).card;
+    assert.equal(findings[0].detail, `${family}: the ledger says carrier=true, canonical LAYOUT_CARRIERS says false`);
+    const e = eligibility(l)[family];
     assert.equal(e.partStripEligible, true, 'eligibility reads the canonical fact, not the false flag');
     assert.equal(e.waitsOn, undefined);
   });
 
   it('a non-carrier family with empty held sets stays fully eligible (the legitimate positive)', () => {
     assert.deepEqual(evaluatePassThrough(view, ledger), []);
-    const e = eligibility(ledger).card;
+    const e = eligibility(ledger)[emptyHeldNonCarrier(ledger)];
     assert.deepEqual(e, { partStripEligible: true, stateStripEligible: true, heldPart: [], heldState: [] });
     for (const carrier of ['box', 'flex', 'stack', 'grid', 'container', 'space']) {
       if (ledger.families[carrier]) assert.equal(eligibility(ledger)[carrier].waitsOn, WAITS, carrier);
