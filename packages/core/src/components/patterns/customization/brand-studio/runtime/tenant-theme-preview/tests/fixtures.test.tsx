@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 
 import { DesignSystemProvider } from "@/infrastructure/runtime/bootstrap";
 import type { TenantConfig } from "@/foundation/contracts";
@@ -75,7 +75,8 @@ describe("tenant-theme preview fixtures render without a product concept", () =>
       </Harness>
     );
     expect((await screen.findAllByText("Records")).length).toBeGreaterThan(0);
-    expect(screen.getByText("Alpha workspace")).toBeInTheDocument();
+    // Awaited, not synchronous: the table rows commit after the chrome title.
+    expect(await screen.findByText("Alpha workspace")).toBeInTheDocument();
     expect(container.textContent ?? "").not.toMatch(DOMAIN_VOCABULARY);
   });
 
@@ -133,8 +134,9 @@ describe("tenant-theme preview fixtures render without a product concept", () =>
       </Harness>
     );
     expect((await screen.findAllByText("Records")).length).toBeGreaterThan(0);
-    expect(screen.getByText("Edit record")).toBeInTheDocument();
-    expect(screen.getAllByText("Overview").length).toBeGreaterThan(0);
+    // Awaited, not synchronous: each stacked fixture commits on its own render.
+    expect(await screen.findByText("Edit record")).toBeInTheDocument();
+    expect((await screen.findAllByText("Overview")).length).toBeGreaterThan(0);
     expect(container.textContent ?? "").not.toMatch(DOMAIN_VOCABULARY);
   });
 });
@@ -161,13 +163,16 @@ describe("PatternBrandStudio tenant-theme preview composition", () => {
 
     await screen.findByText("Tenant theme live preview");
 
-    const scope = container.querySelector(
-      `[${PREVIEW_SCOPE_ATTRIBUTE}='preview-tenant']`
-    );
-    expect(scope).not.toBeNull();
+    const scope = await waitFor(() => {
+      const found = container.querySelector(
+        `[${PREVIEW_SCOPE_ATTRIBUTE}='preview-tenant']`
+      );
+      expect(found).not.toBeNull();
+      return found;
+    });
     // The fixtures render inside that scope, so the theme re-skins them live.
     expect(
-      within(scope as HTMLElement).getAllByText("Records").length
+      (await within(scope as HTMLElement).findAllByText("Records")).length
     ).toBeGreaterThan(0);
 
     // A scoped <style> block is injected and anchored to the preview root only.
@@ -199,7 +204,7 @@ describe("PatternBrandStudio tenant-theme preview composition", () => {
     );
 
     await screen.findByText("Tenant theme live preview");
-    expect(screen.getByText("Document not valid")).toBeInTheDocument();
+    expect(await screen.findByText("Document not valid")).toBeInTheDocument();
     expect(
       container.querySelector(`[${PREVIEW_SCOPE_ATTRIBUTE}='preview-tenant']`)
     ).toBeNull();
