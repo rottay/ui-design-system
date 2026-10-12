@@ -8241,6 +8241,11 @@
      "at": "2026-10-09 00:08",
      "by": "kimi-dt",
      "note": "hooks:check MANIFEST_STALE RESOLVED by attributed housekeeping (contracts/css/hooks/index.json republished via pnpm hooks:generate only): the drift was exactly counts.componentFiles 1301 -> 1317 from 383368e13/32409b080/0b8730d3a (contract last generated 7ba9dc177), zero hook-entry changes, verified by three independent re-derivations before the regen. hooks:check green ('published contract is current'); hooks suite 60/60 (was 57 + the MANIFEST_STALE trio). The official core build now passes the hooks:check prebuild; with TS4058 fixed at 504dcd020 the full build chain is green end-to-end for the first time since the W7a split. The step-1 migration's class hooks do not create manifest entries (verified), so the contract stays current through the remaining lots."
+    },
+    {
+     "at": "2026-10-12 12:28",
+     "by": "kimi",
+     "note": "2026-10-12 (quality wave, 12 commits dc5cbed7e..ae89f3644): the axis-difference real-render roster repaired (6ca876866; 8 re-pins attributed to the ARC-12 strip commits + 2 re-shaped mounts + unobservable pin 7->9; drill 350/350; review ACCEPT 7cdfec5b with byte-identical measurement reproduction). THE INSTRUMENT NOW MEASURES AND ITS VERDICT IS RED: depth 79.5% (159/200) and states 79.6% (121/152) declared vs the 80% threshold, both negative controls 0%; the 2026-10-05 published indicator (6/6) is stale — locale-switcher stopped moving on 5 axes after 0b8730d3a, states lost 4 movers. Owner item EVI-02-AXIS-DROP carries the four decisions. Also landed: APCA contrast instrument repaired + coverage control (1d191c171: 0 fail / 20 justified skips / 32 evaluated of 52; the dark-leg hole registered as the next instrument lot); theme-population re-pin WRITTEN but HELD (hk-pop lot.diff preserved) pending the owner answer — the population gate stays red at committed HEAD meanwhile; channel-liveness R1 regenerated on a clean layout (ae89f3644; in-repo red only on app-bithire's dirty seed WIP, attributed); the structure member split (f899ced25). The wave did NOT run the B2 roster re-seat or the fleet re-measure (both follow the owner answers)."
     }
    ]
   },
