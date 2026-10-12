@@ -3059,7 +3059,7 @@
    "lane": "architecture",
    "order": 16,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -3074,9 +3074,15 @@
    ],
    "phase": "1",
    "notes": "W4 divergence exit cert plus the app-side plumb; satisfies the DS-IMP-061 phase-1 pin. Post-C4 programme (2026-09-05): conserved unchanged; it is consumer migration, so it hangs off WO-CON-04 (milestone A: document v2 + mountTenantTheme + the per-app migration packages) and its scope narrows to app-bithire under owner scope D-31.",
-   "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "progressLog": [
+    {
+     "at": "2026-10-12 14:00",
+     "by": "Kimi DT",
+     "note": "2026-10-12: DS-side preparation landed (00a86aab0, independently reviewed): the transport-parity DB leg now runs from serialized row bytes (json + jsonb) through hydrate->compile->mount, byte-identical to the static path with mutants and a write->read->write fixed-point proof; the showroom probe round-trips row bytes to first paint with 0 differing pixels; the frozen per-app probe contract is recorded at docs/consumer-contract/migration/db-first-paint-probe/. The app-side half stays blocked on the owner's D-31 cross-repo authorization. Not DONE."
+    }
+   ],
+   "claimedBy": "Kimi DT",
+   "claimedAt": "2026-10-12",
    "doneAt": null,
    "evidence": null,
    "execution": {
