@@ -216,14 +216,23 @@ describe('contested token channels', () => {
    * note above describes as the goal rather than a suppression -- and the row
    * still fails the moment an artifact starts declaring one again.
    *
+   * Alias law (re-pinned 2026-10-12; moved 2026-09-29 by 6a91f16ff -> 6ca620661
+   * -> 6f72fee77, which completes the facade regen): the census is the SAME TWO
+   * names on all three. Each artifact now restates, under its own scope, the
+   * alias the bridge declares at `:root`, with the bridge's text --
+   * `var(--_ds-personality-resolved-<name>, <same fallback>)`. The unlayered
+   * artifact wins the cascade, but it reads the bridge's private channel first,
+   * so the winner changed and the rendered value did not. A third name, or a
+   * restatement that stops reading the private channel first, is a real change.
+   *
    * Personality-namespaced variables (`--ds-personality-*`) never appear here
    * because the artifacts declare none of them -- the bridge is their sole
    * emitter, asserted separately below.
    */
   const CONTESTED_BY_VERTICAL: Record<string, string[]> = {
-    rottay: [],
-    bithire: [],
-    evnto: [],
+    rottay: ['--ds-card-border-hover', '--ds-typography-heading-font-weight'],
+    bithire: ['--ds-card-border-hover', '--ds-typography-heading-font-weight'],
+    evnto: ['--ds-card-border-hover', '--ds-typography-heading-font-weight'],
   };
 
   /** Variable names the personality bridge can emit. */

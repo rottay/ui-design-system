@@ -84,6 +84,12 @@ const OWNER_SOURCES = import.meta.glob<string>(
 const { CollectionWorkspaceSurface } = surface as typeof import('@/components/surfaces/presentation/pages/workspace/collection-workspace');
 
 const CAPTURE_PATH = process.env.W7A_CAPTURE;
+// p2 re-captured 2026-10-12 through W7A_CAPTURE. Landed by WO-RET-04 W7a (383368e13); moved by the
+// ARC-12 step-2 P-88 closures, where the engine's own data-part replaces the caller literal:
+// E2 3c466551f (input "input" -> "root": shell, rtl), E9 28e169406 (button "icon-button" |
+// "utility-icon-toggle" | "control" | "fallback-open-link" -> "trigger": every scene but shell, rtl)
+// and E8-a 2d9e75af1 (phone title gains class ds-collection-render-dispatch__title). E3 4d8559be9
+// measured inert here. Attribute-only delta: tag sequence and text nodes are byte-identical.
 const PINS: Record<string, unknown> = {
   "p1": {
     "keys": [
@@ -93,14 +99,14 @@ const PINS: Record<string, unknown> = {
     "alias": true
   },
   "p2": {
-    "legacy": "fbe7199c2c5fa6bb99869c0642913eab20fa40eace78fdaeef80e91be395e53f",
-    "headerless": "82636681f4047d07885147587d34fb5b29ed504d3d599957e3343e724ec7a6a6",
-    "shell": "741f066ae617c3fd6ae60b95513d2fe4b0bad922bb6f7f5db21c70f02de9a8d2",
-    "dropdown": "11b34463fd523f269e38cffe0c8386a0ea67b7381b0c9563cb34b5bfa8064ecb",
-    "frozen": "5df25de20f7d8fd892f8b503bf70350107ea191e7bc439fcb423461b1497d474",
-    "phone": "dd7d3c87a222ca92d31f72b7d798c1e2d53fbc341406b7d9c356a280af4b4002",
-    "accordion": "0358b8d58dad23bc81dcd1720fbcf69b7858f3a28340909aef6bbc04c2732db2",
-    "rtl": "7525c0dbc2fb14d720e163d4efb4ee821b2a72d15ebf201e655145bb6ecc0e15"
+    "legacy": "e9a4ab2847d1204bbc8ae4eaee015c97d9a90e1d87275f2e8a478b08b5d28ba9",
+    "headerless": "11a5c3b3ae066dfeac95650b3085b3492fcf982b656e951d4df59618c408b01d",
+    "shell": "7b378034bf3b627fc4c2db325a92b8f306d0bdfe760797d1324ac6d3ca75b329",
+    "dropdown": "ac62a9ec744d32f804058850c65109b01644f8d9885afb50c7b4eee538a3fb5f",
+    "frozen": "b1a3cd69ec441e2980ab06bc1405b7411edeed60d5a101f13f1339b7fc524485",
+    "phone": "fd82c14e0d179be0d6c4c57fdf2f85b13531d2e4122e18d8845259085450af5d",
+    "accordion": "43c8429def71227f6f0ff3385fe2026ff4058dc9e38003cef2ed62b01eecd703",
+    "rtl": "aba7c50e14ce00f19b247cf6d6f44d4317e5216ef572c72b8ebc7b1efce33e95"
   },
   "p2id": {
     "phone": {
