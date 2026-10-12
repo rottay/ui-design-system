@@ -15,10 +15,39 @@
  *   MUTANT 2  the published artifact loses one variable. Law 3 asserts a SET
  *             equality against the moved delta precisely so a silently
  *             shortened artifact cannot pass.
+ *
+ * The serialized-row laws (4 and 5) are drilled on the BYTES, with no mock: the
+ * row arm is supposed to see nothing else, so the planted defect is a changed
+ * byte and the laws' own comparison must move.
+ *
+ *   MUTANT 3  one byte of the row's document changes. An arm that had kept
+ *             reading the fixture object would still agree with the static arm.
+ *   MUTANT 4  one trusted column changes (`rowVersion`). The digest is computed
+ *             over it, and the hydration door refuses the row by name when the
+ *             request's own identity says otherwise.
+ *   MUTANT 5  the bytes are not exactly one row: truncated, or carrying a
+ *             column the door was never promised.
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
+import {
+  compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
+  hydrateTenantThemeConfig,
+  TenantThemeValidationError,
+} from "@/infrastructure/compilers/composition/tenant-theme";
+import {
+  DIVERGENCE_SOBER_DOCUMENT,
+  DIVERGENCE_SOBER_IDENTITY,
+} from "@tests/fixtures/brand-themes/divergence-sober";
+import {
+  decodeTenantThemeRow,
+  encodeTenantThemeRow,
+  TENANT_THEME_ROW_ENCODINGS,
+  TenantThemeRowRefusal,
+  tenantThemeRowOf,
+} from "@tests/support/tenant-theme-row";
 
 const VERTICAL = "bithire" as const;
 const SLUG = "transport-parity-drill";
@@ -173,4 +202,67 @@ describe("transport-parity DRILL — each transport is measured separately", () 
     expect(previewAuthored).toBe(dbAuthored);
     expect(previewDelta).toEqual(dbDelta);
   });
+});
+
+const ROW_ENVELOPE = getTenantThemeVerticalEnvelope(DIVERGENCE_SOBER_IDENTITY.verticalKey);
+
+/** The row arm of law 5: nothing but the bytes and the request's trusted identity. */
+function compileRowBytes(bytes: Uint8Array, expectedIdentity = DIVERGENCE_SOBER_IDENTITY) {
+  const row = decodeTenantThemeRow(bytes);
+  return compileTenantThemeConfig(
+    hydrateTenantThemeConfig(row.document, row.identity, { expectedIdentity }),
+    { verticalEnvelope: ROW_ENVELOPE }
+  );
+}
+
+/** Replace exactly one occurrence, so a mutant that did not land fails loudly. */
+function rewriteBytes(bytes: Uint8Array, from: string, to: string): Uint8Array {
+  const text = Buffer.from(bytes).toString("utf8");
+  expect(text.split(from).length - 1, `${from} must occur exactly once in the row`).toBe(1);
+  return new TextEncoder().encode(text.replace(from, to));
+}
+
+describe("transport-parity DRILL — the serialized row is read from its bytes", () => {
+  const staticArtifact = compileTenantThemeConfig(
+    { ...DIVERGENCE_SOBER_DOCUMENT, ...DIVERGENCE_SOBER_IDENTITY },
+    { verticalEnvelope: ROW_ENVELOPE }
+  );
+  const rowBytes = (encoding: (typeof TENANT_THEME_ROW_ENCODINGS)[number]) =>
+    encodeTenantThemeRow(tenantThemeRowOf(DIVERGENCE_SOBER_DOCUMENT, DIVERGENCE_SOBER_IDENTITY), encoding);
+
+  for (const encoding of TENANT_THEME_ROW_ENCODINGS) {
+    it(`CONTROL (${encoding}): the untouched row compiles to the static artifact`, () => {
+      const artifact = compileRowBytes(rowBytes(encoding));
+      expect(artifact.digest).toBe(staticArtifact.digest);
+      expect(artifact.css).toBe(staticArtifact.css);
+    });
+
+    it(`MUTANT 3 (${encoding}): one changed byte in the document moves the digest and the css`, () => {
+      const artifact = compileRowBytes(rewriteBytes(rowBytes(encoding), "#2F6B9A", "#2F6B9B"));
+      expect(artifact.digest, "law 5a compares digests").not.toBe(staticArtifact.digest);
+      expect(artifact.css, "law 5a compares css bytes").not.toBe(staticArtifact.css);
+    });
+
+    it(`MUTANT 4 (${encoding}): a changed rowVersion column moves the digest, and the trusted identity refuses it`, () => {
+      const separator = encoding === "jsonb" ? ": " : ":";
+      const tampered = rewriteBytes(rowBytes(encoding), `"rowVersion"${separator}1`, `"rowVersion"${separator}2`);
+      const next = { ...DIVERGENCE_SOBER_IDENTITY, rowVersion: 2 };
+      expect(compileRowBytes(tampered, next).digest).not.toBe(staticArtifact.digest);
+      let refusal: unknown;
+      try {
+        compileRowBytes(tampered);
+      } catch (error) {
+        refusal = error;
+      }
+      expect(refusal).toBeInstanceOf(TenantThemeValidationError);
+      expect((refusal as TenantThemeValidationError).issues.map((issue) => issue.path)).toEqual(["$.rowVersion"]);
+    });
+
+    it(`MUTANT 5 (${encoding}): bytes that are not exactly one row are refused by name`, () => {
+      const bytes = rowBytes(encoding);
+      expect(() => decodeTenantThemeRow(bytes.slice(0, bytes.length - 1))).toThrow(TenantThemeRowRefusal);
+      const extra = rewriteBytes(bytes, '"rowVersion"', '"compiledCss"');
+      expect(() => decodeTenantThemeRow(extra)).toThrow(/missing: rowVersion; extra: compiledCss/);
+    });
+  }
 });

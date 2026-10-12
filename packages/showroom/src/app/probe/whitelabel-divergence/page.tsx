@@ -1,4 +1,16 @@
-import { groundFor, GroundStage } from '@/components/probe-ground';
+import { createHash } from 'node:crypto';
+
+import { hydrateTenantThemeConfig } from '@rottay/design-system/server';
+
+import {
+  decodeTenantThemeRow,
+  encodeTenantThemeRow,
+  groundFor,
+  GroundStage,
+  TENANT_THEME_ROW_ENCODINGS,
+  tenantThemeRowOf,
+  type TenantThemeRowEncoding,
+} from '@/components/probe-ground';
 import { DivergenceSurface } from '@/components/divergence-surface';
 import {
   DIVERGENCE_ROUTES,
@@ -21,6 +33,12 @@ import {
 //   ?fixture=sober|editorial   which tenant document compiles (default sober)
 //   ?route=dashboard|list|detail  which demo screen renders (default dashboard)
 //   ?ground=light|dark         which presentation theme paints (default light)
+//   ?row=json|jsonb            read the tenant back from serialized row bytes
+//                              (default: the in-memory fixture, the static path)
+//
+// With `?row=` the fixture is written to one row's bytes and nothing but those
+// bytes and the request's trusted identity reaches the hydration door; the
+// design system reads no database, the bytes are the boundary (WO-ARC-21).
 //
 // The fixtures are never registered as product tenants and never generate a
 // build artifact; each load compiles the document through the probe-ground
@@ -42,6 +60,10 @@ function isRoute(value: string | null): value is DivergenceRoute {
   return value !== null && (DIVERGENCE_ROUTES as readonly string[]).includes(value);
 }
 
+function isRowEncoding(value: string | null): value is TenantThemeRowEncoding {
+  return value !== null && (TENANT_THEME_ROW_ENCODINGS as readonly string[]).includes(value);
+}
+
 export default async function WhitelabelDivergencePage({
   searchParams,
 }: {
@@ -55,17 +77,44 @@ export default async function WhitelabelDivergencePage({
   const route: DivergenceRoute = isRoute(routeParam) ? routeParam : 'dashboard';
   const ground: DivergenceGround = first(query.ground) === 'dark' ? 'dark' : 'light';
 
+  const rowParam = first(query.row);
+  const rowEncoding = isRowEncoding(rowParam) ? rowParam : null;
+
   const spec = DIVERGENCE_FIXTURES[fixture];
+  let tenant: { document: unknown; tenantId: string; slug: string; rowVersion: number } = {
+    document: spec.document,
+    ...spec.identity,
+  };
+  let rowProof: Record<string, string> = {};
+  if (rowEncoding) {
+    const bytes = encodeTenantThemeRow(tenantThemeRowOf(spec.document, spec.identity), rowEncoding);
+    const row = decodeTenantThemeRow(bytes);
+    // The fixture identity stands in for the request's trusted directory entry:
+    // a row whose columns name another tenant or version is refused by the door.
+    const { tenantId, slug, verticalKey, rowVersion, ...document } = hydrateTenantThemeConfig(
+      row.document,
+      row.identity,
+      { expectedIdentity: spec.identity },
+    );
+    if (verticalKey !== 'bithire') throw new Error(`The ${fixture} row names vertical ${verticalKey}`);
+    tenant = { document, tenantId, slug, rowVersion };
+    rowProof = {
+      'data-row-encoding': rowEncoding,
+      'data-row-bytes': String(bytes.byteLength),
+      'data-row-sha256': createHash('sha256').update(bytes).digest('hex'),
+    };
+  }
+
   const mounted = await groundFor({
     source: {
       kind: 'legacy',
-      document: spec.document,
-      tenantId: spec.identity.tenantId,
-      rowVersion: spec.identity.rowVersion,
+      document: tenant.document,
+      tenantId: tenant.tenantId,
+      rowVersion: tenant.rowVersion,
       vertical: 'bithire',
       name: spec.displayName,
     },
-    slug: spec.identity.slug,
+    slug: tenant.slug,
     mode: ground,
   });
   const { artifact } = mounted.stage;
@@ -73,7 +122,7 @@ export default async function WhitelabelDivergencePage({
 
   return (
     <>
-      <script data-testid="divergence-stamp" dangerouslySetInnerHTML={{ __html: mounted.stamp }} />
+      <script data-testid="divergence-stamp" {...rowProof} dangerouslySetInnerHTML={{ __html: mounted.stamp }} />
       <GroundStage
         {...mounted.stage}
         tenantConfig={divergenceTenantConfig(fixture, ground)}

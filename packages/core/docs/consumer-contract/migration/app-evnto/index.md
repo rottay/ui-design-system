@@ -42,6 +42,12 @@ against what they meant, since the skin never selected the trigger by class.
 Full table and verification:
 [cross-app guide](../legacy-class-retirement/index.md).
 
+### WO-ARC-21 DB-to-first-paint probe — frozen definition (2026-10-12)
+
+Nothing here executes until the owner authorizes it under D-31. The probe's
+route, tenant fixture, assertions and execution control for app-evnto are
+recorded in the [cross-app record](../db-first-paint-probe/index.md) §3.
+
 ## What will be in the packet when it is written
 
 - **X-01** — visual-authority declaration: app-evnto sends a bare string today.

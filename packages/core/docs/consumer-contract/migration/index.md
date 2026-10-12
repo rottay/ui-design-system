@@ -13,6 +13,10 @@ Cross-app guides, applying to every consumer at once:
 - [`legacy-class-retirement/index.md`](./legacy-class-retirement/index.md) — WO-FAM-11
   (owner ruling 8): the `rottay-app-shell*` / `rottay-action-dock*` rename to
   `ds-*`; what changed, who is affected, the exact rename table, verification.
+- [`db-first-paint-probe/index.md`](./db-first-paint-probe/index.md) — WO-ARC-21:
+  the frozen dispatch record for the DB-to-first-paint probe in each
+  application (route, tenant fixture, first-paint assertions, rollback, disable,
+  telemetry). Awaits the owner's D-31 authorization; not dispatched.
 
 - **X-07** (all three applications) — `scripts/ds-supplier-honesty.mjs` reads
   the installed package by filesystem path and breaks on 3.0; each packet

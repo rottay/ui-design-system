@@ -32,6 +32,12 @@ reaches them through a webpack alias in `next.config.ts`, and the two artifacts
 do not exist in `dist/`. app-platform resolves that on its own side when it
 enters scope.
 
+WO-ARC-21 DB-to-first-paint probe — frozen definition (2026-10-12): nothing
+executes until the owner authorizes it under D-31. The route, tenant fixture,
+assertions and execution control for app-platform are recorded in the
+[cross-app record](../db-first-paint-probe/index.md) §3; `platform` has no
+tenant-theme envelope, so the probe row names `rottay`.
+
 ## What will be in the packet when it is written
 
 - **X-01** — visual-authority declaration: app-platform sends none today.

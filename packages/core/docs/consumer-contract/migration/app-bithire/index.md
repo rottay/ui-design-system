@@ -243,6 +243,13 @@ A row whose dials are outside those vocabularies therefore does NOT migrate
 silently: fix the value at the source row, or leave the row on v1 until you
 can.
 
+The proof that a row read through this door reaches the first paint is a
+separate, owner-authorized packet (WO-ARC-21, D-31), not a step of this one.
+Its frozen probe definition for app-bithire — route, tenant fixture, first-paint
+assertions, rollback, disable and telemetry — is in the
+[cross-app record](../db-first-paint-probe/index.md); the design-system half is
+already executable in `tests/integration/transport-parity/` (laws 4 and 5).
+
 ### Step 7 — Rename the shell/dock class selectors (WO-FAM-11, owner ruling 8)
 
 The design-system major `.changeset/fam-11-legacy-class-retirement.md`

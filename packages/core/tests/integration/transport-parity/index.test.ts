@@ -72,6 +72,27 @@
  * byte-identical on every moved channel. A row whose precedence entry stopped being true fails in the first
  * direction; a row that drifts fails in the second.
  *
+ * THE SERIALIZED ROW (WO-ARC-21, DS-side). Every arm above is handed a fixture
+ * OBJECT, and so is the DB arm -- which is the one transport that never arrives
+ * as an object. An application reads bytes out of its own database, and a
+ * fixture object shares key order and number spelling with the static arm for
+ * free. Laws 4 and 5 put the row's bytes between the fixture and the door:
+ *
+ *   4  ROW = DOCUMENT. Each driven decision is serialized as a row in both
+ *      encodings (`json`, and PostgreSQL's reordered `jsonb::text`), decoded,
+ *      and compiled; the map and the published artifact are byte-identical to
+ *      the fixture-object arm's.
+ *   5  ROW -> hydrate -> compile -> mount = STATIC. The two W4 certification
+ *      documents travel as rows through `hydrateTenantThemeConfig`,
+ *      `compileTenantThemeConfig` and `mountTenantTheme`; the artifact, the
+ *      mounted `<style>` and the root projection are byte-identical to the
+ *      in-memory config's, and re-serializing the hydrated config reproduces
+ *      the row.
+ *
+ * The design system reads no database here or anywhere: the bytes are the
+ * boundary. `drill/` flips one byte of a row and one trusted column, so
+ * agreement cannot come from both arms reading the same object.
+ *
  * DRIVEN OFF THE CATALOG, ACCOUNTED FOR IN BOTH DIRECTIONS. `CASES` must name
  * every row that declares a `css-channels` effect on both keypaths -- either
  * with the value to drive it, or with a written reason. A new dual-transport
@@ -85,6 +106,12 @@ import {
 } from "@/contracts/theme/runtime/catalog";
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { TenantThemeConfigIdentity } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import {
+  compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
+  hydrateTenantThemeConfig,
+} from "@/infrastructure/compilers/composition/tenant-theme";
 import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
 import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme";
 import {
@@ -93,6 +120,21 @@ import {
   previewThemeIntent,
   staticThemeIntent,
 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
+import { mountTenantTheme } from "@/infrastructure/runtime/theming/composition/mount";
+import {
+  DIVERGENCE_EDITORIAL_DOCUMENT,
+  DIVERGENCE_EDITORIAL_IDENTITY,
+} from "@tests/fixtures/brand-themes/divergence-editorial";
+import {
+  DIVERGENCE_SOBER_DOCUMENT,
+  DIVERGENCE_SOBER_IDENTITY,
+} from "@tests/fixtures/brand-themes/divergence-sober";
+import {
+  decodeTenantThemeRow,
+  encodeTenantThemeRow,
+  TENANT_THEME_ROW_ENCODINGS,
+  tenantThemeRowOf,
+} from "@tests/support/tenant-theme-row";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
@@ -502,6 +544,146 @@ describe("transport parity — one decision, four doors, compared as bytes", () 
           .map((channel) => `${channel}: artifact=${published[channel]} preview=${preview[channel]}`);
         expect(mismatched).toEqual([]);
       });
+
+      it("law 4 — the same decision read back from serialized row bytes is the same document arm", () => {
+        const identity = {
+          tenantId: "tenant_transport_parity",
+          slug: SLUG,
+          verticalKey: VERTICAL,
+          rowVersion: 1,
+        };
+        const fromFixture = compileTenantThemeDocumentV2({ document, ...identity }).artifact;
+        const encodings = TENANT_THEME_ROW_ENCODINGS.map((encoding) =>
+          encodeTenantThemeRow(tenantThemeRowOf(document, identity), encoding)
+        );
+        expect(Buffer.from(encodings[0]!).equals(Buffer.from(encodings[1]!)), "the two encodings must be different bytes").toBe(false);
+        for (const bytes of encodings) {
+          const row = decodeTenantThemeRow(bytes);
+          const rowDocument = row.document as TenantThemeDocumentV2;
+          const fromRow = variablesOf(
+            documentThemeIntent({ vertical: VERTICAL, slug: row.identity.slug, document: rowDocument })
+          );
+          const names = [...new Set([...Object.keys(db), ...Object.keys(fromRow)])];
+          expect(names.filter((channel) => fromRow[channel] !== db[channel])).toEqual([]);
+          const artifact = compileTenantThemeDocumentV2({
+            document: rowDocument,
+            tenantId: row.identity.tenantId,
+            slug: row.identity.slug,
+            verticalKey: VERTICAL,
+            rowVersion: row.identity.rowVersion,
+          }).artifact;
+          expect(artifact.digest).toBe(fromFixture.digest);
+          expect(artifact.css).toBe(fromFixture.css);
+          expect(artifact).toEqual(fromFixture);
+        }
+      });
     });
   }
+});
+
+/**
+ * Law 5: the v1 hydration door, from row bytes to the mount.
+ *
+ * The documents are the W4 wave-exit certification inputs, so the bytes proven
+ * here are the bytes `packages/showroom/e2e/whitelabel` paints. The static arm
+ * is the config built in memory, which is what that probe compiled before a
+ * row existed; the row arm sees nothing but the bytes and the request's own
+ * trusted identity.
+ */
+const ROW_FIXTURES: readonly {
+  readonly name: string;
+  readonly document: unknown;
+  readonly identity: TenantThemeConfigIdentity;
+}[] = [
+  { name: "divergence-sober", document: DIVERGENCE_SOBER_DOCUMENT, identity: DIVERGENCE_SOBER_IDENTITY },
+  { name: "divergence-editorial", document: DIVERGENCE_EDITORIAL_DOCUMENT, identity: DIVERGENCE_EDITORIAL_IDENTITY },
+];
+
+const MOUNT_OPTIONS = { themeMode: "light", locale: "en" } as const;
+
+async function mountOf(document: unknown, artifact: ReturnType<typeof compileTenantThemeConfig>) {
+  const mounted = await mountTenantTheme(
+    documentThemeIntent({
+      vertical: artifact.verticalKey as typeof VERTICAL,
+      slug: artifact.slug,
+      document: document as Parameters<typeof documentThemeIntent>[0]["document"],
+    }),
+    { ...MOUNT_OPTIONS, artifact }
+  );
+  return {
+    rootAttributes: mounted.rootAttributes,
+    styleElements: mounted.styleElements.map(({ id, attributes, css }) => ({ id, attributes, css })),
+    artifactDigest: mounted.artifactDigest,
+    css: mounted.hydrationProof.css,
+    scope: mounted.hydrationProof.scope,
+  };
+}
+
+describe("transport parity — the DB leg as serialized row bytes, hydrate to mount", () => {
+  const digests = new Set<string>();
+
+  for (const fixture of ROW_FIXTURES) {
+    const verticalEnvelope = getTenantThemeVerticalEnvelope(fixture.identity.verticalKey);
+    const staticArtifact = compileTenantThemeConfig(
+      { ...(fixture.document as object), ...fixture.identity },
+      { verticalEnvelope }
+    );
+    digests.add(staticArtifact.digest);
+
+    it(`${fixture.name}: law 0 — the row's document moves the vertical, so parity is not vacuous`, () => {
+      expect(Object.keys(staticArtifact.variables).length).toBeGreaterThan(0);
+      expect(staticArtifact.css.length).toBeGreaterThan(0);
+    });
+
+    for (const encoding of TENANT_THEME_ROW_ENCODINGS) {
+      describe(`${fixture.name} as ${encoding} bytes`, () => {
+        const bytes = encodeTenantThemeRow(tenantThemeRowOf(fixture.document, fixture.identity), encoding);
+        const row = decodeTenantThemeRow(bytes);
+        const hydrated = hydrateTenantThemeConfig(row.document, row.identity, {
+          expectedIdentity: fixture.identity,
+        });
+        const rowArtifact = compileTenantThemeConfig(hydrated, { verticalEnvelope });
+
+        it("law 5a — hydrate -> compile from the bytes is the static artifact, byte for byte", () => {
+          expect(rowArtifact.digest).toBe(staticArtifact.digest);
+          expect(rowArtifact.css).toBe(staticArtifact.css);
+          expect(rowArtifact).toEqual(staticArtifact);
+        });
+
+        it("law 5b — the mount emits the same <style> bytes and the same root projection", async () => {
+          const fromRow = await mountOf(row.document, rowArtifact);
+          const fromStatic = await mountOf(fixture.document, staticArtifact);
+          expect(fromRow.styleElements).toHaveLength(1);
+          expect(fromRow.styleElements[0]!.css).toBe(staticArtifact.css);
+          expect(fromRow).toEqual(fromStatic);
+        });
+
+        it("law 5c — re-serializing the hydrated config reproduces the row (write -> read -> write is a fixed point)", () => {
+          const { tenantId, slug, verticalKey, rowVersion, ...document } = hydrated;
+          const rewritten = encodeTenantThemeRow(
+            tenantThemeRowOf(document, { tenantId, slug, verticalKey, rowVersion }),
+            "jsonb"
+          );
+          const canonical = encodeTenantThemeRow(tenantThemeRowOf(fixture.document, fixture.identity), "jsonb");
+          expect(Buffer.from(rewritten).toString("utf8")).toBe(Buffer.from(canonical).toString("utf8"));
+        });
+      });
+    }
+  }
+
+  it("the two rows are two tenants: their artifacts carry different digests", () => {
+    expect(digests.size).toBe(ROW_FIXTURES.length);
+  });
+
+  it("the jsonb encoding really reorders: its bytes differ from the authored-order json", () => {
+    for (const fixture of ROW_FIXTURES) {
+      const row = tenantThemeRowOf(fixture.document, fixture.identity);
+      const json = Buffer.from(encodeTenantThemeRow(row, "json")).toString("utf8");
+      const jsonb = Buffer.from(encodeTenantThemeRow(row, "jsonb")).toString("utf8");
+      expect(jsonb).not.toBe(json);
+      expect(jsonb.replace(/\s/g, ""), "and by more than whitespace").not.toBe(json);
+      expect(jsonb.indexOf('"slug"')).toBeLessThan(jsonb.indexOf('"document"'));
+      expect(json.indexOf('"tenantId"')).toBeLessThan(json.indexOf('"slug"'));
+    }
+  });
 });
