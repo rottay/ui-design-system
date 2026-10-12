@@ -3131,9 +3131,14 @@ const governedHover = (compound) =>
 
 test("CONTROL: the owning compound of a state nested in `:is()` is the compound that HOSTS the pseudo, not what sits left of the bracket", () => {
   const compoundsOf = (css) => {
-    const file = join(mkdtempSync(join(tmpdir(), 'family-cut-compound-')), 'index.css');
-    writeFileSync(file, css);
-    return analyzeSkin(file).stateCompounds.map((row) => row.tokens);
+    const dir = mkdtempSync(join(tmpdir(), 'family-cut-compound-'));
+    try {
+      const file = join(dir, 'index.css');
+      writeFileSync(file, css);
+      return analyzeSkin(file).stateCompounds.map((row) => row.tokens);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   };
   /* Walking back from `[data-state` alone finds `(` and returns nothing: that
    * is the measured reason the states arm could not see a composed stamp. */
