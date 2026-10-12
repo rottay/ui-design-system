@@ -1353,7 +1353,7 @@ const SHAPE_REACH_ROWS = Object.freeze({
     markup: '<div class="rottay-avatar rottay-avatar--modern" data-part="root" data-variant="default" data-shape="square" data-size="md">'
       + '<div data-part="mask"></div></div>',
     stamps: Object.freeze([
-      Object.freeze({ token: 'attr:data-part=root', stamp: '{...partAttributes(dataPart ?? "root", isInteractive ? interaction : {})}' }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: '{...partAttributes("root", isInteractive ? interaction : {})}' }),
       Object.freeze({
         token: 'attr:data-variant=default',
         stamp: 'data-variant={variant}',
@@ -1398,7 +1398,7 @@ const SHAPE_REACH_ROWS = Object.freeze({
           Object.freeze({ source: 'src/components/primitives/display/image/contracts/index.ts', text: "radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';" }),
         ]),
       }),
-      Object.freeze({ token: 'attr:data-part=root', stamp: "{...partAttributes(dataPart ?? 'root', interaction)}" }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: "{...partAttributes('root', interaction)}" }),
     ]),
   }),
   'box-rounded': Object.freeze({
@@ -1624,7 +1624,7 @@ const STATES_REACH_ROWS = Object.freeze({
     stamps: Object.freeze([
       Object.freeze({
         token: 'attr:data-part=root',
-        stamp: "{...partAttributes(dataPart ?? 'root', interaction)}\n        {...skinAttributes}\n      />",
+        stamp: "{...partAttributes('root', interaction)}\n        {...skinAttributes}\n      />",
       }),
       Object.freeze({
         token: 'attr:data-variant=outline',
@@ -1666,7 +1666,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       + '<div data-part="line" data-animation="pulse"></div><div data-part="line" data-animation="pulse"></div>'
       + '<div data-part="line" data-animation="pulse"></div></div></div>',
     stamps: Object.freeze([
-      Object.freeze({ token: 'attr:data-part=root', stamp: "data-part={dataPart ?? 'root'}" }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: 'data-part="root"' }),
       Object.freeze({
         token: 'attr:data-animation=pulse',
         stamp: 'data-animation={resolvedStyle}',
@@ -2651,7 +2651,8 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   'stats-grid-interactive': Object.freeze({
     family: 'stats-grid',
     state: Object.freeze({
-      name: 'a loaded stats grid given `onStatClick` (variant "default") -- every card becomes a button, `data-interactive="true"`, the node the lift, press and ring rules are gated on',
+      name: 'a loaded stats grid given `onStatClick` (variant "default") -- every card is kernel-stamped and `data-interactive="true"`, the node the lift, press and ring rules are gated on '
+        + '(the activation is a chrome-less Button stretched over the card; it is omitted, the rules are gated on the card)',
       source: 'src/components/patterns/data/stats-grid/engines/modern/index.tsx',
       anchors: Object.freeze(['onClick={onStatClick ? () => onStatClick(stat) : undefined}', 'data-interactive={onClick ? "true" : "false"}']),
       resolves: Object.freeze([
@@ -2660,7 +2661,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
     }),
     axes: Object.freeze(['states']),
     markup: '<div class="ds-pattern-stats-grid ds-engine-modern" data-part="root" data-loading="false" data-variant="default">'
-      + '<div class="ds-stats-grid__card" data-part="card" data-variant="default" data-interactive="true" role="button" tabindex="0">'
+      + '<div class="ds-stats-grid__card" data-part="card" data-variant="default" data-interactive="true">'
       + '<div data-part="label-row"><div data-part="statistic">Revenue</div></div></div></div>',
     stamps: Object.freeze([
       Object.freeze({
@@ -2671,8 +2672,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
         ]),
       }),
       Object.freeze({ token: 'attr:data-interactive=true', stamp: 'data-interactive={onClick ? "true" : "false"}' }),
-      Object.freeze({ token: 'attr:role=button', stamp: 'role={onClick ? "button" : undefined}' }),
-      Object.freeze({ token: 'attr:tabindex=0', stamp: 'tabIndex={onClick ? 0 : undefined}' }),
+      Object.freeze({ token: 'attr:data-part=card', stamp: '{...partAttributes("card", onClick ? interaction.state : {})}' }),
     ]),
   }),
   'stats-header': Object.freeze({
@@ -2768,9 +2768,10 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   }),
   'activity-log': Object.freeze({
     state: Object.freeze({
-      name: 'a loaded activity log given `onActivityClick` -- each item body becomes a button, `data-interactive="true"`, the node the ring rule is gated on (the Timeline wrappers between root and body are omitted: the rule is a descendant match)',
+      name: 'a loaded activity log given `onActivityClick` -- each item body is kernel-stamped and `data-interactive="true"`, the node the ring rule is gated on (the Timeline wrappers between root and body are omitted: the rule is a descendant match; '
+        + 'the activation is a chrome-less Button stretched over the body and is omitted too)',
       source: 'src/components/patterns/communication/activity-log/engines/modern/index.tsx',
-      anchors: Object.freeze(["data-interactive={onActivityClick ? 'true' : 'false'}"]),
+      anchors: Object.freeze(['onActivate={onActivityClick ? () => onActivityClick(activity) : undefined}']),
       resolves: Object.freeze([
         Object.freeze({ source: 'src/components/patterns/communication/activity-log/contracts/index.ts', text: 'onActivityClick?: (activity: Activity) => void;' }),
       ]),
@@ -2778,11 +2779,9 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
     axes: Object.freeze(['states']),
     pseudoReads: Object.freeze([Object.freeze({ part: 'item-body', pseudo: '::after' })]),
     markup: '<div data-part="root" class="ds-pattern-activity-log ds-engine-modern" data-loading="false">'
-      + '<div data-part="item-body" data-interactive="true" role="button" tabindex="0"></div></div>',
+      + '<div data-part="item-body" data-interactive="true"></div></div>',
     stamps: Object.freeze([
-      Object.freeze({ token: 'attr:data-interactive=true', stamp: "data-interactive={onActivityClick ? 'true' : 'false'}" }),
-      Object.freeze({ token: 'attr:role=button', stamp: "role={onActivityClick ? 'button' : undefined}" }),
-      Object.freeze({ token: 'attr:tabindex=0', stamp: 'tabIndex={onActivityClick ? 0 : undefined}' }),
+      Object.freeze({ token: 'attr:data-part=item-body', stamp: "{...partAttributes('item-body', interaction.state)} data-interactive=\"true\">" }),
     ]),
   }),
   avatar: Object.freeze({
@@ -2798,7 +2797,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
     markup: '<div class="rottay-avatar rottay-avatar--modern" data-part="root" data-variant="default" data-shape="circle" data-size="md" '
       + 'data-interactive="true" role="button" tabindex="0"><div data-part="mask"></div></div>',
     stamps: Object.freeze([
-      Object.freeze({ token: 'attr:data-part=root', stamp: '{...partAttributes(dataPart ?? "root", isInteractive ? interaction : {})}' }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: '{...partAttributes("root", isInteractive ? interaction : {})}' }),
       Object.freeze({
         token: 'attr:data-variant=default',
         stamp: 'data-variant={variant}',
@@ -3309,7 +3308,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
     markup: '<div class="rottay-descriptions rottay-descriptions--modern" data-part="root" data-has-header="true">'
       + '<div class="rottay-descriptions-title" data-part="header"></div></div>',
     stamps: Object.freeze([
-      Object.freeze({ token: 'attr:data-part=root', stamp: "data-part={dataPart ?? 'root'}" }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: 'data-part="root"' }),
       Object.freeze({
         token: 'attr:data-has-header=true',
         stamp: 'data-has-header={hasHeader}',
@@ -3348,7 +3347,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
     markup: '<div class="rottay-image rottay-image--modern" data-shadow="true" data-part="root"></div>',
     stamps: Object.freeze([
       Object.freeze({ token: 'attr:data-shadow=true', stamp: "data-shadow={shadow ? 'true' : undefined}" }),
-      Object.freeze({ token: 'attr:data-part=root', stamp: "{...partAttributes(dataPart ?? 'root', interaction)}" }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: "{...partAttributes('root', interaction)}" }),
     ]),
   }),
   box: Object.freeze({
@@ -3389,7 +3388,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
     axes: Object.freeze(['shape', 'depth']),
     markup: '<div class="rottay-list rottay-list--modern" data-part="root" data-bordered="true"></div>',
     stamps: Object.freeze([
-      Object.freeze({ token: 'attr:data-part=root', stamp: "data-part={dataPart ?? 'root'}" }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: 'data-part="root"' }),
       Object.freeze({ token: 'attr:data-bordered=true', stamp: "data-bordered={bordered ? 'true' : 'false'}" }),
     ]),
   }),
@@ -3583,8 +3582,10 @@ export const UNOBSERVABLE_FAMILIES = Object.freeze({
     'edit-fields': 'colour-only',
     'form-builder': 'no-vocabulary',
     list: 'colour-only',
+    'locale-switcher': 'colour-only',
     'metrics-chart': 'colour-only',
     'metrics-rows': 'no-vocabulary',
+    'status-filter-pills': 'colour-only',
     'table-toolbar': 'colour-only',
   }),
   motion: Object.freeze({}),

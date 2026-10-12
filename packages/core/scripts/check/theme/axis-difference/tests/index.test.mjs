@@ -4434,7 +4434,7 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     assert.ok(failures.some((line) => line.includes('witness moved 13 and published 13 id(s) / 12 famil(ies)')), failures.join(' | '));
   });
 
-  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 7 on states, 0 elsewhere', () => {
+  it('PIN: the unobservable set is exactly what check/theme/population derives on this tree -- 9 on states, 0 elsewhere', () => {
     const live = axisUnobservable(ROOT);
     const asRun = Object.fromEntries(AXIS_IDS.map((axis) => [axis, live.get(axis)]));
     assert.deepEqual(unobservableDrift(asRun), []);
@@ -4444,9 +4444,11 @@ describe('axis-difference — S5 instrument truth lot (WO-EVI-02, the two Fable 
     // 8 -> 9 (2026-10-03): approval-inbox enters colour-only -- 0c9b89be0 retired its one non-chromatic state paint.
     // 9 -> 8 (2026-10-03): approval-inbox leaves -- 083423044 writes `box-shadow` on its root `::after` under focus.
     // 8 -> 7 (2026-10-04): operational-ledger leaves -- its scroll region writes `box-shadow` on `::before` under focus.
-    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 7);
+    // 7 -> 9 (re-pinned 2026-10-12, both colour-only): status-filter-pills enters at 464d5cf52 (WO-ARC-22 L6, the pills
+    // drain onto Button) and locale-switcher at 0b8730d3a (WO-EXT-DS E-3, it composes the canonical Select).
+    assert.equal(Object.keys(UNOBSERVABLE_FAMILIES.states).length, 9);
     assert.deepEqual(Object.entries(UNOBSERVABLE_FAMILIES.states).filter(([, kind]) => kind === 'colour-only').map(([family]) => family),
-      ['edit-fields', 'list', 'metrics-chart', 'table-toolbar']);
+      ['edit-fields', 'list', 'locale-switcher', 'metrics-chart', 'status-filter-pills', 'table-toolbar']);
     assert.equal(Object.hasOwn(UNOBSERVABLE_FAMILIES.states, 'approval-inbox'), false);
     assert.ok(!live.get('states').some((entry) => entry.family === 'approval-inbox'));
     assert.ok(axisPopulations(ROOT).get('states').includes('approval-inbox'), 'it stays in the declared denominator');
@@ -5836,7 +5838,7 @@ describe('axis-difference — the states reach rows: real public renders, and on
     assert.deepEqual(mutated(ENGINE, gate, gate.replace('loading) {', 'loading || !prefix) {')),
       [`input: ${entry.state.source} no longer carries the gate \`${gate}\``]);
     assert.deepEqual(mutated(ENGINE, plainStamp, '{...skinAttributes}\n      />'), [stampGone]);
-    assert.deepEqual(mutated(ENGINE, plainStamp, "{...partAttributes(dataPart ?? 'root', interaction)}\n      />"), [stampGone]);
+    assert.deepEqual(mutated(ENGINE, plainStamp, "{...partAttributes('root', interaction)}\n      />"), [stampGone]);
     assert.deepEqual(mutated(CONTRACT, 'clearable: false,', 'clearable: true,'),
       ['input/state: src/components/primitives/inputs/input/contracts/index.ts no longer carries the resolves `clearable: false,`']);
     assert.deepEqual(mutated(CONTRACT, 'loading: false,', 'loading: true,'),
