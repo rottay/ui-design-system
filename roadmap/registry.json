@@ -2985,7 +2985,13 @@
    ],
    "phase": "1",
    "notes": "REFORMULATED by WO-EMI-02 + WO-CAT-02: mount and identity move to the single mount law (provider-scoped identity contradicts mountTenantTheme) and the anatomy manifest becomes a derived view of the typed catalog instead of an authored file. Original spec: W4 landlord family: provider scoping, identity split, anatomy manifest, portal bridge, generated skin imports.",
-   "progressLog": [],
+   "progressLog": [
+    {
+     "at": "2026-10-12 16:38",
+     "by": "Kimi DT",
+     "note": "2026-10-12: closure verification window on the exact candidate 8edbf2ca8 (clean clone, fresh build): build RC 0 (exports-artifact-gate OK, 66 targets), css-layer-paint PASS, engine-token-audit --check OK (4264 counters, no counter regresses). NOT CLOSABLE: the unit suite is RED — 14 failed / 18513 passed. Attribution: 13 fail identically at ce1e2bec6 (pre-existing, unrecorded; none of today's lots touches their sources); the 14th (CollectionWorkspace tablet-filters projection) is a load-dependent flake, 3/3 green isolated at the candidate. The substance step map (recon a-arc.report.md:78-125, reformulated by EMI-02+CAT-02) stands verified; the 'build and unit green' arm fails on the 13 pre-existing reds. Diagnosis dispatched (per-failure first-red commit, classification, owning WO, lawful repair). ARC-14 closes when unit is green on a fresh candidate."
+    }
+   ],
    "claimedBy": "Kimi DT",
    "claimedAt": "2026-10-12",
    "doneAt": null,
