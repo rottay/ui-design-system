@@ -98,7 +98,7 @@ function IssuesView({
         >
           {t('brandStudio.tenantReport.documentInvalid', 'Document not valid')}
         </Text>
-        <Badge variant="error" data-state="invalid">
+        <Badge variant="error">
           {issues.length}{' '}
           {issues.length === 1
             ? t('brandStudio.tenantReport.issueOne', 'issue')
@@ -229,7 +229,7 @@ function PackWarningsView({
         >
           {t('brandStudio.tenantReport.fontPacksNotLoaded', 'Font packs not loaded')}
         </Text>
-        <Badge variant="warning" data-state="warning">
+        <Badge variant="warning">
           {packWarnings.length}{' '}
           {packWarnings.length === 1
             ? t('brandStudio.tenantReport.packOne', 'pack')

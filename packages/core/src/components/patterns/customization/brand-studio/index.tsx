@@ -867,7 +867,6 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
         </Text>
         <Badge
           className="ds-pattern-brand-studio__contrast-state"
-          data-state={report.valid ? 'pass' : 'fail'}
           variant={report.valid ? 'success' : 'error'}
         >
           {report.valid
@@ -1580,7 +1579,7 @@ function TenantThemePreviewSection({
         >
           {label ?? t('brandStudio.tenantPreview.heading', 'Tenant theme live preview')}
         </Text>
-        <Badge variant={artifact ? 'secondary' : 'error'} data-state={artifact ? 'valid' : 'invalid'}>
+        <Badge variant={artifact ? 'secondary' : 'error'}>
           {artifact ? identity.verticalKey : t('brandStudio.tenantPreview.invalidDocument', 'invalid document')}
         </Badge>
       </Flex>
