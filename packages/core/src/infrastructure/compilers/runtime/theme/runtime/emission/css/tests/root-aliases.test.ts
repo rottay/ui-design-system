@@ -378,7 +378,12 @@ describe("a container scope's mode rules follow the document's mode", () => {
     it("a mode text that reads a stated operand its base text does not is carried in that mode", () => {
       const proposed = { ...untouched, cssVariables: { ...untouched.cssVariables, "--ds-color-primary": "#222222" } };
       const [dark] = containerModeBlocks({ "--ds-color-primary": "#222222" }, proposed, untouched);
-      expect(dark?.cssVariables).toEqual({ "--ds-glow": "0 0 4px var(--ds-color-primary)" });
+      // d5c9c823e (R15-1): the DS dark block states the command palette's focus
+      // line over the stated operand, so the law carries it beside the fixture's own.
+      expect(dark?.cssVariables).toEqual({
+        "--ds-glow": "0 0 4px var(--ds-color-primary)",
+        "--ds-command-palette-focus-line": "var(--ds-color-primary)",
+      });
     });
 
     it("nothing moved in a mode and nothing stated: no mode block, never an invented channel", () => {
@@ -423,23 +428,26 @@ describe("the DS root's own mode channels (CONTAINER_MODE_TEXTS)", () => {
   const row = (name: string) => CONTAINER_MODE_TEXTS.find((entry) => entry.name === name);
 
   it("tables every name the base stylesheets declare under a root-state mode rule, none stopped", () => {
-    expect(CONTAINER_MODE_TEXTS.length).toBe(190);
+    // d5c9c823e (R15-1): --ds-command-palette-focus-line joins the dark block,
+    // one more tabled name (190 -> 191) and one more outside the alias tables (143 -> 144).
+    expect(CONTAINER_MODE_TEXTS.length).toBe(191);
     expect(derived.modeTexts.stopped).toEqual({});
     const tabled = new Set([
       ...ROOT_ALIASES.map(([name]) => name),
       ...CONTAINER_ALIASES.map((alias) => alias.name),
       ...CONTAINER_ALIAS_CONTEXTS.map((context) => context.name),
     ]);
-    expect(CONTAINER_MODE_TEXTS.filter((entry) => !tabled.has(entry.name)).length).toBe(143);
+    expect(CONTAINER_MODE_TEXTS.filter((entry) => !tabled.has(entry.name)).length).toBe(144);
   });
 
   it("carries the cascade-winning text per mode, read from its site", () => {
+    // d5c9c823e (R15-1): two lines added above the dark site, 2134 -> 2136.
     expect(row("--ds-color-neutral-900")).toEqual({
       name: "--ds-color-neutral-900",
       base: "#171717",
       light: "#171717",
       dark: "#f8fafc",
-      sites: { base: "foundation/themes/default/index.css:62", dark: "foundation/themes/default/index.css:2134" },
+      sites: { base: "foundation/themes/default/index.css:62", dark: "foundation/themes/default/index.css:2136" },
     });
     expect(row("--ds-table-bg")).toMatchObject({ base: "#ffffff", dark: "var(--ds-surface-card)" });
     // The components layer's bare :root rule outranks the token layer's dark block.

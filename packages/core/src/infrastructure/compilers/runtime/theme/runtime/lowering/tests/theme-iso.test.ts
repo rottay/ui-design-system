@@ -757,9 +757,12 @@ describe("T0 DB mode projection through the common compiler", () => {
 
     // 6a91f16ff (one scope re-resolution law for root-declared aliases): the
     // base rule is the delta PLUS every root alias its operands re-resolve,
-    // each restated with its own root text -- 524 here (600 declarations over
+    // each restated with its own root text -- 521 here (597 declarations over
     // the 76-channel delta; the 15 aliases BitHire's own rule states on the
     // same element are not restated). The delta itself is still carried exactly.
+    // Down from 524: 266b0883c retired --ds-card-focus-ring-color,
+    // --ds-card-shadow-selected and --ds-material-card-shadow-selected and added
+    // --ds-card-focus-ring (-2); 239dd6306 retired --ds-sidebar-footer-bg (-1).
     const rootText = new Map(ROOT_ALIASES);
     const restatedAliases = Object.entries(baseRule).filter(
       ([name]) => !(name in artifact.variables)
@@ -774,7 +777,7 @@ describe("T0 DB mode projection through the common compiler", () => {
       expect(VERTICAL_OUTRIGHT.bithire, name).not.toContain(name);
     }
     expect(Object.keys(artifact.variables)).toHaveLength(76);
-    expect(restatedAliases).toHaveLength(524);
+    expect(restatedAliases).toHaveLength(521);
     expect(baseRule["--ds-color-primary"]).toBe("#2F6B9A");
     expect(darkRule["--ds-color-primary"]).toBe("#315D4D");
     expect(darkRule["--ds-color-bg-primary"]).toBe("#101014");

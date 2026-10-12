@@ -58,11 +58,11 @@ const WRITERS: Readonly<
       'Portaled tooltip surfaces re-stamp the anchor posture (`density ?? portalScope["data-density"]`). The former third site — the private portal-scope builder that carried the anchor lineage — consolidated into the shared portal-scope reader at d03a82275 (WO-INV-01); the lineage still conducts through that module\'s own pinned site.',
   },
   'components/primitives/overlay/popover/engines/modern/index.tsx': {
-    sites: 4,
+    sites: 5,
     kind: 're-stamp',
     owner: 'engine:modern',
     reason:
-      'Portaled popover surfaces re-stamp the anchor posture (`density ?? portalScope["data-density"]`).',
+      'Portaled popover surfaces re-stamp the anchor posture (`density ?? portalScope["data-density"]`). The fifth site is the anchored in-tree host added at 5a446ffec (WO-ARC-23): mounted in-tree on an external anchor, it stamps the popover\'s own `density` and the surface reads the portal scope only when portaled.',
   },
   'components/structures/workspace/action-dock/runtime/rendering/index.tsx': {
     sites: 1,

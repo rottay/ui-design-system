@@ -330,7 +330,8 @@ describe('PatternBrandStudio customization anatomy anatomy and behavior', () => 
     const root = container.querySelector('.ds-pattern-brand-studio') as HTMLElement;
     expect(root).toHaveAttribute('data-part', 'root');
     expect(root).toHaveAttribute('data-state', 'idle');
-    expect(queryAll(root, '.ds-pattern-brand-studio__section')).toHaveLength(5);
+    // 1d04d8509 (WO-RET-06 W-4): the motion editor section retired, 5 -> 4.
+    expect(queryAll(root, '.ds-pattern-brand-studio__section')).toHaveLength(4);
     expect(queryAll(root, '.ds-pattern-brand-studio__field').length).toBeGreaterThan(30);
     expect(queryAll(root, '.ds-pattern-brand-studio__color-swatch')).toHaveLength(23);
     expect(queryAll(root, '.ds-pattern-brand-studio__field-input').length).toBeGreaterThan(30);
