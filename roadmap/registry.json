@@ -8246,6 +8246,11 @@
      "at": "2026-10-12 12:28",
      "by": "kimi",
      "note": "2026-10-12 (quality wave, 12 commits dc5cbed7e..ae89f3644): the axis-difference real-render roster repaired (6ca876866; 8 re-pins attributed to the ARC-12 strip commits + 2 re-shaped mounts + unobservable pin 7->9; drill 350/350; review ACCEPT 7cdfec5b with byte-identical measurement reproduction). THE INSTRUMENT NOW MEASURES AND ITS VERDICT IS RED: depth 79.5% (159/200) and states 79.6% (121/152) declared vs the 80% threshold, both negative controls 0%; the 2026-10-05 published indicator (6/6) is stale — locale-switcher stopped moving on 5 axes after 0b8730d3a, states lost 4 movers. Owner item EVI-02-AXIS-DROP carries the four decisions. Also landed: APCA contrast instrument repaired + coverage control (1d191c171: 0 fail / 20 justified skips / 32 evaluated of 52; the dark-leg hole registered as the next instrument lot); theme-population re-pin WRITTEN but HELD (hk-pop lot.diff preserved) pending the owner answer — the population gate stays red at committed HEAD meanwhile; channel-liveness R1 regenerated on a clean layout (ae89f3644; in-repo red only on app-bithire's dirty seed WIP, attributed); the structure member split (f899ced25). The wave did NOT run the B2 roster re-seat or the fleet re-measure (both follow the owner answers)."
+    },
+    {
+     "at": "2026-10-12 13:10",
+     "by": "Kimi DT",
+     "note": "2026-10-12: the published six-axis indicator of 2026-10-05 (commit 99a867a3a, 6/6 met) is HISTORICAL and does NOT certify the current candidate: the repaired axis-difference instrument measures depth 79.5% (159/200 declared) and states 79.6% (121/152 declared), RED vs the 80% floor (evidence: .tmp/ds-codex-2026-10-08/quality-2026-10-12/axis-roster/logs/probe-threshold80.log; the reading was taken with the two HELD HK-POP population files present in the candidate). The history is preserved; the red measurement stands. Diagnosis of the lost movers (locale-switcher, status-filter-pills, collection-workspace, detail-panel, compare) dispatched per the owner directive of 2026-10-12; no threshold, denominator or acceptance change is made or implied."
     }
    ]
   },
