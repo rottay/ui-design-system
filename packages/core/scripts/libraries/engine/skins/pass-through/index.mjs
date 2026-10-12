@@ -60,6 +60,15 @@
  * implemented engine to its skin kinds. Behaviour unchanged: census parity byte-identical (40 /
  * 859 / 31). The pinned tools import the roster reader, so they run staged inside a repo tree
  * (arc12/census-v717/tools/run-staged.sh); un-staged they fail closed.
+ *
+ * v7.1.8 (2026-10-12; arc12/census-v718: census 45c97c8b / ast b2d4d8a0, post / report /
+ * attribution unchanged): the sweep splits along its declared seam — the AST helpers section moves
+ * verbatim into sweep/ast/index.mjs behind createSweepAst({ ts }) — so the 829-line member leaves
+ * the structure law's >800 surface (213, back at the pin). Behaviour unchanged: census parity
+ * byte-identical (40 / 859 / 31). The pin covers both modules (the sweep body rule on census.mjs,
+ * the whole-module rule on ast/index.mjs; both shas in the Provenance line); the staged tools carry
+ * the ast/ directory. Registered gap until the next report.mjs re-pin: report.mjs does not record
+ * the ast sha — a v7.1.8 census.json counts as evidence only with its tool-shas.txt.
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';
