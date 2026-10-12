@@ -344,7 +344,8 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.equal(report.exclusions.revision, exclusionsRevision());
 
     const line = populationLine();
-    assert.match(line, /shape 213 \(5 N\/A\)/);
+    // Mover: 65f9f8b80 (ARC-12 E6 prerequisite, re-pinned by HK-POP 2026-10-12): active-filters-bar enters shape on a reset (`border-radius: 0`), 213 -> 214.
+    assert.match(line, /shape 214 \(5 N\/A\)/);
     assert.match(line, /typography 184 \(0 N\/A\)/);
     assert.match(line, /exclusions [0-9a-f]{16} \(6 reviewed\)/);
 
@@ -373,8 +374,9 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     // OVM 2026-10-02 (owner ruling 4 + Fable) -- the overlay-modal-compounds orphans retire (215 -> 214);
     // GLASS-1 (owner ruling 3) -- the glass-card skin enters shape and depth (214 -> 215);
     // FAM09-CL 2026-10-02 -- the skeleton-bar dome re-enters the chart-line exclusion (215 -> 214, N/A 3 -> 4);
-    // OWNSO 9789b3469 + W23-POPX 2026-10-04 -- shortcuts-overlay's dialog corner retires into Modal, delegated (214 -> 213, N/A 4 -> 5).
-    assert.equal(floor.axes.shape, 213);
+    // OWNSO 9789b3469 + W23-POPX 2026-10-04 -- shortcuts-overlay's dialog corner retires into Modal, delegated (214 -> 213, N/A 4 -> 5);
+    // 65f9f8b80 (ARC-12 E6 prerequisite, re-pinned by HK-POP 2026-10-12): active-filters-bar enters shape on a reset (213 -> 214).
+    assert.equal(floor.axes.shape, 214);
     assert.deepEqual(floor.provenance.membershipMoves.orphanRetirement.byAxis,
       Object.fromEntries(['shape', 'depth', 'states'].map((axis) => [axis, { removed: ['overlay-modal-compounds'], added: [] }])));
     assert.equal(floor.notApplicable.shape, 5);
@@ -860,7 +862,8 @@ describe('theme population — a delegated shape surface: shortcuts-overlay pain
     assert.ok(populationReport(dir, catalogIn(dir)).exclusions.ineffective.some((entry) => entry.family === 'shortcuts-overlay' && entry.axis === 'shape'));
     has(checkExclusionRegistry(dir).failures, `${soLabel()}STALE — shortcuts-overlay declares shape again (properties [border-radius], head channels [])`);
     const floor = checkPopulationFloor(dir, catalogIn(dir)).failures;
-    has(floor, 'shape: denominator 214 is ABOVE its pin 213');
+    // Mover: 65f9f8b80 (ARC-12 E6 prerequisite, re-pinned by HK-POP 2026-10-12): active-filters-bar enters shape, so the pin is 214 and the re-declaring sandbox reads one above it.
+    has(floor, 'shape: denominator 215 is ABOVE its pin 214');
     has(floor, 'shape: 4 famil(ies) not applicable != pinned 5');
   });
 
@@ -1081,7 +1084,7 @@ describe('theme population — per-rule state evidence and the unobservable coun
     assert.ok(cited > 100, `only ${cited} families cite a state rule`);
   });
 
-  it('PIN (A4): 7 declaring states families are unobservable on this tree -- 4 colour-only + 3 no-vocabulary -- reported beside the denominator and not subtracted', () => {
+  it('PIN (A4): 9 declaring states families are unobservable on this tree -- 6 colour-only + 3 no-vocabulary -- reported beside the denominator and not subtracted', () => {
     // Movers of the pin (8 -> 9, STATES-K 2026-10-01): record-facts and
     // scope-switcher leave with the population; edit-fields, table-toolbar
     // (colour-only) and form-builder (cursor) enter with it. 9 -> 8 (OVM
@@ -1090,13 +1093,17 @@ describe('theme population — per-rule state evidence and the unobservable coun
     // and tooltip were observable.
     // 8 -> 7 (2026-10-04): operational-ledger leaves; its scroll region now
     // wears the tenant focus signature, a non-chromatic states rule.
+    // 7 -> 9 (re-pinned by HK-POP 2026-10-12, both colour-only): status-filter-pills
+    // enters at 464d5cf52 (WO-ARC-22 L6, the pills drain onto Button) and
+    // locale-switcher at 0b8730d3a (WO-EXT-DS E-3, it composes the canonical Select).
     const report = populationReport();
     const states = report.axes.find((entry) => entry.axis === 'states');
     assert.equal(states.denominator, 152);
-    assert.equal(states.unobservableCount, 7);
+    assert.equal(states.unobservableCount, 9);
     assert.deepEqual(states.unobservable.map((entry) => `${entry.family}:${entry.class}`), [
       'button-group:no-vocabulary', 'edit-fields:colour-only', 'form-builder:no-vocabulary', 'list:colour-only',
-      'metrics-chart:colour-only', 'metrics-rows:no-vocabulary', 'table-toolbar:colour-only',
+      'locale-switcher:colour-only', 'metrics-chart:colour-only', 'metrics-rows:no-vocabulary',
+      'status-filter-pills:colour-only', 'table-toolbar:colour-only',
     ]);
     for (const entry of states.unobservable) assert.ok(states.families.includes(entry.family), entry.family);
     for (const entry of report.axes.filter((axis) => axis.axis !== 'states')) assert.equal(entry.unobservableCount, 0, entry.axis);
@@ -1333,7 +1340,8 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
       // chart-area enter on the scale-token reads their drained skins gained; no leaver, no corpus move.
       // shape 214 -> 213, N/A 4 -> 5 (OWNSO 9789b3469 + W23-POPX): shortcuts-overlay's shape is delegated to modal.
       // motion 204 -> 203, N/A 0 -> 1 (WO-ARC-22 L6 464d5cf52 + EVI02-MOTION, owner ruling 2026-10-08 #2): status-filter-pills' motion is delegated to button.
-      { shape: 213, typography: 184, rhythm: 226, depth: 199, motion: 203 });
+      // shape 213 -> 214, depth 199 -> 200 (65f9f8b80 (ARC-12 E6 prerequisite, re-pinned by HK-POP 2026-10-12): active-filters-bar enters both on resets; no leaver, no corpus move).
+      { shape: 214, typography: 184, rhythm: 226, depth: 200, motion: 203 });
     assert.deepEqual(Object.fromEntries(report.axes.map((entry) => [entry.axis, entry.notApplicableCount])),
       { shape: 5, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 1 });
     // The two ruled-out alternatives, measured: the twin clause keeps out
@@ -1372,11 +1380,12 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     assert.ok(at(151).some((line) => line.startsWith('states: denominator 152 is ABOVE its pin 151')), at(151).join(' | '));
   });
 
-  it('D9: depth is 199 under the focus-signature law -- five leave by name, the unproven alias stays, the depth law moves no states member, the floor refuses both directions', () => {
+  it('D9: depth is 200 under the focus-signature law (199 by the law, then one named entrant) -- five leave by name, the unproven alias stays, the depth law moves no states member, the floor refuses both directions', () => {
     const report = populationReport();
     const byAxis = Object.fromEntries(report.axes.map((entry) => [entry.axis, entry]));
     const LEFT = ['link', 'scroll-area', 'search', 'typography', 'virtual-list'];
-    assert.equal(byAxis.depth.denominator, 199);
+    // Mover: 65f9f8b80 (ARC-12 E6 prerequisite, re-pinned by HK-POP 2026-10-12): active-filters-bar enters depth on resets (`border: 0`, `box-shadow: none`), 199 -> 200; the focus-signature law itself moves nothing.
+    assert.equal(byAxis.depth.denominator, 200);
     for (const family of LEFT) assert.ok(!byAxis.depth.families.includes(family), `${family}: a focus-only shadow does not declare depth`);
     assert.deepEqual(byAxis.depth.focusSignatureOnly.map((entry) => entry.family).sort(), LEFT);
     // The conservative arm, published by name: in depth through a var()-only shadow no producer proves.
@@ -1397,7 +1406,8 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
     }
     assert.equal(byAxis.depth.notApplicableCount, 0, 'the law is a definition, never a reviewed exclusion');
     const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
-    assert.equal(floor.axes.depth, 199);
+    // Mover: 65f9f8b80 (ARC-12 E6 prerequisite, re-pinned by HK-POP 2026-10-12): active-filters-bar enters depth (199 -> 200).
+    assert.equal(floor.axes.depth, 200);
     assert.equal(floor.catalogRevision, catalogRevision().digest);
     const move = floor.provenance.membershipMoves.depthFocusSignatureLaw;
     assert.deepEqual(move.byAxis.depth, { added: [], removed: LEFT });
@@ -1428,15 +1438,18 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
       writeFileSync(path, JSON.stringify({ ...floor, axes: { ...floor.axes, depth } }));
       return checkPopulationFloor(ROOT, undefined, path).failures;
     };
-    assert.ok(at(204).some((line) => line.startsWith('depth: denominator 199 is BELOW its floor 204')), at(204).join(' | '));
-    assert.ok(at(198).some((line) => line.startsWith('depth: denominator 199 is ABOVE its pin 198')), at(198).join(' | '));
+    // Mover: 65f9f8b80 (ARC-12 E6 prerequisite, re-pinned by HK-POP 2026-10-12): active-filters-bar enters depth, so the live denominator both directions are read against is 200.
+    assert.ok(at(204).some((line) => line.startsWith('depth: denominator 200 is BELOW its floor 204')), at(204).join(' | '));
+    assert.ok(at(199).some((line) => line.startsWith('depth: denominator 200 is ABOVE its pin 199')), at(199).join(' | '));
   });
 
-  it('D8: 7 declaring states families are unobservable -- surface-states is not one (opacity is read) -- and none is subtracted', () => {
+  // Movers of the roster (7 -> 9): status-filter-pills 464d5cf52 (WO-ARC-22 L6), locale-switcher 0b8730d3a (WO-EXT-DS E-3).
+  it('D8: 9 declaring states families are unobservable -- surface-states is not one (opacity is read) -- and none is subtracted', () => {
     const states = populationReport().axes.find((entry) => entry.axis === 'states');
     assert.deepEqual(states.unobservable.map((entry) => `${entry.family}:${entry.class}`), [
       'button-group:no-vocabulary', 'edit-fields:colour-only', 'form-builder:no-vocabulary', 'list:colour-only',
-      'metrics-chart:colour-only', 'metrics-rows:no-vocabulary', 'table-toolbar:colour-only',
+      'locale-switcher:colour-only', 'metrics-chart:colour-only', 'metrics-rows:no-vocabulary',
+      'status-filter-pills:colour-only', 'table-toolbar:colour-only',
     ]);
     assert.ok(!states.unobservable.some((entry) => entry.family === 'surface-states'));
     for (const entry of states.unobservable) assert.ok(states.families.includes(entry.family), entry.family);
