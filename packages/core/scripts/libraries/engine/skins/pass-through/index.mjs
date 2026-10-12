@@ -53,6 +53,13 @@
  * v7.1.6 (2026-10-11; arc12/census-v716: post c23e82f4, census / report / attribution unchanged): the
  * pin inventory is empty. The modern and rustic Card drop a resting caller state, so their two
  * rows left with the last two it.fails; a future pin re-enters as a row and is checked as before.
+ *
+ * v7.1.7 (2026-10-12; arc12/census-v717: census d9456c63 / attribution 098d6c7b, post / report
+ * unchanged): the sweep and the attribution stop restating the engine roster (the engine-wiring
+ * gate's 3 findings) and derive it from the roster reader — one total fail-closed record maps each
+ * implemented engine to its skin kinds. Behaviour unchanged: census parity byte-identical (40 /
+ * 859 / 31). The pinned tools import the roster reader, so they run staged inside a repo tree
+ * (arc12/census-v717/tools/run-staged.sh); un-staged they fail closed.
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';

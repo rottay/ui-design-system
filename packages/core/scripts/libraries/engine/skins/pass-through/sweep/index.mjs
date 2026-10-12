@@ -8,12 +8,16 @@
  * family-cut G1 all read. The body below is the adopted census.mjs verbatim; only its CLI shell
  * (argv, the JSON write, console output) is replaced by this function's parameters and return.
  */
-// Provenance: arc12/census-v713/census.mjs sha256 2f7e05183ff87ae27d68f60a149a5d5a50532ce4edf8967e8af86cbb9b521c35 (census v7.1.3, 2026-10-11: a
-// `{...partAttributes('<part>', <state>)}` spread is a caller row like the literal attributes; v7.1.1 was be21d40e -- the tag-name
+// Provenance: arc12/census-v717/census.mjs sha256 d9456c6351773f69b57ad90e2870f1781cc88d58a6fdcd48b5162bbc729e0640 (census v7.1.7, 2026-10-12: the
+// engine roster is read from libraries/engine/roster and ONE total ENGINE_SKIN_KINDS record replaces the two engine-name comparison
+// chains, no measurement moves; v7.1.3 was arc12/census-v713/census.mjs 2f7e0518 -- a `{...partAttributes('<part>', <state>)}`
+// spread is a caller row like the literal attributes; v7.1.1 was be21d40e -- the tag-name
 // fallback removed; v7.1 was 3ca4db81 -- the lexical re-export chain and the unresolved-caller report; v7 was 1937b947).
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, relative, dirname, resolve } from 'node:path';
 import { createRequire } from 'node:module';
+
+import { IMPLEMENTED_ENGINE_NAMES } from '../../../roster/index.mjs';
 
 /** @param {{ repoRoot: string }} options  repoRoot = the workspace root (holds packages/core). */
 export function sweepPassThrough({ repoRoot } = {}) {
@@ -30,6 +34,21 @@ const SKIN_DIRS = {
   rustic: 'foundation/tokens/css/runtime/engines/rustic/skin',
   presentation: 'foundation/tokens/css/presentation/components/skin',
 };
+// The skin kinds an engine's rows read: its own engine skin, when it has one, and presentation.
+// ONE total record over the roster's implemented engines (the loader-totality shape), never a
+// chain of name comparisons: a missing or a foreign key fails closed below.
+const ENGINE_SKIN_KINDS = {
+  classic: ['presentation'],
+  modern: ['modern', 'presentation'],
+  rustic: ['rustic', 'presentation'],
+};
+{
+  const owed = IMPLEMENTED_ENGINE_NAMES.filter((name) => !Object.hasOwn(ENGINE_SKIN_KINDS, name));
+  const foreign = Object.keys(ENGINE_SKIN_KINDS).filter((name) => !IMPLEMENTED_ENGINE_NAMES.includes(name));
+  if (owed.length || foreign.length) throw new Error(`sweepPassThrough: ENGINE_SKIN_KINDS is not total over the implemented engine roster (omits: ${owed.join(', ') || '-'}; foreign: ${foreign.join(', ') || '-'})`);
+}
+/** The skin kinds `engine` reads, or null for an engine-agnostic row (no engine, every kind). */
+const skinKindsOf = (engine) => (Object.hasOwn(ENGINE_SKIN_KINDS, engine) ? ENGINE_SKIN_KINDS[engine] : null);
 
 const rel = (p) => relative(REPO, p).replaceAll('\\', '/');
 const isTestish = (p) => /(\.test\.|\.spec\.|\.stories\.|\/tests?\/|\/__tests__\/|\/__mocks__\/|\.fixture)/.test(p);
@@ -70,7 +89,7 @@ for (const [kind, d] of Object.entries(SKIN_DIRS)) {
 const partRe = (part) => new RegExp(`\\[data-part=["']${part}["']\\]`);
 function skinCount({ family, part, stateOnly = false, anyFamily = false, engine = null }) {
   const re = partRe(part);
-  const kinds = engine === 'modern' ? ['modern', 'presentation'] : engine === 'rustic' ? ['rustic', 'presentation'] : engine === 'classic' ? ['presentation'] : null;
+  const kinds = skinKindsOf(engine);
   const hits = skinSelectors.filter((s) => (!kinds || kinds.includes(s.kind)) && (anyFamily || s.family === family) && re.test(s.selector) && (!stateOnly || /\[data-state/.test(s.selector)));
   const byFile = {};
   for (const h of hits) byFile[h.file] = (byFile[h.file] ?? 0) + 1;
@@ -569,7 +588,7 @@ for (const [f, r] of fileResults) {
 // family-level skin info
 for (const row of [...engineSites, ...structuralSites]) {
   row.familyHasSkin = familiesWithSkin.has(row.family);
-  row.engineSkinFiles = [...new Set(skinSelectors.filter((s) => s.family === row.family && (row.engine === 'modern' ? ['modern', 'presentation'] : row.engine === 'rustic' ? ['rustic', 'presentation'] : row.engine === 'classic' ? ['presentation'] : ['modern', 'rustic', 'presentation']).includes(s.kind)).map((s) => s.file))];
+  row.engineSkinFiles = [...new Set(skinSelectors.filter((s) => s.family === row.family && (skinKindsOf(row.engine) ?? ['modern', 'rustic', 'presentation']).includes(s.kind)).map((s) => s.file))];
   row.engineSkinSelectorTotal = skinSelectors.filter((s) => row.engineSkinFiles.includes(s.file)).length;
   // C2 element-level condition (e): DS-owned class, stamped part, or a family skin selector whose
   // rightmost compound targets this element's tag (e.g. `.ds-toggle--modern input`).

@@ -7,8 +7,8 @@
  "lastMoveKind": "decrease",
  "measuredFrom": {
   "head": "27273599d9919310b98424e13ab993361356961a",
-  "census": "v7.1.3, 2026-10-11 (arc12/census-v713: census 2f7e0518 / post d6eb6187 / report 2f340462 / attribution 7ab151e9): the partAttributes-spread callers counted (finding N); 23 new dependent rows, 1 re-keyed. v7.1.2 (post d6eb6187 / report 2f340462) at arc12/dt3, v7.1.1 at arc12/l2-tools, v7.1 at arc12/l2-tools-v7.1-snapshot, v7 at arc12/l2-tools-v7-snapshot",
-  "measurement": "scripts/libraries/engine/skins/pass-through (the v7.1.3 tools ported with verbatim bodies; parity at this head is byte-identical on raw, classified and census)"
+  "census": "v7.1.7, 2026-10-12 (arc12/census-v717: census d9456c63 / attribution 098d6c7b / post c23e82f4 / report 2f340462): the roster literals derive from the canonical roster reader (engine-wiring findings closed); behaviour unchanged, parity byte-identical. v7.1.6 (post c23e82f4) at arc12/census-v716, v7.1.5 at arc12/census-v715, v7.1.4 at arc12/census-v714, v7.1.3 (the partAttributes-spread callers counted, finding N; 23 new dependent rows, 1 re-keyed) at arc12/census-v713, v7.1.2 (post d6eb6187 / report 2f340462) at arc12/dt3, v7.1.1 at arc12/l2-tools, v7.1 at arc12/l2-tools-v7.1-snapshot, v7 at arc12/l2-tools-v7-snapshot",
+  "measurement": "scripts/libraries/engine/skins/pass-through (the v7.1.7 tools ported with verbatim bodies; parity at this head is byte-identical on raw, classified and census)"
  },
  "keys": "Line-free. Sites and tripwires: <file>#<owning component>#<tag>#<canonical part|none>#<ordinal>. Dependents: <file>#<child component>#<caller part|none>#<ordinal>. The ordinal counts elements sharing the first four fields in source order, so a line shift elsewhere never churns a key.",
  "eligibilityRule": "A child family's part-strip engine lot is eligible iff its `part` set is empty; its state-strip lot iff its `state` set is empty. Layout carriers (carrier: true) wait on the owner's carrier ruling (§6) whatever their sets say. A held entry names its routing; the typography engine lot's ruled precondition is exactly its held set.",

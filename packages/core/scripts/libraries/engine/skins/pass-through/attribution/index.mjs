@@ -15,10 +15,14 @@
 //      strikes it. `opts.rules` selects the enabled set (v6 = ['C7']); `opts.bypass` disables one
 //      clause (drill isolation only); `opts.overlay` maps repo-relative paths to file contents
 //      (drill mutants; overlay files are added to every index).
+//  v7.1.7: the C9 engine list is the roster reader's IMPLEMENTED_ENGINE_NAMES (libraries/engine/roster),
+//      no longer a literal restated here. No measurement moves.
 //  Selector parsing is paren-aware (commas inside :is()/:where() do not split).
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative, dirname, resolve as resolvePath } from 'node:path';
 import { createRequire } from 'node:module';
+
+import { IMPLEMENTED_ENGINE_NAMES } from '../../../roster/index.mjs';
 
 const SKIN_DIRS = ['runtime/engines/modern/skin', 'runtime/engines/rustic/skin', 'presentation/components/skin'];
 const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -345,7 +349,7 @@ export function buildAttribution(repo, opts = {}) {
     if (!dirs || dirs.size !== 1) return { ok: false, why: `child family ${caller.childFamily} has ${dirs ? dirs.size : 0} engine dirs` };
     const dir = [...dirs][0];
     const callerEng = (caller.file.match(/\/engines\/(modern|rustic|classic)\//) || [])[1] || null;
-    const engines = ['classic', 'modern', 'rustic'].filter((e) => exists(`${dir}/engines/${e}/index.tsx`) && (!callerEng || e === callerEng));
+    const engines = IMPLEMENTED_ENGINE_NAMES.filter((e) => exists(`${dir}/engines/${e}/index.tsx`) && (!callerEng || e === callerEng));
     if (!engines.length) return { ok: false, why: 'no engine file for the caller engine' };
     const key = `${dir}|${engines.join(',')}|${A}`;
     if (admissCache.has(key)) return admissCache.get(key);
