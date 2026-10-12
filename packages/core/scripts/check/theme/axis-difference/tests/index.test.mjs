@@ -3753,6 +3753,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'date-picker',
       'descriptions',
       'detail',
+      'detail-panel',
       'drawer-compounds',
       'drawer-compounds-divider',
       'dropdown',
@@ -3773,6 +3774,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'input-compounds',
       'layout',
       'list',
+      'locale-switcher',
       'modal-compounds',
       'modal-compounds-divider',
       'pattern-timeline',
@@ -6113,6 +6115,338 @@ describe('axis-difference BROWSER drill — the states reach rows move states th
     assert.ok(!states.movedIds.includes('chart-foundation'));
     assert.ok(evaluate(measurement).some((line) => line.startsWith('chart-foundation: its real-render mount was REFUSED on states in bithire/light states')));
   }, 240_000);
+});
+
+describe('axis-difference — the composed reach rows: the node a pattern paints inside the primitive it composes (WO-EVI-02, 2026-10-12)', () => {
+  const LOCALE = REAL_RENDER_MOUNTS['locale-switcher'];
+  const PANEL = REAL_RENDER_MOUNTS['detail-panel'];
+  const LOCALE_ENGINE = 'src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx';
+  const PANEL_ENGINE = 'src/components/patterns/data/detail-panel/engines/modern/index.tsx';
+  const SELECT_ENGINE = 'src/components/primitives/inputs/select/engines/modern/index.tsx';
+  const BUTTON_ENGINE = 'src/components/primitives/inputs/button/engines/modern/index.tsx';
+  const BUTTON_RECIPE = 'src/infrastructure/runtime/foundation/recipes/contracts/families/button/index.ts';
+  const COMPARE_ENGINE = 'src/components/surfaces/presentation/pages/data/compare/index.tsx';
+  const skin = (family) => skinFamilies(ROOT).get(family).map((file) => readFileSync(file, 'utf8')).join('\n');
+  const without = (roster, row) => Object.fromEntries(Object.entries(roster).filter(([key]) => key !== row));
+  const drifted = (suffix, from, to) => (file) => {
+    const text = readFileSync(file, 'utf8');
+    return file.endsWith(suffix) ? text.replaceAll(from, to) : text;
+  };
+  const FRAME = ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'][data-chrome='none']";
+  const ACTION = ".ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button";
+
+  it('each row passes the door alone, on the axes its own paint sits on; locale-switcher does NOT declare states', () => {
+    assert.deepEqual([...LOCALE.axes], ['shape', 'rhythm', 'depth', 'motion']);
+    assert.deepEqual([...PANEL.axes], ['states']);
+    for (const [row, entry] of [['locale-switcher', LOCALE], ['detail-panel', PANEL]]) {
+      assert.equal(entry.family, undefined, `${row} is a real render of its own family`);
+      assert.deepEqual(realRenderRosterFailures(ROOT, { [row]: entry }), [], row);
+      for (const axis of entry.axes) assert.ok(axisPopulations(ROOT).get(axis).includes(row), `${row}/${axis}`);
+      assert.deepEqual(probe.realRenderStampedParts(entry), ['trigger'], row);
+    }
+    // The ring on the chrome-less trigger is Select's; the pattern's own state rules write `background` alone, which
+    // is why the family stays pinned colour-only. Crediting a delegate's ring is an owner decision, not a row.
+    assert.equal(UNOBSERVABLE_FAMILIES.states['locale-switcher'], 'colour-only');
+    const frame = cssRules(skin('locale-switcher')).filter((rule) => rule.selector.includes("[data-chrome='none']:is("));
+    assert.ok(frame.length >= 2, 'the pattern no longer ships a state rule on the chrome-less trigger');
+    for (const rule of frame) assert.deepEqual(rule.declarations.map((declaration) => declaration.property), ['background'], rule.selector);
+  });
+
+  it('the paint is the family\'s OWN: its skin ships the rule on the composed node, and the part law still refuses that selector for everyone', () => {
+    const frame = cssRules(skin('locale-switcher')).find((rule) => rule.selector === FRAME);
+    assert.ok(frame, 'the locale-switcher skin no longer paints the chrome-less trigger frame');
+    const authored = Object.fromEntries(frame.declarations.map((declaration) => [declaration.property, declaration.value]));
+    assert.match(authored['border-radius'], /^var\(--ds-radius-md\)$/u);
+    assert.match(authored['padding-inline'], /--ds-spacing-2/u);
+    assert.match(authored.border, /^var\(--ds-edge-hairline-width, 1px\) solid /u);
+    assert.match(authored.transition, /var\(--ds-motion-feedback\)/u);
+    const ring = cssRules(skin('detail-panel')).filter((rule) => rule.selector.startsWith(`${ACTION}:is([data-state~='focus-visible'], :focus-visible)`));
+    assert.equal(ring.length, 2, 'the detail-panel skin no longer restates the ring on its primary action (bare and beside the lift)');
+    for (const rule of ring) {
+      assert.match(rule.declarations.find((declaration) => declaration.property === 'box-shadow').value, /^var\(--ds-button-focus-ring\)/u, rule.selector);
+    }
+    // Not liberalized: a part compound carrying any attribute but `data-part` is refused, exactly as before the rows.
+    const elements = familyElements(ROOT, ['locale-switcher', 'detail-panel']);
+    assert.equal(projectPartChain(FRAME, elements.get('locale-switcher')).rejected, 'part-variant-gated');
+    assert.equal(projectPartChain(ACTION, elements.get('detail-panel')).rejected, 'part-variant-gated');
+    assert.equal(projectPartChain(".ds-x[data-part='root'] [data-part='y'][data-anything='z']", { classes: ['ds-x'], attributes: { 'data-part': 'root' } }).rejected, 'part-variant-gated');
+  });
+
+  it('THE OLD MOUNT, read off the skin alone: no node of the default scene carries that paint', () => {
+    const elements = familyElements(ROOT, ['locale-switcher', 'detail-panel']);
+    const parts = familyAxisParts(ROOT, ['locale-switcher', 'detail-panel'], elements, { partReach: true });
+    // locale-switcher: the scene is the empty wrapper -- not one part on any axis.
+    assert.deepEqual(parts.get('locale-switcher').parts, []);
+    assert.ok(parts.get('locale-switcher').rejected['part-variant-gated'] >= 1, JSON.stringify(parts.get('locale-switcher').rejected));
+    // detail-panel: no part is the action wrapper or its Button, on states or anywhere.
+    const panel = parts.get('detail-panel').parts;
+    assert.ok(panel.length > 0);
+    for (const part of panel) {
+      assert.ok(!/action-button|ds-button/u.test(part.selector), part.selector);
+    }
+    assert.deepEqual(
+      panel.filter((part) => part.axes.includes('states')).map((part) => part.chain.at(-1).attributes['data-part']).sort(),
+      ['panel-surface', 'sidebar'],
+    );
+    // And without its row a family has no real render at all.
+    for (const row of ['locale-switcher', 'detail-panel']) {
+      const mounts = realRenderMountList(elements, { roster: without(REAL_RENDER_MOUNTS, row) });
+      assert.ok(!mounts.some((mount) => mount.family === row), row);
+      assert.equal(realRenderMountList(elements).filter((mount) => mount.family === row).length, 1, row);
+    }
+  });
+
+  it('SOURCE TESTIMONY: every stamp names the file that writes it -- the pattern its own, the composed primitive and the recipe theirs', () => {
+    const owners = (entry) => Object.fromEntries(entry.stamps.map((row) => [row.token, row.source ?? entry.state.source]));
+    assert.deepEqual(owners(LOCALE), {
+      'attr:data-loading=false': LOCALE_ENGINE,
+      'class:ds-select-shell': SELECT_ENGINE,
+      'class:ds-select-shell--modern': SELECT_ENGINE,
+      'attr:data-size=md': SELECT_ENGINE,
+      'attr:data-mode=single': SELECT_ENGINE,
+      'attr:data-part=trigger': SELECT_ENGINE,
+      'attr:data-chrome=none': SELECT_ENGINE,
+      'attr:data-variant=outline': SELECT_ENGINE,
+      'attr:data-part=trigger-value': SELECT_ENGINE,
+      'attr:data-part=value': SELECT_ENGINE,
+    });
+    assert.deepEqual(owners(PANEL), {
+      'attr:data-has-actions=true': PANEL_ENGINE,
+      'attr:data-variant=primary': PANEL_ENGINE,
+      'attr:data-loading=false': PANEL_ENGINE,
+      'tag:button': BUTTON_ENGINE,
+      'attr:type=button': BUTTON_ENGINE,
+      'class:ds-button': BUTTON_RECIPE,
+      'class:ds-button--modern': BUTTON_RECIPE,
+      'class:ds-button--primary': BUTTON_RECIPE,
+      'class:ds-button--sm': BUTTON_RECIPE,
+      'class:ds-button--default': BUTTON_RECIPE,
+      'attr:data-size=sm': BUTTON_ENGINE,
+      'attr:data-shape=default': BUTTON_ENGINE,
+      'attr:data-part=trigger': BUTTON_ENGINE,
+    });
+    // The chrome stamp is resolved through BOTH files: Select derives it, the pattern passes the value.
+    const chrome = LOCALE.stamps.find((row) => row.token === 'attr:data-chrome=none');
+    assert.deepEqual(chrome.resolves.map((row) => row.source), [SELECT_ENGINE, LOCALE_ENGINE]);
+    // The gates are the JSX, not the file comment that also spells `chrome="none"`.
+    const report = realRenderReport(realRenderMountList(familyElements(ROOT, ['locale-switcher', 'detail-panel'])));
+    const engine = readFileSync(join(ROOT, LOCALE_ENGINE), 'utf8').split('\n');
+    for (const gate of report.map['locale-switcher'].gates) {
+      assert.ok(!engine[Number(gate.split(':').at(-1)) - 1].trimStart().startsWith('*'), `${gate} resolves to a comment line`);
+    }
+    assert.equal(report.map['detail-panel'].gates.length, 3);
+  });
+
+  it('MUTANT, one per row: a FICTITIOUS mount -- a stamped byte no engine writes -- fails the door', () => {
+    const fabricated = {
+      'locale-switcher': [
+        LOCALE.markup.replace('data-chrome="none"', 'data-chrome="ghost"'),
+        LOCALE.markup.replace('<div data-part="trigger"', '<div class="ds-select-trigger" data-part="trigger"'),
+        LOCALE.markup.replace('data-size="md"', 'data-size="lg"'),
+        LOCALE.markup.replace('data-part="trigger-value"', 'data-part="frame"'),
+      ],
+      'detail-panel': [
+        PANEL.markup.replaceAll('data-variant="primary"', 'data-variant="accent"'),
+        PANEL.markup.replace('ds-button--default', 'ds-button--default ds-button--glow'),
+        PANEL.markup.replace('<button type="button"', '<button type="button" data-focus-ring="tenant"'),
+        PANEL.markup.replace('data-part="action-button"', 'data-part="primary-action"'),
+      ],
+    };
+    for (const [row, markups] of Object.entries(fabricated)) {
+      for (const markup of markups) {
+        assert.notEqual(markup, REAL_RENDER_MOUNTS[row].markup, `${row}: the mutant did not change the mount`);
+        const failures = realRenderRosterFailures(ROOT, { [row]: { ...REAL_RENDER_MOUNTS[row], markup } });
+        assert.ok(failures.some((line) => line.startsWith(`${row}:`) && line.includes('is not written by')), `${markup} -> ${failures.join(' | ')}`);
+      }
+    }
+    // A stamp row that names a writer which does not write it is as fictitious as a token nobody writes.
+    const misattributed = realRenderRosterFailures(ROOT, {
+      'locale-switcher': { ...LOCALE, stamps: LOCALE.stamps.map((row) => (row.token === 'attr:data-chrome=none' ? { ...row, source: LOCALE_ENGINE } : row)) },
+    });
+    assert.ok(misattributed.some((line) => line.includes(`${LOCALE_ENGINE} no longer carries the stamp \`data-chrome={chromeStamp}\``)), misattributed.join(' | '));
+    const unrecipe = realRenderRosterFailures(ROOT, {
+      'detail-panel': { ...PANEL, stamps: PANEL.stamps.map((row) => (row.token === 'class:ds-button' ? { ...row, source: PANEL_ENGINE } : row)) },
+    });
+    assert.ok(unrecipe.some((line) => line.startsWith('detail-panel/class:ds-button:') && line.includes('no longer carries the stamp')), unrecipe.join(' | '));
+  });
+
+  it('MUTANT, one per writer: an engine, a primitive or a recipe that stops writing a pinned byte fails the row that names it', () => {
+    const cases = [
+      ['locale-switcher', LOCALE_ENGINE, '<ModernSelect\n      chrome="none"', '<ModernSelect', /no longer carries the gate/u],
+      ['locale-switcher', LOCALE_ENGINE, 'renderValue={(option, _content, state) => (', 'renderLabel={(option, _content, state) => (', /no longer carries the gate/u],
+      ['locale-switcher', SELECT_ENGINE, 'data-chrome={chromeStamp}', 'data-frame={chromeStamp}', /no longer carries the stamp `data-chrome=\{chromeStamp\}`/u],
+      ['locale-switcher', SELECT_ENGINE, "const chromeStamp = chrome === 'none' ? 'none' : undefined;", 'const chromeStamp = undefined;', /no longer carries the resolves/u],
+      ['locale-switcher', SELECT_ENGINE, '&& !renderOption && !renderValue) {', '&& !renderOption) {', /locale-switcher\/state: .* no longer carries the resolves/u],
+      ['locale-switcher', LOCALE_ENGINE, "size = 'md',", "size = 'sm',", /no longer carries the resolves `size = 'md',`/u],
+      ['detail-panel', PANEL_ENGINE, 'data-variant={variant}', 'data-tone={variant}', /no longer carries the gate `data-variant=\{variant\}`/u],
+      ['detail-panel', PANEL_ENGINE, 'size="sm"', 'size="md"', /no longer carries the resolves `size="sm"`/u],
+      ['detail-panel', BUTTON_ENGINE, "...partAttributes('trigger', interaction),", "...partAttributes('root', interaction),", /no longer carries the stamp/u],
+      ['detail-panel', BUTTON_RECIPE, "slots: { root: ['ds-button', 'ds-button--modern'] },", "slots: { root: ['ds-btn'] },", /detail-panel\/class:ds-button: .* no longer carries the stamp/u],
+      ['detail-panel', BUTTON_RECIPE, '{ root: `ds-button--${value}` }', '{ root: `ds-btn--${value}` }', /detail-panel\/class:ds-button--primary: .* no longer carries the stamp/u],
+    ];
+    for (const [row, file, from, to, expected] of cases) {
+      assert.ok(readFileSync(join(ROOT, file), 'utf8').includes(from), `${file} does not carry \`${from}\`: the mutant would prove nothing`);
+      const failures = realRenderRosterFailures(ROOT, { [row]: REAL_RENDER_MOUNTS[row] }, { readSource: drifted(file, from, to) });
+      assert.ok(failures.some((line) => expected.test(line)), `${row} / ${from} -> ${failures.join(' | ')}`);
+    }
+  });
+
+  it('compare: the as-rendered row restores the part the engine stamps beside the two classes -- and only that', () => {
+    assert.deepEqual(AS_RENDERED_ROOT_STAMPS.compare.map((row) => [row.attribute, row.value, row.source]), [['data-part', 'root', COMPARE_ENGINE]]);
+    assert.deepEqual(asRenderedRosterFailures(ROOT, { compare: AS_RENDERED_ROOT_STAMPS.compare }), []);
+    // One element writes all three, and the surface writes those two classes nowhere else.
+    const engine = readFileSync(join(ROOT, COMPARE_ENGINE), 'utf8');
+    assert.equal(engine.split('className="ds-surface ds-compare"').length - 1, 1);
+    assert.ok(engine.includes('className="ds-surface ds-compare"\n          data-part="root"'));
+    // THE OLD MOUNT: the class-door re-key left no root candidate naming the part, so the bare root is mounted and
+    // every `[data-part="root"]`-headed rule is refused at the head.
+    const before = familyElements(ROOT, ['compare'], { asRendered: false }).get('compare');
+    const after = familyElements(ROOT, ['compare']).get('compare');
+    assert.equal(before.selector, '.ds-surface.ds-compare');
+    assert.equal(after.selector, ".ds-surface.ds-compare[data-part='root']");
+    const rhythm = cssRules(skin('compare'))
+      .filter((rule) => rule.declarations.some((declaration) => /^padding/u.test(declaration.property)))
+      .map((rule) => rule.selector.replace(/\s+/gu, ' '));
+    assert.deepEqual(rhythm, [
+      '.ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading',
+      '.ds-surface.ds-compare[data-part="root"] .ds-compare__divider[data-part="divider"]',
+    ]);
+    for (const selector of rhythm) {
+      assert.equal(projectPartChain(selector, before).rejected, 'head-variant-gated', selector);
+      assert.equal(projectPartChain(selector, after).rejected, undefined, selector);
+    }
+    const partsOn = (elements) => familyAxisParts(ROOT, ['compare'], new Map([['compare', elements]]), { partReach: true })
+      .get('compare').parts.filter((part) => part.axes.includes('rhythm')).length;
+    assert.deepEqual([partsOn(before), partsOn(after)], [0, 2]);
+  });
+
+  it('MUTANT: a compare row for a part the engine does not stamp there, or one the skin does not gate on, fails the door', () => {
+    const [row] = AS_RENDERED_ROOT_STAMPS.compare;
+    const fictitious = asRenderedRosterFailures(ROOT, {
+      compare: [{ ...row, value: 'surface', stamp: 'className="ds-surface ds-compare"\n          data-part="surface"' }],
+    });
+    assert.ok(fictitious.some((line) => line.startsWith('compare/data-part:') && line.includes('no longer carries the stamp')), fictitious.join(' | '));
+    const ungated = asRenderedRosterFailures(ROOT, { compare: [{ ...row, attribute: 'data-surface' }] });
+    assert.ok(ungated.some((line) => line.includes('compare/data-surface: the skin no longer gates on this attribute')), ungated.join(' | '));
+    const state = asRenderedRosterFailures(ROOT, { compare: [{ ...row, attribute: 'data-state' }] });
+    assert.ok(state.some((line) => line.includes('a state is stamped by the scene, never by the root')), state.join(' | '));
+  });
+});
+
+describe('axis-difference BROWSER drill — the composed reach rows move through their mount, and only through it', { skip: browserReason }, () => {
+  const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
+  const families = ['compare', 'detail-panel', 'locale-switcher'];
+  const scenarios = ['shape', 'typography', 'rhythm', 'depth', 'states', 'motion', 'palette-only', 'states-emphasis-only'].map(byId);
+  const options = { verticals: ['bithire'], themes: ['light'], families, scenarios };
+  const without = (roster, ...rows) => Object.fromEntries(Object.entries(roster).filter(([key]) => !rows.includes(key)));
+  const cellOf = (measurement, id, axis = id) => measurement.cells.find((entry) => entry.scenario === id && entry.axis === axis);
+  const RESTING = ['shape', 'rhythm', 'depth', 'motion'];
+
+  it('THE OLD SCENE credits none of them; the rows credit each on its own axes; both controls stay 0 and nothing is left unsettled', async () => {
+    const on = await run(options);
+    const off = await run({
+      ...options,
+      realRenderRoster: without(REAL_RENDER_MOUNTS, 'locale-switcher', 'detail-panel'),
+      asRenderedRoster: without(AS_RENDERED_ROOT_STAMPS, 'compare'),
+    });
+    // locale-switcher: four resting axes, through the mount alone.
+    for (const axis of RESTING) {
+      assert.ok(!cellOf(off, axis).movedIds.includes('locale-switcher'), `${axis}: locale-switcher moved without its mount`);
+      const cell = cellOf(on, axis);
+      assert.deepEqual(cell.realRender.refused, [], axis);
+      assert.deepEqual(cell.realRender.rescued, ['locale-switcher'], axis);
+      assert.ok(cell.movedIds.includes('locale-switcher'), axis);
+    }
+    assert.deepEqual(Object.fromEntries(RESTING.map((axis) => [axis, cellOf(on, axis).movedFamilies.find((entry) => entry.family === 'locale-switcher').property])), {
+      shape: 'border-top-left-radius', rhythm: 'padding-top', depth: 'border-top-width', motion: 'transition-duration',
+    });
+    // States is not declared on that row: never stamped, never forced, never credited.
+    for (const measurement of [on, off]) assert.ok(!cellOf(measurement, 'states').movedIds.includes('locale-switcher'));
+    assert.deepEqual(on.realRender.map['locale-switcher'].statesReach, { declared: false, stamped: 0, native: 0 });
+    // detail-panel: states, through the mount alone, on both halves, with its own state rules reaching the node.
+    assert.ok(!cellOf(off, 'states').movedIds.includes('detail-panel'), 'detail-panel moved on states without its mount');
+    const states = cellOf(on, 'states');
+    assert.deepEqual(states.realRender, { credited: ['detail-panel'], rescued: ['detail-panel'], refused: [], undecided: [] });
+    assert.deepEqual(states.movedIds, ['detail-panel']);
+    assert.deepEqual(states.widthOnly, []);
+    assert.deepEqual(states.pseudoOnly, [], 'the credit rests on a node, not on a pseudo-element box');
+    assert.deepEqual([states.movedStamped, states.movedNative], [1, 1]);
+    assert.equal(on.realRender.map['detail-panel'].statesReach.stamped > 0, true);
+    assert.equal(on.realRender.map['detail-panel'].statesReach.native > 0, true);
+    // Its resting axes are the default scene's, row or no row.
+    for (const axis of RESTING) assert.equal(cellOf(on, axis).movedIds.includes('detail-panel'), cellOf(off, axis).movedIds.includes('detail-panel'), axis);
+    // compare: the root is the part again and rhythm returns; every other axis reads as it did.
+    assert.equal(off.roots.map.compare, '.ds-surface.ds-compare');
+    assert.equal(on.roots.map.compare, ".ds-surface.ds-compare[data-part='root']");
+    assert.ok(!cellOf(off, 'rhythm').movedIds.includes('compare'), 'compare moved on rhythm from the bare root');
+    assert.ok(cellOf(on, 'rhythm').movedIds.includes('compare'));
+    for (const axis of ['shape', 'typography', 'depth', 'motion']) {
+      assert.equal(cellOf(on, axis).movedIds.includes('compare'), cellOf(off, axis).movedIds.includes('compare'), axis);
+    }
+    // THE CONTROLS, on the same mounts: exactly 0, and evidential. (In the old scene none of the three moves on
+    // states, so the emphasis control has no witness there; its 0 is asserted, its standing is not.)
+    for (const measurement of [on, off]) {
+      const controls = measurement.cells.filter((entry) => entry.kind === 'negative');
+      assert.equal(controls.length, 8);
+      for (const entry of controls) {
+        if (measurement === on) assert.equal(entry.evidential, true, `${entry.scenario}/${entry.axis}: ${entry.nonEvidentialReason}`);
+        assert.equal(entry.moved, 0, `${entry.scenario}/${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+      }
+    }
+    for (const axis of RESTING) assert.deepEqual(cellOf(on, 'palette-only', axis).realRender.credited, ['locale-switcher'], `${axis}: the control did not read the mount`);
+    assert.deepEqual(cellOf(on, 'palette-only', 'states').realRender.credited, ['detail-panel'], 'the control did not read the mount its positive credited');
+    // SETTLING: every read ends the transitions its own writes started (`readComputed`), under the stamp and under forcing.
+    assert.deepEqual(on.families.observedUnsettled, []);
+    assert.deepEqual(on.nativePseudos.unsettled, []);
+    assert.deepEqual(on.populations, off.populations, 'a mount may move a numerator, never a denominator');
+    assert.deepEqual(on.refusals, []);
+    assert.deepEqual(evaluate(on), []);
+  }, 480_000);
+
+  it('detail-panel moves on its OWN ring: with the focus style alone in the pair, the move is the box-shadow its skin restates', async () => {
+    const focusOnly = { ...byId('states'), a: { 'states.focus-style': 'ring' }, b: { 'states.focus-style': 'glow' } };
+    const only = { verticals: ['bithire'], themes: ['light'], families: ['detail-panel'], scenarios: [focusOnly, byId('palette-only')] };
+    const on = await run(only);
+    const off = await run({ ...only, realRenderRoster: without(REAL_RENDER_MOUNTS, 'detail-panel') });
+    const states = cellOf(on, 'states');
+    assert.deepEqual(states.realRender.refused, []);
+    assert.deepEqual(states.movedFamilies, [{ family: 'detail-panel', property: 'box-shadow' }]);
+    assert.deepEqual(states.widthOnly, []);
+    assert.deepEqual(cellOf(off, 'states').movedIds, []);
+    assert.equal(cellOf(on, 'palette-only', 'states').moved, 0);
+  }, 360_000);
+
+  it('MUTANT, one per row: mounted WITHOUT the node that carries the paint, the row is REFUSED by law 3 and fails the run', async () => {
+    const hollow = {
+      'locale-switcher': {
+        ...REAL_RENDER_MOUNTS['locale-switcher'],
+        markup: '<div class="ds-pattern-locale-switcher ds-engine-modern" data-part="root" data-pattern="locale-switcher" data-loading="false"></div>',
+        stamps: REAL_RENDER_MOUNTS['locale-switcher'].stamps.filter((row) => row.token === 'attr:data-loading=false'),
+      },
+      'detail-panel': {
+        ...REAL_RENDER_MOUNTS['detail-panel'],
+        markup: REAL_RENDER_MOUNTS['detail-panel'].markup.replace(/<button[^>]*><\/button>/u, ''),
+        stamps: REAL_RENDER_MOUNTS['detail-panel'].stamps
+          .filter((row) => ['attr:data-has-actions=true', 'attr:data-variant=primary', 'attr:data-loading=false'].includes(row.token)),
+      },
+    };
+    for (const [row, mutant] of Object.entries(hollow)) {
+      assert.deepEqual(realRenderRosterFailures(ROOT, { [row]: mutant }), [], `${row}: the hollow mount omits, it does not fabricate`);
+      const measurement = await run({
+        verticals: ['bithire'], themes: ['light'], families: [row],
+        scenarios: REAL_RENDER_MOUNTS[row].axes.map(byId),
+        realRenderRoster: { ...REAL_RENDER_MOUNTS, [row]: mutant },
+      });
+      for (const axis of REAL_RENDER_MOUNTS[row].axes) {
+        const cell = cellOf(measurement, axis);
+        const refusal = cell.realRender.refused.find((item) => item.family === row);
+        assert.ok(refusal, `${row}/${axis}: ${JSON.stringify(cell.realRender)}`);
+        assert.match(refusal.reason, /the real render does not move on/u, `${row}/${axis}`);
+        assert.ok(!cell.movedIds.includes(row), `${row}/${axis}`);
+        assert.ok(evaluate(measurement).some((line) => line.startsWith(`${row}: its real-render mount was REFUSED on ${axis} in bithire/light ${axis}`)), `${row}/${axis}`);
+      }
+    }
+  }, 480_000);
 });
 
 describe('axis-difference --verify-indicator — the reading-only mode reads a file and launches nothing (audit W19-R33 P3)', () => {

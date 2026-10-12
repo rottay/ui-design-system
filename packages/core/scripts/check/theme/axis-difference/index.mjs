@@ -933,6 +933,20 @@ export const AS_RENDERED_ROOT_STAMPS = Object.freeze({
       resolves: "variant = 'full',",
     }),
   ]),
+  // 2026-10-12 (WO-EVI-02). 955e20e50 re-keyed the surface's last attribute-only
+  // chain to class doors, so no root candidate names the part any more and the
+  // mount law reads `.ds-surface.ds-compare` bare -- while every section rule
+  // is still headed `[data-part="root"]`. The engine writes the part on the
+  // same element as the two classes, in the one branch that renders them.
+  compare: Object.freeze([
+    Object.freeze({
+      attribute: 'data-part',
+      value: 'root',
+      source: 'src/components/surfaces/presentation/pages/data/compare/index.tsx',
+      stamp: 'className="ds-surface ds-compare"\n          data-part="root"',
+      resolves: 'className="ds-surface ds-compare"',
+    }),
+  ]),
 });
 
 /**
@@ -1642,6 +1656,212 @@ const STATES_REACH_ROWS = Object.freeze({
           Object.freeze({ source: INPUT_CONTRACT, text: "size: 'md' as const," }),
         ]),
       }),
+    ]),
+  }),
+});
+
+/**
+ * THE COMPOSED REACH ROWS (2026-10-12, WO-EVI-02; owner directive of the same
+ * date). Two patterns whose own skin still paints a node their engine composes
+ * from a canonical primitive, behind a gate the part law refuses as
+ * `part-variant-gated` -- so the scene mounted the wrapper and read nothing
+ * where the family's paint sits. The part law is not relaxed for anyone: each
+ * row mounts the composed node itself, with every stamp held to the file that
+ * writes it.
+ *
+ * WHOSE STAMP IS WHOSE. The pattern engine writes the root and names the
+ * configuration; the primitive it composes writes the shell, the trigger and
+ * the Button's attributes, and the Button recipe writes its classes. Each of
+ * those names its own `source`, as `column-menu`'s Popover surface does. That
+ * reads law 1's "a sibling component of the same render" as covering a
+ * COMPOSED CHILD of the same render: the mechanism is the same door, the
+ * sentence is narrower than this use.
+ *
+ * WHOSE PAINT IS WHOSE. locale-switcher's frame (radius, padding and gap,
+ * hairline, transition) is the pattern skin's own rule on
+ * `[data-part='trigger'][data-chrome='none']`; Select drops its frame under
+ * that same stamp. Its row does NOT declare `states`: the pattern's state
+ * rules write `background` alone and the ring on that node is Select's.
+ * detail-panel declares `states` alone: its skin restates the tenant ring on
+ * the primary action (`[data-part='action-button'][data-variant='primary'] >
+ * .ds-button` under focus-visible), which is the winning declaration on that
+ * node and exists for that variant only -- so the configuration is named, and
+ * a panel with no primary action keeps reading as before.
+ */
+const LOCALE_SWITCHER_ENGINE = 'src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx';
+const SELECT_ENGINE = 'src/components/primitives/inputs/select/engines/modern/index.tsx';
+const SELECT_CONTRACT = 'src/components/primitives/inputs/select/contracts/index.ts';
+const DETAIL_PANEL_ENGINE = 'src/components/patterns/data/detail-panel/engines/modern/index.tsx';
+const DETAIL_PANEL_CONTRACT = 'src/components/patterns/data/detail-panel/contracts/index.ts';
+const BUTTON_ENGINE = 'src/components/primitives/inputs/button/engines/modern/index.tsx';
+const BUTTON_CONTRACT = 'src/components/primitives/inputs/button/contracts/index.ts';
+const BUTTON_RECIPE = 'src/infrastructure/runtime/foundation/recipes/contracts/families/button/index.ts';
+const BUTTON_RECIPE_AXIS_CLASS = '[...values].map((value) => [value, { root: `ds-button--${value}` }])';
+
+const COMPOSED_REACH_ROWS = Object.freeze({
+  'locale-switcher': Object.freeze({
+    state: Object.freeze({
+      name: 'the default LocaleSwitcher (md, label shown) -- the root wraps the canonical Select composed with `chrome="none"`, and '
+        + '`renderValue` takes Select\'s custom listbox branch, so the trigger is the kernel-stamped `div` the pattern skin paints the frame on; '
+        + 'the actions slot (rhythm the Select skin paints), the ARIA wiring and the closed panel are omitted',
+      source: LOCALE_SWITCHER_ENGINE,
+      anchors: Object.freeze(['<ModernSelect\n      chrome="none"', 'renderValue={(option, _content, state) => (']),
+      resolves: Object.freeze([
+        Object.freeze({
+          source: SELECT_ENGINE,
+          text: 'if (!forceCustomDropdown && !isSearchable && !multiple && !optionGroups && !virtual && !renderOption && !renderValue) {',
+        }),
+      ]),
+    }),
+    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion']),
+    markup: '<div class="ds-pattern-locale-switcher ds-engine-modern" data-part="root" data-pattern="locale-switcher" data-loading="false">'
+      + '<div class="ds-select-shell ds-select-shell--modern" data-part="root" data-size="md" data-mode="single">'
+      + '<div data-part="trigger" data-chrome="none" data-variant="outline">'
+      + '<div data-part="trigger-value"><span data-part="value" data-mode="single">'
+      + '<span data-pattern="locale-switcher" data-part="locale-content"><span aria-hidden="true" data-part="flag"></span>'
+      + '<span data-part="autoglottonym"></span></span></span></div></div></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-loading=false', stamp: "data-loading={loading ? 'true' : 'false'}" }),
+      ...['ds-select-shell', 'ds-select-shell--modern'].map((name) => Object.freeze({
+        token: `class:${name}`,
+        source: SELECT_ENGINE,
+        stamp: "className={`ds-select-shell ds-select-shell--modern ${className || ''}`}",
+      })),
+      Object.freeze({
+        token: 'attr:data-size=md',
+        source: SELECT_ENGINE,
+        stamp: 'data-size={size}',
+        resolves: Object.freeze([
+          Object.freeze({ source: LOCALE_SWITCHER_ENGINE, text: "size = 'md'," }),
+          Object.freeze({ source: LOCALE_SWITCHER_ENGINE, text: 'size={size}' }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-mode=single',
+        source: SELECT_ENGINE,
+        stamp: Object.freeze(["data-mode={multiple ? 'multiple' : 'single'}", 'data-part="value"\n        data-mode="single"']),
+        resolves: Object.freeze([
+          Object.freeze({ source: SELECT_ENGINE, text: 'multiple = SELECT_DEFAULTS.multiple,' }),
+          Object.freeze({ source: SELECT_CONTRACT, text: 'multiple: false,' }),
+        ]),
+      }),
+      Object.freeze({ token: 'attr:data-part=trigger', source: SELECT_ENGINE, stamp: "{...partAttributes('trigger', trigger.state)}" }),
+      Object.freeze({
+        token: 'attr:data-chrome=none',
+        source: SELECT_ENGINE,
+        stamp: 'data-chrome={chromeStamp}',
+        resolves: Object.freeze([
+          Object.freeze({ source: SELECT_ENGINE, text: "const chromeStamp = chrome === 'none' ? 'none' : undefined;" }),
+          Object.freeze({ source: LOCALE_SWITCHER_ENGINE, text: '<ModernSelect\n      chrome="none"' }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-variant=outline',
+        source: SELECT_ENGINE,
+        stamp: 'data-variant={variant}',
+        resolves: Object.freeze([
+          Object.freeze({ source: SELECT_ENGINE, text: 'variant = SELECT_DEFAULTS.variant,' }),
+          Object.freeze({ source: SELECT_CONTRACT, text: "variant: 'outline' as SelectVariant," }),
+        ]),
+      }),
+      Object.freeze({ token: 'attr:data-part=trigger-value', source: SELECT_ENGINE, stamp: '<div data-part="trigger-value">' }),
+      Object.freeze({ token: 'attr:data-part=value', source: SELECT_ENGINE, stamp: 'data-part="value"\n        data-mode="single"' }),
+    ]),
+  }),
+  'detail-panel': Object.freeze({
+    state: Object.freeze({
+      name: 'a DetailPanel given one `variant: "primary"` action -- the header\'s action wrapper stamps the variant and wraps the canonical Button '
+        + '(`size="sm"`), the node the panel skin restates the tenant focus ring on; the identity column, the Button\'s content and its motion '
+        + 'recipe hatches are omitted',
+      source: DETAIL_PANEL_ENGINE,
+      anchors: Object.freeze([
+        'data-part="action-button"',
+        'data-variant={variant}',
+        '{actions?.map((a) => <ActionButton key={a.key} action={a} />)}',
+      ]),
+      resolves: Object.freeze([
+        Object.freeze({ source: DETAIL_PANEL_CONTRACT, text: "variant?: 'default' | 'primary' | 'danger' | 'ghost';" }),
+      ]),
+    }),
+    axes: Object.freeze(['states']),
+    markup: '<div class="ds-pattern-detail-panel ds-engine-modern" data-part="root" data-pattern="detail-panel"><div data-part="panel-inner">'
+      + '<div data-part="header" data-has-actions="true"><div data-part="actions">'
+      + '<span data-part="action-button" data-variant="primary" data-loading="false">'
+      + '<button type="button" class="ds-button ds-button--modern ds-button--primary ds-button--sm ds-button--default" '
+      + 'data-variant="primary" data-size="sm" data-shape="default" data-part="trigger"></button>'
+      + '</span></div></div></div></div>',
+    stamps: Object.freeze([
+      Object.freeze({ token: 'attr:data-has-actions=true', stamp: "data-has-actions={actions || headerExtra ? 'true' : 'false'}" }),
+      Object.freeze({
+        token: 'attr:data-variant=primary',
+        stamp: 'data-variant={variant}',
+        resolves: Object.freeze([
+          Object.freeze({ source: DETAIL_PANEL_ENGINE, text: "const variant = action.variant ?? 'default';" }),
+          Object.freeze({ source: DETAIL_PANEL_ENGINE, text: 'variant={variant}' }),
+          Object.freeze({ source: BUTTON_ENGINE, text: "'data-variant': effectiveVariant," }),
+        ]),
+      }),
+      Object.freeze({ token: 'attr:data-loading=false', stamp: "data-loading={action.loading ? 'true' : 'false'}" }),
+      Object.freeze({
+        token: 'tag:button',
+        source: BUTTON_ENGINE,
+        stamp: '<button\n        {...nativeButtonProps}',
+        resolves: Object.freeze([Object.freeze({ source: DETAIL_PANEL_ENGINE, text: '<Button\n        htmlType="button"\n        size="sm"' })]),
+      }),
+      Object.freeze({
+        token: 'attr:type=button',
+        source: BUTTON_ENGINE,
+        stamp: 'type={htmlType}',
+        resolves: Object.freeze([Object.freeze({ source: DETAIL_PANEL_ENGINE, text: 'htmlType="button"' })]),
+      }),
+      ...['ds-button', 'ds-button--modern'].map((name) => Object.freeze({
+        token: `class:${name}`,
+        source: BUTTON_RECIPE,
+        stamp: "slots: { root: ['ds-button', 'ds-button--modern'] },",
+      })),
+      Object.freeze({
+        token: 'class:ds-button--primary',
+        source: BUTTON_RECIPE,
+        stamp: BUTTON_RECIPE_AXIS_CLASS,
+        resolves: Object.freeze([
+          Object.freeze({ source: BUTTON_RECIPE, text: 'variant: axisFromDomain(BUTTON_VARIANT_VALUES),' }),
+          Object.freeze({ source: BUTTON_ENGINE, text: 'variant: effectiveVariant,' }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'class:ds-button--sm',
+        source: BUTTON_RECIPE,
+        stamp: BUTTON_RECIPE_AXIS_CLASS,
+        resolves: Object.freeze([
+          Object.freeze({ source: BUTTON_RECIPE, text: 'size: axisFromDomain(BUTTON_SIZE_VALUES),' }),
+          Object.freeze({ source: DETAIL_PANEL_ENGINE, text: 'size="sm"' }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'class:ds-button--default',
+        source: BUTTON_RECIPE,
+        stamp: BUTTON_RECIPE_AXIS_CLASS,
+        resolves: Object.freeze([
+          Object.freeze({ source: BUTTON_RECIPE, text: 'shape: axisFromDomain(BUTTON_SHAPE_VALUES),' }),
+          Object.freeze({ source: BUTTON_CONTRACT, text: "shape: 'default' as const," }),
+        ]),
+      }),
+      Object.freeze({
+        token: 'attr:data-size=sm',
+        source: BUTTON_ENGINE,
+        stamp: "'data-size': size,",
+        resolves: Object.freeze([Object.freeze({ source: DETAIL_PANEL_ENGINE, text: 'size="sm"' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-shape=default',
+        source: BUTTON_ENGINE,
+        stamp: "'data-shape': shape,",
+        resolves: Object.freeze([
+          Object.freeze({ source: BUTTON_ENGINE, text: 'BUTTON_DEFAULTS.shape;' }),
+          Object.freeze({ source: BUTTON_CONTRACT, text: "shape: 'default' as const," }),
+        ]),
+      }),
+      Object.freeze({ token: 'attr:data-part=trigger', source: BUTTON_ENGINE, stamp: "...partAttributes('trigger', interaction)," }),
     ]),
   }),
 });
@@ -3465,6 +3685,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   ...CHART_LEGEND_SHAPE_ROWS,
   ...SHAPE_REACH_ROWS,
   ...STATES_REACH_ROWS,
+  ...COMPOSED_REACH_ROWS,
 });
 
 /**
