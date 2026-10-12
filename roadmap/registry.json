@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-11",
+ "updated": "2026-10-12",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -2913,7 +2913,7 @@
    "lane": "architecture",
    "order": 13,
    "size": "S",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2928,9 +2928,15 @@
    ],
    "phase": "1",
    "notes": "ABSORBED by WO-EVI-01 (audit F-04, F-53): theme-graph is exactly the certified cascade-order graph, derived from source with a byte-exact --check. Original spec: W1 landed css-layer-paint gate and unlayered twins; the written cascade certification rides W4-D.",
-   "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "progressLog": [
+    {
+     "at": "2026-10-12 09:15",
+     "by": "kimi",
+     "note": "2026-10-12: css-layer-paint gate GREEN at dc5cbed7e (the stale assistant UNLAYERED_HEADER_DEBT row removed; the header was corrected by 79b1a43b9; gate PASS 1 entrypoint, suite 44/44; independent review ACCEPT 7cdfec5b; evidence .tmp/ds-codex-2026-10-08/recon/gate-header-debt.report.txt + quality-2026-10-12/gate-review/report.txt). Remaining residual: the certification doc pinning the 14-layer order + the dead gate-path fix in docs-engineering (foreign repo — needs an owner-granted write set; docs-engineering carries foreign WIP, do not touch). Recon: .tmp/ds-codex-2026-10-08/recon/a-arc.report.md."
+    }
+   ],
+   "claimedBy": "kimi",
+   "claimedAt": "2026-10-12",
    "doneAt": null,
    "evidence": null,
    "execution": {
