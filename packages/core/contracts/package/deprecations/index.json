@@ -7,65 +7,6 @@
   "compatReceivers": [
     "WO-RET-06"
   ],
-  "notes": [
-    "The `removeIn` line `4.0` on the compat-frozen-sole-implementer, compat-canon-pending and compat-persisted-data rows is the ledger author's assumption (the first major after 3.0); the release line of those rows awaits an owner statement."
-  ],
-  "rows": [
-    {
-      "file": "src/foundation/contracts/composition/tenants/themes/index.ts",
-      "anchor": "BrandSurfaces.materials",
-      "class": "compat-persisted-data",
-      "reason": "Schema-v1 theme payloads stored for tenants may carry `materials`; the lowering reads it when `surfaceRoles` is absent, and nothing proves the stored data absent or migrated.",
-      "scope": "One optional field of `BrandSurfaces`, read-only: new static themes and database payloads must not author it. No database was inspected.",
-      "replacement": "`surfaceRoles`",
-      "canonicalOwner": "src/foundation/contracts/composition/tenants/themes/index.ts",
-      "blocker": "persisted-data-unproven",
-      "receiver": "WO-RET-06",
-      "since": "2026-07-25",
-      "removeIn": "4.0",
-      "evidence": [
-        {
-          "kind": "persisted-reader",
-          "path": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/materials/index.ts",
-          "needle": "bt.surfaces?.surfaceRoles ?? bt.surfaces?.materials"
-        },
-        {
-          "kind": "persisted-reader",
-          "path": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/surfaces/index.ts",
-          "needle": "su.surfaceRoles ?? su.materials"
-        }
-      ],
-      "codemod": "member-changed/.#BrandSurfaces.materials",
-      "changeset": null
-    },
-    {
-      "file": "src/foundation/contracts/composition/tenants/themes/index.ts",
-      "anchor": "BrandMotion",
-      "class": "compat-persisted-data",
-      "reason": "Theme documents stored for tenants may carry its twelve open-ended fields: the theme-document iso schema admits them and the personality lowering reads them, and nothing proves the stored data absent or migrated. No bundled preset authors the interface any more.",
-      "scope": "Exported interface; it types `FlatTheme.motion`. The Brand Studio editor no longer authors the six open-ended fields (entrance, entranceDuration, hoverLift, hoverScale, pulseSpeed and skeletonStyle) and its file export no longer reads entranceDuration (WO-RET-06 W-4); drafts that carry them still round-trip. The four governed fields (intensity, durationScale, ambient, character) stay. No database was inspected: whether stored tenant payloads carry the open-ended fields was not measured.",
-      "replacement": "the vertical `MotionProfile` plus the bounded `TenantMotionDial`",
-      "canonicalOwner": "src/foundation/contracts/composition/tenants/themes/index.ts",
-      "blocker": "persisted-data-unproven",
-      "receiver": "WO-RET-06",
-      "since": "2026-07-16",
-      "removeIn": "4.0",
-      "evidence": [
-        {
-          "kind": "persisted-reader",
-          "path": "packages/core/src/foundation/contracts/composition/tenants/themes/iso/schema/index.ts",
-          "needle": "\"motion.entranceDuration\": NUMBER",
-          "note": "Measured: the theme-document schema admits the open-ended motion fields. Not measured: stored tenant documents."
-        },
-        {
-          "kind": "persisted-reader",
-          "path": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality/index.ts",
-          "needle": "entranceDuration: bt.motion?.entranceDuration",
-          "note": "Measured: the personality lowering reads the open-ended fields from the flat theme."
-        }
-      ],
-      "codemod": "member-changed/.#BrandMotion.entranceDuration",
-      "changeset": null
-    }
-  ]
+  "notes": [],
+  "rows": []
 }

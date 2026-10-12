@@ -952,5 +952,19 @@ Lane-wide rules (binding on every WO):
   with the row, not moved); the dependency is not removed; no genuinely transitional alias exists. Resolving this
   row does not close WO-RET-06 (the D-C rows, the doors/findings and its other obligations remain). The amendment
   and its implementation each require independent review.
+- **AMENDMENT (2026-10-12, DT execution record — disposition D-C executed; the acceptance above stands)** —
+  The D-C disposition of 2026-10-07 was executed as reviewed lot `quality-ret06-dc` (writer session
+  90d0df80, independent review ACCEPT, receipts in `.tmp/ds-codex-2026-10-08/`): the `@deprecated` markers
+  of `BrandSurfaces.materials` and `BrandMotion` removed (the field line and the interface type surface
+  byte-identical, comment-stripped AST identical per the review), the two ledger rows deleted (the ledger
+  now holds zero rows; the stale `removeIn: 4.0` assumption note removed with them), the notice-only
+  codemod entries `member-changed/.#BrandSurfaces.materials` and `member-changed/.#BrandMotion.entranceDuration`
+  left with the rows, the backward-compatible admission documented at
+  `packages/core/docs/consumer-contract/persisted-theme-admission/index.md`, changeset
+  `ret-06-d-c-persisted-theme-admission.md`. Admission and reading of stored documents are preserved
+  exactly as D-C states; no narrowing; step 4(ii) stays owner/ops. The deprecations gate's residual red is
+  exactly the 11 ARC-12 caller-part marker-without-row failures (owner queue DEPRECATIONS-RECEIVER), in
+  both sibling modes, unchanged by this lot. This execution closes nothing else of WO-RET-06: the doors,
+  the findings, D-D and the closure re-measurement remain.
 - **Size** — L.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-RET-06 (Transitional compatibility and transferred closures of the 3.0 line) exactly as specified in `roadmap/retire.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-42, F-109, F-111, F-113, F-115, F-84, F-88 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.

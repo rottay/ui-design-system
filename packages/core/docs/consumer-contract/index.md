@@ -473,3 +473,5 @@ pasan a ser productivos) están en
 [`frozen-engine-capabilities/`](frozen-engine-capabilities/index.md).
 
 Los rellenos estructurales canónicos de `variant` en Badge, Tag y Avatar (D-B, 2026-10-07): [`structural-variant-fills/`](structural-variant-fills/index.md).
+
+La admisión retrocompatible de los documentos de tema almacenados, `BrandSurfaces.materials` y `BrandMotion` (D-C, 2026-10-07): [`persisted-theme-admission/`](persisted-theme-admission/index.md).

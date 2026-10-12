@@ -596,8 +596,9 @@ export interface BrandSurfaces {
   /** Coordinated semantic surface roles shared by every component family. */
   surfaceRoles?: SemanticSurfaceRoleMap;
   /**
-   * @deprecated Use `surfaceRoles`. Read-only compatibility for schema v1;
-   * new static themes and DB payloads must not author this field.
+   * Schema-v1 spelling of `surfaceRoles`, admitted and read when
+   * `surfaceRoles` is absent so stored theme documents keep resolving.
+   * New static themes and DB payloads author `surfaceRoles`.
    */
   materials?: SemanticSurfaceRoleMap;
   /** `full` is the pill/circle radius, not a fifth step of the scale. */
@@ -753,21 +754,18 @@ export interface BrandSurfaces {
 }
 
 /**
- * @deprecated The open-ended fields (`entrance`, `entranceDuration`,
+ * Motion block of the flat theme view: it types `FlatTheme.motion`, and
+ * `DEFAULT_MOTION_SHAPE` in `themes/iso` states its whole shape. The four
+ * governed fields are `intensity`, `durationScale`, `ambient` and
+ * `character`. The open-ended fields (`entrance`, `entranceDuration`,
  * `hoverLift`, `hoverScale`, `useSpring`, `springTension`, `springFriction`,
  * `pulseSpeed`, `skeletonStyle`, `staggerDelay`, `staggerMax`,
- * `countUpEnabled`) are superseded. No bundled preset authors this interface
- * any more: the evnto experience baseline is authored against
- * `AnimationPersonalityTokens`. The interface still types `FlatTheme.motion`,
- * `DEFAULT_MOTION_SHAPE` in `themes/iso` states its whole shape, and the
- * theme-document schema admits and lowers those fields from a theme document.
- * The Brand Studio editor authors six of them into drafts (`entrance`,
- * `entranceDuration`, `hoverLift`, `hoverScale`, `pulseSpeed`,
- * `skeletonStyle`) and its file export reads `entranceDuration`. Runtime
- * choreography resolves through the vertical MotionProfile plus the bounded
- * TenantMotionDial; DB tenants must not author springs, bounce, keyframes or
- * loop topology. The four governed fields are `intensity`, `durationScale`,
- * `ambient` and `character`, and they stay.
+ * `countUpEnabled`) stay admitted: the theme-document schema admits and lowers
+ * them so stored theme documents keep resolving. No bundled preset authors
+ * them: the evnto experience baseline is authored against
+ * `AnimationPersonalityTokens`. Runtime choreography resolves through the
+ * vertical MotionProfile plus the bounded TenantMotionDial; DB tenants must not
+ * author springs, bounce, keyframes or loop topology.
  */
 export interface BrandMotion {
   intensity?: number;
@@ -783,7 +781,7 @@ export interface BrandMotion {
    * and entrance-offset roles, never a duration -- so a tenant can ask for
    * mechanical motion without also asking for fast motion.
    *
-   * One of the four GOVERNED fields on this otherwise deprecated interface
+   * One of the four GOVERNED fields on this otherwise open-ended interface
    * (see `intensity`, `durationScale` and `ambient`): bounded, closed, and
    * admissible on both transports. Absent -> `organic`, the engine's own eases.
    */
