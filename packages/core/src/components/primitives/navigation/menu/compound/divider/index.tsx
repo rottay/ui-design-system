@@ -81,7 +81,10 @@ export function MenuDivider({
   dashed = false,
   className = '',
   style,
-  'data-part': dataPart,
+  // P-88: the menu divider keeps its own anatomy ('divider'); a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
   // divider element, BEFORE the engine's own stamps.
   ...rest
@@ -98,7 +101,7 @@ export function MenuDivider({
       className={`ds-menu-divider ${dashed ? 'ds-menu-divider--dashed' : ''} ${className}`.trim()}
       style={style}
       role="separator"
-      data-part={dataPart ?? 'divider'}
+      data-part="divider"
     />
   );
 }

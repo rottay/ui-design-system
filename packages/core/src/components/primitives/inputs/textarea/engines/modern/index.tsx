@@ -87,8 +87,12 @@ const ModernTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     autoComplete,
     autoFocus,
     'data-testid': dataTestId,
+    // P-88: the textarea keeps its own anatomy ('root'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...rest
-  } = props;
+  } = props as TextareaProps & { 'data-part'?: string; 'data-state'?: string };
   const { onKeyDown: callerKeyDown, ...nativeRest } = rest as typeof rest & {
     onKeyDown?: React.KeyboardEventHandler<HTMLTextAreaElement>;
   };

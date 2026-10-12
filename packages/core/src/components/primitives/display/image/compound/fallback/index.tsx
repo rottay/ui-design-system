@@ -37,7 +37,19 @@ const FALLBACK_A11Y = { key: 'image.failedToLoad', fallback: 'Image failed to lo
  * ```
  */
 export const ImageFallback = forwardRef<HTMLDivElement, ImageFallbackProps>(
-  ({ children, className = '', style, width, height, ...props }, ref) => {
+  (allProps, ref) => {
+    const {
+      children,
+      className = '',
+      style,
+      width,
+      height,
+      // P-88: the image fallback keeps its own anatomy ('fallback'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
+      ...props
+    } = allProps as ImageFallbackProps & { 'data-part'?: string; 'data-state'?: string };
     // Optional provider + English floor, the same idiom as Avatar's status
     // names: bare compositions (tests, lightweight consumers) must not crash.
     const i18n = useOptionalTranslation('components');

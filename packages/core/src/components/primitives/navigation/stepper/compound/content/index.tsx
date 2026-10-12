@@ -107,6 +107,10 @@ export function StepperContent({
   style,
   // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
   // panel element, BEFORE the engine's own stamps.
+  // P-88: the step content keeps its own anatomy ('panel'); a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   ...rest
 }: StepContentInternalProps): React.ReactElement | null {
   // ========================================================================

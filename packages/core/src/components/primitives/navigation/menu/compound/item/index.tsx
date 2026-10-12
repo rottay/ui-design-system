@@ -81,7 +81,10 @@ export function MenuItem({
   children,
   className = '',
   style,
-  'data-part': dataPart,
+  // P-88: the menu item keeps its own anatomy ('item'); a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
   // item element. It spreads BEFORE the engine's own stamps so the skin
   // contract (data-part default, role, data-*) always lands last.
@@ -138,7 +141,7 @@ export function MenuItem({
       {...rest}
       className={`ds-menu-item ${className}`.trim()}
       style={style}
-      {...partAttributes(dataPart ?? 'item', interaction.state)}
+      {...partAttributes('item', interaction.state)}
       {...chained}
       onClick={handleClick}
       onKeyDown={handleKeyDown}

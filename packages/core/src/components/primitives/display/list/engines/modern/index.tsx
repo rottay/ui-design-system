@@ -98,7 +98,10 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
       description,
       className = '',
       style,
-      'data-part': dataPart,
+      // P-88: the list item meta keeps its own anatomy ('meta'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
       // the meta root. It spreads BEFORE the engine's own stamps so the skin
       // contract always lands last.
@@ -110,7 +113,7 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
         {...rest}
         ref={ref}
         className={`rottay-list-item-meta rottay-list-item-meta--modern ${className}`}
-        data-part={dataPart ?? 'meta'}
+        data-part="meta"
         style={style}
       >
         {avatar && <div data-part="meta-avatar">{avatar}</div>}
@@ -141,7 +144,10 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
       children,
       className = '',
       style,
-      'data-part': dataPart,
+      // P-88: the list item keeps its own anatomy ('item'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
       // the row element. It spreads BEFORE the engine's own stamps so the skin
       // contract always lands last — and it is what makes the skin's
@@ -156,7 +162,7 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
         {...rest}
         ref={ref}
         className={`rottay-list-item rottay-list-item--modern ${className}`}
-        data-part={dataPart ?? 'item'}
+        data-part="item"
         style={style}
       >
         <div data-part="item-content">{children}</div>
@@ -202,7 +208,10 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       children,
       className = '',
       style,
-      'data-part': dataPart,
+      // P-88: the list keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
       // the root element (both postures). It spreads BEFORE the engine's own
       // stamps so the skin contract always lands last.
@@ -226,7 +235,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
           {...rest}
           ref={ref}
           className={`rottay-list rottay-list--modern ${className}`}
-          data-part={dataPart ?? 'root'}
+          data-part="root"
           data-loading="true"
           // The loading posture is the SAME list: the stamps below must stay
           // exactly the loaded root's, or the shell jumps on every load.
@@ -269,7 +278,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         {...rest}
         ref={ref}
         className={`rottay-list rottay-list--modern ${className}`}
-        data-part={dataPart ?? 'root'}
+        data-part="root"
         data-loading="false"
         data-bordered={bordered ? 'true' : 'false'}
         data-size={size}

@@ -78,7 +78,10 @@ export function MenuGroup({
   children,
   className = '',
   style,
-  'data-part': dataPart,
+  // P-88: the menu group keeps its own anatomy ('group'); a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
   // group root element, BEFORE the engine's own stamps.
   ...rest
@@ -95,7 +98,7 @@ export function MenuGroup({
       className={`ds-menu-group ${className}`.trim()}
       style={style}
       role="presentation"
-      data-part={dataPart ?? 'group'}
+      data-part="group"
     >
       {/* Group title header */}
       <div

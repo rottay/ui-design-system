@@ -19,9 +19,8 @@
  *   `aria-label` WINS over the fallback name (the Descriptions idiom).
  * - The `BaseComponentProps` passthrough (id / aria-* / data-* /
  *   data-testid) spreads on the `<nav>` (the outermost element) BEFORE the
- *   engine's stamps; the caller-owned `data-part` hook (P-79) replaces the
- *   `<ul>`'s default `'root'` anatomy hook — the skin scope detaches by
- *   contract when a caller claims it.
+ *   engine's stamps; a caller `data-part` is never forwarded (P-88), so
+ *   the `<ul>` keeps its `'root'` anatomy hook.
  * - `size` (sm/md/lg) and `variant` (default/simple/circles) ride
  *   `data-size`/`data-variant` on the root; both were previously accepted
  *   and silently ignored by this engine.
@@ -242,7 +241,9 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
     children,
     className = '',
     style,
-    'data-part': dataPart,
+    // P-88: the stepper keeps its own anatomy ('root'); a caller data-part
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
     'aria-label': callerAriaLabel,
     engine: _engine,
     // Consumed contract axes that must NOT leak onto the DOM through the
@@ -389,7 +390,7 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
     >
       <ul
         className="ds-stepper ds-stepper--modern"
-        data-part={dataPart ?? 'root'}
+        data-part="root"
         data-direction={direction}
         data-size={size}
         data-variant={variant}

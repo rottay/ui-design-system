@@ -81,7 +81,10 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     engine: _engine,
     quality: _quality,
     blurDataURL: _blurDataURL,
-    'data-part': dataPart,
+    // P-88: the image keeps its own anatomy ('root'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     // Caller passthrough (id / aria-* / data-* / data-testid): spreads BEFORE
     // the engine's own stamps so the skin and interaction-state contracts land
     // last.
@@ -201,7 +204,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
           }
         : {})}
       {...interactionHandlers}
-      {...partAttributes(dataPart ?? 'root', interaction)}
+      {...partAttributes('root', interaction)}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >

@@ -30,18 +30,20 @@ import { RADIUS_MAP } from '../../contracts';
  * ```
  */
 export const ImageSkeleton = forwardRef<HTMLDivElement, ImageSkeletonProps>(
-  (
-    {
+  (allProps, ref) => {
+    const {
       width,
       height,
       radius = 'none',
       animate = true,
       className = '',
       style,
+      // P-88: the image skeleton keeps its own anatomy ('skeleton'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       ...props
-    },
-    ref
-  ) => {
+    } = allProps as ImageSkeletonProps & { 'data-part'?: string; 'data-state'?: string };
     // Get radius CSS value
     const radiusValue = RADIUS_MAP[radius] || RADIUS_MAP.none;
 

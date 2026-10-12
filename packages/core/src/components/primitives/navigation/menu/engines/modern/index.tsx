@@ -11,8 +11,8 @@
  * kernel's `data-state`, decided once by `useInteractionState`; the modern
  * skin (`modern/skin/menu`) owns 100% of layout and paint. No inline style
  * objects beyond the two custom properties. The `BaseComponentProps` passthrough (id / aria-* /
- * data-* / data-testid + the caller-owned `data-part` hook, P-79) spreads on
- * the root BEFORE the engine's stamps so the skin contract always lands last.
+ * data-* / data-testid) spreads on the root BEFORE the engine's stamps so the skin contract
+ * always lands last; a caller `data-part`/`data-state` is never forwarded (P-88).
  *
  * Keyboard contract (owned by the shared roving-focus kernel): the menu is a
  * SINGLE tab stop. The K3-B model — every enabled row its own tab stop — made
@@ -505,7 +505,10 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
     style,
     inlineIndent = MENU_DEFAULTS.inlineIndent,
     expandIcon,
-    'data-part': dataPart,
+    // P-88: the menu keeps its own anatomy ('root'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     engine: _engine,
     // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
     // the root element. It spreads BEFORE the engine's own stamps so the
@@ -687,7 +690,7 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
       style={style}
       role="menu"
       aria-orientation={mode === 'horizontal' ? 'horizontal' : 'vertical'}
-      data-part={dataPart ?? 'root'}
+      data-part="root"
       data-variant={theme}
       data-mode={mode}
       data-collapsed={inlineCollapsed || undefined}

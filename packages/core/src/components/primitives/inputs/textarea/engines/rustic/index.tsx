@@ -68,8 +68,12 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
     id,
     autoComplete,
     autoFocus,
+    // P-88: the textarea keeps its own anatomy ('root'); a caller data-part/data-state
+    // is never forwarded (callers compose through className).
+    'data-part': _callerDataPart,
+    'data-state': _callerDataState,
     ...rest
-  } = props;
+  } = props as TextareaProps & { 'data-part'?: string; 'data-state'?: string };
 
   // Character count for the optional showCount feature -- kept in sync with value
   const [charCount, setCharCount] = useState(value?.length || defaultValue?.length || 0);

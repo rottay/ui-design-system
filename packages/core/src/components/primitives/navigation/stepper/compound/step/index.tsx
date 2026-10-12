@@ -120,6 +120,10 @@ export function StepperStep({
   children,
   // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
   // step root element, BEFORE the engine's own stamps.
+  // P-88: the step keeps its own anatomy ('item'); a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   ...rest
 }: StepInternalProps): React.ReactElement {
   // Get size values from mappings

@@ -248,10 +248,20 @@ describe('engine/skins/pass-through -- source drills (the census itself turns th
     const from = 'className={className || undefined}';
     assert.equal(original.split(from).length, 2, 'the tripwire wrapper is located exactly once');
     writeFileSync(path, original.replace(from, "className={['ds-stepper-track', className].filter(Boolean).join(' ')}"));
+    // The specimen seeds its own family row: stepper leaves `families` once its last site does,
+    // and a repainted wrapper of a family with no row would add a second finding (carrier/fail).
+    const seeded = clone(ledger);
+    seeded.families.stepper ??= { carrier: false, part: [], state: [] };
     try {
-      const findings = evaluatePassThrough(measureCopy(), ledger);
+      const v = measureCopy();
+      const findings = evaluatePassThrough(v, seeded);
       assert.deepEqual(kinds(findings), ['counter/grew', 'site/grew', 'tripwire/grew']);
       assert.ok(findings.some((f) => /TRIPWIRE primitives\/navigation\/stepper\/engines\/modern\/index\.tsx#default#nav#none#0 is painted again/.test(f.detail)));
+      // Non-vacuity: the seeded row is what classifies the repainted wrapper's family.
+      assert.equal(v.roster.find((r) => /stepper\/engines\/modern\/index\.tsx#default#nav#none#0$/.test(r.key))?.family, 'stepper');
+      const unseeded = clone(seeded);
+      delete unseeded.families.stepper;
+      assert.ok(evaluatePassThrough(v, unseeded).some((f) => f.kind === 'carrier' && /^stepper: the ledger has no carrier classification/.test(f.detail)));
     } finally {
       writeFileSync(path, original);
     }

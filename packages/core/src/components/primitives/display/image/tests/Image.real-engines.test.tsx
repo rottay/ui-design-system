@@ -233,11 +233,12 @@ describe('Image modern — pass-through honesty law', () => {
     expect(root).toHaveAttribute('data-part', 'root');
   });
 
-  it('lets a composing owner name the root part', () => {
+  it('keeps its own root part over a composing owner data-part', () => {
     const { container } = render(
       <ModernImage src="/p.jpg" alt="Photo" data-part="card-media" />
     );
-    expect(container.querySelector('.rottay-image--modern')).toHaveAttribute('data-part', 'card-media');
+    expect(container.querySelector('.rottay-image--modern')).toHaveAttribute('data-part', 'root');
+    expect(container.querySelector('[data-part="card-media"]')).toBeNull();
   });
 
   it('never leaks non-DOM contract fields onto the frame', () => {

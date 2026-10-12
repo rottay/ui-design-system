@@ -76,6 +76,10 @@ export function MenuSubMenu({
   style,
   // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
   // submenu root element, BEFORE the engine's own stamps.
+  // P-88: the submenu root carries no part of its own; a caller data-part/data-state
+  // is never forwarded (callers compose through className).
+  'data-part': _callerDataPart,
+  'data-state': _callerDataState,
   ...rest
 }: MenuSubMenuProps): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false);
