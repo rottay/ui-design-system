@@ -373,7 +373,7 @@ export default function ModernCommentThread(props: CommentThreadProps) {
           {Array.from({ length: 3 }).map((_, i) => (
             <ModernSkeleton
               key={i}
-              data-part="skeleton"
+              className="ds-comment-thread__skeleton"
               avatar
               title
               paragraph={{ rows: 1 }}

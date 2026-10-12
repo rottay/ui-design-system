@@ -173,7 +173,7 @@ describe('comment-thread -- data-part contract (communication-pattern anatomy)',
     // reflow when the thread arrives. Rustic stays frozen on its text part.
     if (engine === 'modern') {
       expect(q(container, '[data-part="skeleton-list"][role="status"]')).toHaveLength(1);
-      expect(q(container, '[data-part="skeleton"]')).toHaveLength(3);
+      expect(q(container, '.ds-comment-thread__skeleton')).toHaveLength(3);
       expect(q(container, '[data-part="spinner"]')).toHaveLength(0);
     } else {
       expect(q(container, '[data-part="loading"]')).toHaveLength(1);
@@ -333,7 +333,7 @@ describe('activity-log -- data-part contract (communication-pattern anatomy)', (
     // rustic's loading branch is a single plain "Loading..." text row with
     // no shimmer to migrate at all. Do not invent a rustic skeleton.
     if (engine === 'modern') {
-      expect(q(container, '[data-part="skeleton"]').length).toBeGreaterThanOrEqual(4);
+      expect(q(container, '.ds-activity-log__skeleton')).toHaveLength(4);
     } else {
       expect(q(container, '[data-part="loading"]')).toHaveLength(1);
       expect(q(container, '[data-part="skeleton"]')).toHaveLength(0);

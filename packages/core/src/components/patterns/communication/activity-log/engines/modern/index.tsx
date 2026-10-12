@@ -271,7 +271,7 @@ function LoadingSkeleton() {
       {Array.from({ length: 4 }).map((_, i) => (
         <ModernSkeleton
           key={i}
-          data-part="skeleton"
+          className="ds-activity-log__skeleton"
           avatar
           title
           paragraph={{ rows: 1 }}
