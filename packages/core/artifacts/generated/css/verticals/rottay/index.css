@@ -96517,7 +96517,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   display: block;
   margin-block-end: var(--ds-spacing-1);
 }
-.ds-pattern-brand-studio .ds-pattern-brand-studio__field-input.rottay-select:where(:not(.rottay-select--rustic)) {
+/* .rottay-select is stamped by more than one Select engine; only the one that
+   renders the Ant root takes this width, anchored at 0 specificity */
+.ds-pattern-brand-studio .ds-pattern-brand-studio__field-input.rottay-select:where(.ant-select) {
   inline-size: 100%;
 }
 .ds-pattern-brand-studio
