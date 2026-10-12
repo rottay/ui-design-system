@@ -1,4 +1,4 @@
-import { APCA_BODY_MIN, APCA_PALETTES, APCA_UI_MIN } from '../../counters/contrast/index.mjs';
+import { APCA_BODY_MIN, APCA_PALETTES, APCA_UI_MIN, describeApcaOutcome } from '../../counters/contrast/index.mjs';
 import { buildTokenCoverage } from '../token-coverage/index.mjs';
 
 /** The counter listing plus the one-line coverage and APCA summaries shared by report and --check. */
@@ -21,7 +21,7 @@ function printSummary({ files, counters, apca, quiet }) {
   // WO-GAT-04: one-line APCA summary, appended to both report and --check output.
   if (!quiet) {
     console.log(
-      `engine-token-audit — APCA contrast: ${apca.failures} pairings below threshold (body>=${APCA_BODY_MIN}/ui>=${APCA_UI_MIN}), ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated across ${APCA_PALETTES.length} palettes`
+      `engine-token-audit — APCA contrast (body>=${APCA_BODY_MIN}/ui>=${APCA_UI_MIN}, ${APCA_PALETTES.length} palettes): ${describeApcaOutcome(apca)}`
     );
   }
 }
@@ -29,15 +29,16 @@ function printSummary({ files, counters, apca, quiet }) {
 /** Report mode only: the APCA pairing table and the three theme.css selector inventories. */
 function printReportDetail({ apca, themeCssAudit, classicThemeAudit, rusticThemeAudit }) {
   console.log('\nengine-token-audit — APCA pairing detail:');
-  console.log('  palette   pairing                 kind  Lc     floor  status');
+  console.log('  palette   leg    pairing                 kind  Lc     floor  status');
   for (const r of apca.results) {
     const lc = r.status === 'skip' ? '  skip' : String(r.lc).padStart(5);
     console.log(
-      `  ${r.palette.padEnd(9)} ${r.pair.padEnd(23)} ${r.kind.padEnd(4)}  ${lc}  ${String(r.threshold).padStart(4)}   ${
+      `  ${r.palette.padEnd(9)} ${r.leg.padEnd(6)} ${r.pair.padEnd(23)} ${r.kind.padEnd(4)}  ${lc}  ${String(r.threshold).padStart(4)}   ${
         r.status
       }`
     );
   }
+  for (const failure of apca.coverageFailures) console.log(`  COVERAGE ${failure}`);
 
   console.log(`\nengine-token-audit — theme.css consumed-class set: ${themeCssAudit.consumedSize} tokens`);
   console.log(`engine-token-audit — theme.css unreferenced selectors (${themeCssAudit.unreferenced.length}):`);

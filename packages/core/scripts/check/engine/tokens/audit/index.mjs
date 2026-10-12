@@ -32,6 +32,7 @@
 import { argumentValue, quiet } from './context/arguments/index.mjs';
 import { hardcodeFixtureActive } from './context/fixtures/index.mjs';
 import { collectAuditState } from './collection/index.mjs';
+import { describeApcaOutcome } from './counters/contrast/index.mjs';
 import { runBaselineUpdate, runCheck } from './ratchet/index.mjs';
 import { writeContrastReport } from './reports/contrast/index.mjs';
 import { buildTokenCoverage, writeCoverageArtifacts } from './reports/token-coverage/index.mjs';
@@ -76,9 +77,7 @@ if (mode === 'apca-report') {
   console.log('engine-token-audit --apca-report: wrote');
   console.log(`  ${jsonPath}`);
   console.log(`  ${mdPath}`);
-  console.log(
-    `engine-token-audit — APCA pairings: ${apca.failures} below threshold, ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated`
-  );
+  console.log(`engine-token-audit — APCA pairings: ${describeApcaOutcome(apca)}`);
   process.exit(0);
 }
 
