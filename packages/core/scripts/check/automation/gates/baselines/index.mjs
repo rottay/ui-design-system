@@ -162,9 +162,10 @@ export function debtOf(path) {
  *
  * The key is the gate's `ratchet` path in the manifest (the drill refuses a key
  * that is not one). Owner ruling R32 Q4: the ownership census has two counters,
- * `productive` and `frozen-transferred → WO-RET-06`, that are never netted; the
- * transferred frozen debt stays visible beside the gate until its receiver
- * disposes of it, so the generic total alone is not a lawful line for it.
+ * `productive` and `frozen-transferred`, that are never netted; the frozen
+ * debt stays visible beside the gate for as long as the frozen engines ship
+ * (owner disposition D-A, 2026-10-07, its final authority), so the generic
+ * total alone is not a lawful line for it.
  */
 export const NAMED_COUNTER_LEDGERS = Object.freeze({
   'scripts/check/boundaries/surfaces/ownership/baseline/index.json': describeLedgerCounters,

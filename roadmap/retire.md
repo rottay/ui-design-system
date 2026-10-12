@@ -780,6 +780,31 @@ Lane-wide rules (binding on every WO):
   **Acceptance** gains: *`node packages/core/scripts/check/boundaries/surfaces/ownership/index.mjs --check` exits 0 and prints the counter `frozen-transferred (Classic + Rustic) → WO-RET-06`, and either (a) the counter reads 0 because the frozen engine files left the package under a dated owner decision, each frozen file edit carrying one engine-freeze `--authorize` entry per file per lot; or (b) a dated owner disposition, recorded in this block as an AMENDMENT, states that the frozen engines keep this debt for as long as they ship, in which case the counter stays published and decrease-only, the rows stop naming this work order, and the disposition names the final authority. No frozen file is edited to lower the counter. The counter is never merged into, or subtracted from, the productive counter. Evidence: the gate output and the id-set digest under `evidence/ret-06-closure/`, sha256 quoted in `done --evidence`.*
   **Do NOT** gains: *Do not treat this transfer as closure of F-86. Do not delete, allowlist or re-key a frozen row to lower the counter. Do not accept a row whose path is not under a frozen engine.*
   **Delegation prompt** gains F-86 in its list of fiches.
+- **AMENDMENT (2026-10-12, DT execution record — route (b) of the R32 Q4 acceptance taken under the dated disposition D-A of 2026-10-07; the acceptance above stands, this is added to it)** —
+  Reviewed lot `quality-f86-receiver` (writer session f5a9394c, independent review ACCEPT with mutants
+  and a HEAD-archive before-state). For the avoidance of doubt for the next auditor: D-A's heading scopes
+  the 25 frozen marker rows, and its body is the dated disposition route (b) requires for the 1311-row /
+  2005-occurrence ownership remainder fixed at the transfer commit (id-set sha256
+  `61df609c1c1c1d3cb4fb4367ef4e7e041fd11c657d91b11e8d36ec0f0f33b2f5`): "The counter stays published and
+  decrease-only; the rows stop naming this work order; the final authority is this disposition." This
+  amendment ties D-A to those rows by name.
+  Executed: the rows stop naming this work order. The gate now prints
+  `frozen-transferred (Classic + Rustic) → disposition D-A` with receiver
+  `owner disposition D-A (2026-10-07, roadmap/retire.md)` and standing `final authority; kept while the
+  frozen engines ship; published, decrease-only`; the R32 Q4 acceptance sentence above that pins the
+  printed label `→ WO-RET-06` is superseded by its own route (b), which this lot executed. The counter
+  stays published and decrease-only; counts 2005/1311 and the id-set digest are unchanged (recomputed
+  independently by the reviewer); the gate still prints `F-86 < 1.000: NOT MET` — nothing is closed or
+  netted. The Files line of the R32 Q4 block granted `ownership/counters/**` (receiver string only); the
+  executed lot lawfully required six paths, recorded here so the record matches what merged:
+  `ownership/counters/index.mjs` (label + receiver + standing + the BASELINE_PURPOSE clause the gate
+  refuses to mismatch), `ownership/baseline/index.json` (its top-level `purpose` string only; no entry,
+  id or count moved), `ownership/index.mjs` (header comment), `ownership/index.test.mjs` (re-pinned
+  expectations + a negative assertion that no report names WO-RET-06),
+  `automation/gates/baselines/tests/index.test.mjs` (one pinned expectation) and
+  `automation/gates/baselines/index.mjs` (comment only). No frozen file was edited; no row was deleted,
+  allowlisted or re-keyed to lower the counter. The closure evidence of the F-86 clause (gate output +
+  digest under `evidence/ret-06-closure/`) is still owed at the WO's closure.
 - **AMENDMENT (owner ruling Q1, 2026-10-06; the acceptance above stands, this is added to it)** —
   Authority: `roadmap/owner-decisions-2026-10-06.md` §Q1, quoted verbatim:
   "Canonical, reusable capability. No retirement to shrink a census, no

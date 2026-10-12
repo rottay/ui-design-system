@@ -6,8 +6,10 @@
  * an edit to the ledger could move.
  *
  *  - `productive`         Modern engine + shared core, drained by its receiver;
- *  - `frozen-transferred` Classic + Rustic, transferred to an open receiver and
- *                         published until that receiver disposes of it.
+ *  - `frozen-transferred` Classic + Rustic, kept for as long as the frozen engines
+ *                         ship by the dated owner disposition D-A (2026-10-07,
+ *                         roadmap/retire.md), which is its final authority;
+ *                         still published and decrease-only.
  *
  * The two are never netted against each other. Their sum is published only to
  * state the F-86 clause as measured.
@@ -28,8 +30,9 @@ export const F86_THRESHOLD = 1000;
 export const BASELINE_PURPOSE =
   'DS-A002 ownership census: presentation ownership leaked into patterns and surfaces, one row per '
   + 'finding id with its pinned occurrence count. Two counters derived from the path, never stored: '
-  + 'productive (Modern engine + shared core) and frozen-transferred (Classic + Rustic, receiver '
-  + 'WO-RET-06). Exact and decrease-only; lowered only by --update-baseline.';
+  + 'productive (Modern engine + shared core) and frozen-transferred (Classic + Rustic, final '
+  + 'authority: owner disposition D-A, 2026-10-07, roadmap/retire.md). Exact and decrease-only; '
+  + 'lowered only by --update-baseline.';
 
 export const PRODUCTIVE = 'productive';
 export const FROZEN_TRANSFERRED = 'frozen-transferred';
@@ -42,9 +45,9 @@ export const COUNTERS = Object.freeze({
     classes: Object.freeze(['modern', 'shared']),
   }),
   [FROZEN_TRANSFERRED]: Object.freeze({
-    label: 'frozen-transferred (Classic + Rustic) → WO-RET-06',
-    receiver: 'WO-RET-06',
-    standing: 'OPEN, transferred, not resolved',
+    label: 'frozen-transferred (Classic + Rustic) → disposition D-A',
+    receiver: 'owner disposition D-A (2026-10-07, roadmap/retire.md)',
+    standing: 'final authority; kept while the frozen engines ship; published, decrease-only',
     classes: FROZEN_ENGINE_NAMES,
   }),
 });

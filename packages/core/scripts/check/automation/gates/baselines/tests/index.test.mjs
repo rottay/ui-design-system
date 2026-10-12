@@ -124,7 +124,7 @@ describe('the runner debt line — named counters stay visible beside their gate
       `the productive counter is not named with its own figures: ${line}`,
     );
     assert.ok(
-      line.includes(`; frozen-transferred ${frozen[0]} occurrence(s) / ${frozen[1]} row(s) → WO-RET-06 (OPEN, transferred, not resolved)`),
+      line.includes(`; frozen-transferred ${frozen[0]} occurrence(s) / ${frozen[1]} row(s) → owner disposition D-A (2026-10-07, roadmap/retire.md) (final authority; kept while the frozen engines ship; published, decrease-only)`),
       `the transferred frozen debt is not visible with its own figures: ${line}`,
     );
     const total = productive[0] + frozen[0];

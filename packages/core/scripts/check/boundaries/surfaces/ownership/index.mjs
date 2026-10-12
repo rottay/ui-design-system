@@ -27,8 +27,9 @@
  *
  * The debt is reported as two named counters (`./counters`): `productive`
  * (Modern engine + shared core) and `frozen-transferred` (Classic + Rustic,
- * receiver WO-RET-06). Owner class is derived from the path with the engine
- * freeze law and is never stored. Each counter is decrease-only and exact: a
+ * final authority: owner disposition D-A, 2026-10-07). Owner class is derived
+ * from the path with the engine freeze law and is never stored. Each counter
+ * is decrease-only and exact: a
  * row above its pin is a regression, a row below its pin is a stale ceiling,
  * and both fail. The counters are never netted against each other.
  *

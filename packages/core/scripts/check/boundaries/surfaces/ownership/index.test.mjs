@@ -328,8 +328,9 @@ test('the gate reports two named counters, each exact, and never a netted figure
     });
     const report = summaryLines(result).join('\n');
     assert.match(report, /productive \(Modern engine \+ shared core\): 2 occurrence\(s\) in 2 row\(s\) — pin 2\/2 — exact — receiver WO-EVI-02/u);
-    assert.match(report, /frozen-transferred \(Classic \+ Rustic\) → WO-RET-06: 3 occurrence\(s\) in 2 row\(s\) — pin 3\/2 — exact/u);
-    assert.match(report, /OPEN, transferred, not resolved/u);
+    assert.match(report, /frozen-transferred \(Classic \+ Rustic\) → disposition D-A: 3 occurrence\(s\) in 2 row\(s\) — pin 3\/2 — exact — receiver owner disposition D-A \(2026-10-07, roadmap\/retire\.md\)/u);
+    assert.match(report, /final authority; kept while the frozen engines ship; published, decrease-only/u);
+    assert.doesNotMatch(report, /WO-RET-06/u);
   });
 });
 
@@ -616,7 +617,7 @@ test('the ledger on disk exposes its real debt to the generic walk the runner pr
     'u',
   ));
   assert.match(sentence, new RegExp(
-    `frozen-transferred ${counters[FROZEN_TRANSFERRED].occurrences} occurrence\\(s\\) / ${counters[FROZEN_TRANSFERRED].rows} row\\(s\\) → WO-RET-06`,
+    `frozen-transferred ${counters[FROZEN_TRANSFERRED].occurrences} occurrence\\(s\\) / ${counters[FROZEN_TRANSFERRED].rows} row\\(s\\) → owner disposition D-A \\(2026-10-07, roadmap/retire\\.md\\)`,
     'u',
   ));
   assert.equal(/F-86 < 1\.000: NOT MET/u.test(sentence), total.occurrences >= F86_THRESHOLD);
