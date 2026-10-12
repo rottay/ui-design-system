@@ -115,7 +115,13 @@ describe("tenant-theme preview fixtures render without a product concept", () =>
       </Harness>
     );
     expect(await screen.findByText("Recent journey")).toBeInTheDocument();
-    expect(screen.getByText("Decision comparison")).toBeInTheDocument();
+    // Awaited, not synchronous: the comparison and the lazily routed Button
+    // can commit one render after the journey under load. The wait is keyed
+    // to the button role, and its full label is then asserted exactly.
+    expect(await screen.findByText("Decision comparison")).toBeInTheDocument();
+    expect(
+      await screen.findByRole("button", { name: /Prepare plan/ })
+    ).toBeInTheDocument();
     expect(screen.getByText("Prepare plan · 1.6k tokens")).toBeInTheDocument();
     expect(container.textContent ?? "").not.toMatch(DOMAIN_VOCABULARY);
   });
