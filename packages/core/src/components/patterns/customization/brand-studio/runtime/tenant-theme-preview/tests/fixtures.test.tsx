@@ -98,8 +98,13 @@ describe("tenant-theme preview fixtures render without a product concept", () =>
     expect(await screen.findByText("Overview")).toBeInTheDocument();
     // Awaited, not synchronous: on a desktop viewport the sections region is
     // measured and packed before it paints, so the board arrives one commit
-    // after the chrome.
-    expect(await screen.findByText("Throughput")).toBeInTheDocument();
+    // after the chrome. The fixture names "Throughput" twice — a stat label
+    // and the board's section title — so the wait is keyed to the heading,
+    // the one that arrives late, and the pair is then counted exactly.
+    expect(
+      await screen.findByRole("heading", { name: "Throughput" })
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("Throughput")).toHaveLength(2);
     expect(container.textContent ?? "").not.toMatch(DOMAIN_VOCABULARY);
   });
 
