@@ -2913,7 +2913,7 @@
    "lane": "architecture",
    "order": 13,
    "size": "S",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2937,8 +2937,8 @@
    ],
    "claimedBy": "kimi",
    "claimedAt": "2026-10-12",
-   "doneAt": null,
-   "evidence": null,
+   "doneAt": "2026-10-12",
+   "evidence": "css-layer-paint gate green at 3c68c1e2f (PASS, 1 entrypoint; verified on the pristine archive by the independent review, with a negative drill red on reordered layers); the certification doc at docs-engineering development/design-system/runtime/engines/cascade-order/README.md (commit 8d38c1e4) matches the gate-enforced order claim-by-claim (22 claims reproduced across all 7 sections by the independent reviewer) and cross-links the gate as the mechanical proof + authority; the P-76 dead gate-path fixed in the same granted write set. No unlayered-twin drift (the header-claim debt arm is decrease-only and green). Writer ccbb5152; independent review ACCEPT.",
    "execution": {
     "decisionOwner": "design-system-program",
     "touchedRepos": [
