@@ -481,6 +481,36 @@ describe('Popover anchored mode -- initial focus', () => {
 
     await waitFor(() => expect(screen.getByRole('textbox', { name: 'Late query' })).toHaveFocus());
   });
+
+  it('lands on the first control when the re-open commits with the unmount of the closed surface', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    try {
+      const nextFrame = () =>
+        act(() => new Promise<void>((done) => requestAnimationFrame(() => done())));
+      render(<Harness />);
+      await nextFrame();
+      const closedSurface = surface();
+      expect(screen.getByRole('textbox', { name: 'Query' })).toHaveFocus();
+
+      fireEvent.keyDown(document.activeElement as HTMLElement, { key: 'Escape' });
+      const anchor = screen.getByRole('button', { name: 'Filters' });
+      expect(anchor).toHaveFocus();
+
+      // One batch: the exit fallback unmounts the surface and the press re-opens
+      // it, so the open commits while the engine still holds the removed element.
+      act(() => {
+        vi.advanceTimersByTime(1000);
+        anchor.click();
+      });
+      await nextFrame();
+
+      expect(closedSurface.isConnected).toBe(false);
+      expect(surface()).not.toBe(closedSurface);
+      expect(screen.getByRole('textbox', { name: 'Query' })).toHaveFocus();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });
 
 describe('Popover anchored mode -- fixed mode rules', () => {

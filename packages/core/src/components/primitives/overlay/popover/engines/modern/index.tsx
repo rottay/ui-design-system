@@ -739,7 +739,10 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         return undefined;
       }
       const surface = surfaceEl;
-      if (!surface || didInitialFocusRef.current) return undefined;
+      // A re-open can commit while this still holds the surface the close just
+      // removed; only a surface in the document spends the session's pass.
+      if (!surface || !surface.isConnected || didInitialFocusRef.current)
+        return undefined;
       if (anchored) {
         // A controlled disclosure declares its landing instead of sniffing activation.
         if (initialFocus === 'none') return undefined;

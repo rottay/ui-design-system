@@ -6,9 +6,9 @@
  * already moved is never taken back.
  */
 import React, { Suspense, lazy } from "react";
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { EngineProvider } from "@/infrastructure/runtime/engines/composition/react/provider";
 import { Button } from "@/components/primitives/inputs/button";
@@ -260,5 +260,52 @@ describe("Popover modern engine -- initial focus on an activation-driven open", 
     );
 
     expect(document.activeElement).toBe(trigger);
+  });
+});
+
+describe("Popover modern engine -- initial focus on a re-open that outruns the unmount", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("focuses the first control when the trigger is pressed in the commit that unmounts the closed surface", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    const nextFrame = () =>
+      act(() => new Promise<void>((done) => requestAnimationFrame(() => done())));
+    render(
+      <ModernPopover
+        trigger="click"
+        title="Settings"
+        destroyTooltipOnHide
+        content={<button type="button">First control</button>}
+      >
+        <button type="button">Open settings</button>
+      </ModernPopover>
+    );
+    const trigger = screen.getByRole("button", { name: "Open settings" });
+
+    fireEvent.click(trigger);
+    await nextFrame();
+    const closedSurface = surface();
+    expect(document.activeElement).toBe(
+      screen.getByRole("button", { name: "First control" })
+    );
+
+    fireEvent.keyDown(document.activeElement as HTMLElement, { key: "Escape" });
+    expect(document.activeElement).toBe(trigger);
+
+    // One batch: the exit fallback unmounts the surface and the press re-opens
+    // it, so the open commits while the engine still holds the removed element.
+    act(() => {
+      vi.advanceTimersByTime(1000);
+      trigger.click();
+    });
+    await nextFrame();
+
+    expect(closedSurface.isConnected).toBe(false);
+    expect(surface()).not.toBe(closedSurface);
+    expect(document.activeElement).toBe(
+      screen.getByRole("button", { name: "First control" })
+    );
   });
 });
