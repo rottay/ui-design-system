@@ -2879,6 +2879,11 @@
      "at": "2026-10-11 21:38",
      "by": "Kimi",
      "note": "O-3 Skeleton INTEGRATED bbe048558 (8 paths): the modern skeleton stops honoring the caller part (no rest spread; the anatomy stamps byte-exact for the bone renderer's MutationObserver); the activity-log/comment-thread literals drop for class hooks; 2 readers re-keyed (one strengthened to exactly-4); new Skeleton.passthrough-contract (5 rows) + CommunicationLoadingSkeleton.integration (2 real-browser rows). VISIBLE FIX named per the review's release condition: the skin's own flex rule fires again in the 2 loading states (436->286 vs 273 loaded; 285->173 vs 186) — pinned red-first, no baselines moved. Ledger 59 -> 57 through the door on a clean HEAD+6 tree; token-audit ceiling via its own door. Review HOLD (paint delta found by the reviewer) -> delta -> ACCEPT (7cdfec5b). Registry 138/168 unchanged."
+    },
+    {
+     "at": "2026-10-11 21:57",
+     "by": "Kimi",
+     "note": "O-4 batch 2 INTEGRATED febd8eae5 (19 paths): image, list, menu, stepper, textarea strip the caller part/state (17 sites; 17 contract rows red-first + mutants; the Image P-79 reader inverted). Divider HELD — Stack injects data-part=divider via cloneElement and the stack skin keys 2 rules on it; routed to the carriers owner queue. The tripwire drill self-seeds its specimen (??= + 2 non-vacuity guards; the seed-less mutant reproduces the 23/24 it fixes). Ledger 57 -> 40 through the door on a clean HEAD+17 tree; token-audit ceiling via its own door; the eligibility list is down to divider. Stepper state-on-nav kept at HEAD behavior, review-ruled acceptable. Reviewer ACCEPT (7cdfec5b) re-proven at 4123a86d3. Program-level question registered (not blocking): PresenceList injects data-state via cloneElement onto stripped-family children — no in-repo use affected; queued for the owner. Registry 138/168 unchanged."
     }
    ],
    "claimedBy": "kimi-dt",
