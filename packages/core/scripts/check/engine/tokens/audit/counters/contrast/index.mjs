@@ -6,7 +6,7 @@ import { join } from 'node:path';
 // root, whichever workspace CWD invokes it). This is ADDITIVE gate machinery: it does NOT touch
 // the shipped WCAG validator at src/foundation/kernel/accessibility/branding-contrast/index.ts (a published /server API).
 import { calcAPCA } from 'apca-w3';
-import { artifactsDir, foundationDir } from '../../context/paths/index.mjs';
+import { artifactsDir, foundationDir, tokensCssDir } from '../../context/paths/index.mjs';
 import { parseCssRules, stripBlockComments } from '../../parsing/index.mjs';
 
 /* ============================================================================
@@ -41,21 +41,19 @@ import { parseCssRules, stripBlockComments } from '../../parsing/index.mjs';
    where html[data-tenant=…] overrides :root), then `var(--x)` chains are
    followed to a concrete color.
 
-   ── SKIP-WITH-COUNT ────────────────────────────────────────────────────────
+   ── SKIPS ARE GATED ────────────────────────────────────────────────────────
    Static `color-mix(in srgb, A p%, B)` is COMPOSITED by the resolver (both
-   endpoints statically opaque — see apcaResolveColorMix), so a tinted badge
-   ground is evaluated, not skipped. A pairing whose text OR bg still resolves
-   to a non-static value — a gradient endpoint, an unresolved `var()` (no
-   definition, no fallback), a non-opaque rgba()/#rrggbbaa (APCA needs an
-   opaque pair; compositing alpha needs a known backdrop), a non-srgb mix
-   space, or a keyword we do not map — is SKIPPED and COUNTED (reported),
-   never silently dropped. As of W8 (2026-07-25) exactly ONE documented
-   pairing skips: bithire `badge-secondary`, whose ground
-   `--ds-control-surface-raised` mixes `--ds-surface-panel`, a linear-gradient
-   — not statically compositable. Any pairing that STARTS skipping later is a
-   visible signal in the report that a token was changed to a non-static form
-   (which would also quietly shrink the evaluated set), not an invisible hole
-   in the gate.
+   endpoints statically opaque — see apcaResolveColorMix), so a tinted ground
+   is evaluated, not skipped. A pairing whose text OR bg does not resolve to a
+   static opaque color — an undefined token, a gradient endpoint, a non-opaque
+   rgba()/#rrggbbaa (APCA needs an opaque pair; compositing alpha needs a known
+   backdrop), a non-srgb mix space, or a keyword we do not map — cannot be
+   measured. Such a pairing is a `skip` ONLY when APCA_SKIP_DISPOSITIONS names
+   it with a reason; any other unmeasured pairing, a palette or component-layer
+   file that is missing, and a disposition whose pairing measures again all
+   count as FAILURES of `a11y.apcaPairings`. The instrument cannot go blind
+   while the counter stays at zero: evaluated + justified skips always equals
+   pairings x palettes.
    ============================================================================ */
 
 const APCA_BODY_MIN = 60; // body-text pairs
@@ -93,12 +91,15 @@ const APCA_PAIRINGS = [
     text: '--ds-color-text-muted',
     bg: '--ds-color-bg-primary',
   },
-  // Primary button label on its own fill (|Lc| >= 45)
+  // Primary button label on its own fill (|Lc| >= 45). The channels are
+  // declared by the button's component token layer, not by the foundation
+  // theme; a tenant artifact may still override them.
   {
     id: 'primary-button-label',
     kind: 'ui',
     text: '--ds-button-primary-color',
     bg: '--ds-button-primary-bg',
+    componentLayer: 'presentation/components/button/index.css',
   },
   // Badge tone label on its own tone fill (|Lc| >= 45) — the 5 gallery tones
   {
@@ -168,7 +169,7 @@ const APCA_PALETTES = [
   {
     id: 'default',
     kind: 'foundation',
-    file: join(foundationDir, 'themes/default.css'),
+    file: join(foundationDir, 'themes/default/index.css'),
     theme: 'dark',
   },
   {
@@ -192,6 +193,24 @@ const APCA_PALETTES = [
     file: join(artifactsDir, 'evnto/index.css'),
     theme: 'light',
   },
+];
+
+const BADGE_TONE_REASON =
+  'no first-party producer: the foundation theme and the three tenant artifacts no longer declare ' +
+  'this tone channel; its only remaining definition is the component default in ' +
+  'presentation/components/badge/index.css, which only the frozen classic and rustic themes paint with';
+
+/**
+ * The ONLY pairings allowed to go unmeasured, each named with its reason.
+ * Decrease-only: an entry whose pairing measures again is a failure until it
+ * is removed, and an unmeasured pairing with no entry is a failure too.
+ */
+const APCA_SKIP_DISPOSITIONS = [
+  { pair: 'badge-primary', palettes: ['default', 'rottay', 'bithire', 'evnto'], disposition: 'frozen-engine-only', reason: BADGE_TONE_REASON },
+  { pair: 'badge-secondary', palettes: ['default', 'rottay', 'bithire', 'evnto'], disposition: 'frozen-engine-only', reason: BADGE_TONE_REASON },
+  { pair: 'badge-success', palettes: ['default', 'rottay', 'bithire', 'evnto'], disposition: 'frozen-engine-only', reason: BADGE_TONE_REASON },
+  { pair: 'badge-warning', palettes: ['default', 'rottay', 'bithire', 'evnto'], disposition: 'frozen-engine-only', reason: BADGE_TONE_REASON },
+  { pair: 'badge-error', palettes: ['default', 'rottay', 'bithire', 'evnto'], disposition: 'frozen-engine-only', reason: BADGE_TONE_REASON },
 ];
 
 /** Extract only the DIRECT (brace-depth-0) `--name: value;` declarations from a
@@ -380,49 +399,57 @@ function apcaResolveValue(raw, defs, seen) {
 }
 
 /**
- * Evaluate every APCA_PAIRINGS pair against every APCA_PALETTES palette. Returns
- * the failure count (pairs whose |Lc| is below their threshold), the skip count
- * (unresolvable pairs), and a per-evaluation detail list for the report/evidence.
+ * Evaluate every pairing against every palette. Returns the failure count, the
+ * justified-skip count, and a per-evaluation detail list for the report.
+ * `failures` is what `a11y.apcaPairings` gates: pairs whose |Lc| is below their
+ * threshold, plus every coverage breach (see `coverageFailures`).
  */
-function evaluateApcaPairings() {
-  const foundationText = existsSync(APCA_PALETTES[0].file) ? readFileSync(APCA_PALETTES[0].file, 'utf8') : '';
-  const foundationDefs = apcaCollectDecls(foundationText, (sel) => sel.trim() === ':root');
+function evaluateApcaPairings({
+  pairings = APCA_PAIRINGS,
+  palettes = APCA_PALETTES,
+  dispositions = APCA_SKIP_DISPOSITIONS,
+  cssRoot = tokensCssDir,
+} = {}) {
+  const coverageFailures = [];
+  const readSource = (file, label) => {
+    if (existsSync(file)) return readFileSync(file, 'utf8');
+    coverageFailures.push(`missing source: ${label} reads ${file}, which does not exist`);
+    return '';
+  };
+  const isRoot = (sel) => sel.trim() === ':root';
+  const foundation = palettes.find((pal) => pal.kind === 'foundation');
+  const foundationDefs = foundation
+    ? apcaCollectDecls(readSource(foundation.file, `palette ${foundation.id}`), isRoot)
+    : new Map();
+  const layerDefs = new Map();
+  for (const layer of new Set(pairings.map((pair) => pair.componentLayer).filter(Boolean))) {
+    layerDefs.set(layer, apcaCollectDecls(readSource(join(cssRoot, layer), `component layer ${layer}`), isRoot));
+  }
+  const dispositionOf = new Map();
+  for (const entry of dispositions) {
+    for (const palette of entry.palettes) dispositionOf.set(`${palette}:${entry.pair}`, entry);
+  }
+  const usedDispositions = new Set();
+
   const results = [];
-  let failures = 0;
+  let belowThreshold = 0;
   let skipped = 0;
-  for (const pal of APCA_PALETTES) {
-    let defs;
-    if (pal.kind === 'foundation') {
-      defs = foundationDefs;
-    } else {
-      const text = existsSync(pal.file) ? readFileSync(pal.file, 'utf8') : '';
-      const artDefs = apcaCollectDecls(text, (sel) => apcaBlockMatchesDefault(sel, pal.tenant, pal.theme));
-      defs = new Map([...foundationDefs, ...artDefs]); // artifact overrides foundation
-    }
-    for (const pair of APCA_PAIRINGS) {
+  for (const pal of palettes) {
+    const artDefs = pal.kind === 'foundation'
+      ? new Map()
+      : apcaCollectDecls(
+          readSource(pal.file, `palette ${pal.id}`),
+          (sel) => apcaBlockMatchesDefault(sel, pal.tenant, pal.theme)
+        );
+    for (const pair of pairings) {
+      // Cascade order: foundation :root, then the pairing's component token
+      // layer, then the tenant artifact (which wins).
+      const defs = new Map([...foundationDefs, ...(layerDefs.get(pair.componentLayer) ?? []), ...artDefs]);
       const textColor = apcaResolveColor(pair.text, defs);
       const bgColor = apcaResolveColor(pair.bg, defs);
       const threshold = pair.kind === 'body' ? APCA_BODY_MIN : APCA_UI_MIN;
-      if (!textColor || !bgColor) {
-        skipped += 1;
-        results.push({
-          palette: pal.id,
-          pair: pair.id,
-          kind: pair.kind,
-          threshold,
-          status: 'skip',
-          textToken: pair.text,
-          bgToken: pair.bg,
-          textColor,
-          bgColor,
-        });
-        continue;
-      }
-      const lcRaw = calcAPCA(textColor, bgColor);
-      const absLc = Math.abs(typeof lcRaw === 'number' ? lcRaw : Number(lcRaw) || 0);
-      const pass = absLc >= threshold;
-      if (!pass) failures += 1;
-      results.push({
+      const key = `${pal.id}:${pair.id}`;
+      const row = {
         palette: pal.id,
         pair: pair.id,
         kind: pair.kind,
@@ -431,17 +458,60 @@ function evaluateApcaPairings() {
         bgToken: pair.bg,
         textColor,
         bgColor,
-        lc: Number(absLc.toFixed(1)),
-        status: pass ? 'pass' : 'FAIL',
-      });
+      };
+      if (!textColor || !bgColor) {
+        const entry = dispositionOf.get(key);
+        if (entry) {
+          usedDispositions.add(key);
+          skipped += 1;
+          results.push({ ...row, status: 'skip', disposition: entry.disposition, reason: entry.reason });
+        } else {
+          coverageFailures.push(
+            `unjustified skip: ${key} does not resolve (${pair.text} -> ${textColor ?? 'unresolved'}, ` +
+              `${pair.bg} -> ${bgColor ?? 'unresolved'}) and APCA_SKIP_DISPOSITIONS does not name it`
+          );
+          results.push({ ...row, lc: 'n/a', status: 'UNJUSTIFIED-SKIP' });
+        }
+        continue;
+      }
+      const lcRaw = calcAPCA(textColor, bgColor);
+      const absLc = Math.abs(typeof lcRaw === 'number' ? lcRaw : Number(lcRaw) || 0);
+      const pass = absLc >= threshold;
+      if (!pass) belowThreshold += 1;
+      results.push({ ...row, lc: Number(absLc.toFixed(1)), status: pass ? 'pass' : 'FAIL' });
     }
   }
-  return { failures, skipped, evaluated: results.length - skipped, results };
+  for (const key of dispositionOf.keys()) {
+    if (usedDispositions.has(key)) continue;
+    coverageFailures.push(
+      `stale skip disposition: ${key} is named in APCA_SKIP_DISPOSITIONS but is not an unmeasured pairing; remove it`
+    );
+  }
+
+  const total = pairings.length * palettes.length;
+  const unjustifiedSkips = results.filter((r) => r.status === 'UNJUSTIFIED-SKIP').length;
+  const evaluated = results.length - skipped - unjustifiedSkips;
+  if (results.length !== total || evaluated + skipped + unjustifiedSkips !== total) {
+    throw new Error(`APCA coverage accounting broke: ${evaluated} evaluated + ${skipped} justified skips + ${unjustifiedSkips} unjustified != ${total}`);
+  }
+  return {
+    failures: belowThreshold + coverageFailures.length,
+    belowThreshold,
+    skipped,
+    evaluated,
+    total,
+    unjustifiedSkips,
+    coverageFailures,
+    dispositions: dispositions.map(({ pair, palettes: named, disposition, reason }) => ({ pair, palettes: named, disposition, reason })),
+    results,
+  };
 }
 
 export {
   APCA_BODY_MIN,
   APCA_UI_MIN,
+  APCA_PAIRINGS,
   APCA_PALETTES,
+  APCA_SKIP_DISPOSITIONS,
   evaluateApcaPairings,
 };
