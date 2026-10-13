@@ -3746,6 +3746,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'chart-foundation',
       'chart-waterfall',
       'collapse',
+      'collection-workspace',
       'column-menu',
       'column-settings',
       'command-palette',
@@ -6447,6 +6448,507 @@ describe('axis-difference BROWSER drill — the composed reach rows move through
       }
     }
   }, 480_000);
+});
+
+describe('axis-difference — the carrier read: the shape is the law, the plan is the family\'s own skin, and a delegate\'s paint is withheld (owner directive 2026-10-12)', () => {
+  const skin = (family) => skinFamilies(ROOT).get(family).map((file) => readFileSync(file, 'utf8')).join('\n');
+  const OWN = '.ds-collection-page-size-control:has(.ds-collection-page-size-control__select select:focus-visible)';
+  const ROW = REAL_RENDER_MOUNTS['collection-workspace'];
+
+  it('THE SHAPE: one :has() on the painted node, over a descendant, ending on the one :focus-visible it names', () => {
+    assert.deepEqual(probe.carrierReadEntry('.a:has(.b select:focus-visible)'), {
+      selector: '.a:has(.b select:focus-visible)', rest: '.a:has(.b select)', target: '.b select',
+    });
+    assert.deepEqual(probe.carrierReadEntry(".r[data-part='root']:has(\n    > .v:focus-visible\n  )"), {
+      selector: ".r[data-part='root']:has( > .v:focus-visible )", rest: ".r[data-part='root']:has(> .v)", target: '> .v',
+    });
+    // The focus alone, and the focus on a direct child of any name: the argument still selects one node to focus.
+    assert.equal(probe.carrierReadEntry('.a:has(:focus-visible)').target, '*');
+    assert.equal(probe.carrierReadEntry('.a:has(> :focus-visible)').rest, '.a:has(> *)');
+    // A `~=` inside an attribute is not a sibling combinator, and a simple selector after the :has() stays on the carrier.
+    assert.equal(probe.carrierReadEntry(".a:has(> [data-x~='y']:focus-visible)[data-z]").rest, ".a:has(> [data-x~='y'])[data-z]");
+    assert.equal(probe.carrierReadEntry('.a:has(.b:focus-visible).c').rest, '.a:has(.b).c');
+    // Nothing to say: a structural :has(), or no :has() at all.
+    for (const selector of ['.a:has(.b)', '.a:focus-visible', '.a .b:hover']) assert.equal(probe.carrierReadEntry(selector), null, selector);
+  });
+
+  it('NOTHING WIDER: every other pseudo inside :has() is refused BY NAME, and the names are the whole list', () => {
+    const refused = {
+      '.a:has(> .v:focus-visible)::after': 'carrier-pseudo-element',
+      '.a:not(:has(:focus-visible))': 'carrier-negated',
+      '.a:has(.b:not(:focus-visible))': 'carrier-negated',
+      '.a:has(.b:focus-visible):has(.c:focus-visible)': 'carrier-second-focus',
+      '.a:has(.b:focus-visible:hover)': 'carrier-second-focus',
+      '.a:hover:has(.b:focus-visible)': 'carrier-own-pseudo',
+      ".a[data-state~='x']:has(.b:focus-visible)": 'carrier-needs-stamp',
+      '.a:has(.b:focus-visible) .c': 'carrier-not-the-subject',
+      '.a:has(.b:hover)': 'carrier-other-pseudo',
+      '.a:has(.b:focus-within)': 'carrier-other-pseudo',
+      '.a:has(.b:focus)': 'carrier-other-pseudo',
+      '.a:has(+ .b:focus-visible)': 'carrier-sibling',
+      '.a:has(.b:focus-visible ~ .c)': 'carrier-sibling',
+      '.a:has(.b:focus-visible .c)': 'carrier-focus-not-the-target',
+    };
+    for (const [selector, reason] of Object.entries(refused)) {
+      assert.deepEqual(probe.carrierReadEntry(selector), { selector, refused: reason }, selector);
+    }
+    assert.deepEqual([...new Set(Object.values(refused))].sort(), [...probe.CARRIER_REFUSALS].sort());
+    assert.equal(probe.CARRIER_PSEUDO, 'focus-visible');
+    assert.equal(probe.CARRIER_VARIANT, 'focus-visible');
+    assert.deepEqual(NATIVE_PSEUDO_FORCING[probe.CARRIER_VARIANT].target.filter((name) => name !== probe.CARRIER_PSEUDO), ['focus', 'focus-within'],
+      'the control read is the declared focus forcing minus :focus-visible, and nothing else');
+  });
+
+  it('THE PLAN IS THE FAMILY\'S OWN SKIN: collection-workspace\'s pill rule, what it writes, and the private property that feeds its shadow', () => {
+    // The paint itself, pinned: the pill wears the signature for the overlaid select through a private layer.
+    const text = stripCssComments(skin('collection-workspace')).replace(/\s+/gu, ' ');
+    assert.ok(text.includes(`${OWN} { --_ds-collection-page-size-focus-layer: var(--ds-focus-ring),; outline: var(--ds-focus-ring-width) solid transparent; `
+      + 'outline-offset: var(--ds-focus-ring-offset); }'), 'the pill no longer wears the tenant focus signature for its select');
+    assert.ok(text.includes('.ds-surface.ds-collection-workspace .ds-collection-page-size-control__select { position: absolute; inset: 0; z-index: 2; opacity: 0; }'),
+      'the select is no longer an invisible overlay -- the reason the pill is the carrier');
+    const { reads, refused } = probe.carrierReadsOf(skin('collection-workspace'));
+    assert.deepEqual(refused, []);
+    assert.equal(reads.length, 1, 'the base rule and its forced-colors twin are one carrier');
+    const [read] = reads;
+    assert.equal(read.selector, OWN);
+    assert.equal(read.rest, '.ds-collection-page-size-control:has(.ds-collection-page-size-control__select select)');
+    assert.equal(read.target, '.ds-collection-page-size-control__select select');
+    assert.deepEqual([...new Set(read.declarations.map((entry) => entry.property))].sort(), ['box-shadow', 'outline', 'outline-offset']);
+    // `cssRules` drops a property spelled `--_name`; the feed is read off the sheet itself, or the signature would be invisible.
+    assert.ok(!cssRules(skin('collection-workspace')).some((rule) => rule.declarations.some((entry) => entry.property.startsWith('--_'))));
+    assert.deepEqual(read.feeds.map((feed) => [feed.selector, feed.declarations.map((entry) => entry.property)]), [
+      ['.ds-collection-page-size-control:focus-within', ['box-shadow']],
+    ]);
+    assert.match(read.feeds[0].declarations[0].value, /^var\(--_ds-collection-page-size-focus-layer,\) 0 8px 18px /u);
+  });
+
+  it('a feed is followed through a custom-to-custom hop, and a rule that sets no custom property has none', () => {
+    const css = `
+      .c:has(.t:focus-visible) { --_layer: var(--ds-focus-ring); }
+      .c { --_shadow: var(--_layer, none); }
+      .c:focus-within { box-shadow: var(--_shadow); }
+      .other { box-shadow: var(--_unrelated); }
+      .d:has(.t:focus-visible) { outline-offset: 2px; }`;
+    const { reads } = probe.carrierReadsOf(css);
+    assert.deepEqual(reads.map((read) => [read.selector, read.declarations.map((entry) => entry.property), read.feeds.map((feed) => feed.selector)]), [
+      ['.c:has(.t:focus-visible)', [], ['.c:focus-within']],
+      ['.d:has(.t:focus-visible)', ['outline-offset'], []],
+    ]);
+  });
+
+  it('NO GLOBAL LIBERALIZATION: on this tree exactly five families plan a carrier read, and every other :has() focus is refused by name', () => {
+    const plans = {};
+    const refusals = {};
+    for (const [family] of skinFamilies(ROOT)) {
+      const { reads, refused } = probe.carrierReadsOf(skin(family));
+      if (reads.length > 0) plans[family] = reads.map((read) => read.rest);
+      for (const entry of refused) (refusals[family] ??= new Set()).add(entry.refused);
+    }
+    assert.deepEqual(Object.keys(plans).sort(), [
+      'collection-workspace', 'collection-workspace-render-dispatch', 'decision-comparison', 'radio-group', 'shift-matrix',
+    ]);
+    for (const [family, rests] of Object.entries(plans)) assert.equal(rests.length, 1, `${family}: ${rests.join(' | ')}`);
+    // widget-board's signature sits on the carrier's ::after -- a box, not the node -- and stays noted, unread.
+    assert.deepEqual([...refusals['widget-board']], ['carrier-pseudo-element']);
+    assert.equal(plans['widget-board'], undefined);
+    assert.ok(STATES_NON_MOVER_NOTES.some((note) => note.family === 'widget-board'));
+    // The relational families the native half already withholds are refused here too, never read as carriers.
+    for (const family of ['checkbox', 'radio', 'toggle']) assert.deepEqual([...refusals[family]], ['carrier-negated'], family);
+    assert.deepEqual([...refusals['input-number']].sort(), ['carrier-not-the-subject', 'carrier-sibling']);
+    for (const set of Object.values(refusals)) for (const reason of set) assert.ok(probe.CARRIER_REFUSALS.includes(reason), reason);
+  });
+
+  it('the reach census asks a carrier rule about the carrier AT REST, only when the read is on; off, the reason is the pre-lot one', () => {
+    const off = stateRuleProbes(skin('collection-workspace')).filter((entry) => entry.selector === OWN);
+    const on = stateRuleProbes(skin('collection-workspace'), { carrierReads: true }).filter((entry) => entry.selector === OWN);
+    assert.ok(off.length >= 1 && off.length === on.length);
+    for (const entry of off) assert.deepEqual([entry.reason, entry.carrier, entry.probe], ['pseudo-inside-has', undefined, OWN]);
+    for (const entry of on) {
+      assert.deepEqual([entry.vocabulary, entry.reason, entry.carrier], ['native', null, true]);
+      assert.equal(entry.probe, '.ds-collection-page-size-control:has(.ds-collection-page-size-control__select select)');
+    }
+    // A :has() the law refuses keeps its reason with the read on: the census does not widen with it.
+    const board = stateRuleProbes(skin('widget-board'), { carrierReads: true }).filter((entry) => entry.selector.includes(':has('));
+    assert.ok(board.length >= 1);
+    for (const entry of board) {
+      assert.equal(entry.carrier, undefined, entry.selector);
+      if (entry.vocabulary === 'native') assert.equal(entry.reason, 'pseudo-inside-has', entry.selector);
+    }
+    assert.ok(board.some((entry) => entry.vocabulary === 'native'));
+    const relational = stateRuleProbes('.a:has(+ .b:focus-visible) { outline-offset: 2px; } .a:has(.b:hover) { opacity: 0.5; }', { carrierReads: true });
+    assert.deepEqual(relational.map((entry) => entry.reason), ['relational', 'pseudo-inside-has']);
+  });
+
+  it('ONE KEYBOARD: a round focuses at most one node per family, and two rules on one carrier are one read', () => {
+    const plan = {
+      a: [{ selector: 'a1', declarations: [{ property: 'outline', value: '1px' }], feeds: [] }, { selector: 'a2', declarations: [], feeds: [] }],
+      b: [{ selector: 'b1', declarations: [], feeds: [] }],
+    };
+    const rounds = probe.carrierRounds([
+      { family: 'a', rule: 0, where: 'default', carrier: 3, target: 5 },
+      { family: 'a', rule: 1, where: 'default', carrier: 3, target: 5 },
+      { family: 'a', rule: 0, where: 'default', carrier: 7, target: 9 },
+      { family: 'b', rule: 0, where: 'real', row: 'b', carrier: 20, target: 22 },
+      { family: 'c', rule: 0, outcome: 'carrier-absent' },
+    ], plan);
+    assert.deepEqual(rounds.map((round) => round.map((pair) => `${pair.family}:${pair.key}`)), [['a:3>5', 'b:20>22'], ['a:7>9']]);
+    assert.deepEqual(rounds[0][0].rules.map((rule) => rule.selector), ['a1', 'a2']);
+    assert.equal(rounds[0][1].row, 'b');
+  });
+
+  describe('the withholding, over readings', () => {
+    const pair = (over = {}) => ({ key: '1>2', family: 'fam', where: 'real', row: 'fam', carrier: 1, target: 2, rules: [{ selector: 'own' }], ...over });
+    const reading = (focus, control, over = {}) => ({
+      pair: pair(over.pair),
+      focus: { matched: ['own'], owned: ['outline-offset', 'box-shadow'], values: focus, ...over.focus },
+      control: { values: control },
+    });
+    const merged = () => ({ fam: { 'outline-offset': '0px', 'box-shadow': 'none', opacity: '1' }, 'fam#default': { 'outline-offset': '0px' }, 'fam#real': {} });
+    const joined = (armA, armB) => {
+      const byArm = new Map([['a', [armA]], ['b', [armB]]]);
+      const painted = probe.carrierPainted(byArm);
+      const [a, b] = [merged(), merged()];
+      const census = probe.joinCarrierReadings(a, byArm.get('a'), painted);
+      probe.joinCarrierReadings(b, byArm.get('b'), painted);
+      return { a, b, census };
+    };
+    const native = (values) => ({ native: { 'focus-visible': values } });
+    const moved = ({ a, b }) => statesHalves(native(a), native(b), 'fam').native;
+
+    it('OWN PAINT: the rule\'s property is published where the control read computes otherwise, on the family and on its real render', () => {
+      const result = joined(
+        reading({ 'outline-offset': '2px', 'box-shadow': 'ring', opacity: '1' }, { 'outline-offset': '0px', 'box-shadow': 'none', opacity: '1' }),
+        reading({ 'outline-offset': '4px', 'box-shadow': 'glow', opacity: '1' }, { 'outline-offset': '0px', 'box-shadow': 'none', opacity: '1' }),
+      );
+      assert.deepEqual(result.a['fam#real'], { 'outline-offset': '2px', 'box-shadow': 'ring' });
+      assert.equal(result.a.fam['outline-offset'], '0px | 2px');
+      assert.deepEqual(result.a['fam#default'], { 'outline-offset': '0px' }, 'a real render never joins the default mount\'s reading');
+      assert.deepEqual(result.census, [{
+        family: 'fam', where: 'real', row: 'fam', rules: ['own'], outcome: 'read', owned: ['outline-offset', 'box-shadow'], painted: ['outline-offset', 'box-shadow'],
+      }]);
+      assert.equal(realRenderQualification({ before: native(result.a), after: native(result.b), family: 'fam', axis: 'states' }).qualified, true);
+    });
+
+    it('DELEGATED PROPERTY: a property the family rule does not write is never published, however it moves on the carrier', () => {
+      const result = joined(
+        reading({ 'outline-offset': '2px', 'box-shadow': 'ring', opacity: '0.9' }, { 'outline-offset': '0px', 'box-shadow': 'none', opacity: '1' }),
+        reading({ 'outline-offset': '2px', 'box-shadow': 'ring', opacity: '0.5' }, { 'outline-offset': '0px', 'box-shadow': 'none', opacity: '1' }),
+      );
+      assert.equal(result.a.fam.opacity, '1');
+      assert.equal(result.a['fam#real'].opacity, undefined);
+      assert.equal(moved(result), null, 'the delegate\'s opacity moved on the carrier and was credited');
+      assert.equal(realRenderQualification({ before: native(result.a), after: native(result.b), family: 'fam', axis: 'states' }).qualified, false);
+    });
+
+    it('THE CONTROL READ: a value the node computes WITHOUT the descendant\'s focus-visible, in every arm, is the control token and credits nobody', () => {
+      const result = joined(
+        reading({ 'outline-offset': '2px', 'box-shadow': 'ring' }, { 'outline-offset': '2px', 'box-shadow': 'ring' }),
+        reading({ 'outline-offset': '4px', 'box-shadow': 'glow' }, { 'outline-offset': '4px', 'box-shadow': 'glow' }),
+      );
+      assert.deepEqual(result.a['fam#real'], { 'outline-offset': probe.CARRIER_CONTROL, 'box-shadow': probe.CARRIER_CONTROL });
+      assert.deepEqual(result.b['fam#real'], result.a['fam#real']);
+      assert.equal(moved(result), null);
+      assert.deepEqual([result.census[0].outcome, result.census[0].painted], ['control', []]);
+    });
+
+    it('A LITERAL OVER A MOVING CONTROL is the same literal twice: the token never differs by arm on its own', () => {
+      // The family rule states 2px; a delegate's non-focus rule moves the CONTROL (2px -> 0px). Per-arm tokens would read
+      // "control" against "2px" and credit a rule that paints the same value in both arms.
+      const result = joined(
+        reading({ 'outline-offset': '2px', 'box-shadow': 'none' }, { 'outline-offset': '2px', 'box-shadow': 'none' }, { focus: { owned: ['outline-offset'] } }),
+        reading({ 'outline-offset': '2px', 'box-shadow': 'none' }, { 'outline-offset': '0px', 'box-shadow': 'none' }, { focus: { owned: ['outline-offset'] } }),
+      );
+      assert.deepEqual([result.a['fam#real'], result.b['fam#real']], [{ 'outline-offset': '2px' }, { 'outline-offset': '2px' }]);
+      assert.equal(moved(result), null);
+    });
+
+    it('a real move whose value meets the control in ONE arm is still read as the move it is', () => {
+      // collection-workspace's own offset: 2px under the ring, 0px under the glow -- and 0px is also what the pill rests on.
+      const result = joined(
+        reading({ 'outline-offset': '2px', 'box-shadow': 'ring' }, { 'outline-offset': '0px', 'box-shadow': 'none' }),
+        reading({ 'outline-offset': '0px', 'box-shadow': 'glow' }, { 'outline-offset': '0px', 'box-shadow': 'none' }),
+      );
+      assert.deepEqual([result.a['fam#real']['outline-offset'], result.b['fam#real']['outline-offset']], ['2px', '0px']);
+      assert.equal(moved(result), 'box-shadow');
+    });
+
+    it('UNMATCHED and WITHHELD: a carrier the browser did not match, or a family the pass dropped, publishes nothing', () => {
+      const unmatched = joined(
+        reading({ 'outline-offset': '2px', 'box-shadow': 'ring' }, { 'outline-offset': '0px', 'box-shadow': 'none' }, { focus: { matched: [], owned: [] } }),
+        reading({ 'outline-offset': '4px', 'box-shadow': 'glow' }, { 'outline-offset': '0px', 'box-shadow': 'none' }, { focus: { matched: [], owned: [] } }),
+      );
+      assert.deepEqual(unmatched.a['fam#real'], {});
+      assert.deepEqual([unmatched.census[0].outcome, unmatched.census[0].rules], ['unmatched', ['own']]);
+      const dropped = { other: { opacity: '1' } };
+      const census = probe.joinCarrierReadings(dropped, [reading({ 'outline-offset': '2px', 'box-shadow': 'ring' }, { 'outline-offset': '0px', 'box-shadow': 'none' })]);
+      assert.deepEqual(dropped, { other: { opacity: '1' } });
+      assert.equal(census[0].outcome, 'withheld');
+    });
+
+    it('a carrier in the DEFAULT mount joins the default mount\'s reading and its hosts, never a real render\'s', () => {
+      const into = { fam: { 'outline-offset': '0px' }, 'fam#default': { 'outline-offset': '0px' }, 'fam#hosts': { 'outline-offset': '0px' }, 'fam#real': { 'outline-offset': '9px' } };
+      probe.joinCarrierReadings(into, [reading({ 'outline-offset': '2px', 'box-shadow': 'x' }, { 'outline-offset': '0px', 'box-shadow': 'x' }, { pair: { where: 'default', row: undefined } })]);
+      assert.deepEqual(into, {
+        fam: { 'outline-offset': '0px | 2px', 'box-shadow': probe.CARRIER_CONTROL },
+        'fam#default': { 'outline-offset': '0px | 2px', 'box-shadow': probe.CARRIER_CONTROL },
+        'fam#hosts': { 'outline-offset': '0px | 2px', 'box-shadow': probe.CARRIER_CONTROL },
+        'fam#real': { 'outline-offset': '9px' },
+      });
+    });
+  });
+
+  it('LAW 6 AT THE DOOR: the shipped carrier row passes; a carrier nobody ships, a second axis, a pseudo read or a mount without the carrier is refused', () => {
+    assert.equal(ROW.carrierOnly, true);
+    assert.deepEqual([...ROW.axes], ['states']);
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'collection-workspace': ROW }), []);
+    assert.deepEqual(Object.entries(REAL_RENDER_MOUNTS).filter(([, entry]) => entry.carrierOnly === true).map(([row]) => row), ['collection-workspace']);
+    const failures = (row, entry) => realRenderRosterFailures(ROOT, { [row]: entry }).join(' | ');
+    // FABRICATED: a family whose skin ships no carrier rule cannot be handed one by a row.
+    assert.equal(probe.carrierReadsOf(skin('detail-panel')).reads.length, 0);
+    assert.match(failures('detail-panel', { ...REAL_RENDER_MOUNTS['detail-panel'], carrierOnly: true }),
+      /detail-panel: a carrier row, and no rule of the family skin selects a node of this mount through `:has\(<descendant>:focus-visible\)`/u);
+    assert.match(failures('collection-workspace', { ...ROW, axes: ['states', 'depth'] }), /a carrier row declares states alone/u);
+    assert.match(failures('collection-workspace', { ...ROW, pseudoReads: [{ part: 'page-size-control', pseudo: '::after' }] }), /a carrier row declares no pseudo read/u);
+    // The pill without the overlay it wears the signature for: the rule's classes are not all in the markup.
+    const hollow = { ...ROW, markup: ROW.markup.replace(' ds-collection-page-size-control__select', '') };
+    assert.match(failures('collection-workspace', hollow), /no rule of the family skin selects a node of this mount/u);
+    // The engine still witnesses every token: the mount is the toolbar's, with the composed Select's own stamps.
+    for (const [suffix, from] of [
+      ['collection-workspace/toolbar-utilities/index.tsx', 'className="ds-collection-page-size-control__select"'],
+      ['collection-workspace/toolbar-utilities/index.tsx', 'chrome="none"'],
+      ['select/engines/modern/index.tsx', 'data-chrome={chromeStamp}'],
+    ]) {
+      const drifted = realRenderRosterFailures(ROOT, { 'collection-workspace': ROW }, {
+        readSource: (file) => (file.endsWith(suffix) ? readFileSync(file, 'utf8').replaceAll(from, 'GONE') : readFileSync(file, 'utf8')),
+      });
+      assert.ok(drifted.length > 0, `${suffix} lost \`${from}\` and the door stayed green`);
+    }
+  });
+
+  it('a carrier row is mounted to be read by the carrier pass ALONE: never stamped, and marked in the scene and in the record', () => {
+    const elements = familyElements(ROOT, ['collection-workspace']);
+    const [mount] = realRenderMountList(elements, { roster: { 'collection-workspace': ROW } });
+    assert.equal(mount.carrierOnly, true);
+    assert.deepEqual(mount.stampedParts, [], 'the Select\'s kernel part would be stamped, and its ring credited to the family');
+    assert.deepEqual(probe.realRenderStampedParts(ROW), ['trigger'], 'the same markup as an ordinary states row IS stamped there');
+    const html = sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements, realRenders: [mount] });
+    assert.match(html, /data-axis-real-render="collection-workspace" data-axis-real-axes="states"[^>]* data-axis-real-carrier="">/u);
+    const plain = sceneHtml({ css: '', vertical: 'bithire', theme: 'light', elements, realRenders: realRenderMountList(elements, { roster: { 'collection-workspace': { ...ROW, carrierOnly: undefined } } }) });
+    assert.ok(!plain.includes('data-axis-real-carrier'));
+    const report = realRenderReport([mount], { roster: { 'collection-workspace': ROW }, root: ROOT, statesRefusals: {} });
+    assert.deepEqual([report.map['collection-workspace'].carrierOnly, report.map['collection-workspace'].stampedParts], [true, []]);
+  });
+
+  it('the read is not a CLI flag: the pre-lot reading is `run({ carrierReads: false })`, and the indicator\'s reproduction list is untouched', () => {
+    const cli = readFileSync(join(ROOT, 'scripts/check/theme/axis-difference/index.mjs'), 'utf8');
+    assert.ok(!cli.includes("process.argv.includes('--no-carrier-reads')"));
+    assert.ok(!REPRODUCTION_FLAGS.some((flag) => flag.includes('carrier')));
+    assert.match(cli, /carrierReads = true,/u);
+  });
+});
+
+describe('axis-difference BROWSER drill — the carrier read reads the family\'s own paint on the carrier, and nobody else\'s', { skip: browserReason }, () => {
+  const ARM_A = { '--ds-focus-ring-offset': '2px', '--ds-state-press-scale': '0.9' };
+  const ARM_B = { '--ds-focus-ring-offset': '4px', '--ds-state-press-scale': '0.7' };
+  const properties = allProperties();
+  const axisOf = axisByProperty();
+  const PILL = ".ds-drill.ds-drill--modern[data-part='root'] [data-part='pill']";
+  // The anatomy every arm shares: a pill that carries a knob, both mounted at rest by resting state-vocabulary rules.
+  const ANATOMY = `${DRILL_ROOT_CSS}
+    ${PILL} { opacity: 1; }
+    ${PILL} [data-part='knob'] { opacity: 1; }`;
+  const CARRIER = `${PILL}:has([data-part='knob']:focus-visible)`;
+  const OWN_LIVE = `${CARRIER} { outline: 1px solid transparent; outline-offset: var(--ds-focus-ring-offset); }`;
+  const OWN_LITERAL = `${CARRIER} { outline: 1px solid transparent; outline-offset: 3px; }`;
+
+  /**
+   * One drill family through the native half: `own` is the family's OWN sheet (the plan is read off it and off nothing
+   * else), `foreign` is CSS the page also carries -- another family's skin, as far as the instrument can know.
+   */
+  const measure = async (context, { own, foreign = '', carriers = true, withheld = new Map(), b = ARM_B }) => {
+    const page = await context.newPage();
+    await page.setContent(sceneHtml({
+      css: `${own}\n${foreign}`, vertical: 'bithire', theme: 'light', elements: new Map([['drill', DRILL_ELEMENT]]),
+      partMounts: new Map([['drill', familyParts(own, DRILL_ELEMENT, ['states'], { nativePseudos: true })]]),
+    }), { waitUntil: 'load' });
+    const plan = probe.carrierReadsOf(own).reads;
+    const native = await measureNativeHalf({
+      page, arms: [{ key: 'a', variables: ARM_A }, { key: 'b', variables: b }], properties, axisOf, withheld,
+      carriers: carriers ? (plan.length > 0 ? { drill: plan } : {}) : null,
+    });
+    await page.close();
+    const [before, after] = [{ native: native.readings.get('a') }, { native: native.readings.get('b') }];
+    const focus = (arm, property) => native.readings.get(arm)['focus-visible'].drill?.[property];
+    return { native, plan, moved: statesHalves(before, after, 'drill').native, every: statesDifferences(before, after, 'drill'), focus };
+  };
+  const withBrowser = async (body) => {
+    const { browser, close } = await launchBrowser();
+    try {
+      return await body(await browser.newContext());
+    } finally {
+      await close();
+    }
+  };
+
+  it('POSITIVE: the pill is read with its knob focused, on the property its own rule writes; without the pass, and for a NULL pair, nothing', async () => {
+    const [on, off, same] = await withBrowser(async (context) => [
+      await measure(context, { own: `${ANATOMY}\n${OWN_LIVE}` }),
+      await measure(context, { own: `${ANATOMY}\n${OWN_LIVE}`, carriers: false }),
+      await measure(context, { own: `${ANATOMY}\n${OWN_LIVE}`, b: ARM_A }),
+    ]);
+    assert.equal(off.moved, null, 'a depth pass never reads the pill while its knob holds focus -- otherwise this drill proves nothing');
+    assert.equal(off.native.carriers, undefined);
+    assert.equal(on.moved, 'outline-offset');
+    assert.deepEqual(on.every, ['outline-offset']);
+    // root | pill | knob, then the carrier: the pill again, as it paints with the knob focused.
+    assert.deepEqual([on.focus('a', 'outline-offset'), on.focus('b', 'outline-offset')], ['0px | 0px | 0px | 2px', '0px | 0px | 0px | 4px']);
+    assert.deepEqual(on.native.carriers.map((entry) => [entry.family, entry.where, entry.outcome, entry.painted]), [
+      ['drill', 'default', 'read', ['outline-style', 'outline-width', 'outline-offset', 'outline-color'].filter((name) => properties.includes(name))],
+    ]);
+    assert.deepEqual(on.native.unsettled, []);
+    assert.equal(same.moved, null, 'the carrier read reported a difference between a document and itself');
+  }, 180_000);
+
+  it('SETTLING: a transition on the carrier is ended before either read, so the value is the end state and the family is settled', async () => {
+    const SLOW = `${PILL} { transition: outline-offset 30s linear, outline-width 30s linear; }`;
+    const reading = await withBrowser((context) => measure(context, { own: `${ANATOMY}\n${SLOW}\n${OWN_LIVE}` }));
+    assert.deepEqual(reading.native.unsettled, []);
+    assert.deepEqual([reading.focus('a', 'outline-offset'), reading.focus('b', 'outline-offset')], ['0px | 0px | 0px | 2px', '0px | 0px | 0px | 4px']);
+  }, 180_000);
+
+  it('NEGATIVE, the owner\'s mutant: the family rule REMOVED and a delegate\'s identical rule left on the page -- the pill still paints, and nothing is read', async () => {
+    const [owned, delegated] = await withBrowser(async (context) => [
+      await measure(context, { own: `${ANATOMY}\n${OWN_LIVE}` }),
+      await measure(context, { own: ANATOMY, foreign: OWN_LIVE }),
+    ]);
+    assert.equal(owned.moved, 'outline-offset', 'the same page, with the rule in the family\'s own sheet, is credited');
+    assert.deepEqual(delegated.plan, [], 'a rule that is not in the family skin plans no read');
+    assert.deepEqual(delegated.native.carriers, []);
+    assert.equal(delegated.moved, null, 'a delegate\'s rule on the carrier was credited to the family');
+    assert.equal(delegated.focus('a', 'outline-offset'), '0px | 0px | 0px', 'no carrier entry joins the reading');
+  }, 180_000);
+
+  it('NEGATIVE: the family rule states a literal and a DELEGATE moves another property of the same carrier under the same focus -- unread', async () => {
+    const DELEGATE = `${CARRIER} { transform: scale(var(--ds-state-press-scale)); }`;
+    const reading = await withBrowser((context) => measure(context, { own: `${ANATOMY}\n${OWN_LITERAL}`, foreign: DELEGATE }));
+    assert.deepEqual(reading.native.carriers.map((entry) => [entry.outcome, entry.owned.includes('transform'), entry.owned.includes('outline-offset')]), [['read', false, true]]);
+    assert.deepEqual([reading.focus('a', 'outline-offset'), reading.focus('b', 'outline-offset')], ['0px | 0px | 0px | 3px', '0px | 0px | 0px | 3px']);
+    assert.equal(reading.focus('a', 'transform'), 'none | none | none', 'the delegate\'s transform on the carrier joined the reading');
+    assert.equal(reading.moved, null, 'a property only the delegate moves was credited');
+  }, 180_000);
+
+  it('NEGATIVE: a delegate that paints the family rule\'s OWN property without needing the focus wins the cascade -- the control read withholds it', async () => {
+    // The carrier pass must not credit it. (The pill's own depth pass still reads `:focus-within` on it, as it always did:
+    // that pass is not attribution-aware and this lot does not change it, so the assertion is on the carrier's entry.)
+    const DELEGATE = `${PILL}:focus-within { outline: 1px solid transparent !important; outline-offset: var(--ds-focus-ring-offset) !important; }`;
+    const [on, off] = await withBrowser(async (context) => [
+      await measure(context, { own: `${ANATOMY}\n${OWN_LIVE}`, foreign: DELEGATE }),
+      await measure(context, { own: `${ANATOMY}\n${OWN_LIVE}`, foreign: DELEGATE, carriers: false }),
+    ]);
+    assert.deepEqual(on.native.carriers.map((entry) => [entry.outcome, entry.painted]), [['control', []]]);
+    for (const arm of ['a', 'b']) assert.ok(on.focus(arm, 'outline-offset').endsWith(` | ${probe.CARRIER_CONTROL}`), on.focus(arm, 'outline-offset'));
+    assert.deepEqual([on.moved, on.every], [off.moved, off.every], 'the carrier pass added a credit the control read should have withheld');
+  }, 180_000);
+
+  it('NEGATIVE, a fabricated carrier: another ANCESTOR of the focused node that no :has() rule of the family selects is never read', async () => {
+    // The root is an ancestor of the knob too, and a delegate paints the tenant signature on it under the same focus.
+    const DELEGATE = `.ds-drill.ds-drill--modern[data-part='root']:has([data-part='knob']:focus-visible) { outline: 1px solid transparent; outline-offset: var(--ds-focus-ring-offset); }`;
+    const reading = await withBrowser((context) => measure(context, { own: `${ANATOMY}\n${OWN_LITERAL}`, foreign: DELEGATE }));
+    assert.equal(reading.native.carriers.length, 1, 'exactly the node the family\'s own rule selects');
+    assert.deepEqual([reading.focus('a', 'outline-offset'), reading.focus('b', 'outline-offset')], ['0px | 0px | 0px | 3px', '0px | 0px | 0px | 3px']);
+    assert.equal(reading.moved, null, 'an ancestor no rule of the family selects was read');
+  }, 180_000);
+
+  it('WITHHELD and ABSENT: a family whose variant is withheld loses its carrier with it, and a rule that selects nothing in the scene is published, not silent', async () => {
+    const ABSENT = `.ds-drill.ds-drill--modern[data-part='root'] [data-part='ghost']:has([data-part='knob']:focus-visible) { outline-offset: var(--ds-focus-ring-offset); }`;
+    const [held, absent] = await withBrowser(async (context) => [
+      await measure(context, { own: `${ANATOMY}\n${OWN_LIVE}`, withheld: new Map([['drill', ['focus-visible']]]) }),
+      await measure(context, { own: `${ANATOMY}\n${ABSENT}` }),
+    ]);
+    assert.equal(held.moved, null);
+    assert.deepEqual(held.native.carriers.map((entry) => entry.outcome), ['withheld']);
+    assert.deepEqual(absent.native.carriers.map((entry) => [entry.family, entry.outcome]), [['drill', 'carrier-absent']]);
+    assert.equal(absent.moved, null);
+  }, 180_000);
+});
+
+describe('axis-difference BROWSER drill — collection-workspace moves on states through its own pill, read under law 6', { skip: browserReason }, () => {
+  const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
+  const scenarios = ['shape', 'rhythm', 'depth', 'motion', 'states', 'palette-only', 'states-emphasis-only'].map(byId);
+  const options = { verticals: ['bithire'], themes: ['light'], families: ['collection-workspace'], scenarios };
+  const cellOf = (measurement, id, axis = id) => measurement.cells.find((entry) => entry.scenario === id && entry.axis === axis);
+  const without = (roster, row) => Object.fromEntries(Object.entries(roster).filter(([key]) => key !== row));
+  const ROW = REAL_RENDER_MOUNTS['collection-workspace'];
+
+  it('THE OLD READING does not credit it; the carrier read credits it on box-shadow, on the native half alone; both controls stay 0', async () => {
+    const on = await run(options);
+    const off = await run({ ...options, carrierReads: false });
+    const rowless = await run({ ...options, realRenderRoster: without(REAL_RENDER_MOUNTS, 'collection-workspace') });
+    for (const measurement of [off, rowless]) {
+      assert.deepEqual(cellOf(measurement, 'states').movedIds, [], 'collection-workspace moved on states without the carrier read');
+      assert.equal(measurement.realRender.map['collection-workspace'], undefined, 'a carrier row nobody reads must not be mounted');
+    }
+    assert.deepEqual([off.nativePseudos.carrier.applied, off.nativePseudos.carrier.census], [false, []]);
+    const states = cellOf(on, 'states');
+    assert.deepEqual(states.realRender, { credited: ['collection-workspace'], rescued: ['collection-workspace'], refused: [], undecided: [] });
+    assert.deepEqual(states.movedFamilies, [{ family: 'collection-workspace', property: 'box-shadow' }]);
+    assert.deepEqual(states.widthOnly, [], 'the move is the signature shadow, not a width alone');
+    assert.deepEqual(states.pseudoOnly ?? [], [], 'the credit rests on the carrier node, not on a pseudo-element box');
+    assert.deepEqual([states.movedStamped, states.movedNative], [0, 1], 'a carrier row is never stamped: the Select\'s ring under the stamp is not the family\'s');
+    assert.deepEqual(on.nativePseudos.carrier.census, [{
+      family: 'collection-workspace',
+      where: 'real',
+      row: 'collection-workspace',
+      rules: ['.ds-collection-page-size-control:has(.ds-collection-page-size-control__select select:focus-visible)'],
+      outcome: 'read',
+      owned: ['box-shadow', 'outline-style', 'outline-width', 'outline-offset', 'outline-color'],
+      painted: ['box-shadow', 'outline-style', 'outline-width', 'outline-offset', 'outline-color'],
+    }]);
+    const record = on.realRender.map['collection-workspace'];
+    assert.deepEqual([record.carrierOnly, record.stampedParts, record.statesReach.declared, record.statesReach.stamped], [true, [], true, 0]);
+    assert.ok(record.statesReach.native >= 1);
+    // The resting axes are the default scene's, carrier read or not: the row declares states alone.
+    for (const axis of ['shape', 'rhythm', 'depth', 'motion']) {
+      assert.deepEqual(cellOf(on, axis).movedIds, cellOf(off, axis).movedIds, axis);
+      assert.deepEqual(cellOf(on, axis).realRender.credited, [], axis);
+    }
+    const controls = on.cells.filter((entry) => entry.kind === 'negative');
+    assert.equal(controls.length, 8);
+    for (const entry of controls) {
+      assert.equal(entry.moved, 0, `${entry.scenario}/${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+      // The pill follows `states.focus-style` and not `states.emphasis`: with this family alone in the run the emphasis
+      // control has no witness, and says so. Its 0 is asserted; its standing is the fleet run's.
+      if (entry.scenario === 'palette-only') assert.equal(entry.evidential, true, `${entry.axis}: ${entry.nonEvidentialReason}`);
+      else assert.match(entry.nonEvidentialReason, /states\.emphasis on its own moved 0 of 1 famil\(ies\) on the states axis/u);
+    }
+    assert.deepEqual(cellOf(on, 'palette-only', 'states').realRender.credited, ['collection-workspace'], 'the control did not read the carrier its positive credited');
+    assert.deepEqual(on.families.observedUnsettled, []);
+    assert.deepEqual(on.nativePseudos.unsettled, []);
+    assert.deepEqual(on.populations, off.populations, 'a read may move a numerator, never a denominator');
+    assert.deepEqual(on.refusals, []);
+    assert.deepEqual(evaluate(on), []);
+    assert.ok(on.limits.states.unreachable.some((line) => line.includes('other than the carrier shape')));
+    assert.ok(off.limits.states.unreachable.some((line) => line.includes('a pseudo inside :has() over a descendant')));
+  }, 480_000);
+
+  it('the move is the pill\'s OWN signature: with the focus style alone in the pair it is box-shadow, and the palette alone moves nothing', async () => {
+    const focusOnly = { ...byId('states'), a: { 'states.focus-style': 'ring' }, b: { 'states.focus-style': 'glow' } };
+    const on = await run({ ...options, scenarios: [focusOnly, byId('palette-only')] });
+    assert.deepEqual(cellOf(on, 'states').movedFamilies, [{ family: 'collection-workspace', property: 'box-shadow' }]);
+    assert.deepEqual(cellOf(on, 'states').realRender.refused, []);
+    assert.equal(cellOf(on, 'palette-only', 'states').moved, 0);
+  }, 360_000);
+
+  it('WHY LAW 6: the same markup as an ORDINARY states row is credited on the stamp half -- the Select\'s own ring -- which the carrier row never reads', async () => {
+    const ordinary = await run({
+      ...options, scenarios: [byId('states')], carrierReads: false,
+      realRenderRoster: { ...REAL_RENDER_MOUNTS, 'collection-workspace': { ...ROW, carrierOnly: undefined } },
+    });
+    const states = cellOf(ordinary, 'states');
+    assert.deepEqual(states.realRender.credited, ['collection-workspace']);
+    assert.equal(states.movedStamped, 1, 'the delegate credit this lot refuses is no longer reachable -- re-read why the carrier row exists');
+    assert.deepEqual(ordinary.realRender.map['collection-workspace'].stampedParts, ['trigger']);
+  }, 360_000);
 });
 
 describe('axis-difference --verify-indicator — the reading-only mode reads a file and launches nothing (audit W19-R33 P3)', () => {

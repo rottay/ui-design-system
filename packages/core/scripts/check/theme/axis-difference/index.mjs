@@ -96,10 +96,17 @@
  * THE COMBINATION RULE: a family moves on states when EITHER half, each
  * compared arm against arm, shows an attributable computed difference; both
  * halves and their union are published per cell. What neither half reaches
- * (`:disabled`, `[aria-*]`, a pseudo inside `:has()`, a pseudo-element other
- * than a `::before`/`::after` on a host already in the scene, a forced pseudo
- * driving a sibling -- withheld, not credited) is counted and named per run.
- * `--no-native-pseudos` reproduces the stamped half alone.
+ * (`:disabled`, `[aria-*]`, a pseudo inside `:has()` other than the carrier
+ * shape, a pseudo-element other than a `::before`/`::after` on a host already
+ * in the scene, a forced pseudo driving a sibling -- withheld, not credited)
+ * is counted and named per run. `--no-native-pseudos` reproduces the stamped
+ * half alone.
+ *
+ * THE CARRIER READ is the native half's one read of an ANCESTOR: a node the
+ * family's own skin selects through `:has(<descendant>:focus-visible)` is read
+ * with that one descendant focused, on the properties that rule writes, and
+ * credited only where a control read without the focus computes otherwise. The
+ * law and its withholding are at `carrierReadEntry`.
  *
  * AND A FAMILY WHOSE PAINT IS NOT UNDER ITS DEFAULT ROOT AT ALL -- an open
  * dropdown's surface, a present tooltip's bubble, the text-variant skeleton's
@@ -1149,6 +1156,18 @@ export function asRenderedReport(elements, { applied = true, roster = AS_RENDERE
  * states row, read on disjoint axes; a second states row is refused by the
  * roster door until per-row halves exist.
  *
+ * 6. A CARRIER ROW (`carrierOnly`, owner directive 2026-10-12) is the mount of
+ * a carrier the default scene cannot hold: a node its family's own skin paints
+ * under `:has(<descendant>:focus-visible)` (`carrierReadEntry`), with the real
+ * descendant inside it. It declares `states` alone and is read BY THE CARRIER
+ * PASS ALONE: never at rest, never stamped, never read in a depth pass. So the
+ * composed primitive the markup must carry for the `:has()` to hold -- a real
+ * `<select>`, with its own ring -- lends the family nothing: a delegate's paint
+ * on its own node is not read, and on the carrier it is withheld by the
+ * carrier law. The door refuses a carrier row whose family skin ships no
+ * carrier rule over the classes this markup carries; law 3 holds per cell as
+ * for every states row. `run({ carrierReads: false })` leaves it unmounted.
+ *
  * `--no-real-render-mounts` reproduces the pre-lot reading on the same tree.
  */
 export const REAL_RENDER_AXES = Object.freeze(['shape', 'rhythm', 'depth', 'motion', 'states']);
@@ -1497,15 +1516,18 @@ const CHART_DATA_ACCESS = `${CHARTS_ROOT}/runtime/chart-engine/presentation/reac
  * `::after` overlays of its sortable header cell and its rows, which the
  * default scene reads through the pseudo-element read law, so law 3 refuses a
  * row for it (`PSEUDO_ONLY_CREDITS.states`); decision-comparison's ring is painted on
- * the root under `:has(> viewport:focus-visible)` -- a pseudo inside `:has()`
- * is a condition on a node the pass does not read (`withoutForcedPseudos`),
- * and the rule has no stamp twin; field-filters-panel and search-command-bar
+ * the root under `:has(> viewport:focus-visible)` -- the carrier shape, read
+ * since the carrier read (`carrierReadEntry`) wherever the scene holds the
+ * carrier, and this one it does not: the rule is headed by
+ * `.ds-engine-modern`, which the mounted root does not carry, so the run
+ * publishes it `carrier-absent`; the rule has no stamp twin; field-filters-panel and search-command-bar
  * own no state rule at all (they feed `--ds-button-focus-ring` to a composed
  * Button, whose paint is the Button's); input-compounds' compact-group seam is
  * a sibling relation over a composed Input, and a second states row is
  * refused by the single-states-row law. widget-board (6e26d5aff) moves,
- * outside the instrument's reach: its ring sits on a `:has()` carrier
- * (`STATES_NON_MOVER_NOTES`).
+ * outside the instrument's reach: its ring sits on the `::after` of a `:has()`
+ * carrier, a box and not the carrier node (`carrier-pseudo-element`,
+ * `STATES_NON_MOVER_NOTES`).
  */
 const STATES_REACH_ROWS = Object.freeze({
   'input-compounds': Object.freeze({
@@ -1862,6 +1884,83 @@ const COMPOSED_REACH_ROWS = Object.freeze({
         ]),
       }),
       Object.freeze({ token: 'attr:data-part=trigger', source: BUTTON_ENGINE, stamp: "...partAttributes('trigger', interaction)," }),
+    ]),
+  }),
+});
+
+/**
+ * THE CARRIER ROW (2026-10-12, WO-EVI-02; owner directive point 3, measured as
+ * C4). collection-workspace's page-size pill is a `<label>` that paints the
+ * presentation while a chrome-less native Select lies over it at
+ * `opacity: 0`, so the pill wears the tenant focus signature for the select:
+ * `.ds-collection-page-size-control:has(.ds-collection-page-size-control__select
+ * select:focus-visible)` leads the pill's lift with `--ds-focus-ring` and states
+ * the outline's width and offset. The default scene grafts the pill and the
+ * overlay as SIBLINGS and no `<select>` at all, so that `:has()` can never hold
+ * there. This row is the control as the toolbar renders it, read under law 6:
+ * the pill alone, with the select focused, on the pill's own rule. The Select's
+ * own ring -- on a node nobody can see -- is the delegate's and is not read.
+ */
+const COLLECTION_TOOLBAR_UTILITIES = 'src/components/surfaces/presentation/pages/workspace/collection-workspace/toolbar-utilities/index.tsx';
+const COLLECTION_WORKSPACE_SURFACE = 'src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx';
+const SELECT_SHELL_STAMP = "className={`ds-select-shell ds-select-shell--modern ${className || ''}`}";
+
+const CARRIER_REACH_ROWS = Object.freeze({
+  'collection-workspace': Object.freeze({
+    state: Object.freeze({
+      name: 'a CollectionWorkspace given `behavior.pagination` with more than one page-size option -- the pill (a label) carries the '
+        + 'chrome-less native Select as an invisible overlay and wears the focus signature for it',
+      source: COLLECTION_TOOLBAR_UTILITIES,
+      anchors: Object.freeze(['if (!pagination || options.length <= 1) {', 'className="ds-collection-page-size-control__select"']),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['states']),
+    carrierOnly: true,
+    markup: '<div class="ds-surface ds-collection-workspace" data-part="root">'
+      + '<label class="ds-collection-page-size-control" data-part="page-size-control" data-load-mode="paged" data-compact="false">'
+      + '<div class="ds-collection-page-size-control__picker" data-part="page-size-picker">'
+      + '<div class="ds-select-shell ds-select-shell--modern ds-collection-page-size-control__select" data-part="root" data-size="sm">'
+      + '<select data-variant="outline" data-chrome="none" data-part="trigger"></select></div></div></label></div>',
+    stamps: Object.freeze([
+      Object.freeze({
+        token: 'tag:div',
+        stamp: '<Box',
+        resolves: Object.freeze([Object.freeze({ source: BOX_ENGINE, text: 'as: Component = BOX_DEFAULTS.as,' })]),
+      }),
+      Object.freeze({ token: 'tag:label', stamp: 'as="label"' }),
+      Object.freeze({ token: 'tag:select', source: SELECT_ENGINE, stamp: '<select' }),
+      Object.freeze({ token: 'class:ds-surface', source: COLLECTION_WORKSPACE_SURFACE, stamp: 'className="ds-surface ds-collection-workspace"' }),
+      Object.freeze({
+        token: 'class:ds-collection-workspace', source: COLLECTION_WORKSPACE_SURFACE, stamp: 'className="ds-surface ds-collection-workspace"',
+      }),
+      Object.freeze({ token: 'attr:data-part=root', source: COLLECTION_WORKSPACE_SURFACE, stamp: 'data-part="root"' }),
+      Object.freeze({ token: 'attr:data-load-mode=paged', stamp: "data-load-mode={isIncremental ? 'incremental' : 'paged'}" }),
+      Object.freeze({
+        token: 'attr:data-compact=false',
+        stamp: "data-compact={compact ? 'true' : 'false'}",
+        resolves: Object.freeze([Object.freeze({ source: COLLECTION_TOOLBAR_UTILITIES, text: 'compact = false,' })]),
+      }),
+      Object.freeze({ token: 'class:ds-select-shell', source: SELECT_ENGINE, stamp: SELECT_SHELL_STAMP }),
+      Object.freeze({ token: 'class:ds-select-shell--modern', source: SELECT_ENGINE, stamp: SELECT_SHELL_STAMP }),
+      Object.freeze({
+        token: 'attr:data-size=sm',
+        source: SELECT_ENGINE,
+        stamp: 'data-size={size}',
+        resolves: Object.freeze([Object.freeze({ source: COLLECTION_TOOLBAR_UTILITIES, text: 'size="sm"' })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-variant=outline',
+        source: SELECT_ENGINE,
+        stamp: 'data-variant={variant}',
+        resolves: Object.freeze([Object.freeze({ source: SELECT_CONTRACT, text: "variant: 'outline' as SelectVariant," })]),
+      }),
+      Object.freeze({
+        token: 'attr:data-chrome=none',
+        source: SELECT_ENGINE,
+        stamp: 'data-chrome={chromeStamp}',
+        resolves: Object.freeze([Object.freeze({ source: COLLECTION_TOOLBAR_UTILITIES, text: 'chrome="none"' })]),
+      }),
+      Object.freeze({ token: 'attr:data-part=trigger', source: SELECT_ENGINE, stamp: "{...partAttributes('trigger', trigger.state)}" }),
     ]),
   }),
 });
@@ -3686,6 +3785,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   ...SHAPE_REACH_ROWS,
   ...STATES_REACH_ROWS,
   ...COMPOSED_REACH_ROWS,
+  ...CARRIER_REACH_ROWS,
 });
 
 /**
@@ -3948,6 +4048,22 @@ export function realRenderRosterFailures(root = CORE_ROOT, roster = REAL_RENDER_
     for (const tag of entry.host ?? []) {
       if (!/^[a-z][a-z0-9-]*$/u.test(tag)) failures.push(`${family}: host \`${tag}\` must be a bare element name`);
     }
+    // A carrier row (law 6) is held to the skin: it declares states alone, and
+    // a carrier rule of the family's OWN skin names a carrier and a focused
+    // descendant this markup carries -- or the row mounts a carrier nobody ships.
+    if (entry.carrierOnly === true) {
+      if (entry.axes.length !== 1 || entry.axes[0] !== 'states') {
+        failures.push(`${family}: a carrier row declares states alone -- its nodes are read by the carrier pass and by nothing else`);
+      }
+      if ((entry.pseudoReads ?? []).length > 0) failures.push(`${family}: a carrier row declares no pseudo read -- the carrier read is a node read`);
+      const tokens = markupTokens(entry.markup);
+      const carried = (selector) => [...selector.matchAll(CLASS_TOKEN)].every(([, name]) => tokens.includes(`class:${name}`));
+      const { reads } = carrierReadsOf(files.map((file) => readFileSync(file, 'utf8')).join('\n'));
+      if (!reads.some((read) => carried(read.rest))) {
+        failures.push(`${family}: a carrier row, and no rule of the family skin selects a node of this mount through `
+          + `\`:has(<descendant>:${CARRIER_PSEUDO})\` -- a carrier is the family's own rule, never the row's claim`);
+      }
+    }
     // A declared pseudo read is held to the skin: a state rule of the family
     // paints that box on that part, or the row reads a box nobody ships.
     for (const box of entry.pseudoReads ?? []) {
@@ -4039,7 +4155,9 @@ export function realRenderMountList(elements, { applied = true, roster = REAL_RE
       family,
       row,
       axes: [...entry.axes],
-      stampedParts: realRenderStampedParts(entry),
+      // A carrier row is never stamped (law 6): its kernel parts stay at rest.
+      stampedParts: entry.carrierOnly === true ? [] : realRenderStampedParts(entry),
+      ...(entry.carrierOnly === true ? { carrierOnly: true } : {}),
       pseudoReads: (entry.pseudoReads ?? []).map((box) => `${box.part}${box.pseudo}`),
       markup: (entry.host ?? []).map((tag) => `<${tag} data-axis-real-host="">`).join('')
         + entry.markup
@@ -4063,7 +4181,8 @@ export function realRenderReport(mounts, {
       axes: [...entry.axes],
       host: [...(entry.host ?? [])],
       tokens: markupTokens(entry.markup).length,
-      stampedParts: realRenderStampedParts(entry),
+      stampedParts: entry.carrierOnly === true ? [] : realRenderStampedParts(entry),
+      ...(entry.carrierOnly === true ? { carrierOnly: true } : {}),
       // How many of the family's state rules select a node of THIS mount, per
       // half, read off the scene: the evidence a row may declare `states`, or
       // the reason it does not.
@@ -4728,6 +4847,269 @@ export function familyForcedPseudoHazards(css) {
     }
   }
   return hazards;
+}
+
+/**
+ * THE CARRIER READ (native half, owner directive 2026-10-12 point 3). A family
+ * may paint its focus signature on an ANCESTOR of the node that holds focus,
+ * selected through `:has(<that descendant>:focus-visible)`: the focused node is
+ * invisible or clipped, so the node around it wears the signature for it
+ * (`collection-workspace`'s page-size pill over its overlaid native select,
+ * `decision-comparison`'s root over its scrollport). A depth pass reads only
+ * the nodes it forced, so that ancestor was read in the one pass where its
+ * descendant is NOT focused and the paint was outside both halves by
+ * construction (C4, 2026-10-12). This law reads it; it paints nothing, mounts
+ * nothing and adds no ring.
+ *
+ * THE SHAPE IS THE LAW, and nothing wider is read:
+ *
+ *  1. ONE `:has()` carrying a forced pseudo, on the SUBJECT compound -- the
+ *     painted node IS the carrier -- whose argument reaches a DESCENDANT and
+ *     ends on the one `:focus-visible` it names. A second forced pseudo, any
+ *     other pseudo (`:hover`, `:focus`, `:focus-within`), a negation, a sibling
+ *     combinator, a forced pseudo the carrier needs on itself, a stamp gate or
+ *     a pseudo-element box is refused BY NAME (`CARRIER_REFUSALS`) and stays
+ *     outside both halves exactly as before.
+ *  2. THE RULE IS THE FAMILY'S OWN. The plan is derived from the family's own
+ *     skin and from nothing else: no row, flag or roster names a carrier. A
+ *     rule that is not in that skin plans no read, so there is nothing to read
+ *     a delegate's paint WITH.
+ *  3. ONE KEYBOARD. A carrier pass forces exactly one descendant per family --
+ *     the first node the `:has()` argument selects under that carrier -- with
+ *     `:focus-within` on its chain, which is what `NATIVE_PSEUDO_FORCING`
+ *     declares for focus. The browser then decides: a carrier it does not
+ *     match under that forcing is `unmatched` and unread.
+ *
+ * THE WITHHOLDING, and it is this read's own. A carrier value is published for
+ * a property only where all three hold, and is withheld otherwise:
+ *
+ *  a. OWN PROPERTY: the family's matched carrier rule writes that property, or
+ *     writes a custom property that another rule of the SAME skin, matching the
+ *     SAME node, reads into it (`feeds` -- the pill's signature leads a
+ *     `box-shadow` its `:focus-within` rule states). Every other property of
+ *     the carrier is unread: a delegate that moves one moves nothing here.
+ *  b. THE CONTROL READ: the same node, the same arm, the same forcing MINUS
+ *     `:focus-visible` on the descendant. The carrier rule cannot match there
+ *     and everything else still does, so a property the control read computes
+ *     the same in EVERY arm of the pass is not the rule's paint -- it is
+ *     published as `CARRIER_CONTROL` in all of them and credits nobody. Where
+ *     the two reads part in any arm the rule paints the property, and the
+ *     focus read is published in every arm: a rule that states a literal
+ *     over a delegate's moving value reads that literal twice, not a move.
+ *  c. THE DEFAULT SCENE'S OWN WITHHOLDING, unchanged: a family whose forced
+ *     pseudo drives a sibling has the variant withheld with its carriers, and a
+ *     family unsettled under a carrier pass is dropped like any other.
+ *
+ * NAMED LIMIT: a FOREIGN skin's rule of this same shape, selecting the same
+ * node, writing the same property and winning the cascade would be read as the
+ * family's. No such rule exists on this tree; (a) and (b) do not see it.
+ *
+ * `run({ carrierReads: false })` reproduces the pre-lot reading on the same
+ * tree: no carrier pass, no carrier row, the old census reason.
+ */
+export const CARRIER_PSEUDO = 'focus-visible';
+
+/** The native variant whose forcing a carrier pass borrows, and whose reading it joins. */
+export const CARRIER_VARIANT = 'focus-visible';
+
+/** What a carrier publishes for an own property the control read computes too: the rule paints nothing there. */
+export const CARRIER_CONTROL = 'carrier=control';
+
+/** Every way a `:has()` holding a forced pseudo is NOT the carrier shape, by name. */
+export const CARRIER_REFUSALS = Object.freeze([
+  'carrier-pseudo-element',
+  'carrier-negated',
+  'carrier-second-focus',
+  'carrier-own-pseudo',
+  'carrier-needs-stamp',
+  'carrier-not-the-subject',
+  'carrier-other-pseudo',
+  'carrier-sibling',
+  'carrier-focus-not-the-target',
+]);
+
+/** How many custom-to-custom hops a carrier's signature is followed through before a property reads it. */
+const CARRIER_FEED_DEPTH = 8;
+
+const CARRIER_STAMP_GATE = /\[data-state\b|\[data-disabled\b/u;
+
+/** Walks a selector outside quotes and attribute brackets, telling the visitor how many parentheses enclose each character. */
+function walkSelector(text, visit) {
+  let brackets = 0;
+  let parens = 0;
+  let quote = null;
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (quote !== null) {
+      if (character === quote) quote = null;
+      continue;
+    }
+    if (character === '"' || character === "'") quote = character;
+    else if (character === '[') brackets += 1;
+    else if (character === ']') brackets -= 1;
+    else if (brackets === 0) {
+      if (character === ')') parens -= 1;
+      if (visit(character, index, parens) === false) return;
+      if (character === '(') parens += 1;
+    }
+  }
+}
+
+/** Every `:has(...)` of a selector, parentheses balanced: its span, its argument and how many parentheses enclose it. */
+function hasGroups(selector) {
+  const groups = [];
+  walkSelector(selector, (character, index, depth) => {
+    if (character !== ':' || !selector.startsWith(STRUCTURAL_HAS, index)) return;
+    let inner = 0;
+    walkSelector(selector.slice(index), (at, offset) => {
+      if (at === '(') inner += 1;
+      else if (at === ')') {
+        inner -= 1;
+        if (inner === 0) {
+          groups.push({ start: index, end: index + offset, body: selector.slice(index + STRUCTURAL_HAS.length, index + offset), depth });
+          return false;
+        }
+      }
+      return true;
+    });
+  });
+  return groups;
+}
+
+/** The forced pseudo-classes a selector text names, each with its position and the parentheses around it. */
+function forcedPseudosIn(text) {
+  const found = [];
+  walkSelector(text, (character, index, depth) => {
+    if (character !== ':') return;
+    const match = FORCED_PSEUDO_AT.exec(text.slice(index));
+    if (match !== null) found.push({ pseudo: match[0].slice(1), index, depth });
+  });
+  return found;
+}
+
+/** Whether a selector text joins two compounds at its top level; `siblingOnly` asks for `+` and `~` alone. */
+function joinsCompounds(text, { siblingOnly = false } = {}) {
+  let joined = false;
+  let gap = false;
+  walkSelector(text, (character, index, depth) => {
+    if (depth > 0) return true;
+    if (character === '+' || character === '~') joined = true;
+    else if (!siblingOnly && character === '>') joined = true;
+    else if (/\s/u.test(character)) gap = true;
+    else if (!siblingOnly && gap) joined = true;
+    return !joined;
+  });
+  return joined;
+}
+
+/**
+ * One selector read as the carrier law reads it: `null` when it holds no forced
+ * pseudo inside a `:has()` (the law has nothing to say), `{ selector, refused }`
+ * when it does and is not the shape, and otherwise the read -- `rest`, the same
+ * selector with the focus dropped, which selects the carrier in a scene nobody
+ * is touching, and `target`, the `:has()` argument, which selects under that
+ * carrier the node a pass focuses.
+ */
+export function carrierReadEntry(selector) {
+  const text = selector.replace(/\s+/gu, ' ').trim();
+  const forced = hasGroups(text).filter((group) => forcedPseudosIn(group.body).length > 0);
+  if (forced.length === 0) return null;
+  const refuse = (refused) => ({ selector: text, refused });
+  if (text.includes('::')) return refuse('carrier-pseudo-element');
+  const top = forced.filter((group) => group.depth === 0);
+  if (top.length === 0) return refuse('carrier-negated');
+  if (top.length > 1) return refuse('carrier-second-focus');
+  const [group] = top;
+  const tail = text.slice(group.end + 1);
+  if (forcedPseudosIn(text.slice(0, group.start) + tail).length > 0) return refuse('carrier-own-pseudo');
+  if (CARRIER_STAMP_GATE.test(text)) return refuse('carrier-needs-stamp');
+  if (joinsCompounds(tail.trimEnd())) return refuse('carrier-not-the-subject');
+  const named = forcedPseudosIn(group.body);
+  if (named.some((entry) => entry.depth > 0)) return refuse('carrier-negated');
+  if (named.length > 1) return refuse('carrier-second-focus');
+  if (named[0].pseudo !== CARRIER_PSEUDO) return refuse('carrier-other-pseudo');
+  if (joinsCompounds(group.body, { siblingOnly: true })) return refuse('carrier-sibling');
+  const after = group.body.slice(named[0].index + CARRIER_PSEUDO.length + 1);
+  if (joinsCompounds(after.trimEnd())) return refuse('carrier-focus-not-the-target');
+  const bare = (group.body.slice(0, named[0].index) + after).trim();
+  const target = bare.length === 0 || bare.endsWith('>') ? `${bare} *`.trim() : bare;
+  return { selector: text, rest: `${text.slice(0, group.start)}:has(${target})${tail}`, target };
+}
+
+const CUSTOM_REFERENCE = /var\(\s*(--[\w-]+)/gu;
+const readsCustom = (value, names) => [...value.matchAll(CUSTOM_REFERENCE)].some(([, name]) => names.has(name));
+const STYLE_BLOCK = /([^{}]+)\{([^{}]*)\}/gu;
+const CUSTOM_DECLARATION = /(?:^|;)\s*(--[\w-]+)\s*:([^;]*)/gu;
+
+/**
+ * selector -> the custom properties its rules declare, read off the sheet
+ * itself: `cssRules` keeps a property spelled `[-a-z]+` and so drops a private
+ * `--_name`, which is precisely how a carrier rule hands its signature on.
+ */
+function customDeclarations(css) {
+  const bySelector = new Map();
+  for (const [, prelude, body] of stripCssComments(css).matchAll(STYLE_BLOCK)) {
+    const found = [...body.matchAll(CUSTOM_DECLARATION)].map(([, property, value]) => ({ property, value: normalizeCssText(value) }));
+    if (found.length === 0) continue;
+    const selector = normalizeCssText(prelude);
+    bySelector.set(selector, [...(bySelector.get(selector) ?? []), ...found]);
+  }
+  return bySelector;
+}
+
+/**
+ * One family's carrier reads, off the rules of ITS OWN stylesheet: per carrier
+ * rule the declarations it writes and its `feeds` -- the rules of the same
+ * sheet that read a custom property the carrier rule sets into a property of
+ * their own. The page decides which of them select the carrier node.
+ */
+export function carrierReadsOf(css) {
+  const rules = cssRules(css);
+  const customs = customDeclarations(css);
+  const reads = new Map();
+  const refused = [];
+  for (const rule of rules) {
+    for (const listed of selectorList(rule.selector)) {
+      for (const authored of expandAlternatives(listed)) {
+        const entry = carrierReadEntry(authored);
+        if (entry === null) continue;
+        if (entry.refused !== undefined) {
+          refused.push(entry);
+          continue;
+        }
+        const read = reads.get(entry.selector) ?? { ...entry, declarations: [], customs: new Set() };
+        for (const { property, value } of rule.declarations) {
+          if (!property.startsWith('--')) read.declarations.push({ property, value });
+        }
+        for (const { property } of customs.get(rule.selector) ?? []) read.customs.add(property);
+        reads.set(entry.selector, read);
+      }
+    }
+  }
+  const feedsOf = (set) => {
+    const names = new Set(set);
+    for (let round = 0; round < CARRIER_FEED_DEPTH; round += 1) {
+      const before = names.size;
+      for (const declared of customs.values()) {
+        for (const { property, value } of declared) {
+          if (readsCustom(value, names)) names.add(property);
+        }
+      }
+      if (names.size === before) break;
+    }
+    return rules
+      .map((rule) => ({
+        selector: rule.selector,
+        declarations: rule.declarations
+          .filter(({ property, value }) => !property.startsWith('--') && readsCustom(value, names))
+          .map(({ property, value }) => ({ property, value })),
+      }))
+      .filter((feed) => feed.declarations.length > 0);
+  };
+  return {
+    reads: [...reads.values()].map(({ customs: set, ...read }) => ({ ...read, feeds: set.size === 0 ? [] : feedsOf(set) })),
+    refused,
+  };
 }
 
 /**
@@ -5459,7 +5841,7 @@ export function sceneHtml({ css, vertical, theme, elements, mounts = null, partM
   const real = realRenders.map((mount) =>
     `\n<div data-axis-real-render="${mount.family}" data-axis-real-axes="${mount.axes.join(' ')}"`
     + ` data-axis-real-row="${mount.row ?? mount.family}" data-axis-real-stamped="${(mount.stampedParts ?? []).join(' ')}"`
-    + ` data-axis-real-pseudo="${(mount.pseudoReads ?? []).join(' ')}">`
+    + ` data-axis-real-pseudo="${(mount.pseudoReads ?? []).join(' ')}"${mount.carrierOnly === true ? ' data-axis-real-carrier=""' : ''}>`
     + `${mount.markup}</div>`).join('');
   return `<!doctype html><html ${attributes}><head><style>${css}</style></head>`
     + `<body><div id="axis-scene">${nodes}${real}</div></body></html>`;
@@ -5711,7 +6093,7 @@ export function allProperties() {
 }
 
 const readComputed = ({
-  properties, axisOf, depth = null, realRender = false, realStates = false, keys = null, pseudoReads = null,
+  properties, axisOf, depth = null, realRender = false, realStates = false, keys = null, pseudoReads = null, carriers = null,
 }) => {
   // FORCE A STYLE FLUSH BEFORE READING. Not defensive padding: writing custom
   // properties on the document element and calling getComputedStyle in the next
@@ -5732,6 +6114,56 @@ const readComputed = ({
     }
   }
   const out = {};
+  // THE CARRIER READ (`carrierReadEntry`): a carrier pass reads its carrier
+  // nodes and nothing else, behind the same flush and the same settling as
+  // every other reading. Each node publishes every property, the family's own
+  // rules the browser matched on it under this forcing, and the properties
+  // those rules write -- the browser expands the shorthands, not this file.
+  if (carriers !== null) {
+    const probe = document.createElement('div').style;
+    const PHYSICAL = [
+      [/-inline(?:-start|-end)?(?=-|$)/u, ['-left', '-right']],
+      [/-block(?:-start|-end)?(?=-|$)/u, ['-top', '-bottom']],
+      [/-(?:start|end)-(?:start|end)-radius$/u, ['-top-left-radius', '-top-right-radius', '-bottom-right-radius', '-bottom-left-radius']],
+    ];
+    const written = (declarations, into) => {
+      for (const { property, value } of declarations) {
+        probe.cssText = '';
+        probe.setProperty(property, value.replace(/\s*!important\s*$/u, ''));
+        for (const name of [...probe]) {
+          into.add(name);
+          for (const [logical, sides] of PHYSICAL) {
+            if (logical.test(name)) for (const side of sides) into.add(name.replace(logical, side));
+          }
+        }
+      }
+    };
+    for (const entry of carriers) {
+      const node = document.querySelector(`[data-axis-native-node="${entry.carrier}"]`);
+      const selects = (selector) => {
+        try {
+          return node.matches(selector);
+        } catch {
+          return false;
+        }
+      };
+      const matched = entry.rules.filter((rule) => selects(rule.selector));
+      const owned = new Set();
+      for (const rule of matched) {
+        written(rule.declarations, owned);
+        for (const feed of rule.feeds) if (selects(feed.selector)) written(feed.declarations, owned);
+      }
+      const style = getComputedStyle(node);
+      const values = (out[entry.family] ??= { '#carriers': [] });
+      for (const property of properties) (values[property] ??= []).push(style.getPropertyValue(property));
+      values['#carriers'].push({
+        key: entry.key,
+        matched: matched.map((rule) => rule.selector),
+        owned: properties.filter((property) => owned.has(property)),
+      });
+    }
+    return out;
+  }
   const styles = new Map();
   const styleOf = (element) => {
     let style = styles.get(element);
@@ -5840,6 +6272,14 @@ const readComputed = ({
         ? (axes.includes('states') ? () => true : () => false)
         : (property) => axisOf[property] !== 'states' && axes.includes(axisOf[property]);
       if (!properties.some(readable)) continue;
+      // A CARRIER ROW is read by the carrier pass alone: under a state the
+      // family keeps its default mount's reading and gains no node of the row.
+      if (container.hasAttribute('data-axis-real-carrier')) {
+        if (!byFamily.has(family)) {
+          byFamily.set(family, { own: Object.fromEntries(properties.map((property) => [property, out[family][property]])), real: {} });
+        }
+        continue;
+      }
       const nodes = [...container.querySelectorAll('*')].filter((node) => !node.hasAttribute('data-axis-real-host'));
       // The boxes the row declares, read under a state only and only where
       // the browser generated them: one entry per box, after the nodes.
@@ -5981,6 +6421,7 @@ const stampState = ({ state, stampAttributes, realStates = false }) => {
   if (realStates) {
     for (const container of document.querySelectorAll('[data-axis-real-render]')) {
       if (!container.getAttribute('data-axis-real-axes').split(' ').includes('states')) continue;
+      if (container.hasAttribute('data-axis-real-carrier')) continue;
       const parts = (container.getAttribute('data-axis-real-stamped') ?? '').split(' ').filter(Boolean);
       groups.push([...container.querySelectorAll('[data-part]')].filter((node) => parts.includes(node.getAttribute('data-part'))));
     }
@@ -6332,6 +6773,143 @@ const indexNativeNodes = (realStates = false) => {
 };
 
 /**
+ * In the page, at rest: every carrier the family's own rules select in a scene
+ * the carrier read reaches -- the family's default mount, and a real render of
+ * it that declares `states` -- each with the ONE descendant a pass will focus:
+ * the first node the `:has()` argument selects under it. A rule that selects
+ * nothing there is `carrier-absent`, published, not silent.
+ */
+const indexCarrierNodes = (plan) => {
+  const found = [];
+  const indexOf = (node) => (node.hasAttribute('data-axis-native-node') && !node.hasAttribute('data-axis-real-host')
+    ? Number(node.getAttribute('data-axis-native-node'))
+    : null);
+  for (const [family, reads] of Object.entries(plan)) {
+    const scopes = [
+      ...[...document.querySelectorAll('[data-axis-family]')]
+        .filter((node) => node.getAttribute('data-axis-family') === family)
+        .map((node) => ({ node, where: 'default' })),
+      ...[...document.querySelectorAll('[data-axis-real-render]')]
+        .filter((node) => node.getAttribute('data-axis-real-render') === family
+          && node.getAttribute('data-axis-real-axes').split(' ').includes('states'))
+        .map((node) => ({ node, where: 'real', row: node.getAttribute('data-axis-real-row') })),
+    ];
+    reads.forEach((read, rule) => {
+      let selected = 0;
+      for (const { node: scope, where, row } of scopes) {
+        let candidates = [];
+        try {
+          candidates = [...(scope.matches(read.rest) ? [scope] : []), ...scope.querySelectorAll(read.rest)];
+        } catch {
+          continue;
+        }
+        for (const node of candidates) {
+          const carrier = indexOf(node);
+          let focused = null;
+          try {
+            focused = node.querySelector(`:scope ${read.target}`);
+          } catch {
+            focused = null;
+          }
+          const target = focused === null ? null : indexOf(focused);
+          if (carrier === null || target === null) continue;
+          selected += 1;
+          found.push({ family, rule, where, ...(row === undefined ? {} : { row }), carrier, target });
+        }
+      }
+      if (selected === 0) found.push({ family, rule, rules: [read.selector], outcome: 'carrier-absent' });
+    });
+  }
+  return found;
+};
+
+/**
+ * The carrier passes of one scene, as rounds: every (carrier, focused node)
+ * the page indexed, with the family rules that selected it, and at most ONE
+ * per family in a round -- one keyboard holds one focus, and `:has()` never
+ * looks outside its own subtree, so a second family's focus is not seen.
+ */
+export function carrierRounds(found, plan) {
+  const pairs = new Map();
+  for (const entry of found) {
+    if (entry.outcome !== undefined) continue;
+    const key = `${entry.carrier}>${entry.target}`;
+    const pair = pairs.get(key) ?? {
+      key, family: entry.family, where: entry.where, ...(entry.row === undefined ? {} : { row: entry.row }),
+      carrier: entry.carrier, target: entry.target, rules: [],
+    };
+    const read = plan[entry.family][entry.rule];
+    pair.rules.push({ selector: read.selector, declarations: read.declarations, feeds: read.feeds });
+    pairs.set(key, pair);
+  }
+  const rounds = [];
+  for (const pair of pairs.values()) {
+    const round = rounds.find((entries) => !entries.some((entry) => entry.family === pair.family));
+    if (round === undefined) rounds.push([pair]);
+    else round.push(pair);
+  }
+  return rounds;
+}
+
+/**
+ * carrier -> the properties its rule PAINTS: the ones the focus read and the
+ * control read compute differently in at least one arm of the pass. Decided
+ * over every arm so the two arms of a pair always publish the same shape.
+ */
+export function carrierPainted(readingsByArm) {
+  const painted = new Map();
+  for (const readings of readingsByArm.values()) {
+    for (const { pair, focus, control } of readings) {
+      const set = painted.get(pair.key) ?? new Set();
+      for (const property of focus.owned) {
+        if (focus.values[property] !== control.values[property]) set.add(property);
+      }
+      painted.set(pair.key, set);
+    }
+  }
+  return painted;
+}
+
+/**
+ * One arm's carrier readings joined to its `:focus-visible` reading, under the
+ * withholding of the carrier law: nothing for a carrier the browser did not
+ * match, nothing for a property the family's rule does not write, and
+ * `CARRIER_CONTROL` for one the control read computes the same in every arm
+ * (`paintedBy`). A family the pass withheld or dropped has no reading left to
+ * join.
+ *
+ * A carrier inside a real render joins that render's reading (`#real`); one in
+ * the default mount joins the default mount's (`#default`, `#hosts`).
+ */
+export function joinCarrierReadings(merged, readings, paintedBy = carrierPainted(new Map([['', readings]]))) {
+  const census = [];
+  for (const { pair, focus } of readings) {
+    const record = { family: pair.family, where: pair.where, ...(pair.row === undefined ? {} : { row: pair.row }), rules: focus.matched };
+    if (merged[pair.family] === undefined) {
+      census.push({ ...record, outcome: 'withheld' });
+      continue;
+    }
+    if (focus.matched.length === 0) {
+      census.push({ ...record, rules: pair.rules.map((rule) => rule.selector), outcome: 'unmatched' });
+      continue;
+    }
+    const keys = pair.where === 'real'
+      ? ['', REAL_RENDER_KEY.real]
+      : ['', REAL_RENDER_KEY.default, '#hosts'].filter((key) => key === '' || merged[`${pair.family}${key}`] !== undefined);
+    const painted = focus.owned.filter((property) => paintedBy.get(pair.key)?.has(property));
+    for (const property of focus.owned) {
+      const value = painted.includes(property) ? focus.values[property] : CARRIER_CONTROL;
+      for (const key of keys) {
+        const into = (merged[`${pair.family}${key}`] ??= {});
+        into[property] = into[property] === undefined || into[property] === '' ? value : `${into[property]} | ${value}`;
+      }
+    }
+    census.push({ ...record, outcome: painted.length > 0 ? 'read' : 'control', owned: focus.owned, painted });
+  }
+  return census;
+}
+
+/**
  * One pass per depth, merged back into one reading per family.
  *
  * The node read in a pass is the node the pointer is ON: it and its ancestors
@@ -6380,11 +6958,15 @@ export async function measureNativeHalf({
   withheld = new Map(),
   realRender = false,
   pseudoReads = null,
+  /* family -> its carrier reads (`carrierReadsOf`); absent, no carrier pass runs. */
+  carriers = null,
 }) {
   const nodes = await page.evaluate(indexNativeNodes, realRender);
   const cdp = await page.context().newCDPSession(page);
   const unsettled = new Set();
   const passes = new Map(arms.map((arm) => [arm.key, Object.fromEntries(variants.map((variant) => [variant, []]))]));
+  const carrierReadings = new Map(arms.map((arm) => [arm.key, []]));
+  const carrierFound = [];
   let forced = 0;
   const depths = [...new Set(nodes.map((node) => node.depth))].sort((left, right) => left - right);
   try {
@@ -6423,10 +7005,54 @@ export async function measureNativeHalf({
         }
       }
     }
+    // THE CARRIER PASSES (`carrierReadEntry`), after every depth pass and under
+    // the forcing `:focus-visible` already declares: the one descendant a
+    // round focuses and `:focus-within` on its chain. Each round is read
+    // twice per arm -- the control read first, the same forcing without
+    // `:focus-visible`, then the focus read -- through the same settling.
+    if (carriers !== null && variants.includes(CARRIER_VARIANT)) {
+      const forcing = NATIVE_PSEUDO_FORCING[CARRIER_VARIANT];
+      const found = await page.evaluate(indexCarrierNodes, carriers);
+      carrierFound.push(...found.filter((entry) => entry.outcome !== undefined).map(({ rule, ...entry }) => entry));
+      for (const round of carrierRounds(found, carriers)) {
+        const targets = round.map((pair) => pair.target);
+        const ancestors = [...new Set(targets.flatMap((index) => nodes[index].ancestors))];
+        const taken = new Map(arms.map((arm) => [arm.key, {}]));
+        for (const phase of ['control', 'focus']) {
+          await force(ancestors, forcing.ancestors);
+          await force(targets, phase === 'focus' ? forcing.target : forcing.target.filter((name) => name !== CARRIER_PSEUDO));
+          forced += targets.length;
+          try {
+            for (const arm of arms) {
+              await page.evaluate(applyVariables, arm.variables);
+              const reading = await readSettled(page, { properties, settleOn, axisOf, carriers: round });
+              for (const family of reading.unsettled) unsettled.add(family);
+              taken.get(arm.key)[phase] = reading.values;
+            }
+          } finally {
+            await force([...ancestors, ...targets], []);
+          }
+        }
+        for (const arm of arms) {
+          const { control, focus } = taken.get(arm.key);
+          for (const pair of round) {
+            const at = focus[pair.family]['#carriers'].findIndex((entry) => entry.key === pair.key);
+            const valuesOf = (reading) => Object.fromEntries(properties.map((property) => [property, reading[pair.family][property][at]]));
+            carrierReadings.get(arm.key).push({
+              pair,
+              focus: { ...focus[pair.family]['#carriers'][at], values: valuesOf(focus) },
+              control: { values: valuesOf(control) },
+            });
+          }
+        }
+      }
+    }
   } finally {
     await cdp.detach().catch(() => {});
   }
   const readings = new Map();
+  const carrierPaint = carrierPainted(carrierReadings);
+  let carrierCensus = null;
   for (const arm of arms) {
     const byVariant = {};
     for (const variant of variants) {
@@ -6437,11 +7063,22 @@ export async function measureNativeHalf({
         const family = key.split('#')[0];
         if (unsettled.has(family) || (withheld.get(family) ?? []).includes(variant)) delete merged[key];
       }
+      // What a carrier matches, owns and paints is decided over the whole
+      // pass, so every arm publishes the one census.
+      if (variant === CARRIER_VARIANT && carriers !== null) {
+        const census = joinCarrierReadings(merged, carrierReadings.get(arm.key), carrierPaint);
+        carrierCensus ??= census;
+      }
       byVariant[variant] = merged;
     }
     readings.set(arm.key, byVariant);
   }
-  return { readings, unsettled: [...unsettled].sort(), nodes: nodes.length, depths: depths.length, forced };
+  return {
+    readings, unsettled: [...unsettled].sort(), nodes: nodes.length, depths: depths.length, forced,
+    // The census a run publishes, and beside it each arm's two readings of
+    // every carrier, so a credit can be audited against the control it beat.
+    ...(carriers === null ? {} : { carriers: [...(carrierCensus ?? []), ...carrierFound], carrierReadings }),
+  };
 }
 
 /**
@@ -6553,7 +7190,7 @@ export { KERNEL_STATE_TOKENS };
  * `owners` the axes whose properties it declares (`null` when it writes a
  * custom property, which may feed any of them).
  */
-export function stateRuleProbes(css, { stamped = STATE_VARIANTS, pseudoReads = true } = {}) {
+export function stateRuleProbes(css, { stamped = STATE_VARIANTS, pseudoReads = true, carrierReads = false } = {}) {
   const probes = [];
   const authoredOwner = new Map();
   for (const axis of AXIS_IDS) {
@@ -6586,9 +7223,17 @@ export function stateRuleProbes(css, { stamped = STATE_VARIANTS, pseudoReads = t
         else if (!custom && owners.size === 0) reason = 'unread-property';
         else if (forced && forcedPseudoHazards(selector).size > 0) reason = 'relational';
         else if (forced && FORCED_PSEUDO.test(withoutNegations(withoutForcedPseudos(selector)))) reason = 'pseudo-inside-has';
+        // The one pseudo inside `:has()` a pass enters: the carrier shape, asked
+        // about as the carrier at rest (`carrierReadEntry`). Every other one --
+        // a box on the carrier included -- keeps the reason above.
+        const carrier = carrierReads && pseudo === null && reason === 'pseudo-inside-has' ? carrierReadEntry(selector) : null;
+        const carried = carrier !== null && carrier.refused === undefined;
+        if (carried) reason = null;
         // A negation OF the stamp holds on every stamped state but one, so it
         // goes with the stamp rather than leaving an empty `:not()` behind.
-        const probe = forced
+        const probe = carried
+          ? carrier.rest
+          : forced
           ? withoutForcedPseudos(selector)
           : selector
             .replace(/:not\([^()]*\[data-(?:state|disabled)\b[^()]*\)/gu, '')
@@ -6601,6 +7246,7 @@ export function stateRuleProbes(css, { stamped = STATE_VARIANTS, pseudoReads = t
           owners: custom ? null : [...owners].sort(),
           reason,
           ...(pseudo === null ? {} : { pseudo }),
+          ...(carried ? { carrier: true } : {}),
         });
       }
     }
@@ -6650,8 +7296,12 @@ const censusReach = (entries) => {
           // real-render mount is never read.
           if (probe.pseudo !== undefined) continue;
           if (container.getAttribute('data-axis-real-render') !== family || node.hasAttribute('data-axis-real-host')) continue;
+          // A carrier row (law 6) is read by the carrier pass alone, so only a
+          // carrier rule reaches a node of it.
           if (container.getAttribute('data-axis-real-axes').split(' ').includes('states')
-            && (probe.vocabulary !== 'stamped' || stampedPartOn(container, node))) {
+            && (container.hasAttribute('data-axis-real-carrier')
+              ? probe.carrier === true
+              : probe.vocabulary !== 'stamped' || stampedPartOn(container, node))) {
             result[index] = 'reached';
             return;
           }
@@ -6671,7 +7321,10 @@ const censusReach = (entries) => {
           result[index] = 'pseudo-element-ungenerated';
           continue;
         }
+        // A carrier is the node its own rule targets, read by the carrier pass
+        // on the properties that rule writes: no axis tag is asked of it.
         const read = node === owner
+          || probe.carrier === true
           || owner.hasAttribute('data-axis-mount')
           || (node.hasAttribute('data-axis-part') && (probe.owners === null
             || node.getAttribute('data-axis-part').split(' ').some((axis) => probe.owners.includes(axis))));
@@ -6716,6 +7369,7 @@ const censusRealReach = (entries) => {
       } catch {
         continue;
       }
+      if (container.hasAttribute('data-axis-real-carrier') && probe.carrier !== true) continue;
       if (matched.some((node) => !node.hasAttribute('data-axis-real-host')
         && (probe.vocabulary !== 'stamped' || stampable(node)))) counts[probe.vocabulary] += 1;
     }
@@ -7545,6 +8199,9 @@ export async function run({
    * law. The hosts and the census are still derived and published, with every
    * readable entry `not-read`. */
   pseudoReads = true,
+  /* `false` reproduces the pre-lot native half: no carrier pass, a carrier
+   * row left unmounted, and every pseudo inside `:has()` outside both halves. */
+  carrierReads = true,
   /* The roster those mounts come from; a drill hands in its own, and it passes
    * the same door the shipped one does before anything is mounted. */
   realRenderRoster = REAL_RENDER_MOUNTS,
@@ -7583,8 +8240,12 @@ export async function run({
       throw new Error(`axis-difference: the real-render roster does not match the engines it names -- ${rosterFailures.join(' | ')}`);
     }
   }
+  // A carrier row is read by the carrier pass alone, which is the native
+  // half's: without it the row would be a mount nobody reads.
+  const carrierApplied = carrierReads && nativePseudos;
   const realRenders = realRenderMountList(elements, { applied: realRenderMounts, roster: realRenderRoster })
-    .filter((mount) => !isMounted(mount.family));
+    .filter((mount) => !isMounted(mount.family))
+    .filter((mount) => carrierApplied || mount.carrierOnly !== true);
   // family -> the union of the axes its rows declare; law 3 is decided per
   // family over every row it has.
   const realRenderAxes = new Map();
@@ -7634,10 +8295,20 @@ export async function run({
   const pinChannels = pseudoPinChannels();
   const stateRules = new Map();
   const withheld = new Map();
+  // THE CARRIER READ: each family's plan, off its own skin and nothing else.
+  const carrierPlan = {};
+  const carrierRefused = {};
   for (const [family, files] of skinFamilies(root)) {
     if (!elements.has(family)) continue;
     const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
-    stateRules.set(family, stateRuleProbes(css, { stamped: stampedStates, pseudoReads: pseudoReads && partMounts !== false }));
+    stateRules.set(family, stateRuleProbes(css, {
+      stamped: stampedStates, pseudoReads: pseudoReads && partMounts !== false, carrierReads: carrierApplied,
+    }));
+    if (carrierApplied && elements.get(family) !== null) {
+      const carried = carrierReadsOf(css);
+      if (carried.reads.length > 0) carrierPlan[family] = carried.reads;
+      if (carried.refused.length > 0) carrierRefused[family] = carried.refused;
+    }
     const hazards = Object.keys(familyForcedPseudoHazards(css));
     if (hazards.length > 0) withheld.set(family, hazards.sort());
   }
@@ -7648,6 +8319,7 @@ export async function run({
   let nativeVariants = [];
   const nativeUnsettled = new Set();
   let nativeShape = null;
+  let carrierCensus = null;
 
   const { browser, close, provenance } = await launchBrowser();
   const cells = [];
@@ -7718,7 +8390,9 @@ export async function run({
               withheld,
               realRender: realRenders.length > 0,
               pseudoReads: nativePseudoPlan,
+              carriers: carrierApplied ? carrierPlan : null,
             });
+            carrierCensus ??= nativeHalf.carriers ?? null;
             await collectPseudoSeen(nativePage, nativePseudoPlan, pseudoSeen);
             for (const family of nativeHalf.unsettled) nativeUnsettled.add(family);
             nativeShape ??= { nodes: nativeHalf.nodes, depths: nativeHalf.depths };
@@ -8036,6 +8710,23 @@ export async function run({
     withheld: Object.fromEntries([...withheld].filter(([family]) => statesPopulation.includes(family))),
     unsettled: [...nativeUnsettled].sort(),
     reach,
+    // THE CARRIER READ, as this run applied it: the plan each family's own
+    // skin gave, every `:has()` it refused by name, and what each carrier the
+    // scene holds read -- `read`, `control` (matched, and the control read
+    // computes the same), `unmatched`, `withheld` or `carrier-absent`.
+    carrier: {
+      applied: carrierApplied,
+      shape: `:has(<descendant>:${CARRIER_PSEUDO}) on the painted node, of the family's own skin`,
+      control: `the same forcing without :${CARRIER_PSEUDO} on the descendant; a value it also computes is published as ${CARRIER_CONTROL}`,
+      families: Object.keys(carrierPlan).sort(),
+      rules: Object.fromEntries(Object.entries(carrierPlan).map(([family, reads]) => [family, reads.map((read) => read.selector)])),
+      refused: Object.fromEntries(Object.entries(carrierRefused).map(([family, entries]) => {
+        const reasons = {};
+        for (const entry of entries) reasons[entry.refused] = (reasons[entry.refused] ?? 0) + 1;
+        return [family, reasons];
+      })),
+      census: carrierCensus ?? [],
+    },
   };
   const partMountsReport = partMountReport(mountedParts, {
     applied: partMounts !== false,
@@ -8077,7 +8768,11 @@ export async function run({
       + '(named at nativePseudos.reach.neither)',
       `${Object.keys(nativeReport.withheld).length} famil(ies) read under a forced pseudo that drives a SIBLING `
       + '(+, ~, or :has() over one): a whole-depth pass hovers the siblings too, so that variant is withheld for '
-      + 'them (nativePseudos.withheld); a pseudo inside :has() over a descendant, '
+      + 'them (nativePseudos.withheld); '
+      + (carrierApplied
+        ? `a pseudo inside :has() other than the carrier shape (a descendant's :${CARRIER_PSEUDO} on the painted node, of the `
+          + 'family\'s own skin, read on its own properties against a control read: nativePseudos.carrier), '
+        : 'a pseudo inside :has() over a descendant, ')
       + (pseudoReads
         ? 'a pseudo-element other than ::before/::after on a host already in the scene (pseudoReads), '
         : 'a pseudo-element, ')
@@ -9373,6 +10068,10 @@ if (isMain) {
     console.log(`    withheld (a forced pseudo drives a sibling): ${Object.entries(native.withheld)
       .map(([family, variants]) => `${family}(${variants.join('/')})`).join(', ') || 'none'}`);
     console.log(`    unsettled under a forced pseudo (native reading dropped): ${native.unsettled.join(', ') || 'none'}`);
+    console.log(`    carrier reads: ${native.carrier.applied
+      ? `ON — ${native.carrier.census.map((entry) => `${entry.family}@${entry.where ?? 'scene'} ${entry.outcome}`
+        + `${entry.painted?.length > 0 ? ` (${entry.painted.join(', ')})` : ''}`).join('; ') || 'no carrier in the scene'}`
+      : 'OFF (a pseudo inside :has() is outside both halves — the pre-lot reading)'}`);
   }
   console.log(
     `    reach over ${native.reach.population} states famil(ies): stamp ${native.reach.reached.stamped}, `
