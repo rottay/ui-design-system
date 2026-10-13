@@ -4,6 +4,7 @@
  */
 
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -41,4 +42,41 @@ test('packageRoot does not get confused by a same-named root package.json', () =
   const from = join(sandbox, 'packages/core/scripts/libraries/x');
   assert.equal(packageRoot(from), join(sandbox, 'packages/core'));
   assert.equal(repoRoot(from), sandbox);
+});
+
+test('an origin that names nothing on disk and exists under no ancestor fails closed', () => {
+  assert.throws(
+    () => packageRoot('/scripts/libraries/no-such-library/index.mjs'),
+    /could not locate the @rottay\/design-system package root from \/scripts\/libraries\/no-such-library\/index\.mjs/,
+  );
+  assert.throws(() => repoRoot('/no-such-root-relative-dir/'), /could not locate/);
+});
+
+test('an existing marker-less origin is never re-anchored onto this repository', () => {
+  const sandbox = mkdtempSync(join(tmpdir(), 'repo-root-'));
+  mkdirSync(join(sandbox, 'scripts/libraries/repo-root'), { recursive: true });
+  assert.throws(() => packageRoot(join(sandbox, 'scripts/libraries/repo-root')), /could not locate/);
+});
+
+test('the vite-root-relative origin a transformed module hands over resolves to the same roots', () => {
+  const core = packageRoot(HERE);
+  assert.equal(packageRoot('/scripts/libraries/tokens/producers/index.mjs'), core);
+  assert.equal(packageRoot('/scripts/libraries/tokens/producers/'), core);
+  assert.equal(repoRoot('/scripts/libraries/tokens/producers/index.mjs'), repoRoot(HERE));
+});
+
+test('under vitest the origin arrives root-relative and both finders still land', () => {
+  const core = packageRoot(HERE);
+  const run = spawnSync(
+    process.execPath,
+    [
+      join(core, 'node_modules/vitest/vitest.mjs'),
+      'run',
+      '--config',
+      join(HERE, 'tests/vitest-context/config.mjs'),
+    ],
+    { cwd: core, encoding: 'utf8' },
+  );
+  assert.equal(run.status, 0, `${run.stdout}\n${run.stderr}`);
+  assert.match(run.stdout, /3 passed/);
 });
