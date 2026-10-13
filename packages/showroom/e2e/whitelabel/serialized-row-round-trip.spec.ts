@@ -94,6 +94,16 @@ async function holdHydration(page: Page): Promise<() => void> {
   return release;
 }
 
+// Reduced motion leaves `transition: all 0.01ms` on every element, so the tenant type scale reaches the tree one
+// inherited step per frame and the capture raced those frames; without transitions it lands in one style pass.
+async function disableTransitions(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync('*, *::before, *::after { transition: none !important; }');
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+  });
+}
+
 async function firstPaint(page: Page, url: string): Promise<FirstPaint> {
   await page.goto(url, { waitUntil: 'commit' });
   await page.locator('[data-testid="divergence-root"]').waitFor({ state: 'attached' });
@@ -114,6 +124,7 @@ async function firstPaint(page: Page, url: string): Promise<FirstPaint> {
     if (!root || !title || !button || !swatch) throw new Error('divergence probe elements missing');
     const rootStyle = window.getComputedStyle(root);
     return {
+      animations: document.getAnimations().length,
       hydrated:
         expando(document, '__reactContainer$') ||
         (window as Window & { __divergenceProbe?: unknown }).__divergenceProbe !== undefined,
@@ -136,6 +147,7 @@ async function firstPaint(page: Page, url: string): Promise<FirstPaint> {
     };
   });
   expect(state.hydrated, `${url} hydrated before the first-paint measurement`).toBe(false);
+  expect(state.animations, `${url} was still animating at the first-paint capture`).toBe(0);
   return { root: state.root, readings: state.readings, capture: await page.screenshot({ fullPage: false }) };
 }
 
@@ -256,6 +268,7 @@ test.describe('serialized row round-trip to first paint (WO-ARC-21, DS-side)', (
       test.setTimeout(180_000);
       await page.setViewportSize(VIEWPORT);
       await page.emulateMedia({ colorScheme: 'light' });
+      await disableTransitions(page);
       const slug = DIVERGENCE_FIXTURES[fixture].identity.slug;
 
       let release = await holdHydration(page);
