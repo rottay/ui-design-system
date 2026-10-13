@@ -163,12 +163,16 @@
  * WHAT THIS GATE DOES NOT DO. It does not certify the fleet. The
  * 80-per-cent-per-axis threshold is `WO-EVI-02`'s own acceptance and is
  * owner-gated; `--threshold` exists so the same instrument can be pointed at it
- * when the family cuts have landed, and the default run PUBLISHES the
- * percentages without passing judgement on them. Reporting a pilot percentage
- * as a fleet percentage is explicitly forbidden by `WO-EVI-05`.
+ * when the family cuts have landed, and the default run PRINTS the
+ * percentages without passing judgement on them and writes nothing: it
+ * publishes only with `--publish` / `AXIS_DIFFERENCE_PUBLISH=1`, so an audit or
+ * a test run mutates no record. Reporting a pilot percentage as a fleet
+ * percentage is explicitly forbidden by `WO-EVI-05`.
  *
  * Usage:
- *   node scripts/check/theme/axis-difference/index.mjs                  measure and publish indicator 7
+ *   node scripts/check/theme/axis-difference/index.mjs                  measure; publishes nothing
+ *   node scripts/check/theme/axis-difference/index.mjs --publish        measure and publish indicator 7
+ *   AXIS_DIFFERENCE_PUBLISH=1 vitest ...axis-difference-pilot             publish the pilot record, from a vitest
  *   node scripts/check/theme/axis-difference/index.mjs --json           the full measurement
  *   node scripts/check/theme/axis-difference/index.mjs --vertical=evnto one vertical
  *   node scripts/check/theme/axis-difference/index.mjs --threshold=80   fail below 80 % per axis, on the declared basis;
@@ -178,7 +182,7 @@
  *   node scripts/check/theme/axis-difference/index.mjs --families=button,card
  *   node scripts/check/theme/axis-difference/index.mjs --no-part-mounts   the pre-lot reading
  *   node scripts/check/theme/axis-difference/index.mjs --collapsed-roots  the pre-repair root
- *   node scripts/check/theme/axis-difference/index.mjs --no-write         publishes nothing (pilot record, indicator 7)
+ *   node scripts/check/theme/axis-difference/index.mjs --no-write         publishes nothing, `--publish` or not
  *   AXIS_DIFFERENCE_NO_WRITE=1 vitest ...axis-difference-pilot              the same, from a vitest
  *   node scripts/check/theme/axis-difference/index.mjs --no-states-disabled  the pre-lot state set
  *   node scripts/check/theme/axis-difference/index.mjs --no-as-rendered   the pre-roster root
@@ -9119,6 +9123,12 @@ export const NO_WRITE_FLAG = '--no-write';
 /** The flag the gate manifest passes; named so the inventory's flag drill can find it. */
 export const THRESHOLD_FLAG = '--threshold';
 export const NO_WRITE_ENV = 'AXIS_DIFFERENCE_NO_WRITE';
+/** The opt-in a run takes to be the published one; without it nothing is written. */
+export const PUBLISH_FLAG = '--publish';
+export const PUBLISH_ENV = 'AXIS_DIFFERENCE_PUBLISH';
+
+/** An exported blank, `0` or `false` is an absent switch, on the opt-in and on the opt-out alike. */
+const switchedOn = (value) => value !== undefined && value !== '' && value !== '0' && value !== 'false';
 
 /**
  * MAY THIS RUN REPUBLISH THE ARTIFACT, and the answer is no more often than it
@@ -9131,10 +9141,16 @@ export const NO_WRITE_ENV = 'AXIS_DIFFERENCE_NO_WRITE';
  * carried a file nobody had meant to change — and the reviewer could no longer
  * tell an artifact the lot MOVED from one an ad-hoc measurement had brushed.
  *
- * The opt-out is `--no-write` on the command line, or
- * `AXIS_DIFFERENCE_NO_WRITE=1` in the environment -- the second because a
- * vitest run has no argv of its own to pass a flag through, and the pilot
- * record is written from a vitest.
+ * PUBLICATION IS OPT-IN (audit 2026-10-13, correction 5). The opt-out alone
+ * left the default publishing, and two test executions republished the record
+ * by running the pilot vitest: an audit or a test run must never mutate it. An
+ * unflagged run is refused; the published run says so with `--publish` on the
+ * command line, or `AXIS_DIFFERENCE_PUBLISH=1` in the environment -- the
+ * second because a vitest run has no argv of its own to pass a flag through,
+ * and the pilot record is written from a vitest.
+ *
+ * The opt-out stays, as `--no-write` or `AXIS_DIFFERENCE_NO_WRITE=1`, and it
+ * WINS any conflict with the opt-in: a run told both publishes nothing.
  *
  * WHAT IT DELIBERATELY DOES NOT DO: refuse a `--families=` run on its own.
  * `evaluate` may skip the pinned-denominator check on a filtered run, but the
@@ -9149,9 +9165,9 @@ export const NO_WRITE_ENV = 'AXIS_DIFFERENCE_NO_WRITE';
  */
 export function publicationRefusal({ argv = [], env = {} } = {}) {
   if (argv.includes(NO_WRITE_FLAG)) return `${NO_WRITE_FLAG} was passed`;
-  const opt = env[NO_WRITE_ENV];
-  if (opt !== undefined && opt !== '' && opt !== '0' && opt !== 'false') return `${NO_WRITE_ENV}=${opt} is set`;
-  return null;
+  if (switchedOn(env[NO_WRITE_ENV])) return `${NO_WRITE_ENV}=${env[NO_WRITE_ENV]} is set`;
+  if (argv.includes(PUBLISH_FLAG) || switchedOn(env[PUBLISH_ENV])) return null;
+  return `publication is opt-in: pass ${PUBLISH_FLAG} (or set ${PUBLISH_ENV}=1) to write the record`;
 }
 
 export function evaluate(result, {

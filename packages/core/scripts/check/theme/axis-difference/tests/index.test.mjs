@@ -53,6 +53,8 @@ import {
   STATE_STAMP_ATTRIBUTE_NAMES,
   NO_WRITE_FLAG,
   NO_WRITE_ENV,
+  PUBLISH_FLAG,
+  PUBLISH_ENV,
   disabledVocabularyCensus,
   publicationRefusal,
   UNMOUNTABLE_FAMILIES,
@@ -3222,9 +3224,33 @@ describe('axis-difference — disabled is a stamped state, and the stamp is the 
  * family. The record then carried a reading nobody reviewed.
  */
 describe('axis-difference — a measurement that is not the published one may not publish', () => {
-  it('permits an unflagged run', () => {
-    assert.equal(publicationRefusal({ argv: ['node', 'index.mjs'], env: {} }), null);
-    assert.equal(publicationRefusal(), null);
+  it('REFUSES an unflagged run and names the door: an audit or a test execution never publishes by default', () => {
+    for (const refusal of [publicationRefusal({ argv: ['node', 'index.mjs'], env: {} }), publicationRefusal(), publicationRefusal({ argv: ['node', 'index.mjs', '--threshold=80', '--json'], env: {} })]) {
+      assert.match(refusal, /pass --publish \(or set AXIS_DIFFERENCE_PUBLISH=1\) to write the record/u);
+    }
+  });
+
+  it('publishes only through the explicit door: the flag, or the environment opt-in a vitest can reach', () => {
+    assert.equal(publicationRefusal({ argv: ['node', 'index.mjs', PUBLISH_FLAG], env: {} }), null);
+    assert.equal(publicationRefusal({ argv: ['node', 'index.mjs'], env: { [PUBLISH_ENV]: '1' } }), null);
+    assert.equal(publicationRefusal({ argv: [PUBLISH_FLAG], env: { [PUBLISH_ENV]: '1' } }), null);
+    // A near-spelling is not the door.
+    for (const argv of [['--publish=1'], ['--publishing'], ['publish']]) assert.match(publicationRefusal({ argv }), /opt-in/u, argv[0]);
+  });
+
+  it('treats an empty, zero or false opt-in as absent, exactly as the opt-out reads its own', () => {
+    for (const value of ['', '0', 'false', undefined]) {
+      assert.match(publicationRefusal({ env: { [PUBLISH_ENV]: value } }), /opt-in/u, String(value));
+    }
+  });
+
+  it('PRECEDENCE: the opt-out wins every conflict with the opt-in, flag or environment, in all four crossings', () => {
+    assert.match(publicationRefusal({ argv: [PUBLISH_FLAG, NO_WRITE_FLAG] }), /--no-write was passed/u);
+    assert.match(publicationRefusal({ argv: [NO_WRITE_FLAG], env: { [PUBLISH_ENV]: '1' } }), /--no-write was passed/u);
+    assert.match(publicationRefusal({ argv: [PUBLISH_FLAG], env: { [NO_WRITE_ENV]: '1' } }), /AXIS_DIFFERENCE_NO_WRITE=1 is set/u);
+    assert.match(publicationRefusal({ env: { [PUBLISH_ENV]: '1', [NO_WRITE_ENV]: '1' } }), /AXIS_DIFFERENCE_NO_WRITE=1 is set/u);
+    // An absent-valued opt-out is no opt-out: the opt-in stands.
+    assert.equal(publicationRefusal({ argv: [PUBLISH_FLAG], env: { [NO_WRITE_ENV]: '0' } }), null);
   });
 
   it('refuses on the flag and on the environment opt-out, which is the one a vitest can reach', () => {
@@ -3233,12 +3259,12 @@ describe('axis-difference — a measurement that is not the published one may no
   });
 
   it('does NOT refuse a filtered run by itself: the pilot always filters, to its own declared roster', () => {
-    assert.equal(publicationRefusal({ argv: ['node', 'index.mjs', '--families=button'], env: {} }), null);
+    assert.equal(publicationRefusal({ argv: ['node', 'index.mjs', '--families=button', PUBLISH_FLAG], env: {} }), null);
   });
 
   it('treats an empty, zero or false opt-out as absent, so an exported blank does not silently stop publishing', () => {
     for (const value of ['', '0', 'false']) {
-      assert.equal(publicationRefusal({ env: { [NO_WRITE_ENV]: value } }), null, value);
+      assert.equal(publicationRefusal({ argv: [PUBLISH_FLAG], env: { [NO_WRITE_ENV]: value } }), null, value);
     }
   });
 });
@@ -4912,7 +4938,7 @@ describe('axis-difference — the pseudo-element read law: bounds, census, pin',
     assert.ok(cli.includes("pseudoReads: !process.argv.includes('--no-pseudo-reads')"));
     assert.match(cli, /^ \*   node scripts\/check\/theme\/axis-difference\/index\.mjs --no-pseudo-reads /mu);
     assert.ok(REPRODUCTION_FLAGS.includes('--no-pseudo-reads'));
-    assert.match(probe.publicationRefusal({ argv: [] }) ?? 'permitted', /permitted/u);
+    assert.match(probe.publicationRefusal({ argv: [PUBLISH_FLAG] }) ?? 'permitted', /permitted/u);
   });
 });
 

@@ -13,11 +13,13 @@
  * adjudication (WO-EVI-05 lot E5b, presented to Codex under iii-f).
  */
 import React from 'react';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { afterAll, describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it, vi } from 'vitest';
 
 import ModernButton from '@/components/primitives/inputs/button/engines/modern';
 import ModernCheckbox from '@/components/primitives/inputs/checkbox/engines/modern';
@@ -34,6 +36,7 @@ import {
   pairScenarios,
   partInvariantFailures,
   pilotReadings,
+  PUBLISH_ENV,
   publicationRefusal,
   run,
   STATE_STAMP_ATTRIBUTES,
@@ -42,7 +45,11 @@ import {
 import { AXES, checkPilotPopulation, readExclusions, withNotApplicable } from '@checks/theme/population/index.mjs';
 
 const CORE = resolve(__dirname, '../../..');
-const RECORD = resolve(CORE, '../../test-artifacts/gates/axis-difference-pilot/index.json');
+const RECORD_PATH = 'test-artifacts/gates/axis-difference-pilot/index.json';
+const RECORD = resolve(CORE, '../..', RECORD_PATH);
+const recordDigest = () => (existsSync(RECORD) ? createHash('sha256').update(readFileSync(RECORD)).digest('hex') : null);
+/** Read before any test of this file runs: what a run that is not the published one must leave behind. */
+const RECORD_AT_LOAD = recordDigest();
 const MODERN_SKINS = 'src/foundation/tokens/css/runtime/engines/modern/skin';
 const AGNOSTIC_SKINS = 'src/foundation/tokens/css/presentation/components/skin';
 const CATALOG = 'src/contracts/theme/runtime/catalog/index.ts';
@@ -225,9 +232,12 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
    * Every run used to rewrite it, including the ad-hoc one taken during a
    * review to answer one question about one family: the artifact then carried a
    * reading nobody had reviewed and the diff carried a file nobody had meant to
-   * change. `AXIS_DIFFERENCE_NO_WRITE=1` is the opt-out -- a vitest run has no
-   * argv of its own to pass `--no-write` through. The refusal is the probe's,
-   * so the gate and this test cannot drift on what "the published run" means.
+   * change. Publication is opt-in (audit 2026-10-13, correction 5): a plain
+   * `vitest run` of this file writes nothing, and `AXIS_DIFFERENCE_PUBLISH=1`
+   * is the door -- a vitest run has no argv of its own to pass `--publish`
+   * through. `AXIS_DIFFERENCE_NO_WRITE=1` still refuses, and wins beside the
+   * opt-in. The refusal is the probe's, so the gate and this test cannot drift
+   * on what "the published run" means.
    */
   let announced = false;
   const writeRecord = () => {
@@ -477,4 +487,36 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
     expect(evaluatePilot(severed, pilot)).toEqual([]);
     expect(restoredFailures).toEqual([]);
   }, 900_000);
+
+  /**
+   * Last on purpose: it reads the record after every `writeRecord()` above has
+   * had its turn, and then takes the write path itself with the opt-in absent.
+   * No browser is opened; `-t DRILL` runs it alone.
+   */
+  it('DRILL (no mutation): a run without the opt-in leaves the published record byte-identical, through the same writeRecord the measurements call', () => {
+    const publishing = publicationRefusal({ argv: process.argv, env: process.env }) === null;
+    const before = recordDigest();
+    expect(before).not.toBeNull();
+    // Nothing above this line wrote, unless the run IS the published one.
+    if (!publishing) expect(before).toBe(RECORD_AT_LOAD);
+    vi.stubEnv(PUBLISH_ENV, '');
+    let refusal: string | null = null;
+    try {
+      refusal = writeRecord();
+    } finally {
+      vi.unstubAllEnvs();
+    }
+    // The bytes first: they are the claim, and the reason is only why they held.
+    expect(recordDigest()).toBe(before);
+    expect(refusal).toMatch(/pass --publish \(or set AXIS_DIFFERENCE_PUBLISH=1\) to write the record|NO_WRITE|--no-write/u);
+    if (publishing) return;
+    // And it is the committed record, where a checkout can say so (a scratch tree without git cannot).
+    let committed: Buffer | null = null;
+    try {
+      committed = execFileSync('git', ['show', `HEAD:${RECORD_PATH}`], { cwd: resolve(CORE, '../..'), stdio: ['ignore', 'pipe', 'ignore'] });
+    } catch {
+      console.log('axis-difference-pilot: no git checkout to read HEAD from; the record was compared with its bytes at load only');
+    }
+    if (committed !== null) expect(createHash('sha256').update(committed).digest('hex')).toBe(before);
+  });
 });
