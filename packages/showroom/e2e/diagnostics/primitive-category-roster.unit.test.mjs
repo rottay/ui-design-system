@@ -38,8 +38,8 @@ const CATEGORY_MAPS = [
   ['src/app/(docs)/primitives/[category]/page.tsx', 'CATEGORY_CARD_ACCENTS'],
   ['src/app/(docs)/primitives/[category]/[component]/page.tsx', 'CATEGORY_GUIDANCE'],
   ['src/app/(docs)/primitives/[category]/[component]/page.tsx', 'categoryProps'],
-  ['src/app/(docs)/primitives/[category]/[component]/live-preview.tsx', 'CATEGORY_META'],
-  ['src/app/(docs)/primitives/[category]/[component]/live-preview.tsx', 'CATEGORY_ACCENTS'],
+  ['src/app/(docs)/primitives/[category]/[component]/live-preview/index.tsx', 'CATEGORY_META'],
+  ['src/app/(docs)/primitives/[category]/[component]/live-preview/index.tsx', 'CATEGORY_ACCENTS'],
 ];
 
 /** The five primitives that used to be filed under `foundation`, and the
