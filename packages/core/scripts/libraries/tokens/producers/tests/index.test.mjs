@@ -19,6 +19,7 @@ import {
   extractKeyedVarsEmissions,
 } from '../../../../check/tokens/cascade/channels/liveness/index.mjs';
 import * as census from '../index.mjs';
+import { CHROME_EMITTER_FILES } from '../../chrome-emitter/index.mjs';
 
 const KERNEL_FILE = 'src/infrastructure/compilers/kernel/foundation/css/drill/index.ts';
 const LOWERING_FOUNDATION_FILE =
@@ -386,10 +387,17 @@ const EMITTER_WRITER = [
   'export { setDrillVars };',
   '',
 ].join('\n');
+// Every declared section, planted empty and imported by the root: the emitter's one door fixes the list.
+const EMITTER_SECTIONS = CHROME_EMITTER_FILES.filter((entry) => entry.role === 'section').map((entry, index) => ({
+  path: `${EMITTER}/${entry.path}`,
+  source: `function setDrillSection${index}Vars(vars: Record<string, string>): void {}\n\nexport { setDrillSection${index}Vars };\n`,
+  importLine: `import { setDrillSection${index}Vars } from "./${entry.path.replace(/\/index\.ts$/, '')}";`,
+}));
 const emitterRoot = (body, importLine = 'import { setDrillVars } from "./writers";') =>
   [
     'import { DRILL_TABLE } from "./tables";',
     importLine,
+    ...EMITTER_SECTIONS.map((section) => section.importLine),
     '',
     'export function chromeToVariables(vars: Record<string, string>, chrome: Record<string, string>): void {',
     '  vars[DRILL_TABLE[0]] = chrome.a;',
@@ -402,6 +410,7 @@ const emitterTree = (overrides = {}) => ({
   [`${EMITTER}/index.ts`]: emitterRoot(EMITTER_CALLS),
   [`${EMITTER}/tables/index.ts`]: 'export const DRILL_TABLE = ["--ds-drill-table"] as const;\n',
   [EMITTER_WRITERS]: EMITTER_WRITER,
+  ...Object.fromEntries(EMITTER_SECTIONS.map((section) => [section.path, section.source])),
   ...overrides,
 });
 const writerSite = (sandbox) =>

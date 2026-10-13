@@ -81,6 +81,7 @@ import { sha256Hex } from '../governance/index.mjs';
 import { REACH_SOURCES } from '../../../orchestration/runtime/tenant-reach/index.mjs';
 import { planeOfCompilerFile } from './index.mjs';
 import { CHROME_VARIABLE_SOURCES, LOWERING_SOURCES } from '../../../orchestration/runtime/tenant-reach/index.mjs';
+import { CHROME_EMITTER_DIR, CHROME_EMITTER_FILES } from '../../../../libraries/tokens/chrome-emitter/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = join(HERE, 'index.mjs');
@@ -5626,12 +5627,16 @@ test('OM-5 NAMED LIMIT: a conditional spread inside an object is a producer wher
 
 test('plane: every chrome emitter member is ts-chrome-variables and nothing else is', () => {
   const chrome = 'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables';
-  assert.deepEqual(CHROME_VARIABLE_SOURCES, [`${chrome}/index.ts`, `${chrome}/tables/index.ts`, `${chrome}/writers/index.ts`]);
+  assert.equal(`packages/core/${CHROME_EMITTER_DIR}`, chrome);
+  assert.deepEqual(CHROME_VARIABLE_SOURCES, CHROME_EMITTER_FILES.map((entry) => `${chrome}/${entry.path}`));
+  assert.equal(CHROME_VARIABLE_SOURCES[0], `${chrome}/index.ts`, 'root first');
+  for (const member of ['tables/index.ts', 'writers/index.ts']) assert.ok(CHROME_VARIABLE_SOURCES.includes(`${chrome}/${member}`), member);
   for (const file of CHROME_VARIABLE_SOURCES) assert.equal(planeOfCompilerFile(file), 'ts-chrome-variables', file);
   for (const file of [
     ...LOWERING_SOURCES,
     'packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts',
     `${chrome}/orphan/index.ts`,
+    `${chrome}/sections/undeclared/index.ts`,
     `${chrome}/tests/frozen-engine-compat.test.ts`,
     `${chrome}/tables`,
   ]) {

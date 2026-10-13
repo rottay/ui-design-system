@@ -1246,6 +1246,10 @@ test("the shipped inventory reads the chrome emitter through its one authority",
   assert.deepEqual(shipped.analysis.emitterFiles.slice(0, chrome.length), chrome);
   assert.deepEqual(chrome, [
     "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+    "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/sections/buttons/index.ts",
+    "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/sections/containers/index.ts",
+    "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/sections/fields/index.ts",
+    "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/sections/frame/index.ts",
     "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/tables/index.ts",
     "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/writers/index.ts",
   ]);

@@ -40,6 +40,10 @@ const gate = (...args) => run(process.execPath, [GATE, ...args], { cwd: ROOT });
  */
 const REACH_CORPUS = Object.freeze([
   'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts',
+  'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/sections/buttons/index.ts',
+  'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/sections/containers/index.ts',
+  'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/sections/fields/index.ts',
+  'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/sections/frame/index.ts',
   'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/tables/index.ts',
   'packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/writers/index.ts',
   'packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts',

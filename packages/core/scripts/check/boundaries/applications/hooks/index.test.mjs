@@ -45,16 +45,23 @@ import {
   serializeHookManifest,
   splitSelectorList,
 } from '../../../../libraries/hooks/index.mjs';
+import { CHROME_EMITTER_FILES } from '../../../../libraries/tokens/chrome-emitter/index.mjs';
 
 const postcss = postcssModule.default ?? postcssModule;
 
 const CHROME_ANCHOR = ANCHORS.tenantChannel.path;
-// The emitter is a closed three-member folder: the root must import its data
-// member. Planted roots keep the import; the data member adds no token.
+// The emitter is a closed folder: the root must import every declared member.
+// Planted roots keep the imports; the planted members add no token.
 const CHROME_TABLES = CHROME_ANCHOR.replace(/index\.ts$/, 'tables/index.ts');
 const CHROME_TABLES_IMPORT = 'import { CHROME_FIXTURE_TABLE } from "./tables";\n';
 const CHROME_WRITERS = CHROME_ANCHOR.replace(/index\.ts$/, 'writers/index.ts');
 const CHROME_WRITERS_IMPORT = 'import { setFixtureVars } from "./writers";\n';
+const CHROME_SECTIONS = CHROME_EMITTER_FILES.filter((entry) => entry.role === 'section').map((entry, index) => ({
+  path: CHROME_ANCHOR.replace(/index\.ts$/, entry.path),
+  source: `function setFixtureSection${index}Vars(vars) {}\n\nexport { setFixtureSection${index}Vars };\n`,
+  importLine: `import { setFixtureSection${index}Vars } from "./${entry.path.replace(/\/index\.ts$/, '')}";\n`,
+}));
+const CHROME_SECTIONS_IMPORT = CHROME_SECTIONS.map((section) => section.importLine).join('');
 // The lowering's channel writers are one owner per concern, so this anchor is a
 // DIRECTORY. A planted tree therefore writes the emitter as an owner inside it,
 // exactly as the real tree does.
@@ -380,12 +387,13 @@ function coreFixture() {
   write(
     root,
     CHROME_ANCHOR,
-    `${CHROME_TABLES_IMPORT}${CHROME_WRITERS_IMPORT}` +
+    `${CHROME_TABLES_IMPORT}${CHROME_WRITERS_IMPORT}${CHROME_SECTIONS_IMPORT}` +
       `export function chromeVariables(a) {\n  const vars = {};\n${emissions.join('\n')}\n  return vars;\n}\n` +
       `${families.join('\n')}\n`,
   );
   write(root, CHROME_TABLES, 'export const CHROME_FIXTURE_TABLE = ["fixture"] as const;\n');
   write(root, CHROME_WRITERS, 'function setFixtureVars(vars) {}\n\nexport { setFixtureVars };\n');
+  for (const section of CHROME_SECTIONS) write(root, section.path, section.source);
   write(
     root,
     `${THEME_CONTRACTS_ANCHOR}/index.ts`,
@@ -555,7 +563,7 @@ test('ANCHOR DRIFT: a missing derivation source fails loudly and names the ancho
 
 test('ANCHOR DRIFT: an emptied anchor fails rather than yielding a short allowlist', () => {
   const root = coreFixture();
-  write(root, CHROME_ANCHOR, `${CHROME_TABLES_IMPORT}${CHROME_WRITERS_IMPORT}export function chromeVariables() { return {}; }\n`);
+  write(root, CHROME_ANCHOR, `${CHROME_TABLES_IMPORT}${CHROME_WRITERS_IMPORT}${CHROME_SECTIONS_IMPORT}export function chromeVariables() { return {}; }\n`);
   assert.throws(() => deriveHookManifest({ coreRoot: root, postcss, promotions: [] }), /ANCHOR DRIFT/);
 });
 
@@ -714,7 +722,7 @@ test('ANCHOR DRIFT: the emitter losing its interpolated families is fatal', () =
     { length: 260 },
     (_, index) => `  vars["--ds-literal-${index}"] = source.value;`,
   ).join('\n');
-  write(root, CHROME_ANCHOR, `${CHROME_TABLES_IMPORT}${CHROME_WRITERS_IMPORT}export function emit(vars, source) {\n${literals}\n}\n`);
+  write(root, CHROME_ANCHOR, `${CHROME_TABLES_IMPORT}${CHROME_WRITERS_IMPORT}${CHROME_SECTIONS_IMPORT}export function emit(vars, source) {\n${literals}\n}\n`);
   assert.throws(
     () => deriveHookManifest({ coreRoot: root, postcss, promotions: [] }),
     /ANCHOR DRIFT[\s\S]*interpolated emission families/,

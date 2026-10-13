@@ -69,6 +69,10 @@ export const CHROME_EMITTER_DIR = 'src/infrastructure/compilers/kernel/foundatio
 
 export const CHROME_EMITTER_FILES = Object.freeze([
   Object.freeze({ path: 'index.ts', role: 'root' }),
+  Object.freeze({ path: 'sections/buttons/index.ts', role: 'section' }),
+  Object.freeze({ path: 'sections/containers/index.ts', role: 'section' }),
+  Object.freeze({ path: 'sections/fields/index.ts', role: 'section' }),
+  Object.freeze({ path: 'sections/frame/index.ts', role: 'section' }),
   Object.freeze({ path: 'tables/index.ts', role: 'data' }),
   Object.freeze({ path: 'writers/index.ts', role: 'writer' }),
 ]);

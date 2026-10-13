@@ -118,10 +118,13 @@ describe('the brand compiler has no per-vertical branch', () => {
     const declared: { path: string; role: string }[] = [...CHROME_EMITTER_FILES];
     expect(declared.map((entry) => `${entry.role}:${entry.path}`)).toEqual([
       'root:index.ts',
+      'section:sections/buttons/index.ts',
+      'section:sections/containers/index.ts',
+      'section:sections/fields/index.ts',
+      'section:sections/frame/index.ts',
       'data:tables/index.ts',
       'writer:writers/index.ts',
     ]);
-    expect(declared.filter((entry) => entry.role === 'section')).toEqual([]);
     expect(members.map((member) => relative(COMPILERS_ROOT, member))).toEqual(
       declared.map((entry) => `kernel/foundation/css/chrome-variables/${entry.path}`)
     );

@@ -1,8 +1,8 @@
 /**
  * Drills for the section role of the chrome emitter authority.
  *
- * The shipped list declares no section, so every drill declares one over a
- * planted tree and judges it through the law's explicit-list form.
+ * Every drill declares a section the shipped list does not hold over a planted
+ * tree, and judges it through the law's explicit-list form.
  */
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -19,8 +19,8 @@ import {
 } from '../../index.mjs';
 import { CORE_ROOT, DRILL_WRITER, ROOT_SOURCE, W, WRITERS_SOURCE, emitterDir, plant, writerOf } from '../support/index.mjs';
 
-const S = `${CHROME_EMITTER_DIR}/sections/frame/index.ts`;
-const SECTION_ENTRY = Object.freeze({ path: 'sections/frame/index.ts', role: 'section' });
+const S = `${CHROME_EMITTER_DIR}/sections/drill/index.ts`;
+const SECTION_ENTRY = Object.freeze({ path: 'sections/drill/index.ts', role: 'section' });
 const WITH_SECTION = Object.freeze([...CHROME_EMITTER_FILES, SECTION_ENTRY]);
 const SECTION_HEAD = 'import type { BrandChrome } from "@/foundation/contracts/composition/tenants/themes";\n';
 const sectionOf = (body, exportList = 'setDrillFrameVars') => `${SECTION_HEAD}\n${body}\nexport { ${exportList} };\n`;
@@ -38,7 +38,7 @@ const DRILL_SECTION = `function setDrillFrameVars(vars: Record<string, string>, 
 const SECTION_SOURCE = sectionOf(DRILL_SECTION);
 const ROOT_WITH_SECTION = ROOT_SOURCE.replace(
   'import { setDrillVars } from "./writers";',
-  'import { setDrillFrameVars } from "./sections/frame";\nimport { setDrillVars } from "./writers";',
+  'import { setDrillFrameVars } from "./sections/drill";\nimport { setDrillVars } from "./writers";',
 ).replace('  setDrillVars(vars, chrome);\n', '  setDrillFrameVars(vars, chrome);\n  setDrillVars(vars, chrome);\n');
 const plantSection = (overrides = {}) =>
   plant({ [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_WITH_SECTION, [S]: SECTION_SOURCE, ...overrides });
@@ -47,37 +47,35 @@ test('a planted section member, declared and imported by the root, is admitted',
   assert.notEqual(ROOT_WITH_SECTION, ROOT_SOURCE);
   assert.deepEqual(sectionViolations('section.ts', SECTION_SOURCE, { writers: ['setDrillVars'] }), []);
   const core = plantSection();
-  assert.deepEqual(validateChromeEmitterMembers(core, WITH_SECTION), [
-    join(emitterDir(core), 'index.ts'),
-    join(emitterDir(core), 'tables/index.ts'),
-    join(emitterDir(core), 'writers/index.ts'),
-    join(emitterDir(core), 'sections/frame/index.ts'),
-  ]);
-  assert.deepEqual(chromeEmitterSectionImporters(core, WITH_SECTION), { 'sections/frame/index.ts': [`${CHROME_EMITTER_DIR}/index.ts`] });
+  assert.deepEqual(
+    validateChromeEmitterMembers(core, WITH_SECTION),
+    WITH_SECTION.map((entry) => join(emitterDir(core), entry.path)),
+  );
+  assert.deepEqual(chromeEmitterSectionImporters(core, WITH_SECTION)['sections/drill/index.ts'], [`${CHROME_EMITTER_DIR}/index.ts`]);
 });
 
 test('N section members are admitted together, each by its own declaration', () => {
   const second = sectionOf('function setDrillFieldVars(vars: Record<string, string>, chrome: BrandChrome): void {\n  if (chrome) vars["--ds-drill-field-bg"] = "1";\n}\n', 'setDrillFieldVars');
   const core = plantSection({
     [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_WITH_SECTION.replace(
-      'import { setDrillFrameVars } from "./sections/frame";',
-      'import { setDrillFieldVars } from "./sections/fields";\nimport { setDrillFrameVars } from "./sections/frame";',
+      'import { setDrillFrameVars } from "./sections/drill";',
+      'import { setDrillFieldVars } from "./sections/drill2";\nimport { setDrillFrameVars } from "./sections/drill";',
     ).replace('  setDrillFrameVars(vars, chrome);\n', '  setDrillFrameVars(vars, chrome);\n  setDrillFieldVars(vars, chrome);\n'),
-    [`${CHROME_EMITTER_DIR}/sections/fields/index.ts`]: second,
+    [`${CHROME_EMITTER_DIR}/sections/drill2/index.ts`]: second,
   });
-  const both = [...WITH_SECTION, { path: 'sections/fields/index.ts', role: 'section' }];
-  assert.equal(validateChromeEmitterMembers(core, both).length, 5);
-  assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /undeclared sections\/fields\/index\.ts is imported by the root/);
+  const both = [...WITH_SECTION, { path: 'sections/drill2/index.ts', role: 'section' }];
+  assert.equal(validateChromeEmitterMembers(core, both).length, both.length);
+  assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /undeclared sections\/drill2\/index\.ts is imported by the root/);
 });
 
-test('the shipped list admits no section: the same planted tree is refused through the one door', () => {
+test('the shipped list does not hold the drill section: the same planted tree is refused through the one door', () => {
   const core = plantSection();
-  assert.throws(() => chromeEmitterSources(core), /undeclared sections\/frame\/index\.ts is imported by the root/);
+  assert.throws(() => chromeEmitterSources(core), /undeclared sections\/drill\/index\.ts is imported by the root/);
   const orphan = plant({ [S]: SECTION_SOURCE });
-  assert.throws(() => chromeEmitterSources(orphan), /orphan sections\/frame\/index\.ts is not imported by the root/);
-  assert.throws(() => validateChromeEmitterMembers(orphan, WITH_SECTION), /orphan sections\/frame\/index\.ts is not imported by the root; declared sections\/frame\/index\.ts is not imported by the root/);
+  assert.throws(() => chromeEmitterSources(orphan), /orphan sections\/drill\/index\.ts is not imported by the root/);
+  assert.throws(() => validateChromeEmitterMembers(orphan, WITH_SECTION), /orphan sections\/drill\/index\.ts is not imported by the root; declared sections\/drill\/index\.ts is not imported by the root/);
   const absent = plant();
-  assert.throws(() => validateChromeEmitterMembers(absent, WITH_SECTION), /declared sections\/frame\/index\.ts is not imported by the root/);
+  assert.throws(() => validateChromeEmitterMembers(absent, WITH_SECTION), /declared sections\/drill\/index\.ts is not imported by the root/);
 });
 
 test('no reader takes the member list as an argument: the drill door is used by the library and its drills only', () => {
@@ -111,7 +109,7 @@ test('a section that references a writer is refused: by name, by call, by parame
   for (const [label, text] of Object.entries(mutants)) {
     assert.notDeepEqual(sectionViolations('section.ts', text, { writers: ['setDrillVars'] }), [], label);
     const core = plantSection({ [S]: text });
-    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/frame\/index\.ts is not a section/, label);
+    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/drill\/index\.ts is not a section/, label);
   }
   assert.match(
     sectionViolations('section.ts', mutants['calls a writer'], { writers: ['setDrillVars'] }).join(' '),
@@ -133,7 +131,7 @@ test('a callable handed to a section is refused whatever it is called: a section
   for (const [label, text] of Object.entries(mutants)) {
     assert.notDeepEqual(sectionViolations('section.ts', text), [], label);
     const core = plantSection({ [S]: text });
-    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/frame\/index\.ts is not a section/, label);
+    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/drill\/index\.ts is not a section/, label);
   }
 });
 
@@ -164,7 +162,7 @@ test('the one effect of a section is vars["--ds-…"] = value with a literal key
   for (const [label, [text, refusal]] of Object.entries(mutants)) {
     assert.match(sectionViolations('section.ts', text).join(' '), refusal, label);
     const core = plantSection({ [S]: text });
-    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/frame\/index\.ts is not a section/, label);
+    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/drill\/index\.ts is not a section/, label);
   }
 });
 
@@ -181,7 +179,7 @@ test('a key is a channel name written as it reads: every vars key, raw text equa
   for (const [label, [text, refusal]] of Object.entries(mutants)) {
     assert.match(sectionViolations('section.ts', text).join(' '), refusal, label);
     const core = plantSection({ [S]: text });
-    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/frame\/index\.ts is not a section/, label);
+    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/drill\/index\.ts is not a section/, label);
   }
   for (const admitted of ['  vars["--ds-drill-probe"] = "1";', "  vars['--ds-drill-probe'] = \"1\";", '  vars[/* k */ "--ds-drill-probe"] = "1";']) {
     assert.deepEqual(sectionViolations('section.ts', sectionFn(admitted)), [], admitted);
@@ -199,7 +197,7 @@ test('a for-of or for-in that assigns to anything but its own const is refused',
   for (const [label, text] of Object.entries(mutants)) {
     assert.match(sectionViolations('section.ts', text).join(' '), /loop assigns to anything but its own const/, label);
     const core = plantSection({ [S]: text });
-    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/frame\/index\.ts is not a section/, label);
+    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/drill\/index\.ts is not a section/, label);
   }
   assert.deepEqual(sectionViolations('section.ts', sectionFn('  for (const size of ["sm", "md"] as const) if (size) vars["--ds-drill-probe"] = size;\n  for (const key in chrome) if (key) vars["--ds-drill-key"] = key;')), []);
 });
@@ -235,63 +233,63 @@ test('every statement shape outside the section grammar is refused', () => {
   for (const [label, text] of Object.entries(mutants)) {
     assert.notDeepEqual(sectionViolations('section.ts', text), [], label);
     const core = plantSection({ [S]: text });
-    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/frame\/index\.ts is not a section/, label);
+    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section member sections\/drill\/index\.ts is not a section/, label);
   }
 });
 
 test('a section names no section of another member', () => {
-  const fields = `${CHROME_EMITTER_DIR}/sections/fields/index.ts`;
-  const both = [...WITH_SECTION, { path: 'sections/fields/index.ts', role: 'section' }];
+  const fields = `${CHROME_EMITTER_DIR}/sections/drill2/index.ts`;
+  const both = [...WITH_SECTION, { path: 'sections/drill2/index.ts', role: 'section' }];
   const root = ROOT_WITH_SECTION.replace(
-    'import { setDrillFrameVars } from "./sections/frame";',
-    'import { setDrillFieldVars } from "./sections/fields";\nimport { setDrillFrameVars } from "./sections/frame";',
+    'import { setDrillFrameVars } from "./sections/drill";',
+    'import { setDrillFieldVars } from "./sections/drill2";\nimport { setDrillFrameVars } from "./sections/drill";',
   );
   const core = plantSection({
     [`${CHROME_EMITTER_DIR}/index.ts`]: root,
     [fields]: sectionOf('function setDrillFieldVars(vars: Record<string, string>, chrome: BrandChrome, setDrillFrameVars: unknown): void {\n  if (chrome && setDrillFrameVars) vars["--ds-drill-field-bg"] = "1";\n}\n', 'setDrillFieldVars'),
   });
-  assert.throws(() => validateChromeEmitterMembers(core, both), /section member sections\/fields\/index\.ts is not a section: :3 section names section setDrillFrameVars/);
+  assert.throws(() => validateChromeEmitterMembers(core, both), /section member sections\/drill2\/index\.ts is not a section: :3 section names section setDrillFrameVars/);
 });
 
 test('the root must import exactly the exported sections, unaliased, and may not shadow one', () => {
   const spare = plantSection({
     [S]: sectionOf(`${DRILL_SECTION}function setSpareVars(vars: Record<string, string>): void {\n  vars["--ds-spare"] = "1";\n}\n`, 'setDrillFrameVars, setSpareVars'),
   });
-  assert.throws(() => validateChromeEmitterMembers(spare, WITH_SECTION), /the root imports \[setDrillFrameVars\] from section sections\/frame\/index\.ts, not its sections \[setDrillFrameVars, setSpareVars\]/);
+  assert.throws(() => validateChromeEmitterMembers(spare, WITH_SECTION), /the root imports \[setDrillFrameVars\] from section sections\/drill\/index\.ts, not its sections \[setDrillFrameVars, setSpareVars\]/);
   const aliased = plantSection({
-    [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_WITH_SECTION.replace('import { setDrillFrameVars } from "./sections/frame";', 'import { setDrillFrameVars as frame } from "./sections/frame";\nconst setDrillFrameVars = frame;'),
+    [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_WITH_SECTION.replace('import { setDrillFrameVars } from "./sections/drill";', 'import { setDrillFrameVars as frame } from "./sections/drill";\nconst setDrillFrameVars = frame;'),
   });
   assert.throws(() => validateChromeEmitterMembers(aliased, WITH_SECTION), /the root imports \[<aliased setDrillFrameVars as frame>\] from section/);
   const namespace = plantSection({
-    [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_WITH_SECTION.replace('import { setDrillFrameVars } from "./sections/frame";', 'import * as frame from "./sections/frame";\nconst setDrillFrameVars = frame.setDrillFrameVars;'),
+    [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_WITH_SECTION.replace('import { setDrillFrameVars } from "./sections/drill";', 'import * as frame from "./sections/drill";\nconst setDrillFrameVars = frame.setDrillFrameVars;'),
   });
   assert.throws(() => validateChromeEmitterMembers(namespace, WITH_SECTION), /the root imports \[<non-named import>\] from section/);
   const shadow = plantSection({
-    [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_WITH_SECTION.replace('import { setDrillFrameVars } from "./sections/frame";', 'import "./sections/frame";')}function setDrillFrameVars(vars: Record<string, string>, chrome: unknown): void {\n  if (chrome) vars["--ds-shadow"] = "1";\n}\n`,
+    [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_WITH_SECTION.replace('import { setDrillFrameVars } from "./sections/drill";', 'import "./sections/drill";')}function setDrillFrameVars(vars: Record<string, string>, chrome: unknown): void {\n  if (chrome) vars["--ds-shadow"] = "1";\n}\n`,
   });
   assert.throws(() => validateChromeEmitterMembers(shadow, WITH_SECTION), /the root shadows section setDrillFrameVars/);
   const clash = plantSection({
     [S]: sectionOf('function setDrillVars(vars: Record<string, string>): void {\n  vars["--ds-clash"] = "1";\n}\n', 'setDrillVars'),
   });
-  assert.throws(() => validateChromeEmitterMembers(clash, WITH_SECTION), /section member sections\/frame\/index\.ts is not a section: .*section names writer setDrillVars/);
+  assert.throws(() => validateChromeEmitterMembers(clash, WITH_SECTION), /section member sections\/drill\/index\.ts is not a section: .*section names writer setDrillVars/);
 });
 
 test('the root is a section member\'s only importer anywhere in src/ or tests/', () => {
-  const alias = `@/${CHROME_EMITTER_DIR.slice('src/'.length)}/sections/frame`;
+  const alias = `@/${CHROME_EMITTER_DIR.slice('src/'.length)}/sections/drill`;
   const vectors = {
     'an @/ alias importer in src': ['src/components/other/index.ts', `import { setDrillFrameVars } from "${alias}";\nexport const leak = setDrillFrameVars;\n`],
     'a dynamic import': ['src/components/lazy/index.ts', `export const load = () => import("${alias}");\n`],
-    'a test importer under tests/': ['tests/support/drill/index.ts', `export const target = "../../../${CHROME_EMITTER_DIR}/sections/frame";\n`],
-    'vi.mock in the emitter tests': [`${CHROME_EMITTER_DIR}/tests/drill.test.ts`, 'vi.mock("../sections/frame", () => ({}));\n'],
-    'the writer member, type-only': [W, `import type { setDrillFrameVars } from "../sections/frame";\n${WRITERS_SOURCE}`],
-    'a specifier with no "frame" in it, inside the section folder': [`${CHROME_EMITTER_DIR}/sections/frame/tests/drill.test.ts`, 'import * as self from "..";\nvoid self;\n'],
+    'a test importer under tests/': ['tests/support/drill/index.ts', `export const target = "../../../${CHROME_EMITTER_DIR}/sections/drill";\n`],
+    'vi.mock in the emitter tests': [`${CHROME_EMITTER_DIR}/tests/drill.test.ts`, 'vi.mock("../sections/drill", () => ({}));\n'],
+    'the writer member, type-only': [W, `import type { setDrillFrameVars } from "../sections/drill";\n${WRITERS_SOURCE}`],
+    'a specifier with no "frame" in it, inside the section folder': [`${CHROME_EMITTER_DIR}/sections/drill/tests/drill.test.ts`, 'import * as self from "..";\nvoid self;\n'],
   };
   for (const [label, [path, text]] of Object.entries(vectors)) {
     const core = plantSection({ [path]: text });
-    assert.ok(chromeEmitterSectionImporters(core, WITH_SECTION)['sections/frame/index.ts'].includes(path), label);
-    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section sections\/frame\/index\.ts is imported by \[.*\], not by the root alone/, label);
+    assert.ok(chromeEmitterSectionImporters(core, WITH_SECTION)['sections/drill/index.ts'].includes(path), label);
+    assert.throws(() => validateChromeEmitterMembers(core, WITH_SECTION), /section sections\/drill\/index\.ts is imported by \[.*\], not by the root alone/, label);
   }
-  const twice = plantSection({ [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_WITH_SECTION}import "./sections/frame";\n` });
+  const twice = plantSection({ [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_WITH_SECTION}import "./sections/drill";\n` });
   assert.throws(() => validateChromeEmitterMembers(twice, WITH_SECTION), /is imported by \[.*index\.ts, .*index\.ts\], not by the root alone/);
 });
 
@@ -308,7 +306,7 @@ test('the existing roles keep biting beside a section: a second member of root, 
       role,
     );
   }
-  assert.equal(validateChromeEmitterMembers(core, [...WITH_SECTION, { path: 'writers2/index.ts', role: 'section' }]).length, 5, 'a literal-only file is a lawful section, never a second writer');
+  assert.equal(validateChromeEmitterMembers(core, [...WITH_SECTION, { path: 'writers2/index.ts', role: 'section' }]).length, WITH_SECTION.length + 1, 'a literal-only file is a lawful section, never a second writer');
 });
 
 test('a section moved into the writer member is still refused by the writer grammar, and a writer is no section', () => {

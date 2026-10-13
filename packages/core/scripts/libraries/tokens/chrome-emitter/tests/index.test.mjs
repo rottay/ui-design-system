@@ -23,32 +23,36 @@ import {
   writerViolations,
 } from '../index.mjs';
 
-import { CORE_ROOT, DRILL_WRITER, ROOT_SOURCE, TABLES_SOURCE, W, WRITERS_SOURCE, WRITER_HEAD, emitterDir, plant, writerOf } from './support/index.mjs';
+import { CORE_ROOT, DRILL_WRITER, PLANTED_MEMBERS, ROOT_SOURCE, TABLES_SOURCE, W, WRITERS_SOURCE, WRITER_HEAD, emitterDir, plant, writerOf } from './support/index.mjs';
 
-test('the shipped emitter is exactly its three declared members, root first, and declares no section', () => {
+const SHIPPED_SECTIONS = ['sections/buttons/index.ts', 'sections/containers/index.ts', 'sections/fields/index.ts', 'sections/frame/index.ts'];
+
+test('the shipped emitter is exactly its declared members, root first, in sorted order, each section declared by path', () => {
   assert.deepEqual(
     CHROME_EMITTER_FILES.map((entry) => `${entry.role}:${entry.path}`),
-    ['root:index.ts', 'data:tables/index.ts', 'writer:writers/index.ts'],
+    ['root:index.ts', ...SHIPPED_SECTIONS.map((path) => `section:${path}`), 'data:tables/index.ts', 'writer:writers/index.ts'],
   );
-  assert.deepEqual(CHROME_EMITTER_FILES.filter((entry) => entry.role === 'section'), []);
-  assert.deepEqual(chromeEmitterSectionImporters(CORE_ROOT), {});
+  assert.deepEqual(CHROME_EMITTER_FILES.map((entry) => entry.path), PLANTED_MEMBERS, 'declared order is the sorted closure');
+  assert.deepEqual(
+    chromeEmitterSectionImporters(CORE_ROOT),
+    Object.fromEntries(SHIPPED_SECTIONS.map((path) => [path, [`${CHROME_EMITTER_DIR}/index.ts`]])),
+  );
   assert.deepEqual(
     chromeEmitterSources(CORE_ROOT),
     CHROME_EMITTER_FILES.map((entry) => join(CORE_ROOT, CHROME_EMITTER_DIR, entry.path)),
   );
-  assert.deepEqual(chromeEmitterClosure(CORE_ROOT), ['index.ts', 'tables/index.ts', 'writers/index.ts']);
-  assert.deepEqual(chromeEmitterInventory(emitterDir(CORE_ROOT)), ['index.ts', 'tables/index.ts', 'writers/index.ts']);
+  assert.deepEqual(chromeEmitterClosure(CORE_ROOT), ['index.ts', ...SHIPPED_SECTIONS, 'tables/index.ts', 'writers/index.ts']);
+  assert.deepEqual(chromeEmitterInventory(emitterDir(CORE_ROOT)), ['index.ts', ...SHIPPED_SECTIONS, 'tables/index.ts', 'writers/index.ts']);
   const tables = join(CORE_ROOT, CHROME_EMITTER_DIR, 'tables/index.ts');
   assert.deepEqual(dataOnlyViolations(tables, readFileSync(tables, 'utf8')), []);
 });
 
-test('a planted three-member emitter is admitted', () => {
+test('a planted emitter holding the shipped list is admitted', () => {
   const core = plant();
-  assert.deepEqual(chromeEmitterSources(core), [
-    join(emitterDir(core), 'index.ts'),
-    join(emitterDir(core), 'tables/index.ts'),
-    join(emitterDir(core), 'writers/index.ts'),
-  ]);
+  assert.deepEqual(
+    chromeEmitterSources(core),
+    CHROME_EMITTER_FILES.map((entry) => join(emitterDir(core), entry.path)),
+  );
 });
 
 test('an orphan productive file under the folder is refused', () => {
@@ -108,8 +112,8 @@ test('the @/ alias resolves to the same member as the relative specifier', () =>
       `"@/${CHROME_EMITTER_DIR.slice('src/'.length)}/tables"`,
     ),
   });
-  assert.deepEqual(chromeEmitterClosure(core), ['index.ts', 'tables/index.ts', 'writers/index.ts']);
-  assert.equal(chromeEmitterSources(core).length, 3);
+  assert.deepEqual(chromeEmitterClosure(core), PLANTED_MEMBERS);
+  assert.equal(chromeEmitterSources(core).length, PLANTED_MEMBERS.length);
 });
 
 test('re-exports and dynamic imports are value edges', () => {
@@ -123,8 +127,8 @@ test('tests/, fixtures/ and stories/ are not inventory, and a member that value-
   const hidden = 'function setHiddenVars(vars: Record<string, string>): void {\n  vars["--ds-hidden"] = "1";\n}\n\nexport { setHiddenVars };\n';
   for (const dir of ['tests', 'test', '__tests__', 'fixtures', '__fixtures__', 'stories', 'sections/fixtures']) {
     const unimported = plant({ [`${CHROME_EMITTER_DIR}/${dir}/hidden/index.ts`]: hidden });
-    assert.deepEqual(chromeEmitterInventory(emitterDir(unimported)), ['index.ts', 'tables/index.ts', 'writers/index.ts'], dir);
-    assert.equal(chromeEmitterSources(unimported).length, 3, dir);
+    assert.deepEqual(chromeEmitterInventory(emitterDir(unimported)), PLANTED_MEMBERS, dir);
+    assert.equal(chromeEmitterSources(unimported).length, PLANTED_MEMBERS.length, dir);
     const imported = plant({
       [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import { setHiddenVars } from "./${dir}/hidden";\n`,
       [`${CHROME_EMITTER_DIR}/${dir}/hidden/index.ts`]: hidden,
@@ -136,7 +140,7 @@ test('tests/, fixtures/ and stories/ are not inventory, and a member that value-
       [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import type { setHiddenVars } from "./${dir}/hidden";\n`,
       [`${CHROME_EMITTER_DIR}/${dir}/hidden/index.ts`]: hidden,
     });
-    assert.equal(chromeEmitterSources(typeOnly).length, 3, `${dir}: a type-only import runs nothing`);
+    assert.equal(chromeEmitterSources(typeOnly).length, PLANTED_MEMBERS.length, `${dir}: a type-only import runs nothing`);
   }
   const missing = plant({ [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import { gone } from "./fixtures/gone";\n` });
   assert.throws(() => chromeEmitterSources(missing), /under a non-productive directory/);
@@ -189,7 +193,7 @@ test('the root is not held to the data grammar: writers live there', () => {
   const core = plant({
     [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}function setExtraVars(vars: Record<string, string>) { vars["--ds-extra"] = "1"; }\n`,
   });
-  assert.equal(chromeEmitterSources(core).length, 3);
+  assert.equal(chromeEmitterSources(core).length, PLANTED_MEMBERS.length);
 });
 
 test('the canonical API has no member override: extra options cannot change the authority', () => {
@@ -201,7 +205,7 @@ test('the canonical API has no member override: extra options cannot change the 
   const elsewhere = plant({ [`${CHROME_EMITTER_DIR}/orphan/index.ts`]: 'export const ORPHAN = ["--ds-orphan"] as const;\n' });
   assert.deepEqual(
     chromeEmitterSources(valid, { files: [{ path: 'orphan/index.ts', role: 'root' }], emitterDir: emitterDir(elsewhere) }),
-    [join(emitterDir(valid), 'index.ts'), join(emitterDir(valid), 'tables/index.ts'), join(emitterDir(valid), 'writers/index.ts')],
+    CHROME_EMITTER_FILES.map((entry) => join(emitterDir(valid), entry.path)),
   );
 });
 
@@ -268,18 +272,19 @@ test('the shipped writer member is admitted by the writer grammar', () => {
 test('the role list is closed: exactly one root, data and writer, and zero or more sections', () => {
   assert.deepEqual(chromeEmitterRoleViolations(CHROME_EMITTER_FILES), []);
   const section = (name) => ({ path: `sections/${name}/index.ts`, role: 'section' });
-  assert.deepEqual(chromeEmitterRoleViolations([...CHROME_EMITTER_FILES, section('frame')]), []);
-  assert.deepEqual(chromeEmitterRoleViolations([...CHROME_EMITTER_FILES, section('frame'), section('fields'), section('tabs')]), []);
+  const withoutRole = (role) => CHROME_EMITTER_FILES.filter((entry) => entry.role !== role);
+  assert.deepEqual(chromeEmitterRoleViolations([...CHROME_EMITTER_FILES, section('drill')]), []);
+  assert.deepEqual(chromeEmitterRoleViolations([...CHROME_EMITTER_FILES, section('drill'), section('drill2'), section('drill3')]), []);
   const cases = {
     'two writers': [[...CHROME_EMITTER_FILES, { path: 'writers2/index.ts', role: 'writer' }], /role writer has 2 members, not 1/],
-    'two roots beside a section': [[...CHROME_EMITTER_FILES, section('frame'), { path: 'root2/index.ts', role: 'root' }], /role root has 2 members, not 1/],
-    'two data members beside a section': [[...CHROME_EMITTER_FILES, section('frame'), { path: 'tables2/index.ts', role: 'data' }], /role data has 2 members, not 1/],
-    'two writers beside a section': [[...CHROME_EMITTER_FILES, section('frame'), { path: 'writers2/index.ts', role: 'writer' }], /role writer has 2 members, not 1/],
-    'role typo': [[CHROME_EMITTER_FILES[0], CHROME_EMITTER_FILES[1], { path: 'writers/index.ts', role: 'writter' }], /unknown role "writter"/],
-    'section typo': [[...CHROME_EMITTER_FILES, { path: 'sections/frame/index.ts', role: 'sections' }], /unknown role "sections"/],
-    'no data member': [[CHROME_EMITTER_FILES[0], CHROME_EMITTER_FILES[2]], /role data has 0 members, not 1/],
-    'sections cannot stand in for a singleton': [[CHROME_EMITTER_FILES[0], CHROME_EMITTER_FILES[1], section('frame')], /role writer has 0 members, not 1/],
-    'a section declared twice': [[...CHROME_EMITTER_FILES, section('frame'), section('frame')], /sections\/frame\/index\.ts is declared twice/],
+    'two roots beside a section': [[...CHROME_EMITTER_FILES, section('drill'), { path: 'root2/index.ts', role: 'root' }], /role root has 2 members, not 1/],
+    'two data members beside a section': [[...CHROME_EMITTER_FILES, section('drill'), { path: 'tables2/index.ts', role: 'data' }], /role data has 2 members, not 1/],
+    'two writers beside a section': [[...CHROME_EMITTER_FILES, section('drill'), { path: 'writers2/index.ts', role: 'writer' }], /role writer has 2 members, not 1/],
+    'role typo': [[...withoutRole('writer'), { path: 'writers/index.ts', role: 'writter' }], /unknown role "writter"/],
+    'section typo': [[...CHROME_EMITTER_FILES, { path: 'sections/drill/index.ts', role: 'sections' }], /unknown role "sections"/],
+    'no data member': [withoutRole('data'), /role data has 0 members, not 1/],
+    'sections cannot stand in for a singleton': [[...withoutRole('writer'), section('drill')], /role writer has 0 members, not 1/],
+    'a section declared twice': [[...CHROME_EMITTER_FILES, section('drill'), section('drill')], /sections\/drill\/index\.ts is declared twice/],
     'one path under two roles': [[...CHROME_EMITTER_FILES, { path: 'writers/index.ts', role: 'section' }], /writers\/index\.ts is declared twice/],
   };
   for (const [label, [files, refusal]] of Object.entries(cases)) assert.match(chromeEmitterRoleViolations(files).join('; '), refusal, label);
@@ -332,7 +337,7 @@ test('a writer value-imports nothing, not even the data member (sibling-owner-de
     [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_SOURCE.replace('import { DRILL_CHROME_VARIABLES } from "./tables";\n', ''),
     [W]: 'import type { DRILL_CHROME_VARIABLES } from "../tables";\n\nfunction setDrillVars(vars: Record<string, string>): void {\n  vars["--ds-drill"] = "1";\n}\n\nexport { setDrillVars };\n',
   });
-  assert.deepEqual(chromeEmitterClosure(typeOnly), ['index.ts', 'writers/index.ts']);
+  assert.deepEqual(chromeEmitterClosure(typeOnly), PLANTED_MEMBERS.filter((member) => member !== 'tables/index.ts'));
   assert.throws(() => chromeEmitterSources(typeOnly), /declared tables\/index\.ts is not imported by the root/);
 });
 
@@ -415,7 +420,7 @@ test('a writer may key a channel by a template whose holes are its parameters or
       'setDrillVars, setPrefixVars',
     ),
   });
-  assert.equal(chromeEmitterSources(core).length, 3);
+  assert.equal(chromeEmitterSources(core).length, PLANTED_MEMBERS.length);
 });
 
 test('every other template shape in a writer is refused', () => {

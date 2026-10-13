@@ -9,9 +9,23 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { packageRoot } from '../../../../repo-root/index.mjs';
-import { CHROME_EMITTER_DIR } from '../../index.mjs';
+import { CHROME_EMITTER_DIR, CHROME_EMITTER_FILES } from '../../index.mjs';
 
 export const CORE_ROOT = packageRoot(dirname(fileURLToPath(import.meta.url)));
+
+/** Every shipped section as an empty stand-in: the one door fixes the shipped list, so a planted tree holds it whole. */
+const SHIPPED_SECTIONS = CHROME_EMITTER_FILES.filter((entry) => entry.role === 'section').map((entry) => {
+  const folder = entry.path.replace(/\/index\.ts$/, '');
+  const name = `setShipped${folder.split('/').at(-1).replace(/^./, (letter) => letter.toUpperCase())}Vars`;
+  return {
+    path: `${CHROME_EMITTER_DIR}/${entry.path}`,
+    source: `function ${name}(vars: Record<string, string>): void {}\n\nexport { ${name} };\n`,
+    importLine: `import { ${name} } from "./${folder}";\n`,
+  };
+});
+export const SHIPPED_SECTION_IMPORTS = SHIPPED_SECTIONS.map((section) => section.importLine).join('');
+/** The members a planted tree holds, folder-relative and sorted: what its closure and its inventory both read. */
+export const PLANTED_MEMBERS = Object.freeze(CHROME_EMITTER_FILES.map((entry) => entry.path).sort());
 
 export const ROOT_SOURCE = `import type { BrandChrome } from "@/foundation/contracts/composition/tenants/themes";
 import { applyRadiusDial } from "@/foundation/kernel/geometry/radius-dial";
@@ -19,7 +33,7 @@ import { applyRadiusDial } from "@/foundation/kernel/geometry/radius-dial";
 import { DRILL_CHROME_VARIABLES } from "./tables";
 
 import { setDrillVars } from "./writers";
-
+${SHIPPED_SECTION_IMPORTS}
 export function chromeToVariables(chrome: BrandChrome): Record<string, string> {
   const vars: Record<string, string> = {};
   for (const [field, name] of Object.entries(DRILL_CHROME_VARIABLES)) vars[name] = String(applyRadiusDial(field));
@@ -67,6 +81,7 @@ export function plant(overrides = {}) {
     [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_SOURCE,
     [`${CHROME_EMITTER_DIR}/tables/index.ts`]: TABLES_SOURCE,
     [`${CHROME_EMITTER_DIR}/writers/index.ts`]: WRITERS_SOURCE,
+    ...Object.fromEntries(SHIPPED_SECTIONS.map((section) => [section.path, section.source])),
     [`${CHROME_EMITTER_DIR}/tests/frozen.test.ts`]: 'import { chromeToVariables } from "..";\n',
     'src/foundation/kernel/geometry/radius-dial/index.ts': 'export const applyRadiusDial = (value: string) => value;\n',
     ...overrides,
