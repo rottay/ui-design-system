@@ -303,8 +303,17 @@ test('sobre el arbol real: ninguna via fuera del vocabulario y toda fila con su 
    * packet 1) deleted the Daisy projection, whose --radius-field line was the
    * only edge attributing --ds-radius-button to a second root (radius.base);
    * with the dead bridge gone the three slots read one root and join the floor
-   * -- population un-hidden, never new debt. */
-  const R2_FLOOR_PIN = 16;
+   * -- population un-hidden, never new debt.
+   * 16 -> 13 (2026-10-13, DT adjudication: an attributed population record,
+   * the pin had sat above the census since 2026-10-02): the three
+   * {rottay,bithire,evnto}:chrome.sidebar.tone slots (-> tier.page.bg) leave
+   * the floor at 5e92f1b89 (RET-01-CH), the first edges artifact carrying the
+   * leaf-fallback edge --ds-color-text-primary -> --ds-sidebar-text
+   * (skin/app-shell, three sites; authored in its parent d5250c385). The edge
+   * attributes --ds-sidebar-text to tier.base.fg by declared-fallback, so each
+   * slot -- its six emitted channels unchanged -- reads a second root and is
+   * outside the "exactly one root" floor. Without the edge the tree reads 16. */
+  const R2_FLOOR_PIN = 13;
   assert.ok(doc.stats.r2Floor <= R2_FLOOR_PIN,
     `r2Floor GREW ${R2_FLOOR_PIN} -> ${doc.stats.r2Floor} (${doc.stats.r2FloorRoots.join(', ')}): the pin never rises -- a larger floor is a population change the census owner adjudicates, not a re-pin`);
   assert.ok(doc.stats.r2Floor >= R2_FLOOR_PIN,
