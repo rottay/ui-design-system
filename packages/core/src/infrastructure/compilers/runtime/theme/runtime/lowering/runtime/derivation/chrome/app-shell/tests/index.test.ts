@@ -24,9 +24,10 @@ import {
   type FamilyFixture,
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { compileThemeIntent, staticThemeIntent } from "@/entrypoints/server";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
-import { appShellChromeDeriver } from "..";
+import { NAVIGATION_FOOTER_INK, appShellChromeDeriver } from "..";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
 
@@ -93,6 +94,14 @@ const READ_OUTSIDE_THE_SKIN = new Set([
 
 const context = () => buildLoweringContext({ theme: firstPartyFixture("bithire") });
 
+const FOOTER_INK = "--ds-app-shell-navigation-footer-color";
+const MODES = ["light", "dark"] as const;
+const atMode = (mode: (typeof MODES)[number]) =>
+  appShellChromeDeriver.derive(
+    buildLoweringContext({ theme: firstPartyFixture("bithire"), mode, surface: mode }),
+    {}
+  );
+
 describe("chrome/app-shell", () => {
   it("states every wired channel at the single resting value the skin reads it with", () => {
     const derived = appShellChromeDeriver.derive(context(), {});
@@ -102,6 +111,45 @@ describe("chrome/app-shell", () => {
       expect({ channel, fallbacks: skinFallbacks(channel) }).toEqual({ channel, fallbacks: [value] });
     }
   });
+
+  it("states the footer ink per mode, and rests the skin on the light one", () => {
+    const light = atMode("light");
+    const dark = atMode("dark");
+    // One plain value per block: the mode delta carries the other mode, so a
+    // `light-dark()` has no place in the producer or in the fallback it mirrors.
+    for (const [channel, value] of [...Object.entries(light), ...Object.entries(dark)]) {
+      expect({ channel, value }).not.toEqual({
+        channel,
+        value: expect.stringContaining("light-dark("),
+      });
+    }
+    expect(SKIN).not.toContain("light-dark(");
+    expect(light[FOOTER_INK]).toBe(NAVIGATION_FOOTER_INK.light);
+    expect(dark[FOOTER_INK]).toBe(NAVIGATION_FOOTER_INK.dark);
+    expect(NAVIGATION_FOOTER_INK.light).not.toBe(NAVIGATION_FOOTER_INK.dark);
+    // The skin states ONE fallback, the light rest; the dark answer reaches it
+    // through the produced channel alone, where it is the nav ink of the block.
+    expect(skinFallbacks(FOOTER_INK)).toEqual([NAVIGATION_FOOTER_INK.light]);
+    expect(dark[FOOTER_INK]).toBe(dark["--ds-app-shell-navigation-color"]);
+    // Every other channel is one value in both modes, which is what lets the
+    // resting-value law above read a single block.
+    const moved = Object.keys(light).filter((channel) => light[channel] !== dark[channel]);
+    expect(moved).toEqual([FOOTER_INK]);
+  });
+
+  it.each([
+    ["bithire", "light", "dark"],
+    ["evnto", "light", "dark"],
+    ["rottay", "dark", "light"],
+  ] as const)(
+    "projects the %s footer ink as its %s body plus an explicit %s mode block",
+    (vertical, base, overlay) => {
+      const { compiled } = compileThemeIntent(staticThemeIntent(vertical));
+      expect(compiled.cssVariables[FOOTER_INK]).toBe(NAVIGATION_FOOTER_INK[base]);
+      const block = compiled.modeBlocks?.find((candidate) => candidate.mode === overlay);
+      expect(block?.cssVariables[FOOTER_INK]).toBe(NAVIGATION_FOOTER_INK[overlay]);
+    }
+  );
 
   it("states the four geometry tracks at exactly the chain the structure reads", () => {
     const derived = appShellChromeDeriver.derive(context(), {});

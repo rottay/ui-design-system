@@ -51991,7 +51991,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   flex-shrink: 0;
   padding: var(--ds-shell-navigation-footer-padding, var(--ds-app-shell-navigation-footer-padding, var(--ds-spacing-3, 12px)));
   background: var(--ds-app-shell-navigation-footer-background, var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg)));
-  color: var(--ds-app-shell-navigation-footer-color, light-dark(var(--ds-color-text-on-primary), var(--ds-sidebar-text, var(--ds-color-text-primary))));
+  color: var(--ds-app-shell-navigation-footer-color, var(--ds-color-text-on-primary));
   border-block-start: var(--ds-app-shell-navigation-footer-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 
@@ -107218,7 +107218,7 @@ html[lang]:lang(ar) {
   --ds-app-shell-navigation-drawer-header-padding: 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px);
   --ds-app-shell-navigation-footer-background: var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg));
   --ds-app-shell-navigation-footer-border: 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle));
-  --ds-app-shell-navigation-footer-color: light-dark(var(--ds-color-text-on-primary), var(--ds-sidebar-text, var(--ds-color-text-primary)));
+  --ds-app-shell-navigation-footer-color: var(--ds-sidebar-text, var(--ds-color-text-primary));
   --ds-app-shell-navigation-footer-padding: var(--ds-spacing-3, 12px);
   --ds-app-shell-navigation-footer-padding-collapsed: var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px);
   --ds-app-shell-navigation-header-background: transparent;
@@ -111009,6 +111009,7 @@ html[lang]:lang(ar) {
 /* === Compiled from Theme.modes.light — do not edit === */
 :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay']))[data-theme='light'], :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay'])).light {
   color-scheme: light;
+  --ds-app-shell-navigation-footer-color: var(--ds-color-text-on-primary);
   --ds-elevation-1: 0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent);
   --ds-elevation-2: 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-ambient-strength)), transparent);
   --ds-elevation-3: 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-ambient-strength)), transparent);

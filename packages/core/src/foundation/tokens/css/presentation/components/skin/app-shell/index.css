@@ -294,7 +294,7 @@
   flex-shrink: 0;
   padding: var(--ds-shell-navigation-footer-padding, var(--ds-app-shell-navigation-footer-padding, var(--ds-spacing-3, 12px)));
   background: var(--ds-app-shell-navigation-footer-background, var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg)));
-  color: var(--ds-app-shell-navigation-footer-color, light-dark(var(--ds-color-text-on-primary), var(--ds-sidebar-text, var(--ds-color-text-primary))));
+  color: var(--ds-app-shell-navigation-footer-color, var(--ds-color-text-on-primary));
   border-block-start: var(--ds-app-shell-navigation-footer-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 

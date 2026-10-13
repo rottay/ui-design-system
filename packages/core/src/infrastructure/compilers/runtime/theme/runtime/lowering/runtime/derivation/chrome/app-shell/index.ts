@@ -42,6 +42,7 @@
  * @package @rottay/design-system
  */
 
+import type { FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
 import type { FamilyDeriver } from "../../../../foundation/contract";
 
 /** A vertical's own `chrome.shell` / `chrome.layout` statement outranks this. */
@@ -123,13 +124,30 @@ export const appShellChromeDeriver: FamilyDeriver = {
     "--ds-app-shell-footer-border",
     "--ds-app-shell-footer-shadow",
   ],
-  derive: () => deriveAppShellChannels(),
+  derive: (context) => deriveAppShellChannels(context.mode),
 };
 
 /** The sidebar hairline, stated once because four owners rest on it. */
 const SIDEBAR_RULE = "1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))";
 
-export function deriveAppShellChannels(): Record<string, string> {
+/** The navigation ink: the sidebar's own on-surface chain, which an inverse tone flips with the mode. */
+const NAVIGATION_INK = "var(--ds-sidebar-text, var(--ds-color-text-primary))";
+
+/**
+ * The footer strip's ink, one plain value per mode.
+ *
+ * The strip rests on the primary ramp, not on the tone's ground: the on-colour
+ * law pairs it in light, and in dark it follows the nav ink the way the
+ * artifacts set the footer ground to follow the sidebar. The answer differs by
+ * mode, so it is stated per block and the mode delta carries the other one --
+ * compiled CSS never holds a `light-dark()`.
+ */
+export const NAVIGATION_FOOTER_INK: Readonly<Record<FlatThemeMode, string>> = {
+  light: "var(--ds-color-text-on-primary)",
+  dark: NAVIGATION_INK,
+};
+
+export function deriveAppShellChannels(mode: FlatThemeMode): Record<string, string> {
   const vars: Record<string, string> = {};
 
   // Tracks: the tenant's authored sidebar geometry, with the honest literal
@@ -162,8 +180,7 @@ export function deriveAppShellChannels(): Record<string, string> {
     "var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated)))";
   // The ink that pairs the tone's surface: the sidebar owns its own on-surface
   // chain, which an inverse tone flips with the mode.
-  vars["--ds-app-shell-navigation-color"] =
-    "var(--ds-sidebar-text, var(--ds-color-text-primary))";
+  vars["--ds-app-shell-navigation-color"] = NAVIGATION_INK;
   vars["--ds-app-shell-navigation-border"] = "0";
   vars["--ds-app-shell-navigation-border-inline-end"] = SIDEBAR_RULE;
   vars["--ds-app-shell-navigation-radius"] = "0";
@@ -182,11 +199,7 @@ export function deriveAppShellChannels(): Record<string, string> {
     "calc(var(--ds-spacing-6, 24px) + 76px)";
   vars["--ds-app-shell-navigation-footer-background"] =
     "var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg))";
-  // The footer strip rests on the primary ramp, not on the tone's ground: the
-  // on-colour law pairs it in light, and in dark it follows the nav ink the way
-  // the artifacts set the footer ground to follow the sidebar.
-  vars["--ds-app-shell-navigation-footer-color"] =
-    "light-dark(var(--ds-color-text-on-primary), var(--ds-sidebar-text, var(--ds-color-text-primary)))";
+  vars["--ds-app-shell-navigation-footer-color"] = NAVIGATION_FOOTER_INK[mode];
   vars["--ds-app-shell-navigation-footer-border"] = SIDEBAR_RULE;
   vars["--ds-app-shell-navigation-footer-padding"] = "var(--ds-spacing-3, 12px)";
   vars["--ds-app-shell-navigation-footer-padding-collapsed"] =

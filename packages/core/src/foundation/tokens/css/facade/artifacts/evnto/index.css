@@ -142,7 +142,7 @@
   --ds-app-shell-navigation-drawer-header-padding: 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px);
   --ds-app-shell-navigation-footer-background: var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg));
   --ds-app-shell-navigation-footer-border: 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle));
-  --ds-app-shell-navigation-footer-color: light-dark(var(--ds-color-text-on-primary), var(--ds-sidebar-text, var(--ds-color-text-primary)));
+  --ds-app-shell-navigation-footer-color: var(--ds-color-text-on-primary);
   --ds-app-shell-navigation-footer-padding: var(--ds-spacing-3, 12px);
   --ds-app-shell-navigation-footer-padding-collapsed: var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px);
   --ds-app-shell-navigation-header-background: transparent;
@@ -3933,6 +3933,7 @@
 /* === Compiled from Theme.modes.dark — do not edit === */
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto']))[data-theme='dark'], :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])).dark {
   color-scheme: dark;
+  --ds-app-shell-navigation-footer-color: var(--ds-sidebar-text, var(--ds-color-text-primary));
   --ds-elevation-1: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28);
   --ds-elevation-2: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.44), 0 6px 16px rgba(0, 0, 0, 0.34);
   --ds-elevation-3: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40);
