@@ -31,6 +31,7 @@ import { createReadStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { Writable } from 'node:stream';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs';
+import { chartGeometryRenderedExports } from './chart-geometry/index.mjs';
 
 // ---------------------------------------------------------------------------
 // Configuration -- keep in sync with docs/quality/performance-budget/index.md
@@ -905,7 +906,6 @@ const CHART_RENDERER_MODULES = Object.freeze({
   SvgScatterRenderer: `${CHART_RENDERER_SOURCE_DIR}scatter/index.js`,
 });
 const CHART_LINE_DATUM_KEY_MODULE = `${CHART_RENDERER_SOURCE_DIR}line/datum-key/index.js`;
-const CHART_GEOMETRY_MODULE = '/components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.js';
 const CHART_RENDERER_BUILDERS = {
   SvgBarRenderer: 'buildSvgBarGeometry',
   SvgFunnelRenderer: 'buildSvgFunnelGeometry',
@@ -1099,10 +1099,9 @@ async function runChartRendererBudgets() {
         )));
       const selectedRetained = [...result.modules.keys()].some((moduleId) => moduleId.endsWith(selectedSuffix));
       const expectedBuilder = CHART_RENDERER_BUILDERS[rendererName];
-      const geometryDetails = [...result.modules.entries()]
-        .find(([moduleId]) => moduleId.endsWith(CHART_GEOMETRY_MODULE))?.[1];
+      const geometryExports = chartGeometryRenderedExports(result.modules);
       const renderedBuilders = Object.values(CHART_RENDERER_BUILDERS)
-        .filter((builder) => geometryDetails?.renderedExports.includes(builder));
+        .filter((builder) => geometryExports.has(builder));
       const siblingBuilders = renderedBuilders.filter((builder) => builder !== expectedBuilder);
       const expectsD3 = publicContract.symbols?.[rendererName]?.includes('d3') ?? false;
       const d3External = [...result.imports].some((specifier) => isExternalFamily(specifier, 'd3'));
@@ -1110,7 +1109,7 @@ async function runChartRendererBudgets() {
       const isolationErrors = [];
       if (!selectedRetained) isolationErrors.push('selected export missing');
       if (siblings.length > 0) isolationErrors.push(`siblings: ${siblings.join(', ')}`);
-      if (!geometryDetails?.renderedExports.includes(expectedBuilder)) isolationErrors.push('selected builder missing');
+      if (!geometryExports.has(expectedBuilder)) isolationErrors.push('selected builder missing');
       if (siblingBuilders.length > 0) isolationErrors.push(`sibling builders: ${siblingBuilders.join(', ')}`);
       if (result.bundledPeerModules.length > 0) isolationErrors.push('React/D3 bundled');
       if (expectsD3 && !d3External) isolationErrors.push('D3 external missing');
@@ -1185,10 +1184,9 @@ async function runChartRendererBudgets() {
         moduleId.endsWith(CHART_RENDERER_MODULES[rendererName])
       ))
     ));
-    const geometryDetails = [...result.modules.entries()]
-      .find(([moduleId]) => moduleId.endsWith(CHART_GEOMETRY_MODULE))?.[1];
+    const geometryExports = chartGeometryRenderedExports(result.modules);
     const retainedBuilders = Object.values(CHART_RENDERER_BUILDERS)
-      .filter((builder) => geometryDetails?.renderedExports.includes(builder));
+      .filter((builder) => geometryExports.has(builder));
     const d3External = [...result.imports].some((specifier) => isExternalFamily(specifier, 'd3'));
     const reactExternal = [...result.imports].some((specifier) => isExternalFamily(specifier, 'react'));
     const isolationErrors = [];

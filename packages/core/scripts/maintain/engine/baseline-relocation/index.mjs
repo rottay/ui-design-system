@@ -4,6 +4,10 @@
  * Relocate only path-keyed engine-audit ceilings using Git's reviewed rename
  * inventory. Values never change and the default mode is a dry run.
  *
+ * A split is the one move Git cannot witness: `--split` distributes one path's
+ * ceilings over named new paths, each at its measured count, and refuses
+ * unless the parts sum to the old ceiling.
+ *
  * Usage:
  *   node scripts/maintain/engine/baseline-relocation/index.mjs
  *   node scripts/maintain/engine/baseline-relocation/index.mjs --write
@@ -11,6 +15,8 @@
  *     --old-root packages/core/src/components \
  *     --new-root packages/core/src/components
  *   node scripts/maintain/engine/baseline-relocation/index.mjs --adopt-new-zero
+ *   node scripts/maintain/engine/baseline-relocation/index.mjs \
+ *     --split <old path>=<new path>,<new path>,...
  */
 
 import { execFileSync } from 'node:child_process';
@@ -21,7 +27,9 @@ import { fileURLToPath } from 'node:url';
 import {
   adoptNewZeroPathCounters,
   parseGitRenameStatus,
+  parseSplitArguments,
   relocatePathKeyedCounters,
+  splitPathKeyedCounters,
 } from '../../../libraries/build/relocation/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 
@@ -40,6 +48,14 @@ function argument(name, fallback) {
   return index >= 0 ? process.argv[index + 1] : fallback;
 }
 
+function repeatedArgument(name) {
+  const prefix = `${name}=`;
+  return process.argv.flatMap((value, index) => {
+    if (value.startsWith(prefix)) return [value.slice(prefix.length)];
+    return value === name ? [process.argv[index + 1] ?? ''] : [];
+  });
+}
+
 const oldRoot = argument('--old-root', 'packages/core/src/components');
 const newRoot = argument('--new-root', oldRoot);
 const similarity = argument('--similarity', '60%');
@@ -52,6 +68,7 @@ const baselinePath = resolve(repositoryRoot, argument(
 ));
 const write = process.argv.includes('--write');
 const adoptNewZero = process.argv.includes('--adopt-new-zero');
+const splits = parseSplitArguments(repeatedArgument('--split'));
 const status = execFileSync('git', [
   'diff',
   '--name-status',
@@ -66,12 +83,20 @@ const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
 const result = relocatePathKeyedCounters(baseline, renames);
 let candidate = result.baseline;
 let adoption = { adopted: [], refused: [] };
-if (adoptNewZero) {
-  const current = JSON.parse(execFileSync(process.execPath, [
+let distribution = [];
+const current = adoptNewZero || splits.length > 0
+  ? JSON.parse(execFileSync(process.execPath, [
     resolve(scriptDirectory, '../../../check/engine/tokens/audit/index.mjs'),
     '--current-json',
     '--quiet',
-  ], { cwd: packageRoot, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }));
+  ], { cwd: packageRoot, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }))
+  : null;
+if (splits.length > 0) {
+  const split = splitPathKeyedCounters(candidate, current, splits);
+  distribution = split.distributed;
+  candidate = split.baseline;
+}
+if (adoptNewZero) {
   adoption = adoptNewZeroPathCounters(candidate, current);
   candidate = adoption.baseline;
 }
@@ -79,6 +104,13 @@ if (adoptNewZero) {
 console.log(`path-keyed baseline relocation | git-renames=${renames.length} | counters=${result.relocated.length}`);
 for (const entry of result.relocated.slice(0, 30)) console.log(`  ${entry.from} -> ${entry.to}`);
 if (result.relocated.length > 30) console.log(`  ... ${result.relocated.length - 30} more`);
+if (splits.length > 0) {
+  console.log(`sum-preserving splits: paths=${splits.length} | counters=${distribution.length}`);
+  for (const entry of distribution) {
+    console.log(`  ${entry.from}=${entry.ceiling} -> ${entry.retained ? 'kept at 0' : 'key removed'}`);
+    for (const part of entry.parts) console.log(`    ${part.key}=${part.value}`);
+  }
+}
 if (adoptNewZero) {
   console.log(`new zero counters: adopted=${adoption.adopted.length} | refused-positive=${adoption.refused.length}`);
   for (const entry of adoption.refused.slice(0, 30)) console.log(`  refused ${entry.key}=${entry.value}`);

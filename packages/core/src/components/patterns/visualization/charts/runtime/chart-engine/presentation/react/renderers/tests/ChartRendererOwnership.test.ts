@@ -17,8 +17,9 @@ function productSourceFiles(directory: string): string[] {
 }
 
 const geometryPath = 'foundation/renderers/geometry/index.ts';
-const geometryFile = resolve(kernelRoot, geometryPath);
-const sourceFiles = [geometryFile, ...productSourceFiles(rendererRoot)].sort();
+const geometryRoot = resolve(kernelRoot, dirname(geometryPath));
+const geometryFiles = productSourceFiles(geometryRoot);
+const sourceFiles = [...geometryFiles, ...productSourceFiles(rendererRoot)].sort();
 
 describe('Chart renderer ownership boundary', () => {
   it('keeps D3 inside immutable geometry and forbids imperative DOM ownership', () => {
@@ -27,7 +28,7 @@ describe('Chart renderer ownership boundary', () => {
     for (const file of sourceFiles) {
       const sourcePath = relative(kernelRoot, file);
       const source = readFileSync(file, 'utf8');
-      if (sourcePath !== geometryPath) {
+      if (!geometryFiles.includes(file)) {
         expect(source, `${sourcePath} imports D3 outside the geometry boundary`)
           .not.toMatch(/from ['"]d3['"]/);
       }
