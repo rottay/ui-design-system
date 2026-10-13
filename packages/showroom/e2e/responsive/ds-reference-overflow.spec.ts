@@ -53,7 +53,7 @@ import { expectHydrated } from '../support/hydration';
 //                   (`notFound()`), so visiting them bare serves Next's 404 —
 //                   a page that cannot overflow and would score as a silent
 //                   pass. Their case lists are read from the
-//                   `sections/<family>/cases.ts` the route itself imports and
+//                   `sections/<family>/cases/index.ts` the route itself imports and
 //                   every case is measured. The remaining parameterized
 //                   families render a declared default instead of 404, so a
 //                   bare visit is a real measurement of a real page; they are
@@ -194,7 +194,7 @@ interface SceneCoverage {
  *
  *   FAIL-CLOSED (`notFound()` on a missing `?only=`) — a bare visit serves a
  *   404, which cannot overflow and would score as clean. Every case is swept,
- *   read from the `sections/<family>/cases.ts` the route itself imports. A
+ *   read from the `sections/<family>/cases/index.ts` the route itself imports. A
  *   route of this shape with no readable list throws rather than being swept
  *   bare.
  *
@@ -212,7 +212,7 @@ function resolveSceneCoverage(lab: string, scene: string, pagePath: string): Sce
       throw new Error(`${pagePath} 404s on a missing case but imports no readable case list — it cannot be measured`);
     }
 
-    const casesPath = join(lab, 'sections', family, 'cases.ts');
+    const casesPath = join(lab, 'sections', family, 'cases', 'index.ts');
     if (!existsSync(casesPath)) {
       throw new Error(`${pagePath} imports sections/${family}/cases, which does not exist at ${casesPath}`);
     }
@@ -220,7 +220,7 @@ function resolveSceneCoverage(lab: string, scene: string, pagePath: string): Sce
     const literal = readFileSync(casesPath, 'utf8').match(/_CASES\s*:[^=]*=\s*\[([\s\S]*?)\]/);
     const cases = literal ? [...literal[1].matchAll(/'([^']+)'/g)].map((match) => match[1]) : [];
     if (cases.length === 0) {
-      throw new Error(`sections/${family}/cases.ts yielded no cases — the sweep would measure nothing for this family`);
+      throw new Error(`sections/${family}/cases/index.ts yielded no cases — the sweep would measure nothing for this family`);
     }
     return { scene, measured: cases, declared: cases.length };
   }

@@ -13,10 +13,10 @@ const FIXTURES = path.join(
 );
 const ROUTE = path.join(
   SHOWROOM_ROOT,
-  'src/app/(docs)/patterns/[group]/[pattern]/pattern-preview.tsx',
+  'src/app/(docs)/patterns/[group]/[pattern]/pattern-preview/index.tsx',
 );
-const REGISTRY = path.join(SHOWROOM_ROOT, 'src/data/registry/patterns.ts');
-const NAVIGATION = path.join(SHOWROOM_ROOT, 'src/data/navigation.ts');
+const REGISTRY = path.join(SHOWROOM_ROOT, 'src/data/registry/patterns/index.ts');
+const NAVIGATION = path.join(SHOWROOM_ROOT, 'src/data/navigation/index.ts');
 const ALLOWLIST = path.join(SHOWROOM_ROOT, 'scripts/design-cards/no-fixture-allowlist.json');
 
 /** A pattern preview has three states, and only one of them may claim to be a
@@ -158,7 +158,7 @@ test('the docs route gates live chrome on the declared state', () => {
   assert.match(
     route,
     /const state = getPatternAdapterState\(slug\);/,
-    'pattern-preview.tsx must read the declared adapter state',
+    'pattern-preview/index.tsx must read the declared adapter state',
   );
   assert.match(
     route,

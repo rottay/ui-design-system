@@ -63,7 +63,7 @@ export const PATHS = Object.freeze({
   ]),
   familiesSpecifier: './families',
   skinDir: join(root, 'src/foundation/tokens/css/presentation/components/skin'),
-  showroomRegistry: join(root, '../showroom/src/data/registry/charts.ts'),
+  showroomRegistry: join(root, '../showroom/src/data/registry/charts/index.ts'),
   familyCutBaseline: join(root, 'scripts/check/family-cut/baseline/index.json'),
 });
 

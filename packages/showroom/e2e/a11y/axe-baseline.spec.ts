@@ -90,7 +90,7 @@ test.describe('route-level axe ledger — laws', () => {
     }
     for (const [scene, { only }] of Object.entries(SCENE_CASES)) {
       // The case must really be in that scene's list, or the route 404s again.
-      const cases = readFileSync(join(here, `../../src/app/probe/ds-reference/sections/${scene}/cases.ts`), 'utf8');
+      const cases = readFileSync(join(here, `../../src/app/probe/ds-reference/sections/${scene}/cases/index.ts`), 'utf8');
       expect(cases, `${scene}/${only}`).toContain(`'${only}'`);
       for (const ground of GROUNDS) {
         expect(scenePath(ground, scene)).toBe(`/probe/ds-reference/${ground}/${scene}?only=${only}`);

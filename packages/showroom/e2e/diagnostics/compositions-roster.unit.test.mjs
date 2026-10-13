@@ -86,12 +86,12 @@ test('each owner exports the single component the docs name', () => {
 });
 
 test('the probe case list and fixture modules partition the roster exactly', () => {
-  const cases = slugArray('cases.ts', 'COMPOSITION_CASES');
+  const cases = slugArray('cases/index.ts', 'COMPOSITION_CASES');
   assert.deepEqual(cases.sort(), EXPECTED.map((e) => e.slug).sort());
 
   const owned = [
-    ...slugArray('config-a.tsx', 'CONFIG_COMPOSITION_A_SLUGS'),
-    ...slugArray('config-b.tsx', 'CONFIG_COMPOSITION_B_SLUGS'),
+    ...slugArray('config-a/index.tsx', 'CONFIG_COMPOSITION_A_SLUGS'),
+    ...slugArray('config-b/index.tsx', 'CONFIG_COMPOSITION_B_SLUGS'),
   ];
   const duplicates = owned.filter((s, i) => owned.indexOf(s) !== i);
   assert.deepEqual(duplicates, [], 'a slug is owned by more than one fixture module');

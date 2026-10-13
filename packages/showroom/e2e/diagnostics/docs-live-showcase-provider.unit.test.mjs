@@ -19,7 +19,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '../..');
 const targetPath = join(
   root,
-  'src/app/(docs)/primitives/live-component-showcase-deferred.tsx',
+  'src/app/(docs)/primitives/live-component-showcase-deferred/index.tsx',
 );
 const pagePath = join(root, 'src/app/(docs)/primitives/page.tsx');
 

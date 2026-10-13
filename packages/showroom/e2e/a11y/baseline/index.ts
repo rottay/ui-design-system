@@ -153,11 +153,11 @@ export function paintedFloor(scene: string): number {
 
 /** Where each parameterized scene's case list lives, relative to the app root. */
 export const CASE_LIST_FILES: Readonly<Record<string, string>> = Object.freeze({
-  charts: 'sections/charts/cases.ts',
-  compositions: 'sections/compositions/cases.ts',
-  monochrome: 'sections/monochrome/cases.ts',
-  structures: 'sections/structures/cases.ts',
-  surfaces: 'sections/surfaces/cases.ts',
+  charts: 'sections/charts/cases/index.ts',
+  compositions: 'sections/compositions/cases/index.ts',
+  monochrome: 'sections/monochrome/cases/index.ts',
+  structures: 'sections/structures/cases/index.ts',
+  surfaces: 'sections/surfaces/cases/index.ts',
 });
 
 /**

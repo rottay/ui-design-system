@@ -8,8 +8,8 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SHOWROOM_ROOT = path.resolve(HERE, '../..');
 const REPO_ROOT = path.resolve(SHOWROOM_ROOT, '../..');
 
-const REGISTRY = path.join(SHOWROOM_ROOT, 'src/data/registry/primitives.ts');
-const NAVIGATION = path.join(SHOWROOM_ROOT, 'src/data/navigation.ts');
+const REGISTRY = path.join(SHOWROOM_ROOT, 'src/data/registry/primitives/index.ts');
+const NAVIGATION = path.join(SHOWROOM_ROOT, 'src/data/navigation/index.ts');
 const ARCHITECTURE = path.join(SHOWROOM_ROOT, 'src/app/(docs)/developers/architecture/page.tsx');
 
 /** `foundation` is a dependency-role support layer inside an owner. It is legal
@@ -31,7 +31,7 @@ const GOVERNED = ['display', 'feedback', 'inputs', 'layout', 'navigation', 'over
 
 /** Every `Record<PrimitiveCategory, ...>` in the showroom, as [file, declaration]. */
 const CATEGORY_MAPS = [
-  ['src/data/registry/primitives.ts', 'primitivesByCategory'],
+  ['src/data/registry/primitives/index.ts', 'primitivesByCategory'],
   ['src/app/(docs)/primitives/page.tsx', 'CATEGORY_EDITORIAL'],
   ['src/app/(docs)/primitives/[category]/page.tsx', 'CATEGORY_PROFILES'],
   ['src/app/(docs)/primitives/[category]/page.tsx', 'CATEGORY_PREVIEW_COPY'],

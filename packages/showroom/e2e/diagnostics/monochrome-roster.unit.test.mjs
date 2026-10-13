@@ -266,7 +266,7 @@ test('ProductWindow has not re-entered the design system', () => {
   assert.deepEqual(claimed, [], 'the family inventory claims ProductWindow as a DS family');
 
   const registryRoot = path.join(SHOWROOM_ROOT, 'src/data/registry');
-  for (const file of ['primitives.ts', 'patterns.ts', 'structures.ts', 'surfaces.ts']) {
+  for (const file of ['primitives/index.ts', 'patterns/index.ts', 'structures/index.ts', 'surfaces/index.ts']) {
     const source = readFileSync(path.join(registryRoot, file), 'utf8');
     assert.equal(
       /name:\s*'ProductWindow'/.test(source),
@@ -277,12 +277,12 @@ test('ProductWindow has not re-entered the design system', () => {
 });
 
 test('the probe case list and fixture modules partition the roster exactly', () => {
-  const cases = slugArray('cases.ts', 'MONOCHROME_CASES');
+  const cases = slugArray('cases/index.ts', 'MONOCHROME_CASES');
   assert.deepEqual(cases.sort(), EXPECTED.map((e) => e.slug).sort());
 
   const owned = [
-    ...slugArray('config-a.tsx', 'CONFIG_MONOCHROME_A_SLUGS'),
-    ...slugArray('config-b.tsx', 'CONFIG_MONOCHROME_B_SLUGS'),
+    ...slugArray('config-a/index.tsx', 'CONFIG_MONOCHROME_A_SLUGS'),
+    ...slugArray('config-b/index.tsx', 'CONFIG_MONOCHROME_B_SLUGS'),
   ];
   const duplicates = owned.filter((s, i) => owned.indexOf(s) !== i);
   assert.deepEqual(duplicates, [], 'a slug is owned by more than one fixture module');
@@ -312,7 +312,7 @@ test('the dispatcher renders both fixture modules and imports no private kit sty
 });
 
 test('the fixtures import from the package root, never a private subpath', () => {
-  for (const file of ['config-a.tsx', 'config-b.tsx']) {
+  for (const file of ['config-a/index.tsx', 'config-b/index.tsx']) {
     const source = readFileSync(path.join(PROBE, file), 'utf8');
     assert.equal(
       source.includes('@rottay/design-system/commercial'),

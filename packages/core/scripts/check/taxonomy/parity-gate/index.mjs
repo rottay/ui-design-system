@@ -422,11 +422,11 @@ const SUPPORT_FOLDER_NAMES = new Set([
 ]);
 
 const SHOWROOM_REGISTRIES = Object.freeze([
-  { file: 'primitives.ts', layers: ['primitive'] },
-  { file: 'patterns.ts', layers: ['pattern'] },
-  { file: 'structures.ts', layers: ['structure'] },
-  { file: 'surfaces.ts', layers: ['surface'] },
-  { file: 'charts.ts', layers: ['chart'] },
+  { file: 'primitives/index.ts', layers: ['primitive'] },
+  { file: 'patterns/index.ts', layers: ['pattern'] },
+  { file: 'structures/index.ts', layers: ['structure'] },
+  { file: 'surfaces/index.ts', layers: ['surface'] },
+  { file: 'charts/index.ts', layers: ['chart'] },
 ]);
 
 function readJson(pathname) {

@@ -44,7 +44,7 @@ src/
     showroom-context/     Global engine/theme state context
   data/
     registry/             Component registries (primitives, patterns, structures, surfaces, charts, icons)
-    navigation.ts         Sidebar navigation tree
+    navigation/           Sidebar navigation tree
 ```
 
 ## DS Integration

@@ -33,10 +33,10 @@ import {
   icons,
   iconsByCategory,
   isIconName,
-} from '../../icons.ts';
+} from '../index.ts';
 
 const COUNTS_SOURCE_PATH = fileURLToPath(new URL('../../counts/index.ts', import.meta.url));
-const NAVIGATION_SOURCE_PATH = fileURLToPath(new URL('../../../navigation.ts', import.meta.url));
+const NAVIGATION_SOURCE_PATH = fileURLToPath(new URL('../../../navigation/index.ts', import.meta.url));
 const FOUNDATIONS_PAGE_PATH = fileURLToPath(
   new URL('../../../../app/(docs)/foundations/page.tsx', import.meta.url),
 );

@@ -19,12 +19,12 @@ function slugArray(file, exportName) {
   return [...block.matchAll(/'([a-z0-9-]+)'/g)].map((m) => m[1]);
 }
 
-const ROSTER = slugArray('cases.ts', 'SURFACE_CASES');
+const ROSTER = slugArray('cases/index.ts', 'SURFACE_CASES');
 const MODULES = [
-  ['config-a.tsx', 'CONFIG_A_SLUGS'],
-  ['config-b.tsx', 'CONFIG_B_SLUGS'],
-  ['config-inherited-a.tsx', 'CONFIG_INHERITED_A_SLUGS'],
-  ['config-inherited-b.tsx', 'CONFIG_INHERITED_B_SLUGS'],
+  ['config-a/index.tsx', 'CONFIG_A_SLUGS'],
+  ['config-b/index.tsx', 'CONFIG_B_SLUGS'],
+  ['config-inherited-a/index.tsx', 'CONFIG_INHERITED_A_SLUGS'],
+  ['config-inherited-b/index.tsx', 'CONFIG_INHERITED_B_SLUGS'],
 ];
 
 test('the roster is the expected 36 families', () => {
@@ -51,7 +51,7 @@ test('the four fixture modules exactly partition the roster', () => {
 test('the dispatcher actually renders every fixture module', () => {
   const dispatcher = readFileSync(path.join(SURFACE_FIXTURES, 'index.tsx'), 'utf8');
   for (const [file] of MODULES) {
-    const moduleName = file.replace(/\.tsx$/, '');
+    const moduleName = file.replace(/\/index\.tsx$/, '');
     assert.ok(
       dispatcher.includes(`./${moduleName}`),
       `${moduleName} is never imported — every slug it owns would render blank`,

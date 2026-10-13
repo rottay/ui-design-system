@@ -572,7 +572,7 @@ const CAPTURES = [
         what: 'raiz de la surface',
         selector: '.ds-surface.ds-record-workbench',
         exact: 1,
-        source: `${SHOWROOM_SCENES}/sections/surfaces/config-b.tsx:137-139`,
+        source: `${SHOWROOM_SCENES}/sections/surfaces/config-b/index.tsx:137-139`,
       },
     ],
     carriers: [
@@ -585,7 +585,7 @@ const CAPTURES = [
         selector:
           '.ds-surface.ds-record-workbench .ds-record-workbench__status-badge[data-part="status-badge"][data-variant="success"]',
         count: { exact: 1 },
-        source: `${SHOWROOM_SCENES}/sections/surfaces/config-b.tsx:142`,
+        source: `${SHOWROOM_SCENES}/sections/surfaces/config-b/index.tsx:142`,
       },
     ],
   },
@@ -2314,7 +2314,7 @@ async function runCapture(args) {
       { path: 'packages/showroom/scripts/causal-canary-capture.mjs', sha256: selfSha },
       /* Las fuentes del ground del lab tambien pineadas: sin ellas la serie no
          puede probar por receipt que el ground fue constante. */
-      ...['ground/index.tsx', 'ground/stamp.ts'].map((rel) => {
+      ...['ground/index.tsx', 'ground/stamp/index.ts'].map((rel) => {
         const relPath = `packages/showroom/src/app/probe/ds-reference/${rel}`;
         return { path: relPath, sha256: sha256(readFileSync(path.join(repoRoot, relPath))) };
       }),

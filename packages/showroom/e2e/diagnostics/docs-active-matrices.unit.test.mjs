@@ -15,7 +15,7 @@ const EXPECTED_OWNER_ROSTER = Object.freeze([
   { path: 'src/app/(docs)/foundations/tokens/motion/page.tsx', axis: 'engine' },
   { path: 'src/app/(docs)/foundations/tokens/shadows/page.tsx', axis: 'engine' },
   { path: 'src/app/(docs)/foundations/engines/page.tsx', axis: 'engine' },
-  { path: 'src/app/(docs)/foundations/themes/theme-preview-grid.tsx', axis: 'tenant' },
+  { path: 'src/app/(docs)/foundations/themes/theme-preview-grid/index.tsx', axis: 'tenant' },
 ]);
 
 const OWNER_META = Object.freeze({
@@ -25,7 +25,7 @@ const OWNER_META = Object.freeze({
   'src/app/(docs)/foundations/tokens/motion/page.tsx': Object.freeze({ selector: 'engine', derivedBinding: 'engineLabel', contentProp: 'label', derivedSource: "engine.charAt(0).toUpperCase() + engine.slice(1)" }),
   'src/app/(docs)/foundations/tokens/shadows/page.tsx': Object.freeze({ selector: 'engine', derivedBinding: 'engineLabel', contentProp: 'label', derivedSource: "engine.charAt(0).toUpperCase() + engine.slice(1)" }),
   'src/app/(docs)/foundations/engines/page.tsx': Object.freeze({ selector: 'engine', derivedBinding: 'activeEngine', contentProp: 'engine', derivedSource: 'ENGINES.find((e) => e.name === engine)!' }),
-  'src/app/(docs)/foundations/themes/theme-preview-grid.tsx': Object.freeze({ selector: 'tenantSlug', derivedBinding: 'activeTheme', contentProp: 'theme', derivedSource: 'TENANT_THEMES.find((theme) => theme.slug === tenantSlug) ?? TENANT_THEMES[0]' }),
+  'src/app/(docs)/foundations/themes/theme-preview-grid/index.tsx': Object.freeze({ selector: 'tenantSlug', derivedBinding: 'activeTheme', contentProp: 'theme', derivedSource: 'TENANT_THEMES.find((theme) => theme.slug === tenantSlug) ?? TENANT_THEMES[0]' }),
 });
 
 const OWNER_ROSTER = Object.freeze(
@@ -45,7 +45,7 @@ const OWNER_ROSTER = Object.freeze(
                   ? 'EnginePreviewContent'
                   : 'ThemePreviewContent';
     const ownerExport =
-      o.path === 'src/app/(docs)/foundations/themes/theme-preview-grid.tsx'
+      o.path === 'src/app/(docs)/foundations/themes/theme-preview-grid/index.tsx'
         ? 'ThemePreviewGrid'
         : 'default';
     return Object.freeze({ ...o, contentName, ownerExport, ...OWNER_META[o.path] });
@@ -949,7 +949,7 @@ test('active-matrix owners have zero local providers and exactly one live cell',
 });
 
 test('theme-preview-grid-deferred renders exactly one skeleton card', () => {
-  const path = join(root, 'src/app/(docs)/foundations/themes/theme-preview-grid-deferred.tsx');
+  const path = join(root, 'src/app/(docs)/foundations/themes/theme-preview-grid-deferred/index.tsx');
   const source = readFileSync(path, 'utf8');
   assertDeferredSkeletonCount1(parse(source, path), path);
 });

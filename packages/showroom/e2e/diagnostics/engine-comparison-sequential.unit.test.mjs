@@ -17,8 +17,8 @@ const componentPath = join(root, 'src/components/playground/engine-comparison/in
 
 const EXPECTED_CALLSITE_COUNTS = Object.freeze({
   'src/app/(docs)/playground/page.tsx': 1,
-  'src/app/(docs)/surfaces/[group]/[surface]/surface-engine-preview.tsx': 1,
-  'src/app/(docs)/patterns/[group]/[pattern]/pattern-engine-preview.tsx': 1,
+  'src/app/(docs)/surfaces/[group]/[surface]/surface-engine-preview/index.tsx': 1,
+  'src/app/(docs)/patterns/[group]/[pattern]/pattern-engine-preview/index.tsx': 1,
   'src/app/(docs)/structures/[group]/[structure]/page.tsx': 1,
   'src/app/(docs)/primitives/[category]/[component]/page.tsx': 1,
 });
@@ -441,8 +441,8 @@ test('rejects a tenantSlug prop on a callsite tag', () => {
     () =>
       assertCallsitesClean({
         'src/app/(docs)/playground/page.tsx': [tagOf('<EngineComparison tenantSlug={tenantSlug}><R /></EngineComparison>')],
-        'src/app/(docs)/surfaces/[group]/[surface]/surface-engine-preview.tsx': [cleanTag],
-        'src/app/(docs)/patterns/[group]/[pattern]/pattern-engine-preview.tsx': [cleanTag],
+        'src/app/(docs)/surfaces/[group]/[surface]/surface-engine-preview/index.tsx': [cleanTag],
+        'src/app/(docs)/patterns/[group]/[pattern]/pattern-engine-preview/index.tsx': [cleanTag],
         'src/app/(docs)/structures/[group]/[structure]/page.tsx': [cleanTag],
         'src/app/(docs)/primitives/[category]/[component]/page.tsx': [cleanTag],
       }),

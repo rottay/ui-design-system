@@ -70,12 +70,12 @@ const DATE_LITERAL = new RegExp(
  *  anything outside these shapes must parse. */
 const VERBATIM_ALLOWLIST = [
   {
-    file: 'config-a.tsx',
+    file: 'config-a/index.tsx',
     shape: /^\d{2}:\d{2}$/,
     why: 'ChatSurface message bubbles render a clock time verbatim; a full datetime would be wrong for a chat transcript',
   },
   {
-    file: 'config-b.tsx',
+    file: 'config-b/index.tsx',
     shape: /^\d+ (?:minute|minutes|hour|hours|day|days) ago$/,
     why: 'NotificationSurface renders its timestamp verbatim. Its TSDoc claims ISO, which is tracked as open defect notification-1; the fixture matches the RENDERER, not the stale doc',
   },
@@ -93,8 +93,9 @@ function dateLiteralsIn(file) {
 }
 
 function fixtureModules() {
-  return readdirSync(SURFACE_FIXTURES)
-    .filter((f) => /^config[a-z-]*\.tsx$/.test(f))
+  return readdirSync(SURFACE_FIXTURES, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && /^config[a-z-]*$/.test(entry.name))
+    .map((entry) => `${entry.name}/index.tsx`)
     .sort();
 }
 
@@ -113,10 +114,10 @@ function offendersIn(entries) {
 
 test('the detector fires on the rejected command-center fixture and clears the corrected one', () => {
   const REJECTED = [
-    { file: 'config-inherited-b.tsx', line: 762, field: 'timestamp', value: '12 minutes ago' },
-    { file: 'config-inherited-b.tsx', line: 763, field: 'timestamp', value: '1 hour ago' },
-    { file: 'config-inherited-b.tsx', line: 764, field: 'timestamp', value: '3 hours ago' },
-    { file: 'config-inherited-b.tsx', line: 765, field: 'timestamp', value: 'Yesterday' },
+    { file: 'config-inherited-b/index.tsx', line: 762, field: 'timestamp', value: '12 minutes ago' },
+    { file: 'config-inherited-b/index.tsx', line: 763, field: 'timestamp', value: '1 hour ago' },
+    { file: 'config-inherited-b/index.tsx', line: 764, field: 'timestamp', value: '3 hours ago' },
+    { file: 'config-inherited-b/index.tsx', line: 765, field: 'timestamp', value: 'Yesterday' },
   ];
   assert.equal(
     offendersIn(REJECTED).length,
@@ -125,10 +126,10 @@ test('the detector fires on the rejected command-center fixture and clears the c
   );
 
   const CORRECTED = [
-    { file: 'config-inherited-b.tsx', line: 765, field: 'timestamp', value: '2026-07-10T14:32:00Z' },
-    { file: 'config-inherited-b.tsx', line: 766, field: 'timestamp', value: '2026-07-10T11:05:00Z' },
-    { file: 'config-inherited-b.tsx', line: 767, field: 'timestamp', value: '2026-07-09T16:48:00Z' },
-    { file: 'config-inherited-b.tsx', line: 768, field: 'timestamp', value: '2026-07-09T09:12:00Z' },
+    { file: 'config-inherited-b/index.tsx', line: 765, field: 'timestamp', value: '2026-07-10T14:32:00Z' },
+    { file: 'config-inherited-b/index.tsx', line: 766, field: 'timestamp', value: '2026-07-10T11:05:00Z' },
+    { file: 'config-inherited-b/index.tsx', line: 767, field: 'timestamp', value: '2026-07-09T16:48:00Z' },
+    { file: 'config-inherited-b/index.tsx', line: 768, field: 'timestamp', value: '2026-07-09T09:12:00Z' },
   ];
   assert.deepEqual(offendersIn(CORRECTED), []);
 });
@@ -159,12 +160,12 @@ test('every date-ish fixture literal parses, or is an allowlisted verbatim shape
 test('the date rule rejects the exact values that were rejected', () => {
   // The four command-center timestamps as shipped in the rejected checkpoint.
   for (const value of ['12 minutes ago', '1 hour ago', '3 hours ago', 'Yesterday']) {
-    const entry = { file: 'config-inherited-b.tsx', line: 0, field: 'timestamp', value };
+    const entry = { file: 'config-inherited-b/index.tsx', line: 0, field: 'timestamp', value };
     assert.equal(Number.isNaN(new Date(value).getTime()), true, `${value} must not parse`);
     assert.equal(
       isAllowedVerbatim(entry),
       false,
-      `${value} must not be excused by the allowlist in config-inherited-b.tsx`,
+      `${value} must not be excused by the allowlist in config-inherited-b/index.tsx`,
     );
   }
   // And the corrected values must pass.
@@ -242,15 +243,15 @@ test('the allowlist is narrow: it excuses only its own file and shape', () => {
   // "1 hour ago" is legitimate in config-b (verbatim renderer) but NOT in the
   // timeline-backed module, which is exactly the distinction that was missed.
   assert.equal(
-    isAllowedVerbatim({ file: 'config-b.tsx', value: '2 hours ago' }),
+    isAllowedVerbatim({ file: 'config-b/index.tsx', value: '2 hours ago' }),
     true,
   );
   assert.equal(
-    isAllowedVerbatim({ file: 'config-inherited-b.tsx', value: '2 hours ago' }),
+    isAllowedVerbatim({ file: 'config-inherited-b/index.tsx', value: '2 hours ago' }),
     false,
   );
   assert.equal(
-    isAllowedVerbatim({ file: 'config-a.tsx', value: 'Yesterday' }),
+    isAllowedVerbatim({ file: 'config-a/index.tsx', value: 'Yesterday' }),
     false,
     'the clock-time shape must not excuse arbitrary prose',
   );

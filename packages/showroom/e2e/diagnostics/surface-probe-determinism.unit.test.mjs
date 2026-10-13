@@ -128,14 +128,14 @@ test('the surface fixture modules are inside the scanned tree', () => {
   );
   assert.ok(files.length > 0, 'no surface probe sources found');
   const sections = 'src/app/probe/ds-reference/sections/surfaces';
-  for (const required of ['index.tsx', 'cases.ts']) {
+  for (const required of ['index.tsx', 'cases/index.ts']) {
     assert.ok(
       files.includes(`${sections}/${required}`),
       `${required} is not in the scanned set — the drill would run on a partial tree`,
     );
   }
   const fixtureModules = files.filter((file) =>
-    /\/config[a-z-]*\.tsx$/.test(file),
+    /\/config[a-z-]*\/index\.tsx$/.test(file),
   );
   assert.ok(
     fixtureModules.length >= 2,

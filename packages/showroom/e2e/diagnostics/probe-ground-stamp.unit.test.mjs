@@ -107,7 +107,7 @@ test('the one stamp: no other showroom source serializes a root stamp', () => {
 
 test('torture-tenant and the ds-reference lab re-export the one stamp', () => {
   const torture = readFileSync(join(ROOT, 'src/components/torture-tenant/index.ts'), 'utf8');
-  const lab = readFileSync(join(ROOT, 'src/app/probe/ds-reference/ground/stamp.ts'), 'utf8');
+  const lab = readFileSync(join(ROOT, 'src/app/probe/ds-reference/ground/stamp/index.ts'), 'utf8');
   assert.match(torture, /export \{ buildRootStampScript \} from '\.\.\/probe-ground\/stamp\/index\.mjs';/u);
   assert.match(lab, /export \{ buildRootStampScript as buildLabRootStampScript \} from '@\/components\/probe-ground\/stamp\/index\.mjs';/u);
 });
