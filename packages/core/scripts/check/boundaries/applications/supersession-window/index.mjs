@@ -33,6 +33,10 @@
  *             so must the `ref:` `.github/workflows/ci.yml` checks out.
  *   bytes     `git show <pin>:<path>` — the committed blob. Uncommitted edits
  *             in the checkout can neither open nor close the window.
+ *   Git       every call runs with the ambient `GIT_*` variables scrubbed, so
+ *             `GIT_DIR` and its kin cannot answer for the declared root.
+ *   step      the workflow step may carry `name`, `env` and the exact command:
+ *             no `if`, no `continue-on-error`, nothing after `--check`.
  *
  * Usage:
  *   APP_BITHIRE_ROOT=<checkout> node scripts/check/boundaries/applications/supersession-window/index.mjs [--check]
@@ -58,6 +62,10 @@ export const SHELL_CONTRACTS_PATH = 'src/components/structures/foundation/shell-
 export const SUPERSEDED_MAP_NAME = 'SHELL_SUPERSEDED_HOOK_CHANNELS';
 export const WORKFLOW_PATH = '.github/workflows/ci.yml';
 export const WINDOW_OPEN = 'window open';
+/** The one command the workflow step may carry: anything appended to it can swallow the exit code. */
+export const RECEIVER_RUN = `node packages/core/scripts/check/boundaries/applications/${GATE_NAME}/index.mjs --check`;
+/** A step that is only named, rooted and run has no key that can skip it or forgive it. */
+const RECEIVER_STEP_KEYS = Object.freeze(['name', 'env', 'run']);
 
 const FULL_COMMIT = /^[0-9a-f]{40}$/;
 
@@ -108,8 +116,40 @@ export function readSupersededPairs(source) {
   return pairs;
 }
 
+/**
+ * The environment the receiver's Git calls run in: the ambient one with every
+ * `GIT_*` variable removed. `-C <root>` names a directory; these variables
+ * outrank it and would let another repository answer for the declared root:
+ *
+ *   GIT_DIR, GIT_COMMON_DIR          answer from another repository altogether
+ *   GIT_WORK_TREE                    move the top level the identity check compares
+ *   GIT_INDEX_FILE                   another index (a Git hook exports it with GIT_DIR)
+ *   GIT_OBJECT_DIRECTORY,
+ *   GIT_ALTERNATE_OBJECT_DIRECTORIES another object store behind the same refs
+ *   GIT_NAMESPACE                    another ref namespace
+ *   GIT_CONFIG_COUNT / _KEY_n / _VALUE_n, GIT_CONFIG_PARAMETERS,
+ *   GIT_CONFIG_GLOBAL, GIT_CONFIG_SYSTEM   inject configuration no checkout carries
+ *   GIT_CEILING_DIRECTORIES, GIT_DISCOVERY_ACROSS_FILESYSTEM   steer discovery
+ *
+ * The prefix is removed whole rather than name by name, so a variable Git
+ * grows later is scrubbed too. `GIT_NO_REPLACE_OBJECTS` is then set: a replace
+ * ref in the checkout would otherwise serve other bytes for the pinned commit.
+ */
+export function scrubGitEnvironment(env = process.env) {
+  const scrubbed = {};
+  for (const [name, value] of Object.entries(env)) {
+    if (!name.toUpperCase().startsWith('GIT_')) scrubbed[name] = value;
+  }
+  scrubbed.GIT_NO_REPLACE_OBJECTS = '1';
+  return scrubbed;
+}
+
 function git(root, args) {
-  return execFileSync('git', ['-C', root, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+  return execFileSync('git', ['-C', root, ...args], {
+    encoding: 'utf8',
+    env: scrubGitEnvironment(),
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
 }
 
 const absent = (detail) => ({ state: 'absent', detail });
@@ -190,9 +230,68 @@ export function readRoster(pairs, read, consumers = NAMED_CONSUMERS) {
   };
 }
 
+const indentOf = (line) => line.length - line.trimStart().length;
+const isYamlNoise = (line) => line.trim() === '' || line.trimStart().startsWith('#');
+
+/**
+ * Why the step holding the `run:` at `runAt` could report green on a red gate.
+ * The step may carry `name`, `env` and the exact command, nothing else: `if`
+ * skips it, `continue-on-error` forgives it, `shell` can wrap it, and anything
+ * after the command (`|| true`, a pipe, a folded continuation line) decides the
+ * exit code in its place.
+ */
+function receiverStepFailures(lines, runAt) {
+  const failures = [];
+  const where = `${WORKFLOW_PATH}:${runAt + 1}`;
+  const stepKey = (line) => line.match(/^(\s*)(-\s+)?([A-Za-z][\w-]*):(.*)$/);
+  const [, runIndent, runDash = '', , runValue] = stepKey(lines[runAt]);
+  const keyIndent = runIndent.length + runDash.length;
+
+  let start = runAt;
+  if (!runDash) {
+    start = -1;
+    for (let index = runAt - 1; index >= 0; index -= 1) {
+      if (isYamlNoise(lines[index])) continue;
+      const dash = lines[index].match(/^(\s*-\s+)\S/);
+      if (dash && dash[1].length === keyIndent) start = index;
+      if (dash || indentOf(lines[index]) < keyIndent) break;
+    }
+    if (start === -1) return [`${where} runs ${GATE_NAME}/index.mjs outside a readable workflow step`];
+  }
+
+  if (runValue.trim() !== RECEIVER_RUN) {
+    failures.push(`${where} must be exactly \`run: ${RECEIVER_RUN}\`, found \`${lines[runAt].trim()}\``);
+  }
+  let currentKey = null;
+  for (let index = start; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (isYamlNoise(line)) continue;
+    const indent = index === start ? keyIndent : indentOf(line);
+    if (indent < keyIndent) break;
+    if (indent > keyIndent) {
+      if (currentKey === 'run') {
+        failures.push(`${where} continues past its \`run\` line: \`${line.trim()}\` is folded into the command`);
+      }
+      continue;
+    }
+    const key = stepKey(line);
+    currentKey = key && (index === start || !key[2]) ? key[3] : null;
+    if (currentKey === null) {
+      failures.push(`${WORKFLOW_PATH}:${index + 1} is not a readable key of the ${GATE_NAME} step: \`${line.trim()}\``);
+    } else if (!RECEIVER_STEP_KEYS.includes(currentKey)) {
+      failures.push(
+        `${WORKFLOW_PATH}:${index + 1} the ${GATE_NAME} step declares \`${currentKey}\`; `
+          + `it may carry only ${RECEIVER_STEP_KEYS.join(', ')}, so nothing can skip it or forgive its exit code`,
+      );
+    }
+  }
+  return failures;
+}
+
 /**
  * The workflow must check each rostered repository out at the pinned revision
- * and must run this gate. Line-based on purpose, as the workflow wiring gate is.
+ * and must run this gate in a step that can still fail the job. Line-based on
+ * purpose, as the workflow wiring gate is.
  */
 export function checkWorkflowReceiver(workflow, { pins = SURFACE_CAPABILITY_PINS, consumers = NAMED_CONSUMERS } = {}) {
   const failures = [];
@@ -219,8 +318,12 @@ export function checkWorkflowReceiver(workflow, { pins = SURFACE_CAPABILITY_PINS
       }
     }
   }
-  const runs = lines.some((line) => /^\s*run:/.test(line) && line.includes(`${GATE_NAME}/index.mjs`));
-  if (!runs) failures.push(`${WORKFLOW_PATH} has no step that runs ${GATE_NAME}/index.mjs`);
+  const runs = lines.flatMap((line, index) =>
+    /^\s*(-\s+)?run:/.test(line) && line.includes(`${GATE_NAME}/index.mjs`) ? [index] : [],
+  );
+  if (runs.length === 0) failures.push(`${WORKFLOW_PATH} has no step that runs ${GATE_NAME}/index.mjs`);
+  // Every such step, not the first: one sound step does not excuse a neutered twin.
+  for (const runAt of runs) failures.push(...receiverStepFailures(lines, runAt));
   return failures;
 }
 

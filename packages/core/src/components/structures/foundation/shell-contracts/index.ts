@@ -95,7 +95,7 @@ export type ShellResolvedChannel = (typeof SHELL_RESOLVED_CHANNELS)[number];
 
 /**
  * Superseded public hook name -> canonical spelling: read as `var(<old>, var(<new>))`,
- * never emitted; `shell-superseded-window.test.ts` is the trigger that closes it.
+ * never emitted; the `supersession-window` gate is the trigger that closes it.
  */
 export const SHELL_SUPERSEDED_HOOK_CHANNELS = {
   '--ds-shell-navigation-border': '--ds-app-shell-navigation-border',

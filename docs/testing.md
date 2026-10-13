@@ -47,6 +47,7 @@ environment variable, or is only exercised by self-hosted CI:
 |---|---|---|
 | `app-ds-boundary`, `app-ds-boundary-drill` | `APP_BITHIRE_ROOT` | Checks the design-system/app boundary against the private `rottay/app-bithire` source, checked out at a pinned SHA in CI |
 | `customization-worklist`, `customization-worklist-drill` | `APP_BITHIRE_ROOT` | Same boundary corpus, for the customization worklist census |
+| `supersession-window` (CI step, not a manifest gate) | `APP_BITHIRE_ROOT` | Reads the consumer half of the app-shell supersession window from the committed bytes of that checkout, whose `HEAD` must be the pinned SHA. The only one of these with **no sibling fallback** |
 | `claim-exactness` | `DOCS_ENGINEERING_ROOT` | Verifies documentation claims against the private `rottay/docs-engineering` repository |
 | Accessibility (`e2e/a11y`) | self-hosted CI only | Playwright + axe against a built Showroom; no npm script runs this locally without first building Showroom and installing browsers |
 | Visual regression / whitelabel / responsive (`test:gates`) | self-hosted CI only | Pixel-diff baselines are approved in CI; running locally without the reference baselines does not prove anything |
@@ -54,7 +55,10 @@ environment variable, or is only exercised by self-hosted CI:
 
 Without `APP_BITHIRE_ROOT` or `DOCS_ENGINEERING_ROOT` set, the gates that read
 them fail closed rather than silently passing — that is the intended,
-documented behavior, not a bug to work around locally.
+documented behavior, not a bug to work around locally. The other
+`APP_BITHIRE_ROOT` gates fall back to a sibling `../app-bithire` worktree when
+the variable is unset; `supersession-window` never does, so an undeclared root
+is red even with the sibling on disk.
 
 ## 4. Quality gates
 
