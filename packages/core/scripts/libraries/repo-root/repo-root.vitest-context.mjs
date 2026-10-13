@@ -13,10 +13,10 @@ import { defineConfig } from 'vitest/config';
 const HERE = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  root: join(HERE, '../../../../..'),
+  root: join(HERE, '../../..'),
   test: {
     environment: 'happy-dom',
-    include: ['scripts/libraries/repo-root/tests/vitest-context/index.vitest.mjs'],
+    include: ['scripts/libraries/repo-root/repo-root.vitest.mjs'],
     reporters: ['default'],
   },
 });

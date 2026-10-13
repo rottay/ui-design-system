@@ -73,7 +73,7 @@ test('under vitest the origin arrives root-relative and both finders still land'
       join(core, 'node_modules/vitest/vitest.mjs'),
       'run',
       '--config',
-      join(HERE, 'tests/vitest-context/config.mjs'),
+      join(HERE, 'repo-root.vitest-context.mjs'),
     ],
     { cwd: core, encoding: 'utf8' },
   );

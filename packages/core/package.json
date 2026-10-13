@@ -227,7 +227,7 @@
     "claim-exactness:write": "node scripts/check/evidence/certification/claims/exactness/index.mjs --write",
     "claim-integrity:structural": "node scripts/check/evidence/certification/claims/integrity/index.mjs --structural",
     "claim-integrity:gate": "node scripts/check/evidence/certification/claims/integrity/index.mjs",
-    "test:scripts": "node --test \"scripts/**/*.test.mjs\" && node --test ../../scripts/check/effects/index.test.mjs && vitest run --config scripts/check/automation/tests/scripts/index.mjs",
+    "test:scripts": "node --test \"scripts/**/*.test.mjs\" && node --test ../../scripts/check/effects/index.test.mjs && vitest run --config scripts/check/automation/tests/scripts/index.mjs && vitest run --config scripts/libraries/repo-root/repo-root.vitest-context.mjs scripts/libraries/repo-root/repo-root.vitest.mjs",
     "pretest": "pnpm run gates:ci",
     "build:vertical-artifacts": "node scripts/build/verticals/bundle-build/index.mjs",
     "build:vertical-bundles": "node scripts/build/verticals/css-build/index.mjs",
