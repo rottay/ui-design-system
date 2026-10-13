@@ -2,6 +2,7 @@ import { bin as createBinLayout, line, scaleLinear } from 'd3';
 
 import {
   DEFAULT_CARTESIAN_INSETS,
+  MAX_CARTESIAN_TICKS,
   finiteSize,
   normalizeInsets,
   plotRect,
@@ -93,7 +94,9 @@ export function buildSvgHistogramGeometry({
   const height = finiteSize(heightInput, 360);
   const insets = normalizeInsets(insetsInput, DEFAULT_CARTESIAN_INSETS);
   const plot = plotRect(width, height, insets);
-  const tickCount = Number.isSafeInteger(maxTicks) ? Math.max(2, maxTicks) : 5;
+  const tickCount = Number.isSafeInteger(maxTicks)
+    ? Math.min(MAX_CARTESIAN_TICKS, Math.max(2, maxTicks))
+    : 5;
   const finiteValues = values.filter((value) => Number.isFinite(value));
   const resolvedBinCount = Number.isFinite(binCount)
     ? Math.min(512, Math.max(1, Math.floor(binCount as number)))

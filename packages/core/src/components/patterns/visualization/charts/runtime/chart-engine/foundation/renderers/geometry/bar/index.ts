@@ -2,6 +2,7 @@ import { scaleBand, scaleLinear } from 'd3';
 
 import {
   DEFAULT_CARTESIAN_INSETS,
+  MAX_CARTESIAN_TICKS,
   finiteSize,
   normalizeInsets,
   plotRect,
@@ -82,7 +83,7 @@ export function buildSvgBarGeometry({
     : 0.2;
   const explicitTickCount =
     typeof maxTicks === 'number' && Number.isSafeInteger(maxTicks)
-      ? Math.max(2, maxTicks)
+      ? Math.min(MAX_CARTESIAN_TICKS, Math.max(2, maxTicks))
       : null;
   const explicitCategoryTickCount =
     typeof maxCategoryTicks === 'number' && Number.isSafeInteger(maxCategoryTicks)
@@ -256,7 +257,7 @@ export function buildSvgBarSeriesGeometry({
     : 0.05;
   const explicitTickCount =
     typeof maxTicks === 'number' && Number.isSafeInteger(maxTicks)
-      ? Math.max(2, maxTicks)
+      ? Math.min(MAX_CARTESIAN_TICKS, Math.max(2, maxTicks))
       : null;
   const explicitCategoryTickCount =
     typeof maxCategoryTicks === 'number' && Number.isSafeInteger(maxCategoryTicks)

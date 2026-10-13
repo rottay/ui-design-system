@@ -11,6 +11,7 @@ import {
 
 import {
   DEFAULT_CARTESIAN_INSETS,
+  MAX_CARTESIAN_TICKS,
   finiteSize,
   normalizeInsets,
   plotRect,
@@ -130,7 +131,9 @@ export function buildSvgLineGeometry({
   const height = finiteSize(heightInput, 360);
   const insets = normalizeInsets(insetsInput, DEFAULT_CARTESIAN_INSETS);
   const plot = plotRect(width, height, insets);
-  const tickCount = Number.isSafeInteger(maxTicks) ? Math.max(2, maxTicks) : 5;
+  const tickCount = Number.isSafeInteger(maxTicks)
+    ? Math.min(MAX_CARTESIAN_TICKS, Math.max(2, maxTicks))
+    : 5;
   const finiteSeries = series.map((currentSeries) => ({
     ...currentSeries,
     points: currentSeries.points.filter((point) => validLinePoint(point, xType)),

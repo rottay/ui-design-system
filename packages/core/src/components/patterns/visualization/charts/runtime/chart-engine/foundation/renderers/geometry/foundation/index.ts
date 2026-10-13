@@ -43,6 +43,9 @@ export const DEFAULT_RADIAL_INSETS: ChartGeometryInsets = Object.freeze({
   left: 16,
 });
 
+/** Upper bound for a caller tick budget: D3 materialises `scale.ticks(count)` before any sampling runs. */
+export const MAX_CARTESIAN_TICKS = 1000;
+
 function finiteSize(value: number, fallback: number): number {
   return Number.isFinite(value) ? Math.max(0, value) : fallback;
 }

@@ -1,12 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  buildSvgAreaGeometry,
   buildSvgBarGeometry,
   buildSvgHeatMapGeometry,
+  buildSvgHistogramGeometry,
   buildSvgLineGeometry,
   buildSvgPieGeometry,
   buildSvgScatterGeometry,
+  buildSvgWaterfallGeometry,
 } from '..';
+import type { ChartGeometryTick } from '..';
 
 describe('React-owned chart geometry', () => {
   it('keeps the bar baseline between negative and positive marks', () => {
@@ -315,5 +319,128 @@ describe('React-owned chart geometry', () => {
         { id: 'second', column: 'A', row: 'B', value: 2 },
       ],
     })).toThrowError('[ChartGeometry] Duplicate heatmap coordinate: A\u0000B.');
+  });
+});
+
+describe('Cartesian tick budget bounds', () => {
+  const size = { width: 640, height: 360 };
+  const categorySeries = [{
+    id: 'category',
+    label: 'Category',
+    points: Array.from({ length: 24 }, (_, index) => ({
+      id: `category-${index}`,
+      x: `Category ${index}`,
+      value: index * 3 - 20,
+    })),
+  }];
+  const linearSeries = [{
+    id: 'linear',
+    label: 'Linear',
+    points: Array.from({ length: 24 }, (_, index) => ({
+      id: `linear-${index}`,
+      x: index * 1.5,
+      value: index * index - 100,
+    })),
+  }];
+  const timeSeries = [{
+    id: 'time',
+    label: 'Time',
+    points: Array.from({ length: 24 }, (_, index) => ({
+      id: `time-${index}`,
+      x: Date.UTC(2026, 0, 1 + index),
+      value: index % 7,
+    })),
+  }];
+  const scatterData = Array.from({ length: 24 }, (_, index) => ({
+    id: `point-${index}`,
+    label: `Point ${index}`,
+    x: index * 4 - 30,
+    y: index * 2.5,
+  }));
+  const histogramValues = Array.from({ length: 120 }, (_, index) => (index * 37) % 101);
+  const waterfallData = [
+    { label: 'Revenue', value: 420 },
+    { label: 'COGS', value: -200 },
+    { label: 'Expenses', value: -80 },
+    { label: 'Net Profit', value: 140, type: 'total' as const },
+  ];
+
+  interface TickBudgetCase {
+    readonly name: string;
+    readonly build: (maxTicks: number | undefined) => object;
+    readonly axes: (maxTicks: number | undefined) => readonly (readonly ChartGeometryTick[])[];
+  }
+
+  const cases: readonly TickBudgetCase[] = [
+    (() => {
+      const build = (maxTicks: number | undefined) => buildSvgLineGeometry({ ...size, series: categorySeries, maxTicks });
+      return { name: 'line (category x)', build, axes: (maxTicks) => [build(maxTicks).xTicks, build(maxTicks).yTicks] };
+    })(),
+    (() => {
+      const build = (maxTicks: number | undefined) =>
+        buildSvgLineGeometry({ ...size, series: linearSeries, xType: 'linear', maxTicks });
+      return { name: 'line (linear x)', build, axes: (maxTicks) => [build(maxTicks).xTicks, build(maxTicks).yTicks] };
+    })(),
+    (() => {
+      const build = (maxTicks: number | undefined) =>
+        buildSvgLineGeometry({ ...size, series: timeSeries, xType: 'time', maxTicks });
+      return { name: 'line (time x)', build, axes: (maxTicks) => [build(maxTicks).xTicks, build(maxTicks).yTicks] };
+    })(),
+    (() => {
+      const build = (maxTicks: number | undefined) => buildSvgAreaGeometry({ ...size, series: categorySeries, maxTicks });
+      return { name: 'area', build, axes: (maxTicks) => [build(maxTicks).xTicks, build(maxTicks).yTicks] };
+    })(),
+    (() => {
+      const build = (maxTicks: number | undefined) => buildSvgScatterGeometry({ ...size, data: scatterData, maxTicks });
+      return { name: 'scatter', build, axes: (maxTicks) => [build(maxTicks).xTicks, build(maxTicks).yTicks] };
+    })(),
+    (() => {
+      const build = (maxTicks: number | undefined) =>
+        buildSvgHistogramGeometry({ ...size, values: histogramValues, cumulative: true, maxTicks });
+      return {
+        name: 'histogram',
+        build,
+        axes: (maxTicks) => [build(maxTicks).xTicks, build(maxTicks).yTicks, build(maxTicks).cumulative?.axisTicks ?? []],
+      };
+    })(),
+    (() => {
+      const build = (maxTicks: number | undefined) => buildSvgWaterfallGeometry({ ...size, data: waterfallData, maxTicks });
+      return { name: 'waterfall', build, axes: (maxTicks) => [build(maxTicks).valueTicks] };
+    })(),
+  ];
+
+  describe.each(cases)('$name', ({ build, axes }) => {
+    it.each([1001, 1_000_000, 1e12, Number.MAX_SAFE_INTEGER])(
+      'clamps an oversized budget of %d to the 1000-tick ceiling',
+      (maxTicks) => {
+        const startedAt = performance.now();
+        const geometry = build(maxTicks);
+        const elapsed = performance.now() - startedAt;
+
+        expect(elapsed).toBeLessThan(2000);
+        for (const ticks of axes(maxTicks)) {
+          expect(ticks.length).toBeLessThanOrEqual(1000);
+        }
+        expect(geometry).toEqual(build(1000));
+      },
+    );
+
+    it('keeps the lower clamp and the non-integer fallback unchanged', () => {
+      expect(build(0)).toEqual(build(2));
+      expect(build(-5)).toEqual(build(2));
+      expect(build(Number.NaN)).toEqual(build(5));
+      expect(build(1.5)).toEqual(build(5));
+      expect(build(undefined)).toEqual(build(5));
+      expect(build(2)).not.toEqual(build(5));
+    });
+
+    it('passes in-range budgets through to the tick bound they request', () => {
+      for (const maxTicks of [2, 3, 5, 10, 999, 1000]) {
+        for (const ticks of axes(maxTicks)) {
+          expect(ticks.length).toBeLessThanOrEqual(maxTicks);
+        }
+      }
+      expect(build(10)).not.toEqual(build(5));
+    });
   });
 });

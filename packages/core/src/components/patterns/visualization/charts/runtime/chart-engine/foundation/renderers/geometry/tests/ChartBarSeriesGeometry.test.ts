@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  buildSvgBarGeometry,
   buildSvgBarSeriesGeometry,
+  type ChartGeometryTick,
   type SvgBarSeriesInput,
 } from '..';
 
@@ -148,5 +150,75 @@ describe('multi-series bar geometry', () => {
     expect(geometry.bars).toHaveLength(2);
     expect(new Set(geometry.bars.map((bar) => bar.x)).size).toBe(2);
     expect(geometry.bars.every((bar) => bar.seriesLabel === 'Same')).toBe(true);
+  });
+});
+
+describe('bar tick budget bounds', () => {
+  const size = { width: 640, height: 360 };
+  const categoryCount = 8;
+  const data = Array.from({ length: categoryCount }, (_, index) => ({
+    id: `bar-${index}`,
+    category: `Category ${index}`,
+    value: index * 13 - 30,
+  }));
+  const series: readonly SvgBarSeriesInput[] = [
+    { id: 'a', label: 'A', points: data.map((datum) => ({ category: datum.category, value: datum.value })) },
+    { id: 'b', label: 'B', points: data.map((datum) => ({ category: datum.category, value: datum.value / 2 + 7 })) },
+  ];
+
+  interface BarTickGeometry {
+    readonly categoryTicks: readonly ChartGeometryTick[];
+    readonly valueTicks: readonly ChartGeometryTick[];
+  }
+
+  const cases: readonly { readonly name: string; readonly build: (maxTicks: number | undefined) => BarTickGeometry }[] = [
+    { name: 'single-series vertical', build: (maxTicks) => buildSvgBarGeometry({ ...size, data, maxTicks }) },
+    {
+      name: 'single-series horizontal',
+      build: (maxTicks) => buildSvgBarGeometry({ ...size, data, orientation: 'horizontal', maxTicks }),
+    },
+    { name: 'multi-series grouped', build: (maxTicks) => buildSvgBarSeriesGeometry({ ...size, series, maxTicks }) },
+    {
+      name: 'multi-series stacked horizontal',
+      build: (maxTicks) =>
+        buildSvgBarSeriesGeometry({ ...size, series, layout: 'stacked', orientation: 'horizontal', maxTicks }),
+    },
+  ];
+
+  describe.each(cases)('$name', ({ build }) => {
+    it.each([1001, 1_000_000, 1e12, Number.MAX_SAFE_INTEGER])(
+      'clamps an oversized budget of %d to the 1000-tick ceiling',
+      (maxTicks) => {
+        const startedAt = performance.now();
+        const geometry = build(maxTicks);
+        const elapsed = performance.now() - startedAt;
+
+        expect(elapsed).toBeLessThan(2000);
+        expect(geometry.valueTicks.length).toBeLessThanOrEqual(1000);
+        expect(geometry).toEqual(build(1000));
+      },
+    );
+
+    it('keeps the lower clamp and the unset fallback unchanged', () => {
+      expect(build(0)).toEqual(build(2));
+      expect(build(-5)).toEqual(build(2));
+      expect(build(2)).not.toEqual(build(5));
+
+      const unset = build(undefined);
+      expect(build(Number.NaN)).toEqual(unset);
+      expect(build(1.5)).toEqual(unset);
+      expect(unset.valueTicks).toEqual(build(5).valueTicks);
+      expect(unset.categoryTicks).toHaveLength(categoryCount);
+      expect(build(5).categoryTicks).toHaveLength(5);
+    });
+
+    it('passes in-range budgets through to the tick bound they request', () => {
+      for (const maxTicks of [2, 3, 5, 10, 999, 1000]) {
+        const geometry = build(maxTicks);
+        expect(geometry.valueTicks.length).toBeLessThanOrEqual(maxTicks);
+        expect(geometry.categoryTicks.length).toBeLessThanOrEqual(maxTicks);
+      }
+      expect(build(10)).not.toEqual(build(5));
+    });
   });
 });

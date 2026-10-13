@@ -2,6 +2,7 @@ import { scaleBand, scaleLinear } from 'd3';
 
 import {
   DEFAULT_CARTESIAN_INSETS,
+  MAX_CARTESIAN_TICKS,
   finiteSize,
   normalizeInsets,
   plotRect,
@@ -104,7 +105,9 @@ export function buildSvgWaterfallGeometry({
   const height = finiteSize(heightInput, 360);
   const insets = normalizeInsets(insetsInput, DEFAULT_CARTESIAN_INSETS);
   const plot = plotRect(width, height, insets);
-  const tickCount = Number.isSafeInteger(maxTicks) ? Math.max(2, maxTicks) : 5;
+  const tickCount = Number.isSafeInteger(maxTicks)
+    ? Math.min(MAX_CARTESIAN_TICKS, Math.max(2, maxTicks))
+    : 5;
   const padding = Number.isFinite(bandPadding) ? Math.min(0.95, Math.max(0, bandPadding)) : 0.3;
 
   let runningTotal = 0;
