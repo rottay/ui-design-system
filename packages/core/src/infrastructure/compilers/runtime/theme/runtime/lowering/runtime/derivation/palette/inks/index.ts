@@ -14,7 +14,10 @@ import {
   deriveReadableInk,
   onToneChannel,
 } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
-import type { ReadableInkPair } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
+import type {
+  OnToneRole,
+  ReadableInkPair,
+} from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 
 /**
  * Readable ink over each hex status tone; a dark-mode tone re-derives its own.
@@ -23,11 +26,13 @@ import type { ReadableInkPair } from "@/infrastructure/compilers/kernel/foundati
  */
 export function derivePaletteInks(
   palette: BrandPalette,
-  inkPair: ReadableInkPair
+  inkPair: ReadableInkPair,
+  painted: Readonly<Partial<Record<OnToneRole, string>>> = {}
 ): Record<string, string> {
   const vars: Record<string, string> = {};
   for (const role of ON_TONE_ROLES) {
-    const seed = palette[`${role}Color`];
+    // The ink sits on what the role PAINTS, which is not the seed once regraded.
+    const seed = painted[role] ?? palette[`${role}Color`];
     if (seed && isHexColor(seed)) {
       vars[onToneChannel(role)] = deriveReadableInk(seed, inkPair);
     }

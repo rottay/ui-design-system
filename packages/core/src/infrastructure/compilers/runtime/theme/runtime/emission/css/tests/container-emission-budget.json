@@ -1,169 +1,169 @@
 {
   "doors": {
     "sandbox:bithire:PRIMARY": {
-      "bytes": 64837,
+      "bytes": 65066,
       "declarations": {
         "base": 685,
-        "context": 1,
-        "mode": 43
+        "context": 2,
+        "mode": 45
       }
     },
     "sandbox:bithire:RICH": {
-      "bytes": 79027,
+      "bytes": 79272,
       "declarations": {
         "base": 907,
-        "context": 3,
-        "mode": 37
+        "context": 4,
+        "mode": 39
       }
     },
     "tenant-preview:bithire": {
-      "bytes": 66475,
+      "bytes": 66746,
       "declarations": {
         "base": 700,
-        "context": 1,
-        "mode": 43
+        "context": 2,
+        "mode": 45
       }
     },
     "brand-studio:bithire:EMPTY:dark": {
-      "bytes": 175597,
+      "bytes": 189363,
       "declarations": {
-        "base": 2261,
+        "base": 2438,
         "context": 7,
         "mode": 0
       }
     },
     "brand-studio:bithire:EMPTY:light": {
-      "bytes": 176639,
+      "bytes": 190044,
       "declarations": {
-        "base": 2261,
+        "base": 2438,
         "context": 7,
         "mode": 0
       }
     },
     "brand-studio:bithire:RICH:dark": {
-      "bytes": 200665,
+      "bytes": 202168,
       "declarations": {
-        "base": 2568,
+        "base": 2593,
         "context": 8,
         "mode": 0
       }
     },
     "brand-studio:bithire:RICH:light": {
-      "bytes": 201708,
+      "bytes": 202850,
       "declarations": {
-        "base": 2568,
+        "base": 2593,
         "context": 8,
         "mode": 0
       }
     },
     "sandbox:evnto:PRIMARY": {
-      "bytes": 69036,
+      "bytes": 69559,
       "declarations": {
         "base": 736,
-        "context": 4,
-        "mode": 41
+        "context": 5,
+        "mode": 49
       }
     },
     "sandbox:evnto:RICH": {
-      "bytes": 81295,
+      "bytes": 81818,
       "declarations": {
         "base": 939,
-        "context": 4,
-        "mode": 35
+        "context": 5,
+        "mode": 43
       }
     },
     "tenant-preview:evnto": {
-      "bytes": 70861,
+      "bytes": 71384,
       "declarations": {
         "base": 753,
-        "context": 4,
-        "mode": 41
+        "context": 5,
+        "mode": 49
       }
     },
     "brand-studio:evnto:EMPTY:dark": {
-      "bytes": 160632,
+      "bytes": 185132,
       "declarations": {
-        "base": 2021,
-        "context": 4,
+        "base": 2334,
+        "context": 5,
         "mode": 0
       }
     },
     "brand-studio:evnto:EMPTY:light": {
-      "bytes": 161687,
+      "bytes": 185798,
       "declarations": {
-        "base": 2021,
-        "context": 4,
+        "base": 2334,
+        "context": 5,
         "mode": 0
       }
     },
     "brand-studio:evnto:RICH:dark": {
-      "bytes": 200642,
+      "bytes": 201977,
       "declarations": {
-        "base": 2574,
+        "base": 2595,
         "context": 8,
         "mode": 0
       }
     },
     "brand-studio:evnto:RICH:light": {
-      "bytes": 201639,
+      "bytes": 202613,
       "declarations": {
-        "base": 2574,
+        "base": 2595,
         "context": 8,
         "mode": 0
       }
     },
     "sandbox:rottay:PRIMARY": {
-      "bytes": 70315,
+      "bytes": 70742,
       "declarations": {
-        "base": 752,
-        "context": 4,
-        "mode": 28
+        "base": 751,
+        "context": 5,
+        "mode": 36
       }
     },
     "sandbox:rottay:RICH": {
-      "bytes": 81415,
+      "bytes": 81842,
       "declarations": {
-        "base": 939,
-        "context": 4,
-        "mode": 35
+        "base": 938,
+        "context": 5,
+        "mode": 43
       }
     },
     "tenant-preview:rottay": {
-      "bytes": 72166,
+      "bytes": 72593,
       "declarations": {
-        "base": 769,
-        "context": 4,
-        "mode": 28
+        "base": 768,
+        "context": 5,
+        "mode": 36
       }
     },
     "brand-studio:rottay:EMPTY:dark": {
-      "bytes": 160632,
+      "bytes": 185132,
       "declarations": {
-        "base": 2021,
-        "context": 4,
+        "base": 2334,
+        "context": 5,
         "mode": 0
       }
     },
     "brand-studio:rottay:EMPTY:light": {
-      "bytes": 161687,
+      "bytes": 185798,
       "declarations": {
-        "base": 2021,
-        "context": 4,
+        "base": 2334,
+        "context": 5,
         "mode": 0
       }
     },
     "brand-studio:rottay:RICH:dark": {
-      "bytes": 201156,
+      "bytes": 202491,
       "declarations": {
-        "base": 2583,
+        "base": 2604,
         "context": 8,
         "mode": 0
       }
     },
     "brand-studio:rottay:RICH:light": {
-      "bytes": 202153,
+      "bytes": 203127,
       "declarations": {
-        "base": 2583,
+        "base": 2604,
         "context": 8,
         "mode": 0
       }
@@ -181,6 +181,12 @@
       "change": "re-anchor (WO-EVI-02 wave: SIG5 focus-signature skins, the Q4 ownership drain incl. OWN-8 chart skins, OWNSO shortcuts-overlay on Modal)",
       "reason": "The wave moved skin-owned paint into and between the family skins the doors compile; measured on the built tree by the doors() probe of this very test file. Every mover lot was independently reviewed before landing.",
       "totalBytes": 2860264
+    },
+    {
+      "date": "2026-10-12",
+      "change": "re-anchor, the first since 2026-10-04 (six lots landed without one: fd5cd57b1 +768, 239dd6306 +128,421, d5c9c823e +1,164, ee00b3d95 +46, 6bea312d6 +3,054, 65f9f8b80 +1,080; then c33048447 -774; then APCA-FIX +1,492)",
+      "reason": "2,860,264 + 134,533 - 774 + 1,492 = 2,995,515, every delta measured per commit by the independent review of APCA-FIX with the doors() probe of this test file on a git archive of each commit and of its parent. 239dd6306 (the foundation dark leg) is 95% of the growth and owns +308 of the +313 base declarations on the evnto/rottay brand-studio EMPTY panels and +160 of the +177 on bithire (the rest: d5c9c823e +1, 6bea312d6 +3, 65f9f8b80 +1, and APCA-FIX +12 on bithire): the container law restating what the root now resolves per mode. APCA-FIX adds 1,492 bytes on exactly the four bithire brand-studio doors and nothing on the other 17: bithire's dark block now states its own four on-tone inks, which makes them mode-varying for bithire, so a panel restates them and the aliases that read them (EMPTY dark and light +578 bytes and +12 base declarations each: the four inks and eight readers; RICH dark and light +168 bytes and +4 each). No panel carries the foundation's new dark role text.",
+      "totalBytes": 2995515
     }
   ]
 }

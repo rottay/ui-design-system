@@ -13,6 +13,7 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes";
 import { themeDefaultMode } from "@/infrastructure/compilers/kernel/foundation/modes";
 import type { RampSurface } from "@/foundation/kernel/color/oklch/ramp";
+import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import type {
   FamilyDeriver,
   LoweringContext,
@@ -24,6 +25,7 @@ import { resolveExpressiveFacts } from "../../foundation/expressive";
 import { flatThemeRampSurface } from "../../foundation/ground";
 import { FAMILY_DERIVERS } from "../derivation";
 import { derivePaletteTints, resolveContrastPosture } from "../derivation/palette";
+import { deriveRampChannels } from "../derivation/ramps";
 import { resolveRadiusBaseline } from "../../foundation/geometry";
 
 /** What the caller states about the block being compiled. */
@@ -38,6 +40,8 @@ export interface LoweringRequest {
   readonly modePrefix?: string;
   readonly tenant?: TenantFacts;
   readonly overlayModes?: readonly FlatThemeMode[];
+  /** The status tones an overlay block inherits ungraded; none for a base block. */
+  readonly inheritedStatusTones?: readonly OnToneRole[];
 }
 
 /** Which family produced each channel, and at which rank it settled. */
@@ -66,9 +70,10 @@ export function buildLoweringContext(
 ): LoweringContext {
   const theme = request.theme;
   const expressive = resolveExpressiveFacts(theme.expressive);
+  const surface = request.surface ?? flatThemeRampSurface(theme);
   return {
     theme,
-    surface: request.surface ?? flatThemeRampSurface(theme),
+    surface,
     mode: request.mode ?? themeDefaultMode(theme),
     modePrefix: request.modePrefix ?? "",
     expressive,
@@ -78,6 +83,8 @@ export function buildLoweringContext(
     statusTints: theme.palette
       ? derivePaletteTints(theme.palette, resolveContrastPosture(theme))
       : {},
+    inheritedStatusTones: request.inheritedStatusTones ?? [],
+    rampChannels: deriveRampChannels(theme.palette, surface),
     tenant: request.tenant,
     overlayModes: request.overlayModes ?? [],
   };

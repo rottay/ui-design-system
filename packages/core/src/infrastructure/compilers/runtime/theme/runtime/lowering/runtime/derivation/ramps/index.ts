@@ -6,6 +6,8 @@
  * @package @rottay/design-system
  */
 
+import type { BrandPalette } from "@/foundation/contracts/composition/tenants/themes";
+import type { RampSurface } from "@/foundation/kernel/color/oklch/ramp";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { deriveTenantColorRamps } from "../../../foundation/ramps";
 
@@ -31,6 +33,17 @@ export const rampsDeriver: FamilyDeriver = {
   rank: "derived",
   consumes: ["palette.primaryColor", "palette.secondaryColor", "palette.successColor", "palette.warningColor", "palette.errorColor", "palette.infoColor", "palette.backgroundColor", "palette.ramps"],
   produces: ["--ds-color-*", "--ds-focus-ring-color"],
-  derive: (context) =>
-    deriveTenantColorRamps(context.theme.palette, context.surface),
+  derive: (context) => context.rampChannels,
 };
+
+/**
+ * The block's ramp channels, derived ONCE by the pipeline and carried as a
+ * context fact: this family emits them, and the palette family reads a status
+ * step out of them without a second derivation or a second owner of the math.
+ */
+export function deriveRampChannels(
+  palette: BrandPalette | undefined,
+  surface: RampSurface
+): Record<string, string> {
+  return deriveTenantColorRamps(palette, surface);
+}

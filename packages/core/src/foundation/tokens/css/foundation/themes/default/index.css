@@ -2169,6 +2169,11 @@ html.dark {
   --ds-color-warning-bg: #451a03;
   --ds-color-info-bg: #172554;
 
+  /* Those ramps stay uninverted, so step 600 is still the light-graded ink
+     here (APCA Lc 41.4 / 42.6, floor 45): each role reads one stop up. */
+  --ds-color-success: var(--ds-color-success-500);
+  --ds-color-warning: var(--ds-color-warning-500);
+
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);
 

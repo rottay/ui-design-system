@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "generatedBy": "scripts/check/tokens/cascade/channels/liveness/index.mjs --write",
   "roundId": "R1",
-  "sourceDigest": "33f192706d37be8459433291eeacf30d8f8a1d6c6534ce1df660eaa6a4760342",
+  "sourceDigest": "c700abbff001e6c4d9184a267fc8e3ef4c73017273b475d4e1ad757caa57c1e7",
   "scopeLaw": "Tenant-channel liveness ledger scoped to TENANT_THEME_OVERRIDE_TOKENS ∪ TENANT_THEME_REFERENCE_TOKENS ∪ brand-theme-compiler-emitted names, plus the app-bithire external consumerRoot. NOT the customization-surface-census.mjs dead-writer census. NOT tenant-channel-consumer-gate.mjs. NOT theme-channel-parity-gate.mjs. No classification asserts a channel is dead, but membership on TENANT_THEME_REFERENCE_TOKENS never protects a row from a NO-GO finding by itself -- only a proven finite terminal-paint chain (in-repo or via a required consumerRoot) does that. A CAPABILITY_SCALE_STEP_UNREAD row is published apart from LIVE: a measured step of a public scale whose capability (single producer, admission and emission in agreement, resolution in every supported mode) the acceptance proves and whose paint nothing proves; it is never counted LIVE and leaves the effect red only while its acceptance measures green for that exact channel.",
   "inputs": {
     "tenantThemeContract": "src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
@@ -28,7 +28,7 @@
       "ok": true,
       "error": null,
       "cssFileCount": 915,
-      "tsFileCount": 4865
+      "tsFileCount": 4867
     }
   ],
   "probeEvidence": {
@@ -206,7 +206,7 @@
     "compiledRows": 3060,
     "compiledArtifacts": 3,
     "attributedReadSites": 1007,
-    "unattributedReadSites": 71598,
+    "unattributedReadSites": 72231,
     "unattributedSharedReadSites": 27,
     "unknownFamilySites": 0,
     "byClassification": {
@@ -507,11 +507,11 @@
         },
         "dark": {
           "--ds-color-bg-primary": "#0A0A0A",
-          "--ds-color-error": "#C62828",
-          "--ds-color-info": "#0369A1",
+          "--ds-color-error": "#F8675D",
+          "--ds-color-info": "#5AA4DC",
           "--ds-color-primary": "#2F5BE8",
-          "--ds-color-success": "#16794A",
-          "--ds-color-warning": "#B45309"
+          "--ds-color-success": "#60B182",
+          "--ds-color-warning": "#DF814B"
         }
       },
       "evnto": {
@@ -528,8 +528,8 @@
           "--ds-color-error": "#f87171",
           "--ds-color-info": "#60a5fa",
           "--ds-color-primary": "#e5e5e5",
-          "--ds-color-success": "#16a34a",
-          "--ds-color-warning": "#d97706"
+          "--ds-color-success": "#22c55e",
+          "--ds-color-warning": "#f59e0b"
         }
       },
       "rottay": {
@@ -546,8 +546,8 @@
           "--ds-color-error": "#f87171",
           "--ds-color-info": "#60a5fa",
           "--ds-color-primary": "#e5e5e5",
-          "--ds-color-success": "#16a34a",
-          "--ds-color-warning": "#d97706"
+          "--ds-color-success": "#22c55e",
+          "--ds-color-warning": "#f59e0b"
         }
       }
     },
@@ -5091,7 +5091,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:147"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:165"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5138,7 +5138,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:224"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:237"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5185,7 +5185,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:225"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:238"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5232,7 +5232,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:223"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:236"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5279,7 +5279,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:227"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:240"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5326,7 +5326,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:228"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:241"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5373,7 +5373,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:226"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:239"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5420,7 +5420,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:229"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:242"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5467,7 +5467,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:214"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:227"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5515,7 +5515,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:207"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:220"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5563,7 +5563,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:209"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:222"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5610,7 +5610,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:210"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:223"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5657,7 +5657,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:203"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:216"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5704,7 +5704,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:204"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:217"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5751,7 +5751,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:205"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:218"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5798,7 +5798,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:206"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:219"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5845,7 +5845,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:212"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:225"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5892,7 +5892,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:213"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:226"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5939,7 +5939,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:216"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:229"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5986,7 +5986,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:202"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:215"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6033,7 +6033,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:220"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:233"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6080,7 +6080,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:221"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:234"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6127,7 +6127,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:222"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:235"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6174,7 +6174,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:198"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:211"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6221,7 +6221,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:197"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:210"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6268,7 +6268,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:161"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:179"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6317,7 +6317,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:177"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:194"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6364,7 +6364,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:179"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:196"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6411,7 +6411,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:181"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:198"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6458,7 +6458,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:167"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:184"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6507,7 +6507,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:168"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:185"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6556,7 +6556,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:165"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:183"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6605,7 +6605,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:174"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:191"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6663,7 +6663,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:172"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:189"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6710,7 +6710,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:183"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:200"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6757,7 +6757,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:190"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:203"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6804,7 +6804,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:188"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:202"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6851,7 +6851,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:191"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:204"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6898,7 +6898,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:192"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:205"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6945,7 +6945,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:170"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:187"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6993,7 +6993,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:171"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:188"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7041,7 +7041,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:175"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:192"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7088,7 +7088,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:176"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:193"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7135,7 +7135,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:169"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:186"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7184,7 +7184,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:194"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:207"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7231,7 +7231,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:160"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:178"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7279,7 +7279,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:153"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:171"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7326,7 +7326,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:155"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:173"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7373,7 +7373,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:154"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:172"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7420,7 +7420,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:151"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:169"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7467,7 +7467,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:152"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:170"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7514,7 +7514,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:156"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:174"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7562,7 +7562,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:150"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:168"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -20063,7 +20063,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:54"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:67"
         ]
       },
       "semanticOwner": "chrome.card",
@@ -20268,8 +20268,8 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css:260 (outline-offset)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:226 (feeds --ds-card-bordered-border-width)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:596 (feeds --ds-card-selected-outline-width)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3727 (feeds --ds-card-bordered-border-width)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3739 (feeds --ds-card-selected-outline-width)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3755 (feeds --ds-card-bordered-border-width)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3767 (feeds --ds-card-selected-outline-width)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3334 (feeds --ds-card-bordered-border-width)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3343 (feeds --ds-card-selected-outline-width)"
       ],
@@ -30411,7 +30411,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:37"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:47"
         ]
       },
       "semanticOwner": "palette",
@@ -30508,7 +30508,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/badge/index.css:520 (background)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/shadows/index.css:123 (feeds --ds-shadow-input-error)",
         "ds-custom-ref:src/foundation/tokens/css/runtime/engines/modern/skin/badge/index.css:416 (feeds --ds-badge-tone-soft-bg)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4026 (feeds --ds-shadow-input-error)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4039 (feeds --ds-shadow-input-error)",
         "ds-ts-unproven:src/components/primitives/display/badge/contracts/index.ts:396"
       ],
       "consumerSitesTruncated": false,
@@ -30712,7 +30712,7 @@
       "consumerSites": [
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/input/index.css:168 (box-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/shadows/index.css:134 (feeds --ds-shadow-focus-ring-success)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4024 (feeds --ds-shadow-focus-ring-success)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3539 (feeds --ds-shadow-focus-ring-success)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_FROZEN_ENGINE_PAINTED",
@@ -30815,7 +30815,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:203 (box-shadow)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/input/index.css:171 (box-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/shadows/index.css:136 (feeds --ds-shadow-focus-ring-warning)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4025 (feeds --ds-shadow-focus-ring-warning)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3540 (feeds --ds-shadow-focus-ring-warning)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_MODERN_PAINTED",
@@ -30838,7 +30838,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:78"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:92"
         ]
       },
       "semanticOwner": "palette",
@@ -30900,7 +30900,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:77"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:91"
         ]
       },
       "semanticOwner": "palette",
@@ -31178,7 +31178,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:76"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:90"
         ]
       },
       "semanticOwner": "palette",
@@ -31494,7 +31494,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:63"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:77"
         ]
       },
       "semanticOwner": "palette",
@@ -31556,7 +31556,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:47"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:57"
         ]
       },
       "semanticOwner": "palette",
@@ -31624,7 +31624,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:49"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:59"
         ]
       },
       "semanticOwner": "palette",
@@ -31702,7 +31702,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:52"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:65"
         ]
       },
       "semanticOwner": "palette",
@@ -32627,7 +32627,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:53"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:67"
         ]
       },
       "semanticOwner": "palette",
@@ -33076,7 +33076,7 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/modal/index.css:222 (feeds --ds-modal-info-icon-color)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3165 (feeds --ds-border-color-info)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3184 (feeds --ds-button-info-bg)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3427 (feeds --ds-modal-info-icon-color)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3436 (feeds --ds-modal-info-icon-color)",
         "ds-ts-unproven:src/components/primitives/display/callout/contracts/index.ts:84",
         "ds-ts-unproven:src/components/primitives/display/card/contracts/index.ts:542"
       ],
@@ -33474,7 +33474,7 @@
         "external-terminal:app-bithire/features/portals/surface/components/signing-rail/styles/index.css:79 (box-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/themes/default/index.css:1974 (feeds --ds-live-feed-new-border)",
         "ds-custom-ref:src/foundation/tokens/css/runtime/engines/modern/skin/badge/index.css:425 (feeds --ds-badge-tone-outline)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3407 (feeds --ds-live-feed-new-border)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3414 (feeds --ds-live-feed-new-border)",
         "external-custom-ref:app-bithire/features/_shared/surface/components/table-cell-renderers/styles/index.css:160 (feeds --rt-cell-tone-border)"
       ],
       "consumerSitesTruncated": true,
@@ -33510,11 +33510,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 1657,
+        "dsTerminal": 1656,
         "externalTerminal": 1741,
         "dsTs": 8,
         "externalTs": 5,
-        "total": 3411
+        "total": 3410
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -34100,11 +34100,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 1268,
+        "dsTerminal": 1266,
         "externalTerminal": 1327,
         "dsTs": 2,
         "externalTs": 0,
-        "total": 2597
+        "total": 2595
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -34166,11 +34166,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4158,
+        "dsTerminal": 4156,
         "externalTerminal": 8024,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 12182
+        "total": 12180
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -34232,11 +34232,11 @@
       "familyIds": [],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 4161,
+        "dsTerminal": 4159,
         "externalTerminal": 8024,
         "dsTs": 0,
         "externalTs": 0,
-        "total": 12185
+        "total": 12183
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -35664,7 +35664,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:34"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:44"
         ]
       },
       "semanticOwner": "palette",
@@ -36547,7 +36547,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:36"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:46"
         ]
       },
       "semanticOwner": "palette",
@@ -37011,7 +37011,7 @@
         "external-terminal:app-bithire/vertical/surface/shell/layout-page-header/view/styles/index.css:90 (background)",
         "external-terminal:app-bithire/vertical/surface/shell/layout-page-header/view/styles/index.css:141 (background)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/animations/premium/index.css:79 (feeds --ds-gradient-primary-soft)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3359 (feeds --ds-gradient-primary-soft)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3366 (feeds --ds-gradient-primary-soft)",
         "external-custom-ref:app-bithire/features/settings/surface/screens/ai/studio/overview/wiring/styles/index.css:23 (feeds --rt-tone-50)",
         "external-custom-ref:app-bithire/vertical/surface/shell/layout-page-header/view/styles/index.css:20 (feeds --rt-page-hero-gradient)",
         "external-custom-ref:app-bithire/vertical/surface/shell/layout-page-header/view/styles/index.css:31 (feeds --rt-page-hero-gradient)"
@@ -37342,7 +37342,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:50"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:61"
         ]
       },
       "semanticOwner": "palette",
@@ -37783,11 +37783,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 25,
+        "dsTerminal": 366,
         "externalTerminal": 0,
         "dsTs": 23,
         "externalTs": 0,
-        "total": 48
+        "total": 389
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -37807,17 +37807,17 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/progress/index.css:47 (background-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/progress/index.css:65 (color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:61 (color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css:712 (background-color)",
-        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/input-compounds/index.css:144 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/input-compounds/index.css:197 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/input-compounds/index.css:342 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css:413 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/input/index.css:119 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/input/index.css:146 (border-bottom-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:84 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/toggle/index.css:123 (background-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/toggle/index.css:146 (background-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/toggle/index.css:157 (background-color)"
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:1830 (color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:1842 (color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:2106 (color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:2134 (color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3147 (border-color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3152 (background)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3305 (background)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3306 (box-shadow)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3361 (border-color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3366 (background)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3382 (border-color)"
       ],
       "consumerSitesTruncated": true,
       "classification": "LIVE_MODERN_PAINTED",
@@ -38228,7 +38228,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:45"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:55"
         ]
       },
       "semanticOwner": "palette",
@@ -38290,7 +38290,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:43"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:53"
         ]
       },
       "semanticOwner": "palette",
@@ -38369,7 +38369,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:39"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:49"
         ]
       },
       "semanticOwner": "palette",
@@ -38419,11 +38419,11 @@
       ],
       "sharedFamilyAttribution": true,
       "reads": {
-        "dsTerminal": 1108,
+        "dsTerminal": 1106,
         "externalTerminal": 1277,
         "dsTs": 65,
         "externalTs": 3,
-        "total": 2453
+        "total": 2451
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -38474,7 +38474,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:41"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:51"
         ]
       },
       "semanticOwner": "palette",
@@ -38566,7 +38566,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:51"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/semantic/index.ts:63"
         ]
       },
       "semanticOwner": "palette",
@@ -38886,7 +38886,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/approval-workflow/index.css:164 (border)",
         "external-terminal:app-bithire/features/insights/surface/components/dashboard/command-center/top-candidates-card/styles/index.css:272 (background)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/rate/index.css:36 (feeds --ds-rate-active-color)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3500 (feeds --ds-rate-active-color)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3514 (feeds --ds-rate-active-color)",
         "ds-ts-unproven:src/components/primitives/navigation/link/contracts/index.ts:271"
       ],
       "consumerSitesTruncated": false,
@@ -39003,11 +39003,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 33,
+        "dsTerminal": 334,
         "externalTerminal": 0,
         "dsTs": 22,
         "externalTs": 0,
-        "total": 55
+        "total": 356
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -39028,16 +39028,16 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/popconfirm/index.css:57 (color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:146 (background-color)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:64 (color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css:719 (background-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/rate/index.css:125 (color)",
-        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/input-compounds/index.css:139 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/input-compounds/index.css:192 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/input-compounds/index.css:338 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/theme/index.css:244 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/input/index.css:404 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/input/index.css:122 (border-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/skin/input/index.css:149 (border-bottom-color)",
-        "ds-terminal:src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:80 (border-color)"
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:1850 (color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3316 (border)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3322 (background)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3399 (border-color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3404 (background)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/semantic-icon/index.css:32 (color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/activity-cards/index.css:167 (color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/activity-cards/index.css:191 (background)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/activity-cards/index.css:209 (color)",
+        "ds-terminal:src/foundation/tokens/css/presentation/components/skin/activity-compact/index.css:178 (color)"
       ],
       "consumerSitesTruncated": true,
       "classification": "LIVE_MODERN_PAINTED",
@@ -39447,11 +39447,11 @@
       ],
       "sharedFamilyAttribution": false,
       "reads": {
-        "dsTerminal": 5881,
+        "dsTerminal": 5879,
         "externalTerminal": 10405,
         "dsTs": 1,
         "externalTs": 0,
-        "total": 16287
+        "total": 16285
       },
       "dsModernPainted": true,
       "dsFrozenOnlyPainted": false,
@@ -59843,11 +59843,11 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/divider/index.css:26 (gap)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/divider/index.css:26 (gap)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:1155 (feeds --ds-divider-gap)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4680 (feeds --ds-divider-gap)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4689 (feeds --ds-divider-gap)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:1041 (feeds --ds-divider-gap)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:4069 (feeds --ds-divider-gap)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:4070 (feeds --ds-divider-gap)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:1041 (feeds --ds-divider-gap)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:4069 (feeds --ds-divider-gap)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:4070 (feeds --ds-divider-gap)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_MODERN_PAINTED",
@@ -64408,7 +64408,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1428 (border-top)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/table/index.css:151 (border-bottom)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/themes/default/index.css:729 (feeds --ds-table-header-rule-width)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3551 (feeds --ds-table-header-rule-width)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3577 (feeds --ds-table-header-rule-width)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3192 (feeds --ds-table-header-rule-width)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3192 (feeds --ds-table-header-rule-width)"
       ],
@@ -65649,8 +65649,8 @@
         "ds-custom-ref:src/foundation/tokens/css/runtime/engines/modern/skin/dropdown/index.css:151 (feeds --_ds-dropdown-layer-step-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:216 (feeds --_ds-popover-layer-step-shadow)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:315 (feeds --ds-box-depth-xl)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4019 (feeds --ds-shadow-2xl)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4020 (feeds --ds-shadow-3xl)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4034 (feeds --ds-shadow-2xl)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4035 (feeds --ds-shadow-3xl)"
       ],
       "consumerSitesTruncated": true,
       "classification": "LIVE_MODERN_PAINTED",
@@ -68161,7 +68161,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:83 (font-size)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/form/index.css:215 (font-size)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/form/index.css:13 (feeds --ds-form-label-font-size-md)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3353 (feeds --ds-form-label-font-size-md)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3360 (feeds --ds-form-label-font-size-md)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3082 (feeds --ds-form-label-font-size-md)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3082 (feeds --ds-form-label-font-size-md)"
       ],
@@ -70021,7 +70021,7 @@
         "external-terminal:app-bithire/ui/details/surface-shell/details-mode/styles/index.css:123 (background)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/button/index.css:365 (feeds --ds-button-gradient)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:1708 (feeds --ds-modal-ok-texture)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3704 (feeds --ds-button-gradient)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3732 (feeds --ds-button-gradient)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:1579 (feeds --ds-modal-ok-texture)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3313 (feeds --ds-button-gradient)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:1579 (feeds --ds-modal-ok-texture)",
@@ -70091,7 +70091,7 @@
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:92 (feeds --ds-alert-texture)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:757 (feeds --ds-column-menu-panel-background)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:1715 (feeds --ds-modal-texture)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3742 (feeds --ds-card-surface-gradient)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3770 (feeds --ds-card-surface-gradient)"
       ],
       "consumerSitesTruncated": true,
       "classification": "LIVE_MODERN_PAINTED",
@@ -71464,7 +71464,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:54"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:67"
         ]
       },
       "semanticOwner": "chrome.input",
@@ -71529,7 +71529,7 @@
           "tenant"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:54",
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:67",
           "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/seeds/index.ts:52"
         ]
       },
@@ -71634,7 +71634,7 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/input/index.css:324 (feeds --ds-input-autofill-caret)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:184 (feeds --ds-auto-complete-caret)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:1404 (feeds --ds-input-number-caret)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3860 (feeds --ds-input-autofill-caret)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3881 (feeds --ds-input-autofill-caret)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:184 (feeds --ds-auto-complete-caret)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:1282 (feeds --ds-input-number-caret)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3435 (feeds --ds-input-autofill-caret)"
@@ -73900,7 +73900,7 @@
           "tenant"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:54",
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:67",
           "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/seeds/index.ts:52"
         ]
       },
@@ -75681,7 +75681,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/patterns/index.css:3610 (background)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/patterns/index.css:19 (feeds --ds-workspace-shell-overlay)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:70 (feeds --_surface-texture)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3642 (feeds --ds-workspace-shell-overlay)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3670 (feeds --ds-workspace-shell-overlay)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_MODERN_PAINTED",
@@ -75804,9 +75804,9 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:28 (feeds --ds-card-bg-active)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:302 (feeds --ds-premium-card-bg-active)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:124 (feeds --_surface-background-active)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4162 (feeds --ds-card-bg-active)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4195 (feeds --ds-dropdown-item-bg-active)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4242 (feeds --ds-premium-card-bg-active)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4166 (feeds --ds-card-bg-active)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4199 (feeds --ds-dropdown-item-bg-active)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4244 (feeds --ds-premium-card-bg-active)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3661 (feeds --ds-card-bg-active)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3692 (feeds --ds-dropdown-item-bg-active)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3727 (feeds --ds-premium-card-bg-active)",
@@ -75867,7 +75867,7 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:30 (feeds --ds-card-bg-disabled)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:318 (feeds --ds-premium-card-bg-disabled)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:126 (feeds --_surface-background-disabled)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4163 (feeds --ds-card-bg-disabled)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4167 (feeds --ds-card-bg-disabled)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4379 (feeds --ds-premium-card-bg-disabled)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3662 (feeds --ds-card-bg-disabled)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3850 (feeds --ds-premium-card-bg-disabled)",
@@ -75997,9 +75997,9 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:310 (feeds --ds-premium-card-bg-selected)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/select/index.css:141 (feeds --ds-select-option-bg-selected)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:125 (feeds --_surface-background-selected)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4164 (feeds --ds-card-bg-selected)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4244 (feeds --ds-premium-card-bg-selected)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4260 (feeds --ds-select-option-bg-selected)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4168 (feeds --ds-card-bg-selected)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4246 (feeds --ds-premium-card-bg-selected)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4262 (feeds --ds-select-option-bg-selected)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3663 (feeds --ds-card-bg-selected)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3729 (feeds --ds-premium-card-bg-selected)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3744 (feeds --ds-select-option-bg-selected)",
@@ -76125,8 +76125,8 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:46 (feeds --ds-card-border-color-active)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:348 (feeds --ds-premium-card-active-border)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:133 (feeds --_surface-border-active)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3721 (feeds --ds-card-border-color-active)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4240 (feeds --ds-premium-card-active-border)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3749 (feeds --ds-card-border-color-active)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4242 (feeds --ds-premium-card-active-border)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3328 (feeds --ds-card-border-color-active)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3725 (feeds --ds-premium-card-active-border)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3328 (feeds --ds-card-border-color-active)",
@@ -76185,8 +76185,8 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:48 (feeds --ds-card-border-color-disabled)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:360 (feeds --ds-premium-card-disabled-border)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:135 (feeds --_surface-border-disabled)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3722 (feeds --ds-card-border-color-disabled)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3949 (feeds --ds-premium-card-disabled-border)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3750 (feeds --ds-card-border-color-disabled)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3970 (feeds --ds-premium-card-disabled-border)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3329 (feeds --ds-card-border-color-disabled)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3509 (feeds --ds-premium-card-disabled-border)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3329 (feeds --ds-card-border-color-disabled)",
@@ -76511,7 +76511,7 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:127 (feeds --_surface-foreground)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:2924 (feeds --ds-tour-close-ink-hover)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:2936 (feeds --ds-tour-title-ink)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4061 (feeds --ds-surface-card-color)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4067 (feeds --ds-surface-card-color)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:2788 (feeds --ds-tour-close-ink-hover)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:2800 (feeds --ds-tour-title-ink)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3573 (feeds --ds-surface-card-color)",
@@ -76571,8 +76571,8 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:36 (feeds --ds-card-color-disabled)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/select/index.css:147 (feeds --ds-select-option-color-disabled)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:129 (feeds --_surface-foreground-disabled)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3728 (feeds --ds-card-color-disabled)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4003 (feeds --ds-select-option-color-disabled)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3756 (feeds --ds-card-color-disabled)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4016 (feeds --ds-select-option-color-disabled)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3335 (feeds --ds-card-color-disabled)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3538 (feeds --ds-select-option-color-disabled)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3335 (feeds --ds-card-color-disabled)",
@@ -76631,7 +76631,7 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/patterns/index.css:45 (feeds --ds-surface-card-color-muted)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:128 (feeds --_surface-foreground-muted)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:2923 (feeds --ds-tour-close-ink)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4062 (feeds --ds-surface-card-color-muted)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4068 (feeds --ds-surface-card-color-muted)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:2787 (feeds --ds-tour-close-ink)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3574 (feeds --ds-surface-card-color-muted)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:2787 (feeds --ds-tour-close-ink)",
@@ -76692,7 +76692,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css:1050 (box-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:404 (feeds --ds-premium-card-depth)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:141 (feeds --_surface-highlight)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3948 (feeds --ds-premium-card-depth)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3969 (feeds --ds-premium-card-depth)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_MODERN_PAINTED",
@@ -76947,7 +76947,7 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:384 (feeds --ds-premium-card-shadow-selected)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:140 (feeds --_surface-shadow-selected)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3240 (feeds --ds-card-shadow-selected)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4248 (feeds --ds-premium-card-shadow-selected)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4250 (feeds --ds-premium-card-shadow-selected)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3017 (feeds --ds-card-shadow-selected)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3732 (feeds --ds-premium-card-shadow-selected)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3017 (feeds --ds-card-shadow-selected)",
@@ -77005,7 +77005,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:400 (background)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/card/index.css:412 (feeds --ds-premium-card-texture)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:142 (feeds --_surface-texture)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3473 (feeds --ds-premium-card-texture)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3482 (feeds --ds-premium-card-texture)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_MODERN_PAINTED",
@@ -77451,8 +77451,8 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/button/index.css:171 (feeds --ds-button-dashed-border-active)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/patterns/index.css:531 (feeds --ds-filter-pill-active-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:181 (feeds --_surface-border-active)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3694 (feeds --ds-button-dashed-border-active)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3696 (feeds --ds-button-default-border-active)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3722 (feeds --ds-button-dashed-border-active)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3724 (feeds --ds-button-default-border-active)"
       ],
       "consumerSitesTruncated": true,
       "classification": "LIVE_MODERN_PAINTED",
@@ -77808,7 +77808,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:395 (color)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/patterns/index.css:71 (feeds --ds-surface-control-color)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:175 (feeds --_surface-foreground)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4064 (feeds --ds-surface-control-color)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4070 (feeds --ds-surface-control-color)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3576 (feeds --ds-surface-control-color)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3576 (feeds --ds-surface-control-color)"
       ],
@@ -80357,11 +80357,11 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/classic/skin/collapse/index.css:90 (background)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:367 (background)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/themes/default/index.css:1820 (feeds --ds-menu-item-bg-active)",
-        "ds-custom-ref:src/foundation/tokens/css/foundation/themes/default/index.css:2228 (feeds --ds-menu-item-bg-active)",
+        "ds-custom-ref:src/foundation/tokens/css/foundation/themes/default/index.css:2233 (feeds --ds-menu-item-bg-active)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/collapse/index.css:72 (feeds --ds-collapse-header-default-active-bg)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/patterns/index.css:177 (feeds --ds-shell-active-bg)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:100 (feeds --_surface-background-active)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4180 (feeds --ds-collapse-header-default-active-bg)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4184 (feeds --ds-collapse-header-default-active-bg)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4282 (feeds --ds-shell-active-bg)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3678 (feeds --ds-collapse-header-default-active-bg)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3764 (feeds --ds-shell-active-bg)",
@@ -80418,7 +80418,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:400 (background)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/collapse/index.css:75 (feeds --ds-collapse-header-default-disabled-bg)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:102 (feeds --_surface-background-disabled)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4181 (feeds --ds-collapse-header-default-disabled-bg)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4185 (feeds --ds-collapse-header-default-disabled-bg)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3679 (feeds --ds-collapse-header-default-disabled-bg)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3679 (feeds --ds-collapse-header-default-disabled-bg)"
       ],
@@ -80550,7 +80550,7 @@
         "ds-custom-ref:src/foundation/tokens/css/foundation/themes/default/index.css:1832 (feeds --ds-menu-item-selected-bg)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:101 (feeds --_surface-background-selected)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/tree/index.css:30 (feeds --ds-tree-node-bg-selected)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4229 (feeds --ds-menu-item-selected-bg)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4231 (feeds --ds-menu-item-selected-bg)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4301 (feeds --ds-table-row-bg-selected)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4318 (feeds --ds-tree-node-bg-selected)"
       ],
@@ -80617,7 +80617,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:384 (border-color)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/patterns/index.css:57 (feeds --ds-surface-panel-border)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:106 (feeds --_surface-border)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4065 (feeds --ds-surface-panel-border)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4071 (feeds --ds-surface-panel-border)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3577 (feeds --ds-surface-panel-border)"
       ],
       "consumerSitesTruncated": true,
@@ -80980,7 +80980,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:395 (color)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/patterns/index.css:53 (feeds --ds-surface-panel-color)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:103 (feeds --_surface-foreground)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4066 (feeds --ds-surface-panel-color)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4072 (feeds --ds-surface-panel-color)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3578 (feeds --ds-surface-panel-color)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3578 (feeds --ds-surface-panel-color)"
       ],
@@ -81039,9 +81039,9 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/collapse/index.css:134 (feeds --ds-collapse-icon-default-disabled-color)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:105 (feeds --_surface-foreground-disabled)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/tree/index.css:33 (feeds --ds-tree-node-color-disabled)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3768 (feeds --ds-collapse-header-default-disabled-color)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3770 (feeds --ds-collapse-icon-default-disabled-color)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4127 (feeds --ds-tree-node-color-disabled)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3792 (feeds --ds-collapse-header-default-disabled-color)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3794 (feeds --ds-collapse-icon-default-disabled-color)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4131 (feeds --ds-tree-node-color-disabled)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3363 (feeds --ds-collapse-header-default-disabled-color)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3365 (feeds --ds-collapse-icon-default-disabled-color)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3633 (feeds --ds-tree-node-color-disabled)",
@@ -81196,7 +81196,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:385 (box-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/patterns/index.css:61 (feeds --ds-surface-panel-shadow)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:113 (feeds --_surface-shadow)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3546 (feeds --ds-surface-panel-shadow)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3572 (feeds --ds-surface-panel-shadow)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3189 (feeds --ds-surface-panel-shadow)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3189 (feeds --ds-surface-panel-shadow)"
       ],
@@ -81398,7 +81398,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:400 (background)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/patterns/index.css:66 (feeds --ds-surface-panel-texture)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/semantic-surface/index.css:118 (feeds --_surface-texture)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3547 (feeds --ds-surface-panel-texture)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3573 (feeds --ds-surface-panel-texture)"
       ],
       "consumerSitesTruncated": false,
       "classification": "LIVE_MODERN_PAINTED",
@@ -118802,7 +118802,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:143"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:161"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -118854,7 +118854,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:139"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:157"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -118914,7 +118914,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:138"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:156"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -118963,7 +118963,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:140"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:158"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -119015,7 +119015,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:137"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:155"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -122537,11 +122537,11 @@
         "ds-custom-ref:src/foundation/tokens/css/runtime/engines/modern/skin/stack/index.css:51 (feeds --_ds-stack-divider-gap-inline)",
         "ds-custom-ref:src/foundation/tokens/css/runtime/engines/modern/skin/stack/index.css:56 (feeds --_ds-stack-divider-gap-block)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:2352 (feeds --ds-stack-divider-gutter)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4763 (feeds --ds-stack-divider-gutter)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:4772 (feeds --ds-stack-divider-gutter)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:2219 (feeds --ds-stack-divider-gutter)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:4152 (feeds --ds-stack-divider-gutter)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:4153 (feeds --ds-stack-divider-gutter)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:2219 (feeds --ds-stack-divider-gutter)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:4152 (feeds --ds-stack-divider-gutter)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:4153 (feeds --ds-stack-divider-gutter)",
         "ds-ts-unproven:src/components/primitives/layout/stack/runtime/responsive/index.tsx:137",
         "ds-ts-unproven:src/components/primitives/layout/stack/runtime/responsive/index.tsx:146"
       ],
@@ -129848,7 +129848,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:54"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:67"
         ]
       },
       "semanticOwner": "chrome.table",
@@ -138659,7 +138659,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tag/index.css:108 (border-radius)",
         "ds-terminal:src/foundation/tokens/css/runtime/personality/index.css:745 (border-radius)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/tag/index.css:57 (feeds --ds-tag-default-radius)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3556 (feeds --ds-tag-default-radius)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3582 (feeds --ds-tag-default-radius)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3194 (feeds --ds-tag-default-radius)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3194 (feeds --ds-tag-default-radius)",
         "ds-ts-unproven:src/components/primitives/display/tag/contracts/index.ts:182"
@@ -139878,7 +139878,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:54"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:67"
         ]
       },
       "semanticOwner": "palette",
@@ -140747,7 +140747,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:54"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:67"
         ]
       },
       "semanticOwner": "palette",
@@ -140795,7 +140795,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:54"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/index.ts:67"
         ]
       },
       "semanticOwner": "palette",
@@ -158357,7 +158357,7 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:105 (letter-spacing)",
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:132 (letter-spacing)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/tooltip/index.css:39 (feeds --ds-tooltip-rich-letter-spacing)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3610 (feeds --ds-tooltip-rich-letter-spacing)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3638 (feeds --ds-tooltip-rich-letter-spacing)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3235 (feeds --ds-tooltip-rich-letter-spacing)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3235 (feeds --ds-tooltip-rich-letter-spacing)"
       ],
@@ -160034,11 +160034,11 @@
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:97 (feeds --ds-z-drawer)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/drawer/index.css:10 (feeds --ds-drawer-layer)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/sheet/index.css:18 (feeds --ds-sheet-layer)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3314 (feeds --ds-drawer-layer)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3531 (feeds --ds-sheet-layer)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3643 (feeds --ds-z-drawer)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3652 (feeds --ds-z-index-drawer-content)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3659 (feeds --ds-z-index-sidebar)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3321 (feeds --ds-drawer-layer)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3554 (feeds --ds-sheet-layer)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3671 (feeds --ds-z-drawer)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3680 (feeds --ds-z-index-drawer-content)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3687 (feeds --ds-z-index-sidebar)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3054 (feeds --ds-drawer-layer)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3181 (feeds --ds-sheet-layer)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3262 (feeds --ds-z-drawer)",
@@ -160103,12 +160103,12 @@
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:93 (feeds --ds-z-dropdown)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:110 (feeds --ds-z-floatbutton)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/dropdown/index.css:10 (feeds --ds-dropdown-layer)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3320 (feeds --ds-dropdown-layer)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3644 (feeds --ds-z-dropdown)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3646 (feeds --ds-z-floatbutton)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3647 (feeds --ds-z-index-autocomplete)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3650 (feeds --ds-z-index-datepicker)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3654 (feeds --ds-z-index-menu)"
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3327 (feeds --ds-dropdown-layer)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3672 (feeds --ds-z-dropdown)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3674 (feeds --ds-z-floatbutton)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3675 (feeds --ds-z-index-autocomplete)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3678 (feeds --ds-z-index-datepicker)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3682 (feeds --ds-z-index-menu)"
       ],
       "consumerSitesTruncated": true,
       "classification": "LIVE_MODERN_PAINTED",
@@ -160166,8 +160166,8 @@
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:95 (feeds --ds-z-fixed)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:28 (feeds --ds-action-dock-z-index)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:154 (feeds --ds-app-shell-navigation-z-index)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3645 (feeds --ds-z-fixed)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3657 (feeds --ds-z-index-navbar)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3673 (feeds --ds-z-fixed)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3685 (feeds --ds-z-index-navbar)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:28 (feeds --ds-action-dock-z-index)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:154 (feeds --ds-app-shell-navigation-z-index)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3264 (feeds --ds-z-fixed)",
@@ -160224,7 +160224,7 @@
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/app-shell/index.css:55 (z-index)",
         "ds-terminal:src/foundation/tokens/css/presentation/components/skin/app-shell/index.css:55 (z-index)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:83 (feeds --ds-z-index-skip-link)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3660 (feeds --ds-z-index-skip-link)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3688 (feeds --ds-z-index-skip-link)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3279 (feeds --ds-z-index-skip-link)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3279 (feeds --ds-z-index-skip-link)"
       ],
@@ -160281,10 +160281,10 @@
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:82 (feeds --ds-z-index-loading-overlay)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:98 (feeds --ds-z-modal)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/modal/index.css:291 (feeds --ds-modal-layer)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3428 (feeds --ds-modal-layer)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3653 (feeds --ds-z-index-loading-overlay)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3656 (feeds --ds-z-index-modal-content)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3662 (feeds --ds-z-modal)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3437 (feeds --ds-modal-layer)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3681 (feeds --ds-z-index-loading-overlay)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3684 (feeds --ds-z-index-modal-content)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3690 (feeds --ds-z-modal)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3122 (feeds --ds-modal-layer)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3272 (feeds --ds-z-index-loading-overlay)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3275 (feeds --ds-z-index-modal-content)",
@@ -160344,8 +160344,8 @@
         "ds-terminal:src/foundation/tokens/css/runtime/engines/modern/skin/notifier/index.css:49 (z-index)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:69 (feeds --ds-z-index-toast)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:101 (feeds --ds-z-toast)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3661 (feeds --ds-z-index-toast)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3666 (feeds --ds-z-toast)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3689 (feeds --ds-z-index-toast)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3694 (feeds --ds-z-toast)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3280 (feeds --ds-z-index-toast)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3285 (feeds --ds-z-toast)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3280 (feeds --ds-z-index-toast)",
@@ -160401,9 +160401,9 @@
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:63 (feeds --ds-z-index-modal-backdrop)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:65 (feeds --ds-z-index-drawer-backdrop)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:96 (feeds --ds-z-overlay)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3651 (feeds --ds-z-index-drawer-backdrop)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3655 (feeds --ds-z-index-modal-backdrop)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3663 (feeds --ds-z-overlay)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3679 (feeds --ds-z-index-drawer-backdrop)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3683 (feeds --ds-z-index-modal-backdrop)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3691 (feeds --ds-z-overlay)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3270 (feeds --ds-z-index-drawer-backdrop)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3274 (feeds --ds-z-index-modal-backdrop)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3282 (feeds --ds-z-overlay)",
@@ -160470,10 +160470,10 @@
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/hover-card/index.css:10 (feeds --ds-hover-card-layer)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/popover/index.css:10 (feeds --ds-popover-instance-z-index)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:779 (feeds --ds-column-menu-trigger-open-z)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3364 (feeds --ds-hover-card-layer)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3460 (feeds --ds-popover-instance-z-index)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3649 (feeds --ds-z-index-context-menu)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3664 (feeds --ds-z-popover)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3371 (feeds --ds-hover-card-layer)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3469 (feeds --ds-popover-instance-z-index)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3677 (feeds --ds-z-index-context-menu)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3692 (feeds --ds-z-popover)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:665 (feeds --ds-column-menu-trigger-open-z)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3091 (feeds --ds-hover-card-layer)"
       ],
@@ -160531,8 +160531,8 @@
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:94 (feeds --ds-z-sticky)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:27 (feeds --ds-action-dock-sticky-z-index)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:128 (feeds --ds-app-shell-header-z-index)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3648 (feeds --ds-z-index-banner)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3665 (feeds --ds-z-sticky)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3676 (feeds --ds-z-index-banner)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3693 (feeds --ds-z-sticky)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:27 (feeds --ds-action-dock-sticky-z-index)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:128 (feeds --ds-app-shell-header-z-index)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3267 (feeds --ds-z-index-banner)",
@@ -160598,8 +160598,8 @@
         "external-terminal:app-bithire/styles/collection-preview-chrome.css:2056 (z-index)",
         "ds-custom-ref:src/foundation/tokens/css/foundation/base/z-index/index.css:100 (feeds --ds-z-tooltip)",
         "ds-custom-ref:src/foundation/tokens/css/presentation/components/tooltip/index.css:10 (feeds --ds-tooltip-instance-z-index)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3606 (feeds --ds-tooltip-instance-z-index)",
-        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3667 (feeds --ds-z-tooltip)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3634 (feeds --ds-tooltip-instance-z-index)",
+        "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/bithire/index.css:3695 (feeds --ds-z-tooltip)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3231 (feeds --ds-tooltip-instance-z-index)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/evnto/index.css:3286 (feeds --ds-z-tooltip)",
         "ds-compiled-ref:src/foundation/tokens/css/facade/artifacts/rottay/index.css:3231 (feeds --ds-tooltip-instance-z-index)",

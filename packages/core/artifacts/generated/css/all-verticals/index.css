@@ -3491,6 +3491,11 @@ html.dark {
   --ds-color-warning-bg: #451a03;
   --ds-color-info-bg: #172554;
 
+  /* Those ramps stay uninverted, so step 600 is still the light-graded ink
+     here (APCA Lc 41.4 / 42.6, floor 45): each role reads one stop up. */
+  --ds-color-success: var(--ds-color-success-500);
+  --ds-color-warning: var(--ds-color-warning-500);
+
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);
 
@@ -114642,15 +114647,20 @@ html[lang]:lang(ar) {
   --ds-checkbox-radius-md: calc(4px * var(--ds-radius-scale, 1));
   --ds-checkbox-radius-sm: calc(2px * var(--ds-radius-scale, 1));
   --ds-checkbox-sm-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
+  --ds-checkbox-success-bg: var(--ds-color-success);
+  --ds-checkbox-success-border: var(--ds-color-success);
   --ds-checkbox-success-check: var(--ds-color-on-success);
   --ds-checkbox-transition-duration: var(--ds-motion-feedback);
   --ds-checkbox-transition-timing: var(--ds-motion-ease-out);
+  --ds-checkbox-warning-bg: var(--ds-color-warning);
+  --ds-checkbox-warning-border: var(--ds-color-warning);
   --ds-checkbox-warning-check: var(--ds-color-on-warning);
   --ds-collapse-header-default-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-collapse-header-default-expanded-color: var(--ds-color-primary-600);
   --ds-collapse-header-default-focus-outline: 2px solid var(--ds-color-primary-500);
   --ds-collapse-header-default-idle-font-weight: var(--ds-font-weight-medium);
   --ds-collapse-icon-default-expanded-color: var(--ds-color-primary-600);
+  --ds-color-accent-live: var(--ds-color-success);
   --ds-color-alpha-primary-10: rgba(var(--ds-color-primary-rgb), 0.10);
   --ds-color-alpha-primary-20: rgba(var(--ds-color-primary-rgb), 0.20);
   --ds-color-alpha-secondary-10: rgba(var(--ds-color-secondary-rgb), 0.10);
@@ -114663,6 +114673,8 @@ html[lang]:lang(ar) {
   --ds-color-primary-hover: var(--ds-color-primary-600);
   --ds-color-primary-subtle: var(--ds-color-primary-100);
   --ds-color-secondary-hover: var(--ds-color-secondary-600);
+  --ds-color-success-ink: color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900) 40%);
+  --ds-color-warning-ink: color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%);
   --ds-command-glow: 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 6%, transparent), 0 10px 28px color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
   --ds-command-grid-line: color-mix(in srgb, var(--ds-color-primary) 11%, transparent);
   --ds-command-grid-line-soft: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
@@ -114786,6 +114798,8 @@ html[lang]:lang(ar) {
   --ds-menu-focus-ring-color: var(--ds-color-primary);
   --ds-menu-item-selected-color: var(--ds-color-primary);
   --ds-meter-fill: var(--ds-color-primary);
+  --ds-meter-fill-success: var(--ds-color-success);
+  --ds-meter-fill-warning: var(--ds-color-warning);
   --ds-modal-action-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-modal-border-width: var(--ds-edge-standard-width);
   --ds-modal-confirm-icon-bg: var(--ds-color-primary-100);
@@ -114848,6 +114862,7 @@ html[lang]:lang(ar) {
   --ds-premium-card-transition: background var(--ds-motion-feedback) var(--ds-motion-ease-enter), border-color var(--ds-motion-feedback) var(--ds-motion-ease-enter), box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter), transform var(--ds-motion-feedback) var(--ds-motion-ease-enter);
   --ds-premium-card-value-color-hover: var(--ds-color-primary);
   --ds-qrcode-refresh-button-bg: var(--ds-color-primary, #1890ff);
+  --ds-qrcode-status-scanned-icon-color: var(--ds-color-success, #52c41a);
   --ds-radio-border-width: calc(var(--ds-edge-standard-width, 1px) * 2);
   --ds-radio-default-dot: var(--ds-color-text-on-primary);
   --ds-radio-disabled-opacity: var(--ds-state-disabled-opacity);
@@ -114859,9 +114874,13 @@ html[lang]:lang(ar) {
   --ds-radio-primary-border: var(--ds-color-primary);
   --ds-radio-primary-dot: var(--ds-color-text-on-primary);
   --ds-radio-sm-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
+  --ds-radio-success-bg: var(--ds-color-success);
+  --ds-radio-success-border: var(--ds-color-success);
   --ds-radio-success-dot: var(--ds-color-on-success);
   --ds-radio-transition-duration: var(--ds-motion-feedback);
   --ds-radio-transition-timing: var(--ds-motion-ease-out);
+  --ds-radio-warning-bg: var(--ds-color-warning);
+  --ds-radio-warning-border: var(--ds-color-warning);
   --ds-radio-warning-dot: var(--ds-color-on-warning);
   --ds-radius-2xl: calc(20px * var(--ds-radius-scale, 1));
   --ds-radius-3xl: calc(24px * var(--ds-radius-scale, 1));
@@ -114876,7 +114895,10 @@ html[lang]:lang(ar) {
   --ds-rate-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
   --ds-rate-focus-ring-width: var(--ds-focus-ring-width, 2px);
   --ds-rate-hover-color: var(--ds-color-warning-500);
+  --ds-result-403-color: var(--ds-color-warning);
   --ds-result-icon-color: var(--ds-color-text-on-primary);
+  --ds-result-success-color: var(--ds-color-success);
+  --ds-result-warning-color: var(--ds-color-warning);
   --ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25);
   --ds-segmented-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-select-border-color-focus: var(--ds-color-primary-500);
@@ -114893,11 +114915,17 @@ html[lang]:lang(ar) {
   --ds-select-value-font-weight: var(--ds-font-weight-medium);
   --ds-select-warning-border-color: var(--ds-color-warning-500);
   --ds-select-warning-border-color-focus: var(--ds-color-warning-600);
+  --ds-shadow-focus-ring-success: 0 0 0 3px var(--ds-color-alpha-success-20, color-mix(in srgb, var(--ds-color-success) 20%, transparent));
+  --ds-shadow-focus-ring-warning: 0 0 0 3px var(--ds-color-alpha-warning-20, color-mix(in srgb, var(--ds-color-warning) 20%, transparent));
   --ds-shadow-none: var(--ds-elevation-0);
   --ds-shadow-primary: 0 4px 14px 0 color-mix(in oklch, var(--ds-color-primary) 25%, transparent), 0 8px 24px color-mix(in oklch, var(--ds-color-primary) 12%, transparent);
   --ds-shadow-primary-lg: 0 10px 15px -3px color-mix(in srgb, var(--ds-color-primary) 15%, transparent), 0 4px 6px -4px color-mix(in srgb, var(--ds-color-primary) 15%, transparent);
   --ds-shadow-primary-md: 0 4px 6px -1px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
   --ds-shadow-primary-sm: 0 1px 3px 0 color-mix(in srgb, var(--ds-color-primary) 12%, transparent), 0 1px 2px -1px color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+  --ds-shadow-success-md: 0 4px 6px -1px color-mix(in srgb, var(--ds-color-success) 12%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--ds-color-success) 12%, transparent);
+  --ds-shadow-success-sm: 0 1px 3px 0 color-mix(in srgb, var(--ds-color-success) 12%, transparent), 0 1px 2px -1px color-mix(in srgb, var(--ds-color-success) 12%, transparent);
+  --ds-shadow-warning-md: 0 4px 6px -1px color-mix(in srgb, var(--ds-color-warning) 12%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
+  --ds-shadow-warning-sm: 0 1px 3px 0 color-mix(in srgb, var(--ds-color-warning) 12%, transparent), 0 1px 2px -1px color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
   --ds-sheet-border-width: var(--ds-edge-standard-width);
   --ds-sheet-enter-curve: var(--ds-motion-ease-enter);
   --ds-sheet-enter-duration: var(--ds-motion-reveal);
@@ -114910,7 +114938,10 @@ html[lang]:lang(ar) {
   --ds-spinner-default-color: var(--ds-color-primary-500);
   --ds-spinner-duration: calc(var(--ds-motion-attention, var(--ds-motion-slow)) * 2);
   --ds-state-transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out), transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+  --ds-statistic-positive-color: var(--ds-color-success);
   --ds-statistic-value-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-statistic-warning-color: var(--ds-color-warning);
+  --ds-stats-grid-trend-positive: var(--ds-color-success);
   --ds-steps-item-bg-active: var(--ds-color-primary);
   --ds-surface-border-width: var(--ds-edge-standard-width);
   --ds-surface-canvas: var(--ds-color-bg-primary);
@@ -114951,6 +114982,8 @@ html[lang]:lang(ar) {
   --ds-time-picker-clear-opacity: var(--ds-state-disabled-opacity);
   --ds-time-picker-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-timeline-color-primary: var(--ds-color-primary, #1890ff);
+  --ds-timeline-color-success: var(--ds-color-success, #52c41a);
+  --ds-timeline-color-warning: var(--ds-color-warning, #faad14);
   --ds-timeline-pending-dot-color: var(--ds-color-primary, #1890ff);
   --ds-toggle-default-bg-checked: var(--ds-color-primary);
   --ds-toggle-disabled-opacity: var(--ds-state-disabled-opacity);
@@ -115131,11 +115164,7 @@ html[lang]:lang(ar) {
   --ds-checkbox-radius-lg: var(--ds-radius-sm);
   --ds-checkbox-secondary-bg: var(--ds-color-secondary);
   --ds-checkbox-secondary-border: var(--ds-color-secondary);
-  --ds-checkbox-success-bg: var(--ds-color-success);
-  --ds-checkbox-success-border: var(--ds-color-success);
   --ds-checkbox-transition: all var(--ds-checkbox-transition-duration) var(--ds-checkbox-transition-timing);
-  --ds-checkbox-warning-bg: var(--ds-color-warning);
-  --ds-checkbox-warning-border: var(--ds-color-warning);
   --ds-checkbox-xl-font-size: var(--ds-font-size-lg);
   --ds-checkbox-xs-font-size: var(--ds-font-size-xs);
   --ds-collapse-content-default-idle-font-size: var(--ds-font-size-base);
@@ -115154,7 +115183,6 @@ html[lang]:lang(ar) {
   --ds-collection-card-status-bg: var(--ds-premium-card-status-bg);
   --ds-collection-card-status-color: var(--ds-premium-card-status-color);
   --ds-color-accent-hover: var(--ds-color-secondary-hover);
-  --ds-color-accent-live: var(--ds-color-success);
   --ds-color-danger: var(--ds-color-error);
   --ds-color-error-ink: color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%);
   --ds-color-info-ink: var(--ds-color-info);
@@ -115170,10 +115198,8 @@ html[lang]:lang(ar) {
   --ds-color-mono-900: color-mix(in lab, var(--ds-color-mono-0) 10%, var(--ds-color-mono-1000));
   --ds-color-picker-transition-duration: var(--ds-input-transition-duration);
   --ds-color-picker-transition-timing: var(--ds-input-transition-timing);
-  --ds-color-success-ink: color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900) 40%);
   --ds-color-surface-ink: color-mix(in lab, var(--ds-color-mono-0) 97%, var(--ds-color-mono-1000));
   --ds-color-surface-paper: var(--ds-color-mono-1000);
-  --ds-color-warning-ink: color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%);
   --ds-command-font: var(--ds-font-family-mono, monospace);
   --ds-command-grid-bg: linear-gradient(var(--ds-command-grid-line-soft) 1px, transparent 1px), linear-gradient(90deg, var(--ds-command-grid-line-soft) 1px, transparent 1px);
   --ds-command-grid-bg-strong: linear-gradient(var(--ds-command-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--ds-command-grid-line) 1px, transparent 1px);
@@ -115263,8 +115289,10 @@ html[lang]:lang(ar) {
   --ds-input-sm-border-radius: var(--ds-radius-md);
   --ds-input-success-border: var(--ds-input-success-border-color);
   --ds-input-success-message-font-size: var(--ds-font-size-sm);
+  --ds-input-success-shadow-focus: var(--ds-shadow-focus-ring-success);
   --ds-input-transition: all var(--ds-input-transition-duration) var(--ds-input-transition-timing);
   --ds-input-warning-border: var(--ds-input-warning-border-color);
+  --ds-input-warning-shadow-focus: var(--ds-shadow-focus-ring-warning);
   --ds-input-xl-border-radius: var(--ds-radius-lg);
   --ds-input-xl-font-size: var(--ds-font-size-lg);
   --ds-input-xs-border-radius: var(--ds-radius-sm);
@@ -115280,8 +115308,6 @@ html[lang]:lang(ar) {
   --ds-mentions-transition-timing: var(--ds-input-transition-timing);
   --ds-menu-border-radius: var(--ds-radius-md);
   --ds-meter-fill-error: var(--ds-color-error);
-  --ds-meter-fill-success: var(--ds-color-success);
-  --ds-meter-fill-warning: var(--ds-color-warning);
   --ds-metric-card-icon-color: var(--ds-premium-card-icon-color);
   --ds-metric-card-meter-fill-neutral: var(--ds-meter-fill-neutral, linear-gradient(90deg, var(--ds-color-text-muted), var(--ds-color-primary)));
   --ds-metric-card-padding: calc(var(--ds-card-sm-padding) * var(--ds-rhythm-effective-scale, 1));
@@ -115327,7 +115353,6 @@ html[lang]:lang(ar) {
   --ds-premium-card-status-border: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-card-border-color));
   --ds-qrcode-border-radius: var(--ds-radius-md, 8px);
   --ds-qrcode-icon-border-radius: var(--ds-radius-sm, 6px);
-  --ds-qrcode-status-scanned-icon-color: var(--ds-color-success, #52c41a);
   --ds-radio-border-hover: var(--ds-material-control-border-hover);
   --ds-radio-error-bg: var(--ds-color-error);
   --ds-radio-error-border: var(--ds-color-error);
@@ -115336,23 +115361,16 @@ html[lang]:lang(ar) {
   --ds-radio-md-font-size: var(--ds-font-size-sm);
   --ds-radio-secondary-bg: var(--ds-color-secondary);
   --ds-radio-secondary-border: var(--ds-color-secondary);
-  --ds-radio-success-bg: var(--ds-color-success);
-  --ds-radio-success-border: var(--ds-color-success);
   --ds-radio-transition: all var(--ds-radio-transition-duration) var(--ds-radio-transition-timing);
-  --ds-radio-warning-bg: var(--ds-color-warning);
-  --ds-radio-warning-border: var(--ds-color-warning);
   --ds-radio-xl-font-size: var(--ds-font-size-lg);
   --ds-radio-xs-font-size: var(--ds-font-size-xs);
   --ds-radius-card: var(--ds-radius-lg);
   --ds-radius-input: var(--ds-radius-md);
   --ds-radius-modal: var(--ds-radius-xl);
-  --ds-result-403-color: var(--ds-color-warning);
   --ds-result-404-color: var(--ds-color-info);
   --ds-result-500-color: var(--ds-color-error);
   --ds-result-error-color: var(--ds-color-error);
   --ds-result-info-color: var(--ds-color-info);
-  --ds-result-success-color: var(--ds-color-success);
-  --ds-result-warning-color: var(--ds-color-warning);
   --ds-rich-card-footer-bg: var(--ds-premium-card-footer-bg);
   --ds-rich-card-sheen: var(--ds-premium-card-sheen);
   --ds-search-input-bg: var(--ds-search-bg, var(--ds-surface-control, var(--ds-color-bg-input)));
@@ -115380,12 +115398,14 @@ html[lang]:lang(ar) {
   --ds-select-search-radius: var(--ds-radius-md);
   --ds-select-sm-border-radius: var(--ds-radius-md);
   --ds-select-sm-font-size: var(--ds-font-size-sm, 0.875rem);
+  --ds-select-success-shadow-focus: var(--ds-shadow-focus-ring-success);
   --ds-select-tag-border-radius: var(--ds-radius-sm);
   --ds-select-tag-font-size: var(--ds-font-size-xs, 0.75rem);
   --ds-select-tag-radius: var(--ds-radius-sm);
   --ds-select-transition-duration: var(--ds-input-transition-duration);
   --ds-select-transition-timing: var(--ds-input-transition-timing);
   --ds-select-trigger-sm-font-size: var(--ds-input-sm-font-size);
+  --ds-select-warning-shadow-focus: var(--ds-shadow-focus-ring-warning);
   --ds-select-xl-border-radius: var(--ds-radius-lg);
   --ds-select-xl-font-size: var(--ds-font-size-xl, 1.125rem);
   --ds-select-xs-border-radius: var(--ds-radius-sm);
@@ -115395,8 +115415,6 @@ html[lang]:lang(ar) {
   --ds-shadow-button-active: var(--ds-shadow-none);
   --ds-shadow-error-md: 0 4px 6px -1px color-mix(in srgb, var(--ds-color-error) 12%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--ds-color-error) 12%, transparent);
   --ds-shadow-error-sm: 0 1px 3px 0 color-mix(in srgb, var(--ds-color-error) 12%, transparent), 0 1px 2px -1px color-mix(in srgb, var(--ds-color-error) 12%, transparent);
-  --ds-shadow-focus-ring-success: 0 0 0 3px var(--ds-color-alpha-success-20, color-mix(in srgb, var(--ds-color-success) 20%, transparent));
-  --ds-shadow-focus-ring-warning: 0 0 0 3px var(--ds-color-alpha-warning-20, color-mix(in srgb, var(--ds-color-warning) 20%, transparent));
   --ds-shadow-input-error: 0 0 0 3px var(--ds-color-alpha-error-10, color-mix(in srgb, var(--ds-color-error) 10%, transparent));
   --ds-shadow-input-focus: 0 0 0 3px var(--ds-color-alpha-primary-10, color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
   --ds-shadow-input-rest: var(--ds-shadow-none);
@@ -115405,10 +115423,6 @@ html[lang]:lang(ar) {
   --ds-shadow-secondary-md: 0 4px 6px -1px color-mix(in srgb, var(--ds-color-secondary) 12%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--ds-color-secondary) 12%, transparent);
   --ds-shadow-secondary-sm: 0 1px 3px 0 color-mix(in srgb, var(--ds-color-secondary) 12%, transparent), 0 1px 2px -1px color-mix(in srgb, var(--ds-color-secondary) 12%, transparent);
   --ds-shadow-sm: var(--ds-elevation-1);
-  --ds-shadow-success-md: 0 4px 6px -1px color-mix(in srgb, var(--ds-color-success) 12%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--ds-color-success) 12%, transparent);
-  --ds-shadow-success-sm: 0 1px 3px 0 color-mix(in srgb, var(--ds-color-success) 12%, transparent), 0 1px 2px -1px color-mix(in srgb, var(--ds-color-success) 12%, transparent);
-  --ds-shadow-warning-md: 0 4px 6px -1px color-mix(in srgb, var(--ds-color-warning) 12%, transparent), 0 2px 4px -2px color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
-  --ds-shadow-warning-sm: 0 1px 3px 0 color-mix(in srgb, var(--ds-color-warning) 12%, transparent), 0 1px 2px -1px color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
   --ds-shadow-xl: var(--ds-elevation-4);
   --ds-shadow-xs: var(--ds-elevation-1);
   --ds-sheet-close-radius: var(--ds-radius-md);
@@ -115424,12 +115438,9 @@ html[lang]:lang(ar) {
   --ds-slider-track-color-disabled: var(--ds-material-control-foreground-disabled);
   --ds-spinner-track-color: var(--ds-material-control-border, var(--ds-color-neutral-200));
   --ds-statistic-negative-color: var(--ds-color-error);
-  --ds-statistic-positive-color: var(--ds-color-success);
   --ds-statistic-title-font-size: var(--ds-font-size-sm, 0.875rem);
   --ds-statistic-value-font-size: var(--ds-font-size-2xl, 1.25rem);
-  --ds-statistic-warning-color: var(--ds-color-warning);
   --ds-stats-grid-trend-negative: var(--ds-color-error);
-  --ds-stats-grid-trend-positive: var(--ds-color-success);
   --ds-surface-card-border: var(--ds-material-card-border, var(--ds-color-border));
   --ds-surface-card-border-strong: var(--ds-material-card-border-strong, var(--ds-color-border-secondary));
   --ds-surface-card-color: var(--ds-material-card-foreground, var(--ds-color-text-primary));
@@ -115473,8 +115484,6 @@ html[lang]:lang(ar) {
   --ds-time-picker-transition-duration: var(--ds-input-transition-duration);
   --ds-time-picker-transition-timing: var(--ds-input-transition-timing);
   --ds-timeline-color-error: var(--ds-color-error, #ff4d4f);
-  --ds-timeline-color-success: var(--ds-color-success, #52c41a);
-  --ds-timeline-color-warning: var(--ds-color-warning, #faad14);
   --ds-timepicker-lg-font-size: var(--ds-font-size-base);
   --ds-timepicker-md-font-size: var(--ds-font-size-sm);
   --ds-timepicker-radius: var(--ds-radius-md);
@@ -115593,9 +115602,7 @@ html[lang]:lang(ar) {
   --ds-input-shadow-error-focus: var(--ds-shadow-input-error);
   --ds-input-sm-radius: var(--ds-input-sm-border-radius);
   --ds-input-success-bg: color-mix(in srgb, var(--ds-input-success-border) 4%, var(--ds-input-bg));
-  --ds-input-success-shadow-focus: var(--ds-shadow-focus-ring-success);
   --ds-input-warning-bg: color-mix(in srgb, var(--ds-input-warning-border) 4%, var(--ds-input-bg));
-  --ds-input-warning-shadow-focus: var(--ds-shadow-focus-ring-warning);
   --ds-input-xl-radius: var(--ds-input-xl-border-radius);
   --ds-input-xs-radius: var(--ds-input-xs-border-radius);
   --ds-list-item-bg-hover: var(--ds-material-panel-background-hover);
@@ -115632,13 +115639,11 @@ html[lang]:lang(ar) {
   --ds-select-dropdown-shadow: var(--ds-shadow-lg);
   --ds-select-option-bg-hover: var(--ds-material-card-background-hover);
   --ds-select-option-bg-selected: var(--ds-material-card-background-selected);
-  --ds-select-success-shadow-focus: var(--ds-shadow-focus-ring-success);
   --ds-select-transition: all var(--ds-select-transition-duration) var(--ds-select-transition-timing);
   --ds-select-trigger-lg-font-size: var(--ds-input-lg-font-size);
   --ds-select-trigger-md-font-size: var(--ds-input-md-font-size);
   --ds-select-trigger-xl-font-size: var(--ds-input-xl-font-size);
   --ds-select-trigger-xs-font-size: var(--ds-input-xs-font-size);
-  --ds-select-warning-shadow-focus: var(--ds-shadow-focus-ring-warning);
   --ds-shadow-button-hover: var(--ds-shadow-sm);
   --ds-shadow-button-rest: var(--ds-shadow-xs);
   --ds-shadow-card-active: var(--ds-shadow-xs);
@@ -115854,6 +115859,7 @@ html[lang]:lang(ar) {
   --ds-color-bg: #0A0A0A;
   --ds-color-bg-input: #0c0c0c;
   --ds-color-bg-primary: #0A0A0A;
+  --ds-color-error: #F8675D;
   --ds-color-error-100: #410002;
   --ds-color-error-200: #690007;
   --ds-color-error-300: #94000E;
@@ -115864,6 +115870,7 @@ html[lang]:lang(ar) {
   --ds-color-error-700: #FF998E;
   --ds-color-error-800: #FFC7C0;
   --ds-color-error-900: #FFF2F0;
+  --ds-color-info: #5AA4DC;
   --ds-color-info-100: #002137;
   --ds-color-info-200: #00385A;
   --ds-color-info-300: #00527F;
@@ -115876,6 +115883,10 @@ html[lang]:lang(ar) {
   --ds-color-info-900: #EDF7FF;
   --ds-color-link: #5987FF;
   --ds-color-link-hover: #5987FF;
+  --ds-color-on-error: #000000;
+  --ds-color-on-info: #000000;
+  --ds-color-on-success: #000000;
+  --ds-color-on-warning: #000000;
   --ds-color-primary-100: #040F5B;
   --ds-color-primary-200: #0B218C;
   --ds-color-primary-300: #1839B9;
@@ -115896,6 +115907,7 @@ html[lang]:lang(ar) {
   --ds-color-secondary-700: #B0BACF;
   --ds-color-secondary-800: #CFD7E7;
   --ds-color-secondary-900: #F1F5FF;
+  --ds-color-success: #60B182;
   --ds-color-success-100: #002613;
   --ds-color-success-200: #004023;
   --ds-color-success-300: #005D35;
@@ -115906,6 +115918,7 @@ html[lang]:lang(ar) {
   --ds-color-success-700: #87CCA2;
   --ds-color-success-800: #B2E5C4;
   --ds-color-success-900: #E0FEEA;
+  --ds-color-warning: #DF814B;
   --ds-color-warning-100: #351300;
   --ds-color-warning-200: #572400;
   --ds-color-warning-300: #7C3600;

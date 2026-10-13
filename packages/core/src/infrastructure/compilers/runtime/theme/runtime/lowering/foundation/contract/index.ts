@@ -164,6 +164,16 @@ export interface LoweringContext {
    * them here is what makes that impossible rather than merely unintended.
    */
   readonly statusTints: Record<string, string>;
+  /**
+   * The status tones this block paints from a seed nobody graded for its mode;
+   * empty for a base block. Their role reads the block's own ramp instead.
+   */
+  readonly inheritedStatusTones: readonly OnToneRole[];
+  /**
+   * The ramp channels THIS block derives, once. The ramps family emits them;
+   * the palette family reads a regraded status role's step from the same map.
+   */
+  readonly rampChannels: Record<string, string>;
   readonly tenant: TenantFacts | undefined;
   /** The modes this base block carries as overlay deltas; empty for an overlay block. */
   readonly overlayModes: readonly FlatThemeMode[];

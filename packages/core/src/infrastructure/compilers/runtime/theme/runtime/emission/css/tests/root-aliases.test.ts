@@ -430,7 +430,8 @@ describe("the DS root's own mode channels (CONTAINER_MODE_TEXTS)", () => {
   it("tables every name the base stylesheets declare under a root-state mode rule, none stopped", () => {
     // d5c9c823e (R15-1): --ds-command-palette-focus-line joins the dark block,
     // one more tabled name (190 -> 191) and one more outside the alias tables (143 -> 144).
-    expect(CONTAINER_MODE_TEXTS.length).toBe(191);
+    // --ds-color-success and --ds-color-warning join the dark block (191 -> 193); both are aliases.
+    expect(CONTAINER_MODE_TEXTS.length).toBe(193);
     expect(derived.modeTexts.stopped).toEqual({});
     const tabled = new Set([
       ...ROOT_ALIASES.map(([name]) => name),
@@ -507,8 +508,8 @@ describe("the mode table and the context table never contest a name (M4)", () =>
 
   it("every dark context is a mode-table name carrying the table's dark text", () => {
     const dark = CONTAINER_ALIAS_CONTEXTS.filter((context) => isDarkContext(context.selector));
-    expect(dark.length).toBe(34);
-    expect(shared.length).toBe(34);
+    expect(dark.length).toBe(36);
+    expect(shared.length).toBe(36);
     const drift = dark.filter((context) => modeRow.get(context.name)?.dark !== context.value);
     expect(drift.map((context) => `${context.name}: ${context.value} vs ${modeRow.get(context.name)?.dark}`)).toEqual([]);
   });

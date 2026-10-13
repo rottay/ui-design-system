@@ -30,13 +30,18 @@ import {
   verticalDefaultMode,
 } from "@/infrastructure/compilers/kernel/foundation/modes";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
-import { contrastRatio } from "@/foundation/kernel/accessibility/branding-contrast";
+import {
+  apcaContrast,
+  contrastRatio,
+} from "@/foundation/kernel/accessibility/branding-contrast";
 import { FOUNDATION_COLOR_DEFAULTS } from "@/foundation/tokens/ts/foundation/base/declared-defaults";
 import {
   DARK_DEFAULT_GROUND,
   LIGHT_DEFAULT_GROUND,
 } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ground";
 import { deriveModeThemes } from "..";
+import { derivePaletteChannels } from "../../palette";
+import { deriveRampChannels } from "../../ramps";
 import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
 const TENANT_PRIMARY = "#2F6B9A";
@@ -468,5 +473,137 @@ describe("WO-DER-05 · the modes family refuses what it always refused", () => {
     expect(() =>
       compileThemeIntent(staticThemeIntent("bithire", "der05-drill"))
     ).not.toThrow();
+  });
+});
+
+describe("a status role nobody graded for a mode reads that mode's own ramp", () => {
+  const bithire = FIRST_PARTY_BASELINES.bithire as unknown as FlatTheme;
+  const TONES = ["success", "warning", "error", "info"] as const;
+  const { compiled } = compileThemeIntent(
+    staticThemeIntent("bithire", "status-regrade-drill")
+  );
+  const dark =
+    compiled.modeBlocks.find((block) => block.mode === "dark")?.cssVariables ?? {};
+
+  it("names every tone the dark overlay does not state", () => {
+    const [request] = deriveModeThemes({
+      theme: bithire,
+      tenantFacts: undefined,
+      tenantPatch: undefined,
+    });
+    expect(request?.inheritedStatusTones).toEqual(TONES);
+  });
+
+  it("keeps the seed in the base block and states the dark ramp's step 600 in dark", () => {
+    for (const tone of TONES) {
+      expect(compiled.cssVariables[`--ds-color-${tone}`]).toBe(
+        bithire.palette?.[`${tone}Color`]
+      );
+      expect(dark[`--ds-color-${tone}`]).toBe(dark[`--ds-color-${tone}-600`]);
+      expect(dark[`--ds-color-${tone}`]).not.toBe(bithire.palette?.[`${tone}Color`]);
+    }
+  });
+
+  it("clears the text floor on the dark ground, which the seed did not", () => {
+    const ground = dark["--ds-color-bg-primary"]!;
+    for (const tone of TONES) {
+      const seed = bithire.palette![`${tone}Color`]!;
+      expect(Math.abs(apcaContrast(seed, ground)), tone).toBeLessThan(45);
+      expect(
+        Math.abs(apcaContrast(dark[`--ds-color-${tone}-600`]!, ground)),
+        tone
+      ).toBeGreaterThanOrEqual(45);
+    }
+  });
+
+  it("re-derives the on-tone ink for the colour the role now paints", () => {
+    for (const tone of TONES) {
+      const ink = dark[`--ds-color-on-${tone}`]!;
+      expect(ink, tone).not.toBe(compiled.cssVariables[`--ds-color-on-${tone}`]);
+      expect(
+        contrastRatio(ink, dark[`--ds-color-${tone}-600`]!),
+        tone
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it("keeps the seed in a dark block that kept the body's light canvas", () => {
+    // A theme that states its inks owns the whole canvas, so its dark block
+    // still paints the body's ground: the lighter ramp step would read worse.
+    const lightCanvas = {
+      ...bithire,
+      palette: {
+        ...bithire.palette,
+        backgroundColor: "#f8fafc",
+        textPrimaryColor: "#172033",
+      },
+      modes: { ...bithire.modes, dark: {} },
+    } as FlatTheme;
+    const [request] = deriveModeThemes({
+      theme: lightCanvas,
+      tenantFacts: undefined,
+      tenantPatch: undefined,
+    });
+    expect(request?.theme.palette?.backgroundColor).toBe("#f8fafc");
+    const rampChannels = deriveRampChannels(request!.theme.palette, "dark");
+    expect(rampChannels["--ds-color-success-600"]).toBeDefined();
+    const vars = derivePaletteChannels(request!.theme, {}, "dark", {
+      tones: request!.inheritedStatusTones,
+      surface: "dark",
+      rampChannels,
+    });
+    for (const tone of TONES) {
+      expect(vars[`--ds-color-${tone}`], tone).toBe(
+        bithire.palette?.[`${tone}Color`]
+      );
+    }
+  });
+
+  it("does not reach a light block over a dark-default body", () => {
+    // Seeds graded for the dark body, none restated by the light overlay: the
+    // exact shape the rule would regrade if it were not dark-only.
+    const rottay = FIRST_PARTY_BASELINES.rottay as unknown as FlatTheme;
+    const seeded = {
+      ...rottay,
+      palette: {
+        ...rottay.palette,
+        successColor: "#4ADE80",
+        warningColor: "#FBBF24",
+        errorColor: "#F87171",
+        infoColor: "#60A5FA",
+      },
+    } as FlatTheme;
+    const [request] = deriveModeThemes({
+      theme: seeded,
+      tenantFacts: undefined,
+      tenantPatch: undefined,
+    });
+    expect(request?.mode).toBe("light");
+    for (const tone of TONES) {
+      expect(request?.theme.palette?.[`${tone}Color`], tone).toBe(
+        seeded.palette?.[`${tone}Color`]
+      );
+      expect(rottay.modes?.light?.palette?.[`${tone}Color`], tone).toBeUndefined();
+    }
+    expect(request?.inheritedStatusTones).toEqual([]);
+  });
+
+  it("leaves a seed the overlay states for the mode exactly as written", () => {
+    const planted = {
+      ...bithire,
+      modes: {
+        ...bithire.modes,
+        dark: {
+          ...bithire.modes?.dark,
+          palette: { ...bithire.modes?.dark?.palette, successColor: "#4ADE80" },
+        },
+      },
+    } as FlatTheme;
+    const [request] = deriveModeThemes({
+      theme: planted,
+      tenantFacts: undefined,
+      tenantPatch: undefined,
+    });
+    expect(request?.inheritedStatusTones).toEqual(["warning", "error", "info"]);
   });
 });

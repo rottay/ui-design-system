@@ -229,6 +229,7 @@ export function compileTheme(
             surface: request.mode,
             modePrefix: request.modePrefix,
             tenant: request.tenant,
+            inheritedStatusTones: request.inheritedStatusTones,
           }),
           base
         )

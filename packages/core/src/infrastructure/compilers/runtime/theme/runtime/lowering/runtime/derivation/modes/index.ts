@@ -32,6 +32,7 @@ import type {
 import type { ThemeCompilationModeBlock } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { completeChromeShape } from "@/foundation/contracts/composition/tenants/themes/iso";
+import { isHexColor } from "@/infrastructure/compilers/kernel/foundation/css/color-math";
 import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { themeDefaultMode } from "@/infrastructure/compilers/kernel/foundation/modes";
@@ -293,6 +294,8 @@ export interface ModeBlockRequest {
   /** `modes.<mode>.` -- the authorship prefix every family reads paths under. */
   readonly modePrefix: string;
   readonly tenant: TenantFacts | undefined;
+  /** The status tones whose seed reached this mode without being graded for it. */
+  readonly inheritedStatusTones: readonly OnToneRole[];
 }
 
 export interface ModeDerivationInput {
@@ -360,9 +363,37 @@ export function deriveModeThemes(
       theme: modeTheme,
       modePrefix,
       tenant: modeTenantFacts(mode, modePrefix, crossed, tenantFacts, tenantPatch),
+      inheritedStatusTones: inheritedStatusTones(mode, modeTheme, overlay),
     });
   }
   return requests;
+}
+
+/**
+ * The status tones a dark block paints from the light body's statement.
+ *
+ * A status seed is identity and crosses modes, but it is graded for the ground
+ * it was written on: the body's ink-dark seed lands on a dark canvas as a dark
+ * ink. The ramp is already re-derived for this block's own surface, so the
+ * palette family states such a role from that ramp. A seed the overlay states
+ * for this mode is a grade somebody chose and stays exactly as written.
+ *
+ * Dark only: a light block over a dark-default body keeps the cascade it has.
+ */
+function inheritedStatusTones(
+  mode: FlatThemeMode,
+  modeTheme: FlatTheme,
+  overlay: FlatThemeModeOverlay
+): readonly OnToneRole[] {
+  if (mode !== "dark") return [];
+  return ON_TONE_ROLES.filter((role) => {
+    const seed = modeTheme.palette?.[`${role}Color`];
+    return (
+      seed !== undefined &&
+      isHexColor(seed) &&
+      overlay.palette?.[`${role}Color`] === undefined
+    );
+  });
 }
 
 /**

@@ -7,8 +7,20 @@
  * @package @rottay/design-system
  */
 
-import type { FlatTheme, FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
+import type {
+  BrandPalette,
+  FlatTheme,
+  FlatThemeMode,
+} from "@/foundation/contracts/composition/tenants/themes";
+import { apcaContrast } from "@/foundation/kernel/accessibility/branding-contrast";
+import type { RampSurface } from "@/foundation/kernel/color/oklch/ramp";
+import { isHexColor } from "@/infrastructure/compilers/kernel/foundation/css/color-math";
+import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import type { FamilyDeriver } from "../../../foundation/contract";
+import {
+  DARK_DEFAULT_GROUND,
+  LIGHT_DEFAULT_GROUND,
+} from "../../../foundation/ground";
 import {
   deriveExtendedPaletteFloor,
   setExtendedPaletteVariables,
@@ -22,6 +34,7 @@ import {
   derivePaletteGround,
   derivePaletteSemanticChannels,
   derivePaletteSemanticFloor,
+  STATUS_ROLE_STEP,
 } from "./semantic";
 
 export { resolveContrastPosture } from "../../../foundation/contrast-posture";
@@ -64,13 +77,55 @@ export const paletteDeriver: FamilyDeriver = {
     "--ds-text-disabled",
     "--ds-border-color*",
   ],
-  derive: (context) => derivePaletteChannels(context.theme, context.statusTints, context.mode),
+  derive: (context) =>
+    derivePaletteChannels(context.theme, context.statusTints, context.mode, {
+      tones: context.inheritedStatusTones,
+      surface: context.surface,
+      rampChannels: context.rampChannels,
+    }),
 };
+
+/** The status tones a block re-grades onto its own ramp, and that ramp's surface. */
+export interface StatusRegrade {
+  readonly tones: readonly OnToneRole[];
+  readonly surface: RampSurface;
+  /** The block's own ramp channels, as the ramps family emits them. */
+  readonly rampChannels: Readonly<Record<string, string>>;
+}
+
+/**
+ * What each regraded role resolves to: its step on the ramp this surface
+ * derives, and only where that step reads harder on the block's own ground
+ * than the seed does -- a block that kept the body's canvas keeps the seed.
+ */
+function regradedTonePaint(
+  palette: BrandPalette,
+  regrade: StatusRegrade | undefined
+): Partial<Record<OnToneRole, string>> {
+  if (!regrade || regrade.tones.length === 0) return {};
+  const ground =
+    palette.backgroundColor ??
+    (regrade.surface === "dark" ? DARK_DEFAULT_GROUND : LIGHT_DEFAULT_GROUND);
+  if (!isHexColor(ground)) return {};
+  const painted: Partial<Record<OnToneRole, string>> = {};
+  for (const role of regrade.tones) {
+    const seed = palette[`${role}Color`];
+    const step = regrade.rampChannels[`--ds-color-${role}-${STATUS_ROLE_STEP}`];
+    if (!seed || !isHexColor(seed) || !step || !isHexColor(step)) continue;
+    if (
+      Math.abs(apcaContrast(step, ground)) > Math.abs(apcaContrast(seed, ground))
+    ) {
+      painted[role] = step;
+    }
+  }
+  return painted;
+}
 
 export function derivePaletteChannels(
   bt: FlatTheme,
   statusTints: Record<string, string>,
-  mode: FlatThemeMode
+  mode: FlatThemeMode,
+  regrade?: StatusRegrade
 ): Record<string, string> {
   const vars: Record<string, string> = {};
   const palette = bt.palette;
@@ -84,8 +139,9 @@ export function derivePaletteChannels(
 
   Object.assign(vars, derivePaletteSemanticFloor(palette));
   Object.assign(vars, derivePaletteBorderHover());
-  Object.assign(vars, derivePaletteSemanticChannels(palette));
-  Object.assign(vars, derivePaletteInks(palette, inkPair));
+  const painted = regradedTonePaint(palette, regrade);
+  Object.assign(vars, derivePaletteSemanticChannels(palette, painted));
+  Object.assign(vars, derivePaletteInks(palette, inkPair, painted));
   Object.assign(
     vars,
     deriveExtendedPaletteFloor(palette.primaryColor, inkPair, textGrounds(palette, mode))

@@ -86,8 +86,18 @@ describe('first-party artifacts: a compile that has a contrast block renders it'
     expect(section).toContain(
       ":is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {",
     );
+    // The dark block states its status roles from its own ramp, so their inks
+    // are the dark rule's own and the posture moves them in a dark block too.
+    const dark = compiled.contrastBlocks?.find((block) => block.mode === 'dark');
+    const movedInDark = Object.keys(dark?.cssVariables ?? {}).sort();
+    expect(movedInDark).toEqual([
+      '--ds-color-on-error',
+      '--ds-color-on-info',
+      '--ds-color-on-success',
+      '--ds-color-on-warning',
+    ]);
     const declared = [...section.matchAll(/^\s+(--ds-[a-z0-9-]+):/gm)].map((match) => match[1]).sort();
-    expect(declared).toEqual(moved);
+    expect(declared).toEqual([...moved, ...movedInDark].sort());
     for (const channel of moved) {
       expect(section).toContain(`${channel}: ${base!.cssVariables[channel]};`);
       expect(compiled.cssVariables[channel]).not.toBe(base!.cssVariables[channel]);
@@ -128,9 +138,13 @@ describe('the lowering: a mode delta corrects the mode rule it sits over', () =>
 
   it('states the dark inks in a dark contrast block and nothing else there', () => {
     const dark = rest.contrastBlocks?.find((block) => block.mode === 'dark');
+    // Warning and info state no dark seed here, so the dark block grades them
+    // onto its own ramp and their inks become the dark rule's own as well.
     expect(dark?.cssVariables).toEqual({
       '--ds-color-on-success': '#000000',
       '--ds-color-on-error': '#000000',
+      '--ds-color-on-warning': '#000000',
+      '--ds-color-on-info': '#000000',
     });
     const restDark = rest.modeBlocks.find((block) => block.mode === 'dark')!.cssVariables;
     expect(restDark['--ds-color-on-success']).toBe('#171717');

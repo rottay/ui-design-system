@@ -9,6 +9,10 @@
 
 import type { BrandPalette } from "@/foundation/contracts/composition/tenants/themes";
 import { derivePaletteSemantics } from "@/infrastructure/compilers/kernel/foundation/css/color-math/palette-derivations";
+import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
+
+/** The ramp step a status role reads when no seed was graded for its mode. */
+export const STATUS_ROLE_STEP = 600;
 
 /**
  * What the seeds IMPLY, merged first so every authored layer outranks them.
@@ -26,9 +30,15 @@ export function derivePaletteSemanticFloor(
 /**
  * What the seeds STATE: one role, one semantic channel. Explicit per-role
  * assignments, because the producer census reads these names out of the source.
+ *
+ * A status role in `painted` was seeded for the other mode's ground, so it
+ * states this block's own ramp step instead: the step the foundation states
+ * for every status role, on the ramp this surface re-derived. A literal, like
+ * the seed it replaces, so the block's own ink stays measurable against it.
  */
 export function derivePaletteSemanticChannels(
-  palette: BrandPalette
+  palette: BrandPalette,
+  painted: Readonly<Partial<Record<OnToneRole, string>>> = {}
 ): Record<string, string> {
   const vars: Record<string, string> = {};
   if (palette.primaryColor) vars["--ds-color-primary"] = palette.primaryColor;
@@ -47,10 +57,14 @@ export function derivePaletteSemanticChannels(
     vars["--ds-color-border-primary"] = palette.borderPrimaryColor;
   if (palette.borderSecondaryColor)
     vars["--ds-color-border-secondary"] = palette.borderSecondaryColor;
-  if (palette.successColor) vars["--ds-color-success"] = palette.successColor;
-  if (palette.warningColor) vars["--ds-color-warning"] = palette.warningColor;
-  if (palette.errorColor) vars["--ds-color-error"] = palette.errorColor;
-  if (palette.infoColor) vars["--ds-color-info"] = palette.infoColor;
+  if (palette.successColor)
+    vars["--ds-color-success"] = painted.success ?? palette.successColor;
+  if (palette.warningColor)
+    vars["--ds-color-warning"] = painted.warning ?? palette.warningColor;
+  if (palette.errorColor)
+    vars["--ds-color-error"] = painted.error ?? palette.errorColor;
+  if (palette.infoColor)
+    vars["--ds-color-info"] = painted.info ?? palette.infoColor;
   return vars;
 }
 
