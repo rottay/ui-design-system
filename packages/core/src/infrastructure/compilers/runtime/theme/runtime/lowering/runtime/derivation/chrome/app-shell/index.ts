@@ -147,6 +147,24 @@ export const NAVIGATION_FOOTER_INK: Readonly<Record<FlatThemeMode, string>> = {
   dark: NAVIGATION_INK,
 };
 
+/**
+ * The footer ink for `mode`, TOTAL over any string that reaches the lowering.
+ *
+ * `FlatThemeMode` admits `light | dark` and nothing else, but the type is not
+ * a runtime guard: the differential instruments compile a theme with one leaf
+ * swapped for a sentinel, `appearance.defaultMode` included, and a bare table
+ * lookup answered that with `undefined`. The lowering never emits `undefined`.
+ *
+ * THE NAMED BEHAVIOUR: a mode that is not `dark` reads the LIGHT rest. It is
+ * the arm every mode-reading sibling in the lowering already takes
+ * (`mode === "dark" ? … : …` in surfaces, the palette and the mode canvas),
+ * and it is the one value the skin states as this channel's fallback -- so an
+ * out-of-domain mode paints exactly what an unproduced channel would have.
+ */
+export function navigationFooterInk(mode: FlatThemeMode): string {
+  return mode === "dark" ? NAVIGATION_FOOTER_INK.dark : NAVIGATION_FOOTER_INK.light;
+}
+
 export function deriveAppShellChannels(mode: FlatThemeMode): Record<string, string> {
   const vars: Record<string, string> = {};
 
@@ -199,7 +217,7 @@ export function deriveAppShellChannels(mode: FlatThemeMode): Record<string, stri
     "calc(var(--ds-spacing-6, 24px) + 76px)";
   vars["--ds-app-shell-navigation-footer-background"] =
     "var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg))";
-  vars["--ds-app-shell-navigation-footer-color"] = NAVIGATION_FOOTER_INK[mode];
+  vars["--ds-app-shell-navigation-footer-color"] = navigationFooterInk(mode);
   vars["--ds-app-shell-navigation-footer-border"] = SIDEBAR_RULE;
   vars["--ds-app-shell-navigation-footer-padding"] = "var(--ds-spacing-3, 12px)";
   vars["--ds-app-shell-navigation-footer-padding-collapsed"] =

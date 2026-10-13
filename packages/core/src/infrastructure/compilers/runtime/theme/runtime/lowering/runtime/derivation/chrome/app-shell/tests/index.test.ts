@@ -13,7 +13,10 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type {
+  FlatTheme,
+  FlatThemeMode,
+} from "@/foundation/contracts/composition/tenants/themes";
 import {
   SHELL_GEOMETRY_READS,
   SHELL_PUBLISHED_CHANNELS,
@@ -27,7 +30,12 @@ import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { compileThemeIntent, staticThemeIntent } from "@/entrypoints/server";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
-import { NAVIGATION_FOOTER_INK, appShellChromeDeriver } from "..";
+import {
+  NAVIGATION_FOOTER_INK,
+  appShellChromeDeriver,
+  deriveAppShellChannels,
+  navigationFooterInk,
+} from "..";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
 
@@ -150,6 +158,37 @@ describe("chrome/app-shell", () => {
       expect(block?.cssVariables[FOOTER_INK]).toBe(NAVIGATION_FOOTER_INK[overlay]);
     }
   );
+
+  it("stays total for a mode outside the contract, which reads the light rest", () => {
+    // The type admits only light | dark, but the differential instruments
+    // swap `appearance.defaultMode` for a sentinel and compile the result.
+    for (const sentinel of ["light-sentinel-1", "auto", "", "DARK", "constructor"]) {
+      const mode = sentinel as FlatThemeMode;
+      expect(navigationFooterInk(mode)).toBe(NAVIGATION_FOOTER_INK.light);
+      const derived = deriveAppShellChannels(mode);
+      expect(Object.keys(derived).sort()).toEqual([...appShellChromeDeriver.produces].sort());
+      for (const [channel, value] of Object.entries(derived)) {
+        expect({ channel, type: typeof value }).toEqual({ channel, type: "string" });
+      }
+      // Out of domain is the light block, channel for channel -- and so the
+      // one fallback the skin states for the footer ink.
+      expect(derived).toEqual(deriveAppShellChannels("light"));
+      expect(skinFallbacks(FOOTER_INK)).toEqual([derived[FOOTER_INK]]);
+    }
+    for (const mode of MODES) {
+      expect(navigationFooterInk(mode)).toBe(NAVIGATION_FOOTER_INK[mode]);
+    }
+  });
+
+  it("compiles a theme whose declared default mode is a sentinel, emitting no undefined", () => {
+    const theme = {
+      ...firstPartyFixture("rottay"),
+      appearance: { defaultMode: "sentinel-mode" },
+    } as unknown as FlatTheme;
+    const derived = appShellChromeDeriver.derive(buildLoweringContext({ theme }), {});
+    expect(derived[FOOTER_INK]).toBe(NAVIGATION_FOOTER_INK.light);
+    expect(Object.values(derived)).not.toContain(undefined);
+  });
 
   it("states the four geometry tracks at exactly the chain the structure reads", () => {
     const derived = appShellChromeDeriver.derive(context(), {});
