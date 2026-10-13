@@ -245,13 +245,25 @@ function functionRebindsName(fn, name) {
   );
 }
 
+/* Only a walk entered without an alias chain is remembered: a nested call's
+ * answer depends on the chain in `seen`. Keyed by node, so by parse. */
+const TOP_LEVEL_MUTATION_WALKS = new WeakMap();
+
 /** Any assignment operator, prefix/postfix `++`/`--` (identifier or property
  * target), or destructuring-assignment write that targets `name` or a
  * property of `name`, anywhere in the function scope -- including nested
  * function bodies, since a callback's write lands on the same object. An
  * alias is keyed by its declaration, so two aliases sharing a spelling are
  * each searched. */
-function hasReassignmentOrMutation(funcScope, name, seen = new Set(), key = `scope@${funcScope.pos}:${name}`) {
+function hasReassignmentOrMutation(funcScope, name, seen, key) {
+  if (seen !== undefined) return walkReassignmentOrMutation(funcScope, name, seen, key);
+  let byName = TOP_LEVEL_MUTATION_WALKS.get(funcScope);
+  if (!byName) TOP_LEVEL_MUTATION_WALKS.set(funcScope, (byName = new Map()));
+  let result = byName.get(name);
+  if (result === undefined) byName.set(name, (result = walkReassignmentOrMutation(funcScope, name)));
+  return result;
+}
+function walkReassignmentOrMutation(funcScope, name, seen = new Set(), key = `scope@${funcScope.pos}:${name}`) {
   let found = false;
   if (seen.has(key) || seen.size > 8) return false; // alias cycle / depth guard
   seen.add(key);
