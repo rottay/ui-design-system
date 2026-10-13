@@ -41,27 +41,27 @@
     "rowsReadingVar": 4,
     "expressionsCarryingLiteral": 0,
     "byRule": {
-      "R5": 80,
+      "R5": 79,
+      "R4": 20,
       "R2": 13,
-      "R4": 19,
       "R1": 4
     },
     "byVerdict": {
-      "adjudicate": 80,
+      "adjudicate": 79,
+      "pro-expert": 20,
       "collapse": 13,
-      "pro-expert": 19,
       "already-collapsed": 4
     },
     "byRootAttribution": {
-      "emits-no-channel": 54,
-      "head-exact": 26,
-      "no-persisted-membership": 29,
-      "slot-spans-several-roots": 7
+      "emits-no-channel": 51,
+      "slot-spans-several-roots": 11,
+      "no-persisted-membership": 28,
+      "head-exact": 26
     },
     "rowsWithRoot": 26,
-    "rowsEmittingNoChannel": 54,
-    "channelEmissions": 318,
-    "distinctChannelsReached": 177,
+    "rowsEmittingNoChannel": 51,
+    "channelEmissions": 366,
+    "distinctChannelsReached": 195,
     "metadataRows": 21,
     "paintDenominator": 95,
     "metadataRosterSize": 4,
@@ -274,17 +274,18 @@
         "base|--ds-sidebar-text-muted",
         "dark|--ds-sidebar-item-color-active"
       ],
-      "rootId": "tier.page.bg",
+      "rootId": null,
       "headRootIds": [
+        "tier.base.fg",
         "tier.page.bg"
       ],
-      "rootAttribution": "head-exact",
-      "rule": "R2",
-      "verdict": "collapse",
+      "rootAttribution": "slot-spans-several-roots",
+      "rule": "R5",
+      "verdict": "adjudicate",
       "evidence": {
-        "rootId": "tier.page.bg",
-        "rootDerivation": "Chrome de pagina (shell, layout, sidebar, detail, list, feed, calendar, timeline, tree): fondo = suelo base desplazado un escalon. El unico tramo con cabeza propia es el sidebar.",
-        "coincidenceGuard": "no-value-match-used"
+        "whyNotR2": "sin raiz atribuible",
+        "whyNotR3": "sin raiz atribuible",
+        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
       }
     },
     {
@@ -745,6 +746,7 @@
       "readsVar": false,
       "isMetadata": false,
       "emitsChannels": [
+        "--ds-badge-selected-ink",
         "--ds-chart-series-8",
         "--ds-color-background",
         "--ds-color-bg",
@@ -806,9 +808,17 @@
         "--ds-color-warning-600",
         "--ds-color-warning-700",
         "--ds-color-warning-800",
-        "--ds-divider-label-ink"
+        "--ds-divider-label-ink",
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3",
+        "--ds-elevation-4",
+        "--ds-elevation-5",
+        "--ds-elevation-6",
+        "--ds-tag-primary-outlined-ink"
       ],
       "emitsScoped": [
+        "base|--ds-badge-selected-ink",
         "base|--ds-chart-series-8",
         "base|--ds-color-background",
         "base|--ds-color-bg",
@@ -871,15 +881,31 @@
         "base|--ds-color-warning-700",
         "base|--ds-color-warning-800",
         "base|--ds-divider-label-ink",
-        "dark|--ds-divider-label-ink"
+        "base|--ds-elevation-1",
+        "base|--ds-elevation-2",
+        "base|--ds-elevation-3",
+        "base|--ds-elevation-4",
+        "base|--ds-elevation-5",
+        "base|--ds-elevation-6",
+        "base|--ds-tag-primary-outlined-ink",
+        "dark|--ds-badge-selected-ink",
+        "dark|--ds-divider-label-ink",
+        "dark|--ds-elevation-1",
+        "dark|--ds-elevation-2",
+        "dark|--ds-elevation-3",
+        "dark|--ds-elevation-4",
+        "dark|--ds-elevation-5",
+        "dark|--ds-elevation-6"
       ],
       "rootId": null,
       "headRootIds": [
+        "elevation.ladder",
         "ramp.seed.error",
         "ramp.seed.primary",
         "ramp.seed.secondary",
         "ramp.seed.success",
         "tier.base.bg",
+        "tier.base.fg",
         "tier.control.bg"
       ],
       "rootAttribution": "slot-spans-several-roots",
@@ -913,6 +939,10 @@
         "--ds-color-alpha-warning-20",
         "--ds-color-error-border",
         "--ds-color-info-border",
+        "--ds-color-on-error",
+        "--ds-color-on-info",
+        "--ds-color-on-success",
+        "--ds-color-on-warning",
         "--ds-color-success-border",
         "--ds-color-warning-border"
       ],
@@ -927,7 +957,11 @@
         "base|--ds-color-error-border",
         "base|--ds-color-info-border",
         "base|--ds-color-success-border",
-        "base|--ds-color-warning-border"
+        "base|--ds-color-warning-border",
+        "dark|--ds-color-on-error",
+        "dark|--ds-color-on-info",
+        "dark|--ds-color-on-success",
+        "dark|--ds-color-on-warning"
       ],
       "rootId": null,
       "headRootIds": [
@@ -979,6 +1013,7 @@
         "base|--ds-color-error-700",
         "base|--ds-color-error-800",
         "base|--ds-color-error-900",
+        "dark|--ds-color-error",
         "dark|--ds-color-error-100",
         "dark|--ds-color-error-200",
         "dark|--ds-color-error-300",
@@ -1000,7 +1035,8 @@
       "evidence": {
         "basis": "tenant-override-allowlist",
         "channels": [
-          "base|--ds-color-error"
+          "base|--ds-color-error",
+          "dark|--ds-color-error"
         ]
       }
     },
@@ -1038,6 +1074,7 @@
         "base|--ds-color-info-700",
         "base|--ds-color-info-800",
         "base|--ds-color-info-900",
+        "dark|--ds-color-info",
         "dark|--ds-color-info-100",
         "dark|--ds-color-info-200",
         "dark|--ds-color-info-300",
@@ -1059,7 +1096,8 @@
       "evidence": {
         "basis": "tenant-override-allowlist",
         "channels": [
-          "base|--ds-color-info"
+          "base|--ds-color-info",
+          "dark|--ds-color-info"
         ]
       }
     },
@@ -1101,6 +1139,7 @@
       "readsVar": false,
       "isMetadata": false,
       "emitsChannels": [
+        "--ds-badge-selected-ink",
         "--ds-button-primary-bg-hover",
         "--ds-chart-series-1",
         "--ds-chart-series-10",
@@ -1129,7 +1168,8 @@
         "--ds-color-primary-800",
         "--ds-color-primary-900",
         "--ds-color-primary-rgb",
-        "--ds-focus-ring-color"
+        "--ds-focus-ring-color",
+        "--ds-tag-primary-outlined-ink"
       ],
       "emitsScoped": [
         "base|--ds-button-primary-bg-hover",
@@ -1161,6 +1201,7 @@
         "base|--ds-color-primary-900",
         "base|--ds-color-primary-rgb",
         "base|--ds-focus-ring-color",
+        "dark|--ds-badge-selected-ink",
         "dark|--ds-chart-series-1",
         "dark|--ds-chart-series-10",
         "dark|--ds-chart-series-11",
@@ -1185,7 +1226,8 @@
         "dark|--ds-color-primary-700",
         "dark|--ds-color-primary-800",
         "dark|--ds-color-primary-900",
-        "dark|--ds-focus-ring-color"
+        "dark|--ds-focus-ring-color",
+        "dark|--ds-tag-primary-outlined-ink"
       ],
       "rootId": null,
       "headRootIds": [
@@ -1298,6 +1340,7 @@
         "base|--ds-color-success-700",
         "base|--ds-color-success-800",
         "base|--ds-color-success-900",
+        "dark|--ds-color-success",
         "dark|--ds-color-success-100",
         "dark|--ds-color-success-200",
         "dark|--ds-color-success-300",
@@ -1319,7 +1362,8 @@
       "evidence": {
         "basis": "tenant-override-allowlist",
         "channels": [
-          "base|--ds-color-success"
+          "base|--ds-color-success",
+          "dark|--ds-color-success"
         ]
       }
     },
@@ -1357,6 +1401,7 @@
         "base|--ds-color-warning-700",
         "base|--ds-color-warning-800",
         "base|--ds-color-warning-900",
+        "dark|--ds-color-warning",
         "dark|--ds-color-warning-100",
         "dark|--ds-color-warning-200",
         "dark|--ds-color-warning-300",
@@ -1378,7 +1423,8 @@
       "evidence": {
         "basis": "tenant-override-allowlist",
         "channels": [
-          "base|--ds-color-warning"
+          "base|--ds-color-warning",
+          "dark|--ds-color-warning"
         ]
       }
     },
@@ -1618,11 +1664,36 @@
       "valueKind": "string",
       "readsVar": false,
       "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
+      "emitsChannels": [
+        "--ds-elevation-0",
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3",
+        "--ds-elevation-4",
+        "--ds-elevation-5",
+        "--ds-elevation-6"
+      ],
+      "emitsScoped": [
+        "base|--ds-elevation-0",
+        "base|--ds-elevation-1",
+        "base|--ds-elevation-2",
+        "base|--ds-elevation-3",
+        "base|--ds-elevation-4",
+        "base|--ds-elevation-5",
+        "base|--ds-elevation-6",
+        "dark|--ds-elevation-1",
+        "dark|--ds-elevation-2",
+        "dark|--ds-elevation-3",
+        "dark|--ds-elevation-4",
+        "dark|--ds-elevation-5",
+        "dark|--ds-elevation-6"
+      ],
       "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
+      "headRootIds": [
+        "elevation.ladder",
+        "tier.base.fg"
+      ],
+      "rootAttribution": "slot-spans-several-roots",
       "rule": "R5",
       "verdict": "adjudicate",
       "evidence": {
@@ -1697,7 +1768,8 @@
         "--ds-button-xl-radius",
         "--ds-button-xs-radius",
         "--ds-radius-button",
-        "--ds-radius-scale"
+        "--ds-radius-scale",
+        "--ds-radius-scale-rest"
       ],
       "emitsScoped": [
         "base|--ds-button-lg-radius",
@@ -1706,20 +1778,20 @@
         "base|--ds-button-xl-radius",
         "base|--ds-button-xs-radius",
         "base|--ds-radius-button",
-        "base|--ds-radius-scale"
+        "base|--ds-radius-scale",
+        "base|--ds-radius-scale-rest"
       ],
-      "rootId": null,
+      "rootId": "control.ratio.radius",
       "headRootIds": [
-        "control.ratio.radius",
-        "radius.base"
+        "control.ratio.radius"
       ],
-      "rootAttribution": "slot-spans-several-roots",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "rootAttribution": "head-exact",
+      "rule": "R2",
+      "verdict": "collapse",
       "evidence": {
-        "whyNotR2": "sin raiz atribuible",
-        "whyNotR3": "sin raiz atribuible",
-        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
+        "rootId": "control.ratio.radius",
+        "rootDerivation": "LA RAZON MAS LIMPIA MEDIDA: radio = redondeo(altura / 4). Bithire la cumple EXACTA en 8 de 10 filas -- botones 26/7, 32/8, 36/9, 40/10, 46/11 (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:1351-1400) y campos 28/7, 32/8, 36/9, 40/10, 46/11 (:1402-1460); el cociente da 0,250 exacto en sm/md/lg de ambas familias.",
+        "coincidenceGuard": "no-value-match-used"
       }
     },
     {
@@ -2221,17 +2293,18 @@
         "base|--ds-sidebar-text-muted",
         "dark|--ds-sidebar-item-bg-active"
       ],
-      "rootId": "tier.page.bg",
+      "rootId": null,
       "headRootIds": [
+        "tier.base.fg",
         "tier.page.bg"
       ],
-      "rootAttribution": "head-exact",
-      "rule": "R2",
-      "verdict": "collapse",
+      "rootAttribution": "slot-spans-several-roots",
+      "rule": "R5",
+      "verdict": "adjudicate",
       "evidence": {
-        "rootId": "tier.page.bg",
-        "rootDerivation": "Chrome de pagina (shell, layout, sidebar, detail, list, feed, calendar, timeline, tree): fondo = suelo base desplazado un escalon. El unico tramo con cabeza propia es el sidebar.",
-        "coincidenceGuard": "no-value-match-used"
+        "whyNotR2": "sin raiz atribuible",
+        "whyNotR3": "sin raiz atribuible",
+        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
       }
     },
     {
@@ -2493,18 +2566,17 @@
         "base|--ds-button-xs-radius",
         "base|--ds-radius-button"
       ],
-      "rootId": null,
+      "rootId": "control.ratio.radius",
       "headRootIds": [
-        "control.ratio.radius",
-        "radius.base"
+        "control.ratio.radius"
       ],
-      "rootAttribution": "slot-spans-several-roots",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "rootAttribution": "head-exact",
+      "rule": "R2",
+      "verdict": "collapse",
       "evidence": {
-        "whyNotR2": "sin raiz atribuible",
-        "whyNotR3": "sin raiz atribuible",
-        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
+        "rootId": "control.ratio.radius",
+        "rootDerivation": "LA RAZON MAS LIMPIA MEDIDA: radio = redondeo(altura / 4). Bithire la cumple EXACTA en 8 de 10 filas -- botones 26/7, 32/8, 36/9, 40/10, 46/11 (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:1351-1400) y campos 28/7, 32/8, 36/9, 40/10, 46/11 (:1402-1460); el cociente da 0,250 exacto en sm/md/lg de ambas familias.",
+        "coincidenceGuard": "no-value-match-used"
       }
     },
     {
@@ -2597,11 +2669,36 @@
       "valueKind": "string",
       "readsVar": false,
       "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
+      "emitsChannels": [
+        "--ds-elevation-0",
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3",
+        "--ds-elevation-4",
+        "--ds-elevation-5",
+        "--ds-elevation-6"
+      ],
+      "emitsScoped": [
+        "base|--ds-elevation-0",
+        "base|--ds-elevation-1",
+        "base|--ds-elevation-2",
+        "base|--ds-elevation-3",
+        "base|--ds-elevation-4",
+        "base|--ds-elevation-5",
+        "base|--ds-elevation-6",
+        "dark|--ds-elevation-1",
+        "dark|--ds-elevation-2",
+        "dark|--ds-elevation-3",
+        "dark|--ds-elevation-4",
+        "dark|--ds-elevation-5",
+        "dark|--ds-elevation-6"
+      ],
       "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
+      "headRootIds": [
+        "elevation.ladder",
+        "tier.base.fg"
+      ],
+      "rootAttribution": "slot-spans-several-roots",
       "rule": "R5",
       "verdict": "adjudicate",
       "evidence": {
@@ -2670,10 +2767,12 @@
       "readsVar": false,
       "isMetadata": false,
       "emitsChannels": [
-        "--ds-radius-scale"
+        "--ds-radius-scale",
+        "--ds-radius-scale-rest"
       ],
       "emitsScoped": [
-        "base|--ds-radius-scale"
+        "base|--ds-radius-scale",
+        "base|--ds-radius-scale-rest"
       ],
       "rootId": null,
       "headRootIds": [],
@@ -2845,22 +2944,74 @@
       "readsVar": false,
       "isMetadata": true,
       "emitsChannels": [
+        "--ds-app-shell-navigation-footer-color",
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3",
+        "--ds-elevation-4",
+        "--ds-elevation-5",
+        "--ds-elevation-6",
+        "--ds-overlay-heavy",
+        "--ds-overlay-light",
+        "--ds-overlay-medium",
         "--ds-sidebar-item-bg-active"
       ],
       "emitsScoped": [
+        "base|--ds-app-shell-navigation-footer-color",
+        "base|--ds-elevation-1",
+        "base|--ds-elevation-2",
+        "base|--ds-elevation-3",
+        "base|--ds-elevation-4",
+        "base|--ds-elevation-5",
+        "base|--ds-elevation-6",
+        "base|--ds-overlay-heavy",
+        "base|--ds-overlay-light",
+        "base|--ds-overlay-medium",
         "base|--ds-sidebar-item-bg-active",
+        "dark|--ds-app-shell-navigation-footer-color",
+        "dark|--ds-elevation-1",
+        "dark|--ds-elevation-2",
+        "dark|--ds-elevation-3",
+        "dark|--ds-elevation-4",
+        "dark|--ds-elevation-5",
+        "dark|--ds-elevation-6",
+        "dark|--ds-overlay-heavy",
+        "dark|--ds-overlay-light",
+        "dark|--ds-overlay-medium",
         "dark|--ds-sidebar-item-bg-active",
+        "light|--ds-app-shell-navigation-footer-color",
+        "light|--ds-elevation-1",
+        "light|--ds-elevation-2",
+        "light|--ds-elevation-3",
+        "light|--ds-elevation-4",
+        "light|--ds-elevation-5",
+        "light|--ds-elevation-6",
+        "light|--ds-overlay-heavy",
+        "light|--ds-overlay-light",
+        "light|--ds-overlay-medium",
         "light|--ds-sidebar-item-bg-active"
       ],
       "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "no-persisted-membership",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "headRootIds": [
+        "elevation.ladder",
+        "tier.base.fg"
+      ],
+      "rootAttribution": "slot-spans-several-roots",
+      "rule": "R4",
+      "verdict": "pro-expert",
       "evidence": {
-        "whyNotR2": "sin raiz atribuible",
-        "whyNotR3": "sin raiz atribuible",
-        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
+        "basis": "tenant-override-allowlist",
+        "channels": [
+          "base|--ds-overlay-heavy",
+          "base|--ds-overlay-light",
+          "base|--ds-overlay-medium",
+          "dark|--ds-overlay-heavy",
+          "dark|--ds-overlay-light",
+          "dark|--ds-overlay-medium",
+          "light|--ds-overlay-heavy",
+          "light|--ds-overlay-light",
+          "light|--ds-overlay-medium"
+        ]
       }
     },
     {
@@ -2977,17 +3128,18 @@
         "base|--ds-sidebar-text-muted",
         "light|--ds-sidebar-item-bg-active"
       ],
-      "rootId": "tier.page.bg",
+      "rootId": null,
       "headRootIds": [
+        "tier.base.fg",
         "tier.page.bg"
       ],
-      "rootAttribution": "head-exact",
-      "rule": "R2",
-      "verdict": "collapse",
+      "rootAttribution": "slot-spans-several-roots",
+      "rule": "R5",
+      "verdict": "adjudicate",
       "evidence": {
-        "rootId": "tier.page.bg",
-        "rootDerivation": "Chrome de pagina (shell, layout, sidebar, detail, list, feed, calendar, timeline, tree): fondo = suelo base desplazado un escalon. El unico tramo con cabeza propia es el sidebar.",
-        "coincidenceGuard": "no-value-match-used"
+        "whyNotR2": "sin raiz atribuible",
+        "whyNotR3": "sin raiz atribuible",
+        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
       }
     },
     {
@@ -3249,18 +3401,17 @@
         "base|--ds-button-xs-radius",
         "base|--ds-radius-button"
       ],
-      "rootId": null,
+      "rootId": "control.ratio.radius",
       "headRootIds": [
-        "control.ratio.radius",
-        "radius.base"
+        "control.ratio.radius"
       ],
-      "rootAttribution": "slot-spans-several-roots",
-      "rule": "R5",
-      "verdict": "adjudicate",
+      "rootAttribution": "head-exact",
+      "rule": "R2",
+      "verdict": "collapse",
       "evidence": {
-        "whyNotR2": "sin raiz atribuible",
-        "whyNotR3": "sin raiz atribuible",
-        "whyNotR4": "ningun canal emitido esta en la allowlist de overrides publicada"
+        "rootId": "control.ratio.radius",
+        "rootDerivation": "LA RAZON MAS LIMPIA MEDIDA: radio = redondeo(altura / 4). Bithire la cumple EXACTA en 8 de 10 filas -- botones 26/7, 32/8, 36/9, 40/10, 46/11 (packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts:1351-1400) y campos 28/7, 32/8, 36/9, 40/10, 46/11 (:1402-1460); el cociente da 0,250 exacto en sm/md/lg de ambas familias.",
+        "coincidenceGuard": "no-value-match-used"
       }
     },
     {
@@ -3353,11 +3504,36 @@
       "valueKind": "string",
       "readsVar": false,
       "isMetadata": false,
-      "emitsChannels": [],
-      "emitsScoped": [],
+      "emitsChannels": [
+        "--ds-elevation-0",
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3",
+        "--ds-elevation-4",
+        "--ds-elevation-5",
+        "--ds-elevation-6"
+      ],
+      "emitsScoped": [
+        "base|--ds-elevation-0",
+        "base|--ds-elevation-1",
+        "base|--ds-elevation-2",
+        "base|--ds-elevation-3",
+        "base|--ds-elevation-4",
+        "base|--ds-elevation-5",
+        "base|--ds-elevation-6",
+        "light|--ds-elevation-1",
+        "light|--ds-elevation-2",
+        "light|--ds-elevation-3",
+        "light|--ds-elevation-4",
+        "light|--ds-elevation-5",
+        "light|--ds-elevation-6"
+      ],
       "rootId": null,
-      "headRootIds": [],
-      "rootAttribution": "emits-no-channel",
+      "headRootIds": [
+        "elevation.ladder",
+        "tier.base.fg"
+      ],
+      "rootAttribution": "slot-spans-several-roots",
       "rule": "R5",
       "verdict": "adjudicate",
       "evidence": {
@@ -3426,10 +3602,12 @@
       "readsVar": false,
       "isMetadata": false,
       "emitsChannels": [
-        "--ds-radius-scale"
+        "--ds-radius-scale",
+        "--ds-radius-scale-rest"
       ],
       "emitsScoped": [
-        "base|--ds-radius-scale"
+        "base|--ds-radius-scale",
+        "base|--ds-radius-scale-rest"
       ],
       "rootId": null,
       "headRootIds": [],
@@ -3592,5 +3770,5 @@
       }
     }
   ],
-  "digest": "31248643f9c3dab0a51dcf0fd9dea676411e3b60fe074091f6b68e881200f203"
+  "digest": "5b08b03d12618fa16163fc3f83609ce4729d5756992b393c638b37567c089c90"
 }

@@ -17,8 +17,8 @@
   "stats": {
     "rows": 26,
     "byClass": {
-      "value-shift": 7,
-      "pure": 19
+      "pure": 19,
+      "value-shift": 7
     },
     "byVertical": {
       "bithire": 16,
@@ -52,17 +52,6 @@
     }
   },
   "rows": [
-    {
-      "slotId": "bithire:THEME.chrome.sidebar.tone",
-      "vertical": "bithire",
-      "rootId": "tier.page.bg",
-      "rule": "R2",
-      "scope": "base",
-      "headChannel": "--ds-sidebar-bg",
-      "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 13
-    },
     {
       "slotId": "bithire:THEME.motion.durationScale",
       "vertical": "bithire",
@@ -174,6 +163,17 @@
       "replacementDeltaBytes": 23
     },
     {
+      "slotId": "bithire:THEME.surfaces.radiusScale",
+      "vertical": "bithire",
+      "rootId": "control.ratio.radius",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-button-md-radius",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 23
+    },
+    {
       "slotId": "bithire:THEME.typography.fontFamilyBase",
       "vertical": "bithire",
       "rootId": "type.family.base",
@@ -229,17 +229,6 @@
       "replacementDeltaBytes": 16
     },
     {
-      "slotId": "evnto:THEME.chrome.sidebar.tone",
-      "vertical": "evnto",
-      "rootId": "tier.page.bg",
-      "rule": "R2",
-      "scope": "base",
-      "headChannel": "--ds-sidebar-bg",
-      "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 14
-    },
-    {
       "slotId": "evnto:THEME.motion.durationScale",
       "vertical": "evnto",
       "rootId": "motion.duration",
@@ -260,6 +249,17 @@
       "headEmitted": true,
       "class": "pure",
       "replacementDeltaBytes": 23
+    },
+    {
+      "slotId": "evnto:THEME.surfaces.buttonStyle",
+      "vertical": "evnto",
+      "rootId": "control.ratio.radius",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-button-md-radius",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 22
     },
     {
       "slotId": "evnto:THEME.surfaces.effectIntensity",
@@ -284,17 +284,6 @@
       "replacementDeltaBytes": 19
     },
     {
-      "slotId": "rottay:THEME.chrome.sidebar.tone",
-      "vertical": "rottay",
-      "rootId": "tier.page.bg",
-      "rule": "R2",
-      "scope": "base",
-      "headChannel": "--ds-sidebar-bg",
-      "headEmitted": true,
-      "class": "value-shift",
-      "replacementDeltaBytes": 14
-    },
-    {
       "slotId": "rottay:THEME.motion.durationScale",
       "vertical": "rottay",
       "rootId": "motion.duration",
@@ -315,6 +304,17 @@
       "headEmitted": true,
       "class": "pure",
       "replacementDeltaBytes": 23
+    },
+    {
+      "slotId": "rottay:THEME.surfaces.buttonStyle",
+      "vertical": "rottay",
+      "rootId": "control.ratio.radius",
+      "rule": "R2",
+      "scope": "base",
+      "headChannel": "--ds-button-md-radius",
+      "headEmitted": true,
+      "class": "value-shift",
+      "replacementDeltaBytes": 22
     },
     {
       "slotId": "rottay:THEME.surfaces.effectIntensity",
@@ -339,5 +339,5 @@
       "replacementDeltaBytes": 19
     }
   ],
-  "digest": "ca7600a78603923730ab0165ced6a2ad8705e88b68f47ece5a2d8b05a292ee46"
+  "digest": "9ff48828123223067e8b8497cf452322343a9b1ea8dc665910cd4de8ba77c171"
 }

@@ -125,7 +125,17 @@ test('sobre el arbol real: las clases PARTICIONAN la poblacion y ninguna se fabr
    * se afirma aca son las PROPIEDADES, que no pueden moverse nunca. */
   const fam = (rootId) => (rootId.startsWith('tier.') ? 'tier' : rootId.startsWith('state.delta.') ? 'state' : rootId.split('.')[0]);
   const cohort = doc.rows.filter((item) => item.rule === 'R2' && ['tier', 'state', 'ramp'].includes(fam(item.rootId)));
-  assert.ok(cohort.length > 0);
+  /* La cohorte tier/state/ramp R2 PUEDE estar vacia, y desde el re-pin del
+   * 2026-10-13 lo esta. Sus unicas filas eran las tres chrome.sidebar.tone
+   * (-> tier.page.bg), que salieron de R2 cuando 5e92f1b89 le dio una segunda
+   * raiz a --ds-sidebar-text; las tres que entraron a R2 por la disolucion de
+   * 7a79c1b89 son control.ratio.radius, otra familia. Se re-atribuyo, no se
+   * rompio: exigir `cohort.length > 0` afirmaba una poblacion, no una
+   * propiedad. Lo que no puede vaciarse es el CENSO -- un lector roto da cero
+   * filas, y contra cero filas todo lo de abajo pasa en vacio. */
+  assert.ok(doc.rows.length > 0, 'el censo no puede estar vacio: sin filas las propiedades pasan en vacio');
+  assert.equal(doc.stats.rows, doc.rows.length, 'stats.rows cuenta las filas que el censo lleva');
+  for (const item of doc.rows) assert.ok(CLASSES.includes(item.class), `${item.slotId} lleva una clase fuera del vocabulario`);
   const byClass = cohort.reduce((acc, item) => { acc[item.class] = (acc[item.class] ?? 0) + 1; return acc; }, {});
   assert.equal(Object.values(byClass).reduce((a, b) => a + b, 0), cohort.length, 'las clases particionan: ni una fila fuera');
   for (const klass of Object.keys(byClass)) assert.ok(CLASSES.includes(klass));

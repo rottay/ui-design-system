@@ -28,23 +28,23 @@
     "parentByDesignFailures": []
   },
   "stats": {
-    "rows": 177,
+    "rows": 195,
     "byVia": {
-      "unattributed": 134,
-      "head-exact": 24,
-      "declared-fallback": 19
+      "unattributed": 148,
+      "head-exact": 25,
+      "declared-fallback": 22
     },
     "byTier": {
-      "sin-tier": 173,
+      "sin-tier": 189,
       "control": 1,
-      "base": 2,
+      "base": 4,
       "page": 1
     },
     "byProperty": {
-      "radius": 7,
-      "fg": 91,
+      "sin-propiedad": 62,
+      "fg": 100,
+      "radius": 8,
       "seed.error": 3,
-      "sin-propiedad": 54,
       "seed.success": 2,
       "seed.warning": 2,
       "seed.info": 1,
@@ -60,8 +60,8 @@
       "delta.selected": 1,
       "scale": 1
     },
-    "withRoot": 43,
-    "withoutRoot": 134,
+    "withRoot": 47,
+    "withoutRoot": 148,
     "sharedHeadsResolved": 9,
     "sharedHeadsUnresolved": 0,
     "ownersCensused": 10,
@@ -71,14 +71,13 @@
     "rowsRefinedByStep": 0,
     "rowsParentByDesign": 0,
     "byStep": {
-      "sin-paso": 177
+      "sin-paso": 195
     },
-    "r2Floor": 16,
+    "r2Floor": 13,
     "r2FloorRoots": [
       "control.ratio.radius",
       "motion.duration",
       "motion.intensity",
-      "tier.page.bg",
       "type.scale"
     ]
   },
@@ -177,21 +176,22 @@
   },
   "byOwner": {
     "THEME.palette": {
-      "channels": 104,
-      "unattributed": 75,
+      "channels": 116,
+      "unattributed": 84,
       "properties": {
-        "fg": 70,
-        "sin-propiedad": 5
+        "fg": 75,
+        "sin-propiedad": 9
       }
     },
     "THEME.surfaces": {
-      "channels": 22,
-      "unattributed": 16,
+      "channels": 30,
+      "unattributed": 22,
       "properties": {
-        "radius": 6,
+        "radius": 7,
         "height": 1,
-        "sin-propiedad": 6,
-        "border": 3
+        "sin-propiedad": 7,
+        "border": 3,
+        "fg": 4
       }
     },
     "THEME.typography": {
@@ -208,6 +208,14 @@
         "sin-propiedad": 13
       }
     },
+    "THEME.appearance": {
+      "channels": 11,
+      "unattributed": 9,
+      "properties": {
+        "sin-propiedad": 5,
+        "fg": 4
+      }
+    },
     "THEME.motion": {
       "channels": 9,
       "unattributed": 7,
@@ -217,16 +225,9 @@
     },
     "THEME.chrome.sidebar": {
       "channels": 6,
-      "unattributed": 5,
+      "unattributed": 4,
       "properties": {
-        "sin-propiedad": 5
-      }
-    },
-    "THEME.appearance": {
-      "channels": 1,
-      "unattributed": 1,
-      "properties": {
-        "sin-propiedad": 1
+        "sin-propiedad": 4
       }
     },
     "THEME.expressive.profiles": {
@@ -252,6 +253,55 @@
     }
   },
   "rows": [
+    {
+      "channel": "--ds-app-shell-navigation-footer-color",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.appearance",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.appearance"
+      ],
+      "contributingSlots": [
+        "rottay:THEME.appearance.defaultMode"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-badge-selected-ink",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.palette"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
+        "bithire:THEME.palette.primaryColor"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
     {
       "channel": "--ds-button-lg-radius",
       "rootId": null,
@@ -1595,7 +1645,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-info",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:136",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:137",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-info-border",
         "coincidenceGuard": "no-value-match-used"
@@ -1707,6 +1757,102 @@
       ],
       "contributingSlots": [
         "bithire:THEME.palette.neutralTemperature"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-color-on-error",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.palette"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.contrastPosture"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-color-on-info",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.palette"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.contrastPosture"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-color-on-success",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.palette"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.contrastPosture"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-color-on-warning",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.palette",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.palette"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.contrastPosture"
       ],
       "rootExposure": null,
       "rootHasDerivationLaw": false,
@@ -1869,7 +2015,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/chart-calendar-heatmap/index.css:27",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/chart-calendar-heatmap/index.css:32",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-primary-500",
         "coincidenceGuard": "no-value-match-used"
@@ -3135,6 +3281,212 @@
       "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
     },
     {
+      "channel": "--ds-elevation-0",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.surfaces",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.surfaces"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.surfaces.elevation",
+        "evnto:THEME.surfaces.elevation",
+        "rottay:THEME.surfaces.elevation"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-elevation-1",
+      "rootId": "elevation.ladder",
+      "via": "head-exact",
+      "evidence": {
+        "catalogHead": "--ds-elevation-1",
+        "sharedHead": false,
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.appearance",
+        "THEME.palette",
+        "THEME.surfaces"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
+        "bithire:THEME.surfaces.elevation",
+        "evnto:THEME.surfaces.elevation",
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.surfaces.elevation"
+      ],
+      "rootExposure": "tenant-dial",
+      "rootHasDerivationLaw": true,
+      "step": null,
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+    },
+    {
+      "channel": "--ds-elevation-2",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.appearance, THEME.palette, THEME.surfaces",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.appearance",
+        "THEME.palette",
+        "THEME.surfaces"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
+        "bithire:THEME.surfaces.elevation",
+        "evnto:THEME.surfaces.elevation",
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.surfaces.elevation"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-elevation-3",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.appearance, THEME.palette, THEME.surfaces",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.appearance",
+        "THEME.palette",
+        "THEME.surfaces"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
+        "bithire:THEME.surfaces.elevation",
+        "evnto:THEME.surfaces.elevation",
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.surfaces.elevation"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-elevation-4",
+      "rootId": "tier.base.fg",
+      "via": "declared-fallback",
+      "evidence": {
+        "fallbackFrom": "--ds-color-text-primary",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/column-menu/index.css:83",
+        "edgeClass": "leaf-fallback",
+        "guardPrimary": "--ds-elevation-4",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": "base",
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.appearance",
+        "THEME.palette",
+        "THEME.surfaces"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
+        "bithire:THEME.surfaces.elevation",
+        "evnto:THEME.surfaces.elevation",
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.surfaces.elevation"
+      ],
+      "rootExposure": "internal-head",
+      "rootHasDerivationLaw": true,
+      "step": null,
+      "stepNote": "sin adjudicar: THEME.palette|fg|backgroundColor, THEME.surfaces|fg|elevation, THEME.appearance|fg|defaultMode"
+    },
+    {
+      "channel": "--ds-elevation-5",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.appearance, THEME.palette, THEME.surfaces",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.appearance",
+        "THEME.palette",
+        "THEME.surfaces"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
+        "bithire:THEME.surfaces.elevation",
+        "evnto:THEME.surfaces.elevation",
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.surfaces.elevation"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-elevation-6",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.appearance, THEME.palette, THEME.surfaces",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.appearance",
+        "THEME.palette",
+        "THEME.surfaces"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
+        "bithire:THEME.surfaces.elevation",
+        "evnto:THEME.surfaces.elevation",
+        "rottay:THEME.appearance.defaultMode",
+        "rottay:THEME.surfaces.elevation"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
       "channel": "--ds-elevation-lift-strength",
       "rootId": null,
       "via": null,
@@ -3164,7 +3516,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-cards/index.css:107",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/radio-group/index.css:165",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-focus-ring-color",
         "coincidenceGuard": "no-value-match-used"
@@ -3650,6 +4002,78 @@
       "stepNote": "sin raiz que refinar"
     },
     {
+      "channel": "--ds-overlay-heavy",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.appearance",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.appearance"
+      ],
+      "contributingSlots": [
+        "rottay:THEME.appearance.defaultMode"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-overlay-light",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.appearance",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.appearance"
+      ],
+      "contributingSlots": [
+        "rottay:THEME.appearance.defaultMode"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-overlay-medium",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.appearance",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": null,
+      "state": null,
+      "owners": [
+        "THEME.appearance"
+      ],
+      "contributingSlots": [
+        "rottay:THEME.appearance.defaultMode"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
       "channel": "--ds-page-header-eyebrow-text-transform",
       "rootId": null,
       "via": null,
@@ -3753,6 +4177,32 @@
     },
     {
       "channel": "--ds-radius-scale",
+      "rootId": null,
+      "via": null,
+      "evidence": {
+        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
+        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
+        "whyNotV3": "owners sin adjudicar: THEME.surfaces",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "radius",
+      "state": null,
+      "owners": [
+        "THEME.surfaces"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.surfaces.radiusScale",
+        "evnto:THEME.surfaces.radiusScale",
+        "rottay:THEME.surfaces.radiusScale"
+      ],
+      "rootExposure": null,
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-radius-scale-rest",
       "rootId": null,
       "via": null,
       "evidence": {
@@ -3982,16 +4432,17 @@
     },
     {
       "channel": "--ds-sidebar-text",
-      "rootId": null,
-      "via": null,
+      "rootId": "tier.base.fg",
+      "via": "declared-fallback",
       "evidence": {
-        "whyNotV1": "el canal no es cabeza declarada de ninguna raiz",
-        "whyNotV2": "ningun fallback declarado lo guarda desde una cabeza",
-        "whyNotV3": "owners sin adjudicar: THEME.chrome.sidebar",
+        "fallbackFrom": "--ds-color-text-primary",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css:109",
+        "edgeClass": "leaf-fallback",
+        "guardPrimary": "--ds-sidebar-text",
         "coincidenceGuard": "no-value-match-used"
       },
-      "tier": null,
-      "property": null,
+      "tier": "base",
+      "property": "fg",
       "state": null,
       "owners": [
         "THEME.chrome.sidebar"
@@ -4001,10 +4452,10 @@
         "evnto:THEME.chrome.sidebar.tone",
         "rottay:THEME.chrome.sidebar.tone"
       ],
-      "rootExposure": null,
-      "rootHasDerivationLaw": false,
+      "rootExposure": "internal-head",
+      "rootHasDerivationLaw": true,
       "step": null,
-      "stepNote": "sin raiz que refinar"
+      "stepNote": "sin adjudicar: THEME.chrome.sidebar|fg|tone"
     },
     {
       "channel": "--ds-sidebar-text-muted",
@@ -4219,6 +4670,32 @@
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-tag-primary-outlined-ink",
+      "rootId": "ramp.seed.primary",
+      "via": "declared-fallback",
+      "evidence": {
+        "fallbackFrom": "--ds-color-primary",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag/index.css:189",
+        "edgeClass": "leaf-fallback",
+        "guardPrimary": "--ds-tag-primary-outlined-ink",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.palette"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
+        "bithire:THEME.palette.primaryColor"
+      ],
+      "rootExposure": "tenant-dial",
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
     },
     {
       "channel": "--ds-type-body-font-variant-numeric",
@@ -4646,5 +5123,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "fa00017359255cb191a402d84a73cb9830b26e2c31a3e63e5a7693c79623c676"
+  "digest": "ba7c30a524bc75bce9af369e5ce56aedfc867dc0b40a71d278e65fdcb4cc82b1"
 }
