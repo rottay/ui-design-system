@@ -252,7 +252,6 @@
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/static-db-channel-vocabulary.test.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-artifact-stability.test.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-compiler.test.ts",
-        "packages/core/src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts",
         "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts",
         "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/tests/index.test.ts",
         "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/tests/brand-compiler.test.ts",
