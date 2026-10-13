@@ -1,192 +1,198 @@
 {
-  "doors": {
-    "sandbox:bithire:PRIMARY": {
-      "bytes": 65066,
-      "declarations": {
-        "base": 685,
-        "context": 2,
-        "mode": 45
-      }
-    },
-    "sandbox:bithire:RICH": {
-      "bytes": 79272,
-      "declarations": {
-        "base": 907,
-        "context": 4,
-        "mode": 39
-      }
-    },
-    "tenant-preview:bithire": {
-      "bytes": 66746,
-      "declarations": {
-        "base": 700,
-        "context": 2,
-        "mode": 45
-      }
-    },
-    "brand-studio:bithire:EMPTY:dark": {
-      "bytes": 189363,
-      "declarations": {
-        "base": 2438,
-        "context": 7,
-        "mode": 0
-      }
-    },
-    "brand-studio:bithire:EMPTY:light": {
-      "bytes": 190044,
-      "declarations": {
-        "base": 2438,
-        "context": 7,
-        "mode": 0
-      }
-    },
-    "brand-studio:bithire:RICH:dark": {
-      "bytes": 202168,
-      "declarations": {
-        "base": 2593,
-        "context": 8,
-        "mode": 0
-      }
-    },
-    "brand-studio:bithire:RICH:light": {
-      "bytes": 202850,
-      "declarations": {
-        "base": 2593,
-        "context": 8,
-        "mode": 0
-      }
-    },
-    "sandbox:evnto:PRIMARY": {
-      "bytes": 69559,
-      "declarations": {
-        "base": 736,
-        "context": 5,
-        "mode": 49
-      }
-    },
-    "sandbox:evnto:RICH": {
-      "bytes": 81818,
-      "declarations": {
-        "base": 939,
-        "context": 5,
-        "mode": 43
-      }
-    },
-    "tenant-preview:evnto": {
-      "bytes": 71384,
-      "declarations": {
-        "base": 753,
-        "context": 5,
-        "mode": 49
-      }
-    },
-    "brand-studio:evnto:EMPTY:dark": {
-      "bytes": 185132,
-      "declarations": {
-        "base": 2334,
-        "context": 5,
-        "mode": 0
-      }
-    },
-    "brand-studio:evnto:EMPTY:light": {
-      "bytes": 185798,
-      "declarations": {
-        "base": 2334,
-        "context": 5,
-        "mode": 0
-      }
-    },
-    "brand-studio:evnto:RICH:dark": {
-      "bytes": 201977,
-      "declarations": {
-        "base": 2595,
-        "context": 8,
-        "mode": 0
-      }
-    },
-    "brand-studio:evnto:RICH:light": {
-      "bytes": 202613,
-      "declarations": {
-        "base": 2595,
-        "context": 8,
-        "mode": 0
-      }
-    },
-    "sandbox:rottay:PRIMARY": {
-      "bytes": 70742,
-      "declarations": {
-        "base": 751,
-        "context": 5,
-        "mode": 36
-      }
-    },
-    "sandbox:rottay:RICH": {
-      "bytes": 81842,
-      "declarations": {
-        "base": 938,
-        "context": 5,
-        "mode": 43
-      }
-    },
-    "tenant-preview:rottay": {
-      "bytes": 72593,
-      "declarations": {
-        "base": 768,
-        "context": 5,
-        "mode": 36
-      }
-    },
-    "brand-studio:rottay:EMPTY:dark": {
-      "bytes": 185132,
-      "declarations": {
-        "base": 2334,
-        "context": 5,
-        "mode": 0
-      }
-    },
-    "brand-studio:rottay:EMPTY:light": {
-      "bytes": 185798,
-      "declarations": {
-        "base": 2334,
-        "context": 5,
-        "mode": 0
-      }
-    },
-    "brand-studio:rottay:RICH:dark": {
-      "bytes": 202491,
-      "declarations": {
-        "base": 2604,
-        "context": 8,
-        "mode": 0
-      }
-    },
-    "brand-studio:rottay:RICH:light": {
-      "bytes": 203127,
-      "declarations": {
-        "base": 2604,
-        "context": 8,
-        "mode": 0
-      }
-    }
+ "doors": {
+  "sandbox:bithire:PRIMARY": {
+   "bytes": 65066,
+   "declarations": {
+    "base": 685,
+    "context": 2,
+    "mode": 45
+   }
   },
-  "history": [
-    {
-      "date": "2026-10-01",
-      "change": "anchor (M4, WO-EVI-02)",
-      "reason": "First pin, after M2 (mode arm) and M3 (CONTAINER_MODE_TEXTS): the growth Fable's M2/M3 review measured (brand-studio 161-203 kB and 2,021-2,585 base declarations per panel) is the anchored state. Brand-studio's ground pin is a near-constant of the DS (the root-only foundation dark block), not of the draft.",
-      "totalBytes": 2869068
-    },
-    {
-      "date": "2026-10-04",
-      "change": "re-anchor (WO-EVI-02 wave: SIG5 focus-signature skins, the Q4 ownership drain incl. OWN-8 chart skins, OWNSO shortcuts-overlay on Modal)",
-      "reason": "The wave moved skin-owned paint into and between the family skins the doors compile; measured on the built tree by the doors() probe of this very test file. Every mover lot was independently reviewed before landing.",
-      "totalBytes": 2860264
-    },
-    {
-      "date": "2026-10-12",
-      "change": "re-anchor, the first since 2026-10-04 (six lots landed without one: fd5cd57b1 +768, 239dd6306 +128,421, d5c9c823e +1,164, ee00b3d95 +46, 6bea312d6 +3,054, 65f9f8b80 +1,080; then c33048447 -774; then APCA-FIX +1,492)",
-      "reason": "2,860,264 + 134,533 - 774 + 1,492 = 2,995,515, every delta measured per commit by the independent review of APCA-FIX with the doors() probe of this test file on a git archive of each commit and of its parent. 239dd6306 (the foundation dark leg) is 95% of the growth and owns +308 of the +313 base declarations on the evnto/rottay brand-studio EMPTY panels and +160 of the +177 on bithire (the rest: d5c9c823e +1, 6bea312d6 +3, 65f9f8b80 +1, and APCA-FIX +12 on bithire): the container law restating what the root now resolves per mode. APCA-FIX adds 1,492 bytes on exactly the four bithire brand-studio doors and nothing on the other 17: bithire's dark block now states its own four on-tone inks, which makes them mode-varying for bithire, so a panel restates them and the aliases that read them (EMPTY dark and light +578 bytes and +12 base declarations each: the four inks and eight readers; RICH dark and light +168 bytes and +4 each). No panel carries the foundation's new dark role text.",
-      "totalBytes": 2995515
-    }
-  ]
+  "sandbox:bithire:RICH": {
+   "bytes": 79272,
+   "declarations": {
+    "base": 907,
+    "context": 4,
+    "mode": 39
+   }
+  },
+  "tenant-preview:bithire": {
+   "bytes": 66746,
+   "declarations": {
+    "base": 700,
+    "context": 2,
+    "mode": 45
+   }
+  },
+  "brand-studio:bithire:EMPTY:dark": {
+   "bytes": 189363,
+   "declarations": {
+    "base": 2438,
+    "context": 7,
+    "mode": 0
+   }
+  },
+  "brand-studio:bithire:EMPTY:light": {
+   "bytes": 190044,
+   "declarations": {
+    "base": 2438,
+    "context": 7,
+    "mode": 0
+   }
+  },
+  "brand-studio:bithire:RICH:dark": {
+   "bytes": 202168,
+   "declarations": {
+    "base": 2593,
+    "context": 8,
+    "mode": 0
+   }
+  },
+  "brand-studio:bithire:RICH:light": {
+   "bytes": 202850,
+   "declarations": {
+    "base": 2593,
+    "context": 8,
+    "mode": 0
+   }
+  },
+  "sandbox:evnto:PRIMARY": {
+   "bytes": 69559,
+   "declarations": {
+    "base": 736,
+    "context": 5,
+    "mode": 49
+   }
+  },
+  "sandbox:evnto:RICH": {
+   "bytes": 81818,
+   "declarations": {
+    "base": 939,
+    "context": 5,
+    "mode": 43
+   }
+  },
+  "tenant-preview:evnto": {
+   "bytes": 71384,
+   "declarations": {
+    "base": 753,
+    "context": 5,
+    "mode": 49
+   }
+  },
+  "brand-studio:evnto:EMPTY:dark": {
+   "bytes": 184781,
+   "declarations": {
+    "base": 2326,
+    "context": 5,
+    "mode": 0
+   }
+  },
+  "brand-studio:evnto:EMPTY:light": {
+   "bytes": 185447,
+   "declarations": {
+    "base": 2326,
+    "context": 5,
+    "mode": 0
+   }
+  },
+  "brand-studio:evnto:RICH:dark": {
+   "bytes": 201977,
+   "declarations": {
+    "base": 2595,
+    "context": 8,
+    "mode": 0
+   }
+  },
+  "brand-studio:evnto:RICH:light": {
+   "bytes": 202613,
+   "declarations": {
+    "base": 2595,
+    "context": 8,
+    "mode": 0
+   }
+  },
+  "sandbox:rottay:PRIMARY": {
+   "bytes": 70742,
+   "declarations": {
+    "base": 751,
+    "context": 5,
+    "mode": 36
+   }
+  },
+  "sandbox:rottay:RICH": {
+   "bytes": 81842,
+   "declarations": {
+    "base": 938,
+    "context": 5,
+    "mode": 43
+   }
+  },
+  "tenant-preview:rottay": {
+   "bytes": 72593,
+   "declarations": {
+    "base": 768,
+    "context": 5,
+    "mode": 36
+   }
+  },
+  "brand-studio:rottay:EMPTY:dark": {
+   "bytes": 184781,
+   "declarations": {
+    "base": 2326,
+    "context": 5,
+    "mode": 0
+   }
+  },
+  "brand-studio:rottay:EMPTY:light": {
+   "bytes": 185447,
+   "declarations": {
+    "base": 2326,
+    "context": 5,
+    "mode": 0
+   }
+  },
+  "brand-studio:rottay:RICH:dark": {
+   "bytes": 202491,
+   "declarations": {
+    "base": 2604,
+    "context": 8,
+    "mode": 0
+   }
+  },
+  "brand-studio:rottay:RICH:light": {
+   "bytes": 203127,
+   "declarations": {
+    "base": 2604,
+    "context": 8,
+    "mode": 0
+   }
+  }
+ },
+ "history": [
+  {
+   "date": "2026-10-01",
+   "change": "anchor (M4, WO-EVI-02)",
+   "reason": "First pin, after M2 (mode arm) and M3 (CONTAINER_MODE_TEXTS): the growth Fable's M2/M3 review measured (brand-studio 161-203 kB and 2,021-2,585 base declarations per panel) is the anchored state. Brand-studio's ground pin is a near-constant of the DS (the root-only foundation dark block), not of the draft.",
+   "totalBytes": 2869068
+  },
+  {
+   "date": "2026-10-04",
+   "change": "re-anchor (WO-EVI-02 wave: SIG5 focus-signature skins, the Q4 ownership drain incl. OWN-8 chart skins, OWNSO shortcuts-overlay on Modal)",
+   "reason": "The wave moved skin-owned paint into and between the family skins the doors compile; measured on the built tree by the doors() probe of this very test file. Every mover lot was independently reviewed before landing.",
+   "totalBytes": 2860264
+  },
+  {
+   "date": "2026-10-12",
+   "change": "re-anchor, the first since 2026-10-04 (six lots landed without one: fd5cd57b1 +768, 239dd6306 +128,421, d5c9c823e +1,164, ee00b3d95 +46, 6bea312d6 +3,054, 65f9f8b80 +1,080; then c33048447 -774; then APCA-FIX +1,492)",
+   "reason": "2,860,264 + 134,533 - 774 + 1,492 = 2,995,515, every delta measured per commit by the independent review of APCA-FIX with the doors() probe of this test file on a git archive of each commit and of its parent. 239dd6306 (the foundation dark leg) is 95% of the growth and owns +308 of the +313 base declarations on the evnto/rottay brand-studio EMPTY panels and +160 of the +177 on bithire (the rest: d5c9c823e +1, 6bea312d6 +3, 65f9f8b80 +1, and APCA-FIX +12 on bithire): the container law restating what the root now resolves per mode. APCA-FIX adds 1,492 bytes on exactly the four bithire brand-studio doors and nothing on the other 17: bithire's dark block now states its own four on-tone inks, which makes them mode-varying for bithire, so a panel restates them and the aliases that read them (EMPTY dark and light +578 bytes and +12 base declarations each: the four inks and eight readers; RICH dark and light +168 bytes and +4 each). No panel carries the foundation's new dark role text.",
+   "totalBytes": 2995515
+  },
+  {
+   "date": "2026-10-13",
+   "change": "BS-DARK (the Brand Studio preview grounds stop scaffolding the four status roles as light-graded literals; the panel now reads the vertical's own dark-graded value): the four rottay/evnto EMPTY doors shed the mode-invariant restatement of --ds-color-info and its readers (-351 bytes, -8 base declarations each; bithire swaps hex for hex, net 0). Total 2,995,515 - 1,404 = 2,994,111, every figure measured by the independent review (quality-xwfollow-bsdark-review).",
+   "totalBytes": 2994111,
+   "reason": "BS-DARK is a defect repair measured by the APCA dark-leg review: the preview grounds' scaffold literals blocked each vertical's own dark-graded status values from the panels (all four roles measured under the APCA floor on the dark ground). Deleting the scaffold drops the mode-invariant restatement of --ds-color-info and its readers from the four rottay/evnto EMPTY doors; every figure was measured by the lot's writer and confirmed by the independent review."
+  }
+ ]
 }

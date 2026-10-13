@@ -35,6 +35,7 @@ import { readGovernedTheme } from '@/infrastructure/compilers/runtime/theme/runt
 import { ThemeAdmissionError } from '@/infrastructure/compilers/runtime/theme';
 import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 import { rootModeTexts } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
+import { APCA_UI_MIN_LC, apcaContrast } from '@/foundation/kernel/accessibility/branding-contrast';
 
 const TEST_TENANT: TenantConfig = {
   slug: 'brand-studio-test',
@@ -436,6 +437,62 @@ describe('PatternBrandStudio panels keep their ground under a document in either
     const css = surfaceScopeCss(buildSurfaceVariables(theme, LIGHT_SURFACE_UNDER_TEST), '.panel');
     expect(css).not.toContain(":is([data-theme='dark'], .dark)) .panel {\n  color-scheme");
     expect(css).toContain(`  --ds-elevation-1: ${root.cssVariables['--ds-elevation-1']};`);
+  });
+});
+
+describe('PatternBrandStudio panels read the status roles through the theme channels', () => {
+  const STATUS_ROLES = ['success', 'warning', 'error', 'info'].map((role) => `--ds-color-${role}`);
+  const root = compileThemeIntent(staticThemeIntent('bithire', 'bithire')).compiled;
+  const rootDark = root.modeBlocks.find((block) => block.mode === 'dark')!.cssVariables;
+  const theme: FlatTheme = { id: 's', name: 'S', palette: { primaryColor: '#4f46e5' } };
+
+  it('scaffolds no status role on either ground', () => {
+    for (const ground of [DEFAULT_DARK_GROUND, DEFAULT_LIGHT_GROUND]) {
+      for (const name of STATUS_ROLES) expect(ground, name).not.toHaveProperty(name);
+    }
+  });
+
+  it('paints the untouched vertical\'s value on each ground, dark-graded on the dark one', () => {
+    const dark = buildSurfaceVariables(theme, DARK_SURFACE_UNDER_TEST);
+    const light = buildSurfaceVariables(theme, LIGHT_SURFACE_UNDER_TEST);
+    const darkCss = surfaceScopeCss(dark, '.panel');
+    for (const name of STATUS_ROLES) {
+      // The vertical grades every role for its dark block; a light literal here is the defect.
+      expect(rootDark[name], name).not.toBe(root.cssVariables[name]);
+      expect(dark.declaredKeys.has(name), name).toBe(false);
+      expect(dark.vars, name).not.toHaveProperty(name);
+      expect(dark.carried[name], name).toBe(rootDark[name]);
+      expect(light.carried[name], name).toBe(root.cssVariables[name]);
+      expect(darkCss, name).toContain(`  ${name}: ${rootDark[name]};`);
+      expect(
+        Math.abs(apcaContrast(dark.carried[name]!, DEFAULT_DARK_GROUND['--ds-color-bg-primary']!)),
+        name,
+      ).toBeGreaterThanOrEqual(APCA_UI_MIN_LC);
+    }
+  });
+
+  it('states the DS root\'s dark text, not a literal, on a vertical that authors no status seed', () => {
+    for (const vertical of ['rottay', 'evnto'] as const) {
+      const untouched = compileThemeIntent(staticThemeIntent(vertical, vertical)).compiled;
+      const dark = buildSurfaceVariables(
+        { id: 's', name: 'S' } as FlatTheme,
+        { ...DARK_SURFACE_UNDER_TEST, vertical },
+      );
+      for (const name of STATUS_ROLES) {
+        expect(untouched.cssVariables, `${vertical} ${name}`).not.toHaveProperty(name);
+        expect(dark.vars, `${vertical} ${name}`).not.toHaveProperty(name);
+      }
+      for (const name of ['--ds-color-success', '--ds-color-warning']) {
+        expect(dark.carried[name], `${vertical} ${name}`).toBe(rootModeTexts('dark')[name]);
+      }
+    }
+  });
+
+  it('still paints a seed the draft authors, verbatim, as a declared channel', () => {
+    const authored: FlatTheme = { ...theme, palette: { primaryColor: '#4f46e5', successColor: '#0f5132' } };
+    const light = buildSurfaceVariables(authored, LIGHT_SURFACE_UNDER_TEST);
+    expect(light.vars['--ds-color-success']).toBe('#0f5132');
+    expect(light.declaredKeys.has('--ds-color-success')).toBe(true);
   });
 });
 

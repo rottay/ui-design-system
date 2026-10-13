@@ -132,17 +132,8 @@ export type { TenantThemePreviewReportProps } from './runtime/tenant-theme-previ
 // `baseTheme`, and nothing outside this module contributes CSS to a preview.
 // ---------------------------------------------------------------------------
 
-// COH-1: the four `-bg` entries this scaffold used to hand-roll (a THIRD
-// formula, seed at 12%) retired. `deriveStatusTintFloor` now merges a real
-// `-bg` for any compiled theme that authors a status seed, so a scaffold
-// value here was always going to be redundant-or-divergent against it; the
-// four seeds alone are what a ground with no compiled theme still needs.
-const SEMANTIC_GROUND: Record<string, string> = {
-  '--ds-color-success': '#16a34a',
-  '--ds-color-warning': '#d97706',
-  '--ds-color-error': '#dc2626',
-  '--ds-color-info': '#2563eb',
-};
+// No status role is scaffolded: a ground literal would mask the value the
+// vertical's root holds on that ground, its dark-graded one included.
 
 /**
  * Chrome vars whose OWN component fallback chain already names
@@ -182,7 +173,6 @@ export const DEFAULT_DARK_GROUND: Record<string, string> = {
   '--ds-color-border': '#243049',
   '--ds-color-border-secondary': '#1b2438',
   '--ds-color-surface': '#131a2b',
-  ...SEMANTIC_GROUND,
   ...PRIMARY_CHROME_FALLBACK,
 };
 
@@ -200,7 +190,6 @@ export const DEFAULT_LIGHT_GROUND: Record<string, string> = {
   '--ds-color-border': '#e2e8f0',
   '--ds-color-border-secondary': '#eef2f6',
   '--ds-color-surface': '#f8fafc',
-  ...SEMANTIC_GROUND,
   ...PRIMARY_CHROME_FALLBACK,
 };
 
