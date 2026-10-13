@@ -263,6 +263,14 @@ describe("channel minting and CSS text have declared owners", () => {
   // like the allowlist above, and it mints nothing.
   const INGRESS_DOCUMENT_MIGRATE =
     "infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/foundation/migrate/index.ts";
+  // 6bea312d6 (WO-RET-01 Q4, the scrim ladder Phase 1) added the scrim-door
+  // census beside the two ingress owners above. It READS a stored document for
+  // the authored values that paint a scrim outside the ladder, so it names the
+  // channels it looks for: the `LADDER_TOKENS` table, the `--ds-color-bg-overlay`
+  // override key, the evidence strings of its findings and the admitted-backdrop
+  // matcher. It returns findings and writes no channel; data, like its siblings.
+  const INGRESS_SCRIM_DOORS =
+    "infrastructure/compilers/runtime/theme/runtime/ingress/foundation/scrim-doors/index.ts";
   // WO-CAT-03 moved the APCA floor, the categorical chart floor, the value
   // grammar and the payload ceilings out of `compileTenantTheme` and into the
   // single admission at the door. They arrived NAMING channels because that is
@@ -329,7 +337,13 @@ describe("channel minting and CSS text have declared owners", () => {
       // only became visible to this sweep when WO-CAT-03 moved the contrast
       // admission under the pipeline root. Anchored on the literal opening
       // `/^var\(` and stopped at the closing `/`, so it cannot swallow code.
-      .replace(/\/\^var\\\([^/\n]*\/[dgimsuvy]*/g, "/ /");
+      .replace(/\/\^var\\\([^/\n]*\/[dgimsuvy]*/g, "/ /")
+      // The same reference matcher behind a keyword alternation:
+      // `/^(none|var\(--ds-glass-backdrop-filter\)|blur\(...\))$/` ADMITS an
+      // authored backdrop value, one arm of which is a `var()` reference. It
+      // arrived with the scrim-door census (6bea312d6). Anchored on the literal
+      // opening `/^(none|var\(` and stopped at the closing `/`.
+      .replace(/\/\^\(none\|var\\\([^/\n]*\/[dgimsuvy]*/g, "/ /");
 
   const MINTS = /vars\[["']--ds-[a-z0-9-]+["']\]|cssVariables\[["']--ds-[a-z0-9-]+["']\]/;
   const rel = (file: string) => file.slice(SRC_ROOT.length + 1);
@@ -495,6 +509,7 @@ describe("channel minting and CSS text have declared owners", () => {
         ...ENGINE_ADAPTERS,
         INGRESS_DOCUMENT_PATCH,
         INGRESS_DOCUMENT_MIGRATE,
+        INGRESS_SCRIM_DOORS,
         ADMISSION_CONTRAST,
         ADMISSION_LIMITS,
         EMISSION_CSS,
@@ -548,7 +563,12 @@ describe("channel minting and CSS text have declared owners", () => {
     // reached through anything but that exact literal opening stays a finding.
     const matcher = `const m = /^var\\(\\s*(--ds-[a-z0-9-]+)\\)$/i.exec(v);\n`;
     expect(withoutChannelMatchers(matcher)).not.toMatch(/--ds-/u);
+    const admitted = `const A = /^(none|var\\(--ds-glass-backdrop-filter\\)|blur\\(\\d+px\\))$/;\nvars["--ds-planted"] = y;\n`;
+    expect(withoutChannelMatchers(admitted)).not.toContain("glass-backdrop");
+    expect(withoutChannelMatchers(admitted)).toContain('vars["--ds-planted"] = y;');
     for (const planted of [
+      `const t = /^(auto|var\\(--ds-radius-md\\))$/.exec(v);\n`,
+      `const t = /(none|var\\(--ds-radius-md\\))/.exec(v);\n`,
       `const t = notVar(/^var2\\(--ds-radius-md\\)/);\n`,
       `const t = --ds-radius-md;\n`,
     ]) {
