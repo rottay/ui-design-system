@@ -18,7 +18,7 @@ const PAGES = [
   'src/app/(docs)/verticals/evnto/page.tsx',
   'src/app/(docs)/verticals/rottay/page.tsx',
   'src/app/(docs)/verticals/bithire/page.tsx',
-  'src/app/(docs)/verticals/vertical-category-appendix.tsx',
+  'src/app/(docs)/verticals/vertical-category-appendix/index.tsx',
   'src/app/(docs)/verticals/evnto/[category]/page.tsx',
   'src/app/(docs)/verticals/rottay/[category]/page.tsx',
   'src/app/(docs)/verticals/bithire/[category]/page.tsx',
@@ -73,7 +73,7 @@ const MAPPED_SITES = {
     '<Icon name="entity.group" decorative size={20} />',
     '<Icon name="navigation.settings" decorative size={20} />',
   ],
-  'src/app/(docs)/verticals/vertical-category-appendix.tsx': [
+  'src/app/(docs)/verticals/vertical-category-appendix/index.tsx': [
     '<Icon name="navigation.back" decorative size={16} />',
   ],
   'src/app/(docs)/verticals/evnto/[category]/page.tsx': [
@@ -206,7 +206,7 @@ test('every migrated icon keeps an explicit numeric size and accessibility inten
 });
 
 test('back links keep their visible label text and use the logical navigation.back role', () => {
-  const appendix = sources.get('src/app/(docs)/verticals/vertical-category-appendix.tsx');
+  const appendix = sources.get('src/app/(docs)/verticals/vertical-category-appendix/index.tsx');
   assert.match(appendix, /<Icon name="navigation\.back" decorative size=\{16\} \/>/);
   assert.match(appendix, /\{backLabel\}/, 'appendix back link lost its visible label');
   for (const [page, backText] of [
