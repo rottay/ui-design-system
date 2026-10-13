@@ -9,7 +9,7 @@ const SHOWROOM_ROOT = path.resolve(HERE, '../..');
 
 const FIXTURES = path.join(
   SHOWROOM_ROOT,
-  'src/app/(docs)/patterns/[group]/[pattern]/pattern-preview-fixtures.tsx',
+  'src/app/(docs)/patterns/[group]/[pattern]/pattern-preview-fixtures/index.tsx',
 );
 const ROUTE = path.join(
   SHOWROOM_ROOT,

@@ -281,7 +281,6 @@
         "packages/showroom/scripts/causal-canary-capture.mjs",
         "packages/showroom/src/app/(docs)/developers/page.tsx",
         "packages/showroom/src/app/(docs)/patterns/[group]/[pattern]/page.tsx",
-        "packages/showroom/src/app/(docs)/patterns/[group]/[pattern]/pattern-preview-fixtures.tsx",
         "packages/showroom/src/app/(docs)/patterns/page.tsx",
         "packages/showroom/src/app/(docs)/patterns/visualization/charts/[type]/page.tsx",
         "packages/showroom/src/app/(docs)/playground/page.tsx",
@@ -509,7 +508,6 @@
       ],
       "empty-directory": [],
       "showroom-loose-file": [
-        "app/(docs)/patterns/[group]/[pattern]/pattern-preview-fixtures.tsx",
         "app/(docs)/verticals/vertical-category-appendix.tsx",
         "app/(docs)/verticals/vertical-showcase-shell.tsx",
         "app/globals.css"
