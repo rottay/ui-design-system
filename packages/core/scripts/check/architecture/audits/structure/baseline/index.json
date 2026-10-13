@@ -225,7 +225,6 @@
         "packages/core/src/contracts/theme/runtime/catalog/index.ts",
         "packages/core/src/entrypoints/suppliers/cli/index.mjs",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-        "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts",
         "packages/core/src/foundation/contracts/composition/tenants/themes/iso/index.ts",
         "packages/core/src/foundation/contracts/composition/tenants/themes/iso/shape/index.ts",
         "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
