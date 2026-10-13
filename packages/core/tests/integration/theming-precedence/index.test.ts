@@ -31,9 +31,9 @@
  *      compiler no longer authors.
  *
  * The accounting is deliberately NOT "all eighteen survive". Measured, they
- * split three ways -- authored directly, authored as the seed a base scale
- * multiplies, and not authored at all -- and the third bucket is pinned by name
- * rather than hidden. A completeness claim that rounded those together would be
+ * split four ways -- authored directly, authored as the seed a base scale
+ * multiplies, restated as the chain over those seeds, and not authored at all
+ * -- and the last bucket is pinned by name rather than hidden. A completeness claim that rounded those together would be
  * the same failure the old count-based ceiling had.
  *
  * NOT DUPLICATED HERE. `whitelabel-field-coverage.test.ts` owns the branding
@@ -54,6 +54,10 @@ import {
   renderFirstPartyArtifact,
 } from '@/infrastructure/compilers/runtime/tenant-css';
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
+import {
+  RADIUS_CHAIN_STEPS,
+  radiusChainValue,
+} from '@/infrastructure/compilers/runtime/theme/runtime/emission/css';
 import { ThemeProvider } from '@/infrastructure/runtime/theming/composition/react/provider';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import { firstPartyFixture, FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
@@ -125,12 +129,25 @@ const SUCCEEDED_DIRECTLY = [
  * back. Each entry lists the seeds a fresh compile must declare.
  */
 const SUCCEEDED_BY_SEED: Record<string, readonly string[]> = {
-  '--ds-radius-sm': ['--ds-radius-sm-base', '--ds-radius-scale'],
-  '--ds-radius-md': ['--ds-radius-md-base', '--ds-radius-scale'],
   '--ds-spacing-xs': ['--ds-density-scale'],
   '--ds-spacing-sm': ['--ds-density-scale'],
   '--ds-spacing-md': ['--ds-density-scale'],
   '--ds-spacing-lg': ['--ds-density-scale'],
+};
+
+type RadiusChainStep = (typeof RADIUS_CHAIN_STEPS)[number];
+
+/**
+ * Retired channels the artifact DOES declare, but never flat: a block that
+ * states `--ds-radius-scale` restates the step as the chain over the seeds, so
+ * the tenant dial reaches it at the scope that states the scale. The value is
+ * the emitter's own chain text for that step and nothing else -- a literal
+ * radius here is the flat write this file exists to refuse. Each entry names
+ * its step and the seeds the chain reads.
+ */
+const SUCCEEDED_BY_CHAIN: Record<string, { step: RadiusChainStep; seeds: readonly string[] }> = {
+  '--ds-radius-sm': { step: 'sm', seeds: ['--ds-radius-sm-base', '--ds-radius-scale'] },
+  '--ds-radius-md': { step: 'md', seeds: ['--ds-radius-md-base', '--ds-radius-scale'] },
 };
 
 /**
@@ -207,14 +224,19 @@ const BRAND_THEMES: Record<string, FlatTheme> = {
   rottay: rottayFlatTheme,
 };
 
-/** Every custom property a freshly rendered artifact declares, by name. */
-function freshlyDeclaredChannels(slug: string): Set<string> {
+/** One vertical's artifact, rendered in-process -- never read from disk. */
+function freshArtifactCss(slug: string): string {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((entry) => entry.slug === slug);
   if (!spec) throw new Error(`no artifact spec for ${slug}`);
-  const css = renderFirstPartyArtifact({
+  return renderFirstPartyArtifact({
     spec,
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   }).css;
+}
+
+/** Every custom property a freshly rendered artifact declares, by name. */
+function freshlyDeclaredChannels(slug: string): Set<string> {
+  const css = freshArtifactCss(slug);
   const declared = new Set<string>();
   for (const [, body] of css.matchAll(/\{([^{}]*)\}/g)) {
     for (const [, property] of body.matchAll(/(--[a-z0-9-]+)\s*:/gi)) {
@@ -222,6 +244,12 @@ function freshlyDeclaredChannels(slug: string): Set<string> {
     }
   }
   return declared;
+}
+
+/** Every value a fresh artifact gives one channel, one per declaring block. */
+function freshlyDeclaredValues(slug: string, channel: string): string[] {
+  const declaration = new RegExp(`^\\s*${channel}\\s*:\\s*(.*?)\\s*;\\s*$`, 'gm');
+  return [...freshArtifactCss(slug).matchAll(declaration)].map(([, value]) => value ?? '');
 }
 
 const SLUGS = FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug);
@@ -315,6 +343,7 @@ describe('the retired block is pinned by name, not by count', () => {
     const accounted = [
       ...SUCCEEDED_DIRECTLY,
       ...Object.keys(SUCCEEDED_BY_SEED),
+      ...Object.keys(SUCCEEDED_BY_CHAIN),
       ...UNSUCCEEDED_EVERYWHERE,
     ].sort();
     expect(accounted).toEqual([...RETIRED_EMERGENCY_CHANNELS].sort());
@@ -322,7 +351,10 @@ describe('the retired block is pinned by name, not by count', () => {
     // A vertical may leave a direct successor or a seed to the foundation; it
     // may never name a channel outside the partition above.
     const leavable: readonly string[] = [...SUCCEEDED_DIRECTLY, ...UNSUCCEEDED_EVERYWHERE];
-    const seeds = Object.values(SUCCEEDED_BY_SEED).flat();
+    const seeds = [
+      ...Object.values(SUCCEEDED_BY_SEED).flat(),
+      ...Object.values(SUCCEEDED_BY_CHAIN).flatMap((entry) => entry.seeds),
+    ];
     for (const slug of Object.keys(UNSUCCEEDED_BY_VERTICAL)) {
       for (const channel of UNSUCCEEDED_BY_VERTICAL[slug] ?? []) {
         expect(leavable, `${slug} ${channel}`).toContain(channel);
@@ -358,6 +390,23 @@ describe('the successor authors the retired channels, measured fresh', () => {
       for (const seed of seeds) {
         // Exact both ways: a seed pinned as left to the foundation is absent,
         // every other seed is declared.
+        expect(declared.has(seed), `${slug} ${seed}, the seed for ${channel}`).toBe(!leftSeeds.has(seed));
+      }
+    }
+  });
+
+  it.each(SLUGS)('%s restates every chained channel as the chain over its seeds, never flat', (slug) => {
+    const declared = freshlyDeclaredChannels(slug);
+    const leftSeeds = new Set(UNSUCCEEDED_SEEDS_BY_VERTICAL[slug] ?? []);
+
+    for (const [channel, { step, seeds }] of Object.entries(SUCCEEDED_BY_CHAIN)) {
+      // Declared, and every block that declares it writes the emitter's own
+      // chain text: a literal radius is a flat write the dial cannot reach.
+      const values = freshlyDeclaredValues(slug, channel);
+      expect(values.length, `${slug} does not declare ${channel}`).toBeGreaterThan(0);
+      expect([...new Set(values)], `${slug} ${channel}`).toEqual([radiusChainValue(step)]);
+      for (const seed of seeds) {
+        // Exact both ways, as for the seeded channels above.
         expect(declared.has(seed), `${slug} ${seed}, the seed for ${channel}`).toBe(!leftSeeds.has(seed));
       }
     }

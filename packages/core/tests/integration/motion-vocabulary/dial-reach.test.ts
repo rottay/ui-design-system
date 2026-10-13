@@ -33,9 +33,20 @@ const sites = motionSites();
  * skeleton-bar shimmer retires with the WO-FAM-12 packet-3 skin (the shared
  * AnatomySkeleton's shimmer is the one renderer now, and its own site is
  * counted in the skeleton family); a duplicate read, never a lost capability.
+ * 455 -> 448 sites, 180 -> 178 families (2026-10-13, five movers): each family
+ * stops painting a hand-built motion rule because it now composes the canonical
+ * primitive, whose skin owns the motion. 9789b3469 shortcuts-overlay composes
+ * Modal (-1 site, -1 family); 82336fab9 the detail-panel breadcrumb link
+ * composes Breadcrumb (-1); 464d5cf52 status-filter-pills drain onto the
+ * chrome-less Button (-1 site, -1 family); bc70bdc77 the detail-panel tab
+ * button composes Tabs (-1); 0b8730d3a locale-switcher composes Select (four
+ * rules out, one in, net -3). Modal, Breadcrumb, Button and Tabs are measured
+ * in their own families. Select is NOT: its skin reads the duration through
+ * `--ds-select-transition-duration`, a component channel this source-read
+ * roster does not follow, so that one move is recorded here, not covered.
  */
-const PINNED_SITES = 455;
-const PINNED_FAMILIES = 180;
+const PINNED_SITES = 448;
+const PINNED_FAMILIES = 178;
 const CONTROL = '<div id="control">Bare control node</div>';
 
 /**
