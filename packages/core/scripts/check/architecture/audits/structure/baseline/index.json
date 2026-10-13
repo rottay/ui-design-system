@@ -185,7 +185,6 @@
         "packages/core/src/components/patterns/data/widget-board/engines/foundation/index.tsx",
         "packages/core/src/components/patterns/forms/form-builder/engines/modern/index.tsx",
         "packages/core/src/components/patterns/visualization/charts/families/sankey/index.tsx",
-        "packages/core/src/components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.ts",
         "packages/core/src/components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/tests/SvgRenderers.test.tsx",
         "packages/core/src/components/patterns/visualization/charts/runtime/chart-engine/runtime/interaction/controller/index.ts",
         "packages/core/src/components/primitives/display/table/engines/modern/index.tsx",

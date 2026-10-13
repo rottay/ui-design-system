@@ -181,7 +181,7 @@
         "floor": 1,
         "why": "`color: col.color` builds the KanbanColumnDef passed to PatternKanbanBoard; it is domain-data forwarding, not a DOM style object. No CSS selector can replace this TypeScript value without changing the public column contract."
       },
-      "patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.ts": {
+      "patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/gauge/index.ts": {
         "floor": 1,
         "why": "`color: segment.color` copies the caller's per-segment colour into the immutable gauge geometry output consumed by the React renderer. It is datum forwarding inside a data structure, never a DOM style object."
       },

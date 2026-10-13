@@ -3340,7 +3340,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       anchors: Object.freeze(['overlay={fallbackMessage ? (']),
       resolves: Object.freeze([
         Object.freeze({
-          source: 'src/components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.ts',
+          source: 'src/components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/funnel/index.ts',
           text: "return 'Funnel charts cannot represent negative stages.';",
         }),
         Object.freeze({ source: 'src/components/patterns/visualization/charts/presentation/scaffold/index.tsx', text: "return 'ready';" }),

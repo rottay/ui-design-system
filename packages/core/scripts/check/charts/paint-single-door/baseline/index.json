@@ -31,8 +31,20 @@
       "count": 1,
       "reason": "Pre-migration: computes its own paint slot; drained when this family adopts the resolver (lot 4b)."
     },
-    "hand-written-paint-modulus:components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.ts": {
-      "count": 4,
+    "hand-written-paint-modulus:components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/funnel/index.ts": {
+      "count": 1,
+      "reason": "Pre-migration: the engine geometry builders cycle their own palette; drained as each family adopts paintFor (lots 4a-4c)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/gantt/index.ts": {
+      "count": 1,
+      "reason": "Pre-migration: the engine geometry builders cycle their own palette; drained as each family adopts paintFor (lots 4a-4c)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/radar/index.ts": {
+      "count": 1,
+      "reason": "Pre-migration: the engine geometry builders cycle their own palette; drained as each family adopts paintFor (lots 4a-4c)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/treemap/index.ts": {
+      "count": 1,
       "reason": "Pre-migration: the engine geometry builders cycle their own palette; drained as each family adopts paintFor (lots 4a-4c)."
     }
   }
