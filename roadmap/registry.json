@@ -6924,6 +6924,11 @@
      "at": "2026-10-09 00:37",
      "by": "kimi-dt",
      "note": "cascade:root-aliases staleness RESOLVED by attributed housekeeping (one-line digest re-table 90cbe72dc): the table's stored edges digest lagged the edges artifact regenerated in the W7a era; the re-derived 2390 aliases are byte-identical in content (zero semantic delta), so this is provenance-only. It was red at 47df9783a (before all of this session's lots). With hooks:check (a7a5177fa) and TS4058 (504dcd020) also fixed, all THREE pre-existing official-build blockers found during the step-1 visual windows are now cleared and attributed; a full pnpm build verification runs in the next free window."
+    },
+    {
+     "at": "2026-10-13 08:16",
+     "by": "Kimi DT",
+     "note": "2026-10-13: CV3 complete (the biggest remaining >800 member): the chrome-emitter grew the section role (bfeb546c1, packet 1: the grammar + the P4 hole closed + law-c option A) and the 2043-line chrome-variables root split into the root (516) + four measured sections (d922d5b0b, packet 2) — the emitted CSS byte-identical by three proofs, every reader identical, the >800 pin dropped through the structure door (212 members). The producers inventory's moved-leaf growth is the split's known cost (the inventory keys by file+line; the channel set and payloads identical; its regen stays frozen for P-1/N3). Next executable: the W-6 tenant-theme schema monolith (2586 lines)."
     }
    ]
   },
