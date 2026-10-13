@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "generatedBy": "scripts/check/tokens/cascade/channels/liveness/index.mjs --write",
   "roundId": "R1",
-  "sourceDigest": "edfd37a4b621351bf3f62374d14858f5a532b6bec818d824f31678e5b6054658",
+  "sourceDigest": "d0a475145a75c4f8e1d6ceaa024e322e45c40fa11b9af83c4eb75e7515e2bb66",
   "scopeLaw": "Tenant-channel liveness ledger scoped to TENANT_THEME_OVERRIDE_TOKENS ∪ TENANT_THEME_REFERENCE_TOKENS ∪ brand-theme-compiler-emitted names, plus the app-bithire external consumerRoot. NOT the customization-surface-census.mjs dead-writer census. NOT tenant-channel-consumer-gate.mjs. NOT theme-channel-parity-gate.mjs. No classification asserts a channel is dead, but membership on TENANT_THEME_REFERENCE_TOKENS never protects a row from a NO-GO finding by itself -- only a proven finite terminal-paint chain (in-repo or via a required consumerRoot) does that. A CAPABILITY_SCALE_STEP_UNREAD row is published apart from LIVE: a measured step of a public scale whose capability (single producer, admission and emission in agreement, resolution in every supported mode) the acceptance proves and whose paint nothing proves; it is never counted LIVE and leaves the effect red only while its acceptance measures green for that exact channel.",
   "inputs": {
     "tenantThemeContract": "src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
@@ -5091,7 +5091,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:165"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:183"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5138,7 +5138,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:237"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:255"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5185,7 +5185,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:238"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:256"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5232,7 +5232,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:236"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:254"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5279,7 +5279,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:240"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:258"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5326,7 +5326,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:241"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:259"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5373,7 +5373,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:239"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:257"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5420,7 +5420,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:242"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:260"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5467,7 +5467,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:227"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:245"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5515,7 +5515,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:220"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:238"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5563,7 +5563,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:222"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:240"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5610,7 +5610,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:223"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:241"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5657,7 +5657,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:216"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:234"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5704,7 +5704,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:217"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:235"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5751,7 +5751,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:218"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:236"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5798,7 +5798,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:219"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:237"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5845,7 +5845,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:225"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:243"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5892,7 +5892,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:226"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:244"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5939,7 +5939,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:229"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:247"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -5986,7 +5986,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:215"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:233"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6033,7 +6033,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:233"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:251"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6080,7 +6080,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:234"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:252"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6127,7 +6127,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:235"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:253"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6174,7 +6174,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:211"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:229"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6221,7 +6221,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:210"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:228"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6268,7 +6268,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:179"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:197"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6317,7 +6317,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:194"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:212"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6364,7 +6364,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:196"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:214"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6411,7 +6411,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:198"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:216"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6458,7 +6458,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:184"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:202"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6507,7 +6507,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:185"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:203"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6556,7 +6556,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:183"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:201"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6605,7 +6605,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:191"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:209"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6663,7 +6663,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:189"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:207"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6710,7 +6710,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:200"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:218"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6757,7 +6757,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:203"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:221"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6804,7 +6804,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:202"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:220"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6851,7 +6851,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:204"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:222"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6898,7 +6898,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:205"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:223"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6945,7 +6945,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:187"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:205"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -6993,7 +6993,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:188"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:206"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7041,7 +7041,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:192"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:210"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7088,7 +7088,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:193"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:211"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7135,7 +7135,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:186"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:204"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7184,7 +7184,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:207"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:225"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7231,7 +7231,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:178"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:196"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7279,7 +7279,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:171"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:189"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7326,7 +7326,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:173"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:191"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7373,7 +7373,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:172"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:190"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7420,7 +7420,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:169"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:187"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7467,7 +7467,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:170"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:188"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7514,7 +7514,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:174"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:192"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -7562,7 +7562,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:168"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:186"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -118802,7 +118802,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:161"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:179"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -118854,7 +118854,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:157"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:175"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -118914,7 +118914,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:156"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:174"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -118963,7 +118963,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:158"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:176"
         ]
       },
       "semanticOwner": "chrome.app-shell",
@@ -119015,7 +119015,7 @@
           "derived"
         ],
         "sites": [
-          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:155"
+          "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell/index.ts:173"
         ]
       },
       "semanticOwner": "chrome.app-shell",

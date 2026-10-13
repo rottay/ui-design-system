@@ -120,8 +120,11 @@ const CENSUS_2026_10_02 = Object.freeze({
   forward: 60,
   // reverse 117 -> 116 on 2026-10-02 (RET-01-CH): --ds-text-inverse retired
   // with its producers, so it left the produces-roster bucket (51 -> 50).
-  reverse: 116,
-  reverseBuckets: Object.freeze({ 'produces-roster': 50, 'direct-literal': 58, 'compiled-artifact': 8 }),
+  // reverse 116 -> 113 on 2026-10-13, owed since 6bea312d6 (W26-Q4 Phase 1, WO-RET-01 Q4 scrim ladder):
+  // --ds-overlay-{light,medium,heavy} are always produced, so they joined the first-party compile and
+  // left the direct-literal bucket (58 -> 55).
+  reverse: 113,
+  reverseBuckets: Object.freeze({ 'produces-roster': 50, 'direct-literal': 55, 'compiled-artifact': 8 }),
 });
 
 /*

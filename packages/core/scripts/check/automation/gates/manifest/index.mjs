@@ -195,7 +195,7 @@ export const CI_GATES = Object.freeze([
     run: ['node', 'scripts/check/tokens/cascade/channels/liveness/reconcile/index.mjs'],
     blocking: false,
     excluded: {
-      reason: 'A reconciliation that names both directions every run, not a law of its own: the 91 forward-gap names are each owned by an exact FORWARD_GAP_PINS entry, and the 118 reverse-gap rows are tenant- or engine-conditional emissions no first-party compile produces. It turns red on an unowned forward name, a discharged pin or a compiled name outside every roster, and returns to blocking when the source universe reads the glob-covered shapes itself.',
+      reason: 'A reconciliation that names both directions every run, not a law of its own: the 60 forward-gap names are each owned by an exact FORWARD_GAP_PINS entry, and the 113 reverse-gap rows are tenant- or engine-conditional emissions no first-party compile produces (both measured 2026-10-13). It turns red on an unowned forward name, a discharged pin or a compiled name outside every roster, and returns to blocking when the source universe reads the glob-covered shapes itself.',
       owner: 'WO-EVI-02 (the source resolver that enumerates the forward gap)',
       trackedSince: '2026-09-25',
     },
