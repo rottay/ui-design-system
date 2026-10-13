@@ -6,101 +6,32 @@
  * file is orphaned, unimported, undeclared or stops being data.
  */
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import test from 'node:test';
-import { fileURLToPath } from 'node:url';
 
-import { packageRoot } from '../../../repo-root/index.mjs';
 import {
   CHROME_EMITTER_DIR,
   CHROME_EMITTER_FILES,
   chromeEmitterClosure,
   chromeEmitterInventory,
   chromeEmitterRoleViolations,
+  chromeEmitterSectionImporters,
   chromeEmitterSources,
   chromeEmitterWriterImporters,
   dataOnlyViolations,
   writerViolations,
 } from '../index.mjs';
 
-const CORE_ROOT = packageRoot(dirname(fileURLToPath(import.meta.url)));
+import { CORE_ROOT, DRILL_WRITER, ROOT_SOURCE, TABLES_SOURCE, W, WRITERS_SOURCE, WRITER_HEAD, emitterDir, plant, writerOf } from './support/index.mjs';
 
-const ROOT_SOURCE = `import type { BrandChrome } from "@/foundation/contracts/composition/tenants/themes";
-import { applyRadiusDial } from "@/foundation/kernel/geometry/radius-dial";
-
-import { DRILL_CHROME_VARIABLES } from "./tables";
-
-import { setDrillVars } from "./writers";
-
-export function chromeToVariables(chrome: BrandChrome): Record<string, string> {
-  const vars: Record<string, string> = {};
-  for (const [field, name] of Object.entries(DRILL_CHROME_VARIABLES)) vars[name] = String(applyRadiusDial(field));
-  setDrillVars(vars, chrome);
-  return vars;
-}
-`;
-
-const TABLES_SOURCE = `import type { BrandDrillChrome } from "@/foundation/contracts/composition/tenants/themes";
-
-const chromeVariableMap = <T extends object>(
-  prefix: string,
-  fields: readonly (keyof T)[]
-): Readonly<Record<keyof T, string>> =>
-  Object.fromEntries(
-    fields.map((field) => [
-      field,
-      \`\${prefix}\${String(field).replace(
-        /[A-Z]/g,
-        (letter) => \`-\${letter.toLowerCase()}\`
-      )}\`,
-    ])
-  ) as Readonly<Record<keyof T, string>>;
-
-const DRILL_FAMILY_VARIABLES = chromeVariableMap<BrandDrillChrome>("--ds-drill-", ["bg", "border"] as const);
-
-export const DRILL_CHROME_VARIABLES = {
-  bg: "--ds-drill-bg",
-  nested: [["drill", DRILL_FAMILY_VARIABLES]],
-} as const satisfies Readonly<Record<string, unknown>>;
-`;
-
-const WRITERS_SOURCE = `import type { BrandChrome } from "@/foundation/contracts/composition/tenants/themes";
-
-function setDrillVars(vars: Record<string, string>, chrome: BrandChrome): void {
-  if (chrome) vars["--ds-drill-writer"] = "1";
-}
-
-export { setDrillVars };
-`;
-
-function plant(overrides = {}) {
-  const core = mkdtempSync(join(tmpdir(), 'chrome-emitter-drill-'));
-  const files = {
-    [`${CHROME_EMITTER_DIR}/index.ts`]: ROOT_SOURCE,
-    [`${CHROME_EMITTER_DIR}/tables/index.ts`]: TABLES_SOURCE,
-    [`${CHROME_EMITTER_DIR}/writers/index.ts`]: WRITERS_SOURCE,
-    [`${CHROME_EMITTER_DIR}/tests/frozen.test.ts`]: 'import { chromeToVariables } from "..";\n',
-    'src/foundation/kernel/geometry/radius-dial/index.ts': 'export const applyRadiusDial = (value: string) => value;\n',
-    ...overrides,
-  };
-  for (const [rel, text] of Object.entries(files)) {
-    if (text === null) continue;
-    mkdirSync(dirname(join(core, rel)), { recursive: true });
-    writeFileSync(join(core, rel), text);
-  }
-  test.after(() => rmSync(core, { recursive: true, force: true }));
-  return core;
-}
-
-const emitterDir = (core) => join(core, CHROME_EMITTER_DIR);
-
-test('the shipped emitter is exactly its three declared members, root first', () => {
+test('the shipped emitter is exactly its three declared members, root first, and declares no section', () => {
   assert.deepEqual(
     CHROME_EMITTER_FILES.map((entry) => `${entry.role}:${entry.path}`),
     ['root:index.ts', 'data:tables/index.ts', 'writer:writers/index.ts'],
   );
+  assert.deepEqual(CHROME_EMITTER_FILES.filter((entry) => entry.role === 'section'), []);
+  assert.deepEqual(chromeEmitterSectionImporters(CORE_ROOT), {});
   assert.deepEqual(
     chromeEmitterSources(CORE_ROOT),
     CHROME_EMITTER_FILES.map((entry) => join(CORE_ROOT, CHROME_EMITTER_DIR, entry.path)),
@@ -188,14 +119,39 @@ test('re-exports and dynamic imports are value edges', () => {
   assert.deepEqual(chromeEmitterClosure(dynamic), ['index.ts', 'tables/index.ts']);
 });
 
-test('tests/ is neither inventory nor an edge', () => {
-  const core = plant({
-    [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import { helper } from "./tests/helper";\n`,
-    [`${CHROME_EMITTER_DIR}/tests/helper/index.ts`]: 'export const helper = 1;\n',
+test('tests/, fixtures/ and stories/ are not inventory, and a member that value-imports into one is refused', () => {
+  const hidden = 'function setHiddenVars(vars: Record<string, string>): void {\n  vars["--ds-hidden"] = "1";\n}\n\nexport { setHiddenVars };\n';
+  for (const dir of ['tests', 'test', '__tests__', 'fixtures', '__fixtures__', 'stories', 'sections/fixtures']) {
+    const unimported = plant({ [`${CHROME_EMITTER_DIR}/${dir}/hidden/index.ts`]: hidden });
+    assert.deepEqual(chromeEmitterInventory(emitterDir(unimported)), ['index.ts', 'tables/index.ts', 'writers/index.ts'], dir);
+    assert.equal(chromeEmitterSources(unimported).length, 3, dir);
+    const imported = plant({
+      [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import { setHiddenVars } from "./${dir}/hidden";\n`,
+      [`${CHROME_EMITTER_DIR}/${dir}/hidden/index.ts`]: hidden,
+    });
+    const refusal = new RegExp(`index\\.ts imports "\\./${dir}/hidden", which is under a non-productive directory`);
+    assert.throws(() => chromeEmitterClosure(imported), refusal, dir);
+    assert.throws(() => chromeEmitterSources(imported), refusal, dir);
+    const typeOnly = plant({
+      [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import type { setHiddenVars } from "./${dir}/hidden";\n`,
+      [`${CHROME_EMITTER_DIR}/${dir}/hidden/index.ts`]: hidden,
+    });
+    assert.equal(chromeEmitterSources(typeOnly).length, 3, `${dir}: a type-only import runs nothing`);
+  }
+  const missing = plant({ [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import { gone } from "./fixtures/gone";\n` });
+  assert.throws(() => chromeEmitterSources(missing), /under a non-productive directory/);
+  const viaWriter = plant({
+    [`${CHROME_EMITTER_DIR}/writers/index.ts`]: `import { helper } from "./fixtures/helper";\n${WRITERS_SOURCE}`,
+    [`${CHROME_EMITTER_DIR}/writers/fixtures/helper/index.ts`]: 'export const helper = 1;\n',
   });
-  assert.deepEqual(chromeEmitterInventory(emitterDir(core)), ['index.ts', 'tables/index.ts', 'writers/index.ts']);
-  assert.deepEqual(chromeEmitterClosure(core), ['index.ts', 'tables/index.ts', 'writers/index.ts']);
-  assert.equal(chromeEmitterSources(core).length, 3);
+  assert.throws(() => chromeEmitterSources(viaWriter), /writers\/index\.ts imports "\.\/fixtures\/helper", which is under a non-productive directory/);
+  for (const name of ['hidden.test.ts', 'hidden.stories.ts', 'hidden.spec.ts']) {
+    const byName = plant({
+      [`${CHROME_EMITTER_DIR}/index.ts`]: `${ROOT_SOURCE}import { setHiddenVars } from "./${name.replace(/\.ts$/, '')}";\n`,
+      [`${CHROME_EMITTER_DIR}/${name}`]: hidden,
+    });
+    assert.throws(() => chromeEmitterSources(byName), new RegExp(`undeclared ${name.replace(/\./g, '\\.')} is imported by the root`), name);
+  }
 });
 
 test('an import that leaves the folder (radius-dial) is not a member', () => {
@@ -304,25 +260,29 @@ test('whitespace inside a helper literal is significant; formatting outside lite
 
 /* ── the writer role ─────────────────────────────────────────────────────── */
 
-const W = `${CHROME_EMITTER_DIR}/writers/index.ts`;
-const WRITER_HEAD = `import type { BrandChrome } from "@/foundation/contracts/composition/tenants/themes";
-`;
-const writerOf = (body, exportList = 'setDrillVars') => `${WRITER_HEAD}\n${body}\nexport { ${exportList} };\n`;
-const DRILL_WRITER = 'function setDrillVars(vars: Record<string, string>, chrome: BrandChrome): void {\n  if (chrome) vars["--ds-drill-writer"] = "1";\n}\n';
-
 test('the shipped writer member is admitted by the writer grammar', () => {
   const file = join(CORE_ROOT, CHROME_EMITTER_DIR, 'writers/index.ts');
   assert.deepEqual(writerViolations(file, readFileSync(file, 'utf8')), []);
 });
 
-test('the role list is closed: exactly one member per role', () => {
+test('the role list is closed: exactly one root, data and writer, and zero or more sections', () => {
   assert.deepEqual(chromeEmitterRoleViolations(CHROME_EMITTER_FILES), []);
+  const section = (name) => ({ path: `sections/${name}/index.ts`, role: 'section' });
+  assert.deepEqual(chromeEmitterRoleViolations([...CHROME_EMITTER_FILES, section('frame')]), []);
+  assert.deepEqual(chromeEmitterRoleViolations([...CHROME_EMITTER_FILES, section('frame'), section('fields'), section('tabs')]), []);
   const cases = {
-    'two writers': [...CHROME_EMITTER_FILES, { path: 'writers2/index.ts', role: 'writer' }],
-    'role typo': [CHROME_EMITTER_FILES[0], CHROME_EMITTER_FILES[1], { path: 'writers/index.ts', role: 'writter' }],
-    'no data member': [CHROME_EMITTER_FILES[0], CHROME_EMITTER_FILES[2]],
+    'two writers': [[...CHROME_EMITTER_FILES, { path: 'writers2/index.ts', role: 'writer' }], /role writer has 2 members, not 1/],
+    'two roots beside a section': [[...CHROME_EMITTER_FILES, section('frame'), { path: 'root2/index.ts', role: 'root' }], /role root has 2 members, not 1/],
+    'two data members beside a section': [[...CHROME_EMITTER_FILES, section('frame'), { path: 'tables2/index.ts', role: 'data' }], /role data has 2 members, not 1/],
+    'two writers beside a section': [[...CHROME_EMITTER_FILES, section('frame'), { path: 'writers2/index.ts', role: 'writer' }], /role writer has 2 members, not 1/],
+    'role typo': [[CHROME_EMITTER_FILES[0], CHROME_EMITTER_FILES[1], { path: 'writers/index.ts', role: 'writter' }], /unknown role "writter"/],
+    'section typo': [[...CHROME_EMITTER_FILES, { path: 'sections/frame/index.ts', role: 'sections' }], /unknown role "sections"/],
+    'no data member': [[CHROME_EMITTER_FILES[0], CHROME_EMITTER_FILES[2]], /role data has 0 members, not 1/],
+    'sections cannot stand in for a singleton': [[CHROME_EMITTER_FILES[0], CHROME_EMITTER_FILES[1], section('frame')], /role writer has 0 members, not 1/],
+    'a section declared twice': [[...CHROME_EMITTER_FILES, section('frame'), section('frame')], /sections\/frame\/index\.ts is declared twice/],
+    'one path under two roles': [[...CHROME_EMITTER_FILES, { path: 'writers/index.ts', role: 'section' }], /writers\/index\.ts is declared twice/],
   };
-  for (const [label, files] of Object.entries(cases)) assert.notDeepEqual(chromeEmitterRoleViolations(files), [], label);
+  for (const [label, [files, refusal]] of Object.entries(cases)) assert.match(chromeEmitterRoleViolations(files).join('; '), refusal, label);
 });
 
 test('a second writer member is undeclared and refused', () => {

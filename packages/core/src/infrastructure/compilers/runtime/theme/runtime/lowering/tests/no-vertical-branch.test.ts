@@ -20,7 +20,10 @@ import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 
 // A .mjs tooling module: the chrome emitter's closed member list.
-import { chromeEmitterSources } from "../../../../../../../../scripts/libraries/tokens/chrome-emitter/index.mjs";
+import {
+  CHROME_EMITTER_FILES,
+  chromeEmitterSources,
+} from "../../../../../../../../scripts/libraries/tokens/chrome-emitter/index.mjs";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 const evntoFlatTheme = firstPartyFixture('evnto');
@@ -112,11 +115,16 @@ describe('the brand compiler has no per-vertical branch', () => {
   it('names no vertical in any member of the chrome emitter', () => {
     const members: string[] = chromeEmitterSources(join(COMPILERS_ROOT, '..', '..', '..'));
     expect(members[0]).toBe(CHROME_VARIABLES);
-    expect(members.map((member) => relative(COMPILERS_ROOT, member))).toEqual([
-      'kernel/foundation/css/chrome-variables/index.ts',
-      'kernel/foundation/css/chrome-variables/tables/index.ts',
-      'kernel/foundation/css/chrome-variables/writers/index.ts',
+    const declared: { path: string; role: string }[] = [...CHROME_EMITTER_FILES];
+    expect(declared.map((entry) => `${entry.role}:${entry.path}`)).toEqual([
+      'root:index.ts',
+      'data:tables/index.ts',
+      'writer:writers/index.ts',
     ]);
+    expect(declared.filter((entry) => entry.role === 'section')).toEqual([]);
+    expect(members.map((member) => relative(COMPILERS_ROOT, member))).toEqual(
+      declared.map((entry) => `kernel/foundation/css/chrome-variables/${entry.path}`)
+    );
     const offenders = members.flatMap((member) =>
       verticalsNamedIn(codeOf(readFileSync(member, 'utf-8'))).map(
         (name) => `${relative(COMPILERS_ROOT, member)}: ${name}`
