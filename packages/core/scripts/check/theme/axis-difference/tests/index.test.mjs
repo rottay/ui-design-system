@@ -6859,6 +6859,29 @@ describe('axis-difference BROWSER drill — the carrier read reads the family\'s
     assert.equal(reading.moved, null, 'an ancestor no rule of the family selects was read');
   }, 180_000);
 
+  it('KNOWN CREDIT, the NAMED LIMIT (CR review F1): the family rule states LITERALS and a delegate\'s rule of the SAME SHAPE, !important, paints the same properties -- this IS credited', async () => {
+    // The four negatives above are not full attribution. The read separates own from delegated paint by RULE PRESENCE and
+    // by the control read, never by which declaration wins the cascade: here the family's rule is matched and writes
+    // `outline-offset` (so the property is owned), and the delegate needs the same focus (so the control read differs).
+    // Every moving value below is the DELEGATE's. Pinned as it is, so closing the limit is a change someone has to make
+    // here too; no rule of this shape exists on the tree (the review scanned 34 selectors in 11 skins).
+    const DELEGATE = `${CARRIER} { outline: 1px solid transparent !important; outline-offset: var(--ds-focus-ring-offset) !important; }`;
+    const [alone, shadowed, removed] = await withBrowser(async (context) => [
+      await measure(context, { own: `${ANATOMY}\n${OWN_LITERAL}` }),
+      await measure(context, { own: `${ANATOMY}\n${OWN_LITERAL}`, foreign: DELEGATE }),
+      await measure(context, { own: ANATOMY, foreign: DELEGATE }),
+    ]);
+    assert.equal(alone.moved, null, 'the family\'s literal alone paints no tenant difference -- otherwise this pins nothing');
+    assert.deepEqual([alone.focus('a', 'outline-offset'), alone.focus('b', 'outline-offset')], ['0px | 0px | 0px | 3px', '0px | 0px | 0px | 3px']);
+    assert.deepEqual(shadowed.plan.map((read) => read.selector), [CARRIER], 'the plan is still the family\'s own rule and nothing else');
+    assert.deepEqual(shadowed.native.carriers.map((entry) => [entry.outcome, entry.painted.includes('outline-offset')]), [['read', true]]);
+    assert.deepEqual([shadowed.focus('a', 'outline-offset'), shadowed.focus('b', 'outline-offset')], ['0px | 0px | 0px | 2px', '0px | 0px | 0px | 4px'],
+      'the delegate\'s moving value is published as the family\'s');
+    assert.equal(shadowed.moved, 'outline-offset', 'THE KNOWN CREDIT: if this is now withheld the limit is closed -- retire this pin and the NAMED LIMIT prose with it');
+    // One step back is the owner's mutant, which is NOT credited: what separates the two is the presence of the family's rule.
+    assert.deepEqual([removed.plan, removed.moved], [[], null]);
+  }, 180_000);
+
   it('WITHHELD and ABSENT: a family whose variant is withheld loses its carrier with it, and a rule that selects nothing in the scene is published, not silent', async () => {
     const ABSENT = `.ds-drill.ds-drill--modern[data-part='root'] [data-part='ghost']:has([data-part='knob']:focus-visible) { outline-offset: var(--ds-focus-ring-offset); }`;
     const [held, absent] = await withBrowser(async (context) => [
@@ -6949,6 +6972,233 @@ describe('axis-difference BROWSER drill — collection-workspace moves on states
     assert.equal(states.movedStamped, 1, 'the delegate credit this lot refuses is no longer reachable -- re-read why the carrier row exists');
     assert.deepEqual(ordinary.realRender.map['collection-workspace'].stampedParts, ['trigger']);
   }, 360_000);
+});
+
+describe('axis-difference — a stand-in for another family\'s composed node is refused, never completed (owner directive 2026-10-12, point 3)', () => {
+  const skin = (family) => skinFamilies(ROOT).get(family).map((file) => readFileSync(file, 'utf8')).join('\n');
+  const REFUSAL = probe.COMPOSED_PRIMITIVE_REFUSAL;
+  // family -> the node the pre-lot part law built, the axes it was read on, and the (axis, selector) readings it stood for.
+  const STAND_INS = {
+    'column-settings': ['div||data-part=footer > div|ds-button|', ['typography']],
+    'list-toolbar': ['div|ds-button.ds-button.ds-list-toolbar__icon-button.ds-list-toolbar__icon-button|', ['depth', 'motion', 'shape', 'states']],
+    'user-profile-card': ['div|ds-button.ds-user-profile-card__action-button.ds-user-profile-card__action-button|', ['depth', 'states', 'typography']],
+    'workspace-switcher': ['div|ds-button.ds-workspace-switcher__item|', ['depth', 'motion', 'rhythm', 'shape', 'typography']],
+    'collection-workspace-render-dispatch': [
+      'div|ds-button.ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation|',
+      ['depth', 'motion', 'rhythm', 'shape', 'states', 'typography'],
+    ],
+    'status-filter-pills': ['div|ds-button.ds-status-filter-pills__pill.ds-status-filter-pills__pill|', ['depth']],
+  };
+  const names = (part, name) => part.chain.some((compound) => compound.classes.includes(name));
+  const PRIMITIVE = '.ds-prim.ds-prim--modern { padding: 1px; } .ds-prim.ds-prim--modern[data-size="sm"] { padding: 2px; }';
+  const FAMILY_ROOT = { classes: ['ds-fam', 'ds-fam--modern'], attributes: { 'data-part': 'root' } };
+  const HEAD = ".ds-fam.ds-fam--modern[data-part='root']";
+  const parts = (css, primitive = PRIMITIVE) => {
+    const own = `${HEAD} { padding: 4px; }\n${css}`;
+    const standIn = probe.composedPrimitiveStandIn(new Map([['fam', own], ['prim', primitive]]));
+    return familyParts(own, FAMILY_ROOT, ['shape', 'rhythm'], { family: 'fam', standIn });
+  };
+
+  it('THE REQUIREMENT IS READ OFF THE OWNER\'S OWN SKIN: every Button compound that names .ds-button names .ds-button--modern; Input requires nothing', () => {
+    assert.deepEqual(probe.composedPrimitiveRequirement(skin('button'), 'ds-button'), ['ds-button--modern']);
+    assert.deepEqual(probe.composedPrimitiveRequirement(skin('input'), 'ds-input-field'), []);
+    assert.deepEqual(probe.composedPrimitiveRequirement(PRIMITIVE, 'ds-prim'), ['ds-prim--modern']);
+    // One compound that states the class alone and nothing is required of it.
+    assert.deepEqual(probe.composedPrimitiveRequirement(`${PRIMITIVE} .ds-group .ds-prim { margin: 0; }`, 'ds-prim'), []);
+    // Named inside a functional pseudo: not read, so nothing is required -- the law never refuses on a reading it did not take.
+    assert.deepEqual(probe.composedPrimitiveRequirement(`${PRIMITIVE} :where(.ds-prim) { margin: 0; }`, 'ds-prim'), []);
+    assert.deepEqual(probe.composedPrimitiveRequirement(`${PRIMITIVE} .ds-group:not(.ds-prim) { margin: 0; }`, 'ds-prim'), []);
+    // A longer name is another class, and a class the skin never states requires nothing.
+    assert.deepEqual(probe.composedPrimitiveRequirement('.ds-prim-icon.ds-other { margin: 0; }', 'ds-prim'), []);
+    // An `:is()` list is read as the alternatives it stands for.
+    assert.deepEqual(probe.composedPrimitiveRequirement('.ds-prim.ds-prim--modern:is(.a, .b) { margin: 0; }', 'ds-prim'), ['ds-prim--modern']);
+  });
+
+  it('THE SHAPE: refused when it names the class without what the owner requires; built when it states it, and for every class nobody owns', () => {
+    const refused = parts(`${HEAD} .ds-fam__action.ds-prim { border-radius: 4px; gap: 2px; }`);
+    assert.deepEqual(refused.parts, []);
+    assert.deepEqual(refused.rejected, { [REFUSAL]: 2 }, 'the unit is the reading refused: one per axis');
+    assert.deepEqual(refused.standIns, ['shape', 'rhythm'].map((axis) => ({
+      axis, selector: `${HEAD} .ds-fam__action.ds-prim`, class: 'ds-prim', owners: ['prim'], requires: ['ds-prim--modern'],
+    })));
+    // SCAFFOLDING counts: a chain that passes THROUGH the stand-in would hang its part on a node that does not exist.
+    const below = parts(`${HEAD} .ds-fam__action.ds-prim [data-part='label'] { gap: 2px; }`);
+    assert.deepEqual([below.parts, below.rejected], [[], { [REFUSAL]: 1 }]);
+    // The selector states the requirement: the compound is built exactly as it is written, as before.
+    const stated = parts(`${HEAD} .ds-fam__action.ds-prim.ds-prim--modern { gap: 2px; }`);
+    assert.deepEqual(stated.parts.map((part) => part.id), ['div|ds-fam__action.ds-prim.ds-prim--modern|']);
+    assert.deepEqual([stated.rejected, stated.standIns], [{}, []]);
+    // A class nobody's root carries is a part like any other.
+    const plain = parts(`${HEAD} .ds-fam__action.ds-helper { gap: 2px; }`);
+    assert.deepEqual([plain.parts.length, plain.rejected], [1, {}]);
+    // An owner that requires nothing of its class (Input's shape) is a node the selector does spell whole.
+    const whole = parts(`${HEAD} .ds-prim[data-part='field'] { gap: 2px; }`, ".ds-prim[data-part='field'] { padding: 1px; }");
+    assert.deepEqual([whole.parts.length, whole.rejected], [1, {}]);
+  });
+
+  it('ALWAYS ANOTHER FAMILY\'S NODE: a family\'s own compounds state their own requirement; two owners are two chances; off is the pre-lot reading', () => {
+    const sharedRoot = { classes: ['ds-fam', 'ds-engine'], attributes: {} };
+    const own = '.ds-fam.ds-engine { padding: 4px; } .ds-fam.ds-engine .ds-engine { gap: 2px; } .ds-fam.ds-engine .ds-prim { gap: 3px; }';
+    const ICON = '.ds-prim.ds-prim--modern.ds-prim-icon { gap: 1px; } .ds-prim.ds-prim--modern.ds-prim-icon .ds-prim.ds-prim--modern.ds-prim-icon { gap: 2px; }';
+    const skins = (fam) => new Map([['fam', fam], ['other', '.ds-other.ds-engine.ds-other--modern { padding: 1px; }'], ['prim', PRIMITIVE], ['prim-icon', ICON]]);
+    const read = (family, css, element, door = probe.composedPrimitiveStandIn(skins(css))) => familyParts(css, element, ['rhythm'], { family, standIn: door });
+    // `.ds-engine` is a root class `other` never states without its own two; `fam` owns it too and states it bare.
+    const fam = read('fam', own, sharedRoot);
+    assert.deepEqual(fam.parts.map((part) => part.id), ['div|ds-engine|'], 'a shared identity class the family itself states was read as a stand-in');
+    assert.deepEqual(fam.standIns.map((entry) => [entry.class, entry.owners, entry.requires]), [['ds-prim', ['prim', 'prim-icon'], ['ds-prim--modern']]]);
+    // An owner naming its own node below its root states its own requirement, whatever a co-owner would ask of it.
+    const primRoot = { classes: ['ds-prim', 'ds-prim--modern', 'ds-prim-icon'], attributes: {} };
+    const icon = read('prim-icon', ICON, primRoot, probe.composedPrimitiveStandIn(skins(own)));
+    assert.deepEqual([icon.parts.map((part) => part.id), icon.rejected], [['div|ds-prim.ds-prim--modern.ds-prim-icon|'], {}]);
+    // Two owners with DIFFERENT requirements: stating either one's is that owner's node; stating neither is refused, naming both.
+    const two = new Map([['a', '.ds-two.ds-two--a { gap: 1px; }'], ['b', '.ds-two.ds-two--b { gap: 1px; }']]);
+    const door = probe.composedPrimitiveStandIn(two);
+    const compound = (...classes) => ({ tag: null, classes, attributes: {} });
+    assert.equal(door(compound('ds-x', 'ds-two', 'ds-two--a')), null);
+    assert.equal(door(compound('ds-x', 'ds-two', 'ds-two--b')), null, 'only the first owner was asked');
+    assert.deepEqual(door(compound('ds-x', 'ds-two')), { class: 'ds-two', owners: ['a', 'b'], requires: ['ds-two--a'] });
+    assert.equal(door(compound('ds-x')), null);
+    // Off, and by default for a caller that hands in no door: the pre-lot reading, to the node.
+    assert.deepEqual(read('fam', own, sharedRoot, null).parts.map((part) => part.id), ['div|ds-engine|', 'div|ds-prim|']);
+    assert.deepEqual(familyParts(own, sharedRoot, ['rhythm']).standIns, []);
+  });
+
+  it('THE SIX: each fabricated `div.ds-button` passed the part law before, on the axes pinned here, and is refused by it now', () => {
+    const before = familyAxisParts(ROOT, Object.keys(STAND_INS), null, { composedPrimitives: false });
+    const after = familyAxisParts(ROOT, Object.keys(STAND_INS));
+    for (const [family, [id, axes]] of Object.entries(STAND_INS)) {
+      const built = before.get(family).parts.filter((part) => names(part, 'ds-button'));
+      assert.deepEqual(built.map((part) => [part.id, part.axes]), [[id, axes]], `${family}: the pre-lot node`);
+      assert.equal(before.get(family).rejected[REFUSAL], undefined, family);
+      assert.deepEqual(before.get(family).standIns, [], family);
+      // The node the engine renders is a <button> carrying the recipe's own class; the grafted one was neither.
+      assert.match(partTreeHtml(built), /<div class="[^"]*\bds-button\b[^"]*"[^>]*><\/div>/u, family);
+      assert.ok(!partTreeHtml(built).includes('ds-button--modern'), family);
+
+      const record = after.get(family);
+      assert.deepEqual(record.parts.filter((part) => names(part, 'ds-button')), [], `${family}: the stand-in is still mounted`);
+      assert.equal(record.rejected[REFUSAL], axes.length, `${family}: one refusal per axis the node was read on`);
+      assert.deepEqual(record.standIns.map((entry) => entry.axis).sort(), axes, family);
+      for (const entry of record.standIns) {
+        assert.deepEqual([entry.class, entry.owners, entry.requires], ['ds-button', ['button', 'button-icon'], ['ds-button--modern']], family);
+      }
+      // NOTHING ELSE of the family moved: its part map is the pre-lot one minus that node, and every other refusal count is equal.
+      assert.deepEqual(record.parts, before.get(family).parts.filter((part) => !names(part, 'ds-button')), family);
+      assert.deepEqual({ ...record.rejected, [REFUSAL]: undefined }, { ...before.get(family).rejected, [REFUSAL]: undefined }, family);
+      assert.deepEqual(record.pseudoReads, before.get(family).pseudoReads, `${family}: no pseudo read was hosted on the stand-in alone`);
+    }
+  });
+
+  it('NOTHING IS COMPLETED: the scene holds no .ds-button node for the six, and the part law wrote no stamp the selectors do not state', () => {
+    const families = Object.keys(STAND_INS);
+    const elements = familyElements(ROOT, families);
+    const scene = (composedPrimitives) => sceneHtml({
+      css: '', vertical: 'bithire', theme: 'light', elements, partMounts: familyAxisParts(ROOT, families, elements, { composedPrimitives }),
+    });
+    assert.equal([...scene(false).matchAll(/class="[^"]*\bds-button\b[^"]*"/gu)].length, 6, 'the pre-lot scene: one stand-in per family');
+    assert.ok(!/\bds-button\b/u.test(scene(true)), 'a .ds-button node is still in the default scene');
+    // The roots carry their own as-rendered stamps (user-profile-card's `data-variant`), so the count is held, not the absence.
+    const count = (html, token) => html.split(token).length - 1;
+    for (const token of ['ds-button--modern', '<button', 'data-variant', 'data-size', 'data-shape', 'data-part="trigger"']) {
+      assert.equal(count(scene(true), token), count(scene(false), token), `the default scene gained \`${token}\` -- the part law may refuse a node, never complete one`);
+    }
+    for (const token of ['ds-button--modern', '<button']) assert.equal(count(scene(true), token), 0, token);
+  });
+
+  it('NO GLOBAL CHANGE: on this tree exactly these six families lose exactly that node; a composed node the selector spells whole keeps its mount', () => {
+    for (const nativePseudos of [false, true]) {
+      const before = familyAxisParts(ROOT, null, null, { nativePseudos, composedPrimitives: false });
+      const after = familyAxisParts(ROOT, null, null, { nativePseudos });
+      assert.deepEqual([...after.keys()], [...before.keys()]);
+      const touched = [...after].filter(([, record]) => record.standIns.length > 0).map(([family]) => family);
+      assert.deepEqual(touched.sort(), Object.keys(STAND_INS).sort(), 'a seventh family is a stand-in someone has to measure before it is refused');
+      for (const [family, record] of after) {
+        if (touched.includes(family)) continue;
+        assert.deepEqual(record, before.get(family), `${family}: a family with no stand-in was read differently`);
+      }
+      // list-toolbar composes Input too, and names the node Input itself renders and selects: built, as before.
+      const field = after.get('list-toolbar').parts.filter((part) => names(part, 'ds-input-field'));
+      assert.deepEqual(field.map((part) => [part.id, part.axes]), [
+        ['div|ds-list-toolbar__search-section|data-part=search-section > div|ds-input-field|data-part=field', ['depth', 'shape']],
+      ]);
+      const report = partMountReport(after);
+      assert.equal(report.refused[REFUSAL], 20);
+      assert.deepEqual(report.composedPrimitives.applied, true);
+      assert.deepEqual(Object.keys(report.composedPrimitives.standIns).sort(), Object.keys(STAND_INS).sort());
+      const off = partMountReport(before, { composedPrimitives: false });
+      assert.deepEqual([off.refused[REFUSAL], off.composedPrimitives], [undefined, { applied: false, standIns: {} }]);
+      assert.equal(report.parts, off.parts - 6, 'six nodes left the scene and nothing entered it');
+    }
+  });
+
+  it('the refusal is not a CLI flag: the pre-lot reading is `run({ composedPrimitives: false })`, and the indicator\'s reproduction list is untouched', () => {
+    const cli = readFileSync(join(ROOT, 'scripts/check/theme/axis-difference/index.mjs'), 'utf8');
+    assert.ok(!cli.includes("process.argv.includes('--no-composed-primitives')"));
+    assert.ok(!REPRODUCTION_FLAGS.some((flag) => flag.includes('composed')));
+    assert.match(cli, /composedPrimitives = true,\n\s+\/\* The roster those mounts come from/u);
+  });
+});
+
+describe('axis-difference BROWSER drill — the six stand-ins leave the scene: no AXIS credit leaves with them, and one chromatic reading does', { skip: browserReason }, () => {
+  const FAMILIES = ['column-settings', 'list-toolbar', 'user-profile-card', 'workspace-switcher', 'collection-workspace-render-dispatch', 'status-filter-pills'];
+  const options = { verticals: ['bithire'], themes: ['light'], families: FAMILIES };
+  // One pair of runs, read by both tests: the same tree with the refusal on and off.
+  let pair = null;
+  const measured = () => (pair ??= (async () => ({ on: await run(options), off: await run({ ...options, composedPrimitives: false }) }))());
+
+  it('AXIS CREDIT: every positive cell credits the same families with the refusal on and off; both controls stay 0; no denominator moves', async () => {
+    const { on, off } = await measured();
+    assert.deepEqual([on.partMounts.composedPrimitives.applied, off.partMounts.composedPrimitives.applied], [true, false]);
+    assert.deepEqual(Object.keys(on.partMounts.composedPrimitives.standIns).sort(), [...FAMILIES].sort());
+    assert.deepEqual(off.partMounts.composedPrimitives.standIns, {});
+    assert.equal(on.partMounts.parts, off.partMounts.parts - 6);
+    const selectors = (measurement) => Object.values(measurement.partMounts.map).flatMap((byAxis) => Object.values(byAxis).flat());
+    assert.ok(selectors(off).some((selector) => /\.ds-button(?![\w-])/u.test(selector)), 'the pre-lot scene no longer mounts a stand-in -- this drill compares nothing');
+    assert.ok(!selectors(on).some((selector) => /\.ds-button(?![\w-])/u.test(selector)));
+    const positives = on.cells.filter((entry) => entry.kind === 'positive');
+    assert.equal(positives.length, 6);
+    for (const entry of positives) {
+      const twin = off.cells.find((other) => other.scenario === entry.scenario && other.axis === entry.axis);
+      assert.deepEqual(entry.movedIds, twin.movedIds, `${entry.axis}: an axis credit rested on a node the product does not render`);
+      assert.deepEqual(entry.movedFamilies, twin.movedFamilies, `${entry.axis}: the first moving property changed`);
+      assert.equal(entry.denominator, twin.denominator, entry.axis);
+      if (entry.axis === 'states') assert.deepEqual([entry.movedStamped, entry.movedNative], [twin.movedStamped, twin.movedNative]);
+    }
+    for (const measurement of [on, off]) {
+      for (const entry of measurement.cells.filter((cellEntry) => cellEntry.kind === 'negative')) {
+        assert.equal(entry.moved, 0, `${entry.scenario}/${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+      }
+      assert.deepEqual(measurement.families.observedUnsettled, []);
+      assert.deepEqual(measurement.refusals, []);
+    }
+    assert.deepEqual(on.populations, off.populations, 'a refusal may move a numerator, never a denominator');
+    assert.deepEqual(evaluate(on), []);
+  }, 600_000);
+
+  it('THE CHROMATIC READING (reported apart, never a status): list-toolbar leaves it with its stand-in, on the states pair and on emphasis alone; the other five are unchanged', async () => {
+    // Its only colour-only state paint is the hover background keyed on `.ds-list-toolbar__icon-button...ds-button`, read on
+    // the stand-in alone. The selector matches the Button the engine renders, so the effect is real and is now UNDER-READ by
+    // this one family. No real-render row restores it: the chromatic reading is not an axis. Pinned so nobody reads the
+    // equality above as "nothing left".
+    const { on, off } = await measured();
+    const chroma = (measurement, scenario) => measurement.chromaticStates.cells.find((entry) => entry.scenario === scenario);
+    for (const scenario of ['states', 'states-emphasis-only']) {
+      const [before, after] = [chroma(off, scenario), chroma(on, scenario)];
+      assert.ok(before.movedIds.includes('list-toolbar'), `${scenario}: the pre-lot chromatic reading no longer holds list-toolbar -- this pins nothing`);
+      assert.deepEqual(before.movedIds.filter((family) => !after.movedIds.includes(family)), ['list-toolbar'], `${scenario}: what left the chromatic reading`);
+      assert.deepEqual(after.movedIds.filter((family) => !before.movedIds.includes(family)), [], `${scenario}: a refusal added a chromatic mover`);
+      assert.equal(after.moved, before.moved - 1, scenario);
+    }
+    assert.deepEqual(chroma(off, 'states').movedIds, ['collection-workspace-render-dispatch', 'list-toolbar', 'user-profile-card', 'workspace-switcher']);
+    assert.deepEqual(chroma(off, 'states-emphasis-only').movedIds, ['list-toolbar']);
+    // The palette control keeps the family (its resting colours move); it loses only the stand-in's own channel there.
+    assert.deepEqual(chroma(on, 'palette-only').movedIds, chroma(off, 'palette-only').movedIds);
+    assert.ok(chroma(on, 'palette-only').movedIds.includes('list-toolbar'));
+    // Reported apart on both sides: the axis cell for states is the same four families either way.
+    const states = (measurement) => measurement.cells.find((entry) => entry.scenario === 'states' && entry.axis === 'states').movedIds;
+    assert.deepEqual(states(on), states(off));
+    assert.ok(states(on).includes('list-toolbar'), 'list-toolbar still moves on the states AXIS, through other nodes');
+  }, 600_000);
 });
 
 describe('axis-difference --verify-indicator — the reading-only mode reads a file and launches nothing (audit W19-R33 P3)', () => {

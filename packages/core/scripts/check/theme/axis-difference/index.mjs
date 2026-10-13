@@ -73,6 +73,14 @@
  * never enters. `--no-as-rendered` and `--no-part-reach` reproduce the two
  * halves of the pre-repair reading on the same tree.
  *
+ * AND A PART THAT STANDS IN FOR ANOTHER FAMILY'S NODE IS NOT GRAFTED. A skin
+ * that re-keys its paint on a composed primitive's block class
+ * (`.ds-list-toolbar__icon-button.ds-button`) was mounted as a bare `div`
+ * carrying that class -- a node the product never renders and no rule of the
+ * primitive can match. It is refused by name and never completed; the law is
+ * at `composedPrimitiveStandIn`, and `run({ composedPrimitives: false })`
+ * reproduces the pre-lot scene.
+ *
  * AND THE ROOT ITSELF WAS A FABRICATION for 113 of the 255 mounted families:
  * a descendant chain squashed onto ONE node carrying the union of its classes
  * and the LAST compound's attribute values, so `breadcrumb` -- which paints a
@@ -4315,6 +4323,13 @@ export function realRenderQualification({ before, after, family, axis }) {
  *     a `::before`/`::after` refused here is READ as its host's pseudo when that
  *     host is already in the scene, and every such refusal publishes its
  *     outcome, so `pseudo-element` in the refusal count keeps its meaning.
+ *  5. A compound naming ANOTHER family's root class is that family's composed
+ *     node, and is built only when the selector states every class that
+ *     family's own skin never selects it without. `.x.ds-button` grafted as a
+ *     bare `div` is a stand-in no Button rule can match; it is refused as
+ *     `part-composed-primitive` and never completed, because the stamps the
+ *     selector leaves out are the engine's to testify, not this law's to
+ *     guess. The law is at `composedPrimitiveStandIn`.
  *
  * THE FIRST OF THE TWO LIMITS THAT LOT NAMED IS LIFTED at `rootCompound`
  * above: a merged root carried its LAST compound's attribute values, so a
@@ -5172,6 +5187,110 @@ export function focusSignatureReads(declaration, declared, proves) {
 }
 
 /**
+ * THE COMPOSED-PRIMITIVE REFUSAL (owner directive 2026-10-12, point 3; the A2
+ * mount-fidelity defect). A family that composes a primitive and re-keys its
+ * skin on the primitive's block class -- `.ds-status-filter-pills__pill.ds-button`
+ * -- handed the part law a compound it built as `<div class="... ds-button">`.
+ * The engine renders a `<button class="ds-button ds-button--modern ...">` with
+ * the Button's variant, size and shape stamps, and every compound of the
+ * Button skin that names `.ds-button` also names `.ds-button--modern`: the
+ * grafted node is one the product never renders and no rule of its primitive
+ * can match. Six families carried one (column-settings, list-toolbar,
+ * user-profile-card, workspace-switcher, collection-workspace-render-dispatch,
+ * status-filter-pills), and the drill pins the list.
+ *
+ * WHAT LEFT WITH THE NODES, measured in all six cells. No AXIS credit rested
+ * on them: every positive and control cell is the pre-lot one. One CHROMATIC
+ * reading did. list-toolbar's only colour-only state paint is the hover
+ * `background` its skin keys on `.ds-list-toolbar__icon-button...ds-button`,
+ * and it was read on that node alone, so the family leaves `chromaticStates`
+ * (reported apart, never a status) on the states pair and on
+ * `states.emphasis` alone. The selector matches the Button the engine
+ * renders: the effect is real, the node it was read on was not, and the
+ * reading is now a lower bound short by that family. The drill pins it.
+ *
+ * THE LAW IS A REFUSAL, DERIVED AND NARROW:
+ *  - the class must be a ROOT class of a mounted family (its owner; a class
+ *    two roots share has two);
+ *  - what an owner requires of it is read off that owner's OWN skin: the
+ *    classes the class never appears without in a compound there. A class the
+ *    skin also names inside a functional pseudo is not read, and requires
+ *    nothing;
+ *  - a compound that states the requirement of ANY owner is built as before
+ *    (`.ds-input-field[data-part='field']` is the node Input renders and its
+ *    skin selects, so list-toolbar's search field keeps its mount); one that
+ *    states none is refused by name. A family's own compounds are among those
+ *    its requirement is read off, so they state it by construction: what is
+ *    refused is always ANOTHER family's node.
+ *
+ * NOTHING IS COMPLETED. Adding `ds-button--modern` and a variant to the node
+ * would be this file writing stamps no source testifies. The real composed
+ * node is reached where the law for real markup admits it -- a
+ * `REAL_RENDER_MOUNTS` row, witnessed token by token and qualified per axis.
+ * `run({ composedPrimitives: false })` reproduces the pre-lot scene.
+ */
+export const COMPOSED_PRIMITIVE_REFUSAL = 'part-composed-primitive';
+
+/** A compound's classes stated outside every bracket and parenthesis. */
+function statedClasses(piece) {
+  let depth = 0;
+  let text = '';
+  for (const character of piece) {
+    if (character === '[' || character === '(') depth += 1;
+    else if (character === ']' || character === ')') depth -= 1;
+    else if (depth === 0) text += character;
+  }
+  return [...text.matchAll(PART_CLASS_TOKEN)].map((match) => match[1]);
+}
+
+/** The classes `name` never appears without in a compound of this skin; none when the skin never states it or names it inside a functional pseudo. */
+export function composedPrimitiveRequirement(css, name) {
+  const named = new RegExp(`\\.${name}(?![\\w-])`, 'u');
+  let required = null;
+  for (const rule of cssRules(css)) {
+    for (const listed of selectorList(rule.selector)) {
+      for (const selector of expandAlternatives(listed)) {
+        for (const piece of compoundPieces(selector)) {
+          if (!named.test(piece)) continue;
+          const stated = statedClasses(piece);
+          if (!stated.includes(name)) return [];
+          required = required === null ? stated : required.filter((entry) => stated.includes(entry));
+        }
+      }
+    }
+  }
+  return (required ?? []).filter((entry) => entry !== name).sort();
+}
+
+/**
+ * `(compound) -> null | { class, owners, requires }`: the root class a compound
+ * names without stating what any of its owners requires (`requires` is the
+ * first owner's). `skins` is `family -> css`, every skin family's.
+ */
+export function composedPrimitiveStandIn(skins) {
+  const owners = new Map();
+  for (const [family, css] of skins) {
+    for (const name of familyElement(css)?.classes ?? []) owners.set(name, [...(owners.get(name) ?? []), family]);
+  }
+  const requirements = new Map();
+  const requirementOf = (family, name) => {
+    const key = `${family}\u0000${name}`;
+    if (!requirements.has(key)) requirements.set(key, composedPrimitiveRequirement(skins.get(family), name));
+    return requirements.get(key);
+  };
+  return (compound) => {
+    for (const name of compound.classes) {
+      const owned = owners.get(name) ?? [];
+      if (owned.length === 0) continue;
+      const demands = owned.map((owner) => requirementOf(owner, name));
+      if (demands.some((requires) => requires.every((entry) => compound.classes.includes(entry)))) continue;
+      return { class: name, owners: owned, requires: demands[0] };
+    }
+    return null;
+  };
+}
+
+/**
  * One family's parts, read off the rules of ONE stylesheet.
  *
  * `axes` is the set the family is in the population of: a part may only be
@@ -5180,12 +5299,15 @@ export function focusSignatureReads(declaration, declared, proves) {
  * refusals, so a selector refused for four axes is counted four times -- the
  * unit is the reading that was refused, not the string.
  */
-export function familyParts(css, rootElement, axes, { family = null, partReach = true, nativePseudos = false, signature = [] } = {}) {
+export function familyParts(css, rootElement, axes, {
+  family = null, partReach = true, nativePseudos = false, signature = [], standIn = null,
+} = {}) {
   const rules = cssRules(css);
   const parts = new Map();
   const rejected = {};
   const deferred = [];
   const pseudoEntries = [];
+  const standIns = [];
   const admit = (chain, selector, axis) => {
     const id = chain.map(compoundKey).join(' > ');
     if (!parts.has(id)) parts.set(id, { id, selector, chain, axes: new Set() });
@@ -5225,6 +5347,13 @@ export function familyParts(css, rootElement, axes, { family = null, partReach =
               // refusal so the census reconciles with the count above.
               if (projection.rejected === 'pseudo-element') pseudoEntries.push(pseudoReadEntry(authoredSelector, axis));
             }
+            continue;
+          }
+          // Law 5: a stand-in for another family's composed node is not built.
+          const composed = standIn === null ? null : projection.chain.map(standIn).find((found) => found !== null) ?? null;
+          if (composed !== null) {
+            rejected[COMPOSED_PRIMITIVE_REFUSAL] = (rejected[COMPOSED_PRIMITIVE_REFUSAL] ?? 0) + 1;
+            standIns.push({ axis, selector: authoredSelector, ...composed });
             continue;
           }
           admit(projection.chain, authoredSelector, axis);
@@ -5284,6 +5413,7 @@ export function familyParts(css, rootElement, axes, { family = null, partReach =
     parts: [...parts.values()].map((part) => ({ ...part, axes: [...part.axes].sort() })),
     rejected,
     pseudoReads: pseudoReadsOf(pseudoEntries),
+    standIns,
   };
 }
 
@@ -5545,21 +5675,25 @@ export const pseudoPinChannels = (pins = PSEUDO_ONLY_CREDITS) => [...new Set(Obj
  * graft has nothing to hang on, and inventing a root for it would move a
  * denominator this lot is not entitled to move.
  */
-export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, { partReach = true, nativePseudos = false } = {}) {
+export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, {
+  partReach = true, nativePseudos = false, composedPrimitives = true,
+} = {}) {
   const resolved = elements ?? familyElements(root, only);
   const populations = axisPopulations(root);
   const declarations = familyAxisDeclarations(root);
   let proof = null;
   const proves = (value) => (proof ??= focusSignatureProof(root)).judgeValue(value) === null;
   const byFamily = new Map();
-  for (const [family, files] of skinFamilies(root)) {
+  // Every skin is read, whatever `only` narrows the run to: who owns a class is a fact of the tree, not of the selection.
+  const skins = new Map([...skinFamilies(root)].map(([family, files]) => [family, files.map((file) => readFileSync(file, 'utf8')).join('\n')]));
+  const standIn = composedPrimitives ? composedPrimitiveStandIn(skins) : null;
+  for (const [family, css] of skins) {
     if (only && !only.includes(family)) continue;
     const rootElement = resolved.get(family);
     if (!rootElement) continue;
     const declared = AXIS_IDS.filter((axis) => populations.get(axis).includes(family));
-    const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
     const signature = focusSignatureReads(declarations.get(family), declared, proves);
-    const record = familyParts(css, rootElement, declared, { family, partReach, nativePseudos, signature });
+    const record = familyParts(css, rootElement, declared, { family, partReach, nativePseudos, signature, standIn });
     if (record.parts.length === 0 && Object.keys(record.rejected).length === 0) continue;
     byFamily.set(family, record);
   }
@@ -5584,13 +5718,17 @@ export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, 
  * never built (`has-node-not-in-scene`), which is the fail-closed direction --
  * that pass may add an axis to a node, never a node to the scene.
  */
-export function partMountReport(byFamily, { applied = true, partReach = true, unmountableCandidates = [] } = {}) {
+export function partMountReport(byFamily, {
+  applied = true, partReach = true, composedPrimitives = true, unmountableCandidates = [],
+} = {}) {
   const perAxis = Object.fromEntries(AXIS_IDS.map((axis) => [axis, { families: 0, parts: 0 }]));
   const refused = {};
   const map = {};
   const pseudoReads = {};
+  const standIns = {};
   let nodes = 0;
   for (const [family, record] of byFamily) {
+    if ((record.standIns ?? []).length > 0) standIns[family] = record.standIns;
     for (const [reason, count] of Object.entries(record.rejected)) {
       refused[reason] = (refused[reason] ?? 0) + count;
     }
@@ -5625,6 +5763,9 @@ export function partMountReport(byFamily, { applied = true, partReach = true, un
     pinnedUnmountableWithPartPaint: unmountableCandidates,
     map,
     pseudoReads,
+    // Law 5: per family, the (axis, selector) readings refused as a stand-in
+    // for another family's composed node, with the class and what it requires.
+    composedPrimitives: { applied: composedPrimitives, standIns },
   };
 }
 
@@ -8202,6 +8343,9 @@ export async function run({
   /* `false` reproduces the pre-lot native half: no carrier pass, a carrier
    * row left unmounted, and every pseudo inside `:has()` outside both halves. */
   carrierReads = true,
+  /* `false` reproduces the pre-lot part law: a compound naming another
+   * family's root class is grafted as the bare node its selector spells. */
+  composedPrimitives = true,
   /* The roster those mounts come from; a drill hands in its own, and it passes
    * the same door the shipped one does before anything is mounted. */
   realRenderRoster = REAL_RENDER_MOUNTS,
@@ -8272,7 +8416,7 @@ export async function run({
   // The pins are read first and honoured: a family with no mountable root
   // gains no parts, so `UNMOUNTABLE_FAMILIES` and every denominator below it
   // are exactly the ones the pre-lot run published.
-  const mountedParts = partMounts === false ? new Map() : familyAxisParts(root, families, elements, { partReach });
+  const mountedParts = partMounts === false ? new Map() : familyAxisParts(root, families, elements, { partReach, composedPrimitives });
   // Read from the same skins the denominator is, so the reach of the disabled
   // stamp is republished every run rather than asserted once in a comment.
   const disabledCensus = disabledVocabularyCensus(root, families);
@@ -8285,7 +8429,7 @@ export async function run({
   // The native scene is the stamped one plus the parts a forced pseudo gates;
   // the stamped scene is not touched, so its half is the pre-lot reading.
   const nativeParts = nativePseudos && partMounts !== false
-    ? familyAxisParts(root, families, elements, { partReach, nativePseudos: true })
+    ? familyAxisParts(root, families, elements, { partReach, nativePseudos: true, composedPrimitives })
     : new Map();
   // The pseudo-element read law: hosts derived HERE, off the same part maps,
   // one plan per scene. The default scene only -- never a real-render mount.
@@ -8731,6 +8875,7 @@ export async function run({
   const partMountsReport = partMountReport(mountedParts, {
     applied: partMounts !== false,
     partReach,
+    composedPrimitives,
     unmountableCandidates: families === null ? unmountablePartCandidates(root, unmountable) : [],
   });
   const pseudoCensus = pseudoReadCensus(mountedParts, pseudoSeen, {
