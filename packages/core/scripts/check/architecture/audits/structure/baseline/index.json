@@ -292,7 +292,6 @@
         "packages/showroom/src/app/(docs)/surfaces/[group]/[surface]/page.tsx",
         "packages/showroom/src/app/(docs)/surfaces/page.tsx",
         "packages/showroom/src/app/(docs)/verticals/page.tsx",
-        "packages/showroom/src/app/(docs)/verticals/vertical-showcase-shell.tsx",
         "packages/showroom/src/app/globals.css",
         "packages/showroom/src/app/page.tsx",
         "packages/showroom/src/app/probe/ds-reference/sections/component-behaviors/index.tsx",
@@ -507,7 +506,6 @@
       ],
       "empty-directory": [],
       "showroom-loose-file": [
-        "app/(docs)/verticals/vertical-showcase-shell.tsx",
         "app/globals.css"
       ],
       "repeated-path-word": []
