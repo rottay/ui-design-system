@@ -1076,17 +1076,33 @@ describe("the two transitional re-exports are consumer-exact", () => {
   it("the retired compiler contracts are gone, and the canonical ones own the shapes", () => {
     // The shapes did not disappear with the retired owner: they belong to the
     // contracts that describe the pipeline that actually exists.
-    const themes = readFileSync(
-      join(SRC_ROOT, "foundation/contracts/composition/tenants/themes/index.ts"),
-      "utf8"
-    );
-    for (const retired of [
-      "export interface BrandCompilerInput",
-      "export interface CompiledBrand",
-      "export interface CompiledBrandModeBlock",
-      "export type CompileBrandTheme",
-    ]) {
-      expect(themes).not.toContain(retired);
+    // The root is split into members, so the names are retired across the whole
+    // owner subtree: a declaration planted in any file under it is a finding.
+    const THEMES_ROOT = join(SRC_ROOT, "foundation/contracts/composition/tenants/themes");
+    const themeSources: string[] = [];
+    const walk = (dir: string) => {
+      for (const entry of readdirSync(dir)) {
+        const full = join(dir, entry);
+        if (statSync(full).isDirectory()) walk(full);
+        else if (entry.endsWith(".ts")) themeSources.push(full);
+      }
+    };
+    walk(THEMES_ROOT);
+    const scanned = themeSources.map((file) => file.slice(THEMES_ROOT.length + 1));
+    // A walk that finds nothing would pass the negative below vacuously.
+    expect(scanned).toContain("index.ts");
+    expect(scanned).toContain("brand/palette/index.ts");
+    expect(scanned).toContain("general/index.ts");
+    for (const file of themeSources) {
+      const source = readFileSync(file, "utf8");
+      for (const retired of [
+        "export interface BrandCompilerInput",
+        "export interface CompiledBrand",
+        "export interface CompiledBrandModeBlock",
+        "export type CompileBrandTheme",
+      ]) {
+        expect(source, file.slice(SRC_ROOT.length + 1)).not.toContain(retired);
+      }
     }
     const compiled = readFileSync(
       join(SRC_ROOT, "foundation/contracts/composition/tenants/themes/compiled/index.ts"),
