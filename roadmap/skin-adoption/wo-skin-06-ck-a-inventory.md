@@ -86,7 +86,7 @@ live rendering path today.
 torture page does **not** need to "pin an override" for dashboard-insights at
 all. It needs to mount all 8 named exports **directly**, exactly as the
 showroom already does for 2 of them today
-(`packages/showroom/src/app/(docs)/structures/[group]/[structure]/structure-preview-fixtures.tsx:1252-1279`,
+(`packages/showroom/src/app/(docs)/structures/[group]/[structure]/structure-preview-fixtures/dashboard/index.tsx:140-168`,
 `DashboardInsightsFamilyPreview`, which renders `<MetricsMinimal metrics={...} />`
 and `<ActivityCompact items={...} />` side by side, never touching `useVariant`).
 This is simpler and more robust than threading an override through the hook,

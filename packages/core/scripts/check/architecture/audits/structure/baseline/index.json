@@ -290,7 +290,6 @@
         "packages/showroom/src/app/(docs)/primitives/[category]/page.tsx",
         "packages/showroom/src/app/(docs)/primitives/page.tsx",
         "packages/showroom/src/app/(docs)/structures/[group]/[structure]/page.tsx",
-        "packages/showroom/src/app/(docs)/structures/[group]/[structure]/structure-preview-fixtures.tsx",
         "packages/showroom/src/app/(docs)/structures/page.tsx",
         "packages/showroom/src/app/(docs)/surfaces/[group]/[surface]/page.tsx",
         "packages/showroom/src/app/(docs)/surfaces/page.tsx",
@@ -513,7 +512,6 @@
       "showroom-loose-file": [
         "app/(docs)/patterns/[group]/[pattern]/pattern-preview-fixtures.tsx",
         "app/(docs)/primitives/[category]/[component]/live-preview.tsx",
-        "app/(docs)/structures/[group]/[structure]/structure-preview-fixtures.tsx",
         "app/(docs)/verticals/vertical-category-appendix.tsx",
         "app/(docs)/verticals/vertical-showcase-shell.tsx",
         "app/globals.css"
