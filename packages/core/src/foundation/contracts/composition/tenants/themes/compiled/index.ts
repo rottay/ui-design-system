@@ -10,11 +10,21 @@ import type { FlatThemeMode } from "..";
 import type { PartialPersonalityTokens } from "@/foundation/contracts/kernel/tokens";
 import type { TenantTokenOverrides } from "@/foundation/contracts/composition/tenants";
 
+/** The four status roles a palette seeds. */
+export type ThemeStatusRole = "success" | "warning" | "error" | "info";
+
 /** A non-default mode's compiled delta over the base block. */
 export interface ThemeCompilationModeBlock {
   readonly mode: FlatThemeMode;
   readonly cssVariables: Readonly<Record<string, string>>;
   readonly colorScheme: FlatThemeMode;
+  /**
+   * The status roles this block PAINTS from its own ramp rather than states as
+   * a seed. Their channel is a mode grade, not identity: an engine that derives
+   * its own grade from a seed reads the base block's value for these. Absent
+   * when the block regrades none.
+   */
+  readonly regradedStatusRoles?: readonly ThemeStatusRole[];
 }
 
 /** What `prefers-contrast: more` moves: the compile re-lowered at high posture, as a delta. */

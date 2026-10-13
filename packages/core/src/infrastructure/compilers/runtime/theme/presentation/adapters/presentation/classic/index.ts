@@ -25,6 +25,14 @@ export const CLASSIC_SEED_CHANNELS = Object.freeze({
   colorTextLightSolid: "--ds-color-text-on-primary",
 } as const);
 
+/** The status seed channel per role: the same four names the table above reads. */
+const CLASSIC_STATUS_SEED_CHANNELS = Object.freeze({
+  success: CLASSIC_SEED_CHANNELS.colorSuccess,
+  warning: CLASSIC_SEED_CHANNELS.colorWarning,
+  error: CLASSIC_SEED_CHANNELS.colorError,
+  info: CLASSIC_SEED_CHANNELS.colorInfo,
+} as const);
+
 /**
  * antd's `borderRadius` is a NUMBER of px, and the compiler emits no resolved
  * radius step: it emits the ramp operand and the dial, which the foundation
@@ -74,12 +82,31 @@ function seedsOf(variables: Readonly<Record<string, string>>): EngineSeeds {
   return seeds;
 }
 
+/**
+ * Ant derives its own grade from a status SEED, so a mode that paints a status
+ * role from its own ramp must not hand that grade over as the seed: Ant would
+ * grade it a second time. Those roles keep the base block's value, which is
+ * the seed the mode inherited; a seed a mode states for itself is projected.
+ */
+function modeSeedsOf(
+  compiled: ThemeCompilation,
+  block: ThemeCompilation["modeBlocks"][number]
+): EngineSeeds {
+  const variables = { ...compiled.cssVariables, ...block.cssVariables };
+  for (const role of block.regradedStatusRoles ?? []) {
+    const channel = CLASSIC_STATUS_SEED_CHANNELS[role];
+    const seed = compiled.cssVariables[channel];
+    if (seed != null) variables[channel] = seed;
+  }
+  return seedsOf(variables);
+}
+
 function projectClassic(compiled: ThemeCompilation): EngineProjection {
   return {
     seeds: seedsOf(compiled.cssVariables),
     modes: compiled.modeBlocks.map((block) => ({
       mode: block.mode,
-      seeds: seedsOf({ ...compiled.cssVariables, ...block.cssVariables }),
+      seeds: modeSeedsOf(compiled, block),
     })),
   };
 }

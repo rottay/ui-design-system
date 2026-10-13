@@ -459,5 +459,15 @@ export function projectModeDelta(
   for (const [key, value] of Object.entries(modeVars)) {
     if (baseVars[key] !== value) cssVariables[key] = value;
   }
-  return { mode: request.mode, cssVariables, colorScheme: request.mode };
+  // A role the block inherited and no longer states as its seed was regraded.
+  const regradedStatusRoles = request.inheritedStatusTones.filter(
+    (role) =>
+      modeVars[`--ds-color-${role}`] !== request.theme.palette?.[`${role}Color`]
+  );
+  return {
+    mode: request.mode,
+    cssVariables,
+    colorScheme: request.mode,
+    ...(regradedStatusRoles.length > 0 ? { regradedStatusRoles } : {}),
+  };
 }

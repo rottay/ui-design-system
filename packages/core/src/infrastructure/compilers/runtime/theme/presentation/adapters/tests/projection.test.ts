@@ -18,7 +18,14 @@ import {
 import { staticThemeIntent } from "../../../runtime/ingress";
 import { modernThemeAdapter } from "../presentation/modern";
 import { rusticThemeAdapter } from "../presentation/rustic";
-import { FIRST_PARTY_BASELINES, resolveFirstParty } from "@tests/support/theme-lowering";
+import {
+  FIRST_PARTY_BASELINES,
+  firstPartyFixture,
+  resolveFirstParty,
+} from "@tests/support/theme-lowering";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { EMPTY_PROVENANCE } from "@/foundation/contracts/composition/tenants/themes/resolved";
+import { liftAuthoredTheme } from "../../../runtime/lowering/foundation/intake";
 
 const SLUGS = ["rottay", "bithire", "evnto"] as const;
 
@@ -373,5 +380,63 @@ describe("adapters project, they never mint a channel name or emit CSS", () => {
       expect(classic.engine).toBe("classic");
       expect(modern.engine).toBe("modern");
     }
+  });
+});
+
+/**
+ * The consumer contract of the classic projection, pinned where a mode-block
+ * change is made: Ant grades a status SEED itself, so every mode hands it the
+ * seed, whatever the mode's own block paints the role with.
+ */
+describe("classic hands Ant the status SEED in every mode", () => {
+  const STATUS = [
+    ["success", "colorSuccess"],
+    ["warning", "colorWarning"],
+    ["error", "colorError"],
+    ["info", "colorInfo"],
+  ] as const;
+  const bithire = firstPartyFixture("bithire");
+  const compileClassic = (theme: FlatTheme) =>
+    compileTheme(
+      { theme: liftAuthoredTheme(theme), provenance: EMPTY_PROVENANCE },
+      classicThemeAdapter
+    );
+
+  it("keeps the inherited seed where the dark block paints the role from its ramp", () => {
+    const compiled = compileClassic(bithire);
+    const block = compiled.modeBlocks.find((entry) => entry.mode === "dark")!;
+    const dark = compiled.projection.modes.find((entry) => entry.mode === "dark")!;
+    expect(block.regradedStatusRoles).toEqual(STATUS.map(([role]) => role));
+    for (const [role, token] of STATUS) {
+      const seed = bithire.palette![`${role}Color`]!;
+      // Anti-vacuity: the block really does paint something else here.
+      expect(block.cssVariables[CLASSIC_SEED_CHANNELS[token]], role).not.toBe(seed);
+      expect(compiled.projection.seeds[token], role).toBe(seed);
+      expect(dark.seeds[token], role).toBe(seed);
+    }
+  });
+
+  it("projects a seed the mode states for itself, and names it no regrade", () => {
+    const compiled = compileClassic({
+      ...bithire,
+      modes: {
+        ...bithire.modes,
+        dark: {
+          ...bithire.modes?.dark,
+          palette: { ...bithire.modes?.dark?.palette, successColor: "#4ADE80" },
+        },
+      },
+    } as FlatTheme);
+    const block = compiled.modeBlocks.find((entry) => entry.mode === "dark")!;
+    const dark = compiled.projection.modes.find((entry) => entry.mode === "dark")!;
+    expect(block.regradedStatusRoles).toEqual(["warning", "error", "info"]);
+    expect(dark.seeds.colorSuccess).toBe("#4ADE80");
+    expect(dark.seeds.colorWarning).toBe(bithire.palette!.warningColor);
+  });
+
+  it("states no regrade on a block that paints every role from its seed", () => {
+    for (const slug of ["rottay", "evnto"] as const)
+      for (const block of COMPILED[slug].modeBlocks)
+        expect("regradedStatusRoles" in block, `${slug} ${block.mode}`).toBe(false);
   });
 });

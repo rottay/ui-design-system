@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "generatedBy": "scripts/check/tokens/cascade/channels/liveness/index.mjs --write",
   "roundId": "R1",
-  "sourceDigest": "c700abbff001e6c4d9184a267fc8e3ef4c73017273b475d4e1ad757caa57c1e7",
+  "sourceDigest": "edfd37a4b621351bf3f62374d14858f5a532b6bec818d824f31678e5b6054658",
   "scopeLaw": "Tenant-channel liveness ledger scoped to TENANT_THEME_OVERRIDE_TOKENS ∪ TENANT_THEME_REFERENCE_TOKENS ∪ brand-theme-compiler-emitted names, plus the app-bithire external consumerRoot. NOT the customization-surface-census.mjs dead-writer census. NOT tenant-channel-consumer-gate.mjs. NOT theme-channel-parity-gate.mjs. No classification asserts a channel is dead, but membership on TENANT_THEME_REFERENCE_TOKENS never protects a row from a NO-GO finding by itself -- only a proven finite terminal-paint chain (in-repo or via a required consumerRoot) does that. A CAPABILITY_SCALE_STEP_UNREAD row is published apart from LIVE: a measured step of a public scale whose capability (single producer, admission and emission in agreement, resolution in every supported mode) the acceptance proves and whose paint nothing proves; it is never counted LIVE and leaves the effect red only while its acceptance measures green for that exact channel.",
   "inputs": {
     "tenantThemeContract": "src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
