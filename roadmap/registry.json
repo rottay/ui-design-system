@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-12",
+ "updated": "2026-10-13",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -2963,7 +2963,7 @@
    "lane": "architecture",
    "order": 14,
    "size": "XL",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2999,8 +2999,8 @@
    ],
    "claimedBy": "Kimi DT",
    "claimedAt": "2026-10-12",
-   "doneAt": null,
-   "evidence": null,
+   "doneAt": "2026-10-13",
+   "evidence": "Closure window on the exact candidate e36f2df24 (clean clone, singleton): build RC 0 (exports-artifact-gate OK, 66 targets); FULL unit GREEN — 18542 passed / 0 failed / 17 skipped, 1591 files; engine-token-audit --check OK (4264 counters, no counter regresses); css-layer-paint PASS; the repaired unit reds of the wave all green (URA/URB/URD/URE/URE-2 + LD + APCA-FIX + its antd-bridge follow-up integrated and re-reviewed). Substance (reformulated by WO-EMI-02 + WO-CAT-02, verified step map recon/a-arc.report.md:78-125): provider scoping per landlord = mountTenantTheme + scoped admission + SSR root projection + claim registry (EMI-02 close 63ab01cd0); identity/render split = TenantConfig stripped + EngineVisualDeclaration; anatomy manifest = the derived family inventory + typed catalog (CAT-02 14c0499cb) — no authored manifest exists by design; portal bridge = PortalScope across 40+ modern overlay engines; manifest-generated skin imports = the single-entrypoint gate + derived layer bindings (CAN-03). Honest note: the window's first in-clone probe/drill ran on a stale index copy of the instrument (my restore error); the corrected re-run (drill 398/398, probe 6/6 OK) is the official record (probe-official-3c.log).",
    "execution": {
     "decisionOwner": "design-system-program",
     "touchedRepos": [
