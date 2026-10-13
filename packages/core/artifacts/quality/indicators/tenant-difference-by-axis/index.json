@@ -1,21 +1,21 @@
 {
   "id": "tenant-difference-by-axis",
   "gate": "axis-difference (`capability-propagation` by axis, WO-EVI-02)",
-  "producedAt": "2026-10-05T23:24:45.497Z",
+  "producedAt": "2026-10-13T07:33:53.492Z",
   "value": "6/6 axes at >= 80 % of declaring families (shape, typography, rhythm, depth, states, motion; effective-denominator reading 6/6, never the status); negative test GREEN — palette-only 0 % on 36/36, states-emphasis-only 0 % on 12/12",
   "target": "6/6 axes at >= 80 % and the negative test green",
   "met": true,
-  "commit": "99a867a3a3c9a968678138d413e291c4c8f9a1d8",
+  "commit": "92be054770ed421cade63b0fe69abddc3b131d85",
   "catalogRevision": "41af5c3698f85c48",
   "browser": "149.0.7827.55",
   "bundleMode": "fresh",
   "inputDigest": {
     "algorithm": "sha256",
-    "digest": "3b7845dc77e2876246c16ed973ab3943280303100932581bb956a76d535e395d",
+    "digest": "97d81de2b3c73d45a961d1dae417819f7b531f3602af498d29136e240f851e45",
     "parts": {
-      "sourceHash": "9222a665e49a55676339da7315c49832afc4b1e6efcc5c7f2015c382bd85ae81",
-      "buildInputFingerprint": "ef3fa64b217ab35762a6c38f54a302e889569b00f1c9c3de4c7e8a4239193184",
-      "instrument": "556252b273abfe91c31521131c46de589a598d30999d975367a0651467700c0c"
+      "sourceHash": "f63cabe4300c562fb416ad3a5da3ab7915358f8b822387acb3d2e78e1a55dca3",
+      "buildInputFingerprint": "f24c8064cc371bc3607762a1512c51cd0216811610bb8f3f934617cbfed0a58f",
+      "instrument": "cde2f56e7ca2b20d2e3f2642106a2a8955c44cae89f71b01d87ff115184c8d73"
     }
   },
   "verticals": [
@@ -32,8 +32,8 @@
   "axes": {
     "shape": {
       "status": "at-threshold",
-      "declared": 213,
-      "effective": 207,
+      "declared": 214,
+      "effective": 208,
       "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
       "populationLaw": null,
       "excludedUnmountable": 6,
@@ -41,10 +41,11 @@
       "notApplicable": 5,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 81.2,
-      "worstPercentEffective": 83.6,
+      "worstPercentDeclared": 80.8,
+      "worstPercentEffective": 83.2,
       "effectiveAtThreshold": true,
       "nonMovers": [
+        "active-filters-bar",
         "affix",
         "anchor",
         "aspect-ratio",
@@ -99,6 +100,7 @@
         "unobservable": [],
         "unreached": [],
         "measuredNotMoving": [
+          "active-filters-bar",
           "affix",
           "anchor",
           "aspect-ratio",
@@ -141,11 +143,12 @@
           "theme": "light",
           "measured": true,
           "moved": 173,
-          "declared": 213,
-          "effective": 207,
-          "percentDeclared": 81.2,
-          "percentEffective": 83.6,
+          "declared": 214,
+          "effective": 208,
+          "percentDeclared": 80.8,
+          "percentEffective": 83.2,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "aspect-ratio",
@@ -193,11 +196,12 @@
           "theme": "dark",
           "measured": true,
           "moved": 173,
-          "declared": 213,
-          "effective": 207,
-          "percentDeclared": 81.2,
-          "percentEffective": 83.6,
+          "declared": 214,
+          "effective": 208,
+          "percentDeclared": 80.8,
+          "percentEffective": 83.2,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "aspect-ratio",
@@ -245,11 +249,12 @@
           "theme": "light",
           "measured": true,
           "moved": 173,
-          "declared": 213,
-          "effective": 207,
-          "percentDeclared": 81.2,
-          "percentEffective": 83.6,
+          "declared": 214,
+          "effective": 208,
+          "percentDeclared": 80.8,
+          "percentEffective": 83.2,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "aspect-ratio",
@@ -297,11 +302,12 @@
           "theme": "dark",
           "measured": true,
           "moved": 173,
-          "declared": 213,
-          "effective": 207,
-          "percentDeclared": 81.2,
-          "percentEffective": 83.6,
+          "declared": 214,
+          "effective": 208,
+          "percentDeclared": 80.8,
+          "percentEffective": 83.2,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "aspect-ratio",
@@ -349,11 +355,12 @@
           "theme": "light",
           "measured": true,
           "moved": 173,
-          "declared": 213,
-          "effective": 207,
-          "percentDeclared": 81.2,
-          "percentEffective": 83.6,
+          "declared": 214,
+          "effective": 208,
+          "percentDeclared": 80.8,
+          "percentEffective": 83.2,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "aspect-ratio",
@@ -401,11 +408,12 @@
           "theme": "dark",
           "measured": true,
           "moved": 173,
-          "declared": 213,
-          "effective": 207,
-          "percentDeclared": 81.2,
-          "percentEffective": 83.6,
+          "declared": 214,
+          "effective": 208,
+          "percentDeclared": 80.8,
+          "percentEffective": 83.2,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "aspect-ratio",
@@ -964,8 +972,8 @@
     },
     "depth": {
       "status": "at-threshold",
-      "declared": 199,
-      "effective": 193,
+      "declared": 200,
+      "effective": 194,
       "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
       "populationLaw": null,
       "excludedUnmountable": 6,
@@ -973,10 +981,11 @@
       "notApplicable": 0,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 80.4,
-      "worstPercentEffective": 82.9,
+      "worstPercentDeclared": 80,
+      "worstPercentEffective": 82.5,
       "effectiveAtThreshold": true,
       "nonMovers": [
+        "active-filters-bar",
         "affix",
         "anchor",
         "ascii-diagram",
@@ -1030,6 +1039,7 @@
         "unobservable": [],
         "unreached": [],
         "measuredNotMoving": [
+          "active-filters-bar",
           "affix",
           "anchor",
           "ascii-diagram",
@@ -1071,11 +1081,12 @@
           "theme": "light",
           "measured": true,
           "moved": 160,
-          "declared": 199,
-          "effective": 193,
-          "percentDeclared": 80.4,
-          "percentEffective": 82.9,
+          "declared": 200,
+          "effective": 194,
+          "percentDeclared": 80,
+          "percentEffective": 82.5,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "ascii-diagram",
@@ -1122,11 +1133,12 @@
           "theme": "dark",
           "measured": true,
           "moved": 160,
-          "declared": 199,
-          "effective": 193,
-          "percentDeclared": 80.4,
-          "percentEffective": 82.9,
+          "declared": 200,
+          "effective": 194,
+          "percentDeclared": 80,
+          "percentEffective": 82.5,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "ascii-diagram",
@@ -1173,11 +1185,12 @@
           "theme": "light",
           "measured": true,
           "moved": 160,
-          "declared": 199,
-          "effective": 193,
-          "percentDeclared": 80.4,
-          "percentEffective": 82.9,
+          "declared": 200,
+          "effective": 194,
+          "percentDeclared": 80,
+          "percentEffective": 82.5,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "ascii-diagram",
@@ -1224,11 +1237,12 @@
           "theme": "dark",
           "measured": true,
           "moved": 160,
-          "declared": 199,
-          "effective": 193,
-          "percentDeclared": 80.4,
-          "percentEffective": 82.9,
+          "declared": 200,
+          "effective": 194,
+          "percentDeclared": 80,
+          "percentEffective": 82.5,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "ascii-diagram",
@@ -1275,11 +1289,12 @@
           "theme": "light",
           "measured": true,
           "moved": 160,
-          "declared": 199,
-          "effective": 193,
-          "percentDeclared": 80.4,
-          "percentEffective": 82.9,
+          "declared": 200,
+          "effective": 194,
+          "percentDeclared": 80,
+          "percentEffective": 82.5,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "ascii-diagram",
@@ -1326,11 +1341,12 @@
           "theme": "dark",
           "measured": true,
           "moved": 160,
-          "declared": 199,
-          "effective": 193,
-          "percentDeclared": 80.4,
-          "percentEffective": 82.9,
+          "declared": 200,
+          "effective": 194,
+          "percentDeclared": 80,
+          "percentEffective": 82.5,
           "nonMoverIds": [
+            "active-filters-bar",
             "affix",
             "anchor",
             "ascii-diagram",
@@ -1389,7 +1405,7 @@
       "excludedUnmountable": 3,
       "excludedUnsettled": 0,
       "notApplicable": 0,
-      "unobservable": 7,
+      "unobservable": 9,
       "unobservableFamilies": [
         {
           "family": "button-group",
@@ -1408,6 +1424,10 @@
           "class": "colour-only"
         },
         {
+          "family": "locale-switcher",
+          "class": "colour-only"
+        },
+        {
           "family": "metrics-chart",
           "class": "colour-only"
         },
@@ -1416,12 +1436,16 @@
           "class": "no-vocabulary"
         },
         {
+          "family": "status-filter-pills",
+          "class": "colour-only"
+        },
+        {
           "family": "table-toolbar",
           "class": "colour-only"
         }
       ],
-      "worstPercentDeclared": 82.2,
-      "worstPercentEffective": 83.9,
+      "worstPercentDeclared": 80.9,
+      "worstPercentEffective": 82.6,
       "effectiveAtThreshold": true,
       "nonMovers": [
         "ascii-diagram",
@@ -1439,6 +1463,7 @@
         "grid-view",
         "kbd",
         "list",
+        "locale-switcher",
         "metrics-chart",
         "metrics-minimal",
         "metrics-rows",
@@ -1446,6 +1471,7 @@
         "presence",
         "search-command-bar",
         "statistic",
+        "status-filter-pills",
         "surface-states",
         "table-toolbar",
         "tree-view-connector",
@@ -1464,8 +1490,10 @@
           "edit-fields",
           "form-builder",
           "list",
+          "locale-switcher",
           "metrics-chart",
           "metrics-rows",
+          "status-filter-pills",
           "table-toolbar"
         ],
         "unreached": [
@@ -1495,11 +1523,11 @@
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 125,
+          "moved": 123,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 82.2,
-          "percentEffective": 83.9,
+          "percentDeclared": 80.9,
+          "percentEffective": 82.6,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
@@ -1516,6 +1544,7 @@
             "grid-view",
             "kbd",
             "list",
+            "locale-switcher",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
@@ -1523,6 +1552,7 @@
             "presence",
             "search-command-bar",
             "statistic",
+            "status-filter-pills",
             "surface-states",
             "table-toolbar",
             "tree-view-connector",
@@ -1534,11 +1564,11 @@
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 125,
+          "moved": 123,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 82.2,
-          "percentEffective": 83.9,
+          "percentDeclared": 80.9,
+          "percentEffective": 82.6,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
@@ -1555,6 +1585,7 @@
             "grid-view",
             "kbd",
             "list",
+            "locale-switcher",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
@@ -1562,6 +1593,7 @@
             "presence",
             "search-command-bar",
             "statistic",
+            "status-filter-pills",
             "surface-states",
             "table-toolbar",
             "tree-view-connector",
@@ -1573,11 +1605,11 @@
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 125,
+          "moved": 123,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 82.2,
-          "percentEffective": 83.9,
+          "percentDeclared": 80.9,
+          "percentEffective": 82.6,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
@@ -1594,6 +1626,7 @@
             "grid-view",
             "kbd",
             "list",
+            "locale-switcher",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
@@ -1601,6 +1634,7 @@
             "presence",
             "search-command-bar",
             "statistic",
+            "status-filter-pills",
             "surface-states",
             "table-toolbar",
             "tree-view-connector",
@@ -1612,11 +1646,11 @@
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 125,
+          "moved": 123,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 82.2,
-          "percentEffective": 83.9,
+          "percentDeclared": 80.9,
+          "percentEffective": 82.6,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
@@ -1633,6 +1667,7 @@
             "grid-view",
             "kbd",
             "list",
+            "locale-switcher",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
@@ -1640,6 +1675,7 @@
             "presence",
             "search-command-bar",
             "statistic",
+            "status-filter-pills",
             "surface-states",
             "table-toolbar",
             "tree-view-connector",
@@ -1651,11 +1687,11 @@
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 125,
+          "moved": 123,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 82.2,
-          "percentEffective": 83.9,
+          "percentDeclared": 80.9,
+          "percentEffective": 82.6,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
@@ -1672,6 +1708,7 @@
             "grid-view",
             "kbd",
             "list",
+            "locale-switcher",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
@@ -1679,6 +1716,7 @@
             "presence",
             "search-command-bar",
             "statistic",
+            "status-filter-pills",
             "surface-states",
             "table-toolbar",
             "tree-view-connector",
@@ -1690,11 +1728,11 @@
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 125,
+          "moved": 123,
           "declared": 152,
           "effective": 149,
-          "percentDeclared": 82.2,
-          "percentEffective": 83.9,
+          "percentDeclared": 80.9,
+          "percentEffective": 82.6,
           "nonMoverIds": [
             "ascii-diagram",
             "button-group",
@@ -1711,6 +1749,7 @@
             "grid-view",
             "kbd",
             "list",
+            "locale-switcher",
             "metrics-chart",
             "metrics-minimal",
             "metrics-rows",
@@ -1718,6 +1757,7 @@
             "presence",
             "search-command-bar",
             "statistic",
+            "status-filter-pills",
             "surface-states",
             "table-toolbar",
             "tree-view-connector",
@@ -1729,17 +1769,17 @@
     },
     "motion": {
       "status": "at-threshold",
-      "declared": 204,
-      "effective": 201,
+      "declared": 203,
+      "effective": 200,
       "effectiveDefinition": "declared families that are mountable and not unsettled (declared minus unmountable minus unsettled); reported, never the status",
       "populationLaw": null,
       "excludedUnmountable": 3,
       "excludedUnsettled": 0,
-      "notApplicable": 0,
+      "notApplicable": 1,
       "unobservable": 0,
       "unobservableFamilies": [],
-      "worstPercentDeclared": 83.8,
-      "worstPercentEffective": 85.1,
+      "worstPercentDeclared": 83.7,
+      "worstPercentEffective": 85,
       "effectiveAtThreshold": true,
       "nonMovers": [
         "anchor",
@@ -1823,11 +1863,11 @@
           "vertical": "bithire",
           "theme": "light",
           "measured": true,
-          "moved": 171,
-          "declared": 204,
-          "effective": 201,
-          "percentDeclared": 83.8,
-          "percentEffective": 85.1,
+          "moved": 170,
+          "declared": 203,
+          "effective": 200,
+          "percentDeclared": 83.7,
+          "percentEffective": 85,
           "nonMoverIds": [
             "anchor",
             "ascii-diagram",
@@ -1868,11 +1908,11 @@
           "vertical": "bithire",
           "theme": "dark",
           "measured": true,
-          "moved": 171,
-          "declared": 204,
-          "effective": 201,
-          "percentDeclared": 83.8,
-          "percentEffective": 85.1,
+          "moved": 170,
+          "declared": 203,
+          "effective": 200,
+          "percentDeclared": 83.7,
+          "percentEffective": 85,
           "nonMoverIds": [
             "anchor",
             "ascii-diagram",
@@ -1913,11 +1953,11 @@
           "vertical": "evnto",
           "theme": "light",
           "measured": true,
-          "moved": 171,
-          "declared": 204,
-          "effective": 201,
-          "percentDeclared": 83.8,
-          "percentEffective": 85.1,
+          "moved": 170,
+          "declared": 203,
+          "effective": 200,
+          "percentDeclared": 83.7,
+          "percentEffective": 85,
           "nonMoverIds": [
             "anchor",
             "ascii-diagram",
@@ -1958,11 +1998,11 @@
           "vertical": "evnto",
           "theme": "dark",
           "measured": true,
-          "moved": 171,
-          "declared": 204,
-          "effective": 201,
-          "percentDeclared": 83.8,
-          "percentEffective": 85.1,
+          "moved": 170,
+          "declared": 203,
+          "effective": 200,
+          "percentDeclared": 83.7,
+          "percentEffective": 85,
           "nonMoverIds": [
             "anchor",
             "ascii-diagram",
@@ -2003,11 +2043,11 @@
           "vertical": "rottay",
           "theme": "light",
           "measured": true,
-          "moved": 171,
-          "declared": 204,
-          "effective": 201,
-          "percentDeclared": 83.8,
-          "percentEffective": 85.1,
+          "moved": 170,
+          "declared": 203,
+          "effective": 200,
+          "percentDeclared": 83.7,
+          "percentEffective": 85,
           "nonMoverIds": [
             "anchor",
             "ascii-diagram",
@@ -2048,11 +2088,11 @@
           "vertical": "rottay",
           "theme": "dark",
           "measured": true,
-          "moved": 171,
-          "declared": 204,
-          "effective": 201,
-          "percentDeclared": 83.8,
-          "percentEffective": 85.1,
+          "moved": 170,
+          "declared": 203,
+          "effective": 200,
+          "percentDeclared": 83.7,
+          "percentEffective": 85,
           "nonMoverIds": [
             "anchor",
             "ascii-diagram",
@@ -2124,20 +2164,20 @@
         "vertical": "bithire",
         "theme": "light",
         "measured": true,
-        "moved": 111,
-        "restIsolated": 110,
-        "percentDeclared": 73,
-        "percentEffective": 74.5,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
         "chromaticOnly": [],
-        "nonChromatic": 125,
+        "nonChromatic": 123,
         "byChannel": {
-          "background-color": 24,
-          "box-shadow(colour)": 107,
+          "background-color": 22,
+          "box-shadow(colour)": 105,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 95,
-          "native": 99
+          "stamped": 94,
+          "native": 97
         },
         "movedIds": [
           "activity-cards",
@@ -2192,9 +2232,7 @@
           "invoice-template",
           "layout",
           "link",
-          "list-toolbar",
           "live-feed",
-          "locale-switcher",
           "markdown-view",
           "mentions",
           "menu",
@@ -2231,7 +2269,6 @@
           "shift-matrix",
           "splitter",
           "stats-grid",
-          "status-filter-pills",
           "stepper",
           "stepper-compounds",
           "table",
@@ -2257,20 +2294,20 @@
         "vertical": "bithire",
         "theme": "dark",
         "measured": true,
-        "moved": 111,
-        "restIsolated": 110,
-        "percentDeclared": 73,
-        "percentEffective": 74.5,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
         "chromaticOnly": [],
-        "nonChromatic": 125,
+        "nonChromatic": 123,
         "byChannel": {
-          "background-color": 24,
-          "box-shadow(colour)": 107,
+          "background-color": 22,
+          "box-shadow(colour)": 105,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 95,
-          "native": 99
+          "stamped": 94,
+          "native": 97
         },
         "movedIds": [
           "activity-cards",
@@ -2325,9 +2362,7 @@
           "invoice-template",
           "layout",
           "link",
-          "list-toolbar",
           "live-feed",
-          "locale-switcher",
           "markdown-view",
           "mentions",
           "menu",
@@ -2364,7 +2399,6 @@
           "shift-matrix",
           "splitter",
           "stats-grid",
-          "status-filter-pills",
           "stepper",
           "stepper-compounds",
           "table",
@@ -2390,20 +2424,20 @@
         "vertical": "evnto",
         "theme": "light",
         "measured": true,
-        "moved": 111,
-        "restIsolated": 110,
-        "percentDeclared": 73,
-        "percentEffective": 74.5,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
         "chromaticOnly": [],
-        "nonChromatic": 125,
+        "nonChromatic": 123,
         "byChannel": {
-          "background-color": 24,
-          "box-shadow(colour)": 107,
+          "background-color": 22,
+          "box-shadow(colour)": 105,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 95,
-          "native": 99
+          "stamped": 94,
+          "native": 97
         },
         "movedIds": [
           "activity-cards",
@@ -2458,9 +2492,7 @@
           "invoice-template",
           "layout",
           "link",
-          "list-toolbar",
           "live-feed",
-          "locale-switcher",
           "markdown-view",
           "mentions",
           "menu",
@@ -2497,7 +2529,6 @@
           "shift-matrix",
           "splitter",
           "stats-grid",
-          "status-filter-pills",
           "stepper",
           "stepper-compounds",
           "table",
@@ -2523,20 +2554,20 @@
         "vertical": "evnto",
         "theme": "dark",
         "measured": true,
-        "moved": 111,
-        "restIsolated": 110,
-        "percentDeclared": 73,
-        "percentEffective": 74.5,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
         "chromaticOnly": [],
-        "nonChromatic": 125,
+        "nonChromatic": 123,
         "byChannel": {
-          "background-color": 24,
-          "box-shadow(colour)": 107,
+          "background-color": 22,
+          "box-shadow(colour)": 105,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 95,
-          "native": 99
+          "stamped": 94,
+          "native": 97
         },
         "movedIds": [
           "activity-cards",
@@ -2591,9 +2622,7 @@
           "invoice-template",
           "layout",
           "link",
-          "list-toolbar",
           "live-feed",
-          "locale-switcher",
           "markdown-view",
           "mentions",
           "menu",
@@ -2630,7 +2659,6 @@
           "shift-matrix",
           "splitter",
           "stats-grid",
-          "status-filter-pills",
           "stepper",
           "stepper-compounds",
           "table",
@@ -2656,20 +2684,20 @@
         "vertical": "rottay",
         "theme": "light",
         "measured": true,
-        "moved": 111,
-        "restIsolated": 110,
-        "percentDeclared": 73,
-        "percentEffective": 74.5,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
         "chromaticOnly": [],
-        "nonChromatic": 125,
+        "nonChromatic": 123,
         "byChannel": {
-          "background-color": 24,
-          "box-shadow(colour)": 107,
+          "background-color": 22,
+          "box-shadow(colour)": 105,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 95,
-          "native": 99
+          "stamped": 94,
+          "native": 97
         },
         "movedIds": [
           "activity-cards",
@@ -2724,9 +2752,7 @@
           "invoice-template",
           "layout",
           "link",
-          "list-toolbar",
           "live-feed",
-          "locale-switcher",
           "markdown-view",
           "mentions",
           "menu",
@@ -2763,7 +2789,6 @@
           "shift-matrix",
           "splitter",
           "stats-grid",
-          "status-filter-pills",
           "stepper",
           "stepper-compounds",
           "table",
@@ -2789,20 +2814,20 @@
         "vertical": "rottay",
         "theme": "dark",
         "measured": true,
-        "moved": 111,
-        "restIsolated": 110,
-        "percentDeclared": 73,
-        "percentEffective": 74.5,
+        "moved": 108,
+        "restIsolated": 107,
+        "percentDeclared": 71.1,
+        "percentEffective": 72.5,
         "chromaticOnly": [],
-        "nonChromatic": 125,
+        "nonChromatic": 123,
         "byChannel": {
-          "background-color": 24,
-          "box-shadow(colour)": 107,
+          "background-color": 22,
+          "box-shadow(colour)": 105,
           "outline-color": 1
         },
         "halves": {
-          "stamped": 95,
-          "native": 99
+          "stamped": 94,
+          "native": 97
         },
         "movedIds": [
           "activity-cards",
@@ -2857,9 +2882,7 @@
           "invoice-template",
           "layout",
           "link",
-          "list-toolbar",
           "live-feed",
-          "locale-switcher",
           "markdown-view",
           "mentions",
           "menu",
@@ -2896,7 +2919,6 @@
           "shift-matrix",
           "splitter",
           "stats-grid",
-          "status-filter-pills",
           "stepper",
           "stepper-compounds",
           "table",
@@ -2919,53 +2941,55 @@
         ]
       }
     ],
-    "worstPercentDeclared": 73,
-    "worstPercentEffective": 74.5,
+    "worstPercentDeclared": 71.1,
+    "worstPercentEffective": 72.5,
     "chromaticOnly": [],
     "chromaticOnlyPinned": [],
     "byChannel": {
-      "background-color": 24,
-      "box-shadow(colour)": 107,
+      "background-color": 22,
+      "box-shadow(colour)": 105,
       "outline-color": 1
     },
     "halves": {
-      "stamped": 95,
-      "native": 99
+      "stamped": 94,
+      "native": 97
     },
     "unreached": [
       "edit-fields",
       "list",
+      "locale-switcher",
       "metrics-chart",
+      "status-filter-pills",
       "table-toolbar"
     ],
     "controls": {
       "palette-only": {
         "nonChromatic": "0 on 36/36 (the law)",
-        "chromatic": 122,
+        "chromatic": 120,
         "chromaticByCell": [
           {
             "where": "bithire/light",
-            "moved": 122
+            "moved": 120
           },
           {
             "where": "bithire/dark",
-            "moved": 122
+            "moved": 120
           },
           {
             "where": "evnto/light",
-            "moved": 122
+            "moved": 120
           },
           {
             "where": "evnto/dark",
-            "moved": 122
+            "moved": 120
           },
           {
             "where": "rottay/light",
-            "moved": 122
+            "moved": 120
           },
           {
             "where": "rottay/dark",
-            "moved": 122
+            "moved": 120
           }
         ],
         "channels": [
@@ -2986,31 +3010,31 @@
       },
       "states-emphasis-only": {
         "nonChromatic": "0 on 12/12 (the law)",
-        "chromatic": 24,
+        "chromatic": 22,
         "chromaticByCell": [
           {
             "where": "bithire/light",
-            "moved": 24
+            "moved": 22
           },
           {
             "where": "bithire/dark",
-            "moved": 24
+            "moved": 22
           },
           {
             "where": "evnto/light",
-            "moved": 24
+            "moved": 22
           },
           {
             "where": "evnto/dark",
-            "moved": 24
+            "moved": 22
           },
           {
             "where": "rottay/light",
-            "moved": 24
+            "moved": 22
           },
           {
             "where": "rottay/dark",
-            "moved": 24
+            "moved": 22
           }
         ],
         "channels": [
@@ -3019,7 +3043,7 @@
         "reads": "reference, not a zero: a chromatic reading has no 0 % law"
       }
     },
-    "line": "chromatic-states (reported apart, never a status): 111/152 declared (73 %), 111/149 effective (74.5 %), every cell; rest-isolated 110; chromatic-only: none; unreached: 4 colour-only families; palette-only non-chromatic 0 on 36/36 | chromatic 122 (reference)"
+    "line": "chromatic-states (reported apart, never a status): 108/152 declared (71.1 %), 108/149 effective (72.5 %), every cell; rest-isolated 107; chromatic-only: none; unreached: 6 colour-only families; palette-only non-chromatic 0 on 36/36 | chromatic 120 (reference)"
   },
   "negativeTest": {
     "status": "green",
@@ -3050,8 +3074,8 @@
             "where": "bithire/dark",
             "kind": "effective-map",
             "control": "palette.seeds",
-            "differing": 43,
-            "channels": 43
+            "differing": 44,
+            "channels": 44
           },
           {
             "where": "evnto/light",
@@ -3099,7 +3123,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 44,
+            "moved": 45,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3115,6 +3139,7 @@
               "column-settings",
               "command-palette",
               "date-picker",
+              "detail-panel",
               "drawer-compounds",
               "dropdown",
               "float-button",
@@ -3153,7 +3178,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 44,
+            "moved": 45,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3169,6 +3194,7 @@
               "column-settings",
               "command-palette",
               "date-picker",
+              "detail-panel",
               "drawer-compounds",
               "dropdown",
               "float-button",
@@ -3207,7 +3233,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 44,
+            "moved": 45,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3223,6 +3249,7 @@
               "column-settings",
               "command-palette",
               "date-picker",
+              "detail-panel",
               "drawer-compounds",
               "dropdown",
               "float-button",
@@ -3261,7 +3288,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 44,
+            "moved": 45,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3277,6 +3304,7 @@
               "column-settings",
               "command-palette",
               "date-picker",
+              "detail-panel",
               "drawer-compounds",
               "dropdown",
               "float-button",
@@ -3315,7 +3343,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 44,
+            "moved": 45,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3331,6 +3359,7 @@
               "column-settings",
               "command-palette",
               "date-picker",
+              "detail-panel",
               "drawer-compounds",
               "dropdown",
               "float-button",
@@ -3369,7 +3398,7 @@
             "kind": "axis-positive",
             "control": "states.emphasis",
             "axis": "states",
-            "moved": 44,
+            "moved": 45,
             "denominator": 149,
             "movedIds": [
               "alert",
@@ -3385,6 +3414,7 @@
               "column-settings",
               "command-palette",
               "date-picker",
+              "detail-panel",
               "drawer-compounds",
               "dropdown",
               "float-button",
