@@ -4,7 +4,7 @@
     "packages/core/src/components/patterns/data/grid-view",
     "packages/core/src/components/patterns/data/grid-view/contracts/index.ts",
     "packages/core/src/components/patterns/data/grid-view/index.ts",
-    "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx",
+    "packages/core/src/components/patterns/data/grid-view/presentation/react/index.tsx",
     "packages/core/src/components/patterns/data/grid-view/runtime/item-identity/index.ts",
     "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
     "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts"

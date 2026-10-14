@@ -44,10 +44,10 @@
  */
 import React, { useState, useRef, useCallback, useEffect, useId } from 'react';
 import type { UploadProps, DraggerProps, UploadFile, UploadChangeInfo, UploadListType } from '../../contracts';
-import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { useFieldOverlay } from '../../../../runtime/overlay/field';
 import { useFileDropZone } from '../../../../runtime/collection/sortable';
 import { UPLOAD_DEFAULTS } from '../../contracts';
-import { filterDroppedFiles, removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/upload-behavior';
+import { filterDroppedFiles, removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/behavior';
 import { Progress } from '../../../../facade';
 import { useTranslation, formatFileSize } from '@/infrastructure/runtime/i18n';
 import { ActionAddIcon } from '@/graphics/icons/semantic/generated/roles/action-add';

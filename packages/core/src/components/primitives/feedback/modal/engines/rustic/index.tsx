@@ -75,7 +75,7 @@ import React, { useCallback, useEffect, useId } from 'react';
 import type { ModalProps, ModalSize } from '../../contracts';
 import { MODAL_DEFAULTS } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
-import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
+import { FocusTrap } from '../../../../runtime/overlay/focus-management/trap';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive';

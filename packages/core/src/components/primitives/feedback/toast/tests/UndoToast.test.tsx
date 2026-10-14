@@ -56,7 +56,7 @@ vi.mock('../engines', () => ({
   },
 }));
 
-import { UndoToast } from '../compound/undo-toast';
+import { UndoToast } from '../compound/undo';
 
 describe('UndoToast timer orchestration', () => {
   afterEach(() => {

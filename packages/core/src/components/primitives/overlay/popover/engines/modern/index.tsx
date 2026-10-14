@@ -73,7 +73,7 @@ import {
 import {
   useFieldOverlay,
   type FieldOverlayDismissReason,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { readLocaleContext } from '../../../../runtime/overlay/portal-scope';
 import {

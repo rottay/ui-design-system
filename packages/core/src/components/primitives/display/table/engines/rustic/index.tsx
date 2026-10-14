@@ -31,7 +31,7 @@ import {
   useTableFeatures,
   columnFieldKey,
   type HeaderCell,
-} from '../../runtime/table-features';
+} from '../../runtime/features';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 

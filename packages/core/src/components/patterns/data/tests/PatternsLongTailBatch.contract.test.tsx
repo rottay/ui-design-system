@@ -7,8 +7,8 @@ import { BulkSelectToggle } from '../bulk-select-toggle';
 // cellRenderers now lives in `patterns/runtime/cell-renderers`; the `patterns/data`
 // barrel re-exports it so data-column callers keep one import.
 import { cellRenderers } from '..';
-import { PatternGalleryView } from '../gallery-view/presentation/gallery';
-import { PatternGridView } from '../grid-view/presentation/grid';
+import { PatternGalleryView } from '../gallery-view/presentation/react';
+import { PatternGridView } from '../grid-view/presentation/react';
 import ModernStatsGrid from '../stats-grid/engines/modern';
 import RusticStatsGrid from '../stats-grid/engines/rustic';
 

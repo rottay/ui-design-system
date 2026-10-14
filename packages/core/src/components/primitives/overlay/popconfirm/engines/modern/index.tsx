@@ -41,7 +41,7 @@ import { POPCONFIRM_DEFAULTS, POPCONFIRM_TO_OVERLAY_PLACEMENT } from '../../cont
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
 import { ModernButton as Button } from '../../../../facade';
-import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { useFieldOverlay } from '../../../../runtime/overlay/field';
 import { readLocaleContext } from '../../../../runtime/overlay/portal-scope';
 import type { OverlayPlacement } from '../../../../runtime/overlay/positioning';
 

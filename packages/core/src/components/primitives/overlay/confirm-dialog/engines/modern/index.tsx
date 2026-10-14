@@ -30,7 +30,7 @@ import { ModernButton as Button } from '../../../../facade';
 import {
   FieldOverlayPanel,
   useFieldOverlay,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import { TopLayerHostProvider, useTopLayerDialog } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 

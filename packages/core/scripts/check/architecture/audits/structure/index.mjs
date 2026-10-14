@@ -369,7 +369,7 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     'portal-scope': 1,
     positioning: 1,
     'layer-stack': 1,
-    'field-overlay': 2,
+    field: 2,
   }),
   'components/primitives/feedback/toast/runtime/state': Object.freeze({
     'method-registry': 0,
@@ -403,7 +403,7 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
   // composes the states; the states do not observe the hook.
   'components/structures/feedback/surface-lifecycle': Object.freeze({
     states: 0,
-    'use-surface-state': 1,
+    'state-machine': 1,
   }),
   // One posture family, two internal branches on the same one-way composition
   // law: `region` owns viewport resolution and the per-region rendering

@@ -4,7 +4,7 @@
     "packages/core/src/components/patterns/data/virtual-list",
     "packages/core/src/components/patterns/data/virtual-list/contracts/index.ts",
     "packages/core/src/components/patterns/data/virtual-list/index.ts",
-    "packages/core/src/components/patterns/data/virtual-list/presentation/list/index.tsx",
+    "packages/core/src/components/patterns/data/virtual-list/presentation/react/index.tsx",
     "packages/core/src/foundation/tokens/css/presentation/components/skin/virtual-list/index.css",
     "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts"
   ],

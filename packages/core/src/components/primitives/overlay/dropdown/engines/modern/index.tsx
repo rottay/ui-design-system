@@ -30,7 +30,7 @@ import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import {
   useFieldOverlay,
   type FieldOverlayDismissReason,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import { DROPDOWN_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';

@@ -23,7 +23,7 @@ import {
   resolveContainerPosture,
 } from '@/foundation/contracts/kernel/adaptation/foundation';
 import { DEFAULT_RESPONSIVE_POSTURE } from '@/foundation/tokens/ts/presentation/responsive-postures';
-import { PatternGalleryView } from '../presentation/gallery';
+import { PatternGalleryView } from '../presentation/react';
 import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,

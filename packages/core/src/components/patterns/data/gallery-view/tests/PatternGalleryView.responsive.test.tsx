@@ -3,7 +3,7 @@ import { waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { renderWithEngine } from '@tests/support/engine';
-import { PatternGalleryView } from '../presentation/gallery';
+import { PatternGalleryView } from '../presentation/react';
 
 interface Photo {
   id: string;

@@ -11,7 +11,7 @@ import {
   getNestedValue,
   normalizeTableKey,
   useTableFeatures,
-} from '../runtime/table-features';
+} from '../runtime/features';
 
 interface TableRow {
   id: string;

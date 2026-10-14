@@ -37,7 +37,7 @@
       },
       {
         "repo": "ui-design-system",
-        "path": "packages/core/src/components/primitives/feedback/toast/compound/undo-toast/index.tsx",
+        "path": "packages/core/src/components/primitives/feedback/toast/compound/undo/index.tsx",
         "symbol": "${ringAnimName}",
         "owner": "design-system",
         "requiresSourcePattern": "const ringAnimName = `ds-toast-undo-ring-",
@@ -45,7 +45,7 @@
       },
       {
         "repo": "ui-design-system",
-        "path": "packages/core/src/components/primitives/feedback/toast/compound/undo-toast/index.tsx",
+        "path": "packages/core/src/components/primitives/feedback/toast/compound/undo/index.tsx",
         "symbol": "${barAnimName}",
         "owner": "design-system",
         "requiresSourcePattern": "const barAnimName = `ds-toast-undo-bar-",

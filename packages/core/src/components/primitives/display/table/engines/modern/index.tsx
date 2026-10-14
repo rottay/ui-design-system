@@ -35,7 +35,7 @@ import {
   useTableFeatures,
   columnFieldKey,
   type HeaderCell,
-} from '../../runtime/table-features';
+} from '../../runtime/features';
 import { AnatomySkeleton } from '../../../../feedback/skeleton';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';

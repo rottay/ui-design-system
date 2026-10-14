@@ -243,7 +243,7 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
       'portal-scope': 1,
       positioning: 1,
       'layer-stack': 1,
-      'field-overlay': 2,
+      field: 2,
     },
     'components/primitives/feedback/toast/runtime/state': {
       'method-registry': 0,
@@ -257,7 +257,7 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
     },
     'components/structures/feedback/surface-lifecycle': {
       states: 0,
-      'use-surface-state': 1,
+      'state-machine': 1,
     },
     // The region owns viewport resolution and per-region rendering; the scope
     // composes that floor with context, density and the action dock.
@@ -423,7 +423,7 @@ test('the structures shell is declared substrate for headers only, not for every
     );
     write(resolve(sourceRoot, 'components/structures/feedback/surface-lifecycle/states/index.ts'), 'export const states = true;\n');
     write(
-      resolve(sourceRoot, 'components/structures/feedback/surface-lifecycle/use-surface-state/index.ts'),
+      resolve(sourceRoot, 'components/structures/feedback/surface-lifecycle/state-machine/index.ts'),
       "import { states } from '../states';\nexport const useSurfaceState = states;\n",
     );
 
@@ -455,7 +455,7 @@ test('the structures shell is declared substrate for headers only, not for every
       'components/structures/headers/header-surface/index.ts->components/structures/shell/surface-chrome/index.ts',
       'components/structures/shell/navigation/sidebar-surface/index.ts->components/structures/shell/surface-chrome/index.ts',
       'components/structures/workspace/search-command-bar/index.ts->components/structures/workspace/connected-command-palette/index.ts',
-      'components/structures/feedback/surface-lifecycle/use-surface-state/index.ts->components/structures/feedback/surface-lifecycle/states/index.ts',
+      'components/structures/feedback/surface-lifecycle/state-machine/index.ts->components/structures/feedback/surface-lifecycle/states/index.ts',
     ]) {
       assert(!ids.has(`sibling-owner-dependency:${edge}`));
       assert(!ids.has(`local-layer-inversion:${edge}`));
@@ -679,7 +679,7 @@ test('the overlay contract composes its substrate without making UI peers global
   try {
     const owner = 'components/primitives/runtime/overlay';
     write(
-      resolve(sourceRoot, `${owner}/field-overlay/index.ts`),
+      resolve(sourceRoot, `${owner}/field/index.ts`),
       [
         "import { layer } from '../layer-stack';",
         "import { portal } from '../portal';",
@@ -691,7 +691,7 @@ test('the overlay contract composes its substrate without making UI peers global
     for (const mechanism of ['layer-stack', 'portal', 'portal-scope', 'positioning']) {
       write(
         resolve(sourceRoot, `${owner}/${mechanism}/index.ts`),
-        "import { contract } from '../field-overlay';\nexport const mechanism = contract;\n",
+        "import { contract } from '../field';\nexport const mechanism = contract;\n",
       );
     }
     write(
@@ -705,10 +705,10 @@ test('the overlay contract composes its substrate without making UI peers global
     // Downstream -> upstream is the declared ladder, not sibling debt.
     for (const mechanism of ['layer-stack', 'portal', 'portal-scope', 'positioning']) {
       assert(!ids.has(
-        `sibling-owner-dependency:${owner}/field-overlay/index.ts->${owner}/${mechanism}/index.ts`,
+        `sibling-owner-dependency:${owner}/field/index.ts->${owner}/${mechanism}/index.ts`,
       ));
       assert(ids.has(
-        `local-layer-inversion:${owner}/${mechanism}/index.ts->${owner}/field-overlay/index.ts`,
+        `local-layer-inversion:${owner}/${mechanism}/index.ts->${owner}/field/index.ts`,
       ));
     }
     // The substrate floor stays below the mechanisms that consume it.
@@ -743,10 +743,10 @@ test('the posture scope composes the region floor without widening the sibling r
     // Control B: an unrelated family keeps its own existing inversion law.
     write(
       resolve(sourceRoot, 'components/structures/feedback/surface-lifecycle/states/index.ts'),
-      "import { useSurfaceState } from '../use-surface-state';\nexport const states = useSurfaceState;\n",
+      "import { useSurfaceState } from '../state-machine';\nexport const states = useSurfaceState;\n",
     );
     write(
-      resolve(sourceRoot, 'components/structures/feedback/surface-lifecycle/use-surface-state/index.ts'),
+      resolve(sourceRoot, 'components/structures/feedback/surface-lifecycle/state-machine/index.ts'),
       'export const useSurfaceState = true;\n',
     );
 
@@ -760,7 +760,7 @@ test('the posture scope composes the region floor without widening the sibling r
     assert(ids.has(`local-layer-inversion:${owner}/region/index.ts->${owner}/scope/index.ts`));
     assert(ids.has(`sibling-owner-dependency:${owner}/to-shell-adapt/index.ts->${owner}/region/index.ts`));
     assert(ids.has(
-      'local-layer-inversion:components/structures/feedback/surface-lifecycle/states/index.ts->components/structures/feedback/surface-lifecycle/use-surface-state/index.ts',
+      'local-layer-inversion:components/structures/feedback/surface-lifecycle/states/index.ts->components/structures/feedback/surface-lifecycle/state-machine/index.ts',
     ));
   } finally {
     rmSync(packageRoot, { recursive: true, force: true });

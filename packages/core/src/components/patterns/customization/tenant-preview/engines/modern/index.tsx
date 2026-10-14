@@ -29,7 +29,7 @@ import type { TenantPreviewProps, PreviewComponent } from '../../contracts';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { resolvePersonalityPreset } from '../../../../../../infrastructure/runtime/tenant/foundation/personality/presets';
-import { buildPreviewCss, draftPreviewSource } from '../../runtime/preview-css';
+import { buildPreviewCss, draftPreviewSource } from '../../runtime/css';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import ModernInput from '../../../../../primitives/inputs/input/engines/modern';

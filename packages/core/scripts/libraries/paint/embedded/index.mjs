@@ -42,7 +42,7 @@ const CERTIFIED_DATA_CSS_IMPORTS = new Map([
   ],
   [
     "buildPreviewCss",
-    "src/components/patterns/customization/tenant-preview/runtime/preview-css",
+    "src/components/patterns/customization/tenant-preview/runtime/css",
   ],
   [
     "useTenantThemePreview",

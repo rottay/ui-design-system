@@ -91,7 +91,7 @@ const PRIVATE_IMPLEMENTATION_BRANCHES = new Set([
  *   application-command runtime instead of a shared command contract.
  */
 const REGISTERED_DEBT = new Set([
-  'ui/patterns/visualization/tree-view/engines/modern/index.tsx -> ui/primitives/display/tree/runtime/tree-behavior/index.ts',
+  'ui/patterns/visualization/tree-view/engines/modern/index.tsx -> ui/primitives/display/tree/runtime/behavior/index.ts',
   'ui/structures/workspace/connected-command-palette/index.tsx -> ui/patterns/navigation/command-palette/runtime/application-commands/index.ts',
 ]);
 

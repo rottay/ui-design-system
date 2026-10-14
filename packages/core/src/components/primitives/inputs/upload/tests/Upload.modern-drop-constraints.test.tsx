@@ -3,7 +3,7 @@ import { fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Dragger } from '../engines/modern';
-import { filterDroppedFiles } from '../runtime/upload-behavior';
+import { filterDroppedFiles } from '../runtime/behavior';
 import { renderWithEngine } from '@tests/support/engine';
 
 /**

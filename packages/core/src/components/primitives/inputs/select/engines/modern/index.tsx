@@ -38,7 +38,7 @@ import {
   FieldOverlayPanel,
   useFieldOverlay,
   type FieldOverlayDismissReason,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import { isTypeaheadKey, useListbox } from '../../../../runtime/collection/listbox';
 import { resolveComboboxListState } from '../../../../runtime/collection/combobox';
 import {

@@ -28,7 +28,7 @@ import {
   resolveContainerPosture,
 } from '@/foundation/contracts/kernel/adaptation/foundation';
 import { DEFAULT_RESPONSIVE_POSTURE } from '@/foundation/tokens/ts/presentation/responsive-postures';
-import { PatternGridView } from '../presentation/grid';
+import { PatternGridView } from '../presentation/react';
 import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,

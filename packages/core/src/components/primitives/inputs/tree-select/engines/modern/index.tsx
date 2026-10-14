@@ -35,7 +35,7 @@ import type {
   TreeSelectMappedNode,
 } from '../../contracts';
 import { TREESELECT_DEFAULTS } from '../../contracts';
-import { FieldOverlayPanel, useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { FieldOverlayPanel, useFieldOverlay } from '../../../../runtime/overlay/field';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';

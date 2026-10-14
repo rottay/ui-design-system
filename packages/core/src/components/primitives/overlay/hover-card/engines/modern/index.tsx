@@ -40,7 +40,7 @@
 import React, { useState, useRef, useCallback, useEffect, useId, isValidElement, cloneElement } from 'react';
 import type { HoverCardProps } from '../../contracts';
 import { HOVERCARD_DEFAULTS, resolveOverlayPlacement } from '../../contracts';
-import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { useFieldOverlay } from '../../../../runtime/overlay/field';
 import { toPhysicalPlacementAttribute } from '../../../../runtime/overlay/positioning';
 import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { usePresence } from '@/graphics/motion/react/runtime';

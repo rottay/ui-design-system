@@ -20,7 +20,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import type { UploadProps, DraggerProps, UploadFile, UploadListType } from '../../contracts';
 import { UPLOAD_DEFAULTS } from '../../contracts';
-import { removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/upload-behavior';
+import { removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/behavior';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 
 // ---------------------------------------------------------------------------

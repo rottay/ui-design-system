@@ -45,7 +45,7 @@ import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import type { ContextMenuProps, ContextMenuItem } from '../../contracts';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { usePresence } from '@/graphics/motion/react/runtime';
-import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { useFieldOverlay } from '../../../../runtime/overlay/field';
 import { resolveTypeaheadPrefix } from '../../../../runtime/collection/typeahead';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 

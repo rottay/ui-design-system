@@ -39,14 +39,14 @@ export type {
   SurfaceOfflineBannerProps,
 } from './states';
 
-export { useSurfaceState } from './use-surface-state';
+export { useSurfaceState } from './state-machine';
 
 export type {
   SurfaceState,
   SurfaceStateRenderConfig,
   UseSurfaceStateOptions,
   UseSurfaceStateReturn,
-} from './use-surface-state';
+} from './state-machine';
 
 export { SurfaceErrorBoundary } from './error-boundary';
 export type { SurfaceErrorBoundaryProps } from './error-boundary';

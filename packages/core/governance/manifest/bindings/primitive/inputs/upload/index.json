@@ -6,7 +6,7 @@
     "packages/core/src/components/primitives/inputs/upload/engines/modern/index.tsx",
     "packages/core/src/components/primitives/inputs/upload/engines/rustic/index.tsx",
     "packages/core/src/components/primitives/inputs/upload/index.ts",
-    "packages/core/src/components/primitives/inputs/upload/runtime/upload-behavior/index.ts",
+    "packages/core/src/components/primitives/inputs/upload/runtime/behavior/index.ts",
     "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/upload/index.css"
   ],
   "provenance": {

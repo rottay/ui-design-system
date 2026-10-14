@@ -28,7 +28,7 @@ import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames }
 import {
   FieldOverlayPanel,
   useFieldOverlay,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import { CASCADER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';

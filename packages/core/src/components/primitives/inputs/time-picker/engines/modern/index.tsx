@@ -27,7 +27,7 @@ import type { TimePickerProps, TimeRangePickerProps, TimePickerPlacement } from 
 import {
   FieldOverlayPanel,
   useFieldOverlay,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';

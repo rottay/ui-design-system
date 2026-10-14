@@ -22,8 +22,8 @@ import React, { useEffect, useCallback, useRef, useId } from 'react';
 import { createPortal } from 'react-dom';
 import type { SheetProps } from '../../contracts';
 import { SHEET_DEFAULTS } from '../../contracts';
-import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
-import { useSheetOverlayRuntime } from '../../runtime/overlay-stack';
+import { FocusTrap } from '../../../../runtime/overlay/focus-management/trap';
+import { useSheetOverlayRuntime } from '../../runtime/stack';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 
 /**

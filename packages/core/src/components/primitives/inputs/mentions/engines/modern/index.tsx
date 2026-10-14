@@ -28,7 +28,7 @@ import type { MentionsProps, MentionsOption } from '../../contracts';
 import {
   FieldOverlayPanel,
   useFieldOverlay,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import { MENTIONS_DEFAULTS } from '../../contracts';
 
 /**

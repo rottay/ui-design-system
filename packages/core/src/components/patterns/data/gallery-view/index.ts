@@ -12,4 +12,4 @@
 
 export type { GalleryViewProps, GalleryViewAdaptation } from './contracts';
 export { resolveGalleryKey } from './runtime/item-identity';
-export { PatternGalleryView } from './presentation/gallery';
+export { PatternGalleryView } from './presentation/react';

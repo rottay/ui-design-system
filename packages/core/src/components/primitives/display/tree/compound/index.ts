@@ -26,5 +26,5 @@
  * @package @rottay/design-system
  */
 
-export { TreeNode } from './tree-node';
-export type { TreeNodeProps } from './tree-node';
+export { TreeNode } from './node';
+export type { TreeNodeProps } from './node';

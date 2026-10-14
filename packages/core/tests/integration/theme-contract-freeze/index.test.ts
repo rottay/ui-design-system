@@ -654,7 +654,7 @@ describe("channel minting and CSS text have declared owners", () => {
    */
   const ASSEMBLERS: readonly { file: string; symbol: string }[] = [
     {
-      file: "components/patterns/customization/tenant-preview/runtime/preview-css/index.ts",
+      file: "components/patterns/customization/tenant-preview/runtime/css/index.ts",
       symbol: "isSafePreviewCssValue",
     },
     { file: EMISSION_ASSEMBLY_OWNER, symbol: "admitCssVariables" },

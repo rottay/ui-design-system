@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
-import { FocusTrap, useFocusTrap } from '../../../runtime/overlay/focus-management/focus-trap';
+import { FocusTrap, useFocusTrap } from '../../../runtime/overlay/focus-management/trap';
 import { Portal, usePortalContainer } from '../../../runtime/overlay/portal';
 
 function PortalHarness(): React.ReactElement | null {

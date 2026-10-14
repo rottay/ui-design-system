@@ -4,7 +4,7 @@
     "packages/core/src/components/patterns/data/gallery-view",
     "packages/core/src/components/patterns/data/gallery-view/contracts/index.ts",
     "packages/core/src/components/patterns/data/gallery-view/index.ts",
-    "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx",
+    "packages/core/src/components/patterns/data/gallery-view/presentation/react/index.tsx",
     "packages/core/src/components/patterns/data/gallery-view/runtime/item-identity/index.ts",
     "packages/core/src/components/patterns/data/gallery-view/runtime/keyboard-navigation/index.ts",
     "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",

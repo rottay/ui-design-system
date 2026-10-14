@@ -27,7 +27,7 @@ import type {
 import {
   FieldOverlayPanel,
   useFieldOverlay,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import type { OverlayPlacement } from '../../../../runtime/overlay/positioning';
 import { partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';

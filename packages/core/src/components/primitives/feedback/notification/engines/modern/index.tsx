@@ -28,7 +28,7 @@ import type {
 import { NOTIFICATION_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { FieldOverlayPanel, useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { FieldOverlayPanel, useFieldOverlay } from '../../../../runtime/overlay/field';
 import { NotifierItem, NotifierStack, type NotifierPlacement, type NotifierTone } from '../../../foundation/notifier';
 
 interface InternalNotification extends NotificationItemProps {

@@ -57,7 +57,7 @@
   },
   "pinnedDebt": {},
   "inert": {
-    "primitives/feedback/toast/compound/undo-toast/index.tsx": {
+    "primitives/feedback/toast/compound/undo/index.tsx": {
       "sites": 2,
       "reason": "The countdown bar track is pinned on BOTH inline edges (`left: 0` with `right: 0`) inside the toast surface, so it spans the full width and the reading direction moves neither edge. Clearing it to `inset-inline: 0` is a zero-pixel change."
     },

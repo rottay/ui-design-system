@@ -40,13 +40,13 @@ import {
 import {
   PREVIEW_SCOPE_ATTRIBUTE,
   buildTenantThemePreviewScope,
-} from './preview-scope';
+} from './scope';
 
 export { PREVIEW_SCOPE_ATTRIBUTE };
 export {
   buildTenantThemePreviewScope,
   type TenantThemePreviewScope,
-} from './preview-scope';
+} from './scope';
 export {
   selectTenantThemeAdjustments,
   type TenantThemeContrastAdjustment,

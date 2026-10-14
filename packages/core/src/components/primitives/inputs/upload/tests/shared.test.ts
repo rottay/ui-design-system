@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { createUploadFile, removeUploadFile, resolveAcceptedUploadFiles } from '../runtime/upload-behavior';
+import { createUploadFile, removeUploadFile, resolveAcceptedUploadFiles } from '../runtime/behavior';
 import type { UploadFile } from '../contracts';
 
 function makeFile(name: string, type = 'text/plain') {

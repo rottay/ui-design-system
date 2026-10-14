@@ -85,7 +85,7 @@ import {
 import {
   useFieldOverlay,
   type FieldOverlayDismissReason,
-} from "../../../../runtime/overlay/field-overlay";
+} from "../../../../runtime/overlay/field";
 import { resolveExitFallbackMs } from "@/graphics/motion/react/runtime/presence/duration";
 
 type OpenReason = "hover" | "focus" | "click" | "content" | "touch";

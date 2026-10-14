@@ -45,12 +45,12 @@ export type { ToastContainerProps } from './container';
  * UndoToast - undo-window recipe (countdown + Undo action), reduced-motion safe.
  * @see {@link UndoToastProps} for prop documentation
  */
-export { UndoToast } from './undo-toast';
+export { UndoToast } from './undo';
 
 /**
  * Props for the UndoToast recipe.
  */
-export type { UndoToastProps } from './undo-toast';
+export type { UndoToastProps } from './undo';
 
 /**
  * AnimatedCheck - draw-in success checkmark for completed confirm flows.

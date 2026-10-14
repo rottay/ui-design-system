@@ -33,14 +33,14 @@ import { Portal } from '../../../primitives/runtime/overlay/portal';
 import { useOverlayLayer } from '../../../primitives/runtime/overlay/layer-stack';
 import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import type { ExportColumn } from './runtime/file-export';
+import type { ExportColumn } from './runtime/formats';
 import {
   copyToClipboard,
   generateClipboardText,
   generateCsv,
   generateJson,
   triggerDownload,
-} from './runtime/file-export';
+} from './runtime/formats';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -382,7 +382,7 @@ export function ExportButton<T = unknown>({
 }
 
 // Re-export utilities so consumers can use them standalone.
-export type { ExportColumn, ExportFormat } from './runtime/file-export';
+export type { ExportColumn, ExportFormat } from './runtime/formats';
 export {
   generateCsv,
   generateJson,
@@ -391,4 +391,4 @@ export {
   copyToClipboard,
   resolveValue,
   resolveHeader,
-} from './runtime/file-export';
+} from './runtime/formats';

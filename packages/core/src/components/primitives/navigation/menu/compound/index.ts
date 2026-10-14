@@ -42,7 +42,7 @@
 
 export { MenuItem } from './item';
 export { MenuGroup } from './group';
-export { MenuSubMenu } from './sub-menu';
+export { MenuSubMenu } from './submenu';
 export { MenuDivider } from './divider';
 
 // ============================================================================

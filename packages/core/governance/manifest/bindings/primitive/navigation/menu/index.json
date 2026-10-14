@@ -5,7 +5,7 @@
     "packages/core/src/components/primitives/navigation/menu/compound/group/index.tsx",
     "packages/core/src/components/primitives/navigation/menu/compound/index.ts",
     "packages/core/src/components/primitives/navigation/menu/compound/item/index.tsx",
-    "packages/core/src/components/primitives/navigation/menu/compound/sub-menu/index.tsx",
+    "packages/core/src/components/primitives/navigation/menu/compound/submenu/index.tsx",
     "packages/core/src/components/primitives/navigation/menu/contracts/index.ts",
     "packages/core/src/components/primitives/navigation/menu/engines/classic/index.tsx",
     "packages/core/src/components/primitives/navigation/menu/engines/modern/index.tsx",

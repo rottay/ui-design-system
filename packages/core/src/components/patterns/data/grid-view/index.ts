@@ -13,4 +13,4 @@
 
 export type { GridViewProps, GridViewAdaptation } from './contracts';
 export { resolveGridRowKey } from './runtime/item-identity';
-export { PatternGridView } from './presentation/grid';
+export { PatternGridView } from './presentation/react';

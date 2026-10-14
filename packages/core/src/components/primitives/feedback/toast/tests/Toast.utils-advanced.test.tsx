@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import type { ToastMethods } from '../contracts';
 import { ToastProvider, useToastContext } from '../runtime/state/provider';
-import { toast, useToast } from '../runtime/state/provider/use-toast';
+import { toast, useToast } from '../runtime/state/provider/imperative';
 import { clearToastMethods, getToastMethods, setToastMethods } from '../runtime/state/method-registry';
 function ToastHookHarness(): React.ReactElement {
   const api = useToast();

@@ -19,7 +19,7 @@ import RusticTextarea from '@/components/primitives/inputs/textarea/engines/rust
 import { MenuDivider } from '@/components/primitives/navigation/menu/compound/divider';
 import { MenuGroup } from '@/components/primitives/navigation/menu/compound/group';
 import { MenuItem } from '@/components/primitives/navigation/menu/compound/item';
-import { MenuSubMenu } from '@/components/primitives/navigation/menu/compound/sub-menu';
+import { MenuSubMenu } from '@/components/primitives/navigation/menu/compound/submenu';
 import ModernMenu from '@/components/primitives/navigation/menu/engines/modern';
 import { StepperContent } from '@/components/primitives/navigation/stepper/compound/content';
 import { StepperStep } from '@/components/primitives/navigation/stepper/compound/step';

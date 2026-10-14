@@ -51,7 +51,7 @@ import React, { useState, useEffect, useCallback, useId, useRef } from 'react';
 import type { TourProps, TourStepProps } from '../../contracts';
 import { TOUR_DEFAULTS } from '../../contracts';
 import { OverlayPortalBoundary } from '../../../../runtime/overlay/positioning';
-import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { useFieldOverlay } from '../../../../runtime/overlay/field';
 import { Portal } from '../../../../runtime/overlay/portal';
 import {
   usePortalScope,

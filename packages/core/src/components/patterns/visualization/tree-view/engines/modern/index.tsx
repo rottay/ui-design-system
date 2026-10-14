@@ -40,7 +40,7 @@ import type {
   TreeDataNode,
   TreeDropInfo,
 } from '../../../../../primitives/display/tree/contracts';
-import { filterTree } from '../../../../../primitives/display/tree/runtime/tree-behavior';
+import { filterTree } from '../../../../../primitives/display/tree/runtime/behavior';
 import Input from '../../../../../primitives/inputs/input/engines/modern';
 import ModernEmpty from '../../../../../primitives/display/empty/engines/modern';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';

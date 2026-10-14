@@ -39,7 +39,7 @@ import {
   flattenVisibleKeys,
   computeHalfCheckedKeys,
   filterTree,
-} from '../../runtime/tree-behavior';
+} from '../../runtime/behavior';
 
 // ---------------------------------------------------------------------------
 // Highlight helper

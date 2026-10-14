@@ -337,7 +337,7 @@ test('a SECOND site in an already-pinned file grows its count and fails', () => 
 });
 
 test('a second site in an INERT file grows that band too', () => {
-  const inertPath = 'primitives/feedback/toast/compound/undo-toast/index.tsx';
+  const inertPath = 'primitives/feedback/toast/compound/undo/index.tsx';
   const pin = readBaseline().inert[inertPath].sites;
   withPlantedTree(
     (sandbox) => plant(sandbox, inertPath, 'marginLeft: 4'),

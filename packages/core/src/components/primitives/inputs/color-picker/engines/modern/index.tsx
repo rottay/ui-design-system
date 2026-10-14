@@ -41,7 +41,7 @@ import type { OverlayPlacement } from '../../../../runtime/overlay/positioning';
 import {
   FieldOverlayPanel,
   useFieldOverlay,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import { COLORPICKER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { resolveCssColor } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';

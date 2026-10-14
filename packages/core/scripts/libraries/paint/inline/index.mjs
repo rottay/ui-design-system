@@ -609,7 +609,7 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     // `data-ds-anchor` attributes. zeroPaint is verified against the hook's
     // own source, which is why that source builds its bags as plain literals
     // rather than through an opaque `useMemo`.
-    "components/primitives/runtime/overlay/field-overlay/index",
+    "components/primitives/runtime/overlay/field/index",
     new Map([
       [
         "useFieldOverlay",

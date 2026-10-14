@@ -697,7 +697,7 @@ export const AS_RENDERED_ROOT_STAMPS = Object.freeze({
   'grid-view': Object.freeze([Object.freeze({
     attribute: 'data-empty',
     value: 'false',
-    source: 'src/components/patterns/data/grid-view/presentation/grid/index.tsx',
+    source: 'src/components/patterns/data/grid-view/presentation/react/index.tsx',
     // Every branch of this renderer stamps the attribute; `false` is the one
     // the loaded grid carries, and it is the branch the family exists for.
     stamp: 'data-empty="false"',

@@ -25,7 +25,7 @@ import { Portal } from '../../../../runtime/overlay/portal';
 import { usePortalScope, usePortalScopeConsumer } from '../../../../runtime/overlay/portal-scope';
 import { TopLayerHostProvider, useTopLayerDialog } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
-import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { useFieldOverlay } from '../../../../runtime/overlay/field';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { usePresence } from '@/graphics/motion/react/runtime';

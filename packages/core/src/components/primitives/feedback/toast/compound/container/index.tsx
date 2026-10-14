@@ -25,7 +25,7 @@ import type { ToastPosition, ToastState } from '../../contracts';
 import {
   FieldOverlayPanel,
   useFieldOverlay,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import { TOAST_CONTAINER_DEFAULTS, POSITION_MAP } from '../../contracts';
 import { useToastContext } from '../../runtime/state/provider';
 import { injectToastStyles, getToastAnimationStyle } from '../../runtime/animation';

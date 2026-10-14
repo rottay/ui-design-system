@@ -18,7 +18,7 @@ import { describe, expect, it } from 'vitest';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { TenantConfig } from '@/foundation/contracts';
-import { PatternVirtualList } from '../presentation/list';
+import { PatternVirtualList } from '../presentation/react';
 import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,

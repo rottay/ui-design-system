@@ -199,10 +199,10 @@ const DOOR_TRAITS: Record<OverlayDoor, DoorTraits> = {
  * the door decides which rung of that ladder it stands on.
  */
 const KERNEL_CONTRACT: Record<OverlayDoor, { module: RegExp; call: RegExp }> = {
-  'field-overlay-panel': { module: /runtime\/overlay\/field-overlay/, call: TAKES_PANEL_DOOR },
-  'kernel-portal': { module: /runtime\/overlay\/field-overlay/, call: TAKES_PANEL_DOOR },
-  'in-tree-fixed': { module: /runtime\/overlay\/field-overlay/, call: TAKES_PANEL_DOOR },
-  inline: { module: /runtime\/overlay\/field-overlay/, call: TAKES_PANEL_DOOR },
+  'field-overlay-panel': { module: /runtime\/overlay\/field/, call: TAKES_PANEL_DOOR },
+  'kernel-portal': { module: /runtime\/overlay\/field/, call: TAKES_PANEL_DOOR },
+  'in-tree-fixed': { module: /runtime\/overlay\/field/, call: TAKES_PANEL_DOOR },
+  inline: { module: /runtime\/overlay\/field/, call: TAKES_PANEL_DOOR },
   'stack-only': { module: /runtime\/overlay\/layer-stack/, call: /useOverlayLayer\(\{/ },
 };
 

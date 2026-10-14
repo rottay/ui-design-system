@@ -11,5 +11,5 @@
  * external dependencies; engine-free.
  */
 
-export { PatternVirtualList } from './presentation/list';
+export { PatternVirtualList } from './presentation/react';
 export type { PatternVirtualListProps } from './contracts';

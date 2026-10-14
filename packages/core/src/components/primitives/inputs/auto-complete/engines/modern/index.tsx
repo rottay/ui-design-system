@@ -22,7 +22,7 @@ import type { AutoCompleteProps, AutoCompleteOption } from '../../contracts';
 import {
   FieldOverlayPanel,
   useFieldOverlay,
-} from '../../../../runtime/overlay/field-overlay';
+} from '../../../../runtime/overlay/field';
 import { AUTOCOMPLETE_DEFAULTS } from '../../contracts';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';

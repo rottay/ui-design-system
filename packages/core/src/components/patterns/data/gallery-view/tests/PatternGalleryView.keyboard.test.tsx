@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, act, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { PatternGalleryView } from '../presentation/gallery';
+import { PatternGalleryView } from '../presentation/react';
 import { ShortcutProvider, ShortcutScope } from '../../../../../infrastructure/runtime/application/interaction/shortcuts';
 import { renderWithEngine, renderWithEngineContext } from '@tests/support/engine';
 

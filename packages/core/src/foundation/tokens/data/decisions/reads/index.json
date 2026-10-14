@@ -10801,9 +10801,9 @@
       "name": "--ds-listing-grid-bottom-bleed",
       "family": "--ds-listing-grid",
       "class": "MODERN_PRIVATE",
-      "owner": "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx",
+      "owner": "packages/core/src/components/patterns/data/grid-view/presentation/react/index.tsx",
       "readSites": 1,
-      "evidence": "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:244  padding: '1px 1px var(--ds-listing-grid-bottom-bleed, 8px)',",
+      "evidence": "packages/core/src/components/patterns/data/grid-view/presentation/react/index.tsx:244  padding: '1px 1px var(--ds-listing-grid-bottom-bleed, 8px)',",
       "flag": "undeclared by design: 1 read(s) carry a fallback that governs",
       "_audit": {
         "readBuckets": {

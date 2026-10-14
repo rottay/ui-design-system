@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { ColumnType, TableProps } from '../contracts';
-import { useTableFeatures } from '../runtime/table-features';
+import { useTableFeatures } from '../runtime/features';
 
 interface Row {
   id: string;
