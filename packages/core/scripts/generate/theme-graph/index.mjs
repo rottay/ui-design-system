@@ -183,8 +183,13 @@ function readJsonViews() {
  * reference widened by a digit. The check sits outside the prebuild chain, so
  * the drift surfaced at the dt35 preflight, not at the lot. (The 10,037,269 ->
  * 10,041,269 step is 6c404dcd0's, whose comment line was never added here.)
+ * RE-ANCHORED 2026-10-14, 10,041,270 -> 10,142,628 (+101,358): the 2026-10-13
+ * wave's reviewed lots — the chart-geometry, tenant-theme contracts/schema and
+ * chrome-variables member splits (RET-04), the showroom splits, and the W-10a
+ * owner renames (046b207fe) — each adds the files' nodes and edges; no removal,
+ * no new consumer class. The pin follows the measurement, never the reverse.
  */
-export const SIZE_BUDGET_BYTES = 10_041_270;
+export const SIZE_BUDGET_BYTES = 10_142_628;
 
 /** A key no id can collide with, used only to sort and de-duplicate pairs. */
 const SEP = "\u241F";

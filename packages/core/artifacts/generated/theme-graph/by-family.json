@@ -1277,6 +1277,7 @@
         "palette.status-seeds",
         "profiles.expressive",
         "shape.button-style",
+        "shape.control-height",
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
@@ -1498,6 +1499,7 @@
         "palette.status-seeds",
         "profiles.expressive",
         "shape.button-style",
+        "shape.control-height",
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
@@ -2791,6 +2793,10 @@
       "decisions": [
         "density.mode",
         "experience.profile",
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
+        "palette.seeds",
+        "palette.status-seeds",
         "profiles.expressive",
         "shape.button-style",
         "shape.control-height",
@@ -3320,8 +3326,6 @@
         "profiles.expressive",
         "shape.button-style",
         "shape.radius-scale",
-        "states.emphasis",
-        "states.focus-style",
         "surfaces.border-style",
         "surfaces.elevation-posture",
         "typography.families",
@@ -3860,15 +3864,7 @@
       "tier": "primitive"
     },
     {
-      "decisions": [
-        "palette.contrast-posture",
-        "palette.neutral-temperature",
-        "palette.seeds",
-        "palette.status-seeds",
-        "states.emphasis",
-        "states.focus-style",
-        "surfaces.elevation-posture"
-      ],
+      "decisions": [],
       "family": "overlay-modal-compounds"
     },
     {
@@ -5113,8 +5109,6 @@
       "decisions": [
         "density.mode",
         "experience.profile",
-        "motion.character",
-        "motion.dial",
         "palette.contrast-posture",
         "palette.neutral-temperature",
         "palette.seeds",
@@ -5685,6 +5679,7 @@
         "palette.status-seeds",
         "profiles.expressive",
         "shape.button-style",
+        "shape.control-height",
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",

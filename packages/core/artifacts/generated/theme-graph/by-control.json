@@ -2,7 +2,7 @@
   "controls": [
     {
       "channels": 6,
-      "channelsThroughAliases": 15,
+      "channelsThroughAliases": 14,
       "decision": "chrome.anatomy",
       "derivers": [
         "chrome"
@@ -15,8 +15,8 @@
       "tier": "pro"
     },
     {
-      "channels": 332,
-      "channelsThroughAliases": 1219,
+      "channels": 335,
+      "channelsThroughAliases": 1230,
       "decision": "density.mode",
       "derivers": [
         "app-shell",
@@ -252,8 +252,8 @@
       "tier": "standard"
     },
     {
-      "channels": 223,
-      "channelsThroughAliases": 1897,
+      "channels": 226,
+      "channelsThroughAliases": 1908,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -730,7 +730,6 @@
         "stats-grid",
         "stats-header",
         "stats-header-keyframes",
-        "status-filter-pills",
         "step-wizard",
         "stepper",
         "stepper-compounds",
@@ -973,7 +972,6 @@
         "stats-grid",
         "stats-header",
         "stats-header-keyframes",
-        "status-filter-pills",
         "step-wizard",
         "stepper",
         "stepper-compounds",
@@ -1006,7 +1004,7 @@
     },
     {
       "channels": 6,
-      "channelsThroughAliases": 15,
+      "channelsThroughAliases": 14,
       "decision": "navigation.sidebar-tone",
       "derivers": [
         "chrome"
@@ -1019,8 +1017,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2522,
-      "channelsThroughAliases": 4103,
+      "channels": 2526,
+      "channelsThroughAliases": 4124,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1093,6 +1091,7 @@
         "stats-header",
         "stepper",
         "surface-lifecycle",
+        "surfaces",
         "tabs",
         "tag",
         "tag-input",
@@ -1225,6 +1224,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "glass-card",
         "grid",
         "grid-view",
         "guided-draft-form",
@@ -1270,7 +1270,6 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
-        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -1374,8 +1373,8 @@
       "tier": "pro"
     },
     {
-      "channels": 2522,
-      "channelsThroughAliases": 4103,
+      "channels": 2526,
+      "channelsThroughAliases": 4124,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1448,6 +1447,7 @@
         "stats-header",
         "stepper",
         "surface-lifecycle",
+        "surfaces",
         "tabs",
         "tag",
         "tag-input",
@@ -1580,6 +1580,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "glass-card",
         "grid",
         "grid-view",
         "guided-draft-form",
@@ -1625,7 +1626,6 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
-        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -1721,8 +1721,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2620,
-      "channelsThroughAliases": 4306,
+      "channels": 2624,
+      "channelsThroughAliases": 4327,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -1798,6 +1798,7 @@
         "stats-header",
         "stepper",
         "surface-lifecycle",
+        "surfaces",
         "tabs",
         "tag",
         "tag-input",
@@ -1931,6 +1932,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "glass-card",
         "grid",
         "grid-view",
         "guided-draft-form",
@@ -1976,7 +1978,6 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
-        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -2072,8 +2073,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2608,
-      "channelsThroughAliases": 4282,
+      "channels": 2612,
+      "channelsThroughAliases": 4303,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -2148,6 +2149,7 @@
         "stats-header",
         "stepper",
         "surface-lifecycle",
+        "surfaces",
         "tabs",
         "tag",
         "tag-input",
@@ -2281,6 +2283,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "glass-card",
         "grid",
         "grid-view",
         "guided-draft-form",
@@ -2326,7 +2329,6 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
-        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -2422,8 +2424,8 @@
       "tier": "standard"
     },
     {
-      "channels": 223,
-      "channelsThroughAliases": 1897,
+      "channels": 226,
+      "channelsThroughAliases": 1908,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -2710,8 +2712,8 @@
       "tier": "pro"
     },
     {
-      "channels": 361,
-      "channelsThroughAliases": 1064,
+      "channels": 364,
+      "channelsThroughAliases": 1067,
       "decision": "shape.button-style",
       "derivers": [
         "app-shell",
@@ -2956,8 +2958,8 @@
       "tier": "standard"
     },
     {
-      "channels": 499,
-      "channelsThroughAliases": 651,
+      "channels": 502,
+      "channelsThroughAliases": 664,
       "decision": "shape.control-height",
       "derivers": [
         "app-shell",
@@ -2999,11 +3001,13 @@
         "chart-radar",
         "chart-treemap",
         "chart-waterfall",
+        "checkbox",
         "cockpit-header",
         "code-block",
         "collection-header",
         "collection-shell",
         "collection-workspace-render-dispatch",
+        "color-picker",
         "column-menu",
         "command-palette",
         "confirm-dialog",
@@ -3058,6 +3062,7 @@
         "tag-input",
         "time-picker",
         "toggle",
+        "transfer",
         "tree-select",
         "visual-excellence-preview",
         "workbench-header"
@@ -3065,8 +3070,8 @@
       "tier": "standard"
     },
     {
-      "channels": 340,
-      "channelsThroughAliases": 464,
+      "channels": 343,
+      "channelsThroughAliases": 467,
       "decision": "shape.nesting",
       "derivers": [
         "app-shell",
@@ -3156,8 +3161,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1292,
-      "channelsThroughAliases": 1933,
+      "channels": 1295,
+      "channelsThroughAliases": 1941,
       "decision": "shape.radius-scale",
       "derivers": [
         "app-shell",
@@ -3428,8 +3433,8 @@
       "tier": "standard"
     },
     {
-      "channels": 331,
-      "channelsThroughAliases": 537,
+      "channels": 334,
+      "channelsThroughAliases": 540,
       "decision": "spacing.rhythm",
       "derivers": [
         "app-shell",
@@ -3512,7 +3517,7 @@
       "tier": "standard"
     },
     {
-      "channels": 388,
+      "channels": 391,
       "channelsThroughAliases": 1220,
       "decision": "states.emphasis",
       "derivers": [
@@ -3639,7 +3644,6 @@
         "list-toolbar",
         "live-feed",
         "loading-overlay",
-        "locale-switcher",
         "markdown-view",
         "marketing-surface",
         "media-surface",
@@ -3660,7 +3664,6 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
-        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -3742,7 +3745,7 @@
       "tier": "standard"
     },
     {
-      "channels": 674,
+      "channels": 677,
       "channelsThroughAliases": 1488,
       "decision": "states.focus-style",
       "derivers": [
@@ -3877,7 +3880,6 @@
         "list-toolbar",
         "live-feed",
         "loading-overlay",
-        "locale-switcher",
         "markdown-view",
         "marketing-surface",
         "media-surface",
@@ -3898,7 +3900,6 @@
         "operational-ledger",
         "operational-surface",
         "otp-input",
-        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
@@ -3981,8 +3982,8 @@
       "tier": "standard"
     },
     {
-      "channels": 487,
-      "channelsThroughAliases": 893,
+      "channels": 490,
+      "channelsThroughAliases": 896,
       "decision": "surfaces.border-style",
       "derivers": [
         "app-shell",
@@ -4185,8 +4186,8 @@
       "tier": "standard"
     },
     {
-      "channels": 330,
-      "channelsThroughAliases": 412,
+      "channels": 333,
+      "channelsThroughAliases": 415,
       "decision": "surfaces.effect-intensity",
       "derivers": [
         "app-shell",
@@ -4244,8 +4245,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1708,
-      "channelsThroughAliases": 2059,
+      "channels": 1711,
+      "channelsThroughAliases": 2069,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "action-dock",
@@ -4412,7 +4413,6 @@
         "notifier",
         "operational-ledger",
         "otp-input",
-        "overlay-modal-compounds",
         "page-shell",
         "pagination",
         "password-input",
