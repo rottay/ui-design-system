@@ -15777,19 +15777,21 @@
         "showroom": 0,
         "apps": 8,
         "appFiles": [
-          "app-bithire/src/features/settings/surface/screens/workflows/setup-guide/overview/wiring/styles/index.css",
-          "app-bithire/src/features/home/surface/screens/workflows/chat/wiring/styles/index.css",
-          "app-bithire/src/features/home/surface/screens/workflows/workbench/surface-only/styles/index.css"
+          "app-bithire/src/features/settings/surface/screens/setup-guide/overview/wiring/styles/index.css",
+          "app-bithire/src/features/home/surface/screens/chat/wiring/styles/index.css",
+          "app-bithire/src/features/home/surface/screens/surfaces/focused/wiring/styles/index.css"
         ]
       },
-      "note": "Adjudicated C12 (2026-09-25). A published AppShell channel (SHELL_PUBLISHED_CHANNELS) that entered the surface as a CSS-declared writer in da6b06d41 with no reader in core or showroom; app-bithire reads it 8 times (3+3+2 var() reads, each with a 56px fallback), identical at the CI-pinned corpus ref 8abd05578. Outside the census scope, not outside the truth: the customization-surface --check re-measures these files and fails if the count moves.",
+      "note": "Adjudicated C12 (2026-09-25). A published AppShell channel (SHELL_PUBLISHED_CHANNELS) that entered the surface as a CSS-declared writer in da6b06d41 with no reader in core or showroom; app-bithire reads it 8 times (3+3+2 var() reads, each with a 56px fallback). Re-keyed 2026-10-14 to the real routes and re-measured at app-bithire 3d9691fbe7c6379267fdc2217cd50071a312f55e (committed bytes): 8 reads, 3+3+2 in the appFiles above. Outside the census scope, not outside the truth: the customization-surface --check re-measures these files and fails if the count moves.",
       "corpusDrift": {
         "registered": "2026-10-07",
-        "pin": "app-bithire 8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f (the CI corpus ref, .github/workflows/ci.yml APP_BITHIRE_ROOT)",
-        "atPin": "8 var() reads in the three appFiles above (3+2+3), measured by git archive of the pin: the adjudication holds in CI.",
-        "atHead": "app-bithire ad2252f098 (196 commits past the pin) moved the files out of screens/workflows/: 8 var() reads in src/features/settings/surface/screens/setup-guide/overview/wiring/styles/index.css (3), src/features/home/surface/screens/chat/wiring/styles/index.css (3), src/features/home/surface/screens/surfaces/focused/wiring/styles/index.css (2). A workstation run against the moving checkout reads 0 and fails the dead arm.",
+        "rekeyed": "2026-10-14",
+        "measuredAt": "app-bithire 3d9691fbe7c6379267fdc2217cd50071a312f55e: 8 var() reads in the three appFiles above (3+3+2), measured by git show of that revision.",
+        "pin": "app-bithire 8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f (the CI corpus ref, .github/workflows/ci.yml APP_BITHIRE_ROOT), unchanged by this re-key.",
+        "atPin": "The same 8 reads under the pre-rename routes src/features/settings/surface/screens/workflows/setup-guide/overview/wiring/styles/index.css (3), src/features/home/surface/screens/workflows/chat/wiring/styles/index.css (3), src/features/home/surface/screens/workflows/workbench/surface-only/styles/index.css (2); the re-keyed routes do not exist at the pin, so a --check against the pinned corpus reads 0 until the pin moves.",
+        "renames": "Pure R100 renames, no read change (git log -S finds no commit touching the token between pin and 3d9691fbe): 75ad14d537 (settings setup-guide out of screens/workflows/), ff93703f05 (home chat, and workflows/workbench/surface-only -> surfaces/focused/wiring).",
         "owner": "WO-GAT-12",
-        "ownerNote": "Re-homing appFiles must move WITH the corpus pin, never ahead of it (CI would then read 0). WO-GAT-12 owns pinned sibling SHAs, but its stated scope is the arc-11 capability census; the DT confirms it as receiver or names another."
+        "ownerNote": "The CI corpus pin is an owner decision outside this re-key; until it reaches a revision at or past ff93703f05 and 75ad14d537, the pinned --check fails this row. WO-GAT-12 owns pinned sibling SHAs, but its stated scope is the arc-11 capability census; the DT confirms it as receiver or names another."
       }
     },
     "--ds-font-pack-arabic-text": {
