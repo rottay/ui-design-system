@@ -122,7 +122,7 @@ describe('default theme dark surfaces', () => {
     }
   });
 
-  it('gives each status wash a dark leg and leaves the ramps and roles alone', () => {
+  it('gives each status wash a dark leg, leaves the ramps alone and re-points success/warning one stop up', () => {
     const root = declarations(THEME_CSS.slice(0, DARK_START));
     const ownDark = declarations(THEME_CSS.slice(DARK_START));
     const hex = (value: string) => {
@@ -136,7 +136,9 @@ describe('default theme dark surfaces', () => {
       expect(contrast(hex(wash!), 'rgb(0, 0, 0)')).toBeLessThan(contrast(hex(root.get(`--ds-color-${tone}-900`)!), 'rgb(0, 0, 0)'));
       // Solid fills under white ink read these steps; the dark scope must not move them.
       expect([...ownDark.keys()].filter((name) => name.startsWith(`--ds-color-${tone}-`) && name !== `--ds-color-${tone}-bg`)).toEqual([]);
-      expect(ownDark.has(`--ds-color-${tone}`)).toBe(false);
+      // b9e426442 (APCA floor repair): the uninverted step 600 is light-graded ink here, so success/warning
+      // read their ramp's step 500 in the dark leg; info stays unrestated.
+      expect(ownDark.get(`--ds-color-${tone}`)).toBe(tone === 'info' ? undefined : `var(--ds-color-${tone}-500)`);
     }
   });
 });

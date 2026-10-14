@@ -285,8 +285,12 @@ describe('PatternBrandStudio customization anatomy anatomy and behavior', () => 
 
       await screen.findByText(`customization anatomy ${engine} host probe`);
       const root = container.querySelector('.ds-pattern-brand-studio') as HTMLElement;
-      const actionPanel = root.querySelector('.ds-pattern-brand-studio__action-panel') as HTMLElement;
-      expect(actionPanel).not.toBeNull();
+      // Awaited, not synchronous: Card is a lazy engine facade, and the classic chunk settles after the title.
+      const actionPanel = await waitFor(() => {
+        const found = root.querySelector('.ds-pattern-brand-studio__action-panel') as HTMLElement;
+        expect(found).not.toBeNull();
+        return found;
+      });
       expect(
         actionPanel.matches(
           '.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel'

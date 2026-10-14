@@ -259,7 +259,9 @@ describe("chrome/tree channels under a local scope", () => {
     expect(ENGINE).toContain("const indentStep = 'var(--ds-tree-indent) * var(--ds-density-effective-scale)'");
     expect(ENGINE).toContain("style={{ '--ds-tree-row-indent': paddingInlineStart } as React.CSSProperties}");
     expect(ENGINE).toContain("'--ds-tree-connector-inset': `calc(${level - 1} * ${indentStep} + 12px)`");
-    for (const part of ["node", "connector", "loading", "checkbox"]) {
+    // f9d5844eb (E4 loading-indicator substrate split): the loading part rides the anatomy prop; the substrate still stamps data-part="loading".
+    expect(ENGINE).toContain("<LoadingIndicator anatomy={{ 'data-part': 'loading' }}");
+    for (const part of ["node", "connector", "checkbox"]) {
       expect(ENGINE).toContain(`data-part="${part}"`);
     }
   });

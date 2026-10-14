@@ -36,7 +36,9 @@ const day = (d: number) => new Date(2026, 2, d);
 const EVENTS = [
   { id: 'e1', title: 'Kickoff', start: day(3) },
   { id: 'e2', title: 'Retro', start: day(3) },
-  { id: 'e3', title: 'Release window', start: day(10), color: 'var(--ds-color-info)' },
+  // A dark stated accent: since 239dd6306 (EVI-02 D-1 dark leg) the themed primary is light, so only
+  // an accent across the contrast-color() split proves the chip inks against its own accent.
+  { id: 'e3', title: 'Release window', start: day(10), color: 'var(--ds-color-info-900)' },
 ];
 
 const TENANT: TenantConfig = {

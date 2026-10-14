@@ -81,29 +81,22 @@ beforeAll(async () => {
 }, 180_000);
 
 /**
- * WO-DER-06 derivation-lane registry, row R3 (mode-palette seeding, rottay
- * dark): the link and text labels fail `color-contrast` against the ground the
- * dark block seeds, so axe reports it in the scope pinned below.
- * Nothing is lowered: every other serious rule must still be empty, and the
- * contrast debt is pinned by the IDENTITY of every failing node, so this row
+ * WO-DER-06 derivation-lane registry, row R3 (mode-palette seeding): the
+ * contrast debt is pinned by the IDENTITY of every failing node, so a row
  * reddens when the debt spreads, when a node is repaired, and when one node is
  * fixed while another starts failing in its place -- the substitution a count
- * could not see (EVI-02, 2026-09-15).
+ * could not see (EVI-02, 2026-09-15). Nothing is lowered: every other serious
+ * rule must still be empty.
  *
- * `bithire dark` had three rows -- ghost, link and text labels -- and they
- * DRAINED: that scope's dark block now re-derives its own canvas ground
- * instead of inheriting the light body's, so those labels no longer sit on a
- * near-white ground. Dropped by identity, not waived: with no entry the scope
- * must now measure clean, and a relapse reddens here.
+ * Every row has DRAINED. `bithire dark` had three -- ghost, link and text
+ * labels -- cleared when that scope's dark block re-derived its own canvas
+ * ground instead of inheriting the light body's. `rottay dark` had two -- the
+ * link and text labels, #0a0a0a ink at 1.04:1 on the dark ground -- cleared by
+ * 239dd6306 (EVI-02 D-1 dark leg: inverted primary ramp and paired inks); the
+ * nodes still render, now inked rgb(245, 245, 245). Dropped by identity, not
+ * waived: with no entry every scope must measure clean, and a relapse reddens here.
  */
-const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
-  'rottay dark': {
-    'color-contrast': [
-      '.ds-button--link > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-      '.ds-button--text > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-    ],
-  },
-};
+const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {};
 
 describe('button causality', () => {
   for (const [decision, arm] of Object.entries(DECISIONS)) {
