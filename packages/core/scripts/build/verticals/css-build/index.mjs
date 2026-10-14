@@ -192,16 +192,67 @@ if (
   );
   process.exit(1);
 }
+
+// The reduced-motion default list ships LAYERED, never in the unlayered guard slice, where a non-important wildcard
+// would outrank every layered skin. It follows the guard header so the strip above removes it on a re-run.
+const baseCssPath = resolve(srcCss, "facade/entrypoints/base/index.css");
+const REDUCED_MOTION_DEFAULT_HEADER =
+  "/* === Reduced-motion default transition list (sourced from facade/entrypoints/base/index.css, layered) === */";
+const REDUCED_MOTION_DEFAULT_OPENING = "@layer rottay-reset {";
+const baseEntrypointCss = readFile(baseCssPath);
+const reducedMotionDefaultStart = baseEntrypointCss.indexOf(
+  `\n${REDUCED_MOTION_DEFAULT_OPENING}\n`
+);
+let reducedMotionDefaultEnd = -1;
+if (reducedMotionDefaultStart !== -1) {
+  let depth = 0;
+  for (let index = reducedMotionDefaultStart; index < baseEntrypointCss.length; index += 1) {
+    if (baseEntrypointCss[index] === "{") depth += 1;
+    else if (baseEntrypointCss[index] === "}") {
+      depth -= 1;
+      if (depth === 0) {
+        reducedMotionDefaultEnd = index + 1;
+        break;
+      }
+    }
+  }
+}
+const reducedMotionDefault =
+  reducedMotionDefaultEnd === -1
+    ? ""
+    : baseEntrypointCss.slice(reducedMotionDefaultStart, reducedMotionDefaultEnd).trim();
+const reducedMotionDefaultRules = [
+  ...reducedMotionDefault.matchAll(/\{\s*transition-property:\s*none\s*;\s*\}/g),
+];
+if (
+  reducedMotionDefaultRules.length !== 2 ||
+  reducedMotionDefault.includes("!important") ||
+  !reducedMotionDefault.includes("@media (prefers-reduced-motion: reduce)") ||
+  !/html\[data-ds-motion=(["'])reduced\1\]/.test(reducedMotionDefault)
+) {
+  console.error(
+    "  ERROR: the layered reduced-motion default in facade/entrypoints/base/index.css must be one `@layer rottay-reset` block holding a non-important `transition-property: none` for the media query and for the runtime seam"
+  );
+  process.exit(1);
+}
+if (/transition-property\s*:/.test(reducedMotionGuard)) {
+  console.error(
+    "  ERROR: the unlayered reduced-motion guard in runtime/personality/index.css must not declare transition-property; the default list belongs to the layered block in facade/entrypoints/base/index.css"
+  );
+  process.exit(1);
+}
 const modernBundle = [
   modernEngine,
   "",
   GUARD_HEADER,
   reducedMotionGuard,
   "",
+  REDUCED_MOTION_DEFAULT_HEADER,
+  reducedMotionDefault,
+  "",
 ].join("\n");
 
 // Read tenant-free base CSS and resolve its imports
-const baseCssPath = resolve(srcCss, "facade/entrypoints/base/index.css");
 let baseCss = readFile(baseCssPath);
 baseCss = resolveImports(baseCss, dirname(baseCssPath));
 

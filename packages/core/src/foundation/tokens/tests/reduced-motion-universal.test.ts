@@ -105,6 +105,75 @@ describe("reduced motion -- universal kill switch", () => {
   });
 });
 
+/** Every `transition-property: none` a bundle declares on a wildcard, with the at-rules that enclose it. */
+function defaultListRules(css: string): { selector: string; body: string; enclosing: string[] }[] {
+  const out: { selector: string; body: string; enclosing: string[] }[] = [];
+  const stack: string[] = [];
+  let prelude = "";
+  for (let index = 0; index < css.length; index += 1) {
+    const char = css[index];
+    if (char === "{") {
+      stack.push(prelude.trim().replace(/\s+/g, " "));
+      prelude = "";
+    } else if (char === "}") {
+      const selector = stack.pop() ?? "";
+      if (/\*/.test(selector) && /transition-property\s*:\s*none/.test(prelude)) {
+        out.push({ selector, body: prelude.trim(), enclosing: [...stack] });
+      }
+      prelude = "";
+    } else if (char === ";" && stack.length === 0) {
+      prelude = "";
+    } else {
+      prelude += char;
+    }
+  }
+  return out;
+}
+
+const DEFAULT_LIST_LAYER = "@layer rottay-reset";
+const DEFAULT_LIST = {
+  media: "*, *::before, *::after",
+  seam: ["", "::before", "::after"].map((pseudo) => `:where(html[data-ds-motion="reduced"]) *${pseudo}`).join(", "),
+};
+
+describe("reduced motion -- default transition list", () => {
+  it.each(BUNDLES)("%s names the default list `none`, layered and never important", (bundle) => {
+    const rules = defaultListRules(blankComments(readFileSync(join(PACKAGE_ROOT, bundle), "utf8")));
+    expect(rules.map((rule) => [rule.selector, rule.enclosing, rule.body])).toEqual([
+      [DEFAULT_LIST.media, [DEFAULT_LIST_LAYER, "@media (prefers-reduced-motion: reduce)"], "transition-property: none;"],
+      [DEFAULT_LIST.seam, [DEFAULT_LIST_LAYER], "transition-property: none;"],
+    ]);
+  });
+
+  it("orders the layer below every first-party layer that authors a transition", () => {
+    const css = blankComments(readFileSync(join(PACKAGE_ROOT, BUNDLES[1]), "utf8"));
+    const order = (/@layer\s+([^;{]+);/.exec(css)?.[1] ?? "").split(",").map((name) => name.trim());
+    const authored = new Set<string>();
+    const stack: string[] = [];
+    let prelude = "";
+    for (let index = 0; index < css.length; index += 1) {
+      const char = css[index];
+      if (char === "{") {
+        stack.push(prelude.trim());
+        prelude = "";
+      } else if (char === "}") {
+        const layer = /^@layer\s+([a-z0-9-]+)$/.exec(stack[0] ?? "")?.[1];
+        if (layer && /(^|[\s;])transition(-property)?\s*:(?!\s*none\b)/.test(prelude)) authored.add(layer);
+        stack.pop();
+        prelude = "";
+      } else if (char === ";" && stack.length === 0) {
+        prelude = "";
+      } else {
+        prelude += char;
+      }
+    }
+    const floor = order.indexOf("rottay-reset");
+    expect(floor).toBeGreaterThanOrEqual(0);
+    expect(authored.size).toBeGreaterThan(0);
+    expect([...authored].filter((layer) => order.indexOf(layer) <= floor)).toEqual([]);
+  });
+});
+
 describe("reduced motion -- source census", () => {
   it("leaves only frozen-engine sheets without a guard of their own", () => {
     expect(UNGUARDED.filter((s) => !isFrozen(s.path, s.selectors)).map((s) => s.path)).toEqual([]);

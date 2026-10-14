@@ -106930,6 +106930,24 @@ html[lang]:lang(ar) {
   }
 }
 
+/* Reduced motion: an element that authored no transition gets no list, so the 0.01ms floor cannot run `all` on it.
+   Unimportant and in the lowest layer: any authored transition outranks it and still fires `transitionend`. */
+@layer rottay-reset {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-property: none;
+    }
+  }
+
+  :where(html[data-ds-motion="reduced"]) *,
+  :where(html[data-ds-motion="reduced"]) *::before,
+  :where(html[data-ds-motion="reduced"]) *::after {
+    transition-property: none;
+  }
+}
+
 
 /* === Modern Engine (Rottay skins + Tailwind utilities) === */
 @layer rottay-framework {

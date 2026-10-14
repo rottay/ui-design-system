@@ -260,3 +260,20 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
   animation: none !important;
   transition: none !important;
 }
+
+/* === Reduced-motion default transition list (sourced from facade/entrypoints/base/index.css, layered) === */
+@layer rottay-reset {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-property: none;
+    }
+  }
+
+  :where(html[data-ds-motion="reduced"]) *,
+  :where(html[data-ds-motion="reduced"]) *::before,
+  :where(html[data-ds-motion="reduced"]) *::after {
+    transition-property: none;
+  }
+}
