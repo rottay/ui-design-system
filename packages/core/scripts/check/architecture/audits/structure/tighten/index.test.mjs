@@ -68,13 +68,13 @@ test('re-anchor adopts unpinned laws and re-anchors the inventory once, then ref
 
 test('re-anchor re-keys pins after a definition change but never admits a new finding id', () => {
   const stored = baseline({ lawMembers: {} });
-  const reruled = { ...laws({ 'repeated-path-word': ['data/data-table'] }), definitions: { ...lawDefinitions(), 'repeated-path-word': { ...lawDefinitions()['repeated-path-word'], definition: 'word-any' } } };
+  const reruled = { ...laws({ 'repeated-path-word': ['data/data-table'] }), definitions: { ...lawDefinitions(), 'repeated-path-word': { ...lawDefinitions()['repeated-path-word'], definition: 'segment-adjacent' } } };
   assert.deepEqual(reanchorStructureBaseline({ result: result(['a']), laws: reruled, baseline: stored }).refused, []);
   const withNewFinding = reanchorStructureBaseline({ result: result(['a', 'new']), laws: reruled, baseline: stored });
   assert.match(withNewFinding.refused.join('\n'), /never admits a finding id/u);
 });
 
-const flipD2 = (members) => ({ ...laws(members), definitions: { ...lawDefinitions(), 'repeated-path-word': { ...lawDefinitions()['repeated-path-word'], definition: 'word-any' } } });
+const flipD2 = (members) => ({ ...laws(members), definitions: { ...lawDefinitions(), 'repeated-path-word': { ...lawDefinitions()['repeated-path-word'], definition: 'segment-adjacent' } } });
 
 test('M1 drill: a D2 flip cannot launder new debt in a law whose definition did not change', () => {
   const stored = baseline({ lawMembers: { 'authored-line-count': ['big.ts'], 'showroom-loose-file': ['app/a.tsx'] } });
@@ -107,7 +107,7 @@ test('M1 drill: the same flip re-keys only the changed law and tightens the othe
   assert.deepEqual(produced.rekeyed, ['repeated-path-word']);
   assert.deepEqual(produced.baseline.laws.members['repeated-path-word'], ['data/data-table', 'runtime/tenant/runtime']);
   assert.deepEqual(produced.baseline.laws.members['authored-line-count'], ['big.ts'], 'an unchanged law is tightened, never raised');
-  assert.equal(produced.baseline.laws.definitions['repeated-path-word'].definition, 'word-any');
+  assert.equal(produced.baseline.laws.definitions['repeated-path-word'].definition, 'segment-adjacent');
 });
 
 test('a changed definition also stops the plain tighten, naming only that law', () => {

@@ -75,13 +75,13 @@ test('showroom loose-file law: only sources outside folder/index, routes and tes
   assert.deepEqual(measureShowroomLooseFiles([...clean, 'packages/showroom/src/app/helper.tsx']), ['app/helper.tsx']);
 });
 
-test('repeated-path-word law: the three D2 definitions measure as named, the default enforces adjacency', () => {
+test('repeated-path-word law: the three D2 definitions measure as named, the ruled definition is word-any', () => {
   const files = [
     'packages/core/src/runtime/runtime/index.ts',
     'packages/core/src/runtime/tenant/runtime/index.ts',
     'packages/core/src/data/data-table/index.ts',
   ];
-  assert.equal(REPEATED_PATH_WORD_DEFINITION, 'segment-adjacent');
+  assert.equal(REPEATED_PATH_WORD_DEFINITION, 'word-any');
   assert.deepEqual(measureRepeatedPathWords(files, 'segment-adjacent'), ['runtime/runtime']);
   assert.deepEqual(measureRepeatedPathWords(files, 'segment-any'), ['runtime/runtime', 'runtime/tenant/runtime']);
   assert.deepEqual(measureRepeatedPathWords(files, 'word-any'), ['data/data-table', 'runtime/runtime', 'runtime/tenant/runtime']);
@@ -113,7 +113,7 @@ test('pinning is exact: a new member and a stale pin both fail, the pinned set p
 
 test('a ruled definition change is not absorbed silently: the stored definitions must match', () => {
   const pinned = measured({});
-  const reruled = { ...measured({}), definitions: { ...lawDefinitions(), 'repeated-path-word': { ...lawDefinitions()['repeated-path-word'], definition: 'word-any' } } };
+  const reruled = { ...measured({}), definitions: { ...lawDefinitions(), 'repeated-path-word': { ...lawDefinitions()['repeated-path-word'], definition: 'segment-adjacent' } } };
   const comparison = compareStructureLaws(reruled, pinned);
   assert.equal(comparison.passed, false);
   assert.deepEqual(comparison.problems, comparison.problems.filter((problem) => problem.startsWith('repeated-path-word: definition changed')));

@@ -14,10 +14,11 @@
  *   repeated-path-word    packages/core/src minimal owner folders that repeat a
  *                         path word under REPEATED_PATH_WORD_DEFINITION (D2).
  *
- * D2 and D3 are open rulings, so their definitions are named constants stored
- * PER LAW: a ruling flips one constant, only that law's stored definition stops
- * matching, and only that law may be re-keyed by a sighted re-anchor. Every
- * candidate definition is also measured and reported each run.
+ * D3 is an open ruling; D2 was ruled word-any (owner 2026-10-13). The
+ * definitions are named constants stored PER LAW: a ruling flips one constant,
+ * only that law's stored definition stops matching, and only that law may be
+ * re-keyed by a sighted re-anchor. Every candidate definition is also measured
+ * and reported each run.
  *
  * Census method: git ls-files; .ts .tsx .mts .cts .js .jsx .mjs .cjs .css;
  * generated/, dist/ and .d.ts dropped; a generated banner in the first three
@@ -36,9 +37,9 @@ export const LINE_COUNT_SCOPES = Object.freeze({
 });
 export const LINE_COUNT_SCOPE = 'all-authored';
 
-/** D2, unruled: what counts as a repeated path word. */
+/** D2, ruled word-any (owner 2026-10-13): what counts as a repeated path word. */
 export const REPEATED_PATH_WORD_DEFINITIONS = Object.freeze(['segment-adjacent', 'segment-any', 'word-any']);
-export const REPEATED_PATH_WORD_DEFINITION = 'segment-adjacent';
+export const REPEATED_PATH_WORD_DEFINITION = 'word-any';
 
 /** Empty folders a live worktree may hold; Git cannot track them. An exemption list, not a definition: it may only shrink. */
 export const REGISTERED_WORKTREE_EMPTY_DIRECTORIES = Object.freeze([]);
