@@ -7,6 +7,7 @@ import {
   type MountedThemeStyleElement,
   type TenantThemeArtifact,
 } from '@rottay/design-system/server';
+import { preloadArtifactFontPacks } from '../font-packs';
 import { applyRootStamp } from '../stamp/index.mjs';
 
 type ProviderProps = ComponentProps<typeof DesignSystemProvider>;
@@ -57,6 +58,7 @@ export function GroundStage({
   const emission = artifact
     ? emitTenantThemeArtifactForSsr(artifact, { slug: artifact.slug, verticalKey: artifact.verticalKey })
     : null;
+  if (artifact) preloadArtifactFontPacks(artifact);
   const bytesAgree = emission ? emission.css === styleElements[0]?.css : null;
   const digest = artifact?.digest ?? null;
   const proof = useMemo<GroundProof>(() => ({ bytesAgree, digest }), [bytesAgree, digest]);
