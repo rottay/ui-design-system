@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "_comment": "Registered private-anatomy reaches with a named application receiver. NOT a baseline and NOT an obligation: nothing here is consumed, so a registered reach still fails `--check` and the cross-repo red stays red. The register only names where each reach lives, when it entered, and who must drain it. An id present here and in baseline.reaches is an error. When the audited corpus is the revision an entry was measured at, its count must reproduce exactly; a drained or changed entry is a failure, so the register cannot fossilise.",
+  "receiver": "app-bithire — design-adoption lane (roadmap/design-adoption.md). No app-bithire work order holds these ids at 3d9691fbe7c6379267fdc2217cd50071a312f55e; the DS cannot edit the app, so the drain is app-side work. Queue entry: PRIVATE-ANATOMY-REACHES (owner answer 2, audit 2026-10-14).",
+  "entries": [
+    {
+      "id": "app-bithire/src/features/home/surface/screens/chat/wiring/styles/index.css :: .rottay-button",
+      "route": "app-bithire/src/features/home/surface/screens/chat/wiring/styles/index.css",
+      "selector": ".rottay-button",
+      "kind": "path-relocation",
+      "count": 1,
+      "owner": "features/home/surface/screens/chat/wiring",
+      "predecessor": "app-bithire/src/features/home/surface/screens/workflows/chat/wiring/styles/index.css :: .rottay-button",
+      "enteredIn": "ff93703f052808863b6d273aa616d21e48369a36",
+      "enteredOn": "2026-09-27",
+      "measuredAt": "3d9691fbe7c6379267fdc2217cd50071a312f55e",
+      "reason": "R100 rename of a baselined pre-ratchet reach; same selector, same count. Migrate to public recipes/props/data-part hooks and delete the selector."
+    },
+    {
+      "id": "app-bithire/src/features/scoring/surface/screens/record/calibration/listing/wiring/styles/index.css :: .rottay-stack",
+      "route": "app-bithire/src/features/scoring/surface/screens/record/calibration/listing/wiring/styles/index.css",
+      "selector": ".rottay-stack",
+      "kind": "path-relocation",
+      "count": 1,
+      "owner": "features/scoring/surface/screens/record/calibration/listing/wiring",
+      "predecessor": "app-bithire/src/features/scoring/surface/screens/workflows/calibration/listing/wiring/styles/index.css :: .rottay-stack",
+      "enteredIn": "0bef61a99c849cdcca3fc6edbae61eeb13361884",
+      "enteredOn": "2026-09-27",
+      "measuredAt": "3d9691fbe7c6379267fdc2217cd50071a312f55e",
+      "reason": "R100 rename of a baselined pre-ratchet reach; same selector, same count. Migrate to public recipes/props/data-part hooks and delete the selector."
+    },
+    {
+      "id": "app-bithire/src/features/scoring/surface/screens/workflows/skill-gaps/view/sections/report/styles/index.css :: .rottay-stack",
+      "route": "app-bithire/src/features/scoring/surface/screens/workflows/skill-gaps/view/sections/report/styles/index.css",
+      "selector": ".rottay-stack",
+      "kind": "path-relocation",
+      "count": 1,
+      "owner": "features/scoring/surface/screens/workflows/skill-gaps/view/sections/report",
+      "predecessor": "app-bithire/src/app/(dashboard)/scoring/skill-gaps/styles/index.css :: .rottay-stack",
+      "enteredIn": "9e5ca9115a481717ebde2e12d6b5169479d2f892",
+      "enteredOn": "2026-09-28",
+      "measuredAt": "3d9691fbe7c6379267fdc2217cd50071a312f55e",
+      "reason": "Two R100 renames of a baselined pre-ratchet reach (bdd14c24f3 to sections/gap-report, then 9e5ca9115a to sections/report); same selector, same count. Migrate to public recipes/props/data-part hooks and delete the selector."
+    },
+    {
+      "id": "app-bithire/src/features/sourcing/surface/screens/referrals/listing/wiring/styles/index.css :: .rottay-box",
+      "route": "app-bithire/src/features/sourcing/surface/screens/referrals/listing/wiring/styles/index.css",
+      "selector": ".rottay-box",
+      "kind": "path-relocation",
+      "count": 6,
+      "owner": "features/sourcing/surface/screens/referrals/listing/wiring",
+      "predecessor": "app-bithire/src/features/sourcing/surface/screens/workflows/referrals/listing/wiring/styles/index.css :: .rottay-box",
+      "enteredIn": "75ad14d5374bbee0c648cdb726340495d94e68bb",
+      "enteredOn": "2026-09-27",
+      "measuredAt": "3d9691fbe7c6379267fdc2217cd50071a312f55e",
+      "reason": "R100 rename of a baselined pre-ratchet reach; same selector, same count. Migrate to public recipes/props/data-part hooks and delete the selector."
+    },
+    {
+      "id": "app-bithire/src/features/sourcing/surface/screens/referrals/listing/wiring/styles/index.css :: .rottay-stack",
+      "route": "app-bithire/src/features/sourcing/surface/screens/referrals/listing/wiring/styles/index.css",
+      "selector": ".rottay-stack",
+      "kind": "path-relocation",
+      "count": 3,
+      "owner": "features/sourcing/surface/screens/referrals/listing/wiring",
+      "predecessor": "app-bithire/src/features/sourcing/surface/screens/workflows/referrals/listing/wiring/styles/index.css :: .rottay-stack",
+      "enteredIn": "75ad14d5374bbee0c648cdb726340495d94e68bb",
+      "enteredOn": "2026-09-27",
+      "measuredAt": "3d9691fbe7c6379267fdc2217cd50071a312f55e",
+      "reason": "R100 rename of a baselined pre-ratchet reach; same selector, same count. Migrate to public recipes/props/data-part hooks and delete the selector."
+    },
+    {
+      "id": "app-bithire/src/styles/cards-surfaces.css :: .ds-error-state__",
+      "route": "app-bithire/src/styles/cards-surfaces.css",
+      "selector": ".ds-error-state__",
+      "kind": "ds-block-adoption",
+      "count": 2,
+      "owner": "styles",
+      "predecessor": null,
+      "enteredIn": "2d9e75af19a6a3bfb4c8e97a14cba12aa93cc2e7",
+      "enteredOn": "2026-10-11",
+      "measuredAt": "3d9691fbe7c6379267fdc2217cd50071a312f55e",
+      "reason": "The app selectors `:where(.ds-error-state__icon)` date from app-bithire 17395bdc4c (2026-06-02) and are also present at the corpus pin 8abd0557. They became a reach when DS commit 2d9e75af1 started shipping the `.ds-error-state__` block in skin/surface-states. Delete the app selectors or style through the public hooks."
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import test from "node:test";
+import test, { after } from "node:test";
 
 import { packageRoot as findPackageRoot } from "../../../../libraries/repo-root/index.mjs";
 import {
@@ -25,6 +25,7 @@ import {
   stripCssComments,
   stripTsComments,
 } from "./index.mjs";
+import { CORPUS_CI_RECEIVER, corpusRefusal, evaluateRegistrations, receiverNote } from "./receivers/index.mjs";
 
 const CORE_ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 
@@ -225,6 +226,12 @@ test("diffCensus counterfactual: a path rename with unchanged cardinality is sti
 /* corpus honesty                                                             */
 /* -------------------------------------------------------------------------- */
 
+// Each topology copies the core scripts and CSS into $TMPDIR; sweep them all.
+const createdWorkspaces = [];
+after(() => {
+  for (const workspace of createdWorkspaces) rmSync(workspace, { recursive: true, force: true });
+});
+
 /**
  * The gate hardcoded a sibling-of-workspace corpus path and never read
  * `APP_BITHIRE_ROOT`, the variable `ci.yml` exports for exactly this purpose.
@@ -244,6 +251,7 @@ function ciTopology({ corpus = true } = {}) {
   // symlinked path makes that comparison false, so `main()` never runs and the
   // fixture would report a silent exit 0 that has nothing to do with the gate.
   const workspace = realpathSync(mkdtempSync(join(tmpdir(), "ds-boundary-ci-")));
+  createdWorkspaces.push(workspace);
   const core = join(workspace, "packages/core");
   mkdirSync(core, { recursive: true });
   writeFileSync(join(workspace, "pnpm-workspace.yaml"), "packages:\n  - 'packages/*'\n");
@@ -290,6 +298,10 @@ test("N1: with no corpus and no env, the gate exits 1 instead of censusing nothi
   assert.equal(result.status, 1, result.output);
   assert.match(result.output, /corpus missing/);
   assert.doesNotMatch(result.output, /OK — no new boundary violations/);
+  // The refusal is named: it cites the pin and the CI step that owes the corpus.
+  assert.match(result.output, /REFUSED — corpus missing/);
+  assert.ok(result.output.includes(`corpus pin: ${obligationsPin()}`), result.output);
+  assert.ok(result.output.includes(`CI receiver: ${CORPUS_CI_RECEIVER}`), result.output);
 });
 
 test("P1/P2: the GitHub Actions layout resolves through APP_BITHIRE_ROOT", () => {
@@ -300,9 +312,9 @@ test("P1/P2: the GitHub Actions layout resolves through APP_BITHIRE_ROOT", () =>
   assert.match(without.output, /corpus missing/);
 
   // With the env exported, the gate resolves the runner's checkout and censuses
-  // it. The exit code is deliberately NOT asserted here: this fixture corpus is
-  // not the pinned one, so the repository's obligation ledger correctly reports
-  // its entries as drained. The claim under test is RESOLUTION.
+  // it. The exit code is deliberately NOT asserted here: this fixture corpus
+  // measures nothing, so the gate refuses it as an empty census (see E1). The
+  // claim under test is RESOLUTION.
   const withEnv = runGate(planted.gate, ["--check"], { APP_BITHIRE_ROOT: planted.corpusRoot });
   assert.match(withEnv.output, /corpus .*\.corpora[/\\]app-bithire/);
   assert.doesNotMatch(withEnv.output, /corpus missing/);
@@ -345,6 +357,155 @@ test("P4: baseline keys are stable when the corpus is mounted somewhere else", (
   const a = runGate(first.gate, ["--app-root", first.corpusRoot]);
   const b = runGate(second.gate, ["--app-root", second.corpusRoot]);
   assert.deepEqual(idsFrom(a.output), idsFrom(b.output));
+});
+
+/* -------------------------------------------------------------------------- */
+/* empty census and registered reaches                                        */
+/* -------------------------------------------------------------------------- */
+
+function obligationsPin() {
+  return JSON.parse(readFileSync(new URL("./obligations/index.json", import.meta.url), "utf8")).corpusPin;
+}
+
+const REACH_FILE = "src/features/thing/styles/index.css";
+const REACH_ID = `app-bithire/${REACH_FILE} :: .rottay-stack`;
+
+/**
+ * A CI topology whose ledgers are replaced by fixtures, so the ONLY measured
+ * finding is the planted reach and the exit code is attributable to it.
+ */
+function hermeticTopology({ reach = true, baselined = false, registrations = { receiver: null, entries: [] } } = {}) {
+  const planted = ciTopology();
+  const imports = dirname(planted.gate);
+  if (reach) {
+    mkdirSync(join(planted.corpusRoot, dirname(REACH_FILE)), { recursive: true });
+    writeFileSync(join(planted.corpusRoot, REACH_FILE), ".thing .rottay-stack { gap: 0; }\n");
+  }
+  const reaches = baselined ? { [REACH_ID]: { count: 1, owner: "features/thing", reason: "fixture" } } : {};
+  writeFileSync(join(imports, "baseline/index.json"), JSON.stringify({ reaches, categories: {} }));
+  writeFileSync(join(imports, "obligations/index.json"), JSON.stringify({ corpusPin: obligationsPin(), obligations: [] }));
+  writeFileSync(join(imports, "registrations/index.json"), JSON.stringify(registrations));
+  return planted;
+}
+
+const REGISTERED_FIXTURE = {
+  receiver: "fixture-app — design-adoption lane",
+  entries: [{
+    id: REACH_ID,
+    route: `app-bithire/${REACH_FILE}`,
+    selector: ".rottay-stack",
+    kind: "path-relocation",
+    count: 1,
+    owner: "features/thing",
+    predecessor: null,
+    enteredIn: "0123456789abcdef0123456789abcdef01234567",
+    enteredOn: "2026-09-27",
+    measuredAt: "0123456789abcdef0123456789abcdef01234567",
+    reason: "fixture",
+  }],
+};
+
+test("E1: a corpus with src/ but zero sites in every category is a named refusal, not a pass", () => {
+  // The default topology plants one tokenized declaration and nothing to count.
+  const planted = ciTopology();
+  for (const args of [["--check"], []]) {
+    const result = runGate(planted.gate, args, { APP_BITHIRE_ROOT: planted.corpusRoot });
+    assert.equal(result.status, 1, `${args.join(" ")}: ${result.output}`);
+    assert.match(result.output, /REFUSED — empty census/);
+    assert.ok(result.output.includes(`corpus pin: ${obligationsPin()}`), result.output);
+    assert.ok(result.output.includes(`CI receiver: ${CORPUS_CI_RECEIVER}`), result.output);
+    assert.doesNotMatch(result.output, /OK — no new boundary violations/);
+  }
+});
+
+test("E2: the importable censuses refuse an absent corpus instead of returning empty maps", () => {
+  const planted = ciTopology({ corpus: false });
+  for (const census of ["censusApplicationReaches", "censusBoundaryCategories", "censusDsModuleBoundary"]) {
+    const probe = spawnSync(
+      process.execPath,
+      ["--input-type=module", "-e", `const m = await import(${JSON.stringify(planted.gate)}); m.${census}();`],
+      { encoding: "utf8", env: { ...process.env, APP_BITHIRE_ROOT: planted.corpusRoot } },
+    );
+    assert.notEqual(probe.status, 0, census);
+    assert.match(probe.stderr, /REFUSED — corpus missing/, census);
+    assert.ok(probe.stderr.includes(`CI receiver: ${CORPUS_CI_RECEIVER}`), census);
+    assert.doesNotMatch(probe.stderr, /WO-[A-Z]+-\d+/, census);
+  }
+});
+
+test("R1: a synthetic corpus WITH a private-anatomy reach reports it and fails", () => {
+  const planted = hermeticTopology();
+  const result = runGate(planted.gate, ["--check"], { APP_BITHIRE_ROOT: planted.corpusRoot });
+  assert.equal(result.status, 1, result.output);
+  assert.ok(result.output.includes(`[private-anatomy] ${REACH_ID} (x1)`), result.output);
+});
+
+test("R2: the same reach in the baseline passes, so the refusal and the red are specific", () => {
+  const planted = hermeticTopology({ baselined: true });
+  const result = runGate(planted.gate, ["--check"], { APP_BITHIRE_ROOT: planted.corpusRoot });
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /OK — no new boundary violations/);
+});
+
+test("R3: a registered reach stays red and only gains its receiver", () => {
+  const unregistered = hermeticTopology();
+  const bare = runGate(unregistered.gate, ["--check"], { APP_BITHIRE_ROOT: unregistered.corpusRoot });
+  const registered = hermeticTopology({ registrations: REGISTERED_FIXTURE });
+  const result = runGate(registered.gate, ["--check"], { APP_BITHIRE_ROOT: registered.corpusRoot });
+  assert.equal(result.status, 1, result.output);
+  assert.ok(
+    result.output.includes(`[private-anatomy] ${REACH_ID} (x1) — registered path-relocation, entered 0123456789 2026-09-27, receiver features/thing`),
+    result.output,
+  );
+  assert.match(result.output, /registered \(red, not admitted\): 1 of 1 present; app receiver: fixture-app/);
+  // Registration changes the annotation, never the verdict or the failure set.
+  assert.equal(bare.status, result.status);
+  const failureIds = (output) => output.split("\n").filter((line) => line.startsWith("  - ")).map((line) => line.split(" — registered")[0]);
+  assert.deepEqual(failureIds(result.output), failureIds(bare.output));
+});
+
+test("R4: the register is validated, never consumed", () => {
+  const live = new Map([[REACH_ID, 1]]);
+  const sha = REGISTERED_FIXTURE.entries[0].measuredAt;
+  assert.deepEqual(evaluateRegistrations(REGISTERED_FIXTURE, live, {}, sha).failures, []);
+
+  const admitted = evaluateRegistrations(REGISTERED_FIXTURE, live, { [REACH_ID]: { count: 1 } }, sha);
+  assert.match(admitted.failures.join("\n"), /also appears in baseline\.reaches; registration never admits/);
+
+  const drifted = evaluateRegistrations(REGISTERED_FIXTURE, new Map([[REACH_ID, 2]]), {}, sha);
+  assert.match(drifted.failures.join("\n"), /measured 2 at its own revision, registered 1/);
+  const drained = evaluateRegistrations(REGISTERED_FIXTURE, new Map(), {}, sha);
+  assert.match(drained.failures.join("\n"), /measured 0 at its own revision/);
+  // At a foreign revision the count is not re-asserted: the entry names where it was measured.
+  assert.deepEqual(evaluateRegistrations(REGISTERED_FIXTURE, new Map(), {}, "f".repeat(40)).failures, []);
+
+  const { owner, ...ownerless } = REGISTERED_FIXTURE.entries[0];
+  const incomplete = evaluateRegistrations({ receiver: null, entries: [{ ...ownerless, route: "elsewhere" }] }, live, {}, sha);
+  assert.match(incomplete.failures.join("\n"), /names no application receiver/);
+  assert.match(incomplete.failures.join("\n"), /is missing owner/);
+  assert.match(incomplete.failures.join("\n"), /does not equal "<route> :: <selector>"/);
+  const unknownKind = evaluateRegistrations({ ...REGISTERED_FIXTURE, entries: [{ ...REGISTERED_FIXTURE.entries[0], kind: "accepted" }] }, live, {}, sha);
+  assert.match(unknownKind.failures.join("\n"), /kind "accepted" is not one of path-relocation, ds-block-adoption/);
+  assert.equal(receiverNote(new Map(), REACH_ID), "");
+  assert.match(corpusRefusal("x", null), /corpus pin: unpinned/);
+});
+
+test("R5: the six registered app-bithire reaches are exact, disjoint from the baseline, and traced", () => {
+  const register = JSON.parse(readFileSync(new URL("./registrations/index.json", import.meta.url), "utf8"));
+  assert.equal(register.entries.length, 6);
+  assert.match(register.receiver, /^app-bithire — /);
+  const { failures } = evaluateRegistrations(register, new Map(), baseline.reaches, null);
+  assert.deepEqual(failures, []);
+  for (const entry of register.entries) {
+    assert.match(entry.enteredIn, /^[0-9a-f]{40}$/, entry.id);
+    assert.match(entry.measuredAt, /^[0-9a-f]{40}$/, entry.id);
+    // A relocation is only a relocation if what it replaced is baselined debt.
+    if (entry.kind === "path-relocation") {
+      assert.equal(baseline.reaches[entry.predecessor]?.count, entry.count, entry.id);
+    } else {
+      assert.equal(entry.kind, "ds-block-adoption", entry.id);
+    }
+  }
 });
 
 /* -------------------------------------------------------------------------- */

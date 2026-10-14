@@ -26,11 +26,15 @@ import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import { corpusRefusal, evaluateRegistrations, receiverNote } from "./receivers/index.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 const BASELINE_PATH = join(HERE, "baseline/index.json");
 const OBLIGATIONS_PATH = join(HERE, "obligations/index.json");
+const REGISTRATIONS_PATH = join(HERE, "registrations/index.json");
+
+const refusal = (reason) => corpusRefusal(reason, loadObligations().corpusPin);
 
 function argValue(flag) {
   const index = process.argv.indexOf(flag);
@@ -50,6 +54,8 @@ function argValue(flag) {
  * `boundaries/applications/styles/index.mjs`: `--app-root` > `APP_BITHIRE_ROOT`
  * > sibling of the workspace. An explicit-but-broken root fails; it never falls
  * back, because a fallback is how a gate ends up auditing the wrong tree.
+ * A missing root, a root without src/, or a census that measures nothing is a
+ * named refusal citing the corpus pin and the CI receiver, never a pass.
  */
 const nonEmpty = (value) => (typeof value === "string" && value.trim() !== "" ? value : null);
 const APP_BITHIRE_ROOT = resolve(
@@ -91,7 +97,14 @@ function collectDsBemBlocks() {
       }
     }
   }
+  if (blocks.size === 0) {
+    throw new Error(refusal("the DS ships no skin BEM block, so the ds-bem detector would census nothing"));
+  }
   return blocks;
+}
+
+function requireApplicationRoot(application, root) {
+  if (!existsSync(root)) throw new Error(refusal(`corpus missing — ${application} has no ${root}`));
 }
 
 export function stripCssComments(source) {
@@ -115,7 +128,7 @@ export function censusApplicationReaches() {
   const dsBemBlocks = collectDsBemBlocks();
   const reaches = [];
   for (const [application, root] of Object.entries(APPLICATIONS)) {
-    if (!existsSync(root)) continue;
+    requireApplicationRoot(application, root);
     for (const file of cssFiles(root)) {
       const source = stripCssComments(readFileSync(file, "utf8"));
       const relativeFile = `${application}/${relative(resolve(root, ".."), file)}`;
@@ -377,7 +390,7 @@ export function censusBoundaryCategories() {
   };
 
   for (const [application, root] of Object.entries(APPLICATIONS)) {
-    if (!existsSync(root)) continue;
+    requireApplicationRoot(application, root);
     const appPrefix = resolve(root, "..");
 
     for (const file of cssFiles(root)) {
@@ -563,6 +576,7 @@ export function censusDsModuleBoundary() {
   const declaredSubpaths = declaredExportSubpaths(manifest.exports);
   const sites = [];
   for (const [application, root] of Object.entries(APPLICATIONS)) {
+    requireApplicationRoot(application, root);
     const appPrefix = resolve(root, "..");
     for (const file of moduleFiles(root)) {
       const relativeFile = `${application}/${relative(appPrefix, file)}`;
@@ -655,6 +669,11 @@ export function evaluateObligations(ledger, censusById, corpusSha) {
   return { failures, consumed };
 }
 
+export function loadRegistrations() {
+  if (!existsSync(REGISTRATIONS_PATH)) return { receiver: null, entries: [] };
+  return JSON.parse(readFileSync(REGISTRATIONS_PATH, "utf8"));
+}
+
 function main() {
   const check = process.argv.includes("--check");
 
@@ -663,16 +682,14 @@ function main() {
   // `--optional` is deliberately absent -- `validateManifest` forbids it in a
   // blocking run array, so offering it here would only invite the half-state.
   if (!existsSync(APP_BITHIRE_ROOT)) {
-    console.error(
-      `application-boundary-gate: corpus missing — ${APP_BITHIRE_ROOT} is not checked out.`,
-    );
+    console.error(refusal(`corpus missing — ${APP_BITHIRE_ROOT} is not checked out.`));
     console.error("  Check out app-bithire beside ui-design-system, pass --app-root <dir>,");
     console.error("  or export APP_BITHIRE_ROOT as the CI workflow does.");
     process.exit(1);
   }
   if (!statSync(APP_BITHIRE_ROOT).isDirectory() || !existsSync(join(APP_BITHIRE_ROOT, "src"))) {
     console.error(
-      `application-boundary-gate: corpus at ${APP_BITHIRE_ROOT} has no src/ — it is not an application checkout.`,
+      refusal(`corpus at ${APP_BITHIRE_ROOT} has no src/ — it is not an application checkout.`),
     );
     process.exit(1);
   }
@@ -687,12 +704,22 @@ function main() {
   );
 
   const current = censusApplicationReaches();
+  const categories = censusBoundaryCategories();
+  categories["ds-module-boundary"] = tally(censusDsModuleBoundary());
+  if ([current, ...Object.values(categories)].every((census) => census.size === 0)) {
+    // A real application checkout always measures something; a zero census
+    // means the corpus was not audited, so it may not turn every ratchet green.
+    console.error(refusal(`empty census — ${APP_BITHIRE_ROOT}/src yields 0 sites in every category.`));
+    process.exit(1);
+  }
   const baseline = loadBaseline();
   const { added, grown, removed } = diffCensus(current, baseline.reaches);
-
+  const { failures: registrationFailures, registered } = evaluateRegistrations(
+    loadRegistrations(), current, baseline.reaches, corpusSha,
+  );
   const newReaches = [
-    ...added.map(({ id, count }) => `${id} (x${count})`),
-    ...grown.map(({ id, from, to }) => `${id} grew ${from} -> ${to}`),
+    ...added.map(({ id, count }) => `${id} (x${count})${receiverNote(registered, id)}`),
+    ...grown.map(({ id, from, to }) => `${id} grew ${from} -> ${to}${receiverNote(registered, id)}`),
   ];
 
   console.log(
@@ -706,9 +733,14 @@ function main() {
     console.log(`  tighten opportunity: ${removed.length} baselined reach(es) no longer present`);
   }
 
-  const failures = [];
-  const categories = censusBoundaryCategories();
-  categories["ds-module-boundary"] = tally(censusDsModuleBoundary());
+  const presentRegistered = [...registered.keys()].filter((id) => current.has(id)).length;
+  if (registered.size > 0) {
+    console.log(
+      `  registered (red, not admitted): ${presentRegistered} of ${registered.size} present; app receiver: ${loadRegistrations().receiver}`,
+    );
+  }
+
+  const failures = [...registrationFailures];
   const liveById = new Map();
   for (const [name, categoryCensus] of Object.entries(categories)) {
     for (const [id, count] of categoryCensus) liveById.set(id, count);
