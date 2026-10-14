@@ -3804,6 +3804,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'chart-waterfall',
       'collapse',
       'collection-workspace',
+      'collection-workspace-render-dispatch',
       'column-menu',
       'column-settings',
       'command-palette',
@@ -3832,6 +3833,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'input-compounds',
       'layout',
       'list',
+      'list-toolbar',
       'locale-switcher',
       'modal-compounds',
       'modal-compounds-divider',
@@ -3848,6 +3850,7 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'stats-grid',
       'stats-grid-interactive',
       'stats-header',
+      'status-filter-pills',
       'stepper-compounds',
       'table',
       'time-picker',
@@ -3856,7 +3859,9 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
       'tree-view-connector',
       'typography',
       'typography-code',
+      'user-profile-card',
       'visual-excellence-preview',
+      'workspace-switcher',
     ]);
     assert.deepEqual(realRenderRosterFailures(ROOT), []);
     for (const [row, entry] of Object.entries(REAL_RENDER_MOUNTS)) {
@@ -5982,7 +5987,7 @@ describe('axis-difference — the states reach rows: real public renders, and on
     assert.ok(restingRules.length > 0, 'the skin must paint that box at rest -- otherwise this drill proves nothing');
     // Opt-in: no other row declares one, so every other mount is read exactly as before.
     assert.deepEqual(Object.entries(REAL_RENDER_MOUNTS).filter(([, row]) => row.pseudoReads !== undefined).map(([row]) => row).sort(),
-      ['activity-log', 'anchor', 'column-menu', 'layout']);
+      ['activity-log', 'anchor', 'column-menu', 'layout', 'workspace-switcher']);
     for (const row of ['activity-log', 'anchor', 'layout']) {
       assert.deepEqual(realRenderRosterFailures(ROOT, { [row]: REAL_RENDER_MOUNTS[row] }), [], row);
     }
@@ -6193,9 +6198,11 @@ describe('axis-difference — the composed reach rows: the node a pattern paints
   const FRAME = ".ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'][data-chrome='none']";
   const ACTION = ".ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button";
 
-  it('each row passes the door alone, on the axes its own paint sits on; locale-switcher does NOT declare states', () => {
-    assert.deepEqual([...LOCALE.axes], ['shape', 'rhythm', 'depth', 'motion']);
+  it('each row passes the door alone, on the axes its own paint sits on; locale-switcher declares states as a COMPOSITION credit (25.1)', () => {
+    assert.deepEqual([...LOCALE.axes], ['shape', 'rhythm', 'depth', 'motion', 'states']);
+    assert.deepEqual({ ...LOCALE.composition, axes: [...LOCALE.composition.axes] }, { primitive: 'select', axes: ['states'] });
     assert.deepEqual([...PANEL.axes], ['states']);
+    assert.equal(PANEL.composition, undefined, 'detail-panel\'s ring is its own restatement, not a composition credit');
     for (const [row, entry] of [['locale-switcher', LOCALE], ['detail-panel', PANEL]]) {
       assert.equal(entry.family, undefined, `${row} is a real render of its own family`);
       assert.deepEqual(realRenderRosterFailures(ROOT, { [row]: entry }), [], row);
@@ -6203,8 +6210,13 @@ describe('axis-difference — the composed reach rows: the node a pattern paints
       assert.deepEqual(probe.realRenderStampedParts(entry), ['trigger'], row);
     }
     // The ring on the chrome-less trigger is Select's; the pattern's own state rules write `background` alone, which
-    // is why the family stays pinned colour-only. Crediting a delegate's ring is an owner decision, not a row.
+    // is why the family stays pinned colour-only. The owner ruled the credit (25.1): the row reads Select's ring there,
+    // published as composition, and the browser drill cuts the Select shell and proves it lost.
     assert.equal(UNOBSERVABLE_FAMILIES.states['locale-switcher'], 'colour-only');
+    const ring = cssRules(skin('select')).find((rule) => rule.selector.includes("[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible)")
+      && rule.declarations.some((declaration) => declaration.property === 'box-shadow'));
+    assert.ok(ring, 'Select no longer paints a ring on its trigger');
+    assert.ok(!ring.selector.includes('data-chrome'), 'Select\'s ring is gated on chrome now -- the composition credit reads nothing');
     const frame = cssRules(skin('locale-switcher')).filter((rule) => rule.selector.includes("[data-chrome='none']:is("));
     assert.ok(frame.length >= 2, 'the pattern no longer ships a state rule on the chrome-less trigger');
     for (const rule of frame) assert.deepEqual(rule.declarations.map((declaration) => declaration.property), ['background'], rule.selector);
@@ -6418,17 +6430,21 @@ describe('axis-difference BROWSER drill — the composed reach rows move through
     assert.deepEqual(Object.fromEntries(RESTING.map((axis) => [axis, cellOf(on, axis).movedFamilies.find((entry) => entry.family === 'locale-switcher').property])), {
       shape: 'border-top-left-radius', rhythm: 'padding-top', depth: 'border-top-width', motion: 'transition-duration',
     });
-    // States is not declared on that row: never stamped, never forced, never credited.
-    for (const measurement of [on, off]) assert.ok(!cellOf(measurement, 'states').movedIds.includes('locale-switcher'));
-    assert.deepEqual(on.realRender.map['locale-switcher'].statesReach, { declared: false, stamped: 0, native: 0 });
+    // States (25.1, composition): credited through the Select ring on the trigger the row mounts, never without the row.
+    assert.ok(!cellOf(off, 'states').movedIds.includes('locale-switcher'));
+    assert.equal(cellOf(on, 'states').movedFamilies.find((entry) => entry.family === 'locale-switcher')?.property, 'box-shadow');
+    assert.equal(on.realRender.map['locale-switcher'].statesReach.declared, true);
+    assert.deepEqual(on.realRender.map['locale-switcher'].composition, { primitive: 'select', axes: ['states'] });
     // detail-panel: states, through the mount alone, on both halves, with its own state rules reaching the node.
     assert.ok(!cellOf(off, 'states').movedIds.includes('detail-panel'), 'detail-panel moved on states without its mount');
     const states = cellOf(on, 'states');
-    assert.deepEqual(states.realRender, { credited: ['detail-panel'], rescued: ['detail-panel'], refused: [], undecided: [] });
-    assert.deepEqual(states.movedIds, ['detail-panel']);
+    assert.deepEqual(states.realRender, {
+      credited: ['detail-panel', 'locale-switcher'], rescued: ['detail-panel', 'locale-switcher'], refused: [], undecided: [],
+    });
+    assert.deepEqual(states.movedIds, ['detail-panel', 'locale-switcher']);
     assert.deepEqual(states.widthOnly, []);
     assert.deepEqual(states.pseudoOnly, [], 'the credit rests on a node, not on a pseudo-element box');
-    assert.deepEqual([states.movedStamped, states.movedNative], [1, 1]);
+    assert.deepEqual([states.movedStamped, states.movedNative], [2, 2]);
     assert.equal(on.realRender.map['detail-panel'].statesReach.stamped > 0, true);
     assert.equal(on.realRender.map['detail-panel'].statesReach.native > 0, true);
     // Its resting axes are the default scene's, row or no row.
@@ -6452,7 +6468,7 @@ describe('axis-difference BROWSER drill — the composed reach rows move through
       }
     }
     for (const axis of RESTING) assert.deepEqual(cellOf(on, 'palette-only', axis).realRender.credited, ['locale-switcher'], `${axis}: the control did not read the mount`);
-    assert.deepEqual(cellOf(on, 'palette-only', 'states').realRender.credited, ['detail-panel'], 'the control did not read the mount its positive credited');
+    assert.deepEqual(cellOf(on, 'palette-only', 'states').realRender.credited, ['detail-panel', 'locale-switcher'], 'the control did not read the mount its positive credited');
     // SETTLING: every read ends the transitions its own writes started (`readComputed`), under the stamp and under forcing.
     assert.deepEqual(on.families.observedUnsettled, []);
     assert.deepEqual(on.nativePseudos.unsettled, []);
@@ -7192,13 +7208,15 @@ describe('axis-difference — a stand-in for another family\'s composed node is 
     const cli = readFileSync(join(ROOT, 'scripts/check/theme/axis-difference/index.mjs'), 'utf8');
     assert.ok(!cli.includes("process.argv.includes('--no-composed-primitives')"));
     assert.ok(!REPRODUCTION_FLAGS.some((flag) => flag.includes('composed')));
-    assert.match(cli, /composedPrimitives = true,\n\s+\/\* The roster those mounts come from/u);
+    assert.match(cli, /composedPrimitives = true,\n\s+\/\* `false` reproduces the pre-lot scene of the composed-node replacements:/u);
   });
 });
 
 describe('axis-difference BROWSER drill — the six stand-ins leave the scene: no AXIS credit leaves with them, and one chromatic reading does', { skip: browserReason }, () => {
   const FAMILIES = ['column-settings', 'list-toolbar', 'user-profile-card', 'workspace-switcher', 'collection-workspace-render-dispatch', 'status-filter-pills'];
-  const options = { verticals: ['bithire'], themes: ['light'], families: FAMILIES };
+  // The scene this lot changed, BEFORE the composed-node replacements (25.4/27) mounted the real Buttons in their place:
+  // with them, list-toolbar's chromatic reading returns through the real node, which the replacement drill pins.
+  const options = { verticals: ['bithire'], themes: ['light'], families: FAMILIES, composedReplacements: false };
   // One pair of runs, read by both tests: the same tree with the refusal on and off.
   let pair = null;
   const measured = () => (pair ??= (async () => ({ on: await run(options), off: await run({ ...options, composedPrimitives: false }) }))());
@@ -7442,4 +7460,344 @@ describe('axis-difference --verify-indicator — the review conditions on the CL
     assert.ok(!/\bwriteIndicator\(/u.test(main), 'the CLI writes only through publishIndicator');
     assert.match(main.slice(publication), /^[^\n]*\n\s*if \(publication\.refusal !== null\) \{[\s\S]*?process\.exit\(1\);\n\s*\}/u);
   });
+});
+
+describe('axis-difference — the composed-node replacements: the real Button where a stand-in or a twin stood (owner decisions 25.4 and 27, 2026-10-14)', () => {
+  const REPLACED = ['collection-workspace-render-dispatch', 'list-toolbar', 'status-filter-pills', 'user-profile-card', 'workspace-switcher'];
+  const STAND_IN_FAMILIES = ['collection-workspace-render-dispatch', 'column-settings', 'list-toolbar', 'status-filter-pills', 'user-profile-card', 'workspace-switcher'];
+  // The full population the part law built on the composed node, family -> [stand-in axes, twin id, twin axes].
+  const POPULATION = {
+    'collection-workspace-render-dispatch': [['depth', 'motion', 'rhythm', 'shape', 'states', 'typography'],
+      'div|ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation|', ['depth', 'rhythm']],
+    'column-settings': [['typography'], null, null],
+    'list-toolbar': [['depth', 'motion', 'shape', 'states'], null, null],
+    'status-filter-pills': [['depth'], null, null],
+    'user-profile-card': [['depth', 'states', 'typography'],
+      'div|ds-user-profile-card__action-button.ds-user-profile-card__action-button|', ['depth', 'motion', 'rhythm', 'shape', 'states', 'typography']],
+    'workspace-switcher': [['depth', 'motion', 'rhythm', 'shape', 'typography'], 'div|ds-workspace-switcher__item|', ['rhythm', 'states']],
+  };
+  const rows = () => Object.fromEntries(REPLACED.map((family) => [family, REAL_RENDER_MOUNTS[family]]));
+  const replacementFailures = (patch) => probe.composedReplacementFailures(ROOT, { ...REAL_RENDER_MOUNTS, ...patch });
+
+  it('THE POPULATION, complete: six stand-ins, three twins on the same composed node, and one disposition each', () => {
+    for (const nativePseudos of [false, true]) {
+      const parts = familyAxisParts(ROOT, Object.keys(POPULATION), null, { nativePseudos });
+      for (const [family, [standInAxes, twinId, twinAxes]] of Object.entries(POPULATION)) {
+        const record = parts.get(family);
+        assert.deepEqual([...new Set(record.standIns.map((entry) => entry.axis))].sort(), standInAxes, `${family}: stand-in axes`);
+        const own = record.standIns.map((entry) => entry.selector.split(/\s+/u).at(-1).match(/\.([\w-]+__[\w-]+)/u)?.[1]).filter(Boolean);
+        // A twin is a grafted part whose compound is that composed node's own BEM class alone.
+        const twins = record.parts.filter((part) => part.chain.at(-1).classes.length > 0 && part.chain.at(-1).classes.every((name) => own.includes(name)));
+        assert.deepEqual(twins.map((part) => [part.id, part.axes]), twinId === null ? [] : [[twinId, twinAxes]], `${family}: twins`);
+      }
+      // No seventh family grafts a twin of a refused stand-in: the population is closed on this tree.
+      const all = familyAxisParts(ROOT, null, null, { nativePseudos });
+      assert.deepEqual([...all].filter(([, record]) => record.standIns.length > 0).map(([family]) => family).sort(), STAND_IN_FAMILIES);
+    }
+    // Dispositions: five rows, one held -- and the rows replace exactly the twins above.
+    assert.deepEqual(Object.keys(REAL_RENDER_MOUNTS).filter((row) => REAL_RENDER_MOUNTS[row].replaces !== undefined).sort(), REPLACED);
+    assert.deepEqual(Object.keys(probe.COMPOSED_NODE_REPLACEMENTS_HELD), ['column-settings']);
+    assert.match(probe.COMPOSED_NODE_REPLACEMENTS_HELD['column-settings'], /typography/u);
+    for (const family of REPLACED) {
+      assert.deepEqual(REAL_RENDER_MOUNTS[family].replaces.twins.map((twin) => twin.id), POPULATION[family][1] === null ? [] : [POPULATION[family][1]], family);
+    }
+  });
+
+  it('THE DOORS: every row is witnessed token by token, replaces what the part law really refused or grafted, and mounts the primitive whole', () => {
+    assert.deepEqual(realRenderRosterFailures(ROOT, rows()), []);
+    assert.deepEqual(probe.composedReplacementFailures(ROOT), []);
+    for (const family of REPLACED) {
+      const entry = REAL_RENDER_MOUNTS[family];
+      assert.ok(!entry.axes.includes('typography'), `${family}: typography is held`);
+      assert.ok(markupTokens(entry.markup).includes('class:ds-button--modern'), family);
+      assert.ok(markupTokens(entry.markup).includes('tag:button'), `${family}: the node is the <button> the Button engine renders`);
+      assert.deepEqual(probe.realRenderStampedParts(entry).includes('trigger'), true, `${family}: the Button's kernel stamp reaches the node`);
+    }
+    // THE MUTANTS: each is refused by name.
+    const upc = REAL_RENDER_MOUNTS['user-profile-card'];
+    const standIn = upc.markup.replace('<button type="button" class="ds-button ds-button--modern', '<div class="ds-button').replace('</button>', '</div>');
+    assert.ok(replacementFailures({ 'user-profile-card': { ...upc, markup: standIn } })
+      .some((line) => line.includes('carries no `ds-button--modern` -- it would mount the stand-in again')));
+    assert.ok(replacementFailures({ 'user-profile-card': { ...upc, axes: [...upc.axes, 'typography'] } })
+      .some((line) => line.includes('never declares typography')));
+    assert.ok(replacementFailures({ 'user-profile-card': { ...upc, axes: upc.axes.filter((axis) => axis !== 'motion') } })
+      .some((line) => line.includes('the replaced nodes were read on')), 'an axis the twin carried was left unread');
+    assert.ok(replacementFailures({ 'user-profile-card': { ...upc, replaces: { ...upc.replaces, twins: [{ ...upc.replaces.twins[0], held: [] }] } } })
+      .some((line) => line.includes('holds typography exactly where it carried it')), 'the typography freeze was dropped');
+    assert.ok(replacementFailures({ 'user-profile-card': { ...upc, replaces: { ...upc.replaces, twins: [{ id: 'div|ds-nothing|', held: [] }] } } })
+      .some((line) => line.includes('is not grafted by the part law -- nothing to retire')));
+    assert.ok(replacementFailures({ 'user-profile-card': { ...upc, replaces: { ...upc.replaces, standIn: 'ds-select-shell' } } })
+      .some((line) => line.includes('nothing to replace')));
+    assert.ok(replacementFailures({ 'user-profile-card-second': { ...REAL_RENDER_MOUNTS.skeleton, family: 'user-profile-card' } })
+      .some((line) => line.startsWith('user-profile-card: a replacement family carries no other row')));
+    // A token the engine does not write is refused by the ordinary door, as for every row.
+    const fabricated = { ...upc, markup: upc.markup.replace('data-shape="default"', 'data-shape="default" data-ring="tenant"') };
+    assert.ok(realRenderRosterFailures(ROOT, { 'user-profile-card': fabricated }).some((line) => line.includes('`attr:data-ring=tenant` is not written by')));
+  });
+
+  it('THE RETIREMENT: with the rows, exactly the three twins leave the default scene -- typography held on user-profile-card -- and nothing else moves', () => {
+    const retirements = probe.composedNodeRetirements();
+    assert.deepEqual([...retirements.keys()].sort(), REPLACED);
+    for (const nativePseudos of [false, true]) {
+      const before = familyAxisParts(ROOT, null, null, { nativePseudos });
+      const after = familyAxisParts(ROOT, null, null, { nativePseudos, retirements });
+      assert.deepEqual([...after.keys()], [...before.keys()]);
+      for (const [family, record] of after) {
+        const twin = POPULATION[family]?.[1] ?? null;
+        if (twin === null) {
+          assert.deepEqual(record, before.get(family), `${family}: a family with no twin was read differently`);
+          continue;
+        }
+        assert.deepEqual(record.parts.filter((part) => part.id !== twin), before.get(family).parts.filter((part) => part.id !== twin), family);
+        const kept = record.parts.find((part) => part.id === twin);
+        assert.deepEqual(kept?.axes ?? [], family === 'user-profile-card' ? ['typography'] : [], `${family}: what the twin still holds`);
+        assert.deepEqual(record.retired, [{ id: twin, axes: POPULATION[family][2].filter((axis) => axis !== 'typography'), held: family === 'user-profile-card' ? ['typography'] : [] }]);
+      }
+      const report = partMountReport(after);
+      assert.deepEqual(Object.keys(report.composedReplacements.retired).sort(), ['collection-workspace-render-dispatch', 'user-profile-card', 'workspace-switcher']);
+      assert.equal(partMountReport(before).composedReplacements, undefined);
+    }
+    // By default (a caller handing no retirements) the part law is the pre-lot one, to the node.
+    assert.deepEqual(familyAxisParts(ROOT, REPLACED), familyAxisParts(ROOT, REPLACED, null, { retirements: null }));
+  });
+
+  it('THE MOUNT LIST carries the flag, the record publishes what each row replaces and composes, and `composedReplacements: false` is the pre-lot roster', () => {
+    const elements = familyElements(ROOT, [...REPLACED, 'locale-switcher']);
+    const mounts = realRenderMountList(elements);
+    assert.deepEqual(mounts.filter((mount) => mount.replaces === true).map((mount) => mount.family).sort(), REPLACED);
+    const report = realRenderReport(mounts);
+    assert.deepEqual(report.map['status-filter-pills'].composition, { primitive: 'button', axes: ['states'] });
+    assert.deepEqual(report.map['locale-switcher'].composition, { primitive: 'select', axes: ['states'] });
+    assert.equal(report.map['locale-switcher'].replaces, undefined);
+    assert.deepEqual(report.map['user-profile-card'].replaces.twins, [{ id: POPULATION['user-profile-card'][1], held: ['typography'] }]);
+    const cli = readFileSync(join(ROOT, 'scripts/check/theme/axis-difference/index.mjs'), 'utf8');
+    assert.match(cli, /\.filter\(\(mount\) => composedReplacements \|\| mount\.replaces !== true\)/u);
+    assert.ok(!REPRODUCTION_FLAGS.some((flag) => flag.includes('replacement')), 'the pre-lot reading is a run option, not a CLI flag');
+  });
+
+  it('A CLASS-HOSTED BOX: workspace-switcher reads the `::after` its item focus rule generates, held to the skin like every pseudo read', () => {
+    const ws = REAL_RENDER_MOUNTS['workspace-switcher'];
+    assert.deepEqual(ws.pseudoReads.map((box) => ({ ...box })), [{ class: 'ds-workspace-switcher__item', pseudo: '::after' }]);
+    assert.equal(realRenderMountList(familyElements(ROOT, ['workspace-switcher']))[0].pseudoReads[0], '.ds-workspace-switcher__item::after');
+    const door = (pseudoReads) => realRenderRosterFailures(ROOT, { 'workspace-switcher': { ...ws, pseudoReads } });
+    assert.deepEqual(door(ws.pseudoReads), []);
+    assert.ok(door([{ class: 'ds-workspace-switcher__trigger', pseudo: '::after' }]).some((line) => line.includes('the mount has no `class:ds-workspace-switcher__trigger` node')));
+    assert.ok(door([{ class: 'ds-workspace-switcher__item', pseudo: '::before' }]).some((line) => line.includes('no state rule of the family skin paints that box')));
+    assert.ok(door([{ class: 'ds-workspace-switcher__item', pseudo: '::marker' }]).some((line) => line.includes('reads only ::before and ::after')));
+  });
+});
+
+describe('axis-difference — the nine states-unobservable families, one verdict each (owner decision 19) and the standing denominator (25.3)', () => {
+  const VERDICTS = probe.STATES_UNOBSERVABLE_VERDICTS;
+
+  it('ONE VERDICT PER PINNED FAMILY, held to the tree: none leaves the denominator, and none is classified by its name', () => {
+    assert.deepEqual(probe.statesUnobservableVerdictFailures(ROOT), []);
+    assert.deepEqual(Object.keys(VERDICTS).sort(), Object.keys(UNOBSERVABLE_FAMILIES.states).sort());
+    assert.deepEqual(Object.fromEntries(Object.entries(VERDICTS).map(([family, entry]) => [family, [entry.verdict, entry.credit ?? null]])), {
+      'button-group': ['container', null],
+      'edit-fields': ['delegates', 'held'],
+      'form-builder': ['delegates', 'held'],
+      list: ['unobservable', null],
+      'locale-switcher': ['delegates', 'composition-row'],
+      'metrics-chart': ['unobservable', null],
+      'metrics-rows': ['unobservable', null],
+      'status-filter-pills': ['delegates', 'composition-row'],
+      'table-toolbar': ['delegates', 'held'],
+    });
+    for (const family of Object.keys(VERDICTS)) assert.ok(axisPopulations(ROOT).get('states').includes(family), `${family} left the states denominator`);
+    // The one interactive node a family OWNS that answers no state is named as product debt, never exempted.
+    assert.deepEqual(Object.entries(VERDICTS).filter(([, entry]) => entry.productDebt).map(([family]) => family), ['form-builder']);
+    assert.match(VERDICTS['form-builder'].productDebt, /upload-trigger/u);
+  });
+
+  it('THE DOOR BITES: a missing family, stale evidence, a composition verdict without its row, and a row without its verdict', () => {
+    const { list: _dropped, ...eight } = VERDICTS;
+    assert.ok(probe.statesUnobservableVerdictFailures(ROOT, { verdicts: eight }).some((line) => line.includes('one verdict per pinned family')));
+    const stale = { ...VERDICTS, list: { ...VERDICTS.list, evidence: [{ file: VERDICTS.list.evidence[0].file, text: 'box-shadow: var(--ds-focus-ring);' }] } };
+    assert.ok(probe.statesUnobservableVerdictFailures(ROOT, { verdicts: stale }).some((line) => line.startsWith('list:') && line.includes('no longer carries')));
+    const { 'status-filter-pills': _row, ...roster } = REAL_RENDER_MOUNTS;
+    assert.ok(probe.statesUnobservableVerdictFailures(ROOT, { roster }).some((line) => line.startsWith('status-filter-pills: a composition-row verdict needs')));
+    const held = { ...VERDICTS, 'locale-switcher': { ...VERDICTS['locale-switcher'], credit: 'held', held: 'planted' } };
+    assert.ok(probe.statesUnobservableVerdictFailures(ROOT, { verdicts: held }).some((line) => line.startsWith('locale-switcher: a delegates/held verdict and a states composition row')));
+  });
+
+  it('25.2: the carrier is the ancestor that owns the paint -- its `:has()` rule ships in production, feeds the tenant ring, and nothing else plans its read', () => {
+    const SKIN = 'src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css';
+    const RULE = '.ds-collection-page-size-control:has(.ds-collection-page-size-control__select select:focus-visible)';
+    const css = readFileSync(join(ROOT, SKIN), 'utf8');
+    // The carrier rule (outside any at-rule) feeds the private layer the pill's own lift reads; the rule parser keeps no custom property, so the text is read.
+    assert.ok(css.includes(`${RULE} {\n  --_ds-collection-page-size-focus-layer: var(--ds-focus-ring),;`), 'the pill no longer derives its focus layer from the tenant ring');
+    assert.ok(css.includes('box-shadow: var(--_ds-collection-page-size-focus-layer,)'), 'the pill no longer paints the layer it derives');
+    assert.ok(cssRules(css).some((rule) => rule.selector === RULE && rule.atRules.length === 0), 'the carrier rule left the production cascade');
+    assert.deepEqual([...new Set(probe.carrierReadsOf(css).reads.map((read) => read.selector))], [RULE], 'the plan is that one rule of the family\'s own skin');
+    // The row mounts the toolbar's real control: the select the engine renders inside the label, focused by the carrier pass.
+    const row = REAL_RENDER_MOUNTS['collection-workspace'];
+    assert.equal(row.carrierOnly, true);
+    assert.ok(markupTokens(row.markup).includes('tag:select') && markupTokens(row.markup).includes('tag:label'));
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'collection-workspace': row }), []);
+    // Withheld from the scene, the rule plans nothing: a carrier row over a skin without it is refused by the door's own law.
+    const without = css.split(RULE).join('.ds-collection-page-size-control--planted-away');
+    assert.ok(!probe.carrierReadsOf(without).reads.some((read) => read.selector === RULE));
+  });
+
+  it('25.3: active-filters-bar stays in the shape and depth denominators with no exclusion; the door refuses either change', () => {
+    assert.deepEqual(probe.standingDenominatorFailures(ROOT), []);
+    for (const axis of ['shape', 'depth']) assert.ok(axisPopulations(ROOT).get(axis).includes('active-filters-bar'), axis);
+    const exclusions = readFileSync(join(ROOT, 'scripts/check/theme/population/exclusions/index.json'), 'utf8');
+    assert.ok(!exclusions.includes('"active-filters-bar"'));
+    // The door's own mutants: a family that IS excluded somewhere, and an axis the family does not declare.
+    assert.ok(exclusions.includes('"table-toolbar"'), 'the planted exclusion moved -- re-plant this mutant');
+    assert.ok(probe.standingDenominatorFailures(ROOT, { 'table-toolbar': { axes: [], reason: 'planted' } }).some((line) => line.includes('named in check/theme/population exclusions')));
+    assert.ok(probe.standingDenominatorFailures(ROOT, { 'active-filters-bar': { axes: ['states'], reason: 'planted' } }).some((line) => line.includes('left the states population')));
+  });
+});
+
+describe('axis-difference BROWSER drill — the composed-node replacements: one family, one reading, the real node carrying what the twin carried', { skip: browserReason }, () => {
+  const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
+  const REPLACED = ['collection-workspace-render-dispatch', 'list-toolbar', 'status-filter-pills', 'user-profile-card', 'workspace-switcher'];
+  const families = [...REPLACED, 'locale-switcher'];
+  const options = { verticals: ['bithire'], themes: ['light'], families };
+  const cellOf = (measurement, id, axis = id) => measurement.cells.find((entry) => entry.scenario === id && entry.axis === axis);
+  const replacedOf = (measurement, axis, family) => cellOf(measurement, axis).realRender.replaced.find((entry) => entry.family === family);
+  // The pre-lot scene: every twin grafted, no replacement mounted, locale-switcher's row on its four resting axes.
+  const PRE_LOT = {
+    composedReplacements: false,
+    realRenderRoster: {
+      ...REAL_RENDER_MOUNTS,
+      'locale-switcher': Object.fromEntries(Object.entries({ ...REAL_RENDER_MOUNTS['locale-switcher'], axes: ['shape', 'rhythm', 'depth', 'motion'] })
+        .filter(([key]) => key !== 'composition')),
+    },
+  };
+  let pair = null;
+  const measured = () => (pair ??= (async () => ({ on: await run(options), off: await run({ ...options, ...PRE_LOT }) }))());
+
+  it('THE SWAP: every axis but states credits the same families; typography is untouched; both controls stay 0; no denominator moves', async () => {
+    const { on, off } = await measured();
+    for (const axis of AXIS_IDS) {
+      const [now, before] = [cellOf(on, axis), cellOf(off, axis)];
+      const gained = now.movedIds.filter((family) => !before.movedIds.includes(family));
+      const lost = before.movedIds.filter((family) => !now.movedIds.includes(family));
+      assert.deepEqual(lost, [], `${axis}: a family lost its credit with its twin -- the real node does not carry it`);
+      assert.deepEqual(gained, axis === 'states' ? ['locale-switcher', 'status-filter-pills'] : [], `${axis}: what the lot added`);
+    }
+    assert.deepEqual(cellOf(on, 'typography').movedFamilies, cellOf(off, 'typography').movedFamilies, 'a typography reading moved (lane G freeze)');
+    for (const measurement of [on, off]) {
+      for (const entry of measurement.cells.filter((cellEntry) => cellEntry.kind === 'negative')) {
+        assert.equal(entry.moved, 0, `${entry.scenario}/${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
+      }
+      assert.deepEqual(measurement.refusals, []);
+      assert.deepEqual(measurement.families.observedUnsettled, []);
+    }
+    assert.deepEqual(on.populations, off.populations, 'a replacement may move a numerator, never a denominator');
+    assert.deepEqual(evaluate(on), []);
+    assert.equal(off.partMounts.composedReplacements, undefined);
+    assert.deepEqual(Object.keys(on.partMounts.composedReplacements.retired).sort(), ['collection-workspace-render-dispatch', 'user-profile-card', 'workspace-switcher']);
+    assert.equal(cellOf(off, 'shape').realRender.replaced, undefined, 'the pre-lot scene publishes no replacement');
+  }, 600_000);
+
+  it('RED FIRST, then the real node: the default mount without its twin no longer moves where the twin alone carried the credit, and the real Button does', async () => {
+    const { on } = await measured();
+    const carriedByTheTwin = { 'user-profile-card': ['shape', 'states', 'motion'], 'workspace-switcher': ['states'] };
+    for (const [family, axes] of Object.entries(carriedByTheTwin)) {
+      for (const axis of axes) {
+        const entry = replacedOf(on, axis, family);
+        assert.equal(entry.defaultAlone, null, `${family}/${axis}: the default scene still moves without the twin -- the twin carried nothing here`);
+        assert.ok(entry.realAlone, `${family}/${axis}: the real node does not carry it`);
+        assert.equal(entry.moved, cellOf(on, axis).movedFamilies.find((moved) => moved.family === family)?.property ?? entry.moved, `${family}/${axis}`);
+      }
+    }
+    // ONE READING: every replaced family appears once per cell, whatever moved it.
+    for (const axis of ['shape', 'rhythm', 'depth', 'states', 'motion']) {
+      const cell = cellOf(on, axis);
+      assert.equal(new Set(cell.movedIds).size, cell.movedIds.length, axis);
+      assert.ok(!cell.realRender.credited.some((family) => REPLACED.includes(family)), `${axis}: a replacement took a law-3 verdict`);
+    }
+  }, 600_000);
+
+  it('WITHHOLDING by the family\'s own rule: without its BEM class the same Button moves on the PRIMITIVE\'s paint, which the family\'s rule withholds', async () => {
+    const strip = (family, name) => ({
+      ...REAL_RENDER_MOUNTS[family],
+      markup: REAL_RENDER_MOUNTS[family].markup.replace(` ${name}"`, '"'),
+    });
+    const cut = await run({
+      ...options,
+      families: ['user-profile-card', 'collection-workspace-render-dispatch'],
+      scenarios: ['states', 'motion'].map(byId),
+      realRenderRoster: {
+        ...REAL_RENDER_MOUNTS,
+        'user-profile-card': strip('user-profile-card', 'ds-user-profile-card__action-button'),
+        'collection-workspace-render-dispatch': strip('collection-workspace-render-dispatch', 'ds-collection-render-dispatch__card-activation'),
+      },
+    });
+    const { on } = await measured();
+    // user-profile-card neutralises the Button's press and paints its own ring: with the class the move is the ring.
+    assert.equal(replacedOf(on, 'states', 'user-profile-card').realAlone, 'box-shadow');
+    assert.equal(replacedOf(cut, 'states', 'user-profile-card').realAlone, 'transform');
+    // render-dispatch resets the hidden activation's transition: the Button's own motion is withheld, and returns without the class.
+    assert.equal(replacedOf(on, 'motion', 'collection-workspace-render-dispatch').realAlone, null);
+    assert.equal(replacedOf(cut, 'motion', 'collection-workspace-render-dispatch').realAlone, 'transition-duration');
+  }, 600_000);
+
+  it('25.1, locale-switcher: credited through Select\'s ring; the Select shell that rule is headed by cut, the credit is REFUSED', async () => {
+    const { on } = await measured();
+    assert.ok(cellOf(on, 'states').realRender.credited.includes('locale-switcher'));
+    assert.equal(cellOf(on, 'states').movedFamilies.find((entry) => entry.family === 'locale-switcher').property, 'box-shadow');
+    const row = REAL_RENDER_MOUNTS['locale-switcher'];
+    const hollow = {
+      ...row,
+      markup: row.markup.replace('<div class="ds-select-shell ds-select-shell--modern" data-part="root"', '<div data-part="root"'),
+      stamps: row.stamps.filter((stamp) => !stamp.token.startsWith('class:ds-select-shell')),
+    };
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'locale-switcher': hollow }), [], 'the cut omits, it does not fabricate');
+    const cut = await run({ ...options, families: ['locale-switcher'], scenarios: [byId('states')], realRenderRoster: { ...REAL_RENDER_MOUNTS, 'locale-switcher': hollow } });
+    const refusal = cellOf(cut, 'states').realRender.refused.find((entry) => entry.family === 'locale-switcher');
+    assert.match(refusal?.reason ?? '', /the real render does not move on states under either half/u);
+    assert.ok(!cellOf(cut, 'states').movedIds.includes('locale-switcher'));
+  }, 600_000);
+
+  it('25.1, status-filter-pills: credited through the composed Button on the pill; the same pill without the Button\'s identity moves nothing', async () => {
+    const { on, off } = await measured();
+    assert.ok(!cellOf(off, 'states').movedIds.includes('status-filter-pills'));
+    const entry = replacedOf(on, 'states', 'status-filter-pills');
+    assert.deepEqual([entry.defaultAlone, Boolean(entry.realAlone)], [null, true], 'the family\'s own colour rules move nothing; the Button does');
+    const row = REAL_RENDER_MOUNTS['status-filter-pills'];
+    const { replaces: _replaces, composition: _composition, ...plain } = row;
+    const pill = { ...plain, axes: ['states'] };
+    const identityless = {
+      ...pill,
+      markup: row.markup.replace('class="ds-button ds-button--modern ds-button--primary ds-button--md ds-button--round ds-status-filter-pills__pill"', 'class="ds-status-filter-pills__pill"'),
+      stamps: row.stamps.filter((stamp) => !stamp.token.startsWith('class:ds-button')),
+    };
+    const read = async (mount) => run({
+      ...options, families: ['status-filter-pills'], scenarios: [byId('states')], realRenderRoster: { ...REAL_RENDER_MOUNTS, 'status-filter-pills': mount },
+    });
+    const [control, cut] = [await read(pill), await read(identityless)];
+    assert.ok(cellOf(control, 'states').realRender.credited.includes('status-filter-pills'), 'the control row (same node, law 3) is not credited -- the cut proves nothing');
+    assert.match(cellOf(cut, 'states').realRender.refused.find((refused) => refused.family === 'status-filter-pills')?.reason ?? '',
+      /the real render does not move on states under either half/u);
+  }, 600_000);
+
+  it('THE FOCUS STYLE ALONE: the composition credits and the twins\' successors move on the ring, never on a width alone', async () => {
+    const focusOnly = { ...byId('states'), a: { 'states.focus-style': 'ring' }, b: { 'states.focus-style': 'glow' } };
+    const only = await run({ ...options, scenarios: [focusOnly, byId('palette-only')] });
+    const states = cellOf(only, 'states');
+    for (const family of ['locale-switcher', 'status-filter-pills', 'user-profile-card', 'workspace-switcher']) {
+      assert.equal(states.movedFamilies.find((entry) => entry.family === family)?.property, 'box-shadow', family);
+    }
+    assert.deepEqual(states.widthOnly, []);
+    assert.equal(cellOf(only, 'palette-only', 'states').moved, 0);
+  }, 600_000);
+
+  it('THE CHROMATIC READING, apart: list-toolbar returns with its real Button (the bd77bfc72 under-read) and its axis cells are what they were', async () => {
+    const { on, off } = await measured();
+    const chroma = (measurement, scenario) => measurement.chromaticStates.cells.find((entry) => entry.scenario === scenario);
+    for (const scenario of ['states', 'states-emphasis-only']) {
+      assert.ok(!chroma(off, scenario).movedIds.includes('list-toolbar'), `${scenario}: the pre-lot scene already read it -- this pins nothing`);
+      assert.ok(chroma(on, scenario).movedIds.includes('list-toolbar'), scenario);
+    }
+    for (const axis of AXIS_IDS) {
+      assert.equal(cellOf(on, axis).movedFamilies.find((entry) => entry.family === 'list-toolbar')?.property,
+        cellOf(off, axis).movedFamilies.find((entry) => entry.family === 'list-toolbar')?.property, `${axis}: the chromatic effect became an axis credit`);
+    }
+  }, 600_000);
 });

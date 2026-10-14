@@ -1714,9 +1714,12 @@ const STATES_REACH_ROWS = Object.freeze({
  * WHOSE PAINT IS WHOSE. locale-switcher's frame (radius, padding and gap,
  * hairline, transition) is the pattern skin's own rule on
  * `[data-part='trigger'][data-chrome='none']`; Select drops its frame under
- * that same stamp. Its row does NOT declare `states`: the pattern's state
- * rules write `background` alone and the ring on that node is Select's.
- * detail-panel declares `states` alone: its skin restates the tenant ring on
+ * that same stamp. Its pattern state rules write `background` alone; the
+ * ring on that node is Select's, and the row declares `states` as a
+ * COMPOSITION credit (owner decision 25.1, 2026-10-14): the default render
+ * carries that Select, its ring rule reaches this trigger ungated by
+ * `data-chrome`, and the drill proves the credit lost when the Select shell
+ * that rule is headed by is cut. detail-panel declares `states` alone: its skin restates the tenant ring on
  * the primary action (`[data-part='action-button'][data-variant='primary'] >
  * .ds-button` under focus-visible), which is the winning declaration on that
  * node and exists for that variant only -- so the configuration is named, and
@@ -1747,7 +1750,8 @@ const COMPOSED_REACH_ROWS = Object.freeze({
         }),
       ]),
     }),
-    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion']),
+    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion', 'states']),
+    composition: Object.freeze({ primitive: 'select', axes: Object.freeze(['states']) }),
     markup: '<div class="ds-pattern-locale-switcher ds-engine-modern" data-part="root" data-pattern="locale-switcher" data-loading="false">'
       + '<div class="ds-select-shell ds-select-shell--modern" data-part="root" data-size="md" data-mode="single">'
       + '<div data-part="trigger" data-chrome="none" data-variant="outline">'
@@ -1976,6 +1980,358 @@ const CARRIER_REACH_ROWS = Object.freeze({
     ]),
   }),
 });
+
+/**
+ * THE COMPOSED-NODE REPLACEMENTS (owner decisions 25.4 and 27, 2026-10-14):
+ * the NAMED EXCEPTION to laws 3 and 4 of the roster.
+ *
+ * WHAT IT REPLACES. A family whose skin paints the canonical Button it
+ * composes was read on nodes the product never renders: the `div.ds-button`
+ * stand-in (refused since bd77bfc72, no axis credit) and, where the family
+ * also writes the same node under its own BEM class alone, a TWIN -- the
+ * bare `div.<family>__<element>` the part law still grafted and credited.
+ * user-profile-card, workspace-switcher and collection-workspace-render-
+ * dispatch carry a twin; list-toolbar and status-filter-pills carry the
+ * stand-in alone. Each row mounts the engine's own root, the wrappers it
+ * renders and the real Button, witnessed token by token like every row.
+ *
+ * WHY LAWS 3 AND 4 DO NOT APPLY. A real-render row is read BESIDE a default
+ * mount and credited only where that mount moves on nothing (law 3). A
+ * replacement is not a rescue: the node it mounts is the one the default
+ * scene stood in for, so the twin leaves the default scene in the SAME run
+ * (`composedNodeRetirements`) and the family is read ONCE, over the default
+ * mount minus the twin plus the real render. One family, one reading: no
+ * axis credits it twice and no law-3 verdict is taken. Every cell publishes
+ * each replaced family with the default mount alone and the real render
+ * alone beside the union (`realRender.replaced`), so the before/after of the
+ * swap is read off the run itself.
+ *
+ * TYPOGRAPHY IS HELD (lane G, E8-b). No row declares it, and a twin that was
+ * read on typography keeps that axis alone (`held`), so no typography cell
+ * moves with the swap. column-settings' stand-in was read on typography
+ * only: it has no row (`COMPOSED_NODE_REPLACEMENTS_HELD`).
+ *
+ * A `composition` clause (owner decision 25.1) names the canonical primitive
+ * whose paint a row is credited with on the axes it lists: the productive
+ * render carries that primitive, its rule reaches the node, and the reading is
+ * non-chromatic by the axis vocabulary. The drill cuts the decision flow for
+ * every such credit and proves it lost.
+ *
+ * `run({ composedReplacements: false })` reproduces the pre-lot scene: twins
+ * grafted, replacement rows unmounted.
+ */
+const USER_PROFILE_CARD_ENGINE = 'src/components/patterns/identity/profile/user-profile-card/engines/modern/index.tsx';
+const WORKSPACE_SWITCHER_ENGINE = 'src/components/patterns/navigation/workspace-switcher/engines/modern/index.tsx';
+const LIST_TOOLBAR_ENGINE = 'src/components/patterns/data/list-toolbar/engines/modern/index.tsx';
+const RENDER_DISPATCH = 'src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx';
+const RENDER_DISPATCH_CARDS = 'src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/cards/index.tsx';
+const STATUS_FILTER_PILLS = 'src/components/patterns/data/status-filter-pills/index.tsx';
+const FLEX_ENGINE = 'src/components/primitives/layout/flex/engines/modern/index.tsx';
+
+const resolvedBy = (...rows) => Object.freeze(rows.map(([source, text]) => Object.freeze({ source, text })));
+
+/**
+ * The stamps of one composed Modern Button, each held to its writer: the tag
+ * and anatomy to the engine, the classes to the recipe, and every value to the
+ * default or the composing call it resolves from. A class two axes write
+ * (`ds-button--default` is a variant and a shape) is one token with both
+ * resolutions.
+ */
+function composedButtonStamps({ variant, size, shape, extra = [] }) {
+  const rows = new Map();
+  const add = (row) => {
+    const prior = rows.get(row.token);
+    rows.set(row.token, prior === undefined
+      ? row
+      : Object.freeze({ ...prior, resolves: Object.freeze([...(prior.resolves ?? []), ...(row.resolves ?? [])]) }));
+  };
+  add(Object.freeze({
+    token: 'tag:button', source: BUTTON_ENGINE, stamp: '<button\n        {...nativeButtonProps}',
+    resolves: resolvedBy([BUTTON_ENGINE, 'htmlType = BUTTON_DEFAULTS.htmlType,']),
+  }));
+  add(Object.freeze({
+    token: 'attr:type=button', source: BUTTON_ENGINE, stamp: 'type={htmlType}',
+    resolves: resolvedBy([BUTTON_CONTRACT, "htmlType: 'button' as const,"]),
+  }));
+  for (const name of ['ds-button', 'ds-button--modern']) {
+    add(Object.freeze({ token: `class:${name}`, source: BUTTON_RECIPE, stamp: "slots: { root: ['ds-button', 'ds-button--modern'] }," }));
+  }
+  for (const [axis, entry] of [['variant', variant], ['size', size], ['shape', shape]]) {
+    const domain = { variant: 'BUTTON_VARIANT_VALUES', size: 'BUTTON_SIZE_VALUES', shape: 'BUTTON_SHAPE_VALUES' }[axis];
+    add(Object.freeze({
+      token: `class:ds-button--${entry.value}`, source: BUTTON_RECIPE, stamp: BUTTON_RECIPE_AXIS_CLASS,
+      resolves: Object.freeze([Object.freeze({ source: BUTTON_RECIPE, text: `${axis}: axisFromDomain(${domain}),` }), ...entry.resolves]),
+    }));
+    add(Object.freeze({
+      token: `attr:data-${axis}=${entry.value}`, source: BUTTON_ENGINE,
+      stamp: { variant: "'data-variant': effectiveVariant,", size: "'data-size': size,", shape: "'data-shape': shape," }[axis],
+      resolves: entry.resolves,
+    }));
+  }
+  add(Object.freeze({ token: 'attr:data-part=trigger', source: BUTTON_ENGINE, stamp: "...partAttributes('trigger', interaction)," }));
+  for (const row of extra) add(row);
+  return Object.freeze([...rows.values()]);
+}
+
+const BUTTON_SIZE_DEFAULT = resolvedBy([BUTTON_CONTRACT, "size: 'md' as const,"]);
+const BUTTON_SHAPE_DEFAULT = resolvedBy([BUTTON_CONTRACT, "shape: 'default' as const,"]);
+const BOX_DIV = Object.freeze({
+  token: 'tag:div', stamp: '<Box',
+  resolves: resolvedBy([BOX_ENGINE, 'as: Component = BOX_DEFAULTS.as,'], [BOX_CONTRACT, 'as: "div",']),
+});
+
+const COMPOSED_NODE_REPLACEMENTS = Object.freeze({
+  'user-profile-card': Object.freeze({
+    state: Object.freeze({
+      name: 'a full UserProfileCard (md, not loading, no onClick) given one action with no variant -- the actions slot renders the '
+        + 'canonical Button carrying the family BEM class, the node the family skin paints the action corner, padding, transition and '
+        + 'focus ring on; the avatar, identity, badges, the Button\'s content and its motion hatches are omitted',
+      source: USER_PROFILE_CARD_ENGINE,
+      anchors: Object.freeze(['{actions.length > 0 && (', 'className="ds-user-profile-card__action-button"', "variant={action.variant ?? 'default'}"]),
+      resolves: resolvedBy([USER_PROFILE_CARD_ENGINE, "variant = 'full',"]),
+    }),
+    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion', 'states']),
+    replaces: Object.freeze({
+      standIn: 'ds-button',
+      twins: Object.freeze([Object.freeze({ id: 'div|ds-user-profile-card__action-button.ds-user-profile-card__action-button|', held: Object.freeze(['typography']) })]),
+    }),
+    markup: '<div class="ds-pattern-user-profile-card ds-engine-modern" data-part="root" data-loading="false" data-variant="full" data-size="md" '
+      + 'data-interactive="false"><div data-part="body"><div data-part="actions">'
+      + '<button type="button" class="ds-button ds-button--modern ds-button--default ds-button--md ds-user-profile-card__action-button" '
+      + 'data-variant="default" data-size="md" data-shape="default" data-part="trigger"></button></div></div></div>',
+    stamps: composedButtonStamps({
+      variant: { value: 'default', resolves: resolvedBy([USER_PROFILE_CARD_ENGINE, "variant={action.variant ?? 'default'}"]) },
+      size: { value: 'md', resolves: BUTTON_SIZE_DEFAULT },
+      shape: { value: 'default', resolves: BUTTON_SHAPE_DEFAULT },
+      extra: [
+        Object.freeze({ token: 'attr:data-loading=false', stamp: 'data-loading={false}' }),
+        Object.freeze({ token: 'attr:data-variant=full', stamp: 'data-variant={variant}', resolves: resolvedBy([USER_PROFILE_CARD_ENGINE, "variant = 'full',"]) }),
+        Object.freeze({ token: 'attr:data-interactive=false', stamp: "data-interactive={onClick ? 'true' : 'false'}" }),
+      ],
+    }).map((row) => (row.token === 'attr:data-size=md'
+      // The card's root writes `data-size` too, from its own default; one token, both writers.
+      ? Object.freeze({ ...row, resolves: Object.freeze([...row.resolves, ...resolvedBy([USER_PROFILE_CARD_ENGINE, "size = 'md',"])]) })
+      : row)),
+  }),
+  'workspace-switcher': Object.freeze({
+    state: Object.freeze({
+      name: 'a sidebar WorkspaceSwitcher with its panel open and one visible, active workspace -- the list row renders the canonical '
+        + 'Button (ghost, md) carrying the family BEM class, the menu item the family skin paints; the trigger, header, search, the '
+        + 'item\'s avatar and copy and the Button\'s content are omitted',
+      source: WORKSPACE_SWITCHER_ENGINE,
+      anchors: Object.freeze(['{open && (', 'visibleWorkspaces.map((ws, idx) => {', 'className="ds-workspace-switcher__item"']),
+      resolves: resolvedBy([WORKSPACE_SWITCHER_ENGINE, "position = 'sidebar',"]),
+    }),
+    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion', 'states']),
+    replaces: Object.freeze({
+      standIn: 'ds-button',
+      twins: Object.freeze([Object.freeze({ id: 'div|ds-workspace-switcher__item|', held: Object.freeze([]) })]),
+    }),
+    // The item's tenant signature is the `::after` its focus rule generates; the outline beside it is width and offset alone.
+    pseudoReads: Object.freeze([Object.freeze({ class: 'ds-workspace-switcher__item', pseudo: '::after' })]),
+    markup: '<div class="ds-pattern-workspace-switcher ds-engine-modern" data-part="root" data-position="sidebar" data-open="true" data-loading="false">'
+      + '<div data-part="panel"><div data-part="list" role="menu"><div data-part="item-row" role="none" data-active="true" data-focused="false">'
+      + '<button type="button" class="ds-button ds-button--modern ds-button--ghost ds-button--md ds-button--default ds-workspace-switcher__item" '
+      + 'role="menuitemradio" tabindex="0" data-active="true" data-focused="false" data-variant="ghost" data-size="md" data-shape="default" '
+      + 'data-part="trigger"></button></div></div></div></div>',
+    stamps: composedButtonStamps({
+      variant: { value: 'ghost', resolves: resolvedBy([WORKSPACE_SWITCHER_ENGINE, '<ModernButton\n                    variant="ghost"']) },
+      size: { value: 'md', resolves: BUTTON_SIZE_DEFAULT },
+      shape: { value: 'default', resolves: BUTTON_SHAPE_DEFAULT },
+      extra: [
+        Object.freeze({ token: 'attr:data-position=sidebar', stamp: 'data-position={position}', resolves: resolvedBy([WORKSPACE_SWITCHER_ENGINE, "position = 'sidebar',"]) }),
+        Object.freeze({ token: 'attr:data-open=true', stamp: "data-open={open ? 'true' : 'false'}" }),
+        Object.freeze({ token: 'attr:role=menu', stamp: "role={hasOptions ? 'menu' : undefined}" }),
+        Object.freeze({ token: 'attr:data-active=true', stamp: 'data-active={isActive}', resolves: resolvedBy([WORKSPACE_SWITCHER_ENGINE, 'const isActive = ws.id === activeWorkspaceId;']) }),
+        Object.freeze({ token: 'attr:data-focused=false', stamp: 'data-focused={isFocused}', resolves: resolvedBy([WORKSPACE_SWITCHER_ENGINE, 'const isFocused = idx === focusIndex;']) }),
+        Object.freeze({ token: 'attr:tabindex=0', stamp: 'tabIndex={idx === rovingIndex ? 0 : -1}' }),
+      ],
+    }),
+  }),
+  'list-toolbar': Object.freeze({
+    state: Object.freeze({
+      name: 'the desktop ListToolbar (full container layout) -- its controls cluster renders the settings IconButton, the canonical Button '
+        + '(ghost, sm, icon-only) carrying the family BEM class, the node the family skin paints the control corner, hairline, feedback '
+        + 'transition, focus ring and press on; the Popover and Tooltip wrappers, the search field and the icon are omitted',
+      source: LIST_TOOLBAR_ENGINE,
+      anchors: Object.freeze(["className='ds-list-toolbar__icon-button'", '<IconButton\n        onClick={() => onOpenChange(!open)}', "data-part='controls'"]),
+      resolves: Object.freeze([]),
+    }),
+    axes: Object.freeze(['shape', 'depth', 'motion', 'states']),
+    replaces: Object.freeze({ standIn: 'ds-button', twins: Object.freeze([]) }),
+    markup: '<div data-part="root" data-mobile="false" data-container-layout="full" class="ds-pattern-list-toolbar ds-engine-modern">'
+      + '<div data-part="main-row" class="ds-list-toolbar__main-row"><div data-part="controls" class="ds-list-toolbar__controls">'
+      + '<button type="button" class="ds-button ds-button--modern ds-button--ghost ds-button--sm ds-button--default ds-list-toolbar__icon-button" '
+      + 'data-variant="ghost" data-size="sm" data-shape="default" data-icon-only="true" data-part="trigger"></button></div></div></div>',
+    stamps: composedButtonStamps({
+      variant: { value: 'ghost', resolves: resolvedBy([LIST_TOOLBAR_ENGINE, "variant='ghost'"]) },
+      size: { value: 'sm', resolves: resolvedBy([LIST_TOOLBAR_ENGINE, "size='sm'"]) },
+      shape: { value: 'default', resolves: BUTTON_SHAPE_DEFAULT },
+      extra: [
+        Object.freeze({ ...BOX_DIV, stamp: Object.freeze(['<Box', '<Flex']), resolves: Object.freeze([...BOX_DIV.resolves, ...resolvedBy([FLEX_ENGINE, '<div\n          // P-79: the default part precedes the spread'])]) }),
+        Object.freeze({ token: 'attr:data-mobile=false', stamp: 'data-mobile={isCompact}', resolves: resolvedBy([LIST_TOOLBAR_ENGINE, "data-container-layout={isCompact ? 'compact' : 'full'}"]) }),
+        Object.freeze({ token: 'attr:data-container-layout=full', stamp: "data-container-layout={isCompact ? 'compact' : 'full'}" }),
+        Object.freeze({
+          token: 'attr:data-icon-only=true', source: BUTTON_ENGINE, stamp: "'data-icon-only': isIconOnly ? 'true' : undefined,",
+          resolves: resolvedBy([BUTTON_ENGINE, 'const isIconOnly = !hasLabel && Boolean(icon || prefix || suffix);'], [LIST_TOOLBAR_ENGINE, 'icon={children}']),
+        }),
+      ],
+    }),
+  }),
+  'collection-workspace-render-dispatch': Object.freeze({
+    state: Object.freeze({
+      name: 'a cards-mode render dispatch given a cardRenderer and onRowClick and no rowHref -- each card item carries the canonical Button '
+        + '(ghost, md) as the visually hidden activation the family skin resets; the card content and the Button\'s content are omitted',
+      source: RENDER_DISPATCH,
+      anchors: Object.freeze(['{cardRenderer && hasActivation ? (', 'className="ds-collection-render-dispatch__card-activation"']),
+      resolves: resolvedBy([RENDER_DISPATCH, 'const hasActivation = Boolean(onRowClick);']),
+    }),
+    axes: Object.freeze(['shape', 'rhythm', 'depth', 'motion', 'states']),
+    replaces: Object.freeze({
+      standIn: 'ds-button',
+      twins: Object.freeze([Object.freeze({ id: 'div|ds-collection-render-dispatch__card-activation.ds-collection-render-dispatch__card-activation|', held: Object.freeze([]) })]),
+    }),
+    markup: '<div class="ds-surface ds-collection-render-dispatch" data-part="root" data-view-mode="cards" data-state="ready">'
+      + '<div class="ds-collection-render-dispatch__card-item" data-part="card-item" data-lone-final="false" data-activatable="true">'
+      + '<button type="button" class="ds-button ds-button--modern ds-button--ghost ds-button--md ds-button--default ds-collection-render-dispatch__card-activation" '
+      + 'data-variant="ghost" data-size="md" data-shape="default" data-part="trigger"></button></div></div>',
+    stamps: composedButtonStamps({
+      variant: { value: 'ghost', resolves: resolvedBy([RENDER_DISPATCH, 'className="ds-collection-render-dispatch__card-activation"\n                    variant="ghost"']) },
+      size: { value: 'md', resolves: BUTTON_SIZE_DEFAULT },
+      shape: { value: 'default', resolves: BUTTON_SHAPE_DEFAULT },
+      extra: [
+        BOX_DIV,
+        Object.freeze({ token: 'class:ds-collection-render-dispatch__card-item', source: RENDER_DISPATCH_CARDS, stamp: 'className="ds-collection-render-dispatch__card-item"' }),
+        Object.freeze({ token: 'attr:data-part=card-item', source: RENDER_DISPATCH_CARDS, stamp: "{...partAttributes('card-item', card.state)}" }),
+        Object.freeze({ token: 'attr:data-lone-final=false', source: RENDER_DISPATCH_CARDS, stamp: "data-lone-final={isLoneFinalCard ? 'true' : 'false'}" }),
+        Object.freeze({
+          token: 'attr:data-activatable=true', source: RENDER_DISPATCH_CARDS, stamp: "data-activatable={hasActivation ? 'true' : 'false'}",
+          resolves: resolvedBy([RENDER_DISPATCH, 'const hasActivation = Boolean(onRowClick);']),
+        }),
+      ],
+    }),
+  }),
+  'status-filter-pills': Object.freeze({
+    state: Object.freeze({
+      name: 'a default StatusFilterPills (md) with one unselected option and no icon or count -- each option is the canonical Button '
+        + '(modern engine, chrome none, round) carrying the family BEM class: the family skin paints the pill frame on it and the Button '
+        + 'paints its focus ring on it; the label is omitted',
+      source: STATUS_FILTER_PILLS,
+      anchors: Object.freeze(['className="ds-status-filter-pills__pill"', 'chrome="none"', 'shape="round"']),
+      resolves: resolvedBy([STATUS_FILTER_PILLS, "size = 'md',"]),
+    }),
+    axes: Object.freeze(['depth', 'states']),
+    replaces: Object.freeze({ standIn: 'ds-button', twins: Object.freeze([]) }),
+    composition: Object.freeze({ primitive: 'button', axes: Object.freeze(['states']) }),
+    markup: '<div data-part="root" class="ds-pattern-status-filter-pills" data-size="md">'
+      + '<button type="button" class="ds-button ds-button--modern ds-button--primary ds-button--md ds-button--round ds-status-filter-pills__pill" '
+      + 'data-selected="false" data-variant="primary" data-size="md" data-shape="round" data-chrome="none" data-part="trigger"></button></div>',
+    stamps: composedButtonStamps({
+      variant: { value: 'primary', resolves: resolvedBy([BUTTON_ENGINE, 'BUTTON_DEFAULTS.variant;'], [BUTTON_CONTRACT, "variant: 'primary' as const,"]) },
+      size: { value: 'md', resolves: resolvedBy([STATUS_FILTER_PILLS, "size = 'md',"], [STATUS_FILTER_PILLS, 'size={size}']) },
+      shape: { value: 'round', resolves: resolvedBy([STATUS_FILTER_PILLS, 'shape="round"']) },
+      extra: [
+        Object.freeze({ token: 'tag:div', stamp: '<Flex', resolves: resolvedBy([FLEX_ENGINE, '<div\n          // P-79: the default part precedes the spread']) }),
+        Object.freeze({ token: 'attr:data-selected=false', stamp: 'data-selected={isSelected}', resolves: resolvedBy([STATUS_FILTER_PILLS, 'const isSelected = selectedValues.includes(option.value);']) }),
+        Object.freeze({
+          token: 'attr:data-chrome=none', source: BUTTON_ENGINE, stamp: "'data-chrome': chrome === 'none' ? 'none' : undefined,",
+          resolves: resolvedBy([STATUS_FILTER_PILLS, 'chrome="none"']),
+        }),
+      ],
+    }),
+  }),
+});
+
+/**
+ * The stand-in families with NO replacement row, and why. column-settings'
+ * footer Button was read on typography alone, the axis lane G is rewriting
+ * (E8-b); its swap waits for that lane, and its stand-in stays refused.
+ */
+export const COMPOSED_NODE_REPLACEMENTS_HELD = Object.freeze({
+  'column-settings': 'typography-only stand-in (the footer reset Button\'s `font-size`); typography is frozen while lane G (E8-b) rewrites the '
+    + 'typography skins -- the stand-in stays refused and no row is written until that lane lands',
+});
+
+/** family -> the twins its replacement row retires from the default scene, each with the axes it keeps (`held`). */
+export function composedNodeRetirements(roster = REAL_RENDER_MOUNTS) {
+  const retirements = new Map();
+  for (const [row, entry] of Object.entries(roster)) {
+    if (entry.replaces === undefined) continue;
+    const family = realRenderFamily(row, entry);
+    retirements.set(family, [...(retirements.get(family) ?? []), ...entry.replaces.twins]);
+  }
+  return retirements;
+}
+
+/** One family's part record with its retired twins taken out: a twin keeps its `held` axes and nothing else. */
+export function retireTwins(record, twins) {
+  if (twins.length === 0) return record;
+  const retired = [];
+  const parts = [];
+  for (const part of record.parts) {
+    const twin = twins.find((entry) => entry.id === part.id);
+    if (twin === undefined) {
+      parts.push(part);
+      continue;
+    }
+    const kept = part.axes.filter((axis) => twin.held.includes(axis));
+    retired.push({ id: part.id, axes: part.axes.filter((axis) => !kept.includes(axis)), held: kept });
+    if (kept.length > 0) parts.push({ ...part, axes: kept });
+  }
+  return { ...record, parts, retired };
+}
+
+/**
+ * Every way a replacement row can be wrong beyond the roster door: it must
+ * replace a node the part law really refused or grafted (a stand-in of its
+ * class, a twin by id), mount the real composed node (the primitive's own
+ * requirement stated), declare every axis the replaced nodes were read on but
+ * typography and nothing else, hold typography exactly where a twin carried
+ * it, and the family may have no other row.
+ */
+export function composedReplacementFailures(root = CORE_ROOT, roster = REAL_RENDER_MOUNTS) {
+  const failures = [];
+  const rows = Object.entries(roster).filter(([, entry]) => entry.replaces !== undefined);
+  if (rows.length === 0) return failures;
+  const families = rows.map(([row, entry]) => realRenderFamily(row, entry));
+  const parts = familyAxisParts(root, families);
+  const skins = new Map([...skinFamilies(root)].map(([family, files]) => [family, files.map((file) => readFileSync(file, 'utf8')).join('\n')]));
+  for (const [row, entry] of rows) {
+    const family = realRenderFamily(row, entry);
+    const others = Object.entries(roster).filter(([key, other]) => key !== row && realRenderFamily(key, other) === family);
+    if (others.length > 0) failures.push(`${row}: a replacement family carries no other row (${others.map(([key]) => key).join(', ')})`);
+    if (entry.axes.includes('typography')) failures.push(`${row}: a replacement never declares typography -- the axis is held`);
+    const record = parts.get(family);
+    const standIns = (record?.standIns ?? []).filter((standIn) => standIn.class === entry.replaces.standIn);
+    if (standIns.length === 0) failures.push(`${row}: the part law refuses no \`${entry.replaces.standIn}\` stand-in for ${family} -- nothing to replace`);
+    const replaced = new Set(standIns.map((standIn) => standIn.axis));
+    for (const twin of entry.replaces.twins) {
+      const part = record?.parts.find((candidate) => candidate.id === twin.id);
+      if (part === undefined) {
+        failures.push(`${row}: the twin \`${twin.id}\` is not grafted by the part law -- nothing to retire`);
+        continue;
+      }
+      for (const axis of part.axes) replaced.add(axis);
+      const typography = part.axes.includes('typography') ? ['typography'] : [];
+      if (JSON.stringify(twin.held) !== JSON.stringify(typography)) {
+        failures.push(`${row}: the twin \`${twin.id}\` holds [${twin.held.join(', ')}]; it holds typography exactly where it carried it`);
+      }
+    }
+    // A composition credit (25.1) is the one axis a row may add to what it replaces.
+    const expected = [...new Set([...replaced, ...(entry.composition?.axes ?? [])])].filter((axis) => axis !== 'typography').sort();
+    const declared = [...entry.axes].sort();
+    if (JSON.stringify(declared) !== JSON.stringify(expected)) {
+      failures.push(`${row}: declares [${declared.join(', ')}]; the replaced nodes were read on [${expected.join(', ')}] (typography held)`);
+    }
+    // The node replaced is the primitive the engine renders: it states what that primitive's own skin requires of its class.
+    const requires = composedPrimitiveRequirement(skins.get('button') ?? '', entry.replaces.standIn);
+    const tokens = markupTokens(entry.markup);
+    for (const name of [entry.replaces.standIn, ...requires]) {
+      if (!tokens.includes(`class:${name}`)) failures.push(`${row}: the mount carries no \`${name}\` -- it would mount the stand-in again`);
+    }
+  }
+  return failures;
+}
 
 const SKELETON_ROWS_MARKUP = Array.from({ length: 4 }, () =>
   '<tr class="ds-skeleton-anatomy-rows" data-part="skeleton-row" data-loading="true" data-animation="shimmer" aria-hidden="true">'
@@ -3798,6 +4154,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   ...STATES_REACH_ROWS,
   ...COMPOSED_REACH_ROWS,
   ...CARRIER_REACH_ROWS,
+  ...COMPOSED_NODE_REPLACEMENTS,
 });
 
 /**
@@ -3942,6 +4299,179 @@ export function unobservableDrift(live, pin = UNOBSERVABLE_FAMILIES) {
   return failures;
 }
 
+/**
+ * THE NINE, ONE VERDICT EACH (owner decision 19, 2026-10-14). Every family
+ * pinned states-unobservable stays in the states denominator; this names why
+ * it does not move there, read off its engine and skins, never off its name.
+ *
+ *  - `unobservable`: the family renders no interactive node of its own; its
+ *    state rules are a colour wash or a decorative hover. The honest no-mover.
+ *  - `container`: the interactive nodes are the CALLER's, slotted in; the
+ *    family composes no primitive, so no composition credit exists (25.1:
+ *    never insert a primitive for the test).
+ *  - `delegates`: the family composes a canonical primitive whose own rule
+ *    paints the visible non-chromatic state on the productive node. `credit`
+ *    says whether a composition row reads it (`composition-row`, credited
+ *    only where the drill's cut loses it) or waits (`held`, with the reason).
+ *
+ * `productDebt` names an interactive node the family OWNS that answers no
+ * state: a product repair for its owner, never an exemption.
+ * `statesUnobservableVerdictFailures` holds every entry to the tree.
+ */
+const SKIN_PRESENTATION = 'src/foundation/tokens/css/presentation/components/skin';
+const SKIN_MODERN = 'src/foundation/tokens/css/runtime/engines/modern/skin';
+const BUTTON_FOCUS_RING = Object.freeze({ file: `${SKIN_MODERN}/button/index.css`, text: 'box-shadow: var(--ds-button-focus-ring);' });
+export const STATES_UNOBSERVABLE_VERDICTS = Object.freeze({
+  'button-group': Object.freeze({
+    verdict: 'container',
+    note: 'a `role="group"` div around the caller\'s Buttons (cloned with group props); its one state rule lifts `z-index` for the hovered '
+      + 'or focused child -- no vocabulary. The ring and press on those children are the caller\'s Buttons\' own paint',
+    evidence: Object.freeze([
+      Object.freeze({ file: `${SKIN_PRESENTATION}/button-group/index.css`, text: 'z-index: var(--ds-z-index-relative-above);' }),
+      Object.freeze({ file: 'src/components/primitives/inputs/button/compound/group/index.tsx', text: 'React.cloneElement(' }),
+    ]),
+  }),
+  'edit-fields': Object.freeze({
+    verdict: 'delegates',
+    primitive: 'button',
+    credit: 'held',
+    held: 'composition row not written in this wave: the family\'s existing real-render row (resting axes) mounts the footer empty, and '
+      + 'adding the Buttons there re-reads its four resting credits; a separate states row waits for the next EVI-02 wave',
+    note: 'its own state rules (`:focus-within` on a field) write `background` and `color`; the toggle, cancel and save are canonical Buttons '
+      + 'whose ring is the Button\'s',
+    evidence: Object.freeze([
+      Object.freeze({ file: `${SKIN_PRESENTATION}/edit-fields/index.css`, text: "[data-requirement]:focus-within {\n  background:" }),
+      Object.freeze({ file: 'src/components/structures/record/edit-fields/index.tsx', text: 'onClick={onToggle}' }),
+      BUTTON_FOCUS_RING,
+    ]),
+  }),
+  'form-builder': Object.freeze({
+    verdict: 'delegates',
+    primitive: 'button',
+    credit: 'held',
+    held: 'composition row not written in this wave (section header and wizard Buttons; inputs are their primitives\' own families)',
+    note: 'its one state rule writes `cursor` on the disabled upload trigger -- no vocabulary; every interactive control is a composed primitive',
+    productDebt: 'the file field\'s `[data-part="upload-trigger"]` span replaces Upload\'s own <button>: it takes no keyboard focus and paints '
+      + 'no focus state (Upload\'s ring targets `[data-part=\'trigger\'] button`). Owner: the form-builder family (pass no children, or a '
+      + 'focusable control)',
+    evidence: Object.freeze([
+      Object.freeze({ file: `${SKIN_MODERN}/form-builder/index.css`, text: "[data-part='upload-trigger'][data-disabled='true'] {\n  cursor: not-allowed;" }),
+      Object.freeze({ file: 'src/components/patterns/forms/form-builder/engines/modern/index.tsx', text: 'data-part="upload-trigger"' }),
+      BUTTON_FOCUS_RING,
+    ]),
+  }),
+  list: Object.freeze({
+    verdict: 'unobservable',
+    note: 'plain <ul>/<li>, no handler, tabindex or role of its own; `:hover`, `:active` and `:focus-within` paint a background wash, and '
+      + 'the slotted actions are the caller\'s controls',
+    evidence: Object.freeze([
+      Object.freeze({ file: `${SKIN_MODERN}/list/index.css`, text: "[data-part='item']:focus-within {\n  background:" }),
+    ]),
+  }),
+  'locale-switcher': Object.freeze({
+    verdict: 'delegates',
+    primitive: 'select',
+    credit: 'composition-row',
+    note: 'its own state rules paint `background` on the chrome-less trigger; the ring on that trigger is Select\'s, ungated by `data-chrome`',
+    evidence: Object.freeze([
+      Object.freeze({ file: `${SKIN_MODERN}/select/index.css`, text: 'box-shadow: var(--ds-select-shadow-focus, var(--ds-focus-ring));' }),
+    ]),
+  }),
+  'metrics-chart': Object.freeze({
+    verdict: 'unobservable',
+    note: 'display only (Box, Flex, Text; no handler, tabindex or role); its own hover recolours the value. The row\'s lift and shadow '
+      + 'under hover are painted by the `dashboard-metrics-interactions` skin, counted for that family',
+    evidence: Object.freeze([
+      Object.freeze({ file: `${SKIN_PRESENTATION}/dashboard-metrics-interactions/index.css`, text: ':where(.ds-metrics-chart) .metric-chart-row-v3:hover {' }),
+    ]),
+  }),
+  'metrics-rows': Object.freeze({
+    verdict: 'unobservable',
+    note: 'display only; its own hover shows the shimmer (`visibility`, no vocabulary). The row\'s lift is the '
+      + '`dashboard-metrics-interactions` skin\'s',
+    evidence: Object.freeze([
+      Object.freeze({ file: `${SKIN_PRESENTATION}/metrics-rows/index.css`, text: "[data-part='metric-row']:hover [data-part='shimmer'] {\n    visibility: visible;" }),
+    ]),
+  }),
+  'status-filter-pills': Object.freeze({
+    verdict: 'delegates',
+    primitive: 'button',
+    credit: 'composition-row',
+    note: 'its own state rules paint `background` and `border-color`; each pill is a canonical Button (chrome none) whose press and ring '
+      + 'are the Button\'s, neither gated by `data-chrome`',
+    evidence: Object.freeze([BUTTON_FOCUS_RING]),
+  }),
+  'table-toolbar': Object.freeze({
+    verdict: 'delegates',
+    primitive: 'input',
+    credit: 'held',
+    held: 'composition row not written in this wave (the search Input takes the addon branch, a markup this roster has not witnessed yet)',
+    note: 'its one state rule recolours the search icon under `:focus-within`; the search Input and the clear/primary Buttons paint '
+      + 'their own rings',
+    evidence: Object.freeze([
+      Object.freeze({ file: `${SKIN_MODERN}/input/index.css`, text: 'box-shadow: var(--ds-input-focus-ring, var(--ds-focus-ring));' }),
+    ]),
+  }),
+});
+
+/** Every way the nine verdicts can be wrong against the tree and the roster. */
+export function statesUnobservableVerdictFailures(root = CORE_ROOT, { verdicts = STATES_UNOBSERVABLE_VERDICTS, roster = REAL_RENDER_MOUNTS } = {}) {
+  const failures = [];
+  const pinned = Object.keys(UNOBSERVABLE_FAMILIES.states).sort();
+  if (JSON.stringify(Object.keys(verdicts).sort()) !== JSON.stringify(pinned)) {
+    failures.push(`the verdicts name [${Object.keys(verdicts).sort().join(', ')}]; the states pin is [${pinned.join(', ')}] -- one verdict per pinned family`);
+  }
+  const statesRows = Object.entries(roster).filter(([, entry]) => entry.axes.includes('states'));
+  for (const [family, entry] of Object.entries(verdicts)) {
+    if (!['unobservable', 'container', 'delegates'].includes(entry.verdict)) failures.push(`${family}: unknown verdict \`${entry.verdict}\``);
+    for (const { file, text } of entry.evidence) {
+      const path = resolve(root, file);
+      if (!existsSync(path)) failures.push(`${family}: ${file} does not exist`);
+      else if (!readFileSync(path, 'utf8').includes(text)) failures.push(`${family}: ${file} no longer carries \`${text}\``);
+    }
+    const rows = statesRows.filter(([row, rowEntry]) => realRenderFamily(row, rowEntry) === family);
+    const composed = rows.filter(([, rowEntry]) => rowEntry.composition?.axes.includes('states'));
+    if (entry.verdict === 'delegates' && entry.credit === 'composition-row') {
+      if (composed.length !== 1 || composed[0][1].composition.primitive !== entry.primitive) {
+        failures.push(`${family}: a composition-row verdict needs exactly one states row composing ${entry.primitive}`);
+      }
+    } else if (composed.length > 0) {
+      failures.push(`${family}: a ${entry.verdict}${entry.credit ? `/${entry.credit}` : ''} verdict and a states composition row -- one of them is wrong`);
+    }
+    if (entry.verdict === 'delegates' && !['composition-row', 'held'].includes(entry.credit)) failures.push(`${family}: a delegate verdict names its credit`);
+    if (entry.credit === 'held' && !entry.held) failures.push(`${family}: a held credit says why`);
+  }
+  return failures;
+}
+
+/**
+ * THE STANDING DENOMINATOR (owner decision 25.3, 2026-10-14). active-filters-
+ * bar declares shape and depth through the three resets that suppress the
+ * composed Tag's chrome; it stays in both populations, with no exclusion, and
+ * reads as a non-mover there by construction. `standingDenominatorFailures`
+ * refuses an exclusion of it and its leaving either population.
+ */
+export const STANDING_NON_MOVERS = Object.freeze({
+  'active-filters-bar': Object.freeze({
+    axes: Object.freeze(['shape', 'depth']),
+    reason: 'the declarations are `border: 0`, `border-radius: 0` and `box-shadow: none` on the composed Tag inside the embedded chips row '
+      + '(65f9f8b80) -- an owner-skin opt-out that paints nothing a tenant moves. Never excluded for the percentage',
+  }),
+});
+
+export function standingDenominatorFailures(root = CORE_ROOT, standing = STANDING_NON_MOVERS) {
+  const failures = [];
+  const populations = axisPopulations(root);
+  const exclusions = readFileSync(resolve(root, 'scripts/check/theme/population/exclusions/index.json'), 'utf8');
+  for (const [family, entry] of Object.entries(standing)) {
+    for (const axis of entry.axes) {
+      if (!populations.get(axis).includes(family)) failures.push(`${family}/${axis}: left the ${axis} population -- the standing denominator moved`);
+    }
+    if (exclusions.includes(`"${family}"`)) failures.push(`${family}: named in check/theme/population exclusions -- the ruling keeps it in the denominator`);
+  }
+  return failures;
+}
+
 const HTML_TAG = /<([a-z][a-z0-9-]*)((?:\s+[a-zA-Z_:][-\w:.]*(?:\s*=\s*"[^"]*")?)*)\s*\/?>/gu;
 const HTML_ATTRIBUTE = /([a-zA-Z_:][-\w:.]*)(?:\s*=\s*"([^"]*)")?/gu;
 
@@ -4079,16 +4609,23 @@ export function realRenderRosterFailures(root = CORE_ROOT, roster = REAL_RENDER_
     // A declared pseudo read is held to the skin: a state rule of the family
     // paints that box on that part, or the row reads a box nobody ships.
     for (const box of entry.pseudoReads ?? []) {
-      const where = `${family}/${box.part}${box.pseudo}`;
+      // A box is hosted by a part, or -- where the family keys the node on its own BEM element -- by that class.
+      const host = box.part === undefined ? `.${box.class}` : box.part;
+      const where = `${family}/${host}${box.pseudo}`;
       if (!entry.axes.includes('states')) failures.push(`${where}: a pseudo read is a states read, and the row does not declare states`);
       if (!REAL_RENDER_PSEUDO_ELEMENTS.includes(box.pseudo)) {
         failures.push(`${where}: a real-render mount reads only ${REAL_RENDER_PSEUDO_ELEMENTS.join(' and ')}`);
       }
-      if (!markupTokens(entry.markup).includes(`attr:data-part=${box.part}`)) failures.push(`${where}: the mount has no \`data-part="${box.part}"\` node`);
-      // The box's host is the LAST part its selector names, under a state.
+      const hostToken = box.part === undefined ? `class:${box.class}` : `attr:data-part=${box.part}`;
+      const hostLabel = box.part === undefined ? hostToken : `data-part="${box.part}"`;
+      if (!markupTokens(entry.markup).includes(hostToken)) failures.push(`${where}: the mount has no \`${hostLabel}\` node`);
+      // The box's host is the LAST part its selector names (or, for a class host, the last class of the box's own compound), under a state.
+      const lastClass = (selector) => [...(compoundPieces(selector.slice(0, -box.pseudo.length)).at(-1) ?? '').matchAll(/\.([\w-]+)/gu)].at(-1)?.[1];
       const paints = (selector) => selector.endsWith(box.pseudo)
         && /\[data-state~=|:focus-visible|:hover|:active|:disabled/u.test(selector)
-        && [...selector.matchAll(/\[data-part=["']?([\w-]+)["']?\]/gu)].at(-1)?.[1] === box.part;
+        && (box.part === undefined
+          ? lastClass(selector) === box.class
+          : [...selector.matchAll(/\[data-part=["']?([\w-]+)["']?\]/gu)].at(-1)?.[1] === box.part);
       const painted = cssRules(files.map((file) => readFileSync(file, 'utf8')).join('\n'))
         .some((rule) => selectorList(rule.selector).some((selector) => paints(selector.trim())));
       if (!painted) failures.push(`${where}: no state rule of the family skin paints that box`);
@@ -4170,7 +4707,8 @@ export function realRenderMountList(elements, { applied = true, roster = REAL_RE
       // A carrier row is never stamped (law 6): its kernel parts stay at rest.
       stampedParts: entry.carrierOnly === true ? [] : realRenderStampedParts(entry),
       ...(entry.carrierOnly === true ? { carrierOnly: true } : {}),
-      pseudoReads: (entry.pseudoReads ?? []).map((box) => `${box.part}${box.pseudo}`),
+      ...(entry.replaces === undefined ? {} : { replaces: true }),
+      pseudoReads: (entry.pseudoReads ?? []).map((box) => `${box.part ?? `.${box.class}`}${box.pseudo}`),
       markup: (entry.host ?? []).map((tag) => `<${tag} data-axis-real-host="">`).join('')
         + entry.markup
         + [...(entry.host ?? [])].reverse().map((tag) => `</${tag}>`).join(''),
@@ -4195,6 +4733,8 @@ export function realRenderReport(mounts, {
       tokens: markupTokens(entry.markup).length,
       stampedParts: entry.carrierOnly === true ? [] : realRenderStampedParts(entry),
       ...(entry.carrierOnly === true ? { carrierOnly: true } : {}),
+      ...(entry.replaces === undefined ? {} : { replaces: { standIn: entry.replaces.standIn, twins: entry.replaces.twins.map((twin) => ({ ...twin })) } }),
+      ...(entry.composition === undefined ? {} : { composition: { primitive: entry.composition.primitive, axes: [...entry.composition.axes] } }),
       // How many of the family's state rules select a node of THIS mount, per
       // half, read off the scene: the evidence a row may declare `states`, or
       // the reason it does not.
@@ -5651,7 +6191,7 @@ export function resolvePseudoOnly(cells) {
 
 /** One cell's verdict off its pending sources; it reads `movedIds` and never edits it. */
 export function resolvePseudoOnlyFrom(cell, { sources, channels }) {
-  const credited = cell.realRender?.credited ?? [];
+  const credited = [...(cell.realRender?.credited ?? []), ...(cell.realRender?.replaced ?? []).map((entry) => entry.family)];
   cell.pseudoMoved = sources.filter((entry) => entry.pseudo !== null).map((entry) => entry.family);
   cell.pseudoOnly = sources
     .filter((entry) => (cell.movedIds ?? []).includes(entry.family) && entry.pseudo !== null && entry.hosts === null
@@ -5681,6 +6221,8 @@ export const pseudoPinChannels = (pins = PSEUDO_ONLY_CREDITS) => [...new Set(Obj
  */
 export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, {
   partReach = true, nativePseudos = false, composedPrimitives = true,
+  /* family -> the twins a replacement row retires (`composedNodeRetirements`); none by default. */
+  retirements = null,
 } = {}) {
   const resolved = elements ?? familyElements(root, only);
   const populations = axisPopulations(root);
@@ -5697,7 +6239,10 @@ export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, 
     if (!rootElement) continue;
     const declared = AXIS_IDS.filter((axis) => populations.get(axis).includes(family));
     const signature = focusSignatureReads(declarations.get(family), declared, proves);
-    const record = familyParts(css, rootElement, declared, { family, partReach, nativePseudos, signature, standIn });
+    const record = retireTwins(
+      familyParts(css, rootElement, declared, { family, partReach, nativePseudos, signature, standIn }),
+      retirements?.get(family) ?? [],
+    );
     if (record.parts.length === 0 && Object.keys(record.rejected).length === 0) continue;
     byFamily.set(family, record);
   }
@@ -5730,9 +6275,11 @@ export function partMountReport(byFamily, {
   const map = {};
   const pseudoReads = {};
   const standIns = {};
+  const retired = {};
   let nodes = 0;
   for (const [family, record] of byFamily) {
     if ((record.standIns ?? []).length > 0) standIns[family] = record.standIns;
+    if ((record.retired ?? []).length > 0) retired[family] = record.retired;
     for (const [reason, count] of Object.entries(record.rejected)) {
       refused[reason] = (refused[reason] ?? 0) + count;
     }
@@ -5770,6 +6317,8 @@ export function partMountReport(byFamily, {
     // Law 5: per family, the (axis, selector) readings refused as a stand-in
     // for another family's composed node, with the class and what it requires.
     composedPrimitives: { applied: composedPrimitives, standIns },
+    // The twins a replacement row took out of the default scene, per family, with the axes each still holds.
+    ...(Object.keys(retired).length === 0 ? {} : { composedReplacements: { retired } }),
   };
 }
 
@@ -6431,7 +6980,11 @@ const readComputed = ({
       const boxes = realStates
         ? (container.getAttribute('data-axis-real-pseudo') ?? '').split(' ').filter(Boolean).flatMap((key) => {
           const at = key.indexOf('::');
-          return nodes.filter((node) => node.getAttribute('data-part') === key.slice(0, at)).map((node) => ({ node, pseudo: key.slice(at) }));
+          const host = key.slice(0, at);
+          const hosts = host.startsWith('.')
+            ? nodes.filter((node) => node.classList.contains(host.slice(1)))
+            : nodes.filter((node) => node.getAttribute('data-part') === host);
+          return hosts.map((node) => ({ node, pseudo: key.slice(at) }));
         })
         : [];
       const boxValue = ({ node, pseudo }, property) => {
@@ -8350,6 +8903,9 @@ export async function run({
   /* `false` reproduces the pre-lot part law: a compound naming another
    * family's root class is grafted as the bare node its selector spells. */
   composedPrimitives = true,
+  /* `false` reproduces the pre-lot scene of the composed-node replacements:
+   * every twin grafted, no replacement row mounted. */
+  composedReplacements = true,
   /* The roster those mounts come from; a drill hands in its own, and it passes
    * the same door the shipped one does before anything is mounted. */
   realRenderRoster = REAL_RENDER_MOUNTS,
@@ -8383,6 +8939,7 @@ export async function run({
     const rosterFailures = [
       ...realRenderRosterFailures(root, realRenderRoster),
       ...(realRenderRoster === REAL_RENDER_MOUNTS ? realRenderRefusedRowFailures(root) : []),
+      ...(composedReplacements ? composedReplacementFailures(root, realRenderRoster) : []),
     ];
     if (rosterFailures.length > 0) {
       throw new Error(`axis-difference: the real-render roster does not match the engines it names -- ${rosterFailures.join(' | ')}`);
@@ -8393,13 +8950,20 @@ export async function run({
   const carrierApplied = carrierReads && nativePseudos;
   const realRenders = realRenderMountList(elements, { applied: realRenderMounts, roster: realRenderRoster })
     .filter((mount) => !isMounted(mount.family))
-    .filter((mount) => carrierApplied || mount.carrierOnly !== true);
+    .filter((mount) => carrierApplied || mount.carrierOnly !== true)
+    .filter((mount) => composedReplacements || mount.replaces !== true);
   // family -> the union of the axes its rows declare; law 3 is decided per
   // family over every row it has.
   const realRenderAxes = new Map();
   for (const mount of realRenders) {
     realRenderAxes.set(mount.family, [...new Set([...(realRenderAxes.get(mount.family) ?? []), ...mount.axes])]);
   }
+  // The named exception: a replacement row's family is read ONCE, over the
+  // default mount minus its twin plus the real render, and takes no law-3
+  // verdict. Its twins leave the default scene only where its row is mounted.
+  const replacementAxes = new Map(realRenders.filter((mount) => mount.replaces === true).map((mount) => [mount.family, mount.axes]));
+  const replacedOn = (family, axis) => replacementAxes.get(family)?.includes(axis) === true;
+  const retirements = new Map([...composedNodeRetirements(realRenderRoster)].filter(([family]) => replacementAxes.has(family)));
   const mountable = [...elements]
     .filter(([family, element]) => element !== null || isMounted(family))
     .map(([family]) => family);
@@ -8420,7 +8984,7 @@ export async function run({
   // The pins are read first and honoured: a family with no mountable root
   // gains no parts, so `UNMOUNTABLE_FAMILIES` and every denominator below it
   // are exactly the ones the pre-lot run published.
-  const mountedParts = partMounts === false ? new Map() : familyAxisParts(root, families, elements, { partReach, composedPrimitives });
+  const mountedParts = partMounts === false ? new Map() : familyAxisParts(root, families, elements, { partReach, composedPrimitives, retirements });
   // Read from the same skins the denominator is, so the reach of the disabled
   // stamp is republished every run rather than asserted once in a comment.
   const disabledCensus = disabledVocabularyCensus(root, families);
@@ -8433,7 +8997,7 @@ export async function run({
   // The native scene is the stamped one plus the parts a forced pseudo gates;
   // the stamped scene is not touched, so its half is the pre-lot reading.
   const nativeParts = nativePseudos && partMounts !== false
-    ? familyAxisParts(root, families, elements, { partReach, nativePseudos: true, composedPrimitives })
+    ? familyAxisParts(root, families, elements, { partReach, nativePseudos: true, composedPrimitives, retirements })
     : new Map();
   // The pseudo-element read law: hosts derived HERE, off the same part maps,
   // one plan per scene. The default scene only -- never a real-render mount.
@@ -8673,6 +9237,7 @@ export async function run({
               // A family's real render witnesses only where the axis's positive
               // in this cell credited it; elsewhere its default mount alone.
               readingsOf: (family) => (realRenderAxes.get(family)?.includes(scenario.witness.axis)
+                && !replacedOn(family, scenario.witness.axis)
                 && !(witnessPositive?.realRender?.credited ?? []).includes(family)
                 ? [realRenderView(before, family, REAL_RENDER_KEY.default), realRenderView(after, family, REAL_RENDER_KEY.default)]
                 : [before, after]),
@@ -8683,7 +9248,7 @@ export async function run({
             const moved = [];
             const halves = axis === 'states' ? { stamped: [], native: [] } : null;
             const widthOnly = axis === 'states' && scenario.kind === 'positive' ? [] : null;
-            const real = { credited: [], rescued: [], refused: [], undecided: [] };
+            const real = { credited: [], rescued: [], refused: [], undecided: [], ...(replacementAxes.size === 0 ? {} : { replaced: [] }) };
             const pending = [];
             const sources = [];
             for (const family of denominator) {
@@ -8697,7 +9262,13 @@ export async function run({
               // whole reading where its real render counts, its default
               // mount alone where it does not.
               let splitOn = [before, after];
-              if (realRenderAxes.get(family)?.includes(axis)) {
+              if (replacedOn(family, axis)) {
+                // One reading, no verdict: the union, with each half of the
+                // swap published beside it.
+                property = differsOnAxis(axis, before, after, family);
+                const side = (key) => differsOnAxis(axis, realRenderView(before, family, key), realRenderView(after, family, key), family) || null;
+                real.replaced.push({ family, moved: property || null, defaultAlone: side(REAL_RENDER_KEY.default), realAlone: side(REAL_RENDER_KEY.real) });
+              } else if (realRenderAxes.get(family)?.includes(axis)) {
                 const alone = [realRenderView(before, family, REAL_RENDER_KEY.default), realRenderView(after, family, REAL_RENDER_KEY.default)];
                 const withoutReal = differsOnAxis(axis, alone[0], alone[1], family);
                 splitOn = alone;
