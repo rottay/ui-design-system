@@ -777,16 +777,6 @@
         100%
     )
   );
-  --ds-command-home-panel-bg-strong: linear-gradient(
-    180deg,
-    var(--ds-surface-card-bg) 0%,
-    color-mix(
-        in srgb,
-        var(--ds-surface-panel-bg) 32%,
-        var(--ds-surface-card-bg)
-      )
-      100%
-  );
   --ds-command-home-compact-action-height: var(
     --ds-command-action-height,
     202px

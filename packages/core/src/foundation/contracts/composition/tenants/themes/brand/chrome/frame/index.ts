@@ -183,6 +183,10 @@ export interface BrandShellChrome {
   commandHomePanelBorderSoft?: string;
   commandHomePanelShadow?: string;
   commandHomePanelBg?: string;
+  /**
+   * @deprecated Admitted and inert: no DS or app part reads it and nothing emits it. Removal is
+   * major-gated behind the stored-document migration (WO-RET-07); use `--ds-command-home-surface-bg`.
+   */
   commandHomePanelBgStrong?: string;
   commandHomeCompactActionHeight?: string;
   commandHomeConsoleMinHeight?: string;

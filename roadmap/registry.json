@@ -7070,6 +7070,22 @@
    ]
   },
   {
+   "id": "WO-RET-07",
+   "title": "Major 4.0 retirement of the eleven inert caller data-part/data-state props (ARC-12 / P-88) and the inert commandHomePanelBgStrong theme field",
+   "lane": "retire",
+   "order": 7,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ARC-12"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "audit-2026-09-05"
+   ],
+   "notes": "Bounded receiver authorized by owner decision 20 (2026-10-14, DEPRECATIONS-RECEIVER: \"autorizo un único receptor acotado para el retiro major 4.0 de esos caller props inertes\") after the scout measured that no existing retire-lane work order lawfully covers the eleven ARC-12 caller-part markers (WO-RET-06 closed scope + noDebtReceivers; WO-RET-04 physical tree only). chrome.shell.commandHomePanelBgStrong admitted to the closed scope by name by DT ruling under owner answer 34 (2026-10-14, DEAD-WRITER-command-home-panel-bg-strong). Registered 2026-10-14; raises the WO total 168 -> 169. Closed scope; every row it receives is class debt; noDebtReceivers and compatReceivers unchanged. An open receiver is not a retirement done."
+  },
+  {
    "id": "WO-EVI-01",
    "title": "theme-graph: derived cascade graph with a byte-exact check",
    "lane": "evidence-graph",

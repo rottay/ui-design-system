@@ -566,6 +566,20 @@ WO-RET-01 AMENDMENT of 2026-10-03 in `retire.md` is the adoption record. The
 134/164 figure near the top of this file is the historical handoff checkpoint
 and is not refreshed.
 
+**Registered on 2026-10-14:** the executable specification of WO-RET-07 (Major
+4.0 retirement of the eleven inert caller data-part/data-state props (ARC-12 /
+P-88) and the inert commandHomePanelBgStrong theme field) is in
+[`retire.md`](./retire.md#wo-ret-07-major-40-retirement-of-the-eleven-inert-caller-data-partdata-state-props-arc-12--p-88-and-the-inert-commandhomepanelbgstrong-theme-field),
+with its entry in `registry.json` and generated STATUS. The addition changed the
+WO denominator **168 -> 169** (done stays 140), preserving prior completion
+evidence, source IDs, phase controls and their fingerprint. It belongs to
+`audit-2026-09-05`. Authority: owner decision 20 of 2026-10-14
+(DEPRECATIONS-RECEIVER: the scout measured that no existing retire-lane work
+order lawfully covers the eleven markers) and owner answer 34 of 2026-10-14
+(chrome.shell.commandHomePanelBgStrong admitted to the closed scope by name
+under its "disposición explícita de la superficie pública"); an open receiver is
+not a retirement done.
+
 Finish current packets without interruption. CAT-04 must acquire the shared
 Theme/catalog/ingress reservation; scope approval is not shared-core design
 approval: Kimi and Fable must review its implementation debrief under the

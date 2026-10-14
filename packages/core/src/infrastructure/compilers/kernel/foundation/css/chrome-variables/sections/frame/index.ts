@@ -216,8 +216,6 @@ function setShellVars(
       vars["--ds-command-home-panel-shadow"] = sh.commandHomePanelShadow;
     if (sh.commandHomePanelBg)
       vars["--ds-command-home-panel-bg"] = sh.commandHomePanelBg;
-    if (sh.commandHomePanelBgStrong)
-      vars["--ds-command-home-panel-bg-strong"] = sh.commandHomePanelBgStrong;
     if (sh.commandHomeCompactActionHeight)
       vars["--ds-command-home-compact-action-height"] =
         sh.commandHomeCompactActionHeight;

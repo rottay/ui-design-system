@@ -110,11 +110,11 @@ export type ButtonHtmlType = 'button' | 'submit' | 'reset';
  */
 export interface ButtonPublicProps extends BaseComponentProps, EngineAwareProps, DisableableProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onClick' | 'prefix' | 'dir'> {
   /**
-   * @deprecated Modern and rustic ignore a caller part since ARC-12 step 2 (P-88); classic honors it until step 3. Use `className`.
+   * @deprecated No engine renders a caller part since ARC-12 step 3 (P-88). Use `className`.
    */
   'data-part'?: string;
   /**
-   * @deprecated Modern and rustic ignore a caller state since ARC-12 step 2 (P-88); classic honors it until step 3. Use `className`.
+   * @deprecated No engine renders a caller state since ARC-12 step 3 (P-88). Use `className`.
    */
   'data-state'?: string | number | boolean | undefined;
   /**
