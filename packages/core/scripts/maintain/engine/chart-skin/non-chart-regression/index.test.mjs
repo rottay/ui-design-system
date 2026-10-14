@@ -469,7 +469,7 @@ function owningJsxElementOfSpreadStamp(styleObject, property) {
 //
 //   const accent = ev.color === undefined ? undefined : ({ '<channel>': ev.color } as …);
 //   if (!interactive) return <EventChip {...(accent === undefined ? {} : { style: accent })}>…;
-//   return <ModernButton data-part="event" style={accent}>…;
+//   return <ModernButton className="…__event" style={accent}>…;
 //
 // The collectors above only ever see a literal standing IN a style position, so
 // this shape read as ZERO publishers for a family that publishes correctly. The
@@ -811,10 +811,10 @@ function countChannelProducers(text, path, channel, datum) {
 // A family whose part carries interaction state cannot spell that part as a
 // literal attribute on a `<div>`: the state has to come from `useInteractionState`,
 // and a hook needs a component. The families that took that step declare a tiny
-// local wrapper — `const EventChip = React.forwardRef(function EventChip({ children,
-// ...rest }, ref) { … return <div {...rest} {...partAttributes('event', state)}>
-// {children}</div>; })` — and render `<EventChip>` where `<div data-part="event">`
-// used to stand.
+// local wrapper — `const DayCell = React.forwardRef(function DayCell({ children,
+// ...rest }, ref) { … return <div {...rest} {...partAttributes('day-cell', state)}>
+// {children}</div>; })` — and render `<DayCell>` where `<div data-part="day-cell">`
+// used to stand. (A wrapper carrying the state with NO part is R-e, below.)
 //
 // That element is NOT opaque and its part is NOT unknown. The component is
 // declared in THIS file, it emits exactly one intrinsic element, and the part it
@@ -1020,6 +1020,132 @@ function localPartWrapperOf(element) {
   return localPartWrappers(element.getSourceFile()).get(tag.text) ?? null;
 }
 
+// ---------------------------------------------------------------------------
+// LOCAL STATE WRAPPERS (R-e, owner answer 26 (c), 2026-10-14) — the native twin
+// of the R-c admitted host. A wrapper that carries the kernel state and NO part
+// is admitted only when ALL hold, each proven in THIS file:
+//   e1 a top-level capitalised declaration whose EVERY return is one intrinsic element;
+//   e2 no `partAttributes` call and no literal `data-part` anywhere in it;
+//   e3 exactly one `data-state`, on that element, spelled
+//      `data-state={serializeState(<c>.state)}` with `<c>` a same-function
+//      `const <c> = useInteractionState()`, both names imported from the kernel
+//      door; every spread on the element is the rest binding or `<c>.handlers`,
+//      and none follows the stamp, so no caller spread can replace the state;
+//   e4 it forwards the caller className (`wrapperForwardsClassName`).
+// It is then intrinsic DOM like a part wrapper, and — at the producer's OWN node
+// only (H5) — named by its class hook, never by a part (`stateWrapperIdentity`).
+const KERNEL_DOOR = 'src/foundation/behavior/index.ts';
+const LOCAL_STATE_WRAPPERS = new WeakMap();
+
+function jsxAttributeNamed(node, name) {
+  return ts.isJsxAttribute(node) && ts.isIdentifier(node.name) && node.name.text === name;
+}
+
+function renderFunctionOf(body) {
+  const fn = ts.isCallExpression(body) ? (body.arguments.length > 0 ? unwrapTransparent(body.arguments[0]) : null) : body;
+  return fn && (ts.isArrowFunction(fn) || ts.isFunctionExpression(fn) || ts.isFunctionDeclaration(fn)) ? fn : null;
+}
+
+function admitsStateWrapper(sourceFile, body) {
+  const fn = renderFunctionOf(body);
+  if (!fn) return null;
+  const states = [];
+  let parts = 0;
+  const interactionConsts = new Set();
+  const visit = (node) => {
+    if (jsxAttributeNamed(node, 'data-part')) parts += 1;
+    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === 'partAttributes') parts += 1;
+    if (jsxAttributeNamed(node, 'data-state')) states.push(node);
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      (node.parent.flags & ts.NodeFlags.Const) !== 0 &&
+      node.initializer &&
+      ts.isCallExpression(node.initializer) &&
+      ts.isIdentifier(node.initializer.expression) &&
+      node.initializer.expression.text === 'useInteractionState' &&
+      nearestFunctionOf(node) === fn
+    ) {
+      interactionConsts.add(node.name.text);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(body);
+  if (parts !== 0 || states.length !== 1) return null;
+
+  const value = states[0].initializer && ts.isJsxExpression(states[0].initializer) ? states[0].initializer.expression : null;
+  const call = value ? unwrapTransparent(value) : null;
+  if (!call || !ts.isCallExpression(call) || !ts.isIdentifier(call.expression) || call.expression.text !== 'serializeState') return null;
+  const [argument, ...extra] = call.arguments;
+  if (!argument || extra.length > 0 || !ts.isPropertyAccessExpression(argument) || argument.name.text !== 'state') return null;
+  if (!ts.isIdentifier(argument.expression) || !interactionConsts.has(argument.expression.text)) return null;
+  const fromRel = coreRelOf(sourceFile.fileName);
+  if (importResolvesTo(sourceFile, fromRel, 'serializeState', KERNEL_DOOR)) return null;
+  if (importResolvesTo(sourceFile, fromRel, 'useInteractionState', KERNEL_DOOR)) return null;
+
+  const opening = states[0].parent.parent;
+  if (!ts.isJsxOpeningElement(opening) && !ts.isJsxSelfClosingElement(opening)) return null;
+  if (!ts.isIdentifier(opening.tagName) || !/^[a-z]/.test(opening.tagName.text)) return null;
+  const attributes = opening.attributes.properties;
+  const rest = fn.parameters[0] && ts.isObjectBindingPattern(fn.parameters[0].name)
+    ? fn.parameters[0].name.elements.find((element) => element.dotDotDotToken && ts.isIdentifier(element.name))
+    : undefined;
+  const spreadsAdmitted = attributes.every(
+    (attribute) =>
+      !ts.isJsxSpreadAttribute(attribute) ||
+      (ts.isIdentifier(attribute.expression) && attribute.expression.text === rest?.name.text) ||
+      (ts.isPropertyAccessExpression(attribute.expression) &&
+        attribute.expression.name.text === 'handlers' &&
+        ts.isIdentifier(attribute.expression.expression) &&
+        interactionConsts.has(attribute.expression.expression.text)),
+  );
+  if (!spreadsAdmitted || attributes.slice(attributes.indexOf(states[0]) + 1).some(ts.isJsxSpreadAttribute)) return null;
+
+  const stamped = ts.isJsxOpeningElement(opening) ? opening.parent : opening;
+  const roots = [];
+  const collectReturns = (node) => {
+    if (ts.isReturnStatement(node) && node.expression) roots.push(unwrapParens(node.expression));
+    ts.forEachChild(node, collectReturns);
+  };
+  collectReturns(body);
+  if (roots.length === 0 || roots.some((root) => root !== stamped)) return null;
+  if (!wrapperForwardsClassName(body, opening)) return null;
+  return { tag: opening.tagName.text };
+}
+
+function localStateWrappers(sourceFile) {
+  const cached = LOCAL_STATE_WRAPPERS.get(sourceFile);
+  if (cached) return cached;
+  const wrappers = new Map();
+  for (const statement of sourceFile.statements) {
+    const declared = ts.isFunctionDeclaration(statement) && statement.name
+      ? [[statement.name.text, statement]]
+      : ts.isVariableStatement(statement)
+        ? statement.declarationList.declarations
+            .filter((declaration) => ts.isIdentifier(declaration.name) && declaration.initializer)
+            .map((declaration) => [declaration.name.text, declaration.initializer])
+        : [];
+    for (const [name, body] of declared) {
+      if (!/^[A-Z]/.test(name)) continue;
+      const admitted = admitsStateWrapper(sourceFile, body);
+      if (admitted) wrappers.set(name, admitted);
+    }
+  }
+  LOCAL_STATE_WRAPPERS.set(sourceFile, wrappers);
+  return wrappers;
+}
+
+function localStateWrapperOf(element) {
+  const tag = element.tagName;
+  if (!ts.isIdentifier(tag)) return null;
+  return localStateWrappers(element.getSourceFile()).get(tag.text) ?? null;
+}
+
+// A local component this file can see through: a part wrapper or a state wrapper.
+function localWrapperOf(element) {
+  return localPartWrapperOf(element) ?? localStateWrapperOf(element);
+}
+
 function literalDataPart(element) {
   const found = literalDataPartAttributes(element);
   if (found.length === 0) {
@@ -1049,15 +1175,26 @@ function literalDataPart(element) {
 // admitted host carries NO `data-part` at all, and the owner names the element
 // through its class hook instead: one static `<block>__<part>` token, counted
 // only when the host is PROVEN to hand the caller's className to its root (H6).
-// This is the one place a class identifies an element without a part beside it;
-// everywhere else the co-stamp (part AND class) stays the rule.
+// This and the R-e local state wrapper are the two places a class identifies an
+// element without a part beside it; everywhere else the co-stamp stays the rule.
 const OWNER_CLASS_TOKEN = /^(ds-[a-z0-9]+(?:-[a-z0-9]+)*)__([a-z0-9]+(?:-[a-z0-9]+)*)$/;
+
+function ownerClassHooks(owner) {
+  const tokens = (staticClassNameLiteral(owner) ?? '').split(/\s+/).filter(Boolean);
+  const hooks = tokens.flatMap((token) => {
+    const match = OWNER_CLASS_TOKEN.exec(token);
+    return match ? [{ token, part: match[2] }] : [];
+  });
+  return { tokens, hooks };
+}
 
 function hostOwnerIdentity(owner, admission) {
   if (admission?.admitted !== true) return null;
+  const kind = 'admitted host';
   const dataPart = literalDataPart(owner);
   if (dataPart.count !== 0) {
     return {
+      kind,
       refused: `the producer element carries ${dataPart.count} data-part attributes, not 0: an admitted host stamps its own part and a caller part never lands`,
       callerPart: true,
       tokens: [],
@@ -1066,18 +1203,36 @@ function hostOwnerIdentity(owner, admission) {
   }
   if (admission.facts.classNameForwarded !== true) {
     return {
+      kind,
       refused: 'the admitted host is not proven to forward the caller className, so no class names it',
       callerPart: false,
       tokens: [],
       hooks: [],
     };
   }
-  const tokens = (staticClassNameLiteral(owner) ?? '').split(/\s+/).filter(Boolean);
-  const hooks = tokens.flatMap((token) => {
-    const match = OWNER_CLASS_TOKEN.exec(token);
-    return match ? [{ token, part: match[2] }] : [];
-  });
-  return { refused: null, callerPart: false, tokens, hooks };
+  return { kind, refused: null, callerPart: false, ...ownerClassHooks(owner) };
+}
+
+// R-e: a local state wrapper owner stamps no part, so a call-site `data-part` would be the only part on it.
+function stateWrapperIdentity(owner) {
+  if (!localStateWrapperOf(owner)) return null;
+  const kind = 'local state wrapper';
+  const dataPart = literalDataPart(owner);
+  if (dataPart.count !== 0) {
+    return {
+      kind,
+      refused: `the producer element carries ${dataPart.count} data-part attributes, not 0: a local state wrapper stamps no part and is named by its class hook alone`,
+      callerPart: true,
+      tokens: [],
+      hooks: [],
+    };
+  }
+  return { kind, refused: null, callerPart: false, ...ownerClassHooks(owner) };
+}
+
+// The producer's OWN node named by its class hook (H5): R-c admitted host, else R-e state wrapper.
+function ownerClassIdentity(owner, admission) {
+  return hostOwnerIdentity(owner, admission) ?? stateWrapperIdentity(owner);
 }
 
 // The placement clause, self-contained: the channel is published exactly once in
@@ -1095,16 +1250,16 @@ function hostOwnerIdentity(owner, admission) {
 // disconnected owner never collapse into one indistinguishable failure.
 function producerPlacementViolations(text, path, channel, datum, part, hostClass = null) {
   return judgeEachProducerOwner(text, path, channel, datum, (owner, admission) => {
-    // R-c: an admitted host is identified by the exact owner class token alone, with NO data-part.
-    const host = hostOwnerIdentity(owner, admission);
+    // R-c / R-e: an admitted host or a local state wrapper is identified by the exact owner class token alone.
+    const host = ownerClassIdentity(owner, admission);
     if (host) {
       if (host.refused) return [host.refused];
       const naming = host.hooks.filter((hook) => hook.part === part);
       if (naming.length !== 1) {
-        return [`the admitted host carries ${naming.length} static class hooks naming '${part}', not 1`];
+        return [`the ${host.kind} carries ${naming.length} static class hooks naming '${part}', not 1`];
       }
       if (hostClass !== null && naming[0].token !== hostClass) {
-        return [`the admitted host is named by '.${naming[0].token}', not '.${hostClass}'`];
+        return [`the ${host.kind} is named by '.${naming[0].token}', not '.${hostClass}'`];
       }
       return [];
     }
@@ -1174,12 +1329,12 @@ function ownerAncestryParts(owner, admission = null, hostClass = null) {
     else if (ts.isJsxElement(node)) opening = node.openingElement;
     if (!opening) continue;
 
-    // R-c: the admitted host owner (and only the owner's own node, H5) is named by its class hook.
-    const host = opening === owner ? hostOwnerIdentity(owner, admission) : null;
+    // R-c / R-e: the owner's own node (and only it, H5) is named by its class hook.
+    const host = opening === owner ? ownerClassIdentity(owner, admission) : null;
     if (host) {
-      if (host.refused) parts.push(host.callerPart ? '<admitted host: a caller data-part>' : '<admitted host: className not forwarded>');
-      else if (host.hooks.length !== 1) parts.push(`<admitted host: ${host.hooks.length} class hooks>`);
-      else if (hostClass !== null && host.hooks[0].token !== hostClass) parts.push(`<admitted host: '.${host.hooks[0].token}'>`);
+      if (host.refused) parts.push(host.callerPart ? `<${host.kind}: a caller data-part>` : `<${host.kind}: className not forwarded>`);
+      else if (host.hooks.length !== 1) parts.push(`<${host.kind}: ${host.hooks.length} class hooks>`);
+      else if (hostClass !== null && host.hooks[0].token !== hostClass) parts.push(`<${host.kind}: '.${host.hooks[0].token}'>`);
       else parts.push(host.hooks[0].part);
       continue;
     }
@@ -1350,10 +1505,10 @@ const HTML_VOID_ELEMENTS = new Set([
 function classifyTag(opening) {
   const tag = opening.tagName;
   if (!ts.isIdentifier(tag) || !/^[a-z]/.test(tag.text)) {
-    // A local part wrapper is the one component this file CAN see through: it is
-    // declared here and provably emits one intrinsic element carrying one literal
-    // part. It is classified as that element, never as unknown DOM.
-    const wrapper = ts.isIdentifier(tag) ? localPartWrapperOf(opening) : null;
+    // A local part or state wrapper is the one component this file CAN see through:
+    // it is declared here and provably emits one intrinsic element (R-e: carrying
+    // the kernel state and no part). It is classified as that element.
+    const wrapper = ts.isIdentifier(tag) ? localWrapperOf(opening) : null;
     if (wrapper) return { kind: 'intrinsic', label: `<${wrapper.tag}>` };
     return { kind: 'opaque', label: `<${tag.getText()}: component, DOM unknown>` };
   }
@@ -1712,7 +1867,7 @@ function hostRoots(fn, refuse) {
       [element] = children;
     }
     const opening = ts.isJsxElement(element) ? element.openingElement : ts.isJsxSelfClosingElement(element) ? element : null;
-    if (!opening || classifyTag(opening).kind !== 'intrinsic' || localPartWrapperOf(opening)) {
+    if (!opening || classifyTag(opening).kind !== 'intrinsic' || localWrapperOf(opening)) {
       refuse('H1', `return @ line ${lineOf(statement)} is not one intrinsic element`);
       continue;
     }
@@ -2300,7 +2455,7 @@ function proveStyleHost(entry, channel) {
 // A2 + the proof, for one owner element. Null when the owner is not a table host.
 function styleHostAdmission(owner, channel) {
   const tag = owner.tagName;
-  if (!ts.isIdentifier(tag) || localPartWrapperOf(owner)) return null;
+  if (!ts.isIdentifier(tag) || localWrapperOf(owner)) return null;
   const entry = STYLE_HOSTS.find((host) => host.name === tag.text);
   if (!entry) return null;
 
@@ -2532,7 +2687,7 @@ function producerRenderPathViolations(text, path, channel, datum) {
 // `selectorAncestryDisagreements` stays and keeps its own separate job —
 // proving the two pinned constants agree — because a drifted pin and a drifted
 // DOM are different defects and must not collapse into one message.
-function physicalPathStep(opening, admission = null) {
+function physicalPathStep(opening, admission = null, isOwner = false) {
   // The opacity verdict is NOT restated here. It is read from `classifyTag`,
   // the same function the render-path walk consults, so an element this gate
   // calls opaque in one clause cannot be transparent in the other.
@@ -2563,17 +2718,17 @@ function physicalPathStep(opening, admission = null) {
   // S2: the element's static className rides along for the class-hop co-stamp.
   // It is the call-site literal, and for a component it counts only when that
   // component is PROVEN to hand it to its DOM element: an admitted host through
-  // H6, a local part wrapper through `wrapperForwardsClassName`. Otherwise null.
+  // H6, a local part wrapper through `wrapperForwardsClassName` (a state wrapper by e4). Otherwise null.
   const wrapper = localPartWrapperOf(opening);
+  const stateWrapper = localStateWrapperOf(opening);
   const forwards = admitted ? admission.facts.classNameForwarded === true : wrapper ? wrapper.classNameForwarded : true;
   const className = forwards ? staticClassNameLiteral(opening) : null;
-  const tag = { text: admitted ? admission.facts.rootTags.join('|') : opening.tagName.text };
-  // R-b: the admitted host stamps its OWN part; the step carries no caller part, only the class tokens the
-  // host is proven to forward. A caller `data-part` on an admitted host never lands, so it names nothing.
-  if (admitted) {
-    const host = hostOwnerIdentity(opening, admission);
-    if (host.callerPart) return { part: null, opaque: false, label: `<${tag.text}: a caller data-part on an admitted host>`, className: null };
-    return { part: null, opaque: false, label: `<${tag.text}: admitted host>`, className, host: true, hostClassTokens: host.tokens };
+  const tag = { text: admitted ? admission.facts.rootTags.join('|') : stateWrapper ? stateWrapper.tag : opening.tagName.text };
+  // R-b / R-e: the owner step carries no part, only its class tokens; a caller `data-part` on it names nothing.
+  const host = admitted ? hostOwnerIdentity(opening, admission) : isOwner ? stateWrapperIdentity(opening) : null;
+  if (host) {
+    if (host.callerPart) return { part: null, opaque: false, label: `<${tag.text}: a caller data-part on ${admitted ? 'an' : 'a'} ${host.kind}>`, className: null };
+    return { part: null, opaque: false, label: `<${tag.text}: ${host.kind}>`, className, host: true, hostClassTokens: host.tokens };
   }
   const dataPart = literalDataPart(opening);
   if (dataPart.count > 1) {
@@ -2595,7 +2750,7 @@ function ownerPhysicalJsxPath(owner, admission = null) {
     else if (ts.isJsxElement(node)) opening = node.openingElement;
     if (!opening) continue;
     // The admission rides with the OWNER's own node and nothing else (H5).
-    steps.push(physicalPathStep(opening, opening === owner ? admission : null));
+    steps.push(physicalPathStep(opening, opening === owner ? admission : null, opening === owner));
   }
 
   return steps;
@@ -2863,7 +3018,7 @@ const KANBAN_ACCENT_SELECTOR =
 // tail of its selector, so the placement expectation and the sink expectation
 // are provably about one element rather than two hopeful constants.
 const CALENDAR_ACCENT_PART = 'event';
-// R-c: the admitted-host owner (the interactive chip) is named by this exact owner class token and no part.
+// R-c / R-e: both chip owners (admitted host, local state wrapper) are named by this exact class token, no part.
 const CALENDAR_ACCENT_HOST_CLASS = 'ds-pattern-calendar-view__event';
 const KANBAN_ACCENT_PART = 'column-header';
 
@@ -3899,16 +4054,16 @@ test('visualization skin Calendar Modern follows the hoisted conditional accent 
     ),
     [
       [
-        { tag: 'EventChip', part: CALENDAR_ACCENT_PART, className: CALENDAR_ACCENT_HOST_CLASS },
+        { tag: 'EventChip', part: null, className: CALENDAR_ACCENT_HOST_CLASS },
         { tag: 'ModernButton', part: null, className: CALENDAR_ACCENT_HOST_CLASS },
       ],
     ],
-    'the owners are the read-only chip (the sink part AND the class) and the interactive chip (the class alone, no part)',
+    'the owners are the read-only chip (R-e state wrapper) and the interactive chip (R-c host): each the class alone, no part',
   );
   assert.deepEqual(
     producerPlacementViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS),
     [],
-    'BOTH owners must be the element the sink selects: the chip by its part, the admitted host by its exact class',
+    'BOTH owners must be the element the sink selects, each by its exact class',
   );
   assert.deepEqual(
     producerAncestryViolations(text, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_ANCESTRY, CALENDAR_ACCENT_HOST_CLASS),
@@ -4421,14 +4576,17 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   // R-b / R-d: the admitted host carries no part, so every PART-form assertion on it is a must-be-red negative,
   // by name; its class hop lands on the host step itself.
   const HOST = '<a|button: admitted host>';
+  // R-e: the read-only chip is a local state wrapper — no part either, so it is held to the same must-be-red rule.
+  const CHIP = '<div: local state wrapper>';
   const noPart = (part = CALENDAR_ACCENT_PART) => `selector part '${part}' is absent from the live physical path`;
+  const noPartOnBoth = (on = onOwner) => [on('EventChip', noPart()), on('ModernButton', noPart())];
   const [liveOwners] = channelProducerOwners(text, path, CALENDAR_CHANNEL, 'ev');
   const liveLine = Object.fromEntries(liveOwners.map(({ tag, line: at }) => [tag, at]));
   const onLiveOwner = (tag, message) => `owner <${tag}> @ line ${liveLine[tag]}: ${message}`;
   assert.equal(EVENT_CLASS, CALENDAR_ACCENT_HOST_CLASS, 'the host class is the owner block hook of the accent part');
 
-  // S2-1 — the PART form: all hops by part. The read-only chip satisfies it (its native part); the admitted host
-  // must NOT (R-d): it carries no part, and no class is read by a part hop.
+  // S2-1 — the PART form: all hops by part. Neither owner may satisfy it: the admitted host (R-d) and the read-only
+  // chip (R-e) carry no part, and no class is read by a part hop.
   assert.deepEqual(
     selectorSteps(PART_FORM),
     [
@@ -4443,8 +4601,8 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   assert.deepEqual(selectorAncestryDisagreements(PART_FORM, CALENDAR_ACCENT_ANCESTRY), [], 'S2-1: ancestry agrees');
   assert.deepEqual(
     producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
-    [onLiveOwner('ModernButton', noPart())],
-    'S2-1: the live read-only chip satisfies the part form; the admitted host is red on it BY NAME',
+    noPartOnBoth(onLiveOwner),
+    'S2-1: the part form is red on BOTH live owners BY NAME',
   );
 
   // S2-2 — the CLASS form (the transformed constant): the same parts, the tail via class.
@@ -4485,7 +4643,7 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   // S2-5 — the CO-STAMP, per owner.
   assert.deepEqual(
     producerSelectorPathViolations(bare, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
-    [onOwner('EventChip', missingClass('event')), onOwner('ModernButton', missingClass(HOST))],
+    [onOwner('EventChip', missingClass(CHIP)), onOwner('ModernButton', missingClass(HOST))],
     'S2-5a: no chip carries the class literal, so the class hop reds on BOTH owners',
   );
   const bothStamped = withStaticClasses(bare, [stamp(chip), stamp(button)]);
@@ -4496,12 +4654,12 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   );
   assert.deepEqual(
     producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
-    [onOwner('ModernButton', noPart())],
-    'S2-5b: and the part form stays green on the read-only chip, red BY NAME on the admitted host',
+    noPartOnBoth(),
+    'S2-5b: and the part form is red BY NAME on both owners',
   );
   assert.deepEqual(
     producerSelectorPathViolations(withStaticClasses(bare, [stamp(button)]), path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
-    [onOwner('EventChip', missingClass('event'))],
+    [onOwner('EventChip', missingClass(CHIP))],
     'S2-5c: only the interactive chip co-stamped -> only the read-only owner reds',
   );
   assert.deepEqual(
@@ -4522,8 +4680,8 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
     withCoreFiles(unforwarded, () =>
       producerSelectorPathViolations(bothStamped, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
     ),
-    [onOwner('ModernButton', noPart())],
-    'S2-5d: and the part form is untouched by the className proof: green on the read-only chip, red BY NAME on the host',
+    noPartOnBoth(),
+    'S2-5d: and the part form is untouched by the className proof: red BY NAME on both owners',
   );
   assert.deepEqual(
     withCoreFiles(unforwarded, () =>
@@ -4559,8 +4717,8 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
       'ev',
       CLASS_FORM,
     ).map((violation) => violation.replace(/@ line \d+/, '@ line L')),
-    [`owner <EventChip> @ line L: ${missingClass('event')}`],
-    'S2-5e: a wrapper that destructures className out never forwards it — its class hop fails closed',
+    [`owner <EventChip> @ line L: ${noPart()}`],
+    'S2-5e: a wrapper that destructures className out is no state wrapper (e4) — its class hop fails closed',
   );
   assert.deepEqual(
     producerSelectorPathViolations(
@@ -4570,12 +4728,12 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
       'ev',
       CLASS_FORM,
     ),
-    [onOwner('EventChip', missingClass('event'))],
+    [onOwner('EventChip', missingClass(CHIP))],
     'S2-5f: a later spread that may replace className voids the literal',
   );
 
   // S2-5g — the LIVE fixture (S3: both emitters carry the class as a static literal) satisfies the class form on
-  // both owners. The part form is green on the read-only chip only; on the admitted host it must be red (R-d).
+  // both owners. The part form must be red on both: the admitted host (R-d) and the state wrapper (R-e).
   assert.deepEqual(
     producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', CLASS_FORM),
     [],
@@ -4583,8 +4741,8 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
   );
   assert.deepEqual(
     producerSelectorPathViolations(text, path, CALENDAR_CHANNEL, 'ev', PART_FORM),
-    [onLiveOwner('ModernButton', noPart())],
-    'S2-5g: and the part form on the read-only chip alone; the admitted host is red on it BY NAME',
+    noPartOnBoth(onLiveOwner),
+    'S2-5g: and the part form is red on both live owners BY NAME',
   );
 
   // S2-5h — the one new arm is exactly as wide as the ruling (R-b): an ADMITTED host, the EXACT owner token,
@@ -4600,7 +4758,7 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
       'a caller part alone on the host, read by the part form',
       withStaticClasses(bare, [stamp(chip), { opening: button, literal: `data-part="${CALENDAR_ACCENT_PART}"` }]),
       PART_FORM,
-      [onOwner('ModernButton', noPart())],
+      noPartOnBoth(),
     ],
     [
       "another block's hook on the host",
@@ -4645,20 +4803,25 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
     /^owner <OtherButton> @ line \d+: selector part 'event' is absent from the live physical path$/,
     'S2-5h: a class on an unlisted component is no hop',
   );
-  // And the read-only chip keeps its native-part arm exact: without its part, its class alone is no hop.
-  const CHIP_PART = "      {...partAttributes('event', interaction.state)}\n";
-  assert.equal(bare.split(CHIP_PART).length - 1, 1, 'the live EventChip part line drifted');
-  const partless = withStaticClasses(bare.replace(CHIP_PART, () => ''), []);
-  const partlessAlias = liveChannelAlias(partless, path, CALENDAR_CHANNEL, 'ev');
-  const partlessSelector = producerSelectorPathViolations(
-    withStaticClasses(partless, partlessAlias.owners.map((owner) => stamp(owner))),
+  // And the read-only chip keeps its R-e arm exact: without its kernel state stamp it is no state wrapper, and its
+  // class alone is no hop.
+  const CHIP_STATE = '      data-state={serializeState(interaction.state)}\n';
+  assert.equal(bare.split(CHIP_STATE).length - 1, 1, 'the live EventChip state line drifted');
+  const stateless = withStaticClasses(bare.replace(CHIP_STATE, () => ''), []);
+  const statelessAlias = liveChannelAlias(stateless, path, CALENDAR_CHANNEL, 'ev');
+  const statelessSelector = producerSelectorPathViolations(
+    withStaticClasses(stateless, statelessAlias.owners.map((owner) => stamp(owner))),
     path,
     CALENDAR_CHANNEL,
     'ev',
     CLASS_FORM,
   );
-  assert.equal(partlessSelector.length, 1, `S2-5h: only the partless chip is refused: ${partlessSelector.join(' | ')}`);
-  assert.match(partlessSelector[0], /^owner <EventChip> @ line \d+: /, 'S2-5h: a class without the native part never names the chip');
+  assert.equal(statelessSelector.length, 1, `S2-5h: only the stateless chip is refused: ${statelessSelector.join(' | ')}`);
+  assert.match(
+    statelessSelector[0],
+    /^owner <EventChip> @ line \d+: selector part 'event' is absent from the live physical path$/,
+    'S2-5h: a class without the kernel state stamp never names the chip',
+  );
 
   // S2-6 — mixed forms on different hops: each hop satisfied by its own form.
   const MIXED = `.${BLOCK}.ds-engine-modern[data-part='root'] > .${BLOCK}__grid [data-part='day-cell'] .${EVENT_CLASS}`;
@@ -4729,6 +4892,117 @@ test('visualization skin Calendar Modern reads a sink hop by part OR owner class
     assert.equal(proof.facts.classNameForwarded, false, `H6 (${name}): no className is forwarded`);
     assert.equal(proof.facts.classRefusals.length, 1, `H6 (${name}): exactly one H6 refusal`);
     assert.match(proof.facts.classRefusals[0], reason, `H6 (${name}): the refusal names the break`);
+  }
+});
+
+test('visualization skin Calendar Modern admits the read-only chip as a local state wrapper by proof only (R-e drills)', () => {
+  const path = pathFor(FILES.calendarModern);
+  const text = source(FILES.calendarModern);
+  const live = localStateWrappers(parseTsx(text, path));
+  assert.deepEqual([...live.keys()], ['EventChip'], 'R-e: the live file admits exactly one state wrapper, the read-only chip');
+  assert.equal(localPartWrappers(parseTsx(text, path)).has('EventChip'), false, 'R-e: and the chip is no part wrapper');
+
+  const L = (violations) => violations.map((violation) => violation.replace(/@ line \d+/, '@ line L'));
+  const onChip = (message) => [`owner <EventChip> @ line L: ${message}`];
+  const once = (fixture, from, to, label) => {
+    assert.equal(fixture.split(from).length - 1, 1, `${label}: the live anchor drifted`);
+    return fixture.replace(from, () => to);
+  };
+  const STATE = '      data-state={serializeState(interaction.state)}\n';
+  const IMPORT = "import { partAttributes, serializeState, useInteractionState } from '@/foundation/behavior';\n";
+  const SIGNATURE = 'function EventChip(\n  { children, onFocus, onBlur, ...rest },';
+  const BODY = `${SIGNATURE}\n  ref,\n) {\n`;
+  const chipOwner = liveChannelAlias(text, path, CALENDAR_CHANNEL, 'ev').owners.find((owner) => owner.tagName.getText() === 'EventChip');
+  const chipClass = chipOwner.attributes.properties.find((attribute) => jsxAttributeNamed(attribute, 'className'));
+  assert.equal(chipClass.getText(), `className="${CALENDAR_ACCENT_HOST_CLASS}"`, 'R-e: the live chip carries the exact host class');
+  const atCall = (replacement) => spliceNode(text, chipClass, replacement);
+
+  // NOT ADMITTED: the chip is then a component whose DOM this file cannot see, refused by name in two clauses.
+  const opaque = [
+    onChip('the producer element carries 0 data-part attributes, not 1'),
+    onChip("the producer is a style prop of '<EventChip: component, DOM unknown>', which may not apply it to DOM"),
+  ];
+  // ADMITTED, but the call site does not name it exactly: placement refuses by name.
+  const named = (message) => [onChip(message), []];
+  for (const [name, fixture, expected] of [
+    ['NS-1 state stamp removed', once(text, STATE, '', 'NS-1'), opaque],
+    ['NS-2 literal data-state', once(text, STATE, '      data-state="hovered"\n', 'NS-2'), opaque],
+    ['NS-3 serializeState of a literal', once(text, STATE, '      data-state={serializeState({ hovered: true })}\n', 'NS-3'), opaque],
+    ['NS-3 another serializer of the state', once(text, STATE, '      data-state={String(interaction.state)}\n', 'NS-3'), opaque],
+    ['NS-3 the state of a non-kernel binding', once(text, STATE, '      data-state={serializeState(rest.state)}\n', 'NS-3'), opaque],
+    ['NS-3 another member of the kernel binding', once(text, STATE, '      data-state={serializeState(interaction.handlers)}\n', 'NS-3'), opaque],
+    ['NS-3 the kernel binding is not a const', once(text, `${BODY}  const interaction`, `${BODY}  let interaction`, 'NS-3'), opaque],
+    [
+      'NS-3 the kernel binding lives in a nested function',
+      once(text, `${BODY}  const interaction = useInteractionState();\n`, `${BODY}  React.useEffect(() => {\n    const interaction = useInteractionState();\n    void interaction;\n  });\n  const interaction = useChipState();\n`, 'NS-3'),
+      opaque,
+    ],
+    ['NS-4 serializeState rebound locally', once(text, BODY, `${BODY}  const serializeState = (state: unknown) => String(state);\n`, 'NS-4'), opaque],
+    [
+      'NS-4 serializeState from a foreign module',
+      once(text, IMPORT, "import { partAttributes, useInteractionState } from '@/foundation/behavior';\nimport { serializeState } from '@/foundation/behavior/kernel/anatomy';\n", 'NS-4'),
+      opaque,
+    ],
+    [
+      'NS-4 useInteractionState from a foreign module',
+      once(text, IMPORT, "import { partAttributes, serializeState } from '@/foundation/behavior';\nimport { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';\n", 'NS-4'),
+      opaque,
+    ],
+    ['NS-5 two state stamps', once(text, STATE, `${STATE}${STATE}`, 'NS-5'), opaque],
+    [
+      'NS-5 the stamp on a nested element',
+      once(once(text, STATE, '', 'NS-5'), '      {children}\n    </div>\n  );\n});\n\n/**', `      <span\n  ${STATE}      >\n        {children}\n      </span>\n    </div>\n  );\n});\n\n/**`, 'NS-5'),
+      opaque,
+    ],
+    ['NS-5 a spread after the stamp', once(text, STATE, `${STATE}      {...interaction.handlers}\n`, 'NS-5'), opaque],
+    ['NS-6 a call-site data-part beside the class', atCall(`${chipClass.getText()} data-part="${CALENDAR_ACCENT_PART}"`), named('the producer element carries 1 data-part attributes, not 0: a local state wrapper stamps no part and is named by its class hook alone')],
+    ['NS-7 the wrapper destructures className', once(text, SIGNATURE, 'function EventChip(\n  { children, onFocus, onBlur, className, ...rest },', 'NS-7'), opaque],
+    ['NS-8 a later spread may replace className', atCall(`${chipClass.getText()} {...extraProps}`), named("the local state wrapper carries 0 static class hooks naming 'event', not 1")],
+    ["NS-9 another block's hook", atCall('className="ds-other__event"'), named(`the local state wrapper is named by '.ds-other__event', not '.${CALENDAR_ACCENT_HOST_CLASS}'`)],
+    ['NS-9 a longer token', atCall(`className="${CALENDAR_ACCENT_HOST_CLASS}-extra"`), named("the local state wrapper carries 0 static class hooks naming 'event', not 1")],
+    ['NS-9 a dynamic class', atCall('className={eventClassName}'), named("the local state wrapper carries 0 static class hooks naming 'event', not 1")],
+    ['NS-10 the wrapper returns null on a branch', once(text, BODY, `${BODY}  if (!children) return null;\n`, 'NS-10'), opaque],
+    [
+      'NS-10 the wrapper emits a component',
+      once(
+        once(text, `${BODY}  const interaction = useInteractionState();\n  return (\n    <div\n`, `${BODY}  const interaction = useInteractionState();\n  return (\n    <Surface\n`, 'NS-10'),
+        '      {children}\n    </div>\n  );\n});\n\n/**',
+        '      {children}\n    </Surface>\n  );\n});\n\n/**',
+        'NS-10',
+      ),
+      opaque,
+    ],
+    ['NS-11 a part smuggled through an object spread', once(text, `${BODY}  const interaction = useInteractionState();\n  return (\n    <div\n`, `${BODY}  const interaction = useInteractionState();\n  return (\n    <div\n      {...{ 'data-part': 'event' }}\n`, 'NS-11'), opaque],
+    ['NS-11 a literal data-part in the wrapper', once(text, STATE, `      data-part="event"\n${STATE}`, 'NS-11'), opaque],
+  ]) {
+    assert.deepEqual(tsxSyntaxDiagnostics(fixture, path), [], `${name}: the mutant must be real TSX`);
+    assert.deepEqual(
+      [
+        L(producerPlacementViolations(fixture, path, CALENDAR_CHANNEL, 'ev', CALENDAR_ACCENT_PART, CALENDAR_ACCENT_HOST_CLASS)),
+        L(producerRenderPathViolations(fixture, path, CALENDAR_CHANNEL, 'ev')),
+      ],
+      expected,
+      name,
+    );
+  }
+
+  // NS-11 — the part reintroduced (in place of the state stamp, or beside it): the chip is a part wrapper again and
+  // the exact owner-shape pin is red BY NAME; family-cut's partsStampedNotConsumed is the cross-gate twin.
+  for (const [name, fixture] of [
+    ['NS-11 partAttributes in place of the state stamp', once(text, STATE, "      {...partAttributes('event', interaction.state)}\n", 'NS-11')],
+    ['NS-11 partAttributes beside the state stamp', once(text, STATE, `${STATE}      {...partAttributes('event', interaction.state)}\n`, 'NS-11')],
+  ]) {
+    assert.deepEqual(tsxSyntaxDiagnostics(fixture, path), [], `${name}: the mutant must be real TSX`);
+    assert.equal(localStateWrappers(parseTsx(fixture, path)).has('EventChip'), false, `${name}: no state wrapper`);
+    const [owners] = channelProducerOwners(fixture, path, CALENDAR_CHANNEL, 'ev');
+    assert.deepEqual(
+      owners.map(({ tag, part, className }) => ({ tag, part, className })),
+      [
+        { tag: 'EventChip', part: CALENDAR_ACCENT_PART, className: CALENDAR_ACCENT_HOST_CLASS },
+        { tag: 'ModernButton', part: null, className: CALENDAR_ACCENT_HOST_CLASS },
+      ],
+      `${name}: the chip owner carries part 'event' again, so the pinned { EventChip, part: null } shape is red`,
+    );
   }
 });
 

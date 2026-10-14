@@ -9,7 +9,9 @@
 process.env.TZ = 'America/Los_Angeles';
 
 import React from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernCalendarView from '../engines/modern';
@@ -125,4 +127,76 @@ describe('PatternCalendarView modern — rescue drills', () => {
       expect.objectContaining({ id: 'a' }),
     );
   });
+
+  it('carries the read-only chip state on its class hook and kernel data-state, never an event part', () => {
+    const events: CalendarEvent[] = [{ id: 'a', title: 'Read only A', start: new Date(2026, 2, 5) }];
+    const { container } = render(
+      <ModernCalendarView
+        {...buildProps({ events, currentDate: new Date(2026, 2, 5), renderEvent: (ev) => <button type="button">{ev.title}</button> })}
+      />,
+    );
+    const chip = container.querySelector('.ds-pattern-calendar-view__event') as HTMLElement;
+    const paints = (token: string) => chip.matches(chipStateRule(token));
+
+    expect(container.querySelectorAll('[data-part="event"]')).toHaveLength(0);
+    expect(chip).not.toHaveAttribute('data-part');
+    expect(chip).not.toHaveAttribute('data-state');
+    expect(['hovered', 'pressed', 'focus-visible'].filter(paints)).toEqual([]);
+    // Selection stays the day cell's; the chip never claims it.
+    expect(chip).not.toHaveAttribute('aria-selected');
+    expect(chip).not.toHaveAttribute('data-selected');
+    const cell = chip.closest('[data-part="day-cell"]') as HTMLElement;
+    expect(cell).toHaveAttribute('aria-selected', 'true');
+    expect(cell).toHaveAttribute('data-selected', 'true');
+
+    fireEvent.pointerEnter(chip);
+    expect(chip).toHaveAttribute('data-state', 'hovered');
+    expect(paints('hovered')).toBe(true);
+    fireEvent.pointerDown(chip);
+    expect(chip).toHaveAttribute('data-state', 'hovered pressed');
+    expect(paints('pressed')).toBe(true);
+    fireEvent.pointerUp(chip);
+    expect(chip).toHaveAttribute('data-state', 'hovered');
+    fireEvent.pointerLeave(chip);
+    expect(chip).not.toHaveAttribute('data-state');
+    expect(paints('hovered')).toBe(false);
+
+    const inner = within(chip).getByRole('button', { name: 'Read only A' });
+    const matches = inner.matches.bind(inner);
+    vi.spyOn(inner, 'matches').mockImplementation((selector: string) => selector === ':focus-visible' || matches(selector));
+    act(() => inner.focus());
+    expect(chip).toHaveAttribute('data-state', 'focused focus-visible');
+    expect(paints('focus-visible')).toBe(true);
+    act(() => inner.blur());
+    expect(chip).not.toHaveAttribute('data-state');
+  });
+
+  it('keeps both chips on one class hook: the interactive chip carries the Button part, never event', () => {
+    const events: CalendarEvent[] = [{ id: 'a', title: 'Standup', start: new Date(2026, 2, 5) }];
+    const readOnly = render(<ModernCalendarView {...buildProps({ events })} />);
+    const interactive = render(<ModernCalendarView {...buildProps({ events, onEventClick: vi.fn() })} />);
+    const chips = [readOnly, interactive].map(
+      ({ container }) => container.querySelector('.ds-pattern-calendar-view__event') as HTMLElement,
+    );
+
+    expect(chips.map((chip) => chip.getAttribute('data-part'))).toEqual([null, 'trigger']);
+    for (const chip of chips) fireEvent.pointerEnter(chip);
+    expect(chips.map((chip) => chip.getAttribute('data-state'))).toEqual(['hovered', 'hovered']);
+    expect(chips.every((chip) => chip.matches(chipStateRule('hovered')))).toBe(true);
+  });
 });
+
+const SKIN = readFileSync(
+  join(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css'),
+  'utf8',
+).replace(/\/\*[\s\S]*?\*\//g, '');
+
+/** The one skin selector that paints a chip in `token`, read off the live skin (kernel token paired with its pseudo-class). */
+function chipStateRule(token: string): string {
+  const found = [...new Set([...SKIN.matchAll(/([^{}]+)\{[^{}]*\}/g)]
+    .map((match) => match[1].trim().replace(/\s+/g, ' '))
+    .filter((selector) => selector.endsWith(`__event:is([data-state~='${token}'], :${{ hovered: 'hover', pressed: 'active' }[token] ?? token})`)))];
+  // One selector per state (the forced-colors block repeats the focus-visible one verbatim).
+  expect(found, token).toHaveLength(1);
+  return found[0];
+}

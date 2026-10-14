@@ -45,7 +45,7 @@
 import React, { useId, useMemo, useRef, useState } from 'react';
 import type { CalendarViewProps, CalendarEvent } from '../../contracts';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { partAttributes, serializeState, useInteractionState } from '@/foundation/behavior';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import ModernSelect from '../../../../../primitives/inputs/select/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
@@ -53,15 +53,15 @@ import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/mo
 const ROOT_CLASS_NAME = 'ds-pattern-calendar-view ds-engine-modern';
 
 /**
- * The two interactive parts of the grid are STATEFUL PARTS: one place decides
- * when they are hovered, pressed or focus-visible (the shared interaction
- * kernel), and the skin pairs every platform pseudo-class with the kernel
- * token it stands for. At rest the kernel serializes nothing, so `[data-state]`
- * never matches a resting cell and the pseudo-class stays the fallback of one
- * decision rather than a second authority (F-37).
+ * The day cell (a part) and the read-only event chip (named by its class hook,
+ * no part) are STATEFUL: the shared interaction kernel alone decides when they
+ * are hovered, pressed or focus-visible, and the skin pairs every platform
+ * pseudo-class with the kernel token it stands for. At rest the kernel
+ * serializes nothing, so `[data-state]` never matches a resting element and the
+ * pseudo-class stays the fallback of one decision, not a second one (F-37).
  *
- * The caller's own `onFocus` / `onBlur` still run: the kernel owns the part's
- * state, the pattern owns the roving tab stop.
+ * The caller's own `onFocus` / `onBlur` still run: the kernel owns the
+ * element's state, the pattern owns the roving tab stop.
  */
 type StatefulDivProps = React.HTMLAttributes<HTMLDivElement> & {
   [key: `data-${string}`]: string | number | boolean | undefined;
@@ -109,7 +109,7 @@ const EventChip = React.forwardRef<HTMLDivElement, StatefulDivProps>(function Ev
         interaction.handlers.onBlur(event);
         onBlur?.(event);
       }}
-      {...partAttributes('event', interaction.state)}
+      data-state={serializeState(interaction.state)}
       ref={ref}
     >
       {children}

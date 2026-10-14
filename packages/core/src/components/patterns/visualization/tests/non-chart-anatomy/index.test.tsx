@@ -47,6 +47,8 @@ describe('non-chart inert anatomy', () => {
     expect(q(normal.container, '[data-part="day-cell"][data-today="true"]')).toHaveLength(1);
     expect(q(normal.container, '[data-part="day-cell"][data-last-column="true"]').length).toBeGreaterThan(0);
     expect(q(normal.container, `${engine === 'modern' ? '.ds-pattern-calendar-view__event' : '[data-part="event"]'}`)).toHaveLength(3);
+    // Modern names the chip by its class hook alone; it stamps no `event` part.
+    if (engine === 'modern') expect(q(normal.container, '[data-part="event"]')).toHaveLength(0);
     expect(q(normal.container, '[data-part="overflow-count"]')).toHaveLength(1);
     normal.unmount();
 

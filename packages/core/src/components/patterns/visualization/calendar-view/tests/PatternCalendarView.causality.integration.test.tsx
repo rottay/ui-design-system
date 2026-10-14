@@ -225,12 +225,16 @@ describe('calendar-view causality surface', () => {
     expect(calendar).toContain('data-part="day-cell"');
     expect(calendar).toContain('data-part="date-label"');
     expect(calendar).toContain('ds-pattern-calendar-view__event');
-    // The day cell and the event chip are stateful parts decided by the
-    // kernel: at rest they carry NO `data-state`, so `[data-state]` never
-    // matches a resting cell and the skin's paired arms fall through to the
-    // platform pseudo-class.
+    // The day cell and the event chip are stateful, decided by the kernel: at
+    // rest they carry NO `data-state`, so `[data-state]` never matches a resting
+    // element and the skin's paired arms fall through to the pseudo-class.
     expect(calendar).not.toContain('data-part="day-cell" data-state');
-    expect(calendar).not.toContain('data-part="event" data-state');
+    const chips = calendar.match(/<[a-z]+\b[^>]*\bclass="[^"]*\bds-pattern-calendar-view__event\b[^"]*"[^>]*>/g) ?? [];
+    expect(chips).toHaveLength(EVENTS.length);
+    for (const chip of chips) {
+      expect(chip).not.toContain('data-part="event"');
+      expect(chip).not.toContain('data-state=');
+    }
   });
 
   /**
