@@ -1,0 +1,63 @@
+:root {
+  --showroom-ink: var(--ds-color-text-primary, #111b2d);
+  --showroom-ink-soft: var(--ds-color-text-secondary, #42516a);
+  --showroom-ink-muted: var(--ds-color-text-muted, #6b7a8f);
+  --showroom-paper:
+    color-mix(in srgb, var(--ds-color-bg-elevated, #ffffff) 78%, var(--ds-color-primary, #4f7cff) 6%);
+  --showroom-paper-strong:
+    color-mix(in srgb, var(--ds-color-bg-primary, #ffffff) 92%, white 8%);
+  --showroom-paper-soft:
+    color-mix(in srgb, var(--ds-color-bg-secondary, #f4f7fb) 84%, var(--ds-color-primary, #4f7cff) 4%);
+  --showroom-line:
+    color-mix(in srgb, var(--ds-color-border-subtle, rgba(17, 27, 45, 0.1)) 84%, transparent);
+  --showroom-line-strong:
+    color-mix(in srgb, var(--ds-color-border, rgba(17, 27, 45, 0.16)) 92%, transparent);
+  --showroom-shadow: var(--ds-shadow-md, 0 18px 44px rgba(15, 24, 39, 0.08));
+  --showroom-shadow-strong: var(--ds-shadow-lg, 0 28px 64px rgba(10, 18, 30, 0.12));
+  --showroom-dark: var(--ds-color-bg-tertiary, #091121);
+  --showroom-dark-soft:
+    color-mix(in srgb, var(--ds-color-bg-tertiary, #12203a) 88%, var(--ds-color-primary, #4f7cff) 12%);
+  --showroom-dark-line:
+    color-mix(in srgb, var(--ds-color-border, rgba(255, 255, 255, 0.12)) 88%, transparent);
+  --showroom-accent: var(--ds-color-primary, #4f7cff);
+  --showroom-accent-soft:
+    color-mix(in srgb, var(--ds-color-primary, #4f7cff) 14%, transparent);
+  --showroom-radius-2xl: 2rem;
+  --showroom-radius-xl: 1.5rem;
+  --showroom-radius-lg: 1.125rem;
+  --showroom-font-display:
+    "Iowan Old Style", "Palatino Linotype", "URW Palladio L", "Book Antiqua", Georgia, serif;
+}
+
+html {
+  min-height: 100%;
+  background: var(--ds-color-bg-secondary, #f4f7fb);
+  scroll-behavior: smooth;
+}
+
+body.showroom-site-body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ds-color-text-primary, var(--showroom-ink));
+  background: var(--ds-color-bg-secondary, #f4f7fb);
+  font-family:
+    var(--font-geist-sans),
+    "Avenir Next",
+    "Segoe UI Variable",
+    "Helvetica Neue",
+    sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+body.showroom-site-body,
+body.showroom-site-body #__next {
+  width: 100%;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--ds-color-primary, #4f7cff) 18%, transparent);
+  color: var(--ds-color-text-primary, var(--showroom-ink));
+}
+

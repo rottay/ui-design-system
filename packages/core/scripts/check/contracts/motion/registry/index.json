@@ -203,7 +203,16 @@
           "scope": "showroom",
           "maxCount": 30,
           "maxFiles": 7,
-          "digest": "3a5d0b745eee95c0f9c457add715227bc66cc57113d64789084e770bb6843de4"
+          "digest": "996ad7e5ee7952ecae2fc7b6550864117fb72cf2eece9f06fc569d2903218017",
+          "lastMove": {
+            "date": "2026-10-14",
+            "from": "30/7",
+            "to": "30/7",
+            "kind": "path-only split, digest re-keyed; counts unchanged, no body added, removed or rewritten",
+            "movers": [
+              "the commit carrying this row (WO-RET-04, showroom globals.css split): see showroomGlobalsSplit on this channel"
+            ]
+          }
         },
         {
           "repo": "ui-design-system",
@@ -234,6 +243,23 @@
         "digest": "3a5d0b745eee95c0f9c457add715227bc66cc57113d64789084e770bb6843de4",
         "scope": "ui-design-system/showroom",
         "fleetStatus": "Canonical DS slice only. The full four-repo fleet remains red; no fleet-level expectation is adjusted by this entry. No fleet count is asserted here: any figure quoted elsewhere comes from the ruling, not from a measurement of this committed tree. The fleet total is environment-dependent, because cross-repo channels such as global-keyframes count a keyframe name defined in more than one SCANNED repository, so the number moves with the roster and with each sibling checkout's state."
+      },
+      "showroomGlobalsSplit": {
+        "commit": "the commit carrying this entry (parent 32313812f)",
+        "classification": "path-only staleness correction for the canonical ui-design-system slice",
+        "notACleanup": true,
+        "notARebaseline": true,
+        "statement": "This is NOT a cleanup and NOT a rebaseline. WO-RET-04 split packages/showroom/src/app/globals.css into five folder/index.css members under app/styles/ with byte-identical concatenation and byte-identical emitted CSS. The showroom-fade-up reference and definition move together into styles/landing-sections/index.css, so the file count holds and only the path-keyed digest went stale.",
+        "pathOnlyMultisetProof": "Scanner exports (scanWorkspace) over `git archive 32313812f` versus the working tree, ui-design-system/showroom slice: 30/30 findings in 7/7 files, multiset by (kind, symbol, evidence) equal, path-free digest equal; the 28 findings in untouched files identical in path, line and order; moved: globals.css:1330 (bare-animation-reference) -> styles/landing-sections/index.css:458 and globals.css:1333 (bare-keyframe-definition) -> :461. The archive scan reproduces previousDigest byte-exact.",
+        "additions": 0,
+        "removals": 0,
+        "countsUnchanged": {
+          "maxCount": 30,
+          "maxFiles": 7
+        },
+        "previousDigest": "3a5d0b745eee95c0f9c457add715227bc66cc57113d64789084e770bb6843de4",
+        "digest": "996ad7e5ee7952ecae2fc7b6550864117fb72cf2eece9f06fc569d2903218017",
+        "scope": "ui-design-system/showroom"
       },
       "reanchor": {
         "kind": "one-off-reanchor",
@@ -364,17 +390,26 @@
           "repo": "ui-design-system",
           "scope": "showroom",
           "maxCount": 41,
-          "maxFiles": 15,
-          "digest": "cc7ad5a38eafcdea34ece0a34c7df0a09e5623aa77a2016bf0128ddb9364b9fa",
+          "maxFiles": 16,
+          "digest": "97bd943838996dffcada247318ddf904b63dbc4042284364cc89b4d4a4f6ae4a",
           "lastMove": {
-            "date": "2026-10-03",
-            "from": "42/16",
-            "to": "41/15",
-            "kind": "net removal (-2 +1), re-pinned DOWN via --print-baseline --repositories ui-design-system; NOT removal-only: one finding identity is new to the scanner, though its timing body is not new to the tree",
+            "date": "2026-10-14",
+            "from": "41/15",
+            "to": "41/16",
+            "kind": "path-only split, file ceiling raised by 1 under the owner's conditional approval (audit 2026-10-13 answer 1); no body added, removed or rewritten",
             "movers": [
-              "70b8f4a0e (WO-RET-05 packet 4a): -2, the unused playground/engine-switcher/index.tsx:52 and playground/theme-switcher/index.tsx:50 inline transitions deleted with their files",
-              "70b8f4a0e (same commit): +1 at components/docs/frame/index.tsx:19, `transition: hoverable ? 'transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease' : undefined`. The same 180ms body sat in the deleted components/showroom-ui/index.tsx:222-224 (from 9abd639d3) with the literal on a continuation line, which the single-line scanner never counted; re-homed onto one line it is now counted. The literal is still raw and stays owed to a governed motion channel. Measured by scanning `git archive 1d3837c67` (which reproduces the previous digest byte-exact) and the working tree with the same scanner: 2 bodies removed, 1 added; files -2 +1 (showroom-ui carried no counted finding)"
-            ]
+              "the commit carrying this row (WO-RET-04, showroom globals.css split): see showroomGlobalsSplit on this channel"
+            ],
+            "previous": {
+              "date": "2026-10-03",
+              "from": "42/16",
+              "to": "41/15",
+              "kind": "net removal (-2 +1), re-pinned DOWN via --print-baseline --repositories ui-design-system; NOT removal-only: one finding identity is new to the scanner, though its timing body is not new to the tree",
+              "movers": [
+                "70b8f4a0e (WO-RET-05 packet 4a): -2, the unused playground/engine-switcher/index.tsx:52 and playground/theme-switcher/index.tsx:50 inline transitions deleted with their files",
+                "70b8f4a0e (same commit): +1 at components/docs/frame/index.tsx:19, `transition: hoverable ? 'transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease' : undefined`. The same 180ms body sat in the deleted components/showroom-ui/index.tsx:222-224 (from 9abd639d3) with the literal on a continuation line, which the single-line scanner never counted; re-homed onto one line it is now counted. The literal is still raw and stays owed to a governed motion channel. Measured by scanning `git archive 1d3837c67` (which reproduces the previous digest byte-exact) and the working tree with the same scanner: 2 bodies removed, 1 added; files -2 +1 (showroom-ui carried no counted finding)"
+              ]
+            }
           }
         },
         {
@@ -426,6 +461,27 @@
         "digest": "9053b0b84301684ee004abc46864082451d98c130414eefc8fd1f7aec7fd8871",
         "scope": "ui-design-system/showroom",
         "fleetStatus": "Canonical DS slice only. The full four-repo fleet remains red; no fleet-level expectation is adjusted by this entry. No fleet count is asserted here: any figure quoted elsewhere comes from the ruling, not from a measurement of this committed tree. The fleet total is environment-dependent, because cross-repo channels such as global-keyframes count a keyframe name defined in more than one SCANNED repository, so the number moves with the roster and with each sibling checkout's state."
+      },
+      "showroomGlobalsSplit": {
+        "commit": "the commit carrying this entry (parent 32313812f)",
+        "classification": "path-only move with a file-ceiling raise for the canonical ui-design-system slice",
+        "notACleanup": true,
+        "notARebaseline": true,
+        "statement": "This is NOT a cleanup and NOT a rebaseline. WO-RET-04 split packages/showroom/src/app/globals.css (1449 lines) into five folder/index.css members under app/styles/ (utilities, foundation, landing-lead, landing-sections, landing-responsive); globals.css keeps only the five @import lines. The member concatenation in chain order is byte-identical to the old file (sha256 7a8f7374...f719) and the emitted CSS is byte-identical. The file's 5 raw timings span 987 lines, so no <=800-line member holds all of them: they land in landing-lead (3) and landing-sections (2), and the file count grows 15 -> 16 with no finding added, removed or rewritten.",
+        "ownerApproval": "maxFiles 15 -> 16 approved CONDITIONALLY by the owner (audit 2026-10-13 answer 1): the independent review must credit byte-identical source concatenation, byte-identical emitted CSS, and the same 41 findings in the same content and order with only paths and digest changed.",
+        "pathOnlyMultisetProof": "Scanner exports (scanWorkspace) over `git archive 32313812f` versus the working tree, ui-design-system/showroom slice: 41/41 findings, multiset by (kind, symbol, evidence) equal, path-free digest equal; the 36 findings in untouched files identical in path, line and order; the 5 moved findings keep their source-chain sequence: globals.css:344, 499, 560 -> styles/landing-lead/index.css:119, 274, 335 and globals.css:1018, 1330 -> styles/landing-sections/index.css:146, 458. The archive scan reproduces previousDigest byte-exact.",
+        "additions": 0,
+        "removals": 0,
+        "counts": {
+          "maxCount": 41,
+          "maxFiles": {
+            "from": 15,
+            "to": 16
+          }
+        },
+        "previousDigest": "cc7ad5a38eafcdea34ece0a34c7df0a09e5623aa77a2016bf0128ddb9364b9fa",
+        "digest": "97bd943838996dffcada247318ddf904b63dbc4042284364cc89b4d4a4f6ae4a",
+        "scope": "ui-design-system/showroom"
       },
       "reanchor": {
         "kind": "one-off-reanchor",
