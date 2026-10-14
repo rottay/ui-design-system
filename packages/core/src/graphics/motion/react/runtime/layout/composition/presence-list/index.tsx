@@ -6,11 +6,14 @@
  * Keeps each REMOVED child of a keyed list mounted for the duration of its own
  * CSS exit motion, then drops it. `usePresence` documents itself as single-node;
  * this is the list equivalent, and it stays CSS-owned: the child receives
- * `data-state="closed"` and the stylesheet decides what closing looks like.
+ * `data-ds-presence="closed"` and the stylesheet decides what closing looks like.
+ * Key presence CSS on `[data-ds-presence]`, the list's own seam. The list still
+ * stamps `data-state` for compatibility, but a child that keeps its own
+ * `data-state` anatomy (P-88) never forwards it; migrate selectors off it.
  *
  * Children must carry stable React keys -- the key IS the identity this diffs --
  * and must spread unknown props onto the element that carries their motion,
- * which is how the list stamps `data-state` and observes the end event.
+ * which is how the list stamps its seam and observes the end event.
  *
  * @example
  * ```tsx
@@ -38,6 +41,9 @@ import { useReducedMotion } from '../../../foundation/preference';
 /** Marks an exiting child so its own node is findable without holding a ref. */
 export const PRESENCE_ITEM_ATTRIBUTE = 'data-ds-presence-item';
 
+/** The list-owned presence state, `open` | `closed`; the selector presence CSS keys on. */
+const PRESENCE_STATE_ATTRIBUTE = 'data-ds-presence';
+
 export interface PresenceListProps {
   children?: ReactNode;
   /** Override the live `prefers-reduced-motion` reading (primarily for tests). */
@@ -57,6 +63,24 @@ function keyedChildren(children: ReactNode): KeyedChild[] {
   return entries;
 }
 
+/** Re-inserts each closing key after the nearest key that preceded it last render. */
+function placeExiting(previous: string[], presentOrder: string[], closing: Set<string>): string[] {
+  const order = [...presentOrder];
+  previous.forEach((key, index) => {
+    if (!closing.has(key) || order.includes(key)) return;
+    let at = 0;
+    for (let before = index - 1; before >= 0; before -= 1) {
+      const anchor = order.indexOf(previous[before]);
+      if (anchor !== -1) {
+        at = anchor + 1;
+        break;
+      }
+    }
+    order.splice(at, 0, key);
+  });
+  return order;
+}
+
 export function PresenceList({
   children,
   reducedMotion: reducedMotionOverride,
@@ -69,6 +93,7 @@ export function PresenceList({
   const present = keyedChildren(children);
   const presentKeys = new Set(present.map((entry) => entry.key));
   const renderedRef = useRef(new Map<string, ReactElement>());
+  const orderRef = useRef<string[]>([]);
   const [exitingKeys, setExitingKeys] = useState<string[]>([]);
   const pendingExitsRef = useRef<string[]>([]);
   const onExitCompleteRef = useRef(onExitComplete);
@@ -131,15 +156,31 @@ export function PresenceList({
     drop(key);
   };
 
+  // One keyed array in the last rendered order: an exiting child keeps its DOM
+  // node (focus, ref, a transition from its open style) and its slot.
+  const closing = new Set([...exiting.map((entry) => entry.key), ...(reducedMotion ? [] : removed)]);
+  const order = placeExiting(orderRef.current, present.map((entry) => entry.key), closing);
+  orderRef.current = order;
+
   return (
     <>
-      {present.map((entry) => cloneElement(entry.element, { 'data-state': 'open' } as never))}
-      {exiting.map((entry) => cloneElement(entry.element, {
-        'data-state': 'closed',
-        [PRESENCE_ITEM_ATTRIBUTE]: `${scope}${entry.key}`,
-        onTransitionEnd: handleEnd(entry.key),
-        onAnimationEnd: handleEnd(entry.key),
-      } as never))}
+      {order.map((key) => {
+        const element = renderedRef.current.get(key);
+        if (!element) return null;
+        if (presentKeys.has(key)) {
+          return cloneElement(element, {
+            [PRESENCE_STATE_ATTRIBUTE]: 'open',
+            'data-state': 'open',
+          } as never);
+        }
+        return cloneElement(element, {
+          [PRESENCE_STATE_ATTRIBUTE]: 'closed',
+          'data-state': 'closed',
+          [PRESENCE_ITEM_ATTRIBUTE]: `${scope}${key}`,
+          onTransitionEnd: handleEnd(key),
+          onAnimationEnd: handleEnd(key),
+        } as never);
+      })}
     </>
   );
 }
