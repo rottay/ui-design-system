@@ -9,7 +9,10 @@
  * (argv, the JSON write, console output) is replaced by this function's parameters and return.
  * Its AST helpers (analyzeFile, classify) are the sibling module ./ast/index.mjs.
  */
-// Provenance: arc12/census-v718/census.mjs sha256 45c97c8b1a9d90334ec5a4506eed079d1ab36f8521ced6ebf7e1ea0e747ae7e5 (census v7.1.8, 2026-10-12: the
+// Provenance: arc12/census-v719/census.mjs sha256 9eeac4402df0057144dc64020a5487504628830fffe5cb9f9d39d2a293acd3a7 (census v7.1.9, 2026-10-14: the
+// own-anatomy index keyed by class and the path-anchored layout carriers; the tool is census.mjs PLUS ast/index.mjs sha256
+// c65e0abf1d17024f74e512349f27ab90c5805e18393b9b3ed1968dcb5f3e65e1, byte-identical to ./ast/index.mjs, which now carries each site's own DS classes;
+// v7.1.8 was arc12/census-v718/census.mjs 45c97c8b (the
 // `AST helpers` section is the sibling module ./ast/index.mjs, moved verbatim -- the tool is census.mjs PLUS ast/index.mjs sha256
 // b2d4d8a088bcb3fecc7ff1855523da582cf832aba4fbb2f8cc2dda3797578afe, byte-identical to ./ast/index.mjs; no measurement moves; v7.1.7 was
 // arc12/census-v717/census.mjs d9456c63 -- the engine roster is read from libraries/engine/roster and ONE total ENGINE_SKIN_KINDS record replaces the two engine-name comparison
@@ -68,6 +71,7 @@ function walk(dir, out = []) {
 
 // ---------- skins: selector index ----------
 const skinSelectors = []; // {file, skinDir, family, selector}
+const skinPreludes = []; // v7.1.9: {file, kind, prelude}, one per rule, unsplit
 for (const [kind, d] of Object.entries(SKIN_DIRS)) {
   const full = join(SRC, d);
   if (!existsSync(full)) continue;
@@ -85,6 +89,7 @@ for (const [kind, d] of Object.entries(SKIN_DIRS)) {
         const prelude = m[1].trim();
         if (!prelude || prelude.startsWith('@')) continue;
         if (/^(from|to|\d+%)/.test(prelude)) continue;
+        skinPreludes.push({ file: rel(p), kind, prelude }); // v7.1.9: the own-anatomy index parses these paren-aware
         for (const sel of prelude.split(',')) skinSelectors.push({ file: rel(p), kind, family, selector: sel.trim() });
       }
     }
@@ -100,6 +105,49 @@ function skinCount({ family, part, stateOnly = false, anyFamily = false, engine 
   return { count: hits.length, byFile };
 }
 const familiesWithSkin = new Set(skinSelectors.map((s) => s.family));
+
+// v7.1.9: OWN-ELEMENT ANATOMY, keyed by CLASS. A skin family is named after its directory, so the
+// rules painting a carrier from presentation/components/skin/layout-primitives (classic + rustic
+// Flex, Stack) or runtime/engines/rustic/skin/layout (rustic Box) are charged to families no
+// carrier is called. This index reads the rules by the element's own DS class instead: a selector
+// counts against an element when one of its compounds carries that class (directly or inside a
+// :where/:is/:not list) together with a [data-part] or [data-state]. Selectors and compounds are
+// split paren- and bracket-aware.
+const topLevel = (text, isSep) => {
+  const out = []; let depth = 0, cur = '';
+  for (const ch of text) {
+    if (ch === '(' || ch === '[') depth++;
+    else if (ch === ')' || ch === ']') depth--;
+    if (depth === 0 && isSep(ch)) { out.push(cur); cur = ''; } else cur += ch;
+  }
+  out.push(cur);
+  return out.map((x) => x.trim()).filter(Boolean);
+};
+const ANATOMY_ATTR = /\[data-(part|state)\b/;
+const ownClassIndex = new Map(); // ds class -> Map(selector id -> { file, kind, anatomy })
+skinPreludes.forEach((r, i) => topLevel(r.prelude, (ch) => ch === ',').forEach((sel, j) => {
+  const id = `${i}:${j}`;
+  for (const compound of topLevel(sel, (ch) => /[\s>+~]/.test(ch))) {
+    const anatomy = ANATOMY_ATTR.test(compound);
+    for (const m of compound.matchAll(/\.((?:ds|rottay)-[A-Za-z0-9_-]+)/g)) {
+      if (!ownClassIndex.has(m[1])) ownClassIndex.set(m[1], new Map());
+      const hit = ownClassIndex.get(m[1]).get(id);
+      ownClassIndex.get(m[1]).set(id, { file: r.file, kind: r.kind, anatomy: Boolean(hit?.anatomy) || anatomy });
+    }
+  }
+}));
+
+// v7.1.9: a layout-carrier family is PATH-anchored at primitives/layout/<fam>/. A row elsewhere whose
+// directory merely shares a carrier name (feedback/foundation/notifier/presentation/stack) is
+// charged to its nearest skinned non-carrier ancestor -- its owner skin -- never to the carrier.
+const LAYOUT_CARRIERS = ['box', 'flex', 'stack', 'grid', 'space', 'container'];
+const anchorCarrierFamily = (row) => {
+  if (!LAYOUT_CARRIERS.includes(row.family) || row.file.startsWith(`packages/core/src/components/primitives/layout/${row.family}/`)) return;
+  const dirs = row.file.replace('packages/core/src/components/', '').split('/').slice(0, -2).filter((x) => !LAYOUT_CARRIERS.includes(x));
+  const owner = [...dirs].reverse().find((x) => familiesWithSkin.has(x)) ?? dirs[dirs.length - 1] ?? 'unanchored';
+  row.familyRelabel = { from: row.family, to: owner, rule: 'v7.1.9 path-anchored layout carrier: outside primitives/layout/<fam>/, the nearest skinned non-carrier ancestor' };
+  row.family = owner;
+};
 
 // ---------- families (dirs that own engines/) ----------
 const allFiles = walk(COMPONENTS).filter((p) => !isTestish(rel(p)));
@@ -130,7 +178,9 @@ for (const [f, r] of fileResults) {
       classNameHook: s.classNameHook, dsClass: s.dsClass ?? false, componentStyle: s.componentStyle ?? false, antPaintClass: s.antPaintClass ?? false, owner: s.owner?.name, publicOwner: s.owner?.public ?? false, tagKind: s.tagKind,
       seq: s.seq.map((x) => x.kind === 'rest' ? `rest(${x.via}${x.part ? ',part' : ''}${x.state ? ',state' : ''})` : `${x.kind}${x.caller ? '[caller]' : ''}${x.cond ? '?' : ''}=${String(x.value).slice(0, 60)}`),
       isEngine,
+      dsClasses: s.dsClasses ?? [], dsClassPartial: s.dsClassPartial ?? false, // v7.1.9
     };
+    anchorCarrierFamily(row); // v7.1.9
     (isEngine ? engineSites : structuralSites).push(row);
   }
 }
@@ -163,6 +213,13 @@ for (const row of [...engineSites, ...structuralSites]) {
   row.skinRulesOnCanonicalPart = partRules;
   row.skinStateRulesOnCanonicalPart = stateRules;
   row.skinFiles = files;
+  // v7.1.9: the own-anatomy index over the skin kinds this row's engine loads (every kind for a
+  // compound row). ownSkinFiles prints every file that selects the element by its own class.
+  const ownKinds = skinKindsOf(row.engine) ?? ['modern', 'rustic', 'presentation'];
+  const own = new Map();
+  for (const cls of row.dsClasses) for (const [id, h] of ownClassIndex.get(cls) ?? []) if (ownKinds.includes(h.kind)) own.set(id, { file: h.file, anatomy: Boolean(own.get(id)?.anatomy) || h.anatomy });
+  row.ownAnatomyRules = [...own.values()].filter((h) => h.anatomy).length;
+  row.ownSkinFiles = [...new Set([...own.values()].map((h) => h.file))].sort();
 }
 
 // ---------- compound: caller data-part/state passed to a skinned component ----------
@@ -375,5 +432,5 @@ for (const [f, r] of fileResults) {
 
 const nativeParts = new Set(); for (const r of fileResults.values()) for (const x of r.native) nativeParts.add(x);
 for (const c of compoundSites) c.callerPartNativelyStamped = (c.callerPart ?? '').split('|').filter(Boolean).some((x) => nativeParts.has(x));
-return { nativeParts: [...nativeParts].sort(), engineSites, structuralSites, compoundSites, unresolvedCallers, nonBreachingCallers, familiesWithSkin: [...familiesWithSkin].sort(), engineFileCount: [...fileResults.keys()].filter((f) => /\/engines\/(classic|modern|rustic)\/index\.tsx$/.test(f)).length, skinSelectorCount: skinSelectors.length };
+return { nativeParts: [...nativeParts].sort(), engineSites, structuralSites, compoundSites, unresolvedCallers, nonBreachingCallers, familiesWithSkin: [...familiesWithSkin].sort(), engineFileCount: [...fileResults.keys()].filter((f) => /\/engines\/(classic|modern|rustic)\/index\.tsx$/.test(f)).length, skinSelectorCount: skinSelectors.length, layoutCarriers: [...LAYOUT_CARRIERS] };
 }

@@ -4,20 +4,22 @@
  "purpose": "The WO-ARC-12 fleet ratchet. It closes the roster of elements where a caller data-part/data-state still lands (passThroughViolations), and the per-family sets of callers whose owner skins would lose paint the day a child family strips caller parts/states (callerPartDependents / callerStateDependents). Those sets are the step-2 engine-lot preconditions, as machine-readable rows.",
  "policy": "decrease-only to 0, the family-cut ledger policy: every count may shrink and must then be lowered here, and none may ever grow. The only door is `node scripts/check/engine/skins/pass-through/index.mjs --update-baseline`. It writes the gate's own measurement, keeps the routing prose of surviving held entries, and refuses if anything grew. A pin is never hand-computed. A pin follows the tree down; an instrument-coverage re-pin to the gate's own measurement, with a cutNote and independent review, is the only lawful raise.",
  "owner": "WO-ARC-12",
- "lastMoveKind": "attributed-raise",
+ "lastMoveKind": "reclassification",
  "measuredFrom": {
   "head": "27273599d9919310b98424e13ab993361356961a",
-  "census": "v7.1.8, 2026-10-12 (arc12/census-v718: census 45c97c8b / ast b2d4d8a0 / attribution 098d6c7b / post c23e82f4 / report 2f340462): the sweep split (structure law; the 829-line member) — verbatim move, parity byte-identical. v7.1.7 (the roster literals derive from the canonical roster reader; engine-wiring findings closed) at arc12/census-v717, v7.1.6 (post c23e82f4) at arc12/census-v716, v7.1.5 at arc12/census-v715, v7.1.4 at arc12/census-v714, v7.1.3 (the partAttributes-spread callers counted, finding N; 23 new dependent rows, 1 re-keyed) at arc12/census-v713, v7.1.2 (post d6eb6187 / report 2f340462) at arc12/dt3, v7.1.1 at arc12/l2-tools, v7.1 at arc12/l2-tools-v7.1-snapshot, v7 at arc12/l2-tools-v7-snapshot",
+  "census": "v7.1.9, 2026-10-14 (arc12/census-v719): the structural-forward class, the class-keyed own-anatomy index and the path-anchored layout carriers (see scripts/libraries/engine/skins/pass-through/index.mjs). v7.1.8 at arc12/census-v718 and earlier as before.",
   "measurement": "scripts/libraries/engine/skins/pass-through (the v7.1.8 tools ported with verbatim bodies; parity at this head is byte-identical on raw, classified and census)"
  },
  "keys": "Line-free. Sites and tripwires: <file>#<owning component>#<tag>#<canonical part|none>#<ordinal>. Dependents: <file>#<child component>#<caller part|none>#<ordinal>. The ordinal counts elements sharing the first four fields in source order, so a line shift elsewhere never churns a key.",
  "eligibilityRule": "A child family's part-strip engine lot is eligible iff its `part` set is empty; its state-strip lot iff its `state` set is empty. Layout carriers (carrier: true) wait on the owner's carrier ruling (§6) whatever their sets say. A held entry names its routing; the typography engine lot's ruled precondition is exactly its held set.",
+ "structuralForwardRule": "structural-forward (census v7.1.9; owner 2026-10-14 CARRIERS answer 2, option 3; P-88 kernel/common:166, \"only a structural component with no part of its own may forward a caller data-part/data-state\"): a classic/rustic layout-carrier engine site that stamps no part or state of its own, never replaces a part, lands on the DOM, and is selected by anatomy through its own class by no loaded skin (s1-s5), AND that the library's closed STRUCTURAL_FORWARDS roster ratifies with an authority and an evidence string. Published, never excluded: its key moves from `roster` to `structuralForwards`, passThroughViolations + structuralForwards is conserved, and its callers stay in the per-family held sets (a carrier still waits on the owner ruling). The only door that moves a key is --reclassify-structural; --update-baseline refuses a reclassification.",
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 40,
+  "passThroughViolations": 28,
   "callerPartDependents": 859,
-  "callerStateDependents": 32
+  "callerStateDependents": 32,
+  "structuralForwards": 12
  },
  "roster": [
   {
@@ -149,26 +151,8 @@
   {
    "key": "primitives/feedback/foundation/notifier/presentation/stack/index.tsx#NotifierStack#div#stack#0",
    "engine": "all (compound)",
-   "family": "stack",
+   "family": "notifier",
    "breach": [
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/box/engines/classic/index.tsx#ClassicBox#createElement(ElementType)#none#0",
-   "engine": "classic",
-   "family": "box",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/box/engines/classic/index.tsx#ClassicBox#createElement(ElementType)#none#1",
-   "engine": "classic",
-   "family": "box",
-   "breach": [
-    "part-forward",
     "state-forward"
    ]
   },
@@ -191,46 +175,10 @@
    ]
   },
   {
-   "key": "primitives/layout/box/engines/rustic/index.tsx#RusticBox#createElement(ElementType)#none#0",
-   "engine": "rustic",
-   "family": "box",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/box/engines/rustic/index.tsx#RusticBox#createElement(ElementType)#none#1",
-   "engine": "rustic",
-   "family": "box",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/container/engines/classic/index.tsx#Container#div#none#0",
-   "engine": "classic",
-   "family": "container",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
    "key": "primitives/layout/container/engines/modern/index.tsx#Container#div#root#0",
    "engine": "modern",
    "family": "container",
    "breach": [
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0",
-   "engine": "rustic",
-   "family": "container",
-   "breach": [
-    "part-forward",
     "state-forward"
    ]
   },
@@ -271,29 +219,11 @@
    ]
   },
   {
-   "key": "primitives/layout/flex/engines/classic/index.tsx#Flex#AntFlex#none#0",
-   "engine": "classic",
-   "family": "flex",
-   "breach": [
-    "part-forward",
-    "state-forward"
-   ]
-  },
-  {
    "key": "primitives/layout/flex/engines/modern/index.tsx#Flex#div#root#0",
    "engine": "modern",
    "family": "flex",
    "breach": [
     "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/flex/engines/rustic/index.tsx#Flex#div#none#0",
-   "engine": "rustic",
-   "family": "flex",
-   "breach": [
-    "part-forward",
     "state-forward"
    ]
   },
@@ -324,19 +254,102 @@
    ]
   },
   {
-   "key": "primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0",
-   "engine": "classic",
+   "key": "primitives/layout/space/engines/modern/index.tsx#Space#div#root#0",
+   "engine": "modern",
    "family": "space",
+   "breach": [
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/stack/engines/modern/index.tsx#HermesStack#createElement(ElementType)#root#0",
+   "engine": "modern",
+   "family": "stack",
+   "breach": [
+    "part-replace",
+    "state-forward"
+   ]
+  }
+ ],
+ "structuralForwards": [
+  {
+   "key": "primitives/layout/box/engines/classic/index.tsx#ClassicBox#createElement(ElementType)#none#0",
+   "engine": "classic",
+   "family": "box",
    "breach": [
     "part-forward",
     "state-forward"
    ]
   },
   {
-   "key": "primitives/layout/space/engines/modern/index.tsx#Space#div#root#0",
-   "engine": "modern",
+   "key": "primitives/layout/box/engines/classic/index.tsx#ClassicBox#createElement(ElementType)#none#1",
+   "engine": "classic",
+   "family": "box",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/box/engines/rustic/index.tsx#RusticBox#createElement(ElementType)#none#0",
+   "engine": "rustic",
+   "family": "box",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/box/engines/rustic/index.tsx#RusticBox#createElement(ElementType)#none#1",
+   "engine": "rustic",
+   "family": "box",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/container/engines/classic/index.tsx#Container#div#none#0",
+   "engine": "classic",
+   "family": "container",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0",
+   "engine": "rustic",
+   "family": "container",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/flex/engines/classic/index.tsx#Flex#AntFlex#none#0",
+   "engine": "classic",
+   "family": "flex",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/flex/engines/rustic/index.tsx#Flex#div#none#0",
+   "engine": "rustic",
+   "family": "flex",
+   "breach": [
+    "part-forward",
+    "state-forward"
+   ]
+  },
+  {
+   "key": "primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0",
+   "engine": "classic",
    "family": "space",
    "breach": [
+    "part-forward",
     "state-forward"
    ]
   },
@@ -355,15 +368,6 @@
    "family": "stack",
    "breach": [
     "part-forward",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/stack/engines/modern/index.tsx#HermesStack#createElement(ElementType)#root#0",
-   "engine": "modern",
-   "family": "stack",
-   "breach": [
-    "part-replace",
     "state-forward"
    ]
   },
@@ -1380,6 +1384,11 @@
    ],
    "state": []
   },
+  "notifier": {
+   "carrier": false,
+   "part": [],
+   "state": []
+  },
   "space": {
    "carrier": true,
    "part": [],
@@ -1496,8 +1505,8 @@
   ]
  },
  "lastMove": {
-  "head": "d0755c498c88a8205c25d7fb1aae4eaa412ff426",
+  "head": "1897bf725dbc54d6293ea7f5b0c93fdc97215e2e",
   "date": "2026-10-14",
-  "note": "attributed raise 31 -> 32: the W-10a rename un-hides one pre-existing grid-view Box card-shell state dependency the colliding 'grid' folder name mis-charged to the grid skin (see families.box.state cutNote). Not new debt. Independent review: W-10a lot review."
+  "note": "reclassification through --reclassify-structural (structural-forward; owner 2026-10-14 CARRIERS answer 2, option 3; P-88 kernel/common:166): 12 ratified key(s) left the counted roster for structuralForwards; forwardingMeasured 40 = passThroughViolations 28 + structuralForwards 12. Moved: primitives/layout/box/engines/classic/index.tsx#ClassicBox#createElement(ElementType)#none#0; primitives/layout/box/engines/classic/index.tsx#ClassicBox#createElement(ElementType)#none#1; primitives/layout/box/engines/rustic/index.tsx#RusticBox#createElement(ElementType)#none#0; primitives/layout/box/engines/rustic/index.tsx#RusticBox#createElement(ElementType)#none#1; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/flex/engines/classic/index.tsx#Flex#AntFlex#none#0; primitives/layout/flex/engines/rustic/index.tsx#Flex#div#none#0; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/layout/stack/engines/classic/index.tsx#TitanStack#createElement(ElementType)#none#0; primitives/layout/stack/engines/rustic/index.tsx#ApolloStack#createElement(ElementType)#none#0"
  }
 }

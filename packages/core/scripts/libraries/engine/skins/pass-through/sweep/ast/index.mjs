@@ -6,7 +6,9 @@
  * This is the `AST helpers` section of ../index.mjs moved here verbatim (census v7.1.8, 2026-10-12:
  * the structure law's 800-line limit); no measurement moves. The section closes over nothing of the
  * sweep but the tree's `typescript`, which createSweepAst receives. The pinned copy is
- * arc12/census-v718/ast/index.mjs, byte-identical to this file; ../index.mjs names its sha256.
+ * arc12/census-v719/ast/index.mjs, byte-identical to this file; ../index.mjs names its sha256.
+ * v7.1.9 (2026-10-14): each site also carries the DS classes its own className names
+ * (`dsClasses`, `dsClassPartial`), the key of the sweep's own-anatomy index.
  */
 import { readFileSync } from 'node:fs';
 
@@ -209,6 +211,22 @@ function analyzeFile(file) {
     }
     return false;
   };
+  // v7.1.9: the DS classes the element's own className names (literal tokens, the same variable
+  // walk as dsClassIn), keyed for the sweep's own-anatomy index. A token cut by a template
+  // (`ds-x--${engine}`) is not guessed: the element is marked `dsClassPartial` (fail-closed).
+  const DS_CLASS_TOKEN = /(?:^|[\s"'`])((?:ds|rottay)-[a-z][a-z0-9_-]*)/g;
+  const dsClassTokens = (text, depth = 0, acc = { classes: new Set(), partial: false }) => {
+    for (const m of text.matchAll(DS_CLASS_TOKEN)) {
+      if (m[1].endsWith('-') || text.slice(m.index + m[0].length).startsWith('${')) acc.partial = true;
+      else acc.classes.add(m[1]);
+    }
+    if (depth > 3) return acc;
+    for (const id of new Set(text.match(/\b[A-Za-z_$][\w$]*\b/g) ?? [])) {
+      if (varInitText.has(id)) dsClassTokens(varInitText.get(id), depth + 1, acc);
+    }
+    return acc;
+  };
+  const ownClassesOf = (text) => { const t = dsClassTokens(text); return { dsClasses: [...t.classes].sort(), dsClassPartial: t.partial }; };
   // v3 (e)(iv): component-authored inline style (not a bare caller `style` pass-through)
   const CALLER_STYLE = /^\s*\{?\s*(\.\.\.)?\s*(props\.)?style\s*\}?\s*$/;
   const authoredStyle = (text) => {
@@ -234,7 +252,8 @@ function analyzeFile(file) {
       const styleProp = objLit && ts.isObjectLiteralExpression(objLit) ? objLit.properties.find((pr) => propName(pr.name) === 'style') : null;
       const componentStyle = Boolean(styleProp && ts.isPropertyAssignment(styleProp) && authoredStyle(textOf(sf, styleProp.initializer)));
       const antPaintClass = Boolean(clsProp && antClassIn(textOf(sf, clsProp)));
-      if (seq.some((x) => x.kind === 'rest' || x.caller)) sites.push({ line: lineOf(sf, n), tag: 'createElement(' + textOf(sf, n.arguments[0]).slice(0, 30) + ')', seq, classNameHook, dsClass, componentStyle, antPaintClass, intrinsic: true, owner: topName(n) });
+      const own = clsProp ? ownClassesOf(textOf(sf, clsProp)) : { dsClasses: [], dsClassPartial: false };
+      if (seq.some((x) => x.kind === 'rest' || x.caller)) sites.push({ line: lineOf(sf, n), tag: 'createElement(' + textOf(sf, n.arguments[0]).slice(0, 30) + ')', seq, classNameHook, dsClass, componentStyle, antPaintClass, ...own, intrinsic: true, owner: topName(n) });
     }
     ts.forEachChild(n, visitCreate);
   };
@@ -293,6 +312,7 @@ function analyzeFile(file) {
       let dsClass = false;
       let componentStyle = false;
       let antPaintClass = false;
+      let own = { dsClasses: [], dsClassPartial: false }; // v7.1.9
       let literalCallerPart = null, literalCallerState = null;
       let spreadForm = false, spreadState = false, spreadPartUnresolved = null; // v7.1.3
       for (const a of n.attributes.properties) {
@@ -328,7 +348,7 @@ function analyzeFile(file) {
             literalCallerState = init ? textOf(sf, init) : 'true';
             spreadState = false;
           }
-          if (k === 'className') { classNameHook = true; if (init && dsClassIn(textOf(sf, init))) dsClass = true; if (init && antClassIn(textOf(sf, init))) antPaintClass = true; }
+          if (k === 'className') { classNameHook = true; if (init && dsClassIn(textOf(sf, init))) dsClass = true; if (init && antClassIn(textOf(sf, init))) antPaintClass = true; if (init) own = ownClassesOf(textOf(sf, init)); }
           if (k === 'style' && init && authoredStyle(textOf(sf, init))) componentStyle = true;
         }
       }
@@ -338,7 +358,7 @@ function analyzeFile(file) {
       if (hasRest || callerPartStamp || callerStateStamp) {
         const refAttr = n.attributes.properties.find((a) => ts.isJsxAttribute(a) && a.name.getText(sf) === 'ref');
         if (imperative.length && /^[A-Z]/.test(tag) && refAttr) for (const im of imperative) seq.push({ kind: 'part', caller: im.caller, value: im.value + ' (imperative stampDataPart L' + im.line + ', post-commit)' });
-        sites.push({ line: lineOf(sf, n), tag, seq, classNameHook, dsClass, componentStyle, antPaintClass, intrinsic: /^[a-z]/.test(tag), owner: topName(n) });
+        sites.push({ line: lineOf(sf, n), tag, seq, classNameHook, dsClass, componentStyle, antPaintClass, ...own, intrinsic: /^[a-z]/.test(tag), owner: topName(n) });
       }
       if (/^[A-Z]/.test(tag) && (literalCallerPart || literalCallerState || spreadPartUnresolved)) {
         const use = { line: lineOf(sf, n), tag, part: literalCallerPart, state: literalCallerState };

@@ -71,13 +71,17 @@ import { applyEvasionFixture, applyThemeCssConsumerFixture } from '../seams/inde
 const modernFiles = modernEngineFiles;
 const modernColorFiles = modernEngineColorFiles;
 
-/** The three P-88 fleet aggregates (WO-ARC-12), from the shared pass-through census. */
+/**
+ * The P-88 fleet aggregates (WO-ARC-12), from the shared pass-through census. Since census v7.1.9 the
+ * ratified structural forwards are their own published counter, beside the violations, not inside them.
+ */
 function passThroughCounters() {
   const { totals } = measurePassThrough({ repoRoot }).census;
   return {
     'skins.passThroughViolations': totals.sites,
     'skins.callerPartDependents': totals.callerPartDependents,
     'skins.callerStateDependents': totals.callerStateDependents,
+    'skins.passThroughStructuralForwards': totals.structuralForwards,
   };
 }
 

@@ -25,10 +25,19 @@
  *   6. a family whose ledger `carrier` claim is missing, not a boolean, or different from the
  *      canonical LAYOUT_CARRIERS (the library's single authority). The claim is cross-checked,
  *      never trusted: eligibility() reads LAYOUT_CARRIERS itself, so no ledger edit can schedule a
- *      layout carrier for stripping past the owner's carrier ruling (§6).
+ *      layout carrier for stripping past the owner's carrier ruling (§6);
+ *   7. a STRUCTURAL FORWARD (census v7.1.9; owner CARRIERS answer 2, option 3; P-88 kernel/common:166)
+ *      the ledger does not hold. The class is published, never excluded: the library's closed
+ *      roster is its only authority and the ledger's `structuralForwards` is cross-checked against
+ *      it both ways. A ratified site that loses its shape (gains a stamp, a replace or an own
+ *      anatomy rule) fails AND is a counted site again; a ledger row the library does not ratify
+ *      fails; `structuralForwards` grows like any counter.
  *
- * DECREASE-ONLY. A count that SHRINKS is also red until the ledger is lowered through the one
- * door, `--update-baseline`. The door writes the gate's own measurement and refuses outright if
+ * DECREASE-ONLY. A count that SHRINKS is also red until the ledger is lowered through the
+ * door, `--update-baseline`. A reclassification has its own door, `--reclassify-structural`: it
+ * moves ratified keys from the counted roster to `structuralForwards` and nothing else, and only
+ * when the conservation line holds (passThroughViolations + structuralForwards unchanged);
+ * `--update-baseline` refuses it. The door writes the gate's own measurement and refuses outright if
  * anything grew. A pin is never hand-computed and never raised. The door keeps the ledger's prose
  * (including the c4 prose), records the HEAD the tree was measured on (`git rev-parse HEAD`; it
  * refuses rather than record none), and keeps the file's own character-escaping style so a
@@ -38,6 +47,7 @@
  *   node scripts/check/engine/skins/pass-through/index.mjs [--check]   exit 1 on any finding
  *   node scripts/check/engine/skins/pass-through/index.mjs --report    the measurement vs the ledger (JSON)
  *   node scripts/check/engine/skins/pass-through/index.mjs --update-baseline   lower the ledger (tighten only)
+ *   node scripts/check/engine/skins/pass-through/index.mjs --reclassify-structural   move ratified structural forwards (conservation only)
  *   node scripts/check/engine/skins/pass-through/index.mjs --emit      print the candidate ledger (review aid; writes nothing)
  */
 import { execFileSync } from 'node:child_process';
@@ -52,11 +62,12 @@ import {
   excludedKeys,
   measurePassThrough,
   siteKeys,
+  structuralForwardKeys,
 } from '../../../../libraries/engine/skins/pass-through/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const BASELINE_PATH = join(HERE, 'baseline/index.json');
-const COUNTERS = ['passThroughViolations', 'callerPartDependents', 'callerStateDependents'];
+const COUNTERS = ['passThroughViolations', 'callerPartDependents', 'callerStateDependents', 'structuralForwards'];
 const UNPAINTED = /unpainted/;
 const CARRIERS = new Set(LAYOUT_CARRIERS);
 
@@ -80,8 +91,12 @@ export function projectMeasurement({ census }) {
       passThroughViolations: census.totals.sites,
       callerPartDependents: census.totals.callerPartDependents,
       callerStateDependents: census.totals.callerStateDependents,
+      structuralForwards: census.totals.structuralForwards,
     },
     roster,
+    structuralForwards: structuralForwardKeys(census.structuralForwards.rows).map(({ key, row }) => ({ key, engine: row.engine, family: row.family, breach: [...row.breachClasses].sort() })),
+    structuralRoster: census.structuralForwards.roster.map((r) => r.key),
+    structuralMismatch: census.structuralForwards.rosterMismatch,
     tripwires,
     families: sorted,
     c4: { unresolved: c4.unresolved.length, crossRoster: [...c4.crossRoster] },
@@ -99,9 +114,10 @@ const diff = (pinned, measured) => ({
  */
 export function evaluatePassThrough(view, ledger) {
   const findings = [];
-  const push = (kind, direction, detail) => findings.push({ kind, direction, detail });
+  const push = (kind, direction, detail, extra = {}) => findings.push({ kind, direction, detail, ...extra });
   for (const name of COUNTERS) {
-    const pinned = ledger.counters[name];
+    // a ledger that predates the structural class holds none (census v7.1.9)
+    const pinned = name === 'structuralForwards' ? ledger.counters[name] ?? 0 : ledger.counters[name];
     const now = view.counters[name];
     if (now > pinned) push('counter', 'grew', `${name} ${pinned} -> ${now}`);
     if (now < pinned) push('counter', 'shrank', `${name} ${pinned} -> ${now}: lower it with --update-baseline`);
@@ -115,7 +131,12 @@ export function evaluatePassThrough(view, ledger) {
     if (d.added.length) push('site-breach', 'grew', `${key} gained ${d.added.join(', ')}`);
     if (d.removed.length) push('site-breach', 'shrank', `${key} no longer ${d.removed.join(', ')}: lower it with --update-baseline`);
   }
-  for (const key of pinnedSites.keys()) if (!nowSites.has(key)) push('site', 'shrank', `site ${key} left the roster: lower it with --update-baseline`);
+  const nowStructural = new Set(view.structuralForwards.map((r) => r.key));
+  for (const key of pinnedSites.keys()) {
+    if (nowSites.has(key)) continue;
+    if (nowStructural.has(key)) push('site', 'shrank', `site ${key} left the roster for the structural-forward class: move it with --reclassify-structural`, { key });
+    else push('site', 'shrank', `site ${key} left the roster: lower it with --update-baseline`, { key });
+  }
   const trip = diff(ledger.tripwires.map((t) => t.key), view.tripwires);
   for (const key of trip.removed) {
     push('tripwire', nowSites.has(key) ? 'grew' : 'shrank', nowSites.has(key)
@@ -129,7 +150,7 @@ export function evaluatePassThrough(view, ledger) {
     // calls a layout carrier a plain family (or the reverse) is red, whatever else it says.
     const canonical = CARRIERS.has(fam);
     const entry = ledger.families[fam];
-    if (!entry || !Object.hasOwn(entry, 'carrier')) push('carrier', 'fail', `${fam}: the ledger has no carrier classification (canonical LAYOUT_CARRIERS: ${canonical})`);
+    if (!entry || !Object.hasOwn(entry, 'carrier')) push('carrier', 'fail', `${fam}: the ledger has no carrier classification (canonical LAYOUT_CARRIERS: ${canonical})`, { family: fam });
     else if (typeof entry.carrier !== 'boolean') push('carrier', 'fail', `${fam}: carrier must be a boolean, the ledger has ${JSON.stringify(entry.carrier)} (canonical LAYOUT_CARRIERS: ${canonical})`);
     else if (entry.carrier !== canonical) push('carrier', 'fail', `${fam}: the ledger says carrier=${entry.carrier}, canonical LAYOUT_CARRIERS says ${canonical}`);
     const pinned = ledger.families[fam] ?? { part: [], state: [] };
@@ -140,11 +161,43 @@ export function evaluatePassThrough(view, ledger) {
       for (const key of d.removed) push(`${arm}-dependent`, 'shrank', `${fam}: caller-${arm} dependent ${key} left: lower it with --update-baseline`);
     }
   }
+  structuralFindings(view, ledger, pinnedSites, push);
   if (view.c4.unresolved > 0) push('c4', 'fail', `${view.c4.unresolved} part-selecting engine-skin selector(s) resolve to no engine scope (C4 ENGINE SCOPE, fail-closed)`);
   const cross = diff(ledger.c4.crossRoster, view.c4.crossRoster);
   for (const s of cross.added) push('c4-cross', 'grew', `NEW CROSS-scope selector ${s}`);
   for (const s of cross.removed) push('c4-cross', 'shrank', `CROSS-scope selector ${s} left: lower it with --update-baseline`);
   return findings;
+}
+
+/**
+ * The structural-forward cross-checks (census v7.1.9). The library's closed roster is the only
+ * authority; the ledger holds the keys it has moved and is checked against both the roster and
+ * the measurement, so neither side can add or drop a ratified key alone.
+ */
+function structuralFindings(view, ledger, pinnedSites, push) {
+  const ledgerRows = ledger.structuralForwards ?? [];
+  const ledgerKeys = new Set(ledgerRows.map((r) => r.key));
+  const measuredKeys = new Set(view.structuralForwards.map((r) => r.key));
+  const libraryRoster = new Set(view.structuralRoster);
+  const counted = new Set(view.roster.map((r) => r.key));
+  for (const m of view.structuralMismatch) {
+    if (m.id) push('structural', 'fail', `ratified ${m.key} lost its structural shape (${m.reason}): it is a counted site again`, { key: m.key });
+    else if (ledgerKeys.has(m.key)) push('structural', 'shrank', `ratified ${m.key} no longer exists: lower it with --update-baseline, then delete its library roster row`, { key: m.key });
+    else push('structural', 'fail', `the library roster row ${m.key} names no measured forwarding element: delete it`, { key: m.key });
+  }
+  for (const key of measuredKeys) {
+    if (!libraryRoster.has(key)) { push('structural', 'fail', `structural forward ${key} is not a row of the library roster (the only authority)`, { key }); continue; }
+    if (ledgerKeys.has(key)) continue;
+    if (pinnedSites.has(key)) push('structural', 'grew', `ratified structural forward ${key} is still a counted site in the ledger: move it with --reclassify-structural`, { key });
+    else push('structural', 'fail', `ratified structural forward ${key} is held nowhere in the ledger (neither roster nor structuralForwards)`, { key });
+  }
+  for (const key of ledgerKeys) {
+    if (measuredKeys.has(key) || libraryRoster.has(key)) continue;
+    if (counted.has(key)) push('structural', 'fail', `the ledger holds ${key} as a structural forward; the library roster does not ratify it`, { key });
+    else push('structural', 'shrank', `structural forward ${key} no longer exists: lower it with --update-baseline`, { key });
+  }
+  const pinnedCount = ledger.counters.structuralForwards ?? 0;
+  if (pinnedCount !== ledgerRows.length) push('structural', 'fail', `the ledger counter structuralForwards ${pinnedCount} disagrees with its ${ledgerRows.length} structuralForwards row(s)`);
 }
 
 /**
@@ -187,11 +240,68 @@ export function tightenLedger(ledger, view, { head = null, date = null } = {}) {
     lastMove: { head, date, note: 'lowered to the gate\'s own measurement through --update-baseline' },
     counters: { ...view.counters },
     roster: view.roster,
+    ...(ledger.structuralForwards ? { structuralForwards: view.structuralForwards } : {}),
     tripwires: view.tripwires.map((key) => tripReason.get(key) ?? { key }),
     families,
     c4: { ...ledger.c4, unresolved: view.c4.unresolved, crossRoster: view.c4.crossRoster },
   };
   return { ok: true, ledger: next };
+}
+
+const STRUCTURAL_RULE = 'structural-forward (census v7.1.9; owner 2026-10-14 CARRIERS answer 2, option 3; P-88 kernel/common:166, "only a structural component with no part of its own may forward a caller data-part/data-state"): a classic/rustic layout-carrier engine site that stamps no part or state of its own, never replaces a part, lands on the DOM, and is selected by anatomy through its own class by no loaded skin (s1-s5), AND that the library\'s closed STRUCTURAL_FORWARDS roster ratifies with an authority and an evidence string. Published, never excluded: its key moves from `roster` to `structuralForwards`, passThroughViolations + structuralForwards is conserved, and its callers stay in the per-family held sets (a carrier still waits on the owner ruling). The only door that moves a key is --reclassify-structural; --update-baseline refuses a reclassification.';
+const STRUCTURAL_CENSUS = 'v7.1.9, 2026-10-14 (arc12/census-v719): the structural-forward class, the class-keyed own-anatomy index and the path-anchored layout carriers (see scripts/libraries/engine/skins/pass-through/index.mjs). v7.1.8 at arc12/census-v718 and earlier as before.';
+
+/**
+ * The reclassification door. Moves the ratified structural forwards the ledger still counts as
+ * sites into `structuralForwards` and admits nothing else: every finding must be one of the moved
+ * keys leaving the roster, the two counters moving by exactly that number, or the owner-skin row of
+ * a family the path-anchored carriers relabelled (a non-carrier family with empty held sets whose
+ * every site the ledger already counted under a layout carrier). The conservation line must hold.
+ */
+export function reclassifyLedger(ledger, view, { head = null, date = null } = {}) {
+  const ledgerRows = ledger.structuralForwards ?? [];
+  const held = new Set(ledgerRows.map((r) => r.key));
+  const moved = view.structuralForwards.filter((r) => !held.has(r.key)).map((r) => r.key);
+  const refusals = [];
+  if (!moved.length) refusals.push({ kind: 'reclassify', direction: 'fail', detail: 'no ratified structural forward is waiting to move' });
+  const pinnedByKey = new Map(ledger.roster.map((r) => [r.key, r]));
+  const relabelled = (fam) => !ledger.families[fam] && !CARRIERS.has(fam) && view.families[fam]?.part.length === 0 && view.families[fam]?.state.length === 0
+    && view.roster.filter((r) => r.family === fam).every((r) => CARRIERS.has(pinnedByKey.get(r.key)?.family));
+  const n = moved.length;
+  const pv = ledger.counters.passThroughViolations;
+  const sf = ledger.counters.structuralForwards ?? 0;
+  for (const f of evaluatePassThrough(view, ledger)) {
+    const ok = (f.kind === 'structural' && f.direction === 'grew' && moved.includes(f.key))
+      || (f.kind === 'site' && f.direction === 'shrank' && moved.includes(f.key))
+      || (f.kind === 'counter' && f.detail === `passThroughViolations ${pv} -> ${pv - n}: lower it with --update-baseline`)
+      || (f.kind === 'counter' && f.detail === `structuralForwards ${sf} -> ${sf + n}`)
+      || (f.kind === 'carrier' && f.family && relabelled(f.family));
+    if (!ok) refusals.push(f);
+  }
+  const before = pv + sf;
+  const after = view.counters.passThroughViolations + view.counters.structuralForwards;
+  if (before !== after || view.counters.passThroughViolations !== pv - n || view.counters.structuralForwards !== sf + n) {
+    refusals.push({ kind: 'conservation', direction: 'fail', detail: `forwardingMeasured ${before} -> ${after} (passThroughViolations ${pv} -> ${view.counters.passThroughViolations}, structuralForwards ${sf} -> ${view.counters.structuralForwards}, ${n} moved): a reclassification conserves the count` });
+  }
+  if (refusals.length) return { ok: false, refusals };
+  const families = { ...ledger.families };
+  for (const fam of Object.keys(view.families)) if (!families[fam]) families[fam] = { carrier: false, part: [], state: [] };
+  const next = {};
+  for (const [k, v] of Object.entries(ledger)) {
+    if (k === 'structuralForwards') continue;
+    next[k] = v;
+    if (k === 'eligibilityRule' && !ledger.structuralForwardRule) next.structuralForwardRule = STRUCTURAL_RULE;
+    if (k === 'roster') next.structuralForwards = view.structuralForwards;
+  }
+  Object.assign(next, {
+    measuredFrom: { ...ledger.measuredFrom, census: STRUCTURAL_CENSUS },
+    lastMoveKind: 'reclassification',
+    counters: { ...view.counters },
+    roster: view.roster,
+    families: Object.fromEntries(Object.keys(families).sort().map((fam) => [fam, families[fam]])),
+    lastMove: { head, date, note: `reclassification through --reclassify-structural (structural-forward; owner 2026-10-14 CARRIERS answer 2, option 3; P-88 kernel/common:166): ${n} ratified key(s) left the counted roster for structuralForwards; forwardingMeasured ${before} = passThroughViolations ${view.counters.passThroughViolations} + structuralForwards ${view.counters.structuralForwards}. Moved: ${moved.join('; ')}` },
+  });
+  return { ok: true, ledger: next, moved };
 }
 
 /**
@@ -217,7 +327,7 @@ export function readLedger(path = BASELINE_PATH) {
   return JSON.parse(readFileSync(path, 'utf8'));
 }
 
-const FLAGS = new Set(['--check', '--report', '--update-baseline', '--emit']);
+const FLAGS = new Set(['--check', '--report', '--update-baseline', '--reclassify-structural', '--emit']);
 
 function main() {
   const args = new Set(process.argv.slice(2));
@@ -242,6 +352,22 @@ function main() {
     console.log(`engine/skins/pass-through: ledger lowered (${COUNTERS.map((c) => `${c} ${res.ledger.counters[c]}`).join(', ')})`);
     return;
   }
+  if (args.has('--reclassify-structural')) {
+    const head = headCommit();
+    if (!head) {
+      console.error('engine/skins/pass-through --reclassify-structural REFUSED: cannot resolve HEAD (git rev-parse HEAD)');
+      process.exit(1);
+    }
+    const res = reclassifyLedger(ledger, view, { head, date: new Date().toISOString().slice(0, 10) });
+    if (!res.ok) {
+      console.error('engine/skins/pass-through --reclassify-structural REFUSED (the door only moves ratified keys, conserving the count):');
+      for (const f of res.refusals) console.error(`  ${f.kind} ${f.direction}: ${f.detail}`);
+      process.exit(1);
+    }
+    writeFileSync(BASELINE_PATH, serializeLedger(res.ledger, readFileSync(BASELINE_PATH, 'utf8')));
+    console.log(`engine/skins/pass-through: ${res.moved.length} key(s) reclassified (${COUNTERS.map((c) => `${c} ${res.ledger.counters[c]}`).join(', ')})`);
+    return;
+  }
   const findings = evaluatePassThrough(view, ledger);
   if (args.has('--report')) {
     process.stdout.write(`${JSON.stringify({ counters: view.counters, ledger: ledger.counters, findings, eligibility: eligibility(ledger) }, null, 1)}\n`);
@@ -253,7 +379,7 @@ function main() {
     process.exit(1);
   }
   const atZero = Object.entries(eligibility(ledger)).filter(([, e]) => e.partStripEligible && e.stateStripEligible).map(([f]) => f);
-  console.log(`engine/skins/pass-through OK (${COUNTERS.map((c) => `${c} ${view.counters[c]}`).join(', ')}; roster ${view.roster.length} line-free sites; tripwires ${view.tripwires.length}; families eligible for their engine lot: ${atZero.join(', ') || 'none'})`);
+  console.log(`engine/skins/pass-through OK (${COUNTERS.map((c) => `${c} ${view.counters[c]}`).join(', ')}; roster ${view.roster.length} line-free sites; structural forwards ${view.structuralForwards.length}; tripwires ${view.tripwires.length}; families eligible for their engine lot: ${atZero.join(', ') || 'none'})`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

@@ -12,11 +12,11 @@ import assert from 'node:assert/strict';
 import { cpSync, mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
-import { measurePassThrough } from '../../../../libraries/engine/skins/pass-through/index.mjs';
-import { BASELINE_PATH, eligibility, evaluatePassThrough, headCommit, projectMeasurement, readLedger, serializeLedger, tightenLedger } from './index.mjs';
+import { LAYOUT_CARRIERS, excludedKeys, measurePassThrough } from '../../../../libraries/engine/skins/pass-through/index.mjs';
+import { BASELINE_PATH, eligibility, evaluatePassThrough, headCommit, projectMeasurement, readLedger, reclassifyLedger, serializeLedger, tightenLedger } from './index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = findRepoRoot(HERE);
@@ -447,5 +447,279 @@ describe('engine/skins/pass-through -- census v7.1: no caller is skipped in sile
       [],
       'a pin with no census site is stale: remove the row or re-aim its predicate',
     );
+  });
+});
+
+/**
+ * census v7.1.9 -- the STRUCTURAL-FORWARD class (owner 2026-10-14, CARRIERS answer 2, option 3;
+ * P-88 kernel/common:166). The negatives N1-N9 of the lane-I debrief §4.4: each one move, its exact
+ * finding set, red on its mutant; the committed ledger is green.
+ */
+describe('engine/skins/pass-through -- structural forwards (census v7.1.9)', () => {
+  const CARRIER = new Set(LAYOUT_CARRIERS);
+  /** The ledger as it stood before its reclassification: every structural key counted again. */
+  const preReclassification = (l) => {
+    const p = clone(l);
+    p.roster = [...p.roster, ...p.structuralForwards.map(({ key, engine, family, breach }) => ({ key, engine, family, breach }))];
+    p.counters.passThroughViolations += p.structuralForwards.length;
+    delete p.counters.structuralForwards;
+    delete p.structuralForwards;
+    return p;
+  };
+  const modernCarrierKey = () => view.roster.find((r) => r.engine === 'modern' && CARRIER.has(r.family)).key;
+
+  it('is published and conserved: every ratified key is measured, none is excluded, forwardingMeasured = sites + structural', () => {
+    const { census } = measurePassThrough({ repoRoot: REPO });
+    const sf = census.structuralForwards;
+    assert.ok(sf.rows.length > 0, 'the lot ratifies at least the render-proven carriers');
+    assert.equal(census.totals.forwardingMeasured, census.totals.sites + census.totals.structuralForwards);
+    assert.equal(ledger.counters.passThroughViolations + ledger.counters.structuralForwards, census.totals.forwardingMeasured);
+    assert.deepEqual(sf.rosterMismatch, []);
+    assert.deepEqual(view.structuralForwards.map((r) => r.key).sort(), sf.roster.map((r) => r.key).sort(), 'the library roster is exactly what is measured');
+    assert.deepEqual(ledger.structuralForwards.map((r) => r.key).sort(), sf.roster.map((r) => r.key).sort(), 'the ledger holds exactly the library roster');
+    const excluded = new Set(excludedKeys(census.excluded).map(({ key }) => key));
+    for (const row of sf.rows) {
+      assert.ok(!excluded.has(row.key), `${row.key} is not excluded`);
+      assert.ok(Object.values(row.structuralPredicate).every(Boolean), `${row.key} satisfies s1-s5`);
+      assert.match(row.structuralForward.authority, /CARRIERS answer 2.*P-88 kernel\/common:166/);
+      assert.match(row.structuralForward.evidence, /carriers-i1 battery/);
+    }
+    for (const key of sf.candidates) assert.ok(view.roster.some((r) => r.key === key), `candidate ${key} stays a counted site`);
+  });
+
+  it('N9: the classic/rustic rows that are not layout carriers stay counted (the frozen engines are not excluded wholesale)', () => {
+    const frozen = view.roster.filter((r) => (r.engine === 'classic' || r.engine === 'rustic') && !CARRIER.has(r.family));
+    const tally = {};
+    for (const r of frozen) tally[`${r.family}/${r.engine}`] = (tally[`${r.family}/${r.engine}`] ?? 0) + 1;
+    assert.deepEqual(tally, { 'typography/classic': 6, 'typography/rustic': 4, 'divider/rustic': 2 });
+    const { census } = measurePassThrough({ repoRoot: REPO });
+    for (const r of frozen) {
+      const site = census.sites.find((s) => s.key === r.key);
+      assert.equal(site.structuralPredicate.s1, false, `${r.key} is no layout carrier (s1)`);
+      assert.equal(site.structuralCandidate, undefined);
+    }
+  });
+
+  it('reads the carrier skins by class: the layout-primitives and rustic/layout files are seen, with no anatomy rule', () => {
+    const { census } = measurePassThrough({ repoRoot: REPO });
+    const all = [...census.sites, ...census.structuralForwards.rows];
+    const row = (re) => all.find((s) => re.test(s.id));
+    const flex = row(/^primitives\/layout\/flex\/engines\/classic\/index\.tsx:/);
+    assert.ok(flex.ownSkinFiles.includes('presentation/components/skin/layout-primitives/index.css'));
+    assert.equal(flex.ownAnatomyRules, 0);
+    const box = row(/^primitives\/layout\/box\/engines\/rustic\/index\.tsx:/);
+    assert.ok(box.ownSkinFiles.includes('runtime/engines/rustic/skin/layout/index.css'));
+    assert.equal(box.ownAnatomyRules, 0);
+    assert.ok(row(/^primitives\/layout\/box\/engines\/modern\/index\.tsx:/).ownAnatomyRules > 0, 'the modern Box is selected by its own anatomy (box-surface)');
+  });
+
+  it('anchors the carriers by path: NotifierStack is charged to its owner skin, not to the stack carrier', () => {
+    const notifier = view.roster.filter((r) => r.key.startsWith('primitives/feedback/foundation/notifier/presentation/stack/index.tsx#'));
+    assert.deepEqual(notifier.map((r) => r.family), ['notifier']);
+    assert.equal(ledger.families.notifier.carrier, false);
+    assert.equal(eligibility(ledger).notifier.waitsOn, undefined);
+  });
+
+  it('N6: a ledger key the library roster does not ratify is red', () => {
+    const l = clone(ledger);
+    const key = modernCarrierKey();
+    l.structuralForwards.push({ key, engine: 'modern', family: 'box', breach: [] });
+    l.counters.structuralForwards += 1;
+    const findings = evaluatePassThrough(view, l);
+    assert.deepEqual(kinds(findings), ['counter/shrank', 'structural/fail']);
+    assert.match(findings.find((f) => f.kind === 'structural').detail, /the library roster does not ratify it/);
+  });
+
+  it('N6: a ratified key removed from the ledger by hand is red', () => {
+    const l = clone(ledger);
+    const [gone] = l.structuralForwards.splice(0, 1);
+    l.counters.structuralForwards -= 1;
+    const findings = evaluatePassThrough(view, l);
+    assert.deepEqual(kinds(findings), ['counter/grew', 'structural/fail']);
+    assert.match(findings.find((f) => f.kind === 'structural').detail, new RegExp(`${gone.key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} is held nowhere`));
+  });
+
+  it('N6: a ledger row added without its counter is red', () => {
+    const l = clone(ledger);
+    l.structuralForwards.push({ key: modernCarrierKey(), engine: 'modern', family: 'box', breach: [] });
+    assert.deepEqual(kinds(evaluatePassThrough(view, l)), ['structural/fail', 'structural/fail']);
+  });
+
+  it('N3/N4 (measurement side): a structural key the library roster does not hold is red', () => {
+    const v = clone(view);
+    const i = v.roster.findIndex((r) => r.engine === 'modern' && CARRIER.has(r.family));
+    const [row] = v.roster.splice(i, 1);
+    v.structuralForwards.push(row);
+    v.counters.passThroughViolations -= 1;
+    v.counters.structuralForwards += 1;
+    const findings = evaluatePassThrough(v, ledger);
+    assert.deepEqual(kinds(findings), ['counter/grew', 'counter/shrank', 'site/shrank', 'structural/fail']);
+    assert.equal(reclassifyLedger(ledger, v).ok, false);
+  });
+
+  it('N7: structuralForwards growing is counter/grew, and the door refuses a broken conservation line', () => {
+    const v = clone(view);
+    v.counters.structuralForwards += 1;
+    assert.deepEqual(kinds(evaluatePassThrough(v, ledger)), ['counter/grew']);
+    const pre = preReclassification(ledger);
+    const broken = clone(view);
+    broken.counters.passThroughViolations += 1;
+    const door = reclassifyLedger(pre, broken);
+    assert.equal(door.ok, false);
+    assert.ok(door.refusals.some((f) => f.kind === 'conservation'), 'the conservation line is named');
+  });
+
+  it('N8: --update-baseline refuses a reclassification; --reclassify-structural performs it and reproduces the committed ledger', () => {
+    const pre = preReclassification(ledger);
+    const n = ledger.structuralForwards.length;
+    const findings = evaluatePassThrough(view, pre);
+    assert.deepEqual(kinds(findings), ['counter/grew', 'counter/shrank', ...Array(n).fill('site/shrank'), ...Array(n).fill('structural/grew')].sort());
+    const lower = tightenLedger(pre, view);
+    assert.equal(lower.ok, false, 'a lower cannot launder a reclassification');
+    assert.ok(lower.refusals.some((f) => f.kind === 'structural' && f.direction === 'grew'));
+    const door = reclassifyLedger(pre, view, { head: 'drill', date: 'drill' });
+    assert.equal(door.ok, true, JSON.stringify(door.refusals));
+    assert.deepEqual(evaluatePassThrough(view, door.ledger), []);
+    for (const field of ['counters', 'roster', 'structuralForwards', 'families', 'tripwires', 'c4', 'structuralForwardRule']) {
+      assert.deepEqual(door.ledger[field], ledger[field], field);
+    }
+    assert.equal(door.ledger.lastMoveKind, 'reclassification');
+    assert.match(door.ledger.lastMove.note, new RegExp(`forwardingMeasured ${ledger.counters.passThroughViolations + n} = passThroughViolations ${ledger.counters.passThroughViolations} \\+ structuralForwards ${n}`));
+    assert.equal(reclassifyLedger(ledger, view).ok, false, 'nothing is left to move: the door is not idempotent cover for anything else');
+  });
+
+  it('the door admits a carrier-relabelled owner-skin family, and refuses one the ledger never counted under a carrier', () => {
+    const fam = Object.keys(view.families).sort().find((f) => !CARRIER.has(f) && view.families[f].part.length === 0
+      && view.families[f].state.length === 0 && view.roster.some((r) => r.family === f));
+    assert.ok(fam, 'a non-carrier family with sites and empty held sets exists to drill');
+    const pre = preReclassification(ledger);
+    delete pre.families[fam];
+    const relabelled = clone(pre);
+    for (const r of relabelled.roster) if (r.family === fam) r.family = 'stack';
+    const door = reclassifyLedger(relabelled, view, { head: 'drill', date: 'drill' });
+    assert.equal(door.ok, true, JSON.stringify(door.refusals));
+    assert.deepEqual(door.ledger.families[fam], { carrier: false, part: [], state: [] });
+    const refused = reclassifyLedger(pre, view);
+    assert.equal(refused.ok, false);
+    assert.deepEqual(kinds(refused.refusals), ['carrier/fail']);
+  });
+});
+
+describe('engine/skins/pass-through -- structural forwards, source drills (the census itself turns the gate red)', () => {
+  let ws;
+  const core = () => join(ws, 'packages/core');
+  before(() => {
+    ws = mkdtempSync(join(tmpdir(), 'pass-through-structural-'));
+    mkdirSync(core(), { recursive: true });
+    cpSync(join(REPO, 'packages/core/src'), join(core(), 'src'), { recursive: true });
+    cpSync(join(REPO, 'packages/core/package.json'), join(core(), 'package.json'));
+    symlinkSync(join(REPO, 'packages/core/node_modules'), join(core(), 'node_modules'));
+  });
+  after(() => { if (ws) rmSync(ws, { recursive: true, force: true }); });
+  const measureCopy = () => measurePassThrough({ repoRoot: ws, fresh: true });
+  /** Mutate one file of the copy, measure, restore. */
+  const withMutant = (rel, from, to, fn) => {
+    const path = join(core(), rel);
+    const original = readFileSync(path, 'utf8');
+    assert.equal(original.split(from).length, 2, `${rel}: the mutation point is located exactly once`);
+    writeFileSync(path, original.replace(from, to));
+    try { return fn(); } finally { writeFileSync(path, original); }
+  };
+  const ratified = (re) => ledger.structuralForwards.filter((r) => re.test(r.key));
+  const expected = (k) => ['counter/grew', 'counter/shrank', ...Array(k).fill('site/grew'), ...Array(k).fill('structural/fail')].sort();
+
+  it('N1: a ratified classic Box that stamps data-part="root" before the spread fails and is counted again', () => {
+    const k = ratified(/^primitives\/layout\/box\/engines\/classic\//).length;
+    assert.ok(k > 0, 'the classic Box is ratified');
+    withMutant('src/components/primitives/layout/box/engines/classic/index.tsx', 'const elementProps = {\n    ...htmlAttributes,', 'const elementProps = {\n    "data-part": "root",\n    ...htmlAttributes,', () => {
+      const findings = evaluatePassThrough(projectMeasurement(measureCopy()), ledger);
+      assert.deepEqual(kinds(findings), expected(k));
+      assert.ok(findings.filter((f) => f.kind === 'structural').every((f) => /it stamps a part of its own/.test(f.detail)));
+    });
+  });
+
+  it('N1b: a ratified classic Box that stamps its own data-state fails (s2) under the same key', () => {
+    const k = ratified(/^primitives\/layout\/box\/engines\/classic\//).length;
+    withMutant('src/components/primitives/layout/box/engines/classic/index.tsx', 'const elementProps = {\n    ...htmlAttributes,', 'const elementProps = {\n    "data-state": "idle",\n    ...htmlAttributes,', () => {
+      const findings = evaluatePassThrough(projectMeasurement(measureCopy()), ledger);
+      assert.deepEqual(kinds(findings), expected(k));
+      assert.ok(findings.filter((f) => f.kind === 'structural').every((f) => /predicate s2 fails/.test(f.detail)));
+    });
+  });
+
+  it('N2: an anatomy rule on a ratified carrier class in layout-primitives fails (s4: the blind-spot regression)', () => {
+    const k = ratified(/^primitives\/layout\/flex\/engines\/classic\//).length;
+    assert.equal(k, 1, 'the classic Flex is ratified');
+    const css = 'src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css';
+    const original = readFileSync(join(core(), css), 'utf8');
+    writeFileSync(join(core(), css), `${original}\n.rottay-flex--classic[data-part='x'] { color: red; }\n`);
+    try {
+      const m = measureCopy();
+      const findings = evaluatePassThrough(projectMeasurement(m), ledger);
+      assert.deepEqual(kinds(findings), expected(1));
+      assert.match(findings.find((f) => f.kind === 'structural').detail, /predicate s4 fails/);
+      assert.equal(m.census.sites.find((s) => /^primitives\/layout\/flex\/engines\/classic\//.test(s.id)).ownAnatomyRules, 1);
+    } finally {
+      writeFileSync(join(core(), css), original);
+    }
+  });
+
+  it('N2b: a :where()-wrapped state rule on the rustic Stack class is read by class too', () => {
+    const css = 'src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css';
+    const original = readFileSync(join(core(), css), 'utf8');
+    writeFileSync(join(core(), css), `${original}\n:where(.rottay-stack--rustic)[data-state] { color: red; }\n`);
+    try {
+      const m = measureCopy();
+      const k = ratified(/^primitives\/layout\/stack\/engines\/rustic\//).length;
+      const rows = [...m.census.sites, ...m.census.structuralForwards.rows].filter((s) => /^primitives\/layout\/stack\/engines\/rustic\//.test(s.id));
+      assert.deepEqual(rows.map((s) => [s.ownAnatomyRules, s.structuralPredicate.s4, Boolean(s.structuralForward)]), [[1, false, false]]);
+      assert.deepEqual(kinds(evaluatePassThrough(projectMeasurement(m), ledger)), k ? expected(k) : []);
+    } finally {
+      writeFileSync(join(core(), css), original);
+    }
+  });
+
+  it('N5: a NEW classic carrier twin outside the roster stays a counted site (structuralCandidate) and is red', () => {
+    const rel = 'src/components/primitives/layout/container/engines/classic/index.tsx';
+    const original = readFileSync(join(core(), rel), 'utf8');
+    writeFileSync(join(core(), rel), `${original}\nexport const ContainerTwin = React.forwardRef<HTMLDivElement, any>((props, ref) => {\n  const { className, ...rest } = props;\n  return <div ref={ref} className={className} style={{ boxSizing: "border-box" }} {...rest} />;\n});\n`);
+    try {
+      const m = measureCopy();
+      const twin = m.census.sites.find((s) => s.key === 'primitives/layout/container/engines/classic/index.tsx#ContainerTwin#div#none#0');
+      assert.ok(twin, 'the twin is measured');
+      assert.equal(twin.structuralCandidate, true);
+      const findings = evaluatePassThrough(projectMeasurement(m), ledger);
+      assert.deepEqual(kinds(findings), ['counter/grew', 'site/grew']);
+    } finally {
+      writeFileSync(join(core(), rel), original);
+    }
+  });
+
+  /** A private copy of the census library whose STRUCTURAL_FORWARDS roster gains one row. */
+  const libraryWithRow = async (tag, key, engine, family) => {
+    const dir = join(core(), `scripts/libraries-${tag}`);
+    cpSync(join(REPO, 'packages/core/scripts/libraries'), dir, { recursive: true });
+    const classify = join(dir, 'engine/skins/pass-through/classify/index.mjs');
+    const text = readFileSync(classify, 'utf8');
+    const anchor = 'const STRUCTURAL_FORWARDS = [\n';
+    assert.equal(text.split(anchor).length, 2);
+    writeFileSync(classify, text.replace(anchor, `${anchor}  { key: ${JSON.stringify(key)}, engine: ${JSON.stringify(engine)}, family: ${JSON.stringify(family)}, authority: STRUCTURAL_AUTHORITY, evidence: 'drill' },\n`));
+    return import(pathToFileURL(join(dir, 'engine/skins/pass-through/index.mjs')).href);
+  };
+
+  it('N3: a MODERN carrier key added to the library roster fails the predicate and is red', async () => {
+    const row = view.roster.find((r) => r.engine === 'modern' && r.family === 'box');
+    const lib = await libraryWithRow('n3', row.key, 'modern', 'box');
+    const findings = evaluatePassThrough(projectMeasurement(lib.measurePassThrough({ repoRoot: ws, fresh: true })), ledger);
+    assert.deepEqual(kinds(findings), ['structural/fail']);
+    assert.match(findings[0].detail, /lost its structural shape \(predicate s1 fails; predicate s2 fails; predicate s3 fails; predicate s4 fails\)/);
+  });
+
+  it('N4: a classic site that is no layout carrier, added to the library roster, fails s1 and is red', async () => {
+    const row = view.roster.find((r) => r.engine === 'classic' && r.family === 'typography');
+    const lib = await libraryWithRow('n4', row.key, 'classic', 'typography');
+    const findings = evaluatePassThrough(projectMeasurement(lib.measurePassThrough({ repoRoot: ws, fresh: true })), ledger);
+    assert.deepEqual(kinds(findings), ['structural/fail']);
+    assert.match(findings[0].detail, /predicate s1 fails/);
   });
 });

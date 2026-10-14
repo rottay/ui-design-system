@@ -69,6 +69,17 @@
  * the whole-module rule on ast/index.mjs; both shas in the Provenance line); the staged tools carry
  * the ast/ directory. Registered gap until the next report.mjs re-pin: report.mjs does not record
  * the ast sha — a v7.1.8 census.json counts as evidence only with its tool-shas.txt.
+ *
+ * v7.1.9 (2026-10-14; arc12/census-v719, every module re-pinned, attribution unchanged): the
+ * STRUCTURAL-FORWARD class (owner CARRIERS answer 2, option 3; P-88 kernel/common:166). The sweep
+ * reads each element's own DS classes and counts the loaded skin selectors that select it by
+ * anatomy through them (`ownAnatomyRules`, `ownSkinFiles`: keyed by class, so the layout-primitives
+ * and rustic/layout skins a directory-named family never sees are read), and anchors the layout
+ * carriers by path (a `stack` directory outside primitives/layout/stack is charged to its owner
+ * skin). Classify publishes a third outcome, `structuralForwards`, for a site the s1-s5 predicate
+ * AND the closed in-library roster both admit; the summary counts it and the conservation line
+ * (`forwardingMeasured` = sites + structuralForwards). Nothing enters `excluded`. report.mjs now
+ * records the ast sha, closing the v7.1.8 gap.
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';
@@ -77,7 +88,11 @@ import { summarizePassThrough } from './summary/index.mjs';
 export { sweepPassThrough, classifyPassThrough, summarizePassThrough };
 export { ALL_RULES } from './attribution/index.mjs';
 
-/** The layout-carrier families whose dependents wait on the owner's carrier ruling (§6). */
+/**
+ * The layout-carrier families whose dependents wait on the owner's carrier ruling (§6). Since
+ * v7.1.9 the sweep anchors them by path (primitives/layout/<fam>/) and carries the same list;
+ * measurePassThrough refuses a measurement whose list differs.
+ */
 export const LAYOUT_CARRIERS = Object.freeze(['box', 'flex', 'stack', 'grid', 'space', 'container']);
 
 const memo = new Map();
@@ -93,6 +108,7 @@ export function measurePassThrough({ repoRoot, rules, head = null, fresh = false
   const raw = sweepPassThrough({ repoRoot });
   const classified = classifyPassThrough(raw, { repoRoot, rules });
   const census = summarizePassThrough(classified, raw, { head });
+  if (raw.layoutCarriers.join() !== LAYOUT_CARRIERS.join()) throw new Error(`measurePassThrough: the sweep's layout carriers (${raw.layoutCarriers.join(', ')}) differ from LAYOUT_CARRIERS (${LAYOUT_CARRIERS.join(', ')})`);
   const measurement = { raw, classified, census };
   memo.set(key, measurement);
   return measurement;
@@ -118,9 +134,19 @@ function keyed(rows, base) {
     });
 }
 
-/** Violating sites keyed `<file>#<owner>#<tag>#<canonicalPart|none>#<ordinal>`. */
+/**
+ * Violating sites keyed `<file>#<owner>#<tag>#<canonicalPart|none>#<ordinal>`. Since v7.1.9 the
+ * census keys every forwarding element itself (the same formula, ordinals over sites AND
+ * structural forwards), so a site keeps its key when a twin leaves for the structural class.
+ */
 export function siteKeys(sites) {
+  if (sites.length && sites.every((s) => typeof s.key === 'string')) return [...sites].sort((a, b) => a.file.localeCompare(b.file) || a.line - b.line).map((row) => ({ key: row.key, row }));
   return keyed(sites, (s) => `${short(s.file)}#${s.owner ?? '?'}#${s.tag}#${s.canonicalPart ?? 'none'}`);
+}
+
+/** The ratified structural forwards (census v7.1.9), keyed like siteKeys. */
+export function structuralForwardKeys(rows) {
+  return [...rows].sort((a, b) => a.file.localeCompare(b.file) || a.line - b.line).map((row) => ({ key: row.key, row }));
 }
 
 /** Excluded rows keyed the same way (the tripwire set is the unpainted subset). */

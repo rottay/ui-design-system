@@ -4,14 +4,18 @@
  * the tripwire marker). READ-ONLY, pure. The body is the adopted report.mjs verbatim; its CLI
  * shell, the out-of-repo tool shas, the `generated` date and the markdown fragment are dropped.
  */
-// Provenance: arc12/dt3/report.mjs sha256 2f340462f8119abedb77ef8f8dfd16621082207aaf3e0c089bf396e925b3a9e5 (census v7.1.2, 2026-10-11: the two
+// Provenance: arc12/census-v719/report.mjs sha256 1794347e1b9d12497c4ce05822497a8e0fcd7ca8724fc0d21bffcdb99b8a4b19 (census v7.1.9, 2026-10-14: the
+// structural-forward totals, conservation line and section; the tool shell now records the ast sha; v7.1.2 was arc12/dt3/report.mjs 2f340462 -- the two
 // discharged adjudication labels dropped; v7.1.1 was 8a8ca98c -- the tag-name audit list dropped with the fallback;
 // v7.1 was d66a34b2 -- the unresolved-caller section; v7 was 44b91e89).
 
 /** @param {object} d  classifyPassThrough() output. @param {object} raw  sweepPassThrough() output. */
 export function summarizePassThrough(d, raw, { head = null } = {}) {
 const short = (f) => f.replace('packages/core/src/components/', '');
-const CARRIERS = new Set(['box', 'flex', 'stack', 'grid', 'space', 'container']);
+// v7.1.9: the carrier names come from the sweep (path-anchored there), never restated here
+if (!Array.isArray(raw.layoutCarriers) || !raw.layoutCarriers.length) throw new Error('pass-through summary: the sweep carries no layoutCarriers (census v7.1.9 requires it)');
+if (!Array.isArray(d.structuralForwards) || !Array.isArray(d.structuralRosterMismatch)) throw new Error('pass-through summary: the classification carries no structural-forward outcome (census v7.1.9 requires it)');
+const CARRIERS = new Set(raw.layoutCarriers);
 
 // twins: same file+owner+mechanics within 2 lines -> one logical site
 const sites = d.sites.map((s) => ({ ...s }));
@@ -60,6 +64,11 @@ const totals = {
   layoutCarrierSites: count(sites, (s) => s.layoutCarrier),
   sitesExcludingLayoutCarriers: count(sites, (s) => !s.layoutCarrier),
   pinnedSites: 0,
+  // v7.1.9: the published structural-forward class and the conservation line
+  structuralForwards: d.structuralForwards.length,
+  forwardingMeasured: sites.length + d.structuralForwards.length,
+  structuralCandidates: count(sites, (s) => s.structuralCandidate),
+  structuralRosterMismatch: d.structuralRosterMismatch.length,
 };
 const pinned = new Set(d.pinCheck.flatMap((p) => p.censusSites));
 for (const s of sites) s.pinned = pinned.has(short(s.file) + ':' + s.line);
@@ -154,6 +163,7 @@ const out = {
       'part-forward': 'the element carries no engine part and the caller rest carries data-part (ADDS) on a skinned family',
       'state-forward': 'the caller rest carries data-state and the engine stamps no data-state after it (classic D1/D2 shape) or stamps it before the spread',
       'state-rest': 'the engine data-state lands after the rest but is conditional (partAttributes omits data-state at rest, or a ternary yields undefined), so a resting caller data-state survives (D3 shape)',
+      'structural-forward': `v7.1.9, ${d.structural.authority}: a forwarding element that leaves the site count for its own published class. It needs BOTH the predicate -- s1 a classic/rustic engine file under primitives/layout/<carrier>/ (path-anchored); s2 no canonical part and no engine data-state stamped; s3 part-forward (ADDS) or none, state-forward or none, never part-replace; s4 zero own-anatomy rules (no loaded skin selector has a compound carrying the element's own DS class together with [data-part]/[data-state], read by class, not by skin directory) and no template-cut own class; s5 lands on the DOM or through an Ant root that forwards rest -- AND a row in the closed STRUCTURAL_FORWARDS roster carrying its authority and evidence. Predicate without a row: a site marked structuralCandidate (still counted). A row without the predicate: a site listed in structuralRosterMismatch (the gate fails). Never in excluded: forwardingMeasured = sites + structuralForwards`,
     },
     excluded: 'internal helpers fed only by engine props, delegations to a child component (the child is the accountable site), the Ant overlay Tooltip (landing not statically provable), structural families with no part and no skin (VisuallyHidden)',
     skinRuleCount: 'comma-split selectors in the engine skin set (modern -> modern+presentation, rustic -> rustic+presentation, classic -> presentation, compound -> all three) of the same family that select the canonical part; stateRules = those also selecting [data-state]',
@@ -163,6 +173,7 @@ const out = {
   sites,
   paths: pathList,
   pinCheck: d.pinCheck,
+  structuralForwards: { note: 'v7.1.9: the ratified structural forwards (definition.classes.structural-forward). Published, never excluded: each row keeps its full site record, its predicate and its roster authority and evidence.', authority: d.structural.authority, carrierFamilies: d.structural.carrierFamilies, total: d.structuralForwards.length, conservation: `forwardingMeasured ${sites.length + d.structuralForwards.length} = sites ${sites.length} + structuralForwards ${d.structuralForwards.length}`, rows: d.structuralForwards, roster: d.structural.roster, candidates: sites.filter((s) => s.structuralCandidate).map((s) => s.key), rosterMismatch: d.structuralRosterMismatch },
   stateDependents: { note: 'C1: callers that hand data-state to a component whose public root currently lets a caller state land, AND whose owner skin selects that state value (on the caller part when the caller passes one). These rules go dead on the day the child family strips data-state, so they must move to their named door first.', total: sdeps.length, ruleAttributions: totals.callerStateDependentRuleAttributions, byOwnerSkin: sByOwner, callers: sdeps, allStateCallers: d.stateCallers },
   perFamilyPrecondition: { rule: 'no part-strip lot for a child family until its callerPartDependents are 0; no state-strip lot for a child family until its callerStateDependents are 0', byChildFamily: precondition },
   dependents: { note: 'callers inside packages/core/src that hand a literal data-part to a component whose public root currently lets a caller part land, AND to which at least one skin rule is credited under the v4 attribution (v3 owner skins, C4 engine scope, plus rule 4b owned-class rules). These rules stop matching the day the engine stops honouring the caller part: route step 1 migrates them to className/slot hooks first.', total: deps.length, nonCarrierTotal: count(deps, (c) => !c.contingentOnCarrierRuling), byChildFamily: byChild, byOwnerSkin: ownerList, callers: deps },
