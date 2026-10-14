@@ -241,7 +241,7 @@ function DraftStatusBadge({
       gap={2}
     >
       <Box data-part="draft-status-dot" data-status={status} aria-hidden="true" />
-      <Text data-part="draft-status-label" className="ds-guided-draft-form__draft-status-label" size="xs" color={statusTone[status]}>
+      <Text className="ds-guided-draft-form__draft-status-label" size="xs" color={statusTone[status]}>
         {statusCopy[status]}
       </Text>
     </Flex>
@@ -293,7 +293,6 @@ function SectionNav({
         aria-label={navAriaLabel}
       >
         <Text
-          data-part="section-nav-label"
           className="ds-guided-draft-form__section-nav-label"
           size="xs"
           weight="semibold"
@@ -326,7 +325,6 @@ function SectionNav({
         aria-label={navAriaLabel}
       >
         <Text
-          data-part="section-nav-label"
           className="ds-guided-draft-form__section-nav-label"
           size="xs"
           weight="semibold"
@@ -355,7 +353,7 @@ function SectionNav({
                       {section.icon}
                     </Box>
                   )}
-                  <Text data-part="section-nav-item-label" className="ds-guided-draft-form__section-nav-item-label" size="sm" color="inherit">
+                  <Text className="ds-guided-draft-form__section-nav-item-label" size="sm" color="inherit">
                     {section.title}
                   </Text>
                   {section.isComplete && <StatusSuccessIcon decorative size={14} />}
@@ -380,7 +378,6 @@ function SectionNav({
       aria-label={navAriaLabel}
     >
       <Text
-        data-part="section-nav-label"
         className="ds-guided-draft-form__section-nav-label"
         size="xs"
         weight="semibold"
@@ -410,7 +407,7 @@ function SectionNav({
                       {section.icon}
                     </Box>
                   )}
-                  <Text data-part="section-nav-item-label" className="ds-guided-draft-form__section-nav-item-label" size="sm" color="inherit">
+                  <Text className="ds-guided-draft-form__section-nav-item-label" size="sm" color="inherit">
                     {section.title}
                   </Text>
                 </Flex>
@@ -456,11 +453,11 @@ function TemplateCard({
               {template.icon}
             </Box>
           )}
-          <Text data-part="template-card-title" className="ds-guided-draft-form__template-card-title" size="sm" weight="semibold" as="p">
+          <Text className="ds-guided-draft-form__template-card-title" size="sm" weight="semibold" as="p">
             {template.name}
           </Text>
           {template.description && (
-            <Text data-part="template-card-description" className="ds-guided-draft-form__template-card-description" size="xs" color="muted" as="p">
+            <Text className="ds-guided-draft-form__template-card-description" size="xs" color="muted" as="p">
               {template.description}
             </Text>
           )}
@@ -511,7 +508,6 @@ function GuidedDraftFormSectionCard({
               {/* One level below the page's own h1 (profile precedent: PatternPageShell/
                  this surface's own title owns h1, nested section titles take h2). */}
               <Heading
-                data-part="section-card-title"
                 className="ds-guided-draft-form__section-card-title"
                 level="h2"
                 size="xs"
@@ -536,7 +532,7 @@ function GuidedDraftFormSectionCard({
               )}
             </Flex>
           {section.description && (
-            <Text data-part="section-card-description" className="ds-guided-draft-form__section-card-description" size="sm" color="muted" as="p">
+            <Text className="ds-guided-draft-form__section-card-description" size="sm" color="muted" as="p">
               {section.description}
             </Text>
           )}
@@ -827,7 +823,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                 ) : (
                   <StatusWarningIcon decorative size={16} />
                 )}
-                <Text data-part="validation-summary-title" className="ds-guided-draft-form__validation-summary-title" size="sm" weight="semibold">
+                <Text className="ds-guided-draft-form__validation-summary-title" size="sm" weight="semibold">
                   {[
                     errorCount > 0
                       ? tSurfaceOr(
@@ -866,7 +862,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                             data-severity={issue.severity}
                             aria-hidden="true"
                           />
-                          <Text data-part="validation-issue-message" className="ds-guided-draft-form__validation-issue-message" size="xs" color="secondary">
+                          <Text className="ds-guided-draft-form__validation-issue-message" size="xs" color="secondary">
                             {navigable ? (
                               <Button
                                 variant="link"
@@ -879,7 +875,6 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                             ) : (
                               <Text
                                 as="span"
-                                data-part="validation-issue-field"
                                 className="ds-guided-draft-form__validation-issue-field"
                                 size="xs"
                                 weight="medium"
@@ -898,7 +893,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                 </Stack>
               </Box>
               {validationIssues.length > 5 && (
-                <Text data-part="validation-issue-overflow" className="ds-guided-draft-form__validation-issue-overflow" size="xs" color="muted" as="p">
+                <Text className="ds-guided-draft-form__validation-issue-overflow" size="xs" color="muted" as="p">
                   {tSurfaceOr(
                     'guided_draft_form.validation_issue_overflow',
                     'Additional issues: {count}',
@@ -918,7 +913,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
             // Mobile: stacked, full-width actions
             <Stack spacing="sm">
               {showProgress && (
-                <Text data-part="submit-bar-progress" className="ds-guided-draft-form__submit-bar-progress" size="xs" color="muted" as="p">
+                <Text className="ds-guided-draft-form__submit-bar-progress" size="xs" color="muted" as="p">
                   {tSurfaceOr(
                     'guided_draft_form.submit_bar_progress',
                     'Sections complete: {completed} of {total}',
@@ -955,7 +950,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
             // Tablet / Desktop: progress left, actions right
             <Flex align="center" justify="between" gap={3}>
               {showProgress ? (
-                <Text data-part="submit-bar-progress" className="ds-guided-draft-form__submit-bar-progress" size="xs" color="muted">
+                <Text className="ds-guided-draft-form__submit-bar-progress" size="xs" color="muted">
                   {tSurfaceOr(
                     'guided_draft_form.submit_bar_progress',
                     'Sections complete: {completed} of {total}',
@@ -1026,13 +1021,13 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                 <StatusDraftIcon decorative size={16} />
               </Box>
               <Box data-part="draft-recovery-copy">
-                <Text data-part="draft-recovery-title" className="ds-guided-draft-form__draft-recovery-title" size="sm" weight="medium" as="p">
+                <Text className="ds-guided-draft-form__draft-recovery-title" size="sm" weight="medium" as="p">
                   {tSurfaceOr(
                     'guided_draft_form.draft_recovery_title',
                     'Unsaved draft found',
                   )}
                 </Text>
-                <Text data-part="draft-recovery-description" className="ds-guided-draft-form__draft-recovery-description" size="xs" color="muted" as="p">
+                <Text className="ds-guided-draft-form__draft-recovery-description" size="xs" color="muted" as="p">
                   {draftRecovery.draftDate
                     ? tSurfaceOr(
                         'guided_draft_form.draft_recovery_description_date',
@@ -1070,7 +1065,6 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
           {/* No PageShellSurface wraps this surface (no `chrome` contract), so
              this title IS the page h1, matching command-center/decision-inbox/record-workbench. */}
           <Heading
-            data-part="title"
             className="ds-guided-draft-form__title"
             level="h1"
             size="md"
@@ -1079,7 +1073,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
             {title}
           </Heading>
           {subtitle && !compactHeader && (
-            <Text data-part="subtitle" className="ds-guided-draft-form__subtitle" size="sm" color="muted" as="p">
+            <Text className="ds-guided-draft-form__subtitle" size="sm" color="muted" as="p">
               {subtitle}
             </Text>
           )}
@@ -1089,7 +1083,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
             <Box data-part="progress-bar">
               <Progress percent={progressPercent} strokeWidth={4} showInfo={false} />
             </Box>
-            <Text data-part="progress-count" className="ds-guided-draft-form__progress-count" size="xs" color="muted">
+            <Text className="ds-guided-draft-form__progress-count" size="xs" color="muted">
               {tSurfaceOr('guided_draft_form.progress_count', '{completed}/{total}', {
                 completed: completedCount,
                 total: sections.length,

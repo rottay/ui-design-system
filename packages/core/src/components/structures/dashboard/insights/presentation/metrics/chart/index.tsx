@@ -66,7 +66,7 @@ function ChartRow({
             <metric.icon data-part="metric-icon" style={{ width: 14, height: 14 }} />
           </Box>
           <Stack spacing="none">
-            <Text size="sm" weight="medium" className="ds-metrics-chart__metric-label" data-part="metric-label" style={{ fontSize: 13 }}>
+            <Text size="sm" weight="medium" className="ds-metrics-chart__metric-label" style={{ fontSize: 13 }}>
               {metric.label}
             </Text>
             <Flex align="center" gap={4}>
@@ -75,14 +75,14 @@ function ChartRow({
               ) : (
                 <TrendingDown data-part="trend-icon" style={{ width: 10, height: 10 }} />
               )}
-              <Text size="xs" className="ds-metrics-chart__metric-change" data-part="metric-change" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
+              <Text size="xs" className="ds-metrics-chart__metric-change" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
                 {metric.change}
               </Text>
             </Flex>
           </Stack>
         </Flex>
         <Text
-          className="ds-metrics-chart__metric-value" data-part="metric-value"
+          className="ds-metrics-chart__metric-value"
           style={{
             fontSize: 22,
             fontWeight: 800,
@@ -116,13 +116,13 @@ function ChartRow({
       </Box>
 
       <Flex justify="between" align="center" data-part="progress-row">
-        <Text size="xs" className="ds-metrics-chart__progress-label" data-part="progress-label" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
+        <Text size="xs" className="ds-metrics-chart__progress-label" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
           {progressLabel}
         </Text>
         <Text
           size="xs"
           weight="bold"
-          className="ds-metrics-chart__progress-percent" data-part="progress-percent"
+          className="ds-metrics-chart__progress-percent"
           style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}
         >
           {Math.round(percentage)}%
@@ -152,13 +152,13 @@ export function MetricsChart({ metrics }: MetricsProps) {
           >
             <Activity data-part="panel-icon" style={{ width: 14, height: 14 }} />
           </Box>
-          <Text weight="bold" size="sm" className="ds-metrics-chart__title" data-part="title">
+          <Text weight="bold" size="sm" className="ds-metrics-chart__title">
             {tOr('metrics.chartTitle', 'Performance')}
           </Text>
         </Flex>
         <Flex align="center" gap={4} data-part="live-badge">
           <Box className="live-dot-chart" data-part="live-dot" />
-          <Text size="xs" weight="bold" className="ds-metrics-chart__live-label" data-part="live-label" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
+          <Text size="xs" weight="bold" className="ds-metrics-chart__live-label" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
             {tOr('metrics.live', 'LIVE')}
           </Text>
         </Flex>

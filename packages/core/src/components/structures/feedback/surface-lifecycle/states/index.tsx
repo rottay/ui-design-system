@@ -221,7 +221,7 @@ export function SurfaceErrorState({
     <Card className="ds-surface ds-error-state" variant="outlined">
       <Card.Body className="ds-error-state__body">
         <Stack spacing="md">
-          <Text className="ds-error-state__title" data-part="title">
+          <Text className="ds-error-state__title">
             {title ?? tSurface('states.error_title')}
           </Text>
           <Alert
@@ -268,7 +268,7 @@ export function SurfaceStaleBanner({
 
   return (
     <Flex className="ds-surface ds-stale-banner" data-part="banner" data-refreshing={refreshing ? 'true' : 'false'} gap={3} align="center">
-      <Text className="ds-stale-banner__description" data-part="description">{message ?? tSurface('states.stale_message')}</Text>
+      <Text className="ds-stale-banner__description">{message ?? tSurface('states.stale_message')}</Text>
       {onRefresh && (
         <Button className="ds-stale-banner__refresh" variant="ghost" size="sm" onClick={onRefresh} pending={refreshing}>
           {tSurface('states.refresh')}

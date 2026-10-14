@@ -48,7 +48,7 @@ const readsAny = (value: string, names: Set<string>) =>
 /** One read site per channel: the part, the declaration its oracle paints, and the computed properties read at both. */
 const SITES = {
   "--ds-wizard-surface-description-margin-block-end": {
-    site: "[data-part='description']",
+    site: ".ds-wizard__description",
     declaration: "margin-block-end",
     properties: ["margin-bottom"],
   },
@@ -93,7 +93,7 @@ const oracleOf = (channel: Channel) =>
 function surface(rootStyle = ""): string {
   return [
     `<div class="ds-surface ds-wizard" data-part="root" style="${rootStyle}">`,
-    `<p data-part="description">Describe the record.</p>`,
+    `<p class="ds-wizard__description" data-part="root">Describe the record.</p>`,
     `<div data-part="error-banner" role="alert">Something failed.</div>`,
     CHANNELS.map(oracleOf).join(""),
     `</div>`,
@@ -214,9 +214,10 @@ describe("chrome/wizard-surface channels under a local scope", () => {
 
   it("probes the parts the engine stamps", () => {
     expect(ENGINE).toContain(`className="ds-surface ds-wizard"`);
-    for (const part of ["root", "description", "error-banner"]) {
+    for (const part of ["root", "error-banner"]) {
       expect(ENGINE).toContain(`data-part="${part}"`);
     }
+    expect(ENGINE).toContain(`className="ds-wizard__description"`);
   });
 
   it("measures a real read site and a real oracle for every channel in every scope", () => {

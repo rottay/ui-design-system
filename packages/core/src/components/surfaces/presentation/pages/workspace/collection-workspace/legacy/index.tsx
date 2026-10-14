@@ -26,7 +26,7 @@ export function renderLegacyHeader<T extends object>(input: CollectionLegacyHead
   return (
         !showToolbar && surfaceMode !== 'embed' && (
           <Box className="ds-collection-workspace__header" data-part="header">
-            <Text className="ds-collection-workspace__title" data-part="title" size="xl" weight="semibold">{title}</Text>
+            <Text className="ds-collection-workspace__title" size="xl" weight="semibold">{title}</Text>
             {subtitle && <Text className="ds-collection-workspace__muted-text" size="sm" color="muted">{subtitle}</Text>}
           </Box>
         )

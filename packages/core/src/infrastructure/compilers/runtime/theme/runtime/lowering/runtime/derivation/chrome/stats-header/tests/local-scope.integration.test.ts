@@ -115,7 +115,7 @@ function header(rootStyle = ""): string {
     `<div data-part="stat-top"><div data-part="statistic">42</div></div>`,
     `<div data-part="spark-dots" aria-hidden="true">`,
     `<div data-part="spark-dot" data-accent="primary" data-dot-index="0"></div></div>`,
-    `<div class="ds-stats-header__stat-insight" data-part="stat-insight">Trending up</div>`,
+    `<div class="ds-stats-header__stat-insight" data-part="root">Trending up</div>`,
     `<div data-part="card-glow" aria-hidden="true"></div>`,
     `</div>`,
     `<div data-part="stat-card" data-accent="success" data-clickable="false">Second</div>`,
@@ -239,7 +239,7 @@ describe("chrome/stats-header channels under a local scope", () => {
 
   it("probes the parts the engine stamps", () => {
     expect(ENGINE).toContain(`className="ds-stats-header"`);
-    for (const part of ["root", "card-grid", "spark-dot", "stat-insight", "card-glow"]) {
+    for (const part of ["root", "card-grid", "spark-dot", "card-glow"]) {
       expect(ENGINE).toContain(`data-part="${part}"`);
     }
     expect(ENGINE).toContain(`className="ds-stats-header__stat-insight"`);

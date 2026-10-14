@@ -211,7 +211,7 @@ export function EditHeader({
                     mirroring contract. The chip's visible label makes the
                     glyph decorative. */}
                 <NavigationBackIcon data-part="back-icon" decorative size={14} />
-                <Text className="ds-edit-header__back-label" data-part="back-label" size="xs" weight="medium" color="secondary">
+                <Text className="ds-edit-header__back-label" size="xs" weight="medium" color="secondary">
                   {resolvedBackLabel}
                 </Text>
               </Flex>,
@@ -225,17 +225,17 @@ export function EditHeader({
                   {breadcrumb.map((item, index) => (
                     <Flex key={index} align="center" gap={8}>
                       {index > 0 && (
-                        <Text className="ds-edit-header__breadcrumb-separator" data-part="breadcrumb-separator" size="xs" color="subtle">/</Text>
+                        <Text className="ds-edit-header__breadcrumb-separator" size="xs" color="subtle">/</Text>
                       )}
                       {item.href ? (
                         renderHrefAnchor(
                           item.href,
-                          <Text className="ds-edit-header__breadcrumb-link" data-part="breadcrumb-link" size="xs" color="secondary">
+                          <Text className="ds-edit-header__breadcrumb-link" size="xs" color="secondary">
                             {item.label}
                           </Text>,
                         )
                       ) : (
-                        <Text className="ds-edit-header__breadcrumb-item" data-part="breadcrumb-item" size="xs" color="secondary">
+                        <Text className="ds-edit-header__breadcrumb-item" size="xs" color="secondary">
                           {item.label}
                         </Text>
                       )}
@@ -249,7 +249,7 @@ export function EditHeader({
           <Flex align="center" gap={16}>
             {entityId && (
               <Text
-                className="ds-edit-header__entity-id" data-part="entity-id"
+                className="ds-edit-header__entity-id"
                 size="xs"
                 color="secondary"
                 title={entityId.length > 8 ? entityId : undefined}
@@ -278,7 +278,7 @@ export function EditHeader({
             <Stack spacing="xs">
               {eyebrow ? (
                 <Text
-                  className="ds-edit-header__eyebrow" data-part="eyebrow"
+                  className="ds-edit-header__eyebrow"
                   size="xs"
                   weight="bold"
                   color="subtle"
@@ -295,7 +295,7 @@ export function EditHeader({
                 </Box>
                 {status && (
                   <Box data-part="status-pill" data-variant={resolveHeaderTone(status.color)}>
-                    <Text className="ds-edit-header__status-pill-text" data-part="status-pill-text" size="xs" weight="medium">
+                    <Text className="ds-edit-header__status-pill-text" size="xs" weight="medium">
                       {status.label}
                     </Text>
                   </Box>
@@ -303,14 +303,14 @@ export function EditHeader({
                 {dirty && (
                   <Box data-part="dirty-chip">
                     <Box data-part="dirty-dot" aria-hidden="true" />
-                    <Text className="ds-edit-header__dirty-label" data-part="dirty-label" size="xs" weight="medium">
+                    <Text className="ds-edit-header__dirty-label" size="xs" weight="medium">
                       {dirtyLabel}
                     </Text>
                   </Box>
                 )}
               </Flex>
               {subtitle && (
-                <Text className="ds-edit-header__subtitle" data-part="subtitle" size="sm" color="secondary">{subtitle}</Text>
+                <Text className="ds-edit-header__subtitle" size="sm" color="secondary">{subtitle}</Text>
               )}
             </Stack>
           </Flex>

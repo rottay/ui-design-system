@@ -42,7 +42,9 @@ describe('DashboardSurface skin anatomy (Modern)', () => {
     const description = await screen.findByText('Tasks that still need attention');
     const node = description.closest('.ds-dashboard__muted-text');
     expect(node).not.toBeNull();
-    expect(node).toHaveAttribute('data-part', 'section-description');
+    // P-88 (E8-b): the Text keeps its own part; the skin reaches it through the class door.
+    expect(node).toHaveAttribute('data-part', 'root');
+    expect(document.querySelector('[data-part="section-description"]')).toBeNull();
 
     const selectors = selectorsDeclaring('var( --ds-dashboard-section-description-color');
     expect(selectors).toHaveLength(1);
@@ -55,7 +57,9 @@ describe('DashboardSurface skin anatomy (Modern)', () => {
     });
     const title = (await screen.findByText('Open items')).closest('.ds-dashboard__section-title');
     expect(title).not.toBeNull();
-    expect(title).toHaveAttribute('data-part', 'section-title');
+    // P-88 (E8-b): the Text keeps its own part; the weight rules reach it through the class door.
+    expect(title).toHaveAttribute('data-part', 'root');
+    expect(container.querySelector('[data-part="section-title"]')).toBeNull();
 
     const selectors = selectorsDeclaring('font-weight:');
     expect(selectors).toHaveLength(3);

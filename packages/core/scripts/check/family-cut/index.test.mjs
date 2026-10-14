@@ -2669,6 +2669,7 @@ test('LIVE: guided-draft-form is measured, not inverted', () => {
   // G1 (ARC-12): every one of those 51 parts is handed to a composed skinned DS child (Box/Flex/
   // Stack/Text), so they are P-88 caller parts, measured in `p88CallerParts`, and the anatomy
   // denominator reads 0. The walk is still not blind: all 51 names are seen, as caller parts.
+  // E8-b: the typography strip dropped 17 of those names from composed Texts; 34 remain caller parts.
   const measured = measureFamily(
     resolveFamily('guided-draft-form', ROOT, readBaseline().families['guided-draft-form']),
     { producers: PRODUCERS },
@@ -2676,7 +2677,7 @@ test('LIVE: guided-draft-form is measured, not inverted', () => {
   assert.equal(measured.denominators.sourceFiles, 1);
   assert.equal(measured.denominators.partsStamped, 0);
   const callerNames = new Set(measured.detail.p88CallerParts.map((row) => row.split('> ')[1].split(' (->')[0]));
-  assert.equal(callerNames.size, 51, 'the 51 stamped parts are all seen, as P-88 caller parts');
+  assert.equal(callerNames.size, 34, 'the 34 parts still handed to a composed child are all seen, as P-88 caller parts');
   assert.equal(measured.ratchets.p88CallerParts, readBaseline().families['guided-draft-form'].p88CallerParts);
   assert.equal(measured.ratchets.partsConsumedNotStamped, 0);
   assert.equal(measured.ratchets.partsStampedNotConsumed, 0);

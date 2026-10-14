@@ -239,7 +239,10 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       translate,
       title,
       children,
-      'data-part': dataPart,
+      // P-88: the heading keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className,
       style,
       ...props
@@ -359,7 +362,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           title={resolvedTitle}
           {...props}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           data-align={align}
           data-size={effectiveSize}
@@ -420,7 +423,10 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       translate,
       title,
       children,
-      'data-part': dataPart,
+      // P-88: the text keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className,
       style,
       ...props
@@ -526,7 +532,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
           title={resolvedTitle}
           {...props}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           data-align={align}
           data-size={size}
@@ -581,7 +587,10 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       translate,
       title,
       children,
-      'data-part': dataPart,
+      // P-88: the paragraph keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className,
       style,
       ...props
@@ -671,7 +680,7 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
           title={resolvedTitle}
           {...props}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           data-align={align}
           data-size={size}
@@ -730,7 +739,10 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       title,
       onClick,
       children,
-      'data-part': dataPart,
+      // P-88: the link keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className,
       style,
       ...props
@@ -836,7 +848,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
           {...props}
           {...chained}
           {...responsive.attrs}
-          {...partAttributes(dataPart ?? 'root', interaction.state)}
+          {...partAttributes('root', interaction.state)}
           data-color={color}
           data-size={size}
           data-ramp={!sizeIsResponsive && textStyle === undefined ? 'tier' : undefined}

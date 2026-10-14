@@ -221,7 +221,7 @@ export function FormSections({
                       retired inline literal painted), the `bold` weight
                       class, and its line-height from the skin. */}
                   <Text
-                    className="ds-form-sections__section-title" data-part="section-title"
+                    className="ds-form-sections__section-title"
                     weight="bold"
                   >
                     {section.title}
@@ -234,7 +234,7 @@ export function FormSections({
                           meaning; the icon is the non-colour shape cue. */}
                       <StatusErrorIcon decorative size={12} data-part="section-error-icon" />
                       {typeof section.error === 'string' || typeof section.error === 'number' ? (
-                        <Text className="ds-form-sections__section-error-copy" data-part="section-error-copy" size="xs" weight="bold">
+                        <Text className="ds-form-sections__section-error-copy" size="xs" weight="bold">
                           {section.error}
                         </Text>
                       ) : (
@@ -248,7 +248,7 @@ export function FormSections({
                   /* Rhythm (line-height) and measure (max-inline-size) are
                      skin-owned; only the `sm` size role stays with the node. */
                   <Text
-                    className="ds-form-sections__section-description" data-part="section-description"
+                    className="ds-form-sections__section-description"
                     size="sm"
                   >
                     {section.description}
@@ -268,7 +268,7 @@ export function FormSections({
               {section.summary ? (
                 <Box data-part="section-summary">
                   {typeof section.summary === 'string' || typeof section.summary === 'number' ? (
-                    <Text className="ds-form-sections__section-summary-text" data-part="section-summary-text" size="xs" weight="medium">
+                    <Text className="ds-form-sections__section-summary-text" size="xs" weight="medium">
                       {section.summary}
                     </Text>
                   ) : (
@@ -396,7 +396,7 @@ export function FormFactsCard({
         {eyebrow ? (
           /* Tracking/case/mono family are skin-owned. */
           <Text
-            className="ds-form-sections__facts-card-eyebrow" data-part="facts-card-eyebrow"
+            className="ds-form-sections__facts-card-eyebrow"
             size="xs"
             weight="bold"
           >
@@ -408,7 +408,7 @@ export function FormFactsCard({
             header families' title precedent), so no size prop competes. */}
         <Box data-part="facts-card-title">{title}</Box>
         {description ? (
-          <Text className="ds-form-sections__facts-card-description" data-part="facts-card-description" size="sm">
+          <Text className="ds-form-sections__facts-card-description" size="sm">
             {description}
           </Text>
         ) : null}
@@ -425,14 +425,14 @@ export function FormFactsCard({
           >
             <Stack spacing="xs" data-part="facts-card-item-copy">
               <Text
-                className="ds-form-sections__facts-card-item-label" data-part="facts-card-item-label"
+                className="ds-form-sections__facts-card-item-label"
                 size="xs"
                 weight="bold"
               >
                 {item.label}
               </Text>
               {item.helper ? (
-                <Text className="ds-form-sections__facts-card-item-helper" data-part="facts-card-item-helper" size="xs">
+                <Text className="ds-form-sections__facts-card-item-helper" size="xs">
                   {item.helper}
                 </Text>
               ) : null}
@@ -440,7 +440,7 @@ export function FormFactsCard({
             {/* Measure, end alignment, break strategy and the mono
                 treatment are skin-owned; `data-mono` stamps the state. */}
             <Text
-              className="ds-form-sections__facts-card-item-value" data-part="facts-card-item-value"
+              className="ds-form-sections__facts-card-item-value"
               size="sm"
               weight="medium"
               data-mono={item.mono ? 'true' : undefined}
@@ -479,7 +479,7 @@ function SectionChip({
       data-badge-tone={tone}
     >
       <Text
-        className="ds-form-sections__section-chip-label" data-part="section-chip-label"
+        className="ds-form-sections__section-chip-label"
         size="xs"
         weight="bold"
       >

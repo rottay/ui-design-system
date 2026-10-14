@@ -92,7 +92,6 @@ function IssuesView({
       <Flex align="center" justify="between" gap={8} wrap="wrap">
         <Text
           className="ds-pattern-brand-studio__preview-report-title"
-          data-part="preview-report-title"
           size="xs"
           weight="semibold"
         >
@@ -119,7 +118,6 @@ function IssuesView({
           >
             <Text
               className="ds-pattern-brand-studio__preview-report-lead"
-              data-part="preview-report-lead"
               size="xs"
               weight="semibold"
             >
@@ -127,7 +125,6 @@ function IssuesView({
             </Text>
             <Text
               className="ds-pattern-brand-studio__preview-issue-message"
-              data-part="preview-issue-message"
               size="xs"
             >
               {issue.message}
@@ -154,7 +151,6 @@ function AdjustmentsView({
       <Flex align="center" justify="between" gap={8} wrap="wrap">
         <Text
           className="ds-pattern-brand-studio__preview-report-title"
-          data-part="preview-report-title"
           size="xs"
           weight="semibold"
         >
@@ -180,7 +176,6 @@ function AdjustmentsView({
           >
             <Text
               className="ds-pattern-brand-studio__preview-report-lead"
-              data-part="preview-report-lead"
               size="xs"
               weight="semibold"
             >
@@ -193,7 +188,6 @@ function AdjustmentsView({
             </Text>
             <Text
               className="ds-pattern-brand-studio__preview-adjustment-detail"
-              data-part="preview-adjustment-detail"
               size="xs"
             >
               {t('brandStudio.tenantReport.adjustmentDetail', 'on {pairedWith} · was Lc {lc}', {
@@ -223,7 +217,6 @@ function PackWarningsView({
       <Flex align="center" justify="between" gap={8} wrap="wrap">
         <Text
           className="ds-pattern-brand-studio__preview-report-title"
-          data-part="preview-report-title"
           size="xs"
           weight="semibold"
         >
@@ -249,7 +242,6 @@ function PackWarningsView({
           >
             <Text
               className="ds-pattern-brand-studio__preview-report-lead"
-              data-part="preview-report-lead"
               size="xs"
               weight="semibold"
             >
@@ -259,7 +251,6 @@ function PackWarningsView({
             </Text>
             <Text
               className="ds-pattern-brand-studio__preview-pack-warning-detail"
-              data-part="preview-pack-warning-detail"
               size="xs"
             >
               {t(

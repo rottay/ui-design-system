@@ -104,7 +104,6 @@ export function StatusFilterPills({
                   data-selected={isSelected}
                 >
                   <Text
-                    data-part="count-badge-text"
                     className="ds-status-filter-pills__count-badge-text"
                     data-selected={isSelected}
                     size="sm"
@@ -116,7 +115,6 @@ export function StatusFilterPills({
             }
           >
             <Text
-              data-part="pill-label"
               className="ds-status-filter-pills__pill-label"
               data-selected={isSelected}
               size="sm"

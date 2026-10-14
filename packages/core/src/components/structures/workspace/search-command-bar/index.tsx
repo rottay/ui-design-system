@@ -453,7 +453,6 @@ export function SearchCommandBar({
                     >
                       <VoiceInputIcon status={voiceStatus} />
                       <Text
-                        data-part="voice-badge-label"
                         className="ds-search-command-bar__voice-badge-label"
                         size="xs"
                       >
@@ -499,13 +498,12 @@ export function SearchCommandBar({
                 >
                   <Flex align="start" justify="between" gap={10}>
                     <Box data-part="voice-help-copy">
-                      <Text className="ds-search-command-bar__voice-help-title" data-part="voice-help-title" size="sm" weight="medium">
+                      <Text className="ds-search-command-bar__voice-help-title" size="sm" weight="medium">
                         {isVoicePermissionBlocked
                           ? tOr('searchCommandBar.enableMicrophone', 'Enable microphone')
                           : tOr('searchCommandBar.allowMicrophoneAccess', 'Allow microphone access')}
                       </Text>
                       <Text
-                        data-part="voice-help-description"
                         className="ds-search-command-bar__voice-help-description"
                         size="xs"
                       >
@@ -557,7 +555,6 @@ export function SearchCommandBar({
 
                   <Flex align="center" justify="between" gap={12} data-part="voice-help-footer">
                     <Text
-                      data-part="voice-help-hint"
                       className="ds-search-command-bar__voice-help-hint"
                       size="xs"
                     >
@@ -615,7 +612,6 @@ export function SearchCommandBar({
                 data-part="status-row"
               >
                 <Text
-                  data-part="status"
                   className="ds-search-command-bar__status"
                   data-voice-status={voiceStatus}
                   size="xs"
@@ -638,7 +634,6 @@ export function SearchCommandBar({
                   aria-label={tOr('searchCommandBar.smartRefine', 'Smart refine')}
                 >
                   <Text
-                    data-part="suggestions-label"
                     className="ds-search-command-bar__suggestions-label"
                     size="xs"
                   >

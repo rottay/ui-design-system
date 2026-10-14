@@ -69,8 +69,11 @@ const TEXT_DOORS: Record<string, string> = {
   'identity-subtitle': '.ds-selection-preview-rail__identity-subtitle',
   'match-reason-eyebrow': '.ds-selection-preview-rail__match-reason-eyebrow',
   'match-reason-body': '.ds-selection-preview-rail__match-reason-body',
+  'snapshot-title': '.ds-selection-preview-rail__snapshot-title',
+  'snapshot-subtitle': '.ds-selection-preview-rail__snapshot-subtitle',
   'snapshot-row-label': '.ds-selection-preview-rail__snapshot-row-label',
   'fallback-string': '.ds-selection-preview-rail__fallback-string',
+  'fallback-boolean': '.ds-selection-preview-rail__fallback-boolean',
   'fallback-empty': '.ds-selection-preview-rail__fallback-empty',
 };
 
@@ -136,6 +139,11 @@ describe('SelectionPreviewRail data-part contract', () => {
     for (const [part, minCount] of Object.entries(DEFAULT_BRANCH_PART_COUNTS)) {
       const nodes = container.querySelectorAll(TEXT_DOORS[part] ?? `[data-part="${part}"]`);
       expect(nodes.length, `data-part="${part}" did not reach the DOM`).toBeGreaterThanOrEqual(minCount);
+      // P-88 (E8-b): a composed Text keeps its own part; its door is the class, and the caller part is retired.
+      if (TEXT_DOORS[part]) {
+        for (const node of Array.from(nodes)) expect(node, `${TEXT_DOORS[part]} keeps the Text's own part`).toHaveAttribute('data-part', 'root');
+        expect(container.querySelectorAll(`[data-part="${part}"]`), `no node carries the retired caller part "${part}"`).toHaveLength(0);
+      }
     }
 
     expect(container.querySelectorAll('.ds-selection-preview-rail__close')).toHaveLength(0);

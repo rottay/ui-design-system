@@ -393,7 +393,6 @@ function DecisionInboxSurfaceContent<T extends object>(props: DecisionInboxSurfa
         <Text
           as="span"
           className="ds-decision-inbox__loading-label"
-          data-part="loading-label"
         >
           {tSurfaceOr('decision_inbox.loading_label', 'Loading…')}
         </Text>
@@ -420,7 +419,7 @@ function DecisionInboxSurfaceContent<T extends object>(props: DecisionInboxSurfa
           {/* Queue name is the page's h1 (document outline); the Heading
               engine applies the same xl/semibold ramp the Text rendered, so
               the swap is landmark-only. */}
-          <Heading className="ds-decision-inbox__title" data-part="title" level="h1" size="xl" weight="semibold">{queueName}</Heading>
+          <Heading className="ds-decision-inbox__title" level="h1" size="xl" weight="semibold">{queueName}</Heading>
           {subtitle && (
             <Text
               className="ds-decision-inbox__muted-text ds-decision-inbox__subtitle"
@@ -589,7 +588,6 @@ function DecisionInboxSurfaceContent<T extends object>(props: DecisionInboxSurfa
                         weight="semibold"
                         id={reviewRailTitleId}
                         className="ds-decision-inbox__review-title"
-                        data-part="review-title"
                       >
                         {tSurfaceOr('decision_inbox.review_details', 'Review Details')}
                       </Heading>

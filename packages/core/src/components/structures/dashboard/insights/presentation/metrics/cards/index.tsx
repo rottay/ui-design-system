@@ -76,7 +76,6 @@ function MetricCard({
             composition mirrors under RTL for free. */}
         <Text
           className="metric-label ds-metrics-cards__metric-label"
-          data-part="metric-label"
           size="xs"
           style={{
             textTransform: METRIC_LABEL_TEXT_TRANSFORM,
@@ -91,7 +90,6 @@ function MetricCard({
         <Box style={{ position: 'relative' }}>
           <Text
             className="metric-value-v3 ds-metrics-cards__metric-value"
-            data-part="metric-value"
             style={{
               // Private proto (C-08): editorial vs operational figure sizing.
               // C-08/C1 retune: the default rises 24px → 28px so the figure
@@ -123,7 +121,7 @@ function MetricCard({
                 ) : (
                   <TrendingDown className="trend-icon" data-part="trend-icon" />
                 )}
-                <Text size="xs" weight="bold" className="ds-metrics-cards__metric-change" data-part="metric-change">
+                <Text size="xs" weight="bold" className="ds-metrics-cards__metric-change">
                   {metric.change}
                 </Text>
               </Flex>
@@ -178,14 +176,14 @@ export function MetricsCards({ metrics, density = 'comfortable' }: MetricsProps)
           >
             <Activity data-part="panel-icon" style={{ width: 16, height: 16 }} />
           </Box>
-          <Text weight="bold" className="ds-metrics-cards__title" data-part="title">
+          <Text weight="bold" className="ds-metrics-cards__title">
             {tOr('metrics.panelTitle', 'Key Metrics')}
           </Text>
         </Flex>
         <Box className="live-badge-v3" data-part="live-badge">
           <Flex align="center" gap={6}>
             <Box className="live-dot-v3" data-part="live-dot" />
-            <Text size="xs" weight="bold" className="ds-metrics-cards__live-label" data-part="live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
+            <Text size="xs" weight="bold" className="ds-metrics-cards__live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
               {tOr('metrics.live', 'LIVE')}
             </Text>
           </Flex>

@@ -101,12 +101,12 @@ function ChangeIndicator({
     <Flex direction="column" align="end" gap={2} data-part="change-indicator">
       <Flex align="center" gap={3} data-part="change-row" data-change={changeType}>
         {TrendIcon && <TrendIcon decorative size={13} />}
-        <Text className="ds-stats-header__change-value" data-part="change-value" data-change={changeType}>
+        <Text className="ds-stats-header__change-value" data-change={changeType}>
           {displayText}
         </Text>
       </Flex>
       {periodLabel && (
-        <Text className="ds-stats-header__change-period" data-part="change-period">
+        <Text className="ds-stats-header__change-period">
           {periodLabel}
         </Text>
       )}
@@ -197,7 +197,7 @@ function StatCard({ stat }: { stat: StatItem }) {
 
       {/* Contextual insight */}
       {stat.insight && (
-        <Text className="ds-stats-header__stat-insight" data-part="stat-insight">
+        <Text className="ds-stats-header__stat-insight">
           {stat.insight}
         </Text>
       )}

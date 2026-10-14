@@ -185,7 +185,6 @@ export function RecordField({
   const primitiveValue = typeof resolved.content === 'string' || typeof resolved.content === 'number';
   const valueNode = primitiveValue ? (
     <Text
-      data-part="field-value"
       className="ds-record__field-value"
       size="sm"
       weight="medium"
@@ -248,7 +247,6 @@ export function RecordField({
   const chrome = (
     <Stack spacing={6}>
       <Text
-        data-part="field-label"
         className="ds-record__field-label"
         size="xs"
         weight="bold"
@@ -274,7 +272,7 @@ export function RecordField({
       </Flex>
 
       {helper ? (
-        <Text data-part="field-helper" className="ds-record__field-helper" size="xs">
+        <Text className="ds-record__field-helper" size="xs">
           {helper}
         </Text>
       ) : null}
@@ -284,7 +282,7 @@ export function RecordField({
           {/* Decorative: the adjacent copy carries the error meaning;
               the icon is the non-colour shape cue. */}
           <StatusErrorIcon decorative size={13} data-part="field-error-icon" />
-          <Text data-part="field-error" className="ds-record__field-error" size="xs">
+          <Text className="ds-record__field-error" size="xs">
             {error}
           </Text>
         </Flex>

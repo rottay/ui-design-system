@@ -375,7 +375,6 @@ export function CollectionRenderDispatch<T extends object>(
           <Text
             as="span"
             className="ds-collection-render-dispatch__loading-label"
-            data-part="loading-label"
           >
             {tSurfaceOr('collection_workspace.loading_label', 'Loading…')}
           </Text>

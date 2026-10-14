@@ -59,7 +59,6 @@ export function renderCollectionTopChrome<T extends object>(input: CollectionTop
     <Flex align="center" gap={10} wrap="wrap" justify="end">
       <Text
         className="ds-collection-workspace__shortcut-label"
-        data-part="shortcut-label"
         size="xs"
       >
         {tSurfaceOr('collection_workspace.shortcuts_label', 'Shortcuts')}
@@ -266,7 +265,6 @@ export function renderCollectionStickyDock<T extends object>(input: CollectionSt
               size="sm"
               color="muted"
               aria-live="polite"
-              data-part="dock-selection-count"
             >
               {tSurfaceOr('collection_workspace.selected_count', '{count} selected', {
                 count: workspace.selectedKeys.length,

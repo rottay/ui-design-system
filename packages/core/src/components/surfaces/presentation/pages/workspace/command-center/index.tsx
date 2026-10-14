@@ -188,7 +188,7 @@ function InsightCard({ insight }: { insight: InsightItem }) {
             <ToneIcon decorative size={16} />
           </span>
           <Box className="ds-command-center__insight-body">
-            <Text className="ds-command-center__insight-title" data-part="insight-title" size="sm" weight="medium">{insight.title}</Text>
+            <Text className="ds-command-center__insight-title" size="sm" weight="medium">{insight.title}</Text>
             {insight.description && (
               <Text
                 className="ds-command-center__insight-description ds-command-center__muted-text"
@@ -246,7 +246,7 @@ function QuickActionCard({
             </Box>
           )}
           <Box className="ds-command-center__quick-action-body">
-            <Text className="ds-command-center__quick-action-title" data-part="quick-action-title" size="sm" weight="medium">{action.label}</Text>
+            <Text className="ds-command-center__quick-action-title" size="sm" weight="medium">{action.label}</Text>
             {action.description && (
               <Text
                 className="ds-command-center__quick-action-description ds-command-center__muted-text"
@@ -387,7 +387,6 @@ function CommandCenterSurfaceContent(props: CommandCenterSurfaceProps) {
         <Text
           as="span"
           className="ds-command-center__loading-label"
-          data-part="loading-label"
         >
           {tSurfaceOr('command_center.loading_label', 'Loading…')}
         </Text>
@@ -413,7 +412,6 @@ function CommandCenterSurfaceContent(props: CommandCenterSurfaceProps) {
             )}
             <Heading
               className="ds-command-center__title"
-              data-part="title"
               level="h1"
               textStyle="pageTitle"
             >

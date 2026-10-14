@@ -265,7 +265,6 @@ function RecordWorkbenchSurfaceContent(props: RecordWorkbenchSurfaceProps) {
         <Text
           as="span"
           className="ds-record-workbench__loading-label"
-          data-part="loading-label"
         >
           {tSurfaceOr('record_workbench.loading_label', 'Loading record…')}
         </Text>
@@ -301,7 +300,7 @@ function RecordWorkbenchSurfaceContent(props: RecordWorkbenchSurfaceProps) {
                 {/* Record name is the page's h1 (document outline); the
                     Heading engine applies the same xl/semibold ramp the Text
                     rendered, so the swap is landmark-only. */}
-                <Heading className="ds-record-workbench__title" data-part="title" level="h1" size="xl" weight="semibold">{title}</Heading>
+                <Heading className="ds-record-workbench__title" level="h1" size="xl" weight="semibold">{title}</Heading>
                 {status && (
                   <span
                     className="ds-record-workbench__status-badge"
@@ -461,7 +460,6 @@ function RecordWorkbenchSurfaceContent(props: RecordWorkbenchSurfaceProps) {
                     <Heading
                       id={sidebarTitleId}
                       className="ds-record-workbench__sidebar-title"
-                      data-part="sidebar-title"
                       level="h2"
                       size="sm"
                       weight="medium"

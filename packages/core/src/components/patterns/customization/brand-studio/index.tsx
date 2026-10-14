@@ -664,7 +664,6 @@ function FieldLabel({ children }: { children: React.ReactNode }): React.ReactEle
   return (
     <Text
       className="ds-pattern-brand-studio__field-label"
-      data-part="field-label"
       size="xs"
       weight="semibold"
     >
@@ -810,7 +809,6 @@ function EditorSection({ title, children }: { title: string; children: React.Rea
       <Stack spacing="sm">
         <Text
           className="ds-pattern-brand-studio__section-title"
-          data-part="section-title"
           id={titleId}
           size="sm"
           weight="semibold"
@@ -846,7 +844,6 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
       >
         <Text
           className="ds-pattern-brand-studio__contrast-label"
-          data-part="contrast-label"
           size="xs"
           weight="semibold"
         >
@@ -866,7 +863,6 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
       {report.violations.length === 0 ? (
         <Text
           className="ds-pattern-brand-studio__contrast-message"
-          data-part="contrast-message"
           size="xs"
         >
           {t('brandStudio.contrast.allPass', 'Every checkable color pair meets its required ratio.')}
@@ -890,12 +886,11 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
                   gap={8}
                   wrap="wrap"
                 >
-                  <Text size="xs" weight="semibold" className="ds-pattern-brand-studio__violation-pair" data-part="violation-pair">
+                  <Text size="xs" weight="semibold" className="ds-pattern-brand-studio__violation-pair">
                     {violation.pair}
                   </Text>
                   <Text
                     className="ds-pattern-brand-studio__violation-ratio"
-                    data-part="violation-ratio"
                     size="xs"
                   >
                     {t('brandStudio.violation.ratio', '{ratio} : 1 · needs {required} : 1 ({level})', {
@@ -907,7 +902,6 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
                 </Flex>
                 <Text
                   className="ds-pattern-brand-studio__violation-detail"
-                  data-part="violation-detail"
                   size="xs"
                 >
                   {suggestion
@@ -977,7 +971,7 @@ function PreviewPanel({
         gap={8}
         wrap="wrap"
       >
-        <Text className="ds-pattern-brand-studio__preview-panel-title" data-part="preview-panel-title" size="sm" weight="semibold">
+        <Text className="ds-pattern-brand-studio__preview-panel-title" size="sm" weight="semibold">
           {surface.label ?? surface.key}
         </Text>
         <Badge variant="secondary">{surface.baseTheme}</Badge>
@@ -998,7 +992,6 @@ function PreviewPanel({
         ) : (
           <Text
             className="ds-pattern-brand-studio__preview-fallback"
-            data-part="preview-fallback"
             size="sm"
           >
             {t('brandStudio.preview.fallback', 'Pass a galleries slot to render live component states here.')}
@@ -1562,7 +1555,6 @@ function TenantThemePreviewSection({
       <Flex align="center" gap={8} wrap="wrap">
         <Text
           className="ds-pattern-brand-studio__tenant-preview-heading"
-          data-part="tenant-preview-heading"
           size="sm"
           weight="semibold"
         >
@@ -1589,7 +1581,6 @@ function TenantThemePreviewSection({
             ) : (
               <Text
                 className="ds-pattern-brand-studio__tenant-preview-fallback"
-                data-part="tenant-preview-fallback"
                 size="sm"
               >
                 {t('brandStudio.tenantPreview.fallback', 'Pass a galleries slot to render live surfaces under this theme.')}
@@ -1680,7 +1671,7 @@ export function PatternBrandStudio({
           <Badge variant="secondary">{theme.name}</Badge>
         </Flex>
         {description ? (
-          <Text className="ds-pattern-brand-studio__description" data-part="description" size="sm">
+          <Text className="ds-pattern-brand-studio__description" size="sm">
             {description}
           </Text>
         ) : null}
@@ -1697,7 +1688,6 @@ export function PatternBrandStudio({
         <Stack className="ds-pattern-brand-studio__editor" data-part="editor-column" spacing="md">
           <Text
             className="ds-pattern-brand-studio__editor-heading"
-            data-part="editor-heading"
             size="sm"
             weight="semibold"
           >
@@ -1709,7 +1699,6 @@ export function PatternBrandStudio({
         <Stack className="ds-pattern-brand-studio__preview-grid" data-part="preview-column" spacing="lg">
           <Text
             className="ds-pattern-brand-studio__preview-heading"
-            data-part="preview-heading"
             size="sm"
             weight="semibold"
           >
@@ -1737,12 +1726,11 @@ export function PatternBrandStudio({
             <Stack spacing="sm">
               <Flex align="center" justify="between" gap={8} wrap="wrap">
                 <Box>
-                  <Text className="ds-pattern-brand-studio__action-title" data-part="action-title" size="sm" weight="semibold">
+                  <Text className="ds-pattern-brand-studio__action-title" size="sm" weight="semibold">
                     {t('brandStudio.hostile.title', 'Hostile input check')}
                   </Text>
                   <Text
                     className="ds-pattern-brand-studio__action-helper"
-                    data-part="action-helper"
                     size="xs"
                   >
                     {t('brandStudio.hostile.helper', 'Applies deliberately extreme values and reports the failing color pairs per ground.')}

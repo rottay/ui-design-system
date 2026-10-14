@@ -314,7 +314,7 @@ export function ExportButton<T = unknown>({
           >
             <Flex gap={1} align="center">
               <StatusSuccessIcon decorative size={12} />
-              <Text className="ds-export-button__toast-label" data-part="toast-label">
+              <Text className="ds-export-button__toast-label">
                 {tOr('exportButton.copied', 'Copied!')}
               </Text>
             </Flex>

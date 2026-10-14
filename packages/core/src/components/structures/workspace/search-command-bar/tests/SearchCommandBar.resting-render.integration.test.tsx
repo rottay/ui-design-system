@@ -8,6 +8,7 @@ import { prerenderToNodeStream } from 'react-dom/static';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
+import { Text } from '@ui/primitives/display/typography/compound/text';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { TenantConfig } from '@/foundation/contracts';
 import { measureArms, type ProbeReadings } from '@tests/support/family-causality';
@@ -111,17 +112,25 @@ function bar(
 let editorialHtml = '';
 
 /* The voice-help drawer opens on a client click and cannot be server rendered,
-   so its subtree is mounted by hand in the anatomy the component states. */
-const HELP = [
-  `<div class="ds-search-command-bar__voice-help" data-part="voice-help" data-permission-blocked="false">`,
-  `<div data-part="voice-help-copy"><span data-part="voice-help-title">Microphone</span>`,
-  `<span class="ds-search-command-bar__voice-help-description" data-part="voice-help-description">Allow access.</span></div>`,
-  `<ul class="ds-search-command-bar__voice-help-list" data-part="voice-help-list">`,
-  `<li data-part="voice-help-step">One</li><li data-part="voice-help-step">Two</li></ul>`,
-  `<div data-part="voice-help-footer">`,
-  `<span class="ds-search-command-bar__voice-help-hint" data-part="voice-help-hint">Hint</span></div>`,
-  `</div>`,
-].join('');
+   so its subtree is mounted by hand in the anatomy the component states; its
+   Texts are the primitive's own server markup. */
+async function helpMarkup(): Promise<string> {
+  const title = await serverMarkup(
+    <Text className="ds-search-command-bar__voice-help-title" size="sm" weight="medium">Microphone</Text>,
+  );
+  const description = await serverMarkup(
+    <Text className="ds-search-command-bar__voice-help-description" size="xs">Allow access.</Text>,
+  );
+  const hint = await serverMarkup(<Text className="ds-search-command-bar__voice-help-hint" size="xs">Hint</Text>);
+  return [
+    `<div class="ds-search-command-bar__voice-help" data-part="voice-help" data-permission-blocked="false">`,
+    `<div data-part="voice-help-copy">${title}${description}</div>`,
+    `<ul class="ds-search-command-bar__voice-help-list" data-part="voice-help-list">`,
+    `<li data-part="voice-help-step">One</li><li data-part="voice-help-step">Two</li></ul>`,
+    `<div data-part="voice-help-footer">${hint}</div>`,
+    `</div>`,
+  ].join('');
+}
 
 const TARGETS = [
   // Rewired: the four corners now ride the radius dial.
@@ -131,10 +140,10 @@ const TARGETS = [
   { id: 'badgeCorner', selector: "#voice [data-part='voice-badge']", property: 'border-top-left-radius' },
   // Rewired: type and rule roots, none of which carry a dial.
   { id: 'dividerSize', selector: "#editorial [data-part='divider']", property: 'height' },
-  { id: 'badgeLabelWeight', selector: "#voice [data-part='voice-badge-label']", property: 'font-weight' },
-  { id: 'labelTracking', selector: "#rest [data-part='suggestions-label']", property: 'letter-spacing' },
-  { id: 'labelWeight', selector: "#rest [data-part='suggestions-label']", property: 'font-weight' },
-  { id: 'helpDescLineHeight', selector: "#help [data-part='voice-help-description']", property: 'line-height' },
+  { id: 'badgeLabelWeight', selector: '#voice .ds-search-command-bar__voice-badge-label', property: 'font-weight' },
+  { id: 'labelTracking', selector: '#rest .ds-search-command-bar__suggestions-label', property: 'letter-spacing' },
+  { id: 'labelWeight', selector: '#rest .ds-search-command-bar__suggestions-label', property: 'font-weight' },
+  { id: 'helpDescLineHeight', selector: '#help .ds-search-command-bar__voice-help-description', property: 'line-height' },
   // Controls: the physical-px geometry the rewire deliberately left alone.
   { id: 'rootPadTop', selector: "#rest [data-part='root']", property: 'padding-top' },
   { id: 'shellPad', selector: "#rest [data-part='search-shell']", property: 'padding-top' },
@@ -154,13 +163,14 @@ beforeAll(async () => {
   VOICE.isSupported = true;
   VOICE.status = 'listening';
   const voice = await serverMarkup(bar('default', 'default'));
+  const help = await helpMarkup();
 
   const markup = [
     `<div id="rest" style="inline-size:80rem">${rest}</div>`,
     `<div id="editorial" style="inline-size:80rem">${editorial}</div>`,
     `<div id="voice" style="inline-size:80rem">${voice}</div>`,
     `<div id="help" style="inline-size:80rem" class="ds-structure ds-search-command-bar">`,
-    `<div class="ds-search-command-bar__search-shell" data-part="search-shell" data-voice-status="error">${HELP}</div></div>`,
+    `<div class="ds-search-command-bar__search-shell" data-part="search-shell" data-voice-status="error">${help}</div></div>`,
   ].join('');
 
   readings = await measureArms({
@@ -173,16 +183,13 @@ beforeAll(async () => {
 
 describe('search-command-bar rewired channels', () => {
   it('mounts the drawer in the anatomy the component states', () => {
-    for (const part of [
-      'voice-help',
-      'voice-help-copy',
-      'voice-help-description',
-      'voice-help-list',
-      'voice-help-step',
-      'voice-help-footer',
-      'voice-help-hint',
-    ]) {
+    for (const part of ['voice-help', 'voice-help-copy', 'voice-help-list', 'voice-help-step', 'voice-help-footer']) {
       expect(COMPONENT_SOURCE).toContain(`data-part="${part}"`);
+    }
+    /* Its Texts keep the primitive's own part and are reached by class. */
+    for (const hook of ['voice-help-title', 'voice-help-description', 'voice-help-hint']) {
+      expect(COMPONENT_SOURCE).toContain(`className="ds-search-command-bar__${hook}"`);
+      expect(COMPONENT_SOURCE).not.toContain(`data-part="${hook}"`);
     }
   });
 

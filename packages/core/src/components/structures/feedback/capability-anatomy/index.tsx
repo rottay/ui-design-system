@@ -58,7 +58,6 @@ export function SurfaceCapabilityAnatomy({
       aria-label={ariaLabel ?? tSurface('states.capability_aria')}
     >
       <Text
-        data-part="capability-anatomy-label"
         className="ds-capability-anatomy__capability-anatomy-label"
         size="xs"
         color="muted"
@@ -78,7 +77,7 @@ export function SurfaceCapabilityAnatomy({
             data-capability-id={capability.id}
             data-disabled={capability.disabled ? 'true' : undefined}
           >
-            <Text size="sm" className="ds-capability-anatomy__capability-label" data-part="capability-label">
+            <Text size="sm" className="ds-capability-anatomy__capability-label">
               {capability.label ?? capability.id}
             </Text>
           </Box>

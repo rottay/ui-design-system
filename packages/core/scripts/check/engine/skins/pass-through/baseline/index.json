@@ -4,7 +4,7 @@
  "purpose": "The WO-ARC-12 fleet ratchet. It closes the roster of elements where a caller data-part/data-state still lands (passThroughViolations), and the per-family sets of callers whose owner skins would lose paint the day a child family strips caller parts/states (callerPartDependents / callerStateDependents). Those sets are the step-2 engine-lot preconditions, as machine-readable rows.",
  "policy": "decrease-only to 0, the family-cut ledger policy: every count may shrink and must then be lowered here, and none may ever grow. The only door is `node scripts/check/engine/skins/pass-through/index.mjs --update-baseline`. It writes the gate's own measurement, keeps the routing prose of surviving held entries, and refuses if anything grew. A pin is never hand-computed. A pin follows the tree down; an instrument-coverage re-pin to the gate's own measurement, with a cutNote and independent review, is the only lawful raise.",
  "owner": "WO-ARC-12",
- "lastMoveKind": "reclassification",
+ "lastMoveKind": "decrease",
  "measuredFrom": {
   "head": "27273599d9919310b98424e13ab993361356961a",
   "census": "v7.1.9, 2026-10-14 (arc12/census-v719): the structural-forward class, the class-keyed own-anatomy index and the path-anchored layout carriers (see scripts/libraries/engine/skins/pass-through/index.mjs). v7.1.8 at arc12/census-v718 and earlier as before.",
@@ -16,8 +16,8 @@
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 28,
-  "callerPartDependents": 859,
+  "passThroughViolations": 20,
+  "callerPartDependents": 854,
   "callerStateDependents": 32,
   "structuralForwards": 12
  },
@@ -70,78 +70,6 @@
   {
    "key": "primitives/display/typography/engines/classic/index.tsx#ClassicLink#AntLink#root#0",
    "engine": "classic",
-   "family": "typography",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/typography/engines/modern/index.tsx#ModernHeading#Component#root#0",
-   "engine": "modern",
-   "family": "typography",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/typography/engines/modern/index.tsx#ModernText#Component#root#0",
-   "engine": "modern",
-   "family": "typography",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/typography/engines/modern/index.tsx#ModernParagraph#p#root#0",
-   "engine": "modern",
-   "family": "typography",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/typography/engines/modern/index.tsx#ModernLink#a#root#0",
-   "engine": "modern",
-   "family": "typography",
-   "breach": [
-    "part-replace",
-    "state-rest"
-   ]
-  },
-  {
-   "key": "primitives/display/typography/engines/rustic/index.tsx#ApolloHeading#HeadingElement#root#0",
-   "engine": "rustic",
-   "family": "typography",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/typography/engines/rustic/index.tsx#ApolloText#TextElement#root#0",
-   "engine": "rustic",
-   "family": "typography",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/typography/engines/rustic/index.tsx#ApolloParagraph#p#root#0",
-   "engine": "rustic",
-   "family": "typography",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/display/typography/engines/rustic/index.tsx#ApolloLink#a#root#0",
-   "engine": "rustic",
    "family": "typography",
    "breach": [
     "part-replace",
@@ -1448,33 +1376,7 @@
   },
   "typography": {
    "carrier": false,
-   "part": [
-    {
-     "key": "patterns/data/gallery-view/presentation/react/index.tsx#Text#caption-text#0",
-     "atBaseline": "patterns/data/gallery-view/presentation/react/index.tsx:129",
-     "routing": "HOLD-G: resolved in the typography engine lot (G1-G5 two-arm re-key; Box :477 untouched pending section-6), same precondition set as H-ET."
-    },
-    {
-     "key": "structures/feedback/surface-lifecycle/states/index.tsx#Text#title#0",
-     "atBaseline": "structures/feedback/surface-lifecycle/states/index.tsx:224",
-     "routing": "H-ET: ruled into the typography engine lot, which carries H-ET C1-C6 + G1-G5. That lot's precondition is exactly this held set {states :224, gallery :129}; it migrates them itself."
-    },
-    {
-     "key": "surfaces/presentation/pages/experience/notification/index.tsx#Text#title#0",
-     "atBaseline": "surfaces/presentation/pages/experience/notification/index.tsx:180",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "surfaces/presentation/pages/forms/form/index.tsx#Text#description#0",
-     "atBaseline": "surfaces/presentation/pages/forms/form/index.tsx:216",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    },
-    {
-     "key": "surfaces/presentation/pages/forms/wizard/index.tsx#Text#description#0",
-     "atBaseline": "surfaces/presentation/pages/forms/wizard/index.tsx:386",
-     "cutNote": "census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible"
-    }
-   ],
+   "part": [],
    "state": []
   }
  },
@@ -1505,8 +1407,8 @@
   ]
  },
  "lastMove": {
-  "head": "1897bf725dbc54d6293ea7f5b0c93fdc97215e2e",
+  "head": "a5dfe2a1a17a022e4763989e26925c5311d9619e",
   "date": "2026-10-14",
-  "note": "reclassification through --reclassify-structural (structural-forward; owner 2026-10-14 CARRIERS answer 2, option 3; P-88 kernel/common:166): 12 ratified key(s) left the counted roster for structuralForwards; forwardingMeasured 40 = passThroughViolations 28 + structuralForwards 12. Moved: primitives/layout/box/engines/classic/index.tsx#ClassicBox#createElement(ElementType)#none#0; primitives/layout/box/engines/classic/index.tsx#ClassicBox#createElement(ElementType)#none#1; primitives/layout/box/engines/rustic/index.tsx#RusticBox#createElement(ElementType)#none#0; primitives/layout/box/engines/rustic/index.tsx#RusticBox#createElement(ElementType)#none#1; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/flex/engines/classic/index.tsx#Flex#AntFlex#none#0; primitives/layout/flex/engines/rustic/index.tsx#Flex#div#none#0; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/layout/stack/engines/classic/index.tsx#TitanStack#createElement(ElementType)#none#0; primitives/layout/stack/engines/rustic/index.tsx#ApolloStack#createElement(ElementType)#none#0"
+  "note": "lowered to the gate's own measurement through --update-baseline"
  }
 }

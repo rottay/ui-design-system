@@ -224,7 +224,7 @@ describeCausality({
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
     'color-contrast': [
-      'button[data-active="true"] > span[data-state="visible"][data-part="content"] > span[data-part="label"] > .rottay-flex[data-part="section-nav-item-row"][data-align="center"] > .rottay-flex[data-part="section-nav-item-main"][data-align="center"] > .ds-guided-draft-form__section-nav-item-label[data-part="section-nav-item-label"][data-color="inherit"]',
+      'button[data-active="true"] > span[data-state="visible"][data-part="content"] > span[data-part="label"] > .rottay-flex[data-part="section-nav-item-row"][data-align="center"] > .rottay-flex[data-part="section-nav-item-main"][data-align="center"] > .ds-guided-draft-form__section-nav-item-label[data-color="inherit"][data-size="sm"]',
     ],
   },
 };

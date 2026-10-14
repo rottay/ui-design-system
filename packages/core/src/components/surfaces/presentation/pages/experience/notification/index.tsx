@@ -179,7 +179,6 @@ function NotificationList({
                     mark-read affordance, never by a decorative edge rail. */}
                 <Text
                   className="ds-notification__title"
-                  data-part="title"
                   weight={notification.read ? 'normal' : 'semibold'}
                 >
                   {notification.title}

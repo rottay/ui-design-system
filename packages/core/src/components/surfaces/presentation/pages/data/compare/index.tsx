@@ -149,9 +149,9 @@ function CompareSurfaceContent({
 
         return (
           <Stack spacing="xs">
-            <Text className="ds-compare__row-label" data-part="row-label">{row.label}</Text>
+            <Text className="ds-compare__row-label">{row.label}</Text>
             {row.description && (
-              <Text className="ds-compare__muted-text" data-part="muted-text">
+              <Text className="ds-compare__muted-text">
                 {row.description}
               </Text>
             )}
@@ -163,11 +163,11 @@ function CompareSurfaceContent({
       key: subject.key,
       title: (
         <Stack spacing="xs">
-          <Text className="ds-compare__subject-label" data-part="subject-label">
+          <Text className="ds-compare__subject-label">
             {subject.label}
           </Text>
           {subject.description && (
-            <Text className="ds-compare__muted-text" data-part="muted-text">
+            <Text className="ds-compare__muted-text">
               {subject.description}
             </Text>
           )}
@@ -221,13 +221,12 @@ function CompareSurfaceContent({
                         level="h2"
                         size="xs"
                         className="ds-compare__section-title"
-                        data-part="section-title"
                       >
                         {section.title}
                       </Heading>
                     )}
                     {section.description && (
-                      <Text className="ds-compare__muted-text" data-part="muted-text">
+                      <Text className="ds-compare__muted-text">
                         {section.description}
                       </Text>
                     )}
@@ -245,11 +244,11 @@ function CompareSurfaceContent({
                       <Card.Body>
                         <Stack spacing="md">
                           <Stack spacing="xs">
-                            <Text className="ds-compare__row-label" data-part="row-label">
+                            <Text className="ds-compare__row-label">
                               {row.label}
                             </Text>
                             {row.description && (
-                              <Text className="ds-compare__muted-text" data-part="muted-text">
+                              <Text className="ds-compare__muted-text">
                                 {row.description}
                               </Text>
                             )}
@@ -262,7 +261,7 @@ function CompareSurfaceContent({
                               data-part="divider"
                             >
                               <Stack spacing="xs">
-                                <Text className="ds-compare__row-label" data-part="row-label">
+                                <Text className="ds-compare__row-label">
                                   {subject.label}
                                 </Text>
                                 {subject.badge}

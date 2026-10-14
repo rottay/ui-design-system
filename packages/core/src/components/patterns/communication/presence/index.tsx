@@ -228,7 +228,6 @@ export function PresenceBar({
           } as React.CSSProperties}
         >
           <Text
-            data-part="overflow-badge-count"
             className="ds-presence__overflow-badge-count"
             weight="semibold"
             style={{
@@ -300,7 +299,7 @@ export function PresenceTypingIndicator({
               <Box key={index} data-part="typing-dot" />
             ))}
           </Box>
-          <Text data-part="label" className="ds-presence__label">
+          <Text className="ds-presence__label">
             {buildTypingLabel(users, maxNames, (key, floor, params) =>
               i18n?.tOr(key, floor, params) ?? floor, i18n?.locale)}
           </Text>

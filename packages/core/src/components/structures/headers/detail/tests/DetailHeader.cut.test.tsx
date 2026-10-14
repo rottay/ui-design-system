@@ -168,19 +168,21 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
       );
       await waitForPart(container, 'root');
       for (const part of stampedParts(container)) stamped.add(part);
-      // The class door and the part name the same elements, in both directions.
+      // P-88 (E8-b): a composed Text keeps its own part. The class door is the only way to it,
+      // and no node carries the retired caller part.
       for (const part of TEXT_PARTS) {
-        const byPart = Array.from(container.querySelectorAll(`[data-part="${part}"]`));
+        expect(container.querySelectorAll(`[data-part="${part}"]`), `no node carries the retired caller part "${part}"`).toHaveLength(0);
         const byHook = Array.from(container.querySelectorAll(`.${textHook(part)}`));
-        expect(byHook, `.${textHook(part)} sits on [data-part="${part}"]`).toEqual(byPart);
+        for (const node of byHook) expect(node, `.${textHook(part)} keeps the Text's own part`).toHaveAttribute('data-part', 'root');
         if (byHook.length > 0) hooked.add(part);
       }
       unmount();
     }
 
-    for (const part of FAMILY_PARTS) {
+    for (const part of LAYOUT_PARTS) {
       expect(stamped.has(part), `stamps [data-part="${part}"]`).toBe(true);
     }
+    for (const part of TEXT_PARTS) expect(stamped.has(part), `stamps no retired Text part "${part}"`).toBe(false);
     // Everything else the render stamps belongs to a composed primitive
     // (Breadcrumb crumbs, Button, Tooltip, …), whose anatomy those families
     // own; the family's own vocabulary is exactly the list above.

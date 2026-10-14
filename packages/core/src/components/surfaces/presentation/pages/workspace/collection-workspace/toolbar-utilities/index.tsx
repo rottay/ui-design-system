@@ -138,7 +138,6 @@ function PageSizeControl({
     return (
       <Text
         className="ds-collection-page-size-control__summary"
-        data-part="page-size-summary"
         size="xs"
       >
         {rangeLabel}
@@ -158,7 +157,6 @@ function PageSizeControl({
       >
         <Text
           className="ds-collection-page-size-control__range"
-          data-part="page-size-range"
           as="span"
           size="xs"
         >
@@ -171,7 +169,6 @@ function PageSizeControl({
           {!compact && (
             <Text
               className="ds-collection-page-size-control__unit"
-              data-part="page-size-unit"
               as="span"
               size="xs"
             >
@@ -181,7 +178,6 @@ function PageSizeControl({
           <Text
             as="span"
             className="ds-collection-page-size-control__value"
-            data-part="page-size-value"
             size="xs"
           >
             {pagination.pageSize}
@@ -189,7 +185,6 @@ function PageSizeControl({
           {!compact && (
             <Text
               className="ds-collection-page-size-control__suffix"
-              data-part="page-size-suffix"
               as="span"
               size="xs"
             >

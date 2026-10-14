@@ -127,7 +127,6 @@ function DefaultGalleryCard<T>({
       {caption != null && String(caption).length > 0 && (
         <Box data-part="caption">
           <Text
-            data-part="caption-text"
             className="ds-gallery-view__caption-text"
             size="sm"
           >
@@ -499,7 +498,7 @@ export function PatternGalleryView<T extends object>(
         style={style}
       >
         {emptyState ?? (
-          <Text data-part="empty-state" className="ds-gallery-view__empty-state">{emptyLabel}</Text>
+          <Text className="ds-gallery-view__empty-state">{emptyLabel}</Text>
         )}
       </Box>
     );

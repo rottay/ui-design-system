@@ -99,14 +99,14 @@ const PINS: Record<string, unknown> = {
     "alias": true
   },
   "p2": {
-    "legacy": "e9a4ab2847d1204bbc8ae4eaee015c97d9a90e1d87275f2e8a478b08b5d28ba9",
-    "headerless": "11a5c3b3ae066dfeac95650b3085b3492fcf982b656e951d4df59618c408b01d",
-    "shell": "7b378034bf3b627fc4c2db325a92b8f306d0bdfe760797d1324ac6d3ca75b329",
-    "dropdown": "ac62a9ec744d32f804058850c65109b01644f8d9885afb50c7b4eee538a3fb5f",
-    "frozen": "b1a3cd69ec441e2980ab06bc1405b7411edeed60d5a101f13f1339b7fc524485",
-    "phone": "fd82c14e0d179be0d6c4c57fdf2f85b13531d2e4122e18d8845259085450af5d",
-    "accordion": "43c8429def71227f6f0ff3385fe2026ff4058dc9e38003cef2ed62b01eecd703",
-    "rtl": "aba7c50e14ce00f19b247cf6d6f44d4317e5216ef572c72b8ebc7b1efce33e95"
+    "legacy": "d780653d4409b3a10257e8e70ba497f9a1648250c7b4f3e6ded5ae2f1adea49f",
+    "headerless": "cb088608ed03c0f75e01d1cff4ea2002b13d6f18fd5527e22c6f668dcd4d1b93",
+    "shell": "09669eb42148136d5a68ad2c357d6fdecf9bcc605051cb6e4e54b096c46ff1d7",
+    "dropdown": "267859fefba1a4f74136f5508e7773097f60838de14b33634cea8da4559ea27a",
+    "frozen": "d90d8491cb581f8cfc9a253772e9d17afd2d7b0fb6fb10761fd8cea3baa25ba2",
+    "phone": "a0798aebf64d52141f4dd83cc89146a5c791c8860ce0eed69457fe44df239f10",
+    "accordion": "86a79fc265f3c420df597611c93212006b1a02a8c6e89241fa92443e33bab764",
+    "rtl": "731bcc94b43f3f076cbad00d70650fab69488ada4053ac0b7143c7f8890eb601"
   },
   "p2id": {
     "phone": {

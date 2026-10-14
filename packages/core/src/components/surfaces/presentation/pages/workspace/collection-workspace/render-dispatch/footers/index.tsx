@@ -167,7 +167,6 @@ export function CardsIncrementalFooter({
     >
       <Text
         className="ds-collection-render-dispatch__incremental-count"
-        data-part="incremental-count"
         size="xs"
       >
         {total === 0
@@ -189,7 +188,6 @@ export function CardsIncrementalFooter({
       ) : (
         <Text
           className="ds-collection-render-dispatch__incremental-end"
-          data-part="incremental-end"
           size="xs"
         >
           {tSurfaceOr('collection_workspace.end_of_cards', 'End of cards')}

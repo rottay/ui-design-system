@@ -190,7 +190,7 @@ export function FormHeader({
                   RTL); the retired catalog ArrowLeftIcon carried no
                   mirroring contract. */}
               <NavigationBackIcon data-part="back-icon" decorative size={14} />
-              <Text className="ds-form-header__back-label" data-part="back-label" size="xs" color="secondary">
+              <Text className="ds-form-header__back-label" size="xs" color="secondary">
                 {resolvedBackLabel}
               </Text>
             </Flex>,
@@ -219,7 +219,7 @@ export function FormHeader({
             <Stack spacing="xs" data-part="hero-copy">
               {eyebrow ? (
                 <Text
-                  className="ds-form-header__eyebrow" data-part="eyebrow"
+                  className="ds-form-header__eyebrow"
                   size="xs"
                   weight="bold"
                   color="subtle"
@@ -234,7 +234,7 @@ export function FormHeader({
                 {title}
               </Box>
               {subtitle && (
-                <Text className="ds-form-header__subtitle" data-part="subtitle" size="sm" color="secondary">
+                <Text className="ds-form-header__subtitle" size="sm" color="secondary">
                   {subtitle}
                 </Text>
               )}

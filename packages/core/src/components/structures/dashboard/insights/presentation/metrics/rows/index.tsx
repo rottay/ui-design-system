@@ -77,7 +77,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
           </Box>
 
           <Stack spacing="xs">
-            <Text size="sm" weight="medium" className="ds-metrics-rows__metric-label" data-part="metric-label">
+            <Text size="sm" weight="medium" className="ds-metrics-rows__metric-label">
               {metric.label}
             </Text>
             <Flex align="center" gap={6}>
@@ -89,7 +89,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
               <Text
                 size="xs"
                 weight="bold"
-                className="ds-metrics-rows__metric-change" data-part="metric-change"
+                className="ds-metrics-rows__metric-change"
                 style={{
                   fontFamily: METRIC_MONO_FONT,
                 }}
@@ -103,7 +103,6 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
         <Box style={{ position: 'relative' }}>
           <Text
             className="metric-row-value ds-metrics-rows__metric-value"
-            data-part="metric-value"
             style={{
               // The figure's measure rides the family channel the skin's
               // narrow cut writes; 28px unset is the exact previous render.
@@ -152,7 +151,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
           >
             <Activity data-part="panel-icon" style={{ width: 16, height: 16 }} />
           </Box>
-          <Text weight="bold" className="ds-metrics-rows__title" data-part="title">
+          <Text weight="bold" className="ds-metrics-rows__title">
             {tOr('metrics.panelTitle', 'Key Metrics')}
           </Text>
         </Flex>
@@ -165,7 +164,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
               className="live-dot-v3"
               data-part="live-dot"
             />
-            <Text size="xs" weight="bold" className="ds-metrics-rows__live-label" data-part="live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
+            <Text size="xs" weight="bold" className="ds-metrics-rows__live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
               {tOr('metrics.live', 'LIVE')}
             </Text>
           </Flex>

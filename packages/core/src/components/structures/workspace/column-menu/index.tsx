@@ -700,10 +700,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
           <Box data-part="header">
             <Flex align="start" justify="between" gap={12}>
               <Box data-part="header-copy">
-                <Text data-part="header-title" className="ds-column-menu__header-title" size="sm" weight="medium">
+                <Text className="ds-column-menu__header-title" size="sm" weight="medium">
                   {tOr("columnMenu.headerTitle", "Table columns")}
                 </Text>
-                <Text data-part="description" className="ds-column-menu__description" size="xs">
+                <Text className="ds-column-menu__description" size="xs">
                   {tOr(
                     "columnMenu.headerDescription",
                     "Configure the table surface before applying."
@@ -792,7 +792,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           <Box data-part="row-copy">
                             <Flex align="center" gap={6}>
                               <Text
-                                data-part="title"
                                 className="ds-column-menu__title"
                                 data-visible={isVisible}
                                 size="sm"
@@ -801,7 +800,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               </Text>
                               {isPinned && (
                                 <Text
-                                  data-part="pin-badge"
                                   className="ds-column-menu__pin-badge"
                                   data-pinned={true}
                                   size="xs"
@@ -825,7 +823,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             </Flex>
                             <Flex data-part="row-meta" align="center" gap={6}>
                               <Text
-                                data-part="description"
                                 className="ds-column-menu__description"
                                 data-visible={isVisible}
                                 size="xs"
@@ -1040,7 +1037,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           }
                         >
                           <Text
-                            data-part="group-toggle-label"
                             className="ds-column-menu__group-toggle-label"
                             size="xs"
                             weight="medium"
@@ -1081,14 +1077,13 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                   >
                     <Box data-part="action-section-copy">
                       <Text
-                        data-part="action-section-label"
                         className="ds-column-menu__action-section-label"
                         size="xs"
                         weight="medium"
                       >
                         {tOr("columnMenu.rowActionsLabel", "Row actions")}
                       </Text>
-                      <Text data-part="description" className="ds-column-menu__description" size="xs">
+                      <Text className="ds-column-menu__description" size="xs">
                         {tOr(
                           "columnMenu.rowActionsDescription",
                           "Choose which quick actions stay visible in the table."
@@ -1133,7 +1128,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               />
                               <Box data-part="action-row-copy">
                                 <Text
-                                  data-part="title"
                                   className="ds-column-menu__title"
                                   data-visible={isVisible}
                                   size="sm"
@@ -1141,7 +1135,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                   {action.title}
                                 </Text>
                                 <Text
-                                  data-part="description"
                                   className="ds-column-menu__description"
                                   data-visible={isVisible}
                                   size="xs"
@@ -1174,7 +1167,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
           </Box>
 
           <Flex align="center" justify="between" gap={12} data-part="footer">
-            <Text data-part="footer-hint" className="ds-column-menu__footer-hint" size="xs">
+            <Text className="ds-column-menu__footer-hint" size="xs">
               {tOr(
                 "columnMenu.footerHint",
                 "Column widths are also adjustable directly from the table header."

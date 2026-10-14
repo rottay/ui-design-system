@@ -218,18 +218,18 @@ export function ActivityTicker({
             <Box
               data-part="badge"
             >
-              <Text className="ds-activity-ticker__badge-count" data-part="badge-count" style={{ fontSize: 8, fontWeight: 700 }}>
+              <Text className="ds-activity-ticker__badge-count" style={{ fontSize: 8, fontWeight: 700 }}>
                 {items.length}
               </Text>
             </Box>
           </Box>
           <Stack spacing="none">
-            <Text weight="bold" className="ds-activity-ticker__title" data-part="title">
+            <Text weight="bold" className="ds-activity-ticker__title">
               {tOr('activity.tickerTitle', 'Live Updates')}
             </Text>
             <Flex align="center" gap={4}>
               <Box className="live-indicator" data-part="live-dot" />
-              <Text size="xs" className="ds-activity-ticker__live-label" data-part="live-label">
+              <Text size="xs" className="ds-activity-ticker__live-label">
                 {tOr('activity.streaming', 'STREAMING')}
               </Text>
             </Flex>
@@ -243,7 +243,7 @@ export function ActivityTicker({
               className="view-all-link"
               data-part="view-all-link"
             >
-              <Text size="xs" weight="medium" className="ds-activity-ticker__view-all-label" data-part="view-all-label">
+              <Text size="xs" weight="medium" className="ds-activity-ticker__view-all-label">
                 {resolvedViewAllLabel}
               </Text>
               <ExternalLink style={{ width: 10, height: 10 }} />
@@ -283,7 +283,7 @@ export function ActivityTicker({
             <Text
               size="sm"
               weight="semibold"
-              className="ds-activity-ticker__item-text" data-part="item-text"
+              className="ds-activity-ticker__item-text"
             >
               {currentItem.text}
             </Text>
@@ -316,7 +316,7 @@ export function ActivityTicker({
                   />
                 ))}
               </Flex>
-              <Text size="xs" className="ds-activity-ticker__ticker-counter" data-part="ticker-counter">
+              <Text size="xs" className="ds-activity-ticker__ticker-counter">
                 {currentIndex + 1}/{items.length}
               </Text>
               <TickerNavButton

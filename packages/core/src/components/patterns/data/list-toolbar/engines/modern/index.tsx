@@ -469,7 +469,6 @@ function SettingsDropdown({
                 label: messages.columns,
                 children: columnSettingsContent ?? (
                   <Text
-                    data-part='settings-empty'
                     className='ds-list-toolbar__settings-empty'
                   >
                     {messages.noColumnSettings}
@@ -504,7 +503,6 @@ function SettingsDropdown({
                 label: messages.views,
                 children: savedViewsContent ?? (
                   <Text
-                    data-part='settings-empty'
                     className='ds-list-toolbar__settings-empty'
                   >
                     {messages.noSavedViews}
@@ -594,7 +592,6 @@ function MobileOverflow({
           {/* View mode */}
           <Box className='ds-list-toolbar__mobile-overflow-group'>
             <Text
-              data-part='mobile-overflow-label'
               className='ds-list-toolbar__mobile-overflow-label'
             >
               {messages.viewMode}
@@ -609,7 +606,6 @@ function MobileOverflow({
           {/* Density */}
           <Box className='ds-list-toolbar__mobile-overflow-group'>
             <Text
-              data-part='mobile-overflow-label'
               className='ds-list-toolbar__mobile-overflow-label'
             >
               {messages.density}
@@ -868,7 +864,6 @@ export default function ModernListToolbar({
                     </Box>
                   )}
                   <Text
-                    data-part='title'
                     className='ds-list-toolbar__title'
                   >
                     {title}
@@ -988,7 +983,6 @@ export default function ModernListToolbar({
                   </Box>
                 )}
                 <Text
-                  data-part='title'
                   className='ds-list-toolbar__title'
                 >
                   {title}
@@ -1150,7 +1144,6 @@ export default function ModernListToolbar({
               size={12}
             />
             <Text
-              data-part='filter-chips-count'
               className='ds-list-toolbar__filter-chips-count'
             >
               {activeFilterChips.length} {messages.active}
@@ -1173,14 +1166,12 @@ export default function ModernListToolbar({
               icon={renderActiveFilterStateGlyph(chip.state)}
             >
               <Text
-                data-part='filter-chip-label'
                 className='ds-list-toolbar__filter-chip-label'
                 as='span'
               >
                 {chip.label}:
               </Text>{' '}
               <Text
-                data-part='filter-chip-value'
                 className='ds-list-toolbar__filter-chip-value'
                 as='span'
               >

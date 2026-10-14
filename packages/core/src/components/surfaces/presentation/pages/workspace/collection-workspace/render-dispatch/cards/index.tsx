@@ -168,7 +168,6 @@ export function renderFallbackCard<T extends object>({
       <Box className="ds-collection-render-dispatch__fallback-heading">
         <Text
           className="ds-collection-render-dispatch__muted-text ds-collection-render-dispatch__fallback-label"
-          data-part="fallback-label"
           size="xs"
         >
           {primaryColumn
@@ -177,7 +176,6 @@ export function renderFallbackCard<T extends object>({
         </Text>
         <Text
           className="ds-collection-render-dispatch__fallback-title ds-collection-render-dispatch__title"
-          data-part="title"
           weight="semibold"
         >
           {primaryValue}
@@ -192,14 +190,12 @@ export function renderFallbackCard<T extends object>({
           <Box key={column.key} className="ds-collection-render-dispatch__fallback-field">
             <Text
               className="ds-collection-render-dispatch__muted-text ds-collection-render-dispatch__fallback-label"
-              data-part="fallback-label"
               size="xs"
             >
               {getColumnHeader(column as ColumnDef<unknown>)}
             </Text>
             <Text
               className="ds-collection-render-dispatch__fallback-value"
-              data-part="fallback-value"
               size="sm"
             >
               {getColumnValue(row, column, index, t, format)}

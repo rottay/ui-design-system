@@ -54,8 +54,10 @@ describe('engine/skins/pass-through -- comparison drills (one move each)', () =>
 
   it('a breach class gained on a pinned site is red', () => {
     const v = clone(view);
-    const row = v.roster.find((r) => !r.breach.includes('state-forward'));
-    row.breach = [...row.breach, 'state-forward'].sort();
+    // E8-b: every pinned site now forwards state, so the drill adds the part breach a site lacks.
+    const row = v.roster.find((r) => !r.breach.includes('part-replace'));
+    assert.ok(row, 'the tree still pins a site without a part breach');
+    row.breach = [...row.breach, 'part-replace'].sort();
     assert.deepEqual(kinds(evaluatePassThrough(v, ledger)), ['site-breach/grew']);
   });
 
@@ -110,12 +112,15 @@ describe('engine/skins/pass-through -- comparison drills (one move each)', () =>
     assert.equal(door.ok, true);
     const e = eligibility(door.ledger);
     assert.equal(e[fam].partStripEligible, true);
-    assert.equal(e.typography.partStripEligible, false);
+    // E8-b stripped typography's last held entries; the surviving held set is found, not named.
+    const noted = (h) => typeof h === 'object';
+    const held = Object.keys(ledger.families).find((f) => f !== fam && f !== 'box' && ledger.families[f].part.some(noted));
+    assert.ok(held, 'a surviving held set exists to check');
+    assert.equal(e[held].partStripEligible, false);
     assert.equal(e.box.partStripEligible, false, 'a layout carrier waits on the owner carrier ruling whatever its set says');
-    assert.ok(door.ledger.families.typography.part.length > 0, 'a surviving held set exists to check');
     // A held entry carries its routing, or -- newly visible under census v7.1 -- its cutNote.
-    assert.ok(door.ledger.families.typography.part.every((h) => typeof h === 'object' && (h.routing || h.cutNote)), 'surviving held entries keep their routing or cutNote');
-    assert.deepEqual(door.ledger.families.typography.part, ledger.families.typography.part, 'the door rewrites no surviving held entry');
+    assert.ok(door.ledger.families[held].part.filter(noted).every((h) => h.routing || h.cutNote), 'surviving held entries keep their routing or cutNote');
+    assert.deepEqual(door.ledger.families[held].part, ledger.families[held].part, 'the door rewrites no surviving held entry');
   });
 
   it('a site that sheds its paint to leave the count is refused (a NEW unpainted row)', () => {
@@ -401,10 +406,12 @@ describe('engine/skins/pass-through -- census v7.1: no caller is skipped in sile
   });
   const short = (file) => file.replace('packages/core/src/components/', '');
 
-  it('typography callers imported through a barrel are in the enumeration', () => {
-    const typography = census.perFamilyPrecondition.byChildFamily.typography;
-    assert.ok(typography, 'typography has a precondition row');
-    assert.equal(typography.callerPartDependents, ledger.families.typography.part.length);
+  // E8-b: typography has no caller left; box carries the barrel (re-export-chain) callers now.
+  it('box callers imported through a barrel are in the enumeration', () => {
+    const box = census.perFamilyPrecondition.byChildFamily.box;
+    assert.ok(box, 'box has a precondition row');
+    assert.ok(raw.compoundSites.some((c) => c.childFamily === 'box' && c.resolvedBy === 're-export-chain'), 'box has callers imported through a barrel');
+    assert.equal(box.callerPartDependents, ledger.families.box.part.length);
   });
 
   it('a family is attributed by proof only: no caller is resolved by its tag name (v7.1.1)', () => {
@@ -491,7 +498,8 @@ describe('engine/skins/pass-through -- structural forwards (census v7.1.9)', () 
     const frozen = view.roster.filter((r) => (r.engine === 'classic' || r.engine === 'rustic') && !CARRIER.has(r.family));
     const tally = {};
     for (const r of frozen) tally[`${r.family}/${r.engine}`] = (tally[`${r.family}/${r.engine}`] ?? 0) + 1;
-    assert.deepEqual(tally, { 'typography/classic': 6, 'typography/rustic': 4, 'divider/rustic': 2 });
+    // E8-b stripped the 4 rustic typography sites; the 6 classic ones wait for step 3.
+    assert.deepEqual(tally, { 'typography/classic': 6, 'divider/rustic': 2 });
     const { census } = measurePassThrough({ repoRoot: REPO });
     for (const r of frozen) {
       const site = census.sites.find((s) => s.key === r.key);

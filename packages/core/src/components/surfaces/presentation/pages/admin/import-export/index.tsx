@@ -285,7 +285,7 @@ function ImportPanel({
                 <Card className="ds-import-export__error-card" variant="outlined">
                   <Card.Body>
                     <Stack spacing="xs">
-                      <Text weight="semibold" color="error" data-part="error-title">
+                      <Text weight="semibold" color="error">
                         {tSurfaceOr(
                           'import_export.validation_errors_title',
                           'Validation Errors'
@@ -353,7 +353,7 @@ function ImportPanel({
             <Stack spacing="md">
               <Flex gap={8} align="center">
                 <StatusSuccessIcon decorative size={18} />
-                <Text weight="semibold" color="success" data-part="success-message">
+                <Text weight="semibold" color="success">
                   {tSurfaceOr(
                     'import_export.import_success',
                     'Import completed successfully'

@@ -100,7 +100,10 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       translate,
       title,
       children,
-      'data-part': dataPart,
+      // P-88: the heading keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className = '',
       style,
       ...restProps
@@ -193,7 +196,7 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           title={title}
           {...restProps}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={{ ...headingStyle, ...responsive.channels }}
@@ -242,7 +245,10 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
       translate,
       title,
       children,
-      'data-part': dataPart,
+      // P-88: the text keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className = '',
       style,
       ...restProps
@@ -326,7 +332,7 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
           title={title}
           {...restProps}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={{ ...resolvedTextStyle, ...responsive.channels }}
@@ -369,7 +375,10 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       translate,
       title,
       children,
-      'data-part': dataPart,
+      // P-88: the paragraph keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className = '',
       style,
       ...restProps
@@ -441,7 +450,7 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
           title={title}
           {...restProps}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={{ ...paragraphStyle, ...responsive.channels }}
@@ -489,7 +498,10 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
       title,
       onClick,
       children,
-      'data-part': dataPart,
+      // P-88: the link keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className = '',
       style,
       ...restProps
@@ -581,7 +593,7 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
           title={title}
           {...restProps}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           data-disabled={disabled || undefined}
           {...typographyDataAttributes(craftProps)}

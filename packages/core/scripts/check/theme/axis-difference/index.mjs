@@ -1367,7 +1367,7 @@ const SHAPE_REACH_ROWS = Object.freeze({
         stamp: 'const Component = as;',
         resolves: Object.freeze([Object.freeze({ source: TYPOGRAPHY_CONTRACT, text: "    | 'code'" })]),
       }),
-      Object.freeze({ token: 'attr:data-part=root', stamp: 'data-part={dataPart ?? "root"}' }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: 'data-part="root"' }),
       Object.freeze({
         token: 'attr:data-color=default',
         stamp: 'data-color={color}',
@@ -3670,7 +3670,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
     axes: Object.freeze(['states']),
     markup: '<a class="rottay-typography rottay-typography--modern hover:underline transition-colors" data-part="root" data-color="primary" data-size="md">Docs</a>',
     stamps: Object.freeze([
-      Object.freeze({ token: 'attr:data-part=root', stamp: "{...partAttributes(dataPart ?? 'root', interaction.state)}" }),
+      Object.freeze({ token: 'attr:data-part=root', stamp: "{...partAttributes('root', interaction.state)}" }),
       Object.freeze({
         token: 'attr:data-color=primary',
         stamp: 'data-color={color}',
