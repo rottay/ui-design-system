@@ -1,12 +1,14 @@
 /**
- * The structure gate's command line: --check, --report, and the two baseline
- * producers (--update-baseline tightens; --re-anchor is the sighted adoption).
+ * The structure gate's command line: --check, --report, the two baseline
+ * producers (--update-baseline tightens; --re-anchor is the sighted adoption)
+ * and the rename door (--relocate --map <file.json>; dry run unless --write).
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 
 import { auditCoreStructure, compareStructureBaseline, parseCliArguments } from '../index.mjs';
-import { STRUCTURE_LAWS, compareStructureLaws, measureStructureLaws } from '../laws/index.mjs';
+import { STRUCTURE_LAWS, compareStructureLaws, listTrackedFiles, measureStructureLaws } from '../laws/index.mjs';
+import { gitTrees, relocateStructureBaseline } from '../relocate/index.mjs';
 import { reanchorStructureBaseline, tightenStructureBaseline } from '../tighten/index.mjs';
 
 function printSummary(result, laws) {
@@ -51,6 +53,39 @@ function writeProduced(path, produced, label) {
   return true;
 }
 
+function runRelocate({ options, result, laws, baseline }) {
+  if (!options.mapPath) {
+    console.error('core-structure-audit: --relocate needs --map <file.json> ({ "<old repo path>": "<new repo path>" })');
+    process.exitCode = 1;
+    return;
+  }
+  const { before, after } = gitTrees({ repoRoot: options.repoRoot, rev: options.fromRev, liveFiles: listTrackedFiles(options.repoRoot) });
+  const produced = relocateStructureBaseline({
+    baseline,
+    mapText: readFileSync(options.mapPath, 'utf8'),
+    result,
+    laws,
+    before,
+    after,
+    specifierEdits: options.specifierEdits,
+  });
+  if (produced.noop) {
+    console.log('relocate: empty map; nothing to re-key, nothing written');
+    return;
+  }
+  for (const entry of produced.content) console.log(`  ${entry.status}: ${entry.from} -> ${entry.to}`);
+  if (produced.refused.length === 0) {
+    console.log(`relocate: ${produced.rekeyed.length} key(s) re-keyed from ${produced.content.length} map entr(ies) against ${options.fromRev}`);
+    for (const move of produced.rekeyed) console.log(`  ${move.class}: ${move.from} -> ${move.to}`);
+    for (const stale of produced.staleUntouched) console.log(`  stale pin untouched by the map (tighten after): ${stale}`);
+    if (!options.write) {
+      console.log('relocate: dry run; pass --write after reviewing the re-keyed keys');
+      return;
+    }
+  }
+  writeProduced(options.baselinePath, produced, 'relocate');
+}
+
 export function runStructureCli(argv = process.argv.slice(2)) {
   if (argv.includes('--write-baseline')) {
     console.error('core-structure-audit: --write-baseline is retired; the baseline is decrease-only. Use --update-baseline (tighten) or, for an unpinned law or a ruled definition change, --re-anchor (sighted).');
@@ -78,6 +113,10 @@ export function runStructureCli(argv = process.argv.slice(2)) {
       const lawsRemoved = Object.entries(produced.removed.laws).filter(([, members]) => members.length > 0);
       console.log(`  removed: ${produced.removed.findings.length} finding(s); ${lawsRemoved.map(([law, members]) => `${law} -${members.length}`).join(', ') || 'no law pin'}`);
     }
+    return;
+  }
+  if (options.mode === 'relocate') {
+    runRelocate({ options, result, laws, baseline });
     return;
   }
   if (options.mode === 're-anchor') {

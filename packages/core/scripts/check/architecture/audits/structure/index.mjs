@@ -1555,6 +1555,7 @@ export function compareStructureBaseline(result, baseline) {
 function selectCliMode(argv) {
   if (argv.includes('--update-baseline')) return 'update-baseline';
   if (argv.includes('--re-anchor')) return 're-anchor';
+  if (argv.includes('--relocate')) return 'relocate';
   if (argv.includes('--report')) return 'report';
   if (argv.includes('--check')) return 'check';
   return 'check';
@@ -1575,6 +1576,10 @@ export function parseCliArguments(argv) {
     packageRoot: resolve(flagValue('--package-root') ?? DEFAULT_PACKAGE_ROOT),
     baselinePath: resolve(flagValue('--baseline') ?? DEFAULT_BASELINE_PATH),
     repoRoot: resolve(flagValue('--repo-root') ?? resolve(DEFAULT_PACKAGE_ROOT, '../..')),
+    mapPath: flagValue('--map'),
+    fromRev: flagValue('--from-rev') ?? 'HEAD',
+    write: argv.includes('--write'),
+    specifierEdits: argv.includes('--specifier-edits'),
   };
 }
 
