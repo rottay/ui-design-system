@@ -18,6 +18,18 @@
  *     pin is a live member at its new path (else its value changed) and the
  *     live tree holds no member the baseline does not (semantic growth).
  *
+ * The map may also be sectioned, `{ "rename": {…}, "within": {…}, "drop": {…} }`
+ * (the flat form is `rename` alone):
+ *
+ *   - `within` lists renames nested inside a renamed folder entry that key no
+ *     pin; each is witnessed like a rename, and the folder's subtree witness
+ *     discounts exactly those subtrees and nothing else;
+ *   - `drop` lists, per law, the exact pins a move resolves. A drop is admitted
+ *     only for a pin the baseline holds, whose path existed at the reference
+ *     revision and left the live tree, and that its law no longer holds live,
+ *     neither at its old key nor at the key a rename gives it. Dropping only
+ *     ever lowers a law; findings and rootEntrypoints are never dropped.
+ *
  * Every refusal is named and nothing is written unless the whole map passes.
  */
 
@@ -55,7 +67,11 @@ export const CARRIED_FIELDS = Object.freeze([
 const SPECIFIER = /(\bfrom\s*|\bimport\s*\(\s*|\bimport\s+|\brequire\s*\(\s*|\b(?:vi|jest)\.(?:mock|doMock|unmock|importActual|importMock)\s*\(\s*|@import\s+(?:url\(\s*)?)(['"`])[^'"`\n]*\2/gu;
 const MAP_KEY = /"((?:[^"\\]|\\.)*)"\s*:/gu;
 
+const MAP_SECTIONS = Object.freeze(['rename', 'within', 'drop']);
+
 const sorted = (values) => [...values].sort((left, right) => left.localeCompare(right));
+/** Each class keeps its producer's order: tighten pins laws and findings by code unit, the audit sorts entrypoints by locale. */
+const byCodeUnit = (values) => [...values].sort();
 const topLevel = (path) => path.split('/')[0] ?? '';
 
 function validRepoPath(path) {
@@ -67,26 +83,11 @@ function validRepoPath(path) {
     && path.split('/').every((segment) => segment && segment !== '.' && segment !== '..');
 }
 
-/** Parse the map text; duplicate source keys are read from the raw text, which JSON.parse would silently drop. */
-export function parseRenameMap(text) {
-  const refused = [];
-  let document;
-  try {
-    document = JSON.parse(text);
-  } catch (error) {
-    return { entries: [], refused: [`malformed map: ${error.message}`] };
-  }
-  if (!document || typeof document !== 'object' || Array.isArray(document)) {
-    return { entries: [], refused: ['malformed map: expected a flat JSON object { "<old path>": "<new path>" }'] };
-  }
-  const rawKeys = [...text.matchAll(MAP_KEY)].map((match) => JSON.parse(`"${match[1]}"`));
-  const seenSources = new Set();
-  for (const key of rawKeys) {
-    if (seenSources.has(key)) refused.push(`non-bijective map: source listed more than once: ${key}`);
-    seenSources.add(key);
-  }
+const plainObject = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+
+function parsePairs(section, label, refused) {
   const entries = [];
-  for (const [from, to] of Object.entries(document)) {
+  for (const [from, to] of Object.entries(section)) {
     if (typeof to !== 'string') {
       refused.push(`malformed entry ${from}: the target must be a path string; a map carries no value, count or rule`);
       continue;
@@ -99,10 +100,66 @@ export function parseRenameMap(text) {
       refused.push(`identity entry: ${from} maps to itself`);
       continue;
     }
-    entries.push({ from, to });
+    entries.push({ from, to, section: label });
   }
+  return entries.sort((left, right) => left.from.localeCompare(right.from));
+}
+
+function parseDrops(section, refused) {
+  const drops = [];
+  for (const [law, keys] of Object.entries(section)) {
+    if (!STRUCTURE_LAWS.includes(law)) {
+      refused.push(`malformed drop: ${law} is not a structure law; only law pins may be dropped (findings and rootEntrypoints never are)`);
+      continue;
+    }
+    if (!Array.isArray(keys) || keys.some((key) => typeof key !== 'string' || key.length === 0)) {
+      refused.push(`malformed drop: ${law} must list the exact pin keys as non-empty strings; a drop carries no value or count`);
+      continue;
+    }
+    const seen = new Set();
+    for (const key of keys) {
+      if (seen.has(key)) refused.push(`malformed drop: ${law} ${key} listed more than once`);
+      else drops.push({ law, key });
+      seen.add(key);
+    }
+  }
+  return drops;
+}
+
+/** Parse the map text; duplicate keys are read from the raw text, which JSON.parse would silently drop. */
+export function parseRenameMap(text) {
+  const refused = [];
+  let document;
+  try {
+    document = JSON.parse(text);
+  } catch (error) {
+    return { entries: [], within: [], drops: [], refused: [`malformed map: ${error.message}`] };
+  }
+  if (!plainObject(document)) {
+    return { entries: [], within: [], drops: [], refused: ['malformed map: expected a JSON object { "<old path>": "<new path>" } or { "rename", "within", "drop" }'] };
+  }
+  const rawKeys = [...text.matchAll(MAP_KEY)].map((match) => JSON.parse(`"${match[1]}"`));
+  const seenSources = new Set();
+  for (const key of rawKeys) {
+    if (seenSources.has(key)) refused.push(`non-bijective map: source listed more than once: ${key}`);
+    seenSources.add(key);
+  }
+  const sectioned = Object.entries(document).some(([key, value]) => MAP_SECTIONS.includes(key) && typeof value !== 'string');
+  const sections = sectioned ? document : { rename: document };
+  if (sectioned) {
+    for (const key of Object.keys(document)) {
+      if (!MAP_SECTIONS.includes(key)) refused.push(`malformed map: unknown section ${key}; a sectioned map holds only ${MAP_SECTIONS.join(', ')}`);
+    }
+    for (const key of MAP_SECTIONS) {
+      if (key in document && !plainObject(document[key])) refused.push(`malformed map: section ${key} must be an object`);
+    }
+  }
+  const pick = (key) => (plainObject(sections[key]) ? sections[key] : {});
+  const entries = parsePairs(pick('rename'), 'rename', refused);
+  const within = parsePairs(pick('within'), 'within', refused);
+  const drops = parseDrops(pick('drop'), refused);
   const byTarget = new Map();
-  for (const entry of entries) byTarget.set(entry.to, [...(byTarget.get(entry.to) ?? []), entry.from]);
+  for (const entry of [...entries, ...within]) byTarget.set(entry.to, [...(byTarget.get(entry.to) ?? []), entry.from]);
   for (const [to, froms] of byTarget) {
     if (froms.length > 1) refused.push(`non-bijective map: ${froms.length} sources map to ${to}: ${sorted(froms).join(', ')}`);
   }
@@ -113,7 +170,7 @@ export function parseRenameMap(text) {
       if (inner.to !== expected) refused.push(`inconsistent nested entry: ${inner.from} -> ${inner.to} contradicts ${outer.from} -> ${outer.to} (expected ${expected})`);
     }
   }
-  return { entries: entries.sort((left, right) => left.from.localeCompare(right.from)), refused };
+  return { entries, within, drops, refused };
 }
 
 /** A tree view over a file list; folders are derived, an empty folder is invisible (Git holds none). */
@@ -163,10 +220,17 @@ export function baselineKeys(baseline) {
 
 const normalizeSpecifiers = (text) => text.replace(SPECIFIER, (_, head, quote) => `${head}${quote}${quote}`);
 
-/** same-byte, specifier-only, or the first difference that makes it a content change. */
-function compareContent(entry, before, after) {
-  const left = before.under(entry.from);
-  const right = after.under(entry.to);
+const inside = (path, folder) => path.startsWith(`${folder}/`);
+const outside = (suffixes, nested) => suffixes.filter((suffix) => !nested.some((relative) => suffix === relative || suffix.startsWith(`${relative}/`)));
+
+/**
+ * same-byte, specifier-only, or the first difference that makes it a content
+ * change. `nested` are the within entries inside this folder entry: their
+ * subtrees are discounted on both sides and witnessed by their own entry.
+ */
+function compareContent(entry, before, after, nested = []) {
+  const left = outside(before.under(entry.from), nested.map(({ from }) => from.slice(entry.from.length)));
+  const right = outside(after.under(entry.to), nested.map(({ to }) => to.slice(entry.to.length)));
   const leftSet = new Set(left);
   const rightSet = new Set(right);
   const missing = left.filter((suffix) => !rightSet.has(suffix));
@@ -185,6 +249,9 @@ function compareContent(entry, before, after) {
     if (oldLines !== newLines) return { status: 'changed', detail: `line count ${oldLines} -> ${newLines} in ${entry.to}${suffix}` };
     if (normalizeSpecifiers(oldText) !== normalizeSpecifiers(newText)) return { status: 'changed', detail: `content changed in ${entry.to}${suffix}` };
     status = 'specifier-only';
+  }
+  if (nested.length > 0 && status === 'same-byte') {
+    return { status: `same-byte modulo within ${nested.map(({ from, to }) => `${from.slice(entry.from.length + 1)} -> ${to.slice(entry.to.length + 1)}`).join(', ')}` };
   }
   return { status };
 }
@@ -207,55 +274,94 @@ function carriedView(baseline) {
 export function relocateStructureBaseline({ baseline, mapText, result, laws, before, after, specifierEdits = false }) {
   const parsed = parseRenameMap(mapText);
   const refused = [...parsed.refused];
-  const { entries } = parsed;
-  if (refused.length === 0 && entries.length === 0) return { refused, noop: true, baseline, rekeyed: [], content: [], staleUntouched: [] };
+  const { entries, within, drops } = parsed;
+  if (refused.length === 0 && entries.length + within.length + drops.length === 0) return { refused, noop: true, baseline, rekeyed: [], dropped: [], content: [], staleUntouched: [] };
+
+  const lawSpec = (law) => PATH_KEYED_CLASSES.find((spec) => spec.law === law);
+  const dropped = new Set(drops.map(({ law, key }) => `${law}\0${key}`));
+  const isDropped = (key) => Boolean(key.spec.law) && dropped.has(`${key.spec.law}\0${key.key}`);
+  for (const { law, key } of drops) {
+    if (!(baseline.laws?.members?.[law] ?? []).includes(key)) refused.push(`drop names no pin: ${law} ${key} is not held by the baseline`);
+  }
 
   const keys = baselineKeys(baseline);
   const keyedPaths = new Map();
-  for (const key of keys) for (const path of key.paths) keyedPaths.set(path, [...(keyedPaths.get(path) ?? []), key]);
+  const anyKeyedPaths = new Set();
+  for (const key of keys) {
+    for (const path of key.paths) {
+      anyKeyedPaths.add(path);
+      if (!isDropped(key)) keyedPaths.set(path, [...(keyedPaths.get(path) ?? []), key]);
+    }
+  }
   const destinationByPath = new Map(entries.map((entry) => [entry.from, entry.to]));
-  const sources = new Set(destinationByPath.keys());
-  const targets = new Set(destinationByPath.values());
+  const sources = new Set([...entries, ...within].map(({ from }) => from));
+  const targets = new Set([...entries, ...within].map(({ to }) => to));
 
   for (const entry of entries) {
-    if (!keyedPaths.has(entry.from)) refused.push(`map entry matches no baseline key: ${entry.from} -> ${entry.to}`);
+    if (!keyedPaths.has(entry.from)) {
+      refused.push(anyKeyedPaths.has(entry.from)
+        ? `map entry re-keys nothing: every pin at ${entry.from} is dropped`
+        : `map entry matches no baseline key: ${entry.from} -> ${entry.to}`);
+    }
     for (const key of keyedPaths.get(entry.from) ?? []) {
       if (!entry.to.startsWith(key.spec.prefix)) refused.push(`class change: ${entry.to} leaves the ${key.spec.name} root ${key.spec.prefix}`);
     }
   }
-  if (refused.length > 0) return { refused: [...new Set(refused)], baseline, rekeyed: [], content: [] };
+  const parentOf = new Map();
+  for (const nested of within) {
+    if (anyKeyedPaths.has(nested.from)) refused.push(`within entry keys a pin: ${nested.from} belongs in rename`);
+    const parents = entries.filter((entry) => inside(nested.from, entry.from)).sort((left, right) => right.from.length - left.from.length);
+    if (parents.length === 0) refused.push(`within entry outside every renamed folder: ${nested.from}`);
+    else if (!inside(nested.to, parents[0].to)) refused.push(`within entry leaves its renamed folder: ${nested.to} is not inside ${parents[0].to}`);
+    else parentOf.set(nested, parents[0]);
+  }
+  if (refused.length > 0) return { refused: [...new Set(refused)], baseline, rekeyed: [], dropped: [], content: [] };
 
   const content = [];
-  for (const entry of entries) {
-    const matched = keyedPaths.get(entry.from) ?? [];
-    if (matched.length === 0) continue;
-    if (matched.every((key) => key.spec.disk)) {
-      content.push({ ...entry, status: 'disk-only (empty folder; witnessed by the live measurement)' });
-      continue;
-    }
+  const witness = (entry, nested = []) => {
     if (!before.exists(entry.from)) refused.push(`source absent from the reference tree: ${entry.from}`);
     if (!after.exists(entry.to)) refused.push(`target absent from the live tree: ${entry.to}`);
     if (after.exists(entry.from) && !targets.has(entry.from)) refused.push(`source still present in the live tree (a copy, not a move): ${entry.from}`);
     if (before.exists(entry.to) && !sources.has(entry.to)) refused.push(`target collides with an existing unmapped path: ${entry.to}`);
-    if (!before.exists(entry.from) || !after.exists(entry.to)) continue;
-    const compared = compareContent(entry, before, after);
-    content.push({ ...entry, status: compared.status });
+    if (!before.exists(entry.from) || !after.exists(entry.to)) return;
+    const compared = compareContent(entry, before, after, nested);
+    content.push({ ...entry, status: entry.section === 'within' ? `${compared.status} (within ${parentOf.get(entry).from})` : compared.status });
     if (compared.status === 'changed') refused.push(`content change: ${entry.from} -> ${entry.to}: ${compared.detail}`);
     else if (compared.status === 'specifier-only' && !specifierEdits) {
       refused.push(`content change: ${entry.from} -> ${entry.to}: module specifiers edited; only --specifier-edits admits a specifier-only delta`);
     }
+  };
+  for (const entry of entries) {
+    const matched = keyedPaths.get(entry.from) ?? [];
+    if (matched.every((key) => key.spec.disk)) {
+      content.push({ ...entry, status: 'disk-only (empty folder; witnessed by the live measurement)' });
+      continue;
+    }
+    witness(entry, within.filter((nested) => parentOf.get(nested) === entry));
   }
+  for (const nested of within) witness(nested);
 
   for (const key of keys) {
-    if (key.spec.disk) continue;
+    if (key.spec.disk || isDropped(key)) continue;
     for (const path of key.paths) {
       if (!sources.has(path) && !after.exists(path)) refused.push(`unmapped baseline path: ${key.spec.name} ${key.key} (${path} left the live tree and the map does not cover it)`);
     }
   }
 
   const destination = (path) => destinationByPath.get(path) ?? null;
+  if (drops.length > 0 && !laws?.members) refused.push('drop unwitnessed: no live law measurement to prove the dropped pins are gone');
+  for (const { law, key } of drops) {
+    const spec = lawSpec(law);
+    const path = `${spec.prefix}${key}`;
+    const target = destination(path)?.slice(spec.prefix.length);
+    if (!spec.disk && !before.exists(path)) refused.push(`drop unwitnessed: ${law} ${key} did not exist at the reference revision`);
+    if (!spec.disk && after.exists(path)) refused.push(`drop unwitnessed: ${law} ${key} is still in the live tree; a rename door drops only what a move resolves (tighten owns in-place resolution)`);
+    if (laws?.members?.[law]?.includes(key)) refused.push(`drop of a live pin: ${law} still holds ${key}`);
+    if (target && laws?.members?.[law]?.includes(target)) refused.push(`drop of a pin still live at its target: ${law} holds ${key} -> ${target}`);
+  }
+
   const rekeyed = [];
-  const rekey = (spec, list, move) => {
+  const rekey = (spec, list, move, order = byCodeUnit) => {
     const next = list.map((key) => {
       const moved = move(key);
       if (moved !== key) rekeyed.push({ class: spec.name, from: key, to: moved });
@@ -266,12 +372,13 @@ export function relocateStructureBaseline({ baseline, mapText, result, laws, bef
       if (seen.has(key)) refused.push(`re-key collision in ${spec.name}: ${key} would be held twice`);
       seen.add(key);
     }
-    return sorted(next);
+    return order(next);
   };
 
   const members = { ...baseline.laws?.members };
   for (const spec of PATH_KEYED_CLASSES.filter(({ law }) => law)) {
-    members[spec.law] = rekey(spec, baseline.laws?.members?.[spec.law] ?? [], (key) => destination(`${spec.prefix}${key}`)?.slice(spec.prefix.length) ?? key);
+    const kept = (baseline.laws?.members?.[spec.law] ?? []).filter((key) => !dropped.has(`${spec.law}\0${key}`));
+    members[spec.law] = rekey(spec, kept, (key) => destination(`${spec.prefix}${key}`)?.slice(spec.prefix.length) ?? key);
   }
   const findingsSpec = PATH_KEYED_CLASSES.find(({ name }) => name === 'snapshot.findings');
   const findings = {};
@@ -291,7 +398,7 @@ export function relocateStructureBaseline({ baseline, mapText, result, laws, bef
     snapshot: {
       ...baseline.snapshot,
       inventory: rootEntrypoints
-        ? { ...baseline.snapshot.inventory, rootEntrypoints: rekey(entrypointsSpec, rootEntrypoints, (key) => destination(`${CORE_SOURCE}${key}`)?.slice(CORE_SOURCE.length) ?? key) }
+        ? { ...baseline.snapshot.inventory, rootEntrypoints: rekey(entrypointsSpec, rootEntrypoints, (key) => destination(`${CORE_SOURCE}${key}`)?.slice(CORE_SOURCE.length) ?? key, sorted) }
         : baseline.snapshot?.inventory,
       findings,
     },
@@ -315,7 +422,8 @@ export function relocateStructureBaseline({ baseline, mapText, result, laws, bef
       if (movedTargets.has(`snapshot.findings\0${id}`)) refused.push(`value change: finding re-keyed to ${id} is not live there`);
     }
   }
-  if (refused.length > 0) return { refused: [...new Set(refused)], baseline, rekeyed, content };
+  const droppedList = drops.map(({ law, key }) => ({ class: `laws.members.${law}`, key }));
+  if (refused.length > 0) return { refused: [...new Set(refused)], baseline, rekeyed, dropped: droppedList, content };
 
   const staleUntouched = [];
   if (laws && result) {
@@ -323,7 +431,8 @@ export function relocateStructureBaseline({ baseline, mapText, result, laws, bef
     for (const law of STRUCTURE_LAWS) for (const member of lawComparison.stale[law] ?? []) staleUntouched.push(`${law}: ${member}`);
     for (const id of compareStructureBaseline(result, candidate).resolved) staleUntouched.push(id);
   }
-  return { refused, baseline: candidate, rekeyed, content, staleUntouched };
+  for (const { class: name, key } of droppedList) content.push({ from: key, to: '(dropped)', status: `drop ${name} (witnessed: left the tree, not live)` });
+  return { refused, baseline: candidate, rekeyed, dropped: droppedList, content, staleUntouched };
 }
 
 /** The reference tree at a Git revision and the live tree (index + worktree), as the laws' census reads them. */

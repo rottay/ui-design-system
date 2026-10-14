@@ -4,6 +4,7 @@ import test from 'node:test';
 
 import { compareStructureBaseline } from '../index.mjs';
 import { STRUCTURE_LAWS, compareStructureLaws, lawDefinitions } from '../laws/index.mjs';
+import { tightenStructureBaseline } from '../tighten/index.mjs';
 import { PATH_KEYED_CLASSES, baselineKeys, parseRenameMap, relocateStructureBaseline, treeView } from './index.mjs';
 
 const SRC = 'packages/core/src/';
@@ -50,12 +51,12 @@ function baseline() {
   };
 }
 
-function live({ lineCount = [`${SRC}${BIG_NEW}`], singleChild = [WRAP_NEW], findings = [FINDING_NEW] } = {}) {
+function live({ lineCount = [`${SRC}${BIG_NEW}`], singleChild = [WRAP_NEW], findings = [FINDING_NEW], repeated = [] } = {}) {
   return {
     result: { findings: findings.map((id) => ({ rule: id.split(':')[0], id, path: id.split(':')[1].split('->')[0] })), inventory: {} },
     laws: {
       definitions: lawDefinitions(),
-      members: { ...Object.fromEntries(STRUCTURE_LAWS.map((law) => [law, []])), 'authored-line-count': lineCount, 'single-child-folder': singleChild },
+      members: { ...Object.fromEntries(STRUCTURE_LAWS.map((law) => [law, []])), 'authored-line-count': lineCount, 'single-child-folder': singleChild, 'repeated-path-word': repeated },
     },
   };
 }
@@ -209,4 +210,110 @@ test('the real baseline holds only the enumerated path-keyed classes plus carrie
     + real.snapshot.inventory.rootEntrypoints.length;
   assert.equal(keys.length, expected);
   assert.deepEqual(new Set(PATH_KEYED_CLASSES.map(({ name }) => name)).size, PATH_KEYED_CLASSES.length);
+});
+
+const RPW = 'repeated-path-word';
+const NESTED = `${WRAP}/inner/reduced-motion`;
+const NESTED_NEW = `${WRAP_NEW}/inner/preference`;
+const ZETA = 'components/Zeta';
+const nestedText = 'export const reduced = 1;\n';
+const w8cBefore = () => ({ ...beforeContents, [`${SRC}${NESTED}/index.ts`]: nestedText, [`${SRC}${ZETA}/only/index.ts`]: 'export {};\n' });
+const w8cAfter = (overrides = {}) => ({ ...moved(), [`${SRC}${NESTED_NEW}/index.ts`]: nestedText, [`${SRC}${ZETA}/only/index.ts`]: 'export {};\n', ...overrides });
+
+/** The W-8c shapes: an owner pin that left the tree (a), a repeated-path-word copy sharing a renamed single-child key (b), a folder with a nested rename (c). */
+function w8cBaseline(extraRepeated = []) {
+  const stored = baseline();
+  stored.laws.members['single-child-folder'] = [ZETA, WRAP];
+  stored.laws.members[RPW] = ['components/old', WRAP, ...extraRepeated].sort();
+  return stored;
+}
+const W8C_MAP = {
+  rename: MAP,
+  within: { [`${SRC}${NESTED}`]: `${SRC}${NESTED_NEW}` },
+  drop: { [RPW]: ['components/old', WRAP] },
+};
+const w8cLive = (options = {}) => live({ singleChild: [ZETA, WRAP_NEW], ...options });
+
+function runW8c({ map = W8C_MAP, mapText = JSON.stringify(map), after = w8cAfter(), measured = w8cLive(), stored = w8cBaseline() } = {}) {
+  return relocateStructureBaseline({ baseline: stored, mapText, ...measured, before: tree(w8cBefore()), after: tree(after) });
+}
+
+test('W-8c positive: re-key, folder witnessed modulo its within rename, witnessed drops; the gate is green and tighten refuses nothing', () => {
+  const stored = w8cBaseline();
+  const produced = runW8c({ stored });
+  assert.deepEqual(produced.refused, []);
+  const next = produced.baseline;
+  assert.deepEqual(next.laws.members[RPW], [], 'both repeated-path-word pins dropped, none re-keyed');
+  assert.deepEqual(next.laws.members['single-child-folder'], [ZETA, WRAP_NEW], 'code-unit order, as tighten pins it');
+  assert.deepEqual(next.laws.members['authored-line-count'], [`${SRC}${BIG_NEW}`]);
+  assert.deepEqual(next.snapshot, { ...stored.snapshot, findings: { 'sibling-owner-dependency': [FINDING_NEW] } });
+  assert.deepEqual(produced.dropped, [{ class: `laws.members.${RPW}`, key: 'components/old' }, { class: `laws.members.${RPW}`, key: WRAP }]);
+  const statuses = Object.fromEntries(produced.content.map(({ from, status }) => [from, status]));
+  assert.equal(statuses[`${SRC}${WRAP}`], 'same-byte modulo within inner/reduced-motion -> inner/preference');
+  assert.equal(statuses[`${SRC}${NESTED}`], `same-byte (within ${SRC}${WRAP})`);
+
+  const { result, laws } = w8cLive();
+  assert.equal(compareStructureLaws(laws, next.laws).passed, true);
+  assert.equal(next.laws.members[RPW].length, laws.members[RPW].length, 'the measurement agrees with every drop');
+  const tightened = tightenStructureBaseline({ result, laws, baseline: next });
+  assert.deepEqual(tightened.refused, []);
+  assert.deepEqual(tightened.removed.findings, []);
+  assert.deepEqual(Object.values(tightened.removed.laws).flat(), []);
+});
+
+test('W-8c without the extension refuses exactly as H1 did: omission (a), value change (b), subtree (c)', () => {
+  const bare = runW8c({ map: MAP });
+  assert.match(refusals(bare), /unmapped baseline path: laws\.members\.repeated-path-word components\/old /u);
+  assert.match(refusals(bare), /value change: repeated-path-word pin re-keyed to components\/fresh\/wrap is not a live member there/u);
+  assert.match(refusals(bare), /content change: .*subtree differs \(missing 1: \/inner\/reduced-motion\/index\.ts; extra 1: \/inner\/preference\/index\.ts\)/u);
+  const partialDrop = runW8c({ map: { ...W8C_MAP, drop: { [RPW]: [WRAP] } } });
+  assert.match(refusals(partialDrop), /unmapped baseline path: laws\.members\.repeated-path-word components\/old /u, 'a drop not listed is not inferred');
+});
+
+test('refused drop: a pin still live at its target or at its old key', () => {
+  const atTarget = runW8c({ measured: w8cLive({ repeated: [WRAP_NEW] }) });
+  assert.match(refusals(atTarget), /drop of a pin still live at its target: repeated-path-word holds components\/old\/wrap -> components\/fresh\/wrap/u);
+  const atKey = runW8c({ measured: w8cLive({ repeated: ['components/old'] }) });
+  assert.match(refusals(atKey), /drop of a live pin: repeated-path-word still holds components\/old/u);
+});
+
+test('refused drop: a key no pin holds, a non-law class, a path still in the tree, no measurement', () => {
+  const nothing = runW8c({ map: { ...W8C_MAP, drop: { [RPW]: ['components/old', WRAP, 'components/never'] } } });
+  assert.match(refusals(nothing), /drop names no pin: repeated-path-word components\/never is not held by the baseline/u);
+  const finding = runW8c({ map: { ...W8C_MAP, drop: { ...W8C_MAP.drop, 'snapshot.findings': [FINDING] } } });
+  assert.match(refusals(finding), /malformed drop: snapshot\.findings is not a structure law/u);
+  const inPlace = runW8c({ stored: w8cBaseline(['components/dep']), map: { ...W8C_MAP, drop: { [RPW]: ['components/dep', 'components/old', WRAP] } } });
+  assert.match(refusals(inPlace), /drop unwitnessed: repeated-path-word components\/dep is still in the live tree/u);
+  const blind = relocateStructureBaseline({ baseline: w8cBaseline(), mapText: JSON.stringify(W8C_MAP), before: tree(w8cBefore()), after: tree(w8cAfter()) });
+  assert.match(refusals(blind), /drop unwitnessed: no live law measurement/u);
+});
+
+test('refused: a folder that differs by anything the within entries do not witness', () => {
+  const extra = runW8c({ after: w8cAfter({ [`${SRC}${WRAP_NEW}/inner/stray/index.ts`]: 'export {};\n' }) });
+  assert.match(refusals(extra), /content change: packages\/core\/src\/components\/old\/wrap -> .*subtree differs \(missing 0: -; extra 1: \/inner\/stray\/index\.ts\)/u);
+  const edited = runW8c({ after: w8cAfter({ [`${SRC}${NESTED_NEW}/index.ts`]: 'export const reduced = 2;\n' }) });
+  assert.match(refusals(edited), /content change: packages\/core\/src\/components\/old\/wrap\/inner\/reduced-motion -> .*content changed/u);
+  const astray = runW8c({ map: { ...W8C_MAP, within: { [`${SRC}${NESTED}`]: `${SRC}components/elsewhere/preference` } } });
+  assert.match(refusals(astray), /within entry leaves its renamed folder/u);
+  const orphan = runW8c({ map: { ...W8C_MAP, within: { ...W8C_MAP.within, [`${SRC}components/dep`]: `${SRC}components/dependency` } } });
+  assert.match(refusals(orphan), /within entry outside every renamed folder: packages\/core\/src\/components\/dep/u);
+  const keyed = runW8c({ map: { ...W8C_MAP, within: { [`${SRC}${BIG}`]: `${SRC}${BIG_NEW}` } } });
+  assert.match(refusals(keyed), /within entry keys a pin: packages\/core\/src\/components\/old\/big\/index\.ts belongs in rename/u);
+});
+
+test('refused: conservation — a drop while the live law still grows', () => {
+  const grown = runW8c({ measured: w8cLive({ repeated: ['components/fresh'] }) });
+  assert.match(refusals(grown), /semantic growth: repeated-path-word gains live member components\/fresh/u);
+});
+
+test('refused: a sectioned map carrying a value, an unknown section, or re-keying only dropped pins', () => {
+  const valued = runW8c({ map: { ...W8C_MAP, drop: { [RPW]: [{ key: WRAP, count: 0 }] } } });
+  assert.match(refusals(valued), /malformed drop: repeated-path-word must list the exact pin keys/u);
+  const valuedRename = runW8c({ map: { ...W8C_MAP, rename: { ...MAP, [`${SRC}${BIG}`]: { to: `${SRC}${BIG_NEW}`, lines: 901 } } } });
+  assert.match(refusals(valuedRename), /a map carries no value, count or rule/u);
+  assert.match(refusals(runW8c({ map: { ...W8C_MAP, keep: {} } })), /unknown section keep/u);
+  const stored = w8cBaseline();
+  stored.laws.members['single-child-folder'] = [ZETA];
+  const onlyDropped = runW8c({ stored, measured: w8cLive({ singleChild: [ZETA] }) });
+  assert.match(refusals(onlyDropped), /map entry re-keys nothing: every pin at packages\/core\/src\/components\/old\/wrap is dropped/u);
 });
