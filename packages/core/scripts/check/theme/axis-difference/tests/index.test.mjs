@@ -3238,9 +3238,40 @@ describe('axis-difference — a measurement that is not the published one may no
     for (const argv of [['--publish=1'], ['--publishing'], ['publish']]) assert.match(publicationRefusal({ argv }), /opt-in/u, argv[0]);
   });
 
-  it('treats an empty, zero or false opt-in as absent, exactly as the opt-out reads its own', () => {
-    for (const value of ['', '0', 'false', undefined]) {
-      assert.match(publicationRefusal({ env: { [PUBLISH_ENV]: value } }), /opt-in/u, String(value));
+  it('reads the environment opt-in as an allowlist of exactly `1`: every other spelling is refused with the opt-in message', () => {
+    const notTheDoor = [undefined, '', '0', 'false', 'off', 'FALSE', 'true', 'yes', 'banana', ' 1', '1 ', '11', '01', '1\n'];
+    for (const value of notTheDoor) {
+      const label = JSON.stringify(value) ?? 'undefined';
+      assert.match(publicationRefusal({ argv: ['node', 'index.mjs'], env: { [PUBLISH_ENV]: value } }) ?? 'permitted', /pass --publish \(or set AXIS_DIFFERENCE_PUBLISH=1\) to write the record/u, label);
+      // The flag is its own door, and a mis-spelt environment does not close it.
+      assert.equal(publicationRefusal({ argv: [PUBLISH_FLAG], env: { [PUBLISH_ENV]: value } }), null, label);
+    }
+    assert.match(publicationRefusal({ env: {} }), /opt-in/u);
+    assert.equal(publicationRefusal({ env: { [PUBLISH_ENV]: '1' } }), null);
+  });
+
+  it('reads the environment opt-out UNCHANGED: blank, zero and false are absent, and any other spelling still stops the publish', () => {
+    for (const value of [undefined, '', '0', 'false']) {
+      const label = JSON.stringify(value) ?? 'undefined';
+      assert.equal(publicationRefusal({ argv: [PUBLISH_FLAG], env: { [NO_WRITE_ENV]: value } }), null, label);
+      assert.equal(publicationRefusal({ env: { [PUBLISH_ENV]: '1', [NO_WRITE_ENV]: value } }), null, label);
+    }
+    for (const value of ['1', 'true', 'yes', 'off', 'FALSE', 'banana', ' 1', '1 ']) {
+      const refused = new RegExp(`^AXIS_DIFFERENCE_NO_WRITE=${value} is set$`, 'u');
+      assert.match(publicationRefusal({ argv: [PUBLISH_FLAG], env: { [NO_WRITE_ENV]: value } }) ?? 'permitted', refused, JSON.stringify(value));
+      assert.match(publicationRefusal({ env: { [PUBLISH_ENV]: '1', [NO_WRITE_ENV]: value } }) ?? 'permitted', refused, JSON.stringify(value));
+    }
+  });
+
+  it('PRECEDENCE holds whatever the opt-in spells: an opt-out names itself as the reason, never the opt-in', () => {
+    for (const optIn of [undefined, '', '0', 'false', 'off', 'true', 'banana', '1']) {
+      const label = JSON.stringify(optIn) ?? 'undefined';
+      assert.match(publicationRefusal({ argv: [NO_WRITE_FLAG], env: { [PUBLISH_ENV]: optIn } }), /^--no-write was passed$/u, label);
+      assert.match(publicationRefusal({ argv: [PUBLISH_FLAG, NO_WRITE_FLAG], env: { [PUBLISH_ENV]: optIn } }), /^--no-write was passed$/u, label);
+      assert.match(publicationRefusal({ env: { [PUBLISH_ENV]: optIn, [NO_WRITE_ENV]: '1' } }), /^AXIS_DIFFERENCE_NO_WRITE=1 is set$/u, label);
+      assert.match(publicationRefusal({ argv: [PUBLISH_FLAG], env: { [PUBLISH_ENV]: optIn, [NO_WRITE_ENV]: 'off' } }), /^AXIS_DIFFERENCE_NO_WRITE=off is set$/u, label);
+      // The flag outranks the environment opt-out, so it is the reason given when both are present.
+      assert.match(publicationRefusal({ argv: [NO_WRITE_FLAG], env: { [PUBLISH_ENV]: optIn, [NO_WRITE_ENV]: '1' } }), /^--no-write was passed$/u, label);
     }
   });
 

@@ -9127,8 +9127,9 @@ export const NO_WRITE_ENV = 'AXIS_DIFFERENCE_NO_WRITE';
 export const PUBLISH_FLAG = '--publish';
 export const PUBLISH_ENV = 'AXIS_DIFFERENCE_PUBLISH';
 
-/** An exported blank, `0` or `false` is an absent switch, on the opt-in and on the opt-out alike. */
+/** An exported blank, `0` or `false` is an absent opt-out; any other value is one. */
 const switchedOn = (value) => value !== undefined && value !== '' && value !== '0' && value !== 'false';
+const optedIn = (value) => value === '1';
 
 /**
  * MAY THIS RUN REPUBLISH THE ARTIFACT, and the answer is no more often than it
@@ -9152,6 +9153,14 @@ const switchedOn = (value) => value !== undefined && value !== '' && value !== '
  * The opt-out stays, as `--no-write` or `AXIS_DIFFERENCE_NO_WRITE=1`, and it
  * WINS any conflict with the opt-in: a run told both publishes nothing.
  *
+ * THE TWO SWITCHES ARE NOT READ ALIKE (audit 2026-10-13, evening). Each must
+ * fail toward the record staying as it is, and that is opposite readings. The
+ * opt-in AUTHORIZES a write, so a value it does not recognise must not publish:
+ * it is an allowlist of exactly `1`, and `true`, `yes`, `off`, `FALSE` or a
+ * padded ` 1` are no door at all. The opt-out PROTECTS, so a value it does not
+ * recognise must still stop the write: only a blank, `0` or `false` is absent.
+ * Read with one predicate, `AXIS_DIFFERENCE_PUBLISH=off` published.
+ *
  * WHAT IT DELIBERATELY DOES NOT DO: refuse a `--families=` run on its own.
  * `evaluate` may skip the pinned-denominator check on a filtered run, but the
  * pilot ALWAYS filters -- to its own declared roster -- so "filtered" does not
@@ -9166,7 +9175,7 @@ const switchedOn = (value) => value !== undefined && value !== '' && value !== '
 export function publicationRefusal({ argv = [], env = {} } = {}) {
   if (argv.includes(NO_WRITE_FLAG)) return `${NO_WRITE_FLAG} was passed`;
   if (switchedOn(env[NO_WRITE_ENV])) return `${NO_WRITE_ENV}=${env[NO_WRITE_ENV]} is set`;
-  if (argv.includes(PUBLISH_FLAG) || switchedOn(env[PUBLISH_ENV])) return null;
+  if (argv.includes(PUBLISH_FLAG) || optedIn(env[PUBLISH_ENV])) return null;
   return `publication is opt-in: pass ${PUBLISH_FLAG} (or set ${PUBLISH_ENV}=1) to write the record`;
 }
 
