@@ -1018,7 +1018,7 @@
     },
     {
       "channels": 2526,
-      "channelsThroughAliases": 4124,
+      "channelsThroughAliases": 4123,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1374,7 +1374,7 @@
     },
     {
       "channels": 2526,
-      "channelsThroughAliases": 4124,
+      "channelsThroughAliases": 4123,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1722,7 +1722,7 @@
     },
     {
       "channels": 2624,
-      "channelsThroughAliases": 4327,
+      "channelsThroughAliases": 4326,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -2074,7 +2074,7 @@
     },
     {
       "channels": 2612,
-      "channelsThroughAliases": 4303,
+      "channelsThroughAliases": 4302,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -3518,7 +3518,7 @@
     },
     {
       "channels": 391,
-      "channelsThroughAliases": 1220,
+      "channelsThroughAliases": 1219,
       "decision": "states.emphasis",
       "derivers": [
         "app-shell",
@@ -3746,7 +3746,7 @@
     },
     {
       "channels": 677,
-      "channelsThroughAliases": 1488,
+      "channelsThroughAliases": 1487,
       "decision": "states.focus-style",
       "derivers": [
         "app-shell",
@@ -4580,6 +4580,7 @@
         "moderation-gallery",
         "mono-stat",
         "notification-center",
+        "notification-surface",
         "notifier",
         "operational-ledger",
         "otp-input",
@@ -4748,6 +4749,7 @@
         "moderation-gallery",
         "mono-stat",
         "notification-center",
+        "notification-surface",
         "notifier",
         "operational-ledger",
         "otp-input",
@@ -5154,6 +5156,7 @@
         "moderation-gallery",
         "mono-stat",
         "notification-center",
+        "notification-surface",
         "notifier",
         "operational-ledger",
         "otp-input",

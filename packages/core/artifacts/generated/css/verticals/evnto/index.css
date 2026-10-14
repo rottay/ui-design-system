@@ -12010,16 +12010,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
         100%
     )
   );
-  --ds-command-home-panel-bg-strong: linear-gradient(
-    180deg,
-    var(--ds-surface-card-bg) 0%,
-    color-mix(
-        in srgb,
-        var(--ds-surface-panel-bg) 32%,
-        var(--ds-surface-card-bg)
-      )
-      100%
-  );
   --ds-command-home-compact-action-height: var(
     --ds-command-action-height,
     202px
@@ -95523,6 +95513,25 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   opacity: 0.7;
 }
 
+/* ---- item title: the md text tier on the tenant's body role, weighted by read state;
+   it states every facet the modern page shell's descendant `title` rule paints. ---- */
+.ds-engine-modern .ds-surface.ds-notification .ds-notification__title {
+  max-width: none;
+  font-family: var(--ds-type-body-font-family);
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-type-body-font-weight);
+  line-height: var(--ds-type-body-line-height);
+  letter-spacing: var(--ds-type-body-letter-spacing);
+  text-transform: var(--ds-type-body-text-transform);
+  font-variant-numeric: var(--ds-type-body-font-variant-numeric);
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.ds-engine-modern .ds-surface.ds-notification .ds-notification__item--unread[data-read='false'] .ds-notification__title {
+  font-weight: var(--ds-font-weight-semibold);
+}
+
 /* ---- item action row offset ----
    The caller-provided inline action sits under the main row on the
    surface's own spacing rhythm. */
@@ -101670,13 +101679,14 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * prefix that nothing wrote; it is now the family's own channel, fallback
  * byte-identical.
  *
- * STATE IS DECIDED ONCE (F-37): the day cell and the event chip are stateful
- * parts -- the engine runs each through `useInteractionState` and stamps
- * `partAttributes(...)` -- so every hover, press and focus arm below pairs the
- * kernel token with the platform pseudo-class it stands for
- * (`:is([data-state~='hovered'], :hover)`). At rest the kernel serializes
- * nothing, so the pseudo-class is the fallback of one decision, never a second
- * authority.
+ * STATE IS DECIDED ONCE (F-37): the day cell is a stateful part the engine
+ * runs through `useInteractionState` and stamps with `partAttributes(...)`;
+ * the read-only event chip is a local state wrapper named by its class hook,
+ * no part (owner answer 26 (c), 2026-10-14) -- so every hover, press and
+ * focus arm below pairs the kernel token with the platform pseudo-class it
+ * stands for (`:is([data-state~='hovered'], :hover)`). At rest the kernel
+ * serializes nothing, so the pseudo-class is the fallback of one decision,
+ * never a second authority.
  */
 
 /* ---- loading frame (Spinner owns ring + cadence) ---- */
@@ -110505,7 +110515,6 @@ html[lang]:lang(ar) {
   --ds-color-picker-transition-timing: var(--ds-input-transition-timing);
   --ds-color-surface-ink: color-mix(in lab, var(--ds-color-mono-0) 97%, var(--ds-color-mono-1000));
   --ds-color-surface-paper: var(--ds-color-mono-1000);
-  --ds-command-home-console-padding: var(--ds-command-console-padding, calc(clamp(20px, 3vw, 34px) * var(--ds-rhythm-effective-scale, 1)) calc(clamp(16px, 4vw, 56px) * var(--ds-rhythm-effective-scale, 1)) calc(24px * var(--ds-rhythm-effective-scale, 1)));
   --ds-command-home-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
   --ds-command-home-panel-gap: calc(var(--ds-spacing-3, 14px) * var(--ds-rhythm-effective-scale, 1));
   --ds-compact-card-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
@@ -110928,14 +110937,9 @@ html[lang]:lang(ar) {
   --ds-collection-card-bg-hover: var(--ds-premium-card-bg-hover);
   --ds-collection-card-selected-ring: var(--ds-premium-card-selected-ring);
   --ds-color-surface-subtle: var(--ds-surface-panel-bg);
-  --ds-command-home-card-bg: linear-gradient(90deg, color-mix(in srgb, var(--ds-command-home-card-tone) 6%, transparent) 1px, transparent 1px), linear-gradient(180deg, color-mix(in srgb, var(--ds-command-home-card-tone) 4%, transparent) 1px, transparent 1px), linear-gradient(180deg, var(--ds-surface-card-bg), var(--ds-surface-panel-bg));
-  --ds-command-home-console-bg: repeating-linear-gradient(90deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 30px), repeating-linear-gradient(0deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 30px), var(--ds-workspace-shell-overlay, transparent), linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card-bg) 96%, var(--ds-color-primary) 4%) 0%, color-mix(in srgb, var(--ds-surface-panel-bg) 72%, var(--ds-surface-card-bg)) 100%);
-  --ds-command-home-control-bg: var(--ds-toolbar-control-bg, var(--ds-button-default-bg, var(--ds-surface-card-bg)));
-  --ds-command-home-control-hover-bg: var(--ds-button-default-bg-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card-bg)));
-  --ds-command-home-hero-bg: repeating-linear-gradient(90deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 28px), repeating-linear-gradient(0deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 28px), var(--ds-premium-card-bg, linear-gradient(180deg, var(--ds-surface-card-bg) 0%, color-mix(in srgb, var(--ds-surface-panel-bg) 50%, var(--ds-surface-card-bg)) 100%));
-  --ds-command-home-icon-border: var(--ds-surface-icon-border, color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-primary)));
+  --ds-command-home-console-bg: var(--ds-command-home-panel-shadow), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
+  --ds-command-home-hero-bg: 0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent), 0 12px 30px color-mix(in srgb, var(--ds-color-primary) 7%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card-bg) 78%, transparent);
   --ds-command-home-panel-bg: var(--ds-premium-card-bg, linear-gradient(180deg, var(--ds-surface-card-bg) 0%, color-mix(in srgb, var(--ds-surface-panel-bg) 56%, var(--ds-surface-card-bg)) 100%));
-  --ds-command-home-panel-bg-strong: linear-gradient(180deg, var(--ds-surface-card-bg) 0%, color-mix(in srgb, var(--ds-surface-panel-bg) 32%, var(--ds-surface-card-bg)) 100%);
   --ds-command-home-panel-border-soft: color-mix(in srgb, var(--ds-command-home-panel-border) 68%, var(--ds-surface-card-bg));
   --ds-command-palette-shadow: var(--ds-shadow-dialog);
   --ds-command-rail-bg: linear-gradient(180deg, var(--ds-surface-card-bg) 0%, var(--ds-surface-panel-bg) 100%);
@@ -111009,11 +111013,6 @@ html[lang]:lang(ar) {
   --ds-collection-card-radius: var(--ds-premium-card-radius);
   --ds-collection-card-shadow: var(--ds-premium-card-shadow);
   --ds-collection-card-shadow-hover: var(--ds-premium-card-shadow-hover);
-  --ds-command-home-card-shadow: var(--ds-surface-card-shadow, var(--ds-card-shadow, 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)));
-  --ds-command-home-card-shadow-hover: var(--ds-surface-card-shadow-hover, var(--ds-card-shadow-hover, 0 2px 6px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)));
-  --ds-command-home-icon-bg: var(--ds-surface-icon-bg, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card-bg)));
-  --ds-command-home-meter-bg: var(--ds-meter-track, color-mix(in srgb, var(--ds-color-border-primary) 72%, transparent));
-  --ds-command-home-surface-bg: repeating-linear-gradient(90deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 26px), repeating-linear-gradient(0deg, var(--ds-command-home-grid-line) 0 1px, transparent 1px 26px), var(--ds-command-rail-bg, linear-gradient(180deg, var(--ds-surface-card-bg) 0%, color-mix(in srgb, var(--ds-surface-panel-bg) 58%, var(--ds-surface-card-bg)) 100%));
   --ds-compact-card-shadow: var(--ds-premium-card-shadow);
   --ds-compact-card-shadow-hover: var(--ds-premium-card-shadow-hover);
   --ds-control-brand-tint: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-control-surface));

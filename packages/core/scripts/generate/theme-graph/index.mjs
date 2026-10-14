@@ -188,8 +188,14 @@ function readJsonViews() {
  * chrome-variables member splits (RET-04), the showroom splits, and the W-10a
  * owner renames (046b207fe) — each adds the files' nodes and edges; no removal,
  * no new consumer class. The pin follows the measurement, never the reverse.
+ * Same day, evening integration wave, 10,142,628 -> 10,145,097 (+2,469):
+ * lane K's notification title skin rules (+8 modern reads), B2's
+ * command-home-panel-bg-strong emission retirement (-1 declaration, its
+ * color-mix with it), the E8-b typography strip (fb048b9cc) and the W-8c
+ * path renames shifting node/edge bytes. Measured on the regenerated
+ * artifact; no removal a consumer references, no new consumer class.
  */
-export const SIZE_BUDGET_BYTES = 10_142_628;
+export const SIZE_BUDGET_BYTES = 10_145_097;
 
 /** A key no id can collide with, used only to sort and de-duplicate pairs. */
 const SEP = "\u241F";

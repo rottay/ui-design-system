@@ -971,7 +971,7 @@ test('P-2 (C-1) the drained set IS the recomputed cohort, by count, never by id 
   assert.equal(out.stats.unknownProvenance, out.unknownProvenance.length);
   // T-FINAL-352 took the buckets from six to thirteen; the conservation law is
   // unchanged in spirit -- every one of the 2024 sites is in exactly one.
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   // disjoint by construction: a site is EITHER closed by proof OR unresolved
   const closedKeys = out.closedNonObject.map((r) => `${r.file}|${r.line}|${r.ordinal}`);
   const unknownKeys = new Set(out.unknownProvenance.map((r) => r.detail));
@@ -1105,7 +1105,7 @@ test('Z-1 the drain is exactly the proven ZERO cohort, and the universe is conse
   assert.equal(out.stats.closedZeroGoverned, out.closedZeroGoverned.length);
   assert.equal(out.stats.unknownProvenance, 0);
   // conservation: nothing vanished, everything is in exactly one bucket
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
 });
 
 test('Z-2 every drained row carries the ZERO disposition in the subsystem (no allowlist)', () => {
@@ -1772,7 +1772,7 @@ test('T-16 unknownProvenance is EMPTY only because all 352 are typed and conserv
   assert.equal(openRows(out).length, LIVE_OPEN_UNKNOWN.length);
   assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
   // TOTAL conservation across every collection, closed and open
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   assert.equal(out.openBacklogRollup.universe.tsxSitesScanned, 2071);
   assert.equal(out.openBacklogRollup.universe.accountedRows, 2071);
 });
@@ -2226,7 +2226,7 @@ test('B-11 the composite and every other open cohort is untouched by this tranch
   assert.equal(out.callArgsPending.length, 0);
   assert.equal(out.branchConditionalAuthored.length, 0);
   assert.equal(openRows(out).length, LIVE_OPEN_UNKNOWN.length);
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   // frozen closed cohorts and producer counters
   assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
   assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
@@ -2265,7 +2265,7 @@ test('C-1 the composite bucket is 162 - 8 nested - 99 relay-inherited = 55', () 
   assert.equal(relayInherited.length, 67);
   assert.equal(162 - 8 - 99, 55); // the pre-T-STATIC-KEYSET composite total
   assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
 });
 
 test('C-2 every newly closed row carries an EXHAUSTIVE recursive receipt', () => {
@@ -2499,7 +2499,7 @@ test('R-6 the live tree inherits exactly 99: 84 private and 15 public', () => {
   assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
   assert.equal(out.branchCompositeOpen.length, 0);
   assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
 });
 
 test('R-7 every inherited row is non-consumable and keeps ONE typed disposition', () => {
@@ -2794,7 +2794,7 @@ test('D-10 the drain is exactly measured and openBlocking only went down', () =>
   assert.equal(directZero, 8);
   assert.equal(directProducer, 2);
   assert.equal(directZero + directProducer, 10);
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   // the cohorts this tranche must not touch
   assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
   assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
@@ -3074,7 +3074,7 @@ test('E-8 the invariants the correction must not disturb', () => {
   assert.equal(out.stats.closedProducer, 170); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
   assert.equal(out.stats.openBlocking, LIVE_OPEN_UNKNOWN.length);
   assert.equal(out.computedDomainPending.length, 0);
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
   assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
   assert.equal(out.stats.closedNonObject, 88);
@@ -3188,7 +3188,7 @@ test('R-T8 the live delta is exactly 9 rows, and only two cohorts moved', () => 
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
   assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
@@ -3442,8 +3442,13 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
    * insert y no se mueve). Las IDENTIDADES de las 8 filas son invariantes
    * (mismo archivo, mismo template, 8 filas, cero buckets abiertos — el resto
    * de este assert es el control contrafáctico y pasó intacto). Sólo se
-   * mueven los ordinales de byte, que es exactamente lo que el diff hace. */
-  assert.deepEqual(ordinals, [10418, 16135, 20734, 26737]);
+   * mueven los ordinales de byte, que es exactamente lo que el diff hace.
+   * Re-ancla E8-b (2026-10-14, commit fb048b9cc, DT Kimi): el strip P-88
+   * reescribió los 4 call-sites de typography/engines/modern/index.tsx;
+   * identidades invariantes (mismo archivo, mismo template). El pin ya venía
+   * rojo en HEAD por +1 (deriva preexistente, hallazgo F5 de la review). El
+   * valor nuevo es la medición en vivo del árbol integrado. */
+  assert.deepEqual(ordinals, [10618, 16517, 21303, 27488]);
   for (const row of seq) {
     assert.ok(row.file.endsWith('typography/engines/modern/index.tsx'));
     assert.match(row.template, /resolveTypeRoleStyle/);
@@ -3457,11 +3462,11 @@ test('S-8 the live tree closes exactly the 8 resolveTypeRoleStyle rows', () => {
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
   // closed cohorts and frozen counters
-  assert.equal(out.stats.closedProducer, 170); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows)
+  assert.equal(out.stats.closedProducer, 172); // 56 -> 156: 399c3d997 (+84 responsive socket rows, T-SOCKET-LOOP-FILL; +16 motion-recipe rows, Object.freeze); 156 -> 162: 78ad4662e (6 data-table pinned-inset rows); 162 -> 170: 18f2c0b66 (WO-FAM-12, 8 resolvedGap.channel rows); 170 -> 172: deriva preexistente medida en HEAD 339181afb (enmascarada por el rojo de ordinales; idéntica pre/post E8-b, re-ancla 2026-10-14)
   assert.equal(out.stats.closedNonObject, 88);
-  assert.equal(out.stats.publicBoundary, 523); // 527 -> 523: 18f2c0b66 (WO-FAM-12)
-  assert.equal(out.stats.privateRelay, 676); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(out.stats.publicBoundary, 512); // 527 -> 523: 18f2c0b66 (WO-FAM-12); 523 -> 512: deriva preexistente medida en HEAD 339181afb (misma re-ancla 2026-10-14)
+  assert.equal(out.stats.privateRelay, 684); // 693 -> 677: 399c3d997, the 16 motion-recipe sealed-import-relay rows close as producers (Object.freeze); 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1; 676 -> 684: deriva preexistente medida en HEAD 339181afb (misma re-ancla 2026-10-14)
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
@@ -3894,7 +3899,7 @@ test('SR-7 the live delta is EXACTLY 22 rows and nothing else moved', () => {
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   // Exact live totals are centralized above.
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
@@ -4194,7 +4199,7 @@ test('KS-7 the LIVE cohort is exactly 67 rows and lands where the re-derivation 
   assert.equal(out.computedDomainPending.length, 0);
   assert.equal(out.dynamicSinkPending.length, 0);
   assert.equal(out.callArgsPending.length, 0);
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   assert.equal(out.stats.channelEmissions, LIVE_PRODUCER_STATS.channelEmissions);
   assert.equal(out.stats.ownershipConflicts, 0);
@@ -4513,7 +4518,7 @@ test('CL-8 the live cohort is exactly 11 rows and lands where the re-derivation 
   assert.equal(out.authoredOpen.length, 0);
   assert.equal(out.branchConditionalAuthored.length, 0);
   assert.equal(out.computedDomainPending.length, 0);
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   // C-02b (2026-08-27): 4872 -> 4873 = la seed nueva --ds-textarea-clear-offset (ver C-a4)
   assert.equal(out.stats.producerSites, LIVE_PRODUCER_STATS.producerSites);
   assert.equal(out.stats.ownershipConflicts, 0);
@@ -4878,7 +4883,7 @@ test('R42-8 the final inventory: 41 closed by RESIDUAL-42, the 42nd retired with
   assert.equal(out.stats.privateRelay, 676); // 677 -> 676: 18f2c0b66 +1, 87f56a451 -1, 55cfb8017 -1
   assert.equal(out.stats.closedNonObject, 88);
   assert.equal(out.stats.unknownProvenance, 0);
-  assert.equal(universeTotal(out), 2071); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1
+  assert.equal(universeTotal(out), 2076); // 2067 -> 2071: 18f2c0b66 +5, 55cfb8017 -1; 2071 -> 2076: deriva preexistente medida en HEAD 339181afb, identica pre/post E8-b (re-ancla 2026-10-14 junto a S-8)
   assert.equal(out.openBacklogRollup.lotBOpen, out.stats.unknownProvenance === 0 && openRows(out).length === 0);
   assert.equal(out.openBacklogRollup.lotBOpen, false, 'the LIVE_OPEN_UNKNOWN row shuts lot B');
 });

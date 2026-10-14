@@ -3755,7 +3755,10 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "typography.families",
+        "typography.numeric",
         "typography.pairing",
+        "typography.role-weights",
         "typography.scale"
       ],
       "family": "notification-surface"

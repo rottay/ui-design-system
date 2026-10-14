@@ -7,7 +7,7 @@
 > 278 skin families; 265 are reached by at least one decision, 13 by none.
 > The tier is the component tier that owns the family; a family with no component folder carries none.
 
-digest: 71fe57c27114daa585356247a89ae81c5a5c0af7089baa9bcb14875186c3ccd2
+digest: 46bc289c0c799ef9e57a6bc89c3980b0474d9752d4ce8a2788b3f63f72b2da25
 
 | family | tier | decisions reaching it |
 |---|---|---|
@@ -181,7 +181,7 @@ digest: 71fe57c27114daa585356247a89ae81c5a5c0af7089baa9bcb14875186c3ccd2
 | `mono-stat` | pattern | 13 |
 | `navigation-static` | — | 4 |
 | `notification-center` | pattern | 20 |
-| `notification-surface` | — | 15 |
+| `notification-surface` | — | 18 |
 | `notifier` | primitive | 24 |
 | `operational-ledger` | pattern | 20 |
 | `operational-surface` | — | 14 |
@@ -479,7 +479,7 @@ on the family.
 | `mono-stat` | `experience.profile`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `navigation-static` | `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds` |
 | `notification-center` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
-| `notification-surface` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.pairing`, `typography.scale` |
+| `notification-surface` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `notifier` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.control-height`, `shape.nesting`, `shape.radius-scale`, `spacing.rhythm`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.effect-intensity`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `operational-ledger` | `density.mode`, `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `surfaces.border-style`, `surfaces.elevation-posture`, `typography.families`, `typography.numeric`, `typography.pairing`, `typography.role-weights`, `typography.scale` |
 | `operational-surface` | `experience.profile`, `motion.character`, `motion.dial`, `palette.contrast-posture`, `palette.neutral-temperature`, `palette.seeds`, `palette.status-seeds`, `profiles.expressive`, `shape.button-style`, `shape.radius-scale`, `states.emphasis`, `states.focus-style`, `typography.pairing`, `typography.scale` |

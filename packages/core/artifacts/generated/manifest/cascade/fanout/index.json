@@ -45,16 +45,16 @@
   ],
   "summary": {
     "filesScanned": 2728,
-    "channels": 9266,
-    "channelsDs": 8575,
+    "channels": 9265,
+    "channelsDs": 8574,
     "channelsBridge": 691,
-    "channelsWithoutReaders": 200,
-    "channelsPaintsFalse": 946,
-    "channelsPaintsInModernFalse": 2023,
-    "readers": 45859,
+    "channelsWithoutReaders": 199,
+    "channelsPaintsFalse": 945,
+    "channelsPaintsInModernFalse": 2022,
+    "readers": 45864,
     "readersByPlane": {
       "modern-skin-css": 16522,
-      "presentation-css": 12150,
+      "presentation-css": 12155,
       "foundation-css": 1745,
       "runtime-css": 197,
       "engines-shared-css": 23,
@@ -70,7 +70,7 @@
     },
     "channelsByPlane": {
       "modern-skin-css": 4908,
-      "presentation-css": 2500,
+      "presentation-css": 2504,
       "foundation-css": 778,
       "runtime-css": 80,
       "engines-shared-css": 22,
@@ -1462,14 +1462,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 374,
+          "line": 375,
           "prop": "inline-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 375,
+          "line": 376,
           "prop": "block-size",
           "scalars": []
         }
@@ -4497,7 +4497,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/structures/dashboard/insights/presentation/metrics/cards/index.tsx",
-          "line": 204,
+          "line": 202,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -4520,7 +4520,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/structures/dashboard/insights/presentation/metrics/cards/index.tsx",
-          "line": 101,
+          "line": 99,
           "prop": "fontSize",
           "scalars": []
         }
@@ -40435,7 +40435,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 888,
+          "line": 878,
           "prop": "--ds-command-home-control-bg",
           "scalars": []
         },
@@ -40562,7 +40562,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 895,
+          "line": 885,
           "prop": "--ds-command-home-control-hover-bg",
           "scalars": []
         },
@@ -40645,7 +40645,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 892,
+          "line": 882,
           "prop": "--ds-command-home-control-border",
           "scalars": []
         },
@@ -46749,7 +46749,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 899,
+          "line": 889,
           "prop": "--ds-command-home-control-hover-border",
           "scalars": []
         },
@@ -51329,7 +51329,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 170,
+          "line": 171,
           "prop": "min-block-size",
           "scalars": []
         }
@@ -51348,7 +51348,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 367,
+          "line": 368,
           "prop": "min-block-size",
           "scalars": []
         }
@@ -51369,14 +51369,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 270,
+          "line": 271,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 318,
+          "line": 319,
           "prop": "color",
           "scalars": []
         }
@@ -51395,7 +51395,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 390,
+          "line": 391,
           "prop": "min-block-size",
           "scalars": []
         }
@@ -59429,21 +59429,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 921,
+          "line": 911,
           "prop": "--ds-command-home-card-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2858,
+          "line": 2848,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2877,
+          "line": 2867,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -59720,7 +59720,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 928,
+          "line": 918,
           "prop": "--ds-command-home-card-shadow-hover",
           "scalars": []
         },
@@ -78050,7 +78050,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2527,
+          "line": 2517,
           "prop": "--ds-command-home-card-tone",
           "scalars": []
         },
@@ -80793,7 +80793,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3119,
+          "line": 3109,
           "prop": "background",
           "scalars": []
         },
@@ -86674,7 +86674,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
-          "line": 85,
+          "line": 104,
           "prop": "background",
           "scalars": []
         },
@@ -89147,28 +89147,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 138,
+          "line": 139,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 163,
+          "line": 164,
           "prop": "border-block-end",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 176,
+          "line": 177,
           "prop": "border-inline-end",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 177,
+          "line": 178,
           "prop": "border-block-end",
           "scalars": []
         },
@@ -89869,77 +89869,84 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1282,
+          "line": 1272,
           "prop": "--ds-table-border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2856,
+          "line": 2846,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3043,
+          "line": 3033,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3104,
+          "line": 3094,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3135,
+          "line": 3125,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3150,
+          "line": 3140,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3163,
+          "line": 3153,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3184,
+          "line": 3174,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3191,
+          "line": 3181,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3226,
+          "line": 3216,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3239,
+          "line": 3229,
+          "prop": "border-color",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3238,
           "prop": "border-color",
           "scalars": []
         },
@@ -89947,13 +89954,6 @@
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3248,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3258,
           "prop": "border-color",
           "scalars": []
         },
@@ -92176,7 +92176,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 900,
+          "line": 890,
           "prop": "--ds-command-home-control-hover-border",
           "scalars": []
         },
@@ -92508,84 +92508,84 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 883,
+          "line": 873,
           "prop": "--ds-command-home-icon-border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 892,
+          "line": 882,
           "prop": "--ds-command-home-control-border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 934,
+          "line": 924,
           "prop": "--ds-command-home-meter-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3320,
+          "line": 3310,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3364,
+          "line": 3354,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3385,
+          "line": 3375,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3402,
+          "line": 3392,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3438,
+          "line": 3428,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3459,
+          "line": 3449,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3476,
+          "line": 3466,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3505,
+          "line": 3495,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3567,
+          "line": 3557,
           "prop": "border",
           "scalars": []
         },
@@ -94164,49 +94164,49 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2510,
+          "line": 2500,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2539,
+          "line": 2529,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2602,
+          "line": 2592,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2615,
+          "line": 2605,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2698,
+          "line": 2688,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2711,
+          "line": 2701,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2875,
+          "line": 2865,
           "prop": "border",
           "scalars": []
         },
@@ -97294,21 +97294,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3014,
+          "line": 3004,
           "prop": "border-bottom",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3019,
+          "line": 3009,
           "prop": "border-top",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3028,
+          "line": 3018,
           "prop": "border-top",
           "scalars": []
         },
@@ -99015,7 +99015,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1965,
+          "line": 1955,
           "prop": "color",
           "scalars": []
         },
@@ -100418,21 +100418,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1965,
+          "line": 1955,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3162,
+          "line": 3152,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3167,
+          "line": 3157,
           "prop": "background",
           "scalars": []
         },
@@ -117106,14 +117106,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 235,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 253,
+          "line": 236,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -117121,20 +117114,27 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
           "line": 254,
+          "prop": "box-shadow",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
+          "line": 255,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 270,
+          "line": 271,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 318,
+          "line": 319,
           "prop": "color",
           "scalars": []
         },
@@ -119084,273 +119084,280 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 818,
+          "line": 808,
           "prop": "--ds-command-home-console-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 876,
+          "line": 866,
           "prop": "--ds-command-home-icon-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 882,
+          "line": 872,
           "prop": "--ds-command-home-icon-border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 896,
+          "line": 886,
           "prop": "--ds-command-home-control-hover-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 902,
+          "line": 892,
           "prop": "--ds-command-home-card-tone",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 938,
+          "line": 928,
           "prop": "--ds-command-home-meter-fill",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1051,
+          "line": 1041,
           "prop": "--ds-workspace-shell-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1059,
+          "line": 1049,
           "prop": "--ds-workspace-shell-overlay",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1063,
+          "line": 1053,
           "prop": "--ds-workspace-shell-overlay",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1076,
+          "line": 1066,
           "prop": "--ds-workspace-shell-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1323,
+          "line": 1313,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1378,
+          "line": 1368,
           "prop": "--ds-signal-card-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1472,
+          "line": 1462,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1534,
+          "line": 1524,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1598,
+          "line": 1588,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1663,
+          "line": 1653,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1696,
+          "line": 1686,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1894,
+          "line": 1884,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2087,
+          "line": 2077,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2398,
+          "line": 2388,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2410,
+          "line": 2400,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2499,
+          "line": 2489,
           "prop": "--ds-command-home-card-tone",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2517,
+          "line": 2507,
           "prop": "--ds-command-home-card-tone",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2591,
+          "line": 2581,
           "prop": "--ds-command-home-card-tone",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2692,
+          "line": 2682,
           "prop": "--ds-command-home-card-tone",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3058,
+          "line": 3048,
           "prop": "background-image",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3071,
+          "line": 3061,
           "prop": "background",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3074,
+          "prop": "background",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3078,
+          "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3084,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3088,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3094,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3103,
+          "line": 3093,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3118,
+          "line": 3108,
           "prop": "background",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3114,
+          "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3124,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3134,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3187,
+          "line": 3177,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3202,
+          "line": 3192,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3225,
+          "line": 3215,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3230,
+          "line": 3220,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3238,
+          "line": 3228,
+          "prop": "border-color",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3237,
           "prop": "border-color",
           "scalars": []
         },
@@ -119364,105 +119371,98 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3257,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3279,
+          "line": 3269,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3343,
+          "line": 3333,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3349,
+          "line": 3339,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3418,
+          "line": 3408,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3426,
+          "line": 3416,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3437,
+          "line": 3427,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3442,
+          "line": 3432,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3467,
+          "line": 3457,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3472,
+          "line": 3462,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3475,
+          "line": 3465,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3504,
+          "line": 3494,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3508,
+          "line": 3498,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3515,
+          "line": 3505,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3558,
+          "line": 3548,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -126759,14 +126759,14 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
+          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/projection/modern/index.ts",
           "line": 45,
           "prop": "lg",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
+          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/projection/modern/index.ts",
           "line": 46,
           "prop": "xl",
           "scalars": []
@@ -127846,14 +127846,14 @@
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
+          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/projection/modern/index.ts",
           "line": 43,
           "prop": "sm",
           "scalars": []
         },
         {
           "plane": "ts-other",
-          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts",
+          "file": "src/infrastructure/compilers/runtime/theme/presentation/adapters/projection/modern/index.ts",
           "line": 44,
           "prop": "md",
           "scalars": []
@@ -130543,7 +130543,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1063,
+          "line": 1053,
           "prop": "--ds-workspace-shell-overlay",
           "scalars": []
         },
@@ -132242,119 +132242,119 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 938,
+          "line": 928,
           "prop": "--ds-command-home-meter-fill",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1830,
+          "line": 1820,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1842,
+          "line": 1832,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2106,
+          "line": 2096,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2134,
+          "line": 2124,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2522,
+          "line": 2512,
           "prop": "--ds-command-home-card-tone",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2527,
+          "line": 2517,
           "prop": "--ds-command-home-card-tone",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3149,
+          "line": 3139,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3154,
+          "line": 3144,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3305,
+          "line": 3295,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3307,
+          "line": 3297,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3363,
+          "line": 3353,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3368,
+          "line": 3358,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3384,
+          "line": 3374,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3389,
+          "line": 3379,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3566,
+          "line": 3556,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3571,
+          "line": 3561,
           "prop": "background",
           "scalars": []
         },
@@ -137882,70 +137882,70 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1338,
+          "line": 1328,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1447,
+          "line": 1437,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1461,
+          "line": 1451,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1494,
+          "line": 1484,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1530,
+          "line": 1520,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1590,
+          "line": 1580,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1818,
+          "line": 1808,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2269,
+          "line": 2259,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2438,
+          "line": 2428,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2546,
+          "line": 2536,
           "prop": "color",
           "scalars": []
         },
@@ -140631,7 +140631,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 271,
+          "line": 272,
           "prop": "color",
           "scalars": []
         },
@@ -140848,7 +140848,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1938,
+          "line": 1928,
           "prop": "color",
           "scalars": []
         },
@@ -143334,7 +143334,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 125,
+          "line": 126,
           "prop": "color",
           "scalars": []
         },
@@ -144496,238 +144496,238 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 922,
+          "line": 912,
           "prop": "--ds-command-home-card-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 929,
+          "line": 919,
           "prop": "--ds-command-home-card-shadow-hover",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1040,
+          "line": 1030,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1172,
+          "line": 1162,
           "prop": "mask-image",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1252,
+          "line": 1242,
           "prop": "mask-image",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1284,
+          "line": 1274,
           "prop": "--ds-table-cell-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1292,
+          "line": 1282,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1359,
+          "line": 1349,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1446,
+          "line": 1436,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1479,
+          "line": 1469,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1589,
+          "line": 1579,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1615,
+          "line": 1605,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1709,
+          "line": 1699,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1752,
+          "line": 1742,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1770,
+          "line": 1760,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1805,
+          "line": 1795,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1898,
+          "line": 1888,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1985,
+          "line": 1975,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2004,
+          "line": 1994,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2120,
+          "line": 2110,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2140,
+          "line": 2130,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2176,
+          "line": 2166,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2217,
+          "line": 2207,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2420,
+          "line": 2410,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2442,
+          "line": 2432,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2453,
+          "line": 2443,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2604,
+          "line": 2594,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2622,
+          "line": 2612,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3035,
+          "line": 3025,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3193,
+          "line": 3183,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3278,
+          "line": 3268,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3342,
+          "line": 3332,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3417,
+          "line": 3407,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3557,
+          "line": 3547,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -149818,14 +149818,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 155,
+          "line": 156,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 350,
+          "line": 351,
           "prop": "color",
           "scalars": []
         },
@@ -150399,91 +150399,91 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1682,
+          "line": 1672,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1723,
+          "line": 1713,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1730,
+          "line": 1720,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1812,
+          "line": 1802,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1906,
+          "line": 1896,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2012,
+          "line": 2002,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2056,
+          "line": 2046,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2127,
+          "line": 2117,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2183,
+          "line": 2173,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2237,
+          "line": 2227,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2429,
+          "line": 2419,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2469,
+          "line": 2459,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2656,
+          "line": 2646,
           "prop": "color",
           "scalars": []
         },
@@ -154519,42 +154519,42 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1850,
+          "line": 1840,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2532,
+          "line": 2522,
           "prop": "--ds-command-home-card-tone",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3319,
+          "line": 3309,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3324,
+          "line": 3314,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3401,
+          "line": 3391,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3406,
+          "line": 3396,
           "prop": "background",
           "scalars": []
         },
@@ -160307,7 +160307,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 791,
+          "line": 781,
           "prop": "--ds-command-home-compact-action-height",
           "scalars": []
         },
@@ -160334,7 +160334,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 795,
+          "line": 785,
           "prop": "--ds-command-home-console-min-height",
           "decl": "--ds-command-home-console-min-height: var( --ds-command-console-min-height, calc(100dvh - 108px) )",
           "scalars": []
@@ -160363,7 +160363,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 801,
+          "line": 791,
           "prop": "--ds-command-home-console-padding",
           "decl": "--ds-command-home-console-padding: var(--ds-command-console-padding, calc(clamp(20px, 3vw, 34px) * var(--ds-rhythm-effective-scale, 1)) calc(clamp(16px, 4vw, 56px) * var(--ds-rhythm-effective-scale, 1)) calc(24px * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -160448,7 +160448,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2870,
+          "line": 2860,
           "prop": "background-image",
           "scalars": []
         }
@@ -160566,7 +160566,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1121,
+          "line": 1111,
           "prop": "opacity",
           "scalars": []
         }
@@ -160587,7 +160587,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2871,
+          "line": 2861,
           "prop": "background-size",
           "scalars": []
         }
@@ -160608,28 +160608,28 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2605,
+          "line": 2595,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2701,
+          "line": 2691,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3649,
+          "line": 3639,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3671,
+          "line": 3661,
           "prop": "background",
           "scalars": []
         }
@@ -160637,6 +160637,48 @@
     },
     {
       "channel": "--ds-command-home-card-shadow",
+      "kind": "ds",
+      "declaredIn": [
+        "src/foundation/tokens/css/presentation/components/patterns/index.css"
+      ],
+      "planes": [
+        "presentation-css"
+      ],
+      "paints": true,
+      "paintsInModern": true,
+      "readers": [
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 2597,
+          "prop": "box-shadow",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 2693,
+          "prop": "box-shadow",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3641,
+          "prop": "box-shadow",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3663,
+          "prop": "box-shadow",
+          "scalars": []
+        }
+      ]
+    },
+    {
+      "channel": "--ds-command-home-card-shadow-hover",
       "kind": "ds",
       "declaredIn": [
         "src/foundation/tokens/css/presentation/components/patterns/index.css"
@@ -160664,49 +160706,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3651,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3673,
-          "prop": "box-shadow",
-          "scalars": []
-        }
-      ]
-    },
-    {
-      "channel": "--ds-command-home-card-shadow-hover",
-      "kind": "ds",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/patterns/index.css"
-      ],
-      "planes": [
-        "presentation-css"
-      ],
-      "paints": true,
-      "paintsInModern": true,
-      "readers": [
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2617,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2713,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3655,
+          "line": 3645,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -160728,56 +160728,56 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 905,
+          "line": 895,
           "prop": "--ds-command-home-card-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 910,
+          "line": 900,
           "prop": "--ds-command-home-card-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2509,
+          "line": 2499,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2538,
+          "line": 2528,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2601,
+          "line": 2591,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2614,
+          "line": 2604,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2697,
+          "line": 2687,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2710,
+          "line": 2700,
           "prop": "border-color",
           "scalars": []
         },
@@ -160805,56 +160805,56 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2022,
+          "line": 2012,
           "prop": "height",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2194,
+          "line": 2184,
           "prop": "height",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2195,
+          "line": 2185,
           "prop": "min-height",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2298,
+          "line": 2288,
           "prop": "min-height",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2634,
+          "line": 2624,
           "prop": "height",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2676,
+          "line": 2666,
           "prop": "height",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2677,
+          "line": 2667,
           "prop": "min-height",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2775,
+          "line": 2765,
           "prop": "min-height",
           "scalars": []
         }
@@ -160875,14 +160875,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3267,
+          "line": 3257,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3610,
+          "line": 3600,
           "prop": "background",
           "scalars": []
         }
@@ -160903,14 +160903,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1631,
+          "line": 1621,
           "prop": "min-height",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2359,
+          "line": 2349,
           "prop": "min-height",
           "scalars": []
         }
@@ -160931,14 +160931,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3264,
+          "line": 3254,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3608,
+          "line": 3598,
           "prop": "padding",
           "scalars": []
         }
@@ -160959,35 +160959,35 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3297,
+          "line": 3287,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3487,
+          "line": 3477,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3498,
+          "line": 3488,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3526,
+          "line": 3516,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3694,
+          "line": 3684,
           "prop": "background",
           "scalars": []
         }
@@ -161008,28 +161008,28 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3296,
+          "line": 3286,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3486,
+          "line": 3476,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3524,
+          "line": 3514,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3692,
+          "line": 3682,
           "prop": "border",
           "scalars": []
         }
@@ -161050,7 +161050,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3544,
+          "line": 3534,
           "prop": "background",
           "scalars": []
         }
@@ -161071,14 +161071,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3347,
+          "line": 3337,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3543,
+          "line": 3533,
           "prop": "border-color",
           "scalars": []
         }
@@ -161099,14 +161099,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1612,
+          "line": 1602,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1857,
+          "line": 1847,
           "prop": "gap",
           "scalars": []
         }
@@ -161128,42 +161128,42 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 804,
+          "line": 794,
           "prop": "--ds-command-home-console-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 809,
+          "line": 799,
           "prop": "--ds-command-home-console-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 830,
+          "line": 820,
           "prop": "--ds-command-home-surface-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 835,
+          "line": 825,
           "prop": "--ds-command-home-surface-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 853,
+          "line": 843,
           "prop": "--ds-command-home-hero-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 858,
+          "line": 848,
           "prop": "--ds-command-home-hero-bg",
           "scalars": []
         },
@@ -161205,14 +161205,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3276,
+          "line": 3266,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3629,
+          "line": 3619,
           "prop": "background",
           "scalars": []
         }
@@ -161233,14 +161233,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3291,
+          "line": 3281,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3639,
+          "line": 3629,
           "prop": "background",
           "scalars": []
         }
@@ -161261,14 +161261,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3290,
+          "line": 3280,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3637,
+          "line": 3627,
           "prop": "border",
           "scalars": []
         }
@@ -161289,35 +161289,35 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1633,
+          "line": 1623,
           "prop": "width",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1634,
+          "line": 1624,
           "prop": "max-width",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1750,
+          "line": 1740,
           "prop": "width",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2356,
+          "line": 2346,
           "prop": "width",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2357,
+          "line": 2347,
           "prop": "max-width",
           "scalars": []
         }
@@ -161338,7 +161338,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3577,
+          "line": 3567,
           "prop": "background",
           "scalars": []
         }
@@ -161359,7 +161359,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3581,
+          "line": 3571,
           "prop": "background",
           "scalars": []
         }
@@ -161380,36 +161380,25 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3340,
+          "line": 3330,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3429,
+          "line": 3419,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3450,
+          "line": 3440,
           "prop": "background",
           "scalars": []
         }
       ]
-    },
-    {
-      "channel": "--ds-command-home-panel-bg-strong",
-      "kind": "ds",
-      "declaredIn": [
-        "src/foundation/tokens/css/presentation/components/patterns/index.css"
-      ],
-      "planes": [],
-      "paints": false,
-      "paintsInModern": false,
-      "readers": []
     },
     {
       "channel": "--ds-command-home-panel-border",
@@ -161434,28 +161423,28 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3265,
+          "line": 3255,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3609,
+          "line": 3599,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3620,
+          "line": 3610,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3687,
+          "line": 3677,
           "prop": "border-color",
           "scalars": []
         },
@@ -161483,21 +161472,28 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3274,
+          "line": 3264,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3331,
+          "line": 3321,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3338,
+          "line": 3328,
+          "prop": "border",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3403,
           "prop": "border",
           "scalars": []
         },
@@ -161511,35 +161507,28 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3423,
+          "line": 3439,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3449,
+          "line": 3486,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3496,
+          "line": 3503,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3513,
-          "prop": "border",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3553,
+          "line": 3543,
           "prop": "border",
           "scalars": []
         }
@@ -161560,14 +161549,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1758,
+          "line": 1748,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2482,
+          "line": 2472,
           "prop": "gap",
           "scalars": []
         }
@@ -161588,14 +161577,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3268,
+          "line": 3258,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3612,
+          "line": 3602,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -161616,28 +161605,28 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3333,
+          "line": 3323,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3415,
+          "line": 3405,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3555,
+          "line": 3545,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3622,
+          "line": 3612,
           "prop": "background",
           "scalars": []
         }
@@ -161656,14 +161645,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1714,
+          "line": 1704,
           "prop": "font-size",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2421,
+          "line": 2411,
           "prop": "font-size",
           "scalars": []
         }
@@ -163052,7 +163041,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 839,
+          "line": 829,
           "prop": "--ds-command-home-surface-bg",
           "scalars": []
         },
@@ -191040,28 +191029,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 138,
+          "line": 139,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 163,
+          "line": 164,
           "prop": "border-block-end",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 176,
+          "line": 177,
           "prop": "border-inline-end",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 177,
+          "line": 178,
           "prop": "border-block-end",
           "scalars": []
         },
@@ -203394,14 +203383,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 225,
+          "line": 226,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 343,
+          "line": 344,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -205582,7 +205571,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 223,
+          "line": 224,
           "prop": "inset",
           "decl": "inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width))",
           "scalars": []
@@ -205590,14 +205579,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 342,
+          "line": 343,
           "prop": "outline-offset",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 483,
+          "line": 484,
           "prop": "outline-offset",
           "scalars": []
         },
@@ -207422,14 +207411,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 216,
+          "line": 217,
           "prop": "outline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 217,
+          "line": 218,
           "prop": "outline-offset",
           "decl": "outline-offset: calc(-1 * var(--ds-focus-ring-width))",
           "scalars": []
@@ -207437,7 +207426,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 223,
+          "line": 224,
           "prop": "inset",
           "decl": "inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width))",
           "scalars": []
@@ -207445,21 +207434,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 234,
+          "line": 235,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 341,
-          "prop": "outline",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 449,
+          "line": 342,
           "prop": "outline",
           "scalars": []
         },
@@ -207467,6 +207449,13 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
           "line": 450,
+          "prop": "outline",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
+          "line": 451,
           "prop": "outline-offset",
           "decl": "outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)))",
           "scalars": []
@@ -207474,7 +207463,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 482,
+          "line": 483,
           "prop": "outline",
           "scalars": []
         },
@@ -209482,7 +209471,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 126,
+          "line": 127,
           "prop": "font-family",
           "scalars": []
         },
@@ -209671,14 +209660,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1041,
+          "line": 1031,
           "prop": "font-family",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1712,
+          "line": 1702,
           "prop": "font-family",
           "scalars": []
         },
@@ -210366,14 +210355,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1480,
+          "line": 1470,
           "prop": "font-family",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1711,
+          "line": 1701,
           "prop": "font-family",
           "scalars": []
         },
@@ -210608,7 +210597,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1712,
+          "line": 1702,
           "prop": "font-family",
           "scalars": []
         },
@@ -210949,42 +210938,42 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1339,
+          "line": 1329,
           "prop": "font-family",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1449,
+          "line": 1439,
           "prop": "font-family",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1522,
+          "line": 1512,
           "prop": "font-family",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1578,
+          "line": 1568,
           "prop": "font-family",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1697,
+          "line": 1687,
           "prop": "font-family",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2411,
+          "line": 2401,
           "prop": "font-family",
           "scalars": []
         },
@@ -211792,7 +211781,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/typography/engines/rustic/index.tsx",
-          "line": 303,
+          "line": 309,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -213930,6 +213919,13 @@
           "scalars": []
         },
         {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
+          "line": 67,
+          "prop": "font-size",
+          "scalars": []
+        },
+        {
           "plane": "ts-other",
           "file": "src/components/primitives/display/typography/contracts/index.ts",
           "line": 579,
@@ -214324,7 +214320,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1481,
+          "line": 1471,
           "prop": "font-size",
           "scalars": []
         },
@@ -214859,7 +214855,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 127,
+          "line": 128,
           "prop": "font-size",
           "scalars": []
         },
@@ -218863,28 +218859,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 156,
+          "line": 157,
           "prop": "font-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 244,
+          "line": 245,
           "prop": "font-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 272,
+          "line": 273,
           "prop": "font-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 351,
+          "line": 352,
           "prop": "font-size",
           "scalars": []
         },
@@ -223268,21 +223264,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 128,
+          "line": 129,
           "prop": "font-weight",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 157,
+          "line": 158,
           "prop": "font-weight",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 255,
+          "line": 256,
           "prop": "font-weight",
           "scalars": []
         },
@@ -223815,6 +223811,13 @@
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/mono-stat/index.css",
           "line": 21,
+          "prop": "font-weight",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
+          "line": 78,
           "prop": "font-weight",
           "scalars": []
         },
@@ -230041,7 +230044,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3033,
+          "line": 3023,
           "prop": "background",
           "scalars": []
         }
@@ -230062,7 +230065,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3032,
+          "line": 3022,
           "prop": "border",
           "scalars": []
         }
@@ -250785,7 +250788,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/typography/engines/rustic/index.tsx",
-          "line": 419,
+          "line": 428,
           "prop": "lineHeight",
           "scalars": []
         }
@@ -254579,7 +254582,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/cards/index.tsx",
-          "line": 256,
+          "line": 252,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -254704,14 +254707,14 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/cards/index.tsx",
-          "line": 253,
+          "line": 249,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/cards/index.tsx",
-          "line": 256,
+          "line": 252,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -259682,7 +259685,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2964,
+          "line": 2954,
           "prop": "border-color",
           "scalars": []
         },
@@ -263335,7 +263338,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2950,
+          "line": 2940,
           "prop": "border-color",
           "scalars": []
         },
@@ -269597,14 +269600,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 937,
+          "line": 927,
           "prop": "--ds-command-home-meter-fill",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3198,
+          "line": 3188,
           "prop": "background",
           "scalars": []
         },
@@ -269756,7 +269759,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 933,
+          "line": 923,
           "prop": "--ds-command-home-meter-bg",
           "scalars": []
         },
@@ -270672,7 +270675,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1539,
+          "line": 1529,
           "prop": "height",
           "scalars": []
         },
@@ -270897,7 +270900,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/structures/dashboard/insights/presentation/metrics/cards/index.tsx",
-          "line": 154,
+          "line": 152,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -271652,7 +271655,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1481,
+          "line": 1471,
           "prop": "font-size",
           "scalars": []
         }
@@ -278635,14 +278638,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1557,
+          "line": 1547,
           "prop": "animation",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2273,
+          "line": 2263,
           "prop": "animation",
           "decl": "animation: ds-command-home-spin calc(var(--ds-motion-attention) * 3) linear infinite",
           "scalars": []
@@ -278832,7 +278835,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
-          "line": 87,
+          "line": 106,
           "prop": "animation",
           "scalars": []
         },
@@ -279488,21 +279491,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1382,
+          "line": 1372,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1383,
+          "line": 1373,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1384,
+          "line": 1374,
           "prop": "transition",
           "scalars": []
         },
@@ -280694,266 +280697,266 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1043,
+          "line": 1033,
           "prop": "animation",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1156,
+          "line": 1146,
           "prop": "animation",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1158,
+          "line": 1148,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1175,
+          "line": 1165,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1238,
+          "line": 1228,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1239,
+          "line": 1229,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1240,
+          "line": 1230,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1274,
+          "line": 1264,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1275,
+          "line": 1265,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1276,
+          "line": 1266,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1295,
+          "line": 1285,
           "prop": "animation",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1297,
+          "line": 1287,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1298,
+          "line": 1288,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1299,
+          "line": 1289,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1300,
+          "line": 1290,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1325,
+          "line": 1315,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1326,
+          "line": 1316,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1383,
+          "line": 1373,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1385,
+          "line": 1375,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1386,
+          "line": 1376,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1387,
+          "line": 1377,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1388,
+          "line": 1378,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1558,
+          "line": 1548,
           "prop": "animation",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1791,
+          "line": 1781,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1792,
+          "line": 1782,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1793,
+          "line": 1783,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1989,
+          "line": 1979,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1990,
+          "line": 1980,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1991,
+          "line": 1981,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2060,
+          "line": 2050,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2061,
+          "line": 2051,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2062,
+          "line": 2052,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2166,
+          "line": 2156,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2167,
+          "line": 2157,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2168,
+          "line": 2158,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2221,
+          "line": 2211,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2222,
+          "line": 2212,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2223,
+          "line": 2213,
           "prop": "transition",
           "scalars": []
         },
@@ -281778,7 +281781,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
-          "line": 88,
+          "line": 107,
           "prop": "animation",
           "scalars": []
         },
@@ -282315,21 +282318,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1382,
+          "line": 1372,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1384,
+          "line": 1374,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1549,
+          "line": 1539,
           "prop": "transition",
           "scalars": []
         },
@@ -284234,14 +284237,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 189,
+          "line": 190,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 273,
+          "line": 274,
           "prop": "transition",
           "scalars": []
         },
@@ -290934,14 +290937,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 189,
+          "line": 190,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 273,
+          "line": 274,
           "prop": "transition",
           "scalars": []
         },
@@ -292173,238 +292176,238 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1158,
+          "line": 1148,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1175,
+          "line": 1165,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1237,
+          "line": 1227,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1239,
+          "line": 1229,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1240,
+          "line": 1230,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1273,
+          "line": 1263,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1275,
+          "line": 1265,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1276,
+          "line": 1266,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1296,
+          "line": 1286,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1298,
+          "line": 1288,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1299,
+          "line": 1289,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1300,
+          "line": 1290,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1324,
+          "line": 1314,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1326,
+          "line": 1316,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1385,
+          "line": 1375,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1386,
+          "line": 1376,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1387,
+          "line": 1377,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1388,
+          "line": 1378,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1558,
+          "line": 1548,
           "prop": "animation",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1790,
+          "line": 1780,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1792,
+          "line": 1782,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1793,
+          "line": 1783,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1988,
+          "line": 1978,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1990,
+          "line": 1980,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1991,
+          "line": 1981,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2059,
+          "line": 2049,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2061,
+          "line": 2051,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2062,
+          "line": 2052,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2165,
+          "line": 2155,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2167,
+          "line": 2157,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2168,
+          "line": 2158,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2220,
+          "line": 2210,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2222,
+          "line": 2212,
           "prop": "transition",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2223,
+          "line": 2213,
           "prop": "transition",
           "scalars": []
         },
@@ -295642,7 +295645,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1549,
+          "line": 1539,
           "prop": "transition",
           "scalars": []
         },
@@ -296672,21 +296675,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1042,
+          "line": 1032,
           "prop": "animation",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1155,
+          "line": 1145,
           "prop": "animation",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1294,
+          "line": 1284,
           "prop": "animation",
           "scalars": []
         },
@@ -310753,14 +310756,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2912,
+          "line": 2902,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2990,
+          "line": 2980,
           "prop": "border-color",
           "scalars": []
         }
@@ -310845,28 +310848,28 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 862,
+          "line": 852,
           "prop": "--ds-command-home-hero-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2882,
+          "line": 2872,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2972,
+          "line": 2962,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2977,
+          "line": 2967,
           "prop": "background",
           "scalars": []
         },
@@ -311034,14 +311037,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2913,
+          "line": 2903,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2989,
+          "line": 2979,
           "prop": "background",
           "scalars": []
         }
@@ -311062,14 +311065,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2931,
+          "line": 2921,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3008,
+          "line": 2998,
           "prop": "background",
           "scalars": []
         }
@@ -311098,7 +311101,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2983,
+          "line": 2973,
           "prop": "background",
           "scalars": []
         },
@@ -311126,14 +311129,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2922,
+          "line": 2912,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3000,
+          "line": 2990,
           "prop": "background",
           "scalars": []
         }
@@ -311226,21 +311229,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2881,
+          "line": 2871,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2971,
+          "line": 2961,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2978,
+          "line": 2968,
           "prop": "border",
           "scalars": []
         },
@@ -311458,21 +311461,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2902,
+          "line": 2892,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2984,
+          "line": 2974,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2995,
+          "line": 2985,
           "prop": "border-color",
           "scalars": []
         },
@@ -311592,14 +311595,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2930,
+          "line": 2920,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3007,
+          "line": 2997,
           "prop": "border-color",
           "scalars": []
         }
@@ -311656,7 +311659,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3027,
+          "line": 3017,
           "prop": "background",
           "scalars": []
         },
@@ -311941,7 +311944,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3013,
+          "line": 3003,
           "prop": "background",
           "scalars": []
         }
@@ -311962,7 +311965,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1201,
+          "line": 1191,
           "prop": "transform",
           "scalars": []
         }
@@ -312572,7 +312575,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3023,
+          "line": 3013,
           "prop": "background",
           "scalars": []
         }
@@ -312593,7 +312596,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3018,
+          "line": 3008,
           "prop": "background",
           "scalars": []
         }
@@ -312636,14 +312639,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2921,
+          "line": 2911,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3001,
+          "line": 2991,
           "prop": "border-color",
           "scalars": []
         },
@@ -312714,7 +312717,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2996,
+          "line": 2986,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -312799,21 +312802,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2884,
+          "line": 2874,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2973,
+          "line": 2963,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2979,
+          "line": 2969,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -312904,14 +312907,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2914,
+          "line": 2904,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2991,
+          "line": 2981,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -312975,14 +312978,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2903,
+          "line": 2893,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2985,
+          "line": 2975,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -313066,14 +313069,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2923,
+          "line": 2913,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3002,
+          "line": 2992,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -313109,7 +313112,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2891,
+          "line": 2881,
           "prop": "background-image",
           "scalars": []
         },
@@ -313357,7 +313360,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2890,
+          "line": 2880,
           "prop": "background-image",
           "scalars": []
         }
@@ -313414,7 +313417,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1157,
+          "line": 1147,
           "prop": "transition",
           "scalars": []
         }
@@ -319130,7 +319133,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 379,
+          "line": 380,
           "prop": "border-radius",
           "scalars": []
         },
@@ -321004,7 +321007,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 139,
+          "line": 140,
           "prop": "border-radius",
           "scalars": []
         },
@@ -321439,49 +321442,49 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1636,
+          "line": 1626,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1650,
+          "line": 1640,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1761,
+          "line": 1751,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1869,
+          "line": 1859,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1884,
+          "line": 1874,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2024,
+          "line": 2014,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2116,
+          "line": 2106,
           "prop": "border-radius",
           "scalars": []
         },
@@ -324123,119 +324126,119 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1039,
+          "line": 1029,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1147,
+          "line": 1137,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1154,
+          "line": 1144,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1272,
+          "line": 1262,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1293,
+          "line": 1283,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1322,
+          "line": 1312,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1346,
+          "line": 1336,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1471,
+          "line": 1461,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1789,
+          "line": 1779,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1893,
+          "line": 1883,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1916,
+          "line": 1906,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1934,
+          "line": 1924,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2046,
+          "line": 2036,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2164,
+          "line": 2154,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2216,
+          "line": 2206,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2650,
+          "line": 2640,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3497,
+          "line": 3487,
           "prop": "border-radius",
           "scalars": []
         },
@@ -324736,7 +324739,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
-          "line": 84,
+          "line": 103,
           "prop": "border-radius",
           "scalars": []
         },
@@ -327436,21 +327439,21 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 252,
+          "line": 253,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 269,
+          "line": 270,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 468,
+          "line": 469,
           "prop": "border-radius",
           "scalars": []
         },
@@ -327688,105 +327691,105 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1236,
+          "line": 1226,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1263,
+          "line": 1253,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1669,
+          "line": 1659,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1681,
+          "line": 1671,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1751,
+          "line": 1741,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1928,
+          "line": 1918,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1951,
+          "line": 1941,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2133,
+          "line": 2123,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2512,
+          "line": 2502,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2700,
+          "line": 2690,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3311,
+          "line": 3301,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3525,
+          "line": 3515,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3638,
+          "line": 3628,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3682,
+          "line": 3672,
           "prop": "border-radius",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3693,
+          "line": 3683,
           "prop": "border-radius",
           "scalars": []
         },
@@ -332948,7 +332951,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 801,
+          "line": 791,
           "prop": "--ds-command-home-console-padding",
           "decl": "--ds-command-home-console-padding: var(--ds-command-console-padding, calc(clamp(20px, 3vw, 34px) * var(--ds-rhythm-effective-scale, 1)) calc(clamp(16px, 4vw, 56px) * var(--ds-rhythm-effective-scale, 1)) calc(24px * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -348450,7 +348453,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3250,
+          "line": 3240,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -351073,7 +351076,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3460,
+          "line": 3450,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -356034,119 +356037,126 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1378,
+          "line": 1368,
           "prop": "--ds-signal-card-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1534,
+          "line": 1524,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1598,
+          "line": 1588,
           "prop": "color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3058,
+          "line": 3048,
           "prop": "background-image",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3071,
+          "line": 3061,
           "prop": "background",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3074,
+          "prop": "background",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3078,
+          "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3084,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3088,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3094,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3103,
+          "line": 3093,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3118,
+          "line": 3108,
           "prop": "background",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3114,
+          "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3124,
-          "prop": "box-shadow",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3134,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3187,
+          "line": 3177,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3202,
+          "line": 3192,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3225,
+          "line": 3215,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3230,
+          "line": 3220,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3238,
+          "line": 3228,
+          "prop": "border-color",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
+          "line": 3237,
           "prop": "border-color",
           "scalars": []
         },
@@ -356154,13 +356164,6 @@
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
           "line": 3247,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3257,
           "prop": "border-color",
           "scalars": []
         },
@@ -357273,14 +357276,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3241,
+          "line": 3231,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3250,
+          "line": 3240,
           "prop": "box-shadow",
           "scalars": []
         },
@@ -357343,14 +357346,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1366,
+          "line": 1356,
           "prop": "--ds-signal-card-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1372,
+          "line": 1362,
           "prop": "--ds-signal-card-bg",
           "scalars": []
         }
@@ -361460,49 +361463,49 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 171,
+          "line": 172,
           "prop": "padding",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 243,
+          "line": 244,
           "prop": "padding-inline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 264,
+          "line": 265,
           "prop": "padding-inline",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 349,
+          "line": 350,
           "prop": "padding-inline",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 377,
-          "prop": "margin-block-start",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
           "line": 378,
+          "prop": "margin-block-start",
+          "scalars": []
+        },
+        {
+          "plane": "modern-skin-css",
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
+          "line": 379,
           "prop": "margin-inline-end",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 466,
+          "line": 467,
           "prop": "padding-inline",
           "scalars": []
         },
@@ -363292,7 +363295,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
-          "line": 73,
+          "line": 92,
           "prop": "padding-block",
           "scalars": []
         },
@@ -364790,7 +364793,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 95,
+          "line": 96,
           "prop": "padding-block",
           "scalars": []
         },
@@ -367022,14 +367025,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 121,
+          "line": 122,
           "prop": "gap",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 153,
+          "line": 154,
           "prop": "padding-block",
           "scalars": []
         },
@@ -369311,7 +369314,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
-          "line": 66,
+          "line": 85,
           "prop": "margin-block-start",
           "scalars": []
         },
@@ -371981,7 +371984,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 114,
+          "line": 115,
           "prop": "gap",
           "scalars": []
         },
@@ -376122,7 +376125,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 115,
+          "line": 116,
           "prop": "margin-block-end",
           "scalars": []
         },
@@ -393318,14 +393321,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1050,
+          "line": 1040,
           "prop": "--ds-workspace-shell-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1075,
+          "line": 1065,
           "prop": "--ds-workspace-shell-bg",
           "scalars": []
         },
@@ -394225,7 +394228,7 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 187,
+          "line": 188,
           "prop": "background",
           "scalars": []
         },
@@ -396197,252 +396200,238 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 782,
-          "prop": "--ds-command-home-panel-bg-strong",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 786,
-          "prop": "--ds-command-home-panel-bg-strong",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 817,
+          "line": 807,
           "prop": "--ds-command-home-console-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 824,
+          "line": 814,
           "prop": "--ds-command-home-console-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 842,
+          "line": 832,
           "prop": "--ds-command-home-surface-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 846,
+          "line": 836,
           "prop": "--ds-command-home-surface-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 865,
+          "line": 855,
           "prop": "--ds-command-home-hero-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 869,
+          "line": 859,
           "prop": "--ds-command-home-hero-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 876,
+          "line": 866,
           "prop": "--ds-command-home-icon-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 888,
+          "line": 878,
           "prop": "--ds-command-home-control-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 896,
+          "line": 886,
           "prop": "--ds-command-home-control-hover-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 915,
+          "line": 905,
           "prop": "--ds-command-home-card-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1049,
+          "line": 1039,
           "prop": "--ds-workspace-shell-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1074,
+          "line": 1064,
           "prop": "--ds-workspace-shell-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1281,
+          "line": 1271,
           "prop": "--ds-table-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1283,
+          "line": 1273,
           "prop": "--ds-table-row-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1365,
+          "line": 1355,
           "prop": "--ds-signal-card-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1377,
+          "line": 1367,
           "prop": "--ds-signal-card-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2047,
+          "line": 2037,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2651,
+          "line": 2641,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3113,
+          "line": 3103,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3140,
+          "line": 3130,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3143,
+          "line": 3133,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3155,
+          "line": 3145,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3168,
+          "line": 3158,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3194,
+          "line": 3184,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3231,
+          "line": 3221,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3269,
+          "line": 3259,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3280,
+          "line": 3270,
           "prop": "box-shadow",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3325,
+          "line": 3315,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3369,
+          "line": 3359,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3390,
+          "line": 3380,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3407,
+          "line": 3397,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3443,
+          "line": 3433,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3466,
+          "line": 3456,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3572,
+          "line": 3562,
           "prop": "background",
           "scalars": []
         },
@@ -397374,42 +397363,42 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2510,
+          "line": 2500,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2539,
+          "line": 2529,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2602,
+          "line": 2592,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2615,
+          "line": 2605,
           "prop": "border-color",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2698,
+          "line": 2688,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2711,
+          "line": 2701,
           "prop": "border-color",
           "scalars": []
         },
@@ -398009,7 +397998,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1133,
+          "line": 1123,
           "prop": "color",
           "scalars": []
         }
@@ -398041,21 +398030,21 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2891,
+          "line": 2881,
           "prop": "background-image",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2943,
+          "line": 2933,
           "prop": "background-image",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3047,
+          "line": 3037,
           "prop": "background-image",
           "scalars": []
         },
@@ -398145,14 +398134,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2893,
+          "line": 2883,
           "prop": "background-size",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2945,
+          "line": 2935,
           "prop": "background-size",
           "scalars": []
         },
@@ -398221,7 +398210,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 919,
+          "line": 909,
           "prop": "--ds-command-home-card-shadow",
           "scalars": []
         },
@@ -398250,7 +398239,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 926,
+          "line": 916,
           "prop": "--ds-command-home-card-shadow-hover",
           "scalars": []
         },
@@ -398713,7 +398702,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2958,
+          "line": 2948,
           "prop": "background",
           "scalars": []
         }
@@ -398734,14 +398723,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2957,
+          "line": 2947,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2965,
+          "line": 2955,
           "prop": "border-color",
           "scalars": []
         }
@@ -398762,7 +398751,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1141,
+          "line": 1131,
           "prop": "color",
           "scalars": []
         }
@@ -398783,7 +398772,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2967,
+          "line": 2957,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -398804,7 +398793,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2959,
+          "line": 2949,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -399262,7 +399251,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3051,
+          "line": 3041,
           "prop": "background-image",
           "scalars": []
         },
@@ -399298,7 +399287,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3211,
+          "line": 3201,
           "prop": "background",
           "scalars": []
         },
@@ -399413,7 +399402,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 875,
+          "line": 865,
           "prop": "--ds-command-home-icon-bg",
           "scalars": []
         },
@@ -399491,7 +399480,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 879,
+          "line": 869,
           "prop": "--ds-command-home-icon-border",
           "scalars": []
         },
@@ -399881,28 +399870,28 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 154,
+          "line": 155,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 195,
+          "line": 196,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 201,
+          "line": 202,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 206,
+          "line": 207,
           "prop": "background",
           "scalars": []
         },
@@ -401364,7 +401353,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
-          "line": 85,
+          "line": 104,
           "prop": "background",
           "scalars": []
         },
@@ -402053,84 +402042,77 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 785,
-          "prop": "--ds-command-home-panel-bg-strong",
-          "scalars": []
-        },
-        {
-          "plane": "presentation-css",
-          "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 823,
+          "line": 813,
           "prop": "--ds-command-home-console-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 845,
+          "line": 835,
           "prop": "--ds-command-home-surface-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 868,
+          "line": 858,
           "prop": "--ds-command-home-hero-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 916,
+          "line": 906,
           "prop": "--ds-command-home-card-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1050,
+          "line": 1040,
           "prop": "--ds-workspace-shell-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1051,
+          "line": 1041,
           "prop": "--ds-workspace-shell-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1075,
+          "line": 1065,
           "prop": "--ds-workspace-shell-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1076,
+          "line": 1066,
           "prop": "--ds-workspace-shell-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1371,
+          "line": 1361,
           "prop": "--ds-signal-card-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2937,
+          "line": 2927,
           "prop": "background",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 3139,
+          "line": 3129,
           "prop": "background",
           "scalars": []
         },
@@ -402585,14 +402567,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2936,
+          "line": 2926,
           "prop": "border",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2951,
+          "line": 2941,
           "prop": "border-color",
           "scalars": []
         }
@@ -402613,7 +402595,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1137,
+          "line": 1127,
           "prop": "color",
           "scalars": []
         }
@@ -402634,7 +402616,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2953,
+          "line": 2943,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -402655,7 +402637,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2938,
+          "line": 2928,
           "prop": "box-shadow",
           "scalars": []
         }
@@ -402676,7 +402658,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2942,
+          "line": 2932,
           "prop": "background-image",
           "scalars": []
         }
@@ -425615,7 +425597,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 887,
+          "line": 877,
           "prop": "--ds-command-home-control-bg",
           "scalars": []
         },
@@ -425727,7 +425709,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 891,
+          "line": 881,
           "prop": "--ds-command-home-control-border",
           "scalars": []
         },
@@ -431886,14 +431868,14 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 390,
+          "line": 391,
           "prop": "min-block-size",
           "scalars": []
         },
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
-          "line": 500,
+          "line": 501,
           "prop": "min-block-size",
           "scalars": []
         },
@@ -440027,6 +440009,13 @@
         },
         {
           "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
+          "line": 66,
+          "prop": "font-family",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/skin/stepper-compounds/index.css",
           "line": 18,
           "prop": "font-family",
@@ -440394,7 +440383,8 @@
         "src/foundation/tokens/css/foundation/themes/default/index.css"
       ],
       "planes": [
-        "modern-skin-css"
+        "modern-skin-css",
+        "presentation-css"
       ],
       "paints": true,
       "paintsInModern": true,
@@ -440403,6 +440393,13 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
           "line": 101,
+          "prop": "font-variant-numeric",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
+          "line": 72,
           "prop": "font-variant-numeric",
           "scalars": []
         }
@@ -440417,6 +440414,7 @@
       "planes": [
         "foundation-css",
         "modern-skin-css",
+        "presentation-css",
         "ts-other"
       ],
       "paints": true,
@@ -440433,6 +440431,13 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
           "line": 75,
+          "prop": "font-weight",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
+          "line": 68,
           "prop": "font-weight",
           "scalars": []
         },
@@ -440461,7 +440466,8 @@
         "src/foundation/tokens/css/foundation/themes/default/index.css"
       ],
       "planes": [
-        "modern-skin-css"
+        "modern-skin-css",
+        "presentation-css"
       ],
       "paints": true,
       "paintsInModern": true,
@@ -440477,6 +440483,13 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
           "line": 99,
+          "prop": "letter-spacing",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
+          "line": 70,
           "prop": "letter-spacing",
           "scalars": []
         }
@@ -440578,6 +440591,13 @@
           "scalars": []
         },
         {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
+          "line": 69,
+          "prop": "line-height",
+          "scalars": []
+        },
+        {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases/generated/index.ts",
           "line": 2236,
@@ -440607,7 +440627,8 @@
         "src/foundation/tokens/css/foundation/themes/default/index.css"
       ],
       "planes": [
-        "modern-skin-css"
+        "modern-skin-css",
+        "presentation-css"
       ],
       "paints": true,
       "paintsInModern": true,
@@ -440616,6 +440637,13 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
           "line": 100,
+          "prop": "text-transform",
+          "scalars": []
+        },
+        {
+          "plane": "presentation-css",
+          "file": "src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
+          "line": 71,
           "prop": "text-transform",
           "scalars": []
         }
@@ -442777,7 +442805,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/typography/engines/rustic/index.tsx",
-          "line": 548,
+          "line": 560,
           "prop": "textUnderlineOffset",
           "scalars": []
         }
@@ -442823,7 +442851,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/typography/engines/rustic/index.tsx",
-          "line": 547,
+          "line": 559,
           "prop": "textDecorationThickness",
           "scalars": []
         }
@@ -444234,7 +444262,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/typography/engines/rustic/index.tsx",
-          "line": 546,
+          "line": 558,
           "prop": "transition",
           "scalars": []
         }
@@ -444300,7 +444328,7 @@
         {
           "plane": "tsx-inline-stamp",
           "file": "src/components/primitives/display/typography/engines/rustic/index.tsx",
-          "line": 546,
+          "line": 558,
           "prop": "transition",
           "scalars": []
         }
@@ -451050,7 +451078,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 1107,
+          "line": 1097,
           "prop": "grid-template-columns",
           "scalars": []
         }
@@ -452144,7 +452172,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2866,
+          "line": 2856,
           "prop": "padding",
           "scalars": []
         }
@@ -452165,7 +452193,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2876,
+          "line": 2866,
           "prop": "background",
           "scalars": []
         }
@@ -452212,7 +452240,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2857,
+          "line": 2847,
           "prop": "background",
           "scalars": []
         },
@@ -452238,7 +452266,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2856,
+          "line": 2846,
           "prop": "border",
           "scalars": []
         },
@@ -452444,14 +452472,14 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 812,
+          "line": 802,
           "prop": "--ds-command-home-console-bg",
           "scalars": []
         },
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2862,
+          "line": 2852,
           "prop": "background",
           "scalars": []
         },
@@ -452522,7 +452550,7 @@
         {
           "plane": "presentation-css",
           "file": "src/foundation/tokens/css/presentation/components/patterns/index.css",
-          "line": 2858,
+          "line": 2848,
           "prop": "box-shadow",
           "scalars": []
         },

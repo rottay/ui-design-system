@@ -4,8 +4,8 @@
   "formatVersion": 1,
   "vertical": "bithire",
   "mode": "light",
-  "channelCount": 4258,
-  "digest": "ff8e411f3366aa49ee2a15a8a134ef9f48f9f6273b48bc871e13a0077671df73",
+  "channelCount": 4257,
+  "digest": "90efabffc2841b873d61e034f2c1e7cb4fae831a850eda78a4c16e1748084997",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -1349,7 +1349,6 @@
     "--ds-command-home-meter-bg": "var(\n    --ds-meter-track,\n    color-mix(in srgb, var(--ds-color-border-primary) 72%, transparent)\n  )",
     "--ds-command-home-meter-fill": "var(\n    --ds-meter-fill,\n    linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))\n  )",
     "--ds-command-home-panel-bg": "var(\n    --ds-premium-card-bg,\n    linear-gradient(\n      180deg,\n      var(--ds-surface-card-bg) 0%,\n      color-mix(\n          in srgb,\n          var(--ds-surface-panel-bg) 56%,\n          var(--ds-surface-card-bg)\n        )\n        100%\n    )\n  )",
-    "--ds-command-home-panel-bg-strong": "linear-gradient(\n    180deg,\n    var(--ds-surface-card-bg) 0%,\n    color-mix(\n        in srgb,\n        var(--ds-surface-panel-bg) 32%,\n        var(--ds-surface-card-bg)\n      )\n      100%\n  )",
     "--ds-command-home-panel-border": "color-mix(\n    in srgb,\n    var(--ds-color-primary) 20%,\n    var(--ds-color-border-secondary, var(--ds-color-border-primary))\n  )",
     "--ds-command-home-panel-border-soft": "color-mix(\n    in srgb,\n    var(--ds-command-home-panel-border) 68%,\n    var(--ds-surface-card-bg)\n  )",
     "--ds-command-home-panel-gap": "calc(var(--ds-spacing-3, 14px) * var(--ds-rhythm-effective-scale, 1))",

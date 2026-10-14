@@ -79,13 +79,14 @@
  * prefix that nothing wrote; it is now the family's own channel, fallback
  * byte-identical.
  *
- * STATE IS DECIDED ONCE (F-37): the day cell and the event chip are stateful
- * parts -- the engine runs each through `useInteractionState` and stamps
- * `partAttributes(...)` -- so every hover, press and focus arm below pairs the
- * kernel token with the platform pseudo-class it stands for
- * (`:is([data-state~='hovered'], :hover)`). At rest the kernel serializes
- * nothing, so the pseudo-class is the fallback of one decision, never a second
- * authority.
+ * STATE IS DECIDED ONCE (F-37): the day cell is a stateful part the engine
+ * runs through `useInteractionState` and stamps with `partAttributes(...)`;
+ * the read-only event chip is a local state wrapper named by its class hook,
+ * no part (owner answer 26 (c), 2026-10-14) -- so every hover, press and
+ * focus arm below pairs the kernel token with the platform pseudo-class it
+ * stands for (`:is([data-state~='hovered'], :hover)`). At rest the kernel
+ * serializes nothing, so the pseudo-class is the fallback of one decision,
+ * never a second authority.
  */
 
 /* ---- loading frame (Spinner owns ring + cadence) ---- */
