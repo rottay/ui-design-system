@@ -10,7 +10,7 @@ import { useLayoutPreference } from '@/infrastructure/runtime/application/state/
 import {
   CommandRegistryProvider,
   useRegisterCommands,
-} from '@/infrastructure/runtime/application/commands/runtime/registry';
+} from '@/infrastructure/runtime/application/commands/dispatch/registry';
 import { useCommandPaletteItems } from '@/components/patterns/navigation/command-palette/runtime/application-commands';
 
 const PACKAGE_ROOT = resolve(__dirname, '../../..');

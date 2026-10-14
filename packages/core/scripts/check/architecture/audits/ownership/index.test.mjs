@@ -268,7 +268,7 @@ test('root-attributes seam: one registry leaf, a consuming presentation leaf, a 
   // (e) Attribute-only claimants narrow to the registry leaf; theming, the one
   // style/class consumer, draws from both leaves and never from the facade.
   const attributeOnlyClaimants = [
-    'infrastructure/runtime/i18n/runtime/context/provider/index.tsx',
+    'infrastructure/runtime/i18n/scope/context/provider/index.tsx',
     'infrastructure/runtime/tenant/composition/react/provider/index.tsx',
     'infrastructure/runtime/engines/composition/react/provider/index.tsx',
   ];

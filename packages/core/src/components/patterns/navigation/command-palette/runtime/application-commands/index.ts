@@ -50,7 +50,7 @@ import {
   useCommandSources,
   type Command,
   type CommandSourceItem,
-} from '@/infrastructure/runtime/application/commands/runtime/registry';
+} from '@/infrastructure/runtime/application/commands/dispatch/registry';
 import { useLayoutPreference, type LayoutPreference } from '@/infrastructure/runtime/application/state';
 import { rankByFrecency, recordUse, type CommandUsageMap } from '../../foundation/frecency';
 import type { CommandItem } from '../../contracts';

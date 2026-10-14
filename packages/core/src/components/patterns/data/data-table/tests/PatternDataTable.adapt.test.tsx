@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, expectTypeOf, it, vi } from "v
 import { mockMatchMedia } from "@tests/support/browser/match-media";
 import { DesignSystemProvider } from "@/infrastructure/runtime/bootstrap";
 import { firstPartyEngineVisual } from "@/infrastructure/compilers/runtime/theme";
-import { resetResponsiveMediaStore } from "@/infrastructure/runtime/responsive/runtime/media-snapshot";
+import { resetResponsiveMediaStore } from "@/infrastructure/runtime/responsive/viewport/media-snapshot";
 import type { TenantConfig } from "@/foundation/contracts";
 import type { ColumnDef } from "@/foundation/contracts/runtime/components/patterns/core";
 import { PatternDataTable } from "..";

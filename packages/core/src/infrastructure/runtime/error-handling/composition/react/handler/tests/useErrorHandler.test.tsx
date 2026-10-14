@@ -7,7 +7,7 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ErrorCategory, ErrorSeverity } from '@/foundation/contracts/runtime/errors';
-import { ErrorHandler } from '../../../../runtime/handler';
+import { ErrorHandler } from '../../../../bus/handler';
 import { useErrorHandler } from '..';
 
 describe('useErrorHandler', () => {

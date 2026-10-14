@@ -12,7 +12,7 @@ import { describe, it, expect } from 'vitest';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import type { TenantCreationConfig } from '../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
+import type { TenantCreationConfig } from '../../../../../infrastructure/runtime/tenant/sourcing/authoring/configuration';
 import ModernTenantPreview from '../engines/modern';
 
 const baseConfig: TenantCreationConfig = {

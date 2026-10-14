@@ -540,7 +540,7 @@ describe('tenant context consumer inventory', () => {
         specifier: '@/infrastructure/runtime/tenant/foundation/context',
       },
       {
-        file: 'components/patterns/visualization/charts/runtime/chart-engine/runtime/grammar/index.ts',
+        file: 'components/patterns/visualization/charts/runtime/chart-engine/mechanics/grammar/index.ts',
         binding: 'TenantContext',
         specifier: '@/infrastructure/runtime/tenant/foundation/context',
       },
@@ -568,7 +568,7 @@ describe('tenant context consumer inventory', () => {
         specifier: '../../../../../infrastructure/runtime/tenant/composition/react/provider',
       },
       {
-        file: 'infrastructure/runtime/adaptation/runtime/container-posture/index.ts',
+        file: 'infrastructure/runtime/adaptation/measurement/container-posture/index.ts',
         binding: 'TenantContext',
         specifier: '@/infrastructure/runtime/tenant/foundation/context',
       },

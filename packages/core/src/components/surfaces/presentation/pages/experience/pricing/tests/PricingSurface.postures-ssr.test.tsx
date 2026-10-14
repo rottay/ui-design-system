@@ -3,7 +3,7 @@ import { PassThrough } from 'node:stream';
 import { renderToPipeableStream } from 'react-dom/server';
 import { afterEach, describe, expect, it } from 'vitest';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
-import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/viewport/media-snapshot';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 import { PricingSurface } from '..';
 

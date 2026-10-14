@@ -9,13 +9,13 @@ import {
 
 import { useResolvedChartPersonality } from '@/infrastructure/runtime/personality';
 import { useChartPaintDecision } from '../../../../theming/composition/react/paint';
-import { useResolvedChartGrammar } from '../../../runtime/grammar';
+import { useResolvedChartGrammar } from '../../../mechanics/grammar';
 import type {
   ChartInteractionMode,
 } from '../../../foundation/interaction';
 import type {
   ChartInteractionRootProps,
-} from '../../../runtime/interaction/controller';
+} from '../../../mechanics/interaction/controller';
 
 type ChartTooltipPositionStyle = CSSProperties & {
   '--ds-chart-tooltip-x'?: string;

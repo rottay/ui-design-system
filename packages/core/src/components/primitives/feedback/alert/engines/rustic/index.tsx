@@ -78,7 +78,7 @@
 import React, { useState, useId } from 'react';
 import type { AlertProps, AlertType } from '../../contracts';
 import { ALERT_DEFAULTS, TONE_TO_ALERT_TYPE } from '../../contracts';
-import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/viewport/style-properties';
 
 // ============================================================================
 // Constants

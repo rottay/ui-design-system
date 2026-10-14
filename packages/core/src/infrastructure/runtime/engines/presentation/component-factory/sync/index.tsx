@@ -23,7 +23,7 @@ import {
   type RefAttributes,
 } from 'react';
 import { useDeclaredEngine } from '../../../composition/react/provider';
-import { getCustomComponent } from '../../../runtime/customization/component-registry';
+import { getCustomComponent } from '../../../selection/customization/component-registry';
 import type { EngineName } from '../../../../../../foundation/contracts';
 import {
   EXTENSION_ENGINE,

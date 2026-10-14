@@ -10,7 +10,7 @@
 
 import React, { useEffect, useMemo, useRef } from 'react';
 
-import { PROVIDER_PAINT_ATTRIBUTE_FILTER } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+import { PROVIDER_PAINT_ATTRIBUTE_FILTER } from '@/infrastructure/runtime/dom/paint/css-color-resolution';
 import type { ParticleFieldFocalArea, ParticleFieldProps } from '@/graphics/motion/foundation/contracts';
 import { useMotionPolicy } from '@/infrastructure/runtime/motion';
 import { isParticleAnimationEligible } from '@/graphics/motion/foundation/particles/eligibility';

@@ -124,7 +124,8 @@ export const ARCHITECTURE_TIERS = Object.freeze({
  * Local layer vocabulary. Rank increases toward the rendered/product edge.
  * Named kernel facets are foundation synonyms so `spatial/react ->
  * spatial/policy` and `charts/react -> charts/kernel` are directional rather
- * than blanket exceptions. Unknown sibling names remain strict peer debt.
+ * than blanket exceptions. Unknown sibling names remain strict peer debt,
+ * except a name SCOPED_LAYER_NAMES declares for one concrete parent.
  */
 export const LOCAL_LAYER_RANKS = Object.freeze({
   foundation: 0,
@@ -160,7 +161,8 @@ export const UI_LAYER_RANKS = Object.freeze({
  * Scoped macro owners whose direct children are an intentional dependency
  * stack. This stays separate from LOCAL_LAYER_RANKS: `runtime` is a reusable
  * local layer name, while `compilers` is meaningful only directly under the
- * infrastructure macro root.
+ * infrastructure macro root. A layer word respelled for one owner belongs in
+ * SCOPED_LAYER_NAMES, never here.
  */
 export const SCOPED_OWNER_RANKS = Object.freeze({
   // One Notifier owns the transient announcement surface, under the `foundation`
@@ -415,6 +417,73 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     scope: 1,
   }),
 });
+
+/**
+ * Owner-scoped layer names. Under the word-any path law a layer leaf may not
+ * repeat a word of its own path (`infrastructure/runtime/tenant/runtime`), so
+ * the leaf takes a function name and keeps the rank of the layer word it
+ * replaces, as a direct child of that one parent only. The replaced word loses
+ * its admission there, and the same name under any other parent stays peer
+ * debt: this is not a global synonym (LOCAL_LAYER_RANKS is unchanged).
+ */
+export const SCOPED_LAYER_NAMES = Object.freeze({
+  'components/patterns/runtime/adaptive-layout': Object.freeze({ solver: 'runtime' }),
+  'components/patterns/visualization/charts/runtime/chart-engine': Object.freeze({ mechanics: 'runtime' }),
+  'contracts/theme/runtime/styles': Object.freeze({ eligibility: 'runtime' }),
+  'graphics/motion/react/runtime/layout': Object.freeze({ animation: 'runtime' }),
+  'infrastructure/compilers/runtime/theme/presentation/adapters': Object.freeze({ projection: 'presentation' }),
+  'infrastructure/runtime/adaptation': Object.freeze({ measurement: 'runtime' }),
+  'infrastructure/runtime/application/commands': Object.freeze({ dispatch: 'runtime' }),
+  'infrastructure/runtime/application/data': Object.freeze({ access: 'runtime' }),
+  'infrastructure/runtime/dom': Object.freeze({ paint: 'runtime' }),
+  'infrastructure/runtime/effects': Object.freeze({ catalog: 'runtime' }),
+  'infrastructure/runtime/engines': Object.freeze({ selection: 'runtime' }),
+  'infrastructure/runtime/error-handling': Object.freeze({ bus: 'runtime' }),
+  'infrastructure/runtime/foundation/icons/active-profile': Object.freeze({ posture: 'runtime' }),
+  'infrastructure/runtime/foundation/motion': Object.freeze({ sensing: 'runtime' }),
+  'infrastructure/runtime/graphics/asset-governance': Object.freeze({ operations: 'runtime' }),
+  'infrastructure/runtime/i18n': Object.freeze({ scope: 'runtime' }),
+  'infrastructure/runtime/personality': Object.freeze({ precedence: 'runtime' }),
+  'infrastructure/runtime/responsive': Object.freeze({ viewport: 'runtime' }),
+  'infrastructure/runtime/spatial': Object.freeze({ admission: 'runtime' }),
+  'infrastructure/runtime/tenant': Object.freeze({ sourcing: 'runtime' }),
+  'infrastructure/runtime/theming/foundation/visual-authority': Object.freeze({ proof: 'runtime' }),
+});
+
+const ownKey = (table, key) => key !== undefined && Object.prototype.hasOwnProperty.call(table, key);
+
+/**
+ * The layer word `child` spells as a direct child of `parent` (src-relative):
+ * a scoped name yields its word, a word the parent migrated away yields
+ * undefined, and anything else is itself.
+ */
+export function scopedLayerWord(parent, child) {
+  const names = ownKey(SCOPED_LAYER_NAMES, parent) ? SCOPED_LAYER_NAMES[parent] : null;
+  if (!names) return child;
+  if (ownKey(names, child)) return names[child];
+  return Object.values(names).includes(child) ? undefined : child;
+}
+
+function localLayerRankAt(parent, child) {
+  const word = scopedLayerWord(parent, child);
+  return ownKey(LOCAL_LAYER_RANKS, word) ? LOCAL_LAYER_RANKS[word] : undefined;
+}
+
+const parentOf = (relativePath) => pathSegments(relativePath).slice(0, -1).join('/');
+
+/** Why one SCOPED_LAYER_NAMES row is not admissible under its parent's live children (empty when it is). */
+export function scopedLayerNameProblems({ parent, name, word, children }) {
+  const problems = [];
+  if (!children.has(name)) problems.push(`no child "${name}"`);
+  if (children.has(word)) problems.push(`migrated word "${word}" is still a child`);
+  if (ownKey(LOCAL_LAYER_RANKS, name) || ownKey(UI_COMPONENT_BRANCH_RANKS, name)) problems.push(`"${name}" is already a layer word`);
+  if (!ownKey(LOCAL_LAYER_RANKS, word)) problems.push(`"${word}" is not a layer word`);
+  if (isUiCapabilityOwner(parent) && !ownKey(UI_COMPONENT_BRANCH_RANKS, word)) {
+    problems.push(`"${word}" is not a UI component branch under a UI capability owner`);
+  }
+  if (ownKey(SCOPED_OWNER_RANKS, parent)) problems.push('the parent is a SCOPED_OWNER_RANKS owner');
+  return problems;
+}
 
 /**
  * Internal ownership branches used by one direct UI component owner. These
@@ -737,22 +806,23 @@ function lowestCommonDirectory(leftFile, rightFile) {
   };
 }
 
-function resolveLocalLayer(file, commonDirectory) {
+function resolveLocalLayer(file, commonDirectory, sourceRoot) {
+  const commonRelative = toPosix(relative(sourceRoot, commonDirectory));
   const relativeDirectory = toPosix(relative(commonDirectory, dirname(file)));
+  let parent = commonRelative;
   for (const segment of pathSegments(relativeDirectory)) {
     // The first declared layer below the common owner defines this dependency
     // boundary. Deeper owners may declare their own nested layers, but those
     // must not overwrite the outer taxonomy (for example a surface's internal
     // `runtime/` still belongs to the outer `components/surfaces` layer when it
     // consumes `components/patterns`).
-    if (LOCAL_LAYER_RANKS[segment] !== undefined) {
-      return { name: segment, rank: LOCAL_LAYER_RANKS[segment] };
-    }
+    const rank = localLayerRankAt(parent, segment);
+    if (rank !== undefined) return { name: segment, rank };
+    parent = parent ? `${parent}/${segment}` : segment;
   }
   const ownerLayer = basename(commonDirectory);
-  return LOCAL_LAYER_RANKS[ownerLayer] === undefined
-    ? null
-    : { name: ownerLayer, rank: LOCAL_LAYER_RANKS[ownerLayer] };
+  const ownerRank = localLayerRankAt(parentOf(commonRelative), ownerLayer);
+  return ownerRank === undefined ? null : { name: ownerLayer, rank: ownerRank };
 }
 
 function resolveUiLayer(file, sourceRoot) {
@@ -778,7 +848,8 @@ function resolveUiComponentBranch(file, commonDirectory, sourceRoot) {
 
   const fileSegments = pathSegments(toPosix(relative(commonDirectory, file)));
   const name = fileSegments[0];
-  const rank = UI_COMPONENT_BRANCH_RANKS[name];
+  const word = scopedLayerWord(commonSegments.join('/'), name);
+  const rank = ownKey(UI_COMPONENT_BRANCH_RANKS, word) ? UI_COMPONENT_BRANCH_RANKS[word] : undefined;
   return rank === undefined ? null : { name, rank };
 }
 
@@ -842,9 +913,9 @@ export function auditCoreStructure({
   // filename are deliberately excluded, so `composition.ts`, a comment that
   // says "composition", or `record/record.ts` cannot masquerade as an owner
   // violation. Adjacent exact repeats are the accidental move shape this gate
-  // prevents (`components/structures/record/record/**`); non-adjacent layer names such
-  // as `runtime/tenant/runtime/**` remain valid and are governed directionally
-  // by LOCAL_LAYER_RANKS instead.
+  // prevents (`components/structures/record/record/**`); a non-adjacent repeat is
+  // the repeated-path-word law's, and a layer leaf that would repeat its macro
+  // root takes an owner-scoped name from SCOPED_LAYER_NAMES instead.
   const repeatedOwnerPaths = new Map();
   const genericRootOwners = new Set();
   const genericOwnerPaths = new Map();
@@ -1125,12 +1196,13 @@ export function auditCoreStructure({
       : (isUiCapabilityOwner(directory)
         ? UI_COMPONENT_BRANCH_RANKS
         : LOCAL_LAYER_RANKS);
-    const layerChildren = sorted([...children].filter((child) => (
-      Object.prototype.hasOwnProperty.call(branchRanks, child)
-    )));
+    const branchWord = (child) => (branchRanks === LOCAL_LAYER_RANKS || branchRanks === UI_COMPONENT_BRANCH_RANKS
+      ? scopedLayerWord(directory, child)
+      : child);
+    const layerChildren = sorted([...children].filter((child) => ownKey(branchRanks, branchWord(child))));
     if (layerChildren.length < 2) continue;
     const capabilityChildren = sorted([...children].filter((child) => (
-      !Object.prototype.hasOwnProperty.call(branchRanks, child)
+      !ownKey(branchRanks, branchWord(child))
       && !AUXILIARY_OWNER_CONTAINERS.has(child)
     )));
     if (capabilityChildren.length === 0) continue;
@@ -1141,6 +1213,25 @@ export function auditCoreStructure({
       'Named architectural layers and unlayered capabilities share one owner level.',
       { capabilityChildren, layerChildren },
     ));
+  }
+
+  // A scoped layer name is admitted only while its parent holds that child and
+  // no longer holds the migrated word. An absent parent is the pinned-count
+  // existence test's refusal, so a fixture tree without these owners is silent.
+  for (const [parent, names] of Object.entries(SCOPED_LAYER_NAMES)) {
+    const children = directChildDirectories.get(parent);
+    if (!children) continue;
+    for (const [name, word] of Object.entries(names)) {
+      const problems = scopedLayerNameProblems({ parent, name, word, children });
+      if (problems.length === 0) continue;
+      findings.push(finding(
+        'stale-scoped-layer-name',
+        `${parent}/${name}`,
+        parent,
+        `Scoped layer name "${name}" (${word}) is stale: ${problems.join('; ')}.`,
+        { name, word },
+      ));
+    }
   }
 
   // Every local/aliased source edge must resolve, including edges from tests,
@@ -1312,8 +1403,8 @@ export function auditCoreStructure({
           }
         }
 
-        const sourceDirectLayerRank = LOCAL_LAYER_RANKS[common.leftOwner];
-        const targetDirectLayerRank = LOCAL_LAYER_RANKS[common.rightOwner];
+        const sourceDirectLayerRank = localLayerRankAt(relativeCommon, common.leftOwner);
+        const targetDirectLayerRank = localLayerRankAt(relativeCommon, common.rightOwner);
         if (sourceDirectLayerRank === undefined && targetDirectLayerRank !== undefined) {
           // A complete capability/category is downstream of support declared
           // directly by its aggregate UI owner.
@@ -1339,10 +1430,10 @@ export function auditCoreStructure({
         const commonSegments = pathSegments(relativeCommon);
         const commonOwnsLocalLayer = commonSegments
           .slice(2)
-          .some((segment) => Object.prototype.hasOwnProperty.call(LOCAL_LAYER_RANKS, segment));
+          .some((segment, index) => localLayerRankAt(commonSegments.slice(0, index + 2).join('/'), segment) !== undefined);
         const branchesAreLocalLayers = (
-          Object.prototype.hasOwnProperty.call(LOCAL_LAYER_RANKS, common.leftOwner)
-          && Object.prototype.hasOwnProperty.call(LOCAL_LAYER_RANKS, common.rightOwner)
+          localLayerRankAt(relativeCommon, common.leftOwner) !== undefined
+          && localLayerRankAt(relativeCommon, common.rightOwner) !== undefined
         );
 
         // Nested foundation/runtime/presentation layers inside one UI family
@@ -1394,8 +1485,8 @@ export function auditCoreStructure({
       }
 
 
-      const sourceDirectLayerRank = LOCAL_LAYER_RANKS[common.leftOwner];
-      const targetDirectLayerRank = LOCAL_LAYER_RANKS[common.rightOwner];
+      const sourceDirectLayerRank = localLayerRankAt(relativeCommon, common.leftOwner);
+      const targetDirectLayerRank = localLayerRankAt(relativeCommon, common.rightOwner);
       if (sourceDirectLayerRank === undefined && targetDirectLayerRank !== undefined) {
         continue;
       }
@@ -1416,8 +1507,8 @@ export function auditCoreStructure({
         continue;
       }
 
-      const sourceLocalLayer = resolveLocalLayer(sourceFile.path, common.directory);
-      const targetLocalLayer = resolveLocalLayer(targetFile.path, common.directory);
+      const sourceLocalLayer = resolveLocalLayer(sourceFile.path, common.directory, absoluteSourceRoot);
+      const targetLocalLayer = resolveLocalLayer(targetFile.path, common.directory, absoluteSourceRoot);
       if (sourceLocalLayer && targetLocalLayer) {
         if (sourceLocalLayer.rank > targetLocalLayer.rank) {
           // Explicit downstream -> upstream dependency: this is the hierarchy
@@ -1521,7 +1612,7 @@ export function createStructureBaseline(result) {
       generated: 'excluded by generated/ segment or generated-file header',
       tests: 'must live directly in tests/, __tests__/ or __test__/; a container shared by 2+ productive sibling owners requires an aggregate index.ts(x)',
       entrypoints: 'derived from Vite/releaseSync plus conventional index.ts; nested entrypoints live only in the classified entrypoints/ support root as folder/index units',
-      localLayers: 'foundation/kernel/contracts/policy/quality/spec/validation < runtime < composition/react < presentation < facade/public; components/primitives < components/patterns < components/structures < components/surfaces; inside one UI capability foundation/contracts < runtime < engines < presentation < compound',
+      localLayers: 'foundation/kernel/contracts/policy/quality/spec/validation < runtime < composition/react < presentation < facade/public; components/primitives < components/patterns < components/structures < components/surfaces; inside one UI capability foundation/contracts < runtime < engines < presentation < compound; a layer leaf that would repeat a word of its own path spells its rank by an owner-scoped name declared for one concrete parent in SCOPED_LAYER_NAMES, and the replaced word loses its admission under that parent',
       layerClosure: 'an owner with two or more named layers has no unlayered capability peers; UI tier roots and infrastructure/runtime are explicit catalogs with a foundation support branch',
       physicalPaths: 'directory segments cannot repeat adjacently; the retired generic root owner composition and generic authored owner segments _internal/internal/misc/shared/utils/hooks are forbidden',
     },

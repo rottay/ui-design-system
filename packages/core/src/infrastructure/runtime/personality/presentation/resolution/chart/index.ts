@@ -13,7 +13,7 @@ import { ProductProfileContext } from '../../../../product-profiles';
 // only wanted `useContext`.
 import { TenantContext } from '../../../../tenant/foundation/context';
 import { EngineVisualDeclarationContext } from '../../../../foundation/engine-visual';
-import { resolveChartPersonality } from '../../../runtime/resolution/chart';
+import { resolveChartPersonality } from '../../../precedence/resolution/chart';
 
 /**
  * Read the resolved chart posture from the nearest provider scope.

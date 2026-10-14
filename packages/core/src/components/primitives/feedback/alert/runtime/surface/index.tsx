@@ -22,7 +22,7 @@ import {
   generateResponsiveCSS,
   isResponsiveValue,
   type ResponsivePropEntry,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import { StatusInfoIcon } from '@/graphics/icons/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';

@@ -29,7 +29,7 @@ import {
   PREVIEW_SCOPE_ATTRIBUTE,
   buildPreviewScopeSelector,
   sanitizePreviewSlug,
-} from '../../../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
+} from '../../../../../../../infrastructure/runtime/tenant/sourcing/preview-scope';
 import { compileFlatThemeThroughDoor } from "@tests/support/theme-door";
 import {
   compileThemeIntent,
@@ -49,7 +49,7 @@ import {
 import {
   createTenantTheme,
   createTenantConfig,
-} from '../../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
+} from '../../../../../../../infrastructure/runtime/tenant/sourcing/authoring/configuration';
 import type { FlatTheme } from '../../../../../../../foundation/contracts/composition/tenants/themes';
 import type { TenantConfig } from '../../../../../../../foundation/contracts/composition/tenants';
 import type {

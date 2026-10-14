@@ -44,7 +44,7 @@ import {
   generateResponsiveCSS,
   isResponsiveValue,
   type ResponsivePropEntry,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import { revealTabWithinList } from '../../runtime/reveal';
 import { Dropdown } from '../../../../facade';
 import { VisuallyHidden } from '../../../../foundation';

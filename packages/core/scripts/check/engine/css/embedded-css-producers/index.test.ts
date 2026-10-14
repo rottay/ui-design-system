@@ -5,7 +5,7 @@ import postcss from "postcss";
 import ts from "typescript";
 import { describe, expect, it } from "vitest";
 import { projectResponsiveGrid } from "../../../../../src/components/primitives/layout/grid/runtime/responsive";
-import { generateResponsiveCSS } from "../../../../../src/infrastructure/runtime/responsive/runtime/style-properties";
+import { generateResponsiveCSS } from "../../../../../src/infrastructure/runtime/responsive/viewport/style-properties";
 import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,

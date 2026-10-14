@@ -66,7 +66,7 @@ const DEFAULT_PATHS = {
   manifest: join(ENGINES_ROOT, 'classic/classic-anatomy-support.json'),
   classicAdapter: join(
     packageRoot,
-    'src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.ts',
+    'src/infrastructure/compilers/runtime/theme/presentation/adapters/projection/classic/index.ts',
   ),
 };
 

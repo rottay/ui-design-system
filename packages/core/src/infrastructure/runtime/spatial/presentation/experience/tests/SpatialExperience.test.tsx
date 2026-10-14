@@ -8,10 +8,10 @@ import { SpatialExperience } from '..';
 import {
   getSpatialContextLeaseCount,
   resetSpatialContextLeaseForTests,
-} from '../../../runtime/browser/context-lease';
+} from '../../../admission/browser/context-lease';
 import type { SpatialSceneRuntimeProps } from '../../../composition/react/contracts/types';
-import { resetWebGL2CapabilityForTests } from '../../../runtime/browser/capability/webgl2';
-import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
+import { resetWebGL2CapabilityForTests } from '../../../admission/browser/capability/webgl2';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/viewport/media-snapshot';
 
 const motion = vi.hoisted(() => ({
   policy: {

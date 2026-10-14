@@ -47,7 +47,7 @@ import React from 'react';
 import { Typography as AntTypography } from 'antd';
 import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } from '../../contracts';
 import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP, LINE_HEIGHT_MAP } from '../../contracts';
-import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import {
   resolveFluidTypographySize,

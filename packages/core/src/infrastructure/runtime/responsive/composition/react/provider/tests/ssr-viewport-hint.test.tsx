@@ -54,7 +54,7 @@ import ModernModal from '@/components/primitives/feedback/modal/engines/modern';
 
 import { ResponsiveProvider } from '..';
 import { usePhoneBreakpoint } from '../phone-state';
-import { resetResponsiveMediaStore } from '../../../../runtime/media-snapshot';
+import { resetResponsiveMediaStore } from '../../../../viewport/media-snapshot';
 
 /** A `matchMedia` that answers for one fixed viewport width. */
 function viewportMock(width: number) {
@@ -1085,7 +1085,7 @@ async function hydrateServerMarkup(
     const { ResponsiveProvider: Provider } = await import('..');
     const { usePhoneBreakpoint: useIsPhone } = await import('../phone-state');
     const { resetResponsiveMediaStore: reset } = await import(
-      '../../../../runtime/media-snapshot'
+      '../../../../viewport/media-snapshot'
     );
     reset();
 

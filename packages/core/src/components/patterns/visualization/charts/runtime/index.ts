@@ -8,12 +8,12 @@
  * time-series charts).
  */
 
-export { useChartDimensions } from './chart-engine/runtime/dimensions';
+export { useChartDimensions } from './chart-engine/mechanics/dimensions';
 export type {
   ChartDimensions,
   ChartDimensionsOptions,
   UseChartDimensionsResult,
-} from './chart-engine/runtime/dimensions';
+} from './chart-engine/mechanics/dimensions';
 
 export { useChartPersonality } from './theming/composition/react/personality';
 export type { ChartPersonalityOptions, ResolvedChartPersonality } from './theming/composition/react/personality';

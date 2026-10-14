@@ -14,10 +14,10 @@ import {
   CLASSIC_RADIUS_CHANNELS,
   CLASSIC_SEED_CHANNELS,
   classicThemeAdapter,
-} from "../presentation/classic";
+} from "../projection/classic";
 import { staticThemeIntent } from "../../../runtime/ingress";
-import { modernThemeAdapter } from "../presentation/modern";
-import { rusticThemeAdapter } from "../presentation/rustic";
+import { modernThemeAdapter } from "../projection/modern";
+import { rusticThemeAdapter } from "../projection/rustic";
 import {
   FIRST_PARTY_BASELINES,
   firstPartyFixture,

@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import {
   isResponsiveValue,
   scalarOrUndefined,
-} from "@/infrastructure/runtime/responsive/runtime/style-properties";
+} from "@/infrastructure/runtime/responsive/viewport/style-properties";
 import type {
   FlexAlign,
   FlexDirection,

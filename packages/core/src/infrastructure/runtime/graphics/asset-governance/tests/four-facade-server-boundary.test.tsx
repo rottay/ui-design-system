@@ -82,7 +82,7 @@ describe('four-facade server boundary', () => {
       'src/graphics/marks/presentation/brand-mark/index.tsx',
       'src/graphics/marks/presentation/cloud-service-mark/index.tsx',
       'src/graphics/pictograms/presentation/feature-pictogram/index.tsx',
-      'src/infrastructure/runtime/graphics/asset-governance/runtime/control/index.ts',
+      'src/infrastructure/runtime/graphics/asset-governance/operations/control/index.ts',
     ];
 
     for (const ownerPath of ownerPaths) {

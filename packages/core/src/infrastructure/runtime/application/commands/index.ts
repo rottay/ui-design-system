@@ -7,7 +7,7 @@ export {
   useExecuteCommand,
   useRegisterCommands,
   useRegisterCommandSource,
-} from './runtime/registry';
+} from './dispatch/registry';
 export type {
   Command,
   CommandParameter,
@@ -15,4 +15,4 @@ export type {
   CommandSource,
   CommandSourceItem,
   UseCommandsReturn,
-} from './runtime/registry';
+} from './dispatch/registry';

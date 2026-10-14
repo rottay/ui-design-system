@@ -8,10 +8,10 @@ import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { DensityScope } from '@/infrastructure/runtime/foundation/density';
-import { I18nProvider } from '@/infrastructure/runtime/i18n/runtime/context/provider';
+import { I18nProvider } from '@/infrastructure/runtime/i18n/scope/context/provider';
 
 import type { WidgetBoardItem } from '../../../../contracts';
-import { resolveAdaptiveLayout } from '../../../../../../runtime/adaptive-layout/runtime';
+import { resolveAdaptiveLayout } from '../../../../../../runtime/adaptive-layout/solver';
 import { normalizeLayoutRevision } from '../../../../../../runtime/adaptive-layout/presentation/react';
 import { widgetItemsToAdaptiveInputs } from '../../policy';
 import { useAdaptiveBoardLayout } from '..';

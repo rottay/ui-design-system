@@ -8,6 +8,7 @@ import {
   ARCHITECTURE_TIERS,
   CLASSIFIED_SUPPORT_ROOTS,
   LOCAL_LAYER_RANKS,
+  SCOPED_LAYER_NAMES,
   SCOPED_OWNER_RANKS,
   UI_COMPONENT_BRANCH_RANKS,
   UI_LAYER_RANKS,
@@ -16,6 +17,8 @@ import {
   createStructureBaseline,
   isBarrelSource,
   parseCliArguments,
+  scopedLayerNameProblems,
+  scopedLayerWord,
 } from './index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 import './laws/index.test.mjs';
@@ -296,6 +299,138 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
       true,
       `SCOPED_OWNER_RANKS declares "${path}", which is not a directory under src/.`,
     );
+  }
+});
+
+test('every scoped layer name resolves to a real directory that replaced its layer word', () => {
+  const sourceRoot = resolve(findPackageRoot(import.meta.dirname), 'src');
+  const parents = Object.keys(SCOPED_LAYER_NAMES);
+  const rows = parents.flatMap((parent) => (
+    Object.entries(SCOPED_LAYER_NAMES[parent]).map(([name, word]) => ({ parent, name, word }))
+  ));
+
+  // Pinned before the loop, as for SCOPED_OWNER_RANKS: a silently deleted row
+  // would otherwise leave a passing loop over whatever survived.
+  assert.equal(parents.length, 21);
+  assert.equal(rows.length, 21);
+
+  const isDirectory = (path) => statSync(resolve(sourceRoot, path), { throwIfNoEntry: false })?.isDirectory() === true;
+  for (const { parent, name, word } of rows) {
+    assert.equal(isDirectory(`${parent}/${name}`), true, `SCOPED_LAYER_NAMES declares "${parent}/${name}", which is not a directory under src/.`);
+    assert.equal(isDirectory(`${parent}/${word}`), false, `"${parent}/${word}" still exists beside its scoped name "${name}".`);
+    assert.equal(Object.hasOwn(LOCAL_LAYER_RANKS, word), true, `"${word}" is not a local layer word.`);
+    assert.equal(Object.hasOwn(LOCAL_LAYER_RANKS, name), false, `"${name}" is a local layer word, not a scoped name.`);
+    assert.equal(Object.hasOwn(UI_COMPONENT_BRANCH_RANKS, name), false, `"${name}" is a UI component branch word, not a scoped name.`);
+    assert.equal(Object.hasOwn(SCOPED_OWNER_RANKS, parent), false, `"${parent}" is also a SCOPED_OWNER_RANKS owner.`);
+    assert.deepEqual(scopedLayerNameProblems({ parent, name, word, children: new Set([name]) }), []);
+  }
+});
+
+test('a scoped layer name spells its word under its parent only, and the parent loses the migrated word', () => {
+  assert.equal(scopedLayerWord('infrastructure/runtime/tenant', 'sourcing'), 'runtime');
+  assert.equal(scopedLayerWord('infrastructure/runtime/tenant', 'runtime'), undefined);
+  assert.equal(scopedLayerWord('infrastructure/runtime/tenant', 'foundation'), 'foundation');
+  assert.equal(scopedLayerWord('infrastructure/runtime/dom', 'sourcing'), 'sourcing');
+  assert.equal(scopedLayerWord('infrastructure/runtime/other', 'runtime'), 'runtime');
+  assert.equal(scopedLayerWord('infrastructure/compilers/runtime/theme/presentation/adapters', 'projection'), 'presentation');
+});
+
+test('the stale rule names every cause that voids a scoped layer name', () => {
+  const parent = 'infrastructure/runtime/fixture-owner';
+  const problems = (row, children) => scopedLayerNameProblems({ parent, ...row, children: new Set(children) });
+
+  assert.deepEqual(problems({ name: 'sourcing', word: 'runtime' }, ['foundation', 'sourcing']), []);
+  assert.deepEqual(problems({ name: 'sourcing', word: 'runtime' }, ['foundation']), ['no child "sourcing"']);
+  assert.deepEqual(problems({ name: 'sourcing', word: 'runtime' }, ['sourcing', 'runtime']), ['migrated word "runtime" is still a child']);
+  assert.deepEqual(problems({ name: 'composition', word: 'runtime' }, ['composition']), ['"composition" is already a layer word']);
+  assert.deepEqual(problems({ name: 'engines', word: 'runtime' }, ['engines']), ['"engines" is already a layer word']);
+  assert.deepEqual(problems({ name: 'sourcing', word: 'catalog' }, ['sourcing']), ['"catalog" is not a layer word']);
+  // N2: under a UI capability owner the word must also rank as a UI component branch.
+  assert.deepEqual(
+    scopedLayerNameProblems({ parent: 'components/patterns/data/widget', name: 'solver', word: 'kernel', children: new Set(['solver']) }),
+    ['"kernel" is not a UI component branch under a UI capability owner'],
+  );
+  // The two ladders never disagree on one owner.
+  assert.deepEqual(
+    scopedLayerNameProblems({ parent: 'foundation/contracts', name: 'sourcing', word: 'runtime', children: new Set(['sourcing']) }),
+    ['the parent is a SCOPED_OWNER_RANKS owner'],
+  );
+});
+
+test('a scoped layer name ranks like its word for sibling edges and closes the mixed-layer check', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const dom = 'infrastructure/runtime/dom';
+    write(resolve(sourceRoot, `${dom}/foundation/index.ts`), 'export const foundationValue = true;\n');
+    write(resolve(sourceRoot, `${dom}/paint/index.ts`), "import { foundationValue } from '../foundation';\nimport { compositionValue } from '../composition';\nexport const paintValue = foundationValue && compositionValue;\n");
+    write(resolve(sourceRoot, `${dom}/composition/index.ts`), "import { paintValue } from '../paint';\nexport const compositionValue = paintValue;\n");
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(result);
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    assert(!ids.has(`mixed-layer-and-capability-peers:${dom}`));
+    assert(!ids.has(`sibling-owner-dependency:${dom}/paint/index.ts->${dom}/foundation/index.ts`));
+    assert(!ids.has(`sibling-owner-dependency:${dom}/composition/index.ts->${dom}/paint/index.ts`));
+    assert(!ids.has(`local-layer-inversion:${dom}/composition/index.ts->${dom}/paint/index.ts`));
+    assert(ids.has(`local-layer-inversion:${dom}/paint/index.ts->${dom}/composition/index.ts`));
+    assert(!result.findings.some(({ rule }) => rule === 'stale-scoped-layer-name'));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('a scoped layer name ranks like its word on the cross-capability path; the migrated word does not', () => {
+  const icons = 'infrastructure/runtime/foundation/icons';
+  const profile = `${icons}/active-profile`;
+  const consumer = `${icons}/glyph-catalog/composition/index.ts`;
+  const plant = (leaf) => {
+    const { packageRoot, sourceRoot } = fixture();
+    write(resolve(sourceRoot, `${profile}/foundation/index.ts`), 'export const profileFoundation = true;\n');
+    write(resolve(sourceRoot, `${profile}/${leaf}/index.ts`), "import { profileFoundation } from '../foundation';\nexport const profileValue = profileFoundation;\n");
+    write(resolve(sourceRoot, consumer), `import { profileValue } from '../../active-profile/${leaf}';\nexport const consumerValue = profileValue;\n`);
+    write(resolve(sourceRoot, `${icons}/other-profile/posture/index.ts`), 'export const otherValue = true;\n');
+    write(resolve(sourceRoot, `${icons}/glyph-catalog/composition/other/index.ts`), "import { otherValue } from '../../../other-profile/posture';\nexport const otherConsumer = otherValue;\n");
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    rmSync(packageRoot, { recursive: true, force: true });
+    assertEveryImportResolved(result);
+    return result;
+  };
+
+  const scoped = plant('posture');
+  const scopedIds = new Set(scoped.findings.map(({ id }) => id));
+  assert(!scopedIds.has(`sibling-owner-dependency:${consumer}->${profile}/posture/index.ts`));
+  assert(!scoped.findings.some(({ rule }) => rule === 'stale-scoped-layer-name'));
+  // The same name under a parent that does not declare it is still peer debt.
+  assert(scopedIds.has(`sibling-owner-dependency:${icons}/glyph-catalog/composition/other/index.ts->${icons}/other-profile/posture/index.ts`));
+
+  // A recreated `runtime/` under the listed parent is not admitted at rank 1:
+  // the edge falls to peer debt and the stale rule names both causes.
+  const migrated = plant('runtime');
+  const migratedIds = new Set(migrated.findings.map(({ id }) => id));
+  assert(migratedIds.has(`sibling-owner-dependency:${consumer}->${profile}/runtime/index.ts`));
+  const stale = migrated.findings.find(({ id }) => id === `stale-scoped-layer-name:${profile}/posture`);
+  assert(stale, 'the stale rule fires for the listed parent');
+  assert.match(stale.message, /no child "posture"/u);
+  assert.match(stale.message, /migrated word "runtime" is still a child/u);
+});
+
+test('a scoped layer name ranks like its UI component branch word inside a UI capability owner', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const owner = 'components/patterns/runtime/adaptive-layout';
+    write(resolve(sourceRoot, `${owner}/foundation/index.ts`), 'export const foundationValue = true;\n');
+    write(resolve(sourceRoot, `${owner}/solver/index.ts`), "import { foundationValue } from '../foundation';\nimport { presentationValue } from '../presentation';\nexport const solverValue = foundationValue && presentationValue;\n");
+    write(resolve(sourceRoot, `${owner}/presentation/index.ts`), "import { solverValue } from '../solver';\nexport const presentationValue = solverValue;\n");
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(result);
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    assert(!ids.has(`mixed-layer-and-capability-peers:${owner}`));
+    assert(!ids.has(`sibling-owner-dependency:${owner}/presentation/index.ts->${owner}/solver/index.ts`));
+    assert(!ids.has(`local-layer-inversion:${owner}/presentation/index.ts->${owner}/solver/index.ts`));
+    assert(ids.has(`local-layer-inversion:${owner}/solver/index.ts->${owner}/presentation/index.ts`));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
   }
 });
 

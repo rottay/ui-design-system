@@ -13,7 +13,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
-import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/viewport/media-snapshot';
 import type { DocumentViewportHint } from '@/infrastructure/runtime/foundation/root-attributes/ssr';
 import type { TenantConfig } from '@/foundation/contracts';
 import { GuidedDraftFormSurface } from '..';

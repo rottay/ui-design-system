@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { createEngineComponent } from '..';
 import { EngineProvider } from '../../../composition/react/provider';
-import { clearCustomRegistry, registerCustomComponents } from '../../../runtime/customization/component-registry';
+import { clearCustomRegistry, registerCustomComponents } from '../../../selection/customization/component-registry';
 import { TenantContext } from '../../../../tenant/composition/react/provider';
 import type { TenantConfig } from '../../../../../../foundation/contracts/composition/tenants';
 

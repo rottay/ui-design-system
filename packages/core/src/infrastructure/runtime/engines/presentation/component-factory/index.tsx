@@ -53,7 +53,7 @@ import {
   type RefAttributes,
 } from 'react';
 import { useDeclaredEngine } from '../../composition/react/provider';
-import { createCustomWrapper } from '../../runtime/customization/component-registry';
+import { createCustomWrapper } from '../../selection/customization/component-registry';
 import { EngineErrorBoundary } from './error-boundary';
 import type { EngineName } from '../../../../../foundation/contracts';
 import {

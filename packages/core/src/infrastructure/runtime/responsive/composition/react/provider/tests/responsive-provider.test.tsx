@@ -26,7 +26,7 @@ import {
   type ResolvedResponsiveContextValue,
   type ResponsiveContextValue,
 } from '../../../..';
-import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/viewport/media-snapshot';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 import { useResponsiveValue } from '@/infrastructure/runtime/responsive/composition/react/provider/value';
 

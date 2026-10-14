@@ -18,7 +18,7 @@ import {
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { useResolvedChartPersonality } from '@/infrastructure/runtime/personality';
 import { useChartTokenScheme } from '../../../../../theming/composition/react/paint';
-import { useResolvedChartGrammar } from '../../../../runtime/grammar';
+import { useResolvedChartGrammar } from '../../../../mechanics/grammar';
 import {
   resolveChartProjection,
   type ChartDeviceClass,

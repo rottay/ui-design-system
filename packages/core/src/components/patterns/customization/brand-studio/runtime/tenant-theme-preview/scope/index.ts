@@ -41,7 +41,7 @@ import {
   buildPreviewScopeSelector,
   isSafePreviewCssValue,
   sanitizePreviewSlug,
-} from '@/infrastructure/runtime/tenant/runtime/preview-scope';
+} from '@/infrastructure/runtime/tenant/sourcing/preview-scope';
 import type { ThemeCompilationModeBlock } from '@/foundation/contracts/composition/tenants/themes/compiled';
 import {
   containerScope,

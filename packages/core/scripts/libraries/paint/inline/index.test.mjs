@@ -14,7 +14,7 @@ import { auditCertifiedInlineStyleProducers, countArc09PaintInFile } from './ind
 const CORE = findPackageRoot(new URL('.', import.meta.url).pathname);
 const BEHAVIOR = 'src/foundation/behavior';
 /** The other certified producer the Input engine spreads, copied so the sandbox measures what the tree measures. */
-const RESPONSIVE_STYLE = 'src/infrastructure/runtime/responsive/runtime/style-properties';
+const RESPONSIVE_STYLE = 'src/infrastructure/runtime/responsive/viewport/style-properties';
 const FIELD_ACTION = `${BEHAVIOR}/composition/field-action/index.ts`;
 const INPUT_ENGINE = 'src/components/primitives/inputs/input/engines/modern/index.tsx';
 

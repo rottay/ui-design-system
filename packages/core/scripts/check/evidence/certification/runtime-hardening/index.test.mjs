@@ -230,7 +230,7 @@ test("shared budget widening fails closed", () => {
 
 test("Particle certification, save-data and context-loss evidence cannot disappear silently", () => {
   const registryPath =
-    "packages/core/src/infrastructure/runtime/effects/runtime/registry/index.ts";
+    "packages/core/src/infrastructure/runtime/effects/catalog/registry/index.ts";
   const registry = auditCra15RuntimeHardening({
     repositoryRoot: REPOSITORY_ROOT,
     sourceOverrides: override(registryPath, (source) =>

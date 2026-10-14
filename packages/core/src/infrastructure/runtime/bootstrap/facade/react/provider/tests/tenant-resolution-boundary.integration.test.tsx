@@ -11,8 +11,8 @@ const { resolveTenantConfigMock } = vi.hoisted(() => ({
   resolveTenantConfigMock: vi.fn(),
 }));
 
-vi.mock('@/infrastructure/runtime/tenant/runtime/store', async (importOriginal) => {
-  const original = await importOriginal<typeof import('@/infrastructure/runtime/tenant/runtime/store')>();
+vi.mock('@/infrastructure/runtime/tenant/sourcing/store', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@/infrastructure/runtime/tenant/sourcing/store')>();
   return {
     ...original,
     getTenantConfig: resolveTenantConfigMock,

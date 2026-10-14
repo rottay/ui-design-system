@@ -13,4 +13,4 @@ export type {
   GraphicAssetTelemetryEvent,
   GraphicAssetTelemetryOutcome,
 } from './foundation/contracts';
-export { installGraphicAssetRuntimeControl } from './runtime/control';
+export { installGraphicAssetRuntimeControl } from './operations/control';

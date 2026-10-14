@@ -32,7 +32,7 @@ import { EngineProvider } from '@/infrastructure/runtime/engines/composition/rea
 import {
   clearCustomRegistry,
   registerCustomComponent,
-} from '@/infrastructure/runtime/engines/runtime/customization/component-registry';
+} from '@/infrastructure/runtime/engines/selection/customization/component-registry';
 import { Heading, Link, Paragraph, Text } from '..';
 
 /**

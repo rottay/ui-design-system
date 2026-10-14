@@ -20,7 +20,7 @@
 
 import { useCallback } from 'react';
 import type { CSSProperties } from 'react';
-import { getReducedMotionSnapshot } from '@/infrastructure/runtime/foundation/motion/runtime/browser/reduced-motion';
+import { getReducedMotionSnapshot } from '@/infrastructure/runtime/foundation/motion/sensing/browser/preference';
 import { useReducedMotion } from '../foundation/preference';
 
 /** A DOM update run inside (or in place of) a view transition. */

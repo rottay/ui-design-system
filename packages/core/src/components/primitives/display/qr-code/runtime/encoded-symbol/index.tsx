@@ -6,7 +6,7 @@ import { QRCode as AntQRCode } from 'antd';
 import {
   PROVIDER_PAINT_ATTRIBUTE_FILTER,
   resolveCssColor,
-} from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+} from '@/infrastructure/runtime/dom/paint/css-color-resolution';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { QRCodeProps } from '../../contracts';
 

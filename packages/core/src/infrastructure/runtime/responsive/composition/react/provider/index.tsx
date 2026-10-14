@@ -55,13 +55,13 @@ import React, {
 } from 'react';
 
 import { useMotionPreference } from '@/infrastructure/runtime/foundation/motion/composition/react/preference';
-import type { DocumentViewportHint, ResponsiveMediaSnapshot } from '../../../runtime/media-snapshot';
+import type { DocumentViewportHint, ResponsiveMediaSnapshot } from '../../../viewport/media-snapshot';
 import {
   UNHINTED_MEDIA_SNAPSHOT,
   getResponsiveMediaSnapshot,
   mediaSnapshotForViewport,
   subscribeResponsiveMedia,
-} from '../../../runtime/media-snapshot';
+} from '../../../viewport/media-snapshot';
 
 // ---------------------------------------------------------------------------
 // Types

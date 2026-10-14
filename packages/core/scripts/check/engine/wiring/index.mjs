@@ -132,9 +132,9 @@ export const TOKEN_BASELINE_OWNERS = Object.freeze([
   'src/foundation/contracts/kernel/tokens/engine/index.ts',
   'src/foundation/contracts/composition/tenants/themes/engine-adapter/index.ts',
   'src/infrastructure/compilers/runtime/theme/presentation/adapters/foundation/definition/index.ts',
-  'src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.ts',
-  'src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/modern/index.ts',
-  'src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/rustic/index.ts',
+  'src/infrastructure/compilers/runtime/theme/presentation/adapters/projection/classic/index.ts',
+  'src/infrastructure/compilers/runtime/theme/presentation/adapters/projection/modern/index.ts',
+  'src/infrastructure/compilers/runtime/theme/presentation/adapters/projection/rustic/index.ts',
 ]);
 
 /**
@@ -149,7 +149,7 @@ export const TOKEN_BASELINE_OWNERS = Object.freeze([
  */
 export const PRIMARY_ENGINE_READERS = Object.freeze([
   'src/foundation/contracts/kernel/engine-identity/index.ts',
-  'src/infrastructure/runtime/engines/runtime/resolution/index.ts',
+  'src/infrastructure/runtime/engines/selection/resolution/index.ts',
   // `scripts/libraries/theme-lowering/index.mjs` used to sit here. It took the
   // primary engine for a slug the roster did not claim, because it asked one
   // value two questions -- which tenant, and which vertical. It now takes the

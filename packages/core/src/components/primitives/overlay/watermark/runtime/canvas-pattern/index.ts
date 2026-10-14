@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   PROVIDER_PAINT_ATTRIBUTE_FILTER,
   resolveCssColor,
-} from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+} from '@/infrastructure/runtime/dom/paint/css-color-resolution';
 import type { WatermarkFont } from '../../contracts';
 import { WATERMARK_DEFAULTS } from '../../contracts';
 

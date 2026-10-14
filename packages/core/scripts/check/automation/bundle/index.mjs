@@ -1542,7 +1542,7 @@ const SPATIAL_RUNTIME_ARTIFACT_FRAGMENTS = Object.freeze([
   '/infrastructure/runtime/spatial/facade/index.',
   '/infrastructure/runtime/spatial/foundation/quality/index.',
   '/infrastructure/runtime/spatial/foundation/validation/index.',
-  '/infrastructure/runtime/spatial/runtime/resolution/index.',
+  '/infrastructure/runtime/spatial/admission/resolution/index.',
 ]);
 // SpatialExperience consumes the supplier-neutral motion policy hook directly.
 // Keep this allowlist finite so MotionProvider, recipes and renderer adapters
@@ -1552,15 +1552,15 @@ const SPATIAL_HOST_BRIDGE_ARTIFACT_FRAGMENTS = Object.freeze([
   '/foundation/contracts/kernel/verticals/',
   '/infrastructure/runtime/foundation/graphics/continuous-runtime-governor/',
   '/infrastructure/runtime/foundation/motion/composition/react/preference/',
-  '/infrastructure/runtime/foundation/motion/runtime/browser/environment/',
+  '/infrastructure/runtime/foundation/motion/sensing/browser/environment/',
   '/infrastructure/runtime/foundation/motion/policy/',
-  '/infrastructure/runtime/foundation/motion/runtime/browser/reduced-motion/',
+  '/infrastructure/runtime/foundation/motion/sensing/browser/preference/',
   '/infrastructure/runtime/spatial/composition/react/',
   '/infrastructure/runtime/spatial/facade/react/index.',
   '/infrastructure/runtime/spatial/presentation/experience/index.',
   '/infrastructure/runtime/spatial/presentation/experience/error-boundary/index.',
-  '/infrastructure/runtime/spatial/runtime/browser/capability/webgl2/index.',
-  '/infrastructure/runtime/spatial/runtime/browser/context-lease/index.',
+  '/infrastructure/runtime/spatial/admission/browser/capability/webgl2/index.',
+  '/infrastructure/runtime/spatial/admission/browser/context-lease/index.',
 ]);
 const SPATIAL_ASSET_MODULE_PATTERN = /\.(?:avif|bmp|css|eot|gif|glb|gltf|ico|jpe?g|less|mp3|mp4|ogg|otf|png|sass|scss|svg|ttf|wav|wasm|webm|webp|woff2?)$/i;
 const SPATIAL_INLINE_ASSET_PATTERN = /\bdata:(?:application\/wasm|audio\/|font\/|image\/|model\/|video\/)/i;

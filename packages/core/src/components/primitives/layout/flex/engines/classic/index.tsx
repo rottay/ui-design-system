@@ -13,7 +13,7 @@
 import React, { useId } from "react";
 import { Flex as AntFlex } from "antd";
 import type { FlexProps } from "../../contracts";
-import { generateResponsiveCSS } from "@/infrastructure/runtime/responsive/runtime/style-properties";
+import { generateResponsiveCSS } from "@/infrastructure/runtime/responsive/viewport/style-properties";
 import {
   resolveFlexAttributes,
   resolveFlexParameterStyle,

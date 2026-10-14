@@ -7,8 +7,8 @@ import {
   EFFECT_REGISTRY_VERSION,
   EFFECT_RESEARCH_PROVENANCE,
   getEffectDefinition,
-} from '../../runtime/registry';
-import { resolveEffect, resolveEffectDefinition } from '../../runtime/registry/resolution';
+} from '../../catalog/registry';
+import { resolveEffect, resolveEffectDefinition } from '../../catalog/registry/resolution';
 import { isEffectDefinition, isEffectId } from '../../foundation/validation';
 
 const SAFE_CONTEXT = Object.freeze({

@@ -10,7 +10,7 @@ import {
   acquireSpatialContextLease,
   getSpatialContextLeaseCount,
   releaseSpatialContextLease,
-} from '@/infrastructure/runtime/spatial/runtime/browser/context-lease';
+} from '@/infrastructure/runtime/spatial/admission/browser/context-lease';
 
 afterEach(() => resetParticleAnimationLeaseForTests());
 

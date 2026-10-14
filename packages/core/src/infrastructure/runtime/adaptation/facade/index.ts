@@ -9,6 +9,6 @@ export {
   resolveActiveResponsivePosture,
   useActiveResponsivePosture,
   useContainerPosture,
-} from '../runtime/container-posture';
+} from '../measurement/container-posture';
 export { useAdaptation } from '../composition/react';
 export type { AdaptationResult, UseAdaptationOptions } from '../composition/react';

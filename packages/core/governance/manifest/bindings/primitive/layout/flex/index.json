@@ -11,7 +11,7 @@
     "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
     "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
     "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
-    "packages/core/src/infrastructure/runtime/responsive/runtime/style-properties"
+    "packages/core/src/infrastructure/runtime/responsive/viewport/style-properties"
   ],
   "shared": [
     {

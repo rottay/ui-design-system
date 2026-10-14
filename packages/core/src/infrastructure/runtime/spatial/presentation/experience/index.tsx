@@ -18,19 +18,19 @@ import type {
 import { changeKey } from '@/kernel/change-key';
 import { useMotionPolicy } from '@/infrastructure/runtime/foundation/motion/composition/react/preference';
 import { isSpatialSceneModule } from '../../foundation/validation';
-import { resolveSpatialPolicy } from '../../runtime/resolution';
+import { resolveSpatialPolicy } from '../../admission/resolution';
 import { SpatialErrorBoundary } from './error-boundary';
 import {
   acquireSpatialContextLease,
   releaseSpatialContextLease,
-} from '../../runtime/browser/context-lease';
+} from '../../admission/browser/context-lease';
 import type {
   SpatialExperienceEvent,
   SpatialExperienceProps,
   SpatialSceneModule,
   SpatialSceneRuntimeProps,
 } from '../../composition/react/contracts/types';
-import { invalidateWebGL2Capability } from '../../runtime/browser/capability/webgl2';
+import { invalidateWebGL2Capability } from '../../admission/browser/capability/webgl2';
 import { useHydrated } from '../../composition/react/hydrated';
 import { useSpatialInView } from '../../composition/react/in-view';
 import { useSpatialViewport } from '../../composition/react/viewport';

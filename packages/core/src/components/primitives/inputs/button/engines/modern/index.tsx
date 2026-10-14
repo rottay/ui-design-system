@@ -62,7 +62,7 @@ import {
   isResponsiveValue,
   scalarOrUndefined,
   type ResponsivePropEntry,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 
 /**
  * The variants the modern skin paints. An unknown variant falls back to

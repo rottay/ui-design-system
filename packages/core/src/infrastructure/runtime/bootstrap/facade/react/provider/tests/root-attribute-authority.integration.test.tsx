@@ -42,8 +42,8 @@ const GOVERNED_ROOT_ATTRIBUTES: Readonly<Record<string, string>> = {
   // the shared registry now, which means they are censused for a single writer
   // and restored to their exact predecessor by the two drills below, on the
   // same terms as every other governed channel.
-  lang: 'infrastructure/runtime/i18n/runtime/context/provider/index.tsx',
-  dir: 'infrastructure/runtime/i18n/runtime/context/provider/index.tsx',
+  lang: 'infrastructure/runtime/i18n/scope/context/provider/index.tsx',
+  dir: 'infrastructure/runtime/i18n/scope/context/provider/index.tsx',
 };
 
 /**

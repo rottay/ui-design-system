@@ -8,16 +8,16 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { isValidTenantConfig } from '../../../src/infrastructure/runtime/tenant/foundation/validation';
 import { getDefaultTenantConfig } from '../../../src/infrastructure/runtime/tenant/foundation/configuration/defaults';
-import { resolveFromSubdomain } from '../../../src/infrastructure/runtime/tenant/runtime/resolution/subdomain';
+import { resolveFromSubdomain } from '../../../src/infrastructure/runtime/tenant/sourcing/resolution/subdomain';
 import {
   resolveFromDomain,
   configureDomainLookup,
-} from '../../../src/infrastructure/runtime/tenant/runtime/resolution/domain';
+} from '../../../src/infrastructure/runtime/tenant/sourcing/resolution/domain';
 import {
   resolveFromHeader,
   setServerHeaders,
   clearServerHeaders,
-} from '../../../src/infrastructure/runtime/tenant/runtime/resolution/header';
+} from '../../../src/infrastructure/runtime/tenant/sourcing/resolution/header';
 
 let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
 

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { renderToString } from 'react-dom/server';
 
 import { ResponsiveProvider } from '@/infrastructure/runtime/responsive/composition/react/provider';
-import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/viewport/media-snapshot';
 
 import { SurfaceRegion } from '..';
 import type { SurfacePostures } from '..';

@@ -56,7 +56,7 @@ import { Component, ErrorInfo, ReactNode } from 'react';
 import type { CSSProperties } from 'react';
 import { errorInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n/composition/translation';
-import { ErrorHandler } from '../../../../error-handling/runtime/handler';
+import { ErrorHandler } from '../../../../error-handling/bus/handler';
 import { ErrorCategory, ErrorSeverity } from '@/foundation/contracts/runtime/errors';
 
 const FALLBACK_TITLE_KEY = 'errors.generic';

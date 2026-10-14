@@ -77,7 +77,7 @@ import {
   generateResponsiveCSS,
   isResponsiveValue,
   scalarOrUndefined,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import { collectBoxResponsiveEntries } from "../../runtime/responsive";
 
 // Classic engine uses the same inline-style approach as rustic for layout props.

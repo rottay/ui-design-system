@@ -110,7 +110,7 @@ import { getVerticalPreset } from '@/foundation/presets/verticals';
 import {
   getTenantConfig as resolveTenantConfig,
   DEFAULT_TENANT_SLUG,
-} from '../../../../tenant/runtime/store';
+} from '../../../../tenant/sourcing/store';
 import {
   getCodeOwnedGovernedBehavior,
   getCodeOwnedRuntimeConfig,
@@ -127,7 +127,7 @@ import {
   assertEngineVisualBelongs,
 } from '../../../../foundation/engine-visual';
 import type { TenantAppearance } from '@/foundation/contracts/composition/tenants/themes';
-import { resolveEngine } from '../../../../engines/runtime/resolution';
+import { resolveEngine } from '../../../../engines/selection/resolution';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry';
 import { CommandRegistryProvider } from '../../../../application/commands';
 import { ShortcutProvider } from '../../../../application/interaction/shortcuts';
@@ -143,7 +143,7 @@ import {
 } from '@/foundation/tokens/ts/presentation/expressive-profiles';
 import { expandExpressiveProfiles } from '@/foundation/tokens/ts/presentation/expressive-profiles/expansion';
 import { IconExpressiveProfileContext } from '@/infrastructure/runtime/foundation/icons/active-profile/foundation/read';
-import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
+import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/posture/resolution';
 import type { DesignSystemProviderProps } from './props';
 import { LoadingScreen, MemoizedChildren } from './boundaries';
 import { NO_RETENTION_REVOCATION, NO_RETENTION_SUBSCRIPTION, RetainedArtifactArm, RetainedArtifactSeal } from './retention';

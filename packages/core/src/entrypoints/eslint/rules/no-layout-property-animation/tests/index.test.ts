@@ -33,7 +33,7 @@ function assignedValue(key: string, value: string) {
 
 const COMPOUND = '/repo/src/components/primitives/feedback/progress/compound/line/index.tsx';
 const RUNTIME_PRESENTATION = '/repo/src/components/primitives/layout/stack/runtime/presentation/index.ts';
-const KERNEL = '/repo/src/graphics/motion/react/runtime/layout/runtime/size/index.ts';
+const KERNEL = '/repo/src/graphics/motion/react/runtime/layout/animation/size/index.ts';
 
 describe('no-layout-property-animation', () => {
   it('blocks a layout property named first in a transition value', () => {

@@ -24,14 +24,14 @@ import {
   getMotionEnvironmentServerSnapshot,
   getMotionEnvironmentSnapshot,
   subscribeMotionEnvironment,
-} from '@/infrastructure/runtime/foundation/motion/runtime/browser/environment';
+} from '@/infrastructure/runtime/foundation/motion/sensing/browser/environment';
 import { claimRootAttribute } from '@/infrastructure/runtime/foundation/root-attributes';
 import { resolveMotionPolicy } from '@/infrastructure/runtime/foundation/motion/policy';
 import {
   getReducedMotionServerSnapshot,
   getReducedMotionSnapshot,
   subscribeReducedMotion,
-} from '@/infrastructure/runtime/foundation/motion/runtime/browser/reduced-motion';
+} from '@/infrastructure/runtime/foundation/motion/sensing/browser/preference';
 
 export { MotionContext, useMotionPolicy, useMotionPreference };
 export type { MotionContextValue };

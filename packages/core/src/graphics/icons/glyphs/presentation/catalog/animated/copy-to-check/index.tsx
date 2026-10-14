@@ -19,7 +19,7 @@ import React from 'react';
 import type { CSSProperties } from 'react';
 import { CheckIcon as Check } from '@phosphor-icons/react/dist/ssr/Check';
 import { CopyIcon as Copy } from '@phosphor-icons/react/dist/ssr/Copy';
-import { useMediaQuery } from '@/infrastructure/runtime/responsive/runtime/media-query';
+import { useMediaQuery } from '@/infrastructure/runtime/responsive/viewport/media-query';
 import { createPhosphorCompatibilityIcon } from '../../../../runtime/factory/phosphor-compat';
 
 const CopyGlyph = createPhosphorCompatibilityIcon(Copy, 'CopyToCheckCopyGlyph');

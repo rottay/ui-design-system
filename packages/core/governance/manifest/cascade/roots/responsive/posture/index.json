@@ -24,7 +24,7 @@
       },
       {
         "kind": "runtime-select",
-        "site": "packages/core/src/components/patterns/runtime/adaptive-layout/runtime/index.ts",
+        "site": "packages/core/src/components/patterns/runtime/adaptive-layout/solver/index.ts",
         "note": "PUERTA 2 (la unica llegada a geometria): env.spanBias :133-137 elige DONDE dentro del rango minSpan..maxSpan que el item ya publico arranca la resolucion. No ensancha autoridad: el comentario :130 lo fija y un spanHint explicito :139-141 lo pisa entero. La salida es gridColumn/gridRow en estilo inline, no un canal."
       }
     ]

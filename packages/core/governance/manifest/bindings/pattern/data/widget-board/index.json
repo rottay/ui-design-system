@@ -11,7 +11,7 @@
     "packages/core/src/components/patterns/data/widget-board/runtime/adaptive/policy/index.ts",
     "packages/core/src/components/patterns/data/widget-board/runtime/adaptive/react/index.ts",
     "packages/core/src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts",
-    "packages/core/src/components/patterns/runtime/adaptive-layout/runtime/index.ts",
+    "packages/core/src/components/patterns/runtime/adaptive-layout/solver/index.ts",
     "packages/core/src/foundation/tokens/css/presentation/components/skin/widget-board/index.css",
     "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/widget-board/index.css",
     "packages/core/src/foundation/tokens/ts/presentation/responsive-postures/index.ts",

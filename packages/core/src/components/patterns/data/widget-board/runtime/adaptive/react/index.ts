@@ -26,7 +26,7 @@ import type {
 import {
   placementsToGridStyles,
   resolveAdaptiveLayout,
-} from '../../../../../runtime/adaptive-layout/runtime';
+} from '../../../../../runtime/adaptive-layout/solver';
 import { useAdaptiveEnvironment } from '../../../../../runtime/adaptive-layout/presentation/react';
 import { widgetItemsToAdaptiveInputs } from '../policy';
 

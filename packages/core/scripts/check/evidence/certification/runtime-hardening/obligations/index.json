@@ -17,7 +17,7 @@
           "workOrder": "WO-CAN-06",
           "from": "bc4a16f8",
           "to": "045bb441",
-          "path": "packages/core/src/infrastructure/runtime/effects/runtime/registry/index.ts",
+          "path": "packages/core/src/infrastructure/runtime/effects/catalog/registry/index.ts",
           "change": "ALL_ENGINES derived from IMPLEMENTED_ENGINE_NAMES instead of the classic/modern/rustic literal"
         },
         {
@@ -41,7 +41,7 @@
           "workOrder": "WO-INV-05",
           "from": "5dc4f916",
           "to": "6d61f508",
-          "path": "packages/core/src/infrastructure/runtime/effects/runtime/registry/index.ts",
+          "path": "packages/core/src/infrastructure/runtime/effects/catalog/registry/index.ts",
           "change": "observed renderer motion -> waapi (two rows)"
         },
         {
@@ -63,7 +63,7 @@
           "packages/core/src/ui/patterns/visualization/charts/runtime/exporting/foundation/file/index.ts -> packages/core/src/components/patterns/visualization/charts/runtime/exporting/foundation/file/index.ts"
         ],
         "contentChangedInPlace": [
-          "packages/core/src/infrastructure/runtime/effects/runtime/registry/index.ts",
+          "packages/core/src/infrastructure/runtime/effects/catalog/registry/index.ts",
           "packages/showroom/e2e/responsive/particle-runtime.spec.ts",
           "packages/showroom/e2e/responsive/spatial-runtime.spec.ts",
           "packages/core/src/graphics/motion/react/presentation/effects/particles/runtime/canvas/tests/ParticleField.test.tsx",

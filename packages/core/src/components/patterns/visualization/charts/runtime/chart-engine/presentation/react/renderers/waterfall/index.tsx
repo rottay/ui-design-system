@@ -2,9 +2,9 @@
 
 import { useId, useMemo, type CSSProperties } from 'react';
 
-import { useChartDimensions } from '../../../../runtime/dimensions';
+import { useChartDimensions } from '../../../../mechanics/dimensions';
 import type { ChartInteraction } from '../../../../foundation/interaction';
-import { useChartInteraction } from '../../../../runtime/interaction/controller';
+import { useChartInteraction } from '../../../../mechanics/interaction/controller';
 import {
   buildSvgWaterfallGeometry,
   type ChartGeometryInsets,

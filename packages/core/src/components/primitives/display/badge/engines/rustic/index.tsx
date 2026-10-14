@@ -15,7 +15,7 @@ import React, { useId } from 'react';
 import type { BadgeProps, BadgeSize } from '../../contracts';
 import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP, VARIANT_SOFT_COLOR_MAP, VARIANT_SOFT_TEXT_COLOR_MAP, VARIANT_SOLID_TEXT_COLOR_MAP } from '../../contracts';
 import { TONE_TO_VARIANT } from '@/foundation/contracts/kernel/common';
-import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
 function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {

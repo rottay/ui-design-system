@@ -29,7 +29,7 @@ import { EngineProvider } from '../../../composition/react/provider';
 import {
   clearCustomRegistry,
   registerCustomComponents,
-} from '../../../runtime/customization/component-registry';
+} from '../../../selection/customization/component-registry';
 import { TenantContext } from '../../../../tenant/composition/react/provider';
 import type { TenantConfig } from '../../../../../../foundation/contracts/composition/tenants';
 

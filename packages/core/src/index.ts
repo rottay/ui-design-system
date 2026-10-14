@@ -35,7 +35,7 @@ export * from './foundation/contracts';
 // ============================================
 // ERROR HANDLING
 // ============================================
-export { ErrorHandler } from './infrastructure/runtime/error-handling/runtime/handler';
+export { ErrorHandler } from './infrastructure/runtime/error-handling/bus/handler';
 export { useErrorHandler } from './infrastructure/runtime/error-handling/composition/react/handler';
 export { ErrorCategory, ErrorSeverity } from './foundation/contracts/runtime/errors';
 export type { DSError, DSErrorInput, ErrorSubscriber } from './foundation/contracts/runtime/errors';
@@ -162,7 +162,7 @@ export {
   placementsToGridStyles,
   resolveAdaptiveLayout,
   resolveContainerPosture,
-} from './components/patterns/runtime/adaptive-layout/runtime';
+} from './components/patterns/runtime/adaptive-layout/solver';
 export {
   normalizeLayoutRevision,
   resolveActiveResponsivePosture,

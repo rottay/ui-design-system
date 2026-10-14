@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import type { TenantCreationConfig } from '../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
+import type { TenantCreationConfig } from '../../../../../infrastructure/runtime/tenant/sourcing/authoring/configuration';
 import ModernTenantPreview from '../engines/modern';
 
 const SKIN = readFileSync(

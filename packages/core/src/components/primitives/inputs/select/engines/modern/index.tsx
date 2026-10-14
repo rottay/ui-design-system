@@ -45,7 +45,7 @@ import {
   isResponsiveValue,
   generateResponsiveCSS,
   type ResponsivePropEntry,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';

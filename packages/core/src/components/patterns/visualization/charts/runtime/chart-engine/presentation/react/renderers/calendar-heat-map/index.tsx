@@ -12,13 +12,13 @@ import {
 import {
   PROVIDER_PAINT_ATTRIBUTE_FILTER,
   resolveCssColor,
-} from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+} from '@/infrastructure/runtime/dom/paint/css-color-resolution';
 import {
   buildSvgCalendarHeatMapGeometry,
 } from '../../../../foundation/renderers/geometry';
 import type { ChartInteraction } from '../../../../foundation/interaction';
-import { useChartDimensions } from '../../../../runtime/dimensions';
-import { useChartInteraction } from '../../../../runtime/interaction/controller';
+import { useChartDimensions } from '../../../../mechanics/dimensions';
+import { useChartInteraction } from '../../../../mechanics/interaction/controller';
 import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 

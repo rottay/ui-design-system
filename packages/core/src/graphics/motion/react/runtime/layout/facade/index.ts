@@ -34,9 +34,9 @@ import type {
   TimedLayoutAnimationKind,
 } from '../contracts';
 import { LAYOUT_CHANNEL_DEFAULTS } from '../kernel/channels';
-import { useFlipLayout } from '../runtime/reflow';
-import { useSharedElementKey } from '../runtime/shared-element';
-import { useSizeAnimation } from '../runtime/size';
+import { useFlipLayout } from '../animation/reflow';
+import { useSharedElementKey } from '../animation/shared-element';
+import { useSizeAnimation } from '../animation/size';
 import { usePresence } from '../../presence';
 import { recordMorphStyle } from '../../view-transition';
 

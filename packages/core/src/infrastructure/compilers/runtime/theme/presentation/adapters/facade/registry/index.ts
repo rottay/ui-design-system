@@ -3,9 +3,9 @@ import {
   ENGINE_NAMES,
   type EngineName,
 } from "@/foundation/contracts/kernel/engine-identity";
-import { classicThemeAdapter } from "../../presentation/classic";
-import { modernThemeAdapter } from "../../presentation/modern";
-import { rusticThemeAdapter } from "../../presentation/rustic";
+import { classicThemeAdapter } from "../../projection/classic";
+import { modernThemeAdapter } from "../../projection/modern";
+import { rusticThemeAdapter } from "../../projection/rustic";
 
 /**
  * TOTAL over `EngineName`: a fifth engine is a `tsc` error here, not a runtime

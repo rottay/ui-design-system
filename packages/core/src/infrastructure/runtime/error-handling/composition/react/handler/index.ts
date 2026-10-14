@@ -10,7 +10,7 @@
  * @package @rottay/design-system
  */
 import { useCallback, useEffect, useId } from 'react';
-import { ErrorHandler } from '../../../runtime/handler';
+import { ErrorHandler } from '../../../bus/handler';
 import {
   DSError,
   DSErrorInput,

@@ -19,7 +19,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, waitFor, within } from '@testing-library/react';
 
 import { DetailHeader } from '..';
-import { I18nProvider } from '@/infrastructure/runtime/i18n/runtime';
+import { I18nProvider } from '@/infrastructure/runtime/i18n/scope';
 import { renderWithEngine } from '@tests/support/engine';
 
 const WAIT_TIMEOUT = 2000;

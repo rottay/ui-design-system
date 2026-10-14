@@ -35,7 +35,7 @@ import { BOX_DEFAULTS, SPACING_MAP, isVoidElement } from "../../contracts";
 import {
   generateResponsiveCSS,
   scalarOrUndefined,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import { collectBoxResponsiveEntries } from "../../runtime/responsive";
 
 // Deterministic style builder. Consumer-supplied paint stays available through

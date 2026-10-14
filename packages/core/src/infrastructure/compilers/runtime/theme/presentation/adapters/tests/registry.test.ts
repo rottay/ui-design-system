@@ -16,9 +16,9 @@ import {
   type EngineName,
 } from "@/foundation/contracts/kernel/engine-identity";
 
-import { classicThemeAdapter } from "../presentation/classic";
+import { classicThemeAdapter } from "../projection/classic";
 import { defineEngineAdapter } from "../foundation/definition";
-import { modernThemeAdapter } from "../presentation/modern";
+import { modernThemeAdapter } from "../projection/modern";
 import {
   EngineControlUnsupportedError,
   EngineNotAdmittedForCompileError,
@@ -33,7 +33,7 @@ import {
   registerEngineAdapter,
   resolveAdapter,
 } from "../facade/registry";
-import { rusticThemeAdapter } from "../presentation/rustic";
+import { rusticThemeAdapter } from "../projection/rustic";
 
 afterEach(() => clearRegisteredEngineAdapters());
 

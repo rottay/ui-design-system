@@ -15,7 +15,7 @@ export const CANVAS_SINK_MANIFEST = Object.freeze([
     sinks: Object.freeze(['context:2d']),
   }),
   Object.freeze({
-    path: 'src/infrastructure/runtime/spatial/runtime/browser/capability/webgl2/index.ts',
+    path: 'src/infrastructure/runtime/spatial/admission/browser/capability/webgl2/index.ts',
     assetClass: 'capability-probe',
     sinks: Object.freeze(['allocation:canvas', 'context:webgl2']),
   }),

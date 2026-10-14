@@ -10,7 +10,7 @@ import {
   type SvgBulletOrientation,
   type SvgBulletTier,
 } from '../../../../foundation/renderers/geometry';
-import { useChartDimensions } from '../../../../runtime/dimensions';
+import { useChartDimensions } from '../../../../mechanics/dimensions';
 import { requireChartSemanticPaint } from '../../../../../theming/composition/foundation/paint';
 import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';

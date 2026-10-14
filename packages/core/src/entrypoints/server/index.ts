@@ -11,7 +11,7 @@ export {
   resolveRequestTenant,
   resolveRequestTenantAsync,
   createEdgeConfigDomainLookup,
-} from '../../infrastructure/runtime/tenant/runtime/resolution/request';
+} from '../../infrastructure/runtime/tenant/sourcing/resolution/request';
 export {
   isKnownTenant,
   isBundledTenant,
@@ -22,7 +22,7 @@ export {
 export type {
   TenantResolutionOptions,
   EdgeConfigDomainLookupOptions,
-} from '../../infrastructure/runtime/tenant/runtime/resolution/request';
+} from '../../infrastructure/runtime/tenant/sourcing/resolution/request';
 
 export { toSupportedLocale } from '../../foundation/i18n/runtime/resolution/locale';
 
@@ -560,10 +560,10 @@ export {
  */
 export {
   provideServerIconExpressiveProfile,
-} from '../../infrastructure/runtime/foundation/icons/active-profile/runtime/provider';
+} from '../../infrastructure/runtime/foundation/icons/active-profile/posture/provider';
 export {
   resolveActiveIconExpressiveProfile,
-} from '../../infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
+} from '../../infrastructure/runtime/foundation/icons/active-profile/posture/resolution';
 
 /**
  * THE MOUNT, as one call.

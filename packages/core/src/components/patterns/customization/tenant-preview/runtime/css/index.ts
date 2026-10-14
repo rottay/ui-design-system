@@ -59,12 +59,12 @@ import { verifyTenantThemeArtifactV1 } from '../../../../../../infrastructure/ru
 import {
   createTenantTheme,
   type TenantCreationConfig,
-} from '@/infrastructure/runtime/tenant/runtime/authoring/configuration';
+} from '@/infrastructure/runtime/tenant/sourcing/authoring/configuration';
 import {
   buildPreviewScopeSelector,
   isSafePreviewCssValue,
   sanitizePreviewSlug,
-} from '../../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
+} from '../../../../../../infrastructure/runtime/tenant/sourcing/preview-scope';
 
 /** One generated declaration: `  <property>: <value>;` on a single line. */
 import type { Theme } from '@/foundation/contracts/composition/tenants/themes/iso';

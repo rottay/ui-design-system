@@ -8,7 +8,7 @@ import {
   buildSvgTreeMapGeometry,
   type SvgTreeMapNode,
 } from '../../../../foundation/renderers/geometry';
-import { useChartDimensions } from '../../../../runtime/dimensions';
+import { useChartDimensions } from '../../../../mechanics/dimensions';
 import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 

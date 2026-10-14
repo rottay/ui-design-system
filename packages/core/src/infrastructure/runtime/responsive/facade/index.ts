@@ -22,7 +22,7 @@ export type {
 // Low-level media subscription and high-level responsive composition hooks.
 // Keeping these beside the provider makes responsive behavior one cohesive
 // runtime capability instead of a disconnected generic hooks tree.
-export { useMediaQuery } from '../runtime/media-query';
+export { useMediaQuery } from '../viewport/media-query';
 export { useBreakpoints } from '../composition/react/provider/breakpoint-state';
 export type { UseBreakpointsResult } from '../composition/react/provider/breakpoint-state';
 export { useResponsiveValue } from '../composition/react/provider/value';

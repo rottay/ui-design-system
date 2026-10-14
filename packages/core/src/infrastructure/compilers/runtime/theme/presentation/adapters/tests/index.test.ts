@@ -17,9 +17,9 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
 import { ENGINE_NAMES } from "@/foundation/contracts/kernel/engine-identity";
 
-import { classicThemeAdapter } from "../presentation/classic";
-import { modernThemeAdapter } from "../presentation/modern";
-import { rusticThemeAdapter } from "../presentation/rustic";
+import { classicThemeAdapter } from "../projection/classic";
+import { modernThemeAdapter } from "../projection/modern";
+import { rusticThemeAdapter } from "../projection/rustic";
 
 /* ---------------------------------------------------------------------------
  * The measurement this drill is checked against: what each engine's own

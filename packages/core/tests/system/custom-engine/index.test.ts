@@ -20,7 +20,7 @@ import {
   getCustomEngineConfig,
   createCustomWrapper,
   useCustomStatus,
-} from '../../../src/infrastructure/runtime/engines/runtime/customization/component-registry';
+} from '../../../src/infrastructure/runtime/engines/selection/customization/component-registry';
 
 describe('Custom Engine', () => {
   beforeEach(() => {

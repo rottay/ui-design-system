@@ -11,8 +11,8 @@ import {
   type SvgFunnelDatum,
   type SvgFunnelOrientation,
 } from '../../../../foundation/renderers/geometry';
-import { useChartInteraction } from '../../../../runtime/interaction/controller';
-import { useChartDimensions } from '../../../../runtime/dimensions';
+import { useChartInteraction } from '../../../../mechanics/interaction/controller';
+import { useChartDimensions } from '../../../../mechanics/dimensions';
 import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 

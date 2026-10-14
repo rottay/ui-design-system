@@ -15,7 +15,7 @@ import { verticalDefaultMode } from "@/infrastructure/compilers/kernel/foundatio
 import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme/facade/runtime/compile";
 import { documentThemeIntent } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/document";
 import { draftPreviewThemeIntent } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/presentation/preview";
-import { assertStyleAuthorable } from "@/contracts/theme/runtime/styles/runtime/partition";
+import { assertStyleAuthorable } from "@/contracts/theme/runtime/styles/eligibility/partition";
 import { projectDecisionsToV1 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { baselineFor, styleThemePatch } from "../../..";
 
@@ -23,7 +23,7 @@ vi.mock("@/contracts/theme/runtime/styles/composition/registry", async (importOr
   const original = await importOriginal<typeof import("@/contracts/theme/runtime/styles/composition/registry")>();
   const { defineThemeStyle, themeStyleDigest } = await import("@/contracts/theme/runtime/styles/foundation/document");
   const { assertStyleAuthorable, assertStyleEmitsSomething } = await import(
-    "@/contracts/theme/runtime/styles/runtime/partition"
+    "@/contracts/theme/runtime/styles/eligibility/partition"
   );
   const publish = (
     id: string,

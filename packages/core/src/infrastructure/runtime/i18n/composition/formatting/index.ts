@@ -34,7 +34,7 @@ import {
   formatRelativeTime,
   formatTime,
 } from '@/foundation/i18n/runtime/formatting';
-import { useI18nContext } from '@/infrastructure/runtime/i18n/runtime/context';
+import { useI18nContext } from '@/infrastructure/runtime/i18n/scope/context';
 
 export interface UseFormatterResult {
   /** The active locale, the same value `useLocale()` and `useTranslation()` report. */

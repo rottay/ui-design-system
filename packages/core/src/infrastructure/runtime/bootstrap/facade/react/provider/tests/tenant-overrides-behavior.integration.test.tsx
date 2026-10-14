@@ -13,7 +13,7 @@ import {
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import { MOTION_PROFILE_DEFAULTS } from '@/infrastructure/runtime/foundation/motion/policy';
 import { resetVisualAuthorityDiagnostics } from '@/infrastructure/runtime/theming';
-import { useI18nContext } from '@/infrastructure/runtime/i18n/runtime/context/provider';
+import { useI18nContext } from '@/infrastructure/runtime/i18n/scope/context/provider';
 import { useFeatures } from '@/infrastructure/runtime/features/composition/react/provider/flags';
 import { useThemeContext } from '@/infrastructure/runtime/theming/composition/react/provider';
 import { useEngineContext } from '@/infrastructure/runtime/engines/composition/react/provider';

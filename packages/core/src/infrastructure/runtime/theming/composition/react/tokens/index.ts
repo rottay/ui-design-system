@@ -30,7 +30,7 @@ import { useEngineContext } from '../../../../engines';
 import { useEngineVisualDeclaration } from '../../../../foundation/engine-visual';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry';
 import { DEFAULT_PERSONALITY } from '../../../../personality/foundation/defaults';
-import { resolveChartPersonality } from '../../../../personality/runtime/resolution/chart';
+import { resolveChartPersonality } from '../../../../personality/precedence/resolution/chart';
 import { resolveEffectiveDensityScale } from '@/foundation/tokens/ts/foundation/base/density';
 import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '@/foundation/contracts';
 

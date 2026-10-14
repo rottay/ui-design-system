@@ -1174,7 +1174,7 @@
           "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
           "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/index.ts",
           "packages/core/src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts",
-          "packages/core/src/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution/index.ts",
+          "packages/core/src/infrastructure/runtime/foundation/icons/active-profile/posture/resolution/index.ts",
           "packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
           "packages/core/src/graphics/icons/semantic/runtime/create-icon/index.tsx"
         ],
@@ -1305,7 +1305,7 @@
           "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts",
           "packages/core/src/infrastructure/runtime/tenant/foundation/configuration/registry/index.ts",
           "packages/core/src/components/patterns/runtime/adaptive-layout/foundation/index.ts",
-          "packages/core/src/components/patterns/runtime/adaptive-layout/runtime/index.ts",
+          "packages/core/src/components/patterns/runtime/adaptive-layout/solver/index.ts",
           "packages/core/src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts",
           "packages/core/src/components/patterns/data/widget-board/runtime/adaptive/react/index.ts",
           "packages/core/src/components/surfaces/presentation/pages/data/dashboard/index.tsx"

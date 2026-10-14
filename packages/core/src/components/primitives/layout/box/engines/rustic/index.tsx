@@ -23,7 +23,7 @@ import {
   generateResponsiveCSS,
   isResponsiveValue,
   scalarOrUndefined,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import { collectBoxResponsiveEntries } from "../../runtime/responsive";
 
 // Rustic engine converts ALL layout props to inline CSSProperties.

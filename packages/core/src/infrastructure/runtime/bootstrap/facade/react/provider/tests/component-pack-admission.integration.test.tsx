@@ -38,7 +38,7 @@ import { createEngineComponent } from '@/infrastructure/runtime/engines/presenta
 import {
   clearCustomRegistry,
   registerCustomComponents,
-} from '@/infrastructure/runtime/engines/runtime/customization/component-registry';
+} from '@/infrastructure/runtime/engines/selection/customization/component-registry';
 import {
   clearRegisteredEngineAdapters,
   defineEngineAdapter,

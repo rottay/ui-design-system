@@ -54,7 +54,7 @@
  */
 
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { ErrorHandler } from '@/infrastructure/runtime/error-handling/runtime/handler';
+import { ErrorHandler } from '@/infrastructure/runtime/error-handling/bus/handler';
 import { ErrorCategory, ErrorSeverity } from '@/foundation/contracts/runtime/errors';
 import { errorInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';

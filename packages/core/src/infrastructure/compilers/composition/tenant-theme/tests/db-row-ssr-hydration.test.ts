@@ -25,7 +25,7 @@ import {
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row';
 import { TENANT_THEME_V1_COVERAGE } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { resolveDocumentRootAttributes } from '@/infrastructure/runtime/foundation/root-attributes/ssr';
-import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
+import { resolveEngine } from '@/infrastructure/runtime/engines/selection/resolution';
 import {
   getKnownTenantConfig,
   getKnownTenantSlugs,

@@ -80,7 +80,7 @@ import {
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
 import { firstPartyGovernedBehavior } from '@/infrastructure/compilers/runtime/tenant-css/artifact-renderer';
 import { IconExpressiveProfileContext } from '@/infrastructure/runtime/foundation/icons/active-profile/foundation/read';
-import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
+import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/posture/resolution';
 import { flatThemeAnatomyAttributes } from '@/infrastructure/runtime/theming/composition/mount';
 import {
   compileTenantThemeConfig,

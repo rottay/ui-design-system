@@ -25,7 +25,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
-import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/viewport/media-snapshot';
 import type { TenantConfig } from '@/foundation/contracts';
 import type { ColumnDef } from '@/foundation/contracts/runtime/components/patterns/core';
 import ModernDataTable from '../engines/modern';

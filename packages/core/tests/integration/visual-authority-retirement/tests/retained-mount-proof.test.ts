@@ -19,8 +19,8 @@ import {
   prepareMountedTenantThemeArtifactClaim,
   resetVisualAuthorityDiagnostics,
   retainMountedTenantThemeArtifact,
-} from '@/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention';
-import type { PreparedTenantThemeArtifactClaim } from '@/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention';
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/proof/retention';
+import type { PreparedTenantThemeArtifactClaim } from '@/infrastructure/runtime/theming/foundation/visual-authority/proof/retention';
 import { clearTenantThemeScope, stampTenantThemeScope } from './mount-fixture';
 
 const ARTIFACT = compileTenantThemeConfig(

@@ -19,7 +19,7 @@ import {
   generateResponsiveCSS,
   isResponsiveValue,
   type ResponsivePropEntry,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 
 import type { BadgePosition, BadgeProps, BadgeSize } from '../../contracts';
 import { BADGE_DEFAULTS, DOT_SIZE_MAP, SIZE_MAP } from '../../contracts';

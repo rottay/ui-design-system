@@ -21,7 +21,7 @@
 import {
   resolveCssColor,
   type CssColorOwner,
-} from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+} from '@/infrastructure/runtime/dom/paint/css-color-resolution';
 
 import type { ChartColorScheme } from '../../../../../contracts';
 import {

@@ -9,13 +9,13 @@ import {
   type RefObject,
 } from 'react';
 
-import { useChartDimensions } from '../../../../runtime/dimensions';
+import { useChartDimensions } from '../../../../mechanics/dimensions';
 import {
   PROVIDER_PAINT_ATTRIBUTE_FILTER,
   resolveCssColor,
-} from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+} from '@/infrastructure/runtime/dom/paint/css-color-resolution';
 import type { ChartInteraction } from '../../../../foundation/interaction';
-import { useChartInteraction } from '../../../../runtime/interaction/controller';
+import { useChartInteraction } from '../../../../mechanics/interaction/controller';
 import {
   buildSvgHeatMapGeometry,
   type ChartGeometryInsets,

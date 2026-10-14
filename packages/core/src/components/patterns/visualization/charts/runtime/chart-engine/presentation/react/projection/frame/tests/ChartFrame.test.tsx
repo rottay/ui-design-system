@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { ChartProjectionSpec, ChartProjectionView } from '../../../../../foundation/projection';
 import { ChartFrame } from '..';
-import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/viewport/media-snapshot';
 
 const activityProjection: ChartProjectionSpec = {
   desktop: {

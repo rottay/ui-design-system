@@ -3,7 +3,7 @@ import React, { forwardRef } from "react";
 import {
   isGraphicAssetAdapterEnabled,
   reportGraphicAssetTelemetry,
-} from '@/infrastructure/runtime/graphics/asset-governance/runtime/control';
+} from '@/infrastructure/runtime/graphics/asset-governance/operations/control';
 import { FEATURE_PICTOGRAM_ARTWORK } from "./artwork";
 import {
   isFeaturePictogramName,

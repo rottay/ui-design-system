@@ -11,6 +11,6 @@
  */
 export * from '@/foundation/tokens/ts/runtime/personality';
 export { DEFAULT_PERSONALITY } from '../foundation/defaults';
-export { resolveChartPersonality } from '../runtime/resolution/chart';
-export type { ChartPersonalityResolutionInput } from '../runtime/resolution/chart';
+export { resolveChartPersonality } from '../precedence/resolution/chart';
+export type { ChartPersonalityResolutionInput } from '../precedence/resolution/chart';
 export { useResolvedChartPersonality } from '../presentation/resolution/chart';

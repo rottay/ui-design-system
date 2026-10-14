@@ -4,7 +4,7 @@ import React, { type ReactNode } from "react";
 import {
   isResponsiveValue,
   type ResponsivePropEntry,
-} from "@/infrastructure/runtime/responsive/runtime/style-properties";
+} from "@/infrastructure/runtime/responsive/viewport/style-properties";
 import {
   ALIGN_MAP,
   JUSTIFY_MAP,

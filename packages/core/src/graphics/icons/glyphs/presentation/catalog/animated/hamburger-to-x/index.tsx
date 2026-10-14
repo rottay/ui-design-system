@@ -18,7 +18,7 @@
 
 import React from 'react';
 import type { CSSProperties } from 'react';
-import { useMediaQuery } from '@/infrastructure/runtime/responsive/runtime/media-query';
+import { useMediaQuery } from '@/infrastructure/runtime/responsive/viewport/media-query';
 
 export interface HamburgerToXProps {
   /** Whether the icon shows the X (open) state. `false` shows the hamburger. */

@@ -18,7 +18,7 @@ import {
 
 import type { ChartPersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
 import { resolveChartSeriesPaint } from '../../../../foundation/grammar/palette';
-import { useChartDimensions } from '../../../../runtime/dimensions';
+import { useChartDimensions } from '../../../../mechanics/dimensions';
 import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 

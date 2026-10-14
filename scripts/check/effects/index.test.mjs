@@ -25,7 +25,7 @@ const repoRoot = findRepoRoot(dirname(fileURLToPath(import.meta.url)));
 const canonicalRoot = resolve(repoRoot, 'packages/core/governance/effects');
 const canonicalRegistry = resolve(
   repoRoot,
-  'packages/core/src/infrastructure/runtime/effects/runtime/registry/index.ts',
+  'packages/core/src/infrastructure/runtime/effects/catalog/registry/index.ts',
 );
 const ciPath = resolve(repoRoot, '.github/workflows/ci.yml');
 const coreManifestPath = resolve(repoRoot, 'packages/core/package.json');

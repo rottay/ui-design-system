@@ -28,13 +28,13 @@ export {
   assertStyleAuthorable,
   assertStyleEmitsSomething,
   type ThemeStyleClass,
-} from "./runtime/partition";
+} from "./eligibility/partition";
 export {
   THEME_STYLE_RANGED_DIALS,
   themeStyleClearanceIssues,
   type ThemeStyleClearanceIssue,
   type ThemeStyleEnvelope,
-} from "./runtime/clearance";
+} from "./eligibility/clearance";
 export {
   THEME_STYLE_IDS,
   THEME_STYLE_REGISTRY,

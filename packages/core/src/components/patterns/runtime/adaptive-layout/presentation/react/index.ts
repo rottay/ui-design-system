@@ -25,10 +25,10 @@ import {
   useState,
 } from 'react';
 
-import { I18nContext } from '@/infrastructure/runtime/i18n/runtime/context/provider';
+import { I18nContext } from '@/infrastructure/runtime/i18n/scope/context/provider';
 import { useDensity } from '@/infrastructure/runtime/foundation/density';
 import { TenantContext } from '@/infrastructure/runtime/tenant/foundation/context';
-import { useActiveResponsivePosture } from '@/infrastructure/runtime/adaptation/runtime/container-posture';
+import { useActiveResponsivePosture } from '@/infrastructure/runtime/adaptation/measurement/container-posture';
 import type { ResponsivePostureDefinition } from '@/foundation/tokens/ts/presentation/responsive-postures';
 
 import type {
@@ -40,7 +40,7 @@ export {
   resolveActiveResponsivePosture,
   useActiveResponsivePosture,
   useContainerPosture,
-} from '@/infrastructure/runtime/adaptation/runtime/container-posture';
+} from '@/infrastructure/runtime/adaptation/measurement/container-posture';
 
 function readTypeScale(): string {
   if (typeof document === 'undefined') return '1';

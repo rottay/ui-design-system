@@ -27,7 +27,7 @@
 import React, { useMemo, useEffect, useId, useRef, useState } from 'react';
 import type { TenantPreviewProps, PreviewComponent } from '../../contracts';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
-import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
+import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/sourcing/authoring/configuration';
 import { resolvePersonalityPreset } from '../../../../../../infrastructure/runtime/tenant/foundation/personality/presets';
 import { buildPreviewCss, draftPreviewSource } from '../../runtime/css';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';

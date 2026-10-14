@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { DesignSystemProvider } from "@/infrastructure/runtime/bootstrap";
-import { resetResponsiveMediaStore } from "@/infrastructure/runtime/responsive/runtime/media-snapshot";
+import { resetResponsiveMediaStore } from "@/infrastructure/runtime/responsive/viewport/media-snapshot";
 import { mockMatchMedia } from "@tests/support/browser/match-media";
 
 import PostureListPage, {

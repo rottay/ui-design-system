@@ -3,9 +3,9 @@
 import { createContext, useContext, useMemo } from 'react';
 
 import type { MotionPolicy } from '@/foundation/contracts/runtime/motion';
-import { useMotionEnvironment } from '@/infrastructure/runtime/foundation/motion/runtime/browser/environment';
+import { useMotionEnvironment } from '@/infrastructure/runtime/foundation/motion/sensing/browser/environment';
 import { resolveMotionPolicy } from '@/infrastructure/runtime/foundation/motion/policy';
-import { useSystemReducedMotion } from '@/infrastructure/runtime/foundation/motion/runtime/browser/reduced-motion';
+import { useSystemReducedMotion } from '@/infrastructure/runtime/foundation/motion/sensing/browser/preference';
 
 export interface MotionContextValue {
   /** Raw operating-system preference. */

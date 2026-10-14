@@ -473,7 +473,7 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
   // mechanism as inline paint it does not contain. `zeroPaint` is VERIFIED by
   // this library against the producer's own body, never asserted here.
   [
-    "infrastructure/runtime/responsive/runtime/style-properties/index",
+    "infrastructure/runtime/responsive/viewport/style-properties/index",
     new Map([
       [
         "generateResponsiveCSS",

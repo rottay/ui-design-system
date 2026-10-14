@@ -13,7 +13,7 @@ import type {
   TranslateOrFunction,
   TranslationNamespace,
 } from "@/foundation/i18n/kernel/contracts";
-import { useI18nContext } from "@/infrastructure/runtime/i18n/runtime/context";
+import { useI18nContext } from "@/infrastructure/runtime/i18n/scope/context";
 
 /**
  * Valor de retorno del hook useTranslation

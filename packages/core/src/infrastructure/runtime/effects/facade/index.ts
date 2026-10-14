@@ -4,6 +4,6 @@ export {
   EFFECT_REGISTRY_VERSION,
   EFFECT_RESEARCH_PROVENANCE,
   getEffectDefinition,
-} from '../runtime/registry';
-export { resolveEffect } from '../runtime/registry/resolution';
+} from '../catalog/registry';
+export { resolveEffect } from '../catalog/registry/resolution';
 export { isEffectDefinition, isEffectId } from '../foundation/validation';

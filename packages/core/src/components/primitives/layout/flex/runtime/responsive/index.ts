@@ -3,7 +3,7 @@
 import {
   isResponsiveValue,
   type ResponsivePropEntry,
-} from "@/infrastructure/runtime/responsive/runtime/style-properties";
+} from "@/infrastructure/runtime/responsive/viewport/style-properties";
 import {
   FLEX_ALIGN_MAP,
   FLEX_JUSTIFY_MAP,

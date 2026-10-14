@@ -75,7 +75,7 @@ import {
   generateResponsiveCSS,
   isResponsiveValue,
   type ResponsivePropEntry,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import type { InputSize } from '../../contracts';
 import { StatusLoadingIcon } from '@/graphics/icons/semantic/generated/roles/status-loading';
 

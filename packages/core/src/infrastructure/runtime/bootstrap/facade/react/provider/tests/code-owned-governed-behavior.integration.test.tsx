@@ -19,7 +19,7 @@ import {
 // the tenant config: that is what this suite proves.
 import { useMotionPolicy } from '../../../../../motion';
 import { useActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/foundation/read';
-import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
+import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/posture/resolution';
 import { DesignSystemProvider } from '..';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 

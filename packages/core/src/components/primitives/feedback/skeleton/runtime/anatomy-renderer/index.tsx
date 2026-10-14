@@ -9,7 +9,7 @@ import React, { forwardRef, useCallback, useEffect, useLayoutEffect, useRef, use
 import type { CSSProperties, ReactNode } from 'react';
 
 import { useOptionalTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
-import { PROVIDER_PAINT_ATTRIBUTE_FILTER } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+import { PROVIDER_PAINT_ATTRIBUTE_FILTER } from '@/infrastructure/runtime/dom/paint/css-color-resolution';
 import { resolveSkeletonPersonalityDefaults } from '@/foundation/tokens/ts/runtime/personality';
 import type { SkeletonAnimation } from '../../contracts';
 

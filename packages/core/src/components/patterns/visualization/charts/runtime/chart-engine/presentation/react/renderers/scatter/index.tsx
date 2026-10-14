@@ -2,12 +2,12 @@
 
 import { useId, useMemo, type CSSProperties } from 'react';
 
-import { useResolvedChartGrammar } from '../../../../runtime/grammar';
-import { ChartInsightLayer } from '../../../../runtime/insight/layer';
+import { useResolvedChartGrammar } from '../../../../mechanics/grammar';
+import { ChartInsightLayer } from '../../../../mechanics/insight/layer';
 import type { ChartInteraction } from '../../../../foundation/interaction';
-import { useChartInteraction } from '../../../../runtime/interaction/controller';
+import { useChartInteraction } from '../../../../mechanics/interaction/controller';
 import type { ChartInsightSpec } from '@ui/patterns/visualization/charts/runtime/chart-engine/foundation/spec';
-import { useChartDimensions } from '../../../../runtime/dimensions';
+import { useChartDimensions } from '../../../../mechanics/dimensions';
 import {
   buildSvgScatterGeometry,
   type ChartGeometryInsets,

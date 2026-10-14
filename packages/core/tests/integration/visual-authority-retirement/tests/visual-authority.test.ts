@@ -23,7 +23,7 @@ import {
 import {
   reportVisualAuthorityConflict,
   resetVisualAuthorityDiagnostics,
-} from '@/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention';
+} from '@/infrastructure/runtime/theming/foundation/visual-authority/proof/retention';
 import { stampTenantThemeScope } from './mount-fixture';
 
 const ARTIFACT = compileTenantThemeConfig(

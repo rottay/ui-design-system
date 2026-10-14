@@ -64,7 +64,7 @@ import {
   isResponsiveValue,
   scalarOrUndefined,
   type ResponsivePropEntry,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
 // Translate DS variant tokens to Ant Design's `type` + `danger` props.

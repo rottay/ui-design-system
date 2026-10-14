@@ -10,7 +10,7 @@ import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/theman
 import { ProductProfileProvider, getProductProfile } from '../../../product-profiles';
 import { TenantProvider } from '../../../tenant';
 import { getVerticalPreset } from '../../../verticals';
-import { resolveChartPersonality } from '../../runtime/resolution/chart';
+import { resolveChartPersonality } from '../../precedence/resolution/chart';
 import { DEFAULT_PERSONALITY } from '../../foundation/defaults';
 import { useResolvedChartPersonality } from '../../presentation/resolution/chart';
 import { firstPartyFixture } from "@tests/support/theme-lowering";

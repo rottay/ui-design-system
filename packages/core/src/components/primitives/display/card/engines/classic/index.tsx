@@ -53,7 +53,7 @@ import React, { useId } from 'react';
 import { Card as AntCard, Skeleton } from 'antd';
 import type { CardProps } from '../../contracts';
 import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../../contracts';
-import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/viewport/style-properties';
 
 /**
  * Classic engine Card component using Ant Design.

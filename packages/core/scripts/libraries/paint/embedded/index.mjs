@@ -34,7 +34,7 @@ const CSS_PAINT_EXEMPT = new Set(["border-collapse", "border-spacing"]);
 const CERTIFIED_DATA_CSS_IMPORTS = new Map([
   [
     "generateResponsiveCSS",
-    "src/infrastructure/runtime/responsive/runtime/style-properties",
+    "src/infrastructure/runtime/responsive/viewport/style-properties",
   ],
   [
     "generateResponsiveGridCSS",

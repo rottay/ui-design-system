@@ -19,6 +19,6 @@ export {
   classicThemeAdapter,
   CLASSIC_RADIUS_CHANNELS,
   CLASSIC_SEED_CHANNELS,
-} from "./presentation/classic";
-export { modernThemeAdapter } from "./presentation/modern";
-export { rusticThemeAdapter } from "./presentation/rustic";
+} from "./projection/classic";
+export { modernThemeAdapter } from "./projection/modern";
+export { rusticThemeAdapter } from "./projection/rustic";

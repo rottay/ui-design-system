@@ -13,9 +13,9 @@ import type { TenantPreviewProps, PreviewComponent } from '../contracts';
 import {
   createTenantConfig,
   type TenantCreationConfig,
-} from '../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
+} from '../../../../../infrastructure/runtime/tenant/sourcing/authoring/configuration';
 import { buildPreviewCss, draftTheme, draftPreviewSource } from '../runtime/css';
-import { PREVIEW_SCOPE_ATTRIBUTE } from '../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
+import { PREVIEW_SCOPE_ATTRIBUTE } from '../../../../../infrastructure/runtime/tenant/sourcing/preview-scope';
 import RusticTenantPreview from '../engines/rustic';
 import ClassicTenantPreview from '../engines/classic';
 import ModernTenantPreview from '../engines/modern';

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
 
 import { ResponsiveProvider } from '@/infrastructure/runtime/responsive/composition/react/provider';
-import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/viewport/media-snapshot';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 
 import { SurfaceRegion } from '..';

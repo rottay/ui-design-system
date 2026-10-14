@@ -18,8 +18,8 @@ import type { ExpressiveIconProfile } from '@/foundation/tokens/ts/presentation/
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
 import { IconExpressiveProfileContext } from '@/infrastructure/runtime/foundation/icons/active-profile/foundation/read';
-import { provideServerIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/provider';
-import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/runtime/resolution';
+import { provideServerIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/posture/provider';
+import { resolveActiveIconExpressiveProfile } from '@/infrastructure/runtime/foundation/icons/active-profile/posture/resolution';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
 const bithireFlatTheme = firstPartyFixture('bithire');

@@ -52,7 +52,7 @@ import ConsumerPage from './app/page';
 import Providers from './app/providers';
 import RolesTable, { type OpenRole } from './app/roles-table';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
-import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
+import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/viewport/media-snapshot';
 import {
   TENANT_DOCUMENT_V2,
   TENANT_IDENTITY,

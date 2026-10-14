@@ -24,7 +24,7 @@ import {
 import {
   assertStyleAuthorable,
   assertStyleEmitsSomething,
-} from "@/contracts/theme/runtime/styles/runtime/partition";
+} from "@/contracts/theme/runtime/styles/eligibility/partition";
 import { EDITORIAL_QUIET_V1 } from "./editorial-quiet";
 import { PRODUCT_DENSE_V1 } from "./product-dense";
 import { QUIET_PREMIUM_V1 } from "./quiet-premium";

@@ -29,7 +29,7 @@ export {
 export type { TenantProviderProps } from '../composition/react/provider';
 
 // ── Authoring (the draft shape `TenantPreview` takes) ──
-export type { TenantCreationConfig } from '../runtime/authoring/configuration';
+export type { TenantCreationConfig } from '../sourcing/authoring/configuration';
 
 // ── Presets (personality resolution) ──
 export { resolvePersonalityPreset } from '../foundation/personality/presets';
@@ -65,8 +65,8 @@ export {
   configureDomainLookup,
   setServerHeaders,
   clearServerHeaders,
-} from '../runtime/resolution';
-export type { ResolverOptions } from '../runtime/resolution';
+} from '../sourcing/resolution';
+export type { ResolverOptions } from '../sourcing/resolution';
 
 // ── Storage ──
 // Config resolution layer: given a slug, returns a full TenantConfig via a
@@ -78,7 +78,7 @@ export {
   configureTenantApi,
   clearTenantCache,
   preloadTenantConfig,
-} from '../runtime/store';
+} from '../sourcing/store';
 export {
   renderFirstPartyArtifact,
   renderVerticalArtifact,
@@ -110,8 +110,8 @@ export {
   resolveRequestTenant,
   resolveRequestTenantAsync,
   createEdgeConfigDomainLookup,
-} from '../runtime/resolution/request';
+} from '../sourcing/resolution/request';
 export type {
   TenantResolutionOptions,
   EdgeConfigDomainLookupOptions,
-} from '../runtime/resolution/request';
+} from '../sourcing/resolution/request';

@@ -66,7 +66,7 @@ import React, { forwardRef, useState, useCallback, useId } from 'react';
 import { Input as AntInput, InputNumber } from 'antd';
 import type { InputProps, InputSize } from '../../contracts';
 import { INPUT_DEFAULTS, ANT_SIZE_MAP, SIZE_MAP as INPUT_SIZE_MAP } from '../../contracts';
-import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
 function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {

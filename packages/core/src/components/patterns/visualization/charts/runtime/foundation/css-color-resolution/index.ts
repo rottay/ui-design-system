@@ -5,7 +5,7 @@
 export {
   PROVIDER_PAINT_ATTRIBUTE_FILTER,
   resolveCssColor,
-} from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+} from '@/infrastructure/runtime/dom/paint/css-color-resolution';
 export type {
   CssColorOwner as ChartColorOwner,
-} from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+} from '@/infrastructure/runtime/dom/paint/css-color-resolution';

@@ -62,7 +62,7 @@ export {
   // ledger's commit-phase write, and the only supported way to reach it is the
   // claim below, which keeps render read-only.
   prepareMountedTenantThemeArtifactClaim,
-} from '../foundation/visual-authority/runtime/retention';
+} from '../foundation/visual-authority/proof/retention';
 export type {
   CompiledArtifactDeclaration,
   ProviderDeclaration,
@@ -78,7 +78,7 @@ export type {
   TenantThemeArtifactSsrEmission,
   TenantThemeArtifactSsrEmissionReceipt,
 } from '../foundation/visual-authority/foundation/admission';
-export type { PreparedTenantThemeArtifactClaim } from '../foundation/visual-authority/runtime/retention';
+export type { PreparedTenantThemeArtifactClaim } from '../foundation/visual-authority/proof/retention';
 
 export {
   ROTTAY_CASCADE_LAYER_ORDER,

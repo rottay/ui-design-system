@@ -3,7 +3,7 @@
 import { useId, useMemo, type CSSProperties } from 'react';
 
 import { useResolvedChartPersonality } from '@/infrastructure/runtime/personality';
-import { useChartDimensions } from '../../../../runtime/dimensions';
+import { useChartDimensions } from '../../../../mechanics/dimensions';
 import {
   buildSvgAreaGeometry,
   type ChartGeometryInsets,

@@ -25,7 +25,7 @@ import {
 } from "@/infrastructure/compilers/composition/tenant-theme";
 import { FAMILY_DERIVERS } from '../runtime/derivation';
 import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
+import { resolveEngine } from '@/infrastructure/runtime/engines/selection/resolution';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
 import type { TenantAppearance } from '@/foundation/contracts';
 import { flatThemeToTenantAppearance } from '@/components/patterns/customization/brand-studio/runtime/file-export';

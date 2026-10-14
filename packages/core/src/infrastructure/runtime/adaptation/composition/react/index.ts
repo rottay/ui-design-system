@@ -24,7 +24,7 @@ import {
 } from '@/foundation/contracts/kernel/adaptation';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 
-import { useContainerPosture } from '../../runtime/container-posture';
+import { useContainerPosture } from '../../measurement/container-posture';
 
 export interface UseAdaptationOptions<A extends object> {
   /** The family's adaptation when nothing is declared. */

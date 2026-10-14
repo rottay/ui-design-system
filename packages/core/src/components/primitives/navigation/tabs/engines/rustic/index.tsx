@@ -42,7 +42,7 @@ import React, { useCallback, useId, useRef, useState } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { TabsProps, TabItem, TabsSize } from '../../contracts';
 import { TABS_DEFAULTS } from '../../contracts';
-import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 

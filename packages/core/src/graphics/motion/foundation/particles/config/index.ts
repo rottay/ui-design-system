@@ -3,7 +3,7 @@ import type {
   ParticleFieldProps,
 } from '../..';
 import { parseHex } from '@/foundation/kernel/color/contrast';
-import { resolveCssColor } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+import { resolveCssColor } from '@/infrastructure/runtime/dom/paint/css-color-resolution';
 
 export const PARTICLE_RUNTIME_LIMITS = Object.freeze({
   maxActiveCanvasContexts: 1,

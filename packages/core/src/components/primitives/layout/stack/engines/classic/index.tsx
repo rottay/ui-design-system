@@ -15,7 +15,7 @@ import { STACK_DEFAULTS } from "../../contracts";
 import {
   generateResponsiveCSS,
   scalarOrDefault,
-} from '@/infrastructure/runtime/responsive/runtime/style-properties';
+} from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import {
   collectStackResponsiveEntries,
   renderStackChildren,

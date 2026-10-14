@@ -37,7 +37,7 @@ import type {
   DashboardSurfaceSection,
 } from "../../../../foundation/contracts";
 import { PageShellSurface } from "../../../../../structures/shell/page-shell-surface";
-import { resolveAdaptiveLayout } from "../../../../../patterns/runtime/adaptive-layout/runtime";
+import { resolveAdaptiveLayout } from "../../../../../patterns/runtime/adaptive-layout/solver";
 import {
   useAdaptiveEnvironment,
   useContainerPosture,

@@ -10,7 +10,7 @@ import {
   verifyTenantThemeArtifactV1,
 } from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import { resolveVisualAuthority as resolveFromFacade } from '@/entrypoints/server';
-import * as retention from '@/infrastructure/runtime/theming/foundation/visual-authority/runtime/retention';
+import * as retention from '@/infrastructure/runtime/theming/foundation/visual-authority/proof/retention';
 import type { RuntimeVisualPayloadCensus } from '@/infrastructure/runtime/theming/foundation/visual-authority/foundation/admission';
 import { stampTenantThemeScope } from './mount-fixture';
 import { withRootAliases } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css';

@@ -3,7 +3,7 @@ import React, { forwardRef } from 'react';
 import {
   isGraphicAssetAdapterEnabled,
   reportGraphicAssetTelemetry,
-} from '@/infrastructure/runtime/graphics/asset-governance/runtime/control';
+} from '@/infrastructure/runtime/graphics/asset-governance/operations/control';
 import { TheSvgBrandMarkAdapter } from '../../runtime/adapters/thesvg-react/brand';
 import {
   isBrandMarkName,

@@ -1421,7 +1421,7 @@ const STYLE_HOSTS = [
       'responsive.channels': {
         producer: {
           fn: 'generateResponsiveCSS',
-          module: 'src/infrastructure/runtime/responsive/runtime/style-properties/index.ts',
+          module: 'src/infrastructure/runtime/responsive/viewport/style-properties/index.ts',
           member: 'channels',
         },
         keyFn: { fn: 'responsiveChannelVariable', module: 'src/foundation/contracts/kernel/responsive/channels/index.ts' },
@@ -1432,7 +1432,7 @@ const STYLE_HOSTS = [
       'responsive.attrs': {
         producer: {
           fn: 'generateResponsiveCSS',
-          module: 'src/infrastructure/runtime/responsive/runtime/style-properties/index.ts',
+          module: 'src/infrastructure/runtime/responsive/viewport/style-properties/index.ts',
           member: 'attrs',
         },
         keyConsts: { module: 'src/foundation/contracts/kernel/responsive/channels/index.ts' },
@@ -4061,7 +4061,7 @@ test('visualization skin Calendar Modern follows the hoisted conditional accent 
 // handed to the proof through the injected reader. No file on disk is touched.
 const STYLE_HOST_FILES = {
   host: 'src/components/primitives/inputs/button/engines/modern/index.tsx',
-  producer: 'src/infrastructure/runtime/responsive/runtime/style-properties/index.ts',
+  producer: 'src/infrastructure/runtime/responsive/viewport/style-properties/index.ts',
   keys: 'src/foundation/contracts/kernel/responsive/channels/index.ts',
   anatomy: 'src/foundation/behavior/kernel/anatomy/index.ts',
   barrel: 'src/foundation/behavior/index.ts',

@@ -66,7 +66,7 @@ const REQUIRED_SOURCE_ASSERTIONS = Object.freeze([
     ],
   }),
   Object.freeze({
-    path: "packages/core/src/infrastructure/runtime/spatial/runtime/browser/context-lease/index.ts",
+    path: "packages/core/src/infrastructure/runtime/spatial/admission/browser/context-lease/index.ts",
     label: "Spatial adapter delegates to the shared governor",
     patterns: [
       /acquireContinuousGraphicsRuntimeLease/u,
@@ -74,7 +74,7 @@ const REQUIRED_SOURCE_ASSERTIONS = Object.freeze([
     ],
   }),
   Object.freeze({
-    path: "packages/core/src/infrastructure/runtime/effects/runtime/registry/index.ts",
+    path: "packages/core/src/infrastructure/runtime/effects/catalog/registry/index.ts",
     label: "ParticleField remains the sole measured certification",
     patterns: [
       /id:\s*'particle-field'[\s\S]*?admission:\s*'certified'/u,
@@ -158,7 +158,7 @@ const REQUIRED_SOURCE_ASSERTIONS = Object.freeze([
     ],
   }),
   Object.freeze({
-    path: "packages/core/src/infrastructure/runtime/foundation/motion/runtime/browser/environment/tests/motion-environment-store.test.ts",
+    path: "packages/core/src/infrastructure/runtime/foundation/motion/sensing/browser/environment/tests/motion-environment-store.test.ts",
     label:
       "Shared background, coarse-pointer and save-data lifecycle contracts",
     patterns: [
@@ -657,7 +657,7 @@ export function auditCra15RuntimeHardening({
       resolve(packageRoot, "governance/effects"),
       resolve(
         packageRoot,
-        "src/infrastructure/runtime/effects/runtime/registry/index.ts"
+        "src/infrastructure/runtime/effects/catalog/registry/index.ts"
       )
     );
   } catch (error) {

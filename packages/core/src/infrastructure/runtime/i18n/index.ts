@@ -29,7 +29,7 @@
  */
 
 export * from '@/infrastructure/runtime/i18n/kernel';
-export * from '@/infrastructure/runtime/i18n/runtime';
+export * from '@/infrastructure/runtime/i18n/scope';
 export * from '@/infrastructure/runtime/i18n/composition';
 
 export {

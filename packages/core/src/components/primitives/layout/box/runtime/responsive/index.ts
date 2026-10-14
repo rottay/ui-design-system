@@ -3,7 +3,7 @@
 import {
   isResponsiveValue,
   type ResponsivePropEntry,
-} from "@/infrastructure/runtime/responsive/runtime/style-properties";
+} from "@/infrastructure/runtime/responsive/viewport/style-properties";
 import type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/values";
 import { SPACING_MAP, type BoxProps, type BoxSpacing } from "../../contracts";
 

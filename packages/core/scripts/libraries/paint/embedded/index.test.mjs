@@ -199,7 +199,7 @@ test("unresolved whole-root calls and properties fail closed", () => {
 test("certified runtime-data generators are explicit safe roots", () => {
   const result = analyzeEmbeddedCssPaint(
     source([
-      "import { generateResponsiveCSS } from '@/infrastructure/runtime/responsive/runtime/style-properties';",
+      "import { generateResponsiveCSS } from '@/infrastructure/runtime/responsive/viewport/style-properties';",
       "export const Example = ({ entries }) => {",
       "  const responsive = entries.length ? generateResponsiveCSS('x', entries) : null;",
       "  return responsive && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />;",
@@ -235,7 +235,7 @@ test("a trusted producer path suffix outside the current core package is not cer
   const dir = mkdtempSync(join(tmpdir(), "embedded-css-evil-producer-"));
   const evilModule = join(
     dir,
-    "src/infrastructure/runtime/responsive/runtime/style-properties/index.ts"
+    "src/infrastructure/runtime/responsive/viewport/style-properties/index.ts"
   );
   try {
     mkdirSync(dirname(evilModule), { recursive: true });

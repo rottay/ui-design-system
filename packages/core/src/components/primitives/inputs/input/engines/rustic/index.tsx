@@ -40,7 +40,7 @@ import React, { forwardRef, useState, useCallback, useRef, useEffect, useId } fr
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
 import type { InputProps, InputSize } from '../../contracts';
 import { INPUT_DEFAULTS, SIZE_MAP } from '../../contracts';
-import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/viewport/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 
 function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {

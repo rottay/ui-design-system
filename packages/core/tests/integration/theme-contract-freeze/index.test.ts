@@ -248,7 +248,7 @@ describe("channel minting and CSS text have declared owners", () => {
   const PIPELINE_ROOT = "infrastructure/compilers/runtime/theme";
   const EMISSION_OWNER = "infrastructure/compilers/runtime/theme/runtime/emission";
   const ADAPTER_ROOT =
-    "infrastructure/compilers/runtime/theme/presentation/adapters/presentation";
+    "infrastructure/compilers/runtime/theme/presentation/adapters/projection";
   const CLASSIC_ADAPTER = `${ADAPTER_ROOT}/classic/index.ts`;
   const ENGINE_ADAPTERS = ["classic", "modern", "rustic"].map(
     (engine) => `${ADAPTER_ROOT}/${engine}/index.ts`,
@@ -622,7 +622,7 @@ describe("channel minting and CSS text have declared owners", () => {
   const VALUE_AUTHORITY = "infrastructure/compilers/kernel/foundation/css/value-safety";
 
   /** The only owner allowed to re-export that grammar under another name. */
-  const AUTHORITY_REEXPORT = "infrastructure/runtime/tenant/runtime/preview-scope";
+  const AUTHORITY_REEXPORT = "infrastructure/runtime/tenant/sourcing/preview-scope";
 
   /**
    * A template that assembles a CSS declaration from two interpolations.
@@ -777,7 +777,7 @@ describe("channel minting and CSS text have declared owners", () => {
     // value it publishes is judged by the same authority the emitter uses --
     // and it assembles NO declaration text and feeds NO stylesheet, which is
     // what stopped a strict CSP from dropping responsive sizing.
-    const file = "infrastructure/runtime/responsive/runtime/style-properties/index.ts";
+    const file = "infrastructure/runtime/responsive/viewport/style-properties/index.ts";
     const source = readFileSync(join(SRC_ROOT, file), "utf8");
     expect(source).toContain(`from '@/${VALUE_AUTHORITY}'`);
     expect(source).toMatch(/isSafeCssValue\(/);

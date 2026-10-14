@@ -62,7 +62,7 @@ import type { ThemeCompilation, ThemeCompilationModeBlock } from '@/foundation/c
 import { emitThemeCss } from '@/infrastructure/compilers/runtime/theme/runtime/emission';
 import { containerModeBlocks } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css';
 import { containerReach } from '@/infrastructure/compilers/runtime/theme/runtime/emission/css/root-aliases';
-import { isSafePreviewCssValue } from '@/infrastructure/runtime/tenant/runtime/preview-scope';
+import { isSafePreviewCssValue } from '@/infrastructure/runtime/tenant/sourcing/preview-scope';
 
 interface BrandingPreviewSandboxProps {
   /** Proposed tenant appearance to preview. */

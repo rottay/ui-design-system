@@ -14,7 +14,7 @@
 
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import type { RefObject } from 'react';
-import { PROVIDER_PAINT_ATTRIBUTE_FILTER } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
+import { PROVIDER_PAINT_ATTRIBUTE_FILTER } from '@/infrastructure/runtime/dom/paint/css-color-resolution';
 
 export type MotionEasingToken = `--ds-motion-ease-${string}`;
 

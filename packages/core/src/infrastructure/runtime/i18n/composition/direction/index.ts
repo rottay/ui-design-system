@@ -20,7 +20,7 @@
  */
 
 import type { TextDirection } from '@/foundation/i18n/kernel/contracts';
-import { useI18nContext } from '@/infrastructure/runtime/i18n/runtime/context';
+import { useI18nContext } from '@/infrastructure/runtime/i18n/scope/context';
 
 /**
  * Returns the active text direction.

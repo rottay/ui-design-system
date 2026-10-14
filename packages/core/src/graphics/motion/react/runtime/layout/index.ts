@@ -9,11 +9,11 @@ export { useLayoutAnimation } from './facade';
 export { LayoutGroup } from './composition/group';
 export { PresenceList, PRESENCE_ITEM_ATTRIBUTE } from './composition/presence-list';
 export type { PresenceListProps } from './composition/presence-list';
-export { useFlipLayout } from './runtime/reflow';
-export type { UseFlipLayoutOptions, UseFlipLayoutResult } from './runtime/reflow';
-export { useSizeAnimation, supportsKeywordSizeInterpolation } from './runtime/size';
-export type { UseSizeAnimationOptions } from './runtime/size';
-export { useSharedElementKey } from './runtime/shared-element';
+export { useFlipLayout } from './animation/reflow';
+export type { UseFlipLayoutOptions, UseFlipLayoutResult } from './animation/reflow';
+export { useSizeAnimation, supportsKeywordSizeInterpolation } from './animation/size';
+export type { UseSizeAnimationOptions } from './animation/size';
+export { useSharedElementKey } from './animation/shared-element';
 export { LAYOUT_CHANNEL_DEFAULTS } from './kernel/channels';
 export type {
   LayoutAnimationKind,

@@ -21,7 +21,7 @@ const SRC_ROOT = join(PACKAGE_ROOT, "src");
 
 const KERNEL = [
   "src/components/primitives/runtime/overlay/layer-stack/index.ts",
-  "src/infrastructure/runtime/application/commands/runtime/registry/index.ts",
+  "src/infrastructure/runtime/application/commands/dispatch/registry/index.ts",
   "src/infrastructure/runtime/application/interaction/shortcuts/index.ts",
 ] as const;
 
@@ -44,7 +44,7 @@ const LOOSE_LEDGER: Readonly<Record<string, { reason: string; receiver: string }
     reason: "Escape cancels an in-flight drag; not an escape-to-close layer",
     receiver: OWNER_WIDENING,
   },
-  "src/components/patterns/visualization/charts/runtime/chart-engine/runtime/interaction/controller/index.ts": {
+  "src/components/patterns/visualization/charts/runtime/chart-engine/mechanics/interaction/controller/index.ts": {
     reason: "Escape resets hover/pin state and yields to a handled key; not an escape-to-close layer",
     receiver: OWNER_WIDENING,
   },

@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-import { isResponsiveValue } from "@/infrastructure/runtime/responsive/runtime/style-properties";
+import { isResponsiveValue } from "@/infrastructure/runtime/responsive/viewport/style-properties";
 import type {
   StackAlign,
   StackDirection,
