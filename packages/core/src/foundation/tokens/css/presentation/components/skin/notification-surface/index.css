@@ -59,6 +59,25 @@
   opacity: 0.7;
 }
 
+/* ---- item title: the md text tier on the tenant's body role, weighted by read state;
+   it states every facet the modern page shell's descendant `title` rule paints. ---- */
+.ds-engine-modern .ds-surface.ds-notification .ds-notification__title {
+  max-width: none;
+  font-family: var(--ds-type-body-font-family);
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-type-body-font-weight);
+  line-height: var(--ds-type-body-line-height);
+  letter-spacing: var(--ds-type-body-letter-spacing);
+  text-transform: var(--ds-type-body-text-transform);
+  font-variant-numeric: var(--ds-type-body-font-variant-numeric);
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.ds-engine-modern .ds-surface.ds-notification .ds-notification__item--unread[data-read='false'] .ds-notification__title {
+  font-weight: var(--ds-font-weight-semibold);
+}
+
 /* ---- item action row offset ----
    The caller-provided inline action sits under the main row on the
    surface's own spacing rhythm. */
