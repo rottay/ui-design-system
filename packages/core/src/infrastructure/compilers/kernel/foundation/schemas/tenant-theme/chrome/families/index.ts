@@ -10,8 +10,8 @@ import {
   number,
   object,
   visualFields,
-} from "../../foundation";
-import type { TenantThemeSchemaNode } from "../../foundation";
+} from "../../spec";
+import type { TenantThemeSchemaNode } from "../../spec";
 
 const chromeFamilyFields: Readonly<Record<string, TenantThemeSchemaNode>> = {
   alert: object(

@@ -25,7 +25,7 @@ import {
   type ChartGeometryRect,
   type ChartGeometryTick,
   type SvgLineCurve,
-} from '../foundation';
+} from '../kernel';
 
 export type SvgLineXValue = string | number;
 export type SvgLineXType = 'category' | 'linear' | 'time';

@@ -3,7 +3,7 @@
  * published field order: frame, controls, containers, families.
  */
 
-import { object } from "../foundation";
+import { object } from "../spec";
 import { chromeContainerFields } from "./containers";
 import { controls } from "./controls";
 import { chromeFamilyFields } from "./families";

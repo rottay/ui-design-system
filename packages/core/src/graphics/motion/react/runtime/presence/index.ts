@@ -26,7 +26,7 @@
  */
 
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
-import { useReducedMotion } from '../foundation/reduced-motion';
+import { useReducedMotion } from '../foundation/preference';
 import type { MotionDataState } from '@/graphics/motion/foundation/contracts';
 
 export interface UsePresenceOptions {

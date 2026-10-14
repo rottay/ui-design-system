@@ -30,7 +30,7 @@ import {
 } from "@/foundation/contracts/composition/tenants/themes/provenance";
 import { THEME_PLAN_TIERS } from "@/contracts/theme/foundation/decisions";
 import type { ThemeDecisionId } from "@/contracts/theme/foundation/decisions";
-import type { ThemeAdmissionIssue } from "../../foundation/issues";
+import type { ThemeAdmissionIssue } from "../../contracts/issues";
 
 /** The tenant's own selections, as the gate recorded them. */
 export type ThemeAdmissionLedger = DecisionProvenanceLedger;

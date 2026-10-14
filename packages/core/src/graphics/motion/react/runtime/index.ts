@@ -5,7 +5,7 @@
  * @description Public barrel for motion-related hooks.
  */
 
-export { useReducedMotion } from './foundation/reduced-motion';
+export { useReducedMotion } from './foundation/preference';
 export { useInView } from './in-view';
 export type { UseInViewOptions, UseInViewResult } from './in-view';
 export { useMousePosition } from './mouse-position';
@@ -13,7 +13,7 @@ export type { MousePosition } from './mouse-position';
 export { useScrollProgress } from './scroll-progress';
 export { useSmoothCounter } from './smooth-counter';
 // `useMotionPersonality` is the bridge between token personality and motion primitives.
-export { useMotionPersonality } from './motion-personality';
+export { useMotionPersonality } from './personality';
 export {
   useViewTransition,
   startDsViewTransition,

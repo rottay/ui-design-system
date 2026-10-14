@@ -6667,7 +6667,7 @@
       "shippedValue": "#0f1520",
       "emittedBy": [
         "core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
-        "core/src/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect/index.ts",
+        "core/src/foundation/kernel/accessibility/branding-contrast/text-autocorrect/index.ts",
         "core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/variables/index.ts",
         "core/src/infrastructure/compilers/runtime/tenant-css/visual-config/index.ts",

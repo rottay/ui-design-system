@@ -13,7 +13,7 @@ import {
   tabPanelTransitionStyle,
   useDirectionalViewTransition,
 } from '..';
-import { useReducedMotion } from '../../foundation/reduced-motion';
+import { useReducedMotion } from '../../foundation/preference';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 
 /** `document` widened so tests can install/remove the optional API method. */

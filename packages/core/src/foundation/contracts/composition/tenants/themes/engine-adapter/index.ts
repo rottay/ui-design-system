@@ -8,7 +8,7 @@
 
 import type { FlatThemeMode } from "..";
 import type { EngineName } from "@/foundation/contracts/kernel/engine-identity";
-import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine-tokens";
+import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine";
 import type { TenantCapabilityId } from "@/foundation/contracts/composition/tenants";
 import type { ThemeCompilation } from "../compiled";
 

@@ -1,6 +1,6 @@
 import { area, curveLinear, curveMonotoneX, curveStepAfter, line, scaleLinear } from 'd3';
 
-import { finiteSize } from '../foundation';
+import { finiteSize } from '../kernel';
 
 // ---------------------------------------------------------------------------
 // Sparkline geometry (micro line variant; no axes or chrome)

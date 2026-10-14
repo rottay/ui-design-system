@@ -11,7 +11,7 @@ import {
   type ChartGeometryInsets,
   type ChartGeometryRect,
   type ChartGeometryTick,
-} from '../foundation';
+} from '../kernel';
 
 // ---------------------------------------------------------------------------
 // Waterfall geometry (running-total bars + connectors)

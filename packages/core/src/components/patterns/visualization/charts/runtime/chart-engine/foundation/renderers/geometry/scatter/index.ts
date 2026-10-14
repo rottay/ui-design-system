@@ -13,7 +13,7 @@ import {
   type ChartGeometryInsets,
   type ChartGeometryRect,
   type ChartGeometryTick,
-} from '../foundation';
+} from '../kernel';
 
 export type SvgScatterVariant = 'scatter' | 'bubble';
 

@@ -41,7 +41,7 @@ import { LAYOUT_CHANNEL_DEFAULTS } from '../../kernel/channels';
 import { useLayoutGroup } from '../../kernel/group';
 import { readRects, readTiming } from '../../kernel/measure';
 import { cancelInFlight, play } from '../../kernel/play';
-import { useReducedMotion } from '../../../foundation/reduced-motion';
+import { useReducedMotion } from '../../../foundation/preference';
 
 export interface UseFlipLayoutOptions {
   /** CSS custom property NAME (not a `var()` expression) supplying the play-back duration, resolved live from the group's computed style. */

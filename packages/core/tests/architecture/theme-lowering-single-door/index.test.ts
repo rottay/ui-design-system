@@ -594,7 +594,7 @@ const ADMISSION_STATION_NAMES: readonly string[] = ADMISSION_STATIONS.map(
  * a regex that excludes its own owner.
  */
 const MEASURED_FIELD_DEFINITION =
-  "src/infrastructure/compilers/runtime/theme/facade/foundation/admission/foundation/issues/index.ts";
+  "src/infrastructure/compilers/runtime/theme/facade/foundation/admission/contracts/issues/index.ts";
 
 /** The sole authoring surface allowed to read the graded compilation. */
 const MEASURED_FIELD_READERS: readonly string[] = [

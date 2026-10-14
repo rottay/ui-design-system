@@ -21,7 +21,7 @@
 import { useCallback } from 'react';
 import type { CSSProperties } from 'react';
 import { getReducedMotionSnapshot } from '@/infrastructure/runtime/foundation/motion/runtime/browser/reduced-motion';
-import { useReducedMotion } from '../foundation/reduced-motion';
+import { useReducedMotion } from '../foundation/preference';
 
 /** A DOM update run inside (or in place of) a view transition. */
 export type ViewTransitionUpdate = () => void | Promise<void>;

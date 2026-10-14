@@ -16,7 +16,7 @@ import {
   number,
   object,
   string,
-} from "../foundation";
+} from "../spec";
 
 /**
  * Governed experience-profile selection (C1b): closed enum over the published

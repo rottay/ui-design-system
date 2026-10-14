@@ -35,8 +35,8 @@ import type {
   TenantThemeArtifactContrastDelta,
   TenantThemeArtifactModeDelta,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { cyclesIn } from "../../foundation/references";
-import type { ThemeAdmissionIssue } from "../../foundation/issues";
+import { cyclesIn } from "../../contracts/references";
+import type { ThemeAdmissionIssue } from "../../contracts/issues";
 
 /** What this station measures: the tenant's own delta, block by block. */
 interface EmittedDelta {

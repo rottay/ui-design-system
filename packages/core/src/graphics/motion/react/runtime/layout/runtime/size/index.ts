@@ -22,7 +22,7 @@ import { LAYOUT_CHANNEL_DEFAULTS } from '../../kernel/channels';
 import { useLayoutGroup } from '../../kernel/group';
 import { readRects, readTiming } from '../../kernel/measure';
 import { cancelInFlight, play } from '../../kernel/play';
-import { useReducedMotion } from '../../../foundation/reduced-motion';
+import { useReducedMotion } from '../../../foundation/preference';
 
 export interface UseSizeAnimationOptions {
   /** Channel NAME supplying the duration. Defaults to `--ds-motion-resize`. */

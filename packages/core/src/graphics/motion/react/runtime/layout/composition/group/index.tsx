@@ -12,8 +12,8 @@
 
 import React, { useMemo, useRef } from 'react';
 
-import type { LayoutGroupProps } from '../../../contracts';
-import { LayoutGroupContext, type LayoutGroupChannel } from '../../../kernel/group';
+import type { LayoutGroupProps } from '../../contracts';
+import { LayoutGroupContext, type LayoutGroupChannel } from '../../kernel/group';
 
 export function LayoutGroup({ id, children }: LayoutGroupProps): React.ReactElement {
   const rootRef = useRef<HTMLDivElement | null>(null);

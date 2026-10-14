@@ -242,7 +242,7 @@ describe("channel minting and CSS text have declared owners", () => {
     "foundation/contracts/composition/tenants/themes/compiled",
     "foundation/contracts/composition/tenants/themes/emission",
     "foundation/contracts/composition/tenants/themes/engine-adapter",
-    "foundation/contracts/kernel/tokens/engine-tokens",
+    "foundation/contracts/kernel/tokens/engine",
   ];
   const LOWERING_ROOT = "infrastructure/compilers/runtime/theme/runtime/lowering";
   const PIPELINE_ROOT = "infrastructure/compilers/runtime/theme";

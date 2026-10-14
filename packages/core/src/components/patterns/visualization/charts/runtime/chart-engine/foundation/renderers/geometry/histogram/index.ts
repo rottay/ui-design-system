@@ -11,7 +11,7 @@ import {
   type ChartGeometryInsets,
   type ChartGeometryRect,
   type ChartGeometryTick,
-} from '../foundation';
+} from '../kernel';
 
 // ---------------------------------------------------------------------------
 // Histogram geometry (contiguous distribution bars; d3.bin is layout math)

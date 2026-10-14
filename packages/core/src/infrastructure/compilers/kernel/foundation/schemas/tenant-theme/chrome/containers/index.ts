@@ -10,8 +10,8 @@ import {
   object,
   string,
   visualFields,
-} from "../../foundation";
-import type { TenantThemeSchemaNode } from "../../foundation";
+} from "../../spec";
+import type { TenantThemeSchemaNode } from "../../spec";
 
 const premiumCardFields: Readonly<Record<string, TenantThemeSchemaNode>> =
   visualFields([

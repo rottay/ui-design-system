@@ -28,7 +28,7 @@ import {
 } from '../../../..';
 import { resetResponsiveMediaStore } from '@/infrastructure/runtime/responsive/runtime/media-snapshot';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
-import { useResponsiveValue } from '@/infrastructure/runtime/responsive/composition/react/provider/responsive-value';
+import { useResponsiveValue } from '@/infrastructure/runtime/responsive/composition/react/provider/value';
 
 // ---------------------------------------------------------------------------
 // matchMedia mock infrastructure

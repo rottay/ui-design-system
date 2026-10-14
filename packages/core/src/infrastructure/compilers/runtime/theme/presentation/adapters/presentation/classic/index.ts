@@ -3,7 +3,7 @@ import type {
   EngineProjection,
   EngineSeeds,
 } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
-import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine-tokens";
+import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine";
 import { defineEngineAdapter } from "../../foundation/definition";
 import { dialedCssLengthToPx } from "@/foundation/kernel/geometry/css-length";
 

@@ -102,7 +102,7 @@ test('a seventh owner of the engine token baseline is caught', () => {
 test('a declared owner may name the baseline', () => {
   const found = rules(
     fixture({
-      'src/foundation/contracts/kernel/tokens/engine-tokens/index.ts':
+      'src/foundation/contracts/kernel/tokens/engine/index.ts':
         'export interface EngineTokenOverrides { densityScale: number }\n',
     })
   );

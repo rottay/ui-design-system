@@ -10,7 +10,7 @@ import {
   enumeration,
   object,
   visualFields,
-} from "../../foundation";
+} from "../../spec";
 
 const buttonVariant = object(
   visualFields([

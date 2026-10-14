@@ -9,13 +9,13 @@ export {
   DEFAULT_CARTESIAN_INSETS,
   DEFAULT_HEATMAP_INSETS,
   DEFAULT_RADIAL_INSETS,
-} from './foundation';
+} from './kernel';
 export type {
   ChartGeometryInsets,
   ChartGeometryRect,
   ChartGeometryTick,
   SvgLineCurve,
-} from './foundation';
+} from './kernel';
 export { buildSvgBarGeometry, buildSvgBarSeriesGeometry } from './bar';
 export type {
   SvgBarDatum,

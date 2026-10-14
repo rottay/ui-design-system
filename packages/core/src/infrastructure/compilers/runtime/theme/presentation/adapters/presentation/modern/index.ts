@@ -1,4 +1,4 @@
-import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine-tokens";
+import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine";
 import { defineEngineAdapter } from "../../foundation/definition";
 
 const INVARIANT_ICON = {

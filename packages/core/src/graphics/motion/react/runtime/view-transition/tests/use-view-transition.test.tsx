@@ -2,7 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { recordTransitionName, startDsViewTransition, useViewTransition } from '..';
-import { useReducedMotion } from '../../foundation/reduced-motion';
+import { useReducedMotion } from '../../foundation/preference';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 
 /**

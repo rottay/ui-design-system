@@ -129,7 +129,7 @@ export const FALLBACK_SHAPES = Object.freeze([
  * table forming, whatever it calls itself.
  */
 export const TOKEN_BASELINE_OWNERS = Object.freeze([
-  'src/foundation/contracts/kernel/tokens/engine-tokens/index.ts',
+  'src/foundation/contracts/kernel/tokens/engine/index.ts',
   'src/foundation/contracts/composition/tenants/themes/engine-adapter/index.ts',
   'src/infrastructure/compilers/runtime/theme/presentation/adapters/foundation/definition/index.ts',
   'src/infrastructure/compilers/runtime/theme/presentation/adapters/presentation/classic/index.ts',

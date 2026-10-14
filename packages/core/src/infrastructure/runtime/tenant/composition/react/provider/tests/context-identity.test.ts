@@ -586,7 +586,7 @@ describe('tenant context consumer inventory', () => {
         specifier: '../../../../tenant/foundation/context',
       },
       {
-        file: 'infrastructure/runtime/personality/presentation/resolution/chart-personality/index.ts',
+        file: 'infrastructure/runtime/personality/presentation/resolution/chart/index.ts',
         binding: 'TenantContext',
         specifier: '../../../../tenant/foundation/context',
       },
@@ -608,7 +608,7 @@ describe('tenant context consumer inventory', () => {
    * law -- a SECOND file that imports without reading still fails.
    */
   const IMPORT_WITHOUT_READ = [
-    'infrastructure/runtime/personality/presentation/resolution/chart-personality/index.ts',
+    'infrastructure/runtime/personality/presentation/resolution/chart/index.ts',
   ];
 
   it('leaf consumers read the Context object and never own a createContext call', () => {

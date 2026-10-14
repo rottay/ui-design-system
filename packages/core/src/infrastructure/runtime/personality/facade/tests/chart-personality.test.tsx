@@ -12,7 +12,7 @@ import { TenantProvider } from '../../../tenant';
 import { getVerticalPreset } from '../../../verticals';
 import { resolveChartPersonality } from '../../runtime/resolution/chart';
 import { DEFAULT_PERSONALITY } from '../../foundation/defaults';
-import { useResolvedChartPersonality } from '../../presentation/resolution/chart-personality';
+import { useResolvedChartPersonality } from '../../presentation/resolution/chart';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
 const bithireFlatTheme = firstPartyFixture('bithire');

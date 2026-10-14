@@ -1,6 +1,6 @@
 import { DEFAULT_COLORS } from '../../../../../../foundation/palettes';
 
-import { finiteSize, normalizeInsets, type ChartGeometryInsets } from '../foundation';
+import { finiteSize, normalizeInsets, type ChartGeometryInsets } from '../kernel';
 
 /** A categorical stage in a tapering funnel. */
 export interface SvgFunnelDatum {

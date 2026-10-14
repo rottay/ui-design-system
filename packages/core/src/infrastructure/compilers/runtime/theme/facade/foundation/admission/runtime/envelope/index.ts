@@ -29,7 +29,7 @@ import {
   isInsideEnvelopeRange,
 } from "@/contracts/theme/runtime/envelopes";
 import { isValidCssColor } from "@/infrastructure/compilers/kernel/foundation/css/color-math";
-import type { ThemeAdmissionIssue } from "../../foundation/issues";
+import type { ThemeAdmissionIssue } from "../../contracts/issues";
 
 /**
  * The five `Governed<T>` roots, whose authored paths are recorded unwrapped.

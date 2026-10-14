@@ -12,7 +12,7 @@
  */
 
 import React, { type ReactNode } from 'react';
-import { useFeatures } from '../../../composition/react/provider/features';
+import { useFeatures } from '../../../composition/react/provider/flags';
 
 /**
  * Props for the `FeatureGate` component.

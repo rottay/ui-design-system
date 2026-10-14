@@ -140,7 +140,7 @@ test('LIVE PLANTED NEGATIVE: MotionProvider retains the supplier, and the verdic
 
 test('the reduced-motion barrel edge this gate guards is still the real shape', () => {
   const reducedMotion = readFileSync(
-    join(PACKAGE_ROOT, 'src/graphics/motion/react/runtime/foundation/reduced-motion/index.ts'),
+    join(PACKAGE_ROOT, 'src/graphics/motion/react/runtime/foundation/preference/index.ts'),
     'utf8',
   );
   assert.match(reducedMotion, /@\/infrastructure\/runtime\/motion/u);

@@ -7,7 +7,7 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { EngineName } from "@/foundation/contracts/kernel/engine-identity";
-import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine-tokens";
+import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine";
 
 /** Everything an engine adapter authors. `posture` is derived, never authored. */
 export interface EngineAdapterDefinition {

@@ -15,7 +15,7 @@ import {
   hydrateTenantThemeConfig,
 } from "@/infrastructure/compilers/composition/tenant-theme";
 import { TENANT_THEME_CHROME_FAMILIES } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { chromeLeafChannels } from "@/infrastructure/compilers/runtime/theme/facade/foundation/admission/foundation/references";
+import { chromeLeafChannels } from "@/infrastructure/compilers/runtime/theme/facade/foundation/admission/contracts/references";
 import {
   compileThemeIntent,
   emitThemeCss,

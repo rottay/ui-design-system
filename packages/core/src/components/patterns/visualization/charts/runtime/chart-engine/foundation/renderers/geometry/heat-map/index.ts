@@ -14,7 +14,7 @@ import {
   type ChartGeometryInsets,
   type ChartGeometryRect,
   type ChartGeometryTick,
-} from '../foundation';
+} from '../kernel';
 
 export interface SvgHeatMapDatum {
   readonly id: string;

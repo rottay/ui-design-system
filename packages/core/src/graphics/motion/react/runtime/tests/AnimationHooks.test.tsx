@@ -4,8 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useInView } from '../in-view';
 import { useMousePosition } from '../mouse-position';
-import { useMotionPersonality } from '../motion-personality';
-import { useReducedMotion } from '../foundation/reduced-motion';
+import { useMotionPersonality } from '../personality';
+import { useReducedMotion } from '../foundation/preference';
 import { useScrollProgress } from '../scroll-progress';
 import { useSmoothCounter } from '../smooth-counter';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';

@@ -2,7 +2,7 @@ import { hierarchy, treemap as createTreemapLayout } from 'd3';
 
 import { DEFAULT_COLORS } from '../../../../../../foundation/palettes';
 
-import { finiteSize, type ChartGeometryRect } from '../foundation';
+import { finiteSize, type ChartGeometryRect } from '../kernel';
 
 // ---------------------------------------------------------------------------
 // TreeMap (squarified hierarchy) geometry

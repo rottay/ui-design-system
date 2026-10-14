@@ -8,7 +8,7 @@ import {
   assertUniqueStrings,
   type ChartGeometryInsets,
   type ChartGeometryRect,
-} from '../foundation';
+} from '../kernel';
 
 export interface SvgPieDatum {
   readonly id: string;

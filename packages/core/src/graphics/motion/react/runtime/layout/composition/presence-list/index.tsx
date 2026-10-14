@@ -32,8 +32,8 @@ import React, {
 } from 'react';
 import type { ReactElement, ReactNode, SyntheticEvent } from 'react';
 
-import { readExitWindowMs } from '../../../kernel/measure';
-import { useReducedMotion } from '../../../../foundation/reduced-motion';
+import { readExitWindowMs } from '../../kernel/measure';
+import { useReducedMotion } from '../../../foundation/preference';
 
 /** Marks an exiting child so its own node is findable without holding a ref. */
 export const PRESENCE_ITEM_ATTRIBUTE = 'data-ds-presence-item';

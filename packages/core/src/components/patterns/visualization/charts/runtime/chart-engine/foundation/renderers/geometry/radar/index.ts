@@ -1,6 +1,6 @@
 import { DEFAULT_COLORS } from '../../../../../../foundation/palettes';
 
-import { finiteSize } from '../foundation';
+import { finiteSize } from '../kernel';
 
 /** A single value projected on one named radar axis. */
 export interface SvgRadarDatum {

@@ -22,7 +22,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { useReducedMotion } from '../foundation/reduced-motion';
+import { useReducedMotion } from '../foundation/preference';
 
 /**
  * Return a smoothly interpolated numeric value that transitions from

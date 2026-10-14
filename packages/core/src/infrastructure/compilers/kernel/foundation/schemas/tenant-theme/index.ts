@@ -40,11 +40,11 @@ import {
   number,
   object,
   string,
-} from "./foundation";
-import type { TenantThemeSchemaNode } from "./foundation";
+} from "./spec";
+import type { TenantThemeSchemaNode } from "./spec";
 import { general } from "./general";
 
-export type { TenantThemeSchemaNode } from "./foundation";
+export type { TenantThemeSchemaNode } from "./spec";
 
 /**
  * Governed recipe-profile selection (DS-S001): the schema is a closed enum

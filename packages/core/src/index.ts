@@ -36,13 +36,13 @@ export * from './foundation/contracts';
 // ERROR HANDLING
 // ============================================
 export { ErrorHandler } from './infrastructure/runtime/error-handling/runtime/handler';
-export { useErrorHandler } from './infrastructure/runtime/error-handling/composition/react/use-error-handler';
+export { useErrorHandler } from './infrastructure/runtime/error-handling/composition/react/handler';
 export { ErrorCategory, ErrorSeverity } from './foundation/contracts/runtime/errors';
 export type { DSError, DSErrorInput, ErrorSubscriber } from './foundation/contracts/runtime/errors';
 export type {
   UseErrorHandlerOptions,
   UseErrorHandlerReturn,
-} from './infrastructure/runtime/error-handling/composition/react/use-error-handler';
+} from './infrastructure/runtime/error-handling/composition/react/handler';
 
 // ============================================
 // PROVIDERS (ResponsiveProvider, etc.)

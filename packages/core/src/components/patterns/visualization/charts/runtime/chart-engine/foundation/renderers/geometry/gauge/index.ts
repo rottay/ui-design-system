@@ -1,6 +1,6 @@
 import { arc as createArcPath } from 'd3';
 
-import { finiteSize } from '../foundation';
+import { finiteSize } from '../kernel';
 
 /** One threshold band in a radial gauge. An explicitly empty color is valid. */
 export interface SvgGaugeSegment {

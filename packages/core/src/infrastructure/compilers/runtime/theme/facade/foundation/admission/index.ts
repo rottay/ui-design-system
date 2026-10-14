@@ -44,7 +44,7 @@ import { admitEngine } from "./runtime/engine";
 import { chartCategoryIssues, compiledChartGrounds, contrastIssues } from "./runtime/contrast";
 import { referenceCycleIssues } from "./runtime/cycles";
 import { envelopeIssues } from "./runtime/envelope";
-import { ThemeAdmissionError, refuse, type ThemeAdmissionIssue } from "./foundation/issues";
+import { ThemeAdmissionError, refuse, type ThemeAdmissionIssue } from "./contracts/issues";
 import { authoredValueIssues, limitIssues, themeChannelDelta } from "./runtime/limits";
 import type { ThemeChannelDelta } from "./runtime/limits";
 import { tierIssues } from "./runtime/tier";
@@ -94,7 +94,7 @@ export {
   channelReferences,
   chromeLeafChannels,
   cyclesIn,
-} from "./foundation/references";
+} from "./contracts/references";
 export { admitEngine } from "./runtime/engine";
 export {
   authoredLeaves,

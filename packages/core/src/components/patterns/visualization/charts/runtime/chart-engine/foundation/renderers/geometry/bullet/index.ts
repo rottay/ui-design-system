@@ -1,6 +1,6 @@
 import { scaleLinear } from 'd3';
 
-import { finiteSize, type ChartGeometryRect } from '../foundation';
+import { finiteSize, type ChartGeometryRect } from '../kernel';
 
 // ---------------------------------------------------------------------------
 // Bullet (linear KPI gauge) geometry

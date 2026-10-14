@@ -9,7 +9,7 @@
 import { describe, expect, it } from "vitest";
 
 import { TENANT_CAPABILITY_REGISTRY } from "../../../capabilities";
-import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine-tokens";
+import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine";
 import type {
   ControlId,
   EngineAdapter,

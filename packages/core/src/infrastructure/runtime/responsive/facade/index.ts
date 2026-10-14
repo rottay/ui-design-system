@@ -25,7 +25,7 @@ export type {
 export { useMediaQuery } from '../runtime/media-query';
 export { useBreakpoints } from '../composition/react/provider/breakpoint-state';
 export type { UseBreakpointsResult } from '../composition/react/provider/breakpoint-state';
-export { useResponsiveValue } from '../composition/react/provider/responsive-value';
+export { useResponsiveValue } from '../composition/react/provider/value';
 export { usePhoneBreakpoint } from '../composition/react/provider/phone-state';
 
 // The CSS-channel projection (`generateResponsiveCSS`, `ResponsivePropEntry`)

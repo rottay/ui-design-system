@@ -28,14 +28,14 @@ import { FOUNDATION_COLOR_DEFAULTS } from "@/foundation/tokens/ts/foundation/bas
 import {
   TEXT_CONTRAST_PAIRINGS,
   enforceTextContrast,
-} from "@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect";
+} from "@/foundation/kernel/accessibility/branding-contrast/text-autocorrect";
 import {
   isHexColor,
   normalizeHexColor,
 } from "@/infrastructure/compilers/kernel/foundation/css/color-math";
 import { OVERRIDE_TOKEN_PATCHES } from "../../../../../runtime/ingress/foundation/document-patch";
 import { isAuthoredLeaf, movedLeaves } from "../../../../../runtime/ingress/foundation/authorship";
-import type { ThemeAdmissionIssue } from "../../foundation/issues";
+import type { ThemeAdmissionIssue } from "../../contracts/issues";
 
 /**
  * Every governed INK channel, keyed on the Theme leaf that produces it.

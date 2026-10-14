@@ -2,7 +2,7 @@ import { interpolateRgb, scaleQuantize, timeDay, timeFormat, timeMonday, timeMon
 
 import { DEFAULT_COLORS } from '../../../../../../foundation/palettes';
 
-import { normalizedConcreteColor, type ChartGeometryRect } from '../foundation';
+import { normalizedConcreteColor, type ChartGeometryRect } from '../kernel';
 
 // ---------------------------------------------------------------------------
 // Calendar heat-map (day grid) geometry

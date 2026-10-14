@@ -23,7 +23,7 @@ import {
   type ChartGeometryRect,
   type ChartGeometryTick,
   type SvgLineCurve,
-} from '../foundation';
+} from '../kernel';
 
 // ---------------------------------------------------------------------------
 // Area geometry (line top edge + filled band; diverging stacking supported)

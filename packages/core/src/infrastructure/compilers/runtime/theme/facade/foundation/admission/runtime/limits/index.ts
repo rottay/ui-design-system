@@ -48,8 +48,8 @@ import {
   retiredVisualReference,
   type TenantThemeSchemaNode,
 } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme";
-import type { ThemeAdmissionIssue } from "../../foundation/issues";
-import { authoredSelfReference } from "../../foundation/references";
+import type { ThemeAdmissionIssue } from "../../contracts/issues";
+import { authoredSelfReference } from "../../contracts/references";
 
 /**
  * The authored/emitted visual-value grammar, re-exported from the schema owner

@@ -6,9 +6,9 @@
  */
 
 export { useLayoutAnimation } from './facade';
-export { LayoutGroup } from './composition/react/group';
-export { PresenceList, PRESENCE_ITEM_ATTRIBUTE } from './composition/react/presence-list';
-export type { PresenceListProps } from './composition/react/presence-list';
+export { LayoutGroup } from './composition/group';
+export { PresenceList, PRESENCE_ITEM_ATTRIBUTE } from './composition/presence-list';
+export type { PresenceListProps } from './composition/presence-list';
 export { useFlipLayout } from './runtime/reflow';
 export type { UseFlipLayoutOptions, UseFlipLayoutResult } from './runtime/reflow';
 export { useSizeAnimation, supportsKeywordSizeInterpolation } from './runtime/size';
