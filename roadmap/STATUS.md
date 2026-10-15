@@ -1524,7 +1524,7 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 140/169 work orders done (83%)
+## Work-order burn-down — 141/169 work orders done (83%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -1534,7 +1534,7 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 | [craft](./craft.md) | 17 | 0 | 7 | 24 |
 | [gates](./gates.md) | 8 | 0 | 4 | 12 |
 | [tokens](./tokens.md) | 10 | 0 | 1 | 11 |
-| [architecture](./architecture.md) | 15 | 2 | 6 | 23 |
+| [architecture](./architecture.md) | 16 | 2 | 5 | 23 |
 | [skin-adoption](./skin-adoption.md) | 7 | 0 | 1 | 8 |
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
 | [consumer-contract](./consumer-contract.md) | 7 | 0 | 1 | 8 |
@@ -1555,13 +1555,13 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-EVI-02 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
 | C · 116/116 | not reached | all 68 work orders of the audit-2026-09-05 programme | 5 of 68 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. D-30 (the BitHire identity pick) is NOT a condition of C: it is a branding-stage obligation, NOT CHOSEN (roadmap/kit-2026-09.md §5d). |
 
-## DS improvements burn-down — 30/82 execute source IDs done (37%)
+## DS improvements burn-down — 32/82 execute source IDs done (39%)
 
 > Derived live from the unique execute-authority work orders. Deferred items never count as done; absorbed, routed, and rejected items remain separate dispositions.
 
 | Source IDs done | Source IDs in progress | Source IDs todo | Execute authorities done/total | Deferred | Absorbed | Routed | Rejected |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 30 | 2 | 50 | 13/32 | 0 | 7 | 2 | 37 |
+| 32 | 2 | 48 | 14/32 | 0 | 7 | 2 | 37 |
 
 ## Support milestones — partial evidence, no source completion effect
 
@@ -1589,7 +1589,6 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-ARC-15 | Primitive-owned focus and keyboard parity floor | M | architecture | ds-improvements |
 | WO-DER-10 | D-30 BitHire identity: record the owner's pick, finalize the bithire preset, retire the candidates | S | derivation |  |
 
 ## Blocked (dependencies or phase claim lock)
@@ -1703,6 +1702,7 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 | WO-CRA-16 | 2026-07-17 | Bounded canary certification is recorded in test-artifacts/craft/cra-16/certification.json. Published registry package @rottay/design-system@2.19.28 at d609b519 provides the fixed 50-name v3 public corpus, deterministic 263-role generated catalog, pinned Phosphor 2.1.10 adapter and BrandMark facade. DS semantic/mark SSR coverage is green at 33/33, generator adversarial coverage at 8/8, and icons:check proves 263 roles/272 files current. BitHire a7d7d8a40 pins and installs exact 2.19.28; its four focused architecture suites are green at 21/21, typecheck and installed-canonical supplier honesty are green with zero direct suppliers. The AST guards fail closed on aliases, dynamic supplier imports and Icon/BrandMark/CloudServiceMark/FeaturePictogram conflation. This support milestone does not complete DS-IMP-090/091, the supplier decision, four-facade family, fleet migration or vertical recipes. |
 | WO-ARC-13 | 2026-10-12 | css-layer-paint gate green at 3c68c1e2f (PASS, 1 entrypoint; verified on the pristine archive by the independent review, with a negative drill red on reordered layers); the certification doc at docs-engineering development/design-system/runtime/engines/cascade-order/README.md (commit 8d38c1e4) matches the gate-enforced order claim-by-claim (22 claims reproduced across all 7 sections by the independent reviewer) and cross-links the gate as the mechanical proof + authority; the P-76 dead gate-path fixed in the same granted write set. No unlayered-twin drift (the header-claim debt arm is decrease-only and green). Writer ccbb5152; independent review ACCEPT. |
 | WO-ARC-14 | 2026-10-13 | Closure window on the exact candidate e36f2df24 (clean clone, singleton): build RC 0 (exports-artifact-gate OK, 66 targets); FULL unit GREEN — 18542 passed / 0 failed / 17 skipped, 1591 files; engine-token-audit --check OK (4264 counters, no counter regresses); css-layer-paint PASS; the repaired unit reds of the wave all green (URA/URB/URD/URE/URE-2 + LD + APCA-FIX + its antd-bridge follow-up integrated and re-reviewed). Substance (reformulated by WO-EMI-02 + WO-CAT-02, verified step map recon/a-arc.report.md:78-125): provider scoping per landlord = mountTenantTheme + scoped admission + SSR root projection + claim registry (EMI-02 close 63ab01cd0); identity/render split = TenantConfig stripped + EngineVisualDeclaration; anatomy manifest = the derived family inventory + typed catalog (CAT-02 14c0499cb) — no authored manifest exists by design; portal bridge = PortalScope across 40+ modern overlay engines; manifest-generated skin imports = the single-entrypoint gate + derived layer bindings (CAN-03). Honest note: the window's first in-clone probe/drill ran on a stale index copy of the instrument (my restore error); the corrected re-run (drill 398/398, probe 6/6 OK) is the official record (probe-official-3c.log). |
+| WO-ARC-15 | 2026-10-14 | Closure by absorption (audit F-40, recorded in the WO notes): with Modern as the only productive engine there is no EngineParity to certify — the primitive-owned focus/keyboard floor is delivered as the platform invariant plus the per-family cut assertion. Receiver proof: WO-INV-03 done 2026-09-22 (4bf21162e, live axe acceptance); WO-FAM-00 froze the cut template carrying the a11y arm; WO-FAM-01..11 all done; the family-cut gate's blocking arm a11yAssertions (scripts/check/family-cut/index.mjs:3479) measures TODAY 106/106 families with >=1 executable accessibility assertion each, 0 findings (gate --json, 2026-10-14). The absorbed MD-DEF-08 P-27 pending-button accessible-name fix rode the button family cut (WO-FAM-01, done). Tool SHA256 9038c72b…768a re-verified 2026-10-14. DT: Kimi. |
 | WO-CRA-23 | 2026-09-05 | SEALED: R0 instrumentación retenida; R1+ sustituidas por derivation/family-cuts; métrica 0/255 reemplazada por indicadores |
 | WO-CRA-24 | 2026-09-08 | landed 8f4d6e9ce; independent K3 audit LANDING PASS (/private/tmp/rottay-cra24-kimi-k3-audit.md): CD-01 probe measured both sides — base {filterCollision:true,remaining:0} → tip {filterCollision:false,remaining:1}; 9/9 acceptance tests; reserve-step mutation turns the 4 restored-identity tests red; no new reds; frozen engines + public surface untouched |
 | WO-CAN-01 | 2026-09-05 | C4 certified on committed baseline through 58-path governance residual closure: 820 stale references across 53 governance files reduced to 0; independent Claude Fable 5.1 audit PASS, matrix 115/115 blocking gates with 1 declared SKIP, Modern Rescue 48/48, roadmap 79/79; report /private/tmp/rottay-wo-can-01-fable.md SHA256 13219027e817fa46da57e43f4ee9f74f66ab0362a7598cdd34571ea071294842. |

@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-13",
+ "updated": "2026-10-14",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -3025,7 +3025,7 @@
    "lane": "architecture",
    "order": 15,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -3042,11 +3042,17 @@
    ],
    "phase": "1",
    "notes": "ABSORBED by WO-INV-03 + the family cuts WO-FAM-01..11 (audit F-40): with Modern as the only productive engine there is no EngineParity to certify, so the focus/keyboard floor is a platform invariant plus a per-family cut assertion. WO-FAM-00 freezes the cut template that carries it. Original spec: W4 a11y lane; absorbs the MD-DEF-08 P-27 pending-button accessible-name fix.",
-   "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
-   "doneAt": null,
-   "evidence": null,
+   "progressLog": [
+    {
+     "at": "2026-10-14 20:53",
+     "by": "kimi-dt",
+     "note": "Absorption receiver proof assembled (2026-10-14, DT Kimi): INV-03 done 2026-09-22 (4bf21162e live axe); FAM-00 template frozen with the a11y arm; FAM-01..11 done; family-cut gate measures 106/106 families with executable a11y assertions, 0 findings today."
+    }
+   ],
+   "claimedBy": "kimi-dt",
+   "claimedAt": "2026-10-14",
+   "doneAt": "2026-10-14",
+   "evidence": "Closure by absorption (audit F-40, recorded in the WO notes): with Modern as the only productive engine there is no EngineParity to certify — the primitive-owned focus/keyboard floor is delivered as the platform invariant plus the per-family cut assertion. Receiver proof: WO-INV-03 done 2026-09-22 (4bf21162e, live axe acceptance); WO-FAM-00 froze the cut template carrying the a11y arm; WO-FAM-01..11 all done; the family-cut gate's blocking arm a11yAssertions (scripts/check/family-cut/index.mjs:3479) measures TODAY 106/106 families with >=1 executable accessibility assertion each, 0 findings (gate --json, 2026-10-14). The absorbed MD-DEF-08 P-27 pending-button accessible-name fix rode the button family cut (WO-FAM-01, done). Tool SHA256 9038c72b…768a re-verified 2026-10-14. DT: Kimi.",
    "execution": {
     "decisionOwner": "design-system-program",
     "touchedRepos": [
