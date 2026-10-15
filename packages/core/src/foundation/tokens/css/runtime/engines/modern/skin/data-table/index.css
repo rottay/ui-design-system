@@ -275,6 +275,7 @@
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="toolbar-stack"],
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__toolbar-stack,
 .ds-pattern-data-table.ds-engine-modern [data-part="filters"] {
   width: 100%;
   min-width: 0;

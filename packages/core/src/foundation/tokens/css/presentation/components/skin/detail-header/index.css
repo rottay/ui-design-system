@@ -447,7 +447,8 @@
   flex: 1;
   min-inline-size: 0;
 }
-.ds-structure.ds-detail-header [data-part='hero-copy'] {
+.ds-structure.ds-detail-header [data-part='hero-copy'],
+.ds-structure.ds-detail-header .ds-detail-header__hero-copy {
   flex: 1;
   min-inline-size: 0;
 }

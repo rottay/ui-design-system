@@ -20,7 +20,8 @@
  */
 
 /* ---- section heading (padding drained from inline) ---- */
-.ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading {
+.ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__section-heading {
   padding: var(--ds-compare-section-padding, var(--ds-spacing-4, 16px));
   border-radius: var(--ds-compare-section-radius, var(--ds-radius-lg));
   background: var(
@@ -32,6 +33,8 @@
 /* ---- divider between per-subject blocks in the stacked layout (padding
         drained to the logical block axis) ---- */
 .ds-surface.ds-compare[data-part="root"]
+  .ds-compare__divider[data-part="divider"],
+.ds-surface.ds-compare.ds-compare__root
   .ds-compare__divider[data-part="divider"] {
   padding-block-start: var(
     --ds-compare-divider-spacing,
@@ -44,7 +47,9 @@
 /* ---- text hierarchy (typography drained from the engine's inline
         fontWeight styles) ---- */
 .ds-surface.ds-compare[data-part="root"] .ds-compare__row-label,
-.ds-surface.ds-compare[data-part="root"] .ds-compare__row-label {
+.ds-surface.ds-compare.ds-compare__root .ds-compare__row-label,
+.ds-surface.ds-compare[data-part="root"] .ds-compare__row-label,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__row-label {
   font-weight: var(
     --ds-compare-row-label-weight,
     var(--ds-font-weight-semibold, 600)
@@ -52,9 +57,13 @@
 }
 
 .ds-surface.ds-compare[data-part="root"] .ds-compare__subject-label,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__subject-label,
 .ds-surface.ds-compare[data-part="root"] .ds-compare__section-title,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__section-title,
 .ds-surface.ds-compare[data-part="root"] .ds-compare__subject-label,
-.ds-surface.ds-compare[data-part="root"] .ds-compare__section-title {
+.ds-surface.ds-compare.ds-compare__root .ds-compare__subject-label,
+.ds-surface.ds-compare[data-part="root"] .ds-compare__section-title,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__section-title {
   font-weight: var(
     --ds-compare-heading-weight,
     var(--ds-font-weight-bold, 700)
@@ -62,11 +71,15 @@
 }
 
 .ds-surface.ds-compare[data-part="root"] .ds-compare__muted-text,
-.ds-surface.ds-compare[data-part="root"] .ds-compare__muted-text {
+.ds-surface.ds-compare.ds-compare__root .ds-compare__muted-text,
+.ds-surface.ds-compare[data-part="root"] .ds-compare__muted-text,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__muted-text {
   color: var(--ds-compare-muted-color, var(--ds-color-text-muted));
 }
 
 .ds-surface.ds-compare[data-part="root"]
+  .ds-compare__table-viewport[data-part="table-viewport"],
+.ds-surface.ds-compare.ds-compare__root
   .ds-compare__table-viewport[data-part="table-viewport"] {
   overflow-x: auto;
   overscroll-behavior-inline: contain;
@@ -114,11 +127,14 @@
    weight (forced colours never strips font-weight). The composed Table and
    Cards keep their own forced-colors contracts. */
 @media (forced-colors: active) {
-  .ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading {
+  .ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading,
+  .ds-surface.ds-compare.ds-compare__root .ds-compare__section-heading {
     border: 1px solid ButtonText;
     background: Canvas;
   }
   .ds-surface.ds-compare[data-part="root"]
+    .ds-compare__divider[data-part="divider"],
+  .ds-surface.ds-compare.ds-compare__root
     .ds-compare__divider[data-part="divider"] {
     border-block-start-color: ButtonText;
   }

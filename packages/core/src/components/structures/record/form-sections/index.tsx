@@ -200,7 +200,7 @@ export function FormSections({
   };
 
   return (
-    <Stack className="ds-structure ds-form-sections" data-part="root" spacing="lg" style={style}>
+    <Stack className="ds-structure ds-form-sections ds-form-sections__root" data-part="root" spacing="lg" style={style}>
       {sections.map((section, index) => {
         const isOpen = resolvedKeys.includes(section.key);
         const resolvedAppearance = section.appearance ?? appearance ?? (!collapsible ? 'divided' : 'card');
@@ -214,7 +214,7 @@ export function FormSections({
                 {String(index + 1).padStart(2, '0')}
               </Box>
 
-              <Stack spacing="xs" data-part="section-copy">
+              <Stack spacing="xs" className="ds-form-sections__section-copy" data-part="section-copy">
                 <Flex align="center" gap={8} wrap="wrap">
                   {/* Type roles only: the title takes the engine's default
                       `md` size (`--ds-font-size-base`, the same 16px the
@@ -414,7 +414,7 @@ export function FormFactsCard({
         ) : null}
       </Stack>
 
-      <Stack spacing="sm" data-part="facts-card-items">
+      <Stack spacing="sm" className="ds-form-sections__facts-card-items" data-part="facts-card-items">
         {visibleItems.map((item) => (
           <Flex
             key={item.label}
@@ -423,7 +423,7 @@ export function FormFactsCard({
             justify="between"
             gap={16}
           >
-            <Stack spacing="xs" data-part="facts-card-item-copy">
+            <Stack spacing="xs" className="ds-form-sections__facts-card-item-copy" data-part="facts-card-item-copy">
               <Text
                 className="ds-form-sections__facts-card-item-label"
                 size="xs"

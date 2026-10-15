@@ -59,7 +59,7 @@ function MetricCard({
         overflow: 'hidden',
       }}
     >
-      <Stack spacing="sm" align="start" data-part="body">
+      <Stack spacing="sm" align="start" className="ds-metrics-cards__body" data-part="body">
         <Box
           className="metric-icon-container"
           data-part="metric-icon-box"

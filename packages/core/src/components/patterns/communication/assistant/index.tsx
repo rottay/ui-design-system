@@ -510,6 +510,7 @@ export function PreviewDiffCard({
             return (
               <Stack
                 key={`diff-row-${index}`}
+                className="ds-assistant__diff-row"
                 data-part="diff-row"
                 direction="horizontal"
                 spacing="sm"

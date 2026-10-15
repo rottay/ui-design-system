@@ -192,7 +192,8 @@
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item'] {
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item'],
+.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item {
   min-inline-size: 0;
 }
 

@@ -77,7 +77,7 @@ export function HeaderSurface({
       loading={loading}
     >
       <Stack
-        className="ds-surface ds-header"
+        className="ds-surface ds-header ds-header__root"
         data-part="root"
         data-loading={loading ? 'true' : 'false'}
         data-mobile-compact={mobileCompact ? 'true' : 'false'}

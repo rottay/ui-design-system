@@ -216,7 +216,7 @@ export function FormHeader({
                 <MainIcon />
               </span>
             </Box>
-            <Stack spacing="xs" data-part="hero-copy">
+            <Stack spacing="xs" className="ds-form-header__hero-copy" data-part="hero-copy">
               {eyebrow ? (
                 <Text
                   className="ds-form-header__eyebrow"

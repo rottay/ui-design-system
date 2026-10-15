@@ -164,7 +164,8 @@
  * half the current gap center the hairline INSIDE the governed rhythm: two
  * neighbours keep exactly one gap between them instead of gap + divider + gap.
  */
-.rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'],
+.rottay-stack.rottay-stack--modern[data-component='stack'] > .rottay-stack-divider {
   align-self: stretch;
   flex: 0 0 var(--ds-stack-divider-thickness, var(--ds-stack-divider-size, var(--ds-border-width-1, 1px)));
   min-inline-size: 0;
@@ -190,7 +191,8 @@
 
 @media (forced-colors: active) {
   /* The hairline is structural: it must survive colour stripping. */
-  .rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'] {
+  .rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'],
+  .rottay-stack.rottay-stack--modern[data-component='stack'] > .rottay-stack-divider {
     background: ButtonText;
     opacity: 1;
   }

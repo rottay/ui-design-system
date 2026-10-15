@@ -715,7 +715,8 @@
   outline-offset: 2px;
 }
 
-.ds-pattern-widget-board .ds-widget-board__content[data-part="card-content"] {
+.ds-pattern-widget-board .ds-widget-board__content[data-part="card-content"],
+.ds-pattern-widget-board .ds-widget-board__content.ds-widget-board__content {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
@@ -725,7 +726,10 @@
 
 .ds-pattern-widget-board
   .ds-widget-board__cell[data-part="card-shell"][data-height="fixed"]
-  .ds-widget-board__content[data-part="card-content"] {
+  .ds-widget-board__content[data-part="card-content"],
+.ds-pattern-widget-board
+  .ds-widget-board__cell[data-part="card-shell"][data-height="fixed"]
+  .ds-widget-board__content.ds-widget-board__content {
   flex: 1 1 auto;
   overflow: auto;
   overscroll-behavior: contain;

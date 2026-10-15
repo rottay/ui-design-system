@@ -51,7 +51,8 @@
    Title bar — the region seam is one hairline rule (ruled page, no card frame)
    ========================================================================== */
 
-.ds-surface.ds-guided-draft-form[data-part='root'] {
+.ds-surface.ds-guided-draft-form[data-part='root'],
+.ds-surface.ds-guided-draft-form.ds-guided-draft-form__root {
   min-inline-size: 0;
 }
 
@@ -280,7 +281,8 @@
    so flexible content can narrow and ellipsize instead of overflowing.
    ========================================================================== */
 
-.ds-surface.ds-guided-draft-form [data-part='content'] {
+.ds-surface.ds-guided-draft-form [data-part='content'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__content {
   min-inline-size: 0;
 }
 

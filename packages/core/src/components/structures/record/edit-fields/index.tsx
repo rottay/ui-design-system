@@ -244,7 +244,7 @@ export function InlineEditorGroup({
   return (
     <Stack
       spacing={0}
-      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      className={['ds-structure', 'ds-edit-fields', 'ds-edit-fields__group', className].filter(Boolean).join(' ')}
       data-part="group"
       style={style}
     >
@@ -293,7 +293,7 @@ export function InlineEditor({
                 <Icon size={16} />
               </Box>
             ) : null}
-            <Stack spacing={4} data-part="editor-copy">
+            <Stack spacing={4} className="ds-edit-fields__editor-copy" data-part="editor-copy">
               {eyebrow ? (
                 <Text
                   className="ds-edit-fields__editor-eyebrow"
@@ -411,7 +411,7 @@ export function InlineEditSection({
               <Icon size={15} />
             </Box>
           ) : null}
-          <Stack spacing={3} data-part="section-copy">
+          <Stack spacing={3} className="ds-edit-fields__section-copy" data-part="section-copy">
             <Flex align="center" gap={8} wrap="wrap">
               {sectionNumber ? (
                 <Text
@@ -689,7 +689,7 @@ export function InlineEditFooter({
       style={style}
     >
       {hasFooterSupport ? (
-        <Stack data-part="footer-support" spacing={2}>
+        <Stack className="ds-edit-fields__footer-support" data-part="footer-support" spacing={2}>
           {summary && error ? (
             <Text className="ds-edit-fields__footer-note" size="xs">
               {summary}

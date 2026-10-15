@@ -44,7 +44,8 @@
    520px default preserves the surface's historic transcript height; a
    contract `transcriptHeight` overrides it inline (inline style wins
    over this rule by cascade). */
-.ds-surface.ds-chat .ds-chat__transcript[data-part='transcript'] {
+.ds-surface.ds-chat .ds-chat__transcript[data-part='transcript'],
+.ds-surface.ds-chat .ds-chat__transcript.ds-chat__transcript {
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
@@ -61,7 +62,8 @@
    520px cap. A contract `transcriptHeight` still wins through the
    sanctioned inline instance channel (inline style beats both rules). */
 @supports (height: 100svh) {
-  .ds-surface.ds-chat .ds-chat__transcript[data-part='transcript'] {
+  .ds-surface.ds-chat .ds-chat__transcript[data-part='transcript'],
+  .ds-surface.ds-chat .ds-chat__transcript.ds-chat__transcript {
     max-block-size: min(520px, 62svh);
   }
 }

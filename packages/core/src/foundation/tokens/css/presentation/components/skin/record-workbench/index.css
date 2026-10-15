@@ -203,7 +203,8 @@
 
 /* Definition-list UA margins (dl block margins) are neutralized; the Stack
    gap owns the rhythm. */
-.ds-surface.ds-record-workbench .ds-record-workbench__metadata-list[data-part='metadata-list'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__metadata-list[data-part='metadata-list'],
+.ds-surface.ds-record-workbench .ds-record-workbench__metadata-list.ds-record-workbench__metadata-list {
   margin-block: 0;
 }
 

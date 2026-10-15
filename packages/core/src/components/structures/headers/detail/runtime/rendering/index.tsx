@@ -290,7 +290,7 @@ export function DetailHeader({
           <Flex data-part="hero-cluster" align="start" gap={18}>
             {avatar ? renderAvatarNode(avatar) : null}
 
-            <Stack data-part="hero-copy" spacing="sm">
+            <Stack className="ds-detail-header__hero-copy" data-part="hero-copy" spacing="sm">
               {eyebrow ? (
                 <Text className="ds-detail-header__eyebrow" size="xs" weight="bold" color="subtle">
                   {eyebrow}

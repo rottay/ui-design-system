@@ -86,6 +86,7 @@
    deliberate px rhythm follows the tenant density posture — the same
    read↔edit footprint at every density (C-12). */
 .ds-structure.ds-edit-fields[data-part='group'],
+.ds-structure.ds-edit-fields.ds-edit-fields__group,
 .ds-structure.ds-edit-fields[data-part='editor'],
 .ds-structure.ds-edit-fields[data-part='grid'],
 .ds-structure.ds-edit-fields[data-part='section'],
@@ -94,7 +95,8 @@
   --_ds-edit-fields-density: var(--ds-density-global-effective-scale, 1);
 }
 
-.ds-structure.ds-edit-fields[data-part='group'] {
+.ds-structure.ds-edit-fields[data-part='group'],
+.ds-structure.ds-edit-fields.ds-edit-fields__group {
   inline-size: 100%;
   min-inline-size: 0;
 }
@@ -108,7 +110,8 @@
   min-inline-size: 0;
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-copy'] {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-copy'],
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-copy {
   min-inline-size: 0;
 }
 
@@ -204,6 +207,7 @@
 }
 
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-copy'],
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-copy,
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-actions'] {
   min-inline-size: 0;
 }
@@ -473,12 +477,14 @@
   transition: border-color var(--ds-motion-reveal) var(--ds-motion-ease-out);
 }
 
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] {
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'],
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support {
   flex: 1 1 280px;
   min-inline-size: 0;
 }
 
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-impact-preview'] {
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-impact-preview'],
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > [data-part='footer-impact-preview'] {
   /* The impact line rides the support stack's flex row: long unbreakable
      preview content shrinks instead of overflowing the footer's measure. */
   min-inline-size: 0;
@@ -489,14 +495,18 @@
 }
 
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-note,
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-note,
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary,
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-hidden-summary {
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-summary,
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-hidden-summary,
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-hidden-summary {
   color: var(--ds-color-text-muted);
 }
 
 /* The footer summary slot is the error channel when one is present -- the footer
    root reports it on `data-error`. */
-.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary {
+.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary,
+.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-summary {
   color: var(--ds-color-error);
 }
 

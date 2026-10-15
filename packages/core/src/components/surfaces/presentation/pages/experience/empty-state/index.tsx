@@ -65,7 +65,7 @@ function EmptyStateSurfaceContent({
   // children carry the part names (`secondary-actions`, `content`).
   const content = (
     <Stack
-      className="ds-surface ds-empty-state-surface"
+      className="ds-surface ds-empty-state-surface ds-empty-state-surface__root"
       data-part="root"
       data-chrome={chrome ? 'page' : 'embedded'}
       data-mobile={isMobile ? 'true' : 'false'}

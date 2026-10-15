@@ -769,7 +769,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
       {/* Content: section nav + form body */}
       {shouldStack ? (
         // Tablet / Mobile: stack vertically -- nav on top, form below
-        <Stack data-part="content" data-layout="stacked" spacing={sectionSpacing}>
+        <Stack className="ds-guided-draft-form__content" data-part="content" data-layout="stacked" spacing={sectionSpacing}>
           <SurfacePostureSlot name="section-navigation"><SectionNav
             sections={sections}
             activeSection={activeSection}
@@ -992,7 +992,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
   const content = (
     <Stack
       ref={setRootElement}
-      className="ds-surface ds-guided-draft-form"
+      className="ds-surface ds-guided-draft-form ds-guided-draft-form__root"
       data-part="root"
       data-mode={mode}
       data-posture={postureAttribute}

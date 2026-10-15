@@ -193,7 +193,7 @@ function CompareSurfaceContent({
     >
       {loading || hasData ? (
         <Stack
-          className="ds-surface ds-compare"
+          className="ds-surface ds-compare ds-compare__root"
           data-part="root"
           data-layout={shouldStack ? "stacked" : "table"}
           data-loading={loading ? "true" : "false"}

@@ -42,6 +42,7 @@
  * geometry), so no FC block — same documented omission as skin/profile.css.
  */
 
-.ds-surface.ds-header[data-part='root'][data-mobile-compact='true'] {
+.ds-surface.ds-header[data-part='root'][data-mobile-compact='true'],
+.ds-surface.ds-header.ds-header__root[data-mobile-compact='true'] {
   min-inline-size: 0;
 }

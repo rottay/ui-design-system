@@ -63,7 +63,7 @@ export function RecordSummaryStrip({
   const chrome = (
     <Box data-part="summary-grid">
       {visibleItems.map((item) => (
-        <Stack key={item.label} data-part="summary-item" spacing={4}>
+        <Stack key={item.label} className="ds-record__summary-item" data-part="summary-item" spacing={4}>
           <Text
             className="ds-record__summary-item-label"
             size="xs"

@@ -62,14 +62,16 @@
 /* ---- container geometry ----
    Default 1120px measure, centered, with fluid padding per viewport. A
    contract-declared `maxWidth` passes inline (instance value) and wins. */
-.ds-surface.ds-auth .ds-auth__container[data-part='container'] {
+.ds-surface.ds-auth .ds-auth__container[data-part='container'],
+.ds-surface.ds-auth .ds-auth__container.ds-auth__container {
   max-inline-size: 1120px;
   margin-inline: auto;
   padding-block: var(--ds-spacing-12, 48px);
   padding-inline: var(--ds-spacing-6, 24px);
 }
 
-.ds-surface.ds-auth[data-mobile='true'] .ds-auth__container[data-part='container'] {
+.ds-surface.ds-auth[data-mobile='true'] .ds-auth__container[data-part='container'],
+.ds-surface.ds-auth[data-mobile='true'] .ds-auth__container.ds-auth__container {
   padding-block-start: var(--ds-spacing-7, 28px);
   padding-block-end: var(--ds-spacing-10, 40px);
   padding-inline: var(--ds-spacing-5, 20px);

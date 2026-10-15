@@ -387,7 +387,7 @@ export function PatternDataTable<T extends object>(
           data-recipe={resolvedRecipe}
           data-error={error ? "true" : "false"}
           className={[
-            "ds-pattern-data-table ds-data-table--mobile",
+            "ds-pattern-data-table ds-data-table--mobile ds-data-table__mobile-root",
             props.className,
           ]
             .filter(Boolean)
@@ -554,7 +554,7 @@ export function PatternDataTable<T extends object>(
         recipe={resolvedRecipe}
         toolbar={
           toolbar || filterPanel ? (
-            <Stack spacing="sm" data-part="toolbar-stack">
+            <Stack spacing="sm" className="ds-data-table__toolbar-stack" data-part="toolbar-stack">
               {toolbar}
               {filterPanel}
             </Stack>

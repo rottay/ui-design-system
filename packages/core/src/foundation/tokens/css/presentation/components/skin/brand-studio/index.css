@@ -81,7 +81,9 @@
   padding: var(--ds-spacing-4);
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-header[data-part='preview-header'] {
+  .ds-pattern-brand-studio__preview-header[data-part='preview-header'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-header.ds-pattern-brand-studio__preview-header {
   margin-block-end: var(--ds-spacing-2);
 }
 .ds-pattern-brand-studio
@@ -108,7 +110,9 @@
   margin-block-start: var(--ds-spacing-2);
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__violations[data-part='violations'] {
+  .ds-pattern-brand-studio__violations[data-part='violations'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violations.ds-pattern-brand-studio__violations {
   margin-block-start: var(--ds-spacing-2);
 }
 .ds-pattern-brand-studio
@@ -265,7 +269,9 @@
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-report-list[data-part='preview-report-list'] {
+  .ds-pattern-brand-studio__preview-report-list[data-part='preview-report-list'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-report-list.ds-pattern-brand-studio__preview-report-list {
   margin-block-start: var(--ds-spacing-2);
 }
 

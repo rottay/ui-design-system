@@ -186,7 +186,8 @@
 
 /* body stack — hosts the internal rhythm socket ----------------------------- */
 
-.ds-metrics-cards.ds-metrics-cards [data-part='body'][data-part='body'] {
+.ds-metrics-cards.ds-metrics-cards [data-part='body'][data-part='body'],
+.ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__body.ds-metrics-cards__body {
   position: relative;
   gap: var(--ds-metric-card-gap, var(--ds-spacing-2, 0.5rem));
 }

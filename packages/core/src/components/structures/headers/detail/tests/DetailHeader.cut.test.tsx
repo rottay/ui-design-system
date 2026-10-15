@@ -141,6 +141,14 @@ const TEXT_PARTS: readonly string[] = [
 const textHook = (part: string) => `ds-detail-header__${part}`;
 
 /**
+ * Layout parts on a modern `Stack` that the skin reaches through BOTH doors
+ * (ARC-12 M-P1): a `.ds-detail-header__<part>` class arm beside the
+ * `[data-part]` arm, at equal specificity, until the Stack strip retires the
+ * caller part.
+ */
+const TWO_ARM_PARTS: readonly string[] = ['hero-copy'];
+
+/**
  * Parts stamped on the family's own layout primitives. Composed `Text` parts
  * resolve their ink and weight through the typography system inline (the
  * skin's own header says so), which is composition, not family paint.
@@ -190,16 +198,18 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
     expect([...hooked].sort()).toEqual([...TEXT_PARTS].sort());
 
     // The skin consumes each family part through exactly one door: the layout
-    // parts by `[data-part]`, the `Text` parts by their class hook.
+    // parts by `[data-part]`, the `Text` parts by their class hook. The
+    // two-arm Stack parts are the one exception: they keep both doors.
     const consumedByPart = new Set(
       [...SKIN.matchAll(/\[data-part='([a-z-]+)'\]/g)].map((match) => match[1]),
     );
     const consumedByHook = new Set(
       [...SKIN.matchAll(/\.ds-detail-header__([a-z-]+)/g)].map((match) => match[1]),
     );
-    expect([...consumedByHook].sort()).toEqual([...TEXT_PARTS].sort());
+    expect([...consumedByHook].sort()).toEqual([...TEXT_PARTS, ...TWO_ARM_PARTS].sort());
     expect([...consumedByPart].sort()).toEqual([...LAYOUT_PARTS].sort());
-    expect([...consumedByPart, ...consumedByHook].sort()).toEqual([...FAMILY_PARTS].sort());
+    for (const part of TWO_ARM_PARTS) expect(LAYOUT_PARTS.has(part), `${part} keeps its [data-part] arm`).toBe(true);
+    expect([...new Set([...consumedByPart, ...consumedByHook])].sort()).toEqual([...FAMILY_PARTS].sort());
   });
 
   it('carries no inline paint on the family layout parts: only --ds-* custom properties travel', async () => {

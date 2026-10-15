@@ -17803,7 +17803,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   outline-offset: 2px;
 }
 
-.ds-pattern-widget-board .ds-widget-board__content[data-part="card-content"] {
+.ds-pattern-widget-board .ds-widget-board__content[data-part="card-content"],
+.ds-pattern-widget-board .ds-widget-board__content.ds-widget-board__content {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
@@ -17813,7 +17814,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 .ds-pattern-widget-board
   .ds-widget-board__cell[data-part="card-shell"][data-height="fixed"]
-  .ds-widget-board__content[data-part="card-content"] {
+  .ds-widget-board__content[data-part="card-content"],
+.ds-pattern-widget-board
+  .ds-widget-board__cell[data-part="card-shell"][data-height="fixed"]
+  .ds-widget-board__content.ds-widget-board__content {
   flex: 1 1 auto;
   overflow: auto;
   overscroll-behavior: contain;
@@ -26172,6 +26176,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="toolbar-stack"],
+.ds-pattern-data-table.ds-engine-modern .ds-data-table__toolbar-stack,
 .ds-pattern-data-table.ds-engine-modern [data-part="filters"] {
   width: 100%;
   min-width: 0;
@@ -28376,7 +28381,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   container-type: inline-size;
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"] {
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"],
+.ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root {
   --ds-card-bg: var(--ds-collection-card-bg, var(--ds-premium-card-bg));
   --ds-card-border: var(
     --ds-collection-card-border,
@@ -28405,15 +28411,18 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   container-type: inline-size;
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="compact"] {
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="compact"],
+.ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root[data-density="compact"] {
   --ds-density-local-factor: var(--ds-density-factor-compact, 0.85);
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="comfortable"] {
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="comfortable"],
+.ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root[data-density="comfortable"] {
   --ds-density-local-factor: var(--ds-density-factor-comfortable, 1);
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="spacious"] {
+.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="spacious"],
+.ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root[data-density="spacious"] {
   --ds-density-local-factor: var(--ds-density-factor-spacious, 1.15);
 }
 
@@ -28477,7 +28486,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   );
 }
 
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-primary"] {
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-primary"],
+.ds-pattern-data-table.ds-data-table--mobile .ds-data-table__mobile-card-primary {
   flex: 1;
   min-width: 0;
 }
@@ -28743,7 +28753,9 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
    use. The swipe affordance and the row-actions menu are painted with them:
    they are the same records' trailing controls. */
 .ds-pattern-data-table.ds-data-table--mobile [data-part="record-cards"],
-.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list"] {
+.ds-pattern-data-table.ds-data-table--mobile .ds-data-table__record-cards,
+.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list"],
+.ds-pattern-data-table.ds-data-table--mobile .ds-data-table__record-list {
   min-inline-size: 0;
 }
 
@@ -57360,7 +57372,8 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * half the current gap center the hairline INSIDE the governed rhythm: two
  * neighbours keep exactly one gap between them instead of gap + divider + gap.
  */
-.rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'],
+.rottay-stack.rottay-stack--modern[data-component='stack'] > .rottay-stack-divider {
   align-self: stretch;
   flex: 0 0 var(--ds-stack-divider-thickness, var(--ds-stack-divider-size, var(--ds-border-width-1, 1px)));
   min-inline-size: 0;
@@ -57386,7 +57399,8 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 
 @media (forced-colors: active) {
   /* The hairline is structural: it must survive colour stripping. */
-  .rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'] {
+  .rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'],
+  .rottay-stack.rottay-stack--modern[data-component='stack'] > .rottay-stack-divider {
     background: ButtonText;
     opacity: 1;
   }
@@ -69048,6 +69062,7 @@ html[data-ds-motion='reduced']
    deliberate px rhythm follows the tenant density posture — the same
    read↔edit footprint at every density (C-12). */
 .ds-structure.ds-edit-fields[data-part='group'],
+.ds-structure.ds-edit-fields.ds-edit-fields__group,
 .ds-structure.ds-edit-fields[data-part='editor'],
 .ds-structure.ds-edit-fields[data-part='grid'],
 .ds-structure.ds-edit-fields[data-part='section'],
@@ -69056,7 +69071,8 @@ html[data-ds-motion='reduced']
   --_ds-edit-fields-density: var(--ds-density-global-effective-scale, 1);
 }
 
-.ds-structure.ds-edit-fields[data-part='group'] {
+.ds-structure.ds-edit-fields[data-part='group'],
+.ds-structure.ds-edit-fields.ds-edit-fields__group {
   inline-size: 100%;
   min-inline-size: 0;
 }
@@ -69070,7 +69086,8 @@ html[data-ds-motion='reduced']
   min-inline-size: 0;
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-copy'] {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-copy'],
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-copy {
   min-inline-size: 0;
 }
 
@@ -69166,6 +69183,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-copy'],
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-copy,
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-actions'] {
   min-inline-size: 0;
 }
@@ -69435,12 +69453,14 @@ html[data-ds-motion='reduced']
   transition: border-color var(--ds-motion-reveal) var(--ds-motion-ease-out);
 }
 
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] {
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'],
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support {
   flex: 1 1 280px;
   min-inline-size: 0;
 }
 
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-impact-preview'] {
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-impact-preview'],
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > [data-part='footer-impact-preview'] {
   /* The impact line rides the support stack's flex row: long unbreakable
      preview content shrinks instead of overflowing the footer's measure. */
   min-inline-size: 0;
@@ -69451,14 +69471,18 @@ html[data-ds-motion='reduced']
 }
 
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-note,
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-note,
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary,
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-hidden-summary {
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-summary,
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-hidden-summary,
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-hidden-summary {
   color: var(--ds-color-text-muted);
 }
 
 /* The footer summary slot is the error channel when one is present -- the footer
    root reports it on `data-error`. */
-.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary {
+.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary,
+.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-summary {
   color: var(--ds-color-error);
 }
 
@@ -69613,14 +69637,14 @@ html[data-ds-motion='reduced']
 
 /* --- Tone token sets ------------------------------------------------------- */
 
-.ds-structure.ds-form-sections[data-part='root'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) {
   container-type: inline-size;
   container-name: ds-form-sections;
   /* One private density factor for the family's deliberate px geometry. */
   --_ds-form-sections-density: var(--ds-density-global-effective-scale, 1);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] {
   --ds-form-sections-surface: var(--ds-surface-card, var(--ds-color-bg-elevated));
   --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%);
   --ds-form-sections-border: var(--ds-color-border-secondary);
@@ -69645,7 +69669,7 @@ html[data-ds-motion='reduced']
   );
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='editorial'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-tone='editorial'] {
   --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 94%, var(--ds-color-bg-primary) 6%);
   --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-primary) 10%);
   --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
@@ -69659,7 +69683,7 @@ html[data-ds-motion='reduced']
   --ds-form-sections-grid-size: 26px;
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='technical'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-tone='technical'] {
   --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 94%, var(--ds-color-text-muted) 6%);
   --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-secondary) 10%);
   --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 84%, var(--ds-color-text-muted) 16%);
@@ -69673,7 +69697,7 @@ html[data-ds-motion='reduced']
   --ds-form-sections-grid-size: 22px;
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='governance'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-tone='governance'] {
   --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 95%, var(--ds-color-bg-primary) 5%);
   --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-primary) 10%);
   --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
@@ -69691,19 +69715,19 @@ html[data-ds-motion='reduced']
 
 /* Shell geometry drained from the engine's former `getSectionShellStyles`:
    card/soft clip to their radius; divided lets its content breathe. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] {
   inline-size: 100%;
   overflow: hidden;
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] {
   overflow: visible;
 }
 
 /* card (default): the open section lifts -- brighter surface, firmer border, and
    the only box-shadow in the family. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='card'] {
   border-radius: var(--ds-radius-xl, 18px);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
@@ -69714,13 +69738,13 @@ html[data-ds-motion='reduced']
     background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'][data-open='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='card'][data-open='true'] {
   border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
   background: var(--ds-form-sections-surface, var(--ds-surface-card, var(--ds-color-bg-elevated)));
   box-shadow: var(--ds-form-sections-shadow, var(--ds-material-raised-shadow-selected, 0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)));
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='soft'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='soft'] {
   border-radius: var(--ds-radius-xl, 18px);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
@@ -69730,7 +69754,7 @@ html[data-ds-motion='reduced']
     background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] {
   border-radius: 0;
   border: none;
   background: transparent;
@@ -69740,7 +69764,7 @@ html[data-ds-motion='reduced']
 /* The divided rhythm is a rule BETWEEN sections, so the first one carries none.
    Divider grammar channels: ruled/dashed tenant divider postures reach the
    separator; floors keep the exact 1px solid pre-wave render. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided']:not(:first-child) {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided']:not(:first-child) {
   border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
@@ -69749,13 +69773,13 @@ html[data-ds-motion='reduced']
    rule at (0,6,0) and wins by sorting after it; the header chip below carries
    the icon + copy, so the state never reads through colour alone. Divided
    sections have no frame by design: the chip is their cue. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance][data-error='true']:not([data-appearance='divided']) {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance][data-error='true']:not([data-appearance='divided']) {
   border-color: color-mix(in srgb, var(--ds-color-error) 62%, var(--ds-color-border-secondary));
 }
 
 /* --- Section header -------------------------------------------------------- */
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] {
   /* Geometry drained from the engine (the former `headerShellStyle`);
      density-scaled by the family's private factor (C-12). */
   inline-size: 100%;
@@ -69784,11 +69808,11 @@ html[data-ds-motion='reduced']
 /* `:not(divided)` is not decoration: a non-collapsible FormSections resolves to
    `divided` AND reports every section open, so an unguarded `[data-open]` rule
    would tie the divided rule and be decided by stylesheet order. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] {
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 70%, transparent);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] {
   padding: calc(16px * var(--_ds-form-sections-density, 1)) calc(10px * var(--_ds-form-sections-density, 1)) calc(14px * var(--_ds-form-sections-density, 1));
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 52%, transparent);
 }
@@ -69798,13 +69822,13 @@ html[data-ds-motion='reduced']
    `data-collapsible`, so this no longer keys on `:not([aria-expanded])`, which
    only worked while the header itself was the button. The rule rides the tenant
    divider grammar (floors 1px solid). */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'][data-collapsible='false'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'][data-collapsible='false'] {
   border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
 /* The header is a row: the disclosure takes the measure, the trailing cluster
    sits beside it and OUTSIDE the button. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] {
   display: flex;
   align-items: center;
   gap: calc(14px * var(--_ds-form-sections-density, 1));
@@ -69813,7 +69837,7 @@ html[data-ds-motion='reduced']
 /* The disclosure is the only control in the header. It carries the button
    reset the header used to carry, plus the keyboard ring the header never had
    (the section was reachable by Tab but showed nothing on focus). */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] > [data-part='section-disclosure'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] > [data-part='section-disclosure'] {
   display: flex;
   flex: 1;
   align-items: center;
@@ -69829,31 +69853,31 @@ html[data-ds-motion='reduced']
   text-align: start;
   cursor: pointer;
 }
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] > [data-part='section-disclosure']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] > [data-part='section-disclosure']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
 }
 
 /* The header's two engine-owned layout regions (drained inline flex hooks). */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-lead'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-lead'] {
   flex: 1;
   min-inline-size: 0;
 }
 
 /* The copy stack (title row + description) fills the lead and survives
    truncation — drained inline `flex: 1; min-width: 0`. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-copy'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] :is([data-part='section-copy'], .ds-form-sections__section-copy) {
   flex: 1;
   min-inline-size: 0;
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-trailing'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-trailing'] {
   flex-shrink: 0;
 }
 
 /* --- Section index --------------------------------------------------------- */
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-index'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-index'] {
   /* Geometry + mono numeral drained from the engine (a Box, so skin-owned).
      The 28px frame is a FLOOR, not a fixed box: at high zoom/type-scale the
      numeral grows the well instead of overflowing it (C-12). */
@@ -69874,12 +69898,12 @@ html[data-ds-motion='reduced']
   color: var(--ds-color-text-tertiary);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-index'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-index'] {
   border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
   background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-index'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-index'] {
   border-color: var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
   background: transparent;
 }
@@ -69890,7 +69914,7 @@ html[data-ds-motion='reduced']
    tight=1.25), so the cadence stays private to this family with the exact
    fallback. Size/weight stay with the node (default `md` role + the
    `bold` weight class). */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-title {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-title {
   color: var(--ds-color-text-primary);
   line-height: var(--_ds-form-sections-title-line-height, 1.15);
 }
@@ -69898,7 +69922,7 @@ html[data-ds-motion='reduced']
 /* Description rhythm + measure drained from the engine: 1.55 sits between
    the `normal` (1.5) and `body` (1.6) roles, so it stays private to this
    family; the 720px measure is local geometry. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-description {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-description {
   color: var(--ds-color-text-secondary);
   line-height: var(--_ds-form-sections-description-line-height, 1.55);
   max-inline-size: 720px;
@@ -69906,7 +69930,7 @@ html[data-ds-motion='reduced']
 
 /* --- Section summary badge -------------------------------------------------- */
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'] {
   /* Geometry drained from the engine; overflow clips rather than breaking
      the header's trailing cluster when the summary runs long. */
   max-inline-size: 360px;
@@ -69920,7 +69944,7 @@ html[data-ds-motion='reduced']
   background: var(--ds-form-sections-badge-bg, var(--ds-color-bg-secondary));
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-summary-text {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-summary-text {
   color: var(--ds-color-text-primary);
 }
 
@@ -69928,33 +69952,33 @@ html[data-ds-motion='reduced']
 
 /* The chip's own two-value vocabulary is independent of the section's four-value
    tone: a required chip reads the same in every tone. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] {
   padding: 4px 8px;
   border-radius: 999px;
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] {
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, var(--ds-color-bg-primary) 12%);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] > .ds-form-sections__section-chip-label {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] > .ds-form-sections__section-chip-label {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] {
   background: var(--ds-color-bg-secondary);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] > .ds-form-sections__section-chip-label {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] > .ds-form-sections__section-chip-label {
   color: var(--ds-color-text-secondary);
 }
 
 /* Chip label type drained from the engine: unit line-height resolves through
    the canonical `none` role; tracking + case are local literals (the family's
    existing eyebrow vocabulary). */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] > .ds-form-sections__section-chip-label {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] > .ds-form-sections__section-chip-label {
   line-height: var(--ds-line-height-none, 1);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -69964,25 +69988,25 @@ html[data-ds-motion='reduced']
    Same pill grammar as the required/optional chip, in the error voice: the
    semantic status icon is the shape cue, the copy carries the meaning, and
    the frame/tint are the colour reinforcement — never the only signal. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-error'] {
   padding: 4px 8px;
   border-radius: 999px;
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-error) 38%, var(--ds-color-border-secondary));
   background: color-mix(in srgb, var(--ds-color-error) 7%, transparent);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-icon'],
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-error-icon'],
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
   color: var(--ds-color-error);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
   line-height: var(--ds-line-height-none, 1);
 }
 
 /* --- Toggle ----------------------------------------------------------------- */
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
   /* Geometry drained from the engine (the 28px chevron well) — a floor, not
      a fixed box, so the chevron survives high zoom/type-scale (C-12). */
   min-inline-size: 28px;
@@ -69998,27 +70022,27 @@ html[data-ds-motion='reduced']
   transform: rotate(0deg);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-toggle'][data-open='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-toggle'][data-open='true'] {
   border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-toggle'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-toggle'] {
   border-color: var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
 /* Part repeated so this OUTRANKS the resting `rotate(0deg)` above rather than
    tying it and depending on declaration order. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'][data-open='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'][data-open='true'] {
   transform: rotate(180deg);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle-icon'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle-icon'] {
   color: var(--ds-color-text-secondary);
 }
 
 /* --- Section content --------------------------------------------------------- */
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > * > * > [data-part='section-content'] {
   /* Card/soft content padding drained from the engine (the divided cut is
      overridden below); density-scaled by the family's private factor. */
   padding: calc(18px * var(--_ds-form-sections-density, 1)) calc(18px * var(--_ds-form-sections-density, 1)) calc(20px * var(--_ds-form-sections-density, 1));
@@ -70026,11 +70050,11 @@ html[data-ds-motion='reduced']
   transform: translateY(-10px);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > * > * > [data-part='section-content'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] > * > * > [data-part='section-content'] {
   padding: calc(20px * var(--_ds-form-sections-density, 1)) calc(10px * var(--_ds-form-sections-density, 1)) calc(6px * var(--_ds-form-sections-density, 1));
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-open='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > * > * > [data-part='section-content'][data-open='true'] {
   transform: translateY(0);
 }
 
@@ -70054,17 +70078,17 @@ html[data-ds-motion='reduced']
   transition: grid-template-rows var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'] {
   opacity: 0;
   transition:
     opacity var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
     transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'][data-open='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'][data-open='true'] {
   opacity: 1;
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
   transition:
     transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
@@ -70079,11 +70103,11 @@ html[data-ds-motion='reduced']
    disclosure moved inward; the read below restores it on the actual
    interactive surface, the row the button fills.) -------------------------- */
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header']:has(> [data-part='section-disclosure']:is([data-state~='pressed'], :active)) {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header']:has(> [data-part='section-disclosure']:is([data-state~='pressed'], :active)) {
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
 }
 @media (hover: hover) {
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header']:has(> [data-part='section-disclosure']:is([data-state~='hovered'], :hover)) {
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header']:has(> [data-part='section-disclosure']:is([data-state~='hovered'], :hover)) {
     background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
   }
 }
@@ -70091,7 +70115,7 @@ html[data-ds-motion='reduced']
 /* --- Narrow cut: the header wraps its trailing cluster under the title ------ */
 
 @container ds-form-sections (inline-size < 30rem) {
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] {
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] {
     flex-wrap: wrap;
   }
 }
@@ -70100,23 +70124,23 @@ html[data-ds-motion='reduced']
         by its header background, the toggle by its rotated chevron. ----------- */
 
 @media (forced-colors: active) {
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'],
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='soft'],
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided']:not(:first-child),
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > div[data-part='section-header']:not([aria-expanded]),
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-index'],
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'],
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'],
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error'],
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='card'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='soft'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided']:not(:first-child),
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > div[data-part='section-header']:not([aria-expanded]),
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-index'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-error'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'],
   div.ds-structure.ds-form-sections[data-part='facts-card'],
   div[data-part='facts-card'] [data-part='facts-card-item'] {
     border-color: ButtonText;
   }
 
   /* The section error keeps its icon shape + copy (never paint alone). */
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-error-icon'],
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-error-icon'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
     color: CanvasText;
   }
 }
@@ -70125,8 +70149,8 @@ html[data-ds-motion='reduced']
 
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-form-sections [data-part='section-grid'][data-collapsible='true'],
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'],
-  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
     transition: none;
   }
 }
@@ -70155,7 +70179,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] > [data-part='facts-ca
   padding: calc(20px * var(--_ds-form-sections-density, 1));
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-items'] {
+.ds-structure.ds-form-sections[data-part='facts-card'] :is([data-part='facts-card-items'], .ds-form-sections__facts-card-items) {
   margin-block-start: calc(18px * var(--_ds-form-sections-density, 1));
 }
 
@@ -70203,7 +70227,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   line-height: var(--_ds-form-sections-description-line-height, 1.55);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-copy'] {
+.ds-structure.ds-form-sections[data-part='facts-card'] :is([data-part='facts-card-item-copy'], .ds-form-sections__facts-card-item-copy) {
   flex: 1;
   min-inline-size: 0;
 }
@@ -70416,7 +70440,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    Title bar — the region seam is one hairline rule (ruled page, no card frame)
    ========================================================================== */
 
-.ds-surface.ds-guided-draft-form[data-part='root'] {
+.ds-surface.ds-guided-draft-form[data-part='root'],
+.ds-surface.ds-guided-draft-form.ds-guided-draft-form__root {
   min-inline-size: 0;
 }
 
@@ -70645,7 +70670,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    so flexible content can narrow and ellipsize instead of overflowing.
    ========================================================================== */
 
-.ds-surface.ds-guided-draft-form [data-part='content'] {
+.ds-surface.ds-guided-draft-form [data-part='content'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__content {
   min-inline-size: 0;
 }
 
@@ -71187,7 +71213,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item'] {
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item'],
+.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item {
   min-inline-size: 0;
 }
 
@@ -72284,7 +72311,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   flex: 1;
   min-inline-size: 0;
 }
-.ds-structure.ds-detail-header [data-part='hero-copy'] {
+.ds-structure.ds-detail-header [data-part='hero-copy'],
+.ds-structure.ds-detail-header .ds-detail-header__hero-copy {
   flex: 1;
   min-inline-size: 0;
 }
@@ -73595,7 +73623,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* ---- hero copy: eyebrow / title / subtitle ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-copy'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-copy'],
+.ds-structure.ds-form-header[data-part='root'] .ds-form-header__hero-copy {
   min-inline-size: 0;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__eyebrow {
@@ -77413,7 +77442,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* body stack — hosts the internal rhythm socket ----------------------------- */
 
-.ds-metrics-cards.ds-metrics-cards [data-part='body'][data-part='body'] {
+.ds-metrics-cards.ds-metrics-cards [data-part='body'][data-part='body'],
+.ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__body.ds-metrics-cards__body {
   position: relative;
   gap: var(--ds-metric-card-gap, var(--ds-spacing-2, 0.5rem));
 }
@@ -80761,7 +80791,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   overflow-wrap: anywhere;
 }
 
-.ds-assistant-preview-diff-card [data-part='diff-row'][data-part='diff-row'][data-part='diff-row'] {
+.ds-assistant-preview-diff-card [data-part='diff-row'][data-part='diff-row'][data-part='diff-row'],
+.ds-assistant-preview-diff-card .ds-assistant__diff-row.ds-assistant__diff-row.ds-assistant__diff-row {
   /* was an inline 6px paddingTop -- snapped to the canonical step */
   padding-block-start: var(--ds-spacing-2);
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
@@ -80857,7 +80888,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     background: ButtonText;
     box-shadow: none;
   }
-  .ds-assistant-preview-diff-card [data-part='diff-row'][data-part='diff-row'][data-part='diff-row'] {
+  .ds-assistant-preview-diff-card [data-part='diff-row'][data-part='diff-row'][data-part='diff-row'],
+  .ds-assistant-preview-diff-card .ds-assistant__diff-row.ds-assistant__diff-row.ds-assistant__diff-row {
     border-top-color: ButtonText;
   }
 }
@@ -91050,14 +91082,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__content[data-part="content"] {
+  .ds-collection-workspace__content[data-part="content"],
+.ds-surface.ds-collection-workspace
+  .ds-collection-workspace__content.ds-collection-workspace__content {
   inline-size: 100%;
   max-inline-size: 100%;
   min-inline-size: 0;
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__content[data-part="content"][data-surface-mode="embed"] {
+  .ds-collection-workspace__content[data-part="content"][data-surface-mode="embed"],
+.ds-surface.ds-collection-workspace
+  .ds-collection-workspace__content.ds-collection-workspace__content[data-surface-mode="embed"] {
   display: flex;
   flex: 1 1 auto;
   min-block-size: 0;
@@ -91067,6 +91103,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-surface.ds-collection-workspace
   :is(
     .ds-collection-workspace__content[data-part="content"],
+    .ds-collection-workspace__body-content[data-part="body-content"]
+  ),
+.ds-surface.ds-collection-workspace
+  :is(
+    .ds-collection-workspace__content.ds-collection-workspace__content,
     .ds-collection-workspace__body-content[data-part="body-content"]
   ) {
   width: 100%;
@@ -92887,7 +92928,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * geometry), so no FC block — same documented omission as skin/profile.css.
  */
 
-.ds-surface.ds-header[data-part='root'][data-mobile-compact='true'] {
+.ds-surface.ds-header[data-part='root'][data-mobile-compact='true'],
+.ds-surface.ds-header.ds-header__root[data-mobile-compact='true'] {
   min-inline-size: 0;
 }
 
@@ -93185,7 +93227,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 /* Definition-list UA margins (dl block margins) are neutralized; the Stack
    gap owns the rhythm. */
-.ds-surface.ds-record-workbench .ds-record-workbench__metadata-list[data-part='metadata-list'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__metadata-list[data-part='metadata-list'],
+.ds-surface.ds-record-workbench .ds-record-workbench__metadata-list.ds-record-workbench__metadata-list {
   margin-block: 0;
 }
 
@@ -93734,7 +93777,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  */
 
 /* ---- section heading (padding drained from inline) ---- */
-.ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading {
+.ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__section-heading {
   padding: var(--ds-compare-section-padding, var(--ds-spacing-4, 16px));
   border-radius: var(--ds-compare-section-radius, var(--ds-radius-lg));
   background: var(
@@ -93746,6 +93790,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- divider between per-subject blocks in the stacked layout (padding
         drained to the logical block axis) ---- */
 .ds-surface.ds-compare[data-part="root"]
+  .ds-compare__divider[data-part="divider"],
+.ds-surface.ds-compare.ds-compare__root
   .ds-compare__divider[data-part="divider"] {
   padding-block-start: var(
     --ds-compare-divider-spacing,
@@ -93758,7 +93804,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- text hierarchy (typography drained from the engine's inline
         fontWeight styles) ---- */
 .ds-surface.ds-compare[data-part="root"] .ds-compare__row-label,
-.ds-surface.ds-compare[data-part="root"] .ds-compare__row-label {
+.ds-surface.ds-compare.ds-compare__root .ds-compare__row-label,
+.ds-surface.ds-compare[data-part="root"] .ds-compare__row-label,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__row-label {
   font-weight: var(
     --ds-compare-row-label-weight,
     var(--ds-font-weight-semibold, 600)
@@ -93766,9 +93814,13 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-compare[data-part="root"] .ds-compare__subject-label,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__subject-label,
 .ds-surface.ds-compare[data-part="root"] .ds-compare__section-title,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__section-title,
 .ds-surface.ds-compare[data-part="root"] .ds-compare__subject-label,
-.ds-surface.ds-compare[data-part="root"] .ds-compare__section-title {
+.ds-surface.ds-compare.ds-compare__root .ds-compare__subject-label,
+.ds-surface.ds-compare[data-part="root"] .ds-compare__section-title,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__section-title {
   font-weight: var(
     --ds-compare-heading-weight,
     var(--ds-font-weight-bold, 700)
@@ -93776,11 +93828,15 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-compare[data-part="root"] .ds-compare__muted-text,
-.ds-surface.ds-compare[data-part="root"] .ds-compare__muted-text {
+.ds-surface.ds-compare.ds-compare__root .ds-compare__muted-text,
+.ds-surface.ds-compare[data-part="root"] .ds-compare__muted-text,
+.ds-surface.ds-compare.ds-compare__root .ds-compare__muted-text {
   color: var(--ds-compare-muted-color, var(--ds-color-text-muted));
 }
 
 .ds-surface.ds-compare[data-part="root"]
+  .ds-compare__table-viewport[data-part="table-viewport"],
+.ds-surface.ds-compare.ds-compare__root
   .ds-compare__table-viewport[data-part="table-viewport"] {
   overflow-x: auto;
   overscroll-behavior-inline: contain;
@@ -93828,11 +93884,14 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    weight (forced colours never strips font-weight). The composed Table and
    Cards keep their own forced-colors contracts. */
 @media (forced-colors: active) {
-  .ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading {
+  .ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading,
+  .ds-surface.ds-compare.ds-compare__root .ds-compare__section-heading {
     border: 1px solid ButtonText;
     background: Canvas;
   }
   .ds-surface.ds-compare[data-part="root"]
+    .ds-compare__divider[data-part="divider"],
+  .ds-surface.ds-compare.ds-compare__root
     .ds-compare__divider[data-part="divider"] {
     border-block-start-color: ButtonText;
   }
@@ -94444,14 +94503,16 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- container geometry ----
    Default 1120px measure, centered, with fluid padding per viewport. A
    contract-declared `maxWidth` passes inline (instance value) and wins. */
-.ds-surface.ds-auth .ds-auth__container[data-part='container'] {
+.ds-surface.ds-auth .ds-auth__container[data-part='container'],
+.ds-surface.ds-auth .ds-auth__container.ds-auth__container {
   max-inline-size: 1120px;
   margin-inline: auto;
   padding-block: var(--ds-spacing-12, 48px);
   padding-inline: var(--ds-spacing-6, 24px);
 }
 
-.ds-surface.ds-auth[data-mobile='true'] .ds-auth__container[data-part='container'] {
+.ds-surface.ds-auth[data-mobile='true'] .ds-auth__container[data-part='container'],
+.ds-surface.ds-auth[data-mobile='true'] .ds-auth__container.ds-auth__container {
   padding-block-start: var(--ds-spacing-7, 28px);
   padding-block-end: var(--ds-spacing-10, 40px);
   padding-inline: var(--ds-spacing-5, 20px);
@@ -94564,7 +94625,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    520px default preserves the surface's historic transcript height; a
    contract `transcriptHeight` overrides it inline (inline style wins
    over this rule by cascade). */
-.ds-surface.ds-chat .ds-chat__transcript[data-part='transcript'] {
+.ds-surface.ds-chat .ds-chat__transcript[data-part='transcript'],
+.ds-surface.ds-chat .ds-chat__transcript.ds-chat__transcript {
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
@@ -94581,7 +94643,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    520px cap. A contract `transcriptHeight` still wins through the
    sanctioned inline instance channel (inline style beats both rules). */
 @supports (height: 100svh) {
-  .ds-surface.ds-chat .ds-chat__transcript[data-part='transcript'] {
+  .ds-surface.ds-chat .ds-chat__transcript[data-part='transcript'],
+  .ds-surface.ds-chat .ds-chat__transcript.ds-chat__transcript {
     max-block-size: min(520px, 62svh);
   }
 }
@@ -94794,6 +94857,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    defer to the parent's material. The visual well, copy hierarchy and
    action tray keep the pattern's treatment untouched. */
 .ds-surface.ds-empty-state-surface[data-part='root'][data-chrome='embedded']
+  > .ds-pattern-empty-state[data-part='root'],
+.ds-surface.ds-empty-state-surface.ds-empty-state-surface__root[data-chrome='embedded']
   > .ds-pattern-empty-state[data-part='root'] {
   --ds-empty-state-border-color: transparent;
   --ds-empty-state-surface: transparent;
@@ -94806,7 +94871,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    wraps at the same optical width as the state text instead of sprawling
    across the page column, and it reads as supporting text, never as a
    second heading. Content longer than the measure wraps; nothing truncates. */
-.ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content'] {
+.ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content'],
+.ds-surface.ds-empty-state-surface.ds-empty-state-surface__root > [data-part='content'] {
   max-inline-size: 52ch;
   margin-inline: auto;
   color: var(--ds-color-text-secondary);
@@ -95268,14 +95334,16 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- container geometry ----
    Default 1260px measure, centered, with fluid padding per viewport. A
    contract-declared `maxWidth` passes inline (instance value) and wins. */
-.ds-surface.ds-marketing .ds-marketing__container[data-part='container'] {
+.ds-surface.ds-marketing .ds-marketing__container[data-part='container'],
+.ds-surface.ds-marketing .ds-marketing__container.ds-marketing__container {
   max-inline-size: 1260px;
   margin-inline: auto;
   padding-block-start: var(--ds-spacing-12, 48px);
   padding-inline: var(--ds-spacing-6, 24px);
 }
 
-.ds-surface.ds-marketing[data-mobile='true'] .ds-marketing__container[data-part='container'] {
+.ds-surface.ds-marketing[data-mobile='true'] .ds-marketing__container[data-part='container'],
+.ds-surface.ds-marketing[data-mobile='true'] .ds-marketing__container.ds-marketing__container {
   padding-block-start: var(--ds-spacing-7, 28px);
   padding-inline: var(--ds-spacing-5, 20px);
 }
@@ -96614,7 +96682,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   padding: var(--ds-spacing-4);
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-header[data-part='preview-header'] {
+  .ds-pattern-brand-studio__preview-header[data-part='preview-header'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-header.ds-pattern-brand-studio__preview-header {
   margin-block-end: var(--ds-spacing-2);
 }
 .ds-pattern-brand-studio
@@ -96641,7 +96711,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   margin-block-start: var(--ds-spacing-2);
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__violations[data-part='violations'] {
+  .ds-pattern-brand-studio__violations[data-part='violations'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violations.ds-pattern-brand-studio__violations {
   margin-block-start: var(--ds-spacing-2);
 }
 .ds-pattern-brand-studio
@@ -96798,7 +96870,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-report-list[data-part='preview-report-list'] {
+  .ds-pattern-brand-studio__preview-report-list[data-part='preview-report-list'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-report-list.ds-pattern-brand-studio__preview-report-list {
   margin-block-start: var(--ds-spacing-2);
 }
 
