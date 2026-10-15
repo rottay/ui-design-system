@@ -20,6 +20,7 @@ import {
   measureArms,
   seriousFindings,
 } from '@tests/support/family-causality';
+import { renderResolvedStaticMarkup } from '@tests/support/resolved-markup';
 
 const markup = renderToStaticMarkup(
   <div>
@@ -144,9 +145,14 @@ describe('checkbox geometry, direction and accessibility in a real browser', () 
   });
 
   it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {
-    const gallery = renderToStaticMarkup(
+    const group = await renderResolvedStaticMarkup(
       <CheckboxGroup engine="modern" options={[{ label: 'One', value: 1 }, { label: 'Two', value: 2, disabled: true }]} defaultValue={[1]} />,
-    ) + markup;
+    );
+    const host = document.createElement('div');
+    host.innerHTML = group;
+    const labels = [...host.querySelectorAll('input[type="checkbox"]')].map((box) => box.closest('label')?.textContent);
+    expect(labels).toEqual(['One', 'Two']);
+    const gallery = group + markup;
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;

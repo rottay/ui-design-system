@@ -24,6 +24,11 @@
       "import": "./dist/server.js",
       "require": "./dist/server.cjs"
     },
+    "./server/static-markup": {
+      "types": "./dist/server-static-markup.d.ts",
+      "import": "./dist/server-static-markup.js",
+      "require": "./dist/server-static-markup.cjs"
+    },
     "./icons": {
       "types": "./dist/icons.d.ts",
       "import": "./dist/icons.js",
@@ -329,6 +334,7 @@
     },
     "sourceEntrypoints": {
       "./server": "entrypoints/server/index.ts",
+      "./server/static-markup": "entrypoints/server/static-markup/index.ts",
       "./icons": "entrypoints/icons/index.ts",
       "./icons/presets/bithire": "entrypoints/icons/presets/bithire/index.ts",
       "./marks": "entrypoints/graphics/marks/index.ts",

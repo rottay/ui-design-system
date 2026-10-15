@@ -11,8 +11,15 @@
  * - **Lazy loading**: Code-splits engine implementations
  * - **Context-aware**: Respects EngineProvider settings
  * - **Override support**: Per-component engine override via prop
- * - **Error handling**: Built-in error boundary
+ * - **Error handling**: Client render and load errors are caught by a
+ *   per-instance error boundary; SSR error isolation belongs to the nearest
+ *   ancestor `<Suspense>`
  * - **Custom engine support**: Custom component registration
+ *
+ * A server-rendered or hydrated instance renders without a factory
+ * `<Suspense>`, so its suspension or SSR error reaches the nearest ancestor
+ * boundary. A fresh client mount, or a change of implementation (engine or
+ * custom pack), keeps a per-instance boundary.
  *
  * @example Creating a component
  * ```tsx
@@ -44,6 +51,8 @@ import {
   Suspense,
   useContext,
   useMemo,
+  useRef,
+  useSyncExternalStore,
   ComponentType,
   LazyExoticComponent,
   ErrorInfo,
@@ -114,6 +123,10 @@ export interface CreateEngineComponentOptions<P extends object = object> {
   modernOnlyProps?: readonly (keyof P)[];
 }
 
+const subscribeNever = () => () => {};
+const clientTrue = () => true;
+const serverFalse = () => false;
+
 /**
  * Creates an engine-aware component that dynamically loads the appropriate
  * implementation based on the current engine context or component-level override.
@@ -180,6 +193,8 @@ export function createEngineComponent<P extends object>(
 
   // Create the router component
   const EngineRouter = forwardRef<any, P & { engine?: EngineName }>((props, ref) => {
+    // False on the server and while this fiber hydrates; latched so the hydrated tree keeps its shape.
+    const mountedOnClient = useRef(useSyncExternalStore(subscribeNever, clientTrue, serverFalse)).current;
     const declaredEngine = useDeclaredEngine();
 
     // Read tenant context if available. Components can still render without a
@@ -220,6 +235,10 @@ export function createEngineComponent<P extends object>(
       return resolved;
     }, [activeEngine, componentPack]);
 
+    // A new implementation remounts anyway, so it may suspend inside its own boundary.
+    const mountedComponent = useRef(Component);
+    const withBoundary = mountedOnClient || Component !== mountedComponent.current;
+
     // An input the selected engine cannot honor is refused HERE, by name,
     // rather than silently degraded inside the engine. Development only: the
     // engine's documented fallback is what production ships.
@@ -238,9 +257,13 @@ export function createEngineComponent<P extends object>(
 
     return (
       <EngineErrorBoundary onError={onError}>
-        <Suspense fallback={fallback}>
+        {withBoundary ? (
+          <Suspense fallback={fallback}>
+            <Component {...(componentProps as any)} ref={ref} />
+          </Suspense>
+        ) : (
           <Component {...(componentProps as any)} ref={ref} />
-        </Suspense>
+        )}
       </EngineErrorBoundary>
     );
   });

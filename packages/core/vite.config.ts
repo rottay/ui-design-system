@@ -54,6 +54,7 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         server: resolve(__dirname, 'src/entrypoints/server/index.ts'),
+        'server-static-markup': resolve(__dirname, 'src/entrypoints/server/static-markup/index.ts'),
         ...publicEntries,
         icons: resolve(__dirname, 'src/entrypoints/icons/index.ts'),
         'icons-preset-bithire': resolve(__dirname, 'src/entrypoints/icons/presets/bithire/index.ts'),
@@ -80,6 +81,8 @@ export default defineConfig({
       external: [
         'react',
         'react-dom',
+        'react-dom/server',
+        'react-dom/static',
         'react/jsx-runtime',
         'd3',
         /^d3\/.*/,

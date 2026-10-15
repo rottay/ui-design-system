@@ -20,6 +20,7 @@ import {
   measureArms,
   seriousFindings,
 } from '@tests/support/family-causality';
+import { renderResolvedStaticMarkup } from '@tests/support/resolved-markup';
 
 const markup = renderToStaticMarkup(
   <div>
@@ -158,9 +159,14 @@ describe('radio segments, geometry, direction and accessibility in a real browse
         <RadioGroup buttonStyle="solid" color={color} defaultValue="a" options={[{ label: `On ${color}`, value: 'a' }, { label: 'Off', value: 'b' }]} />,
       ))
       .join('');
-    const gallery = allColours + renderToStaticMarkup(
+    const group = await renderResolvedStaticMarkup(
       <RadioGroup engine="modern" defaultValue={1} options={[{ label: 'One', value: 1 }, { label: 'Two', value: 2, disabled: true }]} />,
-    ) + markup;
+    );
+    const host = document.createElement('div');
+    host.innerHTML = group;
+    const labels = [...host.querySelectorAll('input[type="radio"]')].map((radio) => radio.closest('label')?.textContent);
+    expect(labels).toEqual(['One', 'Two']);
+    const gallery = allColours + group + markup;
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;

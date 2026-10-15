@@ -3569,6 +3569,15 @@
         "verticalEngine"
       ]
     },
+    "./server/static-markup": {
+      "exports": [
+        "renderResolvedStaticMarkup"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "renderResolvedStaticMarkup"
+      ]
+    },
     "./icons": {
       "exports": [
         "BITHIRE_ICON_NAMES",

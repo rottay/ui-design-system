@@ -120,14 +120,16 @@ const PINS: Record<string, unknown> = {
       "trigger": "ds-collection-preview-_r_cb_-trigger"
     }
   },
+  // Engine router: +1 useSyncExternalStore +2 useRef per render, insert-only vs the raw W7A_LEDGER_DIR dumps
+  // (N = 66 legacy / 143 phone: 3303 + 198, 3658 + 429). A router hook added later re-derives these from the dumps.
   "p2hook": {
     "legacy": {
-      "count": 3303,
-      "sha256": "f16a6f58f361a8d9c6e28d209a69e61a5d26665bdb60db2258020f1f43d48b4a"
+      "count": 3501,
+      "sha256": "f06d276d253ef69ff36d2a5026509c527cdb4505de35bd41c9a0f1269d8fa6dd"
     },
     "phone": {
-      "count": 3658,
-      "sha256": "36eca8960f863b4619ea0318edc72445e3497da930416ea3f9d60039b0b056f0"
+      "count": 4087,
+      "sha256": "d88bf56aa18702226c93f6d52e981970307a771689982ca4450be803a0170444"
     }
   },
   "p3a": {

@@ -86,6 +86,13 @@ export const CLASSES = Object.freeze([
     match: (subpath) => subpath === './server',
   },
   {
+    id: 'server-render-helper',
+    reason:
+      'the resolved static-markup renderer, kept off `./server` because it imports react-dom/server and '
+      + 'react-dom/static (React >= 19); its contract is pinned by its own test and the factory legacy-SSR negative',
+    match: (subpath) => subpath === './server/static-markup',
+  },
+  {
     id: 'graphics-pack',
     reason:
       'icon, mark and pictogram packs: generated asset entrypoints whose supplier fence, licences, embedding and '

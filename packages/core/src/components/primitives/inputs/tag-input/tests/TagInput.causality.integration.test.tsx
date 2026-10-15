@@ -20,14 +20,17 @@ import {
   measureArms,
   seriousFindings,
 } from '@tests/support/family-causality';
+import { renderResolvedStaticMarkup } from '@tests/support/resolved-markup';
 
 const noop = () => {};
 const modern = (node: React.ReactNode) => renderToStaticMarkup(<EngineProvider defaultEngine="modern">{node}</EngineProvider>);
-const markup = modern(
-  <div>
-    <div id="rest"><ModernTagInput value={['design']} onChange={noop} aria-label="Skills" /></div>
-    <div id="error"><ModernTagInput value={['design']} error onChange={noop} aria-label="Topics" /></div>
-  </div>,
+const markup = await renderResolvedStaticMarkup(
+  <EngineProvider defaultEngine="modern">
+    <div>
+      <div id="rest"><ModernTagInput value={['design']} onChange={noop} aria-label="Skills" /></div>
+      <div id="error"><ModernTagInput value={['design']} error onChange={noop} aria-label="Topics" /></div>
+    </div>
+  </EngineProvider>,
 );
 
 const ROOT = "#rest [data-part='root']";
@@ -140,6 +143,13 @@ describe('tag-input geometry, direction, language and accessibility in a real br
         <ModernTagInput value={['one']} error errorMessage="Tag is not allowed" onChange={noop} aria-label="Topics" />
       </div>,
     );
+    const chips = (html: string) => {
+      const host = document.createElement('div');
+      host.innerHTML = html;
+      return [...host.querySelectorAll('.ds-tag-input__tag-chip [data-part="content"]')].map((chip) => chip.textContent);
+    };
+    expect(chips(markup)).toEqual(['design', 'design']);
+    expect(chips(gallery)).toEqual(['one', 'two', 'one']);
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;

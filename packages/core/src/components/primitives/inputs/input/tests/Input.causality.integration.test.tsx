@@ -19,6 +19,7 @@ import {
   measureArms,
   seriousFindings,
 } from '@tests/support/family-causality';
+import { renderResolvedStaticMarkup } from '@tests/support/resolved-markup';
 import { firstPartyFixture } from '@tests/support/theme-lowering';
 import { compileFlatThemeThroughDoor } from '@tests/support/theme-door';
 
@@ -149,7 +150,7 @@ describe('input geometry, direction, language and accessibility in a real browse
   });
 
   it('has no serious or critical axe violation in any gated vertical mode', async () => {
-    const gallery = renderToStaticMarkup(
+    const gallery = await renderResolvedStaticMarkup(
       <EngineProvider defaultEngine="modern">
         <div>
           <ModernInput aria-label="Plain" placeholder="Plain" />
@@ -165,6 +166,10 @@ describe('input geometry, direction, language and accessibility in a real browse
         </div>
       </EngineProvider>,
     );
+    const host = document.createElement('div');
+    host.innerHTML = gallery;
+    const controls = ['input[aria-label="Search"]', 'textarea[aria-label="Notes"]', 'input[aria-label="First"]', 'input[aria-label="Second"]'];
+    expect(controls.filter((selector) => !host.querySelector(selector))).toEqual([]);
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       // Both dark scopes are DRAINED. bithire dark went first (the mode-canvas
