@@ -113,9 +113,9 @@ function DetailTab({
     }
     event.preventDefault();
     const currentTab = event.currentTarget as HTMLElement;
-    const strip = currentTab.closest('[data-part="tab-strip"]');
+    const strip = currentTab.closest('[role="tablist"]');
     const stripTabs = Array.from(
-      strip?.querySelectorAll<HTMLElement>('[data-part="tab"]') ?? [],
+      strip?.querySelectorAll<HTMLElement>('[role="tab"]') ?? [],
     );
     const currentIndex = stripTabs.indexOf(currentTab);
     if (currentIndex < 0) {

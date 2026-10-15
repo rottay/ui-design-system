@@ -290,7 +290,7 @@ export function EditHeader({
                 {/* Box as="h1" (the DetailHeader precedent): a composed Text
                     resolves its size inline, which left the skin's display
                     type dead — the h1 is fully skin-owned now. */}
-                <Box data-part="title" as="h1">
+                <Box className="ds-edit-header__title" data-part="title" as="h1">
                   {title}
                 </Box>
                 {status && (

@@ -14,6 +14,7 @@ import { fireEvent, waitFor, within } from '@testing-library/react';
 
 import { HEADER_TONES } from '../../../foundation/chrome/runtime/header-tone';
 import { EditHeader } from '..';
+import { resolveBonePart, resolvePartRole } from '../../../../primitives/feedback/skeleton/runtime/anatomy-renderer';
 import { renderWithEngine } from '@tests/support/engine';
 
 const WAIT_TIMEOUT = 2000;
@@ -105,6 +106,21 @@ describe('EditHeader (WO-FAM-10 cut)', () => {
     for (const part of ['top-bar', 'hero-panel', 'icon-badge', 'title', 'actions']) {
       expect(source.querySelector(`[data-part="${part}"]`), part).not.toBeNull();
     }
+  });
+
+  it('names the title bone through its own class hook, whatever part the h1 carrier stamps', async () => {
+    const { container } = renderWithEngine(
+      <EditHeader title="Loading" backHref="/x" loading />,
+      'modern',
+    );
+    await waitForPart(container, 'root');
+    const title = container.querySelector<HTMLElement>('[data-part="source"] h1');
+    expect(title).not.toBeNull();
+    expect(title!.classList.contains('ds-edit-header__title')).toBe(true);
+    expect(resolveBonePart(title!, title!.getAttribute('data-part')!)).toBe('title');
+    // A layout carrier that keeps only its own stamp still draws the title line.
+    expect(resolveBonePart(title!, 'box-surface')).toBe('title');
+    expect(resolvePartRole('title')).toBe('line');
   });
 
   it('renders the same chrome outside the loading state, with no skeleton left behind', async () => {

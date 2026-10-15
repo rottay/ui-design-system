@@ -73163,7 +73163,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   letter-spacing: var(--ds-letter-spacing-widest, 0.1em);
   text-transform: uppercase;
 }
-.ds-structure.ds-edit-header [data-part='title'] {
+.ds-structure.ds-edit-header [data-part='title'],
+.ds-structure.ds-edit-header .ds-edit-header__title {
   /* the title is a Box as="h1" (not typography), so the full page-title role
      chain reaches it; the family channel stays first so a tenant that already
      named a size keeps it */
@@ -73292,7 +73293,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     --ds-edit-header-icon-badge-size: 44px;
     --ds-edit-header-icon-badge-glyph-size: 20px;
   }
-  .ds-structure.ds-edit-header [data-part='title'] {
+  .ds-structure.ds-edit-header [data-part='title'],
+  .ds-structure.ds-edit-header .ds-edit-header__title {
     font-size: var(--ds-edit-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
   }
   .ds-structure.ds-edit-header [data-part='actions'] {
