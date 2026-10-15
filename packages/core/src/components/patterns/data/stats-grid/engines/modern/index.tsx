@@ -394,7 +394,7 @@ export default function ModernStatsGrid(props: StatsGridProps) {
     containerRef: rootRef,
   });
   const resolvedGap = gridGap(gap);
-  const rootClassName = ["ds-pattern-stats-grid", "ds-engine-modern", className]
+  const rootClassName = ["ds-pattern-stats-grid", "ds-engine-modern", "ds-stats-grid__root", className]
     .filter(Boolean)
     .join(" ");
   const gridStyle = { ...resolvedGap.channel, ...style } as React.CSSProperties;

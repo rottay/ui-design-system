@@ -92,7 +92,7 @@ const oracleOf = (channel: Channel) =>
  *  plus one oracle per channel painting its expression in place. */
 function surface(rootStyle = ""): string {
   return [
-    `<div class="ds-surface ds-wizard" data-part="root" style="${rootStyle}">`,
+    `<div class="ds-surface ds-wizard ds-wizard__root" data-part="root" style="${rootStyle}">`,
     `<p class="ds-wizard__description" data-part="root">Describe the record.</p>`,
     `<div data-part="error-banner" role="alert">Something failed.</div>`,
     CHANNELS.map(oracleOf).join(""),
@@ -213,7 +213,7 @@ describe("chrome/wizard-surface channels under a local scope", () => {
   }, 180_000);
 
   it("probes the parts the engine stamps", () => {
-    expect(ENGINE).toContain(`className="ds-surface ds-wizard"`);
+    expect(ENGINE).toContain(`className="ds-surface ds-wizard ds-wizard__root"`);
     for (const part of ["root", "error-banner"]) {
       expect(ENGINE).toContain(`data-part="${part}"`);
     }

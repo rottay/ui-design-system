@@ -198,6 +198,7 @@ export function MetricsCards({ metrics, density = 'comfortable' }: MetricsProps)
             cards per row while an editorial one breathes; the semantic gap
             follows the tenant density/rhythm ramp instead of a literal px. */}
         <Grid
+          className="ds-metrics-cards__cards-grid"
           data-part="cards-grid"
           columns="repeat(auto-fit, minmax(min(100%, var(--_ds-metric-card-track-min, 10rem)), 1fr))"
           gap="sm"

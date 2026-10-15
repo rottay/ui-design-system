@@ -84,7 +84,7 @@ const oracleOf = (channel: Channel) =>
 function surface(rootStyle = ""): string {
   return [
     `<div>`,
-    `<div class="ds-surface ds-detail-form ds-detail-form--stacked" data-part="root" data-stacked="true" style="${rootStyle}">`,
+    `<div class="ds-surface ds-detail-form ds-detail-form__root ds-detail-form--stacked" data-part="root" data-stacked="true" style="${rootStyle}">`,
     `<div data-part="error-banner" role="alert">Could not save</div>`,
     `</div>`,
     CHANNELS.map(oracleOf).join(""),
@@ -205,7 +205,7 @@ describe("chrome/detail-form-surface channel under a local scope", () => {
   }, 180_000);
 
   it("probes the parts the engine stamps", () => {
-    expect(ENGINE).toContain(`className="ds-surface ds-detail-form ds-detail-form--stacked"`);
+    expect(ENGINE).toContain(`className="ds-surface ds-detail-form ds-detail-form__root ds-detail-form--stacked"`);
     expect(ENGINE).toContain(`data-part="root"`);
     expect(ENGINE).toContain(`data-part="error-banner"`);
   });

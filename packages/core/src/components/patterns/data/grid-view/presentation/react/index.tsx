@@ -259,7 +259,7 @@ export function PatternGridView<T>(
           minItem={adaptation.minItem}
           templateColumns={templateColumns}
           gap={resolvedGap.gap}
-          className={['ds-pattern-grid-view', className].filter(Boolean).join(' ')}
+          className={['ds-pattern-grid-view', 'ds-grid-view__root', className].filter(Boolean).join(' ')}
           data-part="root"
           data-loading="true"
           data-empty="false"
@@ -284,7 +284,7 @@ export function PatternGridView<T>(
     return (
       <Box
         ref={rootRef}
-        className={['ds-pattern-grid-view', className].filter(Boolean).join(' ')}
+        className={['ds-pattern-grid-view', 'ds-grid-view__root', className].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="false"
         data-empty="true"
@@ -310,7 +310,7 @@ export function PatternGridView<T>(
         minItem={adaptation.minItem}
         templateColumns={templateColumns}
         gap={resolvedGap.gap}
-        className={['ds-pattern-grid-view', className, stagger.containerClassName].filter(Boolean).join(' ')}
+        className={['ds-pattern-grid-view', 'ds-grid-view__root', className, stagger.containerClassName].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="false"
         data-empty="false"

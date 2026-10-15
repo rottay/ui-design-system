@@ -239,7 +239,7 @@ function DetailFormSurfaceContent({
   const content = stacked ? (
     <Stack
       ref={setRootElement}
-      className="ds-surface ds-detail-form ds-detail-form--stacked"
+      className="ds-surface ds-detail-form ds-detail-form__root ds-detail-form--stacked"
       data-part="root"
       data-mobile={resolvedMobile ? 'true' : 'false'}
       data-posture={postureAttribute}
@@ -254,7 +254,7 @@ function DetailFormSurfaceContent({
   ) : (
     <Grid
       ref={setRootElement}
-      className="ds-surface ds-detail-form ds-detail-form--split"
+      className="ds-surface ds-detail-form ds-detail-form__root ds-detail-form--split"
       data-part="root"
       data-mobile={resolvedMobile ? 'true' : 'false'}
       data-posture={postureAttribute}

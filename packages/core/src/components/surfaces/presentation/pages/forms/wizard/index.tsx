@@ -367,7 +367,7 @@ function WizardSurfaceContent({ config, loading = false, error, onRetry, adapt }
   const wizardContent = (
     <Grid
       ref={setRootElement}
-      className="ds-surface ds-wizard"
+      className="ds-surface ds-wizard ds-wizard__root"
       data-part="root"
       data-mobile={resolvedMobile ? 'true' : 'false'}
       data-posture={postureAttribute}

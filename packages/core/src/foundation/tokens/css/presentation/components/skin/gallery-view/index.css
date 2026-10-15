@@ -33,6 +33,7 @@
  * fallback of one decision, never as a second authority (F-37).
  */
 
+.ds-pattern-gallery-view.ds-gallery-view__root,
 .ds-pattern-gallery-view[data-part='root'] {
   --ds-gallery-view-aspect-ratio: 1;
 }
@@ -198,6 +199,7 @@
 
 /* ---- empty state ---- */
 
+.ds-pattern-gallery-view.ds-gallery-view__root.ds-gallery-view__root[data-empty='true'],
 .ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true'] {
   padding: var(--ds-spacing-8) var(--ds-spacing-5);
   text-align: center;

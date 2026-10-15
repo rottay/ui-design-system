@@ -50,6 +50,7 @@
  */
 
 /* A fixed ActionDock leaves the form scrollable through its final field/action. */
+.ds-surface.ds-form-surface.ds-form-surface__root.ds-form-surface--sticky-actions,
 .ds-surface.ds-form-surface[data-part='root'].ds-form-surface--sticky-actions {
   padding-block-end: var(--ds-form-action-dock-reserved-space, 6rem);
 }
@@ -59,6 +60,7 @@
    description is a composed Text that stamps its own root part, so the rule
    keys the `ds-form-surface__description` class hook alone (H-1: a generic
    `[data-part='description']` arm would reach composed descendants). */
+.ds-surface.ds-form-surface.ds-form-surface__root .ds-form-surface__description,
 .ds-surface.ds-form-surface[data-part='root'] .ds-form-surface__description {
   margin-block-end: var(--ds-form-surface-description-margin-block-end, var(--ds-spacing-0, 0));
 }
@@ -66,6 +68,7 @@
 /* The error surface is a ruled alert: the recessed error ground, an emphasis
    border wrapping the full perimeter at the error tone, optical padding on
    the rhythm plane — no second card frame. */
+.ds-surface.ds-form-surface.ds-form-surface__root [data-part='error-banner'],
 .ds-surface.ds-form-surface[data-part='root'] [data-part='error-banner'] {
   padding: var(--ds-form-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-error-bg, transparent);
@@ -73,6 +76,7 @@
 }
 
 /* The non-sticky action rail's gap, drained from the Flex prop. */
+.ds-surface.ds-form-surface.ds-form-surface__root [data-part='actions'],
 .ds-surface.ds-form-surface[data-part='root'] [data-part='actions'] {
   gap: var(--ds-form-surface-actions-gap, calc(8px * var(--ds-rhythm-effective-scale, 1)));
 }
@@ -80,6 +84,7 @@
 /* Desktop aside follows scroll on long forms; stacked layouts stay static.
    The aside is a composed Card root (P-79), so the rule keys the class the
    surface stamps on it; the sticky offset rides the spacing plane. */
+.ds-surface.ds-form-surface.ds-form-surface__root[data-stacked='false'] .ds-form-surface__aside-card,
 .ds-surface.ds-form-surface[data-part='root'][data-stacked='false'] .ds-form-surface__aside-card {
   position: sticky;
   inset-block-start: var(--ds-spacing-4, 1rem);
@@ -88,6 +93,7 @@
 /* forced-colors: the alert's recessed ground and emphasis border re-assert in
    system colors; the rail, the aside and the reserved runway own no colour. */
 @media (forced-colors: active) {
+  .ds-surface.ds-form-surface.ds-form-surface__root [data-part='error-banner'],
   .ds-surface.ds-form-surface[data-part='root'] [data-part='error-banner'] {
     background: Canvas;
     border-color: CanvasText;

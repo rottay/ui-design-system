@@ -20,6 +20,7 @@
  * fallback of one decision, never as a second authority (F-37).
  */
 
+.ds-pattern-grid-view.ds-grid-view__root[data-empty='false'],
 .ds-pattern-grid-view[data-part='root'][data-empty='false'] {
   /* One pixel of bleed on each side so a card's own ring is not clipped, and a
      bottom bleed the listing layer can tune. */
@@ -118,6 +119,7 @@
   box-shadow: var(--ds-elevation-1);
 }
 
+.ds-pattern-grid-view.ds-grid-view__root.ds-grid-view__root[data-empty='true'],
 .ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true'] {
   padding: var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px);
   text-align: center;

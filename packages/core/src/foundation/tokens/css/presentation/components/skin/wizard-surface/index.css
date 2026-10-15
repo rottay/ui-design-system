@@ -40,6 +40,7 @@
    description is a composed Text that stamps its own root part, so the rule
    keys the `ds-wizard__description` class hook alone (H-1: a generic
    `[data-part='description']` arm would reach composed descendants). */
+.ds-surface.ds-wizard.ds-wizard__root .ds-wizard__description,
 .ds-surface.ds-wizard[data-part='root'] .ds-wizard__description {
   margin-block-end: var(--ds-wizard-surface-description-margin-block-end, var(--ds-spacing-0, 0));
 }
@@ -47,6 +48,7 @@
 /* The error surface is a ruled alert: the recessed error ground, an emphasis
    border wrapping the full perimeter at the error tone, optical padding on
    the rhythm plane — no second card frame. */
+.ds-surface.ds-wizard.ds-wizard__root [data-part='error-banner'],
 .ds-surface.ds-wizard[data-part='root'] [data-part='error-banner'] {
   padding: var(--ds-wizard-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-error-bg, transparent);
@@ -57,6 +59,7 @@
    stays static. The aside is a composed Card root (P-79), so the rule keys
    the class the surface stamps on it; the sticky offset rides the spacing
    plane. */
+.ds-surface.ds-wizard.ds-wizard__root[data-stacked='false'] .ds-wizard__aside-card,
 .ds-surface.ds-wizard[data-part='root'][data-stacked='false'] .ds-wizard__aside-card {
   position: sticky;
   inset-block-start: var(--ds-spacing-4, 1rem);
@@ -65,6 +68,7 @@
 /* forced-colors: the alert's recessed ground and emphasis border re-assert in
    system colors. */
 @media (forced-colors: active) {
+  .ds-surface.ds-wizard.ds-wizard__root [data-part='error-banner'],
   .ds-surface.ds-wizard[data-part='root'] [data-part='error-banner'] {
     background: Canvas;
     border-color: CanvasText;

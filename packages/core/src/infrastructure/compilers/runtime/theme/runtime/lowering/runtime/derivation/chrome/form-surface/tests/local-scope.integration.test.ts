@@ -92,7 +92,7 @@ const oracleOf = (channel: Channel) =>
  *  plus one oracle per channel painting its expression in place. */
 function surface(rootStyle = ""): string {
   return [
-    `<div class="ds-surface ds-form-surface" data-part="root" style="${rootStyle}">`,
+    `<div class="ds-surface ds-form-surface ds-form-surface__root" data-part="root" style="${rootStyle}">`,
     `<p class="ds-form-surface__description" data-part="root">Describe the record.</p>`,
     `<div data-part="error-banner" role="alert">Something failed.</div>`,
     CHANNELS.map(oracleOf).join(""),
@@ -213,7 +213,7 @@ describe("chrome/form-surface channels under a local scope", () => {
   }, 180_000);
 
   it("probes the parts the engine stamps", () => {
-    expect(ENGINE).toContain("'ds-surface ds-form-surface'");
+    expect(ENGINE).toContain("'ds-surface ds-form-surface ds-form-surface__root'");
     for (const part of ["root", "error-banner"]) {
       expect(ENGINE).toContain(`data-part="${part}"`);
     }

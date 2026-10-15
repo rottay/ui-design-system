@@ -309,6 +309,7 @@
   overflow-y: auto;
 }
 
+.ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__cards-grid,
 .ds-metrics-cards.ds-metrics-cards [data-part='cards-grid'] {
   position: relative;
 }

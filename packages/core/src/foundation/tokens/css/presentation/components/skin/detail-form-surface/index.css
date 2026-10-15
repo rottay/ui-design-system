@@ -36,6 +36,7 @@
 /* The error surface is a ruled alert: the recessed error ground, an emphasis
    border wrapping the full perimeter at the error tone, optical padding on
    the rhythm plane — no second card frame. */
+.ds-surface.ds-detail-form.ds-detail-form__root [data-part='error-banner'],
 .ds-surface.ds-detail-form[data-part='root'] [data-part='error-banner'] {
   padding: var(--ds-detail-form-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-error-bg, transparent);
@@ -45,6 +46,7 @@
 /* Split layout: the summary column follows scroll on long forms; stacked
    stays static. The summary is the surface-stamped Stack root (P-79), so the
    rule keys its class; the sticky offset rides the spacing plane. */
+.ds-surface.ds-detail-form.ds-detail-form__root[data-stacked='false'] .ds-detail-form__summary,
 .ds-surface.ds-detail-form[data-part='root'][data-stacked='false'] .ds-detail-form__summary {
   position: sticky;
   inset-block-start: var(--ds-spacing-4, 1rem);
@@ -53,6 +55,7 @@
 /* forced-colors: the alert's recessed ground and emphasis border re-assert in
    system colors. */
 @media (forced-colors: active) {
+  .ds-surface.ds-detail-form.ds-detail-form__root [data-part='error-banner'],
   .ds-surface.ds-detail-form[data-part='root'] [data-part='error-banner'] {
     background: Canvas;
     border-color: CanvasText;

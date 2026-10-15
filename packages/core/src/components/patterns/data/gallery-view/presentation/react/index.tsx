@@ -462,7 +462,7 @@ export function PatternGalleryView<T extends object>(
           minItem={adaptation.minItem}
           templateColumns={templateColumns}
           gap={resolvedGap.gap}
-          className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
+          className={['ds-pattern-gallery-view', 'ds-gallery-view__root', className].filter(Boolean).join(' ')}
           data-part="root"
           data-loading="true"
           data-empty="false"
@@ -490,7 +490,7 @@ export function PatternGalleryView<T extends object>(
     return (
       <Box
         ref={rootRef}
-        className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
+        className={['ds-pattern-gallery-view', 'ds-gallery-view__root', className].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="false"
         data-empty="true"
@@ -519,7 +519,7 @@ export function PatternGalleryView<T extends object>(
       minItem={adaptation.minItem}
       templateColumns={templateColumns}
       gap={resolvedGap.gap}
-      className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
+      className={['ds-pattern-gallery-view', 'ds-gallery-view__root', className].filter(Boolean).join(' ')}
       data-part="root"
       data-loading="false"
       data-empty="false"

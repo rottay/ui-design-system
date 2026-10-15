@@ -26,6 +26,7 @@
  */
 
 /* The root spans its container, as the inline geometry it replaces did. */
+.ds-pattern-stats-grid.ds-engine-modern.ds-stats-grid__root,
 .ds-pattern-stats-grid.ds-engine-modern[data-part="root"] {
   inline-size: 100%;
   box-sizing: border-box;

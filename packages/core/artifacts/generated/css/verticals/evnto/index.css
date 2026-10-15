@@ -68932,6 +68932,7 @@ html[data-ds-motion='reduced']
 /* The error surface is a ruled alert: the recessed error ground, an emphasis
    border wrapping the full perimeter at the error tone, optical padding on
    the rhythm plane — no second card frame. */
+.ds-surface.ds-detail-form.ds-detail-form__root [data-part='error-banner'],
 .ds-surface.ds-detail-form[data-part='root'] [data-part='error-banner'] {
   padding: var(--ds-detail-form-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-error-bg, transparent);
@@ -68941,6 +68942,7 @@ html[data-ds-motion='reduced']
 /* Split layout: the summary column follows scroll on long forms; stacked
    stays static. The summary is the surface-stamped Stack root (P-79), so the
    rule keys its class; the sticky offset rides the spacing plane. */
+.ds-surface.ds-detail-form.ds-detail-form__root[data-stacked='false'] .ds-detail-form__summary,
 .ds-surface.ds-detail-form[data-part='root'][data-stacked='false'] .ds-detail-form__summary {
   position: sticky;
   inset-block-start: var(--ds-spacing-4, 1rem);
@@ -68949,6 +68951,7 @@ html[data-ds-motion='reduced']
 /* forced-colors: the alert's recessed ground and emphasis border re-assert in
    system colors. */
 @media (forced-colors: active) {
+  .ds-surface.ds-detail-form.ds-detail-form__root [data-part='error-banner'],
   .ds-surface.ds-detail-form[data-part='root'] [data-part='error-banner'] {
     background: Canvas;
     border-color: CanvasText;
@@ -70308,6 +70311,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  */
 
 /* A fixed ActionDock leaves the form scrollable through its final field/action. */
+.ds-surface.ds-form-surface.ds-form-surface__root.ds-form-surface--sticky-actions,
 .ds-surface.ds-form-surface[data-part='root'].ds-form-surface--sticky-actions {
   padding-block-end: var(--ds-form-action-dock-reserved-space, 6rem);
 }
@@ -70317,6 +70321,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    description is a composed Text that stamps its own root part, so the rule
    keys the `ds-form-surface__description` class hook alone (H-1: a generic
    `[data-part='description']` arm would reach composed descendants). */
+.ds-surface.ds-form-surface.ds-form-surface__root .ds-form-surface__description,
 .ds-surface.ds-form-surface[data-part='root'] .ds-form-surface__description {
   margin-block-end: var(--ds-form-surface-description-margin-block-end, var(--ds-spacing-0, 0));
 }
@@ -70324,6 +70329,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The error surface is a ruled alert: the recessed error ground, an emphasis
    border wrapping the full perimeter at the error tone, optical padding on
    the rhythm plane — no second card frame. */
+.ds-surface.ds-form-surface.ds-form-surface__root [data-part='error-banner'],
 .ds-surface.ds-form-surface[data-part='root'] [data-part='error-banner'] {
   padding: var(--ds-form-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-error-bg, transparent);
@@ -70331,6 +70337,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* The non-sticky action rail's gap, drained from the Flex prop. */
+.ds-surface.ds-form-surface.ds-form-surface__root [data-part='actions'],
 .ds-surface.ds-form-surface[data-part='root'] [data-part='actions'] {
   gap: var(--ds-form-surface-actions-gap, calc(8px * var(--ds-rhythm-effective-scale, 1)));
 }
@@ -70338,6 +70345,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Desktop aside follows scroll on long forms; stacked layouts stay static.
    The aside is a composed Card root (P-79), so the rule keys the class the
    surface stamps on it; the sticky offset rides the spacing plane. */
+.ds-surface.ds-form-surface.ds-form-surface__root[data-stacked='false'] .ds-form-surface__aside-card,
 .ds-surface.ds-form-surface[data-part='root'][data-stacked='false'] .ds-form-surface__aside-card {
   position: sticky;
   inset-block-start: var(--ds-spacing-4, 1rem);
@@ -70346,6 +70354,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* forced-colors: the alert's recessed ground and emphasis border re-assert in
    system colors; the rail, the aside and the reserved runway own no colour. */
 @media (forced-colors: active) {
+  .ds-surface.ds-form-surface.ds-form-surface__root [data-part='error-banner'],
   .ds-surface.ds-form-surface[data-part='root'] [data-part='error-banner'] {
     background: Canvas;
     border-color: CanvasText;
@@ -71789,6 +71798,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    description is a composed Text that stamps its own root part, so the rule
    keys the `ds-wizard__description` class hook alone (H-1: a generic
    `[data-part='description']` arm would reach composed descendants). */
+.ds-surface.ds-wizard.ds-wizard__root .ds-wizard__description,
 .ds-surface.ds-wizard[data-part='root'] .ds-wizard__description {
   margin-block-end: var(--ds-wizard-surface-description-margin-block-end, var(--ds-spacing-0, 0));
 }
@@ -71796,6 +71806,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The error surface is a ruled alert: the recessed error ground, an emphasis
    border wrapping the full perimeter at the error tone, optical padding on
    the rhythm plane — no second card frame. */
+.ds-surface.ds-wizard.ds-wizard__root [data-part='error-banner'],
 .ds-surface.ds-wizard[data-part='root'] [data-part='error-banner'] {
   padding: var(--ds-wizard-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-error-bg, transparent);
@@ -71806,6 +71817,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    stays static. The aside is a composed Card root (P-79), so the rule keys
    the class the surface stamps on it; the sticky offset rides the spacing
    plane. */
+.ds-surface.ds-wizard.ds-wizard__root[data-stacked='false'] .ds-wizard__aside-card,
 .ds-surface.ds-wizard[data-part='root'][data-stacked='false'] .ds-wizard__aside-card {
   position: sticky;
   inset-block-start: var(--ds-spacing-4, 1rem);
@@ -71814,6 +71826,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* forced-colors: the alert's recessed ground and emphasis border re-assert in
    system colors. */
 @media (forced-colors: active) {
+  .ds-surface.ds-wizard.ds-wizard__root [data-part='error-banner'],
   .ds-surface.ds-wizard[data-part='root'] [data-part='error-banner'] {
     background: Canvas;
     border-color: CanvasText;
@@ -77521,6 +77534,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   overflow-y: auto;
 }
 
+.ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__cards-grid,
 .ds-metrics-cards.ds-metrics-cards [data-part='cards-grid'] {
   position: relative;
 }
@@ -88654,6 +88668,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  */
 
 /* The root spans its container, as the inline geometry it replaces did. */
+.ds-pattern-stats-grid.ds-engine-modern.ds-stats-grid__root,
 .ds-pattern-stats-grid.ds-engine-modern[data-part="root"] {
   inline-size: 100%;
   box-sizing: border-box;
@@ -90147,6 +90162,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * fallback of one decision, never as a second authority (F-37).
  */
 
+.ds-pattern-gallery-view.ds-gallery-view__root,
 .ds-pattern-gallery-view[data-part='root'] {
   --ds-gallery-view-aspect-ratio: 1;
 }
@@ -90312,6 +90328,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* ---- empty state ---- */
 
+.ds-pattern-gallery-view.ds-gallery-view__root.ds-gallery-view__root[data-empty='true'],
 .ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true'] {
   padding: var(--ds-spacing-8) var(--ds-spacing-5);
   text-align: center;
@@ -90399,6 +90416,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * fallback of one decision, never as a second authority (F-37).
  */
 
+.ds-pattern-grid-view.ds-grid-view__root[data-empty='false'],
 .ds-pattern-grid-view[data-part='root'][data-empty='false'] {
   /* One pixel of bleed on each side so a card's own ring is not clipped, and a
      bottom bleed the listing layer can tune. */
@@ -90497,6 +90515,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   box-shadow: var(--ds-elevation-1);
 }
 
+.ds-pattern-grid-view.ds-grid-view__root.ds-grid-view__root[data-empty='true'],
 .ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true'] {
   padding: var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px);
   text-align: center;

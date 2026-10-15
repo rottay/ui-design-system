@@ -196,7 +196,7 @@ function FormSurfaceContent({ config, loading = false, error, onRetry, adapt }: 
   const formContent = (
     <Grid
       ref={setRootElement}
-      className={['ds-surface ds-form-surface', actionsSticky ? 'ds-form-surface--sticky-actions' : undefined]
+      className={['ds-surface ds-form-surface ds-form-surface__root', actionsSticky ? 'ds-form-surface--sticky-actions' : undefined]
         .filter(Boolean)
         .join(' ')}
       data-part="root"
