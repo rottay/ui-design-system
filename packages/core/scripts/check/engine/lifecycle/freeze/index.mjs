@@ -35,6 +35,21 @@
  * above: implementation and visual-excellence effort is exclusively Modern;
  * Classic/Rustic are read-only except a minimal shared-contract compile fix.
  *
+ * THE P-88 MIGRATION EXCEPTION CLASS (owner decision 7, 2026-10-14)
+ * -----------------------------------------------------------------
+ * The anatomy law in `foundation/contracts/kernel/common` (P-88: a skinned
+ * component keeps its canonical `data-part`/`data-state` and never forwards a
+ * caller's) reaches the frozen engines. Both controls stand. A classic/rustic
+ * edit that applies P-88 is a NAMED P-88 MIGRATION EXCEPTION, not a compile
+ * fix, and it enters only through this gate's `--authorize`: per file or per
+ * lot, against reviewed bytes, with a reason that names the class, the delta
+ * and the replaced rule. There is no bulk re-pin. The freeze does not suspend
+ * P-88, and P-88 does not open the freeze.
+ *
+ * A written exception authorizes SOURCE BYTES only. It does not decide release
+ * compatibility: whether a published contract still obliges the old behaviour
+ * is the owner's release decision, and it is not settled by a green gate.
+ *
  * WHAT THIS GATE AUDITS
  * ---------------------
  * Every difference between the SEALED BASE REVISION and the current worktree
@@ -823,8 +838,10 @@ function authorize(baseline, base, changes, readWorktree) {
   const reason = argValue('--reason', '').trim();
   if (reason.length < 12) {
     fail(
-      '--authorize requires --reason "<why this frozen-engine edit is a minimal compile fix>" (12+ characters). ' +
-        'The reason is the written exception a reviewer reads in the baseline diff.',
+      '--authorize requires --reason "<exception class and why>" (12+ characters): either a minimal ' +
+        'shared-contract compile fix, or a named P-88 migration exception (owner decision 7, 2026-10-14) ' +
+        'naming the delta, the replaced rule and the reviewed bytes. The reason is the written exception a ' +
+        'reviewer reads in the baseline diff. It authorizes source bytes, not release compatibility.',
     );
   }
   if (process.env.ENGINE_FREEZE_BASE) {
@@ -935,9 +952,12 @@ function main() {
     console.log(
       `  UNAUTHORIZED frozen-engine change [${change.status}] ${change.path}\n` +
         `    differs from the sealed base ${base.slice(0, 8)}${change.untracked ? ' (untracked)' : ''}.\n` +
-        '    Classic/Rustic are read-only. If this is a minimal shared-contract compile fix, record a\n' +
-        '    written exception:\n' +
-        `      node scripts/check/engine/lifecycle/freeze/index.mjs --authorize ${change.path} --reason "<why>"`,
+        '    Classic/Rustic are read-only. Two exception classes enter, each per file through this door:\n' +
+        '    a minimal shared-contract compile fix, or a named P-88 migration exception (owner decision 7,\n' +
+        '    2026-10-14: reviewed bytes, exact reason, no bulk). Record it as a written exception:\n' +
+        `      node scripts/check/engine/lifecycle/freeze/index.mjs --authorize ${change.path} --reason "<class: why>"\n` +
+        '    The exception authorizes these source bytes only. Whether a published contract still obliges\n' +
+        '    the old behaviour is the owner\'s release decision, not this gate\'s.',
     );
   }
   for (const change of drifted) {

@@ -166,6 +166,8 @@ export type Alignment = 'start' | 'center' | 'end';
  * on a stable element and are covered by tests. Only a structural component
  * with no part of its own may forward a caller `data-part`/`data-state`. Inner
  * sub-parts (spinner/icon/label/content/...) stay engine-owned in both cases.
+ * In the frozen classic/rustic engines this rule lands only as a written
+ * exception through `engine-freeze-gate --authorize` (owner decision 7).
  */
 export interface BaseComponentProps {
   /** Arbitrary semantic state hooks forwarded to the rendered DOM element (`data-part`/`data-state` excepted, see below). */
