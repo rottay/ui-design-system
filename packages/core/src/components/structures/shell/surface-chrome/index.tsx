@@ -206,7 +206,7 @@ export function SurfaceSectionCard({
       data-has-header={hasHeader ? 'true' : 'false'}
     >
       <Card.Body className={classes.body} data-part="body" padding="none">
-        <Stack data-part="content" spacing="none">
+        <Stack className="ds-section-card__content-stack" data-part="content" spacing="none">
           {/* The header chrome stays optional so the same wrapper can be used for plain sections. */}
           {hasHeader && (
             <Flex
@@ -217,9 +217,9 @@ export function SurfaceSectionCard({
               align="start"
               gap={12}
             >
-              <Flex data-part="header-main" align="start" gap={12}>
+              <Flex className="ds-section-card__header-main" data-part="header-main" align="start" gap={12}>
                 {icon && <span data-part="header-icon">{icon}</span>}
-                <Stack data-part="header-copy" spacing="xs">
+                <Stack className="ds-section-card__header-copy" data-part="header-copy" spacing="xs">
                   {eyebrow && (
                     <Text className="ds-section-card__eyebrow" style={SECTION_CARD_HEADER_TYPE.eyebrow}>
                       {eyebrow}
