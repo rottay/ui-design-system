@@ -7,7 +7,14 @@ Nothing is removed from the public types in this release. Twelve deprecated
 public symbols gain a ledger row naming WO-RET-07, class `debt`, removal in the
 4.0 major line; that line is not released and carries no date.
 
-Caller props, inert in every engine since ARC-12 step 3 (P-88); use `className`:
+Caller props, inert in every engine of the current source since ARC-12 step 3
+(P-88); use `className`. "Inert" describes this source, not the installed
+package. In the published 2.19.37 several engines still render these values,
+including the modern `Button`, which forwards a caller `data-state`. The
+runtime break that makes them inert ships as major (see
+`arc12-step2-modern-engine-strips`, `arc12-step3-classic-strips`,
+`arc12-o3-o4-strips` and
+`packages/core/docs/consumer-contract/migration/p88-caller-anatomy/index.md`):
 
 - `AvatarProps.data-part`, `AvatarProps.data-state`
 - `BadgeBaseProps.data-part`, `BadgeBaseProps.data-state`
@@ -25,8 +32,14 @@ since ARC-12 step 3. Comment only; the declarations are unchanged.
 Consumer note for the later 4.0 removal: app-bithire passes
 `ButtonPublicProps.data-state` to the DS Button at three production sites
 (`ui/details/inline-editor/index.tsx:611`, `ui/upgrade/modal/index.tsx:297`
-and `:334`). The value is not rendered today; the removal will turn those sites
-into a TypeScript excess-property error. The design system edits no application.
+and `:334`). The DS source no longer renders the value (ARC-12 step 2, E9). The
+installed 2.19.37 modern `Button` still renders it, and three app CSS rules read
+it (`.rt-upgrade-modal__cta[data-state="current"|"included"]`,
+`.rt-detail-more-fields-toggle__button[data-state="expanded"]`). The styling
+therefore breaks at the next major's runtime; the WO-RET-07 type removal
+(timing per the owner's open version decision) later turns the sites into a
+TypeScript excess-property error. The design system edits no
+application.
 
 Tenant-theme field `chrome.shell.commandHomePanelBgStrong`
 (`BrandShellChrome.commandHomePanelBgStrong`, published through `./server`):

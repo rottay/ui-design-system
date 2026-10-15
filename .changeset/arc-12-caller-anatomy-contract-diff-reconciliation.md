@@ -1,5 +1,5 @@
 ---
-"@rottay/design-system": patch
+"@rottay/design-system": major
 ---
 
 Contract-diff reconciliation for the ARC-12 caller-anatomy wave (P-88) and one
@@ -27,6 +27,24 @@ the DOM on these primitives. Each one stamps its own part (`root`, `divider`,
 composing DS primitive hands down through `anatomy`. Consumers compose through
 `className`. This follows the `w25-p88-passthrough-law` ruling and the
 `e8b-typography-engine-strip` precedent.
+
+Release class: major. "No public type is removed or narrowed" holds for the
+types. It does not hold for behavior: the runtime note is a change to
+rendered output for anyone on the published 2.19.37, where these primitives
+rendered the caller value (the published law required it). The same runtime
+strip covers the O-4 batch 1 engines with no signature row here: Descriptions,
+Rate (modern, rustic), Toggle (modern, rustic) and the Tooltip trigger and
+content (b02e74875), plus the Image, List, Menu, Stepper and Textarea (modern,
+rustic) engines of O-4 batch 2 (febd8eae5). This lot did not measure the
+published runtime of each family; the 2026-10-15 consumer census found no
+application call site passing either attribute to them.
+
+Overlap exception (owner, 2026-10-15): these identified P-88 and sync-SSR
+breaks ship directly in this major, with an exact inventory, a migration
+guide, replacements and reviewed evidence, by the owner's express exception
+to the one-minor overlap rule. The exception does not extend to any other
+deprecation or retirement. Migration guide:
+`packages/core/docs/consumer-contract/migration/p88-caller-anatomy/index.md`.
 
 ```contract-diff
 signature .#SpinnerProps — `data-part` JSDoc rewritten as inert and tagged `@deprecated` (use `className`); type unchanged (ba108dece)

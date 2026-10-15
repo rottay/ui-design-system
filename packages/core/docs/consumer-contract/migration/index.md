@@ -13,6 +13,12 @@ Cross-app guides, applying to every consumer at once:
 - [`legacy-class-retirement/index.md`](./legacy-class-retirement/index.md) — WO-FAM-11
   (owner ruling 8): the `rottay-app-shell*` / `rottay-action-dock*` rename to
   `ds-*`; what changed, who is affected, the exact rename table, verification.
+- [`p88-caller-anatomy/index.md`](./p88-caller-anatomy/index.md) — the next
+  major (owner 2026-10-15): the P-88 caller `data-part`/`data-state` break and
+  the legacy sync-SSR break, shipped under the owner's express overlap
+  exception; per-family inventory against 2.19.37, consumer census, the
+  `className` replacement. Skeleton: the sync-SSR section awaits Suspense
+  Phase B.
 - [`db-first-paint-probe/index.md`](./db-first-paint-probe/index.md) — WO-ARC-21:
   the frozen dispatch record for the DB-to-first-paint probe in each
   application (route, tenant fixture, first-paint assertions, rollback, disable,
