@@ -135,7 +135,10 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       translate,
       title,
       children,
-      'data-part': dataPart,
+      // P-88: the heading keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className,
       style,
       ...props
@@ -216,7 +219,7 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
             title={title}
             {...props}
             {...responsive.attrs}
-            data-part={dataPart ?? "root"}
+            data-part="root"
             data-color={color}
             {...typographyDataAttributes(craftProps)}
             style={{ ...resolvedStyle, ...responsive.channels }}
@@ -241,7 +244,7 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           title={title}
           {...props}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={{ ...resolvedStyle, ...responsive.channels }}
@@ -298,7 +301,10 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
       translate,
       title,
       children,
-      'data-part': dataPart,
+      // P-88: the text keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className,
       style,
       ...props
@@ -385,7 +391,7 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
             title={title}
             {...props}
             {...responsive.attrs}
-            data-part={dataPart ?? "root"}
+            data-part="root"
             data-color={color}
             {...typographyDataAttributes(craftProps)}
             className={resolvedClassName}
@@ -415,7 +421,7 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
           title={title}
           {...props}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={{ ...resolvedStyle, ...responsive.channels }}
@@ -466,7 +472,10 @@ export const ClassicParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>
       translate,
       title,
       children,
-      'data-part': dataPart,
+      // P-88: the paragraph keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className,
       style,
       ...props
@@ -521,7 +530,7 @@ export const ClassicParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>
           title={title}
           {...props}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           {...typographyDataAttributes(craftProps)}
           style={{
@@ -590,7 +599,10 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
       title,
       onClick,
       children,
-      'data-part': dataPart,
+      // P-88: the link keeps its own anatomy ('root'); a caller data-part/data-state
+      // is never forwarded (callers compose through className).
+      'data-part': _callerDataPart,
+      'data-state': _callerDataState,
       className,
       style,
       ...props
@@ -649,7 +661,7 @@ export const ClassicLink = forwardRef<HTMLAnchorElement, LinkProps>(
           title={title}
           {...props}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          data-part="root"
           data-color={color}
           data-disabled={disabled || undefined}
           {...typographyDataAttributes(craftProps)}

@@ -498,8 +498,8 @@ describe('engine/skins/pass-through -- structural forwards (census v7.1.9)', () 
     const frozen = view.roster.filter((r) => (r.engine === 'classic' || r.engine === 'rustic') && !CARRIER.has(r.family));
     const tally = {};
     for (const r of frozen) tally[`${r.family}/${r.engine}`] = (tally[`${r.family}/${r.engine}`] ?? 0) + 1;
-    // E8-b stripped the 4 rustic typography sites; the 6 classic ones wait for step 3.
-    assert.deepEqual(tally, { 'typography/classic': 6, 'divider/rustic': 2 });
+    // E8-b stripped the 4 rustic typography sites; step 3 stripped the 6 classic ones.
+    assert.deepEqual(tally, { 'divider/rustic': 2 });
     const { census } = measurePassThrough({ repoRoot: REPO });
     for (const r of frozen) {
       const site = census.sites.find((s) => s.key === r.key);
@@ -723,9 +723,11 @@ describe('engine/skins/pass-through -- structural forwards, source drills (the c
     assert.match(findings[0].detail, /lost its structural shape \(predicate s1 fails; predicate s2 fails; predicate s3 fails; predicate s4 fails\)/);
   });
 
-  it('N4: a classic site that is no layout carrier, added to the library roster, fails s1 and is red', async () => {
-    const row = view.roster.find((r) => r.engine === 'classic' && r.family === 'typography');
-    const lib = await libraryWithRow('n4', row.key, 'classic', 'typography');
+  it('N4: a frozen-engine site that is no layout carrier, added to the library roster, fails s1 and is red', async () => {
+    // Step 3 stripped the classic typography sites; the frozen non-carrier rows left are rustic.
+    const row = view.roster.find((r) => (r.engine === 'classic' || r.engine === 'rustic') && !LAYOUT_CARRIERS.includes(r.family));
+    assert.ok(row, 'the tree still pins a frozen-engine site that is no layout carrier');
+    const lib = await libraryWithRow('n4', row.key, row.engine, row.family);
     const findings = evaluatePassThrough(projectMeasurement(lib.measurePassThrough({ repoRoot: ws, fresh: true })), ledger);
     assert.deepEqual(kinds(findings), ['structural/fail']);
     assert.match(findings[0].detail, /predicate s1 fails/);

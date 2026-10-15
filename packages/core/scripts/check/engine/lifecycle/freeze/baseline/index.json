@@ -191,9 +191,9 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx": {
-      "blob": "11114fa5495242f591896d7ed46fe3e07a47e4885313aae43eb56bb9abec6601",
-      "relocationDigest": "ff7f5a5c6ec23d5328b68f182a155537c195bf786f769044768d014b1a94eb31",
-      "reason": "the craft resolver moved to runtime/legacy-craft (WO-FAM-06 typography-rest craft split); this engine's import follows it to the identical module, behavior unchanged, frozen paint preserved",
+      "blob": "cbcc0f552bb25f04b7e151022a5dd24bb8c1d62b3880e6b3da7936fcf968edbd",
+      "relocationDigest": "1cbdf653d6f50e9306a8c67dd4ac820f0998968bc0d69cb122acaf61a5dc8c3b",
+      "reason": "Owner decision 7 (2026-10-14, FREEZE-P88-SCOPE): named P-88 migration exception, ARC-12 step 3 lot S3-4 — the classic typography caller data-part/data-state strip (4 destructures + 6 stamps -> 'root'), no other byte; independently reviewed bytes cbcc0f552bb2 (review bd81427b, point 2 ACCEPT of scope)",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx": {
