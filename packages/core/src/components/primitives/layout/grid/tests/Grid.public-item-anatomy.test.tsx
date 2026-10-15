@@ -21,14 +21,29 @@ describe("Grid.Item (public) anatomy", () => {
     await waitFor(() => expect(container.querySelectorAll(CELL)).toHaveLength(2));
   });
 
-  it("keeps a caller-owned data-part and still stamps the owned data-component", async () => {
+  it("a caller data-part cannot replace grid-cell; composition goes through className", async () => {
     const { container } = renderWithEngine(
       <Grid columns={2}>
-        <Grid.Item data-part="tile">a</Grid.Item>
+        <Grid.Item data-part="tile" className="tile-hook">a</Grid.Item>
       </Grid>,
       "modern",
     );
-    await waitFor(() => expect(container.querySelector("[data-part='tile']")).not.toBeNull());
-    expect(container.querySelector("[data-part='tile']")).toHaveAttribute("data-component", "grid-item");
+    await waitFor(() => expect(container.querySelector(".tile-hook")).not.toBeNull());
+    expect(container.querySelector("[data-part='tile']")).toBeNull();
+    expect(container.querySelector(".tile-hook")).toHaveAttribute("data-part", "grid-cell");
+    expect(container.querySelector(".tile-hook")).toHaveAttribute("data-component", "grid-item");
+    expect(container.querySelectorAll(CELL)).toHaveLength(1);
+  });
+
+  it("does not forward a caller data-state", async () => {
+    const { container } = renderWithEngine(
+      <Grid columns={2}>
+        <Grid.Item data-state="x" className="tile-hook">a</Grid.Item>
+      </Grid>,
+      "modern",
+    );
+    await waitFor(() => expect(container.querySelector(".tile-hook")).not.toBeNull());
+    expect(container.querySelector("[data-state]")).toBeNull();
+    expect(container.querySelector(".tile-hook")).toHaveAttribute("data-part", "grid-cell");
   });
 });

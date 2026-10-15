@@ -418,6 +418,9 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
     style: _style,
     engine: _engine,
     adapt,
+    // P-88: the grid stamps its own part ('root') after the spread; a caller
+    // data-state is never forwarded (callers compose through className).
+    "data-state": _callerDataState,
     ...htmlAttributes
   } = props;
 
@@ -491,9 +494,6 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
   return React.createElement(
     ElementType,
     {
-      // P-79: the default part precedes the spread, so a caller's own
-      // `data-part` reaches the DOM and owns that node's paint.
-      "data-part": "root",
       ...htmlAttributes,
       ref: (node: HTMLElement | null) => {
         containerRef.current = node;
@@ -507,6 +507,7 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
       "data-auto-fit": autoFit ? "true" : undefined,
       "data-min-item": autoFit ? minItem : undefined,
       "data-inline": props.inline ? "true" : undefined,
+      "data-part": "root",
       "data-component": "grid",
       "data-gap-preset": gridGapPresetSpelling(
         adaptation.gap ?? GRID_DEFAULTS.gap

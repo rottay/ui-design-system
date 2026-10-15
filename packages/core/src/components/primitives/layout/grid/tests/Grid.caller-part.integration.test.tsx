@@ -1,7 +1,8 @@
 /**
- * A composite may name the Grid node it renders, and the Modern skin must still
- * lay that node out. The part belongs to the caller; the layout is keyed on the
- * owned `data-component` stamp, which no caller spread can remove.
+ * A composite names the Grid node it renders through its className hook, and the
+ * Modern skin must still lay that node out. A caller `data-part` is replaced by
+ * the owned `root` part; the layout is keyed on the owned `data-component` stamp,
+ * which no caller spread can remove.
  *
  * jsdom loads no skin, so the proof is Chromium's computed style. The default
  * root instance is the control: both must read identically.
@@ -28,9 +29,9 @@ const UNIFORM = { columns: 2, gap: 'md' } as const;
 const SPLIT = { columns: 2, inline: true, gap: 'sm', columnGap: '2xl', motion: 'rearrange' } as const;
 
 const markup = [
-  `<div id="owned">${grid({ ...UNIFORM, 'data-part': 'results' })}</div>`,
+  `<div id="owned">${grid({ ...UNIFORM, 'data-part': 'results', className: 'results-hook' })}</div>`,
   `<div id="default">${grid(UNIFORM)}</div>`,
-  `<div id="ownedSplit">${grid({ ...SPLIT, 'data-part': 'gallery' })}</div>`,
+  `<div id="ownedSplit">${grid({ ...SPLIT, 'data-part': 'gallery', className: 'gallery-hook' })}</div>`,
   `<div id="defaultSplit">${grid(SPLIT)}</div>`,
 ].join('');
 
@@ -38,11 +39,17 @@ const PROPERTIES = ['display', 'column-gap', 'row-gap', 'min-inline-size', 'tran
 
 const NODE = "[data-component='grid']";
 
-describe('Grid with a caller-owned data-part', () => {
-  it('keeps the caller part in the DOM', () => {
-    expect(markup).toContain('data-part="results"');
-    expect(markup).toContain('data-part="gallery"');
-    expect(markup).toContain('data-part="root"');
+const openingTag = (hook: string): string => markup.match(new RegExp(`<[^>]*\\b${hook}\\b[^>]*>`))?.[0] ?? '';
+
+describe('Grid with a caller-supplied data-part', () => {
+  it('replaces the caller part with its own root and keeps the className hook', () => {
+    expect(markup).not.toContain('data-part="results"');
+    expect(markup).not.toContain('data-part="gallery"');
+    for (const hook of ['results-hook', 'gallery-hook']) {
+      expect(openingTag(hook), hook).toContain('data-part="root"');
+      expect(openingTag(hook), hook).toContain('data-component="grid"');
+    }
+    expect(markup.match(/data-part="root"/g)).toHaveLength(4);
     expect(markup.match(/data-component="grid"/g)).toHaveLength(4);
   });
 

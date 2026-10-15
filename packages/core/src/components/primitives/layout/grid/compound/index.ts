@@ -147,6 +147,9 @@ export const GridItem = forwardRef<HTMLElement, GridItemProps>((props, ref) => {
     placeSelf: _placeSelf,
     zIndex: _zIndex,
     style: _style,
+    // P-88: the item stamps its own part ('grid-cell') after the spread; a caller
+    // data-state is never forwarded (callers compose through className).
+    "data-state": _callerDataState,
     ...restProps
   } = props;
 
@@ -160,8 +163,8 @@ export const GridItem = forwardRef<HTMLElement, GridItemProps>((props, ref) => {
       ref: ref as Ref<HTMLElement>,
       className: `rottay-grid-item ${className}`.trim(),
       style: computedStyle,
-      "data-part": "grid-cell",
       ...restProps,
+      "data-part": "grid-cell",
       "data-component": "grid-item",
     },
     children
