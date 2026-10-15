@@ -54,10 +54,12 @@ describe('engine/skins/pass-through -- comparison drills (one move each)', () =>
 
   it('a breach class gained on a pinned site is red', () => {
     const v = clone(view);
-    // E8-b: every pinned site now forwards state, so the drill adds the part breach a site lacks.
-    const row = v.roster.find((r) => !r.breach.includes('part-replace'));
-    assert.ok(row, 'the tree still pins a site without a part breach');
-    row.breach = [...row.breach, 'part-replace'].sort();
+    // Census v7.1.10: every pinned site now carries part-replace and state-forward, so the drill
+    // adds a census breach class the first site lacks.
+    const row = v.roster[0];
+    const gained = ['part-replace', 'part-forward', 'state-forward', 'state-rest'].find((c) => !row.breach.includes(c));
+    assert.ok(row && gained, 'the tree still pins a site missing a breach class');
+    row.breach = [...row.breach, gained].sort();
     assert.deepEqual(kinds(evaluatePassThrough(v, ledger)), ['site-breach/grew']);
   });
 

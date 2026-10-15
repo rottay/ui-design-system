@@ -6,9 +6,12 @@
  * This is the `AST helpers` section of ../index.mjs moved here verbatim (census v7.1.8, 2026-10-12:
  * the structure law's 800-line limit); no measurement moves. The section closes over nothing of the
  * sweep but the tree's `typescript`, which createSweepAst receives. The pinned copy is
- * arc12/census-v719/ast/index.mjs, byte-identical to this file; ../index.mjs names its sha256.
+ * arc12/census-v7110/ast/index.mjs, byte-identical to this file; ../index.mjs names its sha256.
  * v7.1.9 (2026-10-14): each site also carries the DS classes its own className names
  * (`dsClasses`, `dsClassPartial`), the key of the sweep's own-anatomy index.
+ * v7.1.10 (2026-10-15): a rest binding is recorded in its enclosing function and a reference ORs
+ * every enclosing record, so a same-named rest in a sibling component no longer poisons it
+ * (the GridItem blind spot) while a nested shadow still over-reports.
  */
 import { readFileSync } from 'node:fs';
 
@@ -23,7 +26,8 @@ const propName = (n) => (n && (ts.isIdentifier(n) || ts.isStringLiteral(n)) ? n.
 function analyzeFile(file) {
   const code = readFileSync(file, 'utf8');
   const sf = ts.createSourceFile(file, code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
-  const carriers = new Map(); // name -> {part:bool, state:bool, origin}
+  const carriers = new Map(); // name -> {part:bool, state:bool, origin} (params, aliases)
+  const restCarriers = new Map(); // v7.1.10: enclosing function (or sf) -> name -> carrier
   const callerPartIds = new Set();
   const callerStateIds = new Set();
   const objects = new Map(); // name -> ObjectLiteralExpression
@@ -32,6 +36,16 @@ function analyzeFile(file) {
   const imperative = []; // {line, caller, value}
 
   const unwrap = (e) => { while (e && (ts.isAsExpression(e) || ts.isParenthesizedExpression(e) || ts.isSatisfiesExpression?.(e) || ts.isTypeAssertionExpression?.(e) || ts.isNonNullExpression(e))) e = e.expression; return e; };
+  // v7.1.10: a rest record lives in its enclosing function; a reference reads every enclosing record,
+  // OR-ed with the file-wide param/alias record of the same name (block scope unmodelled: over-report).
+  const orCarrier = (a, b) => (a && b ? { part: a.part || b.part, state: a.state || b.state, origin: a.origin } : a ?? b);
+  const scopeOf = (n) => { let cur = n.parent; while (cur && cur !== sf && !ts.isFunctionLike(cur)) cur = cur.parent; return cur ?? sf; };
+  const carrierAt = (id) => {
+    let rest;
+    for (let cur = scopeOf(id); cur; cur = cur === sf ? null : scopeOf(cur)) rest = orCarrier(rest, restCarriers.get(cur)?.get(id.text));
+    return orCarrier(carriers.get(id.text), rest);
+  };
+  const carrierByName = (name) => [...restCarriers.values()].reduce((acc, m) => orCarrier(acc, m.get(name)), carriers.get(name));
 
   // pass 1: params
   const visitParams = (n) => {
@@ -72,7 +86,7 @@ function analyzeFile(file) {
       let src = patternSource(pat);
       let srcCarrier = null;
       if (src.param) srcCarrier = { part: true, state: true, origin: 'param' };
-      else if (src.init && ts.isIdentifier(src.init) && carriers.has(src.init.text)) srcCarrier = carriers.get(src.init.text);
+      else if (src.init && ts.isIdentifier(src.init) && carrierAt(src.init)) srcCarrier = carrierAt(src.init);
       else if (src.init && ts.isIdentifier(src.init) && paramNames.has(src.init.text)) srcCarrier = { part: true, state: true, origin: src.init.text };
       if (!srcCarrier) continue;
       let takesPart = false, takesState = false;
@@ -82,12 +96,15 @@ function analyzeFile(file) {
         if (key === 'data-part') { takesPart = true; if (ts.isIdentifier(el.name)) callerPartIds.add(el.name.text); }
         if (key === 'data-state') { takesState = true; if (ts.isIdentifier(el.name)) callerStateIds.add(el.name.text); }
       }
-      for (const [a, b] of aliases) if (carriers.has(b) && !carriers.has(a)) carriers.set(a, { ...carriers.get(b), origin: `alias:${b}` });
+      for (const [a, b] of aliases) if (carrierByName(b) && !carrierByName(a)) carriers.set(a, { ...carrierByName(b), origin: `alias:${b}` });
       if (restEl) {
         const name = restEl.name.text;
         const c = { part: srcCarrier.part && !takesPart, state: srcCarrier.state && !takesState, origin: `rest:${name}@${lineOf(sf, restEl)}` };
-        const prev = carriers.get(name);
-        if (!prev || (prev.part !== c.part || prev.state !== c.state)) carriers.set(name, prev ? { part: prev.part || c.part, state: prev.state || c.state, origin: prev.origin } : c);
+        const scope = scopeOf(restEl);
+        if (!restCarriers.has(scope)) restCarriers.set(scope, new Map());
+        const scoped = restCarriers.get(scope);
+        const prev = scoped.get(name);
+        if (!prev || (prev.part !== c.part || prev.state !== c.state)) scoped.set(name, prev ? { part: prev.part || c.part, state: prev.state || c.state, origin: prev.origin } : c);
       }
     }
   }
@@ -99,7 +116,7 @@ function analyzeFile(file) {
       if (ts.isIdentifier(n) && ids.has(n.text)) hit = true;
       if (ts.isElementAccessExpression(n) && ts.isStringLiteral(n.argumentExpression) && n.argumentExpression.text === key) {
         const base = unwrap(n.expression);
-        if (ts.isIdentifier(base) && (carriers.has(base.text) || paramNames.has(base.text))) hit = true;
+        if (ts.isIdentifier(base) && (carrierAt(base) || paramNames.has(base.text))) hit = true;
       }
       ts.forEachChild(n, v);
     };
@@ -120,7 +137,7 @@ function analyzeFile(file) {
     const out = [];
     if (!e || depth > 4) return out;
     if (ts.isIdentifier(e)) {
-      if (carriers.has(e.text)) { const c = carriers.get(e.text); out.push({ kind: 'rest', part: c.part, state: c.state, via: e.text }); return out; }
+      if (carrierAt(e)) { const c = carrierAt(e); out.push({ kind: 'rest', part: c.part, state: c.state, via: e.text }); return out; }
       if (objects.has(e.text)) return entriesOfObject(objects.get(e.text), depth + 1, e.text);
       return out;
     }
@@ -150,7 +167,7 @@ function analyzeFile(file) {
     return out;
   };
 
-  for (const [a, b] of aliases) if (carriers.has(b) && !carriers.has(a)) carriers.set(a, { ...carriers.get(b), origin: `alias:${b}` });
+  for (const [a, b] of aliases) if (carrierByName(b) && !carrierByName(a)) carriers.set(a, { ...carrierByName(b), origin: `alias:${b}` });
   const findImperative = (n) => {
     if (ts.isCallExpression(n) && ts.isIdentifier(n.expression) && n.expression.text === 'stampDataPart' && n.arguments[1]) {
       imperative.push({ line: lineOf(sf, n), caller: refsCaller(n.arguments[1], callerPartIds, 'data-part'), value: textOf(sf, n.arguments[1]) });
@@ -456,7 +473,7 @@ function analyzeFile(file) {
     ts.forEachChild(n, scanNative);
   };
   scanNative(sf);
-  return { native: [...native], sites, compoundUses, imports, imperative, carriers: Object.fromEntries(carriers), callerPartIds: [...callerPartIds], callerStateIds: [...callerStateIds] };
+  return { native: [...native], sites, compoundUses, imports, imperative, carriers: Object.fromEntries([...new Set([...carriers.keys(), ...[...restCarriers.values()].flatMap((m) => [...m.keys()])])].map((k) => [k, carrierByName(k)])), callerPartIds: [...callerPartIds], callerStateIds: [...callerStateIds] };
 }
 
 // classify one engine-site attribute sequence

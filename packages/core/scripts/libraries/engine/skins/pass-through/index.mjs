@@ -80,6 +80,10 @@
  * AND the closed in-library roster both admit; the summary counts it and the conservation line
  * (`forwardingMeasured` = sites + structuralForwards). Nothing enters `excluded`. report.mjs now
  * records the ast sha, closing the v7.1.8 gap.
+ *
+ * v7.1.10 (2026-10-15; arc12/census-v7110: ast 5a447bc8, census / post / report / attribution unchanged):
+ * a rest-binding carrier is keyed by its enclosing function, not by name file-wide, so ModernGrid's
+ * `htmlAttributes` no longer poisons ModernGridItem's stripped one (sites 11 -> 10, that row only).
  */
 import { sweepPassThrough } from './sweep/index.mjs';
 import { classifyPassThrough } from './classify/index.mjs';

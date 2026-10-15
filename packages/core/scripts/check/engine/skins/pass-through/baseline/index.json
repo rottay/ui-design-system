@@ -7,7 +7,7 @@
  "lastMoveKind": "decrease",
  "measuredFrom": {
   "head": "27273599d9919310b98424e13ab993361356961a",
-  "census": "v7.1.9, 2026-10-14 (arc12/census-v719): the structural-forward class, the class-keyed own-anatomy index and the path-anchored layout carriers (see scripts/libraries/engine/skins/pass-through/index.mjs). v7.1.8 at arc12/census-v718 and earlier as before.",
+  "census": "v7.1.10, 2026-10-15 (arc12/census-v7110, ast 5a447bc8): rest-binding carriers scoped per enclosing function, every enclosing record OR-ed (ast/index.mjs only; census / post / report / attribution unchanged from v7.1.9). v7.1.9 at arc12/census-v719 (the structural-forward class, the class-keyed own-anatomy index and the path-anchored layout carriers), v7.1.8 at arc12/census-v718 and earlier as before (see scripts/libraries/engine/skins/pass-through/index.mjs).",
   "measurement": "scripts/libraries/engine/skins/pass-through (the v7.1.8 tools ported with verbatim bodies; parity at this head is byte-identical on raw, classified and census)"
  },
  "keys": "Line-free. Sites and tripwires: <file>#<owning component>#<tag>#<canonical part|none>#<ordinal>. Dependents: <file>#<child component>#<caller part|none>#<ordinal>. The ordinal counts elements sharing the first four fields in source order, so a line shift elsewhere never churns a key.",
@@ -16,7 +16,7 @@
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 11,
+  "passThroughViolations": 10,
   "callerPartDependents": 854,
   "callerStateDependents": 32,
   "structuralForwards": 12
@@ -100,14 +100,6 @@
    "family": "grid",
    "breach": [
     "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/grid/engines/modern/index.tsx#ModernGridItem#createElement(ElementType)#grid-cell#0",
-   "engine": "modern",
-   "family": "grid",
-   "breach": [
     "state-forward"
    ]
   },
@@ -1309,8 +1301,8 @@
   ]
  },
  "lastMove": {
-  "head": "ab88fc5c8f6622d1ca8f9f2136b963625134cd49",
+  "head": "589c7c5ab193fdb15d259c9455f9c9fc8adbb4bd",
   "date": "2026-10-15",
-  "note": "lowered to the gate's own measurement through --update-baseline; ARC-12 modern-carriers cohort M1 (Container, Space, engine-internal ModernGridItem, NotifierStack): the caller data-state strip under owner answer 2 (CARRIERS, 2026-10-14) and the conditional MODERN-CARRIERS GO, P-88 kernel/common:159-164 (skinned carrier). ModernGridItem stays on the roster as an INSTRUMENT FALSE POSITIVE: the census keys rest bindings by identifier name file-wide and ModernGrid's same-named rest poisons it (fail-safe OR, over-reports only); the contract row PassThroughLaw.modern-carriers-m1 is its only guard until the census scope fix (v7.1.10 follow-up) or the M-C2 strip clears the collision."
+  "note": "lowered to the gate's own measurement through --update-baseline; census v7.1.10 (arc12/census-v7110, ast 5a447bc8): rest-binding carriers are scoped per enclosing function, so ModernGridItem leaves the roster (passThroughViolations 11 -> 10, that row only; parity v7.1.9 <-> v7.1.10 moves no other row). Historical: at ab88fc5c8 -> 589c7c5ab (ARC-12 modern-carriers cohort M1, owner answer 2 CARRIERS) ModernGridItem had stayed on the roster as an INSTRUMENT FALSE POSITIVE -- the census keyed rest bindings by identifier name file-wide and ModernGrid's same-named rest poisoned it (fail-safe OR, over-reports only); the contract row PassThroughLaw.modern-carriers-m1 was its only guard until this scope fix. ModernGrid's own rest (M5) still forwards and stays counted."
  }
 }

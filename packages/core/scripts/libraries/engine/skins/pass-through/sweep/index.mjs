@@ -9,9 +9,10 @@
  * (argv, the JSON write, console output) is replaced by this function's parameters and return.
  * Its AST helpers (analyzeFile, classify) are the sibling module ./ast/index.mjs.
  */
-// Provenance: arc12/census-v719/census.mjs sha256 9eeac4402df0057144dc64020a5487504628830fffe5cb9f9d39d2a293acd3a7 (census v7.1.9, 2026-10-14: the
-// own-anatomy index keyed by class and the path-anchored layout carriers; the tool is census.mjs PLUS ast/index.mjs sha256
-// c65e0abf1d17024f74e512349f27ab90c5805e18393b9b3ed1968dcb5f3e65e1, byte-identical to ./ast/index.mjs, which now carries each site's own DS classes;
+// Provenance: arc12/census-v7110/census.mjs sha256 9eeac4402df0057144dc64020a5487504628830fffe5cb9f9d39d2a293acd3a7 (census v7.1.10, 2026-10-15: rest
+// carriers scoped per enclosing function; census.mjs unchanged from v7.1.9, the tool is census.mjs PLUS ast/index.mjs sha256
+// 5a447bc88bd1a05d3796c5ed9d4a8c853cef3b281fc07450fc4023f8681613ae, byte-identical to ./ast/index.mjs; v7.1.9 was arc12/census-v719 -- the
+// own-anatomy index keyed by class and the path-anchored layout carriers, ast/index.mjs c65e0abf carrying each site's own DS classes;
 // v7.1.8 was arc12/census-v718/census.mjs 45c97c8b (the
 // `AST helpers` section is the sibling module ./ast/index.mjs, moved verbatim -- the tool is census.mjs PLUS ast/index.mjs sha256
 // b2d4d8a088bcb3fecc7ff1855523da582cf832aba4fbb2f8cc2dda3797578afe, byte-identical to ./ast/index.mjs; no measurement moves; v7.1.7 was
