@@ -28,6 +28,7 @@ export const CONTRACT_PACKAGE = '@rottay/design-system';
 export const PUBLISHED_SUBPATHS: readonly ContractRow[] = [
   { subpath: '.', disposition: 'guaranteed', retiredBy: null },
   { subpath: './server', disposition: 'guaranteed', retiredBy: null },
+  { subpath: './server/static-markup', disposition: 'lab', retiredBy: 'WO-CON-09' },
   { subpath: './icons', disposition: 'guaranteed', retiredBy: null },
   { subpath: './icons/presets/bithire', disposition: 'guaranteed', retiredBy: null },
   { subpath: './icons/roles/*', disposition: 'retire-by', retiredBy: 'WO-RET-06' },

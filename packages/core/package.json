@@ -330,6 +330,10 @@
       "./spatial": {
         "owner": "WO-CRA-15",
         "reviewBy": "4.0"
+      },
+      "./server/static-markup": {
+        "owner": "WO-CON-09",
+        "reviewBy": "4.1"
       }
     },
     "sourceEntrypoints": {

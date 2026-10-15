@@ -3,13 +3,14 @@
   "policy": "decrease-only",
   "purpose": "Consumer census anchor (WO-RET-01 step 1): every published subpath classified by consumption across the four consumer roots, plus the internal reachability census. Growth in consumerlessSubpaths / unreachableModules / testOnlyModules fails --check naming every new member; shrinkage never fails (retirements shrink it). stylesUnreferenced is reported, not ratcheted. exportsDigest pins the published subpath map; a drifted digest means the map moved and the baseline must be rewritten by a sighted --write.",
   "measured": "consumer-census",
-  "exportsDigest": "sha256-ef2aeb987f06346a579f7699a67b23932b299a726e25270f5ac412c8e3fb82d7",
+  "exportsDigest": "sha256-7bd83a551ab0843f6fe8ef0c9924b43cc58e7aa64188cc928e964c049e930d2e",
   "consumerlessSubpaths": [
     "./fonts/arabic-text.css",
     "./icons/roles/*",
     "./marks/brand",
     "./marks/cloud",
     "./pictograms",
+    "./server/static-markup",
     "./styles/rottay",
     "./supplier-contract",
     "./supplier-honesty-cli"

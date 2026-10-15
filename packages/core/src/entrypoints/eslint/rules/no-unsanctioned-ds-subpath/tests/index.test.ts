@@ -78,7 +78,17 @@ function withSpatialRow(disposition: string, workOrder: string): string {
   return withRow(documentMarkdown, './spatial', disposition, workOrder);
 }
 
-const LAB_FIXTURE = parseConsumerContract(withSpatialRow('lab', 'WO-CRA-15'));
+/** The ledger drills state every other lab row as guaranteed, so `./spatial` is their only lab door. */
+function withSpatialLedgerRow(disposition: string, workOrder: string): string {
+  return withRow(
+    withRow(documentMarkdown, './server/static-markup', 'guaranteed', '—'),
+    './spatial',
+    disposition,
+    workOrder,
+  );
+}
+
+const LAB_FIXTURE = parseConsumerContract(withSpatialLedgerRow('lab', 'WO-CRA-15'));
 const LAB_FIXTURE_LEDGER = {
   './spatial': { owner: 'WO-CRA-15', reviewBy: '4.0' },
 };
@@ -133,15 +143,15 @@ describe('consumer contract: document is the single source', () => {
     expect(parsed.published.map((row) => row.subpath)).toEqual(exportKeys);
   });
 
-  it('publishes 32 subpaths and states that count in the document', () => {
+  it('publishes 33 subpaths and states that count in the document', () => {
     // The export map, disposition table and prose carry the same live count.
-    expect(exportKeys).toHaveLength(32);
-    expect(parsed.published).toHaveLength(32);
+    expect(exportKeys).toHaveLength(33);
+    expect(parsed.published).toHaveLength(33);
     expect(documentMarkdown).toContain(
-      '| Subpaths publicados | 32 |',
+      '| Subpaths publicados | 33 |',
     );
     expect(documentMarkdown).toContain(
-      '## 1. Superficie de importación sancionada (32/32)',
+      '## 1. Superficie de importación sancionada (33/33)',
     );
   });
 
@@ -167,8 +177,15 @@ describe('consumer contract: document is the single source', () => {
       return line ? Number(/\| (\d+) \|$/.exec(line)?.[1]) : 0;
     };
 
-    expect(count(tallyOf(retiring), 'lab')).toBe(0);
-    expect(count(tallyOf(oneLab), 'lab')).toBe(1);
+    // Lab rows this drill does not rewrite count the same in every variant.
+    const untouchedLab = parsed.published.filter(
+      (row) =>
+        row.disposition === 'lab' &&
+        row.subpath !== './spatial' &&
+        row.subpath !== './motion',
+    ).length;
+    expect(count(tallyOf(retiring), 'lab')).toBe(untouchedLab);
+    expect(count(tallyOf(oneLab), 'lab')).toBe(untouchedLab + 1);
     expect(count(tallyOf(oneLab), 'guaranteed')).toBe(
       count(tallyOf(retiring), 'guaranteed'),
     );
@@ -177,7 +194,7 @@ describe('consumer contract: document is the single source', () => {
     );
 
     // A guaranteed door moved to lab leaves the guaranteed count.
-    expect(count(tallyOf(twoLab), 'lab')).toBe(2);
+    expect(count(tallyOf(twoLab), 'lab')).toBe(untouchedLab + 2);
     expect(count(tallyOf(twoLab), 'guaranteed')).toBe(
       count(tallyOf(oneLab), 'guaranteed') - 1,
     );
@@ -307,7 +324,7 @@ describe('lab doors: the review ledger cannot drift from the table', () => {
     expect(
       labFixtureProblems({
         published: parseConsumerContract(
-          withSpatialRow('retire-by', 'WO-RET-01'),
+          withSpatialLedgerRow('retire-by', 'WO-RET-01'),
         ).published,
       }),
     ).toEqual(['releaseSync.lab names ./spatial, which is not a lab row']);

@@ -23,8 +23,15 @@ legacy-SSR renderer.
   code-split implementations first and returns the same markup.
 - **New subpath (additive).** `./server/static-markup` exports
   `renderResolvedStaticMarkup(node): Promise<string>`. It needs React >= 19
-  (`react-dom/static`), resolves `React.lazy` payloads only (it is not a
-  data-suspense renderer) and renders in two passes. `./server` is unchanged.
+  (`react-dom/static`; on React 18 the subpath fails to load with
+  `ERR_PACKAGE_PATH_NOT_EXPORTED`), resolves `React.lazy` payloads only (it is
+  not a data-suspense renderer) and renders in two passes. `./server` is
+  unchanged. It is the supported legacy-SSR path in the major. Until its
+  first consumer is measured it carries controlled adoption: the consumer
+  contract lists it as a `lab` door owned by the open receiver WO-CON-09, and
+  an application opts in with
+  `allowSubpaths: ['./server/static-markup']` for the
+  `no-unsanctioned-ds-subpath` lint rule.
 - The engine router calls 3 more React hooks per render
   (`useSyncExternalStore` + 2 `useRef`), and a hydrated engine component
   renders once more right after hydration (the hydration latch forces one
@@ -34,4 +41,5 @@ legacy-SSR renderer.
 ```contract-diff
 subpath ./server/static-markup — added; the supported legacy-SSR renderer, kept off ./server because it imports react-dom/server and react-dom/static
 export ./server/static-markup#renderResolvedStaticMarkup — added
+export ./eslint#PUBLISHED_SUBPATHS — changed; adds the `./server/static-markup` row (lab, owner WO-CON-09)
 ```

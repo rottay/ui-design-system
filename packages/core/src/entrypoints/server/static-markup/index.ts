@@ -27,7 +27,9 @@ import { prerender } from 'react-dom/static';
  * general data-suspense renderer: a promise that is not cached between renders
  * suspends again in the second pass and throws there.
  *
- * Requires React >= 19 (`react-dom/static`).
+ * Requires React >= 19 (`react-dom/static`). On React 18 this module fails to
+ * load: `react-dom` 18 publishes no `react-dom/static`, so Node reports
+ * `ERR_PACKAGE_PATH_NOT_EXPORTED` before this function can run.
  *
  * @example
  * ```tsx

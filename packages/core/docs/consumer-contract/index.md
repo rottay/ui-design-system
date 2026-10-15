@@ -32,7 +32,7 @@ contrato puede desaparecer (D-07) sin aviso a las apps.
 | Espejo | `packages/core/src/entrypoints/eslint/rules/no-unsanctioned-ds-subpath/contract/index.ts` | copia derivada que la regla importa (sin `node:fs`, funciona publicada) |
 | Lector | `.../no-unsanctioned-ds-subpath/contract/parse/index.ts` | parser puro markdown → filas |
 | Regla | `.../no-unsanctioned-ds-subpath/index.ts`, publicada como `@rottay/design-system/eslint` → `@rottay/no-unsanctioned-ds-subpath` | falla en todo lo que no está `guaranteed` |
-| Anti-deriva | `.../no-unsanctioned-ds-subpath/tests/index.test.ts` | reparsea este archivo, exige igualdad exacta con el espejo, exige 32/32 contra `package.json` `exports` (mismo conjunto y mismo orden) |
+| Anti-deriva | `.../no-unsanctioned-ds-subpath/tests/index.test.ts` | reparsea este archivo, exige igualdad exacta con el espejo, exige 33/33 contra `package.json` `exports` (mismo conjunto y mismo orden) |
 
 La regla es **fail-closed**: un especificador `@rottay/design-system…` que no
 aparezca como `guaranteed` en §1.2 se reporta, incluso si no está en ninguna
@@ -58,7 +58,7 @@ el showroom es parte del propio paquete y sus sondas no son consumo de producto
 (mismo criterio que ya aplicaba el borrador a `./spatial` y a
 `./tenant-theme-canary-fixtures`).
 
-## 1. Superficie de importación sancionada (32/32)
+## 1. Superficie de importación sancionada (33/33)
 
 Censo: `app-bithire` y `packages/showroom` (alcance del owner, 2026-09-05).
 Se cuentan especificadores de módulo reales (`from`, `import`, `import()`,
@@ -70,11 +70,11 @@ disposición es la parte normativa y es la que no puede derivar.
 
 | Métrica | Valor |
 | --- | --- |
-| Subpaths publicados | 32 |
+| Subpaths publicados | 33 |
 | `guaranteed` | 26 |
 | `retire-by WO-RET-06` | 5 |
-| `lab` | 1 |
-| Subpaths publicados con 0 consumidores en alcance (bithire + showroom) | 14 |
+| `lab` | 2 |
+| Subpaths publicados con 0 consumidores en alcance (bithire + showroom) | 15 |
 | Importaciones a superficie garantizada | bithire 2086 · showroom 325 |
 | Importaciones a superficie no garantizada (línea base, decrece) | bithire 16 · showroom 14 |
 
@@ -85,6 +85,7 @@ disposición es la parte normativa y es la que no puede derivar.
 | --- | --- | --- | --- | --- |
 | `.` | guaranteed | — | 1179 | 259 |
 | `./server` | guaranteed | — | 9 | 10 |
+| `./server/static-markup` | lab | WO-CON-09 | 0 | 0 |
 | `./icons` | guaranteed | — | 864 | 53 |
 | `./icons/presets/bithire` | guaranteed | — | 11 | 0 |
 | `./icons/roles/*` | retire-by | WO-RET-06 | 0 | 0 |
@@ -116,6 +117,21 @@ disposición es la parte normativa y es la que no puede derivar.
 | `./fonts/plex-mono.css` | guaranteed | — | 0 | 0 |
 | `./tenant-theme-canary-fixtures` | guaranteed | — | 2 | 3 |
 <!-- consumer-contract:published:end -->
+
+`./server/static-markup` (aditivo en el major 4.0, changeset
+`suspense-phase-b-w1`) exporta `renderResolvedStaticMarkup(node): Promise<string>`,
+la ruta SSR heredada soportada: resuelve los `React.lazy` de los motores y
+devuelve el mismo HTML que `renderToStaticMarkup`. Requiere React >= 19: con
+React 18 el módulo no carga (`react-dom` 18 no publica `react-dom/static`; Node
+responde `ERR_PACKAGE_PATH_NOT_EXPORTED`). Es la ruta soportada en el major,
+pero hoy no tiene un consumidor medido, así que entra como `lab` con receptor
+abierto WO-CON-09 (decisión del owner 2026-10-15 §6 y fallo del DT): aquí `lab`
+significa admitido con adopción controlada durante el interregno 4.0, **no**
+experimental. Una app lo adopta con `allowSubpaths: ['./server/static-markup']`,
+que es la guarda de migración prevista del major. Sus consumidores previstos son
+los 9 archivos de test de las apps que hoy usan `renderToStaticMarkup` (censo de
+la Fase B, listado en WO-CON-09; el DS no edita apps). La fila pasa a
+`guaranteed` cuando el censo mida el primer consumidor real.
 
 ### 1.3 Tabla ejecutable: subpaths no publicados observados en las apps
 

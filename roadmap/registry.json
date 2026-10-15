@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-14",
+ "updated": "2026-10-15",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -9260,6 +9260,20 @@
     "audit-2026-09-05"
    ],
    "notes": "owner-approved 2026-09-20 (proposals.md style/history queue; Fable review ACCEPT: evidence/style-history-roadmap-review/index.md); registered 2026-09-20 by the sole DT per the queue instructions — no new source IDs, phase or DS-improvements authority; wave 4; touchedRepos: [ui-design-system, app-bithire] (explicit cross-repo exception under D-31; other apps receive the protocol/recipe only); extends the consumer contract through the CON-05 versioned change protocol; WO-ARC-21 keeps its original acceptance/authority"
+  },
+  {
+   "id": "WO-CON-09",
+   "title": "4.0 adoption: consumers migrate legacy sync SSR to renderResolvedStaticMarkup",
+   "lane": "consumer-contract",
+   "order": 9,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "owner-2026-10-15"
+   ],
+   "notes": "Open receiver of the lab disposition of ./server/static-markup (consumer-contract §1.2, releaseSync.lab), registered 2026-10-15 by DT ruling (FIX-W1-CC part 3) under owner decision 6 of 2026-10-15 (legacy sync SSR is a documented major break; the app test files that use renderToStaticMarkup are reported, never edited). wave 5, adoption stage of the 4.0 line; not a gate of programme milestone C (programs owner-2026-10-15, not audit-2026-09-05). Lab here means admitted with controlled adoption during the interregnum, not experimental; apps opt in with allowSubpaths. Census (W1 validation 2026-10-15): 9 app test files, 7 app-bithire + 2 app-platform, listed in the lane block. Contract: @rottay/design-system/server/static-markup (renderResolvedStaticMarkup). The DS never edits applications. WO total 169 -> 170 (honest growth, owner decision 20 allowance)."
   },
   {
    "id": "WO-ARC-22",

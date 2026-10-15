@@ -580,6 +580,19 @@ order lawfully covers the eleven markers) and owner answer 34 of 2026-10-14
 under its "disposición explícita de la superficie pública"); an open receiver is
 not a retirement done.
 
+**Registered on 2026-10-15:** the executable specification of WO-CON-09 (4.0
+adoption: consumers migrate legacy sync SSR to renderResolvedStaticMarkup) is in
+[`consumer-contract.md`](./consumer-contract.md#wo-con-09-40-adoption-consumers-migrate-legacy-sync-ssr-to-renderresolvedstaticmarkup),
+with its entry in `registry.json` and generated STATUS. The addition changed the
+WO denominator **169 -> 170**, preserving prior completion evidence, source IDs,
+phase controls and their fingerprint. It is the open receiver of the `lab`
+disposition of `./server/static-markup`: admitted with controlled adoption
+during the 4.0 interregnum, not experimental. Its programme is
+`owner-2026-10-15`, so it does not gate milestone C. Authority: owner decision 6
+of 2026-10-15 (`owner-decisions-2026-10-15.md`) and the DT ruling of FIX-W1-CC
+part 3; the growth is registered under owner decision 20's allowance. Open
+receiver is not adoption done.
+
 Finish current packets without interruption. CAT-04 must acquire the shared
 Theme/catalog/ingress reservation; scope approval is not shared-core design
 approval: Kimi and Fable must review its implementation debrief under the

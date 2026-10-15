@@ -1270,6 +1270,7 @@ Recorded vs measured — 3 row(s) disagree; neither side is authority, and the d
 | export | `./contracts/surfaces#AdaptiveConfig` | removed; superseded by SurfaceAdaptivePosture | major | `inv-04-one-responsive-mechanism.md` |
 | export | `./contracts/surfaces#SurfaceAdaptivePosture` | added; a posture per breakpoint on the one ladder | major | `inv-04-one-responsive-mechanism.md` |
 | export | `./contracts/surfaces#SurfaceAdaptivePosture` | added; the ./contracts/surfaces subpath publishes the new name in place of AdaptiveConfig | major | `inv-04-one-responsive-mechanism.md` |
+| export | `./eslint#PUBLISHED_SUBPATHS` | changed; adds the `./server/static-markup` row (lab, owner WO-CON-09) | major | `suspense-phase-b-w1.md` |
 | export | `./eslint#rules` | changed; `no-motion-literals` also reports keyword easing in motion values | minor | `inv-05-motion-invariant.md` |
 | export | `./icons#AlertIcon` | removed; use Icon name="status.warning" (zero productive consumers, WO-RET-06 W-1) | major | `ret-06-w1-doors-and-transfers.md` |
 | export | `./icons#ICON_SIZE_MAP` | changed; values carry a rem fallback (`var(--ds-icon-md-size, 1.25rem)`) | minor | `inv-05-motion-invariant.md` |
@@ -1541,7 +1542,7 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 141/169 work orders done (83%)
+## Work-order burn-down — 141/170 work orders done (83%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -1554,7 +1555,7 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 | [architecture](./architecture.md) | 16 | 2 | 5 | 23 |
 | [skin-adoption](./skin-adoption.md) | 7 | 0 | 1 | 8 |
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
-| [consumer-contract](./consumer-contract.md) | 7 | 0 | 1 | 8 |
+| [consumer-contract](./consumer-contract.md) | 7 | 0 | 2 | 9 |
 | [catalog-door](./catalog-door.md) | 4 | 0 | 0 | 4 |
 | [derivation](./derivation.md) | 9 | 0 | 1 | 10 |
 | [family-cuts](./family-cuts.md) | 15 | 0 | 0 | 15 |
@@ -1607,6 +1608,7 @@ Also pending, declaring no public surface movement: `app-shell-bottom-bar-body-p
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
 | WO-DER-10 | D-30 BitHire identity: record the owner's pick, finalize the bithire preset, retire the candidates | S | derivation |  |
+| WO-CON-09 | 4.0 adoption: consumers migrate legacy sync SSR to renderResolvedStaticMarkup | S | consumer-contract | owner-2026-10-15 |
 
 ## Blocked (dependencies or phase claim lock)
 
