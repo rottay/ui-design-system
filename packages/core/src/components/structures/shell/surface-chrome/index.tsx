@@ -51,6 +51,7 @@ import type {
   SurfaceAction,
   SurfaceTabbedView,
 } from '../../foundation/chrome/contracts';
+import { withContentBoundary } from '../../foundation/content-boundary/region';
 
 export interface SurfaceActionBarProps<TView = void> {
   actions?: SurfaceAction<TView>[];
@@ -244,7 +245,10 @@ export function SurfaceSectionCard({
               {actions && <div data-part="header-actions">{actions}</div>}
             </Flex>
           )}
-          <div className={classes.content} data-part="section-content">{children}</div>
+          {withContentBoundary(
+            'section-content',
+            <div className={classes.content} data-part="section-content">{children}</div>,
+          )}
         </Stack>
       </Card.Body>
     </Card>

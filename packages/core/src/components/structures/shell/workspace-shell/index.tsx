@@ -30,6 +30,7 @@
 import { lazy, Suspense, type CSSProperties, type ReactNode } from 'react';
 
 import { Box } from '../../../primitives/layout/box';
+import { withContentBoundary } from '../../foundation/content-boundary/region';
 
 /** Independently controlled ParticleField runtime and static alternative. */
 export interface WorkspaceShellParticleFieldConfig {
@@ -234,9 +235,12 @@ export function WorkspaceShell({
 
       <Box className="ds-collection-shell__overlay" data-part="overlay" />
 
-      <Box className="ds-collection-shell__content" data-part="content">
-        {children}
-      </Box>
+      {withContentBoundary(
+        'workspace-content',
+        <Box className="ds-collection-shell__content" data-part="content">
+          {children}
+        </Box>,
+      )}
     </Box>
   );
 }

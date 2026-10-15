@@ -23,6 +23,7 @@ import type { ReactNode } from 'react';
 import { Box } from '../../../primitives';
 import { PatternPageShell } from '../../../patterns';
 import type { SurfacePageChrome } from '../../foundation/chrome/contracts';
+import { withContentBoundary } from '../../foundation/content-boundary/region';
 
 /**
  * Props for the PageShellSurface component.
@@ -86,9 +87,12 @@ export function PageShellSurface({
           name is inert outside an active view transition, and it is PAINT --
           `skin/page-shell-surface` states it on this part, so the surface
           carries anatomy and no visual value of its own. */}
-      <Box className="ds-surface ds-page-shell-surface" data-part="body">
-        {children}
-      </Box>
+      {withContentBoundary(
+        'content-slot',
+        <Box className="ds-surface ds-page-shell-surface" data-part="body">
+          {children}
+        </Box>,
+      )}
     </PatternPageShell>
   );
 }

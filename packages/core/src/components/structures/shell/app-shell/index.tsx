@@ -56,6 +56,7 @@ import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/r
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { NavigationMenuIcon } from '@/graphics/icons/semantic/generated/roles/navigation-menu';
 import { Sheet } from '../../../primitives/overlay/sheet';
+import { withContentBoundary } from '../../foundation/content-boundary/region';
 
 // ---------------------------------------------------------------------------
 // Context — allows children to read shell state
@@ -513,14 +514,17 @@ export function AppShell({
           )}
 
           {/* Content */}
-          <main
-            id={contentId}
-            tabIndex={-1}
-            className="ds-app-shell__content"
-            data-part="content"
-          >
-            {children}
-          </main>
+          {withContentBoundary(
+            'content-slot',
+            <main
+              id={contentId}
+              tabIndex={-1}
+              className="ds-app-shell__content"
+              data-part="content"
+            >
+              {children}
+            </main>,
+          )}
 
           {/* Footer */}
           {footer && (
