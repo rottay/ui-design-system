@@ -25,28 +25,27 @@ import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/ind
 const packageDir = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 
 /**
- * Lint one planted file at a path INSIDE the package, so the config's
- * path-scoped blocks apply exactly as they would in the real tree.
- * `src/__eslint-drill__/` is created and removed per case.
+ * Lint one planted file under a logical path INSIDE the package, so the
+ * config's path-scoped blocks and the rules' filename scopes apply exactly as
+ * they would in the real tree. The source reaches ESLint on stdin and never
+ * touches `src/`, which sibling suites walk concurrently.
  */
 function lintPlanted(relativePath, source) {
-  const absolute = join(packageDir, relativePath);
-  mkdirSync(dirname(absolute), { recursive: true });
-  writeFileSync(absolute, source, 'utf8');
-  try {
-    const run = spawnSync(
-      'node',
-      [join(packageDir, '../../node_modules/eslint/bin/eslint.js'), relativePath, '-f', 'json'],
-      { cwd: packageDir, encoding: 'utf8' },
-    );
-    const [report] = JSON.parse(run.stdout || '[]');
-    return report?.messages ?? [];
-  } finally {
-    // Remove the whole planted subtree, whatever depth it sits at: the drill
-    // root is the ancestor named `__eslint-drill__`.
-    const root = relativePath.slice(0, relativePath.indexOf('__eslint-drill__') + '__eslint-drill__'.length);
-    rmSync(join(packageDir, root), { recursive: true, force: true });
-  }
+  const run = spawnSync(
+    'node',
+    [
+      join(packageDir, '../../node_modules/eslint/bin/eslint.js'),
+      '--stdin',
+      '--stdin-filename',
+      relativePath,
+      '-f',
+      'json',
+    ],
+    { cwd: packageDir, encoding: 'utf8', input: source },
+  );
+  const [report] = JSON.parse(run.stdout || '[]');
+  assert.equal(report?.filePath, join(packageDir, relativePath), `eslint must lint the logical path; ${run.stderr}`);
+  return report.messages;
 }
 
 const COLOURED_COMPONENT = `import React from 'react';
