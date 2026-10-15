@@ -414,6 +414,7 @@ function CommandCenterSurfaceContent(props: CommandCenterSurfaceProps) {
               className="ds-command-center__title"
               level="h1"
               textStyle="pageTitle"
+              align="start"
             >
               {title}
             </Heading>

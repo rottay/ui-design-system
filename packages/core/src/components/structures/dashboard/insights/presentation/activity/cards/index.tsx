@@ -157,7 +157,7 @@ export function ActivityCards({
               className="view-all-link"
               data-part="view-all-link"
             >
-              <Text size="xs" weight="medium" className="ds-activity-cards__view-all-label" style={{ fontSize: 10 }}>
+              <Text size="xs" weight="medium" className="ds-activity-cards__view-all-label" style={{ fontSize: 10 }} align="start">
                 {resolvedViewAllLabel}
               </Text>
               <ExternalLink style={{ width: 9, height: 9 }} />

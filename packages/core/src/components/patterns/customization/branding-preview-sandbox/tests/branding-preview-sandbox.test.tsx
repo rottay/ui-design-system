@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 import { BrandingPreviewSandbox } from '..';
 import { compileThemeIntent, staticThemeIntent } from '@/infrastructure/compilers/runtime/theme';
@@ -159,3 +159,33 @@ describe('BrandingPreviewSandbox', () => {
   });
 });
 
+// F-1 RTL (owner ruling 2026-10-14): the engine default stays the physical `left`, so reading-order text passes
+// align="start". jsdom loads no skin stylesheet, so the pair reads the stamped logical value and its utility
+// class under each direction; that `text-align: start` lands on the right edge under dir=rtl is CSS's own rule.
+function expectLogicalStart(container: ParentNode, hooks: readonly string[], dir: 'ltr' | 'rtl'): void {
+  for (const hook of hooks) {
+    const nodes = container.querySelectorAll(`.${hook}`);
+    expect(nodes.length, hook).toBeGreaterThan(0);
+    for (const node of nodes) {
+      expect(node.getAttribute('data-align'), hook).toBe('start');
+      expect(node.classList.contains('text-start'), hook).toBe(true);
+      // the regression: the physical default pins the text to the left edge in RTL
+      expect(node.classList.contains('text-left'), hook).toBe(false);
+      expect(node.closest('[dir]')?.getAttribute('dir'), hook).toBe(dir);
+    }
+  }
+}
+
+describe('F-1 RTL semantic alignment', () => {
+  it.each(['ltr', 'rtl'] as const)('stamps the logical start on both preview card titles under dir=%s', async (dir) => {
+    const { container } = mount(
+      <div dir={dir}>
+        <BrandingPreviewSandbox vertical="bithire" appearance={{ general: { palette: { primary: '#FF0000' } } }} />
+      </div>,
+    );
+    await waitFor(() => {
+      expect(container.querySelectorAll('.ds-branding-preview-sandbox__preview-card-title')).toHaveLength(2);
+    });
+    expectLogicalStart(container, ['ds-branding-preview-sandbox__preview-card-title'], dir);
+  });
+});

@@ -20,6 +20,9 @@ import type { TenantConfig } from '@/foundation/contracts';
 import { ActivityCards, ActivityCompact, ActivityTicker, ActivityTimeline } from '../presentation';
 import type { ActivityItem } from '../foundation/contracts';
 import { describe, expect, it } from 'vitest';
+import { screen } from '@testing-library/react';
+
+import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
 import {
   FIRST_PARTY_VERTICALS as VERTICALS,
@@ -155,5 +158,35 @@ describe('activity-strips focus ring drill', () => {
   it('the stamped twin is the only difference between the two markups', () => {
     expect(rendered).not.toContain('data-state="focus-visible"');
     expect(stamped.replace(/ data-state="focus-visible"/gu, '')).toBe(rendered);
+  });
+});
+
+// F-1 RTL (owner ruling 2026-10-14): the engine default stays the physical `left`, so reading-order text passes
+// align="start". jsdom loads no skin stylesheet, so the pair reads the stamped logical value and its utility
+// class under each direction; that `text-align: start` lands on the right edge under dir=rtl is CSS's own rule.
+function expectLogicalStart(container: ParentNode, hooks: readonly string[], dir: 'ltr' | 'rtl'): void {
+  for (const hook of hooks) {
+    const nodes = container.querySelectorAll(`.${hook}`);
+    expect(nodes.length, hook).toBeGreaterThan(0);
+    for (const node of nodes) {
+      expect(node.getAttribute('data-align'), hook).toBe('start');
+      expect(node.classList.contains('text-start'), hook).toBe(true);
+      // the regression: the physical default pins the text to the left edge in RTL
+      expect(node.classList.contains('text-left'), hook).toBe(false);
+      expect(node.closest('[dir]')?.getAttribute('dir'), hook).toBe(dir);
+    }
+  }
+}
+
+describe('F-1 RTL semantic alignment', () => {
+  it.each(['ltr', 'rtl'] as const)('stamps the logical start on the cards view-all label under dir=%s', async (dir) => {
+    const { container } = renderSurface(
+      <div dir={dir}>
+        <ActivityCards items={ITEMS} viewAllHref="/all" viewAllLabel="View all" />
+      </div>,
+      { engine: 'modern' },
+    );
+    await screen.findByText('View all');
+    expectLogicalStart(container, ['ds-activity-cards__view-all-label'], dir);
   });
 });

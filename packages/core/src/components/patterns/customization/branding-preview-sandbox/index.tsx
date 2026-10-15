@@ -313,7 +313,7 @@ export function BrandingPreviewSandbox({
             variant="outlined"
           >
             <Card.Body>
-              <Text className="ds-branding-preview-sandbox__preview-card-title" weight="semibold">
+              <Text className="ds-branding-preview-sandbox__preview-card-title" weight="semibold" align="start">
                 {t('brandingPreview.card.title', 'Card Title')}
               </Text>
               <Text className="ds-branding-preview-sandbox__preview-card-body" size="sm">
@@ -324,7 +324,7 @@ export function BrandingPreviewSandbox({
           {!compact && (
             <Card className="ds-branding-preview-sandbox__card" variant="elevated">
               <Card.Body>
-                <Text className="ds-branding-preview-sandbox__preview-card-title" weight="semibold">
+                <Text className="ds-branding-preview-sandbox__preview-card-title" weight="semibold" align="start">
                   {t('brandingPreview.card.elevatedTitle', 'Elevated Card')}
                 </Text>
                 <Text className="ds-branding-preview-sandbox__preview-card-body" size="sm">

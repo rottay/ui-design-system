@@ -729,6 +729,7 @@ export function MessageBubble({
                     className="ds-assistant__author"
                     weight="bold"
                     title={typeof author === 'string' ? author : undefined}
+                    align="start"
                   >
                     {author}
                   </Text>

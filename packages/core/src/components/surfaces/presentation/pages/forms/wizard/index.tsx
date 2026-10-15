@@ -383,7 +383,7 @@ function WizardSurfaceContent({ config, loading = false, error, onRetry, adapt }
       <Grid.Item span={asideNode && !shouldStack ? 8 : undefined}>
         <Stack spacing={sectionSpacing}>
           {config.presentation.description && (
-            <SurfacePostureSlot name="description" asChild><Text className="ds-wizard__description" as="p" color="subtle">
+            <SurfacePostureSlot name="description" asChild><Text className="ds-wizard__description" as="p" color="subtle" align="start">
               {config.presentation.description}
             </Text></SurfacePostureSlot>
           )}

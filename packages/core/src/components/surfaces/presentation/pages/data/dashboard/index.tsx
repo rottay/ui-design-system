@@ -443,6 +443,7 @@ function DashboardSurfaceContent({
                                     level="h2"
                                     className="ds-dashboard__section-title"
                                     textStyle="sectionTitle"
+                                    align="start"
                                   >
                                     {section.title}
                                   </Heading>
@@ -450,6 +451,7 @@ function DashboardSurfaceContent({
                                 {section.description && (
                                   <Text
                                     className="ds-dashboard__muted-text ds-dashboard__section-description"
+                                    align="start"
                                   >
                                     {section.description}
                                   </Text>

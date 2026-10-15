@@ -363,3 +363,45 @@ describe('PatternListToolbar contract', () => {
     });
   });
 });
+
+// F-1 RTL (owner ruling 2026-10-14): the engine default stays the physical `left`, so reading-order text passes
+// align="start". jsdom loads no skin stylesheet, so the pair reads the stamped logical value and its utility
+// class under each direction; that `text-align: start` lands on the right edge under dir=rtl is CSS's own rule.
+function expectLogicalStart(container: ParentNode, hooks: readonly string[], dir: 'ltr' | 'rtl'): void {
+  for (const hook of hooks) {
+    const nodes = container.querySelectorAll(`.${hook}`);
+    expect(nodes.length, hook).toBeGreaterThan(0);
+    for (const node of nodes) {
+      expect(node.getAttribute('data-align'), hook).toBe('start');
+      expect(node.classList.contains('text-start'), hook).toBe(true);
+      // the regression: the physical default pins the text to the left edge in RTL
+      expect(node.classList.contains('text-left'), hook).toBe(false);
+      expect(node.closest('[dir]')?.getAttribute('dir'), hook).toBe(dir);
+    }
+  }
+}
+
+describe('F-1 RTL semantic alignment', () => {
+  // 1280 renders the full row (title section), 375 the compact one: each carries its own title Text.
+  it.each([
+    ['ltr', 1280],
+    ['rtl', 1280],
+    ['ltr', 375],
+    ['rtl', 375],
+  ] as const)('stamps the logical start on the title and the active-filter count under dir=%s at %ipx', async (dir, width) => {
+    // The engine wrapper stamps its own locale direction, so the direction under test sits inside it.
+    mockMatchMedia(width);
+    renderWithEngine(
+      <div dir={dir}>
+        <PatternListToolbar engine="modern" {...baseProps()} />
+      </div>,
+      'modern',
+    );
+    const root = await findToolbarRoot();
+    expect(root.getAttribute('data-container-layout')).toBe(width === 375 ? 'compact' : 'full');
+    await waitFor(() => {
+      expect(root.querySelector('.ds-list-toolbar__title')).not.toBeNull();
+    });
+    expectLogicalStart(root, ['ds-list-toolbar__title', 'ds-list-toolbar__filter-chips-count'], dir);
+  }, 45000);
+});

@@ -865,6 +865,7 @@ export default function ModernListToolbar({
                   )}
                   <Text
                     className='ds-list-toolbar__title'
+                    align='start'
                   >
                     {title}
                   </Text>
@@ -984,6 +985,7 @@ export default function ModernListToolbar({
                 )}
                 <Text
                   className='ds-list-toolbar__title'
+                  align='start'
                 >
                   {title}
                 </Text>
@@ -1145,6 +1147,7 @@ export default function ModernListToolbar({
             />
             <Text
               className='ds-list-toolbar__filter-chips-count'
+              align='start'
             >
               {activeFilterChips.length} {messages.active}
             </Text>
