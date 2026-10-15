@@ -2242,13 +2242,13 @@
     "channelsRead": 11,
     "classTokens": 2,
     "partsStamped": 0,
-    "partsConsumed": 1
+    "partsConsumed": 0
    },
    "readWithoutProducer": 0,
    "classVocabularies": 1,
    "legacyNamespaceClasses": 0,
    "partsStampedNotConsumed": 0,
-   "partsConsumedNotStamped": 1,
+   "partsConsumedNotStamped": 0,
    "statesConsumedNotStamped": 0,
    "unpairedStatePseudoSelectors": 0,
    "colorLiteralsInSkin": 0,
@@ -2256,7 +2256,7 @@
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
    "p88CallerParts": 3,
-   "cutNote": "WO-FAM-10 sub-lot F, and one of the four owners S1 made visible. Its skin selects classes and never `[data-part]`: a near-empty shell reading 3 channels, so the anatomy contract has to be built rather than drained. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible | H-1 (ARC-12 E8-b, DT interim ruling, review 5bed3a29): the typography strip leaves the skin's `description` part-arm painted-but-unstamped (partsConsumed and partsConsumedNotStamped 0 -> 1, the gate's own measurement). Both part-arms stay until follow-up E8b-RETIRE-DESCRIPTION-ARMS retires them with a default-value no-move proof and mirror regen"
+   "cutNote": "WO-FAM-10 sub-lot F, and one of the four owners S1 made visible. Its skin selects classes and never `[data-part]`: a near-empty shell reading 3 channels, so the anatomy contract has to be built rather than drained. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible | H-1 (ARC-12 E8-b, DT interim ruling, review 5bed3a29): the typography strip leaves the skin's `description` part-arm painted-but-unstamped (partsConsumed and partsConsumedNotStamped 0 -> 1, the gate's own measurement). Both part-arms stay until follow-up E8b-RETIRE-DESCRIPTION-ARMS retires them with a default-value no-move proof and mirror regen | E8b-RETIRE-DESCRIPTION-ARMS (ARC-12 H-1 retirement, owner ruling 2026-10-14, audit new-kimi-stop-audit): the generic `[data-part='description']` arm is retired and the class arm `.ds-form-surface__description` keeps the `--ds-form-surface-description-margin-block-end` channel; the generic arm matched 0 elements on all 3 engines with fields; with fields: [] on modern it matched the FormBuilder EmptyState description, a second cross-family leak the retirement also closes (e8b/logs/two-arm-matchsets.txt, re-measured in h1-retire/logs), so partsConsumed and partsConsumedNotStamped 1 -> 0, the gate's own measurement; channelsRead unmoved"
   },
   "wizard-surface": {
    "cut": "WO-FAM-10",
@@ -2268,13 +2268,13 @@
     "channelsRead": 9,
     "classTokens": 0,
     "partsStamped": 0,
-    "partsConsumed": 1
+    "partsConsumed": 0
    },
    "readWithoutProducer": 0,
    "classVocabularies": 0,
    "legacyNamespaceClasses": 0,
    "partsStampedNotConsumed": 0,
-   "partsConsumedNotStamped": 1,
+   "partsConsumedNotStamped": 0,
    "statesConsumedNotStamped": 0,
    "unpairedStatePseudoSelectors": 0,
    "colorLiteralsInSkin": 0,
@@ -2282,7 +2282,7 @@
    "dndTransportOwners": 0,
    "dndDropZoneOwners": 0,
    "p88CallerParts": 2,
-   "cutNote": "WO-FAM-10 sub-lot F, S1-visible. A near-empty shell: 2 channels, no `[data-part]` in the skin. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible | H-1 (ARC-12 E8-b, DT interim ruling, review 5bed3a29): the typography strip leaves the skin's `description` part-arm painted-but-unstamped (partsConsumed and partsConsumedNotStamped 0 -> 1, the gate's own measurement). Both part-arms stay until follow-up E8b-RETIRE-DESCRIPTION-ARMS retires them with a default-value no-move proof and mirror regen"
+   "cutNote": "WO-FAM-10 sub-lot F, S1-visible. A near-empty shell: 2 channels, no `[data-part]` in the skin. | G1 (ARC-12): P-88 caller parts re-classified out of the anatomy arms into p88CallerParts; newly visible as their own debt | census v7.1 (ARC-12): the barrel-import resolution blind spot fixed; typography's true caller set newly visible | H-1 (ARC-12 E8-b, DT interim ruling, review 5bed3a29): the typography strip leaves the skin's `description` part-arm painted-but-unstamped (partsConsumed and partsConsumedNotStamped 0 -> 1, the gate's own measurement). Both part-arms stay until follow-up E8b-RETIRE-DESCRIPTION-ARMS retires them with a default-value no-move proof and mirror regen | E8b-RETIRE-DESCRIPTION-ARMS (ARC-12 H-1 retirement, owner ruling 2026-10-14, audit new-kimi-stop-audit): the generic `[data-part='description']` arm is retired and the class arm `.ds-wizard__description` keeps the `--ds-wizard-surface-description-margin-block-end` channel; the generic arm matched 0 elements on rustic/classic and only the 3 native modern Stepper description spans (stepper/engines/modern:178), a cross-family leak into the wizard's rhythm that the retirement closes (e8b/logs/two-arm-matchsets.txt, re-measured in h1-retire/logs), so partsConsumed and partsConsumedNotStamped 1 -> 0, the gate's own measurement; channelsRead unmoved"
   },
   "detail-form-surface": {
    "cut": "WO-FAM-10",

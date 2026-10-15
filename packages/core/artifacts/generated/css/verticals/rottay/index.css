@@ -70245,8 +70245,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * SCOPE: the surface owns ONE page rhythm (the record-and-form doctrine:
  * ruled sections on a flat canvas). Every rule keys on the anatomy the surface
  * stamps — the scope classes + `[data-part]` — and the only class-keyed rules
- * left are the composed Card roots, which do not take consumer data-part
- * (P-79); their internals stay theirs.
+ * left are the composed Card roots and the composed description Text, which
+ * do not take consumer data-part (P-79); their internals stay theirs.
  *
  *   - `root`: the sticky-actions arm reserves scroll runway for the fixed
  *     mobile ActionDock through `--ds-form-action-dock-reserved-space`, the
@@ -70290,9 +70290,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* The description's trailing rhythm: the Stack spacing above it is
-   profile-driven and stays in the TSX, so the channel rests at 0. */
-.ds-surface.ds-form-surface[data-part='root'] .ds-form-surface__description,
-.ds-surface.ds-form-surface[data-part='root'] [data-part='description'] {
+   profile-driven and stays in the TSX, so the channel rests at 0. The
+   description is a composed Text that stamps its own root part, so the rule
+   keys the `ds-form-surface__description` class hook alone (H-1: a generic
+   `[data-part='description']` arm would reach composed descendants). */
+.ds-surface.ds-form-surface[data-part='root'] .ds-form-surface__description {
   margin-block-end: var(--ds-form-surface-description-margin-block-end, var(--ds-spacing-0, 0));
 }
 
@@ -71734,8 +71736,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * SCOPE: the surface owns ONE page rhythm (the record-and-form doctrine:
  * ruled sections on a flat canvas). Every rule keys on the anatomy the
  * surface stamps — the scope classes + `[data-part]`; the only class-keyed
- * rule left is the composed aside Card root, which does not take consumer
- * data-part (P-79).
+ * rules left are the composed aside Card root and the composed description
+ * Text, which do not take consumer data-part (P-79).
  *
  *   - `description`: the trailing rhythm channel. The profile-driven Stack
  *     already supplies the gap today, so the channel rests at 0 — producing
@@ -71760,9 +71762,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  */
 
 /* The description's trailing rhythm: the Stack spacing above it is
-   profile-driven and stays in the TSX, so the channel rests at 0. */
-.ds-surface.ds-wizard[data-part='root'] .ds-wizard__description,
-.ds-surface.ds-wizard[data-part='root'] [data-part='description'] {
+   profile-driven and stays in the TSX, so the channel rests at 0. The
+   description is a composed Text that stamps its own root part, so the rule
+   keys the `ds-wizard__description` class hook alone (H-1: a generic
+   `[data-part='description']` arm would reach composed descendants). */
+.ds-surface.ds-wizard[data-part='root'] .ds-wizard__description {
   margin-block-end: var(--ds-wizard-surface-description-margin-block-end, var(--ds-spacing-0, 0));
 }
 
