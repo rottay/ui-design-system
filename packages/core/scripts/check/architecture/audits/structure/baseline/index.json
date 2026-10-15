@@ -454,7 +454,6 @@
         "infrastructure/runtime/effects/composition/react",
         "infrastructure/runtime/effects/foundation",
         "infrastructure/runtime/engines/composition",
-        "infrastructure/runtime/engines/composition/react",
         "infrastructure/runtime/engines/foundation",
         "infrastructure/runtime/engines/presentation/adapters",
         "infrastructure/runtime/engines/selection/customization",

@@ -85,6 +85,7 @@ import React, {
   useSyncExternalStore,
 } from 'react';
 import { EngineProvider } from '../../../../engines/composition/react/provider';
+import { RenderedFamiliesRoot } from '../../../../engines/composition/react/rendered-families';
 import { ThemeProvider } from '../../../../theming';
 import {
   censusRuntimeVisualPayload,
@@ -724,6 +725,7 @@ export function DesignSystemProvider({
       rendered at all and hydration has nothing extra to reconcile.
     */}
     {claim ? <RetainedArtifactArm claim={claim} /> : null}
+    <RenderedFamiliesRoot>
     <IconProfileCarrier.Provider value={iconExpressiveProfile}>
     <TenantProvider
       config={resolvedRuntimeConfig}
@@ -790,6 +792,7 @@ export function DesignSystemProvider({
       </RecipeProfileProvider>
     </TenantProvider>
     </IconProfileCarrier.Provider>
+    </RenderedFamiliesRoot>
     {claim ? <RetainedArtifactSeal claim={claim} /> : null}
     </>
   );

@@ -62,6 +62,10 @@ import {
   type RefAttributes,
 } from 'react';
 import { useDeclaredEngine } from '../../composition/react/provider';
+import {
+  RenderedFamiliesContext,
+  registerWarmableFamily,
+} from '../../composition/react/rendered-families';
 import { createCustomWrapper } from '../../selection/customization/component-registry';
 import { EngineErrorBoundary } from './error-boundary';
 import type { EngineName } from '../../../../../foundation/contracts';
@@ -163,6 +167,11 @@ export function createEngineComponent<P extends object>(
     };
   };
 
+  for (const engine of IMPLEMENTED_ENGINE_NAMES) {
+    const loader = loaders[engine];
+    if (loader) registerWarmableFamily(`${displayName}@${engine}`, loader);
+  }
+
   const components = {
     ...(Object.fromEntries(
       IMPLEMENTED_ENGINE_NAMES.map((engine) => [engine, lazy(implementation(engine))])
@@ -196,6 +205,7 @@ export function createEngineComponent<P extends object>(
     // False on the server and while this fiber hydrates; latched so the hydrated tree keeps its shape.
     const mountedOnClient = useRef(useSyncExternalStore(subscribeNever, clientTrue, serverFalse)).current;
     const declaredEngine = useDeclaredEngine();
+    const renderedFamilies = useContext(RenderedFamiliesContext);
 
     // Read tenant context if available. Components can still render without a
     // TenantProvider, but in that case custom pack resolution falls back to the
@@ -234,6 +244,10 @@ export function createEngineComponent<P extends object>(
       }
       return resolved;
     }, [activeEngine, componentPack]);
+
+    if (renderedFamilies && activeEngine !== EXTENSION_ENGINE) {
+      renderedFamilies.record(`${displayName}@${activeEngine}`);
+    }
 
     // A new implementation remounts anyway, so it may suspend inside its own boundary.
     const mountedComponent = useRef(Component);
