@@ -90,6 +90,9 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       children,
       className,
       style,
+      // P-88: the space stamps its own part ('root') after the spread; a caller
+      // data-state is never forwarded (callers compose through className).
+      "data-state": _callerDataState,
       ...rest
     } = props;
 

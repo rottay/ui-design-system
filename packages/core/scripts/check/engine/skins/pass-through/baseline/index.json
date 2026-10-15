@@ -16,20 +16,12 @@
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 14,
+  "passThroughViolations": 11,
   "callerPartDependents": 854,
   "callerStateDependents": 32,
   "structuralForwards": 12
  },
  "roster": [
-  {
-   "key": "primitives/feedback/foundation/notifier/presentation/stack/index.tsx#NotifierStack#div#stack#0",
-   "engine": "all (compound)",
-   "family": "notifier",
-   "breach": [
-    "state-forward"
-   ]
-  },
   {
    "key": "primitives/layout/box/engines/modern/index.tsx#ModernBox#createElement(ElementType)#box-surface#0",
    "engine": "modern",
@@ -45,14 +37,6 @@
    "family": "box",
    "breach": [
     "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/container/engines/modern/index.tsx#Container#div#root#0",
-   "engine": "modern",
-   "family": "container",
-   "breach": [
     "state-forward"
    ]
   },
@@ -123,14 +107,6 @@
    "key": "primitives/layout/grid/engines/modern/index.tsx#ModernGridItem#createElement(ElementType)#grid-cell#0",
    "engine": "modern",
    "family": "grid",
-   "breach": [
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/space/engines/modern/index.tsx#Space#div#root#0",
-   "engine": "modern",
-   "family": "space",
    "breach": [
     "state-forward"
    ]
@@ -1070,11 +1046,6 @@
     "surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx#Box#root#3"
    ]
   },
-  "container": {
-   "carrier": true,
-   "part": [],
-   "state": []
-  },
   "divider": {
    "carrier": false,
    "part": [],
@@ -1258,16 +1229,6 @@
    ],
    "state": []
   },
-  "notifier": {
-   "carrier": false,
-   "part": [],
-   "state": []
-  },
-  "space": {
-   "carrier": true,
-   "part": [],
-   "state": []
-  },
   "stack": {
    "carrier": true,
    "part": [
@@ -1348,8 +1309,8 @@
   ]
  },
  "lastMove": {
-  "head": "d91b4123c87d4b51402237425b01bb6c095e8c4e",
+  "head": "ab88fc5c8f6622d1ca8f9f2136b963625134cd49",
   "date": "2026-10-15",
-  "note": "lowered to the gate's own measurement through --update-baseline"
+  "note": "lowered to the gate's own measurement through --update-baseline; ARC-12 modern-carriers cohort M1 (Container, Space, engine-internal ModernGridItem, NotifierStack): the caller data-state strip under owner answer 2 (CARRIERS, 2026-10-14) and the conditional MODERN-CARRIERS GO, P-88 kernel/common:159-164 (skinned carrier). ModernGridItem stays on the roster as an INSTRUMENT FALSE POSITIVE: the census keys rest bindings by identifier name file-wide and ModernGrid's same-named rest poisons it (fail-safe OR, over-reports only); the contract row PassThroughLaw.modern-carriers-m1 is its only guard until the census scope fix (v7.1.10 follow-up) or the M-C2 strip clears the collision."
  }
 }

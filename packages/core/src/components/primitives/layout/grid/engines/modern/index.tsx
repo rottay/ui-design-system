@@ -555,6 +555,9 @@ const ModernGridItem = forwardRef<HTMLElement, GridItemProps>((props, ref) => {
     placeSelf: _placeSelf,
     zIndex: _zIndex,
     style: _style,
+    // P-88: the grid item stamps its own part ('grid-cell') after the spread; a caller
+    // data-state is never forwarded (callers compose through className).
+    "data-state": _callerDataState,
     ...htmlAttributes
   } = props;
 

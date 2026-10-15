@@ -17,8 +17,12 @@ import type { NotifierStackProps } from '../../contracts';
 
 type StackElementProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'role' | 'style' | 'className'>;
 
-export const NotifierStack = forwardRef<HTMLDivElement, NotifierStackProps & StackElementProps & { liveRole?: 'log' | 'region' }>(
-  function NotifierStack({ role, placement, layer, offset, gap, children, className, style, liveRole, ...rest }, ref) {
+// P-88: the stack stamps its own part ('stack') after the spread; a caller
+// data-state is never forwarded (callers compose through className).
+type CallerState = { 'data-state'?: string };
+
+export const NotifierStack = forwardRef<HTMLDivElement, NotifierStackProps & StackElementProps & CallerState & { liveRole?: 'log' | 'region' }>(
+  function NotifierStack({ role, placement, layer, offset, gap, children, className, style, liveRole, 'data-state': _callerDataState, ...rest }, ref) {
     const channels = {
       '--ds-notifier-layer': layer,
       ...(offset === undefined ? null : { '--ds-notifier-stack-offset': `${offset}px` }),

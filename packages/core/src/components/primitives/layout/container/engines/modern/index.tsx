@@ -81,6 +81,9 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
       children,
       className,
       style,
+      // P-88: the container stamps its own part ('root') after the spread; a caller
+      // data-state is never forwarded (callers compose through className).
+      "data-state": _callerDataState,
       ...rest
     } = props;
 

@@ -152,8 +152,15 @@ describe('engine/skins/pass-through -- carrier classification (audit, Defect A)'
     return family;
   };
 
+  // The container specimen seeds its own family row: container leaves `families` once its last
+  // roster row is stripped, and the drill must not depend on which carrier rows remain.
+  const withContainer = (l) => {
+    l.families.container ??= { carrier: true, part: [], state: [] };
+    return l;
+  };
+
   it('flipping a layout carrier to carrier=false is red, and eligibility still holds it on the owner ruling', () => {
-    const l = clone(ledger);
+    const l = withContainer(clone(ledger));
     assert.equal(l.families.container.carrier, true, 'container is a layout carrier in the committed ledger');
     l.families.container.carrier = false;
     const findings = evaluatePassThrough(view, l);
@@ -167,7 +174,7 @@ describe('engine/skins/pass-through -- carrier classification (audit, Defect A)'
   });
 
   it('a missing carrier key is red', () => {
-    const l = clone(ledger);
+    const l = withContainer(clone(ledger));
     delete l.families.container.carrier;
     assert.deepEqual(kinds(evaluatePassThrough(view, l)), ['carrier/fail']);
     assert.equal(eligibility(l).container.waitsOn, WAITS);
@@ -521,13 +528,6 @@ describe('engine/skins/pass-through -- structural forwards (census v7.1.9)', () 
     assert.ok(row(/^primitives\/layout\/box\/engines\/modern\/index\.tsx:/).ownAnatomyRules > 0, 'the modern Box is selected by its own anatomy (box-surface)');
   });
 
-  it('anchors the carriers by path: NotifierStack is charged to its owner skin, not to the stack carrier', () => {
-    const notifier = view.roster.filter((r) => r.key.startsWith('primitives/feedback/foundation/notifier/presentation/stack/index.tsx#'));
-    assert.deepEqual(notifier.map((r) => r.family), ['notifier']);
-    assert.equal(ledger.families.notifier.carrier, false);
-    assert.equal(eligibility(ledger).notifier.waitsOn, undefined);
-  });
-
   it('N6: a ledger key the library roster does not ratify is red', () => {
     const l = clone(ledger);
     const key = modernCarrierKey();
@@ -696,11 +696,28 @@ describe('engine/skins/pass-through -- structural forwards, source drills (the c
       const twin = m.census.sites.find((s) => s.key === 'primitives/layout/container/engines/classic/index.tsx#ContainerTwin#div#none#0');
       assert.ok(twin, 'the twin is measured');
       assert.equal(twin.structuralCandidate, true);
-      const findings = evaluatePassThrough(projectMeasurement(m), ledger);
+      // The container family row is seeded: it leaves `families` once its last roster row does.
+      const seeded = clone(ledger);
+      seeded.families.container ??= { carrier: true, part: [], state: [] };
+      const findings = evaluatePassThrough(projectMeasurement(m), seeded);
       assert.deepEqual(kinds(findings), ['counter/grew', 'site/grew']);
     } finally {
       writeFileSync(join(core(), rel), original);
     }
+  });
+
+  // NotifierStack no longer forwards a caller state, so the anchoring is drilled on a mutant that
+  // forwards it again: the re-counted site must be charged to its owner skin, never to `stack`.
+  it('anchors the carriers by path: NotifierStack is charged to its owner skin, not to the stack carrier', () => {
+    withMutant('src/components/primitives/feedback/foundation/notifier/presentation/stack/index.tsx', "'data-state': _callerDataState, ", '', () => {
+      const measured = projectMeasurement(measureCopy());
+      const notifier = measured.roster.filter((r) => r.key.startsWith('primitives/feedback/foundation/notifier/presentation/stack/index.tsx#'));
+      assert.deepEqual(notifier.map((r) => r.family), ['notifier']);
+      const seeded = clone(ledger);
+      seeded.families.notifier ??= { carrier: false, part: [], state: [] };
+      assert.equal(eligibility(seeded).notifier.waitsOn, undefined);
+      assert.deepEqual(kinds(evaluatePassThrough(measured, seeded)), ['counter/grew', 'site/grew']);
+    });
   });
 
   /** A private copy of the census library whose STRUCTURAL_FORWARDS roster gains one row. */

@@ -33,7 +33,7 @@
   "skins.unwired": 0,
   "skins.exemptionsBreached": 0,
   "skins.deadParts": 0,
-  "skins.passThroughViolations": 14,
+  "skins.passThroughViolations": 11,
   "skins.callerPartDependents": 854,
   "skins.callerStateDependents": 32,
   "skins.passThroughStructuralForwards": 12,
