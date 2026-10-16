@@ -447,30 +447,32 @@ export function PatternDataTable<T extends object>(
                   <Card variant="outlined">
                     <Card.Body>
                       <Stack spacing="md">
-                        <Box data-part="mobile-card-title">{"\u00a0"}</Box>
+                        <Box data-part="mobile-card-title" className="ds-data-table__mobile-card-title">{"\u00a0"}</Box>
                         <Flex
                           data-part="mobile-card-summary-row"
+                          className="ds-data-table__mobile-card-summary-row"
                           justify="between"
                           align="start"
                           gap={12}
                         >
-                          <Box data-part="mobile-card-summary-label">
+                          <Box data-part="mobile-card-summary-label" className="ds-data-table__mobile-card-summary-label">
                             {"\u00a0"}
                           </Box>
-                          <Box data-part="mobile-card-summary-value">
+                          <Box data-part="mobile-card-summary-value" className="ds-data-table__mobile-card-summary-value">
                             {"\u00a0"}
                           </Box>
                         </Flex>
                         <Flex
                           data-part="mobile-card-summary-row"
+                          className="ds-data-table__mobile-card-summary-row"
                           justify="between"
                           align="start"
                           gap={12}
                         >
-                          <Box data-part="mobile-card-summary-label">
+                          <Box data-part="mobile-card-summary-label" className="ds-data-table__mobile-card-summary-label">
                             {"\u00a0"}
                           </Box>
-                          <Box data-part="mobile-card-summary-value">
+                          <Box data-part="mobile-card-summary-value" className="ds-data-table__mobile-card-summary-value">
                             {"\u00a0"}
                           </Box>
                         </Flex>

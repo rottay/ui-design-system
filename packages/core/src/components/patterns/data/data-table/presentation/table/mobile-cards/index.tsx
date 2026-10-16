@@ -265,6 +265,7 @@ export function DataTableMobileCards<T extends object>({
               key={rowKey}
               role="listitem"
               data-part="record-list-item"
+              className="ds-data-table__record-list-item"
               data-selected={isSelected ? "true" : "false"}
               onClick={openRow}
             >
@@ -276,6 +277,7 @@ export function DataTableMobileCards<T extends object>({
                     gap={12}
                     wrap="wrap"
                     data-part="record-list-open"
+                    className="ds-data-table__record-list-open"
                     role={openRow ? "button" : undefined}
                     tabIndex={openRow ? 0 : undefined}
                     onKeyDown={
@@ -290,13 +292,13 @@ export function DataTableMobileCards<T extends object>({
                     }
                   >
                     {titleColumn && (
-                      <Box data-part="mobile-card-title">
+                      <Box data-part="mobile-card-title" className="ds-data-table__mobile-card-title">
                         {renderDefaultField(titleColumn, row, index)}
                       </Box>
                     )}
                     {renderMeta(row, index)}
                     {summaryColumns.map((column) => (
-                      <Box key={column.key} data-part="mobile-card-summary-value">
+                      <Box key={column.key} data-part="mobile-card-summary-value" className="ds-data-table__mobile-card-summary-value">
                         {renderDefaultField(column, row, index)}
                       </Box>
                     ))}
@@ -305,6 +307,7 @@ export function DataTableMobileCards<T extends object>({
                 {inlineActions && (
                   <Box
                     data-part="mobile-card-actions"
+                    className="ds-data-table__mobile-card-actions"
                     onClick={(event) => event.stopPropagation()}
                   >
                     {inlineActions}
@@ -331,7 +334,7 @@ export function DataTableMobileCards<T extends object>({
                 <Flex justify="between" align="start" gap={12}>
                   <Stack spacing="xs" className="ds-data-table__mobile-card-primary" data-part="mobile-card-primary">
                     {titleColumn && (
-                      <Box data-part="mobile-card-title">
+                      <Box data-part="mobile-card-title" className="ds-data-table__mobile-card-title">
                         {renderDefaultField(titleColumn, row, index)}
                       </Box>
                     )}
@@ -347,6 +350,7 @@ export function DataTableMobileCards<T extends object>({
                       <Flex
                         key={column.key}
                         data-part="mobile-card-summary-row"
+                        className="ds-data-table__mobile-card-summary-row"
                         justify="between"
                         align="start"
                         gap={12}
@@ -356,10 +360,10 @@ export function DataTableMobileCards<T extends object>({
                          * primitive contract. Keep the pattern slot on Box so
                          * the DataTable skin has a stable, engine-neutral hook.
                          */}
-                        <Box data-part="mobile-card-summary-label">
+                        <Box data-part="mobile-card-summary-label" className="ds-data-table__mobile-card-summary-label">
                           <Text color="subtle">{column.header}</Text>
                         </Box>
-                        <Box data-part="mobile-card-summary-value">
+                        <Box data-part="mobile-card-summary-value" className="ds-data-table__mobile-card-summary-value">
                           {renderDefaultField(column, row, index)}
                         </Box>
                       </Flex>
@@ -370,6 +374,7 @@ export function DataTableMobileCards<T extends object>({
                 {inlineActions && (
                   <Box
                     data-part="mobile-card-actions"
+                    className="ds-data-table__mobile-card-actions"
                     onClick={(event) => event.stopPropagation()}
                   >
                     <Flex gap={8} wrap="wrap">

@@ -277,14 +277,14 @@ export function InlineEditor({
   return (
     <Box
       id={id}
-      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      className={['ds-structure', 'ds-edit-fields', className, 'ds-edit-fields__editor'].filter(Boolean).join(' ')}
       data-part="editor"
       data-headerless={headerless}
       style={style}
     >
       {!headerless ? (
-        <Flex data-part="editor-header" align="start" justify="between" gap={14} wrap="wrap">
-          <Flex align="start" gap={12} data-part="editor-lead">
+        <Flex data-part="editor-header" className="ds-edit-fields__editor-header" align="start" justify="between" gap={14} wrap="wrap">
+          <Flex align="start" gap={12} data-part="editor-lead" className="ds-edit-fields__editor-lead">
             {Icon ? (
               <Box
                 data-part="editor-icon"
@@ -362,7 +362,7 @@ export function InlineEditGrid({
     <Box
       ref={setGridElement}
       id={id}
-      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      className={['ds-structure', 'ds-edit-fields', className, 'ds-edit-fields__grid'].filter(Boolean).join(' ')}
       data-part="grid"
       data-kind={kind}
       data-expanded={kind === 'advanced' ? expanded : undefined}
@@ -400,12 +400,12 @@ export function InlineEditSection({
   const copy = useEditFieldsCopy();
   return (
     <Box
-      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      className={['ds-structure', 'ds-edit-fields', className, 'ds-edit-fields__section'].filter(Boolean).join(' ')}
       data-part="section"
       style={style}
     >
-      <Flex data-part="section-header" align="center" justify="between" gap={12} wrap="wrap">
-        <Flex align="center" gap={10} data-part="section-lead">
+      <Flex data-part="section-header" className="ds-edit-fields__section-header" align="center" justify="between" gap={12} wrap="wrap">
+        <Flex align="center" gap={10} data-part="section-lead" className="ds-edit-fields__section-lead">
           {Icon ? (
             <Box data-part="section-icon" aria-hidden>
               <Icon size={15} />
@@ -439,7 +439,7 @@ export function InlineEditSection({
           </Flex>
         ) : null}
       </Flex>
-      <Box data-part="section-content" style={contentStyle}>{children}</Box>
+      <Box data-part="section-content" className="ds-edit-fields__section-content" style={contentStyle}>{children}</Box>
     </Box>
   );
 }
@@ -680,7 +680,7 @@ export function InlineEditFooter({
       justify={hasFooterSupport ? 'between' : 'end'}
       gap={8}
       wrap="wrap"
-      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      className={['ds-structure', 'ds-edit-fields', className, 'ds-edit-fields__footer'].filter(Boolean).join(' ')}
       data-part="footer"
       data-saving={Boolean(isSaving)}
       data-error={Boolean(error)}
@@ -705,10 +705,10 @@ export function InlineEditFooter({
               {hiddenDirtySummary}
             </Text>
           ) : null}
-          {impactPreview ? <Box data-part="footer-impact-preview">{impactPreview}</Box> : null}
+          {impactPreview ? <Box data-part="footer-impact-preview" className="ds-edit-fields__footer-impact-preview">{impactPreview}</Box> : null}
         </Stack>
       ) : null}
-      <Flex align="center" justify="end" gap={8} wrap="wrap" data-part="footer-actions">
+      <Flex align="center" justify="end" gap={8} wrap="wrap" data-part="footer-actions" className="ds-edit-fields__footer-actions">
         {hasStructuredActions ? (
           <>
             <Button

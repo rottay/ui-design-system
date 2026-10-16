@@ -241,13 +241,16 @@
 
 /* ---- mobile card text (title + summary value Boxes; the summary LABEL is a
         Text prop-swapped to color="subtle", not a rule) ---- */
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-title"] {
+.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-title"],
+.ds-pattern-data-table.ds-data-table--mobile .ds-data-table__mobile-card-title {
   color: var(--ds-color-text-primary);
   font-family: var(--ds-type-section-title-font-family, inherit);
   font-weight: var(--ds-type-section-title-font-weight, 600);
 }
 .ds-pattern-data-table.ds-data-table--mobile
-  [data-part="mobile-card-summary-label"] {
+  [data-part="mobile-card-summary-label"],
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card-summary-label {
   flex-shrink: 0;
   font-family: var(--ds-type-label-font-family, inherit);
   font-size: var(--ds-typography-label-size, 0.6875rem);
@@ -256,7 +259,9 @@
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 .ds-pattern-data-table.ds-data-table--mobile
-  [data-part="mobile-card-summary-value"] {
+  [data-part="mobile-card-summary-value"],
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card-summary-value {
   min-width: 0;
   overflow-wrap: anywhere;
   text-align: end;
@@ -264,7 +269,9 @@
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
-  [data-part="mobile-card-summary-row"] {
+  [data-part="mobile-card-summary-row"],
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card-summary-row {
   min-width: 0;
   min-height: var(--ds-data-table-mobile-summary-min-height, var(--ds-spacing-8, 2rem));
   padding-block: var(--ds-data-table-mobile-summary-padding-block, calc(0.375rem * var(--ds-rhythm-effective-scale, 1)));
@@ -273,7 +280,10 @@
 
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="mobile-card-summary-row"]
-  + [data-part="mobile-card-summary-row"] {
+  + [data-part="mobile-card-summary-row"],
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card-summary-row
+  + .ds-data-table__mobile-card-summary-row {
   border-block-start: 1px solid
     var(
       --ds-data-table-mobile-summary-divider,
@@ -294,7 +304,9 @@
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
-  [data-part="mobile-card-actions"][data-part="mobile-card-actions"] {
+  [data-part="mobile-card-actions"][data-part="mobile-card-actions"],
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card-actions.ds-data-table__mobile-card-actions {
   padding-block-start: var(--ds-data-table-mobile-actions-padding-block, calc(0.625rem * var(--ds-rhythm-effective-scale, 1)));
   border-block-start: 1px solid
     var(--ds-table-row-border, var(--ds-color-border-subtle));
@@ -436,7 +448,8 @@
   min-inline-size: 0;
 }
 
-.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list-item"] {
+.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list-item"],
+.ds-pattern-data-table.ds-data-table--mobile .ds-data-table__record-list-item {
   min-inline-size: 0;
   /* The list row keeps the card summary's rhythm: same two channels, so a
      tenant retunes one padding and both record shapes follow. */
@@ -447,7 +460,10 @@
 
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="record-list-item"]
-  + [data-part="record-list-item"] {
+  + [data-part="record-list-item"],
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__record-list-item
+  + .ds-data-table__record-list-item {
   border-block-start: 1px solid
     var(--ds-table-row-border, var(--ds-color-border-subtle));
 }
@@ -457,7 +473,8 @@
   background: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
 }
 
-.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list-open"] {
+.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list-open"],
+.ds-pattern-data-table.ds-data-table--mobile .ds-data-table__record-list-open {
   min-inline-size: 0;
   border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
@@ -509,7 +526,9 @@
 
 @container ds-mobile-table (max-width: 28rem) {
   .ds-pattern-data-table.ds-data-table--mobile
-    [data-part="mobile-card-summary-label"] {
+    [data-part="mobile-card-summary-label"],
+  .ds-pattern-data-table.ds-data-table--mobile
+    .ds-data-table__mobile-card-summary-label {
     max-width: 42%;
   }
 }

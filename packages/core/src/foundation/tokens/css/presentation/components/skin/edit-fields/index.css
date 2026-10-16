@@ -88,10 +88,14 @@
 .ds-structure.ds-edit-fields[data-part='group'],
 .ds-structure.ds-edit-fields.ds-edit-fields__group,
 .ds-structure.ds-edit-fields[data-part='editor'],
+.ds-structure.ds-edit-fields.ds-edit-fields__editor,
 .ds-structure.ds-edit-fields[data-part='grid'],
+.ds-structure.ds-edit-fields.ds-edit-fields__grid,
 .ds-structure.ds-edit-fields[data-part='section'],
+.ds-structure.ds-edit-fields.ds-edit-fields__section,
 .ds-structure.ds-edit-fields[data-part='field'],
-.ds-structure.ds-edit-fields[data-part='footer'] {
+.ds-structure.ds-edit-fields[data-part='footer'],
+.ds-structure.ds-edit-fields.ds-edit-fields__footer {
   --_ds-edit-fields-density: var(--ds-density-global-effective-scale, 1);
 }
 
@@ -101,17 +105,20 @@
   min-inline-size: 0;
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'],
+.ds-structure.ds-edit-fields.ds-edit-fields__editor > .ds-edit-fields__editor-header {
   padding-block-end: calc(14px * var(--_ds-edit-fields-density, 1));
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-lead'] {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-lead'],
+.ds-structure.ds-edit-fields.ds-edit-fields__editor > .ds-edit-fields__editor-header .ds-edit-fields__editor-lead {
   flex: 1 1 420px;
   min-inline-size: 0;
 }
 
 .ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-copy'],
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-copy {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-copy,
+.ds-structure.ds-edit-fields.ds-edit-fields__editor > .ds-edit-fields__editor-header .ds-edit-fields__editor-copy {
   min-inline-size: 0;
 }
 
@@ -127,7 +134,8 @@
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-eyebrow {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-eyebrow,
+.ds-structure.ds-edit-fields.ds-edit-fields__editor > .ds-edit-fields__editor-header .ds-edit-fields__editor-eyebrow {
   color: var(--ds-color-text-muted);
   letter-spacing: 0.08em;
   line-height: 1;
@@ -136,11 +144,13 @@
   text-transform: var(--ds-page-header-eyebrow-text-transform, var(--ds-typography-label-transform, uppercase));
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-title {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-title,
+.ds-structure.ds-edit-fields.ds-edit-fields__editor > .ds-edit-fields__editor-header .ds-edit-fields__editor-title {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-description {
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] .ds-edit-fields__editor-description,
+.ds-structure.ds-edit-fields.ds-edit-fields__editor > .ds-edit-fields__editor-header .ds-edit-fields__editor-description {
   color: var(--ds-color-text-secondary);
   line-height: 1.45;
 }
@@ -152,7 +162,8 @@
 
 /* --- InlineEditGrid -------------------------------------------------------- */
 
-.ds-structure.ds-edit-fields[data-part='grid'] {
+.ds-structure.ds-edit-fields[data-part='grid'],
+.ds-structure.ds-edit-fields.ds-edit-fields__grid {
   /* Authored defaults (an authored declaration IS a producer): the engine's
      per-instance inline channel writes override these only when a caller
      passes a non-default `columns`/`gap`, so the read below is never an
@@ -175,7 +186,8 @@
    divider-grammar seam sews stacked cells, with each cell's own block
    padding keeping the air symmetric around the rule. */
 @container ds-edit-fields-grid (inline-size < 30rem) {
-  .ds-structure.ds-edit-fields[data-part='grid'] {
+  .ds-structure.ds-edit-fields[data-part='grid'],
+  .ds-structure.ds-edit-fields.ds-edit-fields__grid {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 0;
   }
@@ -185,29 +197,34 @@
   }
 }
 
-.ds-structure.ds-edit-fields[data-part='grid'][data-kind] {
+.ds-structure.ds-edit-fields[data-part='grid'][data-kind],
+.ds-structure.ds-edit-fields.ds-edit-fields__grid[data-kind] {
   /* Tenant divider grammar reaches the region seam (floors 1px solid). */
   border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
 }
 
 /* --- InlineEditSection ----------------------------------------------------- */
 
-.ds-structure.ds-edit-fields[data-part='section'] {
+.ds-structure.ds-edit-fields[data-part='section'],
+.ds-structure.ds-edit-fields.ds-edit-fields__section {
   inline-size: 100%;
   min-inline-size: 0;
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'],
+.ds-structure.ds-edit-fields.ds-edit-fields__section > .ds-edit-fields__section-header {
   padding-block-end: 10px;
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-lead'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-lead'],
+.ds-structure.ds-edit-fields.ds-edit-fields__section > .ds-edit-fields__section-header .ds-edit-fields__section-lead {
   flex: 1 1 360px;
   min-inline-size: 0;
 }
 
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-copy'],
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-copy,
+.ds-structure.ds-edit-fields.ds-edit-fields__section > .ds-edit-fields__section-header .ds-edit-fields__section-copy,
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-actions'] {
   min-inline-size: 0;
 }
@@ -216,26 +233,32 @@
   display: flex;
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-number {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-number,
+.ds-structure.ds-edit-fields.ds-edit-fields__section > .ds-edit-fields__section-header .ds-edit-fields__section-number {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.08em;
 }
 
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-icon'],
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-number,
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-description {
+.ds-structure.ds-edit-fields.ds-edit-fields__section > .ds-edit-fields__section-header .ds-edit-fields__section-number,
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-description,
+.ds-structure.ds-edit-fields.ds-edit-fields__section > .ds-edit-fields__section-header .ds-edit-fields__section-description {
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-description {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-description,
+.ds-structure.ds-edit-fields.ds-edit-fields__section > .ds-edit-fields__section-header .ds-edit-fields__section-description {
   line-height: 1.4;
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-title {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] .ds-edit-fields__section-title,
+.ds-structure.ds-edit-fields.ds-edit-fields__section > .ds-edit-fields__section-header .ds-edit-fields__section-title {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-content'] {
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-content'],
+.ds-structure.ds-edit-fields.ds-edit-fields__section > .ds-edit-fields__section-content {
   /* The body region consumer fields land in: it can shrink below its content's
      intrinsic measure instead of blowing out the section's row (the survival
      hook every copy stack in this file carries); the header above owns the
@@ -470,7 +493,8 @@
 
 /* --- InlineEditFooter ------------------------------------------------------ */
 
-.ds-structure.ds-edit-fields[data-part='footer'][data-saving] {
+.ds-structure.ds-edit-fields[data-part='footer'][data-saving],
+.ds-structure.ds-edit-fields.ds-edit-fields__footer[data-saving] {
   padding-block-start: calc(14px * var(--_ds-edit-fields-density, 1));
   margin-block-start: calc(14px * var(--_ds-edit-fields-density, 1));
   border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
@@ -478,35 +502,42 @@
 }
 
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'],
-.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support {
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support,
+.ds-structure.ds-edit-fields.ds-edit-fields__footer > .ds-edit-fields__footer-support {
   flex: 1 1 280px;
   min-inline-size: 0;
 }
 
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-impact-preview'],
-.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > [data-part='footer-impact-preview'] {
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > [data-part='footer-impact-preview'],
+.ds-structure.ds-edit-fields.ds-edit-fields__footer > .ds-edit-fields__footer-support > .ds-edit-fields__footer-impact-preview {
   /* The impact line rides the support stack's flex row: long unbreakable
      preview content shrinks instead of overflowing the footer's measure. */
   min-inline-size: 0;
 }
 
-.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-actions'] {
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-actions'],
+.ds-structure.ds-edit-fields.ds-edit-fields__footer > .ds-edit-fields__footer-actions {
   min-inline-size: 0;
 }
 
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-note,
 .ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-note,
+.ds-structure.ds-edit-fields.ds-edit-fields__footer > .ds-edit-fields__footer-support > .ds-edit-fields__footer-note,
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary,
 .ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-summary,
+.ds-structure.ds-edit-fields.ds-edit-fields__footer > .ds-edit-fields__footer-support > .ds-edit-fields__footer-summary,
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > .ds-edit-fields__footer-hidden-summary,
-.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-hidden-summary {
+.ds-structure.ds-edit-fields[data-part='footer'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-hidden-summary,
+.ds-structure.ds-edit-fields.ds-edit-fields__footer > .ds-edit-fields__footer-support > .ds-edit-fields__footer-hidden-summary {
   color: var(--ds-color-text-muted);
 }
 
 /* The footer summary slot is the error channel when one is present -- the footer
    root reports it on `data-error`. */
 .ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > .ds-edit-fields__footer-summary,
-.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-summary {
+.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-summary,
+.ds-structure.ds-edit-fields.ds-edit-fields__footer[data-error='true'] > .ds-edit-fields__footer-support > .ds-edit-fields__footer-summary {
   color: var(--ds-color-error);
 }
 
@@ -516,7 +547,8 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'],
   .ds-structure.ds-edit-fields[data-part='grid'] > .ds-structure.ds-edit-fields[data-part='field'],
-  .ds-structure.ds-edit-fields[data-part='footer'][data-saving] {
+  .ds-structure.ds-edit-fields[data-part='footer'][data-saving],
+  .ds-structure.ds-edit-fields.ds-edit-fields__footer[data-saving] {
     transition: none;
   }
 }
@@ -539,7 +571,9 @@
     color: ButtonText;
   }
   .ds-structure.ds-edit-fields[data-part='grid'][data-kind],
-  .ds-structure.ds-edit-fields[data-part='footer'][data-saving] {
+  .ds-structure.ds-edit-fields.ds-edit-fields__grid[data-kind],
+  .ds-structure.ds-edit-fields[data-part='footer'][data-saving],
+  .ds-structure.ds-edit-fields.ds-edit-fields__footer[data-saving] {
     border-top-color: ButtonText;
   }
   .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error-row'] [data-part='field-error-icon'] {
