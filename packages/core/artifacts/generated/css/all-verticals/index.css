@@ -93818,8 +93818,12 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
         drained to the logical block axis) ---- */
 .ds-surface.ds-compare[data-part="root"]
   .ds-compare__divider[data-part="divider"],
+.ds-surface.ds-compare[data-part="root"]
+  .ds-compare__divider.ds-compare__divider,
 .ds-surface.ds-compare.ds-compare__root
-  .ds-compare__divider[data-part="divider"] {
+  .ds-compare__divider[data-part="divider"],
+.ds-surface.ds-compare.ds-compare__root
+  .ds-compare__divider.ds-compare__divider {
   padding-block-start: var(
     --ds-compare-divider-spacing,
     var(--ds-spacing-3, 12px)
@@ -93863,8 +93867,12 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 .ds-surface.ds-compare[data-part="root"]
   .ds-compare__table-viewport[data-part="table-viewport"],
+.ds-surface.ds-compare[data-part="root"]
+  .ds-compare__table-viewport.ds-compare__table-viewport,
 .ds-surface.ds-compare.ds-compare__root
-  .ds-compare__table-viewport[data-part="table-viewport"] {
+  .ds-compare__table-viewport[data-part="table-viewport"],
+.ds-surface.ds-compare.ds-compare__root
+  .ds-compare__table-viewport.ds-compare__table-viewport {
   overflow-x: auto;
   overscroll-behavior-inline: contain;
   scrollbar-gutter: stable;
@@ -93877,7 +93885,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
         channel and goes quiet under reduced motion. Fills are neutral
         surface tokens, so forced colors needs no re-keying here (the
         composed Cards/Table force their own frames). ---- */
-.ds-surface.ds-compare [data-part="compare-skeleton-block"] {
+.ds-surface.ds-compare [data-part="compare-skeleton-block"],
+.ds-surface.ds-compare .ds-compare__compare-skeleton-block {
   border-radius: var(--ds-skeleton-radius, var(--ds-radius-md, 8px));
   background: var(
     --ds-skeleton-bg,
@@ -93889,18 +93898,23 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-compare
-  [data-part="compare-skeleton-block"][data-size="section-title"] {
+  [data-part="compare-skeleton-block"][data-size="section-title"],
+.ds-surface.ds-compare
+  .ds-compare__compare-skeleton-block[data-size="section-title"] {
   inline-size: 42%;
   min-block-size: 20px;
 }
 
 .ds-surface.ds-compare
-  [data-part="compare-skeleton-block"][data-size="table"] {
+  [data-part="compare-skeleton-block"][data-size="table"],
+.ds-surface.ds-compare
+  .ds-compare__compare-skeleton-block[data-size="table"] {
   min-block-size: 240px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-compare [data-part="compare-skeleton-block"] {
+  .ds-surface.ds-compare [data-part="compare-skeleton-block"],
+  .ds-surface.ds-compare .ds-compare__compare-skeleton-block {
     animation: none;
   }
 }
@@ -93918,8 +93932,12 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   }
   .ds-surface.ds-compare[data-part="root"]
     .ds-compare__divider[data-part="divider"],
+  .ds-surface.ds-compare[data-part="root"]
+    .ds-compare__divider.ds-compare__divider,
   .ds-surface.ds-compare.ds-compare__root
-    .ds-compare__divider[data-part="divider"] {
+    .ds-compare__divider[data-part="divider"],
+  .ds-surface.ds-compare.ds-compare__root
+    .ds-compare__divider.ds-compare__divider {
     border-block-start-color: ButtonText;
   }
 }

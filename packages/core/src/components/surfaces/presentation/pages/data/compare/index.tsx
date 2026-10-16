@@ -48,8 +48,8 @@ function CompareSkeleton({
     <Stack spacing="lg" className="ds-compare__compare-skeleton" data-part="compare-skeleton">
       {Array.from({ length: sectionCount }, (_, index) => (
         <Stack key={index} spacing="md">
-          <Box data-part="compare-skeleton-block" data-size="section-title" />
-          <Box data-part="compare-skeleton-block" data-size="table" />
+          <Box data-part="compare-skeleton-block" className="ds-compare__compare-skeleton-block" data-size="section-title" />
+          <Box data-part="compare-skeleton-block" className="ds-compare__compare-skeleton-block" data-size="table" />
         </Stack>
       ))}
     </Stack>
