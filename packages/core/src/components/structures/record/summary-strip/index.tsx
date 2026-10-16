@@ -61,7 +61,7 @@ export function RecordSummaryStrip({
   /* Grid rhythm + per-variant columns/padding/gap are skin-owned off
      data-variant (they were an inline variantStyles map). */
   const chrome = (
-    <Box data-part="summary-grid">
+    <Box data-part="summary-grid" className="ds-record__summary-grid">
       {visibleItems.map((item) => (
         <Stack key={item.label} className="ds-record__summary-item" data-part="summary-item" spacing={4}>
           <Text
@@ -91,7 +91,7 @@ export function RecordSummaryStrip({
 
   return (
     <Box
-      className="ds-structure ds-record"
+      className="ds-structure ds-record ds-record__summary-strip"
       data-part="summary-strip"
       data-structure="record"
       data-variant={variant}

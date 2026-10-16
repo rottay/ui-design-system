@@ -68924,7 +68924,9 @@ html[data-ds-motion='reduced']
    border wrapping the full perimeter at the error tone, optical padding on
    the rhythm plane — no second card frame. */
 .ds-surface.ds-detail-form.ds-detail-form__root [data-part='error-banner'],
-.ds-surface.ds-detail-form[data-part='root'] [data-part='error-banner'] {
+.ds-surface.ds-detail-form.ds-detail-form__root .ds-detail-form__error-banner,
+.ds-surface.ds-detail-form[data-part='root'] [data-part='error-banner'],
+.ds-surface.ds-detail-form[data-part='root'] .ds-detail-form__error-banner {
   padding: var(--ds-detail-form-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-error-bg, transparent);
   border: var(--ds-edge-emphasis-width, 1px) solid var(--ds-color-error);
@@ -68943,7 +68945,9 @@ html[data-ds-motion='reduced']
    system colors. */
 @media (forced-colors: active) {
   .ds-surface.ds-detail-form.ds-detail-form__root [data-part='error-banner'],
-  .ds-surface.ds-detail-form[data-part='root'] [data-part='error-banner'] {
+  .ds-surface.ds-detail-form.ds-detail-form__root .ds-detail-form__error-banner,
+  .ds-surface.ds-detail-form[data-part='root'] [data-part='error-banner'],
+  .ds-surface.ds-detail-form[data-part='root'] .ds-detail-form__error-banner {
     background: Canvas;
     border-color: CanvasText;
   }
@@ -71141,18 +71145,21 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   --_ds-record-density: var(--ds-density-global-effective-scale, 1);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'] {
+.ds-structure.ds-record[data-part='summary-strip'],
+.ds-structure.ds-record.ds-record__summary-strip {
   container: ds-record-summary / inline-size;
   inline-size: 100%;
   padding: var(--_ds-record-summary-padding, calc(18px * var(--_ds-record-density, 1)));
   border-radius: var(--ds-radius-xl, 18px);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'],
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'] {
   padding: calc(20px * var(--_ds-record-density, 1));
 }
 
-.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid'] {
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid'],
+.ds-structure.ds-record.ds-record__summary-strip .ds-record__summary-grid {
   display: grid;
   /* min(100%, …) guard: a sub-measure container re-flows to one column
      instead of overflowing (320px and below). */
@@ -71164,11 +71171,13 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 13.75rem), 1fr));
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-grid'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-grid'],
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'] .ds-record__summary-grid {
   gap: calc(18px * var(--_ds-record-density, 1));
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='default'],
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='default'] {
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
 }
@@ -71188,13 +71197,15 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   border: var(--ds-edge-standard-width, 1px) solid color-mix(in srgb, var(--ds-color-border) 62%, var(--ds-color-bg-primary) 38%);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'],
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%);
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item'],
-.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item {
+.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item,
+.ds-structure.ds-record.ds-record__summary-strip .ds-record__summary-item {
   min-inline-size: 0;
 }
 
@@ -71212,8 +71223,10 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    full reading ink, so the label stays subordinate. The editorial and
    governance wells are gradients and keep their own authored tints. */
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] .ds-record__summary-item-label,
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='default'] .ds-record__summary-item-label,
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] .ds-record__summary-item-label,
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] .ds-record__summary-item-label {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] .ds-record__summary-item-label,
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'] .ds-record__summary-item-label {
   color: var(--ds-record-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary)));
 }
 
@@ -71225,7 +71238,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   color: color-mix(in srgb, var(--ds-color-text-primary) 26%, var(--ds-color-text-muted) 74%);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item-label {
+.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item-label,
+.ds-structure.ds-record.ds-record__summary-strip .ds-record__summary-item-label {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.12em;
   /* Personality channel: BitHire's authored `sentence` shield and The
@@ -71234,7 +71248,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-value {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-value,
+.ds-structure.ds-record.ds-record__summary-strip[data-variant] .ds-record__summary-item-value {
   color: var(--ds-color-text-primary);
   word-break: break-word;
   /* Numeric posture channel: technical profiles read tabular lining figures,
@@ -71247,14 +71262,16 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   font-family: var(--ds-font-family-mono, monospace);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] .ds-record__summary-item-value {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] .ds-record__summary-item-value,
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'] .ds-record__summary-item-value {
   font-size: var(--ds-record-heading-font-size, var(--ds-font-size-lg));
   /* The metrics strip reads as a stat row: tabular figures keep aligned
      values from jittering when the data refreshes. */
   font-variant-numeric: tabular-nums;
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-helper {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-helper,
+.ds-structure.ds-record.ds-record__summary-strip[data-variant] .ds-record__summary-item-helper {
   color: var(--ds-record-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary)));
   line-height: 1.5;
 }
@@ -71665,10 +71682,12 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 @container ds-record-summary (inline-size < 30rem) {
-  .ds-structure.ds-record[data-part='summary-strip'] {
+  .ds-structure.ds-record[data-part='summary-strip'],
+  .ds-structure.ds-record.ds-record__summary-strip {
     --_ds-record-summary-padding: calc(14px * var(--_ds-record-density, 1));
   }
-  .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid'] {
+  .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid'],
+  .ds-structure.ds-record.ds-record__summary-strip .ds-record__summary-grid {
     gap: calc(12px * var(--_ds-record-density, 1));
   }
 }
@@ -71695,10 +71714,12 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    ever depended on paint. -------------------------------------------------- */
 @media (forced-colors: active) {
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='default'],
+  .ds-structure.ds-record.ds-record__summary-strip[data-variant='default'],
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'],
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'],
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'],
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'],
+  .ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'],
   .ds-structure.ds-record[data-part='field'][data-mono='false'],
   .ds-structure.ds-record[data-part='field'][data-mono='true'],
   .ds-structure.ds-record[data-part='action-bar'][data-structure='record'],
@@ -71709,6 +71730,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   }
 
   .ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-value,
+  .ds-structure.ds-record.ds-record__summary-strip[data-variant] .ds-record__summary-item-value,
   .ds-structure.ds-record[data-part='field'][data-empty='false'] .ds-record__field-value,
   .ds-structure.ds-record[data-part='field'] [data-part='field-link-icon'] {
     color: CanvasText;
@@ -71716,6 +71738,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
   .ds-structure.ds-record[data-part='field'][data-empty='true'] .ds-record__field-value,
   .ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-helper,
+  .ds-structure.ds-record.ds-record__summary-strip[data-variant] .ds-record__summary-item-helper,
   .ds-structure.ds-record[data-part='field'][data-empty] > * > .ds-record__field-helper {
     color: GrayText;
   }
@@ -90990,7 +91013,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  * it is a composition fact of the page, not a brand decision.
  */
 
-.ds-surface.ds-page-shell-surface[data-part='body'] {
+.ds-surface.ds-page-shell-surface[data-part='body'],
+.ds-surface.ds-page-shell-surface.ds-page-shell-surface__body {
   --ds-page-shell-surface-transition-name: ds-vt-page-body;
 
   min-inline-size: 0;
@@ -91000,7 +91024,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* A morph is motion. Under a reduced-motion preference the body keeps its
    place in the flow and the named group stops being a transition target. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-page-shell-surface[data-part='body'] {
+  .ds-surface.ds-page-shell-surface[data-part='body'],
+  .ds-surface.ds-page-shell-surface.ds-page-shell-surface__body {
     view-transition-name: none;
   }
 }

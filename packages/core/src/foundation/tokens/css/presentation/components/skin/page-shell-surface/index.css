@@ -17,7 +17,8 @@
  * it is a composition fact of the page, not a brand decision.
  */
 
-.ds-surface.ds-page-shell-surface[data-part='body'] {
+.ds-surface.ds-page-shell-surface[data-part='body'],
+.ds-surface.ds-page-shell-surface.ds-page-shell-surface__body {
   --ds-page-shell-surface-transition-name: ds-vt-page-body;
 
   min-inline-size: 0;
@@ -27,7 +28,8 @@
 /* A morph is motion. Under a reduced-motion preference the body keeps its
    place in the flow and the named group stops being a transition target. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-page-shell-surface[data-part='body'] {
+  .ds-surface.ds-page-shell-surface[data-part='body'],
+  .ds-surface.ds-page-shell-surface.ds-page-shell-surface__body {
     view-transition-name: none;
   }
 }

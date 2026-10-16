@@ -89,7 +89,7 @@ export function PageShellSurface({
           carries anatomy and no visual value of its own. */}
       {withContentBoundary(
         'content-slot',
-        <Box className="ds-surface ds-page-shell-surface" data-part="body">
+        <Box className="ds-surface ds-page-shell-surface ds-page-shell-surface__body" data-part="body">
           {children}
         </Box>,
       )}

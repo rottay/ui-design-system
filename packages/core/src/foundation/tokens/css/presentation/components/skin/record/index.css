@@ -140,18 +140,21 @@
   --_ds-record-density: var(--ds-density-global-effective-scale, 1);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'] {
+.ds-structure.ds-record[data-part='summary-strip'],
+.ds-structure.ds-record.ds-record__summary-strip {
   container: ds-record-summary / inline-size;
   inline-size: 100%;
   padding: var(--_ds-record-summary-padding, calc(18px * var(--_ds-record-density, 1)));
   border-radius: var(--ds-radius-xl, 18px);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'],
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'] {
   padding: calc(20px * var(--_ds-record-density, 1));
 }
 
-.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid'] {
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid'],
+.ds-structure.ds-record.ds-record__summary-strip .ds-record__summary-grid {
   display: grid;
   /* min(100%, …) guard: a sub-measure container re-flows to one column
      instead of overflowing (320px and below). */
@@ -163,11 +166,13 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 13.75rem), 1fr));
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-grid'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-grid'],
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'] .ds-record__summary-grid {
   gap: calc(18px * var(--_ds-record-density, 1));
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='default'],
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='default'] {
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
 }
@@ -187,13 +192,15 @@
   border: var(--ds-edge-standard-width, 1px) solid color-mix(in srgb, var(--ds-color-border) 62%, var(--ds-color-bg-primary) 38%);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'],
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%);
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item'],
-.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item {
+.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item,
+.ds-structure.ds-record.ds-record__summary-strip .ds-record__summary-item {
   min-inline-size: 0;
 }
 
@@ -211,8 +218,10 @@
    full reading ink, so the label stays subordinate. The editorial and
    governance wells are gradients and keep their own authored tints. */
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] .ds-record__summary-item-label,
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='default'] .ds-record__summary-item-label,
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] .ds-record__summary-item-label,
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] .ds-record__summary-item-label {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] .ds-record__summary-item-label,
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'] .ds-record__summary-item-label {
   color: var(--ds-record-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary)));
 }
 
@@ -224,7 +233,8 @@
   color: color-mix(in srgb, var(--ds-color-text-primary) 26%, var(--ds-color-text-muted) 74%);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item-label {
+.ds-structure.ds-record[data-part='summary-strip'] .ds-record__summary-item-label,
+.ds-structure.ds-record.ds-record__summary-strip .ds-record__summary-item-label {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.12em;
   /* Personality channel: BitHire's authored `sentence` shield and The
@@ -233,7 +243,8 @@
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-value {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-value,
+.ds-structure.ds-record.ds-record__summary-strip[data-variant] .ds-record__summary-item-value {
   color: var(--ds-color-text-primary);
   word-break: break-word;
   /* Numeric posture channel: technical profiles read tabular lining figures,
@@ -246,14 +257,16 @@
   font-family: var(--ds-font-family-mono, monospace);
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] .ds-record__summary-item-value {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] .ds-record__summary-item-value,
+.ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'] .ds-record__summary-item-value {
   font-size: var(--ds-record-heading-font-size, var(--ds-font-size-lg));
   /* The metrics strip reads as a stat row: tabular figures keep aligned
      values from jittering when the data refreshes. */
   font-variant-numeric: tabular-nums;
 }
 
-.ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-helper {
+.ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-helper,
+.ds-structure.ds-record.ds-record__summary-strip[data-variant] .ds-record__summary-item-helper {
   color: var(--ds-record-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary)));
   line-height: 1.5;
 }
@@ -664,10 +677,12 @@
 }
 
 @container ds-record-summary (inline-size < 30rem) {
-  .ds-structure.ds-record[data-part='summary-strip'] {
+  .ds-structure.ds-record[data-part='summary-strip'],
+  .ds-structure.ds-record.ds-record__summary-strip {
     --_ds-record-summary-padding: calc(14px * var(--_ds-record-density, 1));
   }
-  .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid'] {
+  .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid'],
+  .ds-structure.ds-record.ds-record__summary-strip .ds-record__summary-grid {
     gap: calc(12px * var(--_ds-record-density, 1));
   }
 }
@@ -694,10 +709,12 @@
    ever depended on paint. -------------------------------------------------- */
 @media (forced-colors: active) {
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='default'],
+  .ds-structure.ds-record.ds-record__summary-strip[data-variant='default'],
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'],
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'],
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'],
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'],
+  .ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'],
   .ds-structure.ds-record[data-part='field'][data-mono='false'],
   .ds-structure.ds-record[data-part='field'][data-mono='true'],
   .ds-structure.ds-record[data-part='action-bar'][data-structure='record'],
@@ -708,6 +725,7 @@
   }
 
   .ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-value,
+  .ds-structure.ds-record.ds-record__summary-strip[data-variant] .ds-record__summary-item-value,
   .ds-structure.ds-record[data-part='field'][data-empty='false'] .ds-record__field-value,
   .ds-structure.ds-record[data-part='field'] [data-part='field-link-icon'] {
     color: CanvasText;
@@ -715,6 +733,7 @@
 
   .ds-structure.ds-record[data-part='field'][data-empty='true'] .ds-record__field-value,
   .ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-helper,
+  .ds-structure.ds-record.ds-record__summary-strip[data-variant] .ds-record__summary-item-helper,
   .ds-structure.ds-record[data-part='field'][data-empty] > * > .ds-record__field-helper {
     color: GrayText;
   }
