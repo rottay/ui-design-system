@@ -272,7 +272,7 @@ export function StreamingText({
     // announces itself as still being written and flips to `false` on the
     // last chunk, so AT gets a completion signal the decorative caret and
     // shimmer cannot carry.
-    <Box className="ds-assistant-streaming-text" data-part="root" aria-busy={streaming}>
+    <Box className="ds-assistant-streaming-text ds-assistant-message-bubble__root" data-part="root" aria-busy={streaming}>
       {streaming && !reduceMotion ? (
         <ShimmerText text={text} style={fontFamily ? { fontFamily } : undefined} />
       ) : (
@@ -318,7 +318,7 @@ export function TypingIndicator({
   const resolvedLabel = label ?? t('surfaces.chat.typing', 'Assistant is typing');
   return (
     <Box
-      className="ds-assistant-typing-indicator"
+      className="ds-assistant-typing-indicator ds-assistant-message-bubble__root"
       data-part="root"
       role="status"
       aria-live="polite"
@@ -449,7 +449,7 @@ export function AssistantStatusIndicator({
 
   return (
     <Box
-      className="ds-assistant-status-indicator"
+      className="ds-assistant-status-indicator ds-assistant-message-bubble__root"
       data-part="root"
       role="status"
       aria-live="polite"
@@ -496,11 +496,11 @@ export function PreviewDiffCard({
                 the stamped parts; the arrow cell is the governed
                 auto-mirroring forward icon (flips in RTL), never a Unicode
                 arrow glyph. */}
-            <Box data-part="diff-spacer" />
+            <Box data-part="diff-spacer" className="ds-assistant-preview-diff-card__diff-spacer" />
             <Text className="ds-assistant__diff-head-cell" data-diff-side="before" size="xs" color="muted">
               {resolvedBeforeLabel}
             </Text>
-            <Box data-part="diff-arrow" aria-hidden="true" />
+            <Box data-part="diff-arrow" className="ds-assistant-preview-diff-card__diff-arrow" aria-hidden="true" />
             <Text className="ds-assistant__diff-head-cell" data-diff-side="after" size="xs" color="muted">
               {resolvedAfterLabel}
             </Text>
@@ -519,7 +519,7 @@ export function PreviewDiffCard({
                 <Text className="ds-assistant__diff-label" size="sm" weight="semibold">
                   {row.label}
                 </Text>
-                <Box data-part="diff-cell-wrap" data-diff-side="before">
+                <Box data-part="diff-cell-wrap" className="ds-assistant-preview-diff-card__diff-cell-wrap" data-diff-side="before">
                   {row.before !== undefined ? (
                     <Text
                       className="ds-assistant__preview-cell"
@@ -531,10 +531,10 @@ export function PreviewDiffCard({
                     </Text>
                   ) : null}
                 </Box>
-                <Box data-part="diff-arrow" aria-hidden="true">
+                <Box data-part="diff-arrow" className="ds-assistant-preview-diff-card__diff-arrow" aria-hidden="true">
                   <NavigationForwardIcon decorative size={12} />
                 </Box>
-                <Box data-part="diff-cell-wrap" data-diff-side="after">
+                <Box data-part="diff-cell-wrap" className="ds-assistant-preview-diff-card__diff-cell-wrap" data-diff-side="after">
                   {row.after !== undefined ? (
                     <Text
                       className="ds-assistant__preview-cell"
@@ -709,7 +709,7 @@ export function MessageBubble({
 
   return (
     <Box
-      className="ds-assistant-message-bubble"
+      className="ds-assistant-message-bubble ds-assistant-message-bubble__root"
       data-part="root"
       data-align={alignEnd ? 'end' : 'start'}
     >

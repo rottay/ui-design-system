@@ -80666,7 +80666,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  * inline; `prefers-reduced-motion` cuts it as a second belt.
  * ==========================================================================*/
 
-.ds-assistant-streaming-text[data-part='root'] {
+.ds-assistant-streaming-text[data-part='root'],
+.ds-assistant-streaming-text.ds-assistant-message-bubble__root {
   white-space: pre-wrap;
 }
 
@@ -80813,7 +80814,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  * quiet next to the values.
  * ==========================================================================*/
 
-.ds-assistant-preview-diff-card [data-part='diff-spacer'] {
+.ds-assistant-preview-diff-card [data-part='diff-spacer'],
+.ds-assistant-preview-diff-card .ds-assistant-preview-diff-card__diff-spacer {
   flex: 2;
   min-inline-size: 0;
 }
@@ -80821,7 +80823,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   flex: 3;
   min-inline-size: 0;
 }
-.ds-assistant-preview-diff-card [data-part='diff-arrow'][data-part='diff-arrow'] {
+.ds-assistant-preview-diff-card [data-part='diff-arrow'][data-part='diff-arrow'],
+.ds-assistant-preview-diff-card .ds-assistant-preview-diff-card__diff-arrow.ds-assistant-preview-diff-card__diff-arrow {
   inline-size: 1rem;
   flex-shrink: 0;
   display: inline-flex;
@@ -80836,7 +80839,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
      of breaking the 2/3/3 split */
   overflow-wrap: anywhere;
 }
-.ds-assistant-preview-diff-card [data-part='diff-cell-wrap'] {
+.ds-assistant-preview-diff-card [data-part='diff-cell-wrap'],
+.ds-assistant-preview-diff-card .ds-assistant-preview-diff-card__diff-cell-wrap {
   flex: 3;
   min-inline-size: 0;
 }
@@ -80897,7 +80901,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  * color below.
  * ==========================================================================*/
 
-.ds-assistant-message-bubble[data-part='root'] {
+.ds-assistant-message-bubble[data-part='root'],
+.ds-assistant-message-bubble.ds-assistant-message-bubble__root {
   display: block;
   container: ds-assistant-bubble / inline-size;
 }
@@ -93194,7 +93199,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Tab strip                                                                   */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-record-workbench .ds-record-workbench__tab-list[data-part='tab-list'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__tab-list[data-part='tab-list'],
+.ds-surface.ds-record-workbench .ds-record-workbench__tab-list.ds-record-workbench__tab-list {
   display: flex;
   overflow-x: auto;
   border-block-end: 1px solid var(--ds-color-border-primary);
@@ -93239,7 +93245,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Content area: column on mobile, row + contextual sidebar on desktop         */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-record-workbench .ds-record-workbench__content[data-part='content'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__content[data-part='content'],
+.ds-surface.ds-record-workbench .ds-record-workbench__content.ds-record-workbench__content {
   flex-direction: column;
   align-items: stretch;
 }
@@ -93248,7 +93255,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   flex-direction: row;
 }
 
-.ds-surface.ds-record-workbench .ds-record-workbench__tabpanel[data-part='tabpanel'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__tabpanel[data-part='tabpanel'],
+.ds-surface.ds-record-workbench .ds-record-workbench__tabpanel.ds-record-workbench__tabpanel {
   flex: 1 1 0%;
   min-inline-size: 0;
 }
@@ -93261,7 +93269,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Sidebar                                                                     */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-record-workbench .ds-record-workbench__sidebar[data-part='sidebar'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__sidebar[data-part='sidebar'],
+.ds-surface.ds-record-workbench .ds-record-workbench__sidebar.ds-record-workbench__sidebar {
   inline-size: 100%;
   flex-shrink: 0;
   padding-block-start: var(--ds-spacing-md, 16px);
@@ -93336,7 +93345,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   }
 
   .ds-surface.ds-record-workbench .ds-record-workbench__tab-list[data-part='tab-list'],
-  .ds-surface.ds-record-workbench .ds-record-workbench__sidebar[data-part='sidebar'] {
+  .ds-surface.ds-record-workbench .ds-record-workbench__tab-list.ds-record-workbench__tab-list,
+  .ds-surface.ds-record-workbench .ds-record-workbench__sidebar[data-part='sidebar'],
+  .ds-surface.ds-record-workbench .ds-record-workbench__sidebar.ds-record-workbench__sidebar {
     border-color: ButtonBorder;
   }
 

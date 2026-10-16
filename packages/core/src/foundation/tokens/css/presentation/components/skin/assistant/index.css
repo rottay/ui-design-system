@@ -100,7 +100,8 @@
  * inline; `prefers-reduced-motion` cuts it as a second belt.
  * ==========================================================================*/
 
-.ds-assistant-streaming-text[data-part='root'] {
+.ds-assistant-streaming-text[data-part='root'],
+.ds-assistant-streaming-text.ds-assistant-message-bubble__root {
   white-space: pre-wrap;
 }
 
@@ -247,7 +248,8 @@
  * quiet next to the values.
  * ==========================================================================*/
 
-.ds-assistant-preview-diff-card [data-part='diff-spacer'] {
+.ds-assistant-preview-diff-card [data-part='diff-spacer'],
+.ds-assistant-preview-diff-card .ds-assistant-preview-diff-card__diff-spacer {
   flex: 2;
   min-inline-size: 0;
 }
@@ -255,7 +257,8 @@
   flex: 3;
   min-inline-size: 0;
 }
-.ds-assistant-preview-diff-card [data-part='diff-arrow'][data-part='diff-arrow'] {
+.ds-assistant-preview-diff-card [data-part='diff-arrow'][data-part='diff-arrow'],
+.ds-assistant-preview-diff-card .ds-assistant-preview-diff-card__diff-arrow.ds-assistant-preview-diff-card__diff-arrow {
   inline-size: 1rem;
   flex-shrink: 0;
   display: inline-flex;
@@ -270,7 +273,8 @@
      of breaking the 2/3/3 split */
   overflow-wrap: anywhere;
 }
-.ds-assistant-preview-diff-card [data-part='diff-cell-wrap'] {
+.ds-assistant-preview-diff-card [data-part='diff-cell-wrap'],
+.ds-assistant-preview-diff-card .ds-assistant-preview-diff-card__diff-cell-wrap {
   flex: 3;
   min-inline-size: 0;
 }
@@ -331,7 +335,8 @@
  * color below.
  * ==========================================================================*/
 
-.ds-assistant-message-bubble[data-part='root'] {
+.ds-assistant-message-bubble[data-part='root'],
+.ds-assistant-message-bubble.ds-assistant-message-bubble__root {
   display: block;
   container: ds-assistant-bubble / inline-size;
 }

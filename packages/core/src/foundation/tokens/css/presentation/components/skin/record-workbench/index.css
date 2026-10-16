@@ -112,7 +112,8 @@
 /* Tab strip                                                                   */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-record-workbench .ds-record-workbench__tab-list[data-part='tab-list'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__tab-list[data-part='tab-list'],
+.ds-surface.ds-record-workbench .ds-record-workbench__tab-list.ds-record-workbench__tab-list {
   display: flex;
   overflow-x: auto;
   border-block-end: 1px solid var(--ds-color-border-primary);
@@ -157,7 +158,8 @@
 /* Content area: column on mobile, row + contextual sidebar on desktop         */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-record-workbench .ds-record-workbench__content[data-part='content'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__content[data-part='content'],
+.ds-surface.ds-record-workbench .ds-record-workbench__content.ds-record-workbench__content {
   flex-direction: column;
   align-items: stretch;
 }
@@ -166,7 +168,8 @@
   flex-direction: row;
 }
 
-.ds-surface.ds-record-workbench .ds-record-workbench__tabpanel[data-part='tabpanel'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__tabpanel[data-part='tabpanel'],
+.ds-surface.ds-record-workbench .ds-record-workbench__tabpanel.ds-record-workbench__tabpanel {
   flex: 1 1 0%;
   min-inline-size: 0;
 }
@@ -179,7 +182,8 @@
 /* Sidebar                                                                     */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-record-workbench .ds-record-workbench__sidebar[data-part='sidebar'] {
+.ds-surface.ds-record-workbench .ds-record-workbench__sidebar[data-part='sidebar'],
+.ds-surface.ds-record-workbench .ds-record-workbench__sidebar.ds-record-workbench__sidebar {
   inline-size: 100%;
   flex-shrink: 0;
   padding-block-start: var(--ds-spacing-md, 16px);
@@ -254,7 +258,9 @@
   }
 
   .ds-surface.ds-record-workbench .ds-record-workbench__tab-list[data-part='tab-list'],
-  .ds-surface.ds-record-workbench .ds-record-workbench__sidebar[data-part='sidebar'] {
+  .ds-surface.ds-record-workbench .ds-record-workbench__tab-list.ds-record-workbench__tab-list,
+  .ds-surface.ds-record-workbench .ds-record-workbench__sidebar[data-part='sidebar'],
+  .ds-surface.ds-record-workbench .ds-record-workbench__sidebar.ds-record-workbench__sidebar {
     border-color: ButtonBorder;
   }
 
