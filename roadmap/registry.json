@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-15",
+ "updated": "2026-10-16",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -2884,6 +2884,11 @@
      "at": "2026-10-11 21:57",
      "by": "Kimi",
      "note": "O-4 batch 2 INTEGRATED febd8eae5 (19 paths): image, list, menu, stepper, textarea strip the caller part/state (17 sites; 17 contract rows red-first + mutants; the Image P-79 reader inverted). Divider HELD — Stack injects data-part=divider via cloneElement and the stack skin keys 2 rules on it; routed to the carriers owner queue. The tripwire drill self-seeds its specimen (??= + 2 non-vacuity guards; the seed-less mutant reproduces the 23/24 it fixes). Ledger 57 -> 40 through the door on a clean HEAD+17 tree; token-audit ceiling via its own door; the eligibility list is down to divider. Stepper state-on-nav kept at HEAD behavior, review-ruled acceptable. Reviewer ACCEPT (7cdfec5b) re-proven at 4123a86d3. Program-level question registered (not blocking): PresenceList injects data-state via cloneElement onto stripped-family children — no in-repo use affected; queued for the owner. Registry 138/168 unchanged."
+    },
+    {
+     "at": "2026-10-16 09:56",
+     "by": "kimi-dt",
+     "note": "2026-10-16: M-P3 family 4 (brand-studio) INTEGRATED bbd078843 (7 paths: tsx + skin + 4 vertical bundles + patch changeset; write-set sha256 verified vs family-4/evidence/write-set-shas.txt, zero foreign staged). Independent review ACCEPT 11/11 (session 9bb9abd2, opus-5-5, receipt carriers-mp3-f4-review.receipt.json): proofs byte-equal on reviewer trees, 6/6 mutants bite, HEAD red container-emission-budget ruled foreign/pre-existing/non-blocking (21 pinned doors, all LOWER, -49,706 B; re-anchor owed by pin owner M4, no waiver, focals 297/298 not full PASS), load breach ruled process-only (deterministic instruments, byte-equal reruns <12 load, no re-run owed). T-1/T-2 text nits ACCEPT (2 exact hunks). Owed text O14-O16 applied as integrator addendum in carriers-mp3/report.txt. Gates green: css-build 13/13, structure 203, freeze 0, token-audit, family-cut, pass-through 7/844/32/12 unchanged (census v7.1.11), changeset load-bearing, tsc/typecheck/eslint 0. STATUS regen e4a493c5f, roadmap:check OK."
     }
    ],
    "claimedBy": "kimi-dt",
