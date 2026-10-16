@@ -920,6 +920,15 @@ describe('AnatomySkeleton reads a composed primitive by its owner class hook (P-
     ]);
   });
 
+  it('draws a Modern caller divider by the Stack divider slot class, not by its own part (ARC-12 M-P2)', () => {
+    // The caller divider keeps its own part (a Divider's `root`, a frame) and takes the
+    // slot class; the Stack's own divider span carries both. Both are the Stack's `divider`.
+    expect(bonesOf("<div data-part='root' class='ds-divider rottay-stack-divider'></div>")).toEqual([]);
+    expect(bonesOf("<span data-part='divider' class='rottay-stack-divider'></span>")).toEqual([]);
+    expect(resolveBonePart(Object.assign(document.createElement('div'), { className: 'rottay-stack-divider' }), 'root')).toBe('divider');
+    expect(resolvePartRole('divider')).toBe('omit');
+  });
+
   it('does not read a BEM modifier as a hook', () => {
     expect(bonesOf("<a data-part='root' class='ds-owner__crumb--current'></a>")).toEqual(['root:frame']);
   });

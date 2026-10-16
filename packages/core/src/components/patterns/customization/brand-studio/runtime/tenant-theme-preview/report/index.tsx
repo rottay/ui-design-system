@@ -282,7 +282,7 @@ export function TenantThemePreviewReport({
       <Stack
         className="ds-pattern-brand-studio__preview-report"
         data-part="preview-report"
-        data-state="invalid"
+        data-status="invalid"
         spacing="sm"
       >
         <IssuesView issues={issues as readonly TenantThemeValidationIssue[]} />
@@ -298,7 +298,7 @@ export function TenantThemePreviewReport({
     <Stack
       className="ds-pattern-brand-studio__preview-report"
       data-part="preview-report"
-      data-state="valid"
+      data-status="valid"
       spacing="sm"
     >
       {adjustments.length > 0 ? <AdjustmentsView adjustments={adjustments} /> : null}

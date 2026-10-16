@@ -156,7 +156,8 @@ function detailHeader(width: Width, rootStyle = "", titleStyle = ""): string {
     `<div data-part="hero-panel" data-archetype="control"><div data-part="hero-spine" aria-hidden="true"></div>`,
     `<div style="display: flex"><div data-part="hero-cluster" style="display: flex">`,
     `<div data-part="avatar" data-variant="initials"><span data-part="avatar-initials">AB</span></div>`,
-    `<div data-part="hero-copy"><h1 data-part="title" data-archetype="control" style="${titleStyle}">Record`,
+    // ARC-12 M-P2: the hero copy is a modern Stack (own part `root`) reached by its class door.
+    `<div class="ds-detail-header__hero-copy" data-part="root"><h1 data-part="title" data-archetype="control" style="${titleStyle}">Record`,
     `<span data-oracle="heading" style="letter-spacing: var(${HEADING_INPUT})"></span></h1></div></div></div>`,
     `<div data-part="metadata-card" role="group"></div></div>`,
     `<div data-part="tab-strip" role="tablist"><div data-part="tab-list" style="display: flex">`,

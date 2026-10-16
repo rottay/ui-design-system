@@ -539,7 +539,7 @@ describe('data-table causality surface', () => {
           ]),
           // Negative control: the figure is quieter than the page's reading ink,
           // so the floor was cleared by derivation and not by dropping the tier.
-          { id: 'pageInk', selector: "#cards [data-part='mobile-root']", property: 'color' },
+          { id: 'pageInk', selector: '#cards .ds-data-table__mobile-root', property: 'color' },
         ],
       });
       const r = readings.base!;

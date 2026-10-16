@@ -16,7 +16,7 @@
  "tripwireHistory": "Census v2 excluded 10 unpainted wrappers. The v3 amended condition (e)(iv) (component-authored inline style or an Ant/engine-owned paint root counts as paint) returned 8 of them to the counted roster, where they are listed below in `returnedToRosterInV3`. Since v3 the tripwire set is these 2 keys. A tripwire re-enters the count the moment a DS class, stamped part, skin selector or component paint reaches it; a NEW unpainted row is refused.",
  "returnedToRosterInV3": "primitives/inputs/textarea/engines/classic/index.tsx#default#AntTextArea#none#0; primitives/layout/container/engines/classic/index.tsx#Container#div#none#0; primitives/layout/container/engines/rustic/index.tsx#Container#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#0; primitives/layout/divider/engines/classic/index.tsx#ClassicDivider#div#none#1; primitives/layout/space/engines/classic/index.tsx#Space#AntSpace#none#0; primitives/layout/space/engines/rustic/index.tsx#Space#div#none#0; primitives/navigation/link/engines/classic/index.tsx#default#AntLink#none#0",
  "counters": {
-  "passThroughViolations": 8,
+  "passThroughViolations": 7,
   "callerPartDependents": 844,
   "callerStateDependents": 32,
   "structuralForwards": 12
@@ -80,15 +80,6 @@
    "key": "primitives/layout/flex/engines/modern/index.tsx#Flex#div#root#0",
    "engine": "modern",
    "family": "flex",
-   "breach": [
-    "part-replace",
-    "state-forward"
-   ]
-  },
-  {
-   "key": "primitives/layout/stack/engines/modern/index.tsx#HermesStack#createElement(ElementType)#root#0",
-   "engine": "modern",
-   "family": "stack",
    "breach": [
     "part-replace",
     "state-forward"
@@ -1267,8 +1258,8 @@
   ]
  },
  "lastMove": {
-  "head": "5e02f6f7547186ad047a99f87553a8672e6567f6",
-  "date": "2026-10-15",
-  "note": "lowered to the gate's own measurement through --update-baseline; ARC-12 modern-carriers cohort M-C2 (owner answer 2 CARRIERS + conditional MODERN-CARRIERS GO, 2026-10-14; P-88 kernel/common:159-164 skinned-carrier clause): ModernGrid and the compound Grid.Item stamp their own part ('root' / 'grid-cell') after the caller spread and destructure a caller data-state, so both sites leave the roster (passThroughViolations 10 -> 8) and families.grid leaves with its 10 caller-part dependents (callerPartDependents 854 -> 844); callerStateDependents 32, structuralForwards 12 and tripwires 2 unmoved. The dependents' doors are the M-C1 class hooks (5e02f6f75, the E8-a two-arm form), proven by P3/P4 part-dependency (0 rule/case rows move on any dependent Grid root, default or 'root' mutation); the census drop proves the strip, not the doors. The compound is engine-agnostic: Grid.Item changes on classic/rustic too (not a frozen file). One measured non-inert row: the visualization aside Grid.Item now receives the modern grid cell floor (min-inline-size/min-block-size 0); per the review the rect is provably unchanged (tracks minmax(0,1fr), CSS Grid 6.6) and a moved rect in the browser window is a FAIL, not a tolerated region. Historical: at a0d7f763f census v7.1.10 scoped rest-binding carriers per enclosing function (ast 5a447bc8), clearing the ModernGridItem instrument false positive that the M1 note recorded."
+  "head": "dd181dff01898a84363d50ce82aa135504672b94",
+  "date": "2026-10-16",
+  "note": "lowered to the gate's own measurement through --update-baseline; ARC-12 modern-carriers M-P2, the Stack strip (P-88 kernel/common:159-164 skinned-carrier clause): the Modern Stack (HermesStack) stamps its own part ('root') after the caller spread and destructures a caller data-state, so its site leaves the roster (passThroughViolations 8 -> 7). families.stack keeps its 46 caller-part dependents (callerPartDependents 844 unmoved): the classic/rustic Stack still forward a caller part (structural forwards, read-only engines; the strip is Modern-only, gated in renderStackChildren like `rhythm`) and the M-P1 part arms are still credited; they leave with the caller cleanup and the dead-arm lot. callerStateDependents 32, structuralForwards 12 and tripwires 2 are unmoved."
  }
 }

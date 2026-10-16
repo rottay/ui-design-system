@@ -245,7 +245,9 @@ describe('widget-board causality surface', () => {
     expect(board).toContain('data-part="root"');
     expect(board).toContain('data-part="toolbar"');
     expect(board).toContain('data-part="card-shell"');
-    expect(board).toContain('data-part="card-content"');
+    // ARC-12 M-P2: the card content is a modern Stack (own part `root`); its door is the class.
+    expect(board).not.toContain('data-part="card-content"');
+    expect(board).toContain('ds-widget-board__content');
     expect(board).toContain('data-part="item-icon"');
     expect(empty).toContain('data-part="empty-state"');
     // Every stateful part is decided by the kernel and serializes NOTHING at

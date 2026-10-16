@@ -414,7 +414,7 @@ async function main() {
       }, MODERN);
       await reflowPage.getByRole('button', { name: 'Done' }).first().click();
       await reflowPage.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => null))));
-      const hoverTarget = await centre(reflowPage, `${MODERN} [data-widget-id="c"] [data-part="card-content"]`);
+      const hoverTarget = await centre(reflowPage, `${MODERN} [data-widget-id="c"] .ds-widget-board__content`);
       await reflowPage.mouse.move(hoverTarget.x, hoverTarget.y);
       await reflowPage.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => null))));
       const hovered = await reflowPage.evaluate((selector) => getComputedStyle(document.querySelector(`${selector} [data-widget-id="c"]`)).transform, MODERN);

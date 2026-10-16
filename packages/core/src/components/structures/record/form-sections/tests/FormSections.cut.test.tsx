@@ -126,9 +126,11 @@ describe('FormSections (WO-FAM-10 cut)', () => {
     expect(container.querySelector('[data-part="facts-card-item-skeleton-value"]')).toBeNull();
     const source = skeleton!.querySelector('[data-part="source"]')!;
     expect(source.getAttribute('aria-hidden')).toBe('true');
-    for (const part of ['facts-card-body', 'facts-card-items', 'facts-card-item']) {
+    for (const part of ['facts-card-body', 'facts-card-item']) {
       expect(source.querySelector(`[data-part="${part}"]`), part).not.toBeNull();
     }
+    // ARC-12 M-P2: the items list is a modern Stack (own part `root`); its door is the class.
+    expect(source.querySelector('.ds-form-sections__facts-card-items[data-part="root"]')).not.toBeNull();
   });
 
   it('renders the resolved card with no skeleton left behind', async () => {

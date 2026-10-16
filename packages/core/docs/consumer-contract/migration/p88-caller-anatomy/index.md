@@ -23,8 +23,8 @@ included, "MUST reach the root" (P-79). P-88 replaces that law (owner,
 2026-10-06). A component that paints its own anatomy keeps its own
 `data-part` / `data-state`. A caller `data-part` never replaces it, and a
 caller `data-state` is not forwarded. Only a structural component with no part
-of its own (Box, Flex, Stack, Space and Container on Classic and Rustic) still
-forwards both. `id`, `aria-*`, every other `data-*` and `className` still
+of its own (Box, Flex, Space and Container on Classic and Rustic, and Stack on
+Classic and Rustic) still forwards both. `id`, `aria-*`, every other `data-*` and `className` still
 reach the root.
 
 ### Per family
@@ -59,6 +59,7 @@ stopped rendering; "state" means a caller `data-state` stopped rendering.
 | Spinner, LoadingIndicator, Image, List, Menu, Stepper, Textarea, Descriptions, Rate, Toggle, Tooltip, SemanticSurfaceSupport | per changeset | part, state | no | `arc-12-caller-anatomy-contract-diff-reconciliation` |
 | Container, Space, grid item, notifier stack | modern | state | yes | `arc12-modern-carriers-m1` |
 | Grid, Grid.Item | modern; Grid.Item all | part, state | Grid yes | `arc12-modern-carriers-mc2` |
+| Stack | modern | part, state; a caller `divider` element keeps its own part and takes the class `rottay-stack-divider` instead of `data-part="divider"` | no | `arc12-carriers-mp2-stack-strip` |
 
 The law text itself: `w25-p88-passthrough-law`. The runtime break above
 changes no type: the affected props stay typed and `@deprecated` until
@@ -75,11 +76,15 @@ or `data-state` to a DS component.
 |---|---|---|
 | app-bithire (forces `modern`) | `Button` `data-state`: `ui/details/inline-editor/index.tsx:611`, `ui/upgrade/modal/index.tsx:297`, `:334` | `.rt-upgrade-modal__cta[data-state="current"\|"included"]`, `.rt-detail-more-fields-toggle__button[data-state="expanded"]` |
 | app-bithire | `Text` `data-state`: `features/applications/surface/components/detail/journey-ribbon/index.tsx:107`, `features/candidates/surface/screens/record/create/view/sections/readiness/index.tsx:197` | `.rt-app-journey__label[data-state="current"\|"future"]`, `.rt-candidate-create-readiness-percent[data-state="complete"]` |
+| app-bithire | `Stack` `data-state`: `features/jobs/surface/screens/record/listing/index.tsx:1226` (Modern Stack strip) | `.bh-jobs-listing__empty-state[data-state="error"]` (`styles/index.css:62`, `:92`) |
 | app-evnto | none | none |
 | app-platform | none | none |
 
-The census also found 54 app-bithire sites on `Box`, `Flex` and `Stack`. Those
-are structural carriers and are not stripped at the census HEAD. The census
+The census also found 54 app-bithire sites on `Box`, `Flex` and `Stack`. Box and
+Flex are structural carriers and are not stripped. The Modern `Stack` is
+stripped since `arc12-carriers-mp2-stack-strip`; the re-run of 2026-10-16 finds
+the one `Stack` site listed above, and no application passes a `divider` to a
+`Stack`. The census
 pattern reads at most 400 characters between the tag and the attribute, so
 re-run it per app at adoption time:
 

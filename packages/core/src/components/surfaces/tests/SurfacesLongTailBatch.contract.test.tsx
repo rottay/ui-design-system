@@ -382,8 +382,9 @@ describe('long-tail anatomy layout and workspace anatomy (I-3)', () => {
       '.ds-surface.ds-record-workbench[data-part="root"][data-loading="false"]',
     ]);
 
-    expect(q(container, '.ds-collection-workspace__content[data-part="content"][data-loading="false"]')).toHaveLength(1);
-    expect(q(container, '.ds-collection-workspace__content[data-part="root"]')).toHaveLength(0);
+    // ARC-12 M-P2: the premium content is a modern Stack (own part `root`) reached by its class door.
+    expect(q(container, '.ds-collection-workspace__content[data-part="root"][data-loading="false"]')).toHaveLength(1);
+    expect(q(container, '.ds-collection-workspace__content[data-part="content"]')).toHaveLength(0);
     expect(q(container, '.ds-collection-preview-rail__resize[data-part="preview-rail-resize"]')).toHaveLength(1);
     expect(q(container, '.ds-collection-preview-rail__resize-bar[data-part="preview-rail-resize-bar"]')).toHaveLength(1);
     expect(q(container, '.ds-collection-workspace__collection[data-part="collection"]')).toHaveLength(1);

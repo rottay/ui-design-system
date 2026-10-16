@@ -248,7 +248,6 @@ describe('guided-draft-form causality surface', () => {
       'title',
       'subtitle',
       'title-bar',
-      'content',
       'content-body',
       'section-card-title',
       'draft-status',
@@ -259,6 +258,13 @@ describe('guided-draft-form causality surface', () => {
     ]) {
       expect(servesPart(rendered, part), part).toBe(true);
     }
+    // ARC-12 M-P2: the stacked content is a modern Stack (own part `root`) reached by its class
+    // door; the sidebar content is a Flex that keeps its part. One of the two is served.
+    expect(
+      /class="[^"]*\bds-guided-draft-form__content[ "]/.test(rendered)
+        || /<[^>]*data-part="content"[^>]*data-layout="sidebar"|<[^>]*data-layout="sidebar"[^>]*data-part="content"/.test(rendered),
+      'content',
+    ).toBe(true);
     // The loading anatomy parts retired with the hand-made skeleton.
     expect(rendered).not.toContain('loading-skeleton');
   });

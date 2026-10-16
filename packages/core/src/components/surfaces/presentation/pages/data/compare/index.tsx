@@ -45,7 +45,7 @@ function CompareSkeleton({
   sectionCount: number;
 }): React.ReactElement {
   return (
-    <Stack spacing="lg" data-part="compare-skeleton">
+    <Stack spacing="lg" className="ds-compare__compare-skeleton" data-part="compare-skeleton">
       {Array.from({ length: sectionCount }, (_, index) => (
         <Stack key={index} spacing="md">
           <Box data-part="compare-skeleton-block" data-size="section-title" />

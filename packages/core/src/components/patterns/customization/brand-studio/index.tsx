@@ -1549,7 +1549,7 @@ function TenantThemePreviewSection({
     <Stack
       className="ds-pattern-brand-studio__tenant-preview"
       data-part="tenant-preview"
-      data-state={artifact ? 'valid' : 'invalid'}
+      data-status={artifact ? 'valid' : 'invalid'}
       spacing="sm"
     >
       <Flex align="center" gap={8} wrap="wrap">
@@ -1660,7 +1660,7 @@ export function PatternBrandStudio({
     <Stack
       className="ds-pattern-brand-studio"
       data-part="root"
-      data-state={hostileReports ? 'checked' : 'idle'}
+      data-status={hostileReports ? 'checked' : 'idle'}
       spacing="lg"
     >
       <Stack className="ds-pattern-brand-studio__preview-header" data-part="preview-header" spacing="xs">
@@ -1696,7 +1696,7 @@ export function PatternBrandStudio({
           <FlatThemeEditor theme={theme} emit={emit} />
         </Stack>
 
-        <Stack className="ds-pattern-brand-studio__preview-grid" data-part="preview-column" spacing="lg">
+        <Stack className="ds-pattern-brand-studio__preview-grid ds-pattern-brand-studio__preview-column" data-part="preview-column" spacing="lg">
           <Text
             className="ds-pattern-brand-studio__preview-heading"
             size="sm"

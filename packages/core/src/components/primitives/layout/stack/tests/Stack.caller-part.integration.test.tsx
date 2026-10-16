@@ -1,7 +1,9 @@
 /**
- * A composite may name the Stack node it renders, and the Modern skin must still
- * lay that node out. The part belongs to the caller; the layout is keyed on the
- * owned `data-component` stamp, which no caller spread can remove.
+ * A composite may still pass a `data-part` to the Stack it renders, and the
+ * Modern skin must still lay that node out. Since the Stack strip (ARC-12 M-P2)
+ * the Modern Stack stamps its own `root` over a caller part (P-88), so the
+ * caller part never reaches the DOM; the layout stays keyed on the owned
+ * `data-component` stamp.
  *
  * jsdom loads no skin, so the proof is Chromium's computed style. The default
  * root instance is the control: both must read identically.
@@ -48,10 +50,10 @@ const PROPERTIES = [
 const NODE = "[data-component='stack']";
 
 describe('Stack with a caller-owned data-part', () => {
-  it('keeps the caller part in the DOM', () => {
-    expect(markup).toContain('data-part="mobile-layout"');
-    expect(markup).toContain('data-part="panel"');
-    expect(markup).toContain('data-part="root"');
+  it('stamps its own root over the caller part', () => {
+    expect(markup).not.toContain('data-part="mobile-layout"');
+    expect(markup).not.toContain('data-part="panel"');
+    expect(markup.match(/data-part="root"/g)).toHaveLength(4);
     expect(markup.match(/data-component="stack"/g)).toHaveLength(4);
   });
 

@@ -175,11 +175,14 @@ describe('detail-header causality surface', () => {
   it('serves the anatomy every probe reads, and no geometry of its own', () => {
     for (const part of [
       'root', 'top-bar', 'back-button', 'breadcrumb-trail', 'actions',
-      'hero-panel', 'hero-spine', 'hero-cluster', 'hero-copy',
+      'hero-panel', 'hero-spine', 'hero-cluster',
       'metadata-card', 'tab-strip', 'tab-list', 'tab', 'tab-rail',
     ]) {
       expect(rendered, part).toContain(`data-part="${part}"`);
     }
+    // ARC-12 M-P2: the hero copy is a modern Stack (own part `root`); its door is the class.
+    expect(rendered).not.toContain('data-part="hero-copy"');
+    expect(rendered).toContain('ds-detail-header__hero-copy');
     // The retired inline flex shares were the runtime's last stamped geometry.
     expect(rendered).not.toContain('min-width');
     expect(rendered).not.toContain('flex:');

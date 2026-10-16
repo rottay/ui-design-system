@@ -141,10 +141,11 @@ const TEXT_PARTS: readonly string[] = [
 const textHook = (part: string) => `ds-detail-header__${part}`;
 
 /**
- * Layout parts on a modern `Stack` that the skin reaches through BOTH doors
- * (ARC-12 M-P1): a `.ds-detail-header__<part>` class arm beside the
- * `[data-part]` arm, at equal specificity, until the Stack strip retires the
- * caller part.
+ * Layout parts on a modern `Stack`. Since the Stack strip (ARC-12 M-P2) the
+ * Stack stamps its own `root`, so no node carries these parts and the class
+ * door `.ds-detail-header__<part>` is the only way to the element. The skin
+ * keeps its `[data-part]` arm beside the class arm (M-P1) until the dead-arm
+ * lot retires it.
  */
 const TWO_ARM_PARTS: readonly (typeof FAMILY_PARTS)[number][] = ['hero-copy'];
 
@@ -178,6 +179,12 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
       for (const part of stampedParts(container)) stamped.add(part);
       // P-88 (E8-b): a composed Text keeps its own part. The class door is the only way to it,
       // and no node carries the retired caller part.
+      for (const part of TWO_ARM_PARTS) {
+        expect(container.querySelectorAll(`[data-part="${part}"]`), `no node carries the stripped Stack part "${part}"`).toHaveLength(0);
+        const byHook = Array.from(container.querySelectorAll(`.${textHook(part)}`));
+        expect(byHook, `.${textHook(part)} reaches the Stack`).toHaveLength(1);
+        for (const node of byHook) expect(node, `.${textHook(part)} keeps the Stack's own part`).toHaveAttribute('data-part', 'root');
+      }
       for (const part of TEXT_PARTS) {
         expect(container.querySelectorAll(`[data-part="${part}"]`), `no node carries the retired caller part "${part}"`).toHaveLength(0);
         const byHook = Array.from(container.querySelectorAll(`.${textHook(part)}`));
@@ -188,8 +195,10 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
     }
 
     for (const part of LAYOUT_PARTS) {
+      if (TWO_ARM_PARTS.includes(part)) continue;
       expect(stamped.has(part), `stamps [data-part="${part}"]`).toBe(true);
     }
+    for (const part of TWO_ARM_PARTS) expect(stamped.has(part), `stamps no stripped Stack part "${part}"`).toBe(false);
     for (const part of TEXT_PARTS) expect(stamped.has(part), `stamps no retired Text part "${part}"`).toBe(false);
     // Everything else the render stamps belongs to a composed primitive
     // (Breadcrumb crumbs, Button, Tooltip, …), whose anatomy those families
@@ -218,7 +227,10 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
 
     for (const part of LAYOUT_PARTS) {
       // A composed Text is not a layout part, whatever part it stamps: its type role travels inline.
-      const selector = `[data-part="${part}"]:not(.rottay-typography)`;
+      // A stripped Stack part is reached through its class door.
+      const selector = TWO_ARM_PARTS.includes(part)
+        ? `.${textHook(part)}`
+        : `[data-part="${part}"]:not(.rottay-typography)`;
       for (const element of Array.from(container.querySelectorAll<HTMLElement>(selector))) {
         expect(inlinePaint(element), `${part} inline paint`).toEqual([]);
       }
@@ -228,7 +240,11 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
   it('moves the hero flex shares behind stamped parts', async () => {
     const { container } = renderWithEngine(<DetailHeader {...fullProps()} />, 'modern');
     const cluster = await waitForPart(container, 'hero-cluster');
-    const copy = await waitForPart(container, 'hero-copy');
+    const copy = await waitFor(() => {
+      const node = container.querySelector<HTMLElement>(`.${textHook('hero-copy')}`);
+      expect(node).not.toBeNull();
+      return node as HTMLElement;
+    });
     // The geometry the two wrappers used to carry inline lives in the skin
     // now; what still travels is the flex gap custom property, which is
     // primitive composition and never a `flex`/`min-width` paint value.

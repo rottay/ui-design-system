@@ -198,11 +198,27 @@ export function collectStackResponsiveEntries(
   return entries;
 }
 
+/** Engine-scoped switches for the shared divider interleave. */
+export interface StackDividerOptions {
+  /**
+   * Mark a caller-supplied divider element with the engine's
+   * `rottay-stack-divider` class instead of stamping `data-part="divider"`
+   * over the element's own part (P-88: a caller element keeps its own part;
+   * the Modern Stack skin keys the slot on the class).
+   *
+   * OFF by default for the same reason as `rhythm`: this interleave is shared
+   * with the read-only Classic and Rustic engines, whose rendered output must
+   * not move. Only the Modern engine opts in.
+   */
+  classDivider?: boolean;
+}
+
 /** Interleaves optional divider content between Stack children. */
 export function renderStackChildren(
   children: ReactNode,
   divider: ReactNode | undefined,
-  _direction: StackDirection
+  _direction: StackDirection,
+  options: StackDividerOptions = {}
 ): ReactNode {
   // `React.Children.toArray` already removes the empty React nodes we do not
   // render. Do not apply a truthiness filter here: numeric `0` and the empty
@@ -217,11 +233,22 @@ export function renderStackChildren(
     const dividerElement = React.isValidElement(divider) ? (
       React.cloneElement(
         divider as React.ReactElement<Record<string, unknown>>,
-        {
-          key: `divider-${index}`,
-          "aria-hidden": true,
-          "data-part": "divider",
-        }
+        options.classDivider
+          ? {
+              key: `divider-${index}`,
+              "aria-hidden": true,
+              className: [
+                (divider.props as { className?: unknown }).className,
+                "rottay-stack-divider",
+              ]
+                .filter((token) => typeof token === "string" && token !== "")
+                .join(" "),
+            }
+          : {
+              key: `divider-${index}`,
+              "aria-hidden": true,
+              "data-part": "divider",
+            }
       )
     ) : (
       <span

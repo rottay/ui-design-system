@@ -44,14 +44,19 @@
  * ```tsx
  * import { Stack, Divider } from '@rottay/design-system';
  *
- * // Automatic dividers between items
+ * // Automatic dividers between items: the Stack renders its own hairline,
+ * // `<span class="rottay-stack-divider" data-part="divider">`.
  * <Stack spacing="lg" divider={true}>
  *   <Section>Section 1</Section>
  *   <Section>Section 2</Section>
  *   <Section>Section 3</Section>
  * </Stack>
  *
- * // Custom divider element
+ * // Custom divider element. On Modern it keeps its own `data-part` and
+ * // receives the slot class `rottay-stack-divider` beside its own classes
+ * // (ARC-12 M-P2); style a divider slot through that class, not through
+ * // `[data-part="divider"]`. Classic and Rustic still stamp
+ * // `data-part="divider"` on the element.
  * <Stack spacing="md" divider={<Divider dashed />}>
  *   <Item>Item A</Item>
  *   <Item>Item B</Item>

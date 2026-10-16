@@ -385,7 +385,7 @@ function SectionNav({
       >
         {tSurfaceOr('guided_draft_form.section_nav_label_plural', 'Sections')}
       </Text>
-      <Stack data-part="section-nav-list" spacing="xs">
+      <Stack className="ds-guided-draft-form__section-nav-list" data-part="section-nav-list" spacing="xs">
         {sections.map((section) => {
           const isActive = activeSection === section.key;
           return (

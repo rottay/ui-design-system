@@ -464,7 +464,8 @@ describe('assistant -- data-part contract (communication-pattern anatomy)', () =
     await waitFor(() => expect(container.textContent).toContain('name'));
     const root = await waitForPart(container, 'root');
     expect(root.className).toContain('ds-assistant-preview-diff-card');
-    expect(q(container, '[data-part="diff-row"]')).toHaveLength(3);
+    expect(q(container, '[data-part="diff-row"]')).toHaveLength(0);
+    expect(q(container, '.ds-assistant__diff-row[data-part="root"]')).toHaveLength(3);
     expect(q(container, '[data-part="divider"]')).toHaveLength(0);
     expect(q(container, '.ds-assistant__preview-cell[data-diff-side="before"][data-change="updated"]')).toHaveLength(1);
     expect(q(container, '.ds-assistant__preview-cell[data-diff-side="after"][data-change="updated"]')).toHaveLength(1);

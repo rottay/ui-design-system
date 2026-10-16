@@ -164,7 +164,9 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
 
         const root = await waitForPart(container, 'summary-strip');
         expect(root.getAttribute('data-variant')).toBe(variant);
-        expect(container.querySelector('[data-part="summary-item"]')).not.toBeNull();
+        // ARC-12 M-P2: the item is a modern Stack (own part `root`); its door is the class.
+        expect(container.querySelector('[data-part="summary-item"]')).toBeNull();
+        expect(container.querySelector('.ds-record__summary-item[data-part="root"]')).not.toBeNull();
         expect(container.querySelector('.ds-record__summary-item-label')).not.toBeNull();
         expect(container.querySelector('.ds-record__summary-item-value')).not.toBeNull();
         expect(container.querySelector('.ds-record__summary-item-helper')).not.toBeNull();
@@ -228,7 +230,16 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
         'modern',
       );
 
-      await waitForPart(container, 'group');
+      // ARC-12 M-P2: the group is a modern Stack (own part `root`); its door is the class.
+      await waitFor(
+        () => {
+          if (!container.querySelector('.ds-edit-fields__group[data-part="root"]')) {
+            throw new Error('expected .ds-edit-fields__group[data-part="root"] in <container>');
+          }
+        },
+        { timeout: WAIT_TIMEOUT },
+      );
+      expect(container.querySelector('[data-part="group"]')).toBeNull();
       const editor = await waitForPart(container, 'editor');
       expect(editor.getAttribute('data-headerless')).toBe('false');
       expect(container.querySelector('[data-part="editor-header"]')).not.toBeNull();
@@ -343,7 +354,9 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       const footer = await waitForPart(container, 'footer');
       expect(footer.getAttribute('data-saving')).toBe('true');
       expect(footer.getAttribute('data-error')).toBe('true');
-      expect(container.querySelector('[data-part="footer-support"]')).not.toBeNull();
+      // ARC-12 M-P2: the support block is a modern Stack (own part `root`); its door is the class.
+      expect(container.querySelector('[data-part="footer-support"]')).toBeNull();
+      expect(container.querySelector('.ds-edit-fields__footer-support[data-part="root"]')).not.toBeNull();
       expect(container.querySelector('.ds-edit-fields__footer-summary')).not.toBeNull();
     });
   });

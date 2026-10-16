@@ -224,6 +224,9 @@ describe('PatternDataTable responsive columns', () => {
 
       expect(await screen.findByText('Alice')).toBeInTheDocument();
       expect(container.querySelector('[data-part="mobile-root"]')).toBeNull();
+      // The class door is stamped on every engine (the Modern Stack no longer
+      // carries the caller part), so this absence cannot pass vacuously.
+      expect(container.querySelector('.ds-data-table__mobile-root')).toBeNull();
       expect(container.querySelector('table')).toBeInTheDocument();
       expect(screen.queryByText('Mobile Alice')).not.toBeInTheDocument();
     });

@@ -1015,6 +1015,24 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'voice-help-list': 'omit',
   'voice-help-step': 'omit',
   'voice-help-title': 'omit',
+  // ---- modern Stack carrier strip (ARC-12 M-P2) ----
+  // A modern Stack now stamps its own `root` (a frame), so the caller part it
+  // used to carry reaches the renderer only through its owner's class hook.
+  // Each name keeps the role it drew before the strip: the section card's
+  // content stack still passes, and the parts the renderer had no role for
+  // still draw the one bone the unroled name fell to.
+  'content-stack': 'pass',
+  'compare-skeleton': 'block',
+  container: 'block',
+  'diff-row': 'block',
+  'metadata-list': 'block',
+  preferences: 'block',
+  'preview-column': 'block',
+  'preview-header': 'block',
+  'preview-report': 'block',
+  'preview-report-list': 'block',
+  transcript: 'block',
+  violations: 'block',
 });
 
 /** A part the renderer has no role for still shows as its own box. */
@@ -1027,6 +1045,9 @@ export function resolvePartRole(part: string): SkeletonPartRole {
 /** An owner's class hook, `ds-<owner>__<part>`; a BEM modifier (`--`) is not a hook. */
 const OWNER_CLASS_HOOK = /^ds-[a-z0-9]+(?:-[a-z0-9]+)*__([a-z0-9]+(?:-[a-z0-9]+)*)$/;
 
+/** The Stack divider slot class, on the engine's own divider and on a Modern caller divider. */
+const STACK_DIVIDER_SLOT = 'rottay-stack-divider';
+
 /**
  * The part a stamped element is drawn as. Under P-88 a composed primitive keeps
  * its own canonical part (a crumb Link stamps `root`), and the owner names it
@@ -1035,8 +1056,14 @@ const OWNER_CLASS_HOOK = /^ds-[a-z0-9]+(?:-[a-z0-9]+)*__([a-z0-9]+(?:-[a-z0-9]+)
  * decides; with no hook, an unknown hook part, or hooks naming different parts,
  * the element's own `data-part` decides, as before. Only stamped elements reach
  * here: a hook on an element with no `data-part` still draws nothing.
+ *
+ * The Stack divider slot is the one engine-owned door: since the Modern Stack
+ * strip (ARC-12 M-P2) a caller divider keeps its own part and carries
+ * `rottay-stack-divider` instead, and it is still drawn as the Stack's
+ * `divider`.
  */
 export function resolveBonePart(element: Element, stampedPart: string): string {
+  if (element.classList.contains(STACK_DIVIDER_SLOT)) return 'divider';
   const hooked = new Set<string>();
   for (const token of Array.from(element.classList)) {
     const part = OWNER_CLASS_HOOK.exec(token)?.[1];

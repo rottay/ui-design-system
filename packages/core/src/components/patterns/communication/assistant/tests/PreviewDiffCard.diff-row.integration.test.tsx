@@ -1,6 +1,8 @@
 /**
- * `divider` is a part the Stack stamps on its own children, so a diff row that
- * is a direct Stack child must not reuse it. jsdom loads no skin: Chromium reads.
+ * The Modern Stack stamps its own part (ARC-12 M-P2), so a caller part never
+ * reaches the diff row: the card paints the row through its class door
+ * (`ds-assistant__diff-row`), and a caller `data-part="divider"` can no longer
+ * pull the row into the Stack divider rule. jsdom loads no skin: Chromium reads.
  */
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -9,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 import ModernStack from '../../../../primitives/layout/stack/engines/modern';
 import { measureArms } from '@tests/support/family-causality';
 
-function card(rowPart: string): string {
+function card(row: { className?: string; part?: string }): string {
   return renderToStaticMarkup(
     <div className="ds-assistant-preview-diff-card" data-part="root">
       <ModernStack spacing="sm">
@@ -18,7 +20,7 @@ function card(rowPart: string): string {
           <span>Before</span>
           <span>After</span>
         </ModernStack>
-        <ModernStack data-part={rowPart} direction="horizontal" spacing="sm" align="center">
+        <ModernStack className={row.className} data-part={row.part} direction="horizontal" spacing="sm" align="center">
           <span>Label</span>
           <span>Value</span>
         </ModernStack>
@@ -28,13 +30,13 @@ function card(rowPart: string): string {
 }
 
 const SCOPES = {
-  renamed: 'diff-row',
-  collision: 'divider',
-  forcedRoot: 'root',
+  hooked: { className: 'ds-assistant__diff-row' },
+  collision: { className: 'ds-assistant__diff-row', part: 'divider' },
+  bare: {},
 } as const;
 
 const markup = Object.entries(SCOPES)
-  .map(([scope, part]) => `<div id="${scope}">${card(part)}</div>`)
+  .map(([scope, row]) => `<div id="${scope}">${card(row)}</div>`)
   .join('');
 
 const STACK_OWNED = ['align-self', 'flex-basis', 'flex-shrink', 'opacity', 'pointer-events', 'background-color'] as const;
@@ -44,8 +46,10 @@ const row = (scope: string) =>
   `#${scope} .ds-assistant-preview-diff-card > [data-component='stack'] > [data-component='stack']:nth-child(3)`;
 
 describe('PreviewDiffCard row part', () => {
-  it('stamps the row as a direct Stack child under its own part', () => {
-    expect(markup).toContain('data-part="diff-row"');
+  it('stamps the row as the Stack root and carries the owner class door', () => {
+    expect(markup).not.toContain('data-part="diff-row"');
+    expect(markup).not.toContain('data-part="divider"');
+    expect(markup.match(/class="rottay-stack rottay-stack--modern ds-assistant__diff-row"/g)).toHaveLength(2);
   });
 
   it('is not painted by the Stack divider rule and keeps the card row rule', async () => {
@@ -64,13 +68,15 @@ describe('PreviewDiffCard row part', () => {
     const r = result.base!;
 
     for (const property of STACK_OWNED) {
-      expect(r[`renamed:${property}`], property).toBe(r[`forcedRoot:${property}`]);
+      expect(r[`hooked:${property}`], property).toBe(r[`bare:${property}`]);
+      expect(r[`collision:${property}`], property).toBe(r[`bare:${property}`]);
     }
-    expect(r['collision:flex-basis']).not.toBe(r['renamed:flex-basis']);
-    expect(r['collision:pointer-events']).toBe('none');
+    expect(r['collision:pointer-events']).not.toBe('none');
 
-    expect(r['renamed:padding-top']).not.toBe('0px');
-    expect(r['renamed:border-top-width']).toBe('1px');
-    expect(r['renamed:border-top-style']).toBe('solid');
+    for (const scope of ['hooked', 'collision'] as const) {
+      expect(r[`${scope}:padding-top`], scope).not.toBe('0px');
+      expect(r[`${scope}:border-top-width`], scope).toBe('1px');
+      expect(r[`${scope}:border-top-style`], scope).toBe('solid');
+    }
   }, 60_000);
 });

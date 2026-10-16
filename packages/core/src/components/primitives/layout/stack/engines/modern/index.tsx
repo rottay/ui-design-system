@@ -78,6 +78,9 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
     motion: _motion,
     style: _style,
     engine: _engine,
+    // P-88: the stack stamps its own part ('root') after the spread; a caller
+    // data-state is never forwarded (callers compose through className).
+    "data-state": _callerDataState,
     // StackProps extends HTMLAttributes: the remaining keys are real DOM
     // attributes (data-*, aria-*, id, handlers) and must reach the element.
     ...htmlAttributes
@@ -89,10 +92,13 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   );
 
   const presentation = resolveStackPresentation(props, { motion: "stamped" });
+  // `classDivider` is Modern-only for the same reason as `rhythm` below: a
+  // caller divider keeps its own part and takes the slot class instead.
   const renderedChildren = renderStackChildren(
     flattenFragments(children),
     divider,
-    scalarDirection
+    scalarDirection,
+    { classDivider: true }
   );
 
   // Responsive CSS generation
@@ -119,15 +125,13 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
       {React.createElement(
         ElementType,
         {
-          // P-79: the default part precedes the spread, so a caller's own
-          // `data-part` reaches the DOM and owns that node's paint.
-          "data-part": "root",
           ...htmlAttributes,
           ref: ref as Ref<HTMLElement>,
           className: classNames,
           style: { ...presentation.style, ...responsive.channels },
           ...presentation.attributes,
           ...responsive.attrs,
+          "data-part": "root",
           "data-component": "stack",
         },
         renderedChildren

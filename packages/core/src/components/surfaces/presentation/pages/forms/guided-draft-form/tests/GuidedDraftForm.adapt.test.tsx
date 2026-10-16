@@ -74,7 +74,10 @@ async function renderGuided(
   return { view, root };
 }
 
-const content = (root: HTMLElement) => root.querySelector('[data-part="content"]') as HTMLElement;
+// ARC-12 M-P2: the stacked content is a modern Stack (own part `root`) reached by its class door;
+// the sidebar content is a Flex that keeps its part.
+const content = (root: HTMLElement) =>
+  root.querySelector('.ds-guided-draft-form__content, [data-part="content"][data-layout]') as HTMLElement;
 const nav = (root: HTMLElement) => root.querySelector('[data-part="section-nav"]') as HTMLElement;
 
 describe('the guided-draft-form adapt slot', () => {

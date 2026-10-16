@@ -90,9 +90,15 @@ describe('GuidedDraftFormSurface (WO-FAM-10 cut)', () => {
     expect(container.querySelector('[data-part="loading-skeleton"]')).toBeNull();
     expect(container.querySelector('[data-part="loading-skeleton-title"]')).toBeNull();
     // The body anatomy the bones are read from is the real one.
-    for (const part of ['content', 'content-body', 'submit-bar']) {
+    for (const part of ['content-body', 'submit-bar']) {
       expect(skeleton?.querySelector(`[data-part="${part}"]`), part).not.toBeNull();
     }
+    // ARC-12 M-P2: the stacked content is a modern Stack reached by its class door;
+    // the sidebar content is a Flex that keeps its part.
+    expect(
+      skeleton?.querySelector('.ds-guided-draft-form__content, [data-part="content"][data-layout]'),
+      'content',
+    ).not.toBeNull();
     // The single announcement stays on the surface root.
     expect(container.querySelectorAll('[aria-busy="true"]')).toHaveLength(1);
   });

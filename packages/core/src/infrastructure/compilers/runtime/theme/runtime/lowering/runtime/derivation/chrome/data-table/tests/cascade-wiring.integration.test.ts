@@ -17,7 +17,8 @@ const MOBILE = "ds-pattern-data-table ds-data-table--mobile";
 
 function mobileRoot(id: string, recipe: string): string {
   return [
-    `<div id="${id}" class="${MOBILE}" data-part="mobile-root" data-recipe="${recipe}">`,
+    // ARC-12 M-P2: the mobile root is a modern Stack (own part `root`) reached by its class door.
+    `<div id="${id}" class="${MOBILE} ds-data-table__mobile-root" data-part="root" data-recipe="${recipe}">`,
     `<div class="${MOBILE}" data-part="mobile-bulk-actions"></div>`,
     `<div class="ds-data-table__mobile-card" data-part="mobile-card">`,
     `<div data-part="mobile-card-selection"></div>`,

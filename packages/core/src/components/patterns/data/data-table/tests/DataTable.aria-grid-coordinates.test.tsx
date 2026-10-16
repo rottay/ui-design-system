@@ -462,7 +462,8 @@ describe('PatternDataTable — the phone posture is a record list, not a grid', 
 
     const records = await waitFor(() => {
       const found = container.querySelector(
-        '[data-part="record-cards"], [data-part="record-list"]',
+        // ARC-12 M-P2: the record Stack stamps `root`; its owner door is the class.
+        '.ds-data-table__record-cards, .ds-data-table__record-list',
       );
       expect(found).not.toBeNull();
       return found as HTMLElement;

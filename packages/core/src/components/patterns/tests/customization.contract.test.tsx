@@ -333,7 +333,10 @@ describe('PatternBrandStudio customization anatomy anatomy and behavior', () => 
     await screen.findByText('customization anatomy Brand Studio');
     const root = container.querySelector('.ds-pattern-brand-studio') as HTMLElement;
     expect(root).toHaveAttribute('data-part', 'root');
-    expect(root).toHaveAttribute('data-state', 'idle');
+    // ARC-12 M-P2: the studio root is a modern Stack, which never forwards a caller data-state;
+    // the studio's check status travels on data-status.
+    expect(root).not.toHaveAttribute('data-state');
+    expect(root).toHaveAttribute('data-status', 'idle');
     // 1d04d8509 (WO-RET-06 W-4): the motion editor section retired, 5 -> 4.
     expect(queryAll(root, '.ds-pattern-brand-studio__section')).toHaveLength(4);
     expect(queryAll(root, '.ds-pattern-brand-studio__field').length).toBeGreaterThan(30);
@@ -363,7 +366,7 @@ describe('PatternBrandStudio customization anatomy anatomy and behavior', () => 
     expect(onChange.mock.calls.at(-1)?.[0].palette.primaryColor).toBe('#123456');
 
     fireEvent.click(await screen.findByRole('button', { name: 'Run check' }));
-    await waitFor(() => expect(root).toHaveAttribute('data-state', 'checked'));
+    await waitFor(() => expect(root).toHaveAttribute('data-status', 'checked'));
     expect(queryAll(root, '.ds-pattern-brand-studio__action[data-status="complete"]')).toHaveLength(1);
     expect(queryAll(root, '[data-part="violation"][data-severity="error"]').length).toBeGreaterThan(0);
 

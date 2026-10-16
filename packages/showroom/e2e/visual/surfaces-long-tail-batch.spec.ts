@@ -189,7 +189,9 @@ async function waitForDesktopPosture(root: Locator): Promise<void> {
       scene.locator('table [data-part="header-row"]'),
       `${caseId} must present its rows as the table`,
     ).toHaveCount(1, { timeout: 30_000 });
-    await expect(scene.locator('[data-part="mobile-root"]'), `${caseId} must not present cards`).toHaveCount(0);
+    // ARC-12 M-P2: the mobile root is a modern Stack (own part `root`); its class door is
+    // stamped on every engine, so this absence cannot pass vacuously.
+    await expect(scene.locator('.ds-data-table__mobile-root'), `${caseId} must not present cards`).toHaveCount(0);
   }
 }
 
@@ -293,8 +295,9 @@ async function assertFixtureCoverage(root: Locator, engine: Engine): Promise<voi
   const collection = root.locator('[data-long-tail-case="workspace-collection"]');
   await expect(collection.locator('.ds-collection-render-dispatch[data-view-mode="cards"]')).toHaveCount(1);
   await expect(collection.locator('.ds-pattern-data-table[data-part="root"]')).toHaveCount(1);
-  await expect(collection.locator('.ds-collection-workspace__content[data-part="root"]')).toHaveCount(0);
-  await expect(collection.locator('.ds-collection-workspace__content[data-part="content"]')).toHaveCount(2);
+  // ARC-12 M-P2: the content is reached by its class door; no modern Stack carries the caller part.
+  await expect(collection.locator('.ds-collection-workspace__content')).toHaveCount(2);
+  await expect(collection.locator('.ds-collection-workspace__content.rottay-stack--modern[data-part="content"]')).toHaveCount(0);
   await expect(collection.getByText('Preview: Beta workspace')).toBeVisible();
   const previewResize = collection.locator('.ds-collection-preview-rail__resize[data-part="preview-rail-resize"]');
   await expect(previewResize).toHaveCount(1);
