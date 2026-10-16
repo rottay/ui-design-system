@@ -150,6 +150,36 @@ const textHook = (part: string) => `ds-detail-header__${part}`;
 const TWO_ARM_PARTS: readonly (typeof FAMILY_PARTS)[number][] = ['hero-copy'];
 
 /**
+ * Layout parts on a modern `Box` / `Flex` that the skin reaches through BOTH
+ * doors (ARC-12 M-P3): a `.ds-detail-header__<part>` class arm beside the
+ * `[data-part]` arm, at equal specificity, until the Box/Flex strip retires
+ * the caller part. Box and Flex still stamp the caller part, so the class door
+ * sits on the very element that stamps it.
+ */
+const CARRIER_TWO_ARM_PARTS: readonly (typeof FAMILY_PARTS)[number][] = [
+  'root',
+  'top-bar',
+  'back-button',
+  'breadcrumb-trail',
+  'breadcrumb-divider',
+  'actions',
+  'hero-panel',
+  'hero-spine',
+  'hero-cluster',
+  'avatar',
+  'title',
+  'context-rail',
+  'metadata-card',
+  'metadata-chip',
+  'metadata-chip-icon',
+  'metadata-card-children',
+  'tab-strip',
+  'tab-list',
+  'tab',
+  'tab-rail',
+];
+
+/**
  * Parts stamped on the family's own layout primitives. Composed `Text` parts
  * resolve their ink and weight through the typography system inline (the
  * skin's own header says so), which is composition, not family paint.
@@ -170,6 +200,7 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
     // the portrait instead. Union the two renders for the stamped side.
     const stamped = new Set<string>();
     const hooked = new Set<string>();
+    const carrierHooked = new Set<string>();
     for (const avatar of ['AC', '/acme.png'] as const) {
       const { container, unmount } = renderWithEngine(
         <DetailHeader {...fullProps()} avatar={avatar} />,
@@ -184,6 +215,12 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
         const byHook = Array.from(container.querySelectorAll(`.${textHook(part)}`));
         expect(byHook, `.${textHook(part)} reaches the Stack`).toHaveLength(1);
         for (const node of byHook) expect(node, `.${textHook(part)} keeps the Stack's own part`).toHaveAttribute('data-part', 'root');
+      }
+      // M-P3: a Box/Flex part keeps its caller part; its class door lands on that same element.
+      for (const part of CARRIER_TWO_ARM_PARTS) {
+        const byHook = Array.from(container.querySelectorAll(`.${textHook(part)}`));
+        for (const node of byHook) expect(node, `.${textHook(part)} sits on the element stamping "${part}"`).toHaveAttribute('data-part', part);
+        if (byHook.length > 0) carrierHooked.add(part);
       }
       for (const part of TEXT_PARTS) {
         expect(container.querySelectorAll(`[data-part="${part}"]`), `no node carries the retired caller part "${part}"`).toHaveLength(0);
@@ -205,19 +242,21 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
     // own; the family's own vocabulary is exactly the list above.
 
     expect([...hooked].sort()).toEqual([...TEXT_PARTS].sort());
+    expect([...carrierHooked].sort()).toEqual([...CARRIER_TWO_ARM_PARTS].sort());
 
     // The skin consumes each family part through exactly one door: the layout
     // parts by `[data-part]`, the `Text` parts by their class hook. The
-    // two-arm Stack parts are the one exception: they keep both doors.
+    // two-arm Stack parts and the two-arm Box/Flex parts are the exceptions:
+    // they keep both doors.
     const consumedByPart = new Set(
       [...SKIN.matchAll(/\[data-part='([a-z-]+)'\]/g)].map((match) => match[1]),
     );
     const consumedByHook = new Set(
       [...SKIN.matchAll(/\.ds-detail-header__([a-z-]+)/g)].map((match) => match[1]),
     );
-    expect([...consumedByHook].sort()).toEqual([...TEXT_PARTS, ...TWO_ARM_PARTS].sort());
+    expect([...consumedByHook].sort()).toEqual([...TEXT_PARTS, ...TWO_ARM_PARTS, ...CARRIER_TWO_ARM_PARTS].sort());
     expect([...consumedByPart].sort()).toEqual([...LAYOUT_PARTS].sort());
-    for (const part of TWO_ARM_PARTS) expect(LAYOUT_PARTS.has(part), `${part} keeps its [data-part] arm`).toBe(true);
+    for (const part of [...TWO_ARM_PARTS, ...CARRIER_TWO_ARM_PARTS]) expect(LAYOUT_PARTS.has(part), `${part} keeps its [data-part] arm`).toBe(true);
     expect([...new Set([...consumedByPart, ...consumedByHook])].sort()).toEqual([...FAMILY_PARTS].sort());
   });
 

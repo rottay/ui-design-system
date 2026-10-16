@@ -60,7 +60,7 @@ function renderAvatarNode(avatar: string | ReactNode) {
   if (typeof avatar === 'string') {
     if (avatar.startsWith('http') || avatar.startsWith('/')) {
       return (
-        <Box data-part="avatar" data-variant="image">
+        <Box data-part="avatar" className="ds-detail-header__avatar" data-variant="image">
           {/* The hero h1 carries the identity name one line away, so the
               portrait is decorative: an `alt` echoing the title made every
               screen reader announce the record twice. */}
@@ -70,7 +70,7 @@ function renderAvatarNode(avatar: string | ReactNode) {
     }
 
     return (
-      <Box data-part="avatar" data-variant="initials">
+      <Box data-part="avatar" className="ds-detail-header__avatar" data-variant="initials">
         <Text className="ds-detail-header__avatar-initials">{avatar}</Text>
       </Box>
     );
@@ -134,6 +134,7 @@ function DetailTab({
     <Box
       {...interaction.handlers}
       {...partAttributes('tab', interaction.state)}
+      className="ds-detail-header__tab"
       data-active={isActive}
       role="tab"
       aria-selected={isActive}
@@ -168,7 +169,7 @@ function DetailTab({
       </Flex>
       {/* Selection rail: the state is a structural edge, not a
           background wash. */}
-      <Box data-part="tab-rail" data-active={isActive} aria-hidden="true" />
+      <Box data-part="tab-rail" className="ds-detail-header__tab-rail" data-active={isActive} aria-hidden="true" />
     </Box>
   );
 }
@@ -218,8 +219,8 @@ export function DetailHeader({
     .join(' ');
 
   return (
-    <Box data-part="root" data-archetype={archetype} className={rootClassName}>
-      <Box data-part="top-bar">
+    <Box data-part="root" data-archetype={archetype} className={[rootClassName, 'ds-detail-header__root'].filter(Boolean).join(' ')}>
+      <Box data-part="top-bar" className="ds-detail-header__top-bar">
         <Flex justify="between" align="center" gap={16} wrap="wrap">
           <Flex align="center" gap={16} wrap="wrap">
             {renderHrefAnchor(
@@ -227,6 +228,7 @@ export function DetailHeader({
               <Flex
                 {...backInteraction.handlers}
                 {...partAttributes('back-button', backInteraction.state)}
+                className="ds-detail-header__back-button"
                 align="center"
                 gap={8}
               >
@@ -245,15 +247,15 @@ export function DetailHeader({
               /* The trail is one addressable region so a narrow container can
                  retire the whole ancestor path in a single rule — hiding the
                  divider alone would leave a floating crumb list. */
-              <Flex data-part="breadcrumb-trail" align="center" gap={16}>
-                <Box data-part="breadcrumb-divider" />
+              <Flex data-part="breadcrumb-trail" className="ds-detail-header__breadcrumb-trail" align="center" gap={16}>
+                <Box data-part="breadcrumb-divider" className="ds-detail-header__breadcrumb-divider" />
                 <Breadcrumb items={breadcrumbItems} />
               </Flex>
             ) : null}
           </Flex>
 
           {actions.length > 0 ? (
-            <Flex data-part="actions" align="center" gap={8} wrap="wrap">
+            <Flex data-part="actions" className="ds-detail-header__actions" align="center" gap={8} wrap="wrap">
               {actions.map((action, index) => {
                 const ActionIcon = resolveSharedHeaderActionIcon(action);
 
@@ -281,13 +283,13 @@ export function DetailHeader({
         </Flex>
       </Box>
 
-      <Box data-part="hero-panel" data-archetype={archetype}>
+      <Box data-part="hero-panel" className="ds-detail-header__hero-panel" data-archetype={archetype}>
         {/* The hero's accent stroke — where the tenant's
             `--ds-detail-hero-spine` lands. */}
-        <Box data-part="hero-spine" aria-hidden="true" />
+        <Box data-part="hero-spine" className="ds-detail-header__hero-spine" aria-hidden="true" />
 
         <Flex align="start" justify="between" gap={22} wrap="wrap">
-          <Flex data-part="hero-cluster" align="start" gap={18}>
+          <Flex data-part="hero-cluster" className="ds-detail-header__hero-cluster" align="start" gap={18}>
             {avatar ? renderAvatarNode(avatar) : null}
 
             <Stack className="ds-detail-header__hero-copy" data-part="hero-copy" spacing="sm">
@@ -298,7 +300,7 @@ export function DetailHeader({
               ) : null}
 
               <Flex align="center" gap={12} wrap="wrap">
-                <Box data-part="title" data-archetype={archetype} as="h1">
+                <Box data-part="title" className="ds-detail-header__title" data-archetype={archetype} as="h1">
                   {title}
                 </Box>
                 {status ? <Badge variant={status.variant}>{status.label}</Badge> : null}
@@ -310,7 +312,7 @@ export function DetailHeader({
                 </Text>
               ) : null}
 
-              {contextRail ? <Box data-part="context-rail">{contextRail}</Box> : null}
+              {contextRail ? <Box data-part="context-rail" className="ds-detail-header__context-rail">{contextRail}</Box> : null}
             </Stack>
           </Flex>
         </Flex>
@@ -319,12 +321,13 @@ export function DetailHeader({
           /* The region is named for assistive technology: without it the
              label/value pairs read as a run of unrelated strings between the
              title and the tab strip. */
-          <Box data-part="metadata-card" role="group" aria-label={metadataRegionLabel}>
+          <Box data-part="metadata-card" className="ds-detail-header__metadata-card" role="group" aria-label={metadataRegionLabel}>
             {visibleMetadata.length > 0 ? (
               <Flex gap={12} wrap="wrap">
                 {visibleMetadata.map((item, index) => (
                   <Flex
                     data-part="metadata-chip"
+                    className="ds-detail-header__metadata-chip"
                     key={`${item.label}-${index}`}
                     align="center"
                     gap={8}
@@ -333,7 +336,7 @@ export function DetailHeader({
                       /* Icon frame drained from the retired inline 14px: the
                          skin owns the well and the glyph inherits
                          currentColor from the chip's muted ink. */
-                      <Box data-part="metadata-chip-icon" aria-hidden>
+                      <Box data-part="metadata-chip-icon" className="ds-detail-header__metadata-chip-icon" aria-hidden>
                         <item.icon />
                       </Box>
                     ) : null}
@@ -354,18 +357,18 @@ export function DetailHeader({
             ) : null}
 
             {children ? (
-              <Box data-part="metadata-card-children">{children}</Box>
+              <Box data-part="metadata-card-children" className="ds-detail-header__metadata-card-children">{children}</Box>
             ) : null}
           </Box>
         ) : null}
       </Box>
 
       {tabs && tabs.length > 0 ? (
-        <Box data-part="tab-strip" role="tablist" aria-label={tabStripLabel}>
+        <Box data-part="tab-strip" className="ds-detail-header__tab-strip" role="tablist" aria-label={tabStripLabel}>
           {/* Wrapping is skin-owned, not composed inline: a narrow container
               turns the lane from a wrapping stack of rows into one swipeable
               row, and an inline `flex-wrap` would outrank every engine. */}
-          <Flex data-part="tab-list" align="center" gap={10}>
+          <Flex data-part="tab-list" className="ds-detail-header__tab-list" align="center" gap={10}>
             {tabs.map((tab) => (
               <DetailTab
                 key={tab.id}
