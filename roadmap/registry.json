@@ -2889,6 +2889,11 @@
      "at": "2026-10-16 09:56",
      "by": "kimi-dt",
      "note": "2026-10-16: M-P3 family 4 (brand-studio) INTEGRATED bbd078843 (7 paths: tsx + skin + 4 vertical bundles + patch changeset; write-set sha256 verified vs family-4/evidence/write-set-shas.txt, zero foreign staged). Independent review ACCEPT 11/11 (session 9bb9abd2, opus-5-5, receipt carriers-mp3-f4-review.receipt.json): proofs byte-equal on reviewer trees, 6/6 mutants bite, HEAD red container-emission-budget ruled foreign/pre-existing/non-blocking (21 pinned doors, all LOWER, -49,706 B; re-anchor owed by pin owner M4, no waiver, focals 297/298 not full PASS), load breach ruled process-only (deterministic instruments, byte-equal reruns <12 load, no re-run owed). T-1/T-2 text nits ACCEPT (2 exact hunks). Owed text O14-O16 applied as integrator addendum in carriers-mp3/report.txt. Gates green: css-build 13/13, structure 203, freeze 0, token-audit, family-cut, pass-through 7/844/32/12 unchanged (census v7.1.11), changeset load-bearing, tsc/typecheck/eslint 0. STATUS regen e4a493c5f, roadmap:check OK."
+    },
+    {
+     "at": "2026-10-16 11:20",
+     "by": "kimi-dt",
+     "note": "2026-10-16: M-P3 family 5 (detail-header) INTEGRATED cdcb324c5 (8 entries: rendering tsx + DetailHeader.cut.test.tsx + skin + 4 vertical bundles + patch changeset; write-set sha256 verified, zero foreign staged). Independent review ACCEPT 11/11 (session 3ac0b4b8, opus-5-5, receipt carriers-mp3-f5-review.receipt.json): partition law EXTENDED NOT LOOSENED (new CARRIER_TWO_ARM_PARTS 20 parts, exact-equality partition + stricter same-part check; HEAD test fails on lot 29/8, new test fails on HEAD 0/20, 4 mutants bite incl. 2 reviewer-built); harness fixes H1 (apply-css.mjs, F3 pair rule unconditional for fold skins) + H2 (family-plan strips ::pseudo-elements) proven neutral on lots 1-4 (0 diff re-stamp, byte-identical re-plan); theme/population red pre-existing at HEAD (74/5 identical all trees, registered lane-g, no re-pin); process slips ruled no-evidence-invalid. Focals 286/286 both trees, pass-through 7/844/32/12 unchanged (v7.1.11), changeset load-bearing (clean-clone drill). Owed text O17-O21 applied as integrator addendum in carriers-mp3/report.txt. STATUS regen 65e7cdef9."
     }
    ],
    "claimedBy": "kimi-dt",
