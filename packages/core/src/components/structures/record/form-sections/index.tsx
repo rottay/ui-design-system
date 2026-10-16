@@ -209,8 +209,8 @@ export function FormSections({
         const sectionContentId = `${sectionsBaseId}-${section.key}-content`;
 
         const sectionLead = (
-          <Flex align="start" gap={14} data-part="section-lead">
-              <Box data-part="section-index">
+          <Flex align="start" gap={14} data-part="section-lead" className="ds-form-sections__section-lead">
+              <Box data-part="section-index" className="ds-form-sections__section-index">
                 {String(index + 1).padStart(2, '0')}
               </Box>
 
@@ -229,7 +229,7 @@ export function FormSections({
                   {section.required ? <SectionChip label={requiredLabel} tone="required" /> : null}
                   {section.optional ? <SectionChip label={optionalLabel} tone="optional" /> : null}
                   {section.error ? (
-                    <Flex data-part="section-error" align="center" gap={5}>
+                    <Flex data-part="section-error" className="ds-form-sections__section-error" align="center" gap={5}>
                       {/* Decorative: the adjacent copy carries the error
                           meaning; the icon is the non-colour shape cue. */}
                       <StatusErrorIcon decorative size={12} data-part="section-error-icon" />
@@ -264,9 +264,9 @@ export function FormSections({
         // invalid and the inner control cannot be reached.
         const sectionTrailing =
           section.summary || section.extra ? (
-            <Flex align="center" gap={10} data-part="section-trailing">
+            <Flex align="center" gap={10} data-part="section-trailing" className="ds-form-sections__section-trailing">
               {section.summary ? (
-                <Box data-part="section-summary">
+                <Box data-part="section-summary" className="ds-form-sections__section-summary">
                   {typeof section.summary === 'string' || typeof section.summary === 'number' ? (
                     <Text className="ds-form-sections__section-summary-text" size="xs" weight="medium">
                       {section.summary}
@@ -285,6 +285,7 @@ export function FormSections({
           <Box
             key={section.key}
             data-part="section"
+            className="ds-form-sections__section"
             data-tone={resolvedTone}
             data-appearance={resolvedAppearance}
             data-open={isOpen}
@@ -292,7 +293,7 @@ export function FormSections({
           >
             {/* The header is always a plain element; only the disclosure is a
                 button, so the trailing slot stays outside the control. */}
-            <Box data-part="section-header" data-collapsible={collapsible}>
+            <Box data-part="section-header" className="ds-form-sections__section-header" data-collapsible={collapsible}>
               {collapsible ? (
                 <SectionDisclosure
                   sectionKey={section.key}
@@ -301,7 +302,7 @@ export function FormSections({
                   onToggle={toggleSection}
                 >
                   {sectionLead}
-                  <Box data-part="section-toggle" data-open={isOpen}>
+                  <Box data-part="section-toggle" className="ds-form-sections__section-toggle" data-open={isOpen}>
                     <NavigationDownIcon size={15} decorative data-part="section-toggle-icon" />
                   </Box>
                 </SectionDisclosure>
@@ -316,13 +317,15 @@ export function FormSections({
                 the engine stamps state only. */}
             <Box
               data-part="section-grid"
+              className="ds-form-sections__section-grid"
               id={sectionContentId}
               data-open={isOpen}
               data-collapsible={collapsible}
             >
-              <Box data-part="section-clip">
+              <Box data-part="section-clip" className="ds-form-sections__section-clip">
                 <Box
                   data-part="section-content"
+                  className="ds-form-sections__section-content"
                   data-open={isOpen}
                   data-collapsible={collapsible}
                 >
@@ -391,7 +394,7 @@ export function FormFactsCard({
      announcement (`aria-busy`), so the renderer is told not to announce a
      second time. */
   const chrome = (
-    <Box data-part="facts-card-body">
+    <Box data-part="facts-card-body" className="ds-form-sections__facts-card-body">
       <Stack spacing="sm">
         {eyebrow ? (
           /* Tracking/case/mono family are skin-owned. */
@@ -406,7 +409,7 @@ export function FormFactsCard({
         {/* Display type, not a tier: the editorial 17px is skin-owned on the
             `--ds-form-sections-facts-title-font-size` family channel (the
             header families' title precedent), so no size prop competes. */}
-        <Box data-part="facts-card-title">{title}</Box>
+        <Box data-part="facts-card-title" className="ds-form-sections__facts-card-title">{title}</Box>
         {description ? (
           <Text className="ds-form-sections__facts-card-description" size="sm">
             {description}
@@ -419,6 +422,7 @@ export function FormFactsCard({
           <Flex
             key={item.label}
             data-part="facts-card-item"
+            className="ds-form-sections__facts-card-item"
             align="start"
             justify="between"
             gap={16}
@@ -455,7 +459,7 @@ export function FormFactsCard({
 
   return (
     <Box
-      className="ds-structure ds-form-sections"
+      className="ds-structure ds-form-sections ds-form-sections__facts-card"
       data-part="facts-card"
       data-loading={loading ? 'true' : undefined}
       aria-busy={loading ? true : undefined}
@@ -476,6 +480,7 @@ function SectionChip({
   return (
     <Box
       data-part="section-chip"
+      className="ds-form-sections__section-chip"
       data-badge-tone={tone}
     >
       <Text

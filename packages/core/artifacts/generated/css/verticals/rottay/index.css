@@ -69621,7 +69621,7 @@ html[data-ds-motion='reduced']
   --_ds-form-sections-density: var(--ds-density-global-effective-scale, 1);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) {
   --ds-form-sections-surface: var(--ds-surface-card, var(--ds-color-bg-elevated));
   --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%);
   --ds-form-sections-border: var(--ds-color-border-secondary);
@@ -69646,7 +69646,7 @@ html[data-ds-motion='reduced']
   );
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-tone='editorial'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-tone='editorial'] {
   --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 94%, var(--ds-color-bg-primary) 6%);
   --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-primary) 10%);
   --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
@@ -69660,7 +69660,7 @@ html[data-ds-motion='reduced']
   --ds-form-sections-grid-size: 26px;
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-tone='technical'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-tone='technical'] {
   --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 94%, var(--ds-color-text-muted) 6%);
   --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-secondary) 10%);
   --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 84%, var(--ds-color-text-muted) 16%);
@@ -69674,7 +69674,7 @@ html[data-ds-motion='reduced']
   --ds-form-sections-grid-size: 22px;
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-tone='governance'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-tone='governance'] {
   --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 95%, var(--ds-color-bg-primary) 5%);
   --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-primary) 10%);
   --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
@@ -69692,19 +69692,19 @@ html[data-ds-motion='reduced']
 
 /* Shell geometry drained from the engine's former `getSectionShellStyles`:
    card/soft clip to their radius; divided lets its content breathe. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) {
   inline-size: 100%;
   overflow: hidden;
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='divided'] {
   overflow: visible;
 }
 
 /* card (default): the open section lifts -- brighter surface, firmer border, and
    the only box-shadow in the family. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='card'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='card'] {
   border-radius: var(--ds-radius-xl, 18px);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
@@ -69715,13 +69715,13 @@ html[data-ds-motion='reduced']
     background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='card'][data-open='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='card'][data-open='true'] {
   border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
   background: var(--ds-form-sections-surface, var(--ds-surface-card, var(--ds-color-bg-elevated)));
   box-shadow: var(--ds-form-sections-shadow, var(--ds-material-raised-shadow-selected, 0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)));
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='soft'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='soft'] {
   border-radius: var(--ds-radius-xl, 18px);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
@@ -69731,7 +69731,7 @@ html[data-ds-motion='reduced']
     background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='divided'] {
   border-radius: 0;
   border: none;
   background: transparent;
@@ -69741,7 +69741,7 @@ html[data-ds-motion='reduced']
 /* The divided rhythm is a rule BETWEEN sections, so the first one carries none.
    Divider grammar channels: ruled/dashed tenant divider postures reach the
    separator; floors keep the exact 1px solid pre-wave render. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided']:not(:first-child) {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='divided']:not(:first-child) {
   border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
@@ -69750,13 +69750,13 @@ html[data-ds-motion='reduced']
    rule at (0,6,0) and wins by sorting after it; the header chip below carries
    the icon + copy, so the state never reads through colour alone. Divided
    sections have no frame by design: the chip is their cue. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance][data-error='true']:not([data-appearance='divided']) {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance][data-error='true']:not([data-appearance='divided']) {
   border-color: color-mix(in srgb, var(--ds-color-error) 62%, var(--ds-color-border-secondary));
 }
 
 /* --- Section header -------------------------------------------------------- */
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) {
   /* Geometry drained from the engine (the former `headerShellStyle`);
      density-scaled by the family's private factor (C-12). */
   inline-size: 100%;
@@ -69785,11 +69785,11 @@ html[data-ds-motion='reduced']
 /* `:not(divided)` is not decoration: a non-collapsible FormSections resolves to
    `divided` AND reports every section open, so an unguarded `[data-open]` rule
    would tie the divided rule and be decided by stylesheet order. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-open='true']:not([data-appearance='divided']) > :is([data-part='section-header'], .ds-form-sections__section-header) {
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 70%, transparent);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='divided'] > :is([data-part='section-header'], .ds-form-sections__section-header) {
   padding: calc(16px * var(--_ds-form-sections-density, 1)) calc(10px * var(--_ds-form-sections-density, 1)) calc(14px * var(--_ds-form-sections-density, 1));
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 52%, transparent);
 }
@@ -69799,13 +69799,13 @@ html[data-ds-motion='reduced']
    `data-collapsible`, so this no longer keys on `:not([aria-expanded])`, which
    only worked while the header itself was the button. The rule rides the tenant
    divider grammar (floors 1px solid). */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'][data-collapsible='false'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header)[data-collapsible='false'] {
   border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
 /* The header is a row: the disclosure takes the measure, the trailing cluster
    sits beside it and OUTSIDE the button. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) {
   display: flex;
   align-items: center;
   gap: calc(14px * var(--_ds-form-sections-density, 1));
@@ -69814,7 +69814,7 @@ html[data-ds-motion='reduced']
 /* The disclosure is the only control in the header. It carries the button
    reset the header used to carry, plus the keyboard ring the header never had
    (the section was reachable by Tab but showed nothing on focus). */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] > [data-part='section-disclosure'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) > [data-part='section-disclosure'] {
   display: flex;
   flex: 1;
   align-items: center;
@@ -69830,31 +69830,32 @@ html[data-ds-motion='reduced']
   text-align: start;
   cursor: pointer;
 }
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] > [data-part='section-disclosure']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] > [data-part='section-disclosure']:is([data-state~='focus-visible'], :focus-visible),
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > .ds-form-sections__section > .ds-form-sections__section-header > [data-part='section-disclosure']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
 }
 
 /* The header's two engine-owned layout regions (drained inline flex hooks). */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-lead'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-lead'], .ds-form-sections__section-lead) {
   flex: 1;
   min-inline-size: 0;
 }
 
 /* The copy stack (title row + description) fills the lead and survives
    truncation — drained inline `flex: 1; min-width: 0`. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] :is([data-part='section-copy'], .ds-form-sections__section-copy) {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-copy'], .ds-form-sections__section-copy) {
   flex: 1;
   min-inline-size: 0;
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-trailing'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-trailing'], .ds-form-sections__section-trailing) {
   flex-shrink: 0;
 }
 
 /* --- Section index --------------------------------------------------------- */
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-index'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-index'], .ds-form-sections__section-index) {
   /* Geometry + mono numeral drained from the engine (a Box, so skin-owned).
      The 28px frame is a FLOOR, not a fixed box: at high zoom/type-scale the
      numeral grows the well instead of overflowing it (C-12). */
@@ -69875,12 +69876,12 @@ html[data-ds-motion='reduced']
   color: var(--ds-color-text-tertiary);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-index'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-open='true']:not([data-appearance='divided']) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-index'], .ds-form-sections__section-index) {
   border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
   background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-index'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='divided'] > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-index'], .ds-form-sections__section-index) {
   border-color: var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
   background: transparent;
 }
@@ -69891,7 +69892,7 @@ html[data-ds-motion='reduced']
    tight=1.25), so the cadence stays private to this family with the exact
    fallback. Size/weight stay with the node (default `md` role + the
    `bold` weight class). */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-title {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) .ds-form-sections__section-title {
   color: var(--ds-color-text-primary);
   line-height: var(--_ds-form-sections-title-line-height, 1.15);
 }
@@ -69899,7 +69900,7 @@ html[data-ds-motion='reduced']
 /* Description rhythm + measure drained from the engine: 1.55 sits between
    the `normal` (1.5) and `body` (1.6) roles, so it stays private to this
    family; the 720px measure is local geometry. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-description {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) .ds-form-sections__section-description {
   color: var(--ds-color-text-secondary);
   line-height: var(--_ds-form-sections-description-line-height, 1.55);
   max-inline-size: 720px;
@@ -69907,7 +69908,7 @@ html[data-ds-motion='reduced']
 
 /* --- Section summary badge -------------------------------------------------- */
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-summary'], .ds-form-sections__section-summary) {
   /* Geometry drained from the engine; overflow clips rather than breaking
      the header's trailing cluster when the summary runs long. */
   max-inline-size: 360px;
@@ -69921,7 +69922,7 @@ html[data-ds-motion='reduced']
   background: var(--ds-form-sections-badge-bg, var(--ds-color-bg-secondary));
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-summary-text {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) .ds-form-sections__section-summary-text {
   color: var(--ds-color-text-primary);
 }
 
@@ -69929,33 +69930,33 @@ html[data-ds-motion='reduced']
 
 /* The chip's own two-value vocabulary is independent of the section's four-value
    tone: a required chip reads the same in every tone. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-chip'], .ds-form-sections__section-chip) {
   padding: 4px 8px;
   border-radius: 999px;
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-chip'], .ds-form-sections__section-chip)[data-badge-tone='required'] {
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, var(--ds-color-bg-primary) 12%);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] > .ds-form-sections__section-chip-label {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-chip'], .ds-form-sections__section-chip)[data-badge-tone='required'] > .ds-form-sections__section-chip-label {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-chip'], .ds-form-sections__section-chip)[data-badge-tone='optional'] {
   background: var(--ds-color-bg-secondary);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] > .ds-form-sections__section-chip-label {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-chip'], .ds-form-sections__section-chip)[data-badge-tone='optional'] > .ds-form-sections__section-chip-label {
   color: var(--ds-color-text-secondary);
 }
 
 /* Chip label type drained from the engine: unit line-height resolves through
    the canonical `none` role; tracking + case are local literals (the family's
    existing eyebrow vocabulary). */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] > .ds-form-sections__section-chip-label {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-chip'], .ds-form-sections__section-chip) > .ds-form-sections__section-chip-label {
   line-height: var(--ds-line-height-none, 1);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -69965,25 +69966,25 @@ html[data-ds-motion='reduced']
    Same pill grammar as the required/optional chip, in the error voice: the
    semantic status icon is the shape cue, the copy carries the meaning, and
    the frame/tint are the colour reinforcement — never the only signal. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-error'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-error'], .ds-form-sections__section-error) {
   padding: 4px 8px;
   border-radius: 999px;
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-error) 38%, var(--ds-color-border-secondary));
   background: color-mix(in srgb, var(--ds-color-error) 7%, transparent);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-error-icon'],
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) [data-part='section-error-icon'],
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) .ds-form-sections__section-error-copy {
   color: var(--ds-color-error);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) .ds-form-sections__section-error-copy {
   line-height: var(--ds-line-height-none, 1);
 }
 
 /* --- Toggle ----------------------------------------------------------------- */
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-toggle'], .ds-form-sections__section-toggle) {
   /* Geometry drained from the engine (the 28px chevron well) — a floor, not
      a fixed box, so the chevron survives high zoom/type-scale (C-12). */
   min-inline-size: 28px;
@@ -69999,7 +70000,7 @@ html[data-ds-motion='reduced']
   transform: rotate(0deg);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-toggle'][data-open='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section):not([data-appearance='divided']) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-toggle'], .ds-form-sections__section-toggle)[data-open='true'] {
   border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
 }
 
@@ -70009,17 +70010,17 @@ html[data-ds-motion='reduced']
 
 /* Part repeated so this OUTRANKS the resting `rotate(0deg)` above rather than
    tying it and depending on declaration order. */
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'][data-open='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-toggle'], .ds-form-sections__section-toggle)[data-open='true'] {
   transform: rotate(180deg);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle-icon'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) [data-part='section-toggle-icon'] {
   color: var(--ds-color-text-secondary);
 }
 
 /* --- Section content --------------------------------------------------------- */
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > * > * > [data-part='section-content'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > * > * > :is([data-part='section-content'], .ds-form-sections__section-content) {
   /* Card/soft content padding drained from the engine (the divided cut is
      overridden below); density-scaled by the family's private factor. */
   padding: calc(18px * var(--_ds-form-sections-density, 1)) calc(18px * var(--_ds-form-sections-density, 1)) calc(20px * var(--_ds-form-sections-density, 1));
@@ -70027,45 +70028,45 @@ html[data-ds-motion='reduced']
   transform: translateY(-10px);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided'] > * > * > [data-part='section-content'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='divided'] > * > * > :is([data-part='section-content'], .ds-form-sections__section-content) {
   padding: calc(20px * var(--_ds-form-sections-density, 1)) calc(10px * var(--_ds-form-sections-density, 1)) calc(6px * var(--_ds-form-sections-density, 1));
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > * > * > [data-part='section-content'][data-open='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > * > * > :is([data-part='section-content'], .ds-form-sections__section-content)[data-open='true'] {
   transform: translateY(0);
 }
 
 /* --- Accordion cadence (drained from the engine's inline transitions; the
         engine stamps data-open / data-collapsible only) ----------------------- */
 
-.ds-structure.ds-form-sections [data-part='section-grid'] {
+.ds-structure.ds-form-sections :is([data-part='section-grid'], .ds-form-sections__section-grid) {
   display: grid;
   grid-template-rows: 0fr;
 }
 
 /* The clip wrapper (drained inline `overflow: hidden`) keeps the collapsing
    region from painting outside its own row while the cadence runs. */
-.ds-structure.ds-form-sections [data-part='section-grid'] > [data-part='section-clip'] {
+.ds-structure.ds-form-sections :is([data-part='section-grid'], .ds-form-sections__section-grid) > :is([data-part='section-clip'], .ds-form-sections__section-clip) {
   overflow: hidden;
 }
-.ds-structure.ds-form-sections [data-part='section-grid'][data-open='true'] {
+.ds-structure.ds-form-sections :is([data-part='section-grid'], .ds-form-sections__section-grid)[data-open='true'] {
   grid-template-rows: 1fr;
 }
-.ds-structure.ds-form-sections [data-part='section-grid'][data-collapsible='true'] {
+.ds-structure.ds-form-sections :is([data-part='section-grid'], .ds-form-sections__section-grid)[data-collapsible='true'] {
   transition: grid-template-rows var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > * > * > :is([data-part='section-content'], .ds-form-sections__section-content)[data-collapsible='true'] {
   opacity: 0;
   transition:
     opacity var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
     transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'][data-open='true'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > * > * > :is([data-part='section-content'], .ds-form-sections__section-content)[data-collapsible='true'][data-open='true'] {
   opacity: 1;
 }
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-toggle'], .ds-form-sections__section-toggle) {
   transition:
     transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
@@ -70080,11 +70081,13 @@ html[data-ds-motion='reduced']
    disclosure moved inward; the read below restores it on the actual
    interactive surface, the row the button fills.) -------------------------- */
 
-.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header']:has(> [data-part='section-disclosure']:is([data-state~='pressed'], :active)) {
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header']:has(> [data-part='section-disclosure']:is([data-state~='pressed'], :active)),
+.ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > .ds-form-sections__section > .ds-form-sections__section-header:has(> [data-part='section-disclosure']:is([data-state~='pressed'], :active)) {
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
 }
 @media (hover: hover) {
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header']:has(> [data-part='section-disclosure']:is([data-state~='hovered'], :hover)) {
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header']:has(> [data-part='section-disclosure']:is([data-state~='hovered'], :hover)),
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > .ds-form-sections__section > .ds-form-sections__section-header:has(> [data-part='section-disclosure']:is([data-state~='hovered'], :hover)) {
     background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
   }
 }
@@ -70092,7 +70095,7 @@ html[data-ds-motion='reduced']
 /* --- Narrow cut: the header wraps its trailing cluster under the title ------ */
 
 @container ds-form-sections (inline-size < 30rem) {
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] {
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) {
     flex-wrap: wrap;
   }
 }
@@ -70101,23 +70104,23 @@ html[data-ds-motion='reduced']
         by its header background, the toggle by its rotated chevron. ----------- */
 
 @media (forced-colors: active) {
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='card'],
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='soft'],
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'][data-appearance='divided']:not(:first-child),
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > div[data-part='section-header']:not([aria-expanded]),
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-index'],
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'],
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'],
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-error'],
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'],
-  div.ds-structure.ds-form-sections[data-part='facts-card'],
-  div[data-part='facts-card'] [data-part='facts-card-item'] {
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='card'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='soft'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section)[data-appearance='divided']:not(:first-child),
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > div:is([data-part='section-header'], .ds-form-sections__section-header):not([aria-expanded]),
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-index'], .ds-form-sections__section-index),
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-summary'], .ds-form-sections__section-summary),
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-chip'], .ds-form-sections__section-chip),
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-error'], .ds-form-sections__section-error),
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-toggle'], .ds-form-sections__section-toggle),
+  div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card),
+  div:is([data-part='facts-card'], .ds-form-sections__facts-card) :is([data-part='facts-card-item'], .ds-form-sections__facts-card-item) {
     border-color: ButtonText;
   }
 
   /* The section error keeps its icon shape + copy (never paint alone). */
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-error-icon'],
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] .ds-form-sections__section-error-copy {
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) [data-part='section-error-icon'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) .ds-form-sections__section-error-copy {
     color: CanvasText;
   }
 }
@@ -70125,9 +70128,9 @@ html[data-ds-motion='reduced']
 /* --- Reduced motion: the whole accordion cadence goes quiet ------------------ */
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-form-sections [data-part='section-grid'][data-collapsible='true'],
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'],
-  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
+  .ds-structure.ds-form-sections :is([data-part='section-grid'], .ds-form-sections__section-grid)[data-collapsible='true'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > * > * > :is([data-part='section-content'], .ds-form-sections__section-content)[data-collapsible='true'],
+  .ds-structure.ds-form-sections:is([data-part='root'], .ds-form-sections__root) > :is([data-part='section'], .ds-form-sections__section) > :is([data-part='section-header'], .ds-form-sections__section-header) :is([data-part='section-toggle'], .ds-form-sections__section-toggle) {
     transition: none;
   }
 }
@@ -70139,7 +70142,7 @@ html[data-ds-motion='reduced']
    above (which are declared on `[data-part='section']`, not on this root).
    It is also its own inline-size container: the ledger rows below stack
    label over value under the narrow cut (C-12 two-column-to-stack rule). */
-div.ds-structure.ds-form-sections[data-part='facts-card'] {
+div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) {
   container: ds-form-facts-card / inline-size;
   --_ds-form-sections-density: var(--ds-density-global-effective-scale, 1);
   inline-size: 100%;
@@ -70152,20 +70155,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] {
 /* Body + list geometry drained from the engine (the former inline padding on
    the body Box, the items stack's margin, and each row's block padding);
    density-scaled by the family's private factor (C-12). */
-div.ds-structure.ds-form-sections[data-part='facts-card'] > [data-part='facts-card-body'] {
+div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) > :is([data-part='facts-card-body'], .ds-form-sections__facts-card-body) {
   padding: calc(20px * var(--_ds-form-sections-density, 1));
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] :is([data-part='facts-card-items'], .ds-form-sections__facts-card-items) {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) :is([data-part='facts-card-items'], .ds-form-sections__facts-card-items) {
   margin-block-start: calc(18px * var(--_ds-form-sections-density, 1));
 }
 
-div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item'] {
+div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) :is([data-part='facts-card-item'], .ds-form-sections__facts-card-item) {
   padding-block: calc(10px * var(--_ds-form-sections-density, 1));
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-eyebrow[data-size],
-.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-label[data-size] {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-eyebrow[data-size],
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-item-label[data-size] {
   color: var(--ds-color-text-muted);
 }
 
@@ -70173,18 +70176,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    ink are all skin-owned, on the family channel with its exact 17px
    fallback — the editorial size no canonical role renders (base is 16, lg
    is 18), so the literal is the honest resting value. */
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-title'] {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) :is([data-part='facts-card-title'], .ds-form-sections__facts-card-title) {
   font-size: var(--ds-form-sections-facts-title-font-size, 17px);
   font-weight: 700;
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-value[data-size] {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-item-value[data-size] {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-description[data-size],
-.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-helper[data-size] {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-description[data-size],
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-item-helper[data-size] {
   color: var(--ds-color-text-secondary);
 }
 
@@ -70192,7 +70195,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    description rhythm (family-private, exact 1.55 fallback), the
    copy stack's flex survival hook, and the value column's measure,
    end-alignment and break strategy — all formerly inline in the engine. */
-.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-eyebrow {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-eyebrow {
   letter-spacing: 0.14em;
   /* Personality channel: tenant label casing reaches the facts eyebrow;
      absent a personality the exact pre-wave uppercase stands (C-12). */
@@ -70200,22 +70203,22 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-family: var(--ds-font-family-mono, monospace);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-description {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-description {
   line-height: var(--_ds-form-sections-description-line-height, 1.55);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] :is([data-part='facts-card-item-copy'], .ds-form-sections__facts-card-item-copy) {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) :is([data-part='facts-card-item-copy'], .ds-form-sections__facts-card-item-copy) {
   flex: 1;
   min-inline-size: 0;
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-label {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-item-label {
   letter-spacing: 0.12em;
   text-transform: var(--ds-typography-label-transform, uppercase);
   font-family: var(--ds-font-family-mono, monospace);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-value {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-item-value {
   /* Ledger measure: scales with the card instead of a dead 180px cap — no
      squeezed values at 390px, no absurd wraps in wide cards (C-12). */
   max-inline-size: min(52%, 15rem);
@@ -70226,7 +70229,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-value[data-mono='true'] {
+.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-item-value[data-mono='true'] {
   font-family: var(--ds-font-family-mono, monospace);
 }
 
@@ -70236,7 +70239,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    the card's bottom padding does not double as a hanging rule. The rule
    rides the tenant divider grammar (floors 1px solid) — ruled/dashed
    postures reach the ledger. */
-div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item']:not(:last-child) {
+div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) :is([data-part='facts-card-item'], .ds-form-sections__facts-card-item):not(:last-child) {
   border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
 }
 
@@ -70247,12 +70250,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    Flex's own row direction is a (0,1,0) skin rule, so this chained rule
    outranks it; `row-gap` likewise outranks the gap channel's row axis. */
 @container ds-form-facts-card (inline-size < 24rem) {
-  div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item'] {
+  div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) :is([data-part='facts-card-item'], .ds-form-sections__facts-card-item) {
     flex-direction: column;
     row-gap: 2px;
   }
 
-  div.ds-structure.ds-form-sections[data-part='facts-card'] .ds-form-sections__facts-card-item-value {
+  div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections__facts-card) .ds-form-sections__facts-card-item-value {
     max-inline-size: none;
     text-align: start;
   }
