@@ -4,7 +4,9 @@
  * the tripwire marker). READ-ONLY, pure. The body is the adopted report.mjs verbatim; its CLI
  * shell, the out-of-repo tool shas, the `generated` date and the markdown fragment are dropped.
  */
-// Provenance: arc12/census-v719/report.mjs sha256 1794347e1b9d12497c4ce05822497a8e0fcd7ca8724fc0d21bffcdb99b8a4b19 (census v7.1.9, 2026-10-14: the
+// Provenance: arc12/census-v7111/report.mjs sha256 5cb475402cfe87f03d31240a4394d9a6a9781a387e8cfd622989493e98c24981 (census v7.1.11, 2026-10-16: the
+// tool shell also records the selectors/index.mjs sha and its `generated` date; the body is unchanged from v7.1.9; v7.1.9 was
+// arc12/census-v719/report.mjs 1794347e -- the
 // structural-forward totals, conservation line and section; the tool shell now records the ast sha; v7.1.2 was arc12/dt3/report.mjs 2f340462 -- the two
 // discharged adjudication labels dropped; v7.1.1 was 8a8ca98c -- the tag-name audit list dropped with the fallback;
 // v7.1 was d66a34b2 -- the unresolved-caller section; v7 was 44b91e89).

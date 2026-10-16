@@ -9,7 +9,10 @@
  * (argv, the JSON write, console output) is replaced by this function's parameters and return.
  * Its AST helpers (analyzeFile, classify) are the sibling module ./ast/index.mjs.
  */
-// Provenance: arc12/census-v7110/census.mjs sha256 9eeac4402df0057144dc64020a5487504628830fffe5cb9f9d39d2a293acd3a7 (census v7.1.10, 2026-10-15: rest
+// Provenance: arc12/census-v7111/census.mjs sha256 80dbbbf6e253b53bc0ea1bc324a7028f6f6244201995a582233372eaa34fd57a (census v7.1.11, 2026-10-16: a
+// rule prelude splits on top-level commas only; the tool is census.mjs PLUS ast/index.mjs sha256 5a447bc8 (unchanged from v7.1.10) PLUS
+// selectors/index.mjs sha256 72cf5c7bb4baa89565c8a178ec24ea46b9e4069186a98c8faf894d77407ac2c8, byte-identical to ./selectors/index.mjs;
+// v7.1.10 was arc12/census-v7110/census.mjs 9eeac440 -- rest
 // carriers scoped per enclosing function; census.mjs unchanged from v7.1.9, the tool is census.mjs PLUS ast/index.mjs sha256
 // 5a447bc88bd1a05d3796c5ed9d4a8c853cef3b281fc07450fc4023f8681613ae, byte-identical to ./ast/index.mjs; v7.1.9 was arc12/census-v719 -- the
 // own-anatomy index keyed by class and the path-anchored layout carriers, ast/index.mjs c65e0abf carrying each site's own DS classes;
@@ -26,6 +29,7 @@ import { createRequire } from 'node:module';
 
 import { IMPLEMENTED_ENGINE_NAMES } from '../../../roster/index.mjs';
 import { createSweepAst } from './ast/index.mjs';
+import { splitSelectorList } from './selectors/index.mjs';
 
 /** @param {{ repoRoot: string }} options  repoRoot = the workspace root (holds packages/core). */
 export function sweepPassThrough({ repoRoot } = {}) {
@@ -91,7 +95,8 @@ for (const [kind, d] of Object.entries(SKIN_DIRS)) {
         if (!prelude || prelude.startsWith('@')) continue;
         if (/^(from|to|\d+%)/.test(prelude)) continue;
         skinPreludes.push({ file: rel(p), kind, prelude }); // v7.1.9: the own-anatomy index parses these paren-aware
-        for (const sel of prelude.split(',')) skinSelectors.push({ file: rel(p), kind, family, selector: sel.trim() });
+        // v7.1.11: top-level commas only -- a raw split severed `:is(a, b)[data-state]` from its part
+        for (const sel of splitSelectorList(prelude)) skinSelectors.push({ file: rel(p), kind, family, selector: sel });
       }
     }
   }
@@ -113,7 +118,8 @@ const familiesWithSkin = new Set(skinSelectors.map((s) => s.family));
 // carrier is called. This index reads the rules by the element's own DS class instead: a selector
 // counts against an element when one of its compounds carries that class (directly or inside a
 // :where/:is/:not list) together with a [data-part] or [data-state]. Selectors and compounds are
-// split paren- and bracket-aware.
+// split paren- and bracket-aware (v7.1.11: the selector list by the shared splitSelectorList, which
+// also honours strings and escapes; identical to topLevel(',') over the whole skin corpus).
 const topLevel = (text, isSep) => {
   const out = []; let depth = 0, cur = '';
   for (const ch of text) {
@@ -126,7 +132,7 @@ const topLevel = (text, isSep) => {
 };
 const ANATOMY_ATTR = /\[data-(part|state)\b/;
 const ownClassIndex = new Map(); // ds class -> Map(selector id -> { file, kind, anatomy })
-skinPreludes.forEach((r, i) => topLevel(r.prelude, (ch) => ch === ',').forEach((sel, j) => {
+skinPreludes.forEach((r, i) => splitSelectorList(r.prelude).forEach((sel, j) => {
   const id = `${i}:${j}`;
   for (const compound of topLevel(sel, (ch) => /[\s>+~]/.test(ch))) {
     const anatomy = ANATOMY_ATTR.test(compound);
