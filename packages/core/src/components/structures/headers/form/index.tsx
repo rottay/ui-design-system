@@ -171,9 +171,9 @@ export function FormHeader({
       data-part="root"
       data-structure="form-header"
       data-mode={mode}
-      className="ds-structure ds-form-header"
+      className="ds-structure ds-form-header ds-form-header__root ds-edit-header__root"
     >
-      <Box data-part="top-bar">
+      <Box data-part="top-bar" className="ds-form-header__top-bar">
         <Flex align="center" gap={16} wrap="wrap">
           {renderHrefAnchor(
             backHref,
@@ -183,6 +183,7 @@ export function FormHeader({
                 ...backInteraction.state,
                 focusVisible: backAnchor.state.focusVisible,
               })}
+              className="ds-form-header__back-button ds-edit-header__back-button"
               align="center"
               gap={8}
             >
@@ -206,10 +207,10 @@ export function FormHeader({
         </Flex>
       </Box>
 
-      <Box data-part="hero-panel" data-archetype={archetype}>
-        <Flex data-part="hero-row" justify="between" align="start" wrap="wrap">
-          <Flex align="center" gap={16} data-part="hero-cluster">
-            <Box data-part="icon-badge" data-variant={resolveHeaderTone(colorVariant)}>
+      <Box data-part="hero-panel" className="ds-form-header__hero-panel ds-edit-header__hero-panel" data-archetype={archetype}>
+        <Flex data-part="hero-row" className="ds-form-header__hero-row" justify="between" align="start" wrap="wrap">
+          <Flex align="center" gap={16} data-part="hero-cluster" className="ds-form-header__hero-cluster">
+            <Box data-part="icon-badge" className="ds-form-header__icon-badge ds-edit-header__icon-badge" data-variant={resolveHeaderTone(colorVariant)}>
               {/* The header owns the glyph slot; the title names the page, so
                   the glyph is decorative. */}
               <span data-part="icon-badge-glyph" aria-hidden="true">
@@ -230,7 +231,7 @@ export function FormHeader({
               {/* Box as="h1" (the DetailHeader precedent): a composed Text
                   resolved its size inline, which left the skin's display
                   type dead — the h1 is fully skin-owned now. */}
-              <Box data-part="title" as="h1">
+              <Box data-part="title" className="ds-form-header__title" as="h1">
                 {title}
               </Box>
               {subtitle && (

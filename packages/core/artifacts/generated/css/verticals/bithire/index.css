@@ -72759,7 +72759,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ─── SHARED EDIT+FORM: hero-panel archetype gradient (buildPatternStyle) ─── */
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='control'],
-.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='control'] {
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='control'],
+.ds-structure.ds-form-header .ds-edit-header__hero-panel[data-archetype='control'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-secondary) 18%, transparent) 0%, transparent 48%),
     radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-primary) 9%, transparent) 0%, transparent 34%),
@@ -72821,7 +72822,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ─── SHARED EDIT+FORM: icon-badge tone, keyed on the header-tone contract ─── */
 
 .ds-structure.ds-edit-header [data-part='icon-badge'],
-.ds-structure.ds-form-header [data-part='icon-badge'] {
+.ds-structure.ds-form-header [data-part='icon-badge'],
+.ds-structure.ds-form-header .ds-edit-header__icon-badge {
   --ds-header-icon-tone-bg: var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent));
   --ds-header-icon-tone-bd: var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary));
   --ds-header-icon-tone-fg: var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary));
@@ -72838,7 +72840,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     0 8px 18px -14px color-mix(in srgb, var(--ds-color-text-primary) 38%, transparent);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'],
-.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'],
+.ds-structure.ds-form-header.ds-edit-header__root .ds-edit-header__icon-badge {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-header-icon-tone-bd);
 }
 
@@ -72879,7 +72882,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    (an interactive affordance on a real link, never decorative motion). */
 
 .ds-structure.ds-edit-header [data-part='back-button'],
-.ds-structure.ds-form-header [data-part='back-button'] {
+.ds-structure.ds-form-header [data-part='back-button'],
+.ds-structure.ds-form-header .ds-edit-header__back-button {
   padding-block: 8px;
   padding-inline: 12px;
   cursor: pointer;
@@ -72895,17 +72899,20 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    the pointer sits on the ANCHOR rather than on the chip's own box. */
 @media (hover: hover) {
   .ds-structure.ds-edit-header [data-part='back-button']:is([data-state~='hovered'], :hover),
-  .ds-structure.ds-form-header [data-part='back-button']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-form-header [data-part='back-button']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-form-header .ds-edit-header__back-button:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
     transform: translateY(-1px);
   }
   .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover),
-  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-form-header.ds-edit-header__root .ds-edit-header__back-button:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
   }
 }
 .ds-structure.ds-edit-header [data-part='back-button']:is([data-state~='pressed'], :active),
-.ds-structure.ds-form-header [data-part='back-button']:is([data-state~='pressed'], :active) {
+.ds-structure.ds-form-header [data-part='back-button']:is([data-state~='pressed'], :active),
+.ds-structure.ds-form-header .ds-edit-header__back-button:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
 }
 /* The keyboard ring's kernel twin sits on the CHIP while the platform arm sits
@@ -72917,7 +72924,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 .ds-structure.ds-edit-header [data-part='back-button'][data-state~='focus-visible'],
 .ds-structure.ds-form-header [data-part='back-button'][data-state~='focus-visible'],
 .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
-.ds-structure.ds-form-header a:focus-visible [data-part='back-button'] {
+.ds-structure.ds-form-header a:focus-visible [data-part='back-button'],
+.ds-structure.ds-form-header a:focus-visible .ds-edit-header__back-button {
   box-shadow: var(--ds-header-back-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
 /* anchors around the back chip carry no underline (the reset moved out of the
@@ -72926,7 +72934,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    file could only ever deliver to one of its two families. It lives in
    `edit-header.css`, with the rest of EditHeader's own breadcrumb grammar. */
 .ds-structure.ds-edit-header a:has(> [data-part='back-button']),
-.ds-structure.ds-form-header a:has(> [data-part='back-button']) {
+.ds-structure.ds-form-header a:has(> [data-part='back-button']),
+.ds-structure.ds-form-header a:has(> .ds-edit-header__back-button) {
   text-decoration: none;
 }
 /* ─── SHARED EDIT+FORM: reduced motion for the back chip ─────────────────────
@@ -72937,7 +72946,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    roots are guarded in their own files — this block owns the chip only. */
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-edit-header [data-part='back-button'],
-  .ds-structure.ds-form-header [data-part='back-button'] {
+  .ds-structure.ds-form-header [data-part='back-button'],
+  .ds-structure.ds-form-header .ds-edit-header__back-button {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -73529,7 +73539,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  */
 
 /* ---- root card (geometry drained from the component's inline styles) ---- */
-.ds-structure.ds-form-header[data-part='root'] {
+.ds-structure.ds-form-header[data-part='root'],
+.ds-structure.ds-form-header.ds-form-header__root {
   --ds-form-header-hero-padding: calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1));
   --ds-form-header-top-bar-padding-block: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
   --ds-form-header-top-bar-padding-inline: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
@@ -73550,14 +73561,16 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    attributes (the engine stamps `data-structure` for exactly this budget) —
    never a repeated `[data-part]` (4th-tanda law; the sister edit-header.css
    still carries the doubled form, noted for its lane). */
-.ds-structure.ds-form-header[data-part='root'][data-structure='form-header'] {
+.ds-structure.ds-form-header[data-part='root'][data-structure='form-header'],
+.ds-structure.ds-form-header.ds-form-header__root[data-structure='form-header'] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 /* ---- top bar: navigation only (back + breadcrumb). The commit action used to
         live here, on the Back link's baseline and a hero-panel away from the
         title it commits; it now sits in the hero row, the EditHeader posture. ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__top-bar {
   padding-block: var(--ds-form-header-top-bar-padding-block, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   padding-inline: var(--ds-form-header-top-bar-padding-inline, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
@@ -73577,14 +73590,17 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    no-op won and the back chip lost its tint in both states. The frame is all
    this rule owns; its corner rides the tenant radius dial relative to the
    vertical's rest (10px at rest in every vertical). */
-.ds-structure.ds-form-header[data-part='root'] [data-part='back-button'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='back-button'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__back-button {
   border: 1px solid var(--ds-color-border);
   border-radius: calc(10px * var(--ds-radius-scale-normalized, 1));
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] .ds-form-header__back-label {
+.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] .ds-form-header__back-label,
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__top-bar .ds-form-header__back-label {
   color: var(--ds-color-text-secondary);
 }
 
@@ -73597,19 +73613,22 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* ---- hero panel (padding drained; the gradient itself lives in
         edit-header.css, shared) ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel {
   padding: var(--ds-form-header-hero-padding, calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1)));
 }
 /* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
    visual value in the TSX and the one measurement here no ramp could see. The channel
    carries the same 20px at rest, on the rhythm plane every other gutter in this file
    already rides -- a bare literal would also be a channel with no path to a root. */
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-row'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-row'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-row {
   gap: var(--ds-form-header-hero-row-gap, calc(20px * var(--ds-rhythm-effective-scale, 1)));
 }
 /* The copy yields before the action rail does: the cluster may shrink, the
    rail may not. */
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-cluster {
   flex: 1 1 auto;
   min-inline-size: 0;
 }
@@ -73630,7 +73649,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* ---- icon badge: the TONE rides the shared hatch (edit-header.css); the
         52px box and the 22px glyph are drained from inline here ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__icon-badge {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -73638,17 +73658,20 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   inline-size: var(--ds-form-header-icon-badge-size, 52px);
   block-size: var(--ds-form-header-icon-badge-size, 52px);
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='icon-badge-glyph'] {
   inline-size: var(--ds-form-header-icon-badge-glyph-size, 22px);
   block-size: var(--ds-form-header-icon-badge-glyph-size, 22px);
 }
 /* icon-badge-glyph and action-icon are the family's own slots around an icon
    component: the slot carries the size and the glyph fills it. */
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='icon-badge-glyph'],
 .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
   display: flex;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'] > *,
+.ds-structure.ds-form-header.ds-form-header__root [data-part='icon-badge-glyph'] > *,
 .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > * {
   inline-size: 100%;
   block-size: 100%;
@@ -73656,10 +73679,12 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* ---- hero copy: eyebrow / title / subtitle ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-copy'],
-.ds-structure.ds-form-header[data-part='root'] .ds-form-header__hero-copy {
+.ds-structure.ds-form-header[data-part='root'] .ds-form-header__hero-copy,
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-copy {
   min-inline-size: 0;
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__eyebrow {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__eyebrow,
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel .ds-form-header__eyebrow {
   color: var(--ds-color-text-muted);
   /* the eyebrow is a micro-label, so it reads the `code` role's family (the
      tenant's mono choice) and the foundation tracking rung — never a literal */
@@ -73667,7 +73692,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   letter-spacing: var(--ds-letter-spacing-widest, 0.1em);
   text-transform: uppercase;
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel .ds-form-header__title {
   /* the title is a Box as="h1" (not typography), so the full page-title role
      chain reaches it; the family channel stays first so a tenant that already
      named a size keeps it */
@@ -73680,7 +73706,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   letter-spacing: var(--ds-type-page-title-letter-spacing, var(--ds-letter-spacing-tight));
   overflow-wrap: break-word;
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__subtitle {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__subtitle,
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel .ds-form-header__subtitle {
   color: var(--ds-color-text-secondary);
   font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
   letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));
@@ -73728,13 +73755,15 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* ~544px and below: the hero compacts instead of crushing. */
 @container ds-form-header (inline-size < 34rem) {
-  .ds-structure.ds-form-header[data-part='root'] > * {
+  .ds-structure.ds-form-header[data-part='root'] > *,
+  .ds-structure.ds-form-header.ds-form-header__root > * {
     --ds-form-header-hero-padding: var(--ds-form-header-hero-padding-compact, calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1)));
     --ds-form-header-context-gap: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
     --ds-form-header-icon-badge-size: 44px;
     --ds-form-header-icon-badge-glyph-size: 20px;
   }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'],
+  .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel .ds-form-header__title {
     font-size: var(--ds-form-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
   }
   /* the rail stops being a right-aligned appendix and becomes its own band */
@@ -73748,10 +73777,12 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    baseline and the actions become full-width targets — a phone posture, not a
    compressed desktop. */
 @container ds-form-header (inline-size < 24rem) {
-  .ds-structure.ds-form-header[data-part='root'] > * {
+  .ds-structure.ds-form-header[data-part='root'] > *,
+  .ds-structure.ds-form-header.ds-form-header__root > * {
     --ds-form-header-top-bar-padding-inline: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
   }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'],
+  .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-cluster {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -73774,7 +73805,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    The forced-colors `animation: none` below is a different contract and stays:
    there the whole decorative layer is being removed, not shortened. ─── */
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-form-header[data-part='root'] {
+  .ds-structure.ds-form-header[data-part='root'],
+  .ds-structure.ds-form-header.ds-form-header__root {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -73787,20 +73819,24 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    degrade to ButtonText. The action rail is composed Buttons with their own
    forced-colors contract; the breadcrumb is the composed primitive's. */
 @media (forced-colors: active) {
-  .ds-structure.ds-form-header[data-part='root'] {
+  .ds-structure.ds-form-header[data-part='root'],
+  .ds-structure.ds-form-header.ds-form-header__root {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
     animation: none;
   }
   .ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'],
+  .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__top-bar,
   .ds-structure.ds-form-header[data-part='root'] [data-part='back-button'],
+  .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__back-button,
   .ds-structure.ds-form-header[data-part='root'] [data-part='context-card'] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'],
+  .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__icon-badge {
     border: 1px solid ButtonText;
     background: Canvas;
     color: ButtonText;
@@ -73871,7 +73907,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* root -------------------------------------------------------------------------- */
 
-.ds-structure.ds-collection-header[data-part='root'] {
+.ds-structure.ds-collection-header[data-part='root'],
+.ds-structure.ds-collection-header.ds-collection-header__root {
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -73925,7 +73962,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   border-radius: 0;
   box-shadow: none;
 }
-.ds-structure.ds-collection-header[data-part='root'][data-embedded='false'] {
+.ds-structure.ds-collection-header[data-part='root'][data-embedded='false'],
+.ds-structure.ds-collection-header.ds-collection-header__root[data-embedded='false'] {
   background: var(
     --ds-collection-header-bg,
     linear-gradient(116deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, var(--ds-surface-panel))
@@ -73933,7 +73971,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   border: 1px solid var(--ds-collection-header-border, var(--ds-color-border-primary));
 }
 
-.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']::after {
+.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']::after,
+.ds-structure.ds-collection-header.ds-collection-header__root[data-embedded='false']::after {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -73945,14 +73984,16 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   animation: ds-collection-header-sheen var(--ds-collection-header-sheen-duration, 17s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-structure.ds-collection-header[data-part='root'] > * {
+.ds-structure.ds-collection-header[data-part='root'] > *,
+.ds-structure.ds-collection-header.ds-collection-header__root > * {
   position: relative;
   z-index: var(--ds-z-index-relative-above, 1);
 }
 
 /* The kernel token and the platform pseudo are the two arms of one decision
    (F-37). The lift paint rides the governed elevation ramp. */
-.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:is([data-state~='pressed'], :active) {
+.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:is([data-state~='pressed'], :active),
+.ds-structure.ds-collection-header.ds-collection-header__root[data-embedded='false']:is([data-state~='pressed'], :active) {
   background-position: 100% 50%;
   border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-collection-header-border, var(--ds-color-border-primary)));
   box-shadow: var(--ds-collection-header-shadow-hover, var(--ds-elevation-2));
@@ -73968,7 +74009,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    skin-owned here: the part is a Box, so the later `rottay-engines`
    typography skin never competes for it. */
 
-.ds-structure.ds-collection-header [data-part='eyebrow'] {
+.ds-structure.ds-collection-header [data-part='eyebrow'],
+.ds-structure.ds-collection-header .ds-collection-header__eyebrow {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-spacing-2, 8px);
@@ -73985,7 +74027,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   line-height: 1;
   text-transform: var(--ds-collection-header-overline-case, var(--ds-page-header-eyebrow-text-transform, uppercase));
 }
-.ds-structure.ds-collection-header [data-part='eyebrow']::before {
+.ds-structure.ds-collection-header [data-part='eyebrow']::before,
+.ds-structure.ds-collection-header .ds-collection-header__eyebrow::before {
   content: '';
   flex-shrink: 0;
   inline-size: var(--ds-edge-emphasis-width, 1px);
@@ -74001,7 +74044,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    Geometry and the caption type role are owned here (a Box has no competing
    typography skin), so a tenant's caption family/scale reaches them. */
 
-.ds-structure.ds-collection-header [data-part='meta-item'] {
+.ds-structure.ds-collection-header [data-part='meta-item'],
+.ds-structure.ds-collection-header .ds-collection-header__meta-item {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-spacing-1, 4px);
@@ -74017,7 +74061,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   /* meta chips carry counts ("12 active") — align the figures */
   font-variant-numeric: tabular-nums;
 }
-.ds-structure.ds-collection-header [data-part='meta-item'][data-tone='primary'] {
+.ds-structure.ds-collection-header [data-part='meta-item'][data-tone='primary'],
+.ds-structure.ds-collection-header .ds-collection-header__meta-item[data-tone='primary'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
   background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
   color: var(--ds-color-primary);
@@ -74040,7 +74085,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    overline/title/supporting stacks is posture-keyed: the compact column that
    leads with the overline breathes, the editorial column is flush. */
 
-.ds-structure.ds-collection-header [data-part='identity'] {
+.ds-structure.ds-collection-header [data-part='identity'],
+.ds-structure.ds-collection-header .ds-collection-header__identity {
   min-inline-size: 0;
   display: grid;
 }
@@ -74053,7 +74099,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 .ds-structure.ds-collection-header[data-part='root'][data-minimal='true'] [data-part='identity'] {
   gap: var(--ds-collection-header-identity-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
 }
-.ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='false'][data-editorial-tech='false'] {
+.ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='false'][data-editorial-tech='false'],
+.ds-structure.ds-collection-header .ds-collection-header__identity[data-compact-layout='false'][data-editorial-tech='false'] {
   flex: 1 1 clamp(17.5rem, 38%, 28.75rem);
   max-width: var(--ds-collection-header-title-measure, var(--ds-page-header-title-max-width, 35rem));
 }
@@ -74075,7 +74122,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    component's inline styles: the title is a Box, so nothing in a later layer
    competes for any of it. */
 
-.ds-structure.ds-collection-header [data-part='title'] {
+.ds-structure.ds-collection-header [data-part='title'],
+.ds-structure.ds-collection-header .ds-collection-header__title {
   margin: 0;
   display: block;
   inline-size: fit-content;
@@ -74182,7 +74230,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    arms, keeps the supporting leading, and quiets its ink by the authored
    opacity. */
 
-.ds-structure.ds-collection-header [data-part='subtitle'] {
+.ds-structure.ds-collection-header [data-part='subtitle'],
+.ds-structure.ds-collection-header .ds-collection-header__subtitle {
   display: block;
   text-wrap: pretty;
   max-inline-size: 100%;
@@ -74236,7 +74285,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 .ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='editorial-tech'] {
   color: color-mix(in srgb, var(--ds-color-text-secondary) 88%, var(--ds-color-primary) 12%);
 }
-.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='default'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='default'],
+.ds-structure.ds-collection-header.ds-collection-header__root .ds-collection-header__subtitle[data-variant='default'] {
   color: var(--ds-color-text-secondary);
 }
 
@@ -74263,7 +74313,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    floor at (0,3,1)); compact retires the rule — on a narrow measure rhythm
    alone separates title from supporting copy. The editorial wrapper is its
    own band: no rule, its own measure, the tighter treated gap. */
-.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-variant='default'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-variant='default'],
+.ds-structure.ds-collection-header.ds-collection-header__root .ds-collection-header__subtitle-row[data-variant='default'] {
   margin-block-start: var(--ds-collection-header-subtitle-row-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   padding-block-start: var(--ds-collection-header-subtitle-row-rule-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   max-inline-size: var(--ds-collection-header-subtitle-row-measure, 620px);
@@ -74299,7 +74350,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    after the identity) and a container for its own rows. With the action
    cluster it is a stretched column; without it a right-aligned grid whose gap
    carries the rhythm. The compact posture turns it into a full-width band. */
-.ds-structure.ds-collection-header [data-part='secondary-rail'] {
+.ds-structure.ds-collection-header [data-part='secondary-rail'],
+.ds-structure.ds-collection-header .ds-collection-header__secondary-rail {
   flex: 1 1 min(100%, 420px);
   inline-size: auto;
   max-inline-size: 560px;
@@ -74311,7 +74363,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   align-items: stretch;
   min-inline-size: 300px;
 }
-.ds-structure.ds-collection-header [data-part='secondary-rail']:not(:has(> [data-part='quick-actions'])) {
+.ds-structure.ds-collection-header [data-part='secondary-rail']:not(:has(> [data-part='quick-actions'])),
+.ds-structure.ds-collection-header .ds-collection-header__secondary-rail:not(:has(> [data-part='quick-actions'])) {
   display: grid;
   gap: var(--ds-collection-header-rail-grid-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
   justify-items: end;
@@ -74502,7 +74555,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         pseudo arm at its original cascade position. The hover lift is one
         decision with the kernel token (F-37). ---- */
 @media (hover: hover) {
-  .ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-collection-header.ds-collection-header__root[data-embedded='false']:is([data-state~='hovered'], :hover) {
     background-position: 100% 50%;
     border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-collection-header-border, var(--ds-color-border-primary)));
     box-shadow: var(--ds-collection-header-shadow-hover, var(--ds-elevation-2));
@@ -74519,9 +74573,12 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         system-colored text for that treatment. ---- */
 @media (forced-colors: active) {
   .ds-structure.ds-collection-header[data-part='root'][data-embedded='false'],
+  .ds-structure.ds-collection-header.ds-collection-header__root[data-embedded='false'],
   .ds-structure.ds-collection-header [data-part='meta-item'],
+  .ds-structure.ds-collection-header .ds-collection-header__meta-item,
   .ds-structure.ds-collection-header[data-part='root'] [data-part='quick-actions'],
   .ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'],
+  .ds-structure.ds-collection-header.ds-collection-header__root .ds-collection-header__subtitle-row,
   .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {
     border-color: ButtonText;
   }
@@ -74530,7 +74587,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
      a background is dropped under forced colors, so it re-asserts as a border
      on system ink. The key cap keeps its depth edge: that edge IS the
      affordance, and a flat cap is indistinguishable from a chip. */
-  .ds-structure.ds-collection-header [data-part='eyebrow']::before {
+  .ds-structure.ds-collection-header [data-part='eyebrow']::before,
+  .ds-structure.ds-collection-header .ds-collection-header__eyebrow::before {
     background: ButtonText;
     border: var(--ds-edge-emphasis-width, 1px) solid ButtonText;
   }
@@ -74571,7 +74629,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-collection-header[data-part='root'],
+  .ds-structure.ds-collection-header.ds-collection-header__root,
   .ds-structure.ds-collection-header[data-part='root']::after,
+  .ds-structure.ds-collection-header.ds-collection-header__root::after,
   .ds-structure.ds-collection-header [data-part='quick-actions'] {
     animation: none;
     transition: none;

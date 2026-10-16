@@ -28,11 +28,17 @@ const source = readFileSync(resolve(process.cwd(), SKIN_PATH), 'utf8');
 const root = postcss.parse(source, { from: SKIN_PATH });
 
 /** Every rule in the skin, at-rule descendants included, with the file's
-    quoting and whitespace normalized away. */
-const rules: Array<{ selector: string; decls: Array<{ prop: string; value: string }> }> = [];
+    quoting and whitespace normalized away; `selectors` is its selector list. */
+const normalize = (text: string) => text.replace(/["']/g, "'").replace(/\s+/g, ' ');
+const rules: Array<{
+  selector: string;
+  selectors: string[];
+  decls: Array<{ prop: string; value: string }>;
+}> = [];
 root.walkRules((rule: Rule) => {
   rules.push({
-    selector: rule.selector.replace(/["']/g, "'").replace(/\s+/g, ' '),
+    selector: normalize(rule.selector),
+    selectors: rule.selectors.map(normalize),
     decls: rule.nodes
       .filter((node): node is typeof node & { prop: string; value: string } => node.type === 'decl')
       .map((decl) => ({ prop: decl.prop, value: decl.value.replace(/\s+/g, ' ') })),
@@ -69,23 +75,25 @@ describe('the collection-header skin carries no second responsive authority', ()
   });
 
   it('keys the two paint rules on the stamped resolution', () => {
-    const glyph = rules.find(
-      (rule) =>
-        rule.selector.startsWith(STAMP) &&
-        rule.selector.includes("[data-part='shortcuts-label-icon']"),
+    const glyph = rules.find((rule) =>
+      rule.selectors.some(
+        (selector) =>
+          selector.startsWith(STAMP) && selector.includes("[data-part='shortcuts-label-icon']"),
+      ),
     );
     expect(glyph?.decls).toEqual([{ prop: 'display', value: 'none' }]);
 
-    const cap = rules.find(
-      (rule) =>
-        rule.selector.startsWith(STAMP) && rule.selector.includes("[data-part='shortcut-pill']"),
+    const cap = rules.find((rule) =>
+      rule.selectors.some(
+        (selector) => selector.startsWith(STAMP) && selector.includes("[data-part='shortcut-pill']"),
+      ),
     );
     expect(cap?.decls).toEqual([{ prop: 'padding-inline', value: 'var(--ds-spacing-1, 4px)' }]);
   });
 
   it('keeps the container declarations the cqi fluid steps depend on', () => {
-    const rootRule = rules.find(
-      (rule) => rule.selector === ".ds-structure.ds-collection-header[data-part='root']",
+    const rootRule = rules.find((rule) =>
+      rule.selectors.includes(".ds-structure.ds-collection-header[data-part='root']"),
     );
     expect(rootRule?.decls).toContainEqual({ prop: 'container-type', value: 'inline-size' });
     expect(rootRule?.decls).toContainEqual({

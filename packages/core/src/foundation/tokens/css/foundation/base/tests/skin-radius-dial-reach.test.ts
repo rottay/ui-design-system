@@ -149,11 +149,30 @@ const RULES: readonly DialRule[] = [
 
 const stripComments = (css: string) => css.replace(/\/\*[\s\S]*?\*\//g, '');
 
-/** The value of `property` in the first top-level rule written with exactly this selector. */
+/** Commas inside `:is()` / `:where()` / `:not()` separate arguments, not selectors. */
+function selectorList(prelude: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let buf = '';
+  for (const ch of prelude) {
+    if (ch === '(') depth += 1;
+    else if (ch === ')') depth -= 1;
+    if (ch === ',' && depth === 0) {
+      parts.push(buf.replace(/\s+/g, ' ').trim());
+      buf = '';
+    } else buf += ch;
+  }
+  parts.push(buf.replace(/\s+/g, ' ').trim());
+  return parts;
+}
+
+/** The value of `property` in the first top-level rule whose selector list holds exactly this selector. */
 function declared(family: string, selector: string, property: string): string | undefined {
   const css = stripComments(readFileSync(resolve(process.cwd(), SKIN, family, 'index.css'), 'utf8'));
   const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const body = new RegExp(`(?:^|\\})\\s*${escape(selector)}\\s*\\{([^}]*)\\}`).exec(css)?.[1];
+  const body = [...css.matchAll(/(?<=^|\})\s*([^{}@]+?)\s*\{([^}]*)\}/g)].find((rule) =>
+    selectorList(rule[1]!).includes(selector),
+  )?.[2];
   return new RegExp(`(?:^|;)\\s*${escape(property)}\\s*:\\s*([^;]+);`).exec(body ?? '')?.[1]?.trim();
 }
 

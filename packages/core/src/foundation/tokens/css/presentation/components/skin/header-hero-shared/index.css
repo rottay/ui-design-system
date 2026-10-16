@@ -48,7 +48,8 @@
 /* ─── SHARED EDIT+FORM: hero-panel archetype gradient (buildPatternStyle) ─── */
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='control'],
-.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='control'] {
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='control'],
+.ds-structure.ds-form-header .ds-edit-header__hero-panel[data-archetype='control'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-secondary) 18%, transparent) 0%, transparent 48%),
     radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-primary) 9%, transparent) 0%, transparent 34%),
@@ -110,7 +111,8 @@
 /* ─── SHARED EDIT+FORM: icon-badge tone, keyed on the header-tone contract ─── */
 
 .ds-structure.ds-edit-header [data-part='icon-badge'],
-.ds-structure.ds-form-header [data-part='icon-badge'] {
+.ds-structure.ds-form-header [data-part='icon-badge'],
+.ds-structure.ds-form-header .ds-edit-header__icon-badge {
   --ds-header-icon-tone-bg: var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent));
   --ds-header-icon-tone-bd: var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary));
   --ds-header-icon-tone-fg: var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary));
@@ -127,7 +129,8 @@
     0 8px 18px -14px color-mix(in srgb, var(--ds-color-text-primary) 38%, transparent);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'],
-.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'],
+.ds-structure.ds-form-header.ds-edit-header__root .ds-edit-header__icon-badge {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-header-icon-tone-bd);
 }
 
@@ -168,7 +171,8 @@
    (an interactive affordance on a real link, never decorative motion). */
 
 .ds-structure.ds-edit-header [data-part='back-button'],
-.ds-structure.ds-form-header [data-part='back-button'] {
+.ds-structure.ds-form-header [data-part='back-button'],
+.ds-structure.ds-form-header .ds-edit-header__back-button {
   padding-block: 8px;
   padding-inline: 12px;
   cursor: pointer;
@@ -184,17 +188,20 @@
    the pointer sits on the ANCHOR rather than on the chip's own box. */
 @media (hover: hover) {
   .ds-structure.ds-edit-header [data-part='back-button']:is([data-state~='hovered'], :hover),
-  .ds-structure.ds-form-header [data-part='back-button']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-form-header [data-part='back-button']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-form-header .ds-edit-header__back-button:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
     transform: translateY(-1px);
   }
   .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover),
-  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-form-header.ds-edit-header__root .ds-edit-header__back-button:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
   }
 }
 .ds-structure.ds-edit-header [data-part='back-button']:is([data-state~='pressed'], :active),
-.ds-structure.ds-form-header [data-part='back-button']:is([data-state~='pressed'], :active) {
+.ds-structure.ds-form-header [data-part='back-button']:is([data-state~='pressed'], :active),
+.ds-structure.ds-form-header .ds-edit-header__back-button:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
 }
 /* The keyboard ring's kernel twin sits on the CHIP while the platform arm sits
@@ -206,7 +213,8 @@
 .ds-structure.ds-edit-header [data-part='back-button'][data-state~='focus-visible'],
 .ds-structure.ds-form-header [data-part='back-button'][data-state~='focus-visible'],
 .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
-.ds-structure.ds-form-header a:focus-visible [data-part='back-button'] {
+.ds-structure.ds-form-header a:focus-visible [data-part='back-button'],
+.ds-structure.ds-form-header a:focus-visible .ds-edit-header__back-button {
   box-shadow: var(--ds-header-back-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
 /* anchors around the back chip carry no underline (the reset moved out of the
@@ -215,7 +223,8 @@
    file could only ever deliver to one of its two families. It lives in
    `edit-header.css`, with the rest of EditHeader's own breadcrumb grammar. */
 .ds-structure.ds-edit-header a:has(> [data-part='back-button']),
-.ds-structure.ds-form-header a:has(> [data-part='back-button']) {
+.ds-structure.ds-form-header a:has(> [data-part='back-button']),
+.ds-structure.ds-form-header a:has(> .ds-edit-header__back-button) {
   text-decoration: none;
 }
 /* ─── SHARED EDIT+FORM: reduced motion for the back chip ─────────────────────
@@ -226,7 +235,8 @@
    roots are guarded in their own files — this block owns the chip only. */
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-edit-header [data-part='back-button'],
-  .ds-structure.ds-form-header [data-part='back-button'] {
+  .ds-structure.ds-form-header [data-part='back-button'],
+  .ds-structure.ds-form-header .ds-edit-header__back-button {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

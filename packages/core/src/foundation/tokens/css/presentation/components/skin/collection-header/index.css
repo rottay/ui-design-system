@@ -57,7 +57,8 @@
 
 /* root -------------------------------------------------------------------------- */
 
-.ds-structure.ds-collection-header[data-part='root'] {
+.ds-structure.ds-collection-header[data-part='root'],
+.ds-structure.ds-collection-header.ds-collection-header__root {
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -111,7 +112,8 @@
   border-radius: 0;
   box-shadow: none;
 }
-.ds-structure.ds-collection-header[data-part='root'][data-embedded='false'] {
+.ds-structure.ds-collection-header[data-part='root'][data-embedded='false'],
+.ds-structure.ds-collection-header.ds-collection-header__root[data-embedded='false'] {
   background: var(
     --ds-collection-header-bg,
     linear-gradient(116deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, var(--ds-surface-panel))
@@ -119,7 +121,8 @@
   border: 1px solid var(--ds-collection-header-border, var(--ds-color-border-primary));
 }
 
-.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']::after {
+.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']::after,
+.ds-structure.ds-collection-header.ds-collection-header__root[data-embedded='false']::after {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -131,14 +134,16 @@
   animation: ds-collection-header-sheen var(--ds-collection-header-sheen-duration, 17s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-structure.ds-collection-header[data-part='root'] > * {
+.ds-structure.ds-collection-header[data-part='root'] > *,
+.ds-structure.ds-collection-header.ds-collection-header__root > * {
   position: relative;
   z-index: var(--ds-z-index-relative-above, 1);
 }
 
 /* The kernel token and the platform pseudo are the two arms of one decision
    (F-37). The lift paint rides the governed elevation ramp. */
-.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:is([data-state~='pressed'], :active) {
+.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:is([data-state~='pressed'], :active),
+.ds-structure.ds-collection-header.ds-collection-header__root[data-embedded='false']:is([data-state~='pressed'], :active) {
   background-position: 100% 50%;
   border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-collection-header-border, var(--ds-color-border-primary)));
   box-shadow: var(--ds-collection-header-shadow-hover, var(--ds-elevation-2));
@@ -154,7 +159,8 @@
    skin-owned here: the part is a Box, so the later `rottay-engines`
    typography skin never competes for it. */
 
-.ds-structure.ds-collection-header [data-part='eyebrow'] {
+.ds-structure.ds-collection-header [data-part='eyebrow'],
+.ds-structure.ds-collection-header .ds-collection-header__eyebrow {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-spacing-2, 8px);
@@ -171,7 +177,8 @@
   line-height: 1;
   text-transform: var(--ds-collection-header-overline-case, var(--ds-page-header-eyebrow-text-transform, uppercase));
 }
-.ds-structure.ds-collection-header [data-part='eyebrow']::before {
+.ds-structure.ds-collection-header [data-part='eyebrow']::before,
+.ds-structure.ds-collection-header .ds-collection-header__eyebrow::before {
   content: '';
   flex-shrink: 0;
   inline-size: var(--ds-edge-emphasis-width, 1px);
@@ -187,7 +194,8 @@
    Geometry and the caption type role are owned here (a Box has no competing
    typography skin), so a tenant's caption family/scale reaches them. */
 
-.ds-structure.ds-collection-header [data-part='meta-item'] {
+.ds-structure.ds-collection-header [data-part='meta-item'],
+.ds-structure.ds-collection-header .ds-collection-header__meta-item {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-spacing-1, 4px);
@@ -203,7 +211,8 @@
   /* meta chips carry counts ("12 active") — align the figures */
   font-variant-numeric: tabular-nums;
 }
-.ds-structure.ds-collection-header [data-part='meta-item'][data-tone='primary'] {
+.ds-structure.ds-collection-header [data-part='meta-item'][data-tone='primary'],
+.ds-structure.ds-collection-header .ds-collection-header__meta-item[data-tone='primary'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
   background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
   color: var(--ds-color-primary);
@@ -226,7 +235,8 @@
    overline/title/supporting stacks is posture-keyed: the compact column that
    leads with the overline breathes, the editorial column is flush. */
 
-.ds-structure.ds-collection-header [data-part='identity'] {
+.ds-structure.ds-collection-header [data-part='identity'],
+.ds-structure.ds-collection-header .ds-collection-header__identity {
   min-inline-size: 0;
   display: grid;
 }
@@ -239,7 +249,8 @@
 .ds-structure.ds-collection-header[data-part='root'][data-minimal='true'] [data-part='identity'] {
   gap: var(--ds-collection-header-identity-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
 }
-.ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='false'][data-editorial-tech='false'] {
+.ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='false'][data-editorial-tech='false'],
+.ds-structure.ds-collection-header .ds-collection-header__identity[data-compact-layout='false'][data-editorial-tech='false'] {
   flex: 1 1 clamp(17.5rem, 38%, 28.75rem);
   max-width: var(--ds-collection-header-title-measure, var(--ds-page-header-title-max-width, 35rem));
 }
@@ -261,7 +272,8 @@
    component's inline styles: the title is a Box, so nothing in a later layer
    competes for any of it. */
 
-.ds-structure.ds-collection-header [data-part='title'] {
+.ds-structure.ds-collection-header [data-part='title'],
+.ds-structure.ds-collection-header .ds-collection-header__title {
   margin: 0;
   display: block;
   inline-size: fit-content;
@@ -368,7 +380,8 @@
    arms, keeps the supporting leading, and quiets its ink by the authored
    opacity. */
 
-.ds-structure.ds-collection-header [data-part='subtitle'] {
+.ds-structure.ds-collection-header [data-part='subtitle'],
+.ds-structure.ds-collection-header .ds-collection-header__subtitle {
   display: block;
   text-wrap: pretty;
   max-inline-size: 100%;
@@ -422,7 +435,8 @@
 .ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='editorial-tech'] {
   color: color-mix(in srgb, var(--ds-color-text-secondary) 88%, var(--ds-color-primary) 12%);
 }
-.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='default'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='default'],
+.ds-structure.ds-collection-header.ds-collection-header__root .ds-collection-header__subtitle[data-variant='default'] {
   color: var(--ds-color-text-secondary);
 }
 
@@ -449,7 +463,8 @@
    floor at (0,3,1)); compact retires the rule — on a narrow measure rhythm
    alone separates title from supporting copy. The editorial wrapper is its
    own band: no rule, its own measure, the tighter treated gap. */
-.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-variant='default'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-variant='default'],
+.ds-structure.ds-collection-header.ds-collection-header__root .ds-collection-header__subtitle-row[data-variant='default'] {
   margin-block-start: var(--ds-collection-header-subtitle-row-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   padding-block-start: var(--ds-collection-header-subtitle-row-rule-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   max-inline-size: var(--ds-collection-header-subtitle-row-measure, 620px);
@@ -485,7 +500,8 @@
    after the identity) and a container for its own rows. With the action
    cluster it is a stretched column; without it a right-aligned grid whose gap
    carries the rhythm. The compact posture turns it into a full-width band. */
-.ds-structure.ds-collection-header [data-part='secondary-rail'] {
+.ds-structure.ds-collection-header [data-part='secondary-rail'],
+.ds-structure.ds-collection-header .ds-collection-header__secondary-rail {
   flex: 1 1 min(100%, 420px);
   inline-size: auto;
   max-inline-size: 560px;
@@ -497,7 +513,8 @@
   align-items: stretch;
   min-inline-size: 300px;
 }
-.ds-structure.ds-collection-header [data-part='secondary-rail']:not(:has(> [data-part='quick-actions'])) {
+.ds-structure.ds-collection-header [data-part='secondary-rail']:not(:has(> [data-part='quick-actions'])),
+.ds-structure.ds-collection-header .ds-collection-header__secondary-rail:not(:has(> [data-part='quick-actions'])) {
   display: grid;
   gap: var(--ds-collection-header-rail-grid-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
   justify-items: end;
@@ -688,7 +705,8 @@
         pseudo arm at its original cascade position. The hover lift is one
         decision with the kernel token (F-37). ---- */
 @media (hover: hover) {
-  .ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-collection-header.ds-collection-header__root[data-embedded='false']:is([data-state~='hovered'], :hover) {
     background-position: 100% 50%;
     border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-collection-header-border, var(--ds-color-border-primary)));
     box-shadow: var(--ds-collection-header-shadow-hover, var(--ds-elevation-2));
@@ -705,9 +723,12 @@
         system-colored text for that treatment. ---- */
 @media (forced-colors: active) {
   .ds-structure.ds-collection-header[data-part='root'][data-embedded='false'],
+  .ds-structure.ds-collection-header.ds-collection-header__root[data-embedded='false'],
   .ds-structure.ds-collection-header [data-part='meta-item'],
+  .ds-structure.ds-collection-header .ds-collection-header__meta-item,
   .ds-structure.ds-collection-header[data-part='root'] [data-part='quick-actions'],
   .ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'],
+  .ds-structure.ds-collection-header.ds-collection-header__root .ds-collection-header__subtitle-row,
   .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {
     border-color: ButtonText;
   }
@@ -716,7 +737,8 @@
      a background is dropped under forced colors, so it re-asserts as a border
      on system ink. The key cap keeps its depth edge: that edge IS the
      affordance, and a flat cap is indistinguishable from a chip. */
-  .ds-structure.ds-collection-header [data-part='eyebrow']::before {
+  .ds-structure.ds-collection-header [data-part='eyebrow']::before,
+  .ds-structure.ds-collection-header .ds-collection-header__eyebrow::before {
     background: ButtonText;
     border: var(--ds-edge-emphasis-width, 1px) solid ButtonText;
   }
@@ -757,7 +779,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-collection-header[data-part='root'],
+  .ds-structure.ds-collection-header.ds-collection-header__root,
   .ds-structure.ds-collection-header[data-part='root']::after,
+  .ds-structure.ds-collection-header.ds-collection-header__root::after,
   .ds-structure.ds-collection-header [data-part='quick-actions'] {
     animation: none;
     transition: none;

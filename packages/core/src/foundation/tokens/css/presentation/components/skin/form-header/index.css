@@ -86,7 +86,8 @@
  */
 
 /* ---- root card (geometry drained from the component's inline styles) ---- */
-.ds-structure.ds-form-header[data-part='root'] {
+.ds-structure.ds-form-header[data-part='root'],
+.ds-structure.ds-form-header.ds-form-header__root {
   --ds-form-header-hero-padding: calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1));
   --ds-form-header-top-bar-padding-block: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
   --ds-form-header-top-bar-padding-inline: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
@@ -107,14 +108,16 @@
    attributes (the engine stamps `data-structure` for exactly this budget) —
    never a repeated `[data-part]` (4th-tanda law; the sister edit-header.css
    still carries the doubled form, noted for its lane). */
-.ds-structure.ds-form-header[data-part='root'][data-structure='form-header'] {
+.ds-structure.ds-form-header[data-part='root'][data-structure='form-header'],
+.ds-structure.ds-form-header.ds-form-header__root[data-structure='form-header'] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 /* ---- top bar: navigation only (back + breadcrumb). The commit action used to
         live here, on the Back link's baseline and a hero-panel away from the
         title it commits; it now sits in the hero row, the EditHeader posture. ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__top-bar {
   padding-block: var(--ds-form-header-top-bar-padding-block, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   padding-inline: var(--ds-form-header-top-bar-padding-inline, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
@@ -134,14 +137,17 @@
    no-op won and the back chip lost its tint in both states. The frame is all
    this rule owns; its corner rides the tenant radius dial relative to the
    vertical's rest (10px at rest in every vertical). */
-.ds-structure.ds-form-header[data-part='root'] [data-part='back-button'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='back-button'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__back-button {
   border: 1px solid var(--ds-color-border);
   border-radius: calc(10px * var(--ds-radius-scale-normalized, 1));
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='back-icon'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] .ds-form-header__back-label {
+.ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] .ds-form-header__back-label,
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__top-bar .ds-form-header__back-label {
   color: var(--ds-color-text-secondary);
 }
 
@@ -154,19 +160,22 @@
 
 /* ---- hero panel (padding drained; the gradient itself lives in
         edit-header.css, shared) ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel {
   padding: var(--ds-form-header-hero-padding, calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1)));
 }
 /* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
    visual value in the TSX and the one measurement here no ramp could see. The channel
    carries the same 20px at rest, on the rhythm plane every other gutter in this file
    already rides -- a bare literal would also be a channel with no path to a root. */
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-row'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-row'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-row {
   gap: var(--ds-form-header-hero-row-gap, calc(20px * var(--ds-rhythm-effective-scale, 1)));
 }
 /* The copy yields before the action rail does: the cluster may shrink, the
    rail may not. */
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-cluster {
   flex: 1 1 auto;
   min-inline-size: 0;
 }
@@ -187,7 +196,8 @@
 
 /* ---- icon badge: the TONE rides the shared hatch (edit-header.css); the
         52px box and the 22px glyph are drained from inline here ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__icon-badge {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -195,17 +205,20 @@
   inline-size: var(--ds-form-header-icon-badge-size, 52px);
   block-size: var(--ds-form-header-icon-badge-size, 52px);
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='icon-badge-glyph'] {
   inline-size: var(--ds-form-header-icon-badge-glyph-size, 22px);
   block-size: var(--ds-form-header-icon-badge-glyph-size, 22px);
 }
 /* icon-badge-glyph and action-icon are the family's own slots around an icon
    component: the slot carries the size and the glyph fills it. */
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='icon-badge-glyph'],
 .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
   display: flex;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'] > *,
+.ds-structure.ds-form-header.ds-form-header__root [data-part='icon-badge-glyph'] > *,
 .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > * {
   inline-size: 100%;
   block-size: 100%;
@@ -213,10 +226,12 @@
 
 /* ---- hero copy: eyebrow / title / subtitle ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-copy'],
-.ds-structure.ds-form-header[data-part='root'] .ds-form-header__hero-copy {
+.ds-structure.ds-form-header[data-part='root'] .ds-form-header__hero-copy,
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-copy {
   min-inline-size: 0;
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__eyebrow {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__eyebrow,
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel .ds-form-header__eyebrow {
   color: var(--ds-color-text-muted);
   /* the eyebrow is a micro-label, so it reads the `code` role's family (the
      tenant's mono choice) and the foundation tracking rung — never a literal */
@@ -224,7 +239,8 @@
   letter-spacing: var(--ds-letter-spacing-widest, 0.1em);
   text-transform: uppercase;
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel .ds-form-header__title {
   /* the title is a Box as="h1" (not typography), so the full page-title role
      chain reaches it; the family channel stays first so a tenant that already
      named a size keeps it */
@@ -237,7 +253,8 @@
   letter-spacing: var(--ds-type-page-title-letter-spacing, var(--ds-letter-spacing-tight));
   overflow-wrap: break-word;
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__subtitle {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] .ds-form-header__subtitle,
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel .ds-form-header__subtitle {
   color: var(--ds-color-text-secondary);
   font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
   letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));
@@ -285,13 +302,15 @@
 
 /* ~544px and below: the hero compacts instead of crushing. */
 @container ds-form-header (inline-size < 34rem) {
-  .ds-structure.ds-form-header[data-part='root'] > * {
+  .ds-structure.ds-form-header[data-part='root'] > *,
+  .ds-structure.ds-form-header.ds-form-header__root > * {
     --ds-form-header-hero-padding: var(--ds-form-header-hero-padding-compact, calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1)));
     --ds-form-header-context-gap: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
     --ds-form-header-icon-badge-size: 44px;
     --ds-form-header-icon-badge-glyph-size: 20px;
   }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'],
+  .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel .ds-form-header__title {
     font-size: var(--ds-form-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
   }
   /* the rail stops being a right-aligned appendix and becomes its own band */
@@ -305,10 +324,12 @@
    baseline and the actions become full-width targets — a phone posture, not a
    compressed desktop. */
 @container ds-form-header (inline-size < 24rem) {
-  .ds-structure.ds-form-header[data-part='root'] > * {
+  .ds-structure.ds-form-header[data-part='root'] > *,
+  .ds-structure.ds-form-header.ds-form-header__root > * {
     --ds-form-header-top-bar-padding-inline: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
   }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'],
+  .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-cluster {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -331,7 +352,8 @@
    The forced-colors `animation: none` below is a different contract and stays:
    there the whole decorative layer is being removed, not shortened. ─── */
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-form-header[data-part='root'] {
+  .ds-structure.ds-form-header[data-part='root'],
+  .ds-structure.ds-form-header.ds-form-header__root {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -344,20 +366,24 @@
    degrade to ButtonText. The action rail is composed Buttons with their own
    forced-colors contract; the breadcrumb is the composed primitive's. */
 @media (forced-colors: active) {
-  .ds-structure.ds-form-header[data-part='root'] {
+  .ds-structure.ds-form-header[data-part='root'],
+  .ds-structure.ds-form-header.ds-form-header__root {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
     animation: none;
   }
   .ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'],
+  .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__top-bar,
   .ds-structure.ds-form-header[data-part='root'] [data-part='back-button'],
+  .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__back-button,
   .ds-structure.ds-form-header[data-part='root'] [data-part='context-card'] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'],
+  .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__icon-badge {
     border: 1px solid ButtonText;
     background: Canvas;
     color: ButtonText;

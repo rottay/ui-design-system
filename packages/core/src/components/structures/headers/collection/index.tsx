@@ -259,7 +259,7 @@ export function CollectionHeader({
      dotted / mono-technical × compact) live in the skin keyed on the
      stamped attributes instead of inline paint. */
   const eyebrowChip = eyebrow ? (
-    <Box as="span" data-part="eyebrow" data-embedded={embedded}>
+    <Box as="span" data-part="eyebrow" className="ds-collection-header__eyebrow" data-embedded={embedded}>
       {eyebrow}
     </Box>
   ) : null;
@@ -270,7 +270,7 @@ export function CollectionHeader({
      domain (neutral | primary | success), mirrored by the skin's tone rules. */
   const renderMetaItem = (item: CollectionHeaderMetaItem) => {
     return (
-      <Box data-part="meta-item" data-tone={item.tone ?? 'neutral'} key={item.key}>
+      <Box data-part="meta-item" className="ds-collection-header__meta-item" data-tone={item.tone ?? 'neutral'} key={item.key}>
         {item.label}
       </Box>
     );
@@ -285,6 +285,7 @@ export function CollectionHeader({
     >
       <Box
         data-part="identity"
+        className="ds-collection-header__identity"
         data-compact-layout={compactLayout}
         data-editorial-tech={editorialTech}
       >
@@ -295,6 +296,7 @@ export function CollectionHeader({
         {(minimalLayout || compactLayout) && eyebrowChip}
         <Box
           data-part="title"
+          className="ds-collection-header__title"
           data-title-treatment={titleTreatment}
           data-compact-layout={compactLayout}
           data-editorial-tech={editorialTech}
@@ -306,12 +308,14 @@ export function CollectionHeader({
           <Flex
             align="start"
             data-part="subtitle-row"
+            className="ds-collection-header__subtitle-row"
             data-variant="editorial-tech"
           >
             <Box data-part="subtitle-divider" aria-hidden="true" />
             <Box
               as="span"
               data-part="subtitle"
+              className="ds-collection-header__subtitle"
               data-variant="editorial-tech"
               data-title-treatment={titleTreatment}
               data-subtitle-treatment={subtitleTreatment}
@@ -323,6 +327,7 @@ export function CollectionHeader({
           <Flex
             align="start"
             data-part="subtitle-row"
+            className="ds-collection-header__subtitle-row"
             data-variant="default"
             data-title-treatment={titleTreatment}
             data-compact-layout={compactLayout}
@@ -330,6 +335,7 @@ export function CollectionHeader({
             <Box
               as="span"
               data-part="subtitle"
+              className="ds-collection-header__subtitle"
               data-variant="default"
               data-title-treatment={titleTreatment}
               data-subtitle-treatment={subtitleTreatment}
@@ -348,7 +354,7 @@ export function CollectionHeader({
       </Box>
 
       {!minimalLayout && quickActions && quickActions.length > 0 && (
-        <Box data-part="secondary-rail">
+        <Box data-part="secondary-rail" className="ds-collection-header__secondary-rail">
           {((!compactLayout && eyebrowChip) || eyebrowMetaItems.length > 0) && (
             <Flex
               align="center"
@@ -498,7 +504,7 @@ export function CollectionHeader({
       )}
 
       {!minimalLayout && !quickActions?.length && ((!compactLayout && eyebrowChip) || compactMetaItems.length > 0 || (shortcuts && shortcuts.length > 0)) && (
-        <Box data-part="secondary-rail">
+        <Box data-part="secondary-rail" className="ds-collection-header__secondary-rail">
           {((!compactLayout && eyebrowChip) || eyebrowMetaItems.length > 0) && (
             <Flex align="center" gap={8} wrap="wrap" justify={compactLayout ? 'start' : 'end'}>
               {eyebrowMetaItems.map(renderMetaItem)}
@@ -541,7 +547,7 @@ export function CollectionHeader({
       data-minimal={minimalLayout}
       data-editorial-tech={editorialTech}
       data-loading={loading ? 'true' : 'false'}
-      className="ds-structure ds-collection-header"
+      className="ds-structure ds-collection-header ds-collection-header__root"
       role={loading ? 'status' : undefined}
       aria-busy={loading ? true : undefined}
       aria-label={loading ? loadingLabel : undefined}
