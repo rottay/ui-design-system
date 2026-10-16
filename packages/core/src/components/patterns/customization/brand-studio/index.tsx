@@ -1682,7 +1682,7 @@ export function PatternBrandStudio({
           physical max-width container query was retired -- the skin owns the
           layout with logical container units and no runtime injection. */}
       <Box
-        className="brand-studio-layout ds-pattern-brand-studio__preview-grid"
+        className="brand-studio-layout ds-pattern-brand-studio__preview-grid ds-pattern-brand-studio__preview-grid-part"
         data-part="preview-grid"
       >
         <Stack className="ds-pattern-brand-studio__editor" data-part="editor-column" spacing="md">

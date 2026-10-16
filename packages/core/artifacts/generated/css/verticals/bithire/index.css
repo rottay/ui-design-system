@@ -96674,20 +96674,23 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* ---- layout: editor field grid + preview track (was inline/injected) ---- */
-.ds-pattern-brand-studio .ds-pattern-brand-studio__editor-grid[data-part='editor-grid'] {
+.ds-pattern-brand-studio .ds-pattern-brand-studio__editor-grid[data-part='editor-grid'],
+.ds-pattern-brand-studio .ds-pattern-brand-studio__editor-grid.ds-pattern-brand-studio__editor-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(9.375rem, 1fr));
   gap: var(--ds-spacing-3);
 }
 
-.ds-pattern-brand-studio .brand-studio-layout[data-part='preview-grid'] {
+.ds-pattern-brand-studio .brand-studio-layout[data-part='preview-grid'],
+.ds-pattern-brand-studio .brand-studio-layout.ds-pattern-brand-studio__preview-grid-part {
   display: grid;
   grid-template-columns: minmax(17.5rem, 0.9fr) minmax(20rem, 1.1fr);
   gap: var(--ds-spacing-6);
   align-items: start;
 }
 @container ds-brand-studio (inline-size < 56.25rem) {
-  .ds-pattern-brand-studio .brand-studio-layout[data-part='preview-grid'] {
+  .ds-pattern-brand-studio .brand-studio-layout[data-part='preview-grid'],
+  .ds-pattern-brand-studio .brand-studio-layout.ds-pattern-brand-studio__preview-grid-part {
     grid-template-columns: 1fr;
   }
 }
@@ -96704,7 +96707,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   inline-size: 100%;
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'] {
+  .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__color-swatch.ds-pattern-brand-studio__color-swatch.ds-pattern-brand-studio__color-swatch {
   inline-size: var(--ds-spacing-7);
   block-size: var(--ds-spacing-7);
   flex-shrink: 0;
@@ -96724,7 +96729,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   display: block;
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__section[data-part='section'][data-part='section'] {
+  .ds-pattern-brand-studio__section[data-part='section'][data-part='section'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__section.ds-pattern-brand-studio__section.ds-pattern-brand-studio__section {
   padding: var(--ds-spacing-4);
 }
 .ds-pattern-brand-studio
@@ -96734,14 +96741,18 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   margin-block-end: var(--ds-spacing-2);
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-content[data-part='preview-content'][data-part='preview-content'] {
+  .ds-pattern-brand-studio__preview-content[data-part='preview-content'][data-part='preview-content'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-content.ds-pattern-brand-studio__preview-content.ds-pattern-brand-studio__preview-content {
   padding: var(--ds-spacing-5);
   /* bare declared channel (fallback-parity): the scoped preview class
      redeclares --ds-font-family-base with the in-flight theme's font */
   font-family: var(--ds-font-family-base);
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'] {
+  .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__contrast-summary.ds-pattern-brand-studio__contrast-summary.ds-pattern-brand-studio__contrast-summary {
   margin-block-start: var(--ds-spacing-3);
   padding: var(--ds-spacing-3);
 }
@@ -96763,7 +96774,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   margin-block-start: var(--ds-spacing-2);
 }
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'] {
+  .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation.ds-pattern-brand-studio__violation.ds-pattern-brand-studio__violation {
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-spacing-3);
 }
@@ -96785,44 +96798,64 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'],
 .ds-pattern-brand-studio
+  .ds-pattern-brand-studio__color-swatch.ds-pattern-brand-studio__color-swatch.ds-pattern-brand-studio__color-swatch,
+.ds-pattern-brand-studio
   .ds-pattern-brand-studio__section[data-part='section'][data-part='section'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__section.ds-pattern-brand-studio__section.ds-pattern-brand-studio__section,
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'],
 .ds-pattern-brand-studio
+  .ds-pattern-brand-studio__contrast-summary.ds-pattern-brand-studio__contrast-summary.ds-pattern-brand-studio__contrast-summary,
+.ds-pattern-brand-studio
   .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'],
 .ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation.ds-pattern-brand-studio__violation.ds-pattern-brand-studio__violation,
+.ds-pattern-brand-studio
   .ds-pattern-brand-studio__preview-content[data-part='preview-content'][data-part='preview-content'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-content.ds-pattern-brand-studio__preview-content.ds-pattern-brand-studio__preview-content,
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary, var(--ds-color-border));
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'] {
+  .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__color-swatch.ds-pattern-brand-studio__color-swatch.ds-pattern-brand-studio__color-swatch {
   border-color: var(--ds-color-border);
   border-radius: var(--ds-radius-sm);
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__section[data-part='section'][data-part='section'] {
+  .ds-pattern-brand-studio__section[data-part='section'][data-part='section'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__section.ds-pattern-brand-studio__section.ds-pattern-brand-studio__section {
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-bg-elevated, var(--ds-color-bg-secondary));
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'] {
+  .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__contrast-summary.ds-pattern-brand-studio__contrast-summary.ds-pattern-brand-studio__contrast-summary {
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-bg-surface, var(--ds-color-bg-secondary));
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'] {
+  .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation.ds-pattern-brand-studio__violation.ds-pattern-brand-studio__violation {
   border-radius: var(--ds-radius-md);
   background: var(--ds-color-bg-primary);
 }
 
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-content[data-part='preview-content'][data-part='preview-content'] {
+  .ds-pattern-brand-studio__preview-content[data-part='preview-content'][data-part='preview-content'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-content.ds-pattern-brand-studio__preview-content.ds-pattern-brand-studio__preview-content {
   border-color: var(--ds-color-border);
   border-radius: var(--ds-radius-xl);
   background: var(--ds-color-bg-primary);
@@ -96884,9 +96917,15 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__preview-issues[data-part='preview-issues'][data-part='preview-issues'],
 .ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-issues.ds-pattern-brand-studio__preview-issues.ds-pattern-brand-studio__preview-issues,
+.ds-pattern-brand-studio
   .ds-pattern-brand-studio__preview-adjustments[data-part='preview-adjustments'][data-part='preview-adjustments'],
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-pack-warnings[data-part='preview-pack-warnings'][data-part='preview-pack-warnings'] {
+  .ds-pattern-brand-studio__preview-adjustments.ds-pattern-brand-studio__preview-adjustments.ds-pattern-brand-studio__preview-adjustments,
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-pack-warnings[data-part='preview-pack-warnings'][data-part='preview-pack-warnings'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-pack-warnings.ds-pattern-brand-studio__preview-pack-warnings.ds-pattern-brand-studio__preview-pack-warnings {
   margin-block-start: var(--ds-spacing-3);
   padding: var(--ds-spacing-3);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary, var(--ds-color-border));
@@ -96897,9 +96936,15 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__preview-issue[data-part='preview-issue'][data-part='preview-issue'],
 .ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-issue.ds-pattern-brand-studio__preview-issue.ds-pattern-brand-studio__preview-issue,
+.ds-pattern-brand-studio
   .ds-pattern-brand-studio__preview-adjustment[data-part='preview-adjustment'][data-part='preview-adjustment'],
 .ds-pattern-brand-studio
-  .ds-pattern-brand-studio__preview-pack-warning[data-part='preview-pack-warning'][data-part='preview-pack-warning'] {
+  .ds-pattern-brand-studio__preview-adjustment.ds-pattern-brand-studio__preview-adjustment.ds-pattern-brand-studio__preview-adjustment,
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-pack-warning[data-part='preview-pack-warning'][data-part='preview-pack-warning'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-pack-warning.ds-pattern-brand-studio__preview-pack-warning.ds-pattern-brand-studio__preview-pack-warning {
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-spacing-3);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary, var(--ds-color-border));
@@ -96952,23 +96997,43 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-brand-studio
     .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'],
   .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__color-swatch.ds-pattern-brand-studio__color-swatch.ds-pattern-brand-studio__color-swatch,
+  .ds-pattern-brand-studio
     .ds-pattern-brand-studio__section[data-part='section'][data-part='section'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__section.ds-pattern-brand-studio__section.ds-pattern-brand-studio__section,
   .ds-pattern-brand-studio
     .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'],
   .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__contrast-summary.ds-pattern-brand-studio__contrast-summary.ds-pattern-brand-studio__contrast-summary,
+  .ds-pattern-brand-studio
     .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__violation.ds-pattern-brand-studio__violation.ds-pattern-brand-studio__violation,
   .ds-pattern-brand-studio
     .ds-pattern-brand-studio__preview-issues[data-part='preview-issues'][data-part='preview-issues'],
   .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-issues.ds-pattern-brand-studio__preview-issues.ds-pattern-brand-studio__preview-issues,
+  .ds-pattern-brand-studio
     .ds-pattern-brand-studio__preview-adjustments[data-part='preview-adjustments'][data-part='preview-adjustments'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-adjustments.ds-pattern-brand-studio__preview-adjustments.ds-pattern-brand-studio__preview-adjustments,
   .ds-pattern-brand-studio
     .ds-pattern-brand-studio__preview-pack-warnings[data-part='preview-pack-warnings'][data-part='preview-pack-warnings'],
   .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-pack-warnings.ds-pattern-brand-studio__preview-pack-warnings.ds-pattern-brand-studio__preview-pack-warnings,
+  .ds-pattern-brand-studio
     .ds-pattern-brand-studio__preview-issue[data-part='preview-issue'][data-part='preview-issue'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-issue.ds-pattern-brand-studio__preview-issue.ds-pattern-brand-studio__preview-issue,
   .ds-pattern-brand-studio
     .ds-pattern-brand-studio__preview-adjustment[data-part='preview-adjustment'][data-part='preview-adjustment'],
   .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-adjustment.ds-pattern-brand-studio__preview-adjustment.ds-pattern-brand-studio__preview-adjustment,
+  .ds-pattern-brand-studio
     .ds-pattern-brand-studio__preview-pack-warning[data-part='preview-pack-warning'][data-part='preview-pack-warning'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-pack-warning.ds-pattern-brand-studio__preview-pack-warning.ds-pattern-brand-studio__preview-pack-warning,
   .ds-pattern-brand-studio
     .ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel {
     border-color: ButtonText;
