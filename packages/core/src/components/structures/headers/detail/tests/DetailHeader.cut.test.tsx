@@ -146,7 +146,7 @@ const textHook = (part: string) => `ds-detail-header__${part}`;
  * `[data-part]` arm, at equal specificity, until the Stack strip retires the
  * caller part.
  */
-const TWO_ARM_PARTS: readonly string[] = ['hero-copy'];
+const TWO_ARM_PARTS: readonly (typeof FAMILY_PARTS)[number][] = ['hero-copy'];
 
 /**
  * Parts stamped on the family's own layout primitives. Composed `Text` parts
