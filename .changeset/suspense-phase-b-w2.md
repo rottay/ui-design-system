@@ -16,7 +16,9 @@ rendered output is unchanged.
   called once, fire-and-forget, before hydration needs it. A failed warm never
   blocks the page and never fails the lazy, which loads on its own call
   (measured under webpack; native-ESM loaders are not claimed). A family first
-  rendered inside a boundary that suspends on the server is not listed.
+  rendered inside a boundary that suspends on the server is not listed. A
+  list whose text is still streaming in when first read is re-read on
+  `DOMContentLoaded` instead of being taken as empty.
 - **Closed by default.** With the channel closed no list is collected, no
   script is rendered and nothing is warmed.
 - **Hook cost, closed or open.** The engine router calls one more React hook

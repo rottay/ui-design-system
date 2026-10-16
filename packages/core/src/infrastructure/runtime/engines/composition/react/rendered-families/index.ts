@@ -114,22 +114,28 @@ let listedFrom: Element | null = null;
 let listed: ReadonlySet<string> = new Set();
 let awaitingParse = false;
 
-function parse(text: string | null): ReadonlySet<string> {
+/** `undefined` while the text does not parse: a list still streaming in, or a broken one. */
+function parse(text: string | null): ReadonlySet<string> | undefined {
   try {
     const value: unknown = JSON.parse(text ?? '[]');
     return new Set(Array.isArray(value) ? value.filter((entry) => typeof entry === 'string') : []);
   } catch {
-    return new Set();
+    return undefined;
   }
 }
 
-/** The list, read once per node; `null` while the document carries none. */
+/**
+ * The list, read once per node; `null` while the document carries none or its
+ * text is still incomplete. Once parsing is over, unparseable text reads as empty.
+ */
 function readListed(): ReadonlySet<string> | null {
   if (listedFrom?.isConnected) return listed;
   const node = document.querySelector(SELECTOR);
   if (!node) return null;
+  const families = parse(node.textContent);
+  if (!families && document.readyState === 'loading') return null;
   listedFrom = node;
-  listed = parse(node.textContent);
+  listed = families ?? new Set();
   return listed;
 }
 
