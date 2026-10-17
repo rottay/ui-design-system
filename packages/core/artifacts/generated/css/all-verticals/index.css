@@ -70529,17 +70529,20 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='title-bar'] {
+.ds-surface.ds-guided-draft-form [data-part='title-bar'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__title-bar {
   min-inline-size: 0;
   border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary, var(--ds-color-border));
 }
 
-.ds-surface.ds-guided-draft-form [data-part='title-copy'] {
+.ds-surface.ds-guided-draft-form [data-part='title-copy'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__title-copy {
   flex: 1;
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='title-copy'] .ds-guided-draft-form__title {
+.ds-surface.ds-guided-draft-form [data-part='title-copy'] .ds-guided-draft-form__title,
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__title-copy .ds-guided-draft-form__title {
   margin-block-end: var(--ds-spacing-1);
   /* The Modern engine paints these two headings' weight inline off the
      governed section-title role; the family retunes that channel onto its own
@@ -70627,12 +70630,15 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='dropdown'] {
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='dropdown'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav[data-layout='dropdown'] {
   margin-block-end: var(--ds-spacing-1);
 }
 
 .ds-surface.ds-guided-draft-form [data-part='section-nav-select'],
-.ds-surface.ds-guided-draft-form [data-part='section-nav-select'] > :first-child {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-select,
+.ds-surface.ds-guided-draft-form [data-part='section-nav-select'] > :first-child,
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-select > :first-child {
   inline-size: 100%;
 }
 
@@ -70646,7 +70652,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   padding-block-end: var(--ds-spacing-1);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] {
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav[data-layout='sidebar'] {
   inline-size: 220px;
   flex-shrink: 0;
   position: sticky;
@@ -70654,7 +70661,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   align-self: flex-start;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-label {
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-label,
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav[data-layout='sidebar'] .ds-guided-draft-form__section-nav-label {
   margin-block-end: var(--ds-spacing-3);
   padding-inline-start: var(--ds-spacing-3);
 }
@@ -70665,7 +70673,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   flex-shrink: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item {
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item,
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav[data-layout='sidebar'] .ds-guided-draft-form__section-nav-item {
   inline-size: 100%;
 }
 
@@ -70689,7 +70698,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   --ds-button-font-weight: var(--ds-font-weight-semibold, 600);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item {
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item,
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav[data-layout='sidebar'] .ds-guided-draft-form__section-nav-item {
   --ds-button-sm-radius: var(--ds-radius-sm);
   --ds-button-ghost-bg: transparent;
   --ds-button-ghost-border: transparent;
@@ -70698,7 +70708,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   --ds-button-ghost-color-hover: var(--ds-color-text-primary);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item[data-active='true'] {
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item[data-active='true'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav[data-layout='sidebar'] .ds-guided-draft-form__section-nav-item[data-active='true'] {
   --ds-button-ghost-bg: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   --ds-button-ghost-border: color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
   --ds-button-ghost-color: var(--ds-color-primary);
@@ -70716,11 +70727,13 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 /* Item inner anatomy (surface-owned nodes inside the Button). */
-.ds-surface.ds-guided-draft-form [data-part='section-nav-item-row'] {
+.ds-surface.ds-guided-draft-form [data-part='section-nav-item-row'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item-row {
   inline-size: 100%;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav-item-main'] {
+.ds-surface.ds-guided-draft-form [data-part='section-nav-item-main'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item-main {
   flex: 1;
   min-inline-size: 0;
 }
@@ -70759,7 +70772,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='content-body'] {
+.ds-surface.ds-guided-draft-form [data-part='content-body'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__content-body {
   min-inline-size: 0;
 }
 
@@ -70888,7 +70902,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   color: var(--ds-color-primary);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-card-header'] {
+.ds-surface.ds-guided-draft-form [data-part='section-card-header'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card-header {
   min-inline-size: 0;
 }
 
@@ -70990,7 +71005,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   position: static;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='submit-bar-panel'] {
+.ds-surface.ds-guided-draft-form [data-part='submit-bar-panel'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-bar-panel {
   padding-block: var(--ds-spacing-3);
   padding-inline: var(--ds-spacing-4);
   background: var(--ds-color-bg-elevated, var(--ds-surface-card, var(--ds-color-bg-tertiary)));
@@ -71004,7 +71020,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   box-shadow: var(--ds-elevation-2);
 }
 
-.ds-surface.ds-guided-draft-form[data-mobile='true'] [data-part='submit-bar-panel'] {
+.ds-surface.ds-guided-draft-form[data-mobile='true'] [data-part='submit-bar-panel'],
+.ds-surface.ds-guided-draft-form[data-mobile='true'] .ds-guided-draft-form__submit-bar-panel {
   padding-block-end: calc(var(--ds-spacing-3) + env(safe-area-inset-bottom, 0px));
 }
 
@@ -71029,12 +71046,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   text-align: center;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='submit-bar-progress-placeholder'] {
+.ds-surface.ds-guided-draft-form [data-part='submit-bar-progress-placeholder'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-bar-progress-placeholder {
   flex: 1;
   min-inline-size: 0;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='submit-bar-actions'] {
+.ds-surface.ds-guided-draft-form [data-part='submit-bar-actions'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-bar-actions {
   flex-shrink: 0;
   min-inline-size: 0;
 }
@@ -91234,7 +91253,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    element descendants (table/grid cells) need to query. Present under both the legacy
    (`!isPremium`) and premium (`WorkspaceShell`-wrapped) render paths. */
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__collection[data-part="collection"] {
+  .ds-collection-workspace__collection:is([data-part="collection"], .ds-collection-workspace__collection) {
   flex: 1 1 0%;
   width: 100%;
   min-width: 0;
@@ -91258,7 +91277,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__content[data-part="content"],
+  .ds-collection-workspace__content:is([data-part="content"], .ds-collection-workspace__content),
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__content.ds-collection-workspace__content {
   inline-size: 100%;
@@ -91267,7 +91286,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__content[data-part="content"][data-surface-mode="embed"],
+  .ds-collection-workspace__content:is([data-part="content"], .ds-collection-workspace__content)[data-surface-mode="embed"],
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__content.ds-collection-workspace__content[data-surface-mode="embed"] {
   display: flex;
@@ -91278,13 +91297,13 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 .ds-surface.ds-collection-workspace
   :is(
-    .ds-collection-workspace__content[data-part="content"],
-    .ds-collection-workspace__body-content[data-part="body-content"]
+    .ds-collection-workspace__content:is([data-part="content"], .ds-collection-workspace__content),
+    .ds-collection-workspace__body-content:is([data-part="body-content"], .ds-collection-workspace__body-content)
   ),
 .ds-surface.ds-collection-workspace
   :is(
     .ds-collection-workspace__content.ds-collection-workspace__content,
-    .ds-collection-workspace__body-content[data-part="body-content"]
+    .ds-collection-workspace__body-content:is([data-part="body-content"], .ds-collection-workspace__body-content)
   ) {
   width: 100%;
   align-items: stretch;
@@ -91841,7 +91860,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    Toolbar row + controls rail (strip swap choreography).
    ------------------------------------------------------------------------- */
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__toolbar-row[data-part="toolbar-row"] {
+  .ds-collection-workspace__toolbar-row:is([data-part="toolbar-row"], .ds-collection-workspace__toolbar-row) {
   position: relative;
   isolation: isolate;
   z-index: 4;
@@ -91867,12 +91886,12 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__controls-row[data-part="controls-row"] {
+  .ds-collection-workspace__controls-row:is([data-part="controls-row"], .ds-collection-workspace__controls-row) {
   min-block-size: var(--ds-spacing-9, 36px);
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__controls-rail[data-part="controls-rail"] {
+  .ds-collection-workspace__controls-rail:is([data-part="controls-rail"], .ds-collection-workspace__controls-rail) {
   position: relative;
   z-index: 1;
   min-inline-size: 0;
@@ -91886,14 +91905,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__strip-host[data-part="strip-host"] {
+  .ds-collection-workspace__strip-host:is([data-part="strip-host"], .ds-collection-workspace__strip-host) {
   position: relative;
   min-block-size: var(--ds-spacing-11, 44px);
   overflow: visible;
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__views-strip[data-part="views-strip"] {
+  .ds-collection-workspace__views-strip:is([data-part="views-strip"], .ds-collection-workspace__views-strip) {
   overflow: hidden;
   transition: max-height var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out),
     opacity var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
@@ -91901,7 +91920,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__views-strip[data-part="views-strip"][data-active="true"] {
+  .ds-collection-workspace__views-strip:is([data-part="views-strip"], .ds-collection-workspace__views-strip)[data-active="true"] {
   max-block-size: var(--ds-spacing-12, 48px);
   opacity: 1;
   transform: translateY(0);
@@ -91940,7 +91959,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    almost zero while still passing document-level overflow checks. */
 @container ds-collection-toolbar (max-width: 480px) {
   .ds-surface.ds-collection-workspace
-    .ds-collection-workspace__views-strip[data-part="views-strip"][data-active="true"] {
+    .ds-collection-workspace__views-strip:is([data-part="views-strip"], .ds-collection-workspace__views-strip)[data-active="true"] {
     max-block-size: calc(var(--ds-spacing-12, 48px) * 2);
   }
 
@@ -92079,7 +92098,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    Body region (table + preview rail host).
    ------------------------------------------------------------------------- */
 .ds-surface.ds-collection-workspace
-  .ds-collection-workspace__body[data-part="body"] {
+  .ds-collection-workspace__body:is([data-part="body"], .ds-collection-workspace__body) {
   inline-size: 100%;
   padding-block-start: var(--ds-spacing-1, 4px);
   padding-block-end: var(--ds-spacing-4, 16px);
@@ -92094,7 +92113,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__content[data-surface-mode="embed"]
-  .ds-collection-workspace__body[data-part="body"] {
+  .ds-collection-workspace__body:is([data-part="body"], .ds-collection-workspace__body) {
   flex: 1 1 auto;
   min-block-size: 0;
 }

@@ -289,6 +289,7 @@ function SectionNav({
       <Box
         as="nav"
         data-part="section-nav"
+        className="ds-guided-draft-form__section-nav"
         data-layout="dropdown"
         aria-label={navAriaLabel}
       >
@@ -300,7 +301,7 @@ function SectionNav({
         >
           {tSurfaceOr('guided_draft_form.section_nav_label', 'Section')}
         </Text>
-        <Box data-part="section-nav-select">
+        <Box data-part="section-nav-select" className="ds-guided-draft-form__section-nav-select">
           <Select
             options={options}
             value={activeSection}
@@ -321,6 +322,7 @@ function SectionNav({
       <Box
         as="nav"
         data-part="section-nav"
+        className="ds-guided-draft-form__section-nav"
         data-layout="pills"
         aria-label={navAriaLabel}
       >
@@ -374,6 +376,7 @@ function SectionNav({
     <Box
       as="nav"
       data-part="section-nav"
+      className="ds-guided-draft-form__section-nav"
       data-layout="sidebar"
       aria-label={navAriaLabel}
     >
@@ -400,8 +403,8 @@ function SectionNav({
               size="sm"
               onClick={() => onSectionClick(section.key)}
             >
-              <Flex data-part="section-nav-item-row" align="center" gap={2}>
-                <Flex data-part="section-nav-item-main" align="center" gap={2}>
+              <Flex data-part="section-nav-item-row" className="ds-guided-draft-form__section-nav-item-row" align="center" gap={2}>
+                <Flex data-part="section-nav-item-main" className="ds-guided-draft-form__section-nav-item-main" align="center" gap={2}>
                   {section.icon && (
                     <Box data-part="section-nav-item-icon" aria-hidden="true">
                       {section.icon}
@@ -498,7 +501,7 @@ function GuidedDraftFormSectionCard({
       id={`section-${section.key}`}
     >
       <>
-        <Box data-part="section-card-header">
+        <Box data-part="section-card-header" className="ds-guided-draft-form__section-card-header">
             <Flex align="center" gap={2}>
               {section.icon && (
                 <Box data-part="section-card-icon" aria-hidden="true">
@@ -777,13 +780,13 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
             layout={sectionNavLayout}
             mode={mode}
           /></SurfacePostureSlot>
-          <Box data-part="content-body">
+          <Box data-part="content-body" className="ds-guided-draft-form__content-body">
             {mode === 'wizard' ? wizardContent : sectionCards}
           </Box>
         </Stack>
       ) : (
         // Desktop: side-by-side layout with sidebar
-        <Flex data-part="content" data-layout="sidebar" gap={5}>
+        <Flex data-part="content" className="ds-guided-draft-form__content" data-layout="sidebar" gap={5}>
           {/* The declared posture reaches the nav on EVERY tier. This branch
               used to hardcode `sidebar`, so an `adaptive` posture that named a
               form layout was silently dropped above the stacking width. With no
@@ -798,7 +801,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
           /></SurfacePostureSlot>
           {/* The body claims the track the nav leaves: without it the column is
               shrink-to-fit and a ledger section is as wide as its widest field. */}
-          <Box data-part="content-body" flex={1}>
+          <Box data-part="content-body" className="ds-guided-draft-form__content-body" flex={1}>
             {mode === 'wizard' ? wizardContent : sectionCards}
           </Box>
         </Flex>
@@ -908,7 +911,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
 
       {/* Submit bar (sticky by default; posture-driven) */}
       <SurfacePostureAction><Box data-part="submit-bar" data-action-bar={actionBarPosture}>
-        <Box data-part="submit-bar-panel">
+        <Box data-part="submit-bar-panel" className="ds-guided-draft-form__submit-bar-panel">
           {isMobile ? (
             // Mobile: stacked, full-width actions
             <Stack spacing="sm">
@@ -958,9 +961,9 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                   )}
                 </Text>
               ) : (
-                <Box data-part="submit-bar-progress-placeholder" aria-hidden="true" />
+                <Box data-part="submit-bar-progress-placeholder" className="ds-guided-draft-form__submit-bar-progress-placeholder" aria-hidden="true" />
               )}
-              <Flex data-part="submit-bar-actions" align="center" gap={2}>
+              <Flex data-part="submit-bar-actions" className="ds-guided-draft-form__submit-bar-actions" align="center" gap={2}>
                 {secondaryActions?.map((action) => (
                   <Button
                     key={action.key}
@@ -1056,12 +1059,13 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
       {/* Title bar with progress */}
       <Flex
         data-part="title-bar"
+        className="ds-guided-draft-form__title-bar"
         align={isMobile ? 'stretch' : 'center'}
         gap={3}
         direction={isMobile ? 'column' : 'row'}
         wrap={isTablet ? 'wrap' : undefined}
       >
-        <Box data-part="title-copy">
+        <Box data-part="title-copy" className="ds-guided-draft-form__title-copy">
           {/* No PageShellSurface wraps this surface (no `chrome` contract), so
              this title IS the page h1, matching command-center/decision-inbox/record-workbench. */}
           <Heading
