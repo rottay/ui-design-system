@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-16",
+ "updated": "2026-10-17",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -2914,6 +2914,11 @@
      "at": "2026-10-16 23:34",
      "by": "kimi-dt",
      "note": "2026-10-16: M-P3 family 9 (guided-draft-form + collection-workspace) INTEGRATED e80efd63b with the O36 planner fix. 25 doors, 34 arms (gdf skin 629->648 pair; cw skin 14 folds at 1057); :910 submit-bar HELD BACK (roster anchor axis-difference/index.mjs:3037 pins exact source text; follow-up micro-lot queued, v1 evidence kept). Independent review ACCEPT 10/10 (session 6d07ad77, receipt carriers-mp3-f9-review.receipt.json): DT rulings A/B/C verified, O36 verified beyond JSON identity, gates re-run at a1432b361. ACCEPTANCE->EVIDENCE->GAP->NEXT->CLOSURE: acceptance = Box/Flex strip + acceptance, not additive doors. Valid evidence: families 1-9 integrated+reviewed; coverage package ACCEPTED (222 real cases, wave C 320/374 strict; review 6e47c173, fix 29ae93e3). Exact gap: lots 10-11; 73 doors blind by instrument (53 portal + 16 click + 4 twin; interaction/portal dump step is a DT-held decision); strip lot (3 hard preconditions incl. 31 owner data-state decisions); dead-arm lot; certification. Next finite lots: f9b submit-bar micro-lot, lot 10 edit-header (HeadersBatch naming constraint registered), lot 11, wave C on strict per-door rule (DT ruling). Closure proof: strip accepted + certified candidate gates. O43 queued: theme-graph regen in next producer window naming lots 1-9. Residual size: L/XL (registry S is historical)."
+    },
+    {
+     "at": "2026-10-17 02:30",
+     "by": "kimi-dt",
+     "note": "2026-10-17: M-P3 f9b INTEGRATED b8fdc4540 (submit-bar door :913 + classAwareTag roster anchor migration in axis-difference, +22/-3). Review ACCEPT 6/6 (session 0c4f2b0a): pin intent preserved (16 adversarial cases), 210-door roster simulation proves only sidebar-surface '<Box data-part=\"main\">' will block (its lot queued with classAwareTag tightening as step 0 — helper accepts invalid-TSX shapes, registered). Guided-draft-form law conflict CLOSED. Owed follow-ups: gdf re-plan under spliced harness (wave-C pass), producers window naming lots 9+9b, O43 theme-graph regen."
     }
    ],
    "claimedBy": "kimi-dt",
