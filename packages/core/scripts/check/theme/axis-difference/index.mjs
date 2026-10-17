@@ -2333,6 +2333,25 @@ export function composedReplacementFailures(root = CORE_ROOT, roster = REAL_REND
   return failures;
 }
 
+/**
+ * A gate on an opening tag that a class door may ride: the tag exactly as
+ * written -- element, attributes, their order, its end -- admitting at most one
+ * string-literal `className` between its attributes. Any other drift retires
+ * the gate. Global, so the gate splits and strips like a literal one.
+ */
+export function classAwareTag(tag) {
+  const match = /^<([A-Z][\w.]*)((?: [^\s>]+)+)>$/u.exec(tag);
+  if (match === null) throw new Error(`classAwareTag: not a one-line opening tag with attributes: ${tag}`);
+  const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+  const attributes = match[2].trim().split(' ').map(escape);
+  const door = 'className="[^"\\n]*"';
+  const variants = [attributes, ...attributes.map((_, at) => [...attributes.slice(0, at), door, ...attributes.slice(at)]), [...attributes, door]];
+  return new RegExp(`<${escape(match[1])} (?:${variants.map((list) => list.join(' ')).join('|')})>`, 'gu');
+}
+
+/** Whether `source` carries `gate`: a literal, or a `classAwareTag`. */
+const carriesGate = (source, gate) => (typeof gate === 'string' ? source.includes(gate) : source.search(gate) >= 0);
+
 const SKELETON_ROWS_MARKUP = Array.from({ length: 4 }, () =>
   '<tr class="ds-skeleton-anatomy-rows" data-part="skeleton-row" data-loading="true" data-animation="shimmer" aria-hidden="true">'
   + '<td data-part="skeleton-cell"><span data-part="skeleton-bar" data-bone="line"></span></td></tr>').join('');
@@ -3034,7 +3053,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
     state: Object.freeze({
       name: 'the default render: the title bar and the sticky-bottom submit bar under the surface root',
       source: 'src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx',
-      anchors: Object.freeze(['data-part="title-bar"', '<Box data-part="submit-bar" data-action-bar={actionBarPosture}>']),
+      anchors: Object.freeze(['data-part="title-bar"', classAwareTag('<Box data-part="submit-bar" data-action-bar={actionBarPosture}>')]),
       resolves: Object.freeze([]),
     }),
     axes: Object.freeze(['depth']),
@@ -4518,7 +4537,7 @@ export function literalWitness(token, source) {
 
 /** The first line of `source` a text starts on, 1-based, or null. */
 const lineOf = (source, text) => {
-  const at = source.indexOf(text);
+  const at = typeof text === 'string' ? source.indexOf(text) : source.search(text);
   return at < 0 ? null : source.slice(0, at).split('\n').length;
 };
 
@@ -4636,7 +4655,7 @@ export function realRenderRosterFailures(root = CORE_ROOT, roster = REAL_RENDER_
       continue;
     }
     for (const anchor of entry.state.anchors) {
-      if (!engine.includes(anchor)) failures.push(`${family}: ${entry.state.source} no longer carries the gate \`${anchor}\``);
+      if (!carriesGate(engine, anchor)) failures.push(`${family}: ${entry.state.source} no longer carries the gate \`${anchor}\``);
     }
     const resolvesFailures = (where, rows) => {
       for (const row of rows ?? []) {

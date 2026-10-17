@@ -910,7 +910,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
       )}
 
       {/* Submit bar (sticky by default; posture-driven) */}
-      <SurfacePostureAction><Box data-part="submit-bar" data-action-bar={actionBarPosture}>
+      <SurfacePostureAction><Box data-part="submit-bar" className="ds-guided-draft-form__submit-bar" data-action-bar={actionBarPosture}>
         <Box data-part="submit-bar-panel" className="ds-guided-draft-form__submit-bar-panel">
           {isMobile ? (
             // Mobile: stacked, full-width actions

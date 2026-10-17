@@ -522,7 +522,8 @@
    range (0-4): it only has to clear the scrolled form content, and staying
    under the `--ds-z-index-dropdown` band keeps an open section Select above
    the bar. */
-.ds-surface.ds-guided-draft-form [data-part='submit-bar'] {
+.ds-surface.ds-guided-draft-form [data-part='submit-bar'],
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-bar {
   position: sticky;
   inset-block-end: 0;
   z-index: 2;
