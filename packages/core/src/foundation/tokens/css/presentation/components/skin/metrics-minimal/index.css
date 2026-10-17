@@ -73,16 +73,19 @@
 .ds-metrics-minimal.ds-metrics-minimal[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='header'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='header'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__header {
   /* Header geometry drained from the engine; the rung scales with density. */
   padding-block-end: var(--ds-spacing-3, 12px);
   margin-block-end: var(--ds-spacing-3, 12px);
   position: relative;
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='header'][data-part='header'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='header'][data-part='header'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__header.ds-metrics-minimal__header {
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__panel-icon-box {
   /* 32px icon well drained from the engine. `flex-shrink: 0` is the well's
      SHAPE: it sits in a flex cluster beside the title/subtitle stack, and
      without it a narrow panel squeezes the square into an oval that still
@@ -96,7 +99,8 @@
   justify-content: center;
   background: var(--ds-signal-card-icon-bg, var(--ds-metric-card-icon-bg, var(--ds-color-primary-100)));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'][data-part='panel-icon-box'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'][data-part='panel-icon-box'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__panel-icon-box.ds-metrics-minimal__panel-icon-box {
   border: 1px solid var(--ds-signal-card-icon-border, var(--ds-metric-card-icon-border, var(--ds-color-primary-200)));
 }
 .ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon'] {
@@ -108,14 +112,17 @@
 .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__subtitle.ds-metrics-minimal__subtitle.ds-metrics-minimal__subtitle {
   color: var(--ds-signal-card-body-color, var(--ds-color-text-muted));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__live-badge {
   padding: 6px 12px;
   background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'][data-part='live-badge'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'][data-part='live-badge'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__live-badge.ds-metrics-minimal__live-badge {
   border: 1px solid var(--ds-signal-card-badge-border, var(--ds-color-success-200));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='live-dot'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='live-dot'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__live-dot {
   inline-size: 8px;
   block-size: 8px;
   border-radius: 50%;
@@ -127,12 +134,14 @@
 
 /* per-row shell ------------------------------------------------------------- */
 
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row {
   background: var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary))));
   border-radius: var(--ds-metric-card-radius, var(--ds-compact-card-radius, var(--ds-radius-md, 8px)));
   box-shadow: var(--ds-metric-card-shadow, var(--ds-compact-card-shadow, none));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-part='metric-row'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-part='metric-row'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row.ds-metrics-minimal__metric-row {
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
 }
 
@@ -140,7 +149,8 @@
    well and the transform cadence are drained from the engine's inline styles;
    hover law: hover-capable-only, reduced-motion quiet. ---------- */
 
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-icon-box {
   inline-size: 48px;
   block-size: 48px;
   display: flex;
@@ -152,17 +162,21 @@
   transition: transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-icon-box'] {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-icon-box'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row:hover .ds-metrics-minimal__metric-icon-box {
     transform: scale(1.05);
   }
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'][data-part='metric-icon-box'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'][data-part='metric-icon-box'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-icon-box.ds-metrics-minimal__metric-icon-box {
   border: 1px solid var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='metric-icon'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='metric-icon'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row[data-positive='true'] [data-part='metric-icon'] {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='metric-icon'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='metric-icon'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row[data-positive='false'] [data-part='metric-icon'] {
   color: var(--ds-metric-card-trend-color-warning, var(--ds-color-warning));
 }
 
@@ -186,16 +200,20 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row[data-positive='true'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row[data-positive='false'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] .ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] .ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change,
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row[data-positive='true'] .ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] .ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] .ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change,
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row[data-positive='false'] .ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change.ds-metrics-minimal__metric-change {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
 
@@ -207,7 +225,8 @@
   transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover .ds-metrics-minimal__metric-value.ds-metrics-minimal__metric-value.ds-metrics-minimal__metric-value {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover .ds-metrics-minimal__metric-value.ds-metrics-minimal__metric-value.ds-metrics-minimal__metric-value,
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row:hover .ds-metrics-minimal__metric-value.ds-metrics-minimal__metric-value.ds-metrics-minimal__metric-value {
     color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
   }
 }
@@ -215,17 +234,20 @@
 /* meter track + fill (track geometry + the fill's frame drained from the
    engine; the fill WIDTH stays inline as runtime data) ------------------- */
 
-.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__meter-track {
   block-size: var(--ds-metric-card-meter-height, 6px);
   position: relative;
   overflow: hidden;
   background: var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary));
   border-radius: 999px;
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'][data-part='meter-track'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'][data-part='meter-track'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__meter-track.ds-metrics-minimal__meter-track {
   border: 1px solid var(--ds-metric-card-meter-track-border, transparent);
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-fill'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='meter-fill'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__meter-fill {
   position: absolute;
   inset-block-start: 0;
   /* Logical anchor: the meter grows from the inline start in both writing
@@ -235,10 +257,12 @@
   border-radius: 999px;
   transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='meter-fill'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='meter-fill'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row[data-positive='true'] .ds-metrics-minimal__meter-fill {
   background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
 }
-.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='meter-fill'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='false'] [data-part='meter-fill'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row[data-positive='false'] .ds-metrics-minimal__meter-fill {
   background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
 }
 
@@ -254,7 +278,8 @@
     transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-chevron'] {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-chevron'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row:hover [data-part='metric-chevron'] {
     opacity: 1;
     transform: translateX(0);
   }
@@ -270,7 +295,8 @@
 
 /* scroll region — geometry drained from the engine ---------------------------- */
 
-.ds-metrics-minimal.ds-metrics-minimal [data-part='scroll-area'] {
+.ds-metrics-minimal.ds-metrics-minimal [data-part='scroll-area'],
+.ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__scroll-area {
   flex: 1;
   min-block-size: 0;
   overflow-y: auto;
@@ -287,11 +313,13 @@
   .ds-metrics-minimal.ds-metrics-minimal[data-part='root'] {
     --_ds-metric-value-size: 22px;
   }
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='header'] {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='header'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__header {
     flex-wrap: wrap;
     row-gap: var(--ds-spacing-2, 8px);
   }
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'] {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-icon-box {
     inline-size: 36px;
     block-size: 36px;
   }
@@ -301,8 +329,10 @@
    live-glow loops are silenced in the interactions skin. */
 @media (prefers-reduced-motion: reduce) {
   .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-icon-box,
   .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-value,
   .ds-metrics-minimal.ds-metrics-minimal [data-part='meter-fill'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__meter-fill,
   .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-chevron'] {
     transition: none;
   }
@@ -314,22 +344,30 @@
 @media (forced-colors: active) {
   .ds-metrics-minimal.ds-metrics-minimal[data-part='root'][data-part='root'],
   .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-part='metric-row'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row.ds-metrics-minimal__metric-row,
   .ds-metrics-minimal.ds-metrics-minimal [data-part='panel-icon-box'][data-part='panel-icon-box'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__panel-icon-box.ds-metrics-minimal__panel-icon-box,
   .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-icon-box'][data-part='metric-icon-box'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-icon-box.ds-metrics-minimal__metric-icon-box,
   .ds-metrics-minimal.ds-metrics-minimal [data-part='live-badge'][data-part='live-badge'],
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='header'][data-part='header'] {
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__live-badge.ds-metrics-minimal__live-badge,
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='header'][data-part='header'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__header.ds-metrics-minimal__header {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='live-dot'] {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='live-dot'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__live-dot {
     background: ButtonText;
   }
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'][data-part='meter-track'] {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='meter-track'][data-part='meter-track'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__meter-track.ds-metrics-minimal__meter-track {
     background: Canvas;
     border: 1px solid ButtonText;
   }
-  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive] [data-part='meter-fill'] {
+  .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive] [data-part='meter-fill'],
+  .ds-metrics-minimal.ds-metrics-minimal .ds-metrics-minimal__metric-row[data-positive] .ds-metrics-minimal__meter-fill {
     background: Highlight;
   }
 }

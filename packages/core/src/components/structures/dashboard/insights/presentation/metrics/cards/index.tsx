@@ -49,7 +49,7 @@ function MetricCard({
 
   return (
     <Box
-      className="metric-card-v3"
+      className="metric-card-v3 ds-metrics-cards__metric-card"
       data-part="metric-card"
       data-positive={metric.positive}
       style={{
@@ -61,7 +61,7 @@ function MetricCard({
     >
       <Stack spacing="sm" align="start" className="ds-metrics-cards__body" data-part="body">
         <Box
-          className="metric-icon-container"
+          className="metric-icon-container ds-metrics-cards__metric-icon-box"
           data-part="metric-icon-box"
           style={{
             position: 'relative',
@@ -112,9 +112,9 @@ function MetricCard({
           </Text>
         </Box>
 
-        <Box data-part="footer">
+        <Box data-part="footer" className="ds-metrics-cards__footer">
           <Flex align="center" gap={8}>
-            <Box className="change-badge" data-part="change-badge">
+            <Box className="change-badge ds-metrics-cards__change-badge" data-part="change-badge">
               <Flex align="center" gap={6}>
                 {metric.positive ? (
                   <TrendingUp className="trend-icon" data-part="trend-icon" />
@@ -128,9 +128,9 @@ function MetricCard({
             </Box>
           </Flex>
 
-          <Box data-part="meter-track">
+          <Box data-part="meter-track" className="ds-metrics-cards__meter-track">
             <Box
-              className="mini-progress"
+              className="mini-progress ds-metrics-cards__meter-fill"
               data-part="meter-fill"
               // Runtime datum (contract `progress`, 75% floor): width is the
               // sole instance-driven geometry retained inline.
@@ -168,10 +168,11 @@ export function MetricsCards({ metrics, density = 'comfortable' }: MetricsProps)
         align="center"
         justify="between"
         data-part="header"
+        className="ds-metrics-cards__header"
       >
         <Flex align="center" gap={10}>
           <Box
-            className="header-icon"
+            className="header-icon ds-metrics-cards__panel-icon-box"
             data-part="panel-icon-box"
           >
             <Activity data-part="panel-icon" style={{ width: 16, height: 16 }} />
@@ -180,9 +181,9 @@ export function MetricsCards({ metrics, density = 'comfortable' }: MetricsProps)
             {tOr('metrics.panelTitle', 'Key Metrics')}
           </Text>
         </Flex>
-        <Box className="live-badge-v3" data-part="live-badge">
+        <Box className="live-badge-v3 ds-metrics-cards__live-badge" data-part="live-badge">
           <Flex align="center" gap={6}>
-            <Box className="live-dot-v3" data-part="live-dot" />
+            <Box className="live-dot-v3 ds-metrics-cards__live-dot" data-part="live-dot" />
             <Text size="xs" weight="bold" className="ds-metrics-cards__live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
               {tOr('metrics.live', 'LIVE')}
             </Text>
@@ -190,7 +191,7 @@ export function MetricsCards({ metrics, density = 'comfortable' }: MetricsProps)
         </Box>
       </Flex>
 
-      <Box data-part="scroll-area" className="metrics-scroll">
+      <Box data-part="scroll-area" className="metrics-scroll ds-metrics-cards__scroll-area">
         {/* Intrinsic tracks: cards reflow 3→2→1 by available inline size
             instead of pinning a desktop-born 3-up that overflows narrow
             embeddings. The track floor rides a private proto (fallback 10rem

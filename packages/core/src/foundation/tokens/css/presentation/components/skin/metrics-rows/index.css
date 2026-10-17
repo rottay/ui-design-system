@@ -67,16 +67,19 @@
 .ds-metrics-rows.ds-metrics-rows[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='header'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='header'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__header {
   /* Header geometry drained from the engine; the rung scales with density. */
   padding-block-end: var(--ds-spacing-3, 12px);
   margin-block-end: var(--ds-spacing-3, 12px);
   position: relative;
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='header'][data-part='header'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='header'][data-part='header'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__header.ds-metrics-rows__header {
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__panel-icon-box {
   /* 32px icon well drained from the engine. `flex-shrink: 0` is the well's
      SHAPE, not padding: it sits in a flex cluster beside the title, and
      without it a long title (or a narrow panel) squeezes the square into an
@@ -90,7 +93,8 @@
   justify-content: center;
   background: var(--ds-signal-card-icon-bg, var(--ds-metric-card-icon-bg, var(--ds-color-primary-100)));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'][data-part='panel-icon-box'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'][data-part='panel-icon-box'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__panel-icon-box.ds-metrics-rows__panel-icon-box {
   border: 1px solid var(--ds-signal-card-icon-border, var(--ds-metric-card-icon-border, var(--ds-color-primary-200)));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='panel-icon'] {
@@ -99,14 +103,17 @@
 .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__title.ds-metrics-rows__title.ds-metrics-rows__title {
   color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='live-badge'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='live-badge'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__live-badge {
   padding: 6px 12px;
   background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='live-badge'][data-part='live-badge'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='live-badge'][data-part='live-badge'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__live-badge.ds-metrics-rows__live-badge {
   border: 1px solid var(--ds-signal-card-badge-border, var(--ds-color-success-200));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='live-dot'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='live-dot'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__live-dot {
   inline-size: 8px;
   block-size: 8px;
   border-radius: 50%;
@@ -118,12 +125,14 @@
 
 /* per-row shell ------------------------------------------------------------- */
 
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row {
   background: var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary))));
   border-radius: var(--ds-metric-card-radius, var(--ds-compact-card-radius, var(--ds-radius-md, 8px)));
   box-shadow: var(--ds-metric-card-shadow, var(--ds-compact-card-shadow, none));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-part='metric-row'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-part='metric-row'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row.ds-metrics-rows__metric-row {
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
 }
 
@@ -133,7 +142,8 @@
    axis because its keyframe (`ds-metrics-rows-shimmer`, contract-pinned in
    the interactions skin) animates `left` — a logical offset would tear the
    sweep under RTL. */
-.ds-metrics-rows.ds-metrics-rows [data-part='shimmer'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='shimmer'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__shimmer {
   position: absolute;
   top: 0;
   left: -100%;
@@ -154,7 +164,8 @@
 /* row icon box — 2px border, static colour; the 40px well is drained from
    the engine --------------------------------- */
 
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-icon-box {
   /* Same shape law as the panel well — and here it was the live defect: the
      sibling `metrics-minimal` already pins its well and this one did not, so
      the same anatomy squashed in one variant and held in the other. */
@@ -167,7 +178,8 @@
   position: relative;
   background: var(--ds-metric-card-icon-bg, var(--ds-signal-card-icon-bg, var(--ds-color-primary-100)));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'][data-part='metric-icon-box'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'][data-part='metric-icon-box'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-icon-box.ds-metrics-rows__metric-icon-box {
   border: 2px solid var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon'] {
@@ -195,16 +207,20 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row[data-positive='true'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row[data-positive='false'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='true'] .ds-metrics-rows__metric-change.ds-metrics-rows__metric-change.ds-metrics-rows__metric-change {
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='true'] .ds-metrics-rows__metric-change.ds-metrics-rows__metric-change.ds-metrics-rows__metric-change,
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row[data-positive='true'] .ds-metrics-rows__metric-change.ds-metrics-rows__metric-change.ds-metrics-rows__metric-change {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='false'] .ds-metrics-rows__metric-change.ds-metrics-rows__metric-change.ds-metrics-rows__metric-change {
+.ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-positive='false'] .ds-metrics-rows__metric-change.ds-metrics-rows__metric-change.ds-metrics-rows__metric-change,
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row[data-positive='false'] .ds-metrics-rows__metric-change.ds-metrics-rows__metric-change.ds-metrics-rows__metric-change {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
 
@@ -217,7 +233,8 @@
 
 /* scroll region — geometry drained from the engine ---------------------------- */
 
-.ds-metrics-rows.ds-metrics-rows [data-part='scroll-area'] {
+.ds-metrics-rows.ds-metrics-rows [data-part='scroll-area'],
+.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__scroll-area {
   flex: 1;
   min-block-size: 0;
   overflow-y: auto;
@@ -239,11 +256,13 @@
   .ds-metrics-rows.ds-metrics-rows[data-part='root'] {
     --_ds-metric-value-size: 22px;
   }
-  .ds-metrics-rows.ds-metrics-rows [data-part='header'] {
+  .ds-metrics-rows.ds-metrics-rows [data-part='header'],
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__header {
     flex-wrap: wrap;
     row-gap: var(--ds-spacing-2, 8px);
   }
-  .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'] {
+  .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'],
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-icon-box {
     inline-size: 32px;
     block-size: 32px;
   }
@@ -253,6 +272,7 @@
    the entrance/glow/shimmer loops are silenced in the interactions skin. */
 @media (prefers-reduced-motion: reduce) {
   .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'],
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row,
   .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-value {
     transition: none;
   }
@@ -264,18 +284,25 @@
 @media (forced-colors: active) {
   .ds-metrics-rows.ds-metrics-rows[data-part='root'][data-part='root'],
   .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-part='metric-row'],
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row.ds-metrics-rows__metric-row,
   .ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'][data-part='panel-icon-box'],
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__panel-icon-box.ds-metrics-rows__panel-icon-box,
   .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'][data-part='metric-icon-box'],
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-icon-box.ds-metrics-rows__metric-icon-box,
   .ds-metrics-rows.ds-metrics-rows [data-part='live-badge'][data-part='live-badge'],
-  .ds-metrics-rows.ds-metrics-rows [data-part='header'][data-part='header'] {
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__live-badge.ds-metrics-rows__live-badge,
+  .ds-metrics-rows.ds-metrics-rows [data-part='header'][data-part='header'],
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__header.ds-metrics-rows__header {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-metrics-rows.ds-metrics-rows [data-part='live-dot'] {
+  .ds-metrics-rows.ds-metrics-rows [data-part='live-dot'],
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__live-dot {
     background: ButtonText;
   }
-  .ds-metrics-rows.ds-metrics-rows [data-part='shimmer'] {
+  .ds-metrics-rows.ds-metrics-rows [data-part='shimmer'],
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__shimmer {
     display: none;
   }
 }

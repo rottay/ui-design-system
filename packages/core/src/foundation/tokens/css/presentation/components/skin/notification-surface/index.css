@@ -81,14 +81,16 @@
 /* ---- item action row offset ----
    The caller-provided inline action sits under the main row on the
    surface's own spacing rhythm. */
-.ds-surface.ds-notification .ds-notification__item-action[data-part='item-action'] {
+.ds-surface.ds-notification .ds-notification__item-action[data-part='item-action'],
+.ds-surface.ds-notification .ds-notification__item-action.ds-notification__item-action {
   margin-block-start: var(--ds-spacing-2, 8px);
 }
 
 /* ---- preference rows ----
    Quiet vertical breathing room between switch rows; the group card owns
    the outer frame. */
-.ds-surface.ds-notification .ds-notification__preference-row[data-part='preference-row'] {
+.ds-surface.ds-notification .ds-notification__preference-row[data-part='preference-row'],
+.ds-surface.ds-notification .ds-notification__preference-row.ds-notification__preference-row {
   padding-block: var(--ds-spacing-1, 4px);
 }
 
@@ -99,7 +101,9 @@
    the loaded state, so the swap to real content is a pure paint change,
    never a layout shift. */
 .ds-surface.ds-notification [data-part='notification-skeleton-item'],
-.ds-surface.ds-notification [data-part='notification-skeleton-preferences'] {
+.ds-surface.ds-notification .ds-notification__notification-skeleton-item,
+.ds-surface.ds-notification [data-part='notification-skeleton-preferences'],
+.ds-surface.ds-notification .ds-notification__notification-skeleton-preferences {
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   animation: ds-foundation-pulse
@@ -107,25 +111,31 @@
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-surface.ds-notification [data-part='notification-skeleton-item'][data-size='lg'] {
+.ds-surface.ds-notification [data-part='notification-skeleton-item'][data-size='lg'],
+.ds-surface.ds-notification .ds-notification__notification-skeleton-item[data-size='lg'] {
   min-block-size: 88px;
 }
 
-.ds-surface.ds-notification [data-part='notification-skeleton-item'][data-size='md'] {
+.ds-surface.ds-notification [data-part='notification-skeleton-item'][data-size='md'],
+.ds-surface.ds-notification .ds-notification__notification-skeleton-item[data-size='md'] {
   min-block-size: 72px;
 }
 
-.ds-surface.ds-notification [data-part='notification-skeleton-item'][data-size='sm'] {
+.ds-surface.ds-notification [data-part='notification-skeleton-item'][data-size='sm'],
+.ds-surface.ds-notification .ds-notification__notification-skeleton-item[data-size='sm'] {
   min-block-size: 56px;
 }
 
-.ds-surface.ds-notification [data-part='notification-skeleton-preferences'] {
+.ds-surface.ds-notification [data-part='notification-skeleton-preferences'],
+.ds-surface.ds-notification .ds-notification__notification-skeleton-preferences {
   min-block-size: 160px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-surface.ds-notification [data-part='notification-skeleton-item'],
-  .ds-surface.ds-notification [data-part='notification-skeleton-preferences'] {
+  .ds-surface.ds-notification .ds-notification__notification-skeleton-item,
+  .ds-surface.ds-notification [data-part='notification-skeleton-preferences'],
+  .ds-surface.ds-notification .ds-notification__notification-skeleton-preferences {
     animation: none;
   }
 }

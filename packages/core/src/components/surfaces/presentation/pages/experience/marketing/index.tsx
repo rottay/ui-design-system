@@ -74,18 +74,18 @@ export interface MarketingSurfaceProps {
 function MarketingIntroSkeleton(): React.ReactElement {
   return (
     <Stack spacing="lg" aria-hidden="true">
-      <Box data-part="marketing-skeleton-eyebrow" />
+      <Box data-part="marketing-skeleton-eyebrow" className="ds-marketing__marketing-skeleton-eyebrow" />
       <Stack spacing="md">
-        <Box data-part="marketing-skeleton-title" data-line="1" />
-        <Box data-part="marketing-skeleton-title" data-line="2" />
+        <Box data-part="marketing-skeleton-title" className="ds-marketing__marketing-skeleton-title" data-line="1" />
+        <Box data-part="marketing-skeleton-title" className="ds-marketing__marketing-skeleton-title" data-line="2" />
       </Stack>
       <Stack spacing="sm">
-        <Box data-part="marketing-skeleton-lede" data-line="1" />
-        <Box data-part="marketing-skeleton-lede" data-line="2" />
+        <Box data-part="marketing-skeleton-lede" className="ds-marketing__marketing-skeleton-lede" data-line="1" />
+        <Box data-part="marketing-skeleton-lede" className="ds-marketing__marketing-skeleton-lede" data-line="2" />
       </Stack>
       <SurfacePostureSlot name="primary-action" asChild><Flex gap={8} wrap="wrap">
-        <Box data-part="marketing-skeleton-cta" data-variant="primary" />
-        <Box data-part="marketing-skeleton-cta" />
+        <Box data-part="marketing-skeleton-cta" className="ds-marketing__marketing-skeleton-cta" data-variant="primary" />
+        <Box data-part="marketing-skeleton-cta" className="ds-marketing__marketing-skeleton-cta" />
       </Flex></SurfacePostureSlot>
     </Stack>
   );
@@ -93,7 +93,7 @@ function MarketingIntroSkeleton(): React.ReactElement {
 
 /** Loading mirror for the hero preview slot (single panel block). */
 function MarketingHeroSkeleton(): React.ReactElement {
-  return <Box data-part="marketing-skeleton-hero" aria-hidden="true" />;
+  return <Box data-part="marketing-skeleton-hero" className="ds-marketing__marketing-skeleton-hero" aria-hidden="true" />;
 }
 
 /** Loading mirror for the features region (card row on the fluid track). */
@@ -104,9 +104,9 @@ function MarketingFeaturesSkeleton(): React.ReactElement {
       gap="lg"
       aria-hidden="true"
     >
-      <Box data-part="marketing-skeleton-feature" />
-      <Box data-part="marketing-skeleton-feature" />
-      <Box data-part="marketing-skeleton-feature" />
+      <Box data-part="marketing-skeleton-feature" className="ds-marketing__marketing-skeleton-feature" />
+      <Box data-part="marketing-skeleton-feature" className="ds-marketing__marketing-skeleton-feature" />
+      <Box data-part="marketing-skeleton-feature" className="ds-marketing__marketing-skeleton-feature" />
     </Grid>
   );
 }
@@ -271,7 +271,7 @@ function MarketingSurfaceContent({
 
   return (
     <Box
-      className="ds-surface ds-marketing"
+      className="ds-surface ds-marketing ds-marketing__root"
       data-part="root"
       data-layout={shouldStack ? 'stacked' : 'split'}
       data-mobile={isMobile ? 'true' : 'false'}

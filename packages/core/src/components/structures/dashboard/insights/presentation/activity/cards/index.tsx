@@ -59,7 +59,7 @@ function ActivityCard({
 
   return (
     <Box
-      className="activity-card-item-v3"
+      className="activity-card-item-v3 ds-activity-cards__item"
       data-part="item"
       data-type={item.type}
       style={{
@@ -70,6 +70,7 @@ function ActivityCard({
       <Flex align="center" gap={12} data-part="item-row" style={{ position: 'relative' }}>
         <Box
           data-part="item-icon-box"
+          className="ds-activity-cards__item-icon-box"
           data-type={item.type}
           style={{
             position: 'relative',
@@ -92,10 +93,10 @@ function ActivityCard({
             {item.text}
           </Text>
           <Flex align="center" gap={4}>
-            <Box className="time-dot" data-part="item-dot" data-type={item.type} />
+            <Box className="time-dot ds-activity-cards__item-dot" data-part="item-dot" data-type={item.type} />
             {/* Relative display text only; the contract carries no ISO
                 timestamp, so no honest `dateTime` can be stamped yet. */}
-            <Box as="time" data-part="item-time">
+            <Box as="time" data-part="item-time" className="ds-activity-cards__item-time">
               {timeAgo}
             </Box>
           </Flex>
@@ -131,14 +132,17 @@ export function ActivityCards({
         align="center"
         justify="between"
         data-part="header"
+        className="ds-activity-cards__header"
       >
         <Flex align="center" gap={8}>
           <Box
             data-part="bell-box"
+            className="ds-activity-cards__bell-box"
           >
             <Bell style={{ width: 14, height: 14 }} />
             <Box
               data-part="badge"
+              className="ds-activity-cards__badge"
             >
               <Text className="ds-activity-cards__badge-count" style={{ fontSize: 7, fontWeight: 700 }}>
                 {items.length}
@@ -154,7 +158,7 @@ export function ActivityCards({
             <Flex
               align="center"
               gap={3}
-              className="view-all-link"
+              className="view-all-link ds-activity-cards__view-all-link"
               data-part="view-all-link"
             >
               <Text size="xs" weight="medium" className="ds-activity-cards__view-all-label" style={{ fontSize: 10 }} align="start">
@@ -165,7 +169,7 @@ export function ActivityCards({
           </NavLinkAnchor>
         ) : null}
       </Flex>
-      <Box data-part="scroll-area" className="activity-scroll">
+      <Box data-part="scroll-area" className="activity-scroll ds-activity-cards__scroll-area">
         <Stack spacing="sm">
           {items.map((item: ActivityItem, i: number) => (
             <ActivityCard

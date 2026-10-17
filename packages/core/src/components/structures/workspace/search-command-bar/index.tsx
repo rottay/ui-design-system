@@ -386,16 +386,16 @@ export function SearchCommandBar({
       data-embedded={embedded}
       data-editorial-tech={editorialTech}
       data-has-top-rail={Boolean(topRailSlot)}
-      className="ds-structure ds-search-command-bar"
+      className="ds-structure ds-search-command-bar ds-search-command-bar__root"
     >
-      <Box data-part="frame">
+      <Box data-part="frame" className="ds-search-command-bar__frame">
         {topRailSlot && (
-          <Box data-part="top-rail">
+          <Box data-part="top-rail" className="ds-search-command-bar__top-rail">
             {topRailSlot}
           </Box>
         )}
-        <Box data-part="bar-row">
-          <Box data-part="input-column">
+        <Box data-part="bar-row" className="ds-search-command-bar__bar-row">
+          <Box data-part="input-column" className="ds-search-command-bar__input-column">
             <Box
               data-part="search-shell"
               className="ds-search-command-bar__search-shell"
@@ -610,6 +610,7 @@ export function SearchCommandBar({
                 gap={10}
                 wrap="wrap"
                 data-part="status-row"
+                className="ds-search-command-bar__status-row"
               >
                 <Text
                   className="ds-search-command-bar__status"
@@ -623,7 +624,7 @@ export function SearchCommandBar({
           </Box>
 
           {(commandSuggestions.length > 0 || actionsSlot) && (
-            <Box data-part="side-cluster">
+            <Box data-part="side-cluster" className="ds-search-command-bar__side-cluster">
               {commandSuggestions.length > 0 && (
                 <Box
                   data-ds-search-shell-slot="true"

@@ -71,19 +71,22 @@
 .ds-activity-ticker.ds-activity-ticker[data-part='root'][data-part='root'] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='header'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='header'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__header {
   /* Header geometry drained from the engine. */
   padding-block-end: 12px;
   margin-block-end: 12px;
   position: relative;
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='header'][data-part='header'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='header'][data-part='header'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__header.ds-activity-ticker__header {
   border-bottom: 1px solid var(--ds-color-border-secondary);
 }
 
 /* bell box + badge ---------------------------------------------------------- */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='bell-box'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='bell-box'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__bell-box {
   /* 32px well drained from the engine. */
   inline-size: 32px;
   block-size: 32px;
@@ -94,10 +97,12 @@
   background: linear-gradient(135deg, var(--ds-color-primary-100), var(--ds-color-secondary-100));
   color: var(--ds-color-primary);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='bell-box'][data-part='bell-box'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='bell-box'][data-part='bell-box'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__bell-box.ds-activity-ticker__bell-box {
   border: 1px solid var(--ds-color-primary-200);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='badge'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='badge'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__badge {
   /* Absolute frame drained from the engine on logical offsets (the former
      physical `right: -4` was LTR-only). */
   position: absolute;
@@ -111,7 +116,8 @@
   border-radius: 50%;
   background: var(--ds-color-error);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='badge'][data-part='badge'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='badge'][data-part='badge'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__badge.ds-activity-ticker__badge {
   border: 2px solid var(--ds-color-bg-secondary);
 }
 .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__badge-count.ds-activity-ticker__badge-count.ds-activity-ticker__badge-count {
@@ -123,7 +129,8 @@
 .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__title.ds-activity-ticker__title.ds-activity-ticker__title {
   color: var(--ds-color-text-primary);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='live-dot'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='live-dot'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__live-dot {
   /* Dot geometry drained from the engine. */
   inline-size: 6px;
   block-size: 6px;
@@ -157,7 +164,8 @@
   box-shadow: var(--ds-focus-ring);
   pointer-events: none;
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__view-all-link {
   /* Pill padding + cadence drained from the engine. */
   padding: 6px 10px;
   background: var(--ds-color-primary-100);
@@ -166,7 +174,8 @@
     background-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease),
     transform var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'][data-part='view-all-link'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'][data-part='view-all-link'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__view-all-link.ds-activity-ticker__view-all-link {
   border: 1px solid var(--ds-color-primary-200);
 }
 .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__view-all-label.ds-activity-ticker__view-all-label.ds-activity-ticker__view-all-label {
@@ -175,7 +184,8 @@
 
 /* ticker body (geometry drained from the engine) ---------------------------- */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-body {
   flex: 1;
   padding: 20px;
   display: flex;
@@ -185,7 +195,8 @@
   overflow: hidden;
   background: linear-gradient(180deg, var(--ds-color-bg-primary) 0%, var(--ds-color-neutral-50) 100%);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'][data-part='ticker-body'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'][data-part='ticker-body'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-body.ds-activity-ticker__ticker-body {
   border: 1px solid var(--ds-color-border-secondary);
 }
 
@@ -197,10 +208,12 @@
 
 /* current-item presenter + content (rhythm/alignment drained) --------------- */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='item-presenter'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='item-presenter'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-presenter {
   margin-block-end: 16px;
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='ticker-content'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-content'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-content {
   text-align: center;
 }
 .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-text {
@@ -212,7 +225,8 @@
 /* current-item icon box — background + border + icon colour keyed on type;
    the 52px well is drained from the engine ---------------------------------- */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-icon-box {
   inline-size: 52px;
   block-size: 52px;
   display: flex;
@@ -220,15 +234,19 @@
   justify-content: center;
 }
 
-.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='success'] { background: var(--ds-color-success-100); color: var(--ds-color-success); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='success'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-icon-box[data-type='success'] { background: var(--ds-color-success-100); color: var(--ds-color-success); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='primary'] { background: var(--ds-color-primary-100); color: var(--ds-color-primary); }
-.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='info']    { background: var(--ds-color-info-100);    color: var(--ds-color-info); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='info'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-icon-box[data-type='info']    { background: var(--ds-color-info-100);    color: var(--ds-color-info); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='warning'] { background: var(--ds-color-warning-100); color: var(--ds-color-warning); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='error']   { background: var(--ds-color-error-100);   color: var(--ds-color-error); }
 
-.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='success'] { border: 2px solid var(--ds-color-success); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='success'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-icon-box.ds-activity-ticker__item-icon-box[data-type='success'] { border: 2px solid var(--ds-color-success); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='primary'] { border: 2px solid var(--ds-color-primary); }
-.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='info']    { border: 2px solid var(--ds-color-info); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='info'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-icon-box.ds-activity-ticker__item-icon-box[data-type='info']    { border: 2px solid var(--ds-color-info); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='warning'] { border: 2px solid var(--ds-color-warning); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'][data-type='error']   { border: 2px solid var(--ds-color-error); }
 
@@ -239,21 +257,25 @@
 /* current-item type dot — geometry drained from the engine, background keyed
    on type ------------------------------------------------------------------- */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-type-dot {
   inline-size: 6px;
   block-size: 6px;
   border-radius: 50%;
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='success'] { background: var(--ds-color-success); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='success'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-type-dot[data-type='success'] { background: var(--ds-color-success); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='primary'] { background: var(--ds-color-primary); }
-.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='info']    { background: var(--ds-color-info); }
+.ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='info'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-type-dot[data-type='info']    { background: var(--ds-color-info); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='warning'] { background: var(--ds-color-warning); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='error']   { background: var(--ds-color-error); }
 
 /* `<time>` micro typography (drained from the engine's former Text inline;
    the mono channel replaces a raw `monospace` literal) ----------------------- */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='item-time'][data-part='item-time'][data-part='item-time'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='item-time'][data-part='item-time'][data-part='item-time'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-time.ds-activity-ticker__item-time.ds-activity-ticker__item-time {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, monospace);
   font-size: var(--ds-font-size-2xs);
@@ -261,7 +283,8 @@
 
 /* controls row — rhythm drained from the engine ------------------------------ */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='controls'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='controls'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__controls {
   margin-block-start: 24px;
 }
 
@@ -273,7 +296,8 @@
 /* nav buttons — real `<button>` controls now: the 32px well, the native-reset
    and the focus ring live here; background + chevron colour; border at (0,4,0) */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='nav-button'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='nav-button'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__nav-button {
   inline-size: 32px;
   block-size: 32px;
   display: flex;
@@ -286,10 +310,12 @@
   background: var(--ds-color-bg-secondary);
   color: var(--ds-color-text-muted);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='nav-button'][data-part='nav-button'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='nav-button'][data-part='nav-button'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__nav-button.ds-activity-ticker__nav-button {
   border: 1px solid var(--ds-color-border-secondary);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-activity-ticker.ds-activity-ticker [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__nav-button:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
@@ -307,7 +333,8 @@
    the WIDTH stays inline as runtime state geometry); active gets the type
    gradient, inactive a flat neutral ------------------------------------------ */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-dot {
   block-size: 10px;
   padding: 0;
   font: inherit;
@@ -316,15 +343,18 @@
   border: none;
   border-radius: 999px;
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']:is([data-state~='focus-visible'], :focus-visible),
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-dot:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='false'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='false'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-dot[data-active='false'] {
   background: var(--ds-color-neutral-200);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='success'] { background: linear-gradient(135deg, var(--ds-color-success), var(--ds-color-success-200)); }
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='success'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-dot[data-active='true'][data-type='success'] { background: linear-gradient(135deg, var(--ds-color-success), var(--ds-color-success-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='primary'] { background: linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='info']    { background: linear-gradient(135deg, var(--ds-color-info), var(--ds-color-info-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='warning'] { background: linear-gradient(135deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
@@ -334,7 +364,8 @@
    physical `left: 0; right: 0` pair is `inset-inline` now; fill gradient keyed
    on current type) ------------------------------------------------------------ */
 
-.ds-activity-ticker.ds-activity-ticker [data-part='progress-track'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='progress-track'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__progress-track {
   position: absolute;
   inset-inline: 0;
   inset-block-end: 0;
@@ -342,10 +373,12 @@
   overflow: hidden;
   background: var(--ds-color-bg-tertiary);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'] {
+.ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__progress-fill {
   block-size: 100%;
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='success'] { background: linear-gradient(135deg, var(--ds-color-success), var(--ds-color-success-200)); }
+.ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='success'],
+.ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__progress-fill[data-type='success'] { background: linear-gradient(135deg, var(--ds-color-success), var(--ds-color-success-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='primary'] { background: linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='info']    { background: linear-gradient(135deg, var(--ds-color-info), var(--ds-color-info-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='warning'] { background: linear-gradient(135deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
@@ -355,7 +388,8 @@
    progress loops are silenced in the interactions skin (and the rotation
    itself never runs — the engine gates it on `useReducedMotion`). */
 @media (prefers-reduced-motion: reduce) {
-  .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'] {
+  .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__view-all-link {
     transition: none;
   }
 }
@@ -370,11 +404,13 @@
     align-items: center;
     min-block-size: var(--ds-touch-target-min, 44px);
   }
-  .ds-activity-ticker.ds-activity-ticker [data-part='nav-button'] {
+  .ds-activity-ticker.ds-activity-ticker [data-part='nav-button'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__nav-button {
     min-inline-size: var(--ds-touch-target-min, 44px);
     min-block-size: var(--ds-touch-target-min, 44px);
   }
-  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']::before {
+  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']::before,
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-dot::before {
     content: '';
     position: absolute;
     inset: -17px -10px;
@@ -387,16 +423,23 @@
 @media (forced-colors: active) {
   .ds-activity-ticker.ds-activity-ticker[data-part='root'][data-part='root'],
   .ds-activity-ticker.ds-activity-ticker [data-part='header'][data-part='header'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__header.ds-activity-ticker__header,
   .ds-activity-ticker.ds-activity-ticker [data-part='bell-box'][data-part='bell-box'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__bell-box.ds-activity-ticker__bell-box,
   .ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'][data-part='ticker-body'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-body.ds-activity-ticker__ticker-body,
   .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-icon-box.ds-activity-ticker__item-icon-box,
   .ds-activity-ticker.ds-activity-ticker [data-part='nav-button'][data-part='nav-button'],
-  .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'][data-part='view-all-link'] {
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__nav-button.ds-activity-ticker__nav-button,
+  .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'][data-part='view-all-link'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__view-all-link.ds-activity-ticker__view-all-link {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-activity-ticker.ds-activity-ticker [data-part='badge'] {
+  .ds-activity-ticker.ds-activity-ticker [data-part='badge'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__badge {
     background: Canvas;
     outline: 1px solid ButtonText;
   }
@@ -404,20 +447,26 @@
     color: ButtonText;
   }
   .ds-activity-ticker.ds-activity-ticker [data-part='live-dot'],
-  .ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'] {
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__live-dot,
+  .ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__item-type-dot {
     background: ButtonText;
   }
-  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'] {
+  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-dot {
     outline: 1px solid ButtonText;
   }
-  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'] {
+  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-dot[data-active='true'] {
     background: Highlight;
   }
-  .ds-activity-ticker.ds-activity-ticker [data-part='progress-track'] {
+  .ds-activity-ticker.ds-activity-ticker [data-part='progress-track'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__progress-track {
     background: Canvas;
     outline: 1px solid ButtonText;
   }
-  .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'] {
+  .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'],
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__progress-fill {
     background: Highlight;
   }
   .ds-activity-ticker.ds-activity-ticker .view-all-anchor:is([data-state~='focus-visible'], :focus-visible) {
@@ -428,7 +477,9 @@
     box-shadow: none;
   }
   .ds-activity-ticker.ds-activity-ticker [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
-  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']:is([data-state~='focus-visible'], :focus-visible) {
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__nav-button:is([data-state~='focus-visible'], :focus-visible),
+  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__ticker-dot:is([data-state~='focus-visible'], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
     box-shadow: none;

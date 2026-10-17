@@ -76,7 +76,7 @@ function ActivityItem({
 
   return (
     <Box
-      className="activity-item-v3"
+      className="activity-item-v3 ds-activity-timeline__item"
       data-part="item"
       data-type={item.type}
       style={{
@@ -86,15 +86,17 @@ function ActivityItem({
         paddingBlockEnd: isLast ? 0 : 12,
       }}
     >
-      {!isLast && <Box data-part="connector" />}
+      {!isLast && <Box data-part="connector" className="ds-activity-timeline__connector" />}
       <Box
         data-part="item-icon-box"
+        className="ds-activity-timeline__item-icon-box"
         data-type={item.type}
       >
         <IconComponent style={{ width: 10, height: 10 }} />
       </Box>
       <Box
         data-part="item-content"
+        className="ds-activity-timeline__item-content"
         data-type={item.type}
       >
         <Flex align="center" justify="between" gap={10}>
@@ -103,10 +105,10 @@ function ActivityItem({
               {item.text}
             </Text>
             <Flex align="center" gap={4}>
-              <Box data-part="item-dot" data-type={item.type} />
+              <Box data-part="item-dot" className="ds-activity-timeline__item-dot" data-type={item.type} />
               {/* Relative display text only; the contract carries no ISO
                   timestamp, so no honest `dateTime` can be stamped yet. */}
-              <Box as="time" data-part="item-time">
+              <Box as="time" data-part="item-time" className="ds-activity-timeline__item-time">
                 {timeAgo}
               </Box>
             </Flex>
@@ -136,14 +138,17 @@ export function ActivityTimeline({
         align="center"
         justify="between"
         data-part="header"
+        className="ds-activity-timeline__header"
       >
         <Flex align="center" gap={10}>
           <Box
             data-part="bell-box"
+            className="ds-activity-timeline__bell-box"
           >
             <Bell style={{ width: 16, height: 16 }} />
             <Box
               data-part="badge"
+              className="ds-activity-timeline__badge"
             >
               <Text className="ds-activity-timeline__badge-count" style={{ fontSize: 8, fontWeight: 700 }}>
                 {items.length}
@@ -155,7 +160,7 @@ export function ActivityTimeline({
               {tOr('activity.timelineTitle', 'Activity')}
             </Text>
             <Flex align="center" gap={4}>
-              <Box className="live-indicator" data-part="live-dot" />
+              <Box className="live-indicator ds-activity-timeline__live-dot" data-part="live-dot" />
               <Text size="xs" className="ds-activity-timeline__live-label">
                 {tOr('activity.streaming', 'STREAMING')}
               </Text>
@@ -167,7 +172,7 @@ export function ActivityTimeline({
             <Flex
               align="center"
               gap={4}
-              className="view-all-link"
+              className="view-all-link ds-activity-timeline__view-all-link"
               data-part="view-all-link"
             >
               <Text size="xs" weight="medium" className="ds-activity-timeline__view-all-label">
@@ -178,7 +183,7 @@ export function ActivityTimeline({
           </NavLinkAnchor>
         ) : null}
       </Flex>
-      <Box data-part="scroll-area" className="activity-scroll">
+      <Box data-part="scroll-area" className="activity-scroll ds-activity-timeline__scroll-area">
         <Stack spacing="none" style={{ position: 'relative' }}>
           {items.map((item: ActivityProps['items'][0], i: number) => (
             <ActivityItem

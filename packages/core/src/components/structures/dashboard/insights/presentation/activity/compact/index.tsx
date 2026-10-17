@@ -59,7 +59,7 @@ function CompactItem({
 
   return (
     <Box
-      className="activity-compact-item-v3"
+      className="activity-compact-item-v3 ds-activity-compact__item"
       data-part="item"
       data-type={item.type}
       style={{
@@ -70,6 +70,7 @@ function CompactItem({
       <Flex align="center" gap={12} data-part="item-row" style={{ position: 'relative' }}>
         <Box
           data-part="item-icon-box"
+          className="ds-activity-compact__item-icon-box"
           data-type={item.type}
           style={{
             position: 'relative',
@@ -91,10 +92,10 @@ function CompactItem({
             {item.text}
           </Text>
           <Flex align="center" gap={4}>
-            <Box data-part="item-dot" data-type={item.type} />
+            <Box data-part="item-dot" className="ds-activity-compact__item-dot" data-type={item.type} />
             {/* Relative display text only; the contract carries no ISO
                 timestamp, so no honest `dateTime` can be stamped yet. */}
-            <Box as="time" data-part="item-time">
+            <Box as="time" data-part="item-time" className="ds-activity-compact__item-time">
               {timeAgo}
             </Box>
           </Flex>
@@ -123,14 +124,17 @@ export function ActivityCompact({
         align="center"
         justify="between"
         data-part="header"
+        className="ds-activity-compact__header"
       >
         <Flex align="center" gap={10}>
           <Box
             data-part="bell-box"
+            className="ds-activity-compact__bell-box"
           >
             <Bell style={{ width: 14, height: 14 }} />
             <Box
               data-part="badge"
+              className="ds-activity-compact__badge"
             >
               <Text className="ds-activity-compact__badge-count" style={{ fontSize: 8, fontWeight: 700 }}>
                 {items.length}
@@ -151,7 +155,7 @@ export function ActivityCompact({
             <Flex
               align="center"
               gap={4}
-              className="view-all-link"
+              className="view-all-link ds-activity-compact__view-all-link"
               data-part="view-all-link"
             >
               <Text size="xs" weight="medium" className="ds-activity-compact__view-all-label">
@@ -162,7 +166,7 @@ export function ActivityCompact({
           </NavLinkAnchor>
         ) : null}
       </Flex>
-      <Box data-part="scroll-area" className="activity-scroll">
+      <Box data-part="scroll-area" className="activity-scroll ds-activity-compact__scroll-area">
         <Stack spacing="sm">
           {items.map((item: ActivityItem, i: number) => (
             <CompactItem

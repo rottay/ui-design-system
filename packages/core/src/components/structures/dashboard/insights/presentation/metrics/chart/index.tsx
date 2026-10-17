@@ -46,7 +46,7 @@ function ChartRow({
 
   return (
     <Box
-      className="metric-chart-row-v3"
+      className="metric-chart-row-v3 ds-metrics-chart__metric-row"
       data-part="metric-row"
       data-positive={metric.positive}
       style={{
@@ -59,6 +59,7 @@ function ChartRow({
         <Flex align="center" gap={10}>
           <Box
             data-part="metric-icon-box"
+            className="ds-metrics-chart__metric-icon-box"
             style={{
               position: 'relative',
             }}
@@ -103,9 +104,11 @@ function ChartRow({
 
       <Box
         data-part="meter-track"
+        className="ds-metrics-chart__meter-track"
       >
         <Box
           data-part="meter-fill"
+          className="ds-metrics-chart__meter-fill"
           style={{
             // Runtime datum (share of the family max): the width is
             // data-driven geometry, so it stays inline by design. Its frame
@@ -115,7 +118,7 @@ function ChartRow({
         />
       </Box>
 
-      <Flex justify="between" align="center" data-part="progress-row">
+      <Flex justify="between" align="center" data-part="progress-row" className="ds-metrics-chart__progress-row">
         <Text size="xs" className="ds-metrics-chart__progress-label" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
           {progressLabel}
         </Text>
@@ -145,10 +148,12 @@ export function MetricsChart({ metrics }: MetricsProps) {
         align="center"
         justify="between"
         data-part="header"
+        className="ds-metrics-chart__header"
       >
         <Flex align="center" gap={8}>
           <Box
             data-part="panel-icon-box"
+            className="ds-metrics-chart__panel-icon-box"
           >
             <Activity data-part="panel-icon" style={{ width: 14, height: 14 }} />
           </Box>
@@ -156,15 +161,15 @@ export function MetricsChart({ metrics }: MetricsProps) {
             {tOr('metrics.chartTitle', 'Performance')}
           </Text>
         </Flex>
-        <Flex align="center" gap={4} data-part="live-badge">
-          <Box className="live-dot-chart" data-part="live-dot" />
+        <Flex align="center" gap={4} data-part="live-badge" className="ds-metrics-chart__live-badge">
+          <Box className="live-dot-chart ds-metrics-chart__live-dot" data-part="live-dot" />
           <Text size="xs" weight="bold" className="ds-metrics-chart__live-label" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
             {tOr('metrics.live', 'LIVE')}
           </Text>
         </Flex>
       </Flex>
 
-      <Box data-part="scroll-area" className="metrics-scroll">
+      <Box data-part="scroll-area" className="metrics-scroll ds-metrics-chart__scroll-area">
         <Stack spacing="sm">
           {metrics.map((metric: KeyMetric, i: number) => (
             <ChartRow

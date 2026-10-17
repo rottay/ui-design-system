@@ -143,9 +143,9 @@ function ChatLoadingSkeleton(): React.ReactElement {
     <>
       <SurfacePostureSlot name="transcript"><SurfaceSectionCard title={tSurfaceOr('chat.conversation_title', 'Conversation')}>
         <Stack data-part="transcript-skeleton" spacing="md" aria-hidden="true">
-          <Box data-part="chat-skeleton-bubble" data-align="start" data-size="lg" />
-          <Box data-part="chat-skeleton-bubble" data-align="end" data-size="md" />
-          <Box data-part="chat-skeleton-bubble" data-align="start" data-size="sm" />
+          <Box data-part="chat-skeleton-bubble" className="ds-chat__chat-skeleton-bubble" data-align="start" data-size="lg" />
+          <Box data-part="chat-skeleton-bubble" className="ds-chat__chat-skeleton-bubble" data-align="end" data-size="md" />
+          <Box data-part="chat-skeleton-bubble" className="ds-chat__chat-skeleton-bubble" data-align="start" data-size="sm" />
         </Stack>
       </SurfaceSectionCard></SurfacePostureSlot>
       <SurfacePostureSlot name="composer" asChild><Box
@@ -156,8 +156,8 @@ function ChatLoadingSkeleton(): React.ReactElement {
       >
         <SurfaceSectionCard title={tSurfaceOr('chat.composer_title', 'Composer')}>
           <Stack spacing="md" aria-hidden="true">
-            <Box data-part="chat-skeleton-block" data-size="composer-input" />
-            <Box data-part="chat-skeleton-block" data-size="send-button" />
+            <Box data-part="chat-skeleton-block" className="ds-chat__chat-skeleton-block" data-size="composer-input" />
+            <Box data-part="chat-skeleton-block" className="ds-chat__chat-skeleton-block" data-size="send-button" />
           </Stack>
         </SurfaceSectionCard>
       </Box></SurfacePostureSlot>

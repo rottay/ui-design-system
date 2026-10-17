@@ -46,7 +46,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
 
   return (
     <Box
-      className="metric-row-v3"
+      className="metric-row-v3 ds-metrics-rows__metric-row"
       data-part="metric-row"
       data-positive={metric.positive}
       style={{
@@ -56,7 +56,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
       }}
     >
       <Box
-        className="row-shimmer"
+        className="row-shimmer ds-metrics-rows__shimmer"
         data-part="shimmer"
         aria-hidden="true"
       />
@@ -64,7 +64,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
       <Flex align="center" justify="between" style={{ position: 'relative' }}>
         <Flex align="center" gap={14}>
           <Box
-            className="metric-row-icon"
+            className="metric-row-icon ds-metrics-rows__metric-icon-box"
             data-part="metric-icon-box"
           >
             <metric.icon
@@ -143,10 +143,11 @@ export function MetricsRows({ metrics }: MetricsProps) {
         align="center"
         justify="between"
         data-part="header"
+        className="ds-metrics-rows__header"
       >
         <Flex align="center" gap={10}>
           <Box
-            className="header-icon"
+            className="header-icon ds-metrics-rows__panel-icon-box"
             data-part="panel-icon-box"
           >
             <Activity data-part="panel-icon" style={{ width: 16, height: 16 }} />
@@ -156,12 +157,12 @@ export function MetricsRows({ metrics }: MetricsProps) {
           </Text>
         </Flex>
         <Box
-          className="live-badge-v3"
+          className="live-badge-v3 ds-metrics-rows__live-badge"
           data-part="live-badge"
         >
           <Flex align="center" gap={6}>
             <Box
-              className="live-dot-v3"
+              className="live-dot-v3 ds-metrics-rows__live-dot"
               data-part="live-dot"
             />
             <Text size="xs" weight="bold" className="ds-metrics-rows__live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
@@ -173,7 +174,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
 
       <Box
         data-part="scroll-area"
-        className="metrics-scroll"
+        className="metrics-scroll ds-metrics-rows__scroll-area"
       >
         <Stack spacing="sm">
           {metrics.map((metric: KeyMetric, i: number) => (

@@ -166,9 +166,9 @@ function AuthSurfaceContent({
                  (`aria-hidden`) while the surface root carries `aria-busy`;
                  geometry and pulse live in the auth skin. */
               <SurfacePostureSlot name="form" asChild><Stack spacing="md" aria-hidden="true">
-                <Box data-part="auth-skeleton-field" />
-                <Box data-part="auth-skeleton-field" />
-                <Box data-part="auth-skeleton-cta" />
+                <Box data-part="auth-skeleton-field" className="ds-auth__auth-skeleton-field" />
+                <Box data-part="auth-skeleton-field" className="ds-auth__auth-skeleton-field" />
+                <Box data-part="auth-skeleton-cta" className="ds-auth__auth-skeleton-cta" />
               </Stack></SurfacePostureSlot>
             ) : (
               <>
@@ -197,7 +197,7 @@ function AuthSurfaceContent({
       <Card className="ds-auth__hero-panel" variant="elevated">
         <Card.Body>
           {showSkeleton ? (
-            <Box data-part="auth-skeleton-hero" aria-hidden="true" />
+            <Box data-part="auth-skeleton-hero" className="ds-auth__auth-skeleton-hero" aria-hidden="true" />
           ) : (
             heroContent
           )}
@@ -236,7 +236,7 @@ function AuthSurfaceContent({
 
   return (
     <Box
-      className="ds-surface ds-auth"
+      className="ds-surface ds-auth ds-auth__root"
       data-part="root"
       data-layout={isSplitLayout ? 'split' : 'centered'}
       data-mobile={isMobile ? 'true' : 'false'}

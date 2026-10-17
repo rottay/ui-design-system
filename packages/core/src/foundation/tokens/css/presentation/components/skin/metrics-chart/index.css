@@ -49,16 +49,19 @@
 .ds-metrics-chart.ds-metrics-chart[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='header'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='header'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__header {
   /* Header geometry drained from the engine; the rung scales with density. */
   padding-block-end: var(--ds-spacing-3, 12px);
   margin-block-end: var(--ds-spacing-3, 12px);
   position: relative;
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='header'][data-part='header'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='header'][data-part='header'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__header.ds-metrics-chart__header {
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='panel-icon-box'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='panel-icon-box'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__panel-icon-box {
   /* 28px icon well drained from the engine. */
   inline-size: 28px;
   block-size: 28px;
@@ -67,7 +70,8 @@
   justify-content: center;
   background: var(--ds-signal-card-icon-bg, var(--ds-metric-card-icon-bg, var(--ds-color-primary-100)));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='panel-icon-box'][data-part='panel-icon-box'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='panel-icon-box'][data-part='panel-icon-box'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__panel-icon-box.ds-metrics-chart__panel-icon-box {
   border: 1px solid var(--ds-signal-card-icon-border, var(--ds-metric-card-icon-border, var(--ds-color-primary-200)));
 }
 .ds-metrics-chart.ds-metrics-chart [data-part='panel-icon'] {
@@ -76,15 +80,18 @@
 .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__title.ds-metrics-chart__title.ds-metrics-chart__title {
   color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='live-badge'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='live-badge'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__live-badge {
   /* Badge padding drained from the engine; the rungs scale with density. */
   padding: var(--ds-spacing-1, 4px) var(--ds-spacing-2, 8px);
   background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='live-badge'][data-part='live-badge'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='live-badge'][data-part='live-badge'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__live-badge.ds-metrics-chart__live-badge {
   border: 1px solid var(--ds-signal-card-badge-border, var(--ds-color-success-200));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='live-dot'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='live-dot'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__live-dot {
   /* Dot geometry drained from the engine. */
   inline-size: 6px;
   block-size: 6px;
@@ -97,19 +104,22 @@
 
 /* per-row shell ------------------------------------------------------------- */
 
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row {
   background: var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary))));
   border-radius: var(--ds-metric-card-radius, var(--ds-compact-card-radius, var(--ds-radius-md, 8px)));
   box-shadow: var(--ds-metric-card-shadow, var(--ds-compact-card-shadow, none));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-part='metric-row'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-part='metric-row'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row.ds-metrics-chart__metric-row {
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
 }
 
 /* row icon box — static bg/border/colour; the 28px well is drained from the
    engine ------------------------------------------------------------------ */
 
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-icon-box'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-icon-box'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-icon-box {
   inline-size: 28px;
   block-size: 28px;
   display: flex;
@@ -117,7 +127,8 @@
   justify-content: center;
   background: var(--ds-metric-card-icon-bg, var(--ds-signal-card-icon-bg, var(--ds-color-primary-100)));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-icon-box'][data-part='metric-icon-box'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-icon-box'][data-part='metric-icon-box'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-icon-box.ds-metrics-chart__metric-icon-box {
   border: 1px solid var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
 }
 .ds-metrics-chart.ds-metrics-chart [data-part='metric-icon'] {
@@ -129,16 +140,20 @@
 .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-label.ds-metrics-chart__metric-label.ds-metrics-chart__metric-label {
   color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='trend-icon'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row[data-positive='true'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='trend-icon'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row[data-positive='false'] [data-part='trend-icon'] {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] .ds-metrics-chart__metric-change.ds-metrics-chart__metric-change.ds-metrics-chart__metric-change {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] .ds-metrics-chart__metric-change.ds-metrics-chart__metric-change.ds-metrics-chart__metric-change,
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row[data-positive='true'] .ds-metrics-chart__metric-change.ds-metrics-chart__metric-change.ds-metrics-chart__metric-change {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] .ds-metrics-chart__metric-change.ds-metrics-chart__metric-change.ds-metrics-chart__metric-change {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] .ds-metrics-chart__metric-change.ds-metrics-chart__metric-change.ds-metrics-chart__metric-change,
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row[data-positive='false'] .ds-metrics-chart__metric-change.ds-metrics-chart__metric-change.ds-metrics-chart__metric-change {
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
 
@@ -151,7 +166,8 @@
   transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease);
 }
 @media (hover: hover) {
-  .ds-metrics-chart.ds-metrics-chart [data-part='metric-row']:hover .ds-metrics-chart__metric-value.ds-metrics-chart__metric-value.ds-metrics-chart__metric-value {
+  .ds-metrics-chart.ds-metrics-chart [data-part='metric-row']:hover .ds-metrics-chart__metric-value.ds-metrics-chart__metric-value.ds-metrics-chart__metric-value,
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row:hover .ds-metrics-chart__metric-value.ds-metrics-chart__metric-value.ds-metrics-chart__metric-value {
     color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
   }
 }
@@ -159,17 +175,20 @@
 /* meter track + fill (track geometry + the fill's frame drained from the
    engine; the fill WIDTH stays inline as runtime data) ------------------- */
 
-.ds-metrics-chart.ds-metrics-chart [data-part='meter-track'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='meter-track'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__meter-track {
   block-size: var(--ds-metric-card-meter-height, 6px);
   position: relative;
   overflow: hidden;
   background: var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary));
   border-radius: 999px;
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='meter-track'][data-part='meter-track'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='meter-track'][data-part='meter-track'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__meter-track.ds-metrics-chart__meter-track {
   border: 1px solid var(--ds-metric-card-meter-track-border, transparent);
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='meter-fill'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='meter-fill'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__meter-fill {
   position: absolute;
   inset-block-start: 0;
   /* Logical anchor: the meter grows from the inline start in both writing
@@ -179,16 +198,19 @@
   border-radius: 999px;
   transition: background var(--ds-motion-reveal) var(--ds-motion-ease-out, ease);
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='meter-fill'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='meter-fill'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row[data-positive='true'] .ds-metrics-chart__meter-fill {
   background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='meter-fill'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] [data-part='meter-fill'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row[data-positive='false'] .ds-metrics-chart__meter-fill {
   background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
 }
 
 /* progress row — rhythm drained from the engine ---------------------------- */
 
-.ds-metrics-chart.ds-metrics-chart [data-part='progress-row'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='progress-row'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__progress-row {
   margin-block-start: var(--ds-spacing-1, 4px);
 }
 
@@ -197,16 +219,19 @@
 .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__progress-label.ds-metrics-chart__progress-label.ds-metrics-chart__progress-label {
   color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] .ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] .ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent,
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row[data-positive='true'] .ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent {
   color: var(--ds-metric-card-trend-color, var(--ds-color-success));
 }
-.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] .ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent {
+.ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='false'] .ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent,
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row[data-positive='false'] .ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent.ds-metrics-chart__progress-percent {
   color: var(--ds-metric-card-trend-color-warning, var(--ds-color-warning));
 }
 
 /* scroll region — geometry drained from the engine ---------------------------- */
 
-.ds-metrics-chart.ds-metrics-chart [data-part='scroll-area'] {
+.ds-metrics-chart.ds-metrics-chart [data-part='scroll-area'],
+.ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__scroll-area {
   flex: 1;
   min-block-size: 0;
   overflow-y: auto;
@@ -216,7 +241,8 @@
    slide-in and live-glow loops are silenced in the interactions skin. */
 @media (prefers-reduced-motion: reduce) {
   .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-value,
-  .ds-metrics-chart.ds-metrics-chart [data-part='meter-fill'] {
+  .ds-metrics-chart.ds-metrics-chart [data-part='meter-fill'],
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__meter-fill {
     transition: none;
   }
 }
@@ -227,22 +253,30 @@
 @media (forced-colors: active) {
   .ds-metrics-chart.ds-metrics-chart[data-part='root'][data-part='root'],
   .ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-part='metric-row'],
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row.ds-metrics-chart__metric-row,
   .ds-metrics-chart.ds-metrics-chart [data-part='panel-icon-box'][data-part='panel-icon-box'],
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__panel-icon-box.ds-metrics-chart__panel-icon-box,
   .ds-metrics-chart.ds-metrics-chart [data-part='metric-icon-box'][data-part='metric-icon-box'],
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-icon-box.ds-metrics-chart__metric-icon-box,
   .ds-metrics-chart.ds-metrics-chart [data-part='live-badge'][data-part='live-badge'],
-  .ds-metrics-chart.ds-metrics-chart [data-part='header'][data-part='header'] {
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__live-badge.ds-metrics-chart__live-badge,
+  .ds-metrics-chart.ds-metrics-chart [data-part='header'][data-part='header'],
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__header.ds-metrics-chart__header {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-metrics-chart.ds-metrics-chart [data-part='live-dot'] {
+  .ds-metrics-chart.ds-metrics-chart [data-part='live-dot'],
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__live-dot {
     background: ButtonText;
   }
-  .ds-metrics-chart.ds-metrics-chart [data-part='meter-track'][data-part='meter-track'] {
+  .ds-metrics-chart.ds-metrics-chart [data-part='meter-track'][data-part='meter-track'],
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__meter-track.ds-metrics-chart__meter-track {
     background: Canvas;
     border: 1px solid ButtonText;
   }
-  .ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive] [data-part='meter-fill'] {
+  .ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive] [data-part='meter-fill'],
+  .ds-metrics-chart.ds-metrics-chart .ds-metrics-chart__metric-row[data-positive] .ds-metrics-chart__meter-fill {
     background: Highlight;
   }
 }

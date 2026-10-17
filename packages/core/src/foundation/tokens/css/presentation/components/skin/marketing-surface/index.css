@@ -50,7 +50,8 @@
    The surface-tint gradient is role 1 of the spec's gradient law (a
    barely-there vertical luminance step on hero surfaces); the mesh channel
    is the showcase-only role, tenant-governed, with a `none` fallback. */
-.ds-surface.ds-marketing[data-part='root'] {
+.ds-surface.ds-marketing[data-part='root'],
+.ds-surface.ds-marketing.ds-marketing__root {
   min-block-size: 100dvh;
   padding-block-end: var(--ds-spacing-20, 80px);
   background:
@@ -62,7 +63,8 @@
     );
 }
 
-.ds-surface.ds-marketing[data-part='root'][data-mobile='true'] {
+.ds-surface.ds-marketing[data-part='root'][data-mobile='true'],
+.ds-surface.ds-marketing.ds-marketing__root[data-mobile='true'] {
   padding-block-end: var(--ds-spacing-10, 40px);
 }
 
@@ -85,7 +87,8 @@
 }
 
 /* ---- hero slot ---- */
-.ds-surface.ds-marketing .ds-marketing__hero[data-part='hero'] {
+.ds-surface.ds-marketing .ds-marketing__hero[data-part='hero'],
+.ds-surface.ds-marketing .ds-marketing__hero.ds-marketing__hero {
   inline-size: 100%;
 }
 
@@ -121,11 +124,17 @@
    rhythm as the loaded state, so the swap to real content is a pure paint
    change, never a layout shift. */
 .ds-surface.ds-marketing [data-part='marketing-skeleton-eyebrow'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-eyebrow,
 .ds-surface.ds-marketing [data-part='marketing-skeleton-title'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-title,
 .ds-surface.ds-marketing [data-part='marketing-skeleton-lede'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-lede,
 .ds-surface.ds-marketing [data-part='marketing-skeleton-cta'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-cta,
 .ds-surface.ds-marketing [data-part='marketing-skeleton-hero'],
-.ds-surface.ds-marketing [data-part='marketing-skeleton-feature'] {
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-hero,
+.ds-surface.ds-marketing [data-part='marketing-skeleton-feature'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-feature {
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   animation: ds-foundation-pulse
@@ -133,59 +142,76 @@
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-eyebrow'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-eyebrow'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-eyebrow {
   inline-size: 96px;
   min-block-size: 12px;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-title'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-title'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-title {
   min-block-size: 44px;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-title'][data-line='1'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-title'][data-line='1'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-title[data-line='1'] {
   inline-size: 88%;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-title'][data-line='2'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-title'][data-line='2'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-title[data-line='2'] {
   inline-size: 64%;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-lede'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-lede'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-lede {
   min-block-size: 16px;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-lede'][data-line='1'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-lede'][data-line='1'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-lede[data-line='1'] {
   inline-size: 96%;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-lede'][data-line='2'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-lede'][data-line='2'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-lede[data-line='2'] {
   inline-size: 72%;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-cta'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-cta'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-cta {
   inline-size: 112px;
   min-block-size: 40px;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-cta'][data-variant='primary'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-cta'][data-variant='primary'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-cta[data-variant='primary'] {
   inline-size: 136px;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-hero'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-hero'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-hero {
   min-block-size: 360px;
 }
 
-.ds-surface.ds-marketing [data-part='marketing-skeleton-feature'] {
+.ds-surface.ds-marketing [data-part='marketing-skeleton-feature'],
+.ds-surface.ds-marketing .ds-marketing__marketing-skeleton-feature {
   min-block-size: 168px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-surface.ds-marketing [data-part='marketing-skeleton-eyebrow'],
+  .ds-surface.ds-marketing .ds-marketing__marketing-skeleton-eyebrow,
   .ds-surface.ds-marketing [data-part='marketing-skeleton-title'],
+  .ds-surface.ds-marketing .ds-marketing__marketing-skeleton-title,
   .ds-surface.ds-marketing [data-part='marketing-skeleton-lede'],
+  .ds-surface.ds-marketing .ds-marketing__marketing-skeleton-lede,
   .ds-surface.ds-marketing [data-part='marketing-skeleton-cta'],
+  .ds-surface.ds-marketing .ds-marketing__marketing-skeleton-cta,
   .ds-surface.ds-marketing [data-part='marketing-skeleton-hero'],
-  .ds-surface.ds-marketing [data-part='marketing-skeleton-feature'] {
+  .ds-surface.ds-marketing .ds-marketing__marketing-skeleton-hero,
+  .ds-surface.ds-marketing [data-part='marketing-skeleton-feature'],
+  .ds-surface.ds-marketing .ds-marketing__marketing-skeleton-feature {
     animation: none;
   }
 }

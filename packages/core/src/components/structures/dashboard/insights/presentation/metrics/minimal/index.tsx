@@ -57,7 +57,7 @@ function MetricRow({
 
   return (
     <Box
-      className="minimal-metric-row"
+      className="minimal-metric-row ds-metrics-minimal__metric-row"
       data-part="metric-row"
       data-positive={metric.positive}
       style={{
@@ -69,6 +69,7 @@ function MetricRow({
       <Flex align="center" gap={16} style={{ position: 'relative' }}>
         <Box
           data-part="metric-icon-box"
+          className="ds-metrics-minimal__metric-icon-box"
         >
           <metric.icon data-part="metric-icon" style={{ width: 22, height: 22 }} />
         </Box>
@@ -117,9 +118,11 @@ function MetricRow({
           </Flex>
           <Box
             data-part="meter-track"
+            className="ds-metrics-minimal__meter-track"
           >
             <Box
               data-part="meter-fill"
+              className="ds-metrics-minimal__meter-fill"
               style={{
                 width: percentage + '%',
               }}
@@ -153,10 +156,12 @@ export function MetricsMinimal({ metrics }: MetricsProps) {
         align="center"
         justify="between"
         data-part="header"
+        className="ds-metrics-minimal__header"
       >
         <Flex align="center" gap={10}>
           <Box
             data-part="panel-icon-box"
+            className="ds-metrics-minimal__panel-icon-box"
           >
             <Activity data-part="panel-icon" style={{ width: 16, height: 16 }} />
           </Box>
@@ -169,9 +174,9 @@ export function MetricsMinimal({ metrics }: MetricsProps) {
             </Text>
           </Stack>
         </Flex>
-        <Box data-part="live-badge">
+        <Box data-part="live-badge" className="ds-metrics-minimal__live-badge">
           <Flex align="center" gap={6}>
-            <Box className="live-dot" data-part="live-dot" />
+            <Box className="live-dot ds-metrics-minimal__live-dot" data-part="live-dot" />
             <Text size="xs" weight="bold" className="ds-metrics-minimal__live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
               {tOr('metrics.live', 'LIVE')}
             </Text>
@@ -179,7 +184,7 @@ export function MetricsMinimal({ metrics }: MetricsProps) {
         </Box>
       </Flex>
 
-      <Box data-part="scroll-area" className="metrics-scroll">
+      <Box data-part="scroll-area" className="metrics-scroll ds-metrics-minimal__scroll-area">
         <Stack spacing="sm">
           {metrics.map((metric: KeyMetric, i: number) => (
             <MetricRow key={metric.label} metric={metric} index={i} maxValue={maxValue} />

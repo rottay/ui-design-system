@@ -51,7 +51,7 @@ function TickerNavButton({
       as="button"
       {...({ type: 'button' } as any)}
       onClick={onClick}
-      className="nav-button"
+      className="nav-button ds-activity-ticker__nav-button"
       {...partAttributes('nav-button', control.state)}
       {...control.handlers}
       aria-label={label}
@@ -78,7 +78,7 @@ function TickerDot({
       as="button"
       {...({ type: 'button' } as any)}
       onClick={onClick}
-      className="ticker-dot"
+      className="ticker-dot ds-activity-ticker__ticker-dot"
       {...partAttributes('ticker-dot', control.state)}
       {...control.handlers}
       data-active={active}
@@ -209,14 +209,17 @@ export function ActivityTicker({
         align="center"
         justify="between"
         data-part="header"
+        className="ds-activity-ticker__header"
       >
         <Flex align="center" gap={10}>
           <Box
             data-part="bell-box"
+            className="ds-activity-ticker__bell-box"
           >
             <Bell style={{ width: 16, height: 16 }} />
             <Box
               data-part="badge"
+              className="ds-activity-ticker__badge"
             >
               <Text className="ds-activity-ticker__badge-count" style={{ fontSize: 8, fontWeight: 700 }}>
                 {items.length}
@@ -228,7 +231,7 @@ export function ActivityTicker({
               {tOr('activity.tickerTitle', 'Live Updates')}
             </Text>
             <Flex align="center" gap={4}>
-              <Box className="live-indicator" data-part="live-dot" />
+              <Box className="live-indicator ds-activity-ticker__live-dot" data-part="live-dot" />
               <Text size="xs" className="ds-activity-ticker__live-label">
                 {tOr('activity.streaming', 'STREAMING')}
               </Text>
@@ -240,7 +243,7 @@ export function ActivityTicker({
             <Flex
               align="center"
               gap={4}
-              className="view-all-link"
+              className="view-all-link ds-activity-ticker__view-all-link"
               data-part="view-all-link"
             >
               <Text size="xs" weight="medium" className="ds-activity-ticker__view-all-label">
@@ -254,7 +257,7 @@ export function ActivityTicker({
 
       <Box style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Box
-          className="ticker-container"
+          className="ticker-container ds-activity-ticker__ticker-body"
           data-part="ticker-body"
           data-paused={isPaused}
           onMouseEnter={() => setIsPaused(true)}
@@ -264,14 +267,15 @@ export function ActivityTicker({
         >
           <Box
             className={
-              'ticker-content-v3 ' +
-              (isAnimating ? (direction === 'next' ? 'ticker-out-left' : 'ticker-out-right') : 'ticker-in')
+              ['ticker-content-v3 ' +
+              (isAnimating ? (direction === 'next' ? 'ticker-out-left' : 'ticker-out-right') : 'ticker-in'), 'ds-activity-ticker__ticker-content'].filter(Boolean).join(' ')
             }
             data-part="ticker-content"
           >
-            <Flex align="center" justify="center" data-part="item-presenter">
+            <Flex align="center" justify="center" data-part="item-presenter" className="ds-activity-ticker__item-presenter">
               <Box
                 data-part="item-icon-box"
+                className="ds-activity-ticker__item-icon-box"
                 data-type={currentItem.type}
                 style={{
                   position: 'relative',
@@ -288,17 +292,17 @@ export function ActivityTicker({
               {currentItem.text}
             </Text>
             <Flex align="center" justify="center" gap={8}>
-              <Box data-part="item-type-dot" data-type={currentItem.type} />
+              <Box data-part="item-type-dot" className="ds-activity-ticker__item-type-dot" data-type={currentItem.type} />
               {/* Relative display text only; the contract carries no ISO
                   timestamp, so no honest `dateTime` can be stamped yet. */}
-              <Box as="time" data-part="item-time">
+              <Box as="time" data-part="item-time" className="ds-activity-ticker__item-time">
                 {tOr('activity.timeAgo', `${currentItem.time} ago`, { time: currentItem.time })}
               </Box>
             </Flex>
           </Box>
 
           {items.length > 1 && (
-            <Flex align="center" justify="center" gap={16} data-part="controls">
+            <Flex align="center" justify="center" gap={16} data-part="controls" className="ds-activity-ticker__controls">
               <TickerNavButton
                 onClick={goToPrev}
                 label={tOr('activity.tickerPrevious', 'Previous update')}
@@ -333,9 +337,10 @@ export function ActivityTicker({
           {items.length > 1 && !prefersReducedMotion && (
             <Box
               data-part="progress-track"
+              className="ds-activity-ticker__progress-track"
             >
               <Box
-                className="ticker-progress"
+                className="ticker-progress ds-activity-ticker__progress-fill"
                 data-part="progress-fill"
                 data-type={currentItem.type}
                 key={currentIndex}

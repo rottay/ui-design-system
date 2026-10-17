@@ -103,16 +103,16 @@ function notificationTypeColor(type?: SurfaceNotificationItem['type']): string {
 function NotificationFeedSkeleton(): React.ReactElement {
   return (
     <Stack spacing="sm" data-part="feed-skeleton" aria-hidden="true">
-      <Box data-part="notification-skeleton-item" data-size="lg" />
-      <Box data-part="notification-skeleton-item" data-size="md" />
-      <Box data-part="notification-skeleton-item" data-size="sm" />
+      <Box data-part="notification-skeleton-item" className="ds-notification__notification-skeleton-item" data-size="lg" />
+      <Box data-part="notification-skeleton-item" className="ds-notification__notification-skeleton-item" data-size="md" />
+      <Box data-part="notification-skeleton-item" className="ds-notification__notification-skeleton-item" data-size="sm" />
     </Stack>
   );
 }
 
 /** Preferences mirror skeleton: one grouped-frame block (switch rows). */
 function NotificationPreferencesSkeleton(): React.ReactElement {
-  return <Box data-part="notification-skeleton-preferences" aria-hidden="true" />;
+  return <Box data-part="notification-skeleton-preferences" className="ds-notification__notification-skeleton-preferences" aria-hidden="true" />;
 }
 
 function NotificationList({

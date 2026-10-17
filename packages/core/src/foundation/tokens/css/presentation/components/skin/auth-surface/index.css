@@ -49,7 +49,8 @@
    Surface-tint is role 1 of the spec's gradient law (a barely-there vertical
    luminance step on hero surfaces); this public pre-auth page IS such a
    first-impression surface (marketing precedent). */
-.ds-surface.ds-auth[data-part='root'] {
+.ds-surface.ds-auth[data-part='root'],
+.ds-surface.ds-auth.ds-auth__root {
   min-block-size: 100dvh;
   background: linear-gradient(
     180deg,
@@ -104,8 +105,11 @@
    so the swap to real content is a pure paint change, never a layout shift
    (all geometry INTERNAL literals, dashboard/chat precedent). */
 .ds-surface.ds-auth [data-part='auth-skeleton-field'],
+.ds-surface.ds-auth .ds-auth__auth-skeleton-field,
 .ds-surface.ds-auth [data-part='auth-skeleton-cta'],
-.ds-surface.ds-auth [data-part='auth-skeleton-hero'] {
+.ds-surface.ds-auth .ds-auth__auth-skeleton-cta,
+.ds-surface.ds-auth [data-part='auth-skeleton-hero'],
+.ds-surface.ds-auth .ds-auth__auth-skeleton-hero {
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   animation: ds-foundation-pulse
@@ -113,25 +117,31 @@
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-surface.ds-auth [data-part='auth-skeleton-field'] {
+.ds-surface.ds-auth [data-part='auth-skeleton-field'],
+.ds-surface.ds-auth .ds-auth__auth-skeleton-field {
   inline-size: 100%;
   min-block-size: 40px;
 }
 
-.ds-surface.ds-auth [data-part='auth-skeleton-cta'] {
+.ds-surface.ds-auth [data-part='auth-skeleton-cta'],
+.ds-surface.ds-auth .ds-auth__auth-skeleton-cta {
   inline-size: 136px;
   min-block-size: 40px;
 }
 
-.ds-surface.ds-auth [data-part='auth-skeleton-hero'] {
+.ds-surface.ds-auth [data-part='auth-skeleton-hero'],
+.ds-surface.ds-auth .ds-auth__auth-skeleton-hero {
   inline-size: 100%;
   min-block-size: 360px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-surface.ds-auth [data-part='auth-skeleton-field'],
+  .ds-surface.ds-auth .ds-auth__auth-skeleton-field,
   .ds-surface.ds-auth [data-part='auth-skeleton-cta'],
-  .ds-surface.ds-auth [data-part='auth-skeleton-hero'] {
+  .ds-surface.ds-auth .ds-auth__auth-skeleton-cta,
+  .ds-surface.ds-auth [data-part='auth-skeleton-hero'],
+  .ds-surface.ds-auth .ds-auth__auth-skeleton-hero {
     animation: none;
   }
 }

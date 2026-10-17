@@ -86,7 +86,9 @@
    layout shift. Bubble blocks alternate alignment and length the way a
    real two-party transcript does. */
 .ds-surface.ds-chat [data-part='chat-skeleton-bubble'],
-.ds-surface.ds-chat [data-part='chat-skeleton-block'] {
+.ds-surface.ds-chat .ds-chat__chat-skeleton-bubble,
+.ds-surface.ds-chat [data-part='chat-skeleton-block'],
+.ds-surface.ds-chat .ds-chat__chat-skeleton-block {
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   animation: ds-foundation-pulse
@@ -94,33 +96,41 @@
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-align='end'] {
+.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-align='end'],
+.ds-surface.ds-chat .ds-chat__chat-skeleton-bubble[data-align='end'] {
   align-self: flex-end;
 }
 
-.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-size='lg'] {
+.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-size='lg'],
+.ds-surface.ds-chat .ds-chat__chat-skeleton-bubble[data-size='lg'] {
   inline-size: 62%;
   min-block-size: 64px;
 }
 
-.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-size='md'] {
+.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-size='md'],
+.ds-surface.ds-chat .ds-chat__chat-skeleton-bubble[data-size='md'] {
   inline-size: 48%;
   min-block-size: 56px;
 }
 
-.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-size='sm'] {
+.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-size='sm'],
+.ds-surface.ds-chat .ds-chat__chat-skeleton-bubble[data-size='sm'] {
   inline-size: 38%;
   min-block-size: 48px;
 }
 
 .ds-surface.ds-chat
-  [data-part='chat-skeleton-block'][data-size='composer-input'] {
+  [data-part='chat-skeleton-block'][data-size='composer-input'],
+.ds-surface.ds-chat
+  .ds-chat__chat-skeleton-block[data-size='composer-input'] {
   inline-size: 100%;
   min-block-size: 96px;
 }
 
 .ds-surface.ds-chat
-  [data-part='chat-skeleton-block'][data-size='send-button'] {
+  [data-part='chat-skeleton-block'][data-size='send-button'],
+.ds-surface.ds-chat
+  .ds-chat__chat-skeleton-block[data-size='send-button'] {
   inline-size: 96px;
   min-block-size: 36px;
   align-self: flex-end;
@@ -128,7 +138,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-surface.ds-chat [data-part='chat-skeleton-bubble'],
-  .ds-surface.ds-chat [data-part='chat-skeleton-block'] {
+  .ds-surface.ds-chat .ds-chat__chat-skeleton-bubble,
+  .ds-surface.ds-chat [data-part='chat-skeleton-block'],
+  .ds-surface.ds-chat .ds-chat__chat-skeleton-block {
     animation: none;
   }
 }
