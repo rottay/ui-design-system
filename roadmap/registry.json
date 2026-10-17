@@ -2924,6 +2924,11 @@
      "at": "2026-10-17 05:27",
      "by": "kimi-dt",
      "note": "2026-10-17: M-P3 family 10 (edit-header) INTEGRATED. 16/16 doors (first STRICT-rule lot: strict-plan.mjs filter, 0 twin-credited arms; raw planner would have armed 7 FormHeader halves), 74 pair arms (edit-header 480->538, header-hero-shared 256->272, FormHeader halves untouched + guard check), naming law resolved (ds-edit-header__back-chip; HeadersBatch 17/17 untouched; bones proven identical), 1 reader migration (reduced-motion-guard named deltas, non-vacuous). Focals 645/645 FULL PASS. Review ACCEPT 9/9 (session 21af4904). F1 STRIP-Lot PRECONDITION registered: back-chip bones safe only pre-strip; post-strip simulation shows 5 bone changes — decision before strip: (A) skeleton role-table entry 'back-chip':'pass' (DT leaning, no law touched) or (B) HeadersBatch :282 whole-word check (owner-gated ban law); strip proofs must include post-strip bones check."
+    },
+    {
+     "at": "2026-10-17 15:18",
+     "by": "kimi-dt",
+     "note": "M-P3 family-11 integrated (1e0e68978): 126/147 doors, wave B complete; review 87ac0028 ACCEPT 11/11; owed: pins micro-lot (strip precondition), harness-ext merge + clock freeze, wave C re-plan"
     }
    ],
    "claimedBy": "kimi-dt",
