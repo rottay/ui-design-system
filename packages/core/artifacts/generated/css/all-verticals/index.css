@@ -72856,6 +72856,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ─── SHARED EDIT+FORM: hero-panel archetype gradient (buildPatternStyle) ─── */
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='control'],
+.ds-structure.ds-edit-header .ds-edit-header__hero-panel[data-archetype='control'],
 .ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='control'],
 .ds-structure.ds-form-header .ds-edit-header__hero-panel[data-archetype='control'] {
   background-image:
@@ -72872,6 +72873,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='editorial'],
+.ds-structure.ds-edit-header .ds-edit-header__hero-panel[data-archetype='editorial'],
 .ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='editorial'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent) 0%, transparent 48%),
@@ -72887,6 +72889,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='technical'],
+.ds-structure.ds-edit-header .ds-edit-header__hero-panel[data-archetype='technical'],
 .ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='technical'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent) 0%, transparent 48%),
@@ -72902,6 +72905,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='governance'],
+.ds-structure.ds-edit-header .ds-edit-header__hero-panel[data-archetype='governance'],
 .ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='governance'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-primary) 17%, transparent) 0%, transparent 48%),
@@ -72919,6 +72923,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ─── SHARED EDIT+FORM: icon-badge tone, keyed on the header-tone contract ─── */
 
 .ds-structure.ds-edit-header [data-part='icon-badge'],
+.ds-structure.ds-edit-header .ds-edit-header__icon-badge,
 .ds-structure.ds-form-header [data-part='icon-badge'],
 .ds-structure.ds-form-header .ds-edit-header__icon-badge {
   --ds-header-icon-tone-bg: var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent));
@@ -72937,12 +72942,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     0 8px 18px -14px color-mix(in srgb, var(--ds-color-text-primary) 38%, transparent);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'],
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__icon-badge,
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'],
 .ds-structure.ds-form-header.ds-edit-header__root .ds-edit-header__icon-badge {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-header-icon-tone-bd);
 }
 
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='primary'],
+.ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='primary'],
 .ds-structure.ds-form-header [data-part='icon-badge'][data-variant='primary'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-primary-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-primary-bd, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary) 82%));
@@ -72955,12 +72962,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   --ds-header-icon-tone-fg: var(--ds-header-tone-success-fg, color-mix(in srgb, var(--ds-color-success) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='warning'],
+.ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='warning'],
 .ds-structure.ds-form-header [data-part='icon-badge'][data-variant='warning'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-warning-bg, color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-warning-bd, color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%));
   --ds-header-icon-tone-fg: var(--ds-header-tone-warning-fg, color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='info'],
+.ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='info'],
 .ds-structure.ds-form-header [data-part='icon-badge'][data-variant='info'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-info-bg, color-mix(in srgb, var(--ds-color-info) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-info-bd, color-mix(in srgb, var(--ds-color-info) 18%, var(--ds-color-border-secondary) 82%));
@@ -72979,6 +72988,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    (an interactive affordance on a real link, never decorative motion). */
 
 .ds-structure.ds-edit-header [data-part='back-button'],
+.ds-structure.ds-edit-header .ds-edit-header__back-chip,
 .ds-structure.ds-form-header [data-part='back-button'],
 .ds-structure.ds-form-header .ds-edit-header__back-button {
   padding-block: 8px;
@@ -72996,18 +73006,21 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    the pointer sits on the ANCHOR rather than on the chip's own box. */
 @media (hover: hover) {
   .ds-structure.ds-edit-header [data-part='back-button']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-edit-header .ds-edit-header__back-chip:is([data-state~='hovered'], :hover),
   .ds-structure.ds-form-header [data-part='back-button']:is([data-state~='hovered'], :hover),
   .ds-structure.ds-form-header .ds-edit-header__back-button:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
     transform: translateY(-1px);
   }
   .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__back-chip:is([data-state~='hovered'], :hover),
   .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover),
   .ds-structure.ds-form-header.ds-edit-header__root .ds-edit-header__back-button:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
   }
 }
 .ds-structure.ds-edit-header [data-part='back-button']:is([data-state~='pressed'], :active),
+.ds-structure.ds-edit-header .ds-edit-header__back-chip:is([data-state~='pressed'], :active),
 .ds-structure.ds-form-header [data-part='back-button']:is([data-state~='pressed'], :active),
 .ds-structure.ds-form-header .ds-edit-header__back-button:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
@@ -73021,6 +73034,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 .ds-structure.ds-edit-header [data-part='back-button'][data-state~='focus-visible'],
 .ds-structure.ds-form-header [data-part='back-button'][data-state~='focus-visible'],
 .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
+.ds-structure.ds-edit-header a:focus-visible .ds-edit-header__back-chip,
 .ds-structure.ds-form-header a:focus-visible [data-part='back-button'],
 .ds-structure.ds-form-header a:focus-visible .ds-edit-header__back-button {
   box-shadow: var(--ds-header-back-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
@@ -73031,6 +73045,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    file could only ever deliver to one of its two families. It lives in
    `edit-header.css`, with the rest of EditHeader's own breadcrumb grammar. */
 .ds-structure.ds-edit-header a:has(> [data-part='back-button']),
+.ds-structure.ds-edit-header a:has(> .ds-edit-header__back-chip),
 .ds-structure.ds-form-header a:has(> [data-part='back-button']),
 .ds-structure.ds-form-header a:has(> .ds-edit-header__back-button) {
   text-decoration: none;
@@ -73043,6 +73058,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    roots are guarded in their own files — this block owns the chip only. */
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-edit-header [data-part='back-button'],
+  .ds-structure.ds-edit-header .ds-edit-header__back-chip,
   .ds-structure.ds-form-header [data-part='back-button'],
   .ds-structure.ds-form-header .ds-edit-header__back-button {
     transition-duration: 0.01ms !important;
@@ -73181,7 +73197,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    channels are PRESET tiers, so the tenant `appearance.rhythm` axis mounts once
    here and every consume site below stays a plain channel read (the
    workbench-header precedent). */
-.ds-structure.ds-edit-header[data-part='root'] {
+.ds-structure.ds-edit-header[data-part='root'],
+.ds-structure.ds-edit-header.ds-edit-header__root {
   --ds-edit-header-hero-padding: calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1));
   --ds-edit-header-top-bar-padding-block: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
   --ds-edit-header-top-bar-padding-inline: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
@@ -73194,7 +73211,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
   animation: ds-header-enter var(--ds-motion-attention, 320ms) var(--ds-motion-ease-out, ease-out) both;
 }
-.ds-structure.ds-edit-header[data-part='root'][data-loading] {
+.ds-structure.ds-edit-header[data-part='root'][data-loading],
+.ds-structure.ds-edit-header.ds-edit-header__root[data-loading] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 /* The loading branch is the SAME card: it holds an anatomy-derived skeleton of this
@@ -73203,33 +73221,39 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    the enter run is suppressed — a placeholder does not announce itself by flying in.
    (The retired rule stripped radius and shadow and padded 48px, which was right for
    the glyph it used to hold and wrong for a skeleton.) */
-.ds-structure.ds-edit-header[data-part='root'][data-loading='true'] {
+.ds-structure.ds-edit-header[data-part='root'][data-loading='true'],
+.ds-structure.ds-edit-header.ds-edit-header__root[data-loading='true'] {
   animation: none;
 }
 
 /* top bar */
-.ds-structure.ds-edit-header [data-part='top-bar'] {
+.ds-structure.ds-edit-header [data-part='top-bar'],
+.ds-structure.ds-edit-header .ds-edit-header__top-bar {
   padding-block: var(--ds-edit-header-top-bar-padding-block, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   padding-inline: var(--ds-edit-header-top-bar-padding-inline, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-bg-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'],
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__top-bar {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 
 /* back button (no className hook — §4 anatomy is data-part only); its corner
    rides the tenant radius dial like its form-header twin (10px at rest) */
-.ds-structure.ds-edit-header [data-part='back-button'] {
+.ds-structure.ds-edit-header [data-part='back-button'],
+.ds-structure.ds-edit-header .ds-edit-header__back-chip {
   border-radius: calc(10px * var(--ds-radius-scale-normalized, 1));
   background: transparent;
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='back-button'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='back-button'],
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__back-chip {
   border: 1px solid var(--ds-color-border-secondary);
 }
 .ds-structure.ds-edit-header [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__back-label {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__back-label,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__top-bar .ds-edit-header__back-label {
   color: var(--ds-color-text-secondary);
 }
 
@@ -73240,18 +73264,22 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 .ds-structure.ds-edit-header a:has(> .ds-edit-header__breadcrumb-link) {
   text-decoration: none;
 }
-.ds-structure.ds-edit-header [data-part='breadcrumb-divider'] {
+.ds-structure.ds-edit-header [data-part='breadcrumb-divider'],
+.ds-structure.ds-edit-header .ds-edit-header__breadcrumb-divider {
   inline-size: 1px;
   block-size: 16px;
   background: var(--ds-color-border-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-separator {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-separator,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__top-bar .ds-edit-header__breadcrumb-separator {
   color: var(--ds-color-text-muted);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-link {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-link,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__top-bar .ds-edit-header__breadcrumb-link {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-item {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__breadcrumb-item,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__top-bar .ds-edit-header__breadcrumb-item {
   color: var(--ds-color-text-secondary);
 }
 
@@ -73266,34 +73294,40 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   font-family: var(--ds-type-code-font-family, var(--ds-font-family-mono, monospace));
   font-variant-numeric: var(--ds-type-code-font-variant-numeric, normal);
 }
-.ds-structure.ds-edit-header[data-part='root'] .ds-edit-header__entity-id {
+.ds-structure.ds-edit-header[data-part='root'] .ds-edit-header__entity-id,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__entity-id {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__entity-id {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] .ds-edit-header__entity-id,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__top-bar .ds-edit-header__entity-id {
   color: var(--ds-color-text-secondary);
 }
 
 /* hero panel geometry + copy hierarchy */
-.ds-structure.ds-edit-header [data-part='hero-panel'] {
+.ds-structure.ds-edit-header [data-part='hero-panel'],
+.ds-structure.ds-edit-header .ds-edit-header__hero-panel {
   padding: var(--ds-edit-header-hero-padding, calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1)));
 }
 /* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
    visual value in the TSX and the one measurement here no ramp could see. The channel
    carries the same 20px at rest, on the rhythm plane every other gutter in this file
    already rides -- a bare literal would also be a channel with no path to a root. */
-.ds-structure.ds-edit-header [data-part='hero-row'] {
+.ds-structure.ds-edit-header [data-part='hero-row'],
+.ds-structure.ds-edit-header .ds-edit-header__hero-row {
   gap: var(--ds-edit-header-hero-row-gap, calc(20px * var(--ds-rhythm-effective-scale, 1)));
 }
 /* the copy yields before the action rail does: the cluster may shrink, the
    rail may not */
-.ds-structure.ds-edit-header [data-part='hero-copy'] {
+.ds-structure.ds-edit-header [data-part='hero-copy'],
+.ds-structure.ds-edit-header .ds-edit-header__hero-copy {
   flex: 1 1 auto;
   min-inline-size: 0;
 }
 /* the icon badge's tone and 52px box are the shared edit+form block above; the
    box gets a channel here (0,4,0 beats the shared 0,3,0) so the ladder can step
    it down, and the glyph size moves out of the engine's inline style */
-.ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'],
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__icon-badge {
   inline-size: var(--ds-edit-header-icon-badge-size, 52px);
   block-size: var(--ds-edit-header-icon-badge-size, 52px);
 }
@@ -73306,22 +73340,26 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    family STAMPS, not `[data-part='actions'] svg`: a descendant-element selector
    reaches into the composed Button's own internals, which this family does not own,
    and it left `action-icon` stamped with no rule of its own. */
-.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'],
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__actions [data-part='action-icon'] {
   inline-size: 14px;
   block-size: 14px;
 }
 /* icon-badge-glyph and action-icon are the family's own slots around an icon
    component: the slot carries the size above and the glyph fills it. */
 .ds-structure.ds-edit-header [data-part='icon-badge-glyph'],
-.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'],
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__actions [data-part='action-icon'] {
   display: flex;
 }
 .ds-structure.ds-edit-header [data-part='icon-badge-glyph'] > *,
-.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > * {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > *,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__actions [data-part='action-icon'] > * {
   inline-size: 100%;
   block-size: 100%;
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__eyebrow {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__eyebrow,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__hero-panel[data-archetype] .ds-edit-header__eyebrow {
   color: var(--ds-color-text-muted);
   /* the eyebrow is a micro-label, so it reads the `code` role's family (the
      tenant's mono choice) and the foundation tracking rung — the old literal
@@ -73344,7 +73382,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   letter-spacing: var(--ds-type-page-title-letter-spacing, var(--ds-letter-spacing-tight));
   overflow-wrap: break-word;
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__subtitle {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__subtitle,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__hero-panel[data-archetype] .ds-edit-header__subtitle {
   color: var(--ds-color-text-secondary);
   font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
   letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));
@@ -73355,7 +73394,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    channels. `secondary` is the resting tone and is declared on the part itself, so a
    pill whose variant never resolved still paints it. The text will not inherit color
    past its own typography skin, so it reads the --…-fg at (0,5,0). */
-.ds-structure.ds-edit-header [data-part='status-pill'] {
+.ds-structure.ds-edit-header [data-part='status-pill'],
+.ds-structure.ds-edit-header .ds-edit-header__status-pill {
   --ds-edit-header-status-tone-bg: var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent));
   --ds-edit-header-status-tone-bd: var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary));
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary));
@@ -73365,12 +73405,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   background: var(--ds-edit-header-status-tone-bg, var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
 }
-.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='success'] {
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='success'],
+.ds-structure.ds-edit-header .ds-edit-header__status-pill[data-variant='success'] {
   --ds-edit-header-status-tone-bg: var(--ds-header-tone-success-bg, color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-edit-header-status-tone-bd: var(--ds-header-tone-success-bd, color-mix(in srgb, var(--ds-color-success) 18%, var(--ds-color-border-secondary) 82%));
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-success-fg, color-mix(in srgb, var(--ds-color-success) 78%, var(--ds-color-text-primary) 22%));
 }
-.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='warning'] {
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='warning'],
+.ds-structure.ds-edit-header .ds-edit-header__status-pill[data-variant='warning'] {
   --ds-edit-header-status-tone-bg: var(--ds-header-tone-warning-bg, color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-edit-header-status-tone-bd: var(--ds-header-tone-warning-bd, color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%));
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-warning-fg, color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%));
@@ -73385,17 +73427,20 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   --ds-edit-header-status-tone-bd: var(--ds-header-tone-error-bd, color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%));
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'],
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__status-pill {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-edit-header-status-tone-bd, var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary)));
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__status-pill-text {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__status-pill-text,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__hero-panel[data-archetype] .ds-edit-header__status-pill-text {
   color: var(--ds-edit-header-status-tone-fg, var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary)));
   letter-spacing: 0.04em;
   text-transform: capitalize;
 }
 
 /* dirty chip: dot (shape) + label (text), never hue alone */
-.ds-structure.ds-edit-header [data-part='dirty-chip'] {
+.ds-structure.ds-edit-header [data-part='dirty-chip'],
+.ds-structure.ds-edit-header .ds-edit-header__dirty-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -73404,28 +73449,33 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   border-radius: 999px;
   background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='dirty-chip'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='dirty-chip'],
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__dirty-chip {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-warning) 26%, var(--ds-color-border-secondary));
 }
-.ds-structure.ds-edit-header [data-part='dirty-dot'] {
+.ds-structure.ds-edit-header [data-part='dirty-dot'],
+.ds-structure.ds-edit-header .ds-edit-header__dirty-dot {
   inline-size: 6px;
   block-size: 6px;
   border-radius: 50%;
   background: var(--ds-color-warning);
 }
-.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__dirty-label {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__dirty-label,
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__hero-panel[data-archetype] .ds-edit-header__dirty-label {
   color: color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%);
 }
 
 /* actions rail: never compresses — the copy yields first */
-.ds-structure.ds-edit-header [data-part='actions'] {
+.ds-structure.ds-edit-header [data-part='actions'],
+.ds-structure.ds-edit-header .ds-edit-header__actions {
   flex: 0 0 auto;
   margin-inline-start: auto;
 }
 
 /* context section below the hero: a RULE, not a card (see the header's
    "Forms are not card stacks" note) */
-.ds-structure.ds-edit-header [data-part='context-card'] {
+.ds-structure.ds-edit-header [data-part='context-card'],
+.ds-structure.ds-edit-header .ds-edit-header__context-card {
   margin-block-start: var(--ds-edit-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   padding-block-start: var(--ds-edit-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   /* The context section is the RECESSED continuation of the hero, so its
@@ -73439,10 +73489,12 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   backdrop-filter: var(--ds-edit-header-context-card-filter, none);
 }
 /* the single dominant boundary for the region */
-.ds-structure.ds-edit-header[data-part='root'] [data-part='context-card'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='context-card'],
+.ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__context-card {
   border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
-.ds-structure.ds-edit-header [data-part='context-rail'] + [data-part='context-card-children'] {
+.ds-structure.ds-edit-header [data-part='context-rail'] + [data-part='context-card-children'],
+.ds-structure.ds-edit-header .ds-edit-header__context-rail + .ds-edit-header__context-card-children {
   margin-block-start: 18px;
 }
 
@@ -73454,7 +73506,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ~544px and below: the hero compacts instead of crushing, and the action rail
    stops being a right-aligned appendix. */
 @container ds-edit-header (inline-size < 34rem) {
-  .ds-structure.ds-edit-header[data-part='root'] {
+  .ds-structure.ds-edit-header[data-part='root'],
+  .ds-structure.ds-edit-header.ds-edit-header__root {
     --ds-edit-header-hero-padding: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
     --ds-edit-header-context-gap: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
     --ds-edit-header-icon-badge-size: 44px;
@@ -73464,7 +73517,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   .ds-structure.ds-edit-header .ds-edit-header__title {
     font-size: var(--ds-edit-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
   }
-  .ds-structure.ds-edit-header [data-part='actions'] {
+  .ds-structure.ds-edit-header [data-part='actions'],
+  .ds-structure.ds-edit-header .ds-edit-header__actions {
     inline-size: 100%;
     margin-inline-start: 0;
   }
@@ -73474,14 +73528,17 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    baseline and Save/Cancel become full-width targets — a phone posture, not a
    compressed desktop. */
 @container ds-edit-header (inline-size < 24rem) {
-  .ds-structure.ds-edit-header[data-part='root'] {
+  .ds-structure.ds-edit-header[data-part='root'],
+  .ds-structure.ds-edit-header.ds-edit-header__root {
     --ds-edit-header-top-bar-padding-inline: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
   }
-  .ds-structure.ds-edit-header [data-part='hero-copy'] {
+  .ds-structure.ds-edit-header [data-part='hero-copy'],
+  .ds-structure.ds-edit-header .ds-edit-header__hero-copy {
     flex-direction: column;
     align-items: flex-start;
   }
-  .ds-structure.ds-edit-header [data-part='actions'] > * {
+  .ds-structure.ds-edit-header [data-part='actions'] > *,
+  .ds-structure.ds-edit-header .ds-edit-header__actions > * {
     flex: 1 1 100%;
   }
 }
@@ -73497,7 +73554,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    longhands collapse the same motion to imperceptible while the events still
    arrive, and the iteration pin stops a repeat surviving as a fast flicker. ─── */
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-edit-header[data-part='root'] {
+  .ds-structure.ds-edit-header[data-part='root'],
+  .ds-structure.ds-edit-header.ds-edit-header__root {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -73511,36 +73569,52 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    already defaults to none. ─── */
 @media (forced-colors: active) {
   .ds-structure.ds-edit-header[data-part='root'][data-loading],
+  .ds-structure.ds-edit-header.ds-edit-header__root[data-loading],
   .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'],
+  .ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__top-bar,
   .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button'],
+  .ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__back-chip,
   .ds-structure.ds-edit-header[data-part='root'] .ds-edit-header__entity-id,
+  .ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__entity-id,
   .ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'],
+  .ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__icon-badge,
   .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'],
+  .ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__status-pill,
   .ds-structure.ds-edit-header[data-part='root'] [data-part='dirty-chip'],
-  .ds-structure.ds-edit-header[data-part='root'] [data-part='context-card'] {
+  .ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__dirty-chip,
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='context-card'],
+  .ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__context-card {
     border-color: ButtonText;
   }
 
   .ds-structure.ds-edit-header [data-part='icon-badge'],
+  .ds-structure.ds-edit-header .ds-edit-header__icon-badge,
   .ds-structure.ds-edit-header [data-part='status-pill'],
-  .ds-structure.ds-edit-header [data-part='dirty-chip'] {
+  .ds-structure.ds-edit-header .ds-edit-header__status-pill,
+  .ds-structure.ds-edit-header [data-part='dirty-chip'],
+  .ds-structure.ds-edit-header .ds-edit-header__dirty-chip {
     background: Canvas;
     box-shadow: none;
   }
 
   .ds-structure.ds-edit-header [data-part='icon-badge'],
+  .ds-structure.ds-edit-header .ds-edit-header__icon-badge,
   .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__status-pill-text,
-  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__dirty-label {
+  .ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__hero-panel[data-archetype] .ds-edit-header__status-pill-text,
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] .ds-edit-header__dirty-label,
+  .ds-structure.ds-edit-header.ds-edit-header__root .ds-edit-header__hero-panel[data-archetype] .ds-edit-header__dirty-label {
     color: CanvasText;
   }
 
-  .ds-structure.ds-edit-header [data-part='dirty-dot'] {
+  .ds-structure.ds-edit-header [data-part='dirty-dot'],
+  .ds-structure.ds-edit-header .ds-edit-header__dirty-dot {
     background: CanvasText;
   }
 
   /* the ring's platform arm, for the same reason stated in header-hero-shared.css:
      the focusable element is the app-injected anchor, which the kernel cannot reach */
-  .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'] {
+  .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
+  .ds-structure.ds-edit-header a:focus-visible .ds-edit-header__back-chip {
     outline: 2px solid Highlight;
     box-shadow: none;
   }

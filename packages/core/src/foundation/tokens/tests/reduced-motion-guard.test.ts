@@ -256,8 +256,8 @@ describe("R5 motion batch -- nothing in scope animates unguarded", () => {
  *  transition (both families at once), and each family file owns its own root's enter animation.
  *  Each row is `file -> the selectors that file is the motion owner of`; the assertions below
  *  read it in both directions, so a guard can neither miss its own selector nor reach across
- *  into a neighbour's. FormHeader's back chip and root also animate through their class arms,
- *  so each arm is a motion selector of its own and is named in its row. */
+ *  into a neighbour's. The back chip and root of both families also animate through their class
+ *  arms, so each arm is a motion selector of its own and is named in its row. */
 const HEADER_HERO_MOTION_OWNERS = [
   {
     path: "presentation/components/skin/header-hero-shared/index.css",
@@ -265,11 +265,15 @@ const HEADER_HERO_MOTION_OWNERS = [
       ".ds-structure.ds-edit-header [data-part='back-button']",
       ".ds-structure.ds-form-header [data-part='back-button']",
       ".ds-structure.ds-form-header .ds-edit-header__back-button",
+      ".ds-structure.ds-edit-header .ds-edit-header__back-chip",
     ],
   },
   {
     path: "presentation/components/skin/edit-header/index.css",
-    selectors: [".ds-structure.ds-edit-header[data-part='root']"],
+    selectors: [
+      ".ds-structure.ds-edit-header[data-part='root']",
+      ".ds-structure.ds-edit-header.ds-edit-header__root",
+    ],
   },
   {
     path: "presentation/components/skin/form-header/index.css",

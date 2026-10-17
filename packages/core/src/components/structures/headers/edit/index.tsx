@@ -192,7 +192,7 @@ export function EditHeader({
 
   const chrome = (
     <>
-      <Box data-part="top-bar">
+      <Box data-part="top-bar" className="ds-edit-header__top-bar">
         <Flex justify="between" align="center" wrap="wrap" gap={12}>
           <Flex align="center" gap={20}>
             {renderHrefAnchor(
@@ -203,6 +203,7 @@ export function EditHeader({
                   ...backInteraction.state,
                   focusVisible: backAnchor.state.focusVisible,
                 })}
+                className="ds-edit-header__back-chip"
                 align="center"
                 gap={8}
               >
@@ -220,7 +221,7 @@ export function EditHeader({
 
             {breadcrumb && breadcrumb.length > 0 && (
               <>
-                <Box data-part="breadcrumb-divider" />
+                <Box data-part="breadcrumb-divider" className="ds-edit-header__breadcrumb-divider" />
                 <Flex align="center" gap={8}>
                   {breadcrumb.map((item, index) => (
                     <Flex key={index} align="center" gap={8}>
@@ -261,11 +262,11 @@ export function EditHeader({
         </Flex>
       </Box>
 
-      <Box data-part="hero-panel" data-archetype={archetype}>
-        <Flex data-part="hero-row" justify="between" align="start" wrap="wrap">
-          <Flex align="center" gap={20} data-part="hero-copy">
+      <Box data-part="hero-panel" className="ds-edit-header__hero-panel" data-archetype={archetype}>
+        <Flex data-part="hero-row" className="ds-edit-header__hero-row" justify="between" align="start" wrap="wrap">
+          <Flex align="center" gap={20} data-part="hero-copy" className="ds-edit-header__hero-copy">
             {Icon && (
-              <Box data-part="icon-badge" data-variant={resolveHeaderTone(colorVariant)}>
+              <Box data-part="icon-badge" className="ds-edit-header__icon-badge" data-variant={resolveHeaderTone(colorVariant)}>
                 {/* Glyph geometry is skin-owned (the FormHeader posture) so the
                     container ladder can step it down without a prop. The header
                     owns the glyph slot; the title names the page, so the glyph
@@ -294,15 +295,15 @@ export function EditHeader({
                   {title}
                 </Box>
                 {status && (
-                  <Box data-part="status-pill" data-variant={resolveHeaderTone(status.color)}>
+                  <Box data-part="status-pill" className="ds-edit-header__status-pill" data-variant={resolveHeaderTone(status.color)}>
                     <Text className="ds-edit-header__status-pill-text" size="xs" weight="medium">
                       {status.label}
                     </Text>
                   </Box>
                 )}
                 {dirty && (
-                  <Box data-part="dirty-chip">
-                    <Box data-part="dirty-dot" aria-hidden="true" />
+                  <Box data-part="dirty-chip" className="ds-edit-header__dirty-chip">
+                    <Box data-part="dirty-dot" className="ds-edit-header__dirty-dot" aria-hidden="true" />
                     <Text className="ds-edit-header__dirty-label" size="xs" weight="medium">
                       {dirtyLabel}
                     </Text>
@@ -317,6 +318,7 @@ export function EditHeader({
 
           <Flex
             data-part="actions"
+            className="ds-edit-header__actions"
             role="group"
             aria-label={actionsLabel}
             align="center"
@@ -381,10 +383,10 @@ export function EditHeader({
         </Flex>
 
         {contextRail || children ? (
-          <Box data-part="context-card">
-            {contextRail ? <Box data-part="context-rail">{contextRail}</Box> : null}
+          <Box data-part="context-card" className="ds-edit-header__context-card">
+            {contextRail ? <Box data-part="context-rail" className="ds-edit-header__context-rail">{contextRail}</Box> : null}
             {children ? (
-              <Box data-part="context-card-children">
+              <Box data-part="context-card-children" className="ds-edit-header__context-card-children">
                 {children}
               </Box>
             ) : null}
@@ -402,7 +404,7 @@ export function EditHeader({
   return (
     <Box
       data-part="root"
-      className="ds-structure ds-edit-header"
+      className="ds-structure ds-edit-header ds-edit-header__root"
       data-loading={loading ? 'true' : 'false'}
       role={loading ? 'status' : undefined}
       aria-busy={loading ? true : undefined}
