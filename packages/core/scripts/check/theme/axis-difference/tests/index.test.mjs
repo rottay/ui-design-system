@@ -94,6 +94,7 @@ import {
   REAL_RENDER_AXES,
   REAL_RENDER_KEY,
   REAL_RENDER_MOUNTS,
+  classAwareTag,
   literalWitness,
   markupTokens,
   realRenderMountList,
@@ -7800,4 +7801,82 @@ describe('axis-difference BROWSER drill — the composed-node replacements: one 
         cellOf(off, axis).movedFamilies.find((entry) => entry.family === 'list-toolbar')?.property, `${axis}: the chromatic effect became an axis credit`);
     }
   }, 600_000);
+});
+
+describe('axis-difference — classAwareTag admits a door only at a real attribute boundary', () => {
+  const refuses = (tag) => assert.throws(() => classAwareTag(tag), /classAwareTag: not a one-line opening tag with attributes/u);
+  const carries = (gate, text) => text.search(gate) >= 0;
+
+  it('a self-closing tag throws: its `/` is not an attribute', () => {
+    refuses('<Box data-part="x" />');
+    refuses('<Box data-part="x"/>');
+  });
+
+  it('a space inside an expression value throws', () => {
+    refuses('<Box data-x={a ? b : c}>');
+    refuses('<Box data-part="x" data-x={ a }>');
+  });
+
+  it('a space inside a string value throws', () => {
+    refuses('<Box aria-label="a b">');
+    refuses('<Box data-part="x" aria-label="a b">');
+  });
+
+  it('the self-closing exploit is refused: no gate is built that would admit a door after the `/`', () => {
+    const exploit = '<Box data-part="x" / className="z">';
+    refuses('<Box data-part="x" />');
+    refuses(exploit);
+    assert.equal(carries(classAwareTag('<Box data-part="x">'), exploit), false);
+  });
+
+  it('the expression exploit is refused: no gate is built that would admit a door inside the value', () => {
+    const exploit = '<Box data-x={a className="z" ? b : c}>';
+    refuses('<Box data-x={a ? b : c}>');
+    refuses(exploit);
+    assert.equal(carries(classAwareTag('<Box data-x={a?b:c}>'), exploit), false);
+  });
+
+  it('the canonical `<Box data-part="main">` is still a gate, and resolves its tag in the sidebar-surface source', () => {
+    const tag = '<Box data-part="main">';
+    const gate = classAwareTag(tag);
+    assert.equal(gate.flags, 'gu');
+    assert.equal(carries(gate, tag), true);
+    assert.equal(carries(gate, '<Box className="ds-sidebar-surface__main" data-part="main">'), true);
+    assert.equal(carries(gate, '<Box data-part="main" className="ds-sidebar-surface__main">'), true);
+    const source = readFileSync(join(ROOT, 'src/components/structures/shell/navigation/sidebar-surface/index.tsx'), 'utf8');
+    assert.ok(source.indexOf(tag) >= 0, 'the literal anchor left the source -- this pins nothing');
+    assert.equal(source.search(gate), source.indexOf(tag));
+    assert.doesNotThrow(() => classAwareTag('<Box data-part="submit-bar" data-action-bar={actionBarPosture}>'));
+  });
+
+  it('the guided-draft-form gate keeps every recorded verdict on the sixteen adversarial texts', () => {
+    const gate = REAL_RENDER_MOUNTS['guided-draft-form'].state.anchors.find((anchor) => typeof anchor !== 'string');
+    assert.ok(gate instanceof RegExp);
+    const open = '<SurfacePostureAction>';
+    const tail = 'data-action-bar={actionBarPosture}>';
+    const red = [
+      `${open}<Box data-part="submit-bar" className='ds-x' ${tail}`,
+      `${open}<Box data-part="submit-bar" className={\`ds-x\`} ${tail}`,
+      `${open}<Box data-part="submit-bar" className="a" className="b" ${tail}`,
+      `${open}<Box {...rest} data-part="submit-bar" ${tail}`,
+      `${open}<Box data-part="submit-bar" className="x"${tail}`,
+      `${open}<Box data-part="submit-bar"  className="x" ${tail}`,
+      `${open}<Box.Root data-part="submit-bar" ${tail}`,
+      `${open}<Box data-part="submit-bar" class="x" ${tail}`,
+      `${open}<Box data-part="submit-bar" data-className="x" ${tail}`,
+      `${open}<Box data-part="submit-bar" className="x" data-y="z" ${tail}`,
+      `${open}<Box data-part="submit-bar" className="a\nb" ${tail}`,
+    ];
+    const source = readFileSync(join(ROOT, 'src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx'), 'utf8');
+    const carrying = [
+      `${open}<Box data-part="submit-bar" className="ds-a ds-b" ${tail}`,
+      `${open}<Box data-part="submit-bar" className="" ${tail}`,
+      `${open}<Box data-part="submit-bar" className="ds-sidebar-surface__main" ${tail}`,
+      `{/* <Box data-part="submit-bar" ${tail} */}`,
+      source.split('\n').find((line) => line.includes('<Box data-part="submit-bar" ')),
+    ];
+    assert.equal(red.length + carrying.length, 16);
+    for (const text of red) assert.equal(carries(gate, text), false, text);
+    for (const text of carrying) assert.equal(carries(gate, text), true, text);
+  });
 });

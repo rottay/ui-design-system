@@ -2338,9 +2338,11 @@ export function composedReplacementFailures(root = CORE_ROOT, roster = REAL_REND
  * written -- element, attributes, their order, its end -- admitting at most one
  * string-literal `className` between its attributes. Any other drift retires
  * the gate. Global, so the gate splits and strips like a literal one.
+ * Each attribute is a whole `name`, `name="…"` or `name={…}` with no space in
+ * it, so every space is a boundary; a self-closing tag or a spaced value throws.
  */
 export function classAwareTag(tag) {
-  const match = /^<([A-Z][\w.]*)((?: [^\s>]+)+)>$/u.exec(tag);
+  const match = /^<([A-Z][\w.]*)((?: [A-Za-z][\w:-]*(?:="[^"\s]*"|=\{[^\s{}>]*\})?)+)>$/u.exec(tag);
   if (match === null) throw new Error(`classAwareTag: not a one-line opening tag with attributes: ${tag}`);
   const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
   const attributes = match[2].trim().split(' ').map(escape);
