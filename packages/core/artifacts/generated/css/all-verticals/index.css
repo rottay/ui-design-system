@@ -90510,7 +90510,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         paints `structures/feedback/capability-anatomy`, a separate family;
         its `--ds-capability-*` channels stay unproduced here on purpose —
         the family cut that claims this block owns its producers. ---- */
-.ds-surface.ds-capability-anatomy[data-part='capability-anatomy'] {
+.ds-surface.ds-capability-anatomy[data-part='capability-anatomy'],
+.ds-surface.ds-capability-anatomy.ds-capability-anatomy__capability-anatomy {
   display: grid;
   gap: var(--ds-spacing-2, 8px);
 }
@@ -90521,13 +90522,15 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   text-transform: uppercase;
 }
 
-.ds-surface.ds-capability-anatomy [data-part='capability-list'] {
+.ds-surface.ds-capability-anatomy [data-part='capability-list'],
+.ds-surface.ds-capability-anatomy .ds-capability-anatomy__capability-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--ds-capability-cell-min-size, 132px)), 1fr));
   gap: var(--ds-spacing-2, 8px);
 }
 
-.ds-surface.ds-capability-anatomy [data-part='capability'] {
+.ds-surface.ds-capability-anatomy [data-part='capability'],
+.ds-surface.ds-capability-anatomy .ds-capability-anatomy__capability {
   min-inline-size: 0;
   padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border, currentColor);
@@ -90535,7 +90538,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   opacity: var(--ds-capability-opacity, 0.72);
 }
 
-.ds-surface.ds-capability-anatomy [data-part='capability'][data-disabled='true'] {
+.ds-surface.ds-capability-anatomy [data-part='capability'][data-disabled='true'],
+.ds-surface.ds-capability-anatomy .ds-capability-anatomy__capability[data-disabled='true'] {
   opacity: var(--ds-capability-disabled-opacity, 0.5);
 }
 
@@ -96773,7 +96777,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   40% { opacity: 1; }
 }
 
-.ds-loading-overlay[data-part='root'] {
+.ds-loading-overlay[data-part='root'],
+.ds-loading-overlay.ds-loading-overlay__root {
   /* The column rhythm the retired inline `gap` props owned. The dot gap is
      optical spacing between a word and its trailing ellipsis, not a rhythm
      step, so it stays a literal with this note (the 17px-title precedent). */
@@ -96797,7 +96802,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    see the header for why applying it to the root dimmed the overlay's own
    message and dots. 0.92 is a declared value, not a channel: no layer
    produces a scrim opacity, so it cannot be re-pointed without moving paint. */
-.ds-loading-overlay[data-part='root']::before {
+.ds-loading-overlay[data-part='root']::before,
+.ds-loading-overlay.ds-loading-overlay__root::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -96810,50 +96816,61 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Content sits above the veil by paint order: both are in the root's stacking
    context and a positioned in-flow box paints after a positioned pseudo that
    precedes it, so no z-index is needed here. */
-.ds-loading-overlay[data-part='root'] [data-part='content'] {
+.ds-loading-overlay[data-part='root'] [data-part='content'],
+.ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__content {
   position: relative;
   gap: var(--_ds-loading-overlay-stack-gap);
 }
 
-.ds-loading-overlay[data-part='root'] [data-part='status'] {
+.ds-loading-overlay[data-part='root'] [data-part='status'],
+.ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__status {
   gap: var(--_ds-loading-overlay-dot-gap);
 }
 
 /* Animation assignment drained from the component's inline styles — same
    keyframes, durations, easing and stagger, verbatim (see the header for
    the private channels and the test re-pin contract). */
-.ds-loading-overlay[data-part='root'] [data-part='logo'] {
+.ds-loading-overlay[data-part='root'] [data-part='logo'],
+.ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__logo {
   animation: ds-loading-overlay-pulse
     var(--_ds-loading-overlay-pulse-duration, calc(var(--ds-motion-glacial) * 3.6 * var(--ds-motion-duration-scale, 1)))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
-.ds-loading-overlay[data-part='root'] .ds-loading-overlay__dot {
+.ds-loading-overlay[data-part='root'] .ds-loading-overlay__dot,
+.ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__dot {
   animation: ds-loading-overlay-dots
     var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8 * var(--ds-motion-duration-scale, 1)))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
-.ds-loading-overlay[data-part='root'] .ds-loading-overlay__dot[data-dot-index='1'] {
+.ds-loading-overlay[data-part='root'] .ds-loading-overlay__dot[data-dot-index='1'],
+.ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__dot[data-dot-index='1'] {
   animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8 * var(--ds-motion-duration-scale, 1))) / 7);
 }
-.ds-loading-overlay[data-part='root'] .ds-loading-overlay__dot[data-dot-index='2'] {
+.ds-loading-overlay[data-part='root'] .ds-loading-overlay__dot[data-dot-index='2'],
+.ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__dot[data-dot-index='2'] {
   animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8 * var(--ds-motion-duration-scale, 1))) / 7 * 2);
 }
 
 .ds-loading-overlay[data-part='root'] .ds-loading-overlay__message,
-.ds-loading-overlay[data-part='root'] .ds-loading-overlay__dot {
+.ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__message,
+.ds-loading-overlay[data-part='root'] .ds-loading-overlay__dot,
+.ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__dot {
   color: var(--ds-color-text-muted);
 }
 
 /* Message typography drained from the component's inline styles (mono +
    tracking is the family vocabulary). */
-.ds-loading-overlay[data-part='root'] .ds-loading-overlay__message {
+.ds-loading-overlay[data-part='root'] .ds-loading-overlay__message,
+.ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__message {
   font-family: var(--ds-font-mono, monospace);
   letter-spacing: 0.05em;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-loading-overlay[data-part='root'] [data-part='logo'],
-  .ds-loading-overlay[data-part='root'] .ds-loading-overlay__dot {
+  .ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__logo,
+  .ds-loading-overlay[data-part='root'] .ds-loading-overlay__dot,
+  .ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__dot {
     animation: none;
   }
 }
@@ -96863,7 +96880,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    is worse than dropping the axis. The column becomes a row and the same
    rhythm channel spaces it. */
 @container ds-loading-overlay (max-height: 200px) {
-  .ds-loading-overlay[data-part='root'] [data-part='content'] {
+  .ds-loading-overlay[data-part='root'] [data-part='content'],
+  .ds-loading-overlay.ds-loading-overlay__root .ds-loading-overlay__content {
     flex-direction: row;
   }
 }
@@ -96874,7 +96892,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    vocabulary halted. The blur is dropped explicitly: forced-colors does not
    remove `backdrop-filter` on its own, which the previous note assumed. */
 @media (forced-colors: active) {
-  .ds-loading-overlay[data-part='root']::before {
+  .ds-loading-overlay[data-part='root']::before,
+  .ds-loading-overlay.ds-loading-overlay__root::before {
     background: Canvas;
     backdrop-filter: none;
     opacity: 1;

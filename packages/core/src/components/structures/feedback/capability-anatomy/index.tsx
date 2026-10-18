@@ -52,7 +52,7 @@ export function SurfaceCapabilityAnatomy({
 
   return (
     <Box
-      className="ds-surface ds-capability-anatomy"
+      className="ds-surface ds-capability-anatomy ds-capability-anatomy__capability-anatomy"
       data-part="capability-anatomy"
       data-capability-count={capabilities.length}
       aria-label={ariaLabel ?? tSurface('states.capability_aria')}
@@ -67,12 +67,14 @@ export function SurfaceCapabilityAnatomy({
       <Box
         role="list"
         data-part="capability-list"
+        className="ds-capability-anatomy__capability-list"
       >
         {capabilities.map((capability) => (
           <Box
             role="listitem"
             key={`${capability.kind}-${capability.id}`}
             data-part="capability"
+            className="ds-capability-anatomy__capability"
             data-capability-kind={capability.kind}
             data-capability-id={capability.id}
             data-disabled={capability.disabled ? 'true' : undefined}

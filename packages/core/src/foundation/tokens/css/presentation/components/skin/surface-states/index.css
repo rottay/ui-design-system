@@ -147,7 +147,8 @@
         paints `structures/feedback/capability-anatomy`, a separate family;
         its `--ds-capability-*` channels stay unproduced here on purpose —
         the family cut that claims this block owns its producers. ---- */
-.ds-surface.ds-capability-anatomy[data-part='capability-anatomy'] {
+.ds-surface.ds-capability-anatomy[data-part='capability-anatomy'],
+.ds-surface.ds-capability-anatomy.ds-capability-anatomy__capability-anatomy {
   display: grid;
   gap: var(--ds-spacing-2, 8px);
 }
@@ -158,13 +159,15 @@
   text-transform: uppercase;
 }
 
-.ds-surface.ds-capability-anatomy [data-part='capability-list'] {
+.ds-surface.ds-capability-anatomy [data-part='capability-list'],
+.ds-surface.ds-capability-anatomy .ds-capability-anatomy__capability-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--ds-capability-cell-min-size, 132px)), 1fr));
   gap: var(--ds-spacing-2, 8px);
 }
 
-.ds-surface.ds-capability-anatomy [data-part='capability'] {
+.ds-surface.ds-capability-anatomy [data-part='capability'],
+.ds-surface.ds-capability-anatomy .ds-capability-anatomy__capability {
   min-inline-size: 0;
   padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border, currentColor);
@@ -172,7 +175,8 @@
   opacity: var(--ds-capability-opacity, 0.72);
 }
 
-.ds-surface.ds-capability-anatomy [data-part='capability'][data-disabled='true'] {
+.ds-surface.ds-capability-anatomy [data-part='capability'][data-disabled='true'],
+.ds-surface.ds-capability-anatomy .ds-capability-anatomy__capability[data-disabled='true'] {
   opacity: var(--ds-capability-disabled-opacity, 0.5);
 }
 

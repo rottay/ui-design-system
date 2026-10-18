@@ -63,19 +63,19 @@ export function LoadingOverlay({ visible, message: messageProp, logo }: LoadingO
 
   return (
     <Box
-      className="ds-loading-overlay"
+      className="ds-loading-overlay ds-loading-overlay__root"
       data-part="root"
       role="status"
       aria-live="polite"
       aria-busy="true"
     >
-      <Flex direction="column" align="center" data-part="content">
+      <Flex direction="column" align="center" data-part="content" className="ds-loading-overlay__content">
         {logo && (
-          <Box data-part="logo">
+          <Box data-part="logo" className="ds-loading-overlay__logo">
             {logo}
           </Box>
         )}
-        <Flex align="center" data-part="status">
+        <Flex align="center" data-part="status" className="ds-loading-overlay__status">
           <Text
             className="ds-loading-overlay__message"
             size="sm"
