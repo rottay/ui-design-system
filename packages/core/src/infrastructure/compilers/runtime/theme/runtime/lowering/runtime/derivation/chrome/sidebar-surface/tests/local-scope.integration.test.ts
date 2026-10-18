@@ -3,6 +3,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
+import ts from "typescript";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { firstPartyFixture } from "@tests/support/theme-lowering";
@@ -34,6 +35,34 @@ const DENSITY_AXIS = scopeVaryingNames("base/density/index.css", /:not\(:root\)/
 const ARABIC_AXIS = scopeVaryingNames("responsive/language-arabic/index.css", /:lang\(ar\)/);
 
 const ENGINE = readFileSync(resolve(process.cwd(), "src/components/structures/shell/navigation/sidebar-surface/index.tsx"), "utf8");
+
+/** The source with each `className="… <block>__<part>"` on an element stamping `data-part="<part>"` read back
+ *  as the className written before that class door; any other drift stays as written. */
+function throughClassDoors(source: string, block: string): string {
+  const file = ts.createSourceFile("engine.tsx", source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const edits: { start: number; end: number; text: string }[] = [];
+  const visit = (node: ts.Node) => {
+    if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+      const literal = (name: string) => {
+        const named = node.attributes.properties.filter(
+          (attribute): attribute is ts.JsxAttribute => ts.isJsxAttribute(attribute) && attribute.name.getText(file) === name
+        );
+        const value = named.length === 1 ? named[0].initializer : undefined;
+        return value !== undefined && ts.isStringLiteral(value) ? value : undefined;
+      };
+      const className = literal("className");
+      const part = literal("data-part")?.text;
+      const written = className?.getText(file);
+      const door = ` ${block}__${part}${written?.slice(-1)}`;
+      if (className && part && written && written.endsWith(door) && written.length > door.length + 1) {
+        edits.push({ start: className.getStart(file), end: className.getEnd(), text: written.slice(0, -door.length) + written[0] });
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(file);
+  return edits.reduceRight((text, edit) => text.slice(0, edit.start) + edit.text + text.slice(edit.end), source);
+}
 
 const PRODUCES = new Set<string>(sidebarSurfaceChromeDeriver.produces);
 
@@ -231,7 +260,7 @@ describe("chrome/sidebar-surface channels under a local scope", () => {
   }, 180_000);
 
   it("probes the anatomy the engine stamps, and its inline aside track", () => {
-    expect(ENGINE).toContain('className="ds-structure ds-sidebar-surface"');
+    expect(throughClassDoors(ENGINE, "ds-sidebar-surface")).toContain('className="ds-structure ds-sidebar-surface"');
     for (const attribute of ["data-stacked", "data-aside", "data-bordered"]) expect(ENGINE).toContain(`${attribute}={`);
     for (const part of ["panel-body", "main"]) expect(ENGINE).toContain(`data-part="${part}"`);
     expect(ENGINE).toContain(`{ '${ASIDE}': toCssLength(config.visual.asideWidth) }`);
