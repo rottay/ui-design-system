@@ -33,17 +33,60 @@ const SKIN = readFileSync(
   'utf8'
 ).replace(/\/\*[\s\S]*?\*\//g, '');
 
+/** Commas inside `:is()` / `:where()` / `:not()` separate arguments, not selectors. */
+function selectorList(prelude: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let buf = '';
+  for (const ch of prelude) {
+    if (ch === '(') depth += 1;
+    else if (ch === ')') depth -= 1;
+    if (ch === ',' && depth === 0) {
+      parts.push(buf.replace(/\s+/g, ' ').trim());
+      buf = '';
+    } else buf += ch;
+  }
+  parts.push(buf.replace(/\s+/g, ' ').trim());
+  return parts;
+}
+
+/**
+ * A selector as its part arm reads it: each own-block class door of a named
+ * part -- the fold `:is([data-part='p'], .block__p)` or the pair arm's
+ * `.block__p` -- reads back as `[data-part='p']`. Any other drift (a widened
+ * `:is()`, a foreign block's class, a dropped compound) is left as written.
+ */
+function asPartSelector(selector: string, block: string, parts: readonly string[]): string {
+  let read = selector;
+  for (const part of parts) {
+    const token = `[data-part='${part}']`;
+    read = read
+      .replace(new RegExp(`:is\\(\\[data-part=(['"])${part}\\1\\],\\s*\\.${block}__${part}\\)`, 'g'), token)
+      .replace(new RegExp(`\\.${block}__${part}(?![\\w-])`, 'g'), token);
+  }
+  return read;
+}
+
+const SPAN_SELECTOR = ".ds-structure.ds-record[data-part='field'][data-span";
+
 /**
  * Loads the field's own grid-column rules, verbatim from the skin, so the
  * resolved geometry can be READ BACK instead of inferred from the stamp the
  * TSX wrote. Every rule the skin declares for the span is loaded, so a finite
- * list of value-arms is measured exactly as a browser would apply it.
+ * list of value-arms is measured exactly as a browser would apply it. The
+ * field's class door reads as its part token; nothing else does.
  */
 function loadSpanRules(): HTMLStyleElement {
-  const rules = SKIN.match(
-    /\.ds-structure\.ds-record\[data-part='field'\]\[data-span[^{}]*\{[^{}]*grid-column:[^{}]*\}/g,
-  );
-  if (!rules?.length) throw new Error('missing the record field span rules in the skin');
+  const rules = [...SKIN.matchAll(/([^{};]+)\{([^{}]*)\}/g)]
+    .filter(
+      ([, prelude, body]) =>
+        body!.includes('grid-column:') &&
+        selectorList(prelude!).some((selector) =>
+          asPartSelector(selector, 'ds-record', ['field']).includes(SPAN_SELECTOR),
+        ),
+    )
+    .map(([rule]) => rule.trim());
+  if (!rules.length) throw new Error('missing the record field span rules in the skin');
   const style = document.createElement('style');
   style.textContent = rules.join('\n');
   document.head.appendChild(style);

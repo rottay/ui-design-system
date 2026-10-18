@@ -24,6 +24,47 @@ const ACTION_DOCK_SKIN = readFileSync(
 );
 const NORMALIZED_ACTION_DOCK_SKIN = ACTION_DOCK_SKIN.replace(/\s+/g, ' ');
 
+/** Commas inside `:is()` / `:where()` / `:not()` separate arguments, not selectors. */
+function selectorList(prelude: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let buf = '';
+  for (const ch of prelude) {
+    if (ch === '(') depth += 1;
+    else if (ch === ')') depth -= 1;
+    if (ch === ',' && depth === 0) {
+      parts.push(buf.replace(/\s+/g, ' ').trim());
+      buf = '';
+    } else buf += ch;
+  }
+  parts.push(buf.replace(/\s+/g, ' ').trim());
+  return parts;
+}
+
+/**
+ * A selector as its part arm reads it: each own-block class door of a named
+ * part -- the fold `:is([data-part='p'], .block__p)` or the pair arm's
+ * `.block__p` -- reads back as `[data-part='p']`. Any other drift (a widened
+ * `:is()`, a foreign block's class, a dropped compound) is left as written.
+ */
+function asPartSelector(selector: string, block: string, parts: readonly string[]): string {
+  let read = selector.replace(/\[data-part="([^"]*)"\]/g, "[data-part='$1']");
+  for (const part of parts) {
+    const token = `[data-part='${part}']`;
+    read = read
+      .replace(new RegExp(`:is\\(\\[data-part='${part}'\\],\\s*\\.${block}__${part}\\)`, 'g'), token)
+      .replace(new RegExp(`\\.${block}__${part}(?![\\w-])`, 'g'), token);
+  }
+  return read;
+}
+
+/** The body of the first rule whose every selector is `selector`, its parts read through the class door. */
+function ruleBody(css: string, selector: string, block: string, parts: readonly string[]): string | undefined {
+  return [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{};]+)\{([^{}]*)\}/g)].find(([, prelude]) =>
+    selectorList(prelude!).every((member) => asPartSelector(member, block, parts) === selector)
+  )?.[2];
+}
+
 const DESKTOP_CONTEXT: ResponsiveContextValue = {
   hasResolvedViewport: true,
   deviceClass: 'desktop',
@@ -346,9 +387,12 @@ describe('ActionDock skin ownership (structured grammar)', () => {
   });
 
   it('reads as a frosted chrome sheet with placement-aware elevation (W10)', () => {
-    const rootRule = ACTION_DOCK_SKIN.match(
-      /\.ds-action-dock\[data-part=["']root["']\]\[data-placement\]\[data-mode\]\s*\{([^}]*)\}/
-    )?.[1];
+    const rootRule = ruleBody(
+      ACTION_DOCK_SKIN,
+      ".ds-action-dock[data-part='root'][data-placement][data-mode]",
+      'ds-action-dock',
+      ['root']
+    );
     const bottomRule = ACTION_DOCK_SKIN.match(
       /\[data-placement=["']bottom["']\]\s*\{([^}]*)\}/
     )?.[1];

@@ -166,12 +166,33 @@ function selectorList(prelude: string): string[] {
   return parts;
 }
 
-/** The value of `property` in the first top-level rule whose selector list holds exactly this selector. */
+/**
+ * A selector as its part arm reads it: each own-block class door of a named
+ * part -- the fold `:is([data-part='p'], .block__p)` or the pair arm's
+ * `.block__p` -- reads back as `[data-part='p']`. Any other drift (a widened
+ * `:is()`, a foreign block's class, a dropped compound) is left as written.
+ */
+function asPartSelector(selector: string, block: string, parts: readonly string[]): string {
+  let read = selector;
+  for (const part of parts) {
+    const token = `[data-part='${part}']`;
+    read = read
+      .replace(new RegExp(`:is\\(\\[data-part=(['"])${part}\\1\\],\\s*\\.${block}__${part}\\)`, 'g'), token)
+      .replace(new RegExp(`\\.${block}__${part}(?![\\w-])`, 'g'), token);
+  }
+  return read;
+}
+
+/**
+ * The value of `property` in the first top-level rule whose selector list holds exactly this selector, a part
+ * read through the family's own class door (`ds-<family>__<part>`).
+ */
 function declared(family: string, selector: string, property: string): string | undefined {
   const css = stripComments(readFileSync(resolve(process.cwd(), SKIN, family, 'index.css'), 'utf8'));
   const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const parts = [...selector.matchAll(/\[data-part='([^']+)'\]/g)].map((token) => token[1]!);
   const body = [...css.matchAll(/(?<=^|\})\s*([^{}@]+?)\s*\{([^}]*)\}/g)].find((rule) =>
-    selectorList(rule[1]!).includes(selector),
+    selectorList(rule[1]!).some((member) => asPartSelector(member, `ds-${family}`, parts) === selector),
   )?.[2];
   return new RegExp(`(?:^|;)\\s*${escape(property)}\\s*:\\s*([^;]+);`).exec(body ?? '')?.[1]?.trim();
 }
