@@ -95,6 +95,7 @@ import {
   REAL_RENDER_KEY,
   REAL_RENDER_MOUNTS,
   classAwareTag,
+  classAwareClassName,
   literalWitness,
   markupTokens,
   realRenderMountList,
@@ -153,6 +154,7 @@ import {
 } from '../index.mjs';
 import {
   AXIS_IDS, AXES, FLOOR_PATH, axisControls, axisPopulations, axisUnobservable, cssRules, familyAxisDeclarations, focusSignatureProof, groupControls, skinFamilies, stripCssComments,
+  normalizeCssText,
   KERNEL_STATE_TOKENS as POPULATION_KERNEL_STATE_TOKENS, STATE_STAMP_ATTRIBUTES as POPULATION_STAMP_ATTRIBUTES,
 } from '../../population/index.mjs';
 import { launchBrowser, resolvePlaywright } from '../../../tokens/cascade/probe/runtime/browser/index.mjs';
@@ -5187,6 +5189,22 @@ describe('axis-difference BROWSER drill — the pseudo-element read law reads pa
  * exclusively the focus signature stays read, for `box-shadow` alone, as a
  * STATES read on the box that paints it -- and that is all it does.
  */
+// A published pseudo read as the part it reads, `family/part::pseudo [property, source]`: a root, then `[data-part]`
+// or the family's own `block__part`. Any other host keeps its spelling behind `?` and never collapses into a part.
+let canonicalElements = null;
+const canonicalPartReads = (entries, elements = (canonicalElements ??= familyElements(ROOT))) => [...new Set(entries.map((entry) => {
+  const match = /^(.+?)(::(?:before|after))((?: \[[^\]]+\])?)$/u.exec(entry);
+  const pieces = match === null ? [] : compoundPieces(match[1]);
+  const family = pieces.length === 2 ? [...elements].find(([, element]) => element?.selector === pieces[0])?.[0] : undefined;
+  if (family === undefined) return `?${entry}`;
+  const node = probe.partCompound(pieces[1]);
+  const bem = familyElementPart(pieces[1], family, elements.get(family));
+  const part = node.rejected === undefined && node.tag === null && node.classes.length === 0 && Object.keys(node.attributes).join() === 'data-part'
+    ? node.attributes['data-part']
+    : bem !== null && bem.classes.length === 1 && Object.keys(bem.attributes).length === 0 ? /__([\w-]+)$/u.exec(bem.classes[0])?.[1] : undefined;
+  return part === undefined ? `?${entry}` : `${family}/${part}${match[2]}${match[3]}`;
+}))].sort();
+
 describe('axis-difference — the focus-signature read: a shadow that left depth as the signature is still read, as a states read', () => {
   const ROOT = ".ds-drill.ds-drill--modern[data-part='root']";
   const HOST = `${ROOT} [data-part='row']`;
@@ -5292,7 +5310,7 @@ describe('axis-difference — the focus-signature read: a shadow that left depth
       const signed = [...parts].filter(([, record]) => record.pseudoReads.reads.some((read) => read.source === probe.FOCUS_SIGNATURE_SOURCE))
         .map(([family]) => family);
       assert.deepEqual(signed, ['search']);
-      assert.deepEqual(report.pseudoReads.search.states, ['.ds-surface.ds-search [data-part="result-custom"]::after [box-shadow, focus-signature]']);
+      assert.deepEqual(canonicalPartReads(report.pseudoReads.search.states), ['search/result-custom::after [box-shadow, focus-signature]']);
       assert.equal(report.pseudoReads.search.depth, undefined);
       assert.equal(report.refused['signature-node'], undefined);
       for (const [family, record] of parts) {
@@ -7844,8 +7862,9 @@ describe('axis-difference — classAwareTag admits a door only at a real attribu
     assert.equal(carries(gate, '<Box className="ds-sidebar-surface__main" data-part="main">'), true);
     assert.equal(carries(gate, '<Box data-part="main" className="ds-sidebar-surface__main">'), true);
     const source = readFileSync(join(ROOT, 'src/components/structures/shell/navigation/sidebar-surface/index.tsx'), 'utf8');
-    assert.ok(source.indexOf(tag) >= 0, 'the literal anchor left the source -- this pins nothing');
-    assert.equal(source.search(gate), source.indexOf(tag));
+    // The gate resolves on the one node carrying the part, with or without a class door on it.
+    assert.equal([...source.matchAll(gate)].length, 1, 'the gate resolves exactly one node in the sidebar-surface source');
+    assert.equal(source.search(gate), source.lastIndexOf('<Box', source.indexOf('data-part="main"')));
     assert.doesNotThrow(() => classAwareTag('<Box data-part="submit-bar" data-action-bar={actionBarPosture}>'));
   });
 
@@ -7879,4 +7898,226 @@ describe('axis-difference — classAwareTag admits a door only at a real attribu
     for (const text of red) assert.equal(carries(gate, text), false, text);
     for (const text of carrying) assert.equal(carries(gate, text), true, text);
   });
+});
+
+// The bare, door-stamped and paired forms below are derived from the live tree, so each reads the same before
+// and after a class door lands.
+const SIDEBAR_SOURCE = 'src/components/structures/shell/navigation/sidebar-surface/index.tsx';
+const TABLE_TOOLBAR_SOURCE = 'src/components/structures/workspace/table-toolbar/runtime/rendering/index.tsx';
+const MAIN_TAG = '<Box data-part="main">';
+const MAIN_DOOR = '<Box data-part="main" className="ds-sidebar-surface__main">';
+const TOOLBAR_CLASS = 'className="ds-structure ds-table-toolbar"';
+const TOOLBAR_DOOR = 'className="ds-structure ds-table-toolbar ds-table-toolbar__root"';
+const RESULT_PART = '[data-part="result-custom"]';
+const RESULT_CLASS = '.ds-search__result-custom';
+const RESULT_PIN = Object.freeze(['search/result-custom::after [box-shadow, focus-signature]']);
+const RESULT_LITERAL = '.ds-surface.ds-search [data-part="result-custom"]::after [box-shadow, focus-signature]';
+
+// The live search skin with every result-custom selector paired with its class form, or unpaired.
+const liveSearchCss = () => skinFamilies(ROOT).get('search').map((file) => readFileSync(file, 'utf8')).join('\n');
+const pairedSearchCss = (css) => (css.includes(RESULT_CLASS) ? css : css.replace(
+  /^(\s*)\.ds-surface\.ds-search \[data-part="result-custom"\]([^\s,{]*)( \{)$/gmu,
+  `$1.ds-surface.ds-search ${RESULT_PART}$2,\n$1.ds-surface.ds-search ${RESULT_CLASS}$2$3`));
+const unpairedSearchCss = (css) => css.replace(/,\n\s*\.ds-surface\.ds-search \.ds-search__result-custom[^\s,{]*(?= \{)/gu, '');
+
+// The search record `familyAxisParts` reads off a stylesheet; the population cites a rule by its whole prelude,
+// so the live citation is re-keyed to the stylesheet's own pairing, either way.
+const searchRecord = (css, { nativePseudos, planted = [] }) => {
+  const populations = axisPopulations(ROOT);
+  const declared = AXIS_IDS.filter((axis) => populations.get(axis).includes('search'));
+  let proof = null;
+  const proves = (value) => (proof ??= focusSignatureProof()).judgeValue(value) === null;
+  const paired = css.includes(RESULT_CLASS);
+  const signature = probe.focusSignatureReads(familyAxisDeclarations().get('search'), declared, proves).map((source) => {
+    if (!source.selector.includes(RESULT_PART)) return source;
+    const bare = source.selector.replace(/, \.ds-surface\.ds-search \.ds-search__result-custom[^\s,]*/gu, '');
+    return { ...source, selector: paired ? normalizeCssText(`${bare},\n${bare.replace(RESULT_PART, RESULT_CLASS)}`) : bare };
+  });
+  return familyParts(css, familyElement(css), declared, { family: 'search', nativePseudos, signature: [...signature, ...planted] });
+};
+const searchStates = (record) => partMountReport(new Map([['search', record]])).pseudoReads.search?.states ?? [];
+const pinsResult = (entries) => {
+  try {
+    assert.deepEqual(canonicalPartReads(entries), RESULT_PIN);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+describe('axis-difference — the law\'s source-text reads are class-aware, and refuse what the literal refused', () => {
+  const swap = (suffix, from, to) => (file) => {
+    const text = readFileSync(file, 'utf8');
+    return file.endsWith(suffix) ? text.replace(from, to) : text;
+  };
+  const sidebarSource = () => readFileSync(join(ROOT, SIDEBAR_SOURCE), 'utf8');
+  const toolbarSource = () => readFileSync(join(ROOT, TABLE_TOOLBAR_SOURCE), 'utf8');
+
+  it('the sidebar-surface roster anchor is a class-aware gate: the bare and the door-stamped main node both pass the row, the literal only the bare one', () => {
+    const entry = REAL_RENDER_MOUNTS['sidebar-surface'];
+    assert.equal(entry.state.anchors.length, 1);
+    const [gate] = entry.state.anchors;
+    assert.ok(gate instanceof RegExp, 'the anchor is still the literal');
+    assert.equal(gate.source, classAwareTag(MAIN_TAG).source);
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'sidebar-surface': entry }), []);
+    const live = sidebarSource().match(gate)?.[0];
+    assert.ok(live === MAIN_TAG || live === MAIN_DOOR, `the live main node is neither form: ${live}`);
+    const bare = { readSource: swap(SIDEBAR_SOURCE, live, MAIN_TAG) };
+    const stamped = { readSource: swap(SIDEBAR_SOURCE, live, MAIN_DOOR) };
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'sidebar-surface': entry }, bare), []);
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'sidebar-surface': entry }, stamped), []);
+    // A literal anchor passes the bare node and fails the stamped one.
+    const literal = { ...entry, state: { ...entry.state, anchors: [MAIN_TAG] } };
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'sidebar-surface': literal }, bare), []);
+    assert.ok(realRenderRosterFailures(ROOT, { 'sidebar-surface': literal }, stamped)
+      .some((line) => line === `sidebar-surface: ${SIDEBAR_SOURCE} no longer carries the gate \`${MAIN_TAG}\``));
+  });
+
+  it('NEGATIVE: the main gate is not satisfied by a sibling part, and a source without the main node fails the row (non-conforming anchors: T1-T5)', () => {
+    const entry = REAL_RENDER_MOUNTS['sidebar-surface'];
+    const [gate] = entry.state.anchors;
+    for (const sibling of ['<Box data-part="panel-body">', '<Box data-part="panel-body" className="ds-sidebar-surface__panel-body">', '<Box data-part="main-x">']) {
+      assert.equal(sibling.search(gate) >= 0, false, sibling);
+    }
+    const source = sidebarSource();
+    assert.ok(source.includes('data-part="panel-body"'), 'the sibling left the source -- this pins nothing');
+    assert.notEqual(source.search(gate), source.lastIndexOf('<Box', source.indexOf('data-part="panel-body"')));
+    const live = source.match(gate)[0];
+    for (const gone of ['<Box>', '<Box data-part="panel">', '<Box data-part="main" className={mainClass}>']) {
+      const failures = realRenderRosterFailures(ROOT, { 'sidebar-surface': entry }, { readSource: swap(SIDEBAR_SOURCE, live, gone) });
+      assert.ok(failures.some((line) => line.startsWith(`sidebar-surface: ${SIDEBAR_SOURCE} no longer carries the gate`)), `${gone}: ${failures.join(' | ')}`);
+    }
+  });
+
+  it('the table-toolbar as-rendered row resolves its structure class class-aware: the same stamp text on the live source, the door-stamped root too', () => {
+    const rows = AS_RENDERED_ROOT_STAMPS['table-toolbar'];
+    assert.equal(rows.length, 1);
+    const [row] = rows;
+    assert.equal(row.stamp, 'data-structure="table-toolbar"', 'the stamp stays the literal it was');
+    assert.ok(row.resolves instanceof RegExp, 'the resolves is still the literal');
+    assert.equal(row.resolves.source, classAwareClassName(TOOLBAR_CLASS).source);
+    assert.deepEqual(asRenderedRosterFailures(ROOT, { 'table-toolbar': rows }), []);
+    const source = toolbarSource();
+    assert.equal([...source.matchAll(row.resolves)].length, 1, 'one root carries the structure class');
+    assert.equal(source.search(row.resolves), source.indexOf(TOOLBAR_CLASS.slice(0, -1)), 'it resolves the structure class the literal resolved');
+    assert.equal(TOOLBAR_CLASS.search(row.resolves), 0);
+    assert.equal(TOOLBAR_DOOR.search(row.resolves), 0);
+    assert.equal(TOOLBAR_DOOR.includes(TOOLBAR_CLASS), false, 'the literal this lifts does not carry the door-stamped root');
+  });
+
+  it('NEGATIVE: another family, a missing structure class, a longer block, a second door or a foreign attribute is not the toolbar root; a bad spelling throws', () => {
+    const [row] = AS_RENDERED_ROOT_STAMPS['table-toolbar'];
+    for (const text of [
+      'className="ds-structure ds-scope-switcher"',
+      'className="ds-structure ds-scope-switcher ds-scope-switcher__root"',
+      'className="ds-table-toolbar"',
+      'className="ds-table-toolbar ds-table-toolbar__root"',
+      'className="ds-structure ds-table-toolbar-x"',
+      'className="ds-structure ds-table-toolbar ds-a ds-b"',
+      'className="ds-structure  ds-table-toolbar"',
+      "className='ds-structure ds-table-toolbar'",
+      'data-className="ds-structure ds-table-toolbar"',
+    ]) assert.equal(text.search(row.resolves) >= 0, false, text);
+    const failures = asRenderedRosterFailures(ROOT, {
+      'table-toolbar': [{ ...row, source: SIDEBAR_SOURCE }],
+    });
+    assert.ok(failures.includes(`table-toolbar/data-structure: ${SIDEBAR_SOURCE} no longer carries the resolves \`${row.resolves}\``), failures.join(' | '));
+    for (const spelling of ['className={cx}', 'className="a  b"', 'className=" a"', 'className=""', "className='a b'", 'ds-structure ds-table-toolbar', 'className="a b" ']) {
+      assert.throws(() => classAwareClassName(spelling), /classAwareClassName: not a one-line string className/u, spelling);
+    }
+  });
+
+  it('the focus-signature read set is pinned by PART: HEAD reads the one literal, the paired skin reads two spellings of one part, and only the canonical pin holds both', () => {
+    const live = liveSearchCss();
+    const bare = unpairedSearchCss(live);
+    const paired = pairedSearchCss(live);
+    assert.notEqual(paired, bare, 'the pairing found no result-custom rule -- this pins nothing');
+    for (const nativePseudos of [false, true]) {
+      // The in-memory record is the instrument's own reading of the tree.
+      assert.deepEqual(searchRecord(live, { nativePseudos }), familyAxisParts(ROOT, ['search'], null, { nativePseudos }).get('search'));
+      const before = searchStates(searchRecord(bare, { nativePseudos }));
+      const after = searchStates(searchRecord(paired, { nativePseudos }));
+      assert.deepEqual(before, [RESULT_LITERAL]);
+      assert.deepEqual(canonicalPartReads(before), RESULT_PIN);
+      assert.deepEqual(after, [RESULT_LITERAL, '.ds-surface.ds-search .ds-search__result-custom::after [box-shadow, focus-signature]']);
+      assert.deepEqual(canonicalPartReads(after), RESULT_PIN);
+      assert.throws(() => assert.deepEqual(after, [RESULT_LITERAL]), 'a literal pin reds on the paired skin');
+    }
+  });
+
+  it('NEGATIVE (WIDENING): a second signature read on another search part, or on another pseudo of the same part, still fails the pin', () => {
+    const paired = pairedSearchCss(liveSearchCss());
+    for (const [selector, label] of [
+      ['.ds-surface.ds-search [data-part="empty-state"]:focus-visible::after', 'another part'],
+      ['.ds-surface.ds-search [data-part="result-custom"]:focus-visible::before', 'another pseudo'],
+    ]) {
+      const css = `${paired}\n${selector} { content: ""; box-shadow: var(--ds-focus-ring); }`;
+      const planted = searchStates(searchRecord(css, { nativePseudos: true, planted: [{ selector, value: 'var(--ds-focus-ring)' }] }));
+      assert.equal(planted.length, 3, `${label}: the planted read was not taken -- this pins nothing`);
+      assert.equal(pinsResult(planted), false, label);
+    }
+  });
+
+  it('NEGATIVE (FOREIGN-BLOCK): another block\'s element under the search root, or another root\'s result-custom part, never collapses into the search pin', () => {
+    assert.equal(familyElements(ROOT).get('dashboard')?.selector, '.ds-surface.ds-dashboard', 'the foreign root moved -- re-plant this mutant');
+    const foreignBlock = '.ds-surface.ds-search .ds-dashboard__result-custom::after [box-shadow, focus-signature]';
+    const foreignRoot = '.ds-surface.ds-dashboard [data-part="result-custom"]::after [box-shadow, focus-signature]';
+    assert.deepEqual(canonicalPartReads([foreignBlock]), [`?${foreignBlock}`]);
+    assert.deepEqual(canonicalPartReads([foreignRoot]), ['dashboard/result-custom::after [box-shadow, focus-signature]']);
+    for (const entries of [[foreignBlock], [foreignRoot], [RESULT_LITERAL, foreignBlock], [RESULT_LITERAL, foreignRoot]]) {
+      assert.equal(pinsResult(entries), false, entries.join(' + '));
+    }
+  });
+
+  it('NEGATIVE (COUNT-ONCE): two spellings of one part are one read, two parts are two, and no read at all is no pass', () => {
+    const classForm = '.ds-surface.ds-search .ds-search__result-custom::after [box-shadow, focus-signature]';
+    assert.deepEqual(canonicalPartReads([RESULT_LITERAL, classForm]), RESULT_PIN);
+    assert.deepEqual(canonicalPartReads([classForm]), RESULT_PIN);
+    const twoParts = [RESULT_LITERAL, '.ds-surface.ds-search [data-part="empty-state"]::after [box-shadow, focus-signature]'];
+    assert.equal(canonicalPartReads(twoParts).length, 2);
+    assert.equal(pinsResult(twoParts), false);
+    assert.equal(pinsResult([RESULT_LITERAL, '.ds-surface.ds-search [data-part="result-custom"]::after']), false, 'an unbound read is another read');
+    assert.equal(pinsResult([]), false, 'zero reads');
+    for (const loose of ['.ds-surface.ds-search .ds-search__result-custom.ds-search__x::after [box-shadow, focus-signature]',
+      '.ds-surface.ds-search [data-part="result-custom"][data-x]::after [box-shadow, focus-signature]',
+      '.ds-surface.ds-search .wrap [data-part="result-custom"]::after [box-shadow, focus-signature]']) {
+      assert.equal(pinsResult([loose]), false, loose);
+    }
+  });
+});
+
+describe('axis-difference BROWSER drill — the class form of a part door: does it reach a mounted node of the scene', { skip: browserReason }, () => {
+  it('ALIAS RECONCILIATION: in the paired search scene the class-form host reaches its own grafted node, never the part-form node', async () => {
+    const live = liveSearchCss();
+    const paired = pairedSearchCss(live);
+    const bare = unpairedSearchCss(live);
+    const hosts = { part: `.ds-surface.ds-search ${RESULT_PART}`, class: `.ds-surface.ds-search ${RESULT_CLASS}` };
+    const scene = (css, nativePseudos) => {
+      const record = searchRecord(css, { nativePseudos });
+      return sceneHtml({ css, vertical: 'bithire', theme: 'light', elements: new Map([['search', familyElement(css)]]), partMounts: new Map([['search', record]]) });
+    };
+    const { browser, close } = await launchBrowser();
+    const seen = {};
+    try {
+      const page = await (await browser.newContext()).newPage();
+      for (const [label, css, nativePseudos] of [['paired-native', paired, true], ['paired-stamped', paired, false], ['bare-native', bare, true]]) {
+        await page.setContent(scene(css, nativePseudos), { waitUntil: 'load' });
+        seen[label] = await page.evaluate(({ part, klass }) => {
+          const family = document.querySelector('[data-axis-family="search"]');
+          const nodes = [family, ...family.querySelectorAll('*')];
+          const byPart = nodes.filter((node) => node.matches(part));
+          const byClass = nodes.filter((node) => node.matches(klass));
+          return { part: byPart.length, class: byClass.length, shared: byClass.filter((node) => byPart.includes(node)).length };
+        }, { part: hosts.part, klass: hosts.class });
+      }
+      await page.close();
+    } finally {
+      await close();
+    }
+    // The class form IS mounted, on a node of its own (the BEM graft); the two spellings never share a node, and
+    // the stamped half mounts neither.
+    assert.deepEqual(seen['paired-native'], { part: 1, class: 1, shared: 0 });
+    assert.deepEqual(seen['paired-stamped'], { part: 0, class: 0, shared: 0 });
+    assert.deepEqual(seen['bare-native'], { part: 1, class: 0, shared: 0 });
+  }, 120_000);
 });

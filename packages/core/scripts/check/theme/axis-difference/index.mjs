@@ -929,7 +929,7 @@ export const AS_RENDERED_ROOT_STAMPS = Object.freeze({
       // The family's own "always-present specificity hook", written literally
       // on the one root every render returns; the root keyline sits behind it.
       stamp: 'data-structure="table-toolbar"',
-      resolves: 'className="ds-structure ds-table-toolbar"',
+      resolves: classAwareClassName('className="ds-structure ds-table-toolbar"'),
     }),
   ]),
   'user-profile-card': Object.freeze([
@@ -1057,7 +1057,7 @@ export function asRenderedRosterFailures(root = CORE_ROOT, roster = AS_RENDERED_
       // `resolves` may name more than one line when the default is resolved in
       // two steps (a legacy spelling, then its canonical mapping).
       for (const [label, text] of [['stamp', row.stamp], ...texts(row.resolves).map((line) => ['resolves', line])]) {
-        if (!source.includes(text)) failures.push(`${where}: ${row.source} no longer carries the ${label} \`${text}\``);
+        if (!carriesGate(source, text)) failures.push(`${where}: ${row.source} no longer carries the ${label} \`${text}\``);
       }
     }
   }
@@ -2349,6 +2349,15 @@ export function classAwareTag(tag) {
   const door = 'className="[^"\\n]*"';
   const variants = [attributes, ...attributes.map((_, at) => [...attributes.slice(0, at), door, ...attributes.slice(at)]), [...attributes, door]];
   return new RegExp(`<${escape(match[1])} (?:${variants.map((list) => list.join(' ')).join('|')})>`, 'gu');
+}
+
+/** The `classAwareTag` gate for a string `className`: its classes as written, in order, plus at most one
+ * appended class door. Any other spelling throws. */
+export function classAwareClassName(attribute) {
+  const match = /^className="([^"\s]+(?: [^"\s]+)*)"$/u.exec(attribute);
+  if (match === null) throw new Error(`classAwareClassName: not a one-line string className: ${attribute}`);
+  const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+  return new RegExp(`(?<![\\w-])className="${escape(match[1])}(?: [^"\\s]+)?"`, 'gu');
 }
 
 /** Whether `source` carries `gate`: a literal, or a `classAwareTag`. */
@@ -3869,7 +3878,7 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       name: 'the default render at a desktop viewport (not stacked, `bordered` unset) -- the main region is written unconditionally, and its '
         + 'inline-start separator (a `border-inline-start` shorthand the part vocabulary does not list) is the family\'s depth paint',
       source: 'src/components/structures/shell/navigation/sidebar-surface/index.tsx',
-      anchors: Object.freeze(['<Box data-part="main">']),
+      anchors: Object.freeze([classAwareTag('<Box data-part="main">')]),
       resolves: Object.freeze([]),
     }),
     axes: Object.freeze(['depth']),
