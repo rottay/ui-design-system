@@ -392,7 +392,7 @@ function WizardSurfaceContent({ config, loading = false, error, onRetry, adapt }
             // The banner is a ruled alert, not a second card frame: the skin
             // paints the recessed ground, the emphasis edge and the optical
             // padding on the part the surface stamps.
-            <SurfacePostureSlot name="error-banner" asChild><Box data-part="error-banner" role="alert">
+            <SurfacePostureSlot name="error-banner" asChild><Box data-part="error-banner" className="ds-wizard__error-banner" role="alert">
               {config.presentation.error}
             </Box></SurfacePostureSlot>
           )}

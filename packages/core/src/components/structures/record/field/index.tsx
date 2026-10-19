@@ -237,6 +237,7 @@ export function RecordField({
       <Flex
         {...linkInteraction.handlers}
         {...partAttributes('field-link-body', linkInteraction.state)}
+        className="ds-record__field-link-body"
       >
         {renderAnchor(href)}
       </Flex>
@@ -255,7 +256,7 @@ export function RecordField({
       </Text>
 
       <Flex align="start" justify="between" gap={12}>
-        <Box data-part="field-body">{maybeLinkedValue}</Box>
+        <Box data-part="field-body" className="ds-record__field-body">{maybeLinkedValue}</Box>
         {copyValue ? (
           <Tooltip content={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}>
             <Button
@@ -278,7 +279,7 @@ export function RecordField({
       ) : null}
 
       {error ? (
-        <Flex data-part="field-error-row" align="start" gap={6}>
+        <Flex data-part="field-error-row" className="ds-record__field-error-row" align="start" gap={6}>
           {/* Decorative: the adjacent copy carries the error meaning;
               the icon is the non-colour shape cue. */}
           <StatusErrorIcon decorative size={13} data-part="field-error-icon" />
@@ -294,7 +295,7 @@ export function RecordField({
     <Box
       {...fieldInteraction.handlers}
       {...partAttributes('field', fieldInteraction.state)}
-      className="ds-structure ds-record"
+      className="ds-structure ds-record ds-record__field"
       data-structure="record"
       data-span={resolvedSpan}
       style={

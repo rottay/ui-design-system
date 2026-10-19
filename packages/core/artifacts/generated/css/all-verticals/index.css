@@ -70438,7 +70438,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    border wrapping the full perimeter at the error tone, optical padding on
    the rhythm plane — no second card frame. */
 .ds-surface.ds-form-surface.ds-form-surface__root [data-part='error-banner'],
-.ds-surface.ds-form-surface[data-part='root'] [data-part='error-banner'] {
+.ds-surface.ds-form-surface.ds-form-surface__root .ds-form-surface__error-banner,
+.ds-surface.ds-form-surface[data-part='root'] [data-part='error-banner'],
+.ds-surface.ds-form-surface[data-part='root'] .ds-form-surface__error-banner {
   padding: var(--ds-form-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-error-bg, transparent);
   border: var(--ds-edge-emphasis-width, 1px) solid var(--ds-color-error);
@@ -70446,7 +70448,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* The non-sticky action rail's gap, drained from the Flex prop. */
 .ds-surface.ds-form-surface.ds-form-surface__root [data-part='actions'],
-.ds-surface.ds-form-surface[data-part='root'] [data-part='actions'] {
+.ds-surface.ds-form-surface.ds-form-surface__root .ds-form-surface__actions,
+.ds-surface.ds-form-surface[data-part='root'] [data-part='actions'],
+.ds-surface.ds-form-surface[data-part='root'] .ds-form-surface__actions {
   gap: var(--ds-form-surface-actions-gap, calc(8px * var(--ds-rhythm-effective-scale, 1)));
 }
 
@@ -70463,7 +70467,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    system colors; the rail, the aside and the reserved runway own no colour. */
 @media (forced-colors: active) {
   .ds-surface.ds-form-surface.ds-form-surface__root [data-part='error-banner'],
-  .ds-surface.ds-form-surface[data-part='root'] [data-part='error-banner'] {
+  .ds-surface.ds-form-surface.ds-form-surface__root .ds-form-surface__error-banner,
+  .ds-surface.ds-form-surface[data-part='root'] [data-part='error-banner'],
+  .ds-surface.ds-form-surface[data-part='root'] .ds-form-surface__error-banner {
     background: Canvas;
     border-color: CanvasText;
   }
@@ -71398,7 +71404,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* --- RecordFieldGrid -------------------------------------------------------- */
 
-.ds-structure.ds-record[data-part='field-grid'] {
+.ds-structure.ds-record:is([data-part='field-grid'], .ds-record__field-grid) {
   container: ds-record-fields / inline-size;
   display: grid;
   /* The ONE producer of the channel: the intrinsic default (auto-fit over a
@@ -71422,7 +71428,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    mini-cards painted per-field, now spent ONCE per seam. Border colour
    clears the P-48 floor from the two scope classes + the two DISTINCT
    contract attributes (data-part, data-structure — always stamped). */
-.ds-structure.ds-record[data-part='field-grid'][data-structure='record'] {
+.ds-structure.ds-record:is([data-part='field-grid'], .ds-record__field-grid)[data-structure='record'] {
   align-items: stretch;
   gap: var(--ds-edge-hairline-width, var(--ds-divider-width, 1px));
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
@@ -71436,7 +71442,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    parts — no repeated class or attribute — so it outranks every standalone
    rule below). The plane surface is the family's card channel, the same
    paint RecordPanel and FormFactsCard already spend. */
-.ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field'] {
+.ds-structure.ds-record:is([data-part='field-grid'], .ds-record__field-grid) > .ds-structure.ds-record:is([data-part='field'], .ds-record__field) {
   border: none;
   border-radius: 0;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
@@ -71463,7 +71469,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    wash reads the kernel's `hovered` state, with the platform pseudo as its
    twin. */
 @media (hover: hover) {
-  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-record.ds-record__field-grid > .ds-structure.ds-record.ds-record__field:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-bg-secondary) 30%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
   }
 }
@@ -71471,7 +71478,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* Keyboard path into the copy button / linked value: an inset keyline that
    never shifts the ledger's geometry. Focus events bubble to the field root,
    so the kernel's `focused` state IS focus-within semantics. */
-.ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:is([data-state~='focused'], :focus-within) {
+.ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:is([data-state~='focused'], :focus-within),
+.ds-structure.ds-record.ds-record__field-grid > .ds-structure.ds-record.ds-record__field:is([data-state~='focused'], :focus-within) {
   box-shadow: inset 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, var(--ds-color-primary));
 }
 
@@ -71486,20 +71494,20 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* --- RecordField ----------------------------------------------------------- */
 
-.ds-structure.ds-record[data-part='field'] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field) {
   min-inline-size: 0;
   padding: calc(12px * var(--_ds-record-density, 1)) calc(14px * var(--_ds-record-density, 1));
   border-radius: var(--ds-radius-lg, 14px);
 }
 
-.ds-structure.ds-record[data-part='field'][data-mono='false'] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-mono='false'] {
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
 }
 
 /* The mono field is the ID / key affordance: a firmer border and a denser fill
    than the prose field beside it. */
-.ds-structure.ds-record[data-part='field'][data-mono='true'] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-mono='true'] {
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%);
 }
@@ -71507,7 +71515,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* The empty field is a deliberate placeholder, not a hole: the frame goes
    dashed — a SHAPE cue that survives forced colors — while the "Not set"
    copy keeps its tertiary ink. */
-.ds-structure.ds-record[data-part='field'][data-empty='true'] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-empty='true'] {
   border-style: dashed;
 }
 
@@ -71516,23 +71524,26 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    pseudo as twin), and a focus-within ring keeps the keyboard path into the
    copy button / link visible against the card's own border. `data-mono` is
    always stamped, so these buy their floor from it. */
-.ds-structure.ds-record[data-part='field'][data-mono] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-mono] {
   transition:
     border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
     background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 @media (hover: hover) {
-  .ds-structure.ds-record[data-part='field'][data-mono='false']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-record[data-part='field'][data-mono='false']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-record.ds-record__field[data-mono='false']:is([data-state~='hovered'], :hover) {
     border-color: var(--ds-color-border);
   }
 
-  .ds-structure.ds-record[data-part='field'][data-mono='true']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-record[data-part='field'][data-mono='true']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-record.ds-record__field[data-mono='true']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-border) 72%, var(--ds-color-text-muted) 28%);
   }
 }
 
-.ds-structure.ds-record[data-part='field'][data-mono]:is([data-state~='focused'], :focus-within) {
+.ds-structure.ds-record[data-part='field'][data-mono]:is([data-state~='focused'], :focus-within),
+.ds-structure.ds-record.ds-record__field[data-mono]:is([data-state~='focused'], :focus-within) {
   border-color: var(--ds-focus-ring-color, var(--ds-color-primary));
 }
 
@@ -71546,7 +71557,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    NOT carry the attribute the channel does not exist and the single track
    comes from a literal no tenant can reach. The authored declaration is the
    producer; the caller's style attribute still outranks it. */
-.ds-structure.ds-record[data-part='field'][data-span] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-span] {
   --ds-record-field-span: 1;
   grid-column: span var(--ds-record-field-span);
 }
@@ -71555,15 +71566,15 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    `data-mono` is always stamped, so the chain ties the hover/focus-within
    rules at (0,5,0) and wins by sorting AFTER them — the error state
    persists through hover and focus instead of snapping to a neutral frame. */
-.ds-structure.ds-record[data-part='field'][data-error='true'][data-mono] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-error='true'][data-mono] {
   border-color: color-mix(in srgb, var(--ds-color-error) 62%, var(--ds-color-border-secondary));
 }
 
-.ds-structure.ds-record[data-part='field'] [data-part='field-error-row'] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field) :is([data-part='field-error-row'], .ds-record__field-error-row) {
   min-inline-size: 0;
 }
 
-.ds-structure.ds-record[data-part='field'][data-error='true'] [data-part='field-error-icon'] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-error='true'] [data-part='field-error-icon'] {
   flex-shrink: 0;
   margin-block-start: 1px;
   color: var(--ds-color-error);
@@ -71573,7 +71584,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    at (0,4,0) via `[data-color='default']`): the chain reaches (0,5,0) from
    the two scope classes + field + data-error + field-error — no repeated
    attribute (4th-tanda law). */
-.ds-structure.ds-record[data-part='field'][data-error='true'] .ds-record__field-error {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-error='true'] .ds-record__field-error {
   color: var(--ds-color-error);
   line-height: 1.4;
 }
@@ -71581,11 +71592,11 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* The ledger's field labels are the canvas-side arm of the same quiet rung:
    the cells paint no well, so their ink is graded against the canvas the grid
    rests on rather than against a page role fixed for a light one. */
-.ds-structure.ds-record[data-part='field'][data-empty] > * > .ds-record__field-label {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-empty] > * > .ds-record__field-label {
   color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
-.ds-structure.ds-record[data-part='field'] .ds-record__field-label {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field) .ds-record__field-label {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.12em;
   /* Personality channel (see the summary-item-label note): tenant label
@@ -71594,20 +71605,20 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
-.ds-structure.ds-record[data-part='field'] [data-part='field-body'] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field) :is([data-part='field-body'], .ds-record__field-body) {
   min-inline-size: 0;
   flex: 1;
 }
 
-.ds-structure.ds-record[data-part='field'][data-empty='false'] .ds-record__field-value {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-empty='false'] .ds-record__field-value {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-record[data-part='field'][data-empty='true'] .ds-record__field-value {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-empty='true'] .ds-record__field-value {
   color: var(--ds-color-text-tertiary);
 }
 
-.ds-structure.ds-record[data-part='field'] .ds-record__field-value {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field) .ds-record__field-value {
   line-height: 1.6;
   word-break: break-word;
   /* Numeric posture channel: tabular lining under a technical profile,
@@ -71615,20 +71626,20 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
 }
 
-.ds-structure.ds-record[data-part='field'][data-mono='true'] .ds-record__field-value {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-mono='true'] .ds-record__field-value {
   font-family: var(--ds-font-family-mono, monospace);
   word-break: break-all;
 }
 
-.ds-structure.ds-record[data-part='field'][data-empty] > * > .ds-record__field-helper {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-empty] > * > .ds-record__field-helper {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-structure.ds-record[data-part='field'] .ds-record__field-helper {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field) .ds-record__field-helper {
   line-height: 1.5;
 }
 
-.ds-structure.ds-record[data-part='field'] .ds-record__field-copy {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field) .ds-record__field-copy {
   flex-shrink: 0;
 }
 
@@ -71641,12 +71652,12 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    platform pseudo. The wrapper WRAPS the anchor and hugs it, so its box IS
    the anchor's box: the hover region and the ring geometry are the anchor's,
    and the anchor's focus reaches the state the ring reads. */
-.ds-structure.ds-record[data-part='field'] [data-part='field-link-body'] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field) :is([data-part='field-link-body'], .ds-record__field-link-body) {
   inline-size: fit-content;
   transition: color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-structure.ds-record[data-part='field'] [data-part='field-link-icon'] {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field) [data-part='field-link-icon'] {
   color: var(--ds-color-text-muted);
   /* Icon frame drained from the engine's inline width/height: a CSS rule
      outranks the svg's presentational width/height attributes. */
@@ -71667,7 +71678,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    Link's DOM is the app's. Hover, press and the keyboard ring all paint on the
    wrapper above through the kernel's `data-state`; the anchor carries no state
    of its own. */
-.ds-structure.ds-record[data-part='field'] .ds-record__field-link {
+.ds-structure.ds-record:is([data-part='field'], .ds-record__field) .ds-record__field-link {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -71677,12 +71688,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 @media (hover: hover) {
-  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-record.ds-record__field .ds-record__field-link-body:is([data-state~='hovered'], :hover) {
     color: var(--ds-color-primary);
   }
 }
 
-.ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='pressed'], :active) {
+.ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='pressed'], :active),
+.ds-structure.ds-record.ds-record__field .ds-record__field-link-body:is([data-state~='pressed'], :active) {
   color: var(--ds-color-primary);
 }
 
@@ -71694,7 +71707,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    other state in this family: `data-state` first, `:focus-within` as the
    platform twin (the wrapper is not itself focusable, so `:focus-within` is
    the pseudo that stands for the anchor's `:focus-visible` here). */
-.ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
+.ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within),
+.ds-structure.ds-record.ds-record__field .ds-record__field-link-body:is([data-state~='focus-visible'], :focus-within) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   border-radius: var(--ds-radius-sm, 4px);
@@ -71715,7 +71729,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    z-index: 1 stays: the cascade's z-index scale has no rung at 1 (its sticky
    rung is 1100, which would reorder the rail above dropdowns), so the
    first-party-integer convention for a quiet in-flow dock holds. */
-.ds-structure.ds-record[data-part='action-bar'] {
+.ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar) {
   container: ds-record-actions / inline-size;
   position: sticky;
   inset-block-end: 0;
@@ -71723,7 +71737,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   padding-block: calc(14px * var(--_ds-record-density, 1)) calc(10px * var(--_ds-record-density, 1));
 }
 
-.ds-structure.ds-record[data-part='action-bar'][data-structure='record'] {
+.ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar)[data-structure='record'] {
   /* The rail's top rule is a hairline seam (hairline role over the divider
      grammar; both rest at the exact 1px solid pre-wave render), so a ruled/
      dashed tenant divider posture keeps its floor and the edge profile
@@ -71732,43 +71746,43 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   background: var(--ds-surface-canvas, var(--ds-color-bg-primary));
 }
 
-.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] {
+.ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar) > :is([data-part='action-bar-meta'], .ds-record__action-bar-meta) {
   min-inline-size: 0;
   flex: 1;
 }
 
-.ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-actions'] {
+.ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar) :is([data-part='action-bar-actions'], .ds-record__action-bar-actions) {
   justify-content: flex-end;
 }
 
 /* The meta label/text pair renders only when `meta` is a string, so no consumer
    node can sit on this path. */
-.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] .ds-record__action-bar-meta-label {
+.ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar) > :is([data-part='action-bar-meta'], .ds-record__action-bar-meta) .ds-record__action-bar-meta-label {
   color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
-.ds-structure.ds-record[data-part='action-bar'] .ds-record__action-bar-meta-label {
+.ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar) .ds-record__action-bar-meta-label {
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.12em;
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 
-.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] .ds-record__action-bar-meta-text {
+.ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar) > :is([data-part='action-bar-meta'], .ds-record__action-bar-meta) .ds-record__action-bar-meta-text {
   color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
-.ds-structure.ds-record[data-part='action-bar'] .ds-record__action-bar-meta-text {
+.ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar) .ds-record__action-bar-meta-text {
   line-height: 1.6;
 }
 
 /* --- RecordPanel ----------------------------------------------------------- */
 
-.ds-structure.ds-record[data-part='panel'] {
+.ds-structure.ds-record:is([data-part='panel'], .ds-record__panel) {
   inline-size: 100%;
   padding: calc(18px * var(--_ds-record-density, 1));
 }
 
-.ds-structure.ds-record[data-part='panel'][data-structure='record'] {
+.ds-structure.ds-record:is([data-part='panel'], .ds-record__panel)[data-structure='record'] {
   border-radius: var(--ds-radius-xl, 18px);
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
@@ -71776,8 +71790,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* --- reduced motion: field/link affordance transitions go quiet ------------ */
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-record[data-part='field'][data-mono],
-  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body'] {
+  .ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-mono],
+  .ds-structure.ds-record:is([data-part='field'], .ds-record__field) :is([data-part='field-link-body'], .ds-record__field-link-body) {
     transition: none;
   }
 }
@@ -71793,10 +71807,10 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    (WO-ARC-05, exact-0). ------------------------------------------------------ */
 
 @container ds-record-fields (inline-size < 30rem) {
-  .ds-structure.ds-record[data-part='field-grid'] {
+  .ds-structure.ds-record:is([data-part='field-grid'], .ds-record__field-grid) {
     --_ds-record-field-grid-gap: calc(10px * var(--_ds-record-density, 1));
   }
-  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field'] {
+  .ds-structure.ds-record:is([data-part='field-grid'], .ds-record__field-grid) > .ds-structure.ds-record:is([data-part='field'], .ds-record__field) {
     padding: calc(10px * var(--_ds-record-density, 1)) calc(12px * var(--_ds-record-density, 1));
   }
 }
@@ -71816,13 +71830,13 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    side by side, the actions take their own full-width row rather than
    right-aligning under the meta copy. */
 @container ds-record-actions (inline-size < 24rem) {
-  .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-meta'] {
+  .ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar) :is([data-part='action-bar-meta'], .ds-record__action-bar-meta) {
     inline-size: 100%;
   }
-  .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-actions'] {
+  .ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar) :is([data-part='action-bar-actions'], .ds-record__action-bar-actions) {
     inline-size: 100%;
   }
-  .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-actions'] > * {
+  .ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar) :is([data-part='action-bar-actions'], .ds-record__action-bar-actions) > * {
     flex: 1 1 100%;
   }
 }
@@ -71840,10 +71854,10 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'],
   .ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'],
   .ds-structure.ds-record.ds-record__summary-strip[data-variant='metrics'],
-  .ds-structure.ds-record[data-part='field'][data-mono='false'],
-  .ds-structure.ds-record[data-part='field'][data-mono='true'],
-  .ds-structure.ds-record[data-part='action-bar'][data-structure='record'],
-  .ds-structure.ds-record[data-part='panel'][data-structure='record'] {
+  .ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-mono='false'],
+  .ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-mono='true'],
+  .ds-structure.ds-record:is([data-part='action-bar'], .ds-record__action-bar)[data-structure='record'],
+  .ds-structure.ds-record:is([data-part='panel'], .ds-record__panel)[data-structure='record'] {
     border-color: ButtonText;
     background: Canvas;
     background-image: none;
@@ -71851,29 +71865,31 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
   .ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-value,
   .ds-structure.ds-record.ds-record__summary-strip[data-variant] .ds-record__summary-item-value,
-  .ds-structure.ds-record[data-part='field'][data-empty='false'] .ds-record__field-value,
-  .ds-structure.ds-record[data-part='field'] [data-part='field-link-icon'] {
+  .ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-empty='false'] .ds-record__field-value,
+  .ds-structure.ds-record:is([data-part='field'], .ds-record__field) [data-part='field-link-icon'] {
     color: CanvasText;
   }
 
-  .ds-structure.ds-record[data-part='field'][data-empty='true'] .ds-record__field-value,
+  .ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-empty='true'] .ds-record__field-value,
   .ds-structure.ds-record[data-part='summary-strip'][data-variant] .ds-record__summary-item-helper,
   .ds-structure.ds-record.ds-record__summary-strip[data-variant] .ds-record__summary-item-helper,
-  .ds-structure.ds-record[data-part='field'][data-empty] > * > .ds-record__field-helper {
+  .ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-empty] > * > .ds-record__field-helper {
     color: GrayText;
   }
 
-  .ds-structure.ds-record[data-part='field'][data-error='true'] .ds-record__field-error,
-  .ds-structure.ds-record[data-part='field'][data-error='true'] [data-part='field-error-icon'] {
+  .ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-error='true'] .ds-record__field-error,
+  .ds-structure.ds-record:is([data-part='field'], .ds-record__field)[data-error='true'] [data-part='field-error-icon'] {
     color: CanvasText;
   }
 
-  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
+  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within),
+  .ds-structure.ds-record.ds-record__field .ds-record__field-link-body:is([data-state~='focus-visible'], :focus-within) {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
 
-  .ds-structure.ds-record[data-part='field'][data-mono]:is([data-state~='focused'], :focus-within) {
+  .ds-structure.ds-record[data-part='field'][data-mono]:is([data-state~='focused'], :focus-within),
+  .ds-structure.ds-record.ds-record__field[data-mono]:is([data-state~='focused'], :focus-within) {
     border-color: Highlight;
   }
 
@@ -71881,12 +71897,12 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
      every background, so each cell re-asserts its segment as a non-shifting
      system-colour outline (the RecordFacts FC recipe); the empty cell keeps
      its dashed slot cue, and the keyboard path re-keys to Highlight. */
-  .ds-structure.ds-record[data-part='field-grid'][data-structure='record'] {
+  .ds-structure.ds-record:is([data-part='field-grid'], .ds-record__field-grid)[data-structure='record'] {
     border-color: ButtonText;
     background: Canvas;
   }
 
-  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field'] {
+  .ds-structure.ds-record:is([data-part='field-grid'], .ds-record__field-grid) > .ds-structure.ds-record:is([data-part='field'], .ds-record__field) {
     background: Canvas;
     box-shadow: none;
     outline: 1px solid ButtonText;
@@ -71898,7 +71914,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     outline-offset: -4px;
   }
 
-  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:is([data-state~='focused'], :focus-within) {
+  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:is([data-state~='focused'], :focus-within),
+  .ds-structure.ds-record.ds-record__field-grid > .ds-structure.ds-record.ds-record__field:is([data-state~='focused'], :focus-within) {
     outline: 2px solid Highlight;
     outline-offset: -2px;
   }
@@ -71957,7 +71974,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    border wrapping the full perimeter at the error tone, optical padding on
    the rhythm plane — no second card frame. */
 .ds-surface.ds-wizard.ds-wizard__root [data-part='error-banner'],
-.ds-surface.ds-wizard[data-part='root'] [data-part='error-banner'] {
+.ds-surface.ds-wizard.ds-wizard__root .ds-wizard__error-banner,
+.ds-surface.ds-wizard[data-part='root'] [data-part='error-banner'],
+.ds-surface.ds-wizard[data-part='root'] .ds-wizard__error-banner {
   padding: var(--ds-wizard-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-error-bg, transparent);
   border: var(--ds-edge-emphasis-width, 1px) solid var(--ds-color-error);
@@ -71977,7 +71996,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    system colors. */
 @media (forced-colors: active) {
   .ds-surface.ds-wizard.ds-wizard__root [data-part='error-banner'],
-  .ds-surface.ds-wizard[data-part='root'] [data-part='error-banner'] {
+  .ds-surface.ds-wizard.ds-wizard__root .ds-wizard__error-banner,
+  .ds-surface.ds-wizard[data-part='root'] [data-part='error-banner'],
+  .ds-surface.ds-wizard[data-part='root'] .ds-wizard__error-banner {
     background: Canvas;
     border-color: CanvasText;
   }

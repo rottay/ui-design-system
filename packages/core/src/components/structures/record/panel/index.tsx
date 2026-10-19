@@ -25,7 +25,7 @@ export function RecordPanel({
 }) {
   return (
     <Box
-      className="ds-structure ds-record"
+      className="ds-structure ds-record ds-record__panel"
       data-part="panel"
       data-structure="record"
       style={style}

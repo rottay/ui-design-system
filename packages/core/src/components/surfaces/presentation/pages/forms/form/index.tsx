@@ -185,7 +185,7 @@ function FormSurfaceContent({ config, loading = false, error, onRetry, adapt }: 
   ) : (
     // The rail's gap is skin-owned (the surface skin reads the family channel);
     // the Flex keeps only direction/wrap/justify, which are posture, not paint.
-    <Flex data-part="actions" direction={isMobile ? 'column' : 'row'} wrap="wrap" justify="end">
+    <Flex data-part="actions" className="ds-form-surface__actions" direction={isMobile ? 'column' : 'row'} wrap="wrap" justify="end">
       {actionButtons}
     </Flex>
   )}</SurfacePostureSlot>) : null;
@@ -222,7 +222,7 @@ function FormSurfaceContent({ config, loading = false, error, onRetry, adapt }: 
                 // The banner is a ruled alert, not a second card frame: the skin
                 // paints the recessed ground, the emphasis edge and the optical
                 // padding on the part the surface stamps.
-                <SurfacePostureSlot name="error-banner" asChild><Box data-part="error-banner" role="alert">
+                <SurfacePostureSlot name="error-banner" asChild><Box data-part="error-banner" className="ds-form-surface__error-banner" role="alert">
                   {config.presentation.error}
                 </Box></SurfacePostureSlot>
               )}

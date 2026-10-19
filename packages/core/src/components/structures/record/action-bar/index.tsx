@@ -89,7 +89,7 @@ export function RecordActionBar({
 
   return (
     <Flex
-      className="ds-structure ds-record"
+      className="ds-structure ds-record ds-record__action-bar"
       data-part="action-bar"
       data-structure="record"
       justify="between"
@@ -98,7 +98,7 @@ export function RecordActionBar({
       wrap="wrap"
       style={style}
     >
-      <Box data-part="action-bar-meta">
+      <Box data-part="action-bar-meta" className="ds-record__action-bar-meta">
         {typeof meta === 'string' ? (
           <Stack spacing={4}>
             <Text
@@ -116,7 +116,7 @@ export function RecordActionBar({
           meta
         )}
       </Box>
-      <Flex data-part="action-bar-actions" gap={12} wrap="wrap">
+      <Flex data-part="action-bar-actions" className="ds-record__action-bar-actions" gap={12} wrap="wrap">
         {renderedActions}
       </Flex>
     </Flex>

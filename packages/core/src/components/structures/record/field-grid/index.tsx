@@ -37,7 +37,7 @@ export function RecordFieldGrid({
 }) {
   return (
     <Box
-      className="ds-structure ds-record"
+      className="ds-structure ds-record ds-record__field-grid"
       data-part="field-grid"
       data-structure="record"
       style={{
