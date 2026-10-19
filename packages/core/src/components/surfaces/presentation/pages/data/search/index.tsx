@@ -117,16 +117,16 @@ function SearchSkeleton({
 }): React.ReactElement {
   const resultsSkeleton = (
     <Stack spacing="md" data-part="skeleton-results">
-      <Box data-part="search-skeleton-block" data-size="result" />
-      <Box data-part="search-skeleton-block" data-size="result" />
-      <Box data-part="search-skeleton-block" data-size="result" />
+      <Box data-part="search-skeleton-block" className="ds-search__search-skeleton-block" data-size="result" />
+      <Box data-part="search-skeleton-block" className="ds-search__search-skeleton-block" data-size="result" />
+      <Box data-part="search-skeleton-block" className="ds-search__search-skeleton-block" data-size="result" />
     </Stack>
   );
 
   return (
     <Stack spacing={sectionSpacing} data-part="skeleton">
-      <Box data-part="search-skeleton-block" data-size="input" />
-      {hasFilters && <SurfacePostureSlot name="filters" asChild><Box data-part="search-skeleton-block" data-size="filter" /></SurfacePostureSlot>}
+      <Box data-part="search-skeleton-block" className="ds-search__search-skeleton-block" data-size="input" />
+      {hasFilters && <SurfacePostureSlot name="filters" asChild><Box data-part="search-skeleton-block" className="ds-search__search-skeleton-block" data-size="filter" /></SurfacePostureSlot>}
       {split ? (
         <Grid columns={12} gap="lg">
           <Grid.Item span={7}>{resultsSkeleton}</Grid.Item>
@@ -327,6 +327,7 @@ function SearchSurfaceContent({
         <Box
           key={result.id}
           data-part="result-custom"
+          className="ds-search__result-custom"
           role="button"
           tabIndex={0}
           aria-pressed={selected}

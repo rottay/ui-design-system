@@ -93479,7 +93479,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* Icon tile: the one tinted part the surface owns. The 36px size is part
    geometry (4px-scale aligned), deliberately density-stable like an avatar. */
-.ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'] {
+.ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'],
+.ds-surface.ds-command-center .ds-command-center__quick-action-icon.ds-command-center__quick-action-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93594,7 +93595,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* Re-key the only surface-owned tint to system colors; every composed part
    (Card, NavLink, Button, StatsGrid, ActivityLog) already handles its own. */
 @media (forced-colors: active) {
-  .ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'] {
+  .ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'],
+  .ds-surface.ds-command-center .ds-command-center__quick-action-icon.ds-command-center__quick-action-icon {
     background: ButtonFace;
     color: ButtonText;
   }
@@ -94869,7 +94871,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 /* ---- board-mirror skeleton: blocks sit on the same grid and spans as the
         real content, preventing a loading-time layout shift. ---- */
-.ds-surface.ds-dashboard [data-part="dashboard-skeleton-block"] {
+.ds-surface.ds-dashboard [data-part="dashboard-skeleton-block"],
+.ds-surface.ds-dashboard .ds-dashboard__dashboard-skeleton-block {
   border-radius: var(--ds-dashboard-skeleton-radius, var(--ds-radius-md, 8px));
   background: var(
     --ds-dashboard-skeleton-background,
@@ -94881,24 +94884,31 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-dashboard
-  [data-part="dashboard-skeleton-block"][data-size="stat"] {
+  [data-part="dashboard-skeleton-block"][data-size="stat"],
+.ds-surface.ds-dashboard
+  .ds-dashboard__dashboard-skeleton-block[data-size="stat"] {
   min-block-size: var(--ds-dashboard-skeleton-stat-height, 96px);
 }
 
 .ds-surface.ds-dashboard
-  [data-part="dashboard-skeleton-block"][data-size="section-title"] {
+  [data-part="dashboard-skeleton-block"][data-size="section-title"],
+.ds-surface.ds-dashboard
+  .ds-dashboard__dashboard-skeleton-block[data-size="section-title"] {
   inline-size: var(--ds-dashboard-skeleton-title-width, 42%);
   min-block-size: var(--ds-dashboard-skeleton-title-height, 20px);
 }
 
 .ds-surface.ds-dashboard
-  [data-part="dashboard-skeleton-block"][data-size="section-line"] {
+  [data-part="dashboard-skeleton-block"][data-size="section-line"],
+.ds-surface.ds-dashboard
+  .ds-dashboard__dashboard-skeleton-block[data-size="section-line"] {
   inline-size: 100%;
   min-block-size: var(--ds-dashboard-skeleton-line-height, 12px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-dashboard [data-part="dashboard-skeleton-block"] {
+  .ds-surface.ds-dashboard [data-part="dashboard-skeleton-block"],
+  .ds-surface.ds-dashboard .ds-dashboard__dashboard-skeleton-block {
     animation: none;
   }
 }
@@ -94976,12 +94986,15 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
         inline `0 4px / 0 2px` padding. Logical (RTL-safe) and density-scaled
         through the canonical spacing channel — the half step keeps the exact
         authored geometry (2px at scale 1) while following tenant density. ---- */
-.ds-surface.ds-list .ds-list__filters-plain[data-part="filters-plain"] {
+.ds-surface.ds-list .ds-list__filters-plain[data-part="filters-plain"],
+.ds-surface.ds-list .ds-list__filters-plain.ds-list__filters-plain {
   padding-inline: calc(var(--ds-spacing-1, 4px) / 2);
 }
 
 .ds-surface.ds-list
-  .ds-list__filters-plain[data-part="filters-plain"][data-mobile="true"] {
+  .ds-list__filters-plain[data-part="filters-plain"][data-mobile="true"],
+.ds-surface.ds-list
+  .ds-list__filters-plain.ds-list__filters-plain[data-mobile="true"] {
   padding-inline: var(--ds-spacing-1, 4px);
 }
 
@@ -95182,17 +95195,20 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    content, so it also owns the cursor affordance and the keyboard focus —
    the tenant focus signature on an overlay, because the app content covers
    the row and an inset signature would sit under it. */
-.ds-surface.ds-search [data-part="result-custom"] {
+.ds-surface.ds-search [data-part="result-custom"],
+.ds-surface.ds-search .ds-search__result-custom {
   position: relative;
   cursor: pointer;
 }
 
-.ds-surface.ds-search [data-part="result-custom"]:focus-visible {
+.ds-surface.ds-search [data-part="result-custom"]:focus-visible,
+.ds-surface.ds-search .ds-search__result-custom:focus-visible {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
 }
 
-.ds-surface.ds-search [data-part="result-custom"]:focus-visible::after {
+.ds-surface.ds-search [data-part="result-custom"]:focus-visible::after,
+.ds-surface.ds-search .ds-search__result-custom:focus-visible::after {
   position: absolute;
   inset: 0;
   z-index: var(--ds-z-index-relative-above, 1);
@@ -95205,25 +95221,29 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Custom renderers become a whole-row button. Keep fine-pointer density
    intact while guaranteeing the row remains a usable coarse-pointer target. */
 @media (hover: none), (pointer: coarse) {
-  .ds-surface.ds-search [data-part="result-custom"] {
+  .ds-surface.ds-search [data-part="result-custom"],
+  .ds-surface.ds-search .ds-search__result-custom {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
 
 @media (forced-colors: active) {
-  .ds-surface.ds-search [data-part="result-custom"]:focus-visible {
+  .ds-surface.ds-search [data-part="result-custom"]:focus-visible,
+  .ds-surface.ds-search .ds-search__result-custom:focus-visible {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
   }
 
-  .ds-surface.ds-search [data-part="result-custom"]:focus-visible::after {
+  .ds-surface.ds-search [data-part="result-custom"]:focus-visible::after,
+  .ds-surface.ds-search .ds-search__result-custom:focus-visible::after {
     display: none;
   }
 }
 
 /* Empty-state landing hook (query/results): wrapper chrome behind the
    composed pattern; the tenant channel keeps its consumer. */
-.ds-surface.ds-search .ds-search__empty-state[data-part="empty-state"][data-state] {
+.ds-surface.ds-search .ds-search__empty-state[data-part="empty-state"][data-state],
+.ds-surface.ds-search .ds-search__empty-state.ds-search__empty-state[data-state] {
   border-radius: var(--ds-radius-lg);
   background: var(--ds-search-empty-bg, transparent);
 }
@@ -95231,7 +95251,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- search-mirror skeleton: blocks sit on the same layout as the real
         content (command bar above, results + preview on the 7/5 grid),
         preventing a loading-time layout shift. ---- */
-.ds-surface.ds-search [data-part="search-skeleton-block"] {
+.ds-surface.ds-search [data-part="search-skeleton-block"],
+.ds-surface.ds-search .ds-search__search-skeleton-block {
   border-radius: var(--ds-skeleton-radius, var(--ds-radius-md, 8px));
   background: var(
     --ds-skeleton-bg,
@@ -95243,17 +95264,23 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-search
-  [data-part="search-skeleton-block"][data-size="input"] {
+  [data-part="search-skeleton-block"][data-size="input"],
+.ds-surface.ds-search
+  .ds-search__search-skeleton-block[data-size="input"] {
   min-block-size: 40px;
 }
 
 .ds-surface.ds-search
-  [data-part="search-skeleton-block"][data-size="filter"] {
+  [data-part="search-skeleton-block"][data-size="filter"],
+.ds-surface.ds-search
+  .ds-search__search-skeleton-block[data-size="filter"] {
   min-block-size: 72px;
 }
 
 .ds-surface.ds-search
-  [data-part="search-skeleton-block"][data-size="result"] {
+  [data-part="search-skeleton-block"][data-size="result"],
+.ds-surface.ds-search
+  .ds-search__search-skeleton-block[data-size="result"] {
   min-block-size: 88px;
 }
 
@@ -95263,7 +95290,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-search [data-part="search-skeleton-block"] {
+  .ds-surface.ds-search [data-part="search-skeleton-block"],
+  .ds-surface.ds-search .ds-search__search-skeleton-block {
     animation: none;
   }
 }

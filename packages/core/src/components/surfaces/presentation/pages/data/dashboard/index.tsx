@@ -109,6 +109,7 @@ function DashboardSkeleton({
             <Box
               key={index}
               data-part="dashboard-skeleton-block"
+              className="ds-dashboard__dashboard-skeleton-block"
               data-size="stat"
             />
           ))}
@@ -134,14 +135,17 @@ function DashboardSkeleton({
                   <Stack spacing="md">
                     <Box
                       data-part="dashboard-skeleton-block"
+                      className="ds-dashboard__dashboard-skeleton-block"
                       data-size="section-title"
                     />
                     <Box
                       data-part="dashboard-skeleton-block"
+                      className="ds-dashboard__dashboard-skeleton-block"
                       data-size="section-line"
                     />
                     <Box
                       data-part="dashboard-skeleton-block"
+                      className="ds-dashboard__dashboard-skeleton-block"
                       data-size="section-line"
                     />
                   </Stack>

@@ -58,7 +58,8 @@
 
 /* Icon tile: the one tinted part the surface owns. The 36px size is part
    geometry (4px-scale aligned), deliberately density-stable like an avatar. */
-.ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'] {
+.ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'],
+.ds-surface.ds-command-center .ds-command-center__quick-action-icon.ds-command-center__quick-action-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,7 +174,8 @@
 /* Re-key the only surface-owned tint to system colors; every composed part
    (Card, NavLink, Button, StatsGrid, ActivityLog) already handles its own. */
 @media (forced-colors: active) {
-  .ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'] {
+  .ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'],
+  .ds-surface.ds-command-center .ds-command-center__quick-action-icon.ds-command-center__quick-action-icon {
     background: ButtonFace;
     color: ButtonText;
   }

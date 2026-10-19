@@ -86,17 +86,20 @@
    content, so it also owns the cursor affordance and the keyboard focus —
    the tenant focus signature on an overlay, because the app content covers
    the row and an inset signature would sit under it. */
-.ds-surface.ds-search [data-part="result-custom"] {
+.ds-surface.ds-search [data-part="result-custom"],
+.ds-surface.ds-search .ds-search__result-custom {
   position: relative;
   cursor: pointer;
 }
 
-.ds-surface.ds-search [data-part="result-custom"]:focus-visible {
+.ds-surface.ds-search [data-part="result-custom"]:focus-visible,
+.ds-surface.ds-search .ds-search__result-custom:focus-visible {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
 }
 
-.ds-surface.ds-search [data-part="result-custom"]:focus-visible::after {
+.ds-surface.ds-search [data-part="result-custom"]:focus-visible::after,
+.ds-surface.ds-search .ds-search__result-custom:focus-visible::after {
   position: absolute;
   inset: 0;
   z-index: var(--ds-z-index-relative-above, 1);
@@ -109,25 +112,29 @@
 /* Custom renderers become a whole-row button. Keep fine-pointer density
    intact while guaranteeing the row remains a usable coarse-pointer target. */
 @media (hover: none), (pointer: coarse) {
-  .ds-surface.ds-search [data-part="result-custom"] {
+  .ds-surface.ds-search [data-part="result-custom"],
+  .ds-surface.ds-search .ds-search__result-custom {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
 
 @media (forced-colors: active) {
-  .ds-surface.ds-search [data-part="result-custom"]:focus-visible {
+  .ds-surface.ds-search [data-part="result-custom"]:focus-visible,
+  .ds-surface.ds-search .ds-search__result-custom:focus-visible {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
   }
 
-  .ds-surface.ds-search [data-part="result-custom"]:focus-visible::after {
+  .ds-surface.ds-search [data-part="result-custom"]:focus-visible::after,
+  .ds-surface.ds-search .ds-search__result-custom:focus-visible::after {
     display: none;
   }
 }
 
 /* Empty-state landing hook (query/results): wrapper chrome behind the
    composed pattern; the tenant channel keeps its consumer. */
-.ds-surface.ds-search .ds-search__empty-state[data-part="empty-state"][data-state] {
+.ds-surface.ds-search .ds-search__empty-state[data-part="empty-state"][data-state],
+.ds-surface.ds-search .ds-search__empty-state.ds-search__empty-state[data-state] {
   border-radius: var(--ds-radius-lg);
   background: var(--ds-search-empty-bg, transparent);
 }
@@ -135,7 +142,8 @@
 /* ---- search-mirror skeleton: blocks sit on the same layout as the real
         content (command bar above, results + preview on the 7/5 grid),
         preventing a loading-time layout shift. ---- */
-.ds-surface.ds-search [data-part="search-skeleton-block"] {
+.ds-surface.ds-search [data-part="search-skeleton-block"],
+.ds-surface.ds-search .ds-search__search-skeleton-block {
   border-radius: var(--ds-skeleton-radius, var(--ds-radius-md, 8px));
   background: var(
     --ds-skeleton-bg,
@@ -147,17 +155,23 @@
 }
 
 .ds-surface.ds-search
-  [data-part="search-skeleton-block"][data-size="input"] {
+  [data-part="search-skeleton-block"][data-size="input"],
+.ds-surface.ds-search
+  .ds-search__search-skeleton-block[data-size="input"] {
   min-block-size: 40px;
 }
 
 .ds-surface.ds-search
-  [data-part="search-skeleton-block"][data-size="filter"] {
+  [data-part="search-skeleton-block"][data-size="filter"],
+.ds-surface.ds-search
+  .ds-search__search-skeleton-block[data-size="filter"] {
   min-block-size: 72px;
 }
 
 .ds-surface.ds-search
-  [data-part="search-skeleton-block"][data-size="result"] {
+  [data-part="search-skeleton-block"][data-size="result"],
+.ds-surface.ds-search
+  .ds-search__search-skeleton-block[data-size="result"] {
   min-block-size: 88px;
 }
 
@@ -167,7 +181,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-search [data-part="search-skeleton-block"] {
+  .ds-surface.ds-search [data-part="search-skeleton-block"],
+  .ds-surface.ds-search .ds-search__search-skeleton-block {
     animation: none;
   }
 }

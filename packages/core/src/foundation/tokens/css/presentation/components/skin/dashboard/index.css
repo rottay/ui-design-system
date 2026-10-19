@@ -47,7 +47,8 @@
 
 /* ---- board-mirror skeleton: blocks sit on the same grid and spans as the
         real content, preventing a loading-time layout shift. ---- */
-.ds-surface.ds-dashboard [data-part="dashboard-skeleton-block"] {
+.ds-surface.ds-dashboard [data-part="dashboard-skeleton-block"],
+.ds-surface.ds-dashboard .ds-dashboard__dashboard-skeleton-block {
   border-radius: var(--ds-dashboard-skeleton-radius, var(--ds-radius-md, 8px));
   background: var(
     --ds-dashboard-skeleton-background,
@@ -59,24 +60,31 @@
 }
 
 .ds-surface.ds-dashboard
-  [data-part="dashboard-skeleton-block"][data-size="stat"] {
+  [data-part="dashboard-skeleton-block"][data-size="stat"],
+.ds-surface.ds-dashboard
+  .ds-dashboard__dashboard-skeleton-block[data-size="stat"] {
   min-block-size: var(--ds-dashboard-skeleton-stat-height, 96px);
 }
 
 .ds-surface.ds-dashboard
-  [data-part="dashboard-skeleton-block"][data-size="section-title"] {
+  [data-part="dashboard-skeleton-block"][data-size="section-title"],
+.ds-surface.ds-dashboard
+  .ds-dashboard__dashboard-skeleton-block[data-size="section-title"] {
   inline-size: var(--ds-dashboard-skeleton-title-width, 42%);
   min-block-size: var(--ds-dashboard-skeleton-title-height, 20px);
 }
 
 .ds-surface.ds-dashboard
-  [data-part="dashboard-skeleton-block"][data-size="section-line"] {
+  [data-part="dashboard-skeleton-block"][data-size="section-line"],
+.ds-surface.ds-dashboard
+  .ds-dashboard__dashboard-skeleton-block[data-size="section-line"] {
   inline-size: 100%;
   min-block-size: var(--ds-dashboard-skeleton-line-height, 12px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-dashboard [data-part="dashboard-skeleton-block"] {
+  .ds-surface.ds-dashboard [data-part="dashboard-skeleton-block"],
+  .ds-surface.ds-dashboard .ds-dashboard__dashboard-skeleton-block {
     animation: none;
   }
 }
