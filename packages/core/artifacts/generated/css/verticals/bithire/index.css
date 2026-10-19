@@ -97333,7 +97333,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* ---- eyebrow section labels (editorial hierarchy; geometry drained) ---- */
-.ds-pattern-branding-preview-sandbox [data-part='header'][data-part='header'] {
+.ds-pattern-branding-preview-sandbox [data-part='header'][data-part='header'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__header.ds-pattern-branding-preview-sandbox__header {
   margin-block-end: var(--ds-spacing-2);
   font-size: var(--ds-font-size-2xs);
   font-weight: var(--ds-font-weight-semibold);
@@ -97344,16 +97345,21 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 /* ---- section rows (was inline flex/16px rhythm) ---- */
 .ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='buttons'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__surface[data-state='buttons'],
 .ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='inputs'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__surface[data-state='inputs'],
 .ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='cards'],
-.ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='badges'] {
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__surface[data-state='cards'],
+.ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='badges'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__surface[data-state='badges'] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--ds-spacing-2);
   margin-block-end: var(--ds-spacing-4);
 }
-.ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='typography'] {
+.ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='typography'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__surface[data-state='typography'] {
   margin-block-end: var(--ds-spacing-4);
 }
 
@@ -97377,14 +97383,16 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* ---- mini table channel mirror (geometry drained; logical alignment) ---- */
-.ds-pattern-branding-preview-sandbox [data-part='table'][data-part='table'][data-part='table'] {
+.ds-pattern-branding-preview-sandbox [data-part='table'][data-part='table'][data-part='table'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__table.ds-pattern-branding-preview-sandbox__table.ds-pattern-branding-preview-sandbox__table {
   overflow: hidden;
   margin-block-end: var(--ds-spacing-4);
   border-radius: var(--ds-radius-md);
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border));
 }
 
-.ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head'] {
+.ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__table-head.ds-pattern-branding-preview-sandbox__table-head.ds-pattern-branding-preview-sandbox__table-head {
   display: flex;
   padding: var(--ds-table-cell-padding, 10px 16px);
   font-size: var(--ds-table-header-font-size, 13px);
@@ -97396,7 +97404,10 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 .ds-pattern-branding-preview-sandbox
   [data-part='table']
-  > [data-part='surface'][data-part='surface'] {
+  > [data-part='surface'][data-part='surface'],
+.ds-pattern-branding-preview-sandbox
+  .ds-pattern-branding-preview-sandbox__table
+  > .ds-pattern-branding-preview-sandbox__surface.ds-pattern-branding-preview-sandbox__surface {
   display: flex;
   align-items: center;
   padding: var(--ds-table-cell-padding, 10px 16px);
@@ -97406,39 +97417,55 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 .ds-pattern-branding-preview-sandbox
   [data-part='table']
-  > [data-part='surface'][data-part='surface']:last-child {
+  > [data-part='surface'][data-part='surface']:last-child,
+.ds-pattern-branding-preview-sandbox
+  .ds-pattern-branding-preview-sandbox__table
+  > .ds-pattern-branding-preview-sandbox__surface.ds-pattern-branding-preview-sandbox__surface:last-child {
   border-bottom: none;
 }
 
 .ds-pattern-branding-preview-sandbox
   [data-part='table']
-  > [data-part='surface'][data-state='default'] {
+  > [data-part='surface'][data-state='default'],
+.ds-pattern-branding-preview-sandbox
+  .ds-pattern-branding-preview-sandbox__table
+  > .ds-pattern-branding-preview-sandbox__surface[data-state='default'] {
   background: var(--ds-table-row-bg, transparent);
 }
 
 .ds-pattern-branding-preview-sandbox
   [data-part='table']
-  > [data-part='surface'][data-state='striped'] {
+  > [data-part='surface'][data-state='striped'],
+.ds-pattern-branding-preview-sandbox
+  .ds-pattern-branding-preview-sandbox__table
+  > .ds-pattern-branding-preview-sandbox__surface[data-state='striped'] {
   background: var(--ds-table-row-bg-striped, transparent);
 }
 
-.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'] {
+.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__preview-table-cell {
   flex: 1;
   min-inline-size: 0;
 }
-.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'][data-span='wide'] {
+.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'][data-span='wide'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__preview-table-cell[data-span='wide'] {
   flex: 2;
 }
-.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'][data-align='end'] {
+.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'][data-align='end'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__preview-table-cell[data-align='end'] {
   /* logical end: the retired physical `right` mirrored nothing under RTL */
   text-align: end;
 }
-.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'][data-variant='name'] {
+.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'][data-variant='name'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__preview-table-cell[data-variant='name'] {
   font-weight: var(--ds-font-weight-medium, 500);
 }
 .ds-pattern-branding-preview-sandbox
   [data-part='table']
-  [data-part='preview-table-cell'][data-variant='date'] {
+  [data-part='preview-table-cell'][data-variant='date'],
+.ds-pattern-branding-preview-sandbox
+  .ds-pattern-branding-preview-sandbox__table
+  .ds-pattern-branding-preview-sandbox__preview-table-cell[data-variant='date'] {
   font-family: var(--ds-font-family-mono);
   font-size: var(--ds-font-size-xs);
   color: var(--ds-color-text-muted);
@@ -97464,7 +97491,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* ---- footer variable count ---- */
-.ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='variable-count'] {
+.ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='variable-count'],
+.ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__subtitle[data-variant='variable-count'] {
   margin-block-start: var(--ds-spacing-2);
   font-size: var(--ds-font-size-2xs);
   text-align: center;
@@ -97476,10 +97504,15 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 @media (forced-colors: active) {
   .ds-pattern-branding-preview-sandbox [data-part='root'][data-part='root'][data-part='root'],
   .ds-pattern-branding-preview-sandbox [data-part='table'][data-part='table'][data-part='table'],
+  .ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__table.ds-pattern-branding-preview-sandbox__table.ds-pattern-branding-preview-sandbox__table,
   .ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head'],
+  .ds-pattern-branding-preview-sandbox .ds-pattern-branding-preview-sandbox__table-head.ds-pattern-branding-preview-sandbox__table-head.ds-pattern-branding-preview-sandbox__table-head,
   .ds-pattern-branding-preview-sandbox
     [data-part='table']
-    > [data-part='surface'][data-part='surface'] {
+    > [data-part='surface'][data-part='surface'],
+  .ds-pattern-branding-preview-sandbox
+    .ds-pattern-branding-preview-sandbox__table
+    > .ds-pattern-branding-preview-sandbox__surface.ds-pattern-branding-preview-sandbox__surface {
     border-color: ButtonText;
   }
 }

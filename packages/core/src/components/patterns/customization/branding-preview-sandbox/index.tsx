@@ -268,11 +268,11 @@ export function BrandingPreviewSandbox({
       >
         {/* Buttons section -- real Buttons reading the scoped chrome vars */}
         {showLabels && (
-          <Box data-part="header" data-state="buttons">
+          <Box data-part="header" className="ds-pattern-branding-preview-sandbox__header" data-state="buttons">
             {t('brandingPreview.section.buttons', 'Buttons')}
           </Box>
         )}
-        <Box data-part="surface" data-state="buttons">
+        <Box data-part="surface" className="ds-pattern-branding-preview-sandbox__surface" data-state="buttons">
           <Button variant="primary">{t('brandingPreview.button.primary', 'Primary')}</Button>
           <Button variant="secondary">{t('brandingPreview.button.secondary', 'Secondary')}</Button>
           <Button variant="default">{t('brandingPreview.button.default', 'Default')}</Button>
@@ -281,11 +281,11 @@ export function BrandingPreviewSandbox({
 
         {/* Inputs section -- real Inputs (read-only: the preview is inert) */}
         {showLabels && (
-          <Box data-part="header" data-state="inputs">
+          <Box data-part="header" className="ds-pattern-branding-preview-sandbox__header" data-state="inputs">
             {t('brandingPreview.section.inputs', 'Inputs')}
           </Box>
         )}
-        <Box data-part="surface" data-state="inputs">
+        <Box data-part="surface" className="ds-pattern-branding-preview-sandbox__surface" data-state="inputs">
           <Input
             placeholder={t('brandingPreview.input.placeholder', 'Text input...')}
             readOnly
@@ -299,11 +299,11 @@ export function BrandingPreviewSandbox({
 
         {/* Cards section -- real Cards */}
         {showLabels && (
-          <Box data-part="header" data-state="cards">
+          <Box data-part="header" className="ds-pattern-branding-preview-sandbox__header" data-state="cards">
             {t('brandingPreview.section.cards', 'Cards')}
           </Box>
         )}
-        <Box data-part="surface" data-state="cards">
+        <Box data-part="surface" className="ds-pattern-branding-preview-sandbox__surface" data-state="cards">
           {/* Card drops a consumer data-part in every engine (its root
               carries Card's own forced part) -- the surviving component
               class is the authoritative hook for the preview width. */}
@@ -337,11 +337,11 @@ export function BrandingPreviewSandbox({
 
         {/* Badges section -- real Badges on the semantic tone axis */}
         {showLabels && (
-          <Box data-part="header" data-state="badges">
+          <Box data-part="header" className="ds-pattern-branding-preview-sandbox__header" data-state="badges">
             {t('brandingPreview.section.badges', 'Badges')}
           </Box>
         )}
-        <Box data-part="surface" data-state="badges">
+        <Box data-part="surface" className="ds-pattern-branding-preview-sandbox__surface" data-state="badges">
           <Badge tone="success">{t('brandingPreview.badge.active', 'Active')}</Badge>
           <Badge tone="warning">{t('brandingPreview.badge.warning', 'Warning')}</Badge>
           <Badge tone="danger">{t('brandingPreview.badge.error', 'Error')}</Badge>
@@ -354,19 +354,19 @@ export function BrandingPreviewSandbox({
         {!compact && (
           <>
             {showLabels && (
-              <Box data-part="header" data-state="table">
+              <Box data-part="header" className="ds-pattern-branding-preview-sandbox__header" data-state="table">
                 {t('brandingPreview.section.table', 'Table')}
               </Box>
             )}
-            <Box data-part="table">
-              <Box data-part="table-head">
-                <Box data-part="preview-table-cell" data-variant="head" data-span="wide">
+            <Box data-part="table" className="ds-pattern-branding-preview-sandbox__table">
+              <Box data-part="table-head" className="ds-pattern-branding-preview-sandbox__table-head">
+                <Box data-part="preview-table-cell" className="ds-pattern-branding-preview-sandbox__preview-table-cell" data-variant="head" data-span="wide">
                   {t('brandingPreview.table.name', 'Name')}
                 </Box>
-                <Box data-part="preview-table-cell" data-variant="head">
+                <Box data-part="preview-table-cell" className="ds-pattern-branding-preview-sandbox__preview-table-cell" data-variant="head">
                   {t('brandingPreview.table.status', 'Status')}
                 </Box>
-                <Box data-part="preview-table-cell" data-variant="head" data-align="end">
+                <Box data-part="preview-table-cell" className="ds-pattern-branding-preview-sandbox__preview-table-cell" data-variant="head" data-align="end">
                   {t('brandingPreview.table.date', 'Date')}
                 </Box>
               </Box>
@@ -382,14 +382,14 @@ export function BrandingPreviewSandbox({
                   date: t('brandingPreview.table.sampleDateB', 'Apr 16, 2026'),
                 },
               ].map((row, i) => (
-                <Box key={row.name} data-part="surface" data-state={i % 2 === 1 ? 'striped' : 'default'}>
-                  <Box data-part="preview-table-cell" data-variant="name" data-span="wide">
+                <Box key={row.name} data-part="surface" className="ds-pattern-branding-preview-sandbox__surface" data-state={i % 2 === 1 ? 'striped' : 'default'}>
+                  <Box data-part="preview-table-cell" className="ds-pattern-branding-preview-sandbox__preview-table-cell" data-variant="name" data-span="wide">
                     {row.name}
                   </Box>
-                  <Box data-part="preview-table-cell" data-variant="status">
+                  <Box data-part="preview-table-cell" className="ds-pattern-branding-preview-sandbox__preview-table-cell" data-variant="status">
                     <Badge tone="success">{t('brandingPreview.badge.active', 'Active')}</Badge>
                   </Box>
-                  <Box data-part="preview-table-cell" data-variant="date" data-align="end">
+                  <Box data-part="preview-table-cell" className="ds-pattern-branding-preview-sandbox__preview-table-cell" data-variant="date" data-align="end">
                     {row.date}
                   </Box>
                 </Box>
@@ -402,11 +402,11 @@ export function BrandingPreviewSandbox({
         {!compact && (
           <>
             {showLabels && (
-              <Box data-part="header" data-state="typography">
+              <Box data-part="header" className="ds-pattern-branding-preview-sandbox__header" data-state="typography">
                 {t('brandingPreview.section.typography', 'Typography')}
               </Box>
             )}
-            <Box data-part="surface" data-state="typography">
+            <Box data-part="surface" className="ds-pattern-branding-preview-sandbox__surface" data-state="typography">
               <Heading level="h3" className="ds-branding-preview-sandbox__title">
                 {t('brandingPreview.typography.heading', 'Heading Text')}
               </Heading>
@@ -424,7 +424,7 @@ export function BrandingPreviewSandbox({
         )}
 
         {/* Footer: var count */}
-        <Box data-part="subtitle" data-variant="variable-count">
+        <Box data-part="subtitle" className="ds-pattern-branding-preview-sandbox__subtitle" data-variant="variable-count">
           {/* Counts what the guard let through, not what was proposed. */}
           {t('brandingPreview.varsApplied', '{count} CSS variables applied', { count: appliedVars.length })}
         </Box>
