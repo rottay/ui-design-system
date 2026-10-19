@@ -80,7 +80,7 @@ function gridGap(gap: number | string | undefined): {
  */
 function ImagePlaceholder() {
   return (
-    <Flex data-part="image-placeholder" align="center" justify="center">
+    <Flex data-part="image-placeholder" className="ds-pattern-gallery-view__image-placeholder" align="center" justify="center">
       <ImageIcon data-part="image-placeholder-icon" />
     </Flex>
   );
@@ -113,7 +113,7 @@ function DefaultGalleryCard<T>({
   return (
     <>
       {hasImage ? (
-        <Box data-part="image-frame">
+        <Box data-part="image-frame" className="ds-pattern-gallery-view__image-frame">
           <img
             data-part="image"
             src={imageUrl as string}
@@ -125,7 +125,7 @@ function DefaultGalleryCard<T>({
         <ImagePlaceholder />
       )}
       {caption != null && String(caption).length > 0 && (
-        <Box data-part="caption">
+        <Box data-part="caption" className="ds-gallery-card__caption">
           <Text
             className="ds-gallery-view__caption-text"
             size="sm"
@@ -229,7 +229,7 @@ function GalleryCardWrapper<T>({
       {...interaction.handlers}
       onFocus={handleFocus}
       onClick={handleClick}
-      className="ds-gallery-card"
+      className="ds-gallery-card ds-gallery-card__card"
     >
       {/* Content: custom renderCard or default image+caption */}
       {renderCard ? (
@@ -250,7 +250,7 @@ function GalleryCardWrapper<T>({
           data-gallery-checkbox=""
           data-part="checkbox"
           data-selected={selected ? 'true' : 'false'}
-          className="ds-gallery-checkbox"
+          className="ds-gallery-checkbox ds-gallery-card__checkbox"
         >
           <Checkbox
             className="ds-gallery-view__checkbox-control"
@@ -470,10 +470,10 @@ export function PatternGalleryView<T extends object>(
           style={gridStyle}
         >
           {Array.from({ length: LOADING_CARD_COUNT }, (_, index) => (
-            <Box key={index} data-part="card" className="ds-gallery-card">
-              <Box data-part="image-frame" />
-              <Box data-part="caption">
-                <Box data-part="caption-text">{'\u00a0'}</Box>
+            <Box key={index} data-part="card" className="ds-gallery-card ds-gallery-card__card">
+              <Box data-part="image-frame" className="ds-pattern-gallery-view__image-frame" />
+              <Box data-part="caption" className="ds-gallery-card__caption">
+                <Box data-part="caption-text" className="ds-gallery-card__caption-text">{'\u00a0'}</Box>
               </Box>
             </Box>
           ))}
@@ -490,7 +490,7 @@ export function PatternGalleryView<T extends object>(
     return (
       <Box
         ref={rootRef}
-        className={['ds-pattern-gallery-view', 'ds-gallery-view__root', className].filter(Boolean).join(' ')}
+        className={['ds-pattern-gallery-view', 'ds-gallery-view__root', className, 'ds-pattern-gallery-view__root'].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="false"
         data-empty="true"

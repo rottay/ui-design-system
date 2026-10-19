@@ -111,6 +111,7 @@ function SelectableCard<T>({
   return (
     <Box
       {...partAttributes('card-shell', interaction.state)}
+      className="ds-pattern-grid-view__card-shell"
       {...interaction.handlers}
       data-selected={selected ? 'true' : 'false'}
       data-ds-stagger-item={staggered ? '' : undefined}
@@ -124,6 +125,7 @@ function SelectableCard<T>({
           this part (logical insets — mirrors under RTL for free). */}
       <Box
         data-part="checkbox-overlay"
+        className="ds-pattern-grid-view__checkbox-overlay"
       >
         <Checkbox
           className="ds-grid-view__checkbox-control"
@@ -267,8 +269,8 @@ export function PatternGridView<T>(
           style={gridChannels}
         >
           {Array.from({ length: LOADING_CARD_COUNT }).map((_, index) => (
-            <Box data-part="card-shell" key={index}>
-              <Box data-part="card-content" />
+            <Box data-part="card-shell" className="ds-pattern-grid-view__card-shell" key={index}>
+              <Box data-part="card-content" className="ds-pattern-grid-view__card-content" />
             </Box>
           ))}
         </Grid>
@@ -284,7 +286,7 @@ export function PatternGridView<T>(
     return (
       <Box
         ref={rootRef}
-        className={['ds-pattern-grid-view', 'ds-grid-view__root', className].filter(Boolean).join(' ')}
+        className={['ds-pattern-grid-view', 'ds-grid-view__root', className, 'ds-pattern-grid-view__root'].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="false"
         data-empty="true"
@@ -343,6 +345,7 @@ export function PatternGridView<T>(
               <Box
                 key={key}
                 data-part="cell"
+                className="ds-pattern-grid-view__cell"
                 data-ds-stagger-item=""
                 style={{ '--ds-stagger-index': index } as React.CSSProperties}
               >

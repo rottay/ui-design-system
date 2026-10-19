@@ -33,18 +33,21 @@
 /* The stagger cell wraps a card only when the motion policy actually animates.
    It is a grid item like any other, and a grid item whose content can overflow
    needs an explicit floor or the track blows out. */
-.ds-pattern-grid-view [data-part='cell'] {
+.ds-pattern-grid-view [data-part='cell'],
+.ds-pattern-grid-view .ds-pattern-grid-view__cell {
   min-inline-size: 0;
 }
 
 /* The card body the loading state stands behind: with no data there is nothing
    inside the caller's slot to draw, so the slot itself is the bone, and it
    needs a footprint for the renderer to measure. */
-.ds-pattern-grid-view [data-part='card-content'] {
+.ds-pattern-grid-view [data-part='card-content'],
+.ds-pattern-grid-view .ds-pattern-grid-view__card-content {
   min-block-size: 7.5rem;
 }
 
-.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell'] {
+.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell'],
+.ds-pattern-grid-view .ds-pattern-grid-view__card-shell.ds-pattern-grid-view__card-shell {
   /* Positioning host for the ::before/::after motif layers and the checkbox
      overlay (was an engine inline style; drained, channels untouched). */
   position: relative;
@@ -57,7 +60,8 @@
 /* checkbox overlay: logical insets — mirrors to the inline-start corner under
    RTL with zero overrides (was physical top/left in the engine). */
 
-.ds-pattern-grid-view [data-part='checkbox-overlay'] {
+.ds-pattern-grid-view [data-part='checkbox-overlay'],
+.ds-pattern-grid-view .ds-pattern-grid-view__checkbox-overlay {
   position: absolute;
   inset-block-start: 8px;
   inset-inline-start: 8px;
@@ -66,7 +70,8 @@
 
 /* grid motif layer (shell ::before; invisible while grid-bg/grid-line unset) */
 
-.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']::before {
+.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']::before,
+.ds-pattern-grid-view .ds-pattern-grid-view__card-shell.ds-pattern-grid-view__card-shell::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -83,7 +88,8 @@
 
 /* overlay + sheen wash layers (shell ::after, above content; invisible while unset) */
 
-.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']::after {
+.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']::after,
+.ds-pattern-grid-view .ds-pattern-grid-view__card-shell.ds-pattern-grid-view__card-shell::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -94,11 +100,13 @@
     var(--ds-collection-card-sheen, none);
 }
 
-.ds-pattern-grid-view [data-part='card-shell'][data-selected='true'] {
+.ds-pattern-grid-view [data-part='card-shell'][data-selected='true'],
+.ds-pattern-grid-view .ds-pattern-grid-view__card-shell[data-selected='true'] {
   box-shadow: var(--ds-collection-card-selected-ring, var(--ds-premium-card-selected-ring, 0 0 0 2px var(--ds-color-primary)));
 }
 
-.ds-pattern-grid-view [data-part='card-shell'][data-selected='false'] {
+.ds-pattern-grid-view [data-part='card-shell'][data-selected='false'],
+.ds-pattern-grid-view .ds-pattern-grid-view__card-shell[data-selected='false'] {
   box-shadow: var(--ds-collection-card-depth, none);
 }
 
@@ -107,7 +115,9 @@
    it computes `none`, the value the shell paints today. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .ds-pattern-grid-view
-    [data-part='card-shell'][data-part='card-shell']:is([data-state~='hovered'], :hover) {
+    [data-part='card-shell'][data-part='card-shell']:is([data-state~='hovered'], :hover),
+  .ds-pattern-grid-view
+    .ds-pattern-grid-view__card-shell.ds-pattern-grid-view__card-shell:is([data-state~='hovered'], :hover) {
     transform: var(--ds-collection-card-hover-transform, none);
   }
 }
@@ -120,7 +130,8 @@
 }
 
 .ds-pattern-grid-view.ds-grid-view__root.ds-grid-view__root[data-empty='true'],
-.ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true'] {
+.ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true'],
+.ds-pattern-grid-view.ds-pattern-grid-view__root.ds-pattern-grid-view__root[data-empty='true'] {
   padding: var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px);
   text-align: center;
   border-radius: var(--ds-radius-lg, 12px);
@@ -135,7 +146,8 @@
 /* forced colors: the selected ring is a box-shadow and is stripped, so the
    selected shell re-expresses through the system highlight outline. */
 @media (forced-colors: active) {
-  .ds-pattern-grid-view [data-part='card-shell'][data-selected='true'] {
+  .ds-pattern-grid-view [data-part='card-shell'][data-selected='true'],
+  .ds-pattern-grid-view .ds-pattern-grid-view__card-shell[data-selected='true'] {
     outline: 2px solid Highlight;
     outline-offset: 1px;
   }

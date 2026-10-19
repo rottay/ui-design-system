@@ -39,6 +39,41 @@ const paintsSolidOutline = (rule: Rule) =>
     (declaration) => /^outline\s*:/.test(declaration) && /solid/.test(declaration) && !/transparent/.test(declaration),
   );
 
+/** Commas inside `:is()` / `:where()` / `:not()` separate arguments, not selectors. */
+function selectorList(prelude: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let buf = '';
+  for (const ch of prelude) {
+    if (ch === '(') depth += 1;
+    else if (ch === ')') depth -= 1;
+    if (ch === ',' && depth === 0) {
+      parts.push(buf.replace(/\s+/g, ' ').trim());
+      buf = '';
+    } else buf += ch;
+  }
+  parts.push(buf.replace(/\s+/g, ' ').trim());
+  return parts;
+}
+
+/** An own-block class door (`:is([data-part='p'], .block__p)` or `.block__p`) reads back as `[data-part='p']`;
+ *  any other drift is left as written. */
+function asPartSelector(selector: string, block: string, parts: readonly string[]): string {
+  let read = selector;
+  for (const part of parts) {
+    const token = `[data-part='${part}']`;
+    read = read
+      .replace(new RegExp(`:is\\(\\[data-part=(['"])${part}\\1\\],\\s*\\.${block}__${part}\\)`, 'g'), token)
+      .replace(new RegExp(`\\.${block}__${part}(?![\\w-])`, 'g'), token);
+  }
+  return read;
+}
+
+/** A rule's selector list read through the card's class door, each distinct member once, in source order:
+ *  a pair arm folds back onto the part selector it doubles. */
+const throughCardDoor = (selector: string) =>
+  [...new Set(selectorList(selector).map((member) => asPartSelector(member, 'ds-gallery-card', ['card'])))].join(', ');
+
 const FORCED = forcedColorsBlock(SKIN);
 const AUTHORED = rulesOf(SKIN.replace(FORCED, ''));
 const focusRules = (rules: Rule[]) => rules.filter((rule) => rule.selector.includes('focus-visible'));
@@ -72,12 +107,14 @@ describe('PatternGalleryView — the card wears the tenant focus signature', () 
   });
 
   it('hosts the overlay on a positioned card', () => {
-    const shell = AUTHORED.find((rule) => rule.selector === ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']");
+    const shell = AUTHORED.find(
+      (rule) => throughCardDoor(rule.selector) === ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']",
+    );
     expect(shell?.declarations).toContain('position: relative');
   });
 
   it('keeps a system-colour outline in forced colors', () => {
-    expect(focusRules(rulesOf(FORCED))).toEqual([
+    expect(focusRules(rulesOf(FORCED)).map((rule) => ({ ...rule, selector: throughCardDoor(rule.selector) }))).toEqual([
       {
         selector: ".ds-pattern-gallery-view .ds-gallery-card[data-part='card']:is([data-state~='focus-visible'], :focus-visible)",
         declarations: [

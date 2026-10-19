@@ -90902,20 +90902,24 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  */
 
 .ds-pattern-gallery-view.ds-gallery-view__root,
-.ds-pattern-gallery-view[data-part='root'] {
+.ds-pattern-gallery-view[data-part='root'],
+.ds-pattern-gallery-view.ds-pattern-gallery-view__root {
   --ds-gallery-view-aspect-ratio: 1;
 }
 
 /* ---- media frame: the image and its placeholder share one geometry. ---- */
 
 .ds-pattern-gallery-view [data-part='image-frame'],
-.ds-pattern-gallery-view [data-part='image-placeholder'] {
+.ds-pattern-gallery-view .ds-pattern-gallery-view__image-frame,
+.ds-pattern-gallery-view [data-part='image-placeholder'],
+.ds-pattern-gallery-view .ds-pattern-gallery-view__image-placeholder {
   /* The media ratio is one decision for the frame and for the placeholder that
      stands in for it, so a missing image never changes the card's footprint. */
   aspect-ratio: var(--ds-gallery-view-aspect-ratio, 1);
 }
 
-.ds-pattern-gallery-view [data-part='image-frame'] {
+.ds-pattern-gallery-view [data-part='image-frame'],
+.ds-pattern-gallery-view .ds-pattern-gallery-view__image-frame {
   inline-size: 100%;
   overflow: hidden;
 }
@@ -90928,7 +90932,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   transition: transform var(--ds-motion-reveal) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-gallery-view [data-part='image-placeholder'] {
+.ds-pattern-gallery-view [data-part='image-placeholder'],
+.ds-pattern-gallery-view .ds-pattern-gallery-view__image-placeholder {
   inline-size: 100%;
   background: var(--ds-color-bg-tertiary);
   color: var(--ds-color-text-disabled);
@@ -90942,7 +90947,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* ---- caption: quiet strip below the media, single-line with ellipsis. ---- */
 
-.ds-pattern-gallery-view .ds-gallery-card [data-part='caption'] {
+.ds-pattern-gallery-view .ds-gallery-card [data-part='caption'],
+.ds-pattern-gallery-view .ds-gallery-card .ds-gallery-card__caption {
   /* The strip owns the caption's rhythm ONCE. The line inside it must not
      repeat the padding: it would indent and inflate every loaded caption
      inside an already-padded strip. */
@@ -90959,7 +90965,10 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   .ds-gallery-view__caption-text.ds-gallery-view__caption-text.ds-gallery-view__caption-text,
 .ds-pattern-gallery-view
   .ds-gallery-card
-  [data-part='caption-text'][data-part='caption-text'][data-part='caption-text'] {
+  [data-part='caption-text'][data-part='caption-text'][data-part='caption-text'],
+.ds-pattern-gallery-view
+  .ds-gallery-card
+  .ds-gallery-card__caption-text.ds-gallery-card__caption-text.ds-gallery-card__caption-text {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -90972,7 +90981,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         card's content box on select — the ring keeps the same emphasis with
         zero reflow). ---- */
 
-.ds-pattern-gallery-view .ds-gallery-card[data-part='card'] {
+.ds-pattern-gallery-view .ds-gallery-card[data-part='card'],
+.ds-pattern-gallery-view .ds-gallery-card.ds-gallery-card__card {
   position: relative;
   overflow: hidden;
   border-radius: var(--ds-radius-md);
@@ -90982,16 +90992,19 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     border-color var(--ds-motion-reveal) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-clickable='true'] {
+.ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-clickable='true'],
+.ds-pattern-gallery-view .ds-gallery-card.ds-gallery-card__card[data-clickable='true'] {
   cursor: pointer;
 }
 
-.ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true'] {
+.ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true'],
+.ds-pattern-gallery-view .ds-gallery-card.ds-gallery-card__card[data-selected='true'] {
   border: var(--ds-border-width-thin) solid var(--ds-color-primary);
   box-shadow: 0 0 0 var(--ds-border-width-thin) var(--ds-color-primary);
 }
 
-.ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='false'] {
+.ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='false'],
+.ds-pattern-gallery-view .ds-gallery-card.ds-gallery-card__card[data-selected='false'] {
   border: var(--ds-border-width-thin) solid var(--ds-color-border);
 }
 
@@ -91006,7 +91019,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   }
 
   .ds-pattern-gallery-view
-    .ds-gallery-card[data-part='card'][data-selected='true']:is([data-state~='hovered'], :hover) {
+    .ds-gallery-card[data-part='card'][data-selected='true']:is([data-state~='hovered'], :hover),
+  .ds-pattern-gallery-view
+    .ds-gallery-card.ds-gallery-card__card[data-selected='true']:is([data-state~='hovered'], :hover) {
     box-shadow:
       0 0 0 var(--ds-border-width-thin) var(--ds-color-primary),
       0 4px 12px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
@@ -91016,7 +91031,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ---- selection overlay: revealed on hover / when checked; always visible
         on coarse pointers, where no hover exists to reveal it. ---- */
 
-.ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox[data-part='checkbox'] {
+.ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox[data-part='checkbox'],
+.ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox.ds-gallery-card__checkbox {
   position: absolute;
   inset-block-start: var(--ds-spacing-2);
   inset-inline-start: var(--ds-spacing-2);
@@ -91068,7 +91084,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ---- empty state ---- */
 
 .ds-pattern-gallery-view.ds-gallery-view__root.ds-gallery-view__root[data-empty='true'],
-.ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true'] {
+.ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true'],
+.ds-pattern-gallery-view.ds-pattern-gallery-view__root.ds-pattern-gallery-view__root[data-empty='true'] {
   padding: var(--ds-spacing-8) var(--ds-spacing-5);
   text-align: center;
   border-radius: var(--ds-radius-lg);
@@ -91084,6 +91101,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-gallery-view .ds-gallery-card[data-part='card'],
+  .ds-pattern-gallery-view .ds-gallery-card.ds-gallery-card__card,
   .ds-pattern-gallery-view .ds-gallery-card [data-part='image'],
   .ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox {
     transition: none;
@@ -91103,18 +91121,22 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         the overlay keeps a solid canvas behind the real checkbox. ---- */
 
 @media (forced-colors: active) {
-  .ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true'] {
+  .ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true'],
+  .ds-pattern-gallery-view .ds-gallery-card.ds-gallery-card__card[data-selected='true'] {
     border-color: Highlight;
     box-shadow: none;
     outline: var(--ds-border-width-thin) solid Highlight;
   }
 
-  .ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='false'] {
+  .ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='false'],
+  .ds-pattern-gallery-view .ds-gallery-card.ds-gallery-card__card[data-selected='false'] {
     border-color: ButtonText;
   }
 
   .ds-pattern-gallery-view
-    .ds-gallery-card[data-part='card']:is([data-state~='focus-visible'], :focus-visible) {
+    .ds-gallery-card[data-part='card']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-pattern-gallery-view
+    .ds-gallery-card.ds-gallery-card__card:is([data-state~='focus-visible'], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
   }
@@ -91168,18 +91190,21 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* The stagger cell wraps a card only when the motion policy actually animates.
    It is a grid item like any other, and a grid item whose content can overflow
    needs an explicit floor or the track blows out. */
-.ds-pattern-grid-view [data-part='cell'] {
+.ds-pattern-grid-view [data-part='cell'],
+.ds-pattern-grid-view .ds-pattern-grid-view__cell {
   min-inline-size: 0;
 }
 
 /* The card body the loading state stands behind: with no data there is nothing
    inside the caller's slot to draw, so the slot itself is the bone, and it
    needs a footprint for the renderer to measure. */
-.ds-pattern-grid-view [data-part='card-content'] {
+.ds-pattern-grid-view [data-part='card-content'],
+.ds-pattern-grid-view .ds-pattern-grid-view__card-content {
   min-block-size: 7.5rem;
 }
 
-.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell'] {
+.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell'],
+.ds-pattern-grid-view .ds-pattern-grid-view__card-shell.ds-pattern-grid-view__card-shell {
   /* Positioning host for the ::before/::after motif layers and the checkbox
      overlay (was an engine inline style; drained, channels untouched). */
   position: relative;
@@ -91192,7 +91217,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* checkbox overlay: logical insets — mirrors to the inline-start corner under
    RTL with zero overrides (was physical top/left in the engine). */
 
-.ds-pattern-grid-view [data-part='checkbox-overlay'] {
+.ds-pattern-grid-view [data-part='checkbox-overlay'],
+.ds-pattern-grid-view .ds-pattern-grid-view__checkbox-overlay {
   position: absolute;
   inset-block-start: 8px;
   inset-inline-start: 8px;
@@ -91201,7 +91227,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* grid motif layer (shell ::before; invisible while grid-bg/grid-line unset) */
 
-.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']::before {
+.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']::before,
+.ds-pattern-grid-view .ds-pattern-grid-view__card-shell.ds-pattern-grid-view__card-shell::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -91218,7 +91245,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* overlay + sheen wash layers (shell ::after, above content; invisible while unset) */
 
-.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']::after {
+.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']::after,
+.ds-pattern-grid-view .ds-pattern-grid-view__card-shell.ds-pattern-grid-view__card-shell::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -91229,11 +91257,13 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     var(--ds-collection-card-sheen, none);
 }
 
-.ds-pattern-grid-view [data-part='card-shell'][data-selected='true'] {
+.ds-pattern-grid-view [data-part='card-shell'][data-selected='true'],
+.ds-pattern-grid-view .ds-pattern-grid-view__card-shell[data-selected='true'] {
   box-shadow: var(--ds-collection-card-selected-ring, var(--ds-premium-card-selected-ring, 0 0 0 2px var(--ds-color-primary)));
 }
 
-.ds-pattern-grid-view [data-part='card-shell'][data-selected='false'] {
+.ds-pattern-grid-view [data-part='card-shell'][data-selected='false'],
+.ds-pattern-grid-view .ds-pattern-grid-view__card-shell[data-selected='false'] {
   box-shadow: var(--ds-collection-card-depth, none);
 }
 
@@ -91242,7 +91272,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    it computes `none`, the value the shell paints today. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .ds-pattern-grid-view
-    [data-part='card-shell'][data-part='card-shell']:is([data-state~='hovered'], :hover) {
+    [data-part='card-shell'][data-part='card-shell']:is([data-state~='hovered'], :hover),
+  .ds-pattern-grid-view
+    .ds-pattern-grid-view__card-shell.ds-pattern-grid-view__card-shell:is([data-state~='hovered'], :hover) {
     transform: var(--ds-collection-card-hover-transform, none);
   }
 }
@@ -91255,7 +91287,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-pattern-grid-view.ds-grid-view__root.ds-grid-view__root[data-empty='true'],
-.ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true'] {
+.ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true'],
+.ds-pattern-grid-view.ds-pattern-grid-view__root.ds-pattern-grid-view__root[data-empty='true'] {
   padding: var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px);
   text-align: center;
   border-radius: var(--ds-radius-lg, 12px);
@@ -91270,7 +91303,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* forced colors: the selected ring is a box-shadow and is stripped, so the
    selected shell re-expresses through the system highlight outline. */
 @media (forced-colors: active) {
-  .ds-pattern-grid-view [data-part='card-shell'][data-selected='true'] {
+  .ds-pattern-grid-view [data-part='card-shell'][data-selected='true'],
+  .ds-pattern-grid-view .ds-pattern-grid-view__card-shell[data-selected='true'] {
     outline: 2px solid Highlight;
     outline-offset: 1px;
   }
