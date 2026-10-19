@@ -152,7 +152,8 @@
 }
 
 /* ---- breadcrumb divider ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='breadcrumb-divider'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='breadcrumb-divider'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='breadcrumb-divider'] {
   inline-size: 1px;
   block-size: 18px;
   background: var(--ds-color-border-secondary);
@@ -181,7 +182,8 @@
 }
 
 /* ---- action rail (moved out of the utility strip) ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] {
   flex: 0 0 auto;
   margin-inline-start: auto;
 }
@@ -189,7 +191,8 @@
    selector is the part the family STAMPS, not `[data-part='actions'] svg`: a
    descendant-element selector reaches into the composed Button's own internals,
    which this family does not own, and it left `action-icon` stamped with no rule. */
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] [data-part='action-icon'] {
   inline-size: 14px;
   block-size: 14px;
 }
@@ -214,12 +217,14 @@
    component: the slot carries the size and the glyph fills it. */
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'],
 .ds-structure.ds-form-header.ds-form-header__root [data-part='icon-badge-glyph'],
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] [data-part='action-icon'] {
   display: flex;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'] > *,
 .ds-structure.ds-form-header.ds-form-header__root [data-part='icon-badge-glyph'] > *,
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > * {
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > *,
+.ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] [data-part='action-icon'] > * {
   inline-size: 100%;
   block-size: 100%;
 }
@@ -263,7 +268,8 @@
 /* ---- context section below the hero: a RULE, not a card (see the header's
         "Forms are not card stacks" note). One dominant boundary, optical
         padding, and the governed inset highlight for the optical top edge. ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='context-card'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='context-card'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='context-card'] {
   margin-block-start: var(--ds-form-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   padding-block-start: var(--ds-form-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   /* The context section is the RECESSED continuation of the hero, so its
@@ -281,14 +287,16 @@
   backdrop-filter: var(--ds-form-header-context-backdrop, none);
 }
 /* the single dominant boundary for the region */
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='context-card'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='context-card'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel [data-part='context-card'] {
   border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 /* the rail's own gap to the children below it — the EditHeader spelling. The
    retired `[data-has-rail='true']` was a boolean the component computed and stamped
    for one rule; the sibling combinator reads the same fact off the anatomy, and
    `context-rail` stops being a part with no paint. */
-.ds-structure.ds-form-header[data-part='root'] [data-part='context-rail'] + [data-part='context-card-children'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='context-rail'] + [data-part='context-card-children'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='context-rail'] + [data-part='context-card-children'] {
   margin-block-start: 18px;
 }
 
@@ -314,7 +322,8 @@
     font-size: var(--ds-form-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
   }
   /* the rail stops being a right-aligned appendix and becomes its own band */
-  .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='actions'],
+  .ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] {
     inline-size: 100%;
     margin-inline-start: 0;
   }
@@ -333,7 +342,8 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] > * {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] > *,
+  .ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] > * {
     flex: 1 1 100%;
   }
 }
@@ -377,7 +387,8 @@
   .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__top-bar,
   .ds-structure.ds-form-header[data-part='root'] [data-part='back-button'],
   .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__back-button,
-  .ds-structure.ds-form-header[data-part='root'] [data-part='context-card'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='context-card'],
+  .ds-structure.ds-form-header.ds-form-header__root [data-part='context-card'] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
@@ -388,7 +399,8 @@
     background: Canvas;
     color: ButtonText;
   }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='breadcrumb-divider'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='breadcrumb-divider'],
+  .ds-structure.ds-form-header.ds-form-header__root [data-part='breadcrumb-divider'] {
     background: ButtonText;
   }
 }

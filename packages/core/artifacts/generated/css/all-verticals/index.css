@@ -72874,7 +72874,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='editorial'],
 .ds-structure.ds-edit-header .ds-edit-header__hero-panel[data-archetype='editorial'],
-.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='editorial'] {
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='editorial'],
+.ds-structure.ds-form-header .ds-edit-header__hero-panel[data-archetype='editorial'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent) 0%, transparent 48%),
     radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-secondary) 10%, transparent) 0%, transparent 34%),
@@ -72890,7 +72891,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='technical'],
 .ds-structure.ds-edit-header .ds-edit-header__hero-panel[data-archetype='technical'],
-.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='technical'] {
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='technical'],
+.ds-structure.ds-form-header .ds-edit-header__hero-panel[data-archetype='technical'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent) 0%, transparent 48%),
     radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent) 0%, transparent 34%),
@@ -72906,7 +72908,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='governance'],
 .ds-structure.ds-edit-header .ds-edit-header__hero-panel[data-archetype='governance'],
-.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='governance'] {
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='governance'],
+.ds-structure.ds-form-header .ds-edit-header__hero-panel[data-archetype='governance'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-primary) 17%, transparent) 0%, transparent 48%),
     radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-secondary) 10%, transparent) 0%, transparent 34%),
@@ -72950,27 +72953,31 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='primary'],
 .ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='primary'],
-.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='primary'] {
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='primary'],
+.ds-structure.ds-form-header .ds-edit-header__icon-badge[data-variant='primary'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-primary-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-primary-bd, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary) 82%));
   --ds-header-icon-tone-fg: var(--ds-header-tone-primary-fg, color-mix(in srgb, var(--ds-color-primary) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='success'],
-.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='success'] {
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='success'],
+.ds-structure.ds-form-header .ds-edit-header__icon-badge[data-variant='success'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-success-bg, color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-success-bd, color-mix(in srgb, var(--ds-color-success) 18%, var(--ds-color-border-secondary) 82%));
   --ds-header-icon-tone-fg: var(--ds-header-tone-success-fg, color-mix(in srgb, var(--ds-color-success) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='warning'],
 .ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='warning'],
-.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='warning'] {
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='warning'],
+.ds-structure.ds-form-header .ds-edit-header__icon-badge[data-variant='warning'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-warning-bg, color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-warning-bd, color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%));
   --ds-header-icon-tone-fg: var(--ds-header-tone-warning-fg, color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='info'],
 .ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='info'],
-.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='info'] {
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='info'],
+.ds-structure.ds-form-header .ds-edit-header__icon-badge[data-variant='info'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-info-bg, color-mix(in srgb, var(--ds-color-info) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-info-bd, color-mix(in srgb, var(--ds-color-info) 18%, var(--ds-color-border-secondary) 82%));
   --ds-header-icon-tone-fg: var(--ds-header-tone-info-fg, color-mix(in srgb, var(--ds-color-info) 78%, var(--ds-color-text-primary) 22%));
@@ -73776,7 +73783,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 /* ---- breadcrumb divider ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='breadcrumb-divider'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='breadcrumb-divider'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='breadcrumb-divider'] {
   inline-size: 1px;
   block-size: 18px;
   background: var(--ds-color-border-secondary);
@@ -73805,7 +73813,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 /* ---- action rail (moved out of the utility strip) ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] {
   flex: 0 0 auto;
   margin-inline-start: auto;
 }
@@ -73813,7 +73822,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    selector is the part the family STAMPS, not `[data-part='actions'] svg`: a
    descendant-element selector reaches into the composed Button's own internals,
    which this family does not own, and it left `action-icon` stamped with no rule. */
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] [data-part='action-icon'] {
   inline-size: 14px;
   block-size: 14px;
 }
@@ -73838,12 +73848,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    component: the slot carries the size and the glyph fills it. */
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'],
 .ds-structure.ds-form-header.ds-form-header__root [data-part='icon-badge-glyph'],
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] [data-part='action-icon'] {
   display: flex;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge-glyph'] > *,
 .ds-structure.ds-form-header.ds-form-header__root [data-part='icon-badge-glyph'] > *,
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > * {
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] > *,
+.ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] [data-part='action-icon'] > * {
   inline-size: 100%;
   block-size: 100%;
 }
@@ -73887,7 +73899,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ---- context section below the hero: a RULE, not a card (see the header's
         "Forms are not card stacks" note). One dominant boundary, optical
         padding, and the governed inset highlight for the optical top edge. ---- */
-.ds-structure.ds-form-header[data-part='root'] [data-part='context-card'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='context-card'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='context-card'] {
   margin-block-start: var(--ds-form-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   padding-block-start: var(--ds-form-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   /* The context section is the RECESSED continuation of the hero, so its
@@ -73905,14 +73918,16 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   backdrop-filter: var(--ds-form-header-context-backdrop, none);
 }
 /* the single dominant boundary for the region */
-.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='context-card'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='context-card'],
+.ds-structure.ds-form-header.ds-form-header__root .ds-form-header__hero-panel [data-part='context-card'] {
   border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 /* the rail's own gap to the children below it — the EditHeader spelling. The
    retired `[data-has-rail='true']` was a boolean the component computed and stamped
    for one rule; the sibling combinator reads the same fact off the anatomy, and
    `context-rail` stops being a part with no paint. */
-.ds-structure.ds-form-header[data-part='root'] [data-part='context-rail'] + [data-part='context-card-children'] {
+.ds-structure.ds-form-header[data-part='root'] [data-part='context-rail'] + [data-part='context-card-children'],
+.ds-structure.ds-form-header.ds-form-header__root [data-part='context-rail'] + [data-part='context-card-children'] {
   margin-block-start: 18px;
 }
 
@@ -73938,7 +73953,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     font-size: var(--ds-form-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
   }
   /* the rail stops being a right-aligned appendix and becomes its own band */
-  .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='actions'],
+  .ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] {
     inline-size: 100%;
     margin-inline-start: 0;
   }
@@ -73957,7 +73973,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     flex-direction: column;
     align-items: flex-start;
   }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] > * {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='actions'] > *,
+  .ds-structure.ds-form-header.ds-form-header__root [data-part='actions'] > * {
     flex: 1 1 100%;
   }
 }
@@ -74001,7 +74018,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__top-bar,
   .ds-structure.ds-form-header[data-part='root'] [data-part='back-button'],
   .ds-structure.ds-form-header.ds-form-header__root .ds-form-header__back-button,
-  .ds-structure.ds-form-header[data-part='root'] [data-part='context-card'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='context-card'],
+  .ds-structure.ds-form-header.ds-form-header__root [data-part='context-card'] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
@@ -74012,7 +74030,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     background: Canvas;
     color: ButtonText;
   }
-  .ds-structure.ds-form-header[data-part='root'] [data-part='breadcrumb-divider'] {
+  .ds-structure.ds-form-header[data-part='root'] [data-part='breadcrumb-divider'],
+  .ds-structure.ds-form-header.ds-form-header__root [data-part='breadcrumb-divider'] {
     background: ButtonText;
   }
 }

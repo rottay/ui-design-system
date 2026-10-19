@@ -66,7 +66,8 @@
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='editorial'],
 .ds-structure.ds-edit-header .ds-edit-header__hero-panel[data-archetype='editorial'],
-.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='editorial'] {
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='editorial'],
+.ds-structure.ds-form-header .ds-edit-header__hero-panel[data-archetype='editorial'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent) 0%, transparent 48%),
     radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-secondary) 10%, transparent) 0%, transparent 34%),
@@ -82,7 +83,8 @@
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='technical'],
 .ds-structure.ds-edit-header .ds-edit-header__hero-panel[data-archetype='technical'],
-.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='technical'] {
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='technical'],
+.ds-structure.ds-form-header .ds-edit-header__hero-panel[data-archetype='technical'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent) 0%, transparent 48%),
     radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent) 0%, transparent 34%),
@@ -98,7 +100,8 @@
 
 .ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='governance'],
 .ds-structure.ds-edit-header .ds-edit-header__hero-panel[data-archetype='governance'],
-.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='governance'] {
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='governance'],
+.ds-structure.ds-form-header .ds-edit-header__hero-panel[data-archetype='governance'] {
   background-image:
     radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-primary) 17%, transparent) 0%, transparent 48%),
     radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-secondary) 10%, transparent) 0%, transparent 34%),
@@ -142,27 +145,31 @@
 
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='primary'],
 .ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='primary'],
-.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='primary'] {
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='primary'],
+.ds-structure.ds-form-header .ds-edit-header__icon-badge[data-variant='primary'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-primary-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-primary-bd, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary) 82%));
   --ds-header-icon-tone-fg: var(--ds-header-tone-primary-fg, color-mix(in srgb, var(--ds-color-primary) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='success'],
-.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='success'] {
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='success'],
+.ds-structure.ds-form-header .ds-edit-header__icon-badge[data-variant='success'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-success-bg, color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-success-bd, color-mix(in srgb, var(--ds-color-success) 18%, var(--ds-color-border-secondary) 82%));
   --ds-header-icon-tone-fg: var(--ds-header-tone-success-fg, color-mix(in srgb, var(--ds-color-success) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='warning'],
 .ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='warning'],
-.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='warning'] {
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='warning'],
+.ds-structure.ds-form-header .ds-edit-header__icon-badge[data-variant='warning'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-warning-bg, color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-warning-bd, color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%));
   --ds-header-icon-tone-fg: var(--ds-header-tone-warning-fg, color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='info'],
 .ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='info'],
-.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='info'] {
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='info'],
+.ds-structure.ds-form-header .ds-edit-header__icon-badge[data-variant='info'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-info-bg, color-mix(in srgb, var(--ds-color-info) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-info-bd, color-mix(in srgb, var(--ds-color-info) 18%, var(--ds-color-border-secondary) 82%));
   --ds-header-icon-tone-fg: var(--ds-header-tone-info-fg, color-mix(in srgb, var(--ds-color-info) 78%, var(--ds-color-text-primary) 22%));
