@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-17",
+ "updated": "2026-10-19",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -2929,6 +2929,16 @@
      "at": "2026-10-17 15:18",
      "by": "kimi-dt",
      "note": "M-P3 family-11 integrated (1e0e68978): 126/147 doors, wave B complete; review 87ac0028 ACCEPT 11/11; owed: pins micro-lot (strip precondition), harness-ext merge + clock freeze, wave C re-plan"
+    },
+    {
+     "at": "2026-10-19 07:38",
+     "by": "kimi-dt",
+     "note": "M-P3 Wave C drain under Kimi ADMIN DT (post-handoff 18/10 18:45): integrated FU-7H f7addb797, LC3 fe9f8db10, LC4 5d3ded564 (incl. independent addendum closing the P2-shard3 rerun), LC2 47a56535a (DT ruling v3-KEEP: own class-A reader migrated in-lot), LC7 a3976004f (same ruling shape). All with independent ACCEPT reviews, §3.4 gates incl. same-env pre-apply node baselines, per-lot retention receipts. In flight: LC11/LC9 integrations (ACCEPT), LC8 re-review r3 (r1/r2 HOLDs fixed: SPR skin-reachability pin), LC13 step 1 dispatched (law-file migrations :3872/T6/:5295/:932; unblocks LC10 revalidation), LC10 parked per ruling. Remainder classes after this wave: wave-C residue lots (LC8/LC9/LC11/LC13s1-2/LC10 + follow-ups FU-LC1B/FU-LC8A/FU-10G/FU-F11R), then strip, dead-arm and final certification per WAVE-C-PLAN; final obligations of EVI-02/RET-04/RET-06 tracked in their own lanes. RECONCILIATION (owner audit 19/10 corr. 3): this entry's size=S and 'ABSORBED by WO-FAM-00' note are stale — the P-88 decision and this log govern a fleet-wide carriers migration (waves A/B/C, 47 families); acceptance/phases/DONE unchanged. The official gate has no size/notes subcommand; a field-level correction is queued as a pointed owner decision (recommendation: size S -> XL-program, notes -> pointer to this log), to be applied when the gate supports it or by owner ruling."
+    },
+    {
+     "at": "2026-10-19 07:40",
+     "by": "kimi-dt",
+     "note": "RESIDUE TABLE (owner audit 19/10 corr. 4; single source = this log; per obligation: owner | precondition | closing gate | observed heavy cost). (a) WAVE C remainder: LC11 integrating now (gates in flight) | LC9 ACCEPT queued after LC11 | LC8 re-review r3 in flight (r1/r2 HOLDs fixed) | LC13-s1 DISPATCHED 07:40 (law-file migrations :3872/T6/:5295/:932 in lot-lc13/s1 NEW root; singleton axis chain; closes the LC10 blocker) | LC10 parked: revalidates ONLY the axis-difference suite vs the re-measured corrected-HEAD baseline after LC13s1 lands (ruling), then review+integration | LC13-s2 after s1 (scope re-derived at dispatch: PM-T2 landed, :85 KEPT per ruling) | FU-F11R after the full LC13 chain | LC5/LC6 (post-G1, certified 1d367edc) | LC12 (after PM-T+G1+FU-F11R) | LC14 (after PM-T2+LC13 chain+G1) | LX1-LX4 + FU-F11V/9A/9B/8A/FU-F11C after the ext harness consumers | FU-10G (after FU-7H, landed f7addb797: focus-visible back-button half + interaction cases) | FU-LC1B (pin :217 migration then door :270+2 arms; strip precondition) | FU-LC8A (FFP.real-engines bColumn per-member then :325+2 arms; strip precondition). (b) strip wave: only after ALL doors armed + the two strip preconditions land; gate = bones-strip + full suite. (c) dead-arm certification + (d) final certification: full pinned suite at the milestone, sighted showroom check. (e) Final obligations of EVI-02/RET-04/RET06 stay in their own lanes with their own gates — not carriers work. Observed cost (audit corr. 5): 5 integrations 22:47-06:40, median 1h58 each incl. queue/review/rework; first lot 4h+ post-handoff; no global date is given from this. Honest separation: (i) DS/Modern milestone closure = the items above; (ii) total-170 includes external receivers NOT in DT authority: WO-DER-10 (human identity pick — owner decision), WO-CON-09 (app adoption, out of DS scope), WO-ARC-21 (app half pending permission D31). Those are NOT claimed closed or blocked-flat; each carries its concrete edge. No app is edited; no WO outside DS authority is closed."
     }
    ],
    "claimedBy": "kimi-dt",
