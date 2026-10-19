@@ -50,7 +50,8 @@
 /* ---- visualization-mirror skeleton: blocks sit on the same layout as the
         real content (KPI row, tab strip + chart inside the views card, aside
         rail), preventing a loading-time layout shift. ---- */
-.ds-surface.ds-visualization [data-part='visualization-skeleton-block'] {
+.ds-surface.ds-visualization [data-part='visualization-skeleton-block'],
+.ds-surface.ds-visualization .ds-visualization__visualization-skeleton-block {
   border-radius: var(
     --ds-skeleton-radius,
     var(--ds-radius-md, 8px)
@@ -68,34 +69,45 @@
 }
 
 .ds-surface.ds-visualization
-  [data-part='visualization-skeleton-block'][data-size='stat'] {
+  [data-part='visualization-skeleton-block'][data-size='stat'],
+.ds-surface.ds-visualization
+  .ds-visualization__visualization-skeleton-block[data-size='stat'] {
   min-block-size: 96px;
 }
 
 .ds-surface.ds-visualization
-  [data-part='visualization-skeleton-block'][data-size='tab'] {
+  [data-part='visualization-skeleton-block'][data-size='tab'],
+.ds-surface.ds-visualization
+  .ds-visualization__visualization-skeleton-block[data-size='tab'] {
   inline-size: 96px;
   min-block-size: 32px;
 }
 
 .ds-surface.ds-visualization
-  [data-part='visualization-skeleton-block'][data-size='description'] {
+  [data-part='visualization-skeleton-block'][data-size='description'],
+.ds-surface.ds-visualization
+  .ds-visualization__visualization-skeleton-block[data-size='description'] {
   inline-size: 48%;
   min-block-size: 12px;
 }
 
 .ds-surface.ds-visualization
-  [data-part='visualization-skeleton-block'][data-size='chart'] {
+  [data-part='visualization-skeleton-block'][data-size='chart'],
+.ds-surface.ds-visualization
+  .ds-visualization__visualization-skeleton-block[data-size='chart'] {
   min-block-size: 280px;
 }
 
 .ds-surface.ds-visualization
-  [data-part='visualization-skeleton-block'][data-size='aside'] {
+  [data-part='visualization-skeleton-block'][data-size='aside'],
+.ds-surface.ds-visualization
+  .ds-visualization__visualization-skeleton-block[data-size='aside'] {
   min-block-size: 320px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-visualization [data-part='visualization-skeleton-block'] {
+  .ds-surface.ds-visualization [data-part='visualization-skeleton-block'],
+  .ds-surface.ds-visualization .ds-visualization__visualization-skeleton-block {
     animation: none;
   }
 }

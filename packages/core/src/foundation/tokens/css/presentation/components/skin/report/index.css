@@ -40,7 +40,8 @@
 /* ---- report-mirror skeleton: blocks sit on the same layout as the real
         content (templates/filters aside, stats + chart + rows in the results
         column), preventing a loading-time layout shift. ---- */
-.ds-surface.ds-report [data-part="report-skeleton-block"] {
+.ds-surface.ds-report [data-part="report-skeleton-block"],
+.ds-surface.ds-report .ds-report__report-skeleton-block {
   border-radius: var(--ds-skeleton-radius, var(--ds-radius-md, 8px));
   background: var(
     --ds-skeleton-bg,
@@ -52,39 +53,52 @@
 }
 
 .ds-surface.ds-report
-  [data-part="report-skeleton-block"][data-size="section-title"] {
+  [data-part="report-skeleton-block"][data-size="section-title"],
+.ds-surface.ds-report
+  .ds-report__report-skeleton-block[data-size="section-title"] {
   inline-size: 32%;
   min-block-size: 20px;
 }
 
 .ds-surface.ds-report
-  [data-part="report-skeleton-block"][data-size="template-card"] {
+  [data-part="report-skeleton-block"][data-size="template-card"],
+.ds-surface.ds-report
+  .ds-report__report-skeleton-block[data-size="template-card"] {
   min-block-size: 72px;
 }
 
 .ds-surface.ds-report
-  [data-part="report-skeleton-block"][data-size="filter"] {
+  [data-part="report-skeleton-block"][data-size="filter"],
+.ds-surface.ds-report
+  .ds-report__report-skeleton-block[data-size="filter"] {
   min-block-size: 96px;
 }
 
 .ds-surface.ds-report
-  [data-part="report-skeleton-block"][data-size="stat"] {
+  [data-part="report-skeleton-block"][data-size="stat"],
+.ds-surface.ds-report
+  .ds-report__report-skeleton-block[data-size="stat"] {
   min-block-size: 96px;
 }
 
 .ds-surface.ds-report
-  [data-part="report-skeleton-block"][data-size="chart"] {
+  [data-part="report-skeleton-block"][data-size="chart"],
+.ds-surface.ds-report
+  .ds-report__report-skeleton-block[data-size="chart"] {
   min-block-size: 240px;
 }
 
 .ds-surface.ds-report
-  [data-part="report-skeleton-block"][data-size="line"] {
+  [data-part="report-skeleton-block"][data-size="line"],
+.ds-surface.ds-report
+  .ds-report__report-skeleton-block[data-size="line"] {
   inline-size: 100%;
   min-block-size: 12px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-report [data-part="report-skeleton-block"] {
+  .ds-surface.ds-report [data-part="report-skeleton-block"],
+  .ds-surface.ds-report .ds-report__report-skeleton-block {
     animation: none;
   }
 }

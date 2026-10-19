@@ -235,15 +235,15 @@ function GeneratingState({
             templateColumns="repeat(auto-fit, minmax(min(100%, 160px), 1fr))"
             gap="md"
           >
-            <Box data-part="report-skeleton-block" data-size="stat" />
-            <Box data-part="report-skeleton-block" data-size="stat" />
-            <Box data-part="report-skeleton-block" data-size="stat" />
+            <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="stat" />
+            <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="stat" />
+            <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="stat" />
           </Grid>
-          <Box data-part="report-skeleton-block" data-size="chart" />
+          <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="chart" />
           <Stack spacing="sm">
-            <Box data-part="report-skeleton-block" data-size="line" />
-            <Box data-part="report-skeleton-block" data-size="line" />
-            <Box data-part="report-skeleton-block" data-size="line" />
+            <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="line" />
+            <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="line" />
+            <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="line" />
           </Stack>
         </Stack>
       </Card.Body>
@@ -396,12 +396,12 @@ function ReportSkeleton({
     <Stack spacing={sectionSpacing} data-part="skeleton-config">
       {hasTemplates && (
         <SurfacePostureSlot name="templates">
-          <Box data-part="report-skeleton-block" data-size="section-title" />
-          <Box data-part="report-skeleton-block" data-size="template-card" />
-          <Box data-part="report-skeleton-block" data-size="template-card" />
+          <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="section-title" />
+          <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="template-card" />
+          <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="template-card" />
         </SurfacePostureSlot>
       )}
-      {hasFilters && <SurfacePostureSlot name="filters" asChild><Box data-part="report-skeleton-block" data-size="filter" /></SurfacePostureSlot>}
+      {hasFilters && <SurfacePostureSlot name="filters" asChild><Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="filter" /></SurfacePostureSlot>}
     </Stack>
   );
 
@@ -412,16 +412,16 @@ function ReportSkeleton({
         templateColumns="repeat(auto-fit, minmax(min(100%, 160px), 1fr))"
         gap="md"
       >
-        <Box data-part="report-skeleton-block" data-size="stat" />
-        <Box data-part="report-skeleton-block" data-size="stat" />
-        <Box data-part="report-skeleton-block" data-size="stat" />
+        <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="stat" />
+        <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="stat" />
+        <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="stat" />
       </Grid>
-      {hasChart && <Box data-part="report-skeleton-block" data-size="chart" />}
+      {hasChart && <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="chart" />}
       <Stack spacing="sm">
-        <Box data-part="report-skeleton-block" data-size="line" />
-        <Box data-part="report-skeleton-block" data-size="line" />
-        <Box data-part="report-skeleton-block" data-size="line" />
-        <Box data-part="report-skeleton-block" data-size="line" />
+        <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="line" />
+        <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="line" />
+        <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="line" />
+        <Box data-part="report-skeleton-block" className="ds-report__report-skeleton-block" data-size="line" />
       </Stack>
     </Stack>
     </SurfacePostureSlot>

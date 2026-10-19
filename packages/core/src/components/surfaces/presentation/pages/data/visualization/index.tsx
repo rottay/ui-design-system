@@ -74,6 +74,7 @@ function VisualizationSkeleton({
             <Box
               key={index}
               data-part="visualization-skeleton-block"
+              className="ds-visualization__visualization-skeleton-block"
               data-size="stat"
             />
           ))}
@@ -85,12 +86,12 @@ function VisualizationSkeleton({
         <Card.Body>
           <Stack spacing="md">
             <Flex gap={8} data-part="visualization-skeleton-tabs">
-              <Box data-part="visualization-skeleton-block" data-size="tab" />
-              <Box data-part="visualization-skeleton-block" data-size="tab" />
-              <Box data-part="visualization-skeleton-block" data-size="tab" />
+              <Box data-part="visualization-skeleton-block" className="ds-visualization__visualization-skeleton-block" data-size="tab" />
+              <Box data-part="visualization-skeleton-block" className="ds-visualization__visualization-skeleton-block" data-size="tab" />
+              <Box data-part="visualization-skeleton-block" className="ds-visualization__visualization-skeleton-block" data-size="tab" />
             </Flex>
-            <Box data-part="visualization-skeleton-block" data-size="description" />
-            <Box data-part="visualization-skeleton-block" data-size="chart" />
+            <Box data-part="visualization-skeleton-block" className="ds-visualization__visualization-skeleton-block" data-size="description" />
+            <Box data-part="visualization-skeleton-block" className="ds-visualization__visualization-skeleton-block" data-size="chart" />
           </Stack>
         </Card.Body>
       </Card>
@@ -294,7 +295,7 @@ function VisualizationSurfaceContent({
           {loading ? (
             <Card variant={cardVariant}>
               <Card.Body>
-                <Box data-part="visualization-skeleton-block" data-size="aside" />
+                <Box data-part="visualization-skeleton-block" className="ds-visualization__visualization-skeleton-block" data-size="aside" />
               </Card.Body>
             </Card>
           ) : (
