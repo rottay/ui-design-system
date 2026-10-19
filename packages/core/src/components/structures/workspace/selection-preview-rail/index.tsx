@@ -258,14 +258,15 @@ export function SelectionPreviewRail<T extends object>({
     return (
       <Box
         as="aside"
-        className="ds-structure ds-selection-preview-rail"
+        className="ds-structure ds-selection-preview-rail ds-selection-preview-rail__root"
         data-part="root"
         data-preview="custom"
         aria-label={landmarkLabel}
       >
-        <Box data-part="sticky">
+        <Box data-part="sticky" className="ds-selection-preview-rail__sticky">
           <Box
             data-part="custom-sticky-card"
+            className="ds-selection-preview-rail__custom-sticky-card"
             style={{
               position: 'relative',
               overflow: 'hidden',
@@ -292,7 +293,7 @@ export function SelectionPreviewRail<T extends object>({
               />
             </Box>
 
-            <Box data-part="custom-content">
+            <Box data-part="custom-content" className="ds-selection-preview-rail__custom-content">
               {customPreview}
             </Box>
           </Box>
@@ -304,14 +305,15 @@ export function SelectionPreviewRail<T extends object>({
   return (
     <Box
       as="aside"
-      className="ds-structure ds-selection-preview-rail"
+      className="ds-structure ds-selection-preview-rail ds-selection-preview-rail__root"
       data-part="root"
       data-preview="default"
       aria-label={landmarkLabel}
     >
-      <Box data-part="sticky">
+      <Box data-part="sticky" className="ds-selection-preview-rail__sticky">
         <Box
           data-part="identity-card"
+          className="ds-selection-preview-rail__identity-card"
           style={{
             position: 'relative',
             overflow: 'hidden',
@@ -319,12 +321,13 @@ export function SelectionPreviewRail<T extends object>({
         >
           <Box
             data-part="identity-card-accent"
+            className="ds-selection-preview-rail__identity-card-accent"
             style={{
               height: 3,
             }}
           />
 
-          <Box data-part="identity-card-body">
+          <Box data-part="identity-card-body" className="ds-selection-preview-rail__identity-card-body">
             <Flex align="center" justify="between" gap={12}>
               <Badge variant={mode === 'selection' ? 'primary' : 'secondary'} size="sm">
                 {mode === 'selection'
@@ -370,6 +373,7 @@ export function SelectionPreviewRail<T extends object>({
             {matchReason && (
               <Box
                 data-part="match-reason-panel"
+                className="ds-selection-preview-rail__match-reason-panel"
               >
                 <Flex align="start" gap={10}>
                   <span
@@ -467,12 +471,14 @@ export function SelectionPreviewRail<T extends object>({
 
         <Box
           data-part="snapshot-card"
+          className="ds-selection-preview-rail__snapshot-card"
           style={{
             overflow: 'hidden',
           }}
         >
           <Box
             data-part="snapshot-header"
+            className="ds-selection-preview-rail__snapshot-header"
           >
             <Text
               size="sm"
@@ -497,7 +503,7 @@ export function SelectionPreviewRail<T extends object>({
             </Text>
           </Box>
 
-          <Box data-part="snapshot-body">
+          <Box data-part="snapshot-body" className="ds-selection-preview-rail__snapshot-body">
             {snapshotColumns.map((column) => {
               const rawValue = resolveColumnValue(column, item);
               const content = column.render
@@ -508,6 +514,7 @@ export function SelectionPreviewRail<T extends object>({
                 <Box
                   key={column.key}
                   data-part="snapshot-row"
+                  className="ds-selection-preview-rail__snapshot-row"
                 >
                   <Text
                     size="xs"
@@ -527,7 +534,7 @@ export function SelectionPreviewRail<T extends object>({
             })}
 
             {snapshotColumns.length === 0 && (
-              <Box data-part="snapshot-empty-frame">
+              <Box data-part="snapshot-empty-frame" className="ds-selection-preview-rail__snapshot-empty-frame">
                 <Text
                   size="sm"
                   color="subtle"

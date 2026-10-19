@@ -147,22 +147,23 @@ export function ActiveFiltersBar({
     <Box
       data-part="root"
       data-embedded={embedded}
-      className="ds-structure ds-active-filters-bar"
+      className="ds-structure ds-active-filters-bar ds-active-filters-bar__root"
       role="region"
       aria-label={tOr("activeFiltersBar.regionLabel", "Active filters")}
     >
-      <Flex data-part="rail" align="center" gap={12} justify="between" wrap="wrap">
-        <Box data-part="chips-region">
+      <Flex data-part="rail" className="ds-active-filters-bar__rail" align="center" gap={12} justify="between" wrap="wrap">
+        <Box data-part="chips-region" className="ds-active-filters-bar__chips-region">
           <Flex
             align="center"
             gap={8}
             wrap="wrap"
             data-part="chips"
+            className="ds-active-filters-bar__chips"
             role="toolbar"
             aria-label={resolvedChipsLabel}
             onKeyDown={handleChipsKeyDown}
           >
-            <Box as="span" data-part="pill">
+            <Box as="span" data-part="pill" className="ds-active-filters-bar__pill">
               {tOr("activeFiltersBar.active_count", "{count} active", {
                 count: activeFilters.length,
               })}
@@ -205,12 +206,13 @@ export function ActiveFiltersBar({
                    the Tag. */
                 icon={renderActiveFilterStateGlyph(state, { "data-part": "icon" })}
               >
-                <Box as="span" data-part="chip-label">
+                <Box as="span" data-part="chip-label" className="ds-active-filters-bar__chip-label">
                   {filter.label}
                 </Box>
                 <Box
                   as="span"
                   data-part="chip-value"
+                  className="ds-active-filters-bar__chip-value"
                   /* Long values ellipsize (skin contract); disclose the full
                      value natively, mirroring the Tag truncated-label law. */
                   title={
@@ -266,6 +268,7 @@ export function ActiveFiltersBar({
             affordances never move). */}
         <Flex
           data-part="actions"
+          className="ds-active-filters-bar__actions"
           align="center"
           gap={8}
           wrap="wrap"

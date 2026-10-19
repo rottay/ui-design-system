@@ -121,6 +121,7 @@ describe('SelectionPreviewRail skin reachability', () => {
 
   it('owns the rail track in the skin, not inline on either root', async () => {
     const scopes = [(await renderDefault()).container, (await renderCustom()).container];
+    const roots: HTMLElement[] = [];
 
     for (const scope of scopes) {
       const root = scope.querySelector('.ds-selection-preview-rail') as HTMLElement;
@@ -128,15 +129,31 @@ describe('SelectionPreviewRail skin reachability', () => {
       expect(root.style.flex, 'root paints flex inline').toBe('');
       expect(root.style.width, 'root paints width inline').toBe('');
       expect(root.style.minWidth, 'root paints min-width inline').toBe('');
+      roots.push(root);
     }
 
-    const track = readSkinRules('selection-preview-rail').filter(
+    // One entry per selector member; a rule reaching a root by part and by class
+    // has two, so the track is counted in rules (each rule shares one decls).
+    const members = readSkinRules('selection-preview-rail').filter(
       (rule) => 'flex' in rule.decls && /\[data-preview=/.test(rule.selector)
     );
+    const track = [...new Set(members.map((rule) => rule.decls))];
     expect(track.length, 'both roots must declare the track').toBe(2);
-    for (const rule of track) {
-      expect(rule.decls['inline-size']).toBe('min(100%, 380px)');
-      expect(rule.decls['min-inline-size']).toBe('min(100%, 320px)');
+    for (const member of members) {
+      expect(roots.some((root) => root.matches(member.selector)), `${member.selector} reaches neither root`).toBe(true);
+    }
+    for (const root of roots) {
+      const reaching = members.filter((member) => root.matches(member.selector));
+      expect(new Set(reaching.map((member) => member.decls)).size, 'one track rule per root').toBe(1);
+      expect(reaching.length, 'one member per hook').toBe(root.classList.contains('ds-selection-preview-rail__root') ? 2 : 1);
+      expect(reaching.some((member) => member.selector.includes("[data-part='root']")), 'reached by its part').toBe(true);
+      if (root.classList.contains('ds-selection-preview-rail__root')) {
+        expect(reaching.some((member) => member.selector.includes('.ds-selection-preview-rail__root')), 'reached by its class').toBe(true);
+      }
+    }
+    for (const decls of track) {
+      expect(decls['inline-size']).toBe('min(100%, 380px)');
+      expect(decls['min-inline-size']).toBe('min(100%, 320px)');
     }
   });
 });

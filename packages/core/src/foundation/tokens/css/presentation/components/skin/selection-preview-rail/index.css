@@ -91,7 +91,8 @@
 /* The track the rail occupies is identical on both branches and was the last
    inline paint either root carried; in the skin a consumer can widen or pin
    it, which an inline style refused. */
-.ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root[data-preview='custom'] {
   flex: 0 1 clamp(320px, 29vw, 380px);
   inline-size: min(100%, 380px);
   min-inline-size: min(100%, 320px);
@@ -105,7 +106,8 @@
   padding-inline: 14px 16px;
 }
 
-.ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root[data-preview='default'] {
   flex: 0 1 clamp(320px, 29vw, 380px);
   inline-size: min(100%, 380px);
   min-inline-size: min(100%, 320px);
@@ -119,11 +121,13 @@
 }
 
 /* sticky waypoint (new stable part; offset rides the 16px spacing rung) --- */
-.ds-structure.ds-selection-preview-rail [data-part='sticky'] {
+.ds-structure.ds-selection-preview-rail [data-part='sticky'],
+.ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__sticky {
   position: sticky;
   top: var(--ds-spacing-4, 16px);
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] [data-part='sticky'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] [data-part='sticky'],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root[data-preview='default'] .ds-selection-preview-rail__sticky {
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -131,13 +135,15 @@
 
 /* customPreview branch ------------------------------------------------------- */
 
-.ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card'] {
+.ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card'],
+.ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__custom-sticky-card {
   border-radius: var(--ds-radius-xl, 16px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 90%, var(--ds-color-bg-elevated) 10%), var(--ds-surface-card));
   box-shadow: 0 18px 44px color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent);
 }
 
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='custom-sticky-card'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='custom-sticky-card'],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__custom-sticky-card {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
@@ -147,6 +153,9 @@
    constraint it now yields to the primitive's coarse-pointer touch floor. */
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom']
   [data-part='custom-sticky-card']
+  .ds-selection-preview-rail__close,
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root[data-preview='custom']
+  .ds-selection-preview-rail__custom-sticky-card
   .ds-selection-preview-rail__close {
   inline-size: 34px;
   min-inline-size: 34px;
@@ -155,30 +164,35 @@
 }
 
 /* the consumer render's own padded frame (new stable part) */
-.ds-structure.ds-selection-preview-rail [data-part='custom-content'] {
+.ds-structure.ds-selection-preview-rail [data-part='custom-content'],
+.ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__custom-content {
   padding: var(--ds-spacing-4, 16px);
 }
 
 /* default branch — identity card --------------------------------------------- */
 
-.ds-structure.ds-selection-preview-rail [data-part='identity-card'] {
+.ds-structure.ds-selection-preview-rail [data-part='identity-card'],
+.ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__identity-card {
   border-radius: var(--ds-radius-xl, 16px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 88%, var(--ds-color-bg-elevated) 12%), var(--ds-surface-card));
   box-shadow: 0 18px 48px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
 }
 
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-card'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-card'],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__identity-card {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
 /* card body padding drained from inline ('18px 18px 16px'); the default
    branch's own close affordance (new stable part) mirrors the custom
    branch's 34px square */
-.ds-structure.ds-selection-preview-rail [data-part='identity-card-body'] {
+.ds-structure.ds-selection-preview-rail [data-part='identity-card-body'],
+.ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__identity-card-body {
   padding-block: 18px 16px;
   padding-inline: 18px;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-close {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-close,
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__identity-close {
   inline-size: 34px;
   min-inline-size: 34px;
   padding: 0;
@@ -187,13 +201,15 @@
 /* The identity card's top rule is a SOFT surface tint, never a solid accent
    bar (the house bans structural color accents; the sanctioned idiom is the
    7–8% card-header tint — widget-board toolbar, cockpit root). */
-.ds-structure.ds-selection-preview-rail [data-part='identity-card-accent'] {
+.ds-structure.ds-selection-preview-rail [data-part='identity-card-accent'],
+.ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__identity-card-accent {
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 2%, transparent));
 }
 
 /* default branch — match-reason panel ---------------------------------------- */
 
-.ds-structure.ds-selection-preview-rail [data-part='match-reason-panel'] {
+.ds-structure.ds-selection-preview-rail [data-part='match-reason-panel'],
+.ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__match-reason-panel {
   border-radius: var(--ds-radius-lg, 12px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
   /* offset + padding drained from inline ('marginTop: 16; 14px 14px 14px 16px') */
@@ -202,7 +218,8 @@
   padding-inline: var(--ds-spacing-4, 16px) 14px;
 }
 
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-panel'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-panel'],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__match-reason-panel {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
 }
 
@@ -213,17 +230,20 @@
 
 /* default branch — snapshot card --------------------------------------------- */
 
-.ds-structure.ds-selection-preview-rail [data-part='snapshot-card'] {
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-card'],
+.ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__snapshot-card {
   border-radius: var(--ds-radius-xl, 16px);
   background: var(--ds-surface-card);
   box-shadow: 0 10px 30px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
 
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-card'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-card'],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__snapshot-card {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__snapshot-header {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   /* drained from inline ('14px 18px') */
   padding-block: 14px;
@@ -231,12 +251,14 @@
 }
 
 /* rows wrapper (new stable part; padding drained from inline '6px 0') */
-.ds-structure.ds-selection-preview-rail [data-part='snapshot-body'] {
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-body'],
+.ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__snapshot-body {
   padding-block: 6px;
   padding-inline: 0;
 }
 
-.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__snapshot-row {
   border-top: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent);
   /* drained from inline ('12px 18px'; the block rung is exact) */
   padding-block: var(--ds-spacing-3, 12px);
@@ -246,7 +268,8 @@
 }
 
 /* empty snapshot frame (new stable part; padding drained from inline '18px') */
-.ds-structure.ds-selection-preview-rail [data-part='snapshot-empty-frame'] {
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-empty-frame'],
+.ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__snapshot-empty-frame {
   padding: 18px;
 }
 
@@ -270,31 +293,39 @@
    reads as data.
 --------------------------------------------------------------------------- */
 
-.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-title[data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-title[data-size],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__identity-title[data-size] {
   letter-spacing: -0.02em;
   line-height: 1.12;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-subtitle[data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__identity-subtitle[data-size],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__identity-subtitle[data-size] {
   line-height: 1.4;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__match-reason-eyebrow[data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__match-reason-eyebrow[data-size],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__match-reason-eyebrow[data-size] {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__match-reason-body[data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__match-reason-body[data-size],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__match-reason-body[data-size] {
   line-height: 1.5;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__snapshot-row-label[data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__snapshot-row-label[data-size],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__snapshot-row-label[data-size] {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__snapshot-empty[data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__snapshot-empty[data-size],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__snapshot-empty[data-size] {
   line-height: 1.45;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__fallback-empty[data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__fallback-empty[data-size],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__fallback-empty[data-size] {
   font-style: italic;
 }
-.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__fallback-string[data-size] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] .ds-selection-preview-rail__fallback-string[data-size],
+.ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__fallback-string[data-size] {
   line-height: 1.45;
 }
 
@@ -302,15 +333,18 @@
         their drained paddings instead of crushing the text column; the
         selectors mirror the base rules' specificity so source order decides. ---- */
 @container ds-rail (max-width: 340px) {
-  .ds-structure.ds-selection-preview-rail [data-part='identity-card-body'] {
+  .ds-structure.ds-selection-preview-rail [data-part='identity-card-body'],
+  .ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__identity-card-body {
     padding-block: 14px 12px;
     padding-inline: 14px;
   }
-  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'] {
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'],
+  .ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__snapshot-header {
     padding-block: 12px;
     padding-inline: 14px;
   }
-  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'] {
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'],
+  .ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__snapshot-row {
     padding-block: 10px;
     padding-inline: 14px;
   }
@@ -321,15 +355,22 @@
         reads by its badge + icon, not by its tint. ---- */
 @media (forced-colors: active) {
   .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='custom-sticky-card'],
+  .ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__custom-sticky-card,
   .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-card'],
+  .ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__identity-card,
   .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-panel'],
+  .ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__match-reason-panel,
   .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-card'],
+  .ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__snapshot-card,
   .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'],
-  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'] {
+  .ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__snapshot-header,
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'],
+  .ds-structure.ds-selection-preview-rail.ds-selection-preview-rail__root .ds-selection-preview-rail__snapshot-row {
     border-color: ButtonText;
   }
 
-  .ds-structure.ds-selection-preview-rail [data-part='identity-card-accent'] {
+  .ds-structure.ds-selection-preview-rail [data-part='identity-card-accent'],
+  .ds-structure.ds-selection-preview-rail .ds-selection-preview-rail__identity-card-accent {
     background: ButtonText;
   }
 }

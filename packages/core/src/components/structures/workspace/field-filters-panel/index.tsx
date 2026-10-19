@@ -104,15 +104,15 @@ export function FieldFiltersPanel({
 
   return (
     <Box
-      className="ds-structure ds-field-filters-panel"
+      className="ds-structure ds-field-filters-panel ds-field-filters-panel__root"
       data-part="root"
       data-active-count={activeCount}
       role="region"
       aria-label={panelLabel}
     >
-      <Flex align="center" justify="between" gap={12} wrap="wrap" data-part="header">
-        <Box data-part="header-copy">
-          <Flex align="center" gap={8} wrap="wrap" data-part="title-group">
+      <Flex align="center" justify="between" gap={12} wrap="wrap" data-part="header" className="ds-field-filters-panel__header">
+        <Box data-part="header-copy" className="ds-field-filters-panel__header-copy">
+          <Flex align="center" gap={8} wrap="wrap" data-part="title-group" className="ds-field-filters-panel__title-group">
             <Text
               className="ds-field-filters-panel__title-pill"
               size="xs"
@@ -129,15 +129,15 @@ export function FieldFiltersPanel({
             </Text>
           </Flex>
         </Box>
-        <Box data-part="signals">
+        <Box data-part="signals" className="ds-field-filters-panel__signals">
           <InlineSignal label={`${activeCount} ${tOr('fieldFiltersPanel.activeSuffix', 'active')}`} tone={activeCount > 0 ? 'primary' : 'neutral'} />
           <InlineSignal label={tOr('fieldFiltersPanel.appliesLive', 'Applies live')} tone="neutral" />
         </Box>
       </Flex>
 
       {presets && presets.length > 0 && (
-        <Box data-part="presets-region">
-          <Flex align="center" gap={10} wrap="wrap" data-part="presets-row">
+        <Box data-part="presets-region" className="ds-field-filters-panel__presets-region">
+          <Flex align="center" gap={10} wrap="wrap" data-part="presets-row" className="ds-field-filters-panel__presets-row">
             <Text
               className="ds-field-filters-panel__presets-pill"
               size="xs"
@@ -160,7 +160,7 @@ export function FieldFiltersPanel({
         </Box>
       )}
 
-      <Box data-part="grid">
+      <Box data-part="grid" className="ds-field-filters-panel__grid">
         {filters.map((filter) => {
           const value = values[filter.key] ?? '';
           const visual = filterVisuals?.[filter.key] ?? defaultFilterVisual(filter.label, tOr('fieldFiltersPanel.refineBy', 'Refine by'));
@@ -255,7 +255,7 @@ function PresetChip({
       className="ds-field-filters-panel__preset-chip"
       onClick={onClick}
       icon={
-        <Box as="span" data-part="preset-chip-icon">
+        <Box as="span" data-part="preset-chip-icon" className="ds-field-filters-panel__preset-chip-icon">
           <AiSparklesIcon size={10} decorative />
         </Box>
       }
@@ -275,6 +275,7 @@ function InlineSignal({
   return (
     <Box
       data-part="signal"
+      className="ds-field-filters-panel__signal"
       data-tone={tone}
     >
       <Text
@@ -300,12 +301,12 @@ function FilterCard({
   children: ReactNode;
 }) {
   return (
-    <Box data-part="filter-card">
-      <Flex align="start" gap={10} data-part="filter-card-head">
-        <Box data-part="filter-card-icon">
+    <Box data-part="filter-card" className="ds-field-filters-panel__filter-card">
+      <Flex align="start" gap={10} data-part="filter-card-head" className="ds-field-filters-panel__filter-card-head">
+        <Box data-part="filter-card-icon" className="ds-field-filters-panel__filter-card-icon">
           {icon}
         </Box>
-        <Box data-part="filter-card-copy">
+        <Box data-part="filter-card-copy" className="ds-field-filters-panel__filter-card-copy">
           <Text
             className="ds-field-filters-panel__filter-card-label"
             size="xs"

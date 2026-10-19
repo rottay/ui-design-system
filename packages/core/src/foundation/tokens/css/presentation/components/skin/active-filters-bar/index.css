@@ -91,7 +91,8 @@
 
 /* ---- root: quiet hairline strip (padding drained from the engine's inline
         styles, keyed on the embedded variant; logical inline axis) ---- */
-.ds-structure.ds-active-filters-bar[data-part="root"] {
+.ds-structure.ds-active-filters-bar[data-part="root"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root {
   /* Seam and stacked-row rhythm, shared with the sibling toolbar so both
      halves of the collection band breathe on one scale. */
   --_ds-active-filters-bar-section-gap: var(
@@ -121,7 +122,8 @@
     var(--ds-active-filters-bar-motion-duration, var(--ds-motion-reveal))
     var(--ds-motion-ease-out, ease-out) both;
 }
-.ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="false"] {
+.ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="false"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root[data-embedded="false"] {
   border-bottom: var(
     --ds-active-filters-bar-border,
     1px solid
@@ -150,17 +152,21 @@
     )
   );
 }
-.ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="true"] {
+.ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="true"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root[data-embedded="true"] {
   padding-block: var(--ds-active-filters-bar-embedded-padding-block, 6px 10px);
 }
 
 /* ---- layout regions (geometry drained from the retired inline flex styles) ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chips-region"] {
+  [data-part="chips-region"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+  .ds-active-filters-bar__chips-region {
   flex: 1 1 var(--ds-active-filters-bar-chips-basis, 560px);
   min-inline-size: 0;
 }
-.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"] {
+.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__actions {
   flex: 0 0 auto;
   padding-inline-start: var(--_ds-active-filters-bar-section-gap);
 }
@@ -170,7 +176,8 @@
         it and read as a filter you could not remove. Typography plus a
         hairline leader carry the role; the capsule, the tint and the border
         are gone, and with them four reads of channels nothing declares. ---- */
-.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
+.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__pill {
   display: inline-flex;
   align-items: center;
   min-block-size: var(--ds-active-filters-bar-count-block-size, 24px);
@@ -187,10 +194,12 @@
 
 /* ---- chips lane: a dismissible object owes a hit target that tracks the
         tenant density plane, and its own row rhythm when the lane wraps ---- */
-.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chips"] {
+.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chips"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__chips {
   row-gap: var(--_ds-active-filters-bar-row-gap);
 }
-.ds-structure.ds-active-filters-bar[data-part="root"] .ds-active-filters-bar__chip {
+.ds-structure.ds-active-filters-bar[data-part="root"] .ds-active-filters-bar__chip,
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__chip {
   min-block-size: var(--_ds-active-filters-bar-chip-target);
 }
 
@@ -202,6 +211,9 @@
         primitive. ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"][data-embedded]
   [data-part="chips"]
+  .ds-active-filters-bar__chip[data-size],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root[data-embedded]
+  .ds-active-filters-bar__chips
   .ds-active-filters-bar__chip[data-size] {
   display: inline;
   max-inline-size: none;
@@ -232,7 +244,10 @@
         logical gap separates label from value without a painted separator. ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"]
   .ds-active-filters-bar__chip
-  [data-part="chip-label"] {
+  [data-part="chip-label"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+  .ds-active-filters-bar__chip
+  .ds-active-filters-bar__chip-label {
   display: inline-block;
   vertical-align: bottom;
   color: var(--ds-color-text-muted);
@@ -249,7 +264,10 @@
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
   .ds-active-filters-bar__chip
-  [data-part="chip-value"] {
+  [data-part="chip-value"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+  .ds-active-filters-bar__chip
+  .ds-active-filters-bar__chip-value {
   display: inline-block;
   vertical-align: bottom;
   color: var(--ds-color-text-primary);
@@ -276,7 +294,10 @@
         - invalid: wavy error underline — the universal "needs repair" mark. ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"]
   .ds-active-filters-bar__chip[data-filter-state="draft"]
-  [data-part="chip-value"] {
+  [data-part="chip-value"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+  .ds-active-filters-bar__chip[data-filter-state="draft"]
+  .ds-active-filters-bar__chip-value {
   /* C1: draft must read at two meters — REGULAR weight + quieted ink under
      the dashed underline, so the provisional chip is visibly ghosted next
      to the solid applied chip (same grammar as the ListToolbar strip). */
@@ -288,22 +309,34 @@
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
   .ds-active-filters-bar__chip[data-filter-state="invalid"]
-  [data-part="chip-value"] {
+  [data-part="chip-value"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+  .ds-active-filters-bar__chip[data-filter-state="invalid"]
+  .ds-active-filters-bar__chip-value {
   color: var(--ds-color-error);
   text-decoration: underline wavy var(--ds-color-error);
   text-underline-offset: 0.2em;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
   .ds-active-filters-bar__chip[data-filter-state="invalid"]
-  [data-part="chip-label"] {
+  [data-part="chip-label"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+  .ds-active-filters-bar__chip[data-filter-state="invalid"]
+  .ds-active-filters-bar__chip-label {
   color: var(--ds-color-error);
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
+  .ds-active-filters-bar__chip[data-filter-state="draft"]
+  [data-part="icon"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
   .ds-active-filters-bar__chip[data-filter-state="draft"]
   [data-part="icon"] {
   color: var(--ds-color-text-muted);
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
+  .ds-active-filters-bar__chip[data-filter-state="invalid"]
+  [data-part="icon"],
+.ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
   .ds-active-filters-bar__chip[data-filter-state="invalid"]
   [data-part="icon"] {
   color: var(--ds-color-error);
@@ -314,14 +347,18 @@
         holds in every posture: chips flow from the start edge, the clear/add
         affordances stay at the end. ---- */
 @container ds-active-filters-bar (max-width: 48rem) {
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="rail"] {
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="rail"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__rail {
     row-gap: var(--_ds-active-filters-bar-row-gap);
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chips-region"] {
+    [data-part="chips-region"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+    .ds-active-filters-bar__chips-region {
     flex: 1 1 100%;
   }
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"] {
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__actions {
     flex: 1 1 100%;
     padding-inline-start: 0;
   }
@@ -333,7 +370,8 @@
         equal-width decision pair — not a right-edge afterthought and not a
         horizontal scroller. ---- */
 @container ds-active-filters-bar (max-width: 30rem) {
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__pill {
     flex: 0 0 100%;
     padding-inline-end: 0;
     border-inline-end: 0;
@@ -343,20 +381,29 @@
      row of 40px objects is a mis-sized tap area, not a quieter one. The
      Button primitive still owns its chrome. */
   .ds-structure.ds-active-filters-bar[data-part="root"] .ds-active-filters-bar__chip,
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__chip,
   .ds-structure.ds-active-filters-bar[data-part="root"] .ds-active-filters-bar__more-toggle,
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__more-toggle,
   .ds-structure.ds-active-filters-bar[data-part="root"] .ds-active-filters-bar__less-toggle {
     min-block-size: calc(
       2.5rem * var(--ds-density-effective-scale, 1)
     );
   }
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"] {
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__actions {
     flex-wrap: nowrap;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
     [data-part="actions"]
     > .ds-active-filters-bar__clear-all,
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+    .ds-active-filters-bar__actions
+    > .ds-active-filters-bar__clear-all,
   .ds-structure.ds-active-filters-bar[data-part="root"]
     [data-part="actions"]
+    > .ds-active-filters-bar__add-filter,
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+    .ds-active-filters-bar__actions
     > .ds-active-filters-bar__add-filter {
     flex: 1 1 0;
   }
@@ -375,7 +422,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-active-filters-bar[data-part="root"] {
+  .ds-structure.ds-active-filters-bar[data-part="root"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root {
     animation: none;
   }
 }
@@ -388,34 +436,48 @@
    survives by FORM: the dashed/wavy value underlines remap to CanvasText and
    the state glyphs render as system ink. */
 @media (forced-colors: active) {
-  .ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="false"] {
+  .ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="false"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root[data-embedded="false"] {
     border-bottom-color: ButtonText;
     background: Canvas;
   }
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root .ds-active-filters-bar__pill {
     border-inline-end-color: ButtonText;
     color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
     .ds-active-filters-bar__chip[data-filter-state="draft"]
-    [data-part="chip-value"] {
+    [data-part="chip-value"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+    .ds-active-filters-bar__chip[data-filter-state="draft"]
+    .ds-active-filters-bar__chip-value {
     color: CanvasText;
     text-decoration: underline dashed;
     text-decoration-color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
     .ds-active-filters-bar__chip[data-filter-state="invalid"]
-    [data-part="chip-value"] {
+    [data-part="chip-value"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+    .ds-active-filters-bar__chip[data-filter-state="invalid"]
+    .ds-active-filters-bar__chip-value {
     color: CanvasText;
     text-decoration: underline wavy;
     text-decoration-color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
     .ds-active-filters-bar__chip[data-filter-state="invalid"]
-    [data-part="chip-label"] {
+    [data-part="chip-label"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
+    .ds-active-filters-bar__chip[data-filter-state="invalid"]
+    .ds-active-filters-bar__chip-label {
     color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
+    .ds-active-filters-bar__chip[data-filter-state]
+    [data-part="icon"],
+  .ds-structure.ds-active-filters-bar.ds-active-filters-bar__root
     .ds-active-filters-bar__chip[data-filter-state]
     [data-part="icon"] {
     color: CanvasText;
