@@ -50,7 +50,8 @@
    rhythm as the loaded gallery, so the swap to real content is a pure paint
    change, never a layout shift. The frame mirrors the outlined card metrics;
    the thumb mirrors the 180px image block; the lines mirror title/caption. */
-.ds-surface.ds-media [data-part='media-skeleton-card'] {
+.ds-surface.ds-media [data-part='media-skeleton-card'],
+.ds-surface.ds-media .ds-media__media-skeleton-card {
   display: grid;
   gap: var(--ds-spacing-2, 8px);
   border: var(--ds-card-border-width, 1px) solid var(--ds-color-border-subtle);
@@ -59,8 +60,11 @@
 }
 
 .ds-surface.ds-media [data-part='media-skeleton-thumb'],
+.ds-surface.ds-media .ds-media__media-skeleton-thumb,
 .ds-surface.ds-media [data-part='media-skeleton-line'],
-.ds-surface.ds-media [data-part='media-skeleton-preview'] {
+.ds-surface.ds-media .ds-media__media-skeleton-line,
+.ds-surface.ds-media [data-part='media-skeleton-preview'],
+.ds-surface.ds-media .ds-media__media-skeleton-preview {
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   animation: ds-foundation-pulse
@@ -68,24 +72,30 @@
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-surface.ds-media [data-part='media-skeleton-thumb'] {
+.ds-surface.ds-media [data-part='media-skeleton-thumb'],
+.ds-surface.ds-media .ds-media__media-skeleton-thumb {
   min-block-size: 180px;
 }
 
-.ds-surface.ds-media [data-part='media-skeleton-line'][data-size='title'] {
+.ds-surface.ds-media [data-part='media-skeleton-line'][data-size='title'],
+.ds-surface.ds-media .ds-media__media-skeleton-line[data-size='title'] {
   inline-size: 60%;
   min-block-size: 14px;
 }
 
-.ds-surface.ds-media [data-part='media-skeleton-line'][data-size='caption'] {
+.ds-surface.ds-media [data-part='media-skeleton-line'][data-size='caption'],
+.ds-surface.ds-media .ds-media__media-skeleton-line[data-size='caption'] {
   inline-size: 85%;
   min-block-size: 12px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-surface.ds-media [data-part='media-skeleton-thumb'],
+  .ds-surface.ds-media .ds-media__media-skeleton-thumb,
   .ds-surface.ds-media [data-part='media-skeleton-line'],
-  .ds-surface.ds-media [data-part='media-skeleton-preview'] {
+  .ds-surface.ds-media .ds-media__media-skeleton-line,
+  .ds-surface.ds-media [data-part='media-skeleton-preview'],
+  .ds-surface.ds-media .ds-media__media-skeleton-preview {
     animation: none;
   }
 }

@@ -213,9 +213,9 @@ function EditorSurfaceContent({
                  page-shell loading early-return is intentionally NOT engaged
                  (dashboard idiom) because it would drop the editor anatomy. */
               <>
-                <Box data-part="editor-skeleton-block" data-size="input" aria-hidden="true" />
+                <Box data-part="editor-skeleton-block" className="ds-editor__editor-skeleton-block" data-size="input" aria-hidden="true" />
                 {config.presentation.statusBar && (
-                  <Box data-part="editor-skeleton-block" data-size="status" aria-hidden="true" />
+                  <Box data-part="editor-skeleton-block" className="ds-editor__editor-skeleton-block" data-size="status" aria-hidden="true" />
                 )}
               </>
             ) : (
@@ -248,7 +248,7 @@ function EditorSurfaceContent({
                 )}
 
                 {config.presentation.statusBar && (
-                  <Box data-part="status-bar">{config.presentation.statusBar}</Box>
+                  <Box data-part="status-bar" className="ds-editor__status-bar">{config.presentation.statusBar}</Box>
                 )}
               </>
             )}
@@ -271,7 +271,7 @@ function EditorSurfaceContent({
             >
               <Card.Body>
                 {loading ? (
-                  <Box data-part="editor-skeleton-block" data-size="preview" aria-hidden="true" />
+                  <Box data-part="editor-skeleton-block" className="ds-editor__editor-skeleton-block" data-size="preview" aria-hidden="true" />
                 ) : (
                   config.presentation.preview
                 )}

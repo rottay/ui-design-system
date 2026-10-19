@@ -92,7 +92,7 @@ function EmptyStateSurfaceContent({
         </Box></SurfacePostureSlot>
       )}
       {config.presentation.content && (
-        <SurfacePostureSlot name="guidance" asChild><Box data-part="content">{config.presentation.content}</Box></SurfacePostureSlot>
+        <SurfacePostureSlot name="guidance" asChild><Box data-part="content" className="ds-empty-state-surface__content">{config.presentation.content}</Box></SurfacePostureSlot>
       )}
     </Stack>
   );

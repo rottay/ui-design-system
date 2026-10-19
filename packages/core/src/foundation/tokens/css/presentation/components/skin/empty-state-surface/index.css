@@ -53,7 +53,9 @@
    across the page column, and it reads as supporting text, never as a
    second heading. Content longer than the measure wraps; nothing truncates. */
 .ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content'],
-.ds-surface.ds-empty-state-surface.ds-empty-state-surface__root > [data-part='content'] {
+.ds-surface.ds-empty-state-surface[data-part='root'] > .ds-empty-state-surface__content,
+.ds-surface.ds-empty-state-surface.ds-empty-state-surface__root > [data-part='content'],
+.ds-surface.ds-empty-state-surface.ds-empty-state-surface__root > .ds-empty-state-surface__content {
   max-inline-size: 52ch;
   margin-inline: auto;
   color: var(--ds-color-text-secondary);

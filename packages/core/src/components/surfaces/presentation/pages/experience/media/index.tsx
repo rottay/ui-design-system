@@ -135,10 +135,10 @@ function MediaGallerySkeleton({ columns }: { columns: number }): React.ReactElem
       aria-hidden="true"
     >
       {Array.from({ length: blockCount }, (_, index) => (
-        <Box key={index} data-part="media-skeleton-card">
-          <Box data-part="media-skeleton-thumb" />
-          <Box data-part="media-skeleton-line" data-size="title" />
-          <Box data-part="media-skeleton-line" data-size="caption" />
+        <Box key={index} data-part="media-skeleton-card" className="ds-media__media-skeleton-card">
+          <Box data-part="media-skeleton-thumb" className="ds-media__media-skeleton-thumb" />
+          <Box data-part="media-skeleton-line" className="ds-media__media-skeleton-line" data-size="title" />
+          <Box data-part="media-skeleton-line" className="ds-media__media-skeleton-line" data-size="caption" />
         </Box>
       ))}
     </Grid>
@@ -165,14 +165,15 @@ function MediaRailSkeleton({
       <SurfaceSectionCard title={tSurfaceOr('media.preview_title', 'Preview')}>
         <Box
           data-part="media-skeleton-preview"
+          className="ds-media__media-skeleton-preview"
           aria-hidden="true"
           style={{ minBlockSize: previewHeight }}
         />
       </SurfaceSectionCard>
       <SurfaceSectionCard title={tSurfaceOr('media.details_title', 'Details')}>
         <Stack spacing="xs" aria-hidden="true">
-          <Box data-part="media-skeleton-line" data-size="title" />
-          <Box data-part="media-skeleton-line" data-size="caption" />
+          <Box data-part="media-skeleton-line" className="ds-media__media-skeleton-line" data-size="title" />
+          <Box data-part="media-skeleton-line" className="ds-media__media-skeleton-line" data-size="caption" />
         </Stack>
       </SurfaceSectionCard>
     </Stack>

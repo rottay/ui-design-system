@@ -36,7 +36,8 @@
    The status row (word count, save status) reads as chrome of the editor
    canvas: a hairline on the block-start edge plus the compact spacing step
    set it apart from the input without inventing a new surface. */
-.ds-surface.ds-editor [data-part='status-bar'] {
+.ds-surface.ds-editor [data-part='status-bar'],
+.ds-surface.ds-editor .ds-editor__status-bar {
   border-block-start: 1px solid var(--ds-color-border, transparent);
   padding-block-start: var(--ds-spacing-2, 8px);
 }
@@ -48,7 +49,8 @@
    status block mirrors the status row, and the preview block mirrors the
    rendered panel (all geometry INTERNAL literals, dashboard/chat
    precedent). */
-.ds-surface.ds-editor [data-part='editor-skeleton-block'] {
+.ds-surface.ds-editor [data-part='editor-skeleton-block'],
+.ds-surface.ds-editor .ds-editor__editor-skeleton-block {
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   animation: ds-foundation-pulse
@@ -56,23 +58,27 @@
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='input'] {
+.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='input'],
+.ds-surface.ds-editor .ds-editor__editor-skeleton-block[data-size='input'] {
   inline-size: 100%;
   min-block-size: 288px;
 }
 
-.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='status'] {
+.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='status'],
+.ds-surface.ds-editor .ds-editor__editor-skeleton-block[data-size='status'] {
   inline-size: 40%;
   min-block-size: 16px;
 }
 
-.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='preview'] {
+.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='preview'],
+.ds-surface.ds-editor .ds-editor__editor-skeleton-block[data-size='preview'] {
   inline-size: 100%;
   min-block-size: 288px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-editor [data-part='editor-skeleton-block'] {
+  .ds-surface.ds-editor [data-part='editor-skeleton-block'],
+  .ds-surface.ds-editor .ds-editor__editor-skeleton-block {
     animation: none;
   }
 }

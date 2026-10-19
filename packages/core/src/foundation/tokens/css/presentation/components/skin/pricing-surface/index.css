@@ -54,41 +54,51 @@
    never a layout shift (all geometry INTERNAL literals, dashboard/chat/auth
    precedent). */
 .ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-toggle,
 .ds-surface.ds-pricing [data-part='pricing-skeleton-plan'],
-.ds-surface.ds-pricing [data-part='pricing-skeleton-row'] {
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-plan,
+.ds-surface.ds-pricing [data-part='pricing-skeleton-row'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-row {
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   animation: ds-foundation-pulse
     var(--ds-motion-attention, 1.5s)
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'] {
+.ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-toggle {
   inline-size: 180px;
   min-block-size: 32px;
   margin-inline: auto;
   border-radius: 999px;
 }
 
-.ds-surface.ds-pricing [data-part='pricing-skeleton-plans'] {
+.ds-surface.ds-pricing [data-part='pricing-skeleton-plans'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-plans {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: var(--ds-spacing-4, 16px);
 }
 
-.ds-surface.ds-pricing [data-part='pricing-skeleton-plan'] {
+.ds-surface.ds-pricing [data-part='pricing-skeleton-plan'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-plan {
   min-block-size: 240px;
   border-radius: var(--ds-radius-lg, 12px);
 }
 
-.ds-surface.ds-pricing [data-part='pricing-skeleton-row'] {
+.ds-surface.ds-pricing [data-part='pricing-skeleton-row'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-row {
   min-block-size: 44px;
   border-radius: var(--ds-radius-md, 8px);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'],
+  .ds-surface.ds-pricing .ds-pricing__pricing-skeleton-toggle,
   .ds-surface.ds-pricing [data-part='pricing-skeleton-plan'],
-  .ds-surface.ds-pricing [data-part='pricing-skeleton-row'] {
+  .ds-surface.ds-pricing .ds-pricing__pricing-skeleton-plan,
+  .ds-surface.ds-pricing [data-part='pricing-skeleton-row'],
+  .ds-surface.ds-pricing .ds-pricing__pricing-skeleton-row {
     animation: none;
   }
 }

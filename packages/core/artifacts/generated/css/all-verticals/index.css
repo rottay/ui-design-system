@@ -95620,7 +95620,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    across the page column, and it reads as supporting text, never as a
    second heading. Content longer than the measure wraps; nothing truncates. */
 .ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content'],
-.ds-surface.ds-empty-state-surface.ds-empty-state-surface__root > [data-part='content'] {
+.ds-surface.ds-empty-state-surface[data-part='root'] > .ds-empty-state-surface__content,
+.ds-surface.ds-empty-state-surface.ds-empty-state-surface__root > [data-part='content'],
+.ds-surface.ds-empty-state-surface.ds-empty-state-surface__root > .ds-empty-state-surface__content {
   max-inline-size: 52ch;
   margin-inline: auto;
   color: var(--ds-color-text-secondary);
@@ -95967,7 +95969,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    The status row (word count, save status) reads as chrome of the editor
    canvas: a hairline on the block-start edge plus the compact spacing step
    set it apart from the input without inventing a new surface. */
-.ds-surface.ds-editor [data-part='status-bar'] {
+.ds-surface.ds-editor [data-part='status-bar'],
+.ds-surface.ds-editor .ds-editor__status-bar {
   border-block-start: 1px solid var(--ds-color-border, transparent);
   padding-block-start: var(--ds-spacing-2, 8px);
 }
@@ -95979,7 +95982,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    status block mirrors the status row, and the preview block mirrors the
    rendered panel (all geometry INTERNAL literals, dashboard/chat
    precedent). */
-.ds-surface.ds-editor [data-part='editor-skeleton-block'] {
+.ds-surface.ds-editor [data-part='editor-skeleton-block'],
+.ds-surface.ds-editor .ds-editor__editor-skeleton-block {
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   animation: ds-foundation-pulse
@@ -95987,23 +95991,27 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='input'] {
+.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='input'],
+.ds-surface.ds-editor .ds-editor__editor-skeleton-block[data-size='input'] {
   inline-size: 100%;
   min-block-size: 288px;
 }
 
-.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='status'] {
+.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='status'],
+.ds-surface.ds-editor .ds-editor__editor-skeleton-block[data-size='status'] {
   inline-size: 40%;
   min-block-size: 16px;
 }
 
-.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='preview'] {
+.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='preview'],
+.ds-surface.ds-editor .ds-editor__editor-skeleton-block[data-size='preview'] {
   inline-size: 100%;
   min-block-size: 288px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-editor [data-part='editor-skeleton-block'] {
+  .ds-surface.ds-editor [data-part='editor-skeleton-block'],
+  .ds-surface.ds-editor .ds-editor__editor-skeleton-block {
     animation: none;
   }
 }
@@ -96282,7 +96290,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    rhythm as the loaded gallery, so the swap to real content is a pure paint
    change, never a layout shift. The frame mirrors the outlined card metrics;
    the thumb mirrors the 180px image block; the lines mirror title/caption. */
-.ds-surface.ds-media [data-part='media-skeleton-card'] {
+.ds-surface.ds-media [data-part='media-skeleton-card'],
+.ds-surface.ds-media .ds-media__media-skeleton-card {
   display: grid;
   gap: var(--ds-spacing-2, 8px);
   border: var(--ds-card-border-width, 1px) solid var(--ds-color-border-subtle);
@@ -96291,8 +96300,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-media [data-part='media-skeleton-thumb'],
+.ds-surface.ds-media .ds-media__media-skeleton-thumb,
 .ds-surface.ds-media [data-part='media-skeleton-line'],
-.ds-surface.ds-media [data-part='media-skeleton-preview'] {
+.ds-surface.ds-media .ds-media__media-skeleton-line,
+.ds-surface.ds-media [data-part='media-skeleton-preview'],
+.ds-surface.ds-media .ds-media__media-skeleton-preview {
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   animation: ds-foundation-pulse
@@ -96300,24 +96312,30 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-surface.ds-media [data-part='media-skeleton-thumb'] {
+.ds-surface.ds-media [data-part='media-skeleton-thumb'],
+.ds-surface.ds-media .ds-media__media-skeleton-thumb {
   min-block-size: 180px;
 }
 
-.ds-surface.ds-media [data-part='media-skeleton-line'][data-size='title'] {
+.ds-surface.ds-media [data-part='media-skeleton-line'][data-size='title'],
+.ds-surface.ds-media .ds-media__media-skeleton-line[data-size='title'] {
   inline-size: 60%;
   min-block-size: 14px;
 }
 
-.ds-surface.ds-media [data-part='media-skeleton-line'][data-size='caption'] {
+.ds-surface.ds-media [data-part='media-skeleton-line'][data-size='caption'],
+.ds-surface.ds-media .ds-media__media-skeleton-line[data-size='caption'] {
   inline-size: 85%;
   min-block-size: 12px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-surface.ds-media [data-part='media-skeleton-thumb'],
+  .ds-surface.ds-media .ds-media__media-skeleton-thumb,
   .ds-surface.ds-media [data-part='media-skeleton-line'],
-  .ds-surface.ds-media [data-part='media-skeleton-preview'] {
+  .ds-surface.ds-media .ds-media__media-skeleton-line,
+  .ds-surface.ds-media [data-part='media-skeleton-preview'],
+  .ds-surface.ds-media .ds-media__media-skeleton-preview {
     animation: none;
   }
 }
@@ -96524,41 +96542,51 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    never a layout shift (all geometry INTERNAL literals, dashboard/chat/auth
    precedent). */
 .ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-toggle,
 .ds-surface.ds-pricing [data-part='pricing-skeleton-plan'],
-.ds-surface.ds-pricing [data-part='pricing-skeleton-row'] {
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-plan,
+.ds-surface.ds-pricing [data-part='pricing-skeleton-row'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-row {
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   animation: ds-foundation-pulse
     var(--ds-motion-attention, 1.5s)
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'] {
+.ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-toggle {
   inline-size: 180px;
   min-block-size: 32px;
   margin-inline: auto;
   border-radius: 999px;
 }
 
-.ds-surface.ds-pricing [data-part='pricing-skeleton-plans'] {
+.ds-surface.ds-pricing [data-part='pricing-skeleton-plans'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-plans {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: var(--ds-spacing-4, 16px);
 }
 
-.ds-surface.ds-pricing [data-part='pricing-skeleton-plan'] {
+.ds-surface.ds-pricing [data-part='pricing-skeleton-plan'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-plan {
   min-block-size: 240px;
   border-radius: var(--ds-radius-lg, 12px);
 }
 
-.ds-surface.ds-pricing [data-part='pricing-skeleton-row'] {
+.ds-surface.ds-pricing [data-part='pricing-skeleton-row'],
+.ds-surface.ds-pricing .ds-pricing__pricing-skeleton-row {
   min-block-size: 44px;
   border-radius: var(--ds-radius-md, 8px);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'],
+  .ds-surface.ds-pricing .ds-pricing__pricing-skeleton-toggle,
   .ds-surface.ds-pricing [data-part='pricing-skeleton-plan'],
-  .ds-surface.ds-pricing [data-part='pricing-skeleton-row'] {
+  .ds-surface.ds-pricing .ds-pricing__pricing-skeleton-plan,
+  .ds-surface.ds-pricing [data-part='pricing-skeleton-row'],
+  .ds-surface.ds-pricing .ds-pricing__pricing-skeleton-row {
     animation: none;
   }
 }

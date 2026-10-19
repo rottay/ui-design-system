@@ -174,17 +174,17 @@ function PricingSurfaceContent({
                geometry and pulse live in the pricing skin. */
             <Stack spacing="md" aria-hidden="true">
               {config.behavior.onBillingCycleChange && (
-                <Box data-part="pricing-skeleton-toggle" />
+                <Box data-part="pricing-skeleton-toggle" className="ds-pricing__pricing-skeleton-toggle" />
               )}
-              <Box data-part="pricing-skeleton-plans">
-                <Box data-part="pricing-skeleton-plan" />
-                <Box data-part="pricing-skeleton-plan" />
-                <Box data-part="pricing-skeleton-plan" />
+              <Box data-part="pricing-skeleton-plans" className="ds-pricing__pricing-skeleton-plans">
+                <Box data-part="pricing-skeleton-plan" className="ds-pricing__pricing-skeleton-plan" />
+                <Box data-part="pricing-skeleton-plan" className="ds-pricing__pricing-skeleton-plan" />
+                <Box data-part="pricing-skeleton-plan" className="ds-pricing__pricing-skeleton-plan" />
               </Box>
-              <Box data-part="pricing-skeleton-row" />
-              <Box data-part="pricing-skeleton-row" />
-              <Box data-part="pricing-skeleton-row" />
-              <Box data-part="pricing-skeleton-row" />
+              <Box data-part="pricing-skeleton-row" className="ds-pricing__pricing-skeleton-row" />
+              <Box data-part="pricing-skeleton-row" className="ds-pricing__pricing-skeleton-row" />
+              <Box data-part="pricing-skeleton-row" className="ds-pricing__pricing-skeleton-row" />
+              <Box data-part="pricing-skeleton-row" className="ds-pricing__pricing-skeleton-row" />
             </Stack>
           ) : /* Entrance motion rides the product personality; reduced/calm
                contexts render the final state by FadeIn's own contract. */
