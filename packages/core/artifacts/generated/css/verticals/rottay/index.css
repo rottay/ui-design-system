@@ -95632,7 +95632,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
 /* ---- mobile lane paging group: rhythm only (was a `style`-prop declaration riding the
         dead `--ds-space-sm` channel — inert since birth, now real tokens). ---- */
-.ds-surface.ds-kanban [data-part='mobile-lane-navigation'] {
+.ds-surface.ds-kanban [data-part='mobile-lane-navigation'],
+.ds-surface.ds-kanban .ds-kanban__mobile-lane-navigation {
   gap: var(--ds-spacing-2, 8px);
   margin-block-end: var(--ds-spacing-2, 8px);
 }
@@ -95641,12 +95642,14 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
         geometry (same gap channel fallback as the pattern default), so the
         swap to live content is paint-only with no layout shift. Columns
         flex evenly and never overflow the page (min-inline-size: 0). ---- */
-.ds-surface.ds-kanban [data-part='kanban-skeleton-board'] {
+.ds-surface.ds-kanban [data-part='kanban-skeleton-board'],
+.ds-surface.ds-kanban .ds-kanban__kanban-skeleton-board {
   display: flex;
   gap: var(--ds-kanban-board-column-gap, var(--ds-spacing-4, 16px));
 }
 
-.ds-surface.ds-kanban [data-part='kanban-skeleton-column'] {
+.ds-surface.ds-kanban [data-part='kanban-skeleton-column'],
+.ds-surface.ds-kanban .ds-kanban__kanban-skeleton-column {
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
@@ -95654,7 +95657,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   gap: var(--ds-spacing-2, 8px);
 }
 
-.ds-surface.ds-kanban [data-part='kanban-skeleton-block'] {
+.ds-surface.ds-kanban [data-part='kanban-skeleton-block'],
+.ds-surface.ds-kanban .ds-kanban__kanban-skeleton-block {
   border-radius: var(
     --ds-skeleton-radius,
     var(--ds-radius-md, 8px)
@@ -95674,17 +95678,22 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* Mirrors the pattern's column-header chrome (padding-block 12px x2 +
    sm title row + accent strip edge). */
 .ds-surface.ds-kanban
-  [data-part='kanban-skeleton-block'][data-size='header'] {
+  [data-part='kanban-skeleton-block'][data-size='header'],
+.ds-surface.ds-kanban
+  .ds-kanban__kanban-skeleton-block[data-size='header'] {
   min-block-size: 44px;
 }
 
 .ds-surface.ds-kanban
-  [data-part='kanban-skeleton-block'][data-size='card'] {
+  [data-part='kanban-skeleton-block'][data-size='card'],
+.ds-surface.ds-kanban
+  .ds-kanban__kanban-skeleton-block[data-size='card'] {
   min-block-size: 72px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-kanban [data-part='kanban-skeleton-block'] {
+  .ds-surface.ds-kanban [data-part='kanban-skeleton-block'],
+  .ds-surface.ds-kanban .ds-kanban__kanban-skeleton-block {
     animation: none;
   }
 }
@@ -95816,7 +95825,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- scheduler-mirror skeleton: blocks sit on the same 8/4 layout as the
         real calendar card and timeline rail, so the swap to live content is
         paint-only with no layout shift. ---- */
-.ds-surface.ds-scheduler [data-part='scheduler-skeleton-block'] {
+.ds-surface.ds-scheduler [data-part='scheduler-skeleton-block'],
+.ds-surface.ds-scheduler .ds-scheduler__scheduler-skeleton-block {
   border-radius: var(
     --ds-skeleton-radius,
     var(--ds-radius-md, 8px)
@@ -95834,28 +95844,37 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-scheduler
-  [data-part='scheduler-skeleton-block'][data-size='header'] {
+  [data-part='scheduler-skeleton-block'][data-size='header'],
+.ds-surface.ds-scheduler
+  .ds-scheduler__scheduler-skeleton-block[data-size='header'] {
   inline-size: 55%;
   min-block-size: 32px;
 }
 
 .ds-surface.ds-scheduler
-  [data-part='scheduler-skeleton-block'][data-size='calendar'] {
+  [data-part='scheduler-skeleton-block'][data-size='calendar'],
+.ds-surface.ds-scheduler
+  .ds-scheduler__scheduler-skeleton-block[data-size='calendar'] {
   min-block-size: 400px;
 }
 
 .ds-surface.ds-scheduler
-  [data-part='scheduler-skeleton-block'][data-size='aside'] {
+  [data-part='scheduler-skeleton-block'][data-size='aside'],
+.ds-surface.ds-scheduler
+  .ds-scheduler__scheduler-skeleton-block[data-size='aside'] {
   min-block-size: 400px;
 }
 
 .ds-surface.ds-scheduler
-  [data-part='scheduler-skeleton-block'][data-size='agenda'] {
+  [data-part='scheduler-skeleton-block'][data-size='agenda'],
+.ds-surface.ds-scheduler
+  .ds-scheduler__scheduler-skeleton-block[data-size='agenda'] {
   min-block-size: var(--ds-touch-target-min, 44px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-scheduler [data-part='scheduler-skeleton-block'] {
+  .ds-surface.ds-scheduler [data-part='scheduler-skeleton-block'],
+  .ds-surface.ds-scheduler .ds-scheduler__scheduler-skeleton-block {
     animation: none;
   }
 }
@@ -96625,7 +96644,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- operational-mirror skeleton: blocks sit on the same layout as the
         real content (KPI row, 8/4 main/side split, top/bottom rails), so the
         swap to live content is paint-only with no layout shift. ---- */
-.ds-surface.ds-operational [data-part='operational-skeleton-block'] {
+.ds-surface.ds-operational [data-part='operational-skeleton-block'],
+.ds-surface.ds-operational .ds-operational__operational-skeleton-block {
   border-radius: var(
     --ds-skeleton-radius,
     var(--ds-radius-md, 8px)
@@ -96643,18 +96663,24 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-operational
-  [data-part='operational-skeleton-block'][data-size='stat'] {
+  [data-part='operational-skeleton-block'][data-size='stat'],
+.ds-surface.ds-operational
+  .ds-operational__operational-skeleton-block[data-size='stat'] {
   min-block-size: 96px;
 }
 
 .ds-surface.ds-operational
-  [data-part='operational-skeleton-block'][data-size='title'] {
+  [data-part='operational-skeleton-block'][data-size='title'],
+.ds-surface.ds-operational
+  .ds-operational__operational-skeleton-block[data-size='title'] {
   inline-size: 40%;
   min-block-size: 20px;
 }
 
 .ds-surface.ds-operational
-  [data-part='operational-skeleton-block'][data-size='panel'] {
+  [data-part='operational-skeleton-block'][data-size='panel'],
+.ds-surface.ds-operational
+  .ds-operational__operational-skeleton-block[data-size='panel'] {
   min-block-size: 280px;
 }
 
@@ -96664,12 +96690,15 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 .ds-surface.ds-operational
-  [data-part='operational-skeleton-block'][data-size='rail'] {
+  [data-part='operational-skeleton-block'][data-size='rail'],
+.ds-surface.ds-operational
+  .ds-operational__operational-skeleton-block[data-size='rail'] {
   min-block-size: 240px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-operational [data-part='operational-skeleton-block'] {
+  .ds-surface.ds-operational [data-part='operational-skeleton-block'],
+  .ds-surface.ds-operational .ds-operational__operational-skeleton-block {
     animation: none;
   }
 }

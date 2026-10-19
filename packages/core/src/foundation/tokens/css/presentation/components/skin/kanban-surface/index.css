@@ -45,7 +45,8 @@
 
 /* ---- mobile lane paging group: rhythm only (was a `style`-prop declaration riding the
         dead `--ds-space-sm` channel — inert since birth, now real tokens). ---- */
-.ds-surface.ds-kanban [data-part='mobile-lane-navigation'] {
+.ds-surface.ds-kanban [data-part='mobile-lane-navigation'],
+.ds-surface.ds-kanban .ds-kanban__mobile-lane-navigation {
   gap: var(--ds-spacing-2, 8px);
   margin-block-end: var(--ds-spacing-2, 8px);
 }
@@ -54,12 +55,14 @@
         geometry (same gap channel fallback as the pattern default), so the
         swap to live content is paint-only with no layout shift. Columns
         flex evenly and never overflow the page (min-inline-size: 0). ---- */
-.ds-surface.ds-kanban [data-part='kanban-skeleton-board'] {
+.ds-surface.ds-kanban [data-part='kanban-skeleton-board'],
+.ds-surface.ds-kanban .ds-kanban__kanban-skeleton-board {
   display: flex;
   gap: var(--ds-kanban-board-column-gap, var(--ds-spacing-4, 16px));
 }
 
-.ds-surface.ds-kanban [data-part='kanban-skeleton-column'] {
+.ds-surface.ds-kanban [data-part='kanban-skeleton-column'],
+.ds-surface.ds-kanban .ds-kanban__kanban-skeleton-column {
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
@@ -67,7 +70,8 @@
   gap: var(--ds-spacing-2, 8px);
 }
 
-.ds-surface.ds-kanban [data-part='kanban-skeleton-block'] {
+.ds-surface.ds-kanban [data-part='kanban-skeleton-block'],
+.ds-surface.ds-kanban .ds-kanban__kanban-skeleton-block {
   border-radius: var(
     --ds-skeleton-radius,
     var(--ds-radius-md, 8px)
@@ -87,17 +91,22 @@
 /* Mirrors the pattern's column-header chrome (padding-block 12px x2 +
    sm title row + accent strip edge). */
 .ds-surface.ds-kanban
-  [data-part='kanban-skeleton-block'][data-size='header'] {
+  [data-part='kanban-skeleton-block'][data-size='header'],
+.ds-surface.ds-kanban
+  .ds-kanban__kanban-skeleton-block[data-size='header'] {
   min-block-size: 44px;
 }
 
 .ds-surface.ds-kanban
-  [data-part='kanban-skeleton-block'][data-size='card'] {
+  [data-part='kanban-skeleton-block'][data-size='card'],
+.ds-surface.ds-kanban
+  .ds-kanban__kanban-skeleton-block[data-size='card'] {
   min-block-size: 72px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-kanban [data-part='kanban-skeleton-block'] {
+  .ds-surface.ds-kanban [data-part='kanban-skeleton-block'],
+  .ds-surface.ds-kanban .ds-kanban__kanban-skeleton-block {
     animation: none;
   }
 }

@@ -123,7 +123,8 @@
 /* ---- scheduler-mirror skeleton: blocks sit on the same 8/4 layout as the
         real calendar card and timeline rail, so the swap to live content is
         paint-only with no layout shift. ---- */
-.ds-surface.ds-scheduler [data-part='scheduler-skeleton-block'] {
+.ds-surface.ds-scheduler [data-part='scheduler-skeleton-block'],
+.ds-surface.ds-scheduler .ds-scheduler__scheduler-skeleton-block {
   border-radius: var(
     --ds-skeleton-radius,
     var(--ds-radius-md, 8px)
@@ -141,28 +142,37 @@
 }
 
 .ds-surface.ds-scheduler
-  [data-part='scheduler-skeleton-block'][data-size='header'] {
+  [data-part='scheduler-skeleton-block'][data-size='header'],
+.ds-surface.ds-scheduler
+  .ds-scheduler__scheduler-skeleton-block[data-size='header'] {
   inline-size: 55%;
   min-block-size: 32px;
 }
 
 .ds-surface.ds-scheduler
-  [data-part='scheduler-skeleton-block'][data-size='calendar'] {
+  [data-part='scheduler-skeleton-block'][data-size='calendar'],
+.ds-surface.ds-scheduler
+  .ds-scheduler__scheduler-skeleton-block[data-size='calendar'] {
   min-block-size: 400px;
 }
 
 .ds-surface.ds-scheduler
-  [data-part='scheduler-skeleton-block'][data-size='aside'] {
+  [data-part='scheduler-skeleton-block'][data-size='aside'],
+.ds-surface.ds-scheduler
+  .ds-scheduler__scheduler-skeleton-block[data-size='aside'] {
   min-block-size: 400px;
 }
 
 .ds-surface.ds-scheduler
-  [data-part='scheduler-skeleton-block'][data-size='agenda'] {
+  [data-part='scheduler-skeleton-block'][data-size='agenda'],
+.ds-surface.ds-scheduler
+  .ds-scheduler__scheduler-skeleton-block[data-size='agenda'] {
   min-block-size: var(--ds-touch-target-min, 44px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-scheduler [data-part='scheduler-skeleton-block'] {
+  .ds-surface.ds-scheduler [data-part='scheduler-skeleton-block'],
+  .ds-surface.ds-scheduler .ds-scheduler__scheduler-skeleton-block {
     animation: none;
   }
 }

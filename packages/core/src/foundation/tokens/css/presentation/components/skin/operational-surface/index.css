@@ -23,7 +23,8 @@
 /* ---- operational-mirror skeleton: blocks sit on the same layout as the
         real content (KPI row, 8/4 main/side split, top/bottom rails), so the
         swap to live content is paint-only with no layout shift. ---- */
-.ds-surface.ds-operational [data-part='operational-skeleton-block'] {
+.ds-surface.ds-operational [data-part='operational-skeleton-block'],
+.ds-surface.ds-operational .ds-operational__operational-skeleton-block {
   border-radius: var(
     --ds-skeleton-radius,
     var(--ds-radius-md, 8px)
@@ -41,18 +42,24 @@
 }
 
 .ds-surface.ds-operational
-  [data-part='operational-skeleton-block'][data-size='stat'] {
+  [data-part='operational-skeleton-block'][data-size='stat'],
+.ds-surface.ds-operational
+  .ds-operational__operational-skeleton-block[data-size='stat'] {
   min-block-size: 96px;
 }
 
 .ds-surface.ds-operational
-  [data-part='operational-skeleton-block'][data-size='title'] {
+  [data-part='operational-skeleton-block'][data-size='title'],
+.ds-surface.ds-operational
+  .ds-operational__operational-skeleton-block[data-size='title'] {
   inline-size: 40%;
   min-block-size: 20px;
 }
 
 .ds-surface.ds-operational
-  [data-part='operational-skeleton-block'][data-size='panel'] {
+  [data-part='operational-skeleton-block'][data-size='panel'],
+.ds-surface.ds-operational
+  .ds-operational__operational-skeleton-block[data-size='panel'] {
   min-block-size: 280px;
 }
 
@@ -62,12 +69,15 @@
 }
 
 .ds-surface.ds-operational
-  [data-part='operational-skeleton-block'][data-size='rail'] {
+  [data-part='operational-skeleton-block'][data-size='rail'],
+.ds-surface.ds-operational
+  .ds-operational__operational-skeleton-block[data-size='rail'] {
   min-block-size: 240px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-operational [data-part='operational-skeleton-block'] {
+  .ds-surface.ds-operational [data-part='operational-skeleton-block'],
+  .ds-surface.ds-operational .ds-operational__operational-skeleton-block {
     animation: none;
   }
 }

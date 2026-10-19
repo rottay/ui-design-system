@@ -77,14 +77,15 @@ function SchedulerSkeleton({
                   <Box
                     key={`scheduler-skeleton-agenda-${key}`}
                     data-part="scheduler-skeleton-block"
+                    className="ds-scheduler__scheduler-skeleton-block"
                     data-size="agenda"
                   />
                 ))}
               </Stack>
             ) : (
               <Stack spacing="sm">
-                <Box data-part="scheduler-skeleton-block" data-size="header" />
-                <Box data-part="scheduler-skeleton-block" data-size="calendar" />
+                <Box data-part="scheduler-skeleton-block" className="ds-scheduler__scheduler-skeleton-block" data-size="header" />
+                <Box data-part="scheduler-skeleton-block" className="ds-scheduler__scheduler-skeleton-block" data-size="calendar" />
               </Stack>
             )}
           </Card.Body>
@@ -95,7 +96,7 @@ function SchedulerSkeleton({
         <SurfacePostureSlot name="sidebar" asChild><Grid.Item role={surfacePosture ? 'region' : undefined} aria-label={surfacePosture ? tSurfaceOr('scheduler.sidebar_label', 'Timeline') : undefined} span={!shouldStack ? 4 : undefined}>
           <Card variant={cardVariant}>
             <Card.Body>
-              <Box data-part="scheduler-skeleton-block" data-size="aside" />
+              <Box data-part="scheduler-skeleton-block" className="ds-scheduler__scheduler-skeleton-block" data-size="aside" />
             </Card.Body>
           </Card>
         </Grid.Item></SurfacePostureSlot>

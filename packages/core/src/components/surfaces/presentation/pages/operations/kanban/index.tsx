@@ -52,13 +52,13 @@ function KanbanSkeleton({
   );
 
   return (
-    <Box data-part="kanban-skeleton-board">
+    <Box data-part="kanban-skeleton-board" className="ds-kanban__kanban-skeleton-board">
       {skeletonColumns.map((columnIndex) => (
-        <Box key={`kanban-skeleton-column-${columnIndex}`} data-part="kanban-skeleton-column">
-          <Box data-part="kanban-skeleton-block" data-size="header" />
-          <Box data-part="kanban-skeleton-block" data-size="card" />
-          <Box data-part="kanban-skeleton-block" data-size="card" />
-          <Box data-part="kanban-skeleton-block" data-size="card" />
+        <Box key={`kanban-skeleton-column-${columnIndex}`} data-part="kanban-skeleton-column" className="ds-kanban__kanban-skeleton-column">
+          <Box data-part="kanban-skeleton-block" className="ds-kanban__kanban-skeleton-block" data-size="header" />
+          <Box data-part="kanban-skeleton-block" className="ds-kanban__kanban-skeleton-block" data-size="card" />
+          <Box data-part="kanban-skeleton-block" className="ds-kanban__kanban-skeleton-block" data-size="card" />
+          <Box data-part="kanban-skeleton-block" className="ds-kanban__kanban-skeleton-block" data-size="card" />
         </Box>
       ))}
     </Box>
@@ -221,6 +221,7 @@ function KanbanSurfaceContent({
                region (pinned anatomy). */
             <SurfacePostureSlot name="lane-navigation" asChild><Flex
               data-part="mobile-lane-navigation"
+              className="ds-kanban__mobile-lane-navigation"
               role="group"
               aria-label={tSurfaceOr('kanban.lanes_nav_aria', 'Kanban lanes')}
               align="center"

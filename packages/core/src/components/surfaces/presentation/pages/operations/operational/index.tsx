@@ -63,8 +63,8 @@ function OperationalSkeletonCard({
     <Card variant={cardVariant}>
       <Card.Body>
         <Stack spacing="md">
-          <Box data-part="operational-skeleton-block" data-size="title" />
-          <Box data-part="operational-skeleton-block" data-size={size} />
+          <Box data-part="operational-skeleton-block" className="ds-operational__operational-skeleton-block" data-size="title" />
+          <Box data-part="operational-skeleton-block" className="ds-operational__operational-skeleton-block" data-size={size} />
         </Stack>
       </Card.Body>
     </Card>
@@ -116,6 +116,7 @@ function OperationalSkeleton({
             <Box
               key={`operational-skeleton-stat-${index}`}
               data-part="operational-skeleton-block"
+              className="ds-operational__operational-skeleton-block"
               data-size="stat"
             />
           ))}
