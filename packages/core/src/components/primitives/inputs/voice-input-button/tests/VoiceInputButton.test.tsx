@@ -29,6 +29,35 @@ const skin = readFileSync(
 );
 const componentSource = readFileSync(join(__dirname, '..', 'index.tsx'), 'utf8');
 
+// Reads each own-block class door (`.block__p`, or the fold `:is([data-part='p'], .block__p)`)
+// back as `[data-part='p']`; any other drift is left as written.
+function asPartSelector(selector: string, block: string, parts: readonly string[]): string {
+  let read = selector;
+  for (const part of parts) {
+    const token = `[data-part='${part}']`;
+    read = read
+      .replace(new RegExp(`:is\\(\\[data-part=(['"])${part}\\1\\],\\s*\\.${block}__${part}\\)`, 'g'), token)
+      .replace(new RegExp(`\\.${block}__${part}(?![\\w-])`, 'g'), token);
+  }
+  return read;
+}
+
+// Every rule with a member that reads back as `selector`; it may hold only that
+// part member and its own class door, each at most once.
+function rulesReading(css: string, selector: string): postcss.Rule[] {
+  const door = selector.replace(/\[data-part='root'\]/g, '.ds-voice-input-button__root');
+  const found: postcss.Rule[] = [];
+  postcss.parse(css).walkRules((rule) => {
+    const members = rule.selectors.map((member) => member.replace(/\s+/g, ' ').trim());
+    if (!members.some((member) => asPartSelector(member, 'ds-voice-input-button', ['root']) === selector)) return;
+    expect(door).not.toBe(selector);
+    expect(new Set(members).size).toBe(members.length);
+    expect(members.every((member) => member === selector || member === door)).toBe(true);
+    found.push(rule);
+  });
+  return found;
+}
+
 type ResultHandler = ((event: unknown) => void) | null;
 
 class FakeSpeechRecognition {
@@ -347,12 +376,12 @@ describe('VoiceInputButton skin ownership — Pass 1', () => {
 
   it('owns a visible focus ring (Pass 2: UA outline was the only affordance)', () => {
     const rings: string[] = [];
-    postcss.parse(skin).walkRules(".ds-voice-input-button[data-part='root']:focus-visible", (rule) => {
-      if (rule.parent?.type === 'atrule') return;
+    for (const rule of rulesReading(skin, ".ds-voice-input-button[data-part='root']:focus-visible")) {
+      if (rule.parent?.type === 'atrule') continue;
       rule.walkDecls('box-shadow', (decl) => {
         rings.push(decl.value.replace(/\s+/g, ' ').trim());
       });
-    });
+    }
     expect(rings).toEqual(['0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)']);
     expect([...rings[0].matchAll(/var\(\s*(--ds-[\w-]+)/g)].map((match) => match[1])).toEqual([
       '--ds-color-primary',

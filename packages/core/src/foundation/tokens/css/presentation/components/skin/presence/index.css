@@ -62,13 +62,15 @@
  * (ink stays inline, RUNTIME), overflow badge.
  * ==========================================================================*/
 
-.ds-presence-bar[data-part='root'] {
+.ds-presence-bar[data-part='root'],
+.ds-presence-bar.ds-presence-live-cursor__root {
   display: inline-flex;
   align-items: center;
   position: relative;
 }
 
-.ds-presence-bar [data-part='avatar'][data-part='avatar'] {
+.ds-presence-bar [data-part='avatar'][data-part='avatar'],
+.ds-presence-bar .ds-presence-bar__avatar.ds-presence-bar__avatar {
   position: relative;
   overflow: hidden;
   display: flex;
@@ -85,7 +87,8 @@
    travel rides the canon's entrance offset so a tenant's motion profile
    tunes it. */
 @media (hover: hover) {
-  .ds-presence-bar [data-part='avatar'][data-part='avatar']:hover {
+  .ds-presence-bar [data-part='avatar'][data-part='avatar']:hover,
+  .ds-presence-bar .ds-presence-bar__avatar.ds-presence-bar__avatar:hover {
     transform: translateY(var(--ds-motion-offset-in));
   }
 }
@@ -102,7 +105,8 @@
   user-select: none;
 }
 
-.ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'] {
+.ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'],
+.ds-presence-bar .ds-presence-bar__overflow-badge.ds-presence-bar__overflow-badge {
   position: relative;
   z-index: 0;
   display: flex;
@@ -114,7 +118,8 @@
   border-radius: 50%;
   background: var(--ds-color-surface-secondary, var(--ds-color-bg-secondary));
 }
-.ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'][data-part='overflow-badge'] {
+.ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'][data-part='overflow-badge'],
+.ds-presence-bar .ds-presence-bar__overflow-badge.ds-presence-bar__overflow-badge.ds-presence-bar__overflow-badge {
   border: var(--ds-presence-badge-ring) solid var(--ds-color-border);
 }
 .ds-presence-bar .ds-presence__overflow-badge-count.ds-presence__overflow-badge-count.ds-presence__overflow-badge-count.ds-presence__overflow-badge-count {
@@ -127,16 +132,19 @@
  * PresenceTypingIndicator -- three bouncing dots (Box) + label (Text).
  * ==========================================================================*/
 
-.ds-presence-typing-indicator[data-part='root'] {
+.ds-presence-typing-indicator[data-part='root'],
+.ds-presence-typing-indicator.ds-presence-live-cursor__root {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-spacing-2);
 }
-.ds-presence-typing-indicator [data-part='dots'] {
+.ds-presence-typing-indicator [data-part='dots'],
+.ds-presence-typing-indicator .ds-presence-typing-indicator__dots {
   display: inline-flex;
   gap: calc(var(--ds-spacing-1) * 0.75);
 }
-.ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot'] {
+.ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot'],
+.ds-presence-typing-indicator .ds-presence-typing-indicator__typing-dot.ds-presence-typing-indicator__typing-dot {
   inline-size: calc(var(--ds-spacing-1) * 1.25);
   block-size: calc(var(--ds-spacing-1) * 1.25);
   border-radius: 50%;
@@ -144,10 +152,12 @@
   animation: ds-presence-dot var(--_ds-presence-dot-duration, calc(var(--ds-motion-glacial) * 2.4))
     var(--ds-motion-ease-in-out) infinite;
 }
-.ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(2) {
+.ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(2),
+.ds-presence-typing-indicator .ds-presence-typing-indicator__typing-dot.ds-presence-typing-indicator__typing-dot:nth-child(2) {
   animation-delay: calc(var(--_ds-presence-dot-duration, calc(var(--ds-motion-glacial) * 2.4)) * 0.125);
 }
-.ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(3) {
+.ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(3),
+.ds-presence-typing-indicator .ds-presence-typing-indicator__typing-dot.ds-presence-typing-indicator__typing-dot:nth-child(3) {
   animation-delay: calc(var(--_ds-presence-dot-duration, calc(var(--ds-motion-glacial) * 2.4)) * 0.25);
 }
 .ds-presence-typing-indicator .ds-presence__label.ds-presence__label.ds-presence__label.ds-presence__label {
@@ -156,10 +166,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-presence-bar [data-part='avatar'][data-part='avatar'] {
+  .ds-presence-bar [data-part='avatar'][data-part='avatar'],
+  .ds-presence-bar .ds-presence-bar__avatar.ds-presence-bar__avatar {
     transition: none;
   }
-  .ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot'] {
+  .ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot'],
+  .ds-presence-typing-indicator .ds-presence-typing-indicator__typing-dot.ds-presence-typing-indicator__typing-dot {
     animation: none;
   }
 }
@@ -169,7 +181,8 @@
  * name badge (background stays inline, RUNTIME).
  * ==========================================================================*/
 
-.ds-presence-live-cursor[data-part='root'] {
+.ds-presence-live-cursor[data-part='root'],
+.ds-presence-live-cursor.ds-presence-live-cursor__root {
   position: absolute;
   inset-block-start: 0;
   inset-inline-start: 0;
@@ -184,14 +197,17 @@
     opacity var(--ds-motion-reveal) var(--ds-motion-ease-out);
   will-change: transform;
 }
-.ds-presence-live-cursor[data-part='root'][data-visible='false'] {
+.ds-presence-live-cursor[data-part='root'][data-visible='false'],
+.ds-presence-live-cursor.ds-presence-live-cursor__root[data-visible='false'] {
   opacity: 0;
 }
-.ds-presence-live-cursor[data-part='root'] svg {
+.ds-presence-live-cursor[data-part='root'] svg,
+.ds-presence-live-cursor.ds-presence-live-cursor__root svg {
   display: block;
 }
 
-.ds-presence-live-cursor [data-part='cursor-badge'][data-part='cursor-badge'] {
+.ds-presence-live-cursor [data-part='cursor-badge'][data-part='cursor-badge'],
+.ds-presence-live-cursor .ds-presence-live-cursor__cursor-badge.ds-presence-live-cursor__cursor-badge {
   position: absolute;
   inset-inline-start: 12px;
   inset-block-start: 16px;
@@ -224,13 +240,16 @@
 
 @media (forced-colors: active) {
   .ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot'],
-  .ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'] {
+  .ds-presence-typing-indicator .ds-presence-typing-indicator__typing-dot.ds-presence-typing-indicator__typing-dot,
+  .ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'],
+  .ds-presence-bar .ds-presence-bar__overflow-badge.ds-presence-bar__overflow-badge {
     background: ButtonText;
   }
   .ds-presence-bar .ds-presence__overflow-badge-count.ds-presence__overflow-badge-count.ds-presence__overflow-badge-count.ds-presence__overflow-badge-count {
     color: Canvas;
   }
-  .ds-presence-live-cursor [data-part='cursor-badge'][data-part='cursor-badge'] {
+  .ds-presence-live-cursor [data-part='cursor-badge'][data-part='cursor-badge'],
+  .ds-presence-live-cursor .ds-presence-live-cursor__cursor-badge.ds-presence-live-cursor__cursor-badge {
     color: ButtonText;
     box-shadow: none;
   }

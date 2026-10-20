@@ -47,7 +47,8 @@
  * border block below. Non-border paint wins unlayered at (0,2,0)+.
  */
 
-.ds-voice-input-button[data-part='root'] {
+.ds-voice-input-button[data-part='root'],
+.ds-voice-input-button.ds-voice-input-button__root {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -67,34 +68,40 @@
 /* Idle hover is hover-capable-only (4th-wave law); the held press answers
    with the canonical press scale on every pointer. */
 @media (hover: hover) {
-  .ds-voice-input-button[data-part='root']:hover:not([data-active='true']):not([data-error='true']) {
+  .ds-voice-input-button[data-part='root']:hover:not([data-active='true']):not([data-error='true']),
+  .ds-voice-input-button.ds-voice-input-button__root:hover:not([data-active='true']):not([data-error='true']) {
     background: var(
       --ds-voice-input-bg-hover,
       color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)
     );
   }
 }
-.ds-voice-input-button[data-part='root']:is([data-state~='pressed'], :active) {
+.ds-voice-input-button[data-part='root']:is([data-state~='pressed'], :active),
+.ds-voice-input-button.ds-voice-input-button__root:is([data-state~='pressed'], :active) {
   transform: scale(var(--ds-state-press-scale));
 }
 
 /* control + icon geometry per size preset (transcribed verbatim: no global
    control-size token covers these values) */
-.ds-voice-input-button[data-part='root'][data-size='sm'] {
+.ds-voice-input-button[data-part='root'][data-size='sm'],
+.ds-voice-input-button.ds-voice-input-button__root[data-size='sm'] {
   inline-size: 28px;
   block-size: 28px;
   min-inline-size: 28px;
 }
-.ds-voice-input-button[data-part='root'][data-size='md'] {
+.ds-voice-input-button[data-part='root'][data-size='md'],
+.ds-voice-input-button.ds-voice-input-button__root[data-size='md'] {
   inline-size: 34px;
   block-size: 34px;
   min-inline-size: 34px;
 }
-.ds-voice-input-button[data-part='root'][data-size='sm'] > .rottay-icon {
+.ds-voice-input-button[data-part='root'][data-size='sm'] > .rottay-icon,
+.ds-voice-input-button.ds-voice-input-button__root[data-size='sm'] > .rottay-icon {
   inline-size: 13px;
   block-size: 13px;
 }
-.ds-voice-input-button[data-part='root'][data-size='md'] > .rottay-icon {
+.ds-voice-input-button[data-part='root'][data-size='md'] > .rottay-icon,
+.ds-voice-input-button.ds-voice-input-button__root[data-size='md'] > .rottay-icon {
   inline-size: 15px;
   block-size: 15px;
 }
@@ -139,7 +146,8 @@
 }
 
 /* focus ring (K4-B Pass 2: the button relied on the UA outline) — badge idiom. */
-.ds-voice-input-button[data-part='root']:focus-visible {
+.ds-voice-input-button[data-part='root']:focus-visible,
+.ds-voice-input-button.ds-voice-input-button__root:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
 }
@@ -147,12 +155,14 @@
    state keeps a FRAME (never hue alone): the base frame and the active
    Highlight frame carry idle vs recording. */
 @media (forced-colors: active) {
-  .ds-voice-input-button[data-part='root']:focus-visible {
+  .ds-voice-input-button[data-part='root']:focus-visible,
+  .ds-voice-input-button.ds-voice-input-button__root:focus-visible {
     outline: 2px solid Highlight;
     box-shadow: none;
   }
 
-  .ds-voice-input-button[data-part='root'][data-size][data-variant] {
+  .ds-voice-input-button[data-part='root'][data-size][data-variant],
+  .ds-voice-input-button.ds-voice-input-button__root[data-size][data-variant] {
     border-color: ButtonText;
   }
   .ds-voice-input-button[data-part='root'][data-variant][data-active='true'] {
@@ -174,7 +184,8 @@
    floor is physical px, never rem (the fluid 15px root erodes rem floors at
    narrow widths -- measured on the live bundle, Axe R0). */
 @media (pointer: coarse) {
-  .ds-voice-input-button[data-part='root'] {
+  .ds-voice-input-button[data-part='root'],
+  .ds-voice-input-button.ds-voice-input-button__root {
     min-inline-size: 44px;
     min-block-size: 44px;
   }
@@ -185,7 +196,8 @@
    `[data-size]` and `[data-variant]` are stamped on EVERY render, so they
    lend the specificity units with no repetition (FRAGILITY NOTE: restore the
    stamps if a future render ever drops them -- never re-double the part). */
-.ds-voice-input-button[data-part='root'][data-size][data-variant] {
+.ds-voice-input-button[data-part='root'][data-size][data-variant],
+.ds-voice-input-button.ds-voice-input-button__root[data-size][data-variant] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 .ds-voice-input-button[data-part='root'][data-variant][data-active='true'] {
@@ -196,7 +208,8 @@
 }
 
 /* background: only the filled variant tints; state overrides in error>active order. */
-.ds-voice-input-button[data-part='root'][data-variant='filled'] {
+.ds-voice-input-button[data-part='root'][data-variant='filled'],
+.ds-voice-input-button.ds-voice-input-button__root[data-variant='filled'] {
   background: color-mix(in srgb, var(--ds-surface-card) 85%, var(--ds-color-bg-primary) 15%);
 }
 .ds-voice-input-button[data-part='root'][data-variant='filled'][data-active='true'] {

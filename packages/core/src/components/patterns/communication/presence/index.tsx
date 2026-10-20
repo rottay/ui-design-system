@@ -163,7 +163,7 @@ export function PresenceBar({
   // group's accessible name.
   return (
     <Box
-      className="ds-presence-bar"
+      className="ds-presence-bar ds-presence-live-cursor__root"
       data-part="root"
       role="list"
       aria-label={i18n?.tOr('presence.barLabel', 'People present') ?? 'People present'}
@@ -175,6 +175,7 @@ export function PresenceBar({
           <Box
             key={user.id}
             data-part="avatar"
+            className="ds-presence-bar__avatar"
             role="listitem"
             // The name is IDENTITY, not a hover affordance: `showNames`
             // governs the visual tooltip only, so the roster stays fully
@@ -204,6 +205,7 @@ export function PresenceBar({
       {overflowCount > 0 && (
         <Box
           data-part="overflow-badge"
+          className="ds-presence-bar__overflow-badge"
           role="listitem"
           /* The overflow is named for AT as ONE parametric catalog message
              ({count}); the hover tooltip lists the hidden names joined
@@ -283,7 +285,7 @@ export function PresenceTypingIndicator({
   // tick as its first content is not announced, so unmounting at 0 users lost it.
   return (
     <Box
-      className="ds-presence-typing-indicator"
+      className="ds-presence-typing-indicator ds-presence-live-cursor__root"
       data-part="root"
       role="status"
       aria-live="polite"
@@ -294,9 +296,9 @@ export function PresenceTypingIndicator({
               private `--_ds-presence-dot-duration` channel with an
               nth-child stagger and hold static under `prefers-reduced-motion`
               (the role=status label keeps the state comprehensible). */}
-          <Box data-part="dots" aria-hidden="true">
+          <Box data-part="dots" className="ds-presence-typing-indicator__dots" aria-hidden="true">
             {[0, 1, 2].map((index) => (
-              <Box key={index} data-part="typing-dot" />
+              <Box key={index} data-part="typing-dot" className="ds-presence-typing-indicator__typing-dot" />
             ))}
           </Box>
           <Text className="ds-presence__label">
@@ -344,7 +346,7 @@ export function LiveCursor({
 
   return (
     <Box
-      className="ds-presence-live-cursor"
+      className="ds-presence-live-cursor ds-presence-live-cursor__root"
       data-part="root"
       data-visible={visible ? undefined : 'false'}
       aria-hidden="true"
@@ -384,6 +386,7 @@ export function LiveCursor({
           runtime data; the ink, shape, shadow and offsets are skin-owned) */}
       <Box
         data-part="cursor-badge"
+        className="ds-presence-live-cursor__cursor-badge"
         style={{
           background: cursorColor,
         }}

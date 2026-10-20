@@ -198,7 +198,7 @@ export function VoiceInputButton({
           as="button"
           type="button"
           {...passthrough}
-          className={['ds-voice-input-button', className].filter(Boolean).join(' ')}
+          className={['ds-voice-input-button', className, 'ds-voice-input-button__root'].filter(Boolean).join(' ')}
           {...partAttributes('root', trigger.state)}
           data-state={serializeState(trigger.state)}
           {...trigger.handlers}
