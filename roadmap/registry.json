@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-19",
+ "updated": "2026-10-20",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -2944,6 +2944,11 @@
      "at": "2026-10-19 19:23",
      "by": "kimi-dt",
      "note": "Wave C residue reconciliation (owner audit 19/10 adjust 2): LC10 INTEGRATED 62cb281f5 (STOP->resolved via LC13s1 law migration 9de2b26d1 + ruled revalidation; review 2d56f51c ACCEPT). Wave C lots delivered by this chain: LC1, LC2, LC3, LC4, LC7, LC8, LC9, LC10, LC11, LC13s0+s1, FU-7H, PM-T, PM-T2. REMAINING per DAG (no ARC12 close claimed): LC13 step 2 (residue doors; :85 KEPT post-PM-T2, scope re-derived at dispatch), FU-F11R (after full LC13 chain), LC5/LC6 (G1 sha 1d367edc pinned), LC12 (PM-T+G1+FU-F11R), LC14 (PM-T2+LC13 chain+G1), LX1-LX4 (ext harness), FU-10G (back-button focus-visible; needs the EXT harness focus-visible interaction case first — harness-owner precondition), FU-LC1B (pin :217 migration -> door :270), FU-LC8A (FFP.real-engines bColumn per-member -> :325 + 2 arms; strip precondition), FU-F11V/9A/9B/8A/FU-F11C/FU-F11K, then strip wave (after ALL doors + strip preconditions), dead-arm certification, final certification (full pinned suite + sighted showroom). Separate from this: WO-DER-10 (human identity pick, owner), WO-CON-09 (app adoption, out of DS scope), WO-ARC-21 (app half pending D31). Capacity note (owner audit corr. 5): 10 integrations in this chain, median ~2h each incl. queue/review/rework; the producers-suite 'hang' scare was real slowness (~13 min) + my own competing probes — recorded in lot-lc10/evidence/integration/baseline-anomaly-note.txt."
+    },
+    {
+     "at": "2026-10-20 09:52",
+     "by": "codex-admin-dt",
+     "note": "LC5 mobile chrome INTEGRATED 06713a4c9 under owner-authorized Codex ADMIN Sol DT; original NORMAL writer855f5688, independent reviewer0c1fb679 source r1 + focused r3 ACCEPT. 20 inert class doors/81 pair arms; own elevation reader migration ratified, four bundles regenerated. Current gates: types/lint, real token audit4322 counters, unit887/887, 42 node suites with no new red vs measured same-worktree baselines; historical producer/graph/claim freshness remains owed in its existing window. CORRECTION: old collection/index.mjs token-audit rows were vacuous (LC1/LC9/LC13/LC5v2); preserved as invalid, actual official audit/index.mjs now passed on cumulative candidate, no retroactive certification. Retention receipt in lot-lc5/evidence/integration/retention-20261020 records all-root retirement. LC13s2 source ACCEPT awaits integration gates, LC6 finite real validation811/811 and fresh independent cd17f768 SOURCE ACCEPT await integration. Next existing DAG: full LC13 -> FU-F11R and LC14; LC12 after FU-F11R; EXT lots/follow-ups and both strip-precondition migrations; then strip, dead-arm and final pinned/browser certification. ARC12 stays in-progress; no WO/wave/phase completion, no new gate GO, no publication."
     }
    ],
    "claimedBy": "kimi-dt",
