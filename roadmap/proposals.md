@@ -1838,5 +1838,28 @@ Oct-17 D3/D4 is decided and not reopened. The DT first checks whether the
 WO-RET-04 2026-09-20 owner amendment already covers the single final move. The
 item is queued for the owner only if an uncovered GO really remains.
 
-**Status** — QUEUED 2026-10-20, unanswered. G-1 is the only item that blocks
-work orders today. G-2 is withdrawn.
+### G-7 — Typography population pin 184 -> 185 (WO-EVI-02, one named entrant; exact scope)
+
+Question: Do you authorize, for this pin only, raising the theme-population typography pin from 184 to 185 to name
+notification-surface? It entered at 7fa45d371 (owner answer 4, D-4-PAGE-SHELL, 2026-10-14) by authoring its item
+title's font-family, font-size and font-weight from tenant channels. The roadmap applies the Oct-17 cut-1154 §2
+sentence ('no touching population for green') to this red. A YES records that this single growth re-pin, to the
+measured set, is outside that sentence. It sets no general rule for other pins.
+Evidence: P-A attribution (sole entrant, byte-identical reruns, independent ACCEPT cd17f768); DT current derivation at
+add02bcc1 (six axis records identical to 7fa45d371, no swap); debrief r1 and its independent review r1; candidate
+sha256 71015493f276…. No classification defect is evidenced: the declarations are live, tenant-driven and covered by
+the owner lot's browser causality test.
+A) YES — one reviewed data lot:
+   - baseline/index.json typography 185 with the provenance membershipMoves.notificationSurfaceTitleRole plus an
+     `authority` field quoting this answer;
+   - the two live-derivation test literals 184 -> 185 with mover comments.
+   It runs after the FU-F11R law integration and before fleet W-2. It is re-derived at that HEAD and STOPS if any other
+   membership moved, then is independently reviewed and committed by the DT. It certifies no indicator.
+B) NO, or not now — the typography floor stays RED and M-DS1 (i) stays blocked until a later lawful resolution. No
+   source, skin or capability change is ordered or implied.
+Not covered either way: any other axis or pin, the theme-graph budget, an exclusion or N/A, the reader, a phase GO,
+G-1, or WO completion.
+
+**Status** — QUEUED 2026-10-20, unanswered. G-1 affects phase eligibility;
+G-7 affects only the named typography outcome and M-DS1 (i). Neither answer
+is inferred. G-2 is withdrawn.
