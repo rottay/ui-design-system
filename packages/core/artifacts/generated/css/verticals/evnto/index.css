@@ -50885,7 +50885,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* ---- root: fixed navigation bar, safe-area aware. Positioning was inline
         in the engine pre-R2+R3; the skin owns it now. ---- */
-.rottay-bottom-tab-bar[data-part='root'] {
+.rottay-bottom-tab-bar[data-part='root'],
+.rottay-bottom-tab-bar.rottay-bottom-tab-bar__root {
   /* family-private geometry — the single place the bar's block rhythm is
      stated. The tab rule, the pill, the label and the reservation all read
      these, so the published hook cannot drift from the painted bar. */
@@ -50931,19 +50932,22 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    repetition is prohibited, so the two extra units ride the always-present
    `data-testid` + `aria-label` hooks (stamped by the engine on every render —
    if either ever goes away, this rule silently loses to the floor). */
-.rottay-bottom-tab-bar[data-part='root'][data-testid='bottom-tab-bar'][aria-label] {
+.rottay-bottom-tab-bar[data-part='root'][data-testid='bottom-tab-bar'][aria-label],
+.rottay-bottom-tab-bar.rottay-bottom-tab-bar__root[data-testid='bottom-tab-bar'][aria-label] {
   border-top: 1px solid var(--ds-color-border);
 }
 
 /* ---- list: the Flex row the engine renders around the items. ---- */
-.rottay-bottom-tab-bar__list[data-part='list'] {
+.rottay-bottom-tab-bar__list[data-part='list'],
+.rottay-bottom-tab-bar__list.rottay-bottom-tab-bar__list {
   inline-size: 100%;
 }
 
 /* ---- tab button: transparent shell; geometry migrated from the engine's
         former inline tabStyle. The active/idle color fans out to the icon
         and label, which re-declare it rather than inherit. ---- */
-.rottay-bottom-tab-bar__tab[data-part='tab-button'] {
+.rottay-bottom-tab-bar__tab[data-part='tab-button'],
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button {
   position: relative;
   display: flex;
   flex: 1;
@@ -50966,7 +50970,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    active tab for profiles that read selection as a typographic rule rather
    than a filled pill. Logical insets keep it centered in both directions;
    fallback 0px renders nothing (today's pill-only grammar untouched). */
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before {
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true']::before {
   content: '';
   position: absolute;
   inset-block-start: 0;
@@ -50979,13 +50984,15 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* The tabs tile the bar edge to edge against the viewport floor, so the
    tenant focus signature rides an overlay inset by its own reach. */
-.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible) {
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible),
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: calc(-1 * var(--ds-focus-ring-width));
   border-radius: var(--ds-radius-md, 10px);
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)::after,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button:is([data-state~='focus-visible'], :focus-visible)::after {
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
   content: '';
@@ -50998,22 +51005,31 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'],
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false'],
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'] .rottay-bottom-tab-bar__icon,
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'] .rottay-bottom-tab-bar__label {
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false'] .rottay-bottom-tab-bar__icon,
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'] .rottay-bottom-tab-bar__label,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false'] .rottay-bottom-tab-bar__label {
   color: var(--ds-color-text-muted);
 }
 
 @media (hover: hover) {
   .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false']:hover,
   .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__icon,
-  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__label {
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false']:hover .rottay-bottom-tab-bar__icon,
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__label,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false']:hover .rottay-bottom-tab-bar__label {
     color: var(--ds-color-text-secondary);
   }
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'],
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'],
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon,
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__icon,
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__label {
   color: var(--ds-color-primary);
 }
 
@@ -51021,7 +51037,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
         horizontal framed surface, never a vertical accent rail). The badge
         anchors to this box; logical offsets keep it on the trailing edge
         in RTL. ---- */
-.rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'] {
+.rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'],
+.rottay-bottom-tab-bar__icon-wrap.rottay-bottom-tab-bar__icon-wrap {
   position: relative;
   display: flex;
   align-items: center;
@@ -51034,7 +51051,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
     transform var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
   background: var(
     --_ds-bottom-tab-bar-pill-bg,
     color-mix(in srgb, var(--ds-color-primary) 12%, transparent)
@@ -51047,11 +51065,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   }
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='pressed'], :active) .rottay-bottom-tab-bar__icon-wrap {
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='pressed'], :active) .rottay-bottom-tab-bar__icon-wrap,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button:is([data-state~='pressed'], :active) .rottay-bottom-tab-bar__icon-wrap {
   transform: scale(0.94);
 }
 
-.rottay-bottom-tab-bar__icon[data-part='icon'] {
+.rottay-bottom-tab-bar__icon[data-part='icon'],
+.rottay-bottom-tab-bar__icon.rottay-bottom-tab-bar__icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51061,7 +51081,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* ---- badge: error pill with a cut-out ring against the bar surface; the
         wide variant (99+) keeps its extra 4px via `data-wide`. ---- */
-.rottay-bottom-tab-bar__badge[data-part='badge'] {
+.rottay-bottom-tab-bar__badge[data-part='badge'],
+.rottay-bottom-tab-bar__badge.rottay-bottom-tab-bar__badge {
   position: absolute;
   inset-block-start: -3px;
   inset-inline-end: 1px;
@@ -51076,14 +51097,16 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   box-shadow: 0 0 0 2px var(--ds-color-bg-primary);
 }
 
-.rottay-bottom-tab-bar__badge[data-part='badge'][data-wide='true'] {
+.rottay-bottom-tab-bar__badge[data-part='badge'][data-wide='true'],
+.rottay-bottom-tab-bar__badge.rottay-bottom-tab-bar__badge[data-wide='true'] {
   min-inline-size: 20px;
 }
 
 /* On-token pair for the error pill: the error fill's own ink, graded per
    mode. The count is numeric data — tabular figures keep the pill width
    stable. */
-.rottay-bottom-tab-bar__badge-text[data-part='badge-text'] {
+.rottay-bottom-tab-bar__badge-text[data-part='badge-text'],
+.rottay-bottom-tab-bar__badge-text.rottay-bottom-tab-bar__badge-text {
   color: var(--ds-color-on-error);
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-variant-numeric: tabular-nums;
@@ -51093,7 +51116,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* ---- label: typography migrated from the engine's inline Text style; the
         selected weight was a JS ternary, now keyed on data-selected. ---- */
-.rottay-bottom-tab-bar__label[data-part='label'] {
+.rottay-bottom-tab-bar__label[data-part='label'],
+.rottay-bottom-tab-bar__label.rottay-bottom-tab-bar__label {
   margin-block-start: var(--_ds-bottom-tab-bar-label-gap);
   max-inline-size: 100%;
   overflow: hidden;
@@ -51106,7 +51130,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   transition: color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__label {
   font-weight: 600;
 }
 
@@ -51119,7 +51144,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    group stops reading as one control. The ground, the hairline and the
    safe-area padding stay full-bleed — only the row of tabs is measured. */
 @container ds-bottom-tab-bar (min-width: 600px) {
-  .rottay-bottom-tab-bar__list[data-part='list'] {
+  .rottay-bottom-tab-bar__list[data-part='list'],
+  .rottay-bottom-tab-bar__list.rottay-bottom-tab-bar__list {
     max-inline-size: var(--_ds-bottom-tab-bar-list-measure);
     margin-inline: auto;
   }
@@ -51130,11 +51156,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    label ellipsizes to two characters — the icon and the touch floor do not
    move, and the full label survives in `aria-label` either way. */
 @container ds-bottom-tab-bar (max-width: 360px) {
-  .rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'] {
+  .rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'],
+  .rottay-bottom-tab-bar__icon-wrap.rottay-bottom-tab-bar__icon-wrap {
     --_ds-bottom-tab-bar-pill-inline-padding: 6px;
   }
 
-  .rottay-bottom-tab-bar__label[data-part='label'] {
+  .rottay-bottom-tab-bar__label[data-part='label'],
+  .rottay-bottom-tab-bar__label.rottay-bottom-tab-bar__label {
     --_ds-bottom-tab-bar-label-tracking: 0;
   }
 }
@@ -51152,9 +51180,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-bottom-tab-bar[data-part='root'],
+  .rottay-bottom-tab-bar.rottay-bottom-tab-bar__root,
   .rottay-bottom-tab-bar__tab[data-part='tab-button'],
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button,
   .rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'],
-  .rottay-bottom-tab-bar__label[data-part='label'] {
+  .rottay-bottom-tab-bar__icon-wrap.rottay-bottom-tab-bar__icon-wrap,
+  .rottay-bottom-tab-bar__label[data-part='label'],
+  .rottay-bottom-tab-bar__label.rottay-bottom-tab-bar__label {
     animation: none;
     transition: none;
   }
@@ -51163,33 +51195,40 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 /* ---- forced colors: the bar keeps its top rule, selection survives as a
         Highlight pill, and the badge keeps a real frame. ---- */
 @media (forced-colors: active) {
-  .rottay-bottom-tab-bar[data-part='root'] {
+  .rottay-bottom-tab-bar[data-part='root'],
+  .rottay-bottom-tab-bar.rottay-bottom-tab-bar__root {
     border-top-color: CanvasText;
   }
 
-  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
     background: Highlight;
   }
 
-  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true']::before {
     background: Highlight;
   }
 
-  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__icon {
     color: HighlightText;
   }
 
-  .rottay-bottom-tab-bar__badge[data-part='badge'] {
+  .rottay-bottom-tab-bar__badge[data-part='badge'],
+  .rottay-bottom-tab-bar__badge.rottay-bottom-tab-bar__badge {
     box-shadow: none;
     outline: 1px solid CanvasText;
   }
 
-  .rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible) {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible),
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button:is([data-state~='focus-visible'], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
   }
 
-  .rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)::after,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button:is([data-state~='focus-visible'], :focus-visible)::after {
     display: none;
   }
 }
@@ -51596,7 +51635,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * inset-left on the inline-start side.
  */
 
-.rottay-mobile-header[data-part='root'] {
+.rottay-mobile-header[data-part='root'],
+.rottay-mobile-header.rottay-mobile-header__root {
   background: var(--ds-color-bg-primary);
   inline-size: 100%;
   /* 56px mobile BAR ROW: no governed rung adopted — kept literal and
@@ -51621,7 +51661,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    governed elevation ramp and fades in through the motion token — it appears
    only once content actually scrolls under the bar (data-stuck). The sticky
    offset, the stacking and `position` itself all live here. */
-.rottay-mobile-header[data-part='root'][data-sticky='true'] {
+.rottay-mobile-header[data-part='root'][data-sticky='true'],
+.rottay-mobile-header.rottay-mobile-header__root[data-sticky='true'] {
   position: sticky;
   background: var(--ds-mobile-header-sticky-bg, color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent));
   backdrop-filter: var(--ds-mobile-header-sticky-backdrop, none);
@@ -51638,7 +51679,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 /* The colored hairline clears the P-48 floor at (0,4,0); the fourth unit is
    the always-present `data-testid` (see SPECIFICITY above — if the engine ever
    stops stamping it, this rule silently drops back under the floor). */
-.rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'] {
+.rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'],
+.rottay-mobile-header.rottay-mobile-header__root[data-sticky][data-testid='mobile-header'] {
   border-bottom: 1px solid var(--ds-mobile-header-hairline-color, var(--ds-color-border));
 }
 
@@ -51668,7 +51710,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    start=right/end=left (`:dir()` follows the nearest authored direction —
    the corpus mirror idiom). The 4px rhythm floor matches the retired inline
    value exactly. */
-.rottay-mobile-header__bar[data-part='bar'] {
+.rottay-mobile-header__bar[data-part='bar'],
+.rottay-mobile-header__bar.rottay-mobile-header__bar {
   block-size: 100%;
   position: relative;
   padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))), env(safe-area-inset-left, 0px));
@@ -51686,27 +51729,32 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    touch minimum; a wider cluster keeps its natural width (shrink 0 + floor)
    and the title yields + truncates first — actions are never clipped. */
 .rottay-mobile-header__left[data-part='left'],
-.rottay-mobile-header__right[data-part='right'] {
+.rottay-mobile-header__left.rottay-mobile-header__left,
+.rottay-mobile-header__right[data-part='right'],
+.rottay-mobile-header__right.rottay-mobile-header__right {
   flex: 1 0 0;
   min-inline-size: var(--ds-touch-target-min, 44px);
   display: flex;
   align-items: center;
 }
 
-.rottay-mobile-header__right[data-part='right'] {
+.rottay-mobile-header__right[data-part='right'],
+.rottay-mobile-header__right.rottay-mobile-header__right {
   justify-content: flex-end;
 }
 
 /* Center slot: yields and truncates first (see the side-slot note above).
    The 8px inline gutter matches the retired inline padding exactly. */
-.rottay-mobile-header__center[data-part='center'] {
+.rottay-mobile-header__center[data-part='center'],
+.rottay-mobile-header__center.rottay-mobile-header__center {
   flex: 0 1 auto;
   overflow: hidden;
   text-align: center;
   padding-inline: var(--ds-mobile-header-center-padding-inline, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
-.rottay-mobile-header__back[data-part='trigger'] {
+.rottay-mobile-header__back[data-part='trigger'],
+.rottay-mobile-header__back.rottay-mobile-header__trigger {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -51727,12 +51775,14 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 .rottay-mobile-header__back[data-part='trigger'][data-state~='pressed'],
-.rottay-mobile-header__back[data-part='trigger']:active {
+.rottay-mobile-header__back[data-part='trigger']:active,
+.rottay-mobile-header__back.rottay-mobile-header__trigger:active {
   transform: scale(var(--ds-mobile-header-trigger-press-scale, 0.94));
 }
 
 .rottay-mobile-header__back[data-part='trigger'][data-state~='focus-visible'],
-.rottay-mobile-header__back[data-part='trigger']:focus-visible {
+.rottay-mobile-header__back[data-part='trigger']:focus-visible,
+.rottay-mobile-header__back.rottay-mobile-header__trigger:focus-visible {
   outline: none;
   box-shadow: var(--ds-mobile-header-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
@@ -51741,7 +51791,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    The kernel token and the platform pseudo are the two arms of one rule. */
 @media (hover: hover) {
   .rottay-mobile-header__back[data-part='trigger'][data-state~='hovered'],
-  .rottay-mobile-header__back[data-part='trigger']:hover {
+  .rottay-mobile-header__back[data-part='trigger']:hover,
+  .rottay-mobile-header__back.rottay-mobile-header__trigger:hover {
     background: var(--ds-mobile-header-trigger-tint, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
   }
 }
@@ -51750,7 +51801,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    subtitle or a search field lines up with the back action above it instead of
    sitting flush against the root edge, and it may shrink inside a flex/grid host
    (an auto minimum would let its content set the header's width). */
-.rottay-mobile-header[data-part='root'] > [data-part='body'] {
+.rottay-mobile-header[data-part='root'] > [data-part='body'],
+.rottay-mobile-header.rottay-mobile-header__root > .rottay-mobile-header__body {
   min-inline-size: 0;
   padding-inline: var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1)));
 }
@@ -51760,7 +51812,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    here, byte-identical to the retired inline values; 17px has no canonical
    rung, so the literal stays with this note). The truncation mechanics moved
    here with it (R-5 geometry drain). */
-.rottay-mobile-header__title[data-part='label'] {
+.rottay-mobile-header__title[data-part='label'],
+.rottay-mobile-header__title.rottay-mobile-header__label {
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -51785,11 +51838,14 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    unchanged — it is the floor for an EMPTY slot, never a cap on a full one. */
 @container ds-mobile-header (max-width: 380px) {
   .rottay-mobile-header__left[data-part='left'],
-  .rottay-mobile-header__right[data-part='right'] {
+  .rottay-mobile-header__left.rottay-mobile-header__left,
+  .rottay-mobile-header__right[data-part='right'],
+  .rottay-mobile-header__right.rottay-mobile-header__right {
     flex: 0 0 auto;
   }
 
-  .rottay-mobile-header__center[data-part='center'] {
+  .rottay-mobile-header__center[data-part='center'],
+  .rottay-mobile-header__center.rottay-mobile-header__center {
     flex: 1 1 auto;
   }
 }
@@ -51800,22 +51856,27 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   /* Raised in step with the hairline above: a media query adds no specificity,
      so leaving this at (0,3,0) would hand forced-colors mode back to the very
      rule this override exists to beat. */
-  .rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'] {
+  .rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'],
+  .rottay-mobile-header.rottay-mobile-header__root[data-sticky][data-testid='mobile-header'] {
     border-bottom-color: ButtonText;
   }
 
-  .rottay-mobile-header__back[data-part='trigger'] {
+  .rottay-mobile-header__back[data-part='trigger'],
+  .rottay-mobile-header__back.rottay-mobile-header__trigger {
     border: 1px solid ButtonText;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-mobile-header[data-part='root'][data-sticky='true'],
-  .rottay-mobile-header__back[data-part='trigger'] {
+  .rottay-mobile-header.rottay-mobile-header__root[data-sticky='true'],
+  .rottay-mobile-header__back[data-part='trigger'],
+  .rottay-mobile-header__back.rottay-mobile-header__trigger {
     transition: none;
   }
   .rottay-mobile-header__back[data-part='trigger'][data-state~='pressed'],
-  .rottay-mobile-header__back[data-part='trigger']:active {
+  .rottay-mobile-header__back[data-part='trigger']:active,
+  .rottay-mobile-header__back.rottay-mobile-header__trigger:active {
     transform: none;
   }
 }
@@ -91484,7 +91545,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* ---- the shell's own stacking context: the fields and the overlay are
         absolutely positioned inside it, and the content rides above both. ---- */
-.ds-surface.ds-collection-shell[data-part="root"] {
+.ds-surface.ds-collection-shell[data-part="root"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root {
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -91492,6 +91554,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 .ds-surface.ds-collection-shell[data-part="root"]
   > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay,
 .ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__orbital-field,
 .ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__ambient-field {
   position: absolute;
@@ -91501,7 +91565,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"]
-  > .ds-collection-shell__content[data-part="content"] {
+  > .ds-collection-shell__content[data-part="content"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root
+  > .ds-collection-shell__content.ds-collection-shell__content {
   position: relative;
   z-index: 1;
 }
@@ -91590,7 +91656,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   );
 }
 
-.ds-surface.ds-collection-shell[data-part="root"][data-continuity="seamless"] {
+.ds-surface.ds-collection-shell[data-part="root"][data-continuity="seamless"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-continuity="seamless"] {
   border-radius: var(--ds-card-radius, var(--ds-radius-xl, 24px));
   border: var(--ds-edge-hairline-width, 1px) solid
     var(
@@ -91603,12 +91670,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     );
 }
 
-.ds-surface.ds-collection-shell[data-part="root"][data-continuity="segmented"] {
+.ds-surface.ds-collection-shell[data-part="root"][data-continuity="segmented"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-continuity="segmented"] {
   border-radius: var(--ds-card-radius-sm, var(--ds-radius-lg, 18px));
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
-.ds-surface.ds-collection-shell[data-part="root"] {
+.ds-surface.ds-collection-shell[data-part="root"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root {
   box-shadow: var(
     --ds-workspace-shell-shadow,
     0 20px 48px color-mix(in srgb, var(--ds-color-primary) 11%, transparent),
@@ -91641,11 +91710,13 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="default"][data-continuity="segmented"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="default"][data-continuity="segmented"],
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-continuity="segmented"] {
   background: var(--ds-surface-card);
 }
 
-.ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-continuity="seamless"] {
+.ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-continuity="seamless"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"][data-continuity="seamless"] {
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-canvas) 8%)
@@ -91666,7 +91737,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"]
-  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"] {
+  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"]
+  > .ds-collection-shell__static-particle-field.ds-collection-shell__particle-field-static-fallback {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -91693,12 +91766,16 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-intensity="high"]
-  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"] {
+  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"][data-intensity="high"]
+  > .ds-collection-shell__static-particle-field.ds-collection-shell__particle-field-static-fallback {
   opacity: 0.6;
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"]
-  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"][data-field-pattern="orbital"] {
+  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"][data-field-pattern="orbital"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"]
+  > .ds-collection-shell__static-particle-field.ds-collection-shell__particle-field-static-fallback[data-field-pattern="orbital"] {
   background-image: radial-gradient(
       ellipse at 24% 18%,
       color-mix(in srgb, var(--ds-color-primary) 24%, transparent) 0 1px,
@@ -91728,7 +91805,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"]
-  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"][data-field-pattern="hybrid"] {
+  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"][data-field-pattern="hybrid"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"]
+  > .ds-collection-shell__static-particle-field.ds-collection-shell__particle-field-static-fallback[data-field-pattern="hybrid"] {
   background-image: radial-gradient(
       ellipse at 24% 18%,
       color-mix(in srgb, var(--ds-color-primary) 24%, transparent) 0 1px,
@@ -91753,12 +91832,16 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-continuity="seamless"]
-  > .ds-collection-shell__content[data-part="content"] {
+  > .ds-collection-shell__content[data-part="content"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-continuity="seamless"]
+  > .ds-collection-shell__content.ds-collection-shell__content {
   border-radius: var(--ds-card-radius, var(--ds-radius-xl, 24px));
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-continuity="segmented"]
-  > .ds-collection-shell__content[data-part="content"] {
+  > .ds-collection-shell__content[data-part="content"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-continuity="segmented"]
+  > .ds-collection-shell__content.ds-collection-shell__content {
   border-radius: var(--ds-card-radius-sm, var(--ds-radius-lg, 18px));
 }
 
@@ -91780,7 +91863,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"]
-  > .ds-collection-shell__content[data-part="content"] {
+  > .ds-collection-shell__content[data-part="content"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"]
+  > .ds-collection-shell__content.ds-collection-shell__content {
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--ds-surface-card) 16%, transparent) 0%,
@@ -91789,7 +91874,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="default"]
-  > .ds-collection-shell__overlay[data-part="overlay"] {
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="default"]
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay {
   background: var(
     --ds-workspace-shell-overlay,
     linear-gradient(
@@ -91802,7 +91889,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"]
-  > .ds-collection-shell__overlay[data-part="overlay"] {
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"]
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay {
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%,
@@ -91813,7 +91902,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-preview-emphasis="true"][data-preview-active="true"]
-  > .ds-collection-shell__overlay[data-part="overlay"] {
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"][data-preview-emphasis="true"][data-preview-active="true"]
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay {
   background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%,
@@ -91829,7 +91920,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-focus-reaction="true"][data-focus-active="true"]
-  > .ds-collection-shell__overlay[data-part="overlay"] {
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"][data-focus-reaction="true"][data-focus-active="true"]
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay {
   background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%,
@@ -91845,7 +91938,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-preview-emphasis="true"][data-preview-active="true"][data-focus-reaction="true"][data-focus-active="true"]
-  > .ds-collection-shell__overlay[data-part="overlay"] {
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"][data-preview-emphasis="true"][data-preview-active="true"][data-focus-reaction="true"][data-focus-active="true"]
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay {
   background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%,

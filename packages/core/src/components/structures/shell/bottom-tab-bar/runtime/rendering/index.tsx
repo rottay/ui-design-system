@@ -102,7 +102,7 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
     <Box
       as={Element}
       {...(item.href ? { href: item.href } as any : { type: 'button' } as any)}
-      className="rottay-bottom-tab-bar__tab"
+      className="rottay-bottom-tab-bar__tab rottay-bottom-tab-bar__tab-button"
       onClick={handleClick}
       aria-current={isActive ? 'page' : undefined}
       aria-label={accessibleName}
@@ -170,7 +170,7 @@ export function BottomTabBar({
   return (
     <Box
       as="nav"
-      className="rottay-bottom-tab-bar"
+      className="rottay-bottom-tab-bar rottay-bottom-tab-bar__root"
       style={style}
       data-testid="bottom-tab-bar"
       aria-label={navLabel}

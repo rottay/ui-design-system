@@ -24,11 +24,23 @@ import {
   readSkinRules,
   unreachableSelectors,
   winningDecl,
+  type SkinRule,
 } from '@tests/support/skin-reachability';
 
 const RULES = readSkinRules('mobile-header');
 const SKIN = readSkinDeclarations('mobile-header');
 const ROOT = ".rottay-mobile-header[data-part='root']";
+
+function throughClassDoors(entries: SkinRule[]): { rule: SkinRule; members: string[] }[] {
+  const rules = new Map<SkinRule['decls'], SkinRule[]>();
+  for (const entry of entries) rules.set(entry.decls, [...(rules.get(entry.decls) ?? []), entry]);
+  return [...rules.values()].map(([rule, ...doors]) => {
+    const door = rule.selector.replace(/\[data-part='([a-z-]+)'\]/g, (_, part: string) => `.rottay-mobile-header__${part}`);
+    expect(doors.map((entry) => entry.selector)).toEqual(doors.length === 0 ? [] : [door]);
+    if (doors.length > 0) expect(door).not.toBe(rule.selector);
+    return { rule, members: [rule.selector, door].slice(0, 1 + doors.length) };
+  });
+}
 
 beforeAll(async () => {
   await Promise.all([
@@ -112,22 +124,23 @@ describe('MobileHeader elevation contract', () => {
   });
 
   it('keeps the hairline and its forced-colors override on one selector', () => {
-    const hairline = RULES.filter((rule) => 'border-bottom' in rule.decls && !rule.conditions);
-    const forced = RULES.filter((rule) => 'border-bottom-color' in rule.decls);
+    const hairline = throughClassDoors(RULES.filter((rule) => 'border-bottom' in rule.decls && !rule.conditions));
+    const forced = throughClassDoors(RULES.filter((rule) => 'border-bottom-color' in rule.decls));
 
     expect(hairline).toHaveLength(1);
     expect(forced).toHaveLength(1);
 
-    // A media query adds no specificity, so an override written below what it
-    // overrides is dead. Selector equality is the invariant that survives any
-    // future specificity change to either one.
-    expect(forced[0].selector).toBe(hairline[0].selector);
+    // A media query adds no specificity, so the override's members must match
+    // the hairline's member for member, part and class door alike.
+    expect(forced[0].rule.selector).toBe(hairline[0].rule.selector);
+    expect(forced[0].members).toEqual(hairline[0].members);
 
-    // Four units of `b` to clear the (0,3,1) border floor — one class and
-    // three attributes, no repetition.
-    const units = hairline[0].selector.match(/\[[^\]]+\]|\.[a-z0-9_-]+/gi) ?? [];
-    expect(units).toHaveLength(4);
-    expect(hairline[0].selector).toContain("[data-testid='mobile-header']");
+    for (const member of hairline[0].members) {
+      const units = member.match(/\[[^\]]+\]|\.[a-z0-9_-]+/gi) ?? [];
+      expect(units).toHaveLength(4);
+      expect(new Set(units).size).toBe(4);
+    }
+    expect(hairline[0].rule.selector).toContain("[data-testid='mobile-header']");
   });
 
   it('stamps the attributes that specificity is bought from', async () => {

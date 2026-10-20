@@ -28,7 +28,8 @@
 
 /* ---- the shell's own stacking context: the fields and the overlay are
         absolutely positioned inside it, and the content rides above both. ---- */
-.ds-surface.ds-collection-shell[data-part="root"] {
+.ds-surface.ds-collection-shell[data-part="root"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root {
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -36,6 +37,8 @@
 
 .ds-surface.ds-collection-shell[data-part="root"]
   > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay,
 .ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__orbital-field,
 .ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__ambient-field {
   position: absolute;
@@ -45,7 +48,9 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"]
-  > .ds-collection-shell__content[data-part="content"] {
+  > .ds-collection-shell__content[data-part="content"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root
+  > .ds-collection-shell__content.ds-collection-shell__content {
   position: relative;
   z-index: 1;
 }
@@ -134,7 +139,8 @@
   );
 }
 
-.ds-surface.ds-collection-shell[data-part="root"][data-continuity="seamless"] {
+.ds-surface.ds-collection-shell[data-part="root"][data-continuity="seamless"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-continuity="seamless"] {
   border-radius: var(--ds-card-radius, var(--ds-radius-xl, 24px));
   border: var(--ds-edge-hairline-width, 1px) solid
     var(
@@ -147,12 +153,14 @@
     );
 }
 
-.ds-surface.ds-collection-shell[data-part="root"][data-continuity="segmented"] {
+.ds-surface.ds-collection-shell[data-part="root"][data-continuity="segmented"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-continuity="segmented"] {
   border-radius: var(--ds-card-radius-sm, var(--ds-radius-lg, 18px));
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
-.ds-surface.ds-collection-shell[data-part="root"] {
+.ds-surface.ds-collection-shell[data-part="root"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root {
   box-shadow: var(
     --ds-workspace-shell-shadow,
     0 20px 48px color-mix(in srgb, var(--ds-color-primary) 11%, transparent),
@@ -185,11 +193,13 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="default"][data-continuity="segmented"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="default"][data-continuity="segmented"],
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-continuity="segmented"] {
   background: var(--ds-surface-card);
 }
 
-.ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-continuity="seamless"] {
+.ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-continuity="seamless"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"][data-continuity="seamless"] {
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-canvas) 8%)
@@ -210,7 +220,9 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"]
-  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"] {
+  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"]
+  > .ds-collection-shell__static-particle-field.ds-collection-shell__particle-field-static-fallback {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -237,12 +249,16 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-intensity="high"]
-  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"] {
+  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"][data-intensity="high"]
+  > .ds-collection-shell__static-particle-field.ds-collection-shell__particle-field-static-fallback {
   opacity: 0.6;
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"]
-  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"][data-field-pattern="orbital"] {
+  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"][data-field-pattern="orbital"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"]
+  > .ds-collection-shell__static-particle-field.ds-collection-shell__particle-field-static-fallback[data-field-pattern="orbital"] {
   background-image: radial-gradient(
       ellipse at 24% 18%,
       color-mix(in srgb, var(--ds-color-primary) 24%, transparent) 0 1px,
@@ -272,7 +288,9 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"]
-  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"][data-field-pattern="hybrid"] {
+  > .ds-collection-shell__static-particle-field[data-part="particle-field-static-fallback"][data-field-pattern="hybrid"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"]
+  > .ds-collection-shell__static-particle-field.ds-collection-shell__particle-field-static-fallback[data-field-pattern="hybrid"] {
   background-image: radial-gradient(
       ellipse at 24% 18%,
       color-mix(in srgb, var(--ds-color-primary) 24%, transparent) 0 1px,
@@ -297,12 +315,16 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-continuity="seamless"]
-  > .ds-collection-shell__content[data-part="content"] {
+  > .ds-collection-shell__content[data-part="content"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-continuity="seamless"]
+  > .ds-collection-shell__content.ds-collection-shell__content {
   border-radius: var(--ds-card-radius, var(--ds-radius-xl, 24px));
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-continuity="segmented"]
-  > .ds-collection-shell__content[data-part="content"] {
+  > .ds-collection-shell__content[data-part="content"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-continuity="segmented"]
+  > .ds-collection-shell__content.ds-collection-shell__content {
   border-radius: var(--ds-card-radius-sm, var(--ds-radius-lg, 18px));
 }
 
@@ -324,7 +346,9 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"]
-  > .ds-collection-shell__content[data-part="content"] {
+  > .ds-collection-shell__content[data-part="content"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"]
+  > .ds-collection-shell__content.ds-collection-shell__content {
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--ds-surface-card) 16%, transparent) 0%,
@@ -333,7 +357,9 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="default"]
-  > .ds-collection-shell__overlay[data-part="overlay"] {
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="default"]
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay {
   background: var(
     --ds-workspace-shell-overlay,
     linear-gradient(
@@ -346,7 +372,9 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"]
-  > .ds-collection-shell__overlay[data-part="overlay"] {
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"]
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay {
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%,
@@ -357,7 +385,9 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-preview-emphasis="true"][data-preview-active="true"]
-  > .ds-collection-shell__overlay[data-part="overlay"] {
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"][data-preview-emphasis="true"][data-preview-active="true"]
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay {
   background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%,
@@ -373,7 +403,9 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-focus-reaction="true"][data-focus-active="true"]
-  > .ds-collection-shell__overlay[data-part="overlay"] {
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"][data-focus-reaction="true"][data-focus-active="true"]
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay {
   background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%,
@@ -389,7 +421,9 @@
 }
 
 .ds-surface.ds-collection-shell[data-part="root"][data-variant="ai-field"][data-preview-emphasis="true"][data-preview-active="true"][data-focus-reaction="true"][data-focus-active="true"]
-  > .ds-collection-shell__overlay[data-part="overlay"] {
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell.ds-collection-shell__root[data-variant="ai-field"][data-preview-emphasis="true"][data-preview-active="true"][data-focus-reaction="true"][data-focus-active="true"]
+  > .ds-collection-shell__overlay.ds-collection-shell__overlay {
   background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%,

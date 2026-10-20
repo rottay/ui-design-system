@@ -107,7 +107,7 @@ export function MobileHeader({
         type="button"
         onClick={onBack}
         {...backInteraction.handlers}
-        className="rottay-mobile-header__back"
+        className="rottay-mobile-header__back rottay-mobile-header__trigger"
         aria-label={backAriaLabel}
         data-testid="mobile-header-back"
         {...partAttributes('trigger', backInteraction.state)}
@@ -131,7 +131,7 @@ export function MobileHeader({
       ) : null}
     <Box
       as="header"
-      className="rottay-mobile-header"
+      className="rottay-mobile-header rottay-mobile-header__root"
       /* The runtime stamps no geometry of its own: `position: sticky` is the
          skin's, keyed on the `data-sticky` stamp below. What travels inline is
          the consumer's own `style`, which keeps its last word over the skin. */
@@ -163,7 +163,7 @@ export function MobileHeader({
           {title && (
             <Box
               as="h1"
-              className="rottay-mobile-header__title"
+              className="rottay-mobile-header__title rottay-mobile-header__label"
               title={title}
               data-testid="mobile-header-title"
               data-part="label"
@@ -186,7 +186,7 @@ export function MobileHeader({
       {/* Optional children below the header bar (subtitle, search, etc.); the skin
           gives the slot the bar's own inline gutter so it lines up with the back
           action above it. */}
-      {children ? <Box data-part="body">{children}</Box> : null}
+      {children ? <Box data-part="body" className="rottay-mobile-header__body">{children}</Box> : null}
     </Box>
     </>
   );

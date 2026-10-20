@@ -92,7 +92,8 @@
 
 /* ---- root: fixed navigation bar, safe-area aware. Positioning was inline
         in the engine pre-R2+R3; the skin owns it now. ---- */
-.rottay-bottom-tab-bar[data-part='root'] {
+.rottay-bottom-tab-bar[data-part='root'],
+.rottay-bottom-tab-bar.rottay-bottom-tab-bar__root {
   /* family-private geometry — the single place the bar's block rhythm is
      stated. The tab rule, the pill, the label and the reservation all read
      these, so the published hook cannot drift from the painted bar. */
@@ -138,19 +139,22 @@
    repetition is prohibited, so the two extra units ride the always-present
    `data-testid` + `aria-label` hooks (stamped by the engine on every render —
    if either ever goes away, this rule silently loses to the floor). */
-.rottay-bottom-tab-bar[data-part='root'][data-testid='bottom-tab-bar'][aria-label] {
+.rottay-bottom-tab-bar[data-part='root'][data-testid='bottom-tab-bar'][aria-label],
+.rottay-bottom-tab-bar.rottay-bottom-tab-bar__root[data-testid='bottom-tab-bar'][aria-label] {
   border-top: 1px solid var(--ds-color-border);
 }
 
 /* ---- list: the Flex row the engine renders around the items. ---- */
-.rottay-bottom-tab-bar__list[data-part='list'] {
+.rottay-bottom-tab-bar__list[data-part='list'],
+.rottay-bottom-tab-bar__list.rottay-bottom-tab-bar__list {
   inline-size: 100%;
 }
 
 /* ---- tab button: transparent shell; geometry migrated from the engine's
         former inline tabStyle. The active/idle color fans out to the icon
         and label, which re-declare it rather than inherit. ---- */
-.rottay-bottom-tab-bar__tab[data-part='tab-button'] {
+.rottay-bottom-tab-bar__tab[data-part='tab-button'],
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button {
   position: relative;
   display: flex;
   flex: 1;
@@ -173,7 +177,8 @@
    active tab for profiles that read selection as a typographic rule rather
    than a filled pill. Logical insets keep it centered in both directions;
    fallback 0px renders nothing (today's pill-only grammar untouched). */
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before {
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true']::before {
   content: '';
   position: absolute;
   inset-block-start: 0;
@@ -186,13 +191,15 @@
 
 /* The tabs tile the bar edge to edge against the viewport floor, so the
    tenant focus signature rides an overlay inset by its own reach. */
-.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible) {
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible),
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: calc(-1 * var(--ds-focus-ring-width));
   border-radius: var(--ds-radius-md, 10px);
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)::after,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button:is([data-state~='focus-visible'], :focus-visible)::after {
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
   content: '';
@@ -205,22 +212,31 @@
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'],
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false'],
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'] .rottay-bottom-tab-bar__icon,
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'] .rottay-bottom-tab-bar__label {
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false'] .rottay-bottom-tab-bar__icon,
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'] .rottay-bottom-tab-bar__label,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false'] .rottay-bottom-tab-bar__label {
   color: var(--ds-color-text-muted);
 }
 
 @media (hover: hover) {
   .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false']:hover,
   .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__icon,
-  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__label {
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false']:hover .rottay-bottom-tab-bar__icon,
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__label,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='false']:hover .rottay-bottom-tab-bar__label {
     color: var(--ds-color-text-secondary);
   }
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'],
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'],
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon,
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__icon,
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__label {
   color: var(--ds-color-primary);
 }
 
@@ -228,7 +244,8 @@
         horizontal framed surface, never a vertical accent rail). The badge
         anchors to this box; logical offsets keep it on the trailing edge
         in RTL. ---- */
-.rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'] {
+.rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'],
+.rottay-bottom-tab-bar__icon-wrap.rottay-bottom-tab-bar__icon-wrap {
   position: relative;
   display: flex;
   align-items: center;
@@ -241,7 +258,8 @@
     transform var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
   background: var(
     --_ds-bottom-tab-bar-pill-bg,
     color-mix(in srgb, var(--ds-color-primary) 12%, transparent)
@@ -254,11 +272,13 @@
   }
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='pressed'], :active) .rottay-bottom-tab-bar__icon-wrap {
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='pressed'], :active) .rottay-bottom-tab-bar__icon-wrap,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button:is([data-state~='pressed'], :active) .rottay-bottom-tab-bar__icon-wrap {
   transform: scale(0.94);
 }
 
-.rottay-bottom-tab-bar__icon[data-part='icon'] {
+.rottay-bottom-tab-bar__icon[data-part='icon'],
+.rottay-bottom-tab-bar__icon.rottay-bottom-tab-bar__icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -268,7 +288,8 @@
 
 /* ---- badge: error pill with a cut-out ring against the bar surface; the
         wide variant (99+) keeps its extra 4px via `data-wide`. ---- */
-.rottay-bottom-tab-bar__badge[data-part='badge'] {
+.rottay-bottom-tab-bar__badge[data-part='badge'],
+.rottay-bottom-tab-bar__badge.rottay-bottom-tab-bar__badge {
   position: absolute;
   inset-block-start: -3px;
   inset-inline-end: 1px;
@@ -283,14 +304,16 @@
   box-shadow: 0 0 0 2px var(--ds-color-bg-primary);
 }
 
-.rottay-bottom-tab-bar__badge[data-part='badge'][data-wide='true'] {
+.rottay-bottom-tab-bar__badge[data-part='badge'][data-wide='true'],
+.rottay-bottom-tab-bar__badge.rottay-bottom-tab-bar__badge[data-wide='true'] {
   min-inline-size: 20px;
 }
 
 /* On-token pair for the error pill: the error fill's own ink, graded per
    mode. The count is numeric data — tabular figures keep the pill width
    stable. */
-.rottay-bottom-tab-bar__badge-text[data-part='badge-text'] {
+.rottay-bottom-tab-bar__badge-text[data-part='badge-text'],
+.rottay-bottom-tab-bar__badge-text.rottay-bottom-tab-bar__badge-text {
   color: var(--ds-color-on-error);
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-variant-numeric: tabular-nums;
@@ -300,7 +323,8 @@
 
 /* ---- label: typography migrated from the engine's inline Text style; the
         selected weight was a JS ternary, now keyed on data-selected. ---- */
-.rottay-bottom-tab-bar__label[data-part='label'] {
+.rottay-bottom-tab-bar__label[data-part='label'],
+.rottay-bottom-tab-bar__label.rottay-bottom-tab-bar__label {
   margin-block-start: var(--_ds-bottom-tab-bar-label-gap);
   max-inline-size: 100%;
   overflow: hidden;
@@ -313,7 +337,8 @@
   transition: color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-out, ease-out);
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label,
+.rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__label {
   font-weight: 600;
 }
 
@@ -326,7 +351,8 @@
    group stops reading as one control. The ground, the hairline and the
    safe-area padding stay full-bleed — only the row of tabs is measured. */
 @container ds-bottom-tab-bar (min-width: 600px) {
-  .rottay-bottom-tab-bar__list[data-part='list'] {
+  .rottay-bottom-tab-bar__list[data-part='list'],
+  .rottay-bottom-tab-bar__list.rottay-bottom-tab-bar__list {
     max-inline-size: var(--_ds-bottom-tab-bar-list-measure);
     margin-inline: auto;
   }
@@ -337,11 +363,13 @@
    label ellipsizes to two characters — the icon and the touch floor do not
    move, and the full label survives in `aria-label` either way. */
 @container ds-bottom-tab-bar (max-width: 360px) {
-  .rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'] {
+  .rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'],
+  .rottay-bottom-tab-bar__icon-wrap.rottay-bottom-tab-bar__icon-wrap {
     --_ds-bottom-tab-bar-pill-inline-padding: 6px;
   }
 
-  .rottay-bottom-tab-bar__label[data-part='label'] {
+  .rottay-bottom-tab-bar__label[data-part='label'],
+  .rottay-bottom-tab-bar__label.rottay-bottom-tab-bar__label {
     --_ds-bottom-tab-bar-label-tracking: 0;
   }
 }
@@ -359,9 +387,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-bottom-tab-bar[data-part='root'],
+  .rottay-bottom-tab-bar.rottay-bottom-tab-bar__root,
   .rottay-bottom-tab-bar__tab[data-part='tab-button'],
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button,
   .rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'],
-  .rottay-bottom-tab-bar__label[data-part='label'] {
+  .rottay-bottom-tab-bar__icon-wrap.rottay-bottom-tab-bar__icon-wrap,
+  .rottay-bottom-tab-bar__label[data-part='label'],
+  .rottay-bottom-tab-bar__label.rottay-bottom-tab-bar__label {
     animation: none;
     transition: none;
   }
@@ -370,33 +402,40 @@
 /* ---- forced colors: the bar keeps its top rule, selection survives as a
         Highlight pill, and the badge keeps a real frame. ---- */
 @media (forced-colors: active) {
-  .rottay-bottom-tab-bar[data-part='root'] {
+  .rottay-bottom-tab-bar[data-part='root'],
+  .rottay-bottom-tab-bar.rottay-bottom-tab-bar__root {
     border-top-color: CanvasText;
   }
 
-  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
     background: Highlight;
   }
 
-  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true']::before {
     background: Highlight;
   }
 
-  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button[data-selected='true'] .rottay-bottom-tab-bar__icon {
     color: HighlightText;
   }
 
-  .rottay-bottom-tab-bar__badge[data-part='badge'] {
+  .rottay-bottom-tab-bar__badge[data-part='badge'],
+  .rottay-bottom-tab-bar__badge.rottay-bottom-tab-bar__badge {
     box-shadow: none;
     outline: 1px solid CanvasText;
   }
 
-  .rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible) {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible),
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button:is([data-state~='focus-visible'], :focus-visible) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: calc(-1 * max(2px, var(--ds-focus-ring-width)));
   }
 
-  .rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)::after {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)::after,
+  .rottay-bottom-tab-bar__tab.rottay-bottom-tab-bar__tab-button:is([data-state~='focus-visible'], :focus-visible)::after {
     display: none;
   }
 }

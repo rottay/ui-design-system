@@ -100,7 +100,8 @@
  * inset-left on the inline-start side.
  */
 
-.rottay-mobile-header[data-part='root'] {
+.rottay-mobile-header[data-part='root'],
+.rottay-mobile-header.rottay-mobile-header__root {
   background: var(--ds-color-bg-primary);
   inline-size: 100%;
   /* 56px mobile BAR ROW: no governed rung adopted — kept literal and
@@ -125,7 +126,8 @@
    governed elevation ramp and fades in through the motion token — it appears
    only once content actually scrolls under the bar (data-stuck). The sticky
    offset, the stacking and `position` itself all live here. */
-.rottay-mobile-header[data-part='root'][data-sticky='true'] {
+.rottay-mobile-header[data-part='root'][data-sticky='true'],
+.rottay-mobile-header.rottay-mobile-header__root[data-sticky='true'] {
   position: sticky;
   background: var(--ds-mobile-header-sticky-bg, color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent));
   backdrop-filter: var(--ds-mobile-header-sticky-backdrop, none);
@@ -142,7 +144,8 @@
 /* The colored hairline clears the P-48 floor at (0,4,0); the fourth unit is
    the always-present `data-testid` (see SPECIFICITY above — if the engine ever
    stops stamping it, this rule silently drops back under the floor). */
-.rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'] {
+.rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'],
+.rottay-mobile-header.rottay-mobile-header__root[data-sticky][data-testid='mobile-header'] {
   border-bottom: 1px solid var(--ds-mobile-header-hairline-color, var(--ds-color-border));
 }
 
@@ -172,7 +175,8 @@
    start=right/end=left (`:dir()` follows the nearest authored direction —
    the corpus mirror idiom). The 4px rhythm floor matches the retired inline
    value exactly. */
-.rottay-mobile-header__bar[data-part='bar'] {
+.rottay-mobile-header__bar[data-part='bar'],
+.rottay-mobile-header__bar.rottay-mobile-header__bar {
   block-size: 100%;
   position: relative;
   padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))), env(safe-area-inset-left, 0px));
@@ -190,27 +194,32 @@
    touch minimum; a wider cluster keeps its natural width (shrink 0 + floor)
    and the title yields + truncates first — actions are never clipped. */
 .rottay-mobile-header__left[data-part='left'],
-.rottay-mobile-header__right[data-part='right'] {
+.rottay-mobile-header__left.rottay-mobile-header__left,
+.rottay-mobile-header__right[data-part='right'],
+.rottay-mobile-header__right.rottay-mobile-header__right {
   flex: 1 0 0;
   min-inline-size: var(--ds-touch-target-min, 44px);
   display: flex;
   align-items: center;
 }
 
-.rottay-mobile-header__right[data-part='right'] {
+.rottay-mobile-header__right[data-part='right'],
+.rottay-mobile-header__right.rottay-mobile-header__right {
   justify-content: flex-end;
 }
 
 /* Center slot: yields and truncates first (see the side-slot note above).
    The 8px inline gutter matches the retired inline padding exactly. */
-.rottay-mobile-header__center[data-part='center'] {
+.rottay-mobile-header__center[data-part='center'],
+.rottay-mobile-header__center.rottay-mobile-header__center {
   flex: 0 1 auto;
   overflow: hidden;
   text-align: center;
   padding-inline: var(--ds-mobile-header-center-padding-inline, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
-.rottay-mobile-header__back[data-part='trigger'] {
+.rottay-mobile-header__back[data-part='trigger'],
+.rottay-mobile-header__back.rottay-mobile-header__trigger {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -231,12 +240,14 @@
 }
 
 .rottay-mobile-header__back[data-part='trigger'][data-state~='pressed'],
-.rottay-mobile-header__back[data-part='trigger']:active {
+.rottay-mobile-header__back[data-part='trigger']:active,
+.rottay-mobile-header__back.rottay-mobile-header__trigger:active {
   transform: scale(var(--ds-mobile-header-trigger-press-scale, 0.94));
 }
 
 .rottay-mobile-header__back[data-part='trigger'][data-state~='focus-visible'],
-.rottay-mobile-header__back[data-part='trigger']:focus-visible {
+.rottay-mobile-header__back[data-part='trigger']:focus-visible,
+.rottay-mobile-header__back.rottay-mobile-header__trigger:focus-visible {
   outline: none;
   box-shadow: var(--ds-mobile-header-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
@@ -245,7 +256,8 @@
    The kernel token and the platform pseudo are the two arms of one rule. */
 @media (hover: hover) {
   .rottay-mobile-header__back[data-part='trigger'][data-state~='hovered'],
-  .rottay-mobile-header__back[data-part='trigger']:hover {
+  .rottay-mobile-header__back[data-part='trigger']:hover,
+  .rottay-mobile-header__back.rottay-mobile-header__trigger:hover {
     background: var(--ds-mobile-header-trigger-tint, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
   }
 }
@@ -254,7 +266,8 @@
    subtitle or a search field lines up with the back action above it instead of
    sitting flush against the root edge, and it may shrink inside a flex/grid host
    (an auto minimum would let its content set the header's width). */
-.rottay-mobile-header[data-part='root'] > [data-part='body'] {
+.rottay-mobile-header[data-part='root'] > [data-part='body'],
+.rottay-mobile-header.rottay-mobile-header__root > .rottay-mobile-header__body {
   min-inline-size: 0;
   padding-inline: var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1)));
 }
@@ -264,7 +277,8 @@
    here, byte-identical to the retired inline values; 17px has no canonical
    rung, so the literal stays with this note). The truncation mechanics moved
    here with it (R-5 geometry drain). */
-.rottay-mobile-header__title[data-part='label'] {
+.rottay-mobile-header__title[data-part='label'],
+.rottay-mobile-header__title.rottay-mobile-header__label {
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -289,11 +303,14 @@
    unchanged — it is the floor for an EMPTY slot, never a cap on a full one. */
 @container ds-mobile-header (max-width: 380px) {
   .rottay-mobile-header__left[data-part='left'],
-  .rottay-mobile-header__right[data-part='right'] {
+  .rottay-mobile-header__left.rottay-mobile-header__left,
+  .rottay-mobile-header__right[data-part='right'],
+  .rottay-mobile-header__right.rottay-mobile-header__right {
     flex: 0 0 auto;
   }
 
-  .rottay-mobile-header__center[data-part='center'] {
+  .rottay-mobile-header__center[data-part='center'],
+  .rottay-mobile-header__center.rottay-mobile-header__center {
     flex: 1 1 auto;
   }
 }
@@ -304,22 +321,27 @@
   /* Raised in step with the hairline above: a media query adds no specificity,
      so leaving this at (0,3,0) would hand forced-colors mode back to the very
      rule this override exists to beat. */
-  .rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'] {
+  .rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'],
+  .rottay-mobile-header.rottay-mobile-header__root[data-sticky][data-testid='mobile-header'] {
     border-bottom-color: ButtonText;
   }
 
-  .rottay-mobile-header__back[data-part='trigger'] {
+  .rottay-mobile-header__back[data-part='trigger'],
+  .rottay-mobile-header__back.rottay-mobile-header__trigger {
     border: 1px solid ButtonText;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-mobile-header[data-part='root'][data-sticky='true'],
-  .rottay-mobile-header__back[data-part='trigger'] {
+  .rottay-mobile-header.rottay-mobile-header__root[data-sticky='true'],
+  .rottay-mobile-header__back[data-part='trigger'],
+  .rottay-mobile-header__back.rottay-mobile-header__trigger {
     transition: none;
   }
   .rottay-mobile-header__back[data-part='trigger'][data-state~='pressed'],
-  .rottay-mobile-header__back[data-part='trigger']:active {
+  .rottay-mobile-header__back[data-part='trigger']:active,
+  .rottay-mobile-header__back.rottay-mobile-header__trigger:active {
     transform: none;
   }
 }

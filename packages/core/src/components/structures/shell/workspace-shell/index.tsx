@@ -112,7 +112,7 @@ function StaticParticleField({
   return (
     <Box
       aria-label={fallbackLabel}
-      className="ds-collection-shell__static-particle-field"
+      className="ds-collection-shell__static-particle-field ds-collection-shell__particle-field-static-fallback"
       data-field-pattern={fieldPattern}
       data-intensity={intensity}
       data-mood={mood}
@@ -160,7 +160,7 @@ export function WorkspaceShell({
 
   return (
     <Box
-      className={['ds-surface ds-collection-shell', className].filter(Boolean).join(' ')}
+      className={['ds-surface ds-collection-shell', className, 'ds-collection-shell__root'].filter(Boolean).join(' ')}
       data-part="root"
       data-variant={variant}
       data-mood={mood}
