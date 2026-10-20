@@ -1,6 +1,13 @@
 # Design System Roadmap — Modern Engine Premium Uplift
 
-## Temporary owner succession — 2026-10-08
+> **Current owner order (2026-10-20):** DS first, real closures, sole Codex
+> ADMIN Sol DT. Full record:
+> [Owner order — 2026-10-20: canonical record](#owner-order--2026-10-20-canonical-record).
+> The succession sections that follow are historical. The 29 open work orders
+> are reconciled in
+> [DS-first reconciliation of the open work orders](#ds-first-reconciliation-of-the-29-open-work-orders--2026-10-20).
+
+## Prior temporary owner succession — 2026-10-08 (superseded by 2026-10-20)
 
 The human owner appointed Codex as the temporary sole DT, auditor and local
 integrator on 2026-10-08 after Kimi Admin exhausted its quota. Claude Admin
@@ -22,7 +29,7 @@ the DT seat to Kimi only after that barrier is met and recorded. There must
 never be two active integrators. Until then Codex supervises at ten-minute
 intervals, without intermediate polling; afterwards the Codex exclusion resumes.
 
-## Current owner succession — 2026-10-04
+## Prior owner succession — 2026-10-04 (superseded by 2026-10-20)
 
 The owner appointed Kimi as the sole active DT, coordinator, auditor and
 integrator of the current programme, directly on main in
@@ -630,7 +637,101 @@ or blanket baseline increases. Existing affected WOs carry a progress reference.
 Preserve active writers, respect app/source file reservations, and continue the
 remaining DAG autonomously. No Codex consultation or approval is part of execution.
 
+### Owner order — 2026-10-20 (binding summary)
+
+Binding for this DS continuation. The full record is
+[Owner order — 2026-10-20: canonical record](#owner-order--2026-10-20-canonical-record).
+
+- **Roles:** Codex ADMIN Sol (`admin@rottay.com`, `gpt-6.1-sol`) is the sole DT,
+  coordinator, auditor and local integrator. Real Claude NORMAL
+  (`daniel.avila@rottay.com`, exact `claude-opus-5-5`) writes source. Each review
+  is a distinct NORMAL Opus session. Verify the account, model and receipt on every
+  dispatch.
+- **Sequence:** first complete the DS (Modern productive, full cascade;
+  Classic/Rustic frozen compatibility). Then four or five test themes that differ
+  beyond palette, plus a full DS audit. Only then applications and final branding.
+  The current divergence, isolation, a11y, state, responsive, SSR and cascade tests
+  on contrasting test configurations stay mandatory now.
+- **Supersession for this continuation only:** this order replaces the following,
+  and nothing else changes:
+  - the 2026-09-19 Codex exclusion ("Codex is completely outside the loop" above);
+  - "Kimi is the requested successor";
+  - the `r4-recon-opus` checkout line (the checkout is
+    `/Users/daniel/Developer/Rottay/ui-design-system` on main);
+  - "Do not contact Codex" in the WO-CON-08 delegation prompt;
+  - the DS succession prose in `AGENTS.md`, `CLAUDE.md` and `KIMI.md`.
+
+  Product invariants, dependencies, phases, fingerprint, acceptance and
+  denominators stay unchanged. No GO, freeze exception or app write is granted.
+
 <!-- execution-policy:end -->
+
+## Owner order — 2026-10-20: canonical record
+
+This is the single full record of the owner order of 2026-10-20. Other locations
+point here; the binding summary inside the execution-policy block repeats only
+roles, sequence and supersession. Earlier succession sections and owner decisions
+stay as written; this record governs only where they conflict on roles or
+scheduling.
+
+- **Provenance (observed):**
+  - Owner order: `.tmp/ds-codex-admin-2026-10-20/OWNER-PRIORITY-DS-FIRST-20261020.txt`
+    (sha256 `e73654cc28360765ad0da2ff7ebd797927d3cddcd96ef71579a16386fd12ce9e`,
+    written 2026-10-20 10:40 America/New_York).
+  - Succession order of the same day: `.tmp/ds-codex-admin-2026-10-20/START-PROMPT.txt`
+    (sha256 `fc18652d23014f6c35a9a1152a9e497515eee0b810fd6e81b041c418efda3bd9`).
+  - Barrier: `migration-state.json` status `CODEX_ADMIN_READY`. The quota-blocked
+    Kimi ADMIN coordinator was retired at 2026-10-20T12:09Z and is not resumed.
+  - Operational record: the section "HANDOFF DT 2026-10-20" of
+    `.tmp/ds-kimi-2026-10-14/REGISTRY.md`.
+- **Roles:**
+  - Exactly one DT and integrator exists.
+  - Nobody approves their own implementation.
+  - The DTs of other modules are not affected.
+  - The `AGENTS.md`, `CLAUDE.md` and `KIMI.md` files carry foreign WIP and are not
+    edited by this record.
+- **Not postponed:** contrasting configurations are admitted through the normal
+  `TenantThemeDocument` door as test configurations. They never become a tenant's
+  final design. No tenant component fork and no application identity is chosen now.
+- **Closure, not activity:**
+  - A lot, a commit or a test count is not a closed work order.
+  - Prioritize the shortest complete path to WO-ARC-12 acceptance and the other
+    fronts that actually close or unblock work orders.
+  - Register an out-of-scope finding with its severity, impact and receiver.
+  - Repair at once what blocks or regresses a candidate.
+- **Counter honesty:**
+  - The DS-only end (milestones M-DS1 and M-DS2) and the downstream application
+    obligations stay visible side by side.
+  - No work order is deleted, no denominator shrinks, and no DS fixture is offered
+    as proof of a database or application installation.
+  - The 170 total and programme C stay intact.
+- **Phase barrier:**
+  - The order authorizes preparing and processing the DS-first framing. It grants
+    no GO, no freeze exception and no removal of a technical precondition.
+  - Authority and phase changes go only through structured phase controls and a
+    reviewed code-and-registry wave-mapping update approved by the owner.
+  - Uncovered decisions are queued in [`proposals.md` §G](./proposals.md#g-ds-first-framing-decisions-queued-2026-10-20-pending-owner-review).
+- **Execution and quality:**
+  - Parallelize finite packets with disjoint write sets. The registry, generators,
+    heavy runs, browser runs, index and integration stay singleton.
+  - Commit only an accepted current candidate, with independent review, the
+    relevant tests and HEAD, index, pathspec and hash guards.
+  - No habitual worktrees, copies or branches. No new publication or push
+    authority.
+  - Do not lower floors or ceilings, disable controls or amputate capability.
+    Standard and Pro are permissions, not quality tiers.
+  - Invalid historical evidence stays invalid: the old library-path token-audit
+    rows were vacuous.
+  - Theme-graph 9.74 MB over its 9.68 MB pin is a real red. No fresh-dist claim
+    without measurement.
+  - Run proportional focal validation per packet and full batteries at real
+    milestones.
+- **Reporting:**
+  - At milestones, report the work orders actually closed, the integrated commits,
+    the remaining critical-path acceptance, the effective parallelism and the
+    pending decisions.
+  - No date is derived from the work-order percentage.
+  - Do not ask the owner a broad "continue?".
 
 ## DS-only parallel execution — owner amendment 2026-09-17
 
@@ -764,6 +865,240 @@ this scheduling amendment does not open a phase or alter its fingerprint.
 | WO-GAT-10 | Conserved: license/provenance for retained effects after RET-01; disjoint checker work can accompany icon cleanup, but shared manifest changes are integrated once. |
 | WO-GAT-11 | INV-01 + INV-03 + EVI-02's actual robustness matrix; one shared browser window, no duplicate fleet harness. |
 | WO-GAT-09 | Final claim-integrity barrier, including its own certifier residuals; cannot close while another executable authority remains open or required review is overdue. |
+
+### DS-first reconciliation of the 29 open work orders — 2026-10-20
+
+This is the one reconciliation requested by the
+[owner order of 2026-10-20](#owner-order--2026-10-20-canonical-record). It is not a
+second backlog and not a new audit, and it changes no status, dependency, phase,
+fingerprint, acceptance or denominator. The basis is the registry at `c54ec1777`
+(sha256 `6bcd92ce099f4543a728edc3b45c5f532ad6376fcee389eb9762565ccdde47a1`):
+170 work orders, 141 done, 5 in progress, 24 todo.
+
+It was re-verified read-only at HEAD `5aa9f59df` (registry sha256
+`b4a32350d82036b95627d970575891d97f5975d89b896a9101d6dcdb84a28adc`):
+- the same 29 open IDs with the same status, phase, `dependsOn` and size;
+- the same fingerprint-relevant projection;
+- WO-ARC-12 `progressLog` grown to 53 entries (LC6).
+
+Commit lists and ratios cited below are labelled as historical cuts.
+
+**Classes.**
+- **N:** genuine work still to be built.
+- **R:** receiver reconciliation. The capability was delivered by the named done
+  WO; closure needs that receiver's evidence re-read against *this* WO's acceptance
+  and a reviewed `done`. It is never closed by absorption.
+- **M:** mixed DS and downstream portions. It closes only when the whole acceptance
+  passes.
+- **D:** downstream only.
+
+**Closure for every row** needs four things:
+- the lane acceptance gate named in the row, evidenced on a pinned candidate;
+- every `dependsOn` done;
+- for DS-improvements WOs, its phase open under a structured `ownerGo`
+  (`phaseClaimBlocker` runs on `claim` *and* `done`);
+- `done --evidence` through `scripts/maintain/roadmap/status/index.mjs` after
+  independent review.
+
+"Unverified" stays unknown until the named bounded verification runs.
+
+**Effort.**
+- A *lot* is one finite writer packet plus an independent review plus DT
+  integration.
+- Ranges are forecasts, not dates. Only the WO-ARC-12 range rests on cited counts;
+  the others are scope judgments marked as such.
+- Proposed receivers are named but never claimed here.
+
+| WO (status · phase/wave · size) | Class | Reusable evidence (source) | Exact remaining gap | Dependency and phase (necessary ≠ sufficient) | Accountable / proposed receiver | Next finite package | Closure condition | Remaining effort |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| WO-ARC-12 (in progress · P1 open · S, stale) | N | `progressLog` 1–53 (entry 53 records LC6 at bookkeeping `5aa9f59df`). Wave C commits `aff0d8f60`, `f7addb797`, `fe9f8db10`, `5d3ded564`, `47a56535a`, `a3976004f`, `7df07c9a8`, `0d13356be`, `cf6d65635`, `62cb281f5`, `6a2f501b5`, `06713a4c9`, `22444327d`/`9de2b26d1`/`e7258423a`, LC6 `f85e7531b`; PM-T `a0463e436`. Each is valid only for its input closure. | 16 named packets (LC6 is integrated and its roots are cleaned): FU-F11R, PM-P14, LC14, LC12, LX1, LX2, LX3, LX4, FU-LC1B, FU-LC8A, FU-F11V, FU-9A, FU-9B, FU-8A, FU-F11C, FU-F11K. Then the caller data-state mapping before the strip (Oct-17), the strip, dead-arm certification and final pinned suite, browser and sighted certification. 2026-10-20 state (operational record, 16:12Z): PM-P14 design r2 ACCEPT and admitted to real paired validation only (no source ACCEPT yet); FU-F11R rekey design r2 ACCEPT, mapper in LIGHT authoring. | Dependencies met; phase 1 open; claimed. | Claim `kimi-dt`; accountable: sole DT; writers: NORMAL Opus. | PM-P14 real paired validation (admitted), then its independent source review; FU-F11R paired-rekey mapper and its output review, then G1. | `architecture.md` WO-ARC-12 acceptance gate (attribute-honesty gate green across engines, no unforwarded advertised attribute, classic byte-identical), plus the recorded strip/dead-arm certification, on the final pinned candidate. `done` while phase 1 is open. | **At least 16 lots, or 14 if Oct-17 D5 merges LX1/LX3/LX4 into one pass; up to about 24.** Basis, historical cut through `f85e7531b`: 7 of the 14 integrated Wave C lots spawned an extra reader or pin migration or a follow-up (LC1, LC2, LC5, LC6, LC7, LC8, LC10). Add the data-state mapping, strip, dead-arm and certification windows. Further discoveries are uncounted. XL. |
+| WO-ARC-21 (in progress · P1 · L) | M | DS preparation `00a86aab0`: row-bytes DB leg, mutants and a fixed point; showroom probe at 0 px; frozen probe contract at `packages/core/docs/consumer-contract/migration/db-first-paint-probe/`. | App-side DB-write-to-SSR first paint (app-bithire, D-31) plus the W4 exit cert. Downstream, deferred by the binding sequence. | Claimed. **It is a phase-1 authority, so it blocks phase 2A** (G-1). | DT; the app half has no authorized receiver. | Owner decision G-1 (the mapping only). No app work. | `architecture.md` WO-ARC-21 acceptance unchanged. `done` only while ARC-21's phase is open, so under G-1 route 1 it happens in the phase-6 window, before WO-GAT-09. | DS: re-verify only. App: unknown (app not inspected), after the application stage opens. |
+| WO-EVI-02 (in progress · wave 4 · L) | N | `cf2851e56` (6/6 axes, both negative controls 0, review `32ac5e41`); `a56cb7907`/`8edbf2ca8` (PL234); F-86 split `355a947c1`. | Full blocking battery at the milestone. Owner items of PL234–235 not enumerated (unknown). F-86 clause 1 named counters (W17-Q4-RUNNER) and the clause-2 statement. Pilot record door repair (unverified). **Typography population floor red 185 > 184 (2026-10-20, BLOCKING).** No population touching for green (Oct-17 cut-1154 §2). | Dependencies met; claimed. Gates milestone B. | Claim `claude-dt`; sole DT; population owner for the red. | Read-only closure read enumerating PL234–235 items against the Oct-17 decisions and F-criteria. | `evidence-graph.md` WO-EVI-02 acceptance (J.1–J.7/J.12/J.22/J.23 gates with drills; six axes at least 80 % with both negative controls) plus its F-closure criteria and amendment 6 wording. | 1 lot for the read, then a judgment of 3–8 lots plus the battery. |
+| WO-RET-04 (in progress · wave 5 · L) | N | W-1..W-10 (for example `4f0e09cdd`, `7941ed050`, `d922d5b0b`; PL30). | 203 authored files over 800 lines and 19 repeated-word owners (PL30). Skin residue reserved until M-P3 drains. The single D-21 move. `docs/architecture` §6. **Oct-17 D3/D4: the size law and F-44 are not changed. If D4 has no substantive solution, the impediment is recorded with two alternatives and RET-04 is not DONE.** | Dependencies met; claimed. Not phase-locked. | Claim `kimi-dt`; sole DT. | `scripts/**` split lots outside the M-P3 write sets. | `retire.md` WO-RET-04 acceptance gate plus its amendments, measured on the post-move tree. | Judgment: 10–25 lots. May stay unclosable under D4 (reported, not waived). |
+| WO-RET-06 (in progress · wave 5 · L) | M | D-A..D-F, Q2 `Variant` and D-C executed (`quality-ret06-dc`); F-86 route (b) executed (`quality-f86-receiver`); W-1/W-2/W-3a/W-3b. | 11 doors (`./icons/roles/*` waits on CRA-20; `./styles/rottay` needs an app consumer: downstream). Six BitHire roles via CRA-17 (phase 2B). F-42/109/111/113/115/84/88 (F-88: Q3 unanswered). D-D. `evidence/ret-06-closure/`. | Dependencies met; claimed. Prose dependencies on phase-locked CRA-17 and CRA-20. | Claim `kimi`; sole DT. | Closure read separating DS-closable from phase-locked and app-dependent items. | `retire.md` WO-RET-06 acceptance gate (deprecations and census gates in both sibling modes, each finding measured or under a dated disposition, `roadmap:check`). | Judgment: 3–8 lots plus dispositions. |
+| WO-RET-07 (todo · wave 5 · S) | M | Step-1 registration (landing commit unverified). | Step 2: the 4.0 major removal of 11 props. **Oct-17 Major version: present the version calculation before publishing; no release authority.** Step 3: removal of `commandHomePanelBgStrong` after the owner/ops stored-document migration (downstream; Oct-17: do not touch DB/apps). | `dependsOn` ARC-12 is unmet. | Unclaimed; proposed: sole DT plus a NORMAL writer in the 4.0 line. | Step 2 after ARC-12 is done. | `retire.md` WO-RET-07 acceptance gate (gates with `--assume-done`, pass-through non-increasing, major changeset rows). Cannot close without step 3. | Step 2: 1–2 lots. Step 3: downstream. |
+| WO-CON-08 (todo · wave 4 · L) | M | CAT-04, EMI-02, CON-06 done. Building blocks exist but are **not verified** against step 1: `TenantThemeArtifact` (`compilerVersion`, `verticalEnvelopeDigest`, `digest`, `rowVersion`, `provenance`) in `foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:764–790`, and the `DecisionProvenanceLedger`. | DS step 1: a revision/provenance descriptor (four identities; style, preset, catalog and envelope digests; build; assets/fonts; secret and billing rejection) under the CON-05 protocol with core review. Consumer steps 2–4: app-bithire history, CAS, restore and re-certification (downstream). | `dependsOn` ARC-21 makes it **not claimable**. G-1 item 5 (conditional on a reviewed debrief resolving q1–q3; no claim, step-1 implementation or adoption until that lot lands and the CON-05 core review accepts). No implementation or claim while the edge persists. | Unclaimed; proposed: a DS descriptor writer, and later an app-bithire writer. | Read-only mapping of the existing blocks against the step-1 clauses (preparation only). | `consumer-contract.md` WO-CON-08 full acceptance gate, including the app clauses, after ARC-21 is done. | DS: judgment 3–5 lots. App: downstream. |
+| WO-CON-09 (todo · wave 5 · S; not programme C) | M | Step-1 registration (2026-10-15). | Step 2: the DS migration guide. Step 3: the flip after a measured app consumer (downstream). | No dependencies; claimable. | Unclaimed; proposed: sole DT plus a NORMAL writer. | Step-2 guide lot. | `consumer-contract.md` WO-CON-09 gate (`consumer-census --check --assume-done=WO-CON-09` OK with a measured consumer). | Step 2: 1 lot. Step 3: downstream. |
+| WO-DER-10 (todo · branding · S; not programme C) | D | None. | The owner's D-30 pick (Oct-17: do not choose the personality, do not design the apps). | Prose-gated until the pick. | Owner, then DT. | None before M-DS2. | `derivation.md` WO-DER-10 gate. | Downstream. |
+| WO-GAT-09 (todo · P6 · L) | N | GAT-07 (phase-0 milestone only). `claim-integrity:structural`. | Final gate. Routed certifier residuals (a)/(b). Public-target gap (RET-06 PL15). **`validateGat09CompletionBarrier` requires every other execute authority done, ARC-21 included: this is the downstream 170 barrier.** | CRA-15 and EVI-02 unmet; phase 6 locked. | `design-system-release`; unclaimed. | None. M-DS2 uses a proposed DS-scoped certifier mode (G-1 item 6: design debrief only), never this closure. | `gates.md` WO-GAT-09 final gate plus the barrier. | Judgment 3–6 lots; after ARC-21. |
+| WO-CRA-15 (todo · P2C · L) | N | Spatial v1 kernel 51/51 unit (lane); CRA-14 Stage A; RET-01 E7 routed `./spatial` here. | DS-IMP-106/107/108 real-browser, performance and context-loss work. The lane continuation lists "the five quarantined Platform routes": route re-exposure is app-platform scope (downstream; execution control keeps the routes on the Stage-A fallback). **Unresolved:** whether DS-IMP-106 closure needs app-side route evidence. DS-IMP-107 WebGPU has no consumer (G-5). | Dependencies met; phase 2C locked. It is a 2C authority, so it must be done before phase 3 opens. | `visualization-runtime`; unclaimed. | Read-only check of whether the DS-IMP-106/107/108 acceptance needs app-platform evidence, before 2C. If it does, only an explicit owner decision may trace that portion downstream; otherwise M-DS1 is NOT REACHED. | `craft.md` WO-CRA-15 acceptance gate. | Judgment 4–8 lots plus browser. |
+| WO-CRA-17 (todo · P2B · L) | M | Phosphor 2.1.10 settled; CRA-16 canary; RET-01. | Final integral gate including `sightedReview`; the six BitHire roles' domain owner (shared with RET-06). The registry lists app-bithire in `touchedRepos`: whether that needs app-side evidence is unverified. | Dependencies met; phase 2B locked. | `iconography-system`; unclaimed. | Read-only app-scope check before 2B (same rule as CRA-15), then a read-only run of the final integral gate when 2B opens. | `craft.md` WO-CRA-17 acceptance plus `cra-17-integral-gate.mjs` final mode. | Judgment 2–5 lots. |
+| WO-ARC-17 (todo · P2A · XL) | R | CAT-02 `14c0499cb`, FAM-00 `c295af9bb`, ARC-14 `e36f2df24`; pilots dropped by D-19 (notes). | Typed, manifest-declared variants on the pilots plus compile-time rejection (unverified). | Dependencies met; phase 2A locked. | Unclaimed. | Read-only receiver verification. | `architecture.md` WO-ARC-17 gate, re-read against the receivers, plus a reviewed `done` in the 2A window. | 1 lot (+1–3). |
+| WO-ARC-16 (todo · P2A · M) | R | `eaeb1448b` (RET-01) retired the `ComponentExtensions` triple: 0 files in `packages/core/src` at `c54ec1777`. | Reintroduction guard (unverified). Oct-17 punctual-authorization text (G-3). | Dependencies met; phase 2A locked. | Unclaimed. | Verification. | `architecture.md` WO-ARC-16 gate (zero consumers, channel removed, guard, build/unit). | 0–1 lot. |
+| WO-ARC-20 (todo · P2A · S) | R | FAM-11 done. | Multi-select round-trip and preset chip `type=button` unit proof (unverified). | Phase 2A locked. | Unclaimed. | Verification. | `architecture.md` WO-ARC-20 gate. | 0–1 lot. |
+| WO-TOK-11 (todo · P2A · S) | R | DER-03 done. | APCA gate zero failed or unjustified-skipped pairs (EVI-02 artifact). | EVI-02 unmet; phase 2A locked. | Unclaimed. | After EVI-02. | `tokens.md` WO-TOK-11 gate. | 0–1 lot. |
+| WO-ARC-18 (todo · P2B · XL) | R | INV-04 `16777a249`, FAM-11. | Container adaptation, CollectionProjection and breakpoint governance, visual under both palettes (unverified). | Phase 2B locked. | Unclaimed. | Verification. | `architecture.md` WO-ARC-18 gate. | 1 lot (+1–4). |
+| WO-ENG-25 (todo · P2B · L) | R | DER-04, INV-05; the AI kit paused (D-19). | Semantic recipes, presence, reduced motion (unverified). AI kit disposition (G-5). | Phase 2B locked. | Unclaimed. | Verification. | `engine-modern.md` WO-ENG-25 gate. | 1 lot plus a disposition. |
+| WO-CRA-19 (todo · P2B · M) | R | CAN-05 `b1134dded`, `5d189f9fe`, `188b38e75`. | z-authority, Escape router, focus restore, scroll-lock refcount (unverified). Oct-17 punctual text (G-3). | Phase 2B locked. | Unclaimed. | Verification. | `craft.md` WO-CRA-19 gate. | 0–1 lot. |
+| WO-CRA-18 (todo · P2C · XL) | R | FAM-09 `76799ef74`, `604afa147`. | CSV/a11y, annotation/streaming, census gate, budgets (option A; unverified). | Phase 2C locked. | Unclaimed. | Verification. | `craft.md` WO-CRA-18 gate. | 1 lot (+1–4). |
+| WO-ENG-24 (todo · P2C · L) | R | `SizeType` retired `fb03f7af1`; CAN-06 freeze. | The certified-minimum boundary is superseded by the freeze: needs a reviewed replacement receipt or an owner disposition. | Phase 2C locked. | Unclaimed. | Verification. | `engine-modern.md` WO-ENG-24 gate, read through its reformulation. | 0–1 lot. |
+| WO-GAT-10 (todo · P2C · S) | N | RET-01 E7: effects `candidate` here. | Effect-registry license/provenance gate, or a disposition if the effects retire. | Phase 2C locked. | Unclaimed. | When 2C opens. | `gates.md` WO-GAT-10 gate. | 1–2 lots. |
+| WO-CRA-20 (todo · P2C · M · support) | N | None. | Preset-used weights only; unblocks the RET-06 `./icons/roles/*` door. | Phase 2C locked. | Unclaimed. | When 2C opens. | `craft.md` WO-CRA-20 gate (support milestone, no source completion). | 1–2 lots. |
+| WO-CRA-21 (todo · P2C · M · support) | N | Pause lifted (RET-01 done). | Ground-keyed BrandMark plus sighted review. | Phase 2C locked. | Unclaimed. | When 2C opens. | `craft.md` WO-CRA-21 gate. | 1–2 lots. |
+| WO-CRA-22 (todo · P2C · M · support) | R | RET-02 done; `AlertIcon` retired (RET-06 W-1). | Zero root-reachable catalog-name imports plus a guard (unverified). | Phase 2C locked. | Unclaimed. | Verification. | `craft.md` WO-CRA-22 gate. | 0–2 lots. |
+| WO-ARC-19 (todo · P3 · M) | R | EVI-02 by-axis probe `cf2851e56`. | EVI-02 done; captures reviewed. | EVI-02 unmet; phase 3 locked. | Unclaimed. | After EVI-02. | `architecture.md` WO-ARC-19 gate read through its reformulation. | 0–1 lot. |
+| WO-GAT-11 (todo · P6 · L) | M | INV-01, INV-03; Modern × bithire matrix. | Forced-colors, RTL, zoom and long-content browser matrix and its review. | EVI-02 unmet; phase 6 locked. | Unclaimed. | After EVI-02, in the browser window. | `gates.md` WO-GAT-11 gate. | 2–4 lots plus browser. |
+| WO-GAT-12 (todo · P6 · S · support) | R | EVI-01 `2f5ac2d6e`, RET-03. | Test 253 disposition (unverified). | Phase 6 locked. | Unclaimed. | Verification. | `gates.md` WO-GAT-12 gate. | 0–1 lot. |
+| WO-SKIN-08 (todo · P6 · L) | R | FAM-01..11, hardcode census. | MD-DEF-04/05 terminal; residue gate; EVI-02 done. | EVI-02 unmet; phase 6 locked. | Unclaimed. | After EVI-02. | `skin-adoption.md` WO-SKIN-08 gate. | 1 lot (+1–3). |
+
+#### Phase barrier (measured at `c54ec1777`; read from `scripts/maintain/roadmap/status/index.mjs` at HEAD)
+
+- **Mechanics.**
+  - `claim` and `done` both call `phaseClaimBlocker` (`validateDoneTransition`).
+    A phase opens for claims and completions only if all of these hold:
+    - it is the sole open phase and every earlier phase is locked;
+    - every execute authority of an earlier phase is done;
+    - no deferred item targets it or an earlier phase;
+    - a structured `ownerGo` exists.
+  - An in-progress WO can sit in a locked phase: no validator forbids it, and
+    `progress` does not consult phases. It simply cannot reach `done` until its
+    phase is open.
+  - The DS-IMP-061 pin (`:2198–2201`) accepts only phase 1, whether as execute
+    or as a deferred target. A deferred route therefore still blocks every phase
+    from 2A onward.
+  - The plan fingerprint (`DS_IMPROVEMENTS_PLAN_SHA256` `ca61cac3…`) covers
+    items, mapped-WO phase and dependencies, phase controls and the ledger.
+  - `validateGat09CompletionBarrier` requires every other execute authority to be
+    done.
+- **Phases.** 0 is locked, 1 is open (GO 2026-10-08), 2A–6 are locked. Phases 4
+  and 5 map no items.
+- **Count.** 29 open. 22 are dependency-satisfied: 17 DS-improvements WOs, plus
+  RET-04, RET-06, EVI-02, DER-10 and CON-09. 15 of those are phase-locked todo
+  WOs:
+  - 2A: ARC-16, ARC-17, ARC-20;
+  - 2B: ARC-18, CRA-17, CRA-19, ENG-25;
+  - 2C: CRA-15, CRA-18, CRA-20, CRA-21, CRA-22, ENG-24, GAT-10;
+  - 6: GAT-12.
+
+  7 are dependency-blocked: GAT-09, TOK-11, ARC-19, GAT-11 and SKIN-08 on
+  EVI-02; RET-07 on ARC-12; CON-08 on ARC-21.
+- **Deadlock.** Phase 2A needs WO-ARC-12 **and WO-ARC-21** done. WO-ARC-21's
+  acceptance is application-side, and the binding sequence defers applications.
+  The phases open serially, so 20 DS-improvements WOs (2A–6) stay locked, as do
+  RET-06's role and icon-role items, CON-08 and every DS-only milestone. The fix
+  is the framing decision G-1 in [`proposals.md`](./proposals.md). Until the
+  owner answers it:
+  - WO-ARC-12 and the other lawful fronts continue;
+  - phase-locked **R** rows may only be verified read-only;
+  - prepared receipts are evidence files, not `progressLog` entries, because
+    `progress` refuses todo WOs.
+
+#### DS-only milestones (documentation-defined; `status` does not publish them)
+
+`PROGRAM_MILESTONES`, programme C and the 170 total are unchanged, and nothing
+here is claimable by prose.
+
+**Status on 2026-10-20: both milestones are NOT REACHED, and both depend on G-1.**
+While G-1 is unanswered, the report lists the phase-gated DS obligations by name
+(the 15 phase-locked WOs plus TOK-11, ARC-19, GAT-11 and SKIN-08). They are never
+dropped and never shown as done.
+
+- **M-DS1 · DS ready for multitheme validation.** Every item below on one pinned
+  integrated candidate:
+  - (a) WO-ARC-12 done.
+  - (b) WO-EVI-02 done.
+  - (c) The DS-owned acceptance of WO-RET-04 and WO-RET-06. If the Oct-17 D4
+    impediment stands, M-DS1 is reported NOT REACHED with that impediment. There
+    is no size-law change.
+  - (d) WO-RET-07 step 2 landed in the 4.0 line, after the Oct-17 version
+    calculation. No publication authority is added.
+  - (e) WO-CON-08 step 1 adopted. This is possible only if all of the following
+    happen:
+    - the G-1 item-5 resequencing is approved;
+    - its independently reviewed debrief resolves q1–q3;
+    - the future lot lands;
+    - the CON-05 core review accepts.
+
+    Until then the registry edge to WO-ARC-21 stays, and (e) is a named, blocking
+    gap.
+  - (f) WO-CON-09 step 2.
+  - (g) WO-ARC-21's DS preparation re-verified at HEAD.
+  - (h) Every DS-improvements WO of phases 2A, 2B, 2C and 3 done through its own
+    phase `ownerGo` (requires G-1). The WO-CRA-15 and WO-CRA-17 app-scope checks run
+    before 2B/2C. If either acceptance needs app-side evidence, that portion can be
+    traced downstream only by an explicit owner decision. Otherwise (h) is unmet and
+    M-DS1 is NOT REACHED; there is no silent cut.
+  - (i) **Every mandatory gate GREEN on the pinned candidate against unchanged
+    laws, or covered by an explicit dated disposition that an EXISTING contract
+    already permits, naming its clause, scope, authority and gaps.** Attribution
+    alone never satisfies (i), and neither does an inherited or baseline green.
+    - Theme-graph (9.74 > 9.68 MB) and the typography population floor (185 > 184)
+      **stay M-DS1-blocking** until legitimately resolved. A re-anchor or re-pin
+      counts only with its proper authority's reviewed decision, never inside a lot.
+    - The old library-path token-audit rows are invalid.
+    - Dist freshness counts only if measured.
+  - (j) A full suite, the official token audit, a real browser run and a sighted
+    check on that candidate.
+
+  **Mandatory robustness scope** (now and at M-DS1, on contrasting test
+  configurations):
+  - divergence: by-axis probe and both negative controls;
+  - isolation: two roots, cross-root and portal;
+  - accessibility: critical axe 0 and APCA;
+  - states: the `states.spec` matrix;
+  - responsive and container behavior, plus SSR first paint (`ssrViewport`);
+  - RTL and i18n;
+  - cascade transport parity: static, row bytes, preview and publish at DS level;
+  - equal Standard/Pro quality.
+- **M-DS2 · DS multitheme certification.** M-DS1 plus all of the following:
+  - **Themes:** four or five provisional test themes admitted through the
+    `TenantThemeDocument` door, Modern × bithire, same vertical, under D-24. This
+    is a DT test-configuration determination, not an owner block. There is no
+    fork, no new compiler and no final identity. Each pair is distinct beyond
+    palette by the WO-EVI-02 by-axis probe at its declared threshold, with both
+    negative controls. Existing three-vertical conformance (CSS build, theme-graph
+    runs) continues untouched.
+  - **Coverage:** the robustness scope across every theme, plus the WO-GAT-11
+    matrix and the audit/20-rubric re-audit.
+  - **Phase 6:** WO-GAT-11, WO-GAT-12 and WO-SKIN-08 done under phase 6's own
+    `ownerGo`. That is reachable without app work only under G-1 route 1.
+  - **DS-scoped certification:** two clean runs of the GAT-09 certifier in a
+    DS-scoped mode, with real static and executable evidence.
+    - **Closed exclusion list.** The list is fixed by name in its reviewed design:
+      WO-ARC-21's application half, WO-CON-08 steps 2–4, WO-CON-09 step 3, WO-RET-06
+      `./styles/rottay`, WO-RET-07 step 3, WO-CRA-15's app-platform route exposure,
+      WO-DER-10 and WO-GAT-09 itself.
+    - **No other exclusion.** Any other open execute authority fails the run.
+    - **Partial exclusion of a mixed WO.** Excluding a mixed WO's downstream
+      portion never waives that WO's DS clauses.
+    - **Never a closure.** `completionEligible` stays false and no final GAT-09
+      artifact is written.
+    - **That mode does not exist today.** `claim-integrity:structural` runs no
+      executable evidence, and the final mode executes evidence only after the
+      registry barrier clears.
+    - It is G-1 item 6, which authorizes a design debrief and independent review
+      only. Its implementation is a separate future reviewed lot. It is never
+      WO-GAT-09 completion and never a 170 certification.
+- **Downstream, traced; their full acceptances are kept:**
+  - WO-ARC-21's application half;
+  - WO-CON-08 steps 2–4;
+  - WO-CON-09 step 3;
+  - WO-RET-06's `./styles/rottay` consumer;
+  - WO-RET-07 step 3 (owner/ops migration);
+  - WO-CRA-15's quarantined app-platform route exposure;
+  - WO-DER-10;
+  - WO-GAT-09 closure, which is the final 170 barrier.
+
+  Mixed WOs are never shown as done by milestone prose. A DS fixture never proves
+  a database or application installation.
+
+#### Eligible close and unblock packets now (phase locks preserved)
+
+1. **WO-ARC-12.** LC6 is integrated (`f85e7531b`; bookkeeping `5aa9f59df`). Follow the
+   existing DAG: FU-F11R rekey and implementation, PM-P14, LC14, LC12, the EXT/FU lots, the data-state mapping,
+   strip, dead-arm and certification. No new scope.
+2. **WO-EVI-02.** Read-only closure read: enumerate the PL234–235 owner items
+   against the Oct-17 decisions and route the typography red to its population
+   owner (no repin).
+3. **WO-RET-06 and WO-RET-04.** Closure reads, plus `scripts/**` splits outside
+   the M-P3 write sets (under D3/D4 as decided).
+4. **WO-CON-09.** Step 2.
+5. **WO-CON-08.** Read-only mapping of the existing descriptor blocks against
+   step 1 (no claim).
+6. **Phase-locked R rows.** One read-only receiver-verification packet, with
+   evidence files only.
+7. **Theme-graph.** A repair attempt in the ARC-12 strip window (pin unchanged).
+8. **WO-CRA-15.** The read-only app-scope check.
 
 ### Conflict reservations and serial integration
 

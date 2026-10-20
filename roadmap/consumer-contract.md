@@ -156,6 +156,21 @@ Lane-wide rules (binding on every WO):
 - **Acceptance gate** — saved draft and published revision history resolves actor, tenant, before/after choices and inherited sources; the descriptor reproduces the archived artifact digest from pinned inputs or verifies the preserved artifact; live DB-to-SSR publication identifies the active revision; preview and publish agree on the same immutable candidate; no output under an old pointer changes during style upgrades; two concurrent publishes admit exactly one expected revision; simulated failure leaves the old active publication intact; cross-tenant and unauthorized writes/history reads fail; restore adds a revision and rejects currently forbidden choices by name; history/failed attempts remain distinct; descriptor schema and data handling reject secret/billing fields.
 - **Do NOT** — No full studio redesign or app-evnto/platform migration implied; do not let the DS query any database or port belonging to the app; do not reinterpret old CON signatures; do not present a hash DTO alone as the completed feature; no unsolicited migration for other apps.
 - **Size** — L.
+- **AMENDMENT (2026-10-20, traceability of the DS and consumer obligations; outcome, steps, dependencies and acceptance gate above are unchanged and close only together)** — This WO is split for traceability:
+  - **DS portion (step 1):** the revision/provenance descriptor and its validation under the CON-05 protocol, with the shared-core review. Existing building blocks such as `TenantThemeArtifact` (`compilerVersion`, `verticalEnvelopeDigest`, `digest`, `rowVersion`, `provenance`) and the `DecisionProvenanceLedger` are reusable only if a read-only mapping proves each step-1 clause from source and tests. That mapping is unverified.
+  - **Consumer portion (steps 2–3):** app-bithire persistence, history, CAS publication and restore, under D-31.
+  - **Step 4:** the re-certification over WO-CON-06 and WO-ARC-21.
+
+  The registry edge to WO-ARC-21 stays, so this WO is not claimable today. No implementation or claim happens while that edge persists. The DS portion is DS scope (milestone M-DS1 (e)), not downstream.
+
+  The proposed resequencing is item 5 of decision G-1 in [`proposals.md`](./proposals.md#g-ds-first-framing-decisions-queued-2026-10-20-pending-owner-review). It is conditional on an independently reviewed debrief that resolves its questions q1–q3. If they are not resolved, this WO stays as it is.
+
+  Its mechanism, `claimDependsOn`, would work as follows:
+  - it is allow-listed for this WO only and carries the owner-decision reference;
+  - `check()` refuses it elsewhere and requires a strict acyclic subset of `dependsOn`;
+  - it is never consulted by `done`.
+
+  Even after approval, no claim, step-1 implementation or adoption happens until that future lot lands and the CON-05 core review accepts. The full `dependsOn` (WO-ARC-21 included), the consumer stages and every existing technical guard stay for steps 2–4 and for whole-WO closure. Governing order: [owner order 2026-10-20](./README.md#owner-order--2026-10-20-canonical-record).
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system` on main, execute WO-CON-08 (Tenant revision history and atomic publication): read the current execution policy in `roadmap/README.md`, this complete WO block in `roadmap/consumer-contract.md` (also returned by `show WO-CON-08`), and `evidence/style-history-roadmap-review/index.md`. The lane block is the executable spec; proposals.md is historical. Respect registry dependencies and declare the DS/app-bithire write sets; adopt the contract before adapter integration; finish only when the acceptance gate passes; report focused checks and their outputs. Do not contact Codex.
 
 ### WO-CON-09 4.0 adoption: consumers migrate legacy sync SSR to renderResolvedStaticMarkup

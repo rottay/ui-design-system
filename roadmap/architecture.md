@@ -507,6 +507,23 @@ apps see zero API change through `createEngineComponent`.
 - **Execution control** — Rollback: Revert the pass-through attribute honesty commits; the W1 stampDataPart evidence and decrease-only gates preserve prior behavior. Disable: Keep the law dark behind the existing W1 entrypoints until the phase-1 cascade opens. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
 - **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
 - **Size** — S.
+- **AMENDMENT (2026-10-20, effort forecast only; outcome, steps, acceptance gate, dependencies, phase and source ID above are unchanged)** — The `S` above is a stale forecast and stays visible for audit. In practice this WO became the carriers M-P3 chain, with 53 `progressLog` entries since the 2026-10-08 claim (entry 53 records LC6, integrated at `f85e7531b`). The integrated Wave C commits are listed in the [DS-first reconciliation](./README.md#ds-first-reconciliation-of-the-29-open-work-orders--2026-10-20).
+
+  Before the strip, 16 named packets remain:
+  - FU-F11R, PM-P14, LC14, LC12;
+  - LX1, LX2, LX3, LX4;
+  - FU-LC1B, FU-LC8A, FU-F11V, FU-9A, FU-9B, FU-8A, FU-F11C, FU-F11K.
+
+  After them come the caller data-state mapping before the strip (owner 2026-10-17), the strip, dead-arm certification, and the final pinned full-suite, browser and sighted certification.
+
+  **Current forecast: XL.**
+  - At least 16 lots, or 14 if owner/DT decision D5 of 2026-10-17 merges LX1/LX3/LX4 into one pass.
+  - Up to about 24 lots. The historical cut through `f85e7531b` shows 7 of the 14 integrated Wave C lots spawned an extra reader or pin migration or a follow-up (LC1, LC2, LC5, LC6, LC7, LC8, LC10, per the operational record).
+  - Plus those four windows.
+  - Further discovery cannot be counted in advance.
+  - No dates.
+
+  The registry `size` field has no official mutator and is not hand-edited. Its forecast is recorded by this amendment plus one official `progress WO-ARC-12` entry made by the DT after review. Governing order: [owner order 2026-10-20](./README.md#owner-order--2026-10-20-canonical-record). This amendment adds no ARC-12 scope.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, certify the pass-through attribute honesty law (DS-IMP-015) against the landed W1 evidence (stampDataPart across classic/modern/rustic). Prove the data-part honesty gate green on all engines, classic byte-identical, and record the closing evidence. Fences: edit-only, no commits, never git-restore directories.
 
 ### WO-ARC-13 Certified cascade order graph
@@ -551,6 +568,17 @@ apps see zero API change through `createEngineComponent`.
 - **Execution control** — Rollback: Revert the app-side TenantThemeConfig plumb per app; the DS schema and compiler stay on the certified static path. Disable: Disable the DB-to-first-paint TenantThemeConfig round-trip per vertical app until the W4 exit cert passes. Telemetry: gate results for the WO acceptance and counter deltas in engine-token-audit. Stop if any decrease-only counter regresses or the acceptance gate cannot pass without weakening a floor.
 - **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
 - **Size** — L.
+- **AMENDMENT (2026-10-20, traceability only; the acceptance above is unchanged and no DS fixture discharges it)** — This WO is split for traceability:
+  - **DS portion:** the preparation landed in `00a86aab0`, independently reviewed (progress entry 1). It covers the row-bytes DB leg, the showroom first-paint probe, and the frozen per-app probe contract at `packages/core/docs/consumer-contract/migration/db-first-paint-probe/`.
+  - **Downstream portion:** the app-side DB-write-to-SSR-first-paint proof (app-bithire under D-31) plus the W4 exit cert. The [binding owner sequence of 2026-10-20](./README.md#owner-order--2026-10-20-canonical-record) defers it to the application stage.
+
+  As a phase-1 authority, this WO blocks phase 2A. The recommended resolution queued as G-1 in [`proposals.md`](./proposals.md#g-ds-first-framing-decisions-queued-2026-10-20-pending-owner-review) is an owner-approved DS-first wave mapping that moves DS-IMP-061 and this WO from phase 1 to phase 6. It would do so in one reviewed code-and-registry lot, with a pin that admits only that move and a re-sealed fingerprint.
+
+  Under that mapping this WO would:
+  - stay in progress and keep this acceptance and every technical precondition;
+  - reach `done` only in the phase-6 window, because `done` consults its phase, and before WO-GAT-09.
+
+  Nothing is moved by this amendment.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system` plus the vertical apps, prove the DB TenantThemeConfig round-trip (DS-IMP-061) from DB write to first paint per app, keeping schema/compiler ownership in the DS and plumb in the apps. Gate: round-trip proven per app, DS never reads the DB, W4 exit cert green, phase-1 pin holds. Fences: edit-only, no commits, never git-restore directories.
 
 ### WO-ARC-22 Chrome-less variants of the canonical controls (proposal E-1)

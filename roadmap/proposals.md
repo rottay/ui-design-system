@@ -1,5 +1,8 @@
 # DS Improvement Proposals — Owner Review Inbox
 
+- **Open (2026-10-20)**: [§G](#g-ds-first-framing-decisions-queued-2026-10-20-pending-owner-review)
+  holds the DS-first framing decisions queued by the 2026-10-20 reconciliation and pending owner
+  review. G-1 (the DS-first wave mapping) blocks phases 2A–6. The bullet below describes the 2026-09-20 state.
 - **Current inbox**: the three owner-approved style/history packets were transferred
   to their lane specifications and registered by the sole DT on 2026-09-20 in
   `3084dc0d5` (161 -> 164 WOs). Nothing in this queue awaits registration or another
@@ -1612,3 +1615,228 @@ values, all sizes, RTL/LTR, breakpoints; F-C/C-bis as REAL contrast repairs, nev
 hiding a defect — SENT and Streaming ride the bounded frozen a11y exception with exact selectors
 registered in the freeze gate, and the modern Select-success and Toggle-checked repairs are
 authorized outright. F-D executed and landed 2026-10-05 (6162bacd9).
+
+## G. DS-first framing decisions queued 2026-10-20, pending owner review
+
+Queued by the one DS-first reconciliation of the
+[owner order of 2026-10-20](./README.md#owner-order--2026-10-20-canonical-record).
+That order authorizes preparing and processing the framing. It does not authorize
+applying it, a GO, a freeze exception or an application write. These are
+decisions, not work. Nothing here opens a phase, changes the fingerprint, records
+an `ownerGo`, claims a work order or changes a denominator. Only the sole DT
+records an answer, after independent review, through the mechanism named in each
+item. Evidence:
+[reconciliation and phase barrier](./README.md#ds-first-reconciliation-of-the-29-open-work-orders--2026-10-20).
+
+### G-1 — DS-first wave mapping (blocking; owner approval of an adjudicated-invariant change)
+
+**Facts (`c54ec1777`; `scripts/maintain/roadmap/status/index.mjs` at HEAD):**
+- Phase 2A opens only when every phase-1 execute authority is done. Those
+  authorities are WO-ARC-12 and WO-ARC-21.
+- The DS-IMP-061 pin (`:2198–2201`) admits only phase 1, as execute or as a
+  deferred target. A registry-only or deferred route is therefore not lawful.
+- Any change to the fingerprint is refused without an owner-approved wave-mapping
+  update (`:2075–2079`).
+- `done` runs `phaseClaimBlocker` (`validateDoneTransition` `:2648`).
+- `validateGat09CompletionBarrier` (`:2612`) requires every other execute
+  authority to be done.
+- WO-ARC-21's acceptance is application-side, and the binding sequence defers
+  applications.
+
+**Recommended route 1 — one reviewed code-and-registry lot, prepared only after
+approval:**
+1. **Pin.** Replace the phase-1-only check with a strict rule. It admits DS-IMP-061
+   as execute in phase `1`, or in phase `6` only with authority `WO-ARC-21`,
+   plus the existing deferred-to-`1` fixture form. It refuses every other phase,
+   authority or deferred target.
+2. **Registry.** Set `phase` `1` → `6` on the DS-IMP-061 item and on WO-ARC-21
+   (both are fingerprinted, and `:2159` requires them to match). Nothing else on
+   WO-ARC-21 changes: status, claim, `progressLog`, dependencies, acceptance and
+   the D-31 scope. The later-phase dependency rule (`:2397–2407`) is satisfied:
+   WO-ARC-21 depends on phase-0 WO-GAT-05/06 and on non-mapped WO-CON-04, and its
+   only dependent, WO-CON-08, is not a mapped WO.
+3. **Seal.** Re-seal `DS_IMPROVEMENTS_PLAN_SHA256` with the dated
+   "Owner-approved wave mapping update" comment.
+4. **Tests.** Negative tests prove all of the following:
+   - the pin refuses phases 2A–5, another authority and a deferred target 6;
+   - WO-ARC-21 `done` is refused while phase 6 is locked;
+   - opening 2A still needs WO-ARC-12 done plus 2A's own structured `ownerGo`;
+   - the GAT-09 barrier still refuses while WO-ARC-21 is open.
+5. **WO-CON-08 resequencing (conditional).** This item is a proposal only.
+   - **Condition.** It takes effect only if an independently reviewed technical
+     debrief resolves q1–q3 below. If they stay unresolved, WO-CON-08 stays as it
+     is, its registry edge to WO-ARC-21 keeps blocking the claim, and M-DS1 (e)
+     stays blocked. Nothing is implemented now.
+   - **Mechanism, if resolved: `claimDependsOn`.** It is a strict subset of
+     `dependsOn` and must be acyclic.
+     - `check()` refuses it on any work order other than the explicit allow-list
+       `[WO-CON-08]`, and that entry must carry the reference to this owner decision.
+     - Only `claim`, `next` and `actionable` read it. `done` never reads it: the
+       unchanged `validateDoneTransition` keeps requiring the full `dependsOn`,
+       WO-ARC-21 included.
+     - WO-CON-08 would get `claimDependsOn` `[WO-CAT-04, WO-EMI-02, WO-CON-06]`.
+       Its `dependsOn`, steps, consumer stages (steps 2–4 with app-bithire under
+       D-31, step 4's re-certification over WO-ARC-21) and every existing
+       technical guard stay unchanged. A lane consumer-stage guard adds that steps
+       2–4 are not dispatched before WO-ARC-21 is done.
+     - The `rules.claim_requires` text is updated in the same lot. WO-CON-08 is
+       not a mapped WO, so the plan fingerprint is unchanged.
+   - **No authorization by approval.** Approving this item does not authorize
+     claiming WO-CON-08, implementing its step 1 or adopting any descriptor. Each
+     of those waits until the future reviewed code-and-registry lot has landed and
+     the CON-05 shared-core review has accepted the step-1 debrief.
+   - **Questions the debrief must resolve:**
+     - (q1) The mutator has no per-step state, so the consumer-stage guard would be
+       a DT dispatch rule plus the `done` barrier, not mechanical. A mechanical
+       guard would need new state, which is out of scope.
+     - (q2) The exact `check()` refusals: not a subset, a cycle, a WO outside the
+       allow-list, or a missing decision reference.
+     - (q3) The STATUS "Next up" semantics.
+
+     Any of q1–q3 left unresolved keeps M-DS1 (e) blocked. Nothing is hidden as
+     downstream.
+6. **DS-scoped certifier mode for M-DS2 (design only).** Today
+   `claim-integrity:structural` runs no executable evidence, and the final mode
+   executes evidence only after the registry barrier clears. A DS-scoped mode does
+   not exist.
+   - **What this decision authorizes:** only a design debrief with independent
+     review. The implementation is a separate future reviewed source lot by the
+     gate owner, not approved by this mapping.
+   - **Design boundaries that the review must hold:**
+     - **Closed exclusion list.** The list is fixed by name in the reviewed design
+       and contains only these downstream portions:
+       - WO-ARC-21's application half;
+       - WO-CON-08 steps 2–4;
+       - WO-CON-09 step 3;
+       - WO-RET-06's `./styles/rottay` consumer;
+       - WO-RET-07 step 3 (the owner/ops migration);
+       - WO-CRA-15's app-platform route exposure;
+       - WO-DER-10;
+       - WO-GAT-09 itself.
+     - **No other exclusion.** Every other execute authority must be done. Any
+       other open authority FAILS the run; there is no "every open authority"
+       exclusion.
+     - **Partial exclusion of a mixed WO.** Excluding a downstream portion never
+       waives that WO's DS clauses. The run must still pass, by evidence:
+       - WO-ARC-21's DS preparation;
+       - WO-CON-08 step 1;
+       - WO-CON-09 step 2;
+       - WO-RET-06's DS items;
+       - WO-RET-07 step 2;
+       - WO-CRA-15's DS acceptance.
+
+       If the design cannot bind an excluded portion to its exact clause, that WO
+       is not excluded and the run fails.
+     - **Real gates.** Both static and executable evidence run, twice.
+       `completionEligible` stays false, and no final WO-GAT-09 artifact is written.
+     - **Never a closure.** It is never WO-GAT-09 completion and never a 170
+       certification.
+
+**Foreign WIP:** `scripts/maintain/roadmap/status/index.mjs` carries foreign WIP
+(sha256 `9038c72b5aa852a580c3c40077e24e8bc434a2464abc2dcf7caa397baa5a768a`, one
+of the ten paths in `migration-state.json`).
+- Its hunks start at HEAD lines 76, 133, 719, 759, 1249, 1904–1929 and 2241.
+- The re-seal at `:129` sits next to the foreign `:133` hunk.
+- The pin (`:2198–2201`), `REGISTRY_WORK_ORDER_KEYS` (`:994`) and claim
+  (`:3828`) are disjoint from it.
+
+The future lot is built from HEAD blobs and applied as disjoint hunks, with no
+staging of foreign hunks and the foreign hash verified unchanged, or it waits for
+that WIP's owner. This is not part of this draft.
+
+**Exact decision text proposed to the owner:**
+> "Apruebo únicamente el mapeo DS-first del roadmap del DS. DS-IMP-061 y WO-ARC-21
+> pasan de la fase 1 a la fase 6 en un único lote futuro revisado de código y
+> registro, con un pin estricto que admite sólo ese movimiento, la huella re-sellada y
+> pruebas negativas.
+>
+> Sobre WO-CON-08: la re-secuenciación por etapas (G-1 ítem 5) queda sujeta a un
+> debrief técnico revisado de forma independiente que resuelva q1–q3. Si no se
+> resuelven, WO-CON-08 queda como está y M-DS1(e) bloqueado. Aun resuelta, esta
+> aprobación no autoriza reclamar WO-CON-08 ni implementar o adoptar su paso 1 hasta
+> que ese lote futuro aterrice y la revisión core de CON-05 lo acepte. Su cierre sigue
+> exigiendo WO-ARC-21 terminada.
+>
+> Sobre el modo DS-scoped del certificador GAT-09 (G-1 ítem 6): autorizo sólo un
+> debrief de diseño con revisión independiente. Su implementación es un lote de
+> fuente futuro y separado, no aprobado por este mapeo, y nunca cierra GAT-09.
+>
+> WO-ARC-21 sigue en progreso con su aceptación íntegra y sus precondiciones técnicas.
+> Esto no es un GO de fase, ni una excepción de freeze, ni una autorización de
+> escritura en apps o base de datos. Cada fase posterior requiere su propio ownerGo
+> estructurado."
+
+**Route 2 (NOT recommended; it needs an explicit owner EXCEPTION to the binding
+sequence):** authorize a bounded app-bithire WO-ARC-21 packet now, on the frozen
+probe contract.
+
+**Route 3 (keep the barrier). Full consequence:**
+- Phases 2A–6 stay locked until the application stage. That keeps 20
+  DS-improvements WOs, WO-CON-08, WO-RET-06's role and icon-role items and WO-GAT-09
+  open.
+- M-DS1 and M-DS2 cannot be reached before applications.
+- The counter can move only through WO-ARC-12, WO-EVI-02, WO-RET-04, WO-RET-06
+  (in part), WO-RET-07 step 2 and WO-CON-09 step 2.
+
+**Not lawful under any route:** a registry-only or deferred route, a GO with an
+open earlier authority, a hand-edited `claimState`, or closing WO-ARC-21 on DS
+fixtures.
+
+**Meanwhile:** WO-ARC-12 and every other lawful front continue. Even under route 1,
+every later phase needs its own `ownerGo`. The WO-CRA-15/WO-CRA-17 app-scope
+checks run before 2B/2C. If either acceptance needs app-side evidence, that portion
+can be traced downstream only by an explicit owner decision. Otherwise M-DS1 stays
+NOT REACHED; there is no silent cut.
+
+### G-2 — withdrawn in r2
+
+The theme scope is not an owner decision. The 4–5 M-DS2 themes are a
+DT-recorded test-configuration determination under D-24: Modern × bithire, same
+vertical, provisional and never a final identity. A D-24 amendment would be
+needed only if the themes really had to span evnto/rottay.
+
+### G-3 — ARC-16 / CRA-19 punctual authorization (owner 2026-10-17: "ready text and exclusive scope")
+
+- **The only official door is the phase `ownerGo`.** Opening 2A makes every 2A
+  WO claimable (ARC-16, ARC-17, ARC-20, TOK-11). Exclusivity is therefore a DT
+  dispatch scope, not a mechanical one.
+- **Preconditions for 2A:** WO-ARC-12 done, and G-1 route 1 landed (or WO-ARC-21
+  done).
+- **CRA-19 (2B)** additionally needs every 2A authority done. TOK-11 depends on
+  EVI-02.
+
+Ready `ownerGo` evidence text for 2A, to be filled when eligible. It avoids the
+negative-GO wording that the checker regex refuses:
+> "Owner GO phase 2A on <date>: verified phase-1 checkpoint (WO-ARC-12 done
+> <commit>; DS-IMP-061 mapped to phase 6 at <commit>), independent checkpoint
+> acceptance <ref>. Dispatch scope: receiver reconciliation of WO-ARC-16 (RET-01
+> eaeb1448b) and WO-ARC-20 (FAM-11), and WO-ARC-17 and WO-TOK-11 by their own
+> acceptance."
+
+The 2B text follows the same form, for WO-CRA-19 (CAN-05).
+
+### G-4 — theme-graph size (repair first)
+
+The graph measures 9.74 MB against the unchanged `SIZE_BUDGET_BYTES` 10,145,097
+(9.68 MB), already 9.73 MB before LC5. It is red and blocks M-DS1.
+- First path: legitimate repair, attempted and measured in the WO-ARC-12 strip
+  window.
+- A budget change is never the default. It is considered only if no legitimate
+  repair preserves capability, and only through the proper authority's reviewed
+  decision.
+- Never re-pin to pass.
+
+### G-5 — paused capabilities inside phase-locked acceptances (conditional, at phase opening)
+
+WO-ENG-25's AI state-motion kit and WO-CRA-15's DS-IMP-107 WebGPU parity have no
+productive consumer (D-19). Each needs delivery or a dated disposition when its
+phase opens. A disposition is never presented as delivered capability.
+
+### G-6 — RET-04 final D-21 move (verify first)
+
+Oct-17 D3/D4 is decided and not reopened. The DT first checks whether the
+WO-RET-04 2026-09-20 owner amendment already covers the single final move. The
+item is queued for the owner only if an uncovered GO really remains.
+
+**Status** — QUEUED 2026-10-20, unanswered. G-1 is the only item that blocks
+work orders today. G-2 is withdrawn.
