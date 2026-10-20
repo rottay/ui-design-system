@@ -73012,6 +73012,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   --ds-header-icon-tone-fg: var(--ds-header-tone-primary-fg, color-mix(in srgb, var(--ds-color-primary) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='success'],
+.ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='success'],
 .ds-structure.ds-form-header [data-part='icon-badge'][data-variant='success'],
 .ds-structure.ds-form-header .ds-edit-header__icon-badge[data-variant='success'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-success-bg, color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-color-bg-secondary) 90%));
@@ -73036,7 +73037,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 /* `error` is EditHeader's alone. FormHeader's `colorVariant` does not admit it, so a
    `.ds-form-header` arm here would be paint for a stamp that family cannot make. */
-.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='error'] {
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='error'],
+.ds-structure.ds-edit-header .ds-edit-header__icon-badge[data-variant='error'] {
   --ds-header-icon-tone-bg: var(--ds-header-tone-error-bg, color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-header-icon-tone-bd: var(--ds-header-tone-error-bd, color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%));
   --ds-header-icon-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
@@ -73092,6 +73094,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    renders the `a:focus-visible` arm unchanged. */
 .ds-structure.ds-edit-header [data-part='back-button'][data-state~='focus-visible'],
 .ds-structure.ds-form-header [data-part='back-button'][data-state~='focus-visible'],
+.ds-structure.ds-form-header .ds-edit-header__back-button[data-state~='focus-visible'],
 .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
 .ds-structure.ds-edit-header a:focus-visible .ds-edit-header__back-chip,
 .ds-structure.ds-form-header a:focus-visible [data-part='back-button'],
@@ -73476,12 +73479,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   --ds-edit-header-status-tone-bd: var(--ds-header-tone-warning-bd, color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%));
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-warning-fg, color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%));
 }
-.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='info'] {
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='info'],
+.ds-structure.ds-edit-header .ds-edit-header__status-pill[data-variant='info'] {
   --ds-edit-header-status-tone-bg: var(--ds-header-tone-info-bg, color-mix(in srgb, var(--ds-color-info) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-edit-header-status-tone-bd: var(--ds-header-tone-info-bd, color-mix(in srgb, var(--ds-color-info) 18%, var(--ds-color-border-secondary) 82%));
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-info-fg, color-mix(in srgb, var(--ds-color-info) 78%, var(--ds-color-text-primary) 22%));
 }
-.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='error'] {
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='error'],
+.ds-structure.ds-edit-header .ds-edit-header__status-pill[data-variant='error'] {
   --ds-edit-header-status-tone-bg: var(--ds-header-tone-error-bg, color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-edit-header-status-tone-bd: var(--ds-header-tone-error-bd, color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%));
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));

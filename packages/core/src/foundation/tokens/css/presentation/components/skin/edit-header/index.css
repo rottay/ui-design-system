@@ -334,12 +334,14 @@
   --ds-edit-header-status-tone-bd: var(--ds-header-tone-warning-bd, color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%));
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-warning-fg, color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%));
 }
-.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='info'] {
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='info'],
+.ds-structure.ds-edit-header .ds-edit-header__status-pill[data-variant='info'] {
   --ds-edit-header-status-tone-bg: var(--ds-header-tone-info-bg, color-mix(in srgb, var(--ds-color-info) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-edit-header-status-tone-bd: var(--ds-header-tone-info-bd, color-mix(in srgb, var(--ds-color-info) 18%, var(--ds-color-border-secondary) 82%));
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-info-fg, color-mix(in srgb, var(--ds-color-info) 78%, var(--ds-color-text-primary) 22%));
 }
-.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='error'] {
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='error'],
+.ds-structure.ds-edit-header .ds-edit-header__status-pill[data-variant='error'] {
   --ds-edit-header-status-tone-bg: var(--ds-header-tone-error-bg, color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-color-bg-secondary) 90%));
   --ds-edit-header-status-tone-bd: var(--ds-header-tone-error-bd, color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%));
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
