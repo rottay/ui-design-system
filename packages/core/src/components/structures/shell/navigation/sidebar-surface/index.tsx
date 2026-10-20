@@ -84,7 +84,7 @@ export function SidebarSurface({ config, adapt }: SidebarSurfaceProps): React.Re
   return (
     <Box
       ref={setRootElement}
-      className="ds-structure ds-sidebar-surface"
+      className="ds-structure ds-sidebar-surface ds-sidebar-surface__root"
       data-part="root"
       data-collapsed={collapsed ? 'true' : 'false'}
       data-stacked={adaptation.stacked ? 'true' : 'false'}
@@ -95,7 +95,7 @@ export function SidebarSurface({ config, adapt }: SidebarSurfaceProps): React.Re
     >
       <Card className="ds-sidebar-surface-panel" variant="outlined">
         <Card.Body>
-          <Box data-part="panel-body">
+          <Box data-part="panel-body" className="ds-sidebar-surface__panel-body">
             {config.visual.collapsible && (
               <Button
                 className="ds-sidebar-surface-toggle"
@@ -114,7 +114,7 @@ export function SidebarSurface({ config, adapt }: SidebarSurfaceProps): React.Re
               </Button>
             )}
 
-            <Box as="nav" id={navigationId} data-part="navigation">
+            <Box as="nav" id={navigationId} data-part="navigation" className="ds-sidebar-surface__navigation">
               {config.presentation.sidebar}
             </Box>
             <SurfaceActionBar
@@ -127,7 +127,7 @@ export function SidebarSurface({ config, adapt }: SidebarSurfaceProps): React.Re
         </Card.Body>
       </Card>
 
-      <Box data-part="main">
+      <Box data-part="main" className="ds-sidebar-surface__main">
         {config.presentation.header}
         <Box>{config.presentation.content}</Box>
       </Box>
