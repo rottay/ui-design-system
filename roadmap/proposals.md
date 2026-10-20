@@ -1,8 +1,10 @@
 # DS Improvement Proposals — Owner Review Inbox
 
 - **Open (2026-10-20)**: [§G](#g-ds-first-framing-decisions-queued-2026-10-20-pending-owner-review)
-  holds the DS-first framing decisions queued by the 2026-10-20 reconciliation and pending owner
-  review. G-1 (the DS-first wave mapping) blocks phases 2A–6. The bullet below describes the 2026-09-20 state.
+  holds the DS-first framing decisions queued by the 2026-10-20 reconciliation. G-1 and G-7 were answered on
+  2026-10-20 ([owner decision](#owner-decision-on-g-1-and-g-7--2026-10-20-approved-bounded)); G-3 to G-6 remain
+  pending owner review. Phases 2A–6 stay locked until the approved G-1 mapping lot lands and each phase has its own
+  `ownerGo`. The bullet below describes the 2026-09-20 state.
 - **Current inbox**: the three owner-approved style/history packets were transferred
   to their lane specifications and registered by the sole DT on 2026-09-20 in
   `3084dc0d5` (161 -> 164 WOs). Nothing in this queue awaits registration or another
@@ -1628,7 +1630,16 @@ records an answer, after independent review, through the mechanism named in each
 item. Evidence:
 [reconciliation and phase barrier](./README.md#ds-first-reconciliation-of-the-29-open-work-orders--2026-10-20).
 
+**Answered 2026-10-20:** G-1 and G-7 are approved, bounded; the one record is
+[Owner decision on G-1 and G-7](#owner-decision-on-g-1-and-g-7--2026-10-20-approved-bounded).
+This heading is kept so existing links resolve. G-2 to G-6 are unchanged.
+
 ### G-1 — DS-first wave mapping (blocking; owner approval of an adjudicated-invariant change)
+
+**Status:** APPROVED 2026-10-20, route 1 only, under the conditions of the
+[owner decision](#owner-decision-on-g-1-and-g-7--2026-10-20-approved-bounded). The
+text below is the question as queued. Routes 2 and 3 and the proposed decision
+text are historical, not open alternatives.
 
 **Facts (`c54ec1777`; `scripts/maintain/roadmap/status/index.mjs` at HEAD):**
 - Phase 2A opens only when every phase-1 execute authority is done. Those
@@ -1840,6 +1851,11 @@ item is queued for the owner only if an uncovered GO really remains.
 
 ### G-7 — Typography population pin 184 -> 185 (WO-EVI-02, one named entrant; exact scope)
 
+**Status:** APPROVED 2026-10-20, option A only, under the conditions of the
+[owner decision](#owner-decision-on-g-1-and-g-7--2026-10-20-approved-bounded). The
+text below is the question as queued. Option B is historical, not an open
+alternative.
+
 Question: Do you authorize, for this pin only, raising the theme-population typography pin from 184 to 185 to name
 notification-surface? It entered at 7fa45d371 (owner answer 4, D-4-PAGE-SHELL, 2026-10-14) by authoring its item
 title's font-family, font-size and font-weight from tenant channels. The roadmap applies the Oct-17 cut-1154 §2
@@ -1860,6 +1876,93 @@ B) NO, or not now — the typography floor stays RED and M-DS1 (i) stays blocked
 Not covered either way: any other axis or pin, the theme-graph budget, an exclusion or N/A, the reader, a phase GO,
 G-1, or WO completion.
 
-**Status** — QUEUED 2026-10-20, unanswered. G-1 affects phase eligibility;
-G-7 affects only the named typography outcome and M-DS1 (i). Neither answer
-is inferred. G-2 is withdrawn.
+### Owner decision on G-1 and G-7 — 2026-10-20 (approved, bounded)
+
+**Record.** The human owner approved G-1 and G-7 on 2026-10-20 (America/New_York)
+in a message delivered directly to the sole DT in its active conversation. Receipt:
+[`.tmp/ds-codex-admin-2026-10-20/OWNER-G1-G7-DECISION-20261020.txt`](/Users/daniel/Developer/Rottay/.tmp/ds-codex-admin-2026-10-20/OWNER-G1-G7-DECISION-20261020.txt) (sha256
+`facdfba6f65abc7463596914c51bccb5061cc482012842a2177d336832b9a41f`). The receipt
+identifies that message; there is no message URL and no auditor approval. The
+owner's words:
+> «Dale, aprobá G-1 y G-7 con esas condiciones y mandáselo vos al DT por tmux. Que
+> siga autónomo, paralelizando lo que corresponda y priorizando cerrar WOs sin
+> perder calidad.»
+
+This is the one canonical record of the decision. It answers G-1 and G-7 only, and
+neither is asked again. The broad sequence stays in the
+[README canonical record](./README.md#owner-order--2026-10-20-canonical-record);
+only this decision's delta is recorded here.
+
+**G-1 — approved, route 1 only.**
+- **Mapping.** DS-IMP-061 and WO-ARC-21 move from phase 1 to phase 6 in ONE future,
+  independently reviewed code-and-registry lot: a strict pin that admits only that
+  movement, the re-sealed fingerprint, and negative tests (G-1 items 1–4).
+- **Preserved.** WO-ARC-21 stays in progress with its full acceptance and its
+  technical dependencies. The global GAT-09 barrier stays. Unauthorized phases,
+  authorities and targets stay refused.
+- **Not granted.** No phase GO, freeze exception, app or DB write, `done`, deleted
+  obligation or publication. Each later phase needs its own structured `ownerGo`.
+- **Foreign WIP.** The roadmap code carries foreign WIP (G-1, "Foreign WIP"). The
+  lot changes only its own proven-disjoint hunks, with hashes, evidence and
+  independent review. Otherwise it coordinates with that WIP's owner and never
+  overwrites it.
+- **WO-CON-08 (item 5).** The staged resequencing stays conditional on an
+  independently reviewed technical debrief that resolves q1–q3. If they stay
+  unresolved, WO-CON-08 is unchanged and M-DS1 (e) stays blocked. Even if
+  resolved, there is no WO-CON-08 claim, step-1 implementation or adoption until
+  that future lot lands and the CON-05 core review accepts. Its closure still
+  requires WO-ARC-21 done.
+- **GAT-09 DS-scoped mode (item 6).** Only a design debrief plus independent review
+  is authorized. Its implementation is a future, separate source lot that this
+  mapping does not authorize, and it never closes WO-GAT-09.
+
+**G-7 — approved, option A only.**
+- **Exception.** One bounded exception to "no touching population for green":
+  typography 184 -> 185, solely for the real notification-surface entrant from the
+  authorized commit 7fa45d371.
+- **Not covered.** No hidden family, lowered percentage, byte budget, other axis or
+  pin, widened exclusion or N/A, changed reader, or indicator, WO or phase
+  certification.
+- **When.** After the FU-F11R integration and before fleet W-2.
+- **Stop rule.** All six sets are re-derived at the actual HEAD of that time. Any
+  additional membership delta STOPS this lot, preserving the useful capability and
+  the associated failure pending adjudication.
+- **Exact scope.** Only the typography 185 datum, the provenance
+  `membershipMoves.notificationSurfaceTitleRole` with an `authority` field citing
+  this decision, and the TWO live-derivation test literals 184 -> 185 with the
+  mover explanation.
+- **Landing.** Real pertinent tests, an independent candidate review and a local
+  functional commit by the sole DT.
+- **Graph.** Theme-graph 9.74 MB > 9.68 MB stays RED. It is not approved or
+  re-pinned (G-4 is unchanged).
+
+**Execution delta of the same message.** The README canonical record keeps the
+roles, the DS-first sequence and the mandatory robustness scope; these points are
+added:
+- One singleton checkpoint; no concurrent integration mutation on the same inputs.
+- Autonomous, finite, useful DAG parallelism: FU-F11R, then WO-ARC-12 and the real
+  WO-EVI-02 gaps, preferring genuine WO closures. No duplicate audits, heavy
+  receipts, copies or debrief loops. Out-of-scope material decisions are queued,
+  and no fictitious work is made when no lawful front exists.
+- Modern stays productive with the full cascade first, preserving the promised
+  legacy compatibility. The current contrasting cascade tests stay mandatory, with
+  lawful fingerprint reuse and no new test programme.
+- The mandatory now-tests are the beyond-palette contrasting cascade, nested scopes, portals, isolation, states,
+  responsive, SSR, accessibility and negative cases. Regressions are detected now, not deferred to the closing
+  audit. Independent semantic review, executable causal evidence and traceable decisions remain mandatory.
+- Before DS closure, an integral audit of the coherent accumulated
+  source/generated/dist candidate is required, and no blocking debt is omitted
+  because it is historical. Then 4–5 functionally contrasting themes and another
+  multi-theme audit; applications and final branding later.
+- Delivered-receiver reconciliations close only with their acceptance met and their
+  phase lawfully enabled. The 170 counter is unchanged and downstream stays visible.
+
+**What this record does not do.** It integrates neither the G-1 mapping nor the G-7
+data. It changes no registry, STATUS, source, pin, phase, `ownerGo`, fingerprint, WO status or denominator; the README
+receives only pointer updates to this record. Each lot above still needs its own
+independent review and DT commit.
+
+**Status** — G-1 and G-7 ANSWERED 2026-10-20 (approved, bounded, as recorded
+above); neither is asked again. Their historical alternatives (G-1 routes 2 and 3,
+G-7 option B) are not open questions and grant no automatic GO. G-2 is withdrawn.
+G-3 to G-6 are unchanged.
