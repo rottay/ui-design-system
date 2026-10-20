@@ -109,10 +109,13 @@ const writeRegistry = (dir, registry, name = 'exclusions.json') => {
   writeFileSync(path, JSON.stringify(registry, null, 2));
   return path;
 };
-const radiiOf = (file) => cssRules(readFileSync(file, 'utf8')).flatMap((rule) =>
-  rule.declarations
+const radiiOf = (file, entry = null) => cssRules(readFileSync(file, 'utf8')).flatMap((rule) => {
+  const reviewed = entry?.declarations.find((declaration) =>
+    Object.values(population.reviewedSelectorForms(declaration.selector, entry.family)).includes(rule.selector));
+  return rule.declarations
     .filter((declaration) => AXES.shape.authored.includes(declaration.property))
-    .map((declaration) => ({ context: rule.atRules, selector: rule.selector, property: declaration.property, value: declaration.value })));
+    .map((declaration) => ({ context: rule.atRules, selector: reviewed?.selector ?? rule.selector, property: declaration.property, value: declaration.value }));
+});
 const CIRCLE_RULE = /\.ds-radio\.ds-radio--modern \[data-part='circle'\] \{[^}]*\}/u;
 const ROOT_RULE = /\.ds-radio\.ds-radio--modern\[data-part='root'\] \{[^}]*\}/u;
 
@@ -774,7 +777,7 @@ describe('theme population — the reviewed table-toolbar divider exclusion on s
     const reviewed = entry();
     assert.equal(reviewed.skin, TABLE_TOOLBAR_SKIN);
     assert.equal(reviewed.reviewedAt.commit, '14f368b50');
-    assert.deepEqual(radiiOf(join(ROOT, reviewed.skin)), reviewed.declarations);
+    assert.deepEqual(radiiOf(join(ROOT, reviewed.skin), reviewed), reviewed.declarations);
     assert.deepEqual(reviewed.declarations, [{ context: [], selector: DIVIDER, property: 'border-radius', value: '1px' }]);
     const declared = familyAxisDeclarations().get('table-toolbar');
     assert.ok(!declared.axes.shape, 'table-toolbar leaves shape');
@@ -784,7 +787,8 @@ describe('theme population — the reviewed table-toolbar divider exclusion on s
   });
 
   it('G1: the reviewed rule authors inline-size 2px beside border-radius 1px, and the selector\'s at-rule variants declare no shape longhand and no inline-size', () => {
-    const rules = cssRules(readFileSync(join(ROOT, TABLE_TOOLBAR_SKIN), 'utf8')).filter((rule) => rule.selector === DIVIDER);
+    const forms = Object.values(population.reviewedSelectorForms(DIVIDER, 'table-toolbar'));
+    const rules = cssRules(readFileSync(join(ROOT, TABLE_TOOLBAR_SKIN), 'utf8')).filter((rule) => forms.includes(rule.selector));
     const premise = 'the table-toolbar exclusion rests on 1px being half the 2px stroke; a box change returns the entry to review';
     assert.deepEqual(rules.map((rule) => rule.atRules), [[], ['@container ds-table-toolbar (max-width: 40rem)'], ['@media (forced-colors: active)']], premise);
     const [reviewed, ...variants] = rules;
@@ -795,6 +799,278 @@ describe('theme population — the reviewed table-toolbar divider exclusion on s
       assert.ok(!variant.declarations.some((declaration) => AXES.shape.authored.includes(declaration.property) || declaration.property === 'inline-size'),
         `${variant.atRules.join(' ')}: ${premise}`);
     }
+  });
+});
+
+describe('theme population — the reviewed declaration keeps its identity across the carrier class door (PM-P14)', () => {
+  const TT = `${AGNOSTIC_ROOT}/table-toolbar/index.css`;
+  const S = ".ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider']";
+  const C = '.ds-structure.ds-table-toolbar .ds-table-toolbar__divider.ds-table-toolbar__divider';
+  const CONTEXTS = [[], ['@container ds-table-toolbar (max-width: 40rem)'], ['@media (forced-colors: active)']];
+  const ALL_CONTEXTS = '[], [@container ds-table-toolbar (max-width: 40rem)], [@media (forced-colors: active)]';
+  const DIVIDER_RULE = /^([ \t]*)\.ds-structure\.ds-table-toolbar \.ds-table-toolbar__divider\[data-part='divider'\] \{/gmu;
+  const formsOf = (selector, family = 'table-toolbar') => population.reviewedSelectorForms(selector, family);
+  const entryIndex = () => readExclusions().entries.findIndex((entry) => entry.family === 'table-toolbar');
+  const label = () => `entry ${entryIndex()} (table-toolbar/shape): `;
+  const notAuthored = (selector = S) => `${label()}selector not authored in ${TT} (comments removed): ${selector}`;
+  const stale = (contexts) => `${label()}STALE — ${TT} no longer authors [] ${S} { border-radius: 1px } verbatim (the selector is authored `
+    + `under ${contexts}); the family has re-entered shape and the entry must be re-reviewed or removed`;
+  const measure = (dir) => ({
+    floor: checkPopulationFloor(dir, catalogIn(dir)).failures,
+    pilot: checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN).failures,
+    registry: checkExclusionRegistry(dir).failures,
+    shape: populationReport(dir, catalogIn(dir)).axes.find((entry) => entry.axis === 'shape'),
+    record: familyAxisDeclarations(dir, catalogIn(dir)).get('table-toolbar'),
+  });
+  let head;
+  const headOf = () => (head ??= measure(sandbox()));
+  const delta = (after, before) => {
+    const rest = [...after];
+    for (const line of before) {
+      const at = rest.indexOf(line);
+      assert.ok(at >= 0, `a line of the paired HEAD sandbox is gone: ${line}`);
+      rest.splice(at, 1);
+    }
+    return rest.sort();
+  };
+  const reentered = () => {
+    const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
+    const base = headOf();
+    assert.ok(!base.floor.some((line) => line.startsWith('shape:')), 'the paired HEAD sandbox reads shape at its pin');
+    return [
+      `shape: denominator ${base.shape.denominator + 1} is ABOVE its pin ${floor.axes.shape} — raise the pin in this commit so `
+        + 'the published population and the floor keep naming the same set',
+      `shape: ${base.shape.notApplicableCount - 1} famil(ies) not applicable != pinned ${floor.notApplicable.shape} — a reviewed `
+        + 'exclusion is published beside the denominator it subtracts from; re-pin both in the same commit with the review',
+    ];
+  };
+  const arm = (prelude, edit = null, setup = () => {}) => {
+    const dir = sandbox();
+    const file = join(dir, TT);
+    let count = 0;
+    const armed = readFileSync(file, 'utf8').replace(DIVIDER_RULE, (_match, indent) => {
+      count += 1;
+      return `${indent}${prelude(indent)} {`;
+    });
+    assert.equal(count, 3, 'the three reviewed divider rules are armed');
+    const edited = edit === null ? armed : edit(armed);
+    if (edit !== null) assert.notEqual(edited, armed, 'the mutation must reach the armed skin');
+    writeFileSync(file, edited);
+    setup(dir);
+    return { dir, measured: measure(dir) };
+  };
+  const pair = (indent) => `${S},\n${indent}${C}`;
+  const premiseOf = (dir) => {
+    const forms = Object.values(formsOf(S));
+    const rules = cssRules(readFileSync(join(dir, TT), 'utf8')).filter((rule) => forms.includes(rule.selector));
+    const valueOf = (rule, property) => rule.declarations.filter((declaration) => declaration.property === property).map((declaration) => declaration.value);
+    return {
+      contexts: rules.map((rule) => rule.atRules),
+      width: valueOf(rules[0], 'inline-size'),
+      radius: valueOf(rules[0], 'border-radius'),
+      variantsClean: rules.slice(1).every((rule) => !rule.declarations.some((declaration) =>
+        AXES.shape.authored.includes(declaration.property) || declaration.property === 'inline-size')),
+    };
+  };
+  const kept = ({ dir, measured }, selector) => {
+    const base = headOf();
+    const entry = readExclusions().entries[entryIndex()];
+    assert.deepEqual(measured.registry, base.registry);
+    assert.deepEqual(measured.floor, base.floor);
+    assert.deepEqual(measured.pilot, base.pilot);
+    assert.deepEqual([measured.shape.denominator, measured.shape.notApplicable], [base.shape.denominator, base.shape.notApplicable]);
+    assert.equal(measured.record.axes.shape, undefined);
+    assert.equal(measured.record.notApplicable.shape.review, TT_REVIEW);
+    assert.deepEqual(measured.record.notApplicable.shape.excludedDeclarations.map((declaration) => [declaration.selector, declaration.context, declaration.value]),
+      [[selector, [], '1px']]);
+    assert.deepEqual(radiiOf(join(dir, TT), entry), entry.declarations);
+    assert.deepEqual(premiseOf(dir), { contexts: CONTEXTS, width: ['2px'], radius: ['1px'], variantsClean: true });
+  };
+  const refused = (measured, registryLine) => {
+    const base = headOf();
+    assert.deepEqual(delta(measured.registry, base.registry), [registryLine]);
+    assert.deepEqual(delta(measured.pilot, base.pilot), [`exclusion registry: ${registryLine}`]);
+    assert.deepEqual(delta(measured.floor, base.floor), [`exclusion registry: ${registryLine}`, ...reentered()].sort());
+    assert.deepEqual(measured.record.axes.shape?.properties, ['border-radius']);
+    assert.deepEqual(measured.record.notApplicable, {});
+  };
+  const unchangedGates = (measured) => {
+    const base = headOf();
+    assert.deepEqual([delta(measured.registry, base.registry), delta(measured.floor, base.floor), delta(measured.pilot, base.pilot)], [[], [], []]);
+  };
+
+  it('M01 HEAD identity: every reviewed byProperty declaration is authored only as its own selector and table-toolbar stays withdrawn from shape', () => {
+    for (const entry of readExclusions().entries.filter((candidate) => candidate.path === 'byProperty')) {
+      const selectors = cssRules(readFileSync(join(ROOT, entry.skin), 'utf8')).map((rule) => rule.selector);
+      for (const reviewed of entry.declarations) {
+        const forms = formsOf(reviewed.selector, entry.family);
+        assert.equal(forms.part, reviewed.selector);
+        assert.ok(selectors.includes(forms.part), forms.part);
+        assert.ok(forms.pair !== null && !selectors.includes(forms.pair) && !selectors.includes(forms.classOnly), `${forms.part}: no carrier form on HEAD`);
+      }
+    }
+    const declared = familyAxisDeclarations().get('table-toolbar');
+    assert.equal(declared.axes.shape, undefined);
+    assert.deepEqual(declared.notApplicable.shape.excludedDeclarations.map((declaration) => [declaration.selector, declaration.context, declaration.value]),
+      [[S, [], '1px']]);
+    assert.ok(populationReport().axes.find((entry) => entry.axis === 'shape').notApplicable.some((entry) => entry.family === 'table-toolbar'));
+  });
+
+  it('M02 form derivation: the seven reviewed selectors derive their exact carrier forms; every unsupported grammar derives none and its probe-style pair is not excluded', () => {
+    const CURRENT = [
+      [".ds-radio.ds-radio--modern [data-part='circle']", 'radio', '.ds-radio.ds-radio--modern .ds-radio__circle'],
+      [".ds-radio.ds-radio--modern [data-part='dot']", 'radio', '.ds-radio.ds-radio--modern .ds-radio__dot'],
+      [".ds-chart-line [data-part='legend-swatch']", 'chart-line', '.ds-chart-line .ds-chart-line__legend-swatch'],
+      [".ds-chart-line [data-part='skeleton-bar']", 'chart-line', '.ds-chart-line .ds-chart-line__skeleton-bar'],
+      [".ds-chart-pie [data-part='legend-swatch']", 'chart-pie', '.ds-chart-pie .ds-chart-pie__legend-swatch'],
+      [".ds-chart-pie [data-part='skeleton']::before", 'chart-pie', '.ds-chart-pie .ds-chart-pie__skeleton::before'],
+      [S, 'table-toolbar', C],
+    ];
+    for (const [selector, family, classOnly] of CURRENT) {
+      assert.deepEqual(formsOf(selector, family), { part: selector, pair: `${selector}, ${classOnly}`, classOnly }, selector);
+    }
+    const reviewedTexts = readExclusions().entries.flatMap((entry) => (entry.declarations ?? []).map((declaration) => declaration.selector));
+    assert.deepEqual([...reviewedTexts].sort(), CURRENT.map(([selector]) => selector).sort(), 'the seven reviewed selectors of the registry');
+    assert.deepEqual(formsOf('.ds-table-toolbar [data-part="a"]').classOnly, '.ds-table-toolbar .ds-table-toolbar__a');
+    const NEGATIVES = [
+      ['mixed exact + unquoted', ".ds-table-toolbar [data-part='a'] [data-part=b]", '.ds-table-toolbar .ds-table-toolbar__a [data-part=b]'],
+      ['unquoted', '.ds-table-toolbar [data-part=a]', null],
+      ['operator ~=', ".ds-table-toolbar [data-part~='a']", null],
+      ['functional :not part', ".ds-table-toolbar:not([data-part='x']) [data-part='a']", '.ds-table-toolbar:not(.ds-table-toolbar__x) .ds-table-toolbar__a'],
+      ['functional :is list', ".ds-table-toolbar :is([data-part='a'], [data-part='b'])", '.ds-table-toolbar :is(.ds-table-toolbar__a, .ds-table-toolbar__b)'],
+      ['top-level list', ".ds-table-toolbar [data-part='a'], .ds-table-toolbar [data-part='b']", '.ds-table-toolbar .ds-table-toolbar__a, .ds-table-toolbar .ds-table-toolbar__b'],
+      ['block only inside attribute value', "[data-x='.ds-table-toolbar'] [data-part='a']", "[data-x='.ds-table-toolbar'] .ds-table-toolbar__a"],
+      ['block only inside :not', ":not(.ds-table-toolbar) [data-part='a']", ':not(.ds-table-toolbar) .ds-table-toolbar__a'],
+      ['BEM-only (no block token)', ".ds-table-toolbar__x [data-part='a']", null],
+      ['prefix collision', ".ds-table-toolbar-x [data-part='a']", null],
+      ['escaped part value', ".ds-table-toolbar [data-part='a\\:b']", '.ds-table-toolbar .ds-table-toolbar__a\\:b'],
+      ['part value with space', ".ds-table-toolbar [data-part='a b']", '.ds-table-toolbar .ds-table-toolbar__a b'],
+      ['part value starting with digit', ".ds-table-toolbar [data-part='1a']", '.ds-table-toolbar .ds-table-toolbar__1a'],
+      ['other attribute in compound', ".ds-table-toolbar [data-part='a'][data-state='x']", ".ds-table-toolbar .ds-table-toolbar__a[data-state='x']"],
+      ['spaces inside attribute', ".ds-table-toolbar [data-part = 'a']", null],
+      ['no part token', '.ds-table-toolbar .ds-table-toolbar__a', null],
+    ];
+    for (const [name, selector] of NEGATIVES) {
+      assert.deepEqual(formsOf(selector), { part: normalizeCssText(selector), pair: null, classOnly: null }, name);
+    }
+    const authorable = NEGATIVES.filter(([, , probe]) => probe !== null);
+    assert.equal(authorable.length, 10);
+    const dir = sandbox();
+    writeFileSync(join(dir, TT), `${readFileSync(join(dir, TT), 'utf8')}\n${authorable
+      .map(([, selector, probe]) => `${selector}, ${probe} { border-radius: 3px; }`).join('\n')}\n`);
+    const registry = baseRegistry();
+    registry.entries[entryIndex()].declarations.push(...authorable.map(([, selector]) => ({ context: [], selector, property: 'border-radius', value: '3px' })));
+    const path = writeRegistry(dir, registry);
+    assert.deepEqual(delta(checkExclusionRegistry(dir, path).failures, headOf().registry),
+      authorable.map(([, selector]) => notAuthored(selector)).sort());
+    const record = familyAxisDeclarations(dir, catalogIn(dir), path).get('table-toolbar');
+    assert.deepEqual(record.axes.shape?.properties, ['border-radius']);
+    assert.equal(record.axes.shape.excludedDeclarations.length, 1, 'only the reviewed divider matches');
+  });
+
+  it('M03 armed pair: the three reviewed rules authored as "S, C" keep the exclusion, the G1/G2 premise and every gate line of the paired HEAD sandbox', () => {
+    kept(arm(pair), `${S}, ${C}`);
+  });
+
+  it('M04 class-only strip control: the three reviewed rules authored as the class twin alone keep the exclusion and the premise', () => {
+    kept(arm(() => C), C);
+  });
+
+  it('M05 non-vacuity: no armed rule is the reviewed text, so the forms alone keep the exclusion; one changed character in the class member re-enters the family', () => {
+    const { dir, measured } = arm(pair);
+    assert.ok(!cssRules(readFileSync(join(dir, TT), 'utf8')).some((rule) => rule.selector === S), 'a verbatim key can match nothing');
+    assert.equal(measured.record.notApplicable.shape.review, TT_REVIEW);
+    refused(arm((indent) => `${S},\n${indent}${C.replace(/__divider$/u, '__dividers')}`).measured, notAuthored());
+  });
+
+  it('M06 wrong radius: the armed reviewed rule painting 2px re-enters shape and the entry is STALE', () => {
+    const { measured } = arm(pair, (css) => css.replace(`${S},\n${C} {\n  inline-size: 2px;\n  block-size: 28px;\n  flex-shrink: 0;\n  margin-inline: 4px;\n  border-radius: 1px;`,
+      `${S},\n${C} {\n  inline-size: 2px;\n  block-size: 28px;\n  flex-shrink: 0;\n  margin-inline: 4px;\n  border-radius: 2px;`));
+    refused(measured, stale(ALL_CONTEXTS));
+  });
+
+  it('M07 wrong width: the armed reviewed rule at inline-size 4px breaks the G1 premise while the verbatim law stays blind to it', () => {
+    const armed = arm(pair, (css) => css.replace(`${S},\n${C} {\n  inline-size: 2px;`, `${S},\n${C} {\n  inline-size: 4px;`));
+    assert.deepEqual(premiseOf(armed.dir).width, ['4px']);
+    unchangedGates(armed.measured);
+  });
+
+  it('M08 missing rule: removing the armed @container variant breaks the G1 context list', () => {
+    const armed = arm(pair, (css) => css.replace(`  ${S},\n  ${C} {\n    display: none;\n  }\n`, ''));
+    assert.deepEqual(premiseOf(armed.dir).contexts, [[], ['@media (forced-colors: active)']]);
+    unchangedGates(armed.measured);
+  });
+
+  it('M09 at-rule change: the armed reviewed rule moved under @media print is STALE by context and re-enters shape', () => {
+    const { measured } = arm(pair, (css) => css.replace(/^\.ds-structure\.ds-table-toolbar \.ds-table-toolbar__divider\[data-part='divider'\],\n[^{]*\{[^}]*\}/mu,
+      (rule) => `@media print {\n${rule}\n}`));
+    refused(measured, stale('[@media print], [@container ds-table-toolbar (max-width: 40rem)], [@media (forced-colors: active)]'));
+  });
+
+  it('M10 variant gains shape or width: a radius in the armed forced-colors variant re-enters shape; an inline-size there breaks G1 alone', () => {
+    const variant = `  ${S},\n  ${C} {\n    background: ButtonText;`;
+    const radius = arm(pair, (css) => css.replace(variant, `  ${S},\n  ${C} {\n    border-radius: 0;\n    background: ButtonText;`));
+    assert.equal(premiseOf(radius.dir).variantsClean, false);
+    const base = headOf();
+    assert.deepEqual([delta(radius.measured.registry, base.registry), delta(radius.measured.pilot, base.pilot)], [[], []]);
+    assert.deepEqual(delta(radius.measured.floor, base.floor), reentered().sort());
+    assert.deepEqual(radius.measured.record.axes.shape.properties, ['border-radius']);
+    assert.equal(radius.measured.record.axes.shape.excludedDeclarations.length, 1);
+    const width = arm(pair, (css) => css.replace(variant, `  ${S},\n  ${C} {\n    inline-size: 3px;\n    background: ButtonText;`));
+    assert.equal(premiseOf(width.dir).variantsClean, false);
+    unchangedGates(width.measured);
+  });
+
+  it('M11 widened member: a class member without the repeated hook, or with a looser ancestor, is refused', () => {
+    for (const member of ['.ds-structure.ds-table-toolbar .ds-table-toolbar__divider', '.ds-structure .ds-table-toolbar__divider.ds-table-toolbar__divider']) {
+      refused(arm((indent) => `${S},\n${indent}${member}`).measured, notAuthored());
+    }
+  });
+
+  it('M12 foreign block: a class member on another family\'s block is refused', () => {
+    refused(arm((indent) => `${S},\n${indent}.ds-structure.ds-table-toolbar .ds-table-toolbar__divider.ds-list-toolbar__divider`).measured, notAuthored());
+  });
+
+  it('M13 wrong part: a class member naming another part is refused', () => {
+    refused(arm((indent) => `${S},\n${indent}.ds-structure.ds-table-toolbar .ds-table-toolbar__divider.ds-table-toolbar__spacer`).measured, notAuthored());
+  });
+
+  it('M14 extra member: a third member beside the pair is refused', () => {
+    refused(arm((indent) => `${S},\n${indent}${C},\n${indent}.ds-drill-extra`).measured, notAuthored());
+  });
+
+  it('M15 duplicate member: a doubled reviewed member or a doubled class member is refused', () => {
+    for (const prelude of [(indent) => `${S},\n${indent}${S}`, (indent) => `${S},\n${indent}${C},\n${indent}${C}`]) {
+      refused(arm(prelude).measured, notAuthored());
+    }
+  });
+
+  it('M16 duplicate rule: a second armed top-level rule breaks the G1 context list at 1px and re-enters shape at 2px', () => {
+    const twin = (value) => (css) => `${css}\n${S},\n${C} {\n  inline-size: 2px;\n  border-radius: ${value};\n}\n`;
+    const same = arm(pair, twin('1px'));
+    assert.deepEqual(premiseOf(same.dir).contexts, [...CONTEXTS, []]);
+    unchangedGates(same.measured);
+    const other = arm(pair, twin('2px'));
+    const base = headOf();
+    assert.deepEqual([delta(other.measured.registry, base.registry), delta(other.measured.pilot, base.pilot)], [[], []]);
+    assert.deepEqual(delta(other.measured.floor, base.floor), reentered().sort());
+    assert.deepEqual(other.measured.record.axes.shape.properties, ['border-radius']);
+  });
+
+  it('M17 order control: the class member before the reviewed member is refused', () => {
+    refused(arm((indent) => `${C},\n${indent}${S}`).measured, notAuthored());
+  });
+
+  it('M18 unowned: the armed pair authored in another family\'s skin is that family\'s own shape position, while table-toolbar stays withdrawn', () => {
+    const { dir, measured } = arm(pair, null, (root) => {
+      mkdirSync(join(root, AGNOSTIC_ROOT, 'drill-unowned'), { recursive: true });
+      writeFileSync(join(root, AGNOSTIC_ROOT, 'drill-unowned/index.css'), `${S},\n${C} {\n  inline-size: 2px;\n  border-radius: 1px;\n}\n`);
+    });
+    const unowned = familyAxisDeclarations(dir, catalogIn(dir)).get('drill-unowned');
+    assert.deepEqual(unowned.axes.shape, { properties: ['border-radius'], headChannels: [] });
+    assert.deepEqual(unowned.notApplicable, {});
+    assert.equal(measured.record.notApplicable.shape.review, TT_REVIEW);
+    assert.deepEqual(delta(measured.registry, headOf().registry), []);
   });
 });
 

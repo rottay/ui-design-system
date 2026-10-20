@@ -504,6 +504,56 @@ const declarationKey = (declaration) =>
   `[${contextKey(declaration.context)}] ${normalizeCssText(declaration.selector)} `
   + `{ ${declaration.property.toLowerCase()}: ${normalizeCssText(declaration.value)} }`;
 
+const FORM_IDENT = '-?[a-z_][a-z0-9_-]*';
+const FORM_TOKEN = new RegExp(`\\.(${FORM_IDENT})|\\[data-part=(['"])(${FORM_IDENT})\\2\\]|::(?:before|after)`, 'yu');
+const FORM_COMBINATORS = ['>', '+', '~'];
+
+/** A reviewed selector's authored forms: itself, its carrier pair "S, C" and class twin C (each part token as `.ds-<family>__<part>`), for every
+    reviewed declaration; any other grammar has no twin. Arming lots owe their own mount, own-element, specificity and cascade proofs. */
+export function reviewedSelectorForms(selector, family) {
+  const part = normalizeCssText(selector);
+  const none = { part, pair: null, classOnly: null };
+  if (/[,\\()]/u.test(part)) return none;
+  const block = `ds-${family}`;
+  const twin = [];
+  let ownsBlock = false;
+  let parts = 0;
+  let pseudo = false;
+  for (const piece of part.split(' ')) {
+    if (FORM_COMBINATORS.includes(piece)) {
+      if (twin.length === 0 || FORM_COMBINATORS.includes(twin[twin.length - 1])) return none;
+      twin.push(piece);
+      continue;
+    }
+    if (pseudo) return none;
+    let rebuilt = '';
+    FORM_TOKEN.lastIndex = 0;
+    while (FORM_TOKEN.lastIndex < piece.length) {
+      const match = FORM_TOKEN.exec(piece);
+      if (match === null || pseudo) return none;
+      if (match[1] !== undefined) {
+        ownsBlock ||= match[1] === block;
+        rebuilt += match[0];
+      } else if (match[3] !== undefined) {
+        parts += 1;
+        rebuilt += `.${block}__${match[3]}`;
+      } else {
+        pseudo = true;
+        rebuilt += match[0];
+      }
+    }
+    twin.push(rebuilt);
+  }
+  if (!ownsBlock || parts === 0 || FORM_COMBINATORS.includes(twin[twin.length - 1])) return none;
+  const classOnly = twin.join(' ');
+  return { part, pair: `${part}, ${classOnly}`, classOnly };
+}
+
+const reviewedFormKeys = (reviewed, family) => {
+  const { part, pair, classOnly } = reviewedSelectorForms(reviewed.selector, family);
+  return [part, pair, classOnly].filter((selector) => selector !== null).map((selector) => declarationKey({ ...reviewed, selector }));
+};
+
 /**
  * The exclusion entry that names this exact declaration for this family, axis
  * and file, or null. Verbatim means context, selector, property AND value: a
@@ -519,7 +569,7 @@ function matchingExclusion(registry, family, axis, file, rule, declaration) {
   for (const entry of registry.entries) {
     if (entry.family !== family || entry.axis !== axis || entry.skin !== file) continue;
     if ((entry.path ?? 'byProperty') !== 'byProperty') continue;
-    if ((entry.declarations ?? []).some((reviewed) => Array.isArray(reviewed.context) && declarationKey(reviewed) === key)) return entry;
+    if ((entry.declarations ?? []).some((reviewed) => Array.isArray(reviewed.context) && reviewedFormKeys(reviewed, family).includes(key))) return entry;
   }
   return null;
 }
@@ -1212,8 +1262,8 @@ export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXC
     }
     const rules = cssRules(readFileSync(join(root, entry.skin), 'utf8'));
     const selectors = new Set(rules.map((rule) => rule.selector));
-    const contextsOf = (selector) => [...new Set(rules
-      .filter((rule) => rule.selector === selector)
+    const contextsOf = (forms) => [...new Set(rules
+      .filter((rule) => forms.includes(rule.selector))
       .map((rule) => `[${contextKey(rule.atRules)}]`))];
     const authoredKeys = new Set();
     for (const rule of rules) {
@@ -1235,15 +1285,16 @@ export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXC
       if (!AXES[entry.axis]?.authored.includes(reviewed.property.toLowerCase())) {
         failures.push(`${label}: ${reviewed.property} is not an authored longhand of ${entry.axis}`);
       }
-      const selector = normalizeCssText(reviewed.selector);
-      if (!selectors.has(selector)) {
+      const { part, pair, classOnly } = reviewedSelectorForms(reviewed.selector, entry.family);
+      const forms = [part, pair, classOnly].filter((form) => form !== null);
+      if (!forms.some((form) => selectors.has(form))) {
         failures.push(`${label}: selector not authored in ${entry.skin} (comments removed): ${reviewed.selector}`);
         continue;
       }
-      if (!authoredKeys.has(key)) {
+      if (!reviewedFormKeys(reviewed, entry.family).some((form) => authoredKeys.has(form))) {
         failures.push(
           `${label}: STALE — ${entry.skin} no longer authors ${key} verbatim (the selector is authored under `
-          + `${contextsOf(selector).join(', ')}); the family has re-entered ${entry.axis} and the entry must be re-reviewed or removed`,
+          + `${contextsOf(forms).join(', ')}); the family has re-entered ${entry.axis} and the entry must be re-reviewed or removed`,
         );
       }
     }
