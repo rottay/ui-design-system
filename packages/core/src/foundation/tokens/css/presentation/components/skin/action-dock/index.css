@@ -123,7 +123,8 @@
  * gap), so the row, the safe areas, and the priority grammar all mirror.
  */
 
-.ds-action-dock[data-part='root'][data-placement][data-mode] {
+.ds-action-dock[data-part='root'][data-placement][data-mode],
+.ds-action-dock.ds-action-dock__root[data-placement][data-mode] {
   box-sizing: border-box;
   width: 100%;
   padding-inline: var(--ds-action-dock-padding-inline, var(--ds-spacing-4, 1rem));
@@ -143,7 +144,8 @@
     var(--ds-motion-ease-out, ease-out) both;
 }
 
-.ds-action-dock[data-part='root'][data-mode='fixed'] {
+.ds-action-dock[data-part='root'][data-mode='fixed'],
+.ds-action-dock.ds-action-dock__root[data-mode='fixed'] {
   position: fixed;
   inset-inline: 0;
 }
@@ -154,12 +156,14 @@
    `--ds-action-dock-sticky-z-index` never resolved. Tie on specificity, win on
    source order. The family test pins that every mode rule outranks the root
    rule for each property both declare. */
-.ds-action-dock[data-part='root'][data-placement][data-mode='sticky'] {
+.ds-action-dock[data-part='root'][data-placement][data-mode='sticky'],
+.ds-action-dock.ds-action-dock__root[data-placement][data-mode='sticky'] {
   position: sticky;
   z-index: var(--ds-action-dock-sticky-z-index, var(--ds-z-index-sticky, 1100));
 }
 
-.ds-action-dock[data-part='root'][data-placement='bottom'] {
+.ds-action-dock[data-part='root'][data-placement='bottom'],
+.ds-action-dock.ds-action-dock__root[data-placement='bottom'] {
   /* Public reservation hook (the S02 `--ds-bottom-tab-bar-reserved-block-end`
      precedent): pages keep their content clear of the fixed dock with
      `padding-block-end: var(--ds-action-dock-reserved-block-end)`. The 60px
@@ -196,11 +200,13 @@
   inset-block-end: var(--ds-virtual-keyboard-inset, 0px);
 }
 
-.ds-action-dock[data-part='root'][data-placement='bottom'][data-mode='sticky'] {
+.ds-action-dock[data-part='root'][data-placement='bottom'][data-mode='sticky'],
+.ds-action-dock.ds-action-dock__root[data-placement='bottom'][data-mode='sticky'] {
   inset-block-end: 0;
 }
 
-.ds-action-dock[data-part='root'][data-placement='top'] {
+.ds-action-dock[data-part='root'][data-placement='top'],
+.ds-action-dock.ds-action-dock__root[data-placement='top'] {
   /* Top-placement mirror of the bottom reservation hook. */
   --ds-action-dock-reserved-block-start: calc(
     60px + var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
@@ -281,7 +287,8 @@
 /* Reduced motion: the surface transition (theme/density channel switches)
  * and the entrance are silenced; layout and the coarse floor are unaffected. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-action-dock[data-part='root'][data-placement][data-mode] {
+  .ds-action-dock[data-part='root'][data-placement][data-mode],
+  .ds-action-dock.ds-action-dock__root[data-placement][data-mode] {
     transition: none;
     animation: none;
   }

@@ -50589,7 +50589,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * gap), so the row, the safe areas, and the priority grammar all mirror.
  */
 
-.ds-action-dock[data-part='root'][data-placement][data-mode] {
+.ds-action-dock[data-part='root'][data-placement][data-mode],
+.ds-action-dock.ds-action-dock__root[data-placement][data-mode] {
   box-sizing: border-box;
   width: 100%;
   padding-inline: var(--ds-action-dock-padding-inline, var(--ds-spacing-4, 1rem));
@@ -50609,7 +50610,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
     var(--ds-motion-ease-out, ease-out) both;
 }
 
-.ds-action-dock[data-part='root'][data-mode='fixed'] {
+.ds-action-dock[data-part='root'][data-mode='fixed'],
+.ds-action-dock.ds-action-dock__root[data-mode='fixed'] {
   position: fixed;
   inset-inline: 0;
 }
@@ -50620,12 +50622,14 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    `--ds-action-dock-sticky-z-index` never resolved. Tie on specificity, win on
    source order. The family test pins that every mode rule outranks the root
    rule for each property both declare. */
-.ds-action-dock[data-part='root'][data-placement][data-mode='sticky'] {
+.ds-action-dock[data-part='root'][data-placement][data-mode='sticky'],
+.ds-action-dock.ds-action-dock__root[data-placement][data-mode='sticky'] {
   position: sticky;
   z-index: var(--ds-action-dock-sticky-z-index, var(--ds-z-index-sticky, 1100));
 }
 
-.ds-action-dock[data-part='root'][data-placement='bottom'] {
+.ds-action-dock[data-part='root'][data-placement='bottom'],
+.ds-action-dock.ds-action-dock__root[data-placement='bottom'] {
   /* Public reservation hook (the S02 `--ds-bottom-tab-bar-reserved-block-end`
      precedent): pages keep their content clear of the fixed dock with
      `padding-block-end: var(--ds-action-dock-reserved-block-end)`. The 60px
@@ -50662,11 +50666,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   inset-block-end: var(--ds-virtual-keyboard-inset, 0px);
 }
 
-.ds-action-dock[data-part='root'][data-placement='bottom'][data-mode='sticky'] {
+.ds-action-dock[data-part='root'][data-placement='bottom'][data-mode='sticky'],
+.ds-action-dock.ds-action-dock__root[data-placement='bottom'][data-mode='sticky'] {
   inset-block-end: 0;
 }
 
-.ds-action-dock[data-part='root'][data-placement='top'] {
+.ds-action-dock[data-part='root'][data-placement='top'],
+.ds-action-dock.ds-action-dock__root[data-placement='top'] {
   /* Top-placement mirror of the bottom reservation hook. */
   --ds-action-dock-reserved-block-start: calc(
     60px + var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
@@ -50747,7 +50753,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 /* Reduced motion: the surface transition (theme/density channel switches)
  * and the entrance are silenced; layout and the coarse floor are unaffected. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-action-dock[data-part='root'][data-placement][data-mode] {
+  .ds-action-dock[data-part='root'][data-placement][data-mode],
+  .ds-action-dock.ds-action-dock__root[data-placement][data-mode] {
     transition: none;
     animation: none;
   }
@@ -86282,7 +86289,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         compositions). Paddings ride the density-scaled spacing rungs so the
         strip breathes per tenant density profile; scroll-padding keeps a
         keyboard-focused option off the scrollport edge. ---- */
-.ds-structure.ds-scope-switcher[data-part='root'] {
+.ds-structure.ds-scope-switcher[data-part='root'],
+.ds-structure.ds-scope-switcher.ds-scope-switcher__root {
   padding-block: var(--ds-scope-switcher-padding-block, var(--ds-spacing-2, 8px));
   padding-inline: var(--ds-scope-switcher-padding-inline, var(--ds-spacing-4, 16px));
   overflow-x: auto;
@@ -86293,7 +86301,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
      linear-gradient(90deg, transparent, black 24px, black calc(100% - 24px), transparent). */
   mask-image: var(--_ds-scope-switcher-overflow-fade, none);
 }
-.ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'] {
+.ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'],
+.ds-structure.ds-scope-switcher.ds-scope-switcher__root[data-inline='false'] {
   border-bottom: var(
     --ds-scope-switcher-border,
     1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)
@@ -86303,7 +86312,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-primary) 5%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%))
   );
 }
-.ds-structure.ds-scope-switcher[data-part='root'][data-inline='true'] {
+.ds-structure.ds-scope-switcher[data-part='root'][data-inline='true'],
+.ds-structure.ds-scope-switcher.ds-scope-switcher__root[data-inline='true'] {
   padding-block: 0;
   padding-inline: 0;
 }
@@ -86311,7 +86321,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ---- count badge INSIDE the composed Segmented option label: the pattern's
         own mini-pill (the primitive owns the option chrome; the count scans
         tabular and reads through number + tint, never tint alone) ---- */
-.ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'] {
+.ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'],
+.ds-structure.ds-scope-switcher.ds-scope-switcher__root [data-part='count-badge'] {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -86342,7 +86353,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     color var(--ds-scope-switcher-motion-duration, var(--ds-motion-feedback))
       var(--ds-motion-ease-out, ease-out);
 }
-.ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true'] {
+.ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true'],
+.ds-structure.ds-scope-switcher.ds-scope-switcher__root [data-part='count-badge'][data-active='true'] {
   background: var(
     --ds-scope-switcher-count-bg-active,
     color-mix(in srgb, var(--ds-color-primary) 18%, transparent)
@@ -86351,7 +86363,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'] {
+  .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'],
+  .ds-structure.ds-scope-switcher.ds-scope-switcher__root [data-part='count-badge'] {
     transition: none;
   }
 }
@@ -86361,11 +86374,13 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    boundary (its number carries the information). The composed Segmented
    keeps its own forced-colors contract (active option by system state). */
 @media (forced-colors: active) {
-  .ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'] {
+  .ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'],
+  .ds-structure.ds-scope-switcher.ds-scope-switcher__root[data-inline='false'] {
     border-bottom-color: ButtonText;
     background: Canvas;
   }
-  .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'] {
+  .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'],
+  .ds-structure.ds-scope-switcher.ds-scope-switcher__root [data-part='count-badge'] {
     outline: 1px solid ButtonText;
     background: Canvas;
     color: CanvasText;
@@ -87112,7 +87127,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   font-weight: 500;
 }
 
-.ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge[data-part='count-badge'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge[data-part='count-badge'],
+.ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -87121,7 +87137,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   padding-block: 0;
   padding-inline: var(--ds-spacing-2, 6px);
 }
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='sm'] .ds-status-filter-pills__count-badge[data-part='count-badge'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='sm'] .ds-status-filter-pills__count-badge[data-part='count-badge'],
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='sm'] .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge {
   min-inline-size: 18px;
   block-size: 18px;
 }
@@ -87212,7 +87229,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'] {
+  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'],
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge {
   border-radius: var(--ds-radius-full, 9999px);
   background: var(--ds-filter-pill-count-bg, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-filter-pill-count-border, transparent);
@@ -87220,7 +87239,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'] {
+  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'],
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge[data-selected='true'] {
   background: var(--ds-filter-pill-count-active-bg, var(--ds-filter-pill-active-color, var(--ds-color-primary)));
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-filter-pill-count-active-border, transparent);
   box-shadow: var(--ds-filter-pill-count-active-ring, none);
@@ -87277,7 +87298,11 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   .ds-pattern-status-filter-pills
     .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'],
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'] {
+    .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge,
+  .ds-pattern-status-filter-pills
+    .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'],
+  .ds-pattern-status-filter-pills
+    .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge[data-selected='true'] {
     border-color: ButtonText;
     background: Canvas;
     color: inherit;
@@ -87353,7 +87378,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  */
 
 /* ---- root: hairline-bottomed chrome row + named query container ---- */
-.ds-structure.ds-table-toolbar[data-part='root'] {
+.ds-structure.ds-table-toolbar[data-part='root'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root {
   --_ds-table-toolbar-section-gap: var(--ds-toolbar-gap, var(--ds-spacing-3, 0.75rem));
   --_ds-table-toolbar-row-gap: var(
     --ds-list-shell-section-gap,
@@ -87371,28 +87397,34 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   background: var(--ds-toolbar-bg, transparent);
   color: var(--ds-toolbar-color, inherit);
 }
-.ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'] {
+.ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root[data-structure='table-toolbar'] {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
 }
 
 /* ---- row sections: one seam channel instead of three fixed paddings ---- */
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__left.ds-table-toolbar__left {
   flex-shrink: 0;
   min-inline-size: 0;
   padding-inline-end: var(--_ds-table-toolbar-section-gap);
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__spacer[data-part='spacer'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__spacer[data-part='spacer'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__spacer.ds-table-toolbar__spacer {
   flex: 1;
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__right.ds-table-toolbar__controls {
   flex-shrink: 0;
   min-inline-size: 0;
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__filters.ds-table-toolbar__filters {
   padding-inline-end: var(--_ds-table-toolbar-section-gap);
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__actions.ds-table-toolbar__actions {
   padding-inline-start: var(--_ds-table-toolbar-section-gap);
 }
 
@@ -87401,12 +87433,16 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         The composed ghost Button keeps its own chrome. ---- */
 .ds-structure.ds-table-toolbar[data-part='root']
   .ds-table-toolbar__filters[data-part='filters']
+  .ds-table-toolbar__clear-filters,
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root
+  .ds-table-toolbar__filters.ds-table-toolbar__filters
   .ds-table-toolbar__clear-filters {
   flex-shrink: 0;
 }
 
 /* ---- divider: soft vertical hairline with a paper highlight ---- */
-.ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
+.ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'],
+.ds-structure.ds-table-toolbar .ds-table-toolbar__divider.ds-table-toolbar__divider {
   inline-size: 2px;
   block-size: 28px;
   flex-shrink: 0;
@@ -87451,7 +87487,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  * type step is a deliberate departure: toolbar controls speak the supporting
  * step rather than the Input's 14px default.
  * ------------------------------------------------------------------------ */
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__search-field.ds-table-toolbar__search-field {
   flex: 0 1 auto;
   inline-size: 100%;
   max-inline-size: var(--_ds-table-toolbar-search-max);
@@ -87469,6 +87506,10 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field[data-part='search-field']
   :where(.ds-table-toolbar__search-input) > .ds-input-shell
+  .ds-table-toolbar__search-icon[data-part='search-icon'],
+.ds-structure.ds-table-toolbar
+  .ds-table-toolbar__search-field.ds-table-toolbar__search-field
+  :where(.ds-table-toolbar__search-input) > .ds-input-shell
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   inline-size: var(--ds-icon-sm-size, 1rem);
   block-size: var(--ds-icon-sm-size, 1rem);
@@ -87478,6 +87519,10 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field[data-part='search-field']:focus-within
   :where(.ds-table-toolbar__search-input) > .ds-input-shell
+  .ds-table-toolbar__search-icon[data-part='search-icon'],
+.ds-structure.ds-table-toolbar
+  .ds-table-toolbar__search-field.ds-table-toolbar__search-field:focus-within
+  :where(.ds-table-toolbar__search-input) > .ds-input-shell
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   color: var(--ds-toolbar-color, var(--ds-color-text-secondary));
 }
@@ -87485,15 +87530,18 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ---- posture: tablet. The search field is the toolbar's primary
         affordance, so it claims its own row before anything is compressed. ---- */
 @container ds-table-toolbar (max-width: 64rem) {
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row[data-part='row'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row[data-part='row'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__row.ds-table-toolbar__row {
     flex-wrap: wrap;
     row-gap: var(--_ds-table-toolbar-row-gap);
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__left.ds-table-toolbar__left {
     flex: 1 1 100%;
     padding-inline-end: 0;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__search-field.ds-table-toolbar__search-field {
     flex: 1 1 100%;
     max-inline-size: 100%;
   }
@@ -87506,26 +87554,33 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         with the row it divided, and the primary action becomes a full-width
         commit control instead of a compact end-edge button. ---- */
 @container ds-table-toolbar (max-width: 40rem) {
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__right.ds-table-toolbar__controls {
     flex: 1 1 100%;
     flex-wrap: wrap;
     row-gap: var(--_ds-table-toolbar-row-gap);
     justify-content: flex-start;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__filters.ds-table-toolbar__filters {
     flex: 1 1 100%;
     padding-inline-end: 0;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__actions.ds-table-toolbar__actions {
     flex: 1 1 100%;
     padding-inline-start: 0;
   }
   .ds-structure.ds-table-toolbar[data-part='root']
     .ds-table-toolbar__actions[data-part='actions']
+    .ds-table-toolbar__primary-action,
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root
+    .ds-table-toolbar__actions.ds-table-toolbar__actions
     .ds-table-toolbar__primary-action {
     flex: 1 1 auto;
   }
-  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
+  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'],
+  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider.ds-table-toolbar__divider {
     display: none;
   }
 }
@@ -87533,19 +87588,26 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* ---- forced colors: system colors only — the hairlines re-express as
         ButtonText and the search icon follows the field ink. ---- */
 @media (forced-colors: active) {
-  .ds-structure.ds-table-toolbar[data-part='root'] {
+  .ds-structure.ds-table-toolbar[data-part='root'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root {
     background: Canvas;
     color: CanvasText;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'] {
+  .ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root[data-structure='table-toolbar'] {
     border-color: ButtonText;
   }
-  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
+  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'],
+  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider.ds-table-toolbar__divider {
     background: ButtonText;
     box-shadow: none;
   }
   .ds-structure.ds-table-toolbar
     .ds-table-toolbar__search-field[data-part='search-field']
+    :where(.ds-table-toolbar__search-input) > .ds-input-shell
+    .ds-table-toolbar__search-icon[data-part='search-icon'],
+  .ds-structure.ds-table-toolbar
+    .ds-table-toolbar__search-field.ds-table-toolbar__search-field
     :where(.ds-table-toolbar__search-input) > .ds-input-shell
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     color: CanvasText;
@@ -87556,6 +87618,10 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-table-toolbar
     .ds-table-toolbar__search-field[data-part='search-field']
+    :where(.ds-table-toolbar__search-input) > .ds-input-shell
+    .ds-table-toolbar__search-icon[data-part='search-icon'],
+  .ds-structure.ds-table-toolbar
+    .ds-table-toolbar__search-field.ds-table-toolbar__search-field
     :where(.ds-table-toolbar__search-input) > .ds-input-shell
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     transition: none;
@@ -87637,7 +87703,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  */
 
 /* ---- root: layout-only pass-through (the primitive owns the track frame) ---- */
-.ds-structure.ds-view-mode-switcher[data-part='root'] {
+.ds-structure.ds-view-mode-switcher[data-part='root'],
+.ds-structure.ds-view-mode-switcher.ds-view-mode-switcher__root {
   display: inline-flex;
   align-items: center;
   max-inline-size: 100%;

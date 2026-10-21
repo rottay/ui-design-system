@@ -133,7 +133,7 @@ export function TableToolbar({
     <Box
       data-part="root"
       data-structure="table-toolbar"
-      className="ds-structure ds-table-toolbar"
+      className="ds-structure ds-table-toolbar ds-table-toolbar__root"
     >
       <Flex align="center" gap={0} data-part="row" className="ds-table-toolbar__row">
         {/* Left: Search + leftContent */}
@@ -181,7 +181,7 @@ export function TableToolbar({
           align="center"
           gap={0}
           data-part="controls"
-          className="ds-table-toolbar__right"
+          className="ds-table-toolbar__right ds-table-toolbar__controls"
           role={hasControls ? 'toolbar' : undefined}
           aria-label={hasControls ? resolvedActionsLabel : undefined}
           onKeyDown={hasControls ? handleControlsKeyDown : undefined}

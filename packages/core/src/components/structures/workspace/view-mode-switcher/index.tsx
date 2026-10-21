@@ -115,7 +115,7 @@ export function ViewModeSwitcher({
     <Box
       data-part="root"
       data-structure="view-mode-switcher"
-      className={`ds-structure ds-view-mode-switcher ${className ?? ''}`}
+      className={`ds-structure ds-view-mode-switcher ${className ?? ''} ds-view-mode-switcher__root`}
     >
       {/* Composed Segmented (P81): radiogroup semantics, roving keyboard
           with focus movement, RTL-aware arrows and option chrome all belong

@@ -51,7 +51,8 @@
   font-weight: 500;
 }
 
-.ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge[data-part='count-badge'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge[data-part='count-badge'],
+.ds-pattern-status-filter-pills .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +61,8 @@
   padding-block: 0;
   padding-inline: var(--ds-spacing-2, 6px);
 }
-.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='sm'] .ds-status-filter-pills__count-badge[data-part='count-badge'] {
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='sm'] .ds-status-filter-pills__count-badge[data-part='count-badge'],
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill[data-size='sm'] .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge {
   min-inline-size: 18px;
   block-size: 18px;
 }
@@ -151,7 +153,9 @@
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'] {
+  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'],
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge {
   border-radius: var(--ds-radius-full, 9999px);
   background: var(--ds-filter-pill-count-bg, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-filter-pill-count-border, transparent);
@@ -159,7 +163,9 @@
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'] {
+  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'],
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge[data-selected='true'] {
   background: var(--ds-filter-pill-count-active-bg, var(--ds-filter-pill-active-color, var(--ds-color-primary)));
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-filter-pill-count-active-border, transparent);
   box-shadow: var(--ds-filter-pill-count-active-ring, none);
@@ -216,7 +222,11 @@
   .ds-pattern-status-filter-pills
     .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'],
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'] {
+    .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge,
+  .ds-pattern-status-filter-pills
+    .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'],
+  .ds-pattern-status-filter-pills
+    .ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge.ds-status-filter-pills__count-badge[data-selected='true'] {
     border-color: ButtonText;
     background: Canvas;
     color: inherit;

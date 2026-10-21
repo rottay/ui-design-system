@@ -71,7 +71,8 @@
  */
 
 /* ---- root: layout-only pass-through (the primitive owns the track frame) ---- */
-.ds-structure.ds-view-mode-switcher[data-part='root'] {
+.ds-structure.ds-view-mode-switcher[data-part='root'],
+.ds-structure.ds-view-mode-switcher.ds-view-mode-switcher__root {
   display: inline-flex;
   align-items: center;
   max-inline-size: 100%;

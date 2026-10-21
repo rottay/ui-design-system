@@ -57,7 +57,8 @@
  */
 
 /* ---- root: hairline-bottomed chrome row + named query container ---- */
-.ds-structure.ds-table-toolbar[data-part='root'] {
+.ds-structure.ds-table-toolbar[data-part='root'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root {
   --_ds-table-toolbar-section-gap: var(--ds-toolbar-gap, var(--ds-spacing-3, 0.75rem));
   --_ds-table-toolbar-row-gap: var(
     --ds-list-shell-section-gap,
@@ -75,28 +76,34 @@
   background: var(--ds-toolbar-bg, transparent);
   color: var(--ds-toolbar-color, inherit);
 }
-.ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'] {
+.ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root[data-structure='table-toolbar'] {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
 }
 
 /* ---- row sections: one seam channel instead of three fixed paddings ---- */
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__left.ds-table-toolbar__left {
   flex-shrink: 0;
   min-inline-size: 0;
   padding-inline-end: var(--_ds-table-toolbar-section-gap);
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__spacer[data-part='spacer'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__spacer[data-part='spacer'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__spacer.ds-table-toolbar__spacer {
   flex: 1;
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__right.ds-table-toolbar__controls {
   flex-shrink: 0;
   min-inline-size: 0;
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__filters.ds-table-toolbar__filters {
   padding-inline-end: var(--_ds-table-toolbar-section-gap);
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__actions.ds-table-toolbar__actions {
   padding-inline-start: var(--_ds-table-toolbar-section-gap);
 }
 
@@ -105,12 +112,16 @@
         The composed ghost Button keeps its own chrome. ---- */
 .ds-structure.ds-table-toolbar[data-part='root']
   .ds-table-toolbar__filters[data-part='filters']
+  .ds-table-toolbar__clear-filters,
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root
+  .ds-table-toolbar__filters.ds-table-toolbar__filters
   .ds-table-toolbar__clear-filters {
   flex-shrink: 0;
 }
 
 /* ---- divider: soft vertical hairline with a paper highlight ---- */
-.ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
+.ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'],
+.ds-structure.ds-table-toolbar .ds-table-toolbar__divider.ds-table-toolbar__divider {
   inline-size: 2px;
   block-size: 28px;
   flex-shrink: 0;
@@ -155,7 +166,8 @@
  * type step is a deliberate departure: toolbar controls speak the supporting
  * step rather than the Input's 14px default.
  * ------------------------------------------------------------------------ */
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'] {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'],
+.ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__search-field.ds-table-toolbar__search-field {
   flex: 0 1 auto;
   inline-size: 100%;
   max-inline-size: var(--_ds-table-toolbar-search-max);
@@ -173,6 +185,10 @@
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field[data-part='search-field']
   :where(.ds-table-toolbar__search-input) > .ds-input-shell
+  .ds-table-toolbar__search-icon[data-part='search-icon'],
+.ds-structure.ds-table-toolbar
+  .ds-table-toolbar__search-field.ds-table-toolbar__search-field
+  :where(.ds-table-toolbar__search-input) > .ds-input-shell
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   inline-size: var(--ds-icon-sm-size, 1rem);
   block-size: var(--ds-icon-sm-size, 1rem);
@@ -182,6 +198,10 @@
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field[data-part='search-field']:focus-within
   :where(.ds-table-toolbar__search-input) > .ds-input-shell
+  .ds-table-toolbar__search-icon[data-part='search-icon'],
+.ds-structure.ds-table-toolbar
+  .ds-table-toolbar__search-field.ds-table-toolbar__search-field:focus-within
+  :where(.ds-table-toolbar__search-input) > .ds-input-shell
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   color: var(--ds-toolbar-color, var(--ds-color-text-secondary));
 }
@@ -189,15 +209,18 @@
 /* ---- posture: tablet. The search field is the toolbar's primary
         affordance, so it claims its own row before anything is compressed. ---- */
 @container ds-table-toolbar (max-width: 64rem) {
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row[data-part='row'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row[data-part='row'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__row.ds-table-toolbar__row {
     flex-wrap: wrap;
     row-gap: var(--_ds-table-toolbar-row-gap);
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__left.ds-table-toolbar__left {
     flex: 1 1 100%;
     padding-inline-end: 0;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__search-field.ds-table-toolbar__search-field {
     flex: 1 1 100%;
     max-inline-size: 100%;
   }
@@ -210,26 +233,33 @@
         with the row it divided, and the primary action becomes a full-width
         commit control instead of a compact end-edge button. ---- */
 @container ds-table-toolbar (max-width: 40rem) {
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__right.ds-table-toolbar__controls {
     flex: 1 1 100%;
     flex-wrap: wrap;
     row-gap: var(--_ds-table-toolbar-row-gap);
     justify-content: flex-start;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__filters.ds-table-toolbar__filters {
     flex: 1 1 100%;
     padding-inline-end: 0;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'] {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root .ds-table-toolbar__actions.ds-table-toolbar__actions {
     flex: 1 1 100%;
     padding-inline-start: 0;
   }
   .ds-structure.ds-table-toolbar[data-part='root']
     .ds-table-toolbar__actions[data-part='actions']
+    .ds-table-toolbar__primary-action,
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root
+    .ds-table-toolbar__actions.ds-table-toolbar__actions
     .ds-table-toolbar__primary-action {
     flex: 1 1 auto;
   }
-  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
+  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'],
+  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider.ds-table-toolbar__divider {
     display: none;
   }
 }
@@ -237,19 +267,26 @@
 /* ---- forced colors: system colors only — the hairlines re-express as
         ButtonText and the search icon follows the field ink. ---- */
 @media (forced-colors: active) {
-  .ds-structure.ds-table-toolbar[data-part='root'] {
+  .ds-structure.ds-table-toolbar[data-part='root'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root {
     background: Canvas;
     color: CanvasText;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'] {
+  .ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'],
+  .ds-structure.ds-table-toolbar.ds-table-toolbar__root[data-structure='table-toolbar'] {
     border-color: ButtonText;
   }
-  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
+  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'],
+  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider.ds-table-toolbar__divider {
     background: ButtonText;
     box-shadow: none;
   }
   .ds-structure.ds-table-toolbar
     .ds-table-toolbar__search-field[data-part='search-field']
+    :where(.ds-table-toolbar__search-input) > .ds-input-shell
+    .ds-table-toolbar__search-icon[data-part='search-icon'],
+  .ds-structure.ds-table-toolbar
+    .ds-table-toolbar__search-field.ds-table-toolbar__search-field
     :where(.ds-table-toolbar__search-input) > .ds-input-shell
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     color: CanvasText;
@@ -260,6 +297,10 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-table-toolbar
     .ds-table-toolbar__search-field[data-part='search-field']
+    :where(.ds-table-toolbar__search-input) > .ds-input-shell
+    .ds-table-toolbar__search-icon[data-part='search-icon'],
+  .ds-structure.ds-table-toolbar
+    .ds-table-toolbar__search-field.ds-table-toolbar__search-field
     :where(.ds-table-toolbar__search-input) > .ds-input-shell
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     transition: none;

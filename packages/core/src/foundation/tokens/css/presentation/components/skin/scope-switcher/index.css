@@ -57,7 +57,8 @@
         compositions). Paddings ride the density-scaled spacing rungs so the
         strip breathes per tenant density profile; scroll-padding keeps a
         keyboard-focused option off the scrollport edge. ---- */
-.ds-structure.ds-scope-switcher[data-part='root'] {
+.ds-structure.ds-scope-switcher[data-part='root'],
+.ds-structure.ds-scope-switcher.ds-scope-switcher__root {
   padding-block: var(--ds-scope-switcher-padding-block, var(--ds-spacing-2, 8px));
   padding-inline: var(--ds-scope-switcher-padding-inline, var(--ds-spacing-4, 16px));
   overflow-x: auto;
@@ -68,7 +69,8 @@
      linear-gradient(90deg, transparent, black 24px, black calc(100% - 24px), transparent). */
   mask-image: var(--_ds-scope-switcher-overflow-fade, none);
 }
-.ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'] {
+.ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'],
+.ds-structure.ds-scope-switcher.ds-scope-switcher__root[data-inline='false'] {
   border-bottom: var(
     --ds-scope-switcher-border,
     1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)
@@ -78,7 +80,8 @@
     linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-primary) 5%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%))
   );
 }
-.ds-structure.ds-scope-switcher[data-part='root'][data-inline='true'] {
+.ds-structure.ds-scope-switcher[data-part='root'][data-inline='true'],
+.ds-structure.ds-scope-switcher.ds-scope-switcher__root[data-inline='true'] {
   padding-block: 0;
   padding-inline: 0;
 }
@@ -86,7 +89,8 @@
 /* ---- count badge INSIDE the composed Segmented option label: the pattern's
         own mini-pill (the primitive owns the option chrome; the count scans
         tabular and reads through number + tint, never tint alone) ---- */
-.ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'] {
+.ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'],
+.ds-structure.ds-scope-switcher.ds-scope-switcher__root [data-part='count-badge'] {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -117,7 +121,8 @@
     color var(--ds-scope-switcher-motion-duration, var(--ds-motion-feedback))
       var(--ds-motion-ease-out, ease-out);
 }
-.ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true'] {
+.ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true'],
+.ds-structure.ds-scope-switcher.ds-scope-switcher__root [data-part='count-badge'][data-active='true'] {
   background: var(
     --ds-scope-switcher-count-bg-active,
     color-mix(in srgb, var(--ds-color-primary) 18%, transparent)
@@ -126,7 +131,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'] {
+  .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'],
+  .ds-structure.ds-scope-switcher.ds-scope-switcher__root [data-part='count-badge'] {
     transition: none;
   }
 }
@@ -136,11 +142,13 @@
    boundary (its number carries the information). The composed Segmented
    keeps its own forced-colors contract (active option by system state). */
 @media (forced-colors: active) {
-  .ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'] {
+  .ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'],
+  .ds-structure.ds-scope-switcher.ds-scope-switcher__root[data-inline='false'] {
     border-bottom-color: ButtonText;
     background: Canvas;
   }
-  .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'] {
+  .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'],
+  .ds-structure.ds-scope-switcher.ds-scope-switcher__root [data-part='count-badge'] {
     outline: 1px solid ButtonText;
     background: Canvas;
     color: CanvasText;

@@ -268,7 +268,7 @@ export function ActionDock({
   return (
     <Box
       id={id}
-      className={rootClassName}
+      className={[rootClassName, 'ds-action-dock__root'].filter(Boolean).join(' ')}
       style={responsiveStyle}
       data-testid={dataTestId}
       data-surface-region={surfaceRegion}

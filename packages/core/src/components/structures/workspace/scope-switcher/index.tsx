@@ -78,7 +78,7 @@ export function ScopeSwitcher({
     <Box
       data-part="root"
       data-inline={isInline}
-      className="ds-structure ds-scope-switcher"
+      className="ds-structure ds-scope-switcher ds-scope-switcher__root"
     >
       {/* Composed Segmented (P81): radiogroup semantics, roving keyboard and
           option chrome belong to the primitive; the count badge is the
