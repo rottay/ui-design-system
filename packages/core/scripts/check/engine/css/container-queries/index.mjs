@@ -38,7 +38,9 @@
  *       such an ancestor (`.card .card[data-part='root']`) says so and is not a
  *       finding; a bare one is, and the same-name nesting it may rely on is
  *       adjudicated per site. A pseudo-element or `&` on the declaring
- *       element itself is counted as not judged. The live sites are a decrease-only ledger: a new site fails,
+ *       element itself is counted as not judged. A same-rule branch differing only by its one [data-part='p'] spelled
+ *       .X__p (X a class it carries, declared by the twin pair) is reported as a collapsed twin, not as a site.
+ *       The live sites are a decrease-only ledger: a new site fails,
  *       and a site that stops being live must move to `removed` with a reason
  *       and the commit that moved it.
  *
@@ -327,7 +329,9 @@ export function extractSelfReferenceFacts(rawCss, fileLabel = '') {
   const declarations = [];
   const queries = [];
   const root = postcss.parse(rawCss);
+  let ruleIndex = 0;
   root.walkRules((rule) => {
+    ruleIndex += 1;
     const names = [];
     for (const node of rule.nodes ?? []) {
       if (node.type === 'decl' && (node.prop === 'container-name' || node.prop === 'container')) names.push(...containerNamesOf(node));
@@ -337,7 +341,7 @@ export function extractSelfReferenceFacts(rawCss, fileLabel = '') {
       for (const branch of branches) {
         const complex = parseComplexSelector(branch);
         if (complex.length !== 1 || complex[0].pseudoElement || complex[0].nesting) continue;
-        for (const name of names) declarations.push({ name, compound: complex[0], selector: branch, file: fileLabel, line: rule.source?.start?.line ?? 0 });
+        for (const name of names) declarations.push({ name, compound: complex[0], selector: branch, file: fileLabel, line: rule.source?.start?.line ?? 0, rule: ruleIndex });
       }
     }
     for (let parent = rule.parent; parent; parent = parent.parent) {
@@ -345,7 +349,7 @@ export function extractSelfReferenceFacts(rawCss, fileLabel = '') {
       const name = queriedName(parent.params);
       if (!name) continue;
       for (const branch of branches) {
-        queries.push({ name, selector: branch, complex: parseComplexSelector(branch), file: fileLabel, line: rule.source?.start?.line ?? 0 });
+        queries.push({ name, selector: branch, complex: parseComplexSelector(branch), file: fileLabel, line: rule.source?.start?.line ?? 0, rule: ruleIndex });
       }
     }
   });
@@ -358,6 +362,63 @@ export function selfReferenceSiteId(site) {
   return site.occurrence > 1 ? `${base} #${site.occurrence}` : base;
 }
 
+const PART_TOKEN = /\[data-part=(['"]?)([A-Za-z0-9_-]+)\1\]/u;
+
+/** The `{ part, scope }` by which `twin` is `selector` with its subject's one `[data-part='p']` spelled `.scope__p`, else null. */
+function classTwinSubstitution(selector, twin) {
+  const kSubject = parseComplexSelector(selector).at(-1);
+  const cSubject = parseComplexSelector(twin).at(-1);
+  if (!kSubject || !cSubject) return null;
+  const prefix = selector.slice(0, selector.length - kSubject.text.length);
+  if (selector !== `${prefix}${kSubject.text}` || twin !== `${prefix}${cSubject.text}`) return null;
+  const kt = kSubject.text;
+  const ct = cSubject.text;
+  if (kt.split('[data-part').length !== 2 || ct.includes('[data-part')) return null;
+  const token = kt.match(PART_TOKEN);
+  if (!token || token.index !== kt.indexOf('[data-part')) return null;
+  const part = token[2];
+  const suffix = `__${part}`;
+  const carriers = [...cSubject.simples].filter((s) => s.startsWith('.') && s.endsWith(suffix) && kSubject.simples.has(s.slice(0, -suffix.length)));
+  if (carriers.length !== 1) return null;
+  const expected = kt.replace(token[0], () => carriers[0]);
+  if (ct !== expected) return null;
+  return { part, scope: carriers[0].slice(1, -suffix.length) };
+}
+
+/** Whether live `twin` is the class twin of live `partSite` in the same rule, declared by the twin pair of one declaring rule. */
+function isClassTwin(partSite, twin) {
+  const substitution = classTwinSubstitution(partSite.query.selector, twin.query.selector);
+  if (!substitution) return false;
+  const [dPart, dTwin] = [partSite.declarer, twin.declarer];
+  if (dPart === dTwin || dPart.file !== dTwin.file || !Number.isInteger(dPart.rule) || dPart.rule !== dTwin.rule) return false;
+  const declared = classTwinSubstitution(dPart.selector, dTwin.selector);
+  return declared !== null && declared.part === substitution.part && declared.scope === substitution.scope;
+}
+
+/** Maps each live class twin to the live part site of its own rule, only when that pairing is one-to-one. */
+function collapseClassTwins(candidates) {
+  const groups = new Map();
+  for (const candidate of candidates) {
+    const { query } = candidate;
+    if (!Number.isInteger(query.rule)) continue;
+    const key = `${query.file}\u0000${query.rule}\u0000${query.name}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(candidate);
+  }
+  const twins = new Map();
+  for (const group of groups.values()) {
+    const pairs = [];
+    for (const partSite of group) for (const twin of group) if (partSite !== twin && isClassTwin(partSite, twin)) pairs.push([partSite, twin]);
+    const text = (candidate) => candidate.query.selector.replace(/\s+/gu, ' ');
+    for (const [partSite, twin] of pairs) {
+      const unique = pairs.filter(([p, t]) => p === partSite || t === twin).length === 1
+        && group.filter((candidate) => text(candidate) === text(partSite)).length === 1;
+      if (unique) twins.set(twin, partSite);
+    }
+  }
+  return twins;
+}
+
 /** Pure evaluator for check (c). */
 export function evaluateSelfReferentialQueries({ declarations, queries, baseline = {} }) {
   const declarersByName = new Map();
@@ -365,8 +426,7 @@ export function evaluateSelfReferentialQueries({ declarations, queries, baseline
     if (!declarersByName.has(declaration.name)) declarersByName.set(declaration.name, []);
     declarersByName.get(declaration.name).push(declaration);
   }
-  const live = new Map();
-  const occurrences = new Map();
+  const candidates = [];
   let unjudged = 0;
   for (const query of queries) {
     const declarers = declarersByName.get(query.name) ?? [];
@@ -382,13 +442,24 @@ export function evaluateSelfReferentialQueries({ declarations, queries, baseline
       (compound) => compound.ancestor && declarers.some((d) => compoundWithin(compound, d.compound)),
     );
     if (namedAncestor) continue;
+    candidates.push({ query, declarer });
+  }
+  const twins = collapseClassTwins(candidates);
+  const live = new Map();
+  const occurrences = new Map();
+  for (const candidate of candidates) {
+    if (twins.has(candidate)) continue;
+    const { query, declarer } = candidate;
     const site = { name: query.name, selector: query.selector, file: query.file, line: query.line, declaredBy: `${declarer.file}:${declarer.line} ${declarer.selector}` };
     const base = selfReferenceSiteId(site);
     const occurrence = (occurrences.get(base) ?? 0) + 1;
     occurrences.set(base, occurrence);
     site.occurrence = occurrence;
-    live.set(selfReferenceSiteId(site), site);
+    candidate.id = selfReferenceSiteId(site);
+    live.set(candidate.id, site);
   }
+  const collapsed = [...twins].map(([{ query }, partSite]) => ({ file: query.file, line: query.line, name: query.name, selector: query.selector, into: partSite.id }));
+  collapsed.sort((a, b) => (a.file === b.file ? a.line - b.line || (a.selector < b.selector ? -1 : 1) : a.file < b.file ? -1 : 1));
   const ledger = new Set(Object.keys(baseline.sites ?? {}));
   const removed = baseline.removed ?? {};
   const newSites = [...live.keys()].filter((id) => !ledger.has(id)).sort();
@@ -403,7 +474,7 @@ export function evaluateSelfReferentialQueries({ declarations, queries, baseline
     }
     if (ledger.has(id)) malformed.push(`${id}: listed both as a live site and as removed`);
   }
-  return { live: [...live.values()], newSites, staleSites, malformed, unjudged };
+  return { live: [...live.values()], newSites, staleSites, malformed, unjudged, collapsed };
 }
 
 function loadBaseline() {
@@ -569,6 +640,10 @@ function main() {
   console.log(`  grown viewport files (fail) : ${result.viewportResult.grown.length}`);
   console.log(`  self-referential queries    : ${result.selfResult.live.length} live (${result.selfResult.unjudged} pseudo-element/nesting subject(s) not judged)`);
   console.log(`  new self-referential (fail) : ${result.selfResult.newSites.length}`);
+  console.log(`  collapsed class twins       : ${result.selfResult.collapsed.length}`);
+  for (const twin of result.selfResult.collapsed) {
+    console.log(`    collapsed class twin: ${twin.file}:${twin.line} @container ${twin.name} ${twin.selector} -> ${twin.into}`);
+  }
 
   if (mode === 'report') {
     for (const q of result.nameResult.dead) {

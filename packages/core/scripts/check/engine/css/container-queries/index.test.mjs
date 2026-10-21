@@ -443,3 +443,155 @@ test('fixture: --seed carries the self-referential ledger verbatim and never reg
     f.cleanup();
   }
 });
+
+/* ------------------------------------------------------------------------ */
+/* (c) class twins                                                          */
+/* ------------------------------------------------------------------------ */
+
+const TWIN_K = ".ds-structure.ds-x[data-part='root']";
+const TWIN_C = '.ds-structure.ds-x.ds-x__root';
+
+function declare(...selectors) {
+  return `${selectors.join(', ')} { container-name: ds-x; container-type: inline-size; }\n`;
+}
+
+const TWIN_DECL = declare(TWIN_K, TWIN_C);
+
+function inTwinQuery(selector, decl = TWIN_DECL) {
+  return `${decl}@container ds-x (inline-size < 20rem) {\n  ${selector} { gap: 0; }\n}\n`;
+}
+
+function twinId(selector, occurrence = 1) {
+  return selfReferenceSiteId({ file: 'skin.css', name: 'ds-x', selector, occurrence });
+}
+
+const TWIN_K_LEDGER = { sites: { [twinId(TWIN_K)]: { adjudication: 'A' } } };
+
+test('self-reference twin: a class twin of a live part site in the same rule is one site, reported as collapsed', () => {
+  for (const order of [[TWIN_K, TWIN_C], [TWIN_C, TWIN_K]]) {
+    const css = inTwinQuery(order.join(', '), declare(...order));
+    const fresh = selfSites(css);
+    assert.equal(fresh.live.length, 1, order.join(', '));
+    assert.deepEqual(fresh.newSites, [twinId(TWIN_K)]);
+    assert.deepEqual(fresh.collapsed.map((entry) => [entry.selector, entry.into]), [[TWIN_C, twinId(TWIN_K)]]);
+    const ledgered = selfSites(css, TWIN_K_LEDGER);
+    assert.deepEqual(ledgered.newSites, []);
+    assert.deepEqual(ledgered.staleSites, []);
+  }
+});
+
+test("self-reference twin: repeated twin rules each collapse into their own rule's site, which keeps its ordinal", () => {
+  const css = `${TWIN_DECL}@container ds-x (inline-size < 30rem) {\n  ${TWIN_K}, ${TWIN_C} { gap: 0; }\n}\n@container ds-x (inline-size < 20rem) {\n  ${TWIN_K}, ${TWIN_C} { gap: 1px; }\n}\n`;
+  const result = selfSites(css);
+  assert.deepEqual(result.live.map(selfReferenceSiteId), [twinId(TWIN_K), twinId(TWIN_K, 2)]);
+  assert.deepEqual(result.collapsed.map((entry) => [entry.line, entry.into]), [[3, twinId(TWIN_K)], [6, twinId(TWIN_K, 2)]]);
+});
+
+test('self-reference twin: a twin without a live part member in its own rule stays a new site', () => {
+  const alone = selfSites(inTwinQuery(TWIN_C), TWIN_K_LEDGER);
+  assert.deepEqual(alone.newSites, [twinId(TWIN_C)]);
+  assert.deepEqual(alone.staleSites, [twinId(TWIN_K)]);
+  assert.deepEqual(alone.collapsed, []);
+
+  const sameLine = selfSites(`${TWIN_DECL}@container ds-x (inline-size < 20rem) {\n  ${TWIN_K} { gap: 0; } ${TWIN_C} { gap: 0; }\n}\n`, TWIN_K_LEDGER);
+  assert.deepEqual(sameLine.live.map((site) => site.line), [3, 3]);
+  assert.deepEqual(sameLine.newSites, [twinId(TWIN_C)]);
+  assert.deepEqual(sameLine.collapsed, []);
+
+  const facts = extractSelfReferenceFacts(inTwinQuery(`${TWIN_K}, ${TWIN_C}`), 'skin.css');
+  for (const fact of [...facts.declarations, ...facts.queries]) delete fact.rule;
+  const anonymous = evaluateSelfReferentialQueries({ ...facts, baseline: TWIN_K_LEDGER });
+  assert.deepEqual(anonymous.newSites, [twinId(TWIN_C)]);
+  assert.deepEqual(anonymous.collapsed, []);
+});
+
+test('self-reference twin: a member that is not the exact class twin stays a new site', () => {
+  const quotedPart = ".ds-structure.ds-x[data-part='root'][data-note='a  b']";
+  const quotedTwin = ".ds-structure.ds-x.ds-x__root[data-note='a b']";
+  const rows = [
+    ['reordered', TWIN_K, '.ds-x.ds-structure.ds-x__root', TWIN_DECL],
+    ['duplicated', TWIN_K, '.ds-structure.ds-x.ds-x.ds-x__root', TWIN_DECL],
+    ['narrowed', TWIN_K, `${TWIN_C}:hover`, TWIN_DECL],
+    ['widened', `${TWIN_K}:not([data-x])`, TWIN_C, TWIN_DECL],
+    ['combinator', `.w > ${TWIN_K}`, `.w ${TWIN_C}`, TWIN_DECL],
+    ['separate declaring rules', TWIN_K, TWIN_C, `${declare(TWIN_K)}${declare(TWIN_C)}`],
+    ['one broader declarer', TWIN_K, TWIN_C, declare('.ds-structure.ds-x')],
+    ['quoted attribute value', quotedPart, quotedTwin, declare(quotedPart, quotedTwin)],
+  ];
+  for (const [label, part, twin, decl] of rows) {
+    const result = selfSites(inTwinQuery(`${part}, ${twin}`, decl), { sites: { [twinId(part)]: { adjudication: 'A' } } });
+    assert.deepEqual(result.newSites, [twinId(twin)], label);
+    assert.deepEqual(result.collapsed, [], label);
+  }
+});
+
+test('self-reference twin: another scope or part, a non-exact part token, or an ambiguous pairing never collapses', () => {
+  const foreign = '.ds-structure.ds-x.ds-y__root';
+  const body = '.ds-structure.ds-x.ds-x__body';
+  const tilde = ".ds-structure.ds-x[data-part~='root']";
+  const otherScope = '.ds-structure.ds-x.ds-structure__root';
+  const quoted = '.ds-structure.ds-x[data-part="root"]';
+  const rows = [
+    ['foreign scope', [TWIN_K, foreign], [TWIN_K, foreign], [foreign]],
+    ['wrong part', [TWIN_K, body], [TWIN_K, body], [body]],
+    ['operator', [tilde, TWIN_C], [tilde, TWIN_C], [tilde, TWIN_C]],
+    ['two twins of one part member', [TWIN_K, TWIN_C, otherScope], [TWIN_K, TWIN_C, otherScope], [TWIN_C, otherScope]],
+    ['one twin of two part members', [TWIN_K, TWIN_C], [TWIN_K, quoted, TWIN_C], [quoted, TWIN_C]],
+    ['repeated part member', [TWIN_K, TWIN_C], [TWIN_K, TWIN_C, TWIN_K], [TWIN_C]],
+  ];
+  for (const [label, decl, query, members] of rows) {
+    const result = selfSites(inTwinQuery(query.join(', '), declare(...decl)));
+    for (const member of members) assert.ok(result.newSites.includes(twinId(member)), `${label}: ${member}`);
+    assert.deepEqual(result.collapsed, [], label);
+  }
+});
+
+test('self-reference twin: a third live member of the rule is judged on its own', () => {
+  const hovered = `${TWIN_K}:hover`;
+  const result = selfSites(inTwinQuery(`${TWIN_K}, ${TWIN_C}, ${hovered}`), TWIN_K_LEDGER);
+  assert.deepEqual(result.newSites, [twinId(hovered)]);
+  assert.deepEqual(result.collapsed.map((entry) => entry.into), [twinId(TWIN_K)]);
+});
+
+test('self-reference twin: pseudo-element members stay not judged and never collapse', () => {
+  const both = selfSites(inTwinQuery(`${TWIN_K}::before, ${TWIN_C}::before`));
+  assert.deepEqual(both.live, []);
+  assert.equal(both.unjudged, 2);
+  assert.deepEqual(both.collapsed, []);
+  const one = selfSites(inTwinQuery(`${TWIN_K}, ${TWIN_C}::before`));
+  assert.equal(one.live.length, 1);
+  assert.equal(one.unjudged, 1);
+  assert.deepEqual(one.collapsed, []);
+});
+
+test('fixture: --check prints the collapsed twin and still fails on every other finding', () => {
+  const f = fixture();
+  try {
+    const probe = 'css-root/runtime/engines/modern/skin/probe/index.css';
+    const twinRule = inTwinQuery(`${TWIN_K}, ${TWIN_C}`);
+    const extraRule = `@container ds-x (inline-size < 10rem) {\n  ${TWIN_K}:focus-within { gap: 0; }\n}\n`;
+    const twinLine = /collapsed class twin: .*probe\/index\.css:\d+ @container ds-x \.ds-structure\.ds-x\.ds-x__root -> (.+)$/mu;
+    f.write(probe, twinRule + extraRule);
+    const unledgered = runGate([...f.args, '--check']);
+    assert.equal(unledgered.status, 1);
+    assert.match(unledgered.stdout, /collapsed class twins\s+: 1/u);
+    const partId = unledgered.stdout.match(twinLine)?.[1];
+    assert.ok(partId, unledgered.stdout);
+    assert.match(unledgered.stderr, /FAIL \(2\)/u);
+    assert.doesNotMatch(unledgered.stderr, /ds-x__root/u);
+
+    f.write('baseline.json', JSON.stringify({ deadContainerNames: {}, viewportQueries: {}, selfReferentialQueries: { sites: { [partId]: { adjudication: 'A' } } } }));
+    const ledgered = runGate([...f.args, '--check']);
+    assert.equal(ledgered.status, 1);
+    assert.match(ledgered.stderr, /FAIL \(1\)/u);
+    assert.doesNotMatch(ledgered.stderr, /ds-x__root/u);
+
+    f.write(probe, twinRule);
+    const clean = runGate([...f.args, '--check']);
+    assert.equal(clean.status, 0, clean.stderr);
+    assert.match(clean.stdout, /collapsed class twins\s+: 1/u);
+    assert.match(clean.stdout, twinLine);
+  } finally {
+    f.cleanup();
+  }
+});
