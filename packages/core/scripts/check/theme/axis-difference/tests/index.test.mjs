@@ -7671,6 +7671,82 @@ describe('axis-difference — the nine states-unobservable families, one verdict
   });
 });
 
+describe('axis-difference — the metrics-rows verdict evidence is read by rule, class-aware, and refuses what the text refused', () => {
+  const VERDICTS = probe.STATES_UNOBSERVABLE_VERDICTS;
+  const { file: FILE } = VERDICTS['metrics-rows'].evidence[0];
+  const K = ".ds-metrics-rows.ds-metrics-rows [data-part='metric-row']:hover [data-part='shimmer']";
+  const C = '.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row:hover .ds-metrics-rows__shimmer';
+  const TEXT = "[data-part='metric-row']:hover [data-part='shimmer'] {\n    visibility: visible;";
+  const live = readFileSync(join(ROOT, FILE), 'utf8');
+  const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+  const PRELUDE = new RegExp(`\\n  (?:${escapeRegExp(K)},\\n  ${escapeRegExp(C)}|${escapeRegExp(K)}|${escapeRegExp(C)}) \\{`, 'gu');
+  const shaped = (members) => live.replace(PRELUDE, `\n  ${members.join(',\n  ')} {`);
+  const failuresOn = (css, verdicts = VERDICTS) => probe.statesUnobservableVerdictFailures(ROOT, {
+    verdicts,
+    readSource: (path) => (path.endsWith(FILE) ? css : readFileSync(path, 'utf8')),
+  });
+  const ruleMessage = `metrics-rows: ${FILE} no longer carries one \`${K}\` rule, bare or with its class door, 1 at-rule deep, first declaring \`visibility: visible\``;
+
+  it('the metrics-rows evidence resolves exactly one hover-shimmer rule in the live skin, bare or paired, and the verdicts hold', () => {
+    assert.equal([...live.matchAll(PRELUDE)].length, 1, 'the live skin carries the hover-shimmer rule once, in one of the three forms');
+    assert.equal(cssRules(live).filter((rule) => [K, `${K}, ${C}`, C].includes(rule.selector)).length, 1);
+    assert.deepEqual({ ...VERDICTS['metrics-rows'].evidence[0].rule }, { selector: K, twin: C, property: 'visibility', value: 'visible', atRules: 1 });
+    assert.deepEqual(probe.statesUnobservableVerdictFailures(ROOT), []);
+    for (const members of [[K], [K, C], [C]]) {
+      const css = shaped(members);
+      assert.equal(cssRules(css).filter((rule) => rule.selector === members.join(', ')).length, 1, members.join(', '));
+      assert.deepEqual(failuresOn(css), [], members.join(', '));
+    }
+  });
+
+  it('CONTROL: the text evidence passes the bare rule and fails the paired one with its exact message', () => {
+    const asText = { ...VERDICTS, 'metrics-rows': { ...VERDICTS['metrics-rows'], evidence: [{ file: FILE, text: TEXT }] } };
+    const message = `metrics-rows: ${FILE} no longer carries \`${TEXT}\``;
+    assert.deepEqual(failuresOn(shaped([K]), asText), []);
+    assert.deepEqual(failuresOn(shaped([K, C]), asText), [message]);
+    assert.deepEqual(failuresOn(shaped([C]), asText), [message]);
+  });
+
+  it('NEGATIVE: a wrong value, a missing, moved or reordered rule, a widened, foreign-block or extra member, and a duplicate rule each fail the verdict', () => {
+    const bare = shaped([K]);
+    const rule = `  ${K} {\n    visibility: visible;\n  }\n`;
+    assert.equal(bare.split(rule).length, 2, 'the bare hover-shimmer rule moved -- re-plant these mutants');
+    const mutants = {
+      'wrong value': bare.replace(rule, `  ${K} {\n    visibility: hidden;\n  }\n`),
+      missing: bare.replace(rule, ''),
+      'moved to the top level': `${bare.replace(rule, '')}\n${K} {\n  visibility: visible;\n}\n`,
+      reordered: bare.replace(rule, `  ${K} {\n    opacity: 1;\n    visibility: visible;\n  }\n`),
+      'widened member': shaped([K, '.ds-metrics-rows.ds-metrics-rows .rottay-box--modern:hover .ds-metrics-rows__shimmer']),
+      'foreign-block member': shaped([K, '.ds-metrics-rows.ds-metrics-rows .ds-metrics-cards__metric-row:hover .ds-metrics-rows__shimmer']),
+      'extra member': shaped([K, C, '.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__row:hover .ds-metrics-rows__shimmer']),
+      'duplicated member': shaped([K, K]),
+      'duplicated twin': shaped([K, C, C]),
+      'reversed order': shaped([C, K]),
+      'partial class form': shaped([K, ".ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row:hover [data-part='shimmer']"]),
+      'duplicate rule': bare.replace(rule, `${rule}${rule}`),
+    };
+    for (const [name, css] of Object.entries(mutants)) {
+      assert.notEqual(css, bare, `${name}: the mutant changed nothing`);
+      assert.deepEqual(failuresOn(css), [ruleMessage], name);
+    }
+  });
+
+  it('a malformed rule evidence throws when the verdicts are built', () => {
+    const good = { file: FILE, selector: K, first: 'visibility: visible', atRules: 1 };
+    assert.deepEqual(probe.ruleEvidence(good), VERDICTS['metrics-rows'].evidence[0]);
+    const malformed = [
+      { ...good, file: '' },
+      { ...good, selector: `${K}, ${C}` },
+      { ...good, selector: ".ds-metrics-rows [data-part='metric-row']:hover [data-part='shimmer']" },
+      { ...good, selector: '.ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__shimmer' },
+      { ...good, first: 'visible' },
+      { ...good, atRules: -1 },
+      { ...good, atRules: 1.5 },
+    ];
+    for (const evidence of malformed) assert.throws(() => probe.ruleEvidence(evidence), /^Error: rule evidence /u, JSON.stringify(evidence));
+  });
+});
+
 describe('axis-difference BROWSER drill — the composed-node replacements: one family, one reading, the real node carrying what the twin carried', { skip: browserReason }, () => {
   const byId = (id) => SCENARIOS.find((scenario) => scenario.id === id);
   const REPLACED = ['collection-workspace-render-dispatch', 'list-toolbar', 'status-filter-pills', 'user-profile-card', 'workspace-switcher'];

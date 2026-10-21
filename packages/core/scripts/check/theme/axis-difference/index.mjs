@@ -236,6 +236,7 @@ import {
   focusSignatureProof,
   groupControls,
   normalizeCssText,
+  selectorBranches,
   skinFamilies,
   stampWrites,
   stripCssComments,
@@ -4420,7 +4421,12 @@ export const STATES_UNOBSERVABLE_VERDICTS = Object.freeze({
     note: 'display only; its own hover shows the shimmer (`visibility`, no vocabulary). The row\'s lift is the '
       + '`dashboard-metrics-interactions` skin\'s',
     evidence: Object.freeze([
-      Object.freeze({ file: `${SKIN_PRESENTATION}/metrics-rows/index.css`, text: "[data-part='metric-row']:hover [data-part='shimmer'] {\n    visibility: visible;" }),
+      ruleEvidence({
+        file: `${SKIN_PRESENTATION}/metrics-rows/index.css`,
+        selector: ".ds-metrics-rows.ds-metrics-rows [data-part='metric-row']:hover [data-part='shimmer']",
+        first: 'visibility: visible',
+        atRules: 1,
+      }),
     ]),
   }),
   'status-filter-pills': Object.freeze({
@@ -4444,8 +4450,40 @@ export const STATES_UNOBSERVABLE_VERDICTS = Object.freeze({
   }),
 });
 
+export function ruleEvidence({ file, selector, first, atRules }) {
+  const scope = typeof selector === 'string' ? /^\.([\w-]+)\.\1(?![\w-])/u.exec(selector)?.[1] : undefined;
+  const declaration = typeof first === 'string' ? /^([-a-z]+):\s*(\S.*)$/u.exec(first) : null;
+  if (typeof file !== 'string' || file === '' || scope === undefined || !/\[data-part=(['"])[\w-]+\1\]/u.test(selector)
+    || selectorBranches(selector).length !== 1 || declaration === null || !Number.isInteger(atRules) || atRules < 0) {
+    throw new Error(`rule evidence ${JSON.stringify({ file, selector, first, atRules })}: needs a file, one doubled-scope selector naming a part, `
+      + 'a first `property: value` and an at-rule depth');
+  }
+  const key = normalizeCssText(selector);
+  return Object.freeze({
+    file,
+    rule: Object.freeze({
+      selector: key,
+      twin: key.replace(/\[data-part=(['"])([\w-]+)\1\]/gu, `.${scope}__$2`),
+      property: declaration[1],
+      value: normalizeCssText(declaration[2]),
+      atRules,
+    }),
+  });
+}
+
+function ruleEvidenceHolds(css, { selector, twin, property, value, atRules }) {
+  const forms = [[selector], [selector, twin], [twin]].map((form) => form.join('\n'));
+  const rules = cssRules(css).filter((rule) => forms.includes(selectorBranches(rule.selector).join('\n')));
+  const [declaration] = rules[0]?.declarations ?? [];
+  return rules.length === 1 && rules[0].atRules.length === atRules && declaration?.property === property && declaration.value === value;
+}
+
 /** Every way the nine verdicts can be wrong against the tree and the roster. */
-export function statesUnobservableVerdictFailures(root = CORE_ROOT, { verdicts = STATES_UNOBSERVABLE_VERDICTS, roster = REAL_RENDER_MOUNTS } = {}) {
+export function statesUnobservableVerdictFailures(root = CORE_ROOT, {
+  verdicts = STATES_UNOBSERVABLE_VERDICTS,
+  roster = REAL_RENDER_MOUNTS,
+  readSource = (file) => readFileSync(file, 'utf8'),
+} = {}) {
   const failures = [];
   const pinned = Object.keys(UNOBSERVABLE_FAMILIES.states).sort();
   if (JSON.stringify(Object.keys(verdicts).sort()) !== JSON.stringify(pinned)) {
@@ -4454,10 +4492,13 @@ export function statesUnobservableVerdictFailures(root = CORE_ROOT, { verdicts =
   const statesRows = Object.entries(roster).filter(([, entry]) => entry.axes.includes('states'));
   for (const [family, entry] of Object.entries(verdicts)) {
     if (!['unobservable', 'container', 'delegates'].includes(entry.verdict)) failures.push(`${family}: unknown verdict \`${entry.verdict}\``);
-    for (const { file, text } of entry.evidence) {
+    for (const { file, text, rule } of entry.evidence) {
       const path = resolve(root, file);
       if (!existsSync(path)) failures.push(`${family}: ${file} does not exist`);
-      else if (!readFileSync(path, 'utf8').includes(text)) failures.push(`${family}: ${file} no longer carries \`${text}\``);
+      else if (rule !== undefined && !ruleEvidenceHolds(readSource(path), rule)) {
+        failures.push(`${family}: ${file} no longer carries one \`${rule.selector}\` rule, bare or with its class door, ${rule.atRules} at-rule `
+          + `deep, first declaring \`${rule.property}: ${rule.value}\``);
+      } else if (rule === undefined && !readSource(path).includes(text)) failures.push(`${family}: ${file} no longer carries \`${text}\``);
     }
     const rows = statesRows.filter(([row, rowEntry]) => realRenderFamily(row, rowEntry) === family);
     const composed = rows.filter(([, rowEntry]) => rowEntry.composition?.axes.includes('states'));

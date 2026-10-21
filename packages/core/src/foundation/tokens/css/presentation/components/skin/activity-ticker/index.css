@@ -59,7 +59,8 @@
 
 /* Root frame drained from the engine (the former inline height/padding/flex
    frame). The 415px fallback is the shipped dashboard measure, byte-exact. */
-.ds-activity-ticker.ds-activity-ticker[data-part='root'] {
+.ds-activity-ticker.ds-activity-ticker[data-part='root'],
+.ds-activity-ticker.ds-activity-ticker.ds-activity-ticker__root {
   display: flex;
   flex-direction: column;
   block-size: var(--_ds-dashboard-panel-block-size, 415px);
@@ -68,7 +69,8 @@
   overflow: hidden;
   background: var(--ds-color-bg-secondary);
 }
-.ds-activity-ticker.ds-activity-ticker[data-part='root'][data-part='root'] {
+.ds-activity-ticker.ds-activity-ticker[data-part='root'][data-part='root'],
+.ds-activity-ticker.ds-activity-ticker.ds-activity-ticker__root.ds-activity-ticker__root {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='header'],
@@ -422,6 +424,7 @@
    through the icon glyph and text, never the hue. */
 @media (forced-colors: active) {
   .ds-activity-ticker.ds-activity-ticker[data-part='root'][data-part='root'],
+  .ds-activity-ticker.ds-activity-ticker.ds-activity-ticker__root.ds-activity-ticker__root,
   .ds-activity-ticker.ds-activity-ticker [data-part='header'][data-part='header'],
   .ds-activity-ticker.ds-activity-ticker .ds-activity-ticker__header.ds-activity-ticker__header,
   .ds-activity-ticker.ds-activity-ticker [data-part='bell-box'][data-part='bell-box'],

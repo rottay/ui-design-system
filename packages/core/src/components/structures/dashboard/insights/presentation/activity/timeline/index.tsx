@@ -131,7 +131,7 @@ export function ActivityTimeline({
 
   return (
     <Box
-      className="ds-activity-timeline"
+      className="ds-activity-timeline ds-activity-timeline__root"
       data-part="root"
     >
       <Flex

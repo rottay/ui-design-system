@@ -202,7 +202,7 @@ export function ActivityTicker({
 
   return (
     <Box
-      className="ds-activity-ticker"
+      className="ds-activity-ticker ds-activity-ticker__root"
       data-part="root"
     >
       <Flex

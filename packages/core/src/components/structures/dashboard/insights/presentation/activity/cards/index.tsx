@@ -125,7 +125,7 @@ export function ActivityCards({
 
   return (
     <Box
-      className="ds-activity-cards"
+      className="ds-activity-cards ds-activity-cards__root"
       data-part="root"
     >
       <Flex

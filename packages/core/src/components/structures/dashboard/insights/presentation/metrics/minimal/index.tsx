@@ -149,7 +149,7 @@ export function MetricsMinimal({ metrics }: MetricsProps) {
 
   return (
     <Box
-      className="ds-metrics-minimal"
+      className="ds-metrics-minimal ds-metrics-minimal__root"
       data-part="root"
     >
       <Flex

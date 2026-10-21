@@ -685,6 +685,10 @@ function parseRelativeCss(path: string) {
   return postcss.parse(readRelative(path), { from: path });
 }
 
+function rootClassName(scope: string): RegExp {
+  return new RegExp(`(?<![\\w-])className="${scope}(?: ${scope}__root)?"`);
+}
+
 function declarationRecord(container: {
   walkDecls: (callback: (declaration: { prop: string; value: string }) => void) => void;
 }): Record<string, string> {
@@ -813,12 +817,52 @@ describe('dashboard embedded CSS recovery contract', () => {
         }
       });
 
-      expect(source, component.sourcePath).toContain(`className="${component.scope}"`);
+      expect(source, component.sourcePath).toMatch(rootClassName(component.scope));
       expect(scopedRules.length, component.scope).toBeGreaterThan(0);
       expect(cssClasses.size, component.scope).toBeGreaterThan(1);
 
       for (const className of cssClasses) {
         expect(source, `${component.sourcePath}: .${className}`).toContain(className);
+      }
+    }
+  });
+
+  it('every interaction scope is the root className, bare or with its one root class door, and the literal reads only the bare form', () => {
+    for (const { sourcePath, scope } of INTERACTION_COMPONENTS) {
+      const source = readRelative(sourcePath);
+      const bare = `className="${scope}"`;
+      const doored = `className="${scope} ${scope}__root"`;
+      expect(source.split(bare).length + source.split(doored).length - 2, sourcePath).toBe(1);
+      const asBare = source.replace(doored, bare);
+      const asDoored = asBare.replace(bare, doored);
+      expect(asBare, sourcePath).toMatch(rootClassName(scope));
+      expect(asDoored, sourcePath).toMatch(rootClassName(scope));
+      expect(asBare, sourcePath).toContain(bare);
+      expect(asDoored, sourcePath).not.toContain(bare);
+    }
+  });
+
+  it('NEGATIVE: a prefix, suffix, foreign or second appended class, a quoted or expression className and a data-className are refused', () => {
+    for (const { sourcePath, scope } of INTERACTION_COMPONENTS) {
+      const bare = `className="${scope}"`;
+      const source = readRelative(sourcePath).replace(`className="${scope} ${scope}__root"`, bare);
+      const foreign = scope === 'ds-metrics-rows' ? 'ds-metrics-cards' : 'ds-metrics-rows';
+      const refused = [
+        `className="x ${scope}"`,
+        `className="${scope}-x"`,
+        `className="${scope} x"`,
+        `className="${scope} ${foreign}__root"`,
+        `className="${scope} ${scope}__root x"`,
+        `className="${scope}  ${scope}__root"`,
+        `className='${scope}'`,
+        `className={"${scope}"}`,
+        `className={\`${scope}\`}`,
+        `data-className="${scope}"`,
+      ];
+      for (const form of refused) {
+        const mutant = source.replace(bare, form);
+        expect(mutant, `${sourcePath}: ${form}`).not.toBe(source);
+        expect(mutant, `${sourcePath}: ${form}`).not.toMatch(rootClassName(scope));
       }
     }
   });

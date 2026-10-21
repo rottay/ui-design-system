@@ -141,7 +141,7 @@ export function MetricsChart({ metrics }: MetricsProps) {
 
   return (
     <Box
-      className="ds-metrics-chart"
+      className="ds-metrics-chart ds-metrics-chart__root"
       data-part="root"
     >
       <Flex

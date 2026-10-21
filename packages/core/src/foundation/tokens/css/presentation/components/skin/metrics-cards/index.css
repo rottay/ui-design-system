@@ -50,7 +50,8 @@
    rhythm channel — rhythm owns the room around content, never a panel's
    capacity; the runtime
    density channels stay inline on the root (the density suite pins them). */
-.ds-metrics-cards.ds-metrics-cards[data-part='root'] {
+.ds-metrics-cards.ds-metrics-cards[data-part='root'],
+.ds-metrics-cards.ds-metrics-cards.ds-metrics-cards__root {
   display: flex;
   flex-direction: column;
   /* The panel is its own responsive frame — every cut in this file is keyed on
@@ -68,7 +69,8 @@
   border-radius: var(--ds-signal-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
   box-shadow: var(--ds-signal-card-shadow, var(--ds-premium-card-shadow, none));
 }
-.ds-metrics-cards.ds-metrics-cards[data-part='root'][data-part='root'] {
+.ds-metrics-cards.ds-metrics-cards[data-part='root'][data-part='root'],
+.ds-metrics-cards.ds-metrics-cards.ds-metrics-cards__root.ds-metrics-cards__root {
   border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='header'],
@@ -358,7 +360,8 @@
    `Text` — an earlier note here claimed the channel had never painted, and
    that claim was an instrument artefact, now withdrawn. */
 @container ds-metrics-cards (inline-size < 20rem) {
-  .ds-metrics-cards.ds-metrics-cards[data-part='root'] {
+  .ds-metrics-cards.ds-metrics-cards[data-part='root'],
+  .ds-metrics-cards.ds-metrics-cards.ds-metrics-cards__root {
     --_ds-metric-value-size: 22px;
   }
   .ds-metrics-cards.ds-metrics-cards [data-part='header'],
@@ -373,6 +376,7 @@
    survives through the trend icon shape and the signed change text. */
 @media (forced-colors: active) {
   .ds-metrics-cards.ds-metrics-cards[data-part='root'][data-part='root'],
+  .ds-metrics-cards.ds-metrics-cards.ds-metrics-cards__root.ds-metrics-cards__root,
   .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-part='metric-card'],
   .ds-metrics-cards.ds-metrics-cards .ds-metrics-cards__metric-card.ds-metrics-cards__metric-card,
   .ds-metrics-cards.ds-metrics-cards [data-part='panel-icon-box'][data-part='panel-icon-box'],

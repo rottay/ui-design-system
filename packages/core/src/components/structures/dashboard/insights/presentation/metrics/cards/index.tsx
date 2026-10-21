@@ -152,7 +152,7 @@ export function MetricsCards({ metrics, density = 'comfortable' }: MetricsProps)
   const cardPadding = `var(--ds-metric-card-padding, ${densityPreset.cardPadding})`;
   return (
     <Box
-      className="ds-metrics-cards"
+      className="ds-metrics-cards ds-metrics-cards__root"
       data-part="root"
       style={{
         // Runtime density wiring stays inline (the density suite pins these

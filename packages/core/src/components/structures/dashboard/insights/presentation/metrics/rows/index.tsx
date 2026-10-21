@@ -136,7 +136,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
 
   return (
     <Box
-      className="ds-metrics-rows"
+      className="ds-metrics-rows ds-metrics-rows__root"
       data-part="root"
     >
       <Flex

@@ -117,7 +117,7 @@ export function ActivityCompact({
 
   return (
     <Box
-      className="ds-activity-compact"
+      className="ds-activity-compact ds-activity-compact__root"
       data-part="root"
     >
       <Flex

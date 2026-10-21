@@ -29,7 +29,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve as resolvePath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import postcss from 'postcss';
+import postcss, { type Rule } from 'postcss';
 import { describe, expect, it } from 'vitest';
 
 /** The panel's private size socket. Embedded hosts retune the panel by
@@ -80,13 +80,36 @@ function readSkin(file: string): string {
   return readFileSync(resolvePath(SKIN_DIRECTORY, file), 'utf8');
 }
 
+function classTwin(selector: string): string {
+  const scope = /^\.([\w-]+)/.exec(selector)?.[1] ?? '';
+  return selector.replace(/\[data-part='([\w-]+)'\]/g, `.${scope}__$1`);
+}
+
+function isRootRule(members: readonly string[], selector: string): boolean {
+  const twin = classTwin(selector);
+  const list = members.map((member) => member.replace(/\s+/g, ' ').trim());
+  return [[selector], [selector, twin], [twin]].some(
+    (form) => form.length === list.length && form.every((member, index) => member === list[index]),
+  );
+}
+
+type Members = (selector: string, twin: string) => readonly string[];
+
+function reshaped(source: string, selector: string, members: Members): string {
+  const root = postcss.parse(source);
+  root.walkRules((rule) => {
+    if (isRootRule(rule.selectors, selector)) rule.selectors = [...members(selector, classTwin(selector))];
+  });
+  return root.toString();
+}
+
 /** Every `block-size` value declared on `selector` in `source`. */
 function rootBlockSizeValues(source: string, selector: string): readonly string[] {
   const out: string[] = [];
   postcss.parse(source).walkDecls('block-size', (declaration) => {
     const parent = declaration.parent;
     if (!parent || parent.type !== 'rule') return;
-    if ((parent as { selector: string }).selector !== selector) return;
+    if (!isRootRule((parent as Rule).selectors, selector)) return;
     out.push(declaration.value);
   });
   return out;
@@ -187,5 +210,63 @@ describe('DashboardInsights panel capacity (the seam sizes the panel, rhythm nev
     const values = rootBlockSizeValues(reverted, selector);
     expect(values).toHaveLength(1);
     expect(capacityViolations(values[0])).not.toEqual([]);
+  });
+
+  it('the root reader finds the one block-size rule bare or paired with its exact class twin, and the exact-selector reader does not', () => {
+    const exact = (source: string, selector: string): readonly string[] => {
+      const out: string[] = [];
+      postcss.parse(source).walkDecls('block-size', (declaration) => {
+        if (declaration.parent?.type === 'rule' && (declaration.parent as Rule).selector === selector) out.push(declaration.value);
+      });
+      return out;
+    };
+    const shapes: readonly [string, Members][] = [
+      ['bare', (selector) => [selector]],
+      ['paired', (selector, twin) => [selector, twin]],
+      ['class-only', (_selector, twin) => [twin]],
+    ];
+    for (const { file, scope } of PANEL_ROOTS) {
+      const selector = rootSelector(scope);
+      const live = readSkin(file);
+      for (const [name, members] of shapes) {
+        const values = rootBlockSizeValues(reshaped(live, selector, members), selector);
+        expect(values, `${file} ${name}`).toHaveLength(1);
+        expect(capacityViolations(values[0]), `${file} ${name}`).toEqual([]);
+      }
+      expect(exact(reshaped(live, selector, shapes[0][1]), selector), file).toHaveLength(1);
+      expect(exact(reshaped(live, selector, shapes[1][1]), selector), file).toHaveLength(0);
+      expect(exact(reshaped(live, selector, shapes[2][1]), selector), file).toHaveLength(0);
+    }
+  });
+
+  it('NEGATIVE: an extra, widened or foreign-block member, a duplicated root rule and a missing root rule each fail the reader', () => {
+    for (const { file, scope } of PANEL_ROOTS) {
+      const selector = rootSelector(scope);
+      const live = readSkin(file);
+      const foreign = scope === 'ds-metrics-cards' ? 'ds-metrics-rows' : 'ds-metrics-cards';
+      const refused: readonly [string, Members][] = [
+        ['extra member', (k, c) => [k, c, `.${scope}.${scope}.${scope}__extra`]],
+        ['widened member', (k) => [k, `.${scope}.${scope}.rottay-box--modern`]],
+        ['foreign-block member', (k) => [k, `.${scope}.${scope}.${foreign}__root`]],
+        ['duplicated member', (k) => [k, k]],
+        ['duplicated twin', (k, c) => [k, c, c]],
+        ['reversed order', (k, c) => [c, k]],
+      ];
+      for (const [name, members] of refused) {
+        expect(rootBlockSizeValues(reshaped(live, selector, members), selector), `${file} ${name}`).toHaveLength(0);
+      }
+      const doubled = postcss.parse(live);
+      const sized: Rule[] = [];
+      doubled.walkRules((rule) => {
+        if (isRootRule(rule.selectors, selector) && rule.some((node) => node.type === 'decl' && node.prop === 'block-size')) sized.push(rule);
+      });
+      for (const rule of sized) rule.after(rule.clone());
+      expect(rootBlockSizeValues(doubled.toString(), selector), `${file} duplicated root rule`).toHaveLength(2);
+      const missing = postcss.parse(live);
+      missing.walkRules((rule) => {
+        if (isRootRule(rule.selectors, selector)) rule.remove();
+      });
+      expect(rootBlockSizeValues(missing.toString(), selector), `${file} missing root rule`).toHaveLength(0);
+    }
   });
 });

@@ -47,7 +47,8 @@
    frame). The panel block size rides the shared dashboard socket so embedded
    contexts (beside-chat strips) can retune it; the 415px fallback is the
    shipped dashboard measure, preserved byte-exact. */
-.ds-metrics-rows.ds-metrics-rows[data-part='root'] {
+.ds-metrics-rows.ds-metrics-rows[data-part='root'],
+.ds-metrics-rows.ds-metrics-rows.ds-metrics-rows__root {
   display: flex;
   flex-direction: column;
   /* The panel is its own responsive frame: every cut in this file is keyed on
@@ -64,7 +65,8 @@
   border-radius: var(--ds-signal-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
   box-shadow: var(--ds-signal-card-shadow, var(--ds-premium-card-shadow, none));
 }
-.ds-metrics-rows.ds-metrics-rows[data-part='root'][data-part='root'] {
+.ds-metrics-rows.ds-metrics-rows[data-part='root'][data-part='root'],
+.ds-metrics-rows.ds-metrics-rows.ds-metrics-rows__root.ds-metrics-rows__root {
   border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='header'],
@@ -156,7 +158,8 @@
 
 /* The parked sweep is off-row; it paints only while the hover sweep runs. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .ds-metrics-rows.ds-metrics-rows [data-part='metric-row']:hover [data-part='shimmer'] {
+  .ds-metrics-rows.ds-metrics-rows [data-part='metric-row']:hover [data-part='shimmer'],
+  .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row:hover .ds-metrics-rows__shimmer {
     visibility: visible;
   }
 }
@@ -253,7 +256,8 @@
    channel is asserted from the engine source and from this file, never from
    a rendered node. */
 @container ds-metrics-rows (inline-size < 20rem) {
-  .ds-metrics-rows.ds-metrics-rows[data-part='root'] {
+  .ds-metrics-rows.ds-metrics-rows[data-part='root'],
+  .ds-metrics-rows.ds-metrics-rows.ds-metrics-rows__root {
     --_ds-metric-value-size: 22px;
   }
   .ds-metrics-rows.ds-metrics-rows [data-part='header'],
@@ -283,6 +287,7 @@
    and the signed change text, never the hue. */
 @media (forced-colors: active) {
   .ds-metrics-rows.ds-metrics-rows[data-part='root'][data-part='root'],
+  .ds-metrics-rows.ds-metrics-rows.ds-metrics-rows__root.ds-metrics-rows__root,
   .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-part='metric-row'],
   .ds-metrics-rows.ds-metrics-rows .ds-metrics-rows__metric-row.ds-metrics-rows__metric-row,
   .ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'][data-part='panel-icon-box'],
