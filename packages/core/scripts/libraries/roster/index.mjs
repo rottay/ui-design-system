@@ -1,18 +1,32 @@
 import { spawnSync } from 'node:child_process';
-import { dirname, relative, resolve } from 'node:path';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { packageRoot as findPackageRoot } from '../repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 
+/**
+ * Name prefix of the Vite cache directory each roster execution creates for
+ * itself under the OS temp root. The directory is removed when the execution
+ * ends, so a leftover entry with this prefix is residue, never a shared cache.
+ */
+const OWNED_CACHE_PREFIX = 'ds-roster-vite-';
+
 const EXECUTABLE_PROJECTION = String.raw`
 import { createServer } from 'vite';
 import { resolve, relative } from 'node:path';
 
-const [modulePath, coreRoot] = process.argv.slice(1);
+const [modulePath, coreRoot, cacheDir] = process.argv.slice(1);
+// The dependency optimizer writes into the directory the parent created for
+// this execution alone. Vite's default <package>/node_modules/.vite is shared by
+// every checkout that links the same node_modules, and the optimizer's startup
+// cleanup deletes other runs' stale temp directories there.
 const server = await createServer({
   root: coreRoot,
+  cacheDir,
   configFile: false,
   logLevel: 'silent',
   appType: 'custom',
@@ -94,11 +108,19 @@ export function validateExecutableRoster(rows, path = '<runtime>') {
   }));
 }
 
-/** Execute the authored TypeScript roster through Vite's source loader. */
-export function readFirstPartyRosterSource(path, { coreRoot = CORE_ROOT } = {}) {
+/**
+ * Run the projection child against one roster module and validate what it prints.
+ *
+ * @param {string} path Roster module to execute.
+ * @param {string} coreRoot Vite root, child working directory and `@` alias base.
+ * @param {string} cacheDir Owned Vite cache directory created for this execution.
+ * @returns {ReadonlyArray<Readonly<Record<string, unknown>>>} The validated, frozen roster rows.
+ * @throws {Error} When the child cannot run, exits non-zero, prints non-JSON or the rows fail validation.
+ */
+function executeProjection(path, coreRoot, cacheDir) {
   const outcome = spawnSync(
     process.execPath,
-    ['--input-type=module', '--eval', EXECUTABLE_PROJECTION, resolve(path), coreRoot],
+    ['--input-type=module', '--eval', EXECUTABLE_PROJECTION, resolve(path), coreRoot, cacheDir],
     { cwd: coreRoot, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024, timeout: 30_000 },
   );
   if (outcome.error) {
@@ -117,4 +139,60 @@ export function readFirstPartyRosterSource(path, { coreRoot = CORE_ROOT } = {}) 
     fail(`source execution returned non-JSON: ${error.message}`, relative(coreRoot, path));
   }
   return validateExecutableRoster(rows, relative(coreRoot, path));
+}
+
+/**
+ * Execute the authored TypeScript roster through Vite's source loader.
+ *
+ * Each call gives Vite a cache directory of its own: it is created under the OS
+ * temp root before the child starts and removed when the call ends, whatever the
+ * outcome. Nothing is written to, or deleted from, the `.vite` cache that
+ * `coreRoot`'s `node_modules` may share with other checkouts.
+ *
+ * @param {string} path Roster module to execute (absolute, or relative to the working directory).
+ * @param {{ coreRoot?: string }} [options] `coreRoot`: Vite root, child working directory and
+ *   `@` alias base; defaults to this package.
+ * @returns {ReadonlyArray<Readonly<Record<string, unknown>>>} The validated, frozen roster rows.
+ * @throws {Error} `Executable first-party roster rejected …` when the owned cache cannot be
+ *   created, the child cannot run, exits non-zero, prints non-JSON, the rows fail validation, or
+ *   the owned cache cannot be removed. A removal failure after another failure keeps that first
+ *   message as the prefix and the first error as `cause`.
+ */
+export function readFirstPartyRosterSource(path, { coreRoot = CORE_ROOT } = {}) {
+  // Created before the child exists, so every later outcome (spawn or cwd error, timeout kill,
+  // failing module, rejected output) reaches the single removal below.
+  let cacheDir;
+  try {
+    cacheDir = mkdtempSync(join(tmpdir(), OWNED_CACHE_PREFIX));
+  } catch (error) {
+    fail(`owned Vite cache could not be created: ${error.message}`, relative(coreRoot, path));
+  }
+
+  let rows;
+  let primary = null;
+  try {
+    rows = executeProjection(path, coreRoot, cacheDir);
+  } catch (error) {
+    primary = error;
+  }
+
+  // `force` only tolerates an already-missing directory; any other removal error is
+  // reported, never swallowed, without hiding a failure that happened first.
+  let cleanupError = null;
+  try {
+    rmSync(cacheDir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+  } catch (error) {
+    cleanupError = error;
+  }
+
+  if (primary !== null) {
+    if (cleanupError === null) throw primary;
+    throw new Error(`${primary.message}; owned Vite cache cleanup also failed: ${cleanupError.message}`, {
+      cause: primary,
+    });
+  }
+  if (cleanupError !== null) {
+    fail(`owned Vite cache cleanup failed: ${cleanupError.message}`, relative(coreRoot, path));
+  }
+  return rows;
 }
