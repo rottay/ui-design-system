@@ -880,6 +880,14 @@ Lane-wide rules (binding on every WO):
   D-E (the door and the feature-pictogram asset class stay published; nothing here retires them).
   **Files** gains for W-2 only: *those exact 4 paths, each carrying the retirement's consistency edit and
   nothing else.*
+- **AMENDMENT (2026-10-21, DT ruling on the missed W-2 license-summary companion; the acceptance above stands)** —
+  The authorized W-2 / F-113 retirement in `965241fa6` left the graphics-license unit summary expecting eight
+  feature pictograms although the catalog, artwork, provenance manifest and notice already contain the six
+  retained names. **Files** gains for this consistency repair only:
+  `packages/core/scripts/package/graphics/licenses/index.test.mjs`, changing only its `featurePictograms` summary
+  literal from 8 to 6; the seven existing tests and all negative assertions remain. The repair carries its own
+  patch changeset. It changes no source population, runtime, asset class, public door, acceptance criterion or
+  owner disposition, and gives no publication, phase or work-order closure credit. Every other field stands.
 - **AMENDMENT (2026-10-07, DT ruling on the W-3a companion surface; the acceptance above stands, this is added to it)** —
   The W-3a packet (the density axis: ten names retired into the two surviving axes) measured these companion
   paths outside the Files list: `packages/core/src/index.ts` (the DENSITY block), `packages/core/src/foundation/contracts/index.ts`

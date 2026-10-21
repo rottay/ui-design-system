@@ -48,7 +48,7 @@ test('canonical graphics pack has exhaustive licensed provenance and notice cove
     functionalIconCompatibilityImports: 330,
     brandMarks: 11,
     cloudServiceMarks: 4,
-    featurePictograms: 8,
+    featurePictograms: 6,
     notice: 'THIRD_PARTY_NOTICES.md',
     archivedLicenses: 2,
   });
