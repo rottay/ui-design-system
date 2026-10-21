@@ -349,7 +349,8 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const line = populationLine();
     // Mover: 65f9f8b80 (ARC-12 E6 prerequisite, re-pinned by HK-POP 2026-10-12): active-filters-bar enters shape on a reset (`border-radius: 0`), 213 -> 214.
     assert.match(line, /shape 214 \(5 N\/A\)/);
-    assert.match(line, /typography 184 \(0 N\/A\)/);
+    // Mover: 7fa45d371 (owner answer 4, D-4-PAGE-SHELL, re-pinned by G7 2026-10-20): notification-surface enters typography on its item title role, 184 -> 185.
+    assert.match(line, /typography 185 \(0 N\/A\)/);
     assert.match(line, /exclusions [0-9a-f]{16} \(6 reviewed\)/);
 
     const pilot = pilotPopulation();
@@ -1617,7 +1618,8 @@ describe('theme population — STATES-K: a family declares states iff kernel-gat
       // shape 214 -> 213, N/A 4 -> 5 (OWNSO 9789b3469 + W23-POPX): shortcuts-overlay's shape is delegated to modal.
       // motion 204 -> 203, N/A 0 -> 1 (WO-ARC-22 L6 464d5cf52 + EVI02-MOTION, owner ruling 2026-10-08 #2): status-filter-pills' motion is delegated to button.
       // shape 213 -> 214, depth 199 -> 200 (65f9f8b80 (ARC-12 E6 prerequisite, re-pinned by HK-POP 2026-10-12): active-filters-bar enters both on resets; no leaver, no corpus move).
-      { shape: 214, typography: 184, rhythm: 226, depth: 200, motion: 203 });
+      // typography 184 -> 185 (7fa45d371, owner answer 4, re-pinned by G7 2026-10-20): notification-surface enters on its item title role; no leaver, no corpus move.
+      { shape: 214, typography: 185, rhythm: 226, depth: 200, motion: 203 });
     assert.deepEqual(Object.fromEntries(report.axes.map((entry) => [entry.axis, entry.notApplicableCount])),
       { shape: 5, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 1 });
     // The two ruled-out alternatives, measured: the twin clause keeps out
