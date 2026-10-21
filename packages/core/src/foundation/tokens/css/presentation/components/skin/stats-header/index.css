@@ -55,14 +55,16 @@
  */
 
 /* ---- root: named container; the wide-column count rides the channel ---- */
-.ds-stats-header[data-part='root'] {
+.ds-stats-header[data-part='root'],
+.ds-stats-header.ds-stats-header__root {
   container: ds-stats-header / inline-size;
   min-inline-size: 0;
 }
 
 /* ---- card grid: N wide (channel), capped to 2 mid and 1 narrow by the
         container cuts at the foot of this file ---- */
-.ds-stats-header[data-part='root'] [data-part='card-grid'] {
+.ds-stats-header[data-part='root'] [data-part='card-grid'],
+.ds-stats-header.ds-stats-header__root [data-part='card-grid'] {
   display: grid;
   grid-template-columns: repeat(
     var(--_ds-stats-header-track-count, var(--ds-stats-header-columns, 4)),
@@ -73,7 +75,8 @@
 }
 
 /* ---- stat card: chrome + drained geometry ---- */
-.ds-stats-header[data-part='root'] [data-part='stat-card'] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card {
   position: relative;
   flex: 1 1 0;
   min-inline-size: 0;
@@ -88,10 +91,12 @@
     transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease);
 }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-stats-header-card-frame, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
 }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-clickable='true'] {
   cursor: pointer;
 }
 
@@ -101,31 +106,36 @@
    fallback. */
 @media (hover: hover) {
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'][data-state~='hovered'],
-  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:hover {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:hover,
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-clickable='true']:hover {
     transform: var(--ds-stats-header-hover-lift, translateY(-2px));
     box-shadow: var(--ds-stats-header-hover-shadow, 0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
   }
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'][data-state~='pressed'],
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:active {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:active,
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-clickable='true']:active {
   transform: var(--ds-stats-header-press-scale, scale(0.98));
   box-shadow: var(--ds-stats-header-press-shadow, 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent));
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'][data-state~='focus-visible'],
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:focus-visible {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:focus-visible,
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-clickable='true']:focus-visible {
   outline: 2px solid var(--ds-stats-header-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
   outline-offset: 2px;
 }
 
 /* ---- top row: composed metric + change pill + corner icon ---- */
-.ds-stats-header[data-part='root'] [data-part='stat-top'] {
+.ds-stats-header[data-part='root'] [data-part='stat-top'],
+.ds-stats-header.ds-stats-header__root [data-part='stat-top'] {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--ds-spacing-2);
   min-inline-size: 0;
 }
-.ds-stats-header[data-part='root'] [data-part='statistic'] {
+.ds-stats-header[data-part='root'] [data-part='statistic'],
+.ds-stats-header.ds-stats-header__root [data-part='statistic'] {
   flex: 1 1 auto;
   min-inline-size: 0;
 }
@@ -135,13 +145,15 @@
         specificity over the Statistic engine skins, whose own value
         typography must yield here — the pattern overrides the primitive,
         never the other way around. ---- */
-.ds-stats-header[data-part='root'] [data-part='stat-card'] [data-part='statistic'] [data-part='value'] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'] [data-part='statistic'] [data-part='value'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card [data-part='statistic'] [data-part='value'] {
   font-size: var(--ds-stats-header-value-font-size, 2.25rem);
   font-weight: var(--ds-stats-header-value-font-weight, var(--ds-font-weight-extrabold, 800));
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-icon'] {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-icon'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent] .ds-stats-header__stat-icon {
   display: flex;
   flex: 0 0 auto;
   align-items: center;
@@ -153,32 +165,42 @@
 /* ---- change indicator: typography and BOTH gaps drained from the TSX (they were
         `gap` props: visual values in the component, on no plane at all); tint by
         data-change ---- */
-.ds-stats-header[data-part='root'] [data-part='change-indicator'] {
+.ds-stats-header[data-part='root'] [data-part='change-indicator'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__change-indicator {
   flex: 0 0 auto;
   gap: var(--ds-stats-header-change-row-gap, 2px);
 }
-.ds-stats-header[data-part='root'] [data-part='change-row'] {
+.ds-stats-header[data-part='root'] [data-part='change-row'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__change-row {
   gap: var(--ds-stats-header-change-column-gap, 3px);
 }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value,
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent] .ds-stats-header__change-value {
   font-size: var(--ds-stats-header-label-font-size, var(--ds-font-size-sm));
   font-weight: var(--ds-font-weight-semibold, 600);
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 .ds-stats-header[data-part='root'] [data-part='change-row'][data-change='increase'],
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value[data-change='increase'] {
+.ds-stats-header.ds-stats-header__root .ds-stats-header__change-row[data-change='increase'],
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value[data-change='increase'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent] .ds-stats-header__change-value[data-change='increase'] {
   color: var(--ds-color-success);
 }
 .ds-stats-header[data-part='root'] [data-part='change-row'][data-change='decrease'],
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value[data-change='decrease'] {
+.ds-stats-header.ds-stats-header__root .ds-stats-header__change-row[data-change='decrease'],
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value[data-change='decrease'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent] .ds-stats-header__change-value[data-change='decrease'] {
   color: var(--ds-color-error);
 }
 .ds-stats-header[data-part='root'] [data-part='change-row'][data-change='neutral'],
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value[data-change='neutral'] {
+.ds-stats-header.ds-stats-header__root .ds-stats-header__change-row[data-change='neutral'],
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-value[data-change='neutral'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent] .ds-stats-header__change-value[data-change='neutral'] {
   color: var(--ds-color-text-muted);
 }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-period {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__change-period,
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent] .ds-stats-header__change-period {
   color: var(--ds-color-text-muted);
   font-size: var(--ds-stats-header-kicker-font-size, var(--ds-font-size-2xs));
   font-weight: var(--ds-font-weight-medium, 500);
@@ -189,11 +211,13 @@
 
 /* ---- sparkline dots: decorative data viz (aria-hidden); the hover ping is
         pure CSS on the parent card, staggered on the ping channel ---- */
-.ds-stats-header[data-part='root'] [data-part='spark-dots'] {
+.ds-stats-header[data-part='root'] [data-part='spark-dots'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__spark-dots {
   margin-block-start: var(--ds-stats-header-spark-margin-block-start, 14px);
   gap: var(--ds-stats-header-spark-dot-gap, 6px);
 }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'] {
+.ds-stats-header[data-part='root'] [data-part='spark-dot'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__spark-dot {
   inline-size: var(--ds-stats-header-spark-dot-size, var(--ds-spacing-1, 4px));
   block-size: var(--ds-stats-header-spark-dot-size, var(--ds-spacing-1, 4px));
   border-radius: 50%;
@@ -209,34 +233,47 @@
 
 @media (hover: hover) {
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'],
-  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'] {
+  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card:hover .ds-stats-header__spark-dot {
     animation: pulse-dot-ping var(--ds-stats-header-ping-duration, 400ms) ease both;
   }
-  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='1'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='1'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card:hover .ds-stats-header__spark-dot[data-dot-index='1'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8); }
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='2'],
-  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='2'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 2); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='2'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card:hover .ds-stats-header__spark-dot[data-dot-index='2'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 2); }
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='3'],
-  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='3'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 3); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='3'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card:hover .ds-stats-header__spark-dot[data-dot-index='3'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 3); }
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='4'],
-  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='4'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 4); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='4'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card:hover .ds-stats-header__spark-dot[data-dot-index='4'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 4); }
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='5'],
-  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='5'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 5); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='5'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card:hover .ds-stats-header__spark-dot[data-dot-index='5'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 5); }
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='6'],
-  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='6'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 6); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='6'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card:hover .ds-stats-header__spark-dot[data-dot-index='6'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 6); }
 }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='primary'] { background: var(--ds-color-primary); }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='success'] { background: var(--ds-color-success); }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='primary'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__spark-dot[data-accent='primary'] { background: var(--ds-color-primary); }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='success'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__spark-dot[data-accent='success'] { background: var(--ds-color-success); }
 .ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='warning'] { background: var(--ds-color-warning); }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='error']   { background: var(--ds-color-error); }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='info']    { background: var(--ds-color-info); }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='error'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__spark-dot[data-accent='error']   { background: var(--ds-color-error); }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='info'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__spark-dot[data-accent='info']    { background: var(--ds-color-info); }
 
 /* ---- progress meter slot (the composed Progress owns track + fill) ---- */
-.ds-stats-header[data-part='root'] [data-part='stat-progress'] {
+.ds-stats-header[data-part='root'] [data-part='stat-progress'],
+.ds-stats-header.ds-stats-header__root [data-part='stat-progress'] {
   margin-block-start: var(--ds-stats-header-progress-margin-block-start, 10px);
 }
 
 /* ---- insight ---- */
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__stat-insight {
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] .ds-stats-header__stat-insight,
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent] .ds-stats-header__stat-insight {
   margin-block-start: var(--ds-stats-header-insight-margin-block-start, var(--ds-spacing-2, 8px));
   color: var(--ds-color-text-muted);
   font-size: var(--ds-stats-header-meta-font-size, var(--ds-font-size-2xs));
@@ -245,18 +282,24 @@
 }
 
 /* ---- card glow — accent at 6% (decorative) ---- */
-.ds-stats-header[data-part='root'] [data-part='card-glow'] {
+.ds-stats-header[data-part='root'] [data-part='card-glow'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__card-glow {
   position: absolute;
   inset-inline: 0;
   inset-block-end: 0;
   block-size: var(--ds-stats-header-glow-block-size, var(--ds-spacing-10, 40px));
   pointer-events: none;
 }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='primary'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-primary) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='success'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-success) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='warning'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-warning) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='error']   [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-error) 6%, transparent), transparent); }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='info']    [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-info) 6%, transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='primary'] [data-part='card-glow'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent='primary'] .ds-stats-header__card-glow { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-primary) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='success'] [data-part='card-glow'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent='success'] .ds-stats-header__card-glow { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-success) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='warning'] [data-part='card-glow'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent='warning'] .ds-stats-header__card-glow { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-warning) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='error']   [data-part='card-glow'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent='error']   .ds-stats-header__card-glow { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-error) 6%, transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='info']    [data-part='card-glow'],
+.ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent='info']    .ds-stats-header__card-glow { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-info) 6%, transparent), transparent); }
 
 /* ---- container cuts: 2 columns mid, 1 narrow + compact measure.
         The cuts CAP the track count instead of replacing the grid, and they
@@ -272,30 +315,37 @@
         `--ds-stats-header-columns`, because a container query cannot read a
         custom property from a selector. ---- */
 @container ds-stats-header (inline-size < 48rem) {
-  .ds-stats-header[data-part='root']:not([data-columns='1']) {
+  .ds-stats-header[data-part='root']:not([data-columns='1']),
+  .ds-stats-header.ds-stats-header__root:not([data-columns='1']) {
     --_ds-stats-header-track-count: 2;
   }
 }
 @container ds-stats-header (inline-size < 30rem) {
-  .ds-stats-header[data-part='root']:not([data-columns='1']) {
+  .ds-stats-header[data-part='root']:not([data-columns='1']),
+  .ds-stats-header.ds-stats-header__root:not([data-columns='1']) {
     --_ds-stats-header-track-count: 1;
   }
-  .ds-stats-header[data-part='root'] [data-part='stat-card'] {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card {
     min-block-size: var(--ds-stats-header-card-min-height-compact, 120px);
     padding: var(--ds-stats-header-card-padding-compact, 18px);
   }
-  .ds-stats-header[data-part='root'] [data-part='stat-card'] {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card {
     --ds-stats-header-value-font-size: var(--ds-stats-header-value-font-size-compact, 1.75rem);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-stats-header[data-part='root'] [data-part='stat-card'],
-  .ds-stats-header[data-part='root'] [data-part='spark-dot'] {
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card,
+  .ds-stats-header[data-part='root'] [data-part='spark-dot'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__spark-dot {
     transition: none;
   }
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'],
-  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'] {
+  .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card:hover .ds-stats-header__spark-dot {
     animation: none;
   }
 }
@@ -307,16 +357,20 @@
    Progress primitives and the anatomy-derived loading renderer keep their
    own forced-colors contracts. */
 @media (forced-colors: active) {
-  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-accent] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
   }
-  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:focus-visible {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:focus-visible,
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__stat-card[data-clickable='true']:focus-visible {
     outline-color: Highlight;
   }
   .ds-stats-header[data-part='root'] [data-part='spark-dots'],
-  .ds-stats-header[data-part='root'] [data-part='card-glow'] {
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__spark-dots,
+  .ds-stats-header[data-part='root'] [data-part='card-glow'],
+  .ds-stats-header.ds-stats-header__root .ds-stats-header__card-glow {
     display: none;
   }
 }

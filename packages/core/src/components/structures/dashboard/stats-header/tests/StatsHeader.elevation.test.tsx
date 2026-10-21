@@ -35,6 +35,8 @@ import { renderSurface } from '../../../../surfaces/foundation/common/test-utils
 const SKIN = '../../../../../foundation/tokens/css/presentation/components/skin/stats-header/index.css';
 const KEYFRAMES =
   '../../../../../foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css';
+const ROOT = ".ds-stats-header[data-part='root']";
+const ROOT_DOOR = '.ds-stats-header.ds-stats-header__root';
 
 function parseSkin(path: string): Root {
   return postcss.parse(readFileSync(new URL(path, import.meta.url), 'utf8'), { from: path });
@@ -58,6 +60,23 @@ function isSeriesRelative(values: string[]): boolean {
     values.length > 0 &&
     values.every((value) => value.includes('--ds-stats-header-spark-dot-opacity'))
   );
+}
+
+/** The container declaration of the rule whose list is exactly the root part, alone or followed by its one own
+ *  class door; any other list (widened, foreign, extra or repeated member) is not the root rule. */
+function rootContainerDecl(root: Root): string {
+  let containerDecl = '';
+  root.walkRules((rule) => {
+    const members = rule.selectors;
+    const isRoot =
+      (members.length === 1 && members[0] === ROOT) ||
+      (members.length === 2 && members[0] === ROOT && members[1] === ROOT_DOOR);
+    if (!isRoot) return;
+    rule.walkDecls(/^container/, (decl) => {
+      containerDecl = `${decl.prop}:${decl.value}`;
+    });
+  });
+  return containerDecl;
 }
 
 function statsOf(count: number): StatItem[] {
@@ -124,14 +143,28 @@ describe('StatsHeader elevation', () => {
   it('answers its own measure and never the viewport', () => {
     const root = parseSkin(SKIN);
 
-    let containerDecl = '';
-    root.walkRules((rule) => {
-      if (rule.selector !== ".ds-stats-header[data-part='root']") return;
-      rule.walkDecls(/^container/, (decl) => {
-        containerDecl = `${decl.prop}:${decl.value}`;
-      });
-    });
+    const containerDecl = rootContainerDecl(root);
     expect(containerDecl).toContain('inline-size');
+
+    const declOf = (list: string, value = 'ds-stats-header / inline-size') =>
+      rootContainerDecl(postcss.parse(`${list} { container: ${value}; }`));
+    expect(declOf(ROOT)).toBe('container:ds-stats-header / inline-size');
+    expect(declOf(`${ROOT},\n${ROOT_DOOR}`)).toBe('container:ds-stats-header / inline-size');
+    expect(declOf(`${ROOT},\n${ROOT_DOOR}`, 'ds-stats-header / size')).not.toContain('inline-size');
+    expect(rootContainerDecl(postcss.parse('.ds-stats-header { color: red; }'))).toBe('');
+    for (const list of [
+      ROOT_DOOR,
+      `${ROOT},\n.ds-stats-header__root`,
+      `${ROOT},\n.ds-stats-header .ds-stats-header__root`,
+      `${ROOT},\n.ds-other.ds-other__root`,
+      `${ROOT},\n${ROOT_DOOR},\n.ds-stats-header.ds-stats-header__card-grid`,
+      `${ROOT},\n${ROOT}`,
+      `${ROOT},\n${ROOT_DOOR},\n${ROOT_DOOR}`,
+      `${ROOT_DOOR},\n${ROOT}`,
+      `${ROOT}:not([data-columns='1'])`,
+    ]) {
+      expect(declOf(list), list).toBe('');
+    }
 
     const viewportQueries: string[] = [];
     root.walkAtRules('media', (at) => {

@@ -116,32 +116,32 @@
  * four card variants and the stat. The entrance fade is skin-owned (MOTION).
  * ==========================================================================*/
 
-.ds-data-terminal-card[data-part='root'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) {
   background: var(--ds-color-background);
   animation: dtc-fade-in
     var(--ds-dtc-duration-entrance, calc(var(--ds-motion-glacial, 500ms) * 0.8))
     var(--ds-motion-ease-out, ease-out);
   transition: border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-data-terminal-card[data-part='root'][data-variant] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
-.ds-data-terminal-stat[data-part='root'] {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) {
   background: var(--ds-color-background);
 }
-.ds-data-terminal-stat[data-part='root'][data-trend] {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* The card is a full-body link: a quiet border shift on hover (hover-capable
    only) and press, never a lift or glow. */
 @media (hover: hover) {
-  .ds-data-terminal-card[data-part='root']:hover {
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root):hover {
     border-color: color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
   }
 }
-.ds-data-terminal-card[data-part='root']:active {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root):active {
   border-color: color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
 }
 
@@ -150,8 +150,8 @@
  * ==========================================================================*/
 
 /* value (Text) — all four bodies + stat, always text-primary, tabular. */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__value,
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__value,
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend][data-band] .ds-data-terminal-card__value {
   color: var(--ds-color-text);
   font-variant-numeric: tabular-nums;
 }
@@ -167,71 +167,71 @@
 }
 
 /* change-value (Text) — binary on data-trend, all five bodies. */
-.ds-data-terminal-card[data-part='root'][data-trend='up'][data-band] .ds-data-terminal-card__change-value,
-.ds-data-terminal-stat[data-part='root'][data-trend='up'][data-band] .ds-data-terminal-card__change-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-trend='up'][data-band] .ds-data-terminal-card__change-value,
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend='up'][data-band] .ds-data-terminal-card__change-value {
   color: var(--ds-color-success);
   font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-part='root'][data-trend='down'][data-band] .ds-data-terminal-card__change-value,
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-trend='down'][data-band] .ds-data-terminal-card__change-value,
 .ds-data-terminal-stat[data-part='root'][data-trend='down'][data-band] .ds-data-terminal-card__change-value {
   color: var(--ds-color-error);
   font-variant-numeric: tabular-nums;
 }
 
 /* target-value (Text) — threshold bucket on the root's data-band. Command/Circuit/Matrix. */
-.ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] .ds-data-terminal-card__target-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-band='high'][data-trend] .ds-data-terminal-card__target-value {
   color: var(--ds-color-success);
   font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] .ds-data-terminal-card__target-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-band='mid'][data-trend] .ds-data-terminal-card__target-value {
   color: var(--ds-color-warning);
   font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] .ds-data-terminal-card__target-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-band='low'][data-trend] .ds-data-terminal-card__target-value {
   color: var(--ds-color-error);
   font-variant-numeric: tabular-nums;
 }
 
 /* period-value (Text) — text-secondary in Command/Circuit/Matrix, text-subtle in HUD. */
-.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] .ds-data-terminal-card__period-value,
-.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] .ds-data-terminal-card__period-value,
-.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] .ds-data-terminal-card__period-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'][data-trend] .ds-data-terminal-card__period-value,
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='3'][data-trend] .ds-data-terminal-card__period-value,
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'][data-trend] .ds-data-terminal-card__period-value {
   color: var(--ds-color-text-secondary);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__period-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'][data-trend] .ds-data-terminal-card__period-value {
   color: var(--ds-color-text-subtle);
 }
 
 /* header icon-box (Box) — HUD/Circuit/Matrix, subtle background + 1px border. */
-.ds-data-terminal-card[data-part='root'] [data-part='header-icon-box'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='header-icon-box'], .ds-data-terminal-card__header-icon-box) {
   background: var(--ds-color-bg-subtle);
 }
-.ds-data-terminal-card[data-part='root'][data-variant] [data-part='header-icon-box'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='header-icon-box'], .ds-data-terminal-card__header-icon-box) {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* header-icon — HUD/Circuit/Matrix, text-secondary. */
-.ds-data-terminal-card[data-part='root'] [data-part='header-icon'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='header-icon'] {
   color: var(--ds-color-text-secondary);
 }
 
 /* header-label (Text) — HUD/Circuit/Matrix, text-secondary. */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__header-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__header-label {
   color: var(--ds-color-text-secondary);
 }
 
 /* details-label (Text) — HUD/Matrix, text-muted. */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__details-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__details-label {
   color: var(--ds-color-text-muted);
 }
 
 /* details-arrow — HUD/Matrix, text-muted. */
-.ds-data-terminal-card[data-part='root'] [data-part='details-arrow'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='details-arrow'] {
   color: var(--ds-color-text-muted);
 }
 
 /* section-divider — the header-section bottom rule in HUD/Circuit/Matrix. */
-.ds-data-terminal-card[data-part='root'][data-variant] [data-part='section-divider'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='section-divider'], .ds-data-terminal-card__section-divider) {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
@@ -241,24 +241,24 @@
  * ==========================================================================*/
 
 /* LiveIndicator rings — colour is caller-passed via the --ds-dtc-live hatch. */
-.ds-data-terminal-card[data-part='root'] [data-part='live-pulse-ring'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='live-pulse-ring'], .ds-data-terminal-card__live-pulse-ring) {
   border-radius: 50%;
   background: var(--ds-dtc-live);
   animation: dtc-live-pulse
     var(--ds-dtc-duration-pulse, calc(var(--ds-motion-glacial, 500ms) * 4))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
-.ds-data-terminal-card[data-part='root'] [data-part='live-ring'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='live-ring'], .ds-data-terminal-card__live-ring) {
   border-radius: 50%;
   background: var(--ds-dtc-live);
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__live-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__live-label {
   color: var(--ds-color-text-muted);
 }
 
 /* ActivityIndicator bars — Command/Circuit/Matrix, success. The per-index
    stagger delay stays inline (runtime value); the cadence is owned here. */
-.ds-data-terminal-card[data-part='root'] [data-part='activity-bar'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='activity-bar'], .ds-data-terminal-card__activity-bar) {
   border-radius: calc(1px * var(--ds-radius-scale-normalized, 1));
   background: var(--ds-color-success);
   animation: dtc-data-tick
@@ -267,7 +267,7 @@
 }
 
 /* QuickAction button — Command/Circuit (DEAD affordance; contract gap). */
-.ds-data-terminal-card[data-part='root'][data-variant] [data-part='quick-action'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='quick-action'], .ds-data-terminal-card__quick-action) {
   background: transparent;
   border: 1px solid var(--ds-color-border);
   transition:
@@ -275,54 +275,54 @@
     color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-data-terminal-card[data-part='root'] [data-part='quick-action']:hover {
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='quick-action'], .ds-data-terminal-card__quick-action):hover {
     background: var(--ds-color-bg-subtle);
   }
 }
-.ds-data-terminal-card[data-part='root'] [data-part='quick-action']:active {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='quick-action'], .ds-data-terminal-card__quick-action):active {
   background: var(--ds-color-bg-subtle);
 }
-.ds-data-terminal-card[data-part='root'] [data-part='quick-action-icon'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='quick-action-icon'] {
   color: var(--ds-color-text-muted);
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__quick-action-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__quick-action-label {
   color: var(--ds-color-text-muted);
 }
 
 /* StatItem label (Text) — Command/Circuit/Matrix, text-subtle. */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__stat-item-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__stat-item-label {
   color: var(--ds-color-text-subtle);
 }
 
 /* ProgressBar — track background + fill band background + shimmer. Card + stat.
  * The radius rides the --ds-dtc-radius hatch (height/2, runtime). The fill's
  * width transition and the shimmer cadence are owned here (MOTION). */
-.ds-data-terminal-card[data-part='root'] [data-part='progress-track'],
-.ds-data-terminal-stat[data-part='root'] [data-part='progress-track'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-track'], .ds-data-terminal-card__progress-track),
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-track'], .ds-data-terminal-card__progress-track) {
   background: var(--ds-color-border);
   border-radius: var(--ds-dtc-radius);
 }
-.ds-data-terminal-card[data-part='root'] [data-part='progress-fill'],
-.ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill),
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill) {
   border-radius: var(--ds-dtc-radius);
   transition: width
     var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2))
     var(--ds-motion-ease-in-out, ease-in-out);
 }
-.ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='high'],
-.ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='high'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill)[data-band='high'],
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill)[data-band='high'] {
   background: var(--ds-color-success);
 }
-.ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='mid'],
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill)[data-band='mid'],
 .ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='mid'] {
   background: var(--ds-color-warning);
 }
-.ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='low'],
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill)[data-band='low'],
 .ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='low'] {
   background: var(--ds-color-error);
 }
-.ds-data-terminal-card[data-part='root'] [data-part='progress-shimmer'],
-.ds-data-terminal-stat[data-part='root'] [data-part='progress-shimmer'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-shimmer'], .ds-data-terminal-card__progress-shimmer),
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-shimmer'], .ds-data-terminal-card__progress-shimmer) {
   background: linear-gradient(
     90deg,
     transparent,
@@ -338,63 +338,63 @@
  * VARIANT 1 — CommandCard (terminal).
  * ==========================================================================*/
 
-.ds-data-terminal-card[data-variant='1'] [data-part='terminal-bar'] {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='terminal-bar'], .ds-data-terminal-card__terminal-bar) {
   background: var(--ds-color-bg-subtle);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='terminal-bar'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'] :is([data-part='terminal-bar'], .ds-data-terminal-card__terminal-bar) {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* terminal-dots — three hardcoded, fixed-order decorative siblings (the
  * traffic-light dots): position IS the meaning and they never reorder, so a
  * scope-anchored :nth-child is byte-exact here. */
-.ds-data-terminal-card[data-variant='1'] [data-part='terminal-dot'] {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='terminal-dot'], .ds-data-terminal-card__terminal-dot) {
   border-radius: 50%;
 }
-.ds-data-terminal-card[data-variant='1'] [data-part='terminal-dot']:nth-child(1) {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='terminal-dot'], .ds-data-terminal-card__terminal-dot):nth-child(1) {
   background: var(--ds-color-error);
 }
-.ds-data-terminal-card[data-variant='1'] [data-part='terminal-dot']:nth-child(2) {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='terminal-dot'], .ds-data-terminal-card__terminal-dot):nth-child(2) {
   background: var(--ds-color-warning);
 }
-.ds-data-terminal-card[data-variant='1'] [data-part='terminal-dot']:nth-child(3) {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='terminal-dot'], .ds-data-terminal-card__terminal-dot):nth-child(3) {
   background: var(--ds-color-success);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] .ds-data-terminal-card__terminal-filename {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'][data-trend] .ds-data-terminal-card__terminal-filename {
   color: var(--ds-color-text-muted);
 }
 
 /* heartbeat-dot — threshold bucket on the root's data-band. */
-.ds-data-terminal-card[data-part='root'] [data-part='heartbeat-dot'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='heartbeat-dot'], .ds-data-terminal-card__heartbeat-dot) {
   border-radius: 50%;
   animation: dtc-heartbeat
     var(--ds-dtc-duration-heartbeat, calc(var(--ds-motion-glacial, 500ms) * 3))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
-.ds-data-terminal-card[data-band='high'] [data-part='heartbeat-dot'] {
+.ds-data-terminal-card[data-band='high'] :is([data-part='heartbeat-dot'], .ds-data-terminal-card__heartbeat-dot) {
   background: var(--ds-color-success);
 }
 .ds-data-terminal-card[data-band='mid'] [data-part='heartbeat-dot'] {
   background: var(--ds-color-warning);
 }
-.ds-data-terminal-card[data-band='low'] [data-part='heartbeat-dot'] {
+.ds-data-terminal-card[data-band='low'] :is([data-part='heartbeat-dot'], .ds-data-terminal-card__heartbeat-dot) {
   background: var(--ds-color-error);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant] [data-part='prompt-header'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='prompt-header'], .ds-data-terminal-card__prompt-header) {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__prompt-symbol {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__prompt-symbol {
   color: var(--ds-color-success);
 }
-.ds-data-terminal-card[data-part='root'] [data-part='prompt-icon'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='prompt-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__prompt-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__prompt-label {
   color: var(--ds-color-text-secondary);
 }
-.ds-data-terminal-card[data-part='root'] [data-part='cursor'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='cursor'], .ds-data-terminal-card__cursor) {
   background: var(--ds-color-text-muted);
   animation: dtc-typing
     var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2))
@@ -402,12 +402,12 @@
 }
 
 /* Command stats-grid — top border only. */
-.ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='stats-grid'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid) {
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* actions-footer — subtle background + top border. */
-.ds-data-terminal-card[data-part='root'][data-variant] [data-part='actions-footer'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='actions-footer'], .ds-data-terminal-card__actions-footer) {
   background: var(--ds-color-bg-subtle);
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
@@ -416,7 +416,7 @@
  * VARIANT 2 — HUDCard (heads-up display).
  * ==========================================================================*/
 
-.ds-data-terminal-card[data-variant='2'] [data-part='grid-texture'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='grid-texture'], .ds-data-terminal-card__grid-texture) {
   background-image: linear-gradient(var(--ds-color-border) 1px, transparent 1px),
     linear-gradient(90deg, var(--ds-color-border) 1px, transparent 1px);
   background-size: 20px 20px;
@@ -425,7 +425,7 @@
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-data-terminal-card[data-variant='2'] [data-part='scan-line'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='scan-line'], .ds-data-terminal-card__scan-line) {
   background: linear-gradient(180deg, transparent, var(--ds-color-border-subtle), transparent);
   animation: dtc-scan
     var(--ds-dtc-duration-scan, calc(var(--ds-motion-glacial, 500ms) * 10))
@@ -435,43 +435,43 @@
 /* corner-brackets — four fixed siblings (nth-child 3..6, after grid-texture +
  * scan-line), each an L of 2px lines. The drift cadence and the per-corner
  * stagger are owned here; delays reuse the cadence channels (no literals). */
-.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket) {
   animation: dtc-pulse
     var(--ds-dtc-duration-drift, calc(var(--ds-motion-glacial, 500ms) * 6))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(3) {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(3) {
   border-block-start: 2px solid var(--ds-color-text-muted);
   border-inline-start: 2px solid var(--ds-color-text-muted);
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(4) {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(4) {
   border-block-start: 2px solid var(--ds-color-text-muted);
   border-inline-end: 2px solid var(--ds-color-text-muted);
   animation-delay: var(--ds-dtc-duration-entrance, calc(var(--ds-motion-glacial, 500ms) * 0.8));
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(5) {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(5) {
   border-block-end: 2px solid var(--ds-color-text-muted);
   border-inline-start: 2px solid var(--ds-color-text-muted);
   animation-delay: var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2));
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(6) {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(6) {
   border-block-end: 2px solid var(--ds-color-text-muted);
   border-inline-end: 2px solid var(--ds-color-text-muted);
   animation-delay: var(--ds-dtc-duration-heartbeat, calc(var(--ds-motion-glacial, 500ms) * 3));
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__tracking-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'][data-trend] .ds-data-terminal-card__tracking-label {
   color: var(--ds-color-text-subtle);
 }
 
 /* status-badge — subtle background + band-coloured border. */
-.ds-data-terminal-card[data-part='root'] [data-part='status-badge'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='status-badge'], .ds-data-terminal-card__status-badge) {
   background: var(--ds-color-bg-subtle);
 }
 .ds-data-terminal-card[data-part='root'][data-band='high'] [data-part='status-badge'] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-success);
 }
-.ds-data-terminal-card[data-part='root'][data-band='mid'] [data-part='status-badge'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-band='mid'] :is([data-part='status-badge'], .ds-data-terminal-card__status-badge) {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-warning);
 }
 .ds-data-terminal-card[data-part='root'][data-band='low'] [data-part='status-badge'] {
@@ -479,7 +479,7 @@
 }
 
 /* status-dot — band background. */
-.ds-data-terminal-card[data-part='root'] [data-part='status-dot'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='status-dot'], .ds-data-terminal-card__status-dot) {
   border-radius: 50%;
   animation: dtc-heartbeat
     var(--ds-dtc-duration-heartbeat, calc(var(--ds-motion-glacial, 500ms) * 3))
@@ -488,7 +488,7 @@
 .ds-data-terminal-card[data-band='high'] [data-part='status-dot'] {
   background: var(--ds-color-success);
 }
-.ds-data-terminal-card[data-band='mid'] [data-part='status-dot'] {
+.ds-data-terminal-card[data-band='mid'] :is([data-part='status-dot'], .ds-data-terminal-card__status-dot) {
   background: var(--ds-color-warning);
 }
 .ds-data-terminal-card[data-band='low'] [data-part='status-dot'] {
@@ -499,7 +499,7 @@
 .ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] .ds-data-terminal-card__status-label {
   color: var(--ds-color-success);
 }
-.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] .ds-data-terminal-card__status-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-band='mid'][data-trend] .ds-data-terminal-card__status-label {
   color: var(--ds-color-warning);
 }
 .ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] .ds-data-terminal-card__status-label {
@@ -507,25 +507,25 @@
 }
 
 /* trend-badge — subtle background + trend-coloured border. */
-.ds-data-terminal-card[data-part='root'] [data-part='trend-badge'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='trend-badge'], .ds-data-terminal-card__trend-badge) {
   background: var(--ds-color-bg-subtle);
 }
 .ds-data-terminal-card[data-part='root'][data-trend='up'] [data-part='trend-badge'] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-success);
 }
-.ds-data-terminal-card[data-part='root'][data-trend='down'] [data-part='trend-badge'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-trend='down'] :is([data-part='trend-badge'], .ds-data-terminal-card__trend-badge) {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-error);
 }
 
 /* stats-panel — subtle background + 1px border. */
-.ds-data-terminal-card[data-part='root'] [data-part='stats-panel'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='stats-panel'], .ds-data-terminal-card__stats-panel) {
   background: var(--ds-color-bg-subtle);
 }
-.ds-data-terminal-card[data-part='root'][data-variant] [data-part='stats-panel'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='stats-panel'], .ds-data-terminal-card__stats-panel) {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__completion-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'][data-trend] .ds-data-terminal-card__completion-label {
   color: var(--ds-color-text-subtle);
 }
 
@@ -534,7 +534,7 @@
   color: var(--ds-color-success);
   font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] .ds-data-terminal-card__completion-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-band='mid'][data-trend] .ds-data-terminal-card__completion-value {
   color: var(--ds-color-warning);
   font-variant-numeric: tabular-nums;
 }
@@ -544,7 +544,7 @@
 }
 
 /* details-icon (activity glyph) — always success. */
-.ds-data-terminal-card[data-part='root'] [data-part='details-icon'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='details-icon'] {
   color: var(--ds-color-success);
   animation: dtc-pulse
     var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2))
@@ -555,14 +555,14 @@
  * VARIANT 3 — CircuitCard (circuit board).
  * ==========================================================================*/
 
-.ds-data-terminal-card[data-variant='3'] [data-part='circuit-pattern'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='circuit-pattern'], .ds-data-terminal-card__circuit-pattern) {
   background-image: radial-gradient(circle at 8px 8px, var(--ds-color-border) 2px, transparent 2px),
     linear-gradient(90deg, transparent 7px, var(--ds-color-border) 7px, var(--ds-color-border) 8px, transparent 8px),
     linear-gradient(transparent 7px, var(--ds-color-border) 7px, var(--ds-color-border) 8px, transparent 8px);
   background-size: 32px 32px;
 }
 
-.ds-data-terminal-card[data-variant='3'] [data-part='flow-line'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='flow-line'], .ds-data-terminal-card__flow-line) {
   background: linear-gradient(90deg, transparent, var(--ds-color-success), transparent);
   animation: dtc-slide
     var(--ds-dtc-duration-ambient, calc(var(--ds-motion-glacial, 500ms) * 8))
@@ -571,25 +571,25 @@
 
 /* node-dots — three uniform indicators (subtle background + 2px border);
  * pulse cadence owned here, per-node stagger reuses the cadence channels. */
-.ds-data-terminal-card[data-part='root'] [data-part='node-dot'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='node-dot'], .ds-data-terminal-card__node-dot) {
   border-radius: 50%;
   background: var(--ds-color-bg-subtle);
   animation: dtc-pulse
     var(--ds-dtc-duration-pulse, calc(var(--ds-motion-glacial, 500ms) * 4))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='node-dot']:nth-child(5) {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='node-dot'], .ds-data-terminal-card__node-dot):nth-child(5) {
   animation-delay: var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2));
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='node-dot']:nth-child(6) {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='node-dot'], .ds-data-terminal-card__node-dot):nth-child(6) {
   animation-delay: var(--ds-dtc-duration-entrance, calc(var(--ds-motion-glacial, 500ms) * 0.8));
 }
-.ds-data-terminal-card[data-part='root'][data-variant] [data-part='node-dot'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='node-dot'], .ds-data-terminal-card__node-dot) {
   border: 2px solid var(--ds-color-text-muted);
 }
 
 /* node-dot-live — band background. */
-.ds-data-terminal-card[data-part='root'] [data-part='node-dot-live'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='node-dot-live'], .ds-data-terminal-card__node-dot-live) {
   border-radius: 50%;
   animation: dtc-heartbeat
     var(--ds-dtc-duration-heartbeat, calc(var(--ds-motion-glacial, 500ms) * 3))
@@ -601,16 +601,16 @@
 .ds-data-terminal-card[data-band='mid'] [data-part='node-dot-live'] {
   background: var(--ds-color-warning);
 }
-.ds-data-terminal-card[data-band='low'] [data-part='node-dot-live'] {
+.ds-data-terminal-card[data-band='low'] :is([data-part='node-dot-live'], .ds-data-terminal-card__node-dot-live) {
   background: var(--ds-color-error);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] .ds-data-terminal-card__metric-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='3'][data-trend] .ds-data-terminal-card__metric-label {
   color: var(--ds-color-text-subtle);
 }
 
 /* Circuit stats-grid — top + bottom border. */
-.ds-data-terminal-card[data-part='root'][data-variant='3'] [data-part='stats-grid'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='3'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid) {
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
@@ -619,7 +619,7 @@
  * VARIANT 4 — MatrixCard (data grid).
  * ==========================================================================*/
 
-.ds-data-terminal-card[data-variant='4'] [data-part='matrix-texture'] {
+.ds-data-terminal-card[data-variant='4'] :is([data-part='matrix-texture'], .ds-data-terminal-card__matrix-texture) {
   background-image: radial-gradient(var(--ds-color-border) 1px, transparent 1px);
   background-size: 12px 12px;
   animation: dtc-flow
@@ -627,7 +627,7 @@
     linear infinite;
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] .ds-data-terminal-card__datapoint-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'][data-trend] .ds-data-terminal-card__datapoint-label {
   color: var(--ds-color-text-subtle);
 }
 
@@ -656,12 +656,12 @@
 }
 
 /* Matrix stats-grid — top + bottom border. */
-.ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='stats-grid'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid) {
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='progress-section'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'] :is([data-part='progress-section'], .ds-data-terminal-card__progress-section) {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
@@ -672,20 +672,20 @@
 
 /* corner-brackets — two fixed siblings (nth-child 1..2), each an L of 2px
    logical lines (mirrors under RTL together with the logical positions). */
-.ds-data-terminal-stat[data-part='root'][data-trend] [data-part='corner-bracket']:nth-child(1) {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(1) {
   border-block-start: 2px solid var(--ds-color-text-muted);
   border-inline-start: 2px solid var(--ds-color-text-muted);
 }
-.ds-data-terminal-stat[data-part='root'][data-trend] [data-part='corner-bracket']:nth-child(2) {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(2) {
   border-block-start: 2px solid var(--ds-color-text-muted);
   border-inline-end: 2px solid var(--ds-color-text-muted);
 }
 
-.ds-data-terminal-stat[data-part='root'] [data-part='stat-icon'] {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) [data-part='stat-icon'] {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__stat-label {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend][data-band] .ds-data-terminal-card__stat-label {
   color: var(--ds-color-text-secondary);
 }
 
@@ -716,7 +716,7 @@
         (`block-size: 100%` inside a link that fills its cell) and each is
         already the containing block for its absolutely positioned decorative
         layers. ---- */
-.ds-data-terminal-card[data-part='root'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -725,7 +725,7 @@
   min-block-size: 240px;
   overflow: hidden;
 }
-.ds-data-terminal-stat[data-part='root'] {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -736,13 +736,13 @@
 }
 
 /* ---- content + value sections (per-variant padding/centering) ---- */
-.ds-data-terminal-card[data-variant='1'] [data-part='content'] {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='content'], .ds-data-terminal-card__content) {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 16px;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='content'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='content'], .ds-data-terminal-card__content) {
   position: relative;
   z-index: 1; /* above the card's own decorative layers (local stacking) */
   flex: 1;
@@ -750,8 +750,8 @@
   flex-direction: column;
   padding: 20px;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='content'],
-.ds-data-terminal-card[data-variant='4'] [data-part='content'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='content'], .ds-data-terminal-card__content),
+.ds-data-terminal-card[data-variant='4'] :is([data-part='content'], .ds-data-terminal-card__content) {
   position: relative;
   z-index: 1; /* above the card's own decorative layers (local stacking) */
   flex: 1;
@@ -760,12 +760,12 @@
   padding: 16px;
 }
 
-.ds-data-terminal-card[data-variant='1'] [data-part='value-section'] {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='value-section'], .ds-data-terminal-card__value-section) {
   flex: 1;
   display: flex;
   align-items: center;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='value-section'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='value-section'], .ds-data-terminal-card__value-section) {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -773,20 +773,20 @@
   justify-content: center;
   padding-block: 20px;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='value-section'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='value-section'], .ds-data-terminal-card__value-section) {
   flex: 1;
   display: flex;
   align-items: center;
   padding-block: 16px;
 }
-.ds-data-terminal-card[data-variant='4'] [data-part='value-section'] {
+.ds-data-terminal-card[data-variant='4'] :is([data-part='value-section'], .ds-data-terminal-card__value-section) {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-block: 20px;
 }
-.ds-data-terminal-stat[data-part='root'] [data-part='value-section'] {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='value-section'], .ds-data-terminal-card__value-section) {
   flex: 1;
   display: flex;
   align-items: center;
@@ -822,26 +822,26 @@
  * exactly where the defect lives, and becomes universal the day the primitive
  * honours a caller part.
  * ---- */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__value {
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 900;
   line-height: 1;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'] .ds-data-terminal-card__value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'] .ds-data-terminal-card__value {
   font-size: min(calc(var(--ds-font-size-6xl) * 1.166667), var(--_ds-dtc-value-cap, 18cqi));
   letter-spacing: -0.02em;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'] .ds-data-terminal-card__value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'] .ds-data-terminal-card__value {
   font-size: min(calc(var(--ds-font-size-6xl) * 1.333333), var(--_ds-dtc-value-cap, 18cqi));
 }
-.ds-data-terminal-card[data-part='root'][data-variant='3'] .ds-data-terminal-card__value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='3'] .ds-data-terminal-card__value {
   font-size: min(calc(var(--ds-font-size-6xl) * 1.166667), var(--_ds-dtc-value-cap, 18cqi));
 }
-.ds-data-terminal-card[data-part='root'][data-variant='4'] .ds-data-terminal-card__value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'] .ds-data-terminal-card__value {
   font-size: min(calc(var(--ds-font-size-6xl) * 1.416667), var(--_ds-dtc-value-cap, 18cqi));
   letter-spacing: -0.03em;
 }
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__value {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend][data-band] .ds-data-terminal-card__value {
   font-family: var(--ds-font-family-mono, monospace);
   font-size: min(calc(var(--ds-font-size-3xl) * 1.166667), var(--_ds-dtc-stat-value-cap, 16cqi));
   font-weight: 800;
@@ -849,44 +849,44 @@
 }
 
 /* ---- stat readouts: change / period / target (Text) ---- */
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__change-value,
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__change-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__change-value,
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend][data-band] .ds-data-terminal-card__change-value {
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 700;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'] .ds-data-terminal-card__change-value,
-.ds-data-terminal-card[data-part='root'][data-variant='3'] .ds-data-terminal-card__change-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'] .ds-data-terminal-card__change-value,
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='3'] .ds-data-terminal-card__change-value {
   font-size: var(--ds-font-size-sm);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'] .ds-data-terminal-card__change-value,
-.ds-data-terminal-card[data-part='root'][data-variant='4'] .ds-data-terminal-card__change-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'] .ds-data-terminal-card__change-value,
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'] .ds-data-terminal-card__change-value {
   font-size: calc(var(--ds-font-size-xs) * 1.083333);
 }
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__change-value {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend][data-band] .ds-data-terminal-card__change-value {
   font-size: var(--ds-font-size-2xs);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__period-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__period-value {
   font-family: var(--ds-font-family-mono, monospace);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'] .ds-data-terminal-card__period-value,
-.ds-data-terminal-card[data-part='root'][data-variant='2'] .ds-data-terminal-card__period-value,
-.ds-data-terminal-card[data-part='root'][data-variant='3'] .ds-data-terminal-card__period-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'] .ds-data-terminal-card__period-value,
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'] .ds-data-terminal-card__period-value,
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='3'] .ds-data-terminal-card__period-value {
   font-size: var(--ds-font-size-xs);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='4'] .ds-data-terminal-card__period-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'] .ds-data-terminal-card__period-value {
   font-size: var(--ds-font-size-2xs);
 }
 
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__target-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__target-value {
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 700;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'] .ds-data-terminal-card__target-value,
-.ds-data-terminal-card[data-part='root'][data-variant='3'] .ds-data-terminal-card__target-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'] .ds-data-terminal-card__target-value,
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='3'] .ds-data-terminal-card__target-value {
   font-size: var(--ds-font-size-sm);
 }
-.ds-data-terminal-card[data-part='root'][data-variant='4'] .ds-data-terminal-card__target-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'] .ds-data-terminal-card__target-value {
   font-size: calc(var(--ds-font-size-xs) * 1.083333);
 }
 
@@ -901,23 +901,23 @@
   inline-size: 12px;
   block-size: 12px;
 }
-.ds-data-terminal-stat[data-part='root'] [data-part='trend-icon'] {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) [data-part='trend-icon'] {
   inline-size: 10px;
   block-size: 10px;
 }
 
 /* ---- LiveIndicator geometry (colour rides the --ds-dtc-live hatch) ---- */
-.ds-data-terminal-card[data-part='root'] [data-part='live-dot'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='live-dot'], .ds-data-terminal-card__live-dot) {
   position: relative;
   inline-size: 6px;
   block-size: 6px;
 }
-.ds-data-terminal-card[data-part='root'] [data-part='live-pulse-ring'],
-.ds-data-terminal-card[data-part='root'] [data-part='live-ring'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='live-pulse-ring'], .ds-data-terminal-card__live-pulse-ring),
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='live-ring'], .ds-data-terminal-card__live-ring) {
   position: absolute;
   inset: 0;
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__live-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__live-label {
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.05em;
@@ -926,40 +926,40 @@
 /* ---- ActivityIndicator bars: width here, per-bar height on data-bar-index
         (the retired ACTIVITY_BAR_HEIGHTS constant, transcribed verbatim);
         the per-index stagger delay stays inline (runtime value). ---- */
-.ds-data-terminal-card[data-part='root'] [data-part='activity-bar'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='activity-bar'], .ds-data-terminal-card__activity-bar) {
   inline-size: 2px;
 }
-.ds-data-terminal-card[data-part='root'] [data-part='activity-bar'][data-bar-index='0'] { block-size: 12px; }
-.ds-data-terminal-card[data-part='root'] [data-part='activity-bar'][data-bar-index='1'] { block-size: 9px; }
-.ds-data-terminal-card[data-part='root'] [data-part='activity-bar'][data-bar-index='2'] { block-size: 15px; }
-.ds-data-terminal-card[data-part='root'] [data-part='activity-bar'][data-bar-index='3'] { block-size: 10px; }
-.ds-data-terminal-card[data-part='root'] [data-part='activity-bar'][data-bar-index='4'] { block-size: 14px; }
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='activity-bar'], .ds-data-terminal-card__activity-bar)[data-bar-index='0'] { block-size: 12px; }
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='activity-bar'], .ds-data-terminal-card__activity-bar)[data-bar-index='1'] { block-size: 9px; }
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='activity-bar'], .ds-data-terminal-card__activity-bar)[data-bar-index='2'] { block-size: 15px; }
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='activity-bar'], .ds-data-terminal-card__activity-bar)[data-bar-index='3'] { block-size: 10px; }
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='activity-bar'], .ds-data-terminal-card__activity-bar)[data-bar-index='4'] { block-size: 14px; }
 
 /* ---- QuickAction geometry (DEAD affordance; contract gap) ---- */
-.ds-data-terminal-card[data-part='root'] [data-part='quick-action'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='quick-action'], .ds-data-terminal-card__quick-action) {
   display: flex;
   align-items: center;
   gap: 4px;
   padding: 5px 10px;
   cursor: pointer;
 }
-.ds-data-terminal-card[data-part='root'] [data-part='quick-action-icon'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='quick-action-icon'] {
   inline-size: 11px;
   block-size: 11px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__quick-action-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__quick-action-label {
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.05em;
 }
 
 /* ---- StatItem geometry + label (Text) ---- */
-.ds-data-terminal-card[data-part='root'] [data-part='stat-item'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='stat-item'], .ds-data-terminal-card__stat-item) {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__stat-item-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__stat-item-label {
   display: block;
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
@@ -968,85 +968,85 @@
 
 /* ---- ProgressBar static geometry (height prop, radius hatch and the fill
         width stay inline as runtime data) ---- */
-.ds-data-terminal-card[data-part='root'] [data-part='progress-track'],
-.ds-data-terminal-stat[data-part='root'] [data-part='progress-track'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-track'], .ds-data-terminal-card__progress-track),
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-track'], .ds-data-terminal-card__progress-track) {
   overflow: hidden;
 }
-.ds-data-terminal-card[data-part='root'] [data-part='progress-fill'],
-.ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill),
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill) {
   position: relative;
   block-size: 100%;
   overflow: hidden;
 }
-.ds-data-terminal-card[data-part='root'] [data-part='progress-shimmer'],
-.ds-data-terminal-stat[data-part='root'] [data-part='progress-shimmer'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-shimmer'], .ds-data-terminal-card__progress-shimmer),
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-shimmer'], .ds-data-terminal-card__progress-shimmer) {
   position: absolute;
   inset: 0;
 }
 
 /* ---- VARIANT 1 (Command) geometry ---- */
-.ds-data-terminal-card[data-variant='1'] [data-part='terminal-bar'] {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='terminal-bar'], .ds-data-terminal-card__terminal-bar) {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 8px 14px;
 }
-.ds-data-terminal-card[data-variant='1'] [data-part='terminal-dot'] {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='terminal-dot'], .ds-data-terminal-card__terminal-dot) {
   inline-size: 10px;
   block-size: 10px;
   opacity: 0.8;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] .ds-data-terminal-card__terminal-filename {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'][data-trend] .ds-data-terminal-card__terminal-filename {
   font-size: var(--ds-font-size-2xs);
   font-family: var(--ds-font-family-mono, monospace);
 }
-.ds-data-terminal-card[data-part='root'] [data-part='heartbeat-dot'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='heartbeat-dot'], .ds-data-terminal-card__heartbeat-dot) {
   inline-size: 8px;
   block-size: 8px;
 }
-.ds-data-terminal-card[data-variant='1'] [data-part='prompt-header'] {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='prompt-header'], .ds-data-terminal-card__prompt-header) {
   padding-block-end: 12px;
   margin-block-end: 16px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] .ds-data-terminal-card__prompt-symbol {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'][data-trend] .ds-data-terminal-card__prompt-symbol {
   font-size: var(--ds-font-size-xs);
   font-family: var(--ds-font-family-mono, monospace);
 }
-.ds-data-terminal-card[data-part='root'] [data-part='prompt-icon'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='prompt-icon'] {
   inline-size: 14px;
   block-size: 14px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] .ds-data-terminal-card__prompt-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'][data-trend] .ds-data-terminal-card__prompt-label {
   font-size: var(--ds-font-size-xs);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.05em;
 }
-.ds-data-terminal-card[data-part='root'] [data-part='cursor'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='cursor'], .ds-data-terminal-card__cursor) {
   inline-size: 8px;
   block-size: 2px;
 }
-.ds-data-terminal-card[data-variant='1'] [data-part='stats-grid'] {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid) {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   padding-block: 14px;
   margin-block-start: 12px;
 }
-.ds-data-terminal-card[data-variant='1'] [data-part='progress-section'] {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='progress-section'], .ds-data-terminal-card__progress-section) {
   padding-block-start: 12px;
 }
-.ds-data-terminal-card[data-variant='1'] [data-part='actions-footer'] {
+.ds-data-terminal-card[data-variant='1'] :is([data-part='actions-footer'], .ds-data-terminal-card__actions-footer) {
   padding: 10px 14px;
 }
 
 /* ---- VARIANT 2 (HUD) geometry ---- */
-.ds-data-terminal-card[data-variant='2'] [data-part='grid-texture'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='grid-texture'], .ds-data-terminal-card__grid-texture) {
   position: absolute;
   inset: 0;
   opacity: 0.25;
   pointer-events: none;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='scan-line'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='scan-line'], .ds-data-terminal-card__scan-line) {
   position: absolute;
   inset-inline: 0;
   block-size: 50px;
@@ -1054,49 +1054,49 @@
 }
 /* corner-brackets: four fixed siblings (nth-child 3..6 after grid-texture +
  * scan-line); positions are logical so the frame mirrors under RTL. */
-.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket) {
   position: absolute;
   inline-size: 18px;
   block-size: 18px;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(3) {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(3) {
   inset-block-start: 10px;
   inset-inline-start: 10px;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(4) {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(4) {
   inset-block-start: 10px;
   inset-inline-end: 10px;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(5) {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(5) {
   inset-block-end: 10px;
   inset-inline-start: 10px;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(6) {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(6) {
   inset-block-end: 10px;
   inset-inline-end: 10px;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='section-divider'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='section-divider'], .ds-data-terminal-card__section-divider) {
   padding-block-end: 14px;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='section-divider'],
-.ds-data-terminal-card[data-variant='4'] [data-part='section-divider'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='section-divider'], .ds-data-terminal-card__section-divider),
+.ds-data-terminal-card[data-variant='4'] :is([data-part='section-divider'], .ds-data-terminal-card__section-divider) {
   padding-block-end: 12px;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='header-icon-box'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='header-icon-box'], .ds-data-terminal-card__header-icon-box) {
   display: flex;
   align-items: center;
   justify-content: center;
   inline-size: 36px;
   block-size: 36px;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='header-icon-box'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='header-icon-box'], .ds-data-terminal-card__header-icon-box) {
   display: flex;
   align-items: center;
   justify-content: center;
   inline-size: 28px;
   block-size: 28px;
 }
-.ds-data-terminal-card[data-variant='4'] [data-part='header-icon-box'] {
+.ds-data-terminal-card[data-variant='4'] :is([data-part='header-icon-box'], .ds-data-terminal-card__header-icon-box) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1112,94 +1112,94 @@
   inline-size: 14px;
   block-size: 14px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__tracking-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'][data-trend] .ds-data-terminal-card__tracking-label {
   display: block;
   margin-block-end: 4px;
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.15em;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__header-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'][data-trend] .ds-data-terminal-card__header-label {
   display: block;
   font-size: calc(var(--ds-font-size-xs) * 1.083333);
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 700;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] .ds-data-terminal-card__header-label,
-.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] .ds-data-terminal-card__header-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='3'][data-trend] .ds-data-terminal-card__header-label,
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'][data-trend] .ds-data-terminal-card__header-label {
   display: block;
   font-size: var(--ds-font-size-xs);
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 600;
   letter-spacing: 0.05em;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='status-badge'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='status-badge'], .ds-data-terminal-card__status-badge) {
   padding: 4px 10px;
 }
-.ds-data-terminal-card[data-part='root'] [data-part='status-dot'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='status-dot'], .ds-data-terminal-card__status-dot) {
   inline-size: 6px;
   block-size: 6px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__status-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'][data-trend] .ds-data-terminal-card__status-label {
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 700;
   letter-spacing: 0.05em;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='trend-row'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='trend-row'], .ds-data-terminal-card__trend-row) {
   margin-block-start: 16px;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='trend-badge'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='trend-badge'], .ds-data-terminal-card__trend-badge) {
   padding: 6px 12px;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='stats-panel'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='stats-panel'], .ds-data-terminal-card__stats-panel) {
   padding: 14px 16px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__completion-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'][data-trend] .ds-data-terminal-card__completion-label {
   display: block;
   margin-block-end: 6px;
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.1em;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__completion-value {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'][data-trend] .ds-data-terminal-card__completion-value {
   display: block;
   font-size: var(--ds-font-size-xl);
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 700;
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='progress-slot'] {
+.ds-data-terminal-card[data-variant='2'] :is([data-part='progress-slot'], .ds-data-terminal-card__progress-slot) {
   flex: 1;
   max-inline-size: 120px;
   margin-inline: 20px;
 }
-.ds-data-terminal-card[data-part='root'] [data-part='details-icon'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='details-icon'] {
   inline-size: 14px;
   block-size: 14px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] .ds-data-terminal-card__details-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='2'][data-trend] .ds-data-terminal-card__details-label {
   font-size: var(--ds-font-size-2xs);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.05em;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] .ds-data-terminal-card__details-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'][data-trend] .ds-data-terminal-card__details-label {
   font-size: calc(var(--ds-font-size-2xs) * 0.909091);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.05em;
 }
-.ds-data-terminal-card[data-part='root'] [data-part='details-arrow'] {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='details-arrow'] {
   inline-size: 12px;
   block-size: 12px;
 }
 
 /* ---- VARIANT 3 (Circuit) geometry ---- */
-.ds-data-terminal-card[data-variant='3'] [data-part='circuit-pattern'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='circuit-pattern'], .ds-data-terminal-card__circuit-pattern) {
   position: absolute;
   inset: 0;
   opacity: 0.12;
   pointer-events: none;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='flow-line'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='flow-line'], .ds-data-terminal-card__flow-line) {
   position: absolute;
   inset-block-start: 40%;
   inset-inline-start: 0;
@@ -1209,87 +1209,87 @@
 }
 /* node-dots: three uniform indicators (nth-child 3, 5, 6 after circuit-pattern
  * + flow-line + node-dot-live); positions are logical (RTL-mirroring). */
-.ds-data-terminal-card[data-variant='3'] [data-part='node-dot'],
-.ds-data-terminal-card[data-variant='3'] [data-part='node-dot-live'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='node-dot'], .ds-data-terminal-card__node-dot),
+.ds-data-terminal-card[data-variant='3'] :is([data-part='node-dot-live'], .ds-data-terminal-card__node-dot-live) {
   position: absolute;
   inline-size: 10px;
   block-size: 10px;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='node-dot']:nth-child(3) {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='node-dot'], .ds-data-terminal-card__node-dot):nth-child(3) {
   inset-block-start: 12px;
   inset-inline-start: 12px;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='node-dot']:nth-child(5) {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='node-dot'], .ds-data-terminal-card__node-dot):nth-child(5) {
   inset-block-end: 12px;
   inset-inline-start: 12px;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='node-dot']:nth-child(6) {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='node-dot'], .ds-data-terminal-card__node-dot):nth-child(6) {
   inset-block-end: 12px;
   inset-inline-end: 12px;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='node-dot-live'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='node-dot-live'], .ds-data-terminal-card__node-dot-live) {
   inset-block-start: 12px;
   inset-inline-end: 12px;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] .ds-data-terminal-card__metric-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='3'][data-trend] .ds-data-terminal-card__metric-label {
   display: block;
   margin-block-end: 2px;
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.1em;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='stats-grid'],
-.ds-data-terminal-card[data-variant='4'] [data-part='stats-grid'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid),
+.ds-data-terminal-card[data-variant='4'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid) {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   padding-block: 12px;
 }
-.ds-data-terminal-card[data-variant='3'] [data-part='progress-section'],
-.ds-data-terminal-card[data-variant='4'] [data-part='progress-section'] {
+.ds-data-terminal-card[data-variant='3'] :is([data-part='progress-section'], .ds-data-terminal-card__progress-section),
+.ds-data-terminal-card[data-variant='4'] :is([data-part='progress-section'], .ds-data-terminal-card__progress-section) {
   padding-block: 12px;
 }
 
 /* ---- VARIANT 4 (Matrix) geometry ---- */
-.ds-data-terminal-card[data-variant='4'] [data-part='matrix-texture'] {
+.ds-data-terminal-card[data-variant='4'] :is([data-part='matrix-texture'], .ds-data-terminal-card__matrix-texture) {
   position: absolute;
   inset: 0;
   opacity: 0.35;
   pointer-events: none;
 }
-.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] .ds-data-terminal-card__datapoint-label {
+.ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'][data-trend] .ds-data-terminal-card__datapoint-label {
   display: block;
   margin-block-end: 2px;
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   letter-spacing: 0.1em;
 }
-.ds-data-terminal-card[data-variant='4'] [data-part='footer'] {
+.ds-data-terminal-card[data-variant='4'] :is([data-part='footer'], .ds-data-terminal-card__footer) {
   padding-block-start: 12px;
 }
 
 /* ---- DataTerminalStat geometry ---- */
-.ds-data-terminal-stat[data-part='root'] [data-part='corner-bracket'] {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket) {
   position: absolute;
   inline-size: 10px;
   block-size: 10px;
 }
-.ds-data-terminal-stat[data-part='root'] [data-part='corner-bracket']:nth-child(1) {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(1) {
   inset-block-start: 0;
   inset-inline-start: 0;
 }
-.ds-data-terminal-stat[data-part='root'] [data-part='corner-bracket']:nth-child(2) {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket):nth-child(2) {
   inset-block-start: 0;
   inset-inline-end: 0;
 }
-.ds-data-terminal-stat[data-part='root'] [data-part='stat-header'] {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='stat-header'], .ds-data-terminal-stat__stat-header) {
   margin-block-end: 6px;
 }
-.ds-data-terminal-stat[data-part='root'] [data-part='stat-icon'] {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) [data-part='stat-icon'] {
   inline-size: 12px;
   block-size: 12px;
 }
-.ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__stat-label {
+.ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend][data-band] .ds-data-terminal-card__stat-label {
   font-size: calc(var(--ds-font-size-2xs) * 0.818182);
   font-family: var(--ds-font-family-mono, monospace);
   font-weight: 600;
@@ -1310,12 +1310,12 @@
  * every measure rather than at two.
  * ==========================================================================*/
 @container ds-data-terminal-card (inline-size < 20rem) {
-  .ds-data-terminal-card[data-variant='1'] [data-part='stats-grid'],
-  .ds-data-terminal-card[data-variant='3'] [data-part='stats-grid'],
-  .ds-data-terminal-card[data-variant='4'] [data-part='stats-grid'] {
+  .ds-data-terminal-card[data-variant='1'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid),
+  .ds-data-terminal-card[data-variant='3'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid),
+  .ds-data-terminal-card[data-variant='4'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .ds-data-terminal-card[data-variant='2'] [data-part='progress-slot'] {
+  .ds-data-terminal-card[data-variant='2'] :is([data-part='progress-slot'], .ds-data-terminal-card__progress-slot) {
     max-inline-size: none;
     margin-inline: 10px;
   }
@@ -1326,29 +1326,29 @@
  * reads on its static tones alone.
  * ==========================================================================*/
 @media (prefers-reduced-motion: reduce) {
-  .ds-data-terminal-card[data-part='root'],
-  .ds-data-terminal-card[data-part='root'] [data-part='live-pulse-ring'],
-  .ds-data-terminal-card[data-part='root'] [data-part='activity-bar'],
-  .ds-data-terminal-card[data-part='root'] [data-part='heartbeat-dot'],
-  .ds-data-terminal-card[data-part='root'] [data-part='cursor'],
-  .ds-data-terminal-card[data-part='root'] [data-part='grid-texture'],
-  .ds-data-terminal-card[data-part='root'] [data-part='scan-line'],
-  .ds-data-terminal-card[data-part='root'] [data-part='corner-bracket'],
-  .ds-data-terminal-card[data-part='root'] [data-part='status-dot'],
-  .ds-data-terminal-card[data-part='root'] [data-part='details-icon'],
-  .ds-data-terminal-card[data-part='root'] [data-part='flow-line'],
-  .ds-data-terminal-card[data-part='root'] [data-part='node-dot'],
-  .ds-data-terminal-card[data-part='root'] [data-part='node-dot-live'],
-  .ds-data-terminal-card[data-part='root'] [data-part='matrix-texture'],
-  .ds-data-terminal-card[data-part='root'] [data-part='progress-shimmer'],
-  .ds-data-terminal-stat[data-part='root'] [data-part='progress-shimmer'] {
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='live-pulse-ring'], .ds-data-terminal-card__live-pulse-ring),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='activity-bar'], .ds-data-terminal-card__activity-bar),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='heartbeat-dot'], .ds-data-terminal-card__heartbeat-dot),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='cursor'], .ds-data-terminal-card__cursor),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='grid-texture'], .ds-data-terminal-card__grid-texture),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='scan-line'], .ds-data-terminal-card__scan-line),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='corner-bracket'], .ds-data-terminal-card__corner-bracket),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='status-dot'], .ds-data-terminal-card__status-dot),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='details-icon'],
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='flow-line'], .ds-data-terminal-card__flow-line),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='node-dot'], .ds-data-terminal-card__node-dot),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='node-dot-live'], .ds-data-terminal-card__node-dot-live),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='matrix-texture'], .ds-data-terminal-card__matrix-texture),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-shimmer'], .ds-data-terminal-card__progress-shimmer),
+  .ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-shimmer'], .ds-data-terminal-card__progress-shimmer) {
     animation: none;
   }
 
-  .ds-data-terminal-card[data-part='root'],
-  .ds-data-terminal-card[data-part='root'] [data-part='progress-fill'],
-  .ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'],
-  .ds-data-terminal-card[data-part='root'] [data-part='quick-action'] {
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill),
+  .ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='quick-action'], .ds-data-terminal-card__quick-action) {
     transition: none;
   }
 }
@@ -1360,50 +1360,50 @@
  * ==========================================================================*/
 @media (forced-colors: active) {
   /* frames */
-  .ds-data-terminal-card[data-part='root'][data-variant],
-  .ds-data-terminal-stat[data-part='root'][data-trend],
-  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='header-icon-box'],
-  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='section-divider'],
-  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='quick-action'],
-  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='stats-panel'],
-  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='actions-footer'],
-  .ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='terminal-bar'],
-  .ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='stats-grid'],
-  .ds-data-terminal-card[data-part='root'][data-variant='3'] [data-part='stats-grid'],
-  .ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='stats-grid'],
-  .ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='progress-section'],
-  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='prompt-header'],
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant],
+  .ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend],
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='header-icon-box'], .ds-data-terminal-card__header-icon-box),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='section-divider'], .ds-data-terminal-card__section-divider),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='quick-action'], .ds-data-terminal-card__quick-action),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='stats-panel'], .ds-data-terminal-card__stats-panel),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='actions-footer'], .ds-data-terminal-card__actions-footer),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'] :is([data-part='terminal-bar'], .ds-data-terminal-card__terminal-bar),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='1'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='3'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'] :is([data-part='stats-grid'], .ds-data-terminal-card__stats-grid),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant='4'] :is([data-part='progress-section'], .ds-data-terminal-card__progress-section),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant] :is([data-part='prompt-header'], .ds-data-terminal-card__prompt-header),
   .ds-data-terminal-card[data-part='root'][data-band='high'] [data-part='status-badge'],
-  .ds-data-terminal-card[data-part='root'][data-band='mid'] [data-part='status-badge'],
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-band='mid'] :is([data-part='status-badge'], .ds-data-terminal-card__status-badge),
   .ds-data-terminal-card[data-part='root'][data-band='low'] [data-part='status-badge'],
   .ds-data-terminal-card[data-part='root'][data-trend='up'] [data-part='trend-badge'],
-  .ds-data-terminal-card[data-part='root'][data-trend='down'] [data-part='trend-badge'] {
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-trend='down'] :is([data-part='trend-badge'], .ds-data-terminal-card__trend-badge) {
     border-color: ButtonText;
   }
 
   /* data readout: progress by width on a system frame, fill in system accent */
-  .ds-data-terminal-card[data-part='root'] [data-part='progress-track'],
-  .ds-data-terminal-stat[data-part='root'] [data-part='progress-track'] {
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-track'], .ds-data-terminal-card__progress-track),
+  .ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-track'], .ds-data-terminal-card__progress-track) {
     background: Canvas;
     border: 1px solid ButtonText;
   }
-  .ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='high'],
-  .ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='mid'],
-  .ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='low'],
-  .ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='high'],
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill)[data-band='high'],
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill)[data-band='mid'],
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill)[data-band='low'],
+  .ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-fill'], .ds-data-terminal-card__progress-fill)[data-band='high'],
   .ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='mid'],
   .ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='low'] {
     background: Highlight;
   }
 
   /* dots, rings and bars read in system ink (their background IS the glyph) */
-  .ds-data-terminal-card[data-part='root'] [data-part='status-dot'],
-  .ds-data-terminal-card[data-part='root'] [data-part='heartbeat-dot'],
-  .ds-data-terminal-card[data-part='root'] [data-part='node-dot-live'],
-  .ds-data-terminal-card[data-part='root'] [data-part='terminal-dot'],
-  .ds-data-terminal-card[data-part='root'] [data-part='live-pulse-ring'],
-  .ds-data-terminal-card[data-part='root'] [data-part='live-ring'],
-  .ds-data-terminal-card[data-part='root'] [data-part='activity-bar'] {
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='status-dot'], .ds-data-terminal-card__status-dot),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='heartbeat-dot'], .ds-data-terminal-card__heartbeat-dot),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='node-dot-live'], .ds-data-terminal-card__node-dot-live),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='terminal-dot'], .ds-data-terminal-card__terminal-dot),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='live-pulse-ring'], .ds-data-terminal-card__live-pulse-ring),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='live-ring'], .ds-data-terminal-card__live-ring),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='activity-bar'], .ds-data-terminal-card__activity-bar) {
     background-color: ButtonText;
   }
 
@@ -1411,27 +1411,27 @@
      specificity so these win inside forced colors): shape (up/down arrow)
      and the label text carry trend and band; the UA forces any remaining
      ink to system values regardless. */
-  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__change-value,
-  .ds-data-terminal-stat[data-part='root'][data-trend][data-band] .ds-data-terminal-card__change-value,
-  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__target-value,
-  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__completion-value,
-  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__status-label,
-  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] .ds-data-terminal-card__prompt-symbol,
-  .ds-data-terminal-card[data-part='root'] [data-part='trend-icon'],
-  .ds-data-terminal-stat[data-part='root'] [data-part='trend-icon'],
-  .ds-data-terminal-card[data-part='root'] [data-part='details-icon'] {
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__change-value,
+  .ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root)[data-trend][data-band] .ds-data-terminal-card__change-value,
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__target-value,
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__completion-value,
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__status-label,
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root)[data-variant][data-trend] .ds-data-terminal-card__prompt-symbol,
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='trend-icon'],
+  .ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) [data-part='trend-icon'],
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) [data-part='details-icon'] {
     color: CanvasText;
   }
 
   /* decorative layers step out */
-  .ds-data-terminal-card[data-part='root'] [data-part='grid-texture'],
-  .ds-data-terminal-card[data-part='root'] [data-part='scan-line'],
-  .ds-data-terminal-card[data-part='root'] [data-part='circuit-pattern'],
-  .ds-data-terminal-card[data-part='root'] [data-part='matrix-texture'],
-  .ds-data-terminal-card[data-part='root'] [data-part='flow-line'],
-  .ds-data-terminal-card[data-part='root'] [data-part='progress-shimmer'],
-  .ds-data-terminal-stat[data-part='root'] [data-part='progress-shimmer'],
-  .ds-data-terminal-card[data-part='root'] [data-part='cursor'] {
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='grid-texture'], .ds-data-terminal-card__grid-texture),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='scan-line'], .ds-data-terminal-card__scan-line),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='circuit-pattern'], .ds-data-terminal-card__circuit-pattern),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='matrix-texture'], .ds-data-terminal-card__matrix-texture),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='flow-line'], .ds-data-terminal-card__flow-line),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-shimmer'], .ds-data-terminal-card__progress-shimmer),
+  .ds-data-terminal-stat:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='progress-shimmer'], .ds-data-terminal-card__progress-shimmer),
+  .ds-data-terminal-card:is([data-part='root'], .ds-data-terminal-card__root) :is([data-part='cursor'], .ds-data-terminal-card__cursor) {
     display: none;
   }
 

@@ -165,9 +165,9 @@ function LiveIndicator({ color = DS.success }: { color?: string }) {
   const { tOr } = useDtcTranslation();
   return (
     <Flex align="center" gap={6} style={{ '--ds-dtc-live': color } as CSSProperties}>
-      <Box data-part="live-dot">
-        <Box data-part="live-pulse-ring" />
-        <Box data-part="live-ring" />
+      <Box data-part="live-dot" className="ds-data-terminal-card__live-dot">
+        <Box data-part="live-pulse-ring" className="ds-data-terminal-card__live-pulse-ring" />
+        <Box data-part="live-ring" className="ds-data-terminal-card__live-ring" />
       </Box>
       <Text className="ds-data-terminal-card__live-label">
         {tOr('dataTerminalCard.live', 'LIVE')}
@@ -186,6 +186,7 @@ function ActivityIndicator() {
         <Box
           key={i}
           data-part="activity-bar"
+          className="ds-data-terminal-card__activity-bar"
           data-bar-index={i}
           style={{
             /* Only the runtime stagger stays inline; the cadence is skin-owned. */
@@ -203,6 +204,7 @@ function QuickAction({ icon: Icon, label }: { icon: DataTerminalIcon; label: str
     <Box
       as="button"
       data-part="quick-action"
+      className="ds-data-terminal-card__quick-action"
       onClick={(e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -224,6 +226,7 @@ function ProgressBar({ progress, height = 4 }: { progress: number; height?: numb
   return (
     <Box
       data-part="progress-track"
+      className="ds-data-terminal-card__progress-track"
       style={
         {
           height,
@@ -233,13 +236,14 @@ function ProgressBar({ progress, height = 4 }: { progress: number; height?: numb
     >
       <Box
         data-part="progress-fill"
+        className="ds-data-terminal-card__progress-fill"
         data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
         style={{
           width: `${progress}%`,
         }}
       >
         {/* Shimmer effect (motion is skin-owned) */}
-        <Box data-part="progress-shimmer" />
+        <Box data-part="progress-shimmer" className="ds-data-terminal-card__progress-shimmer" />
       </Box>
     </Box>
   );
@@ -248,7 +252,7 @@ function ProgressBar({ progress, height = 4 }: { progress: number; height?: numb
 // Stats item component for consistent layout
 function StatItem({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <Box data-part="stat-item">
+    <Box data-part="stat-item" className="ds-data-terminal-card__stat-item">
       <Text className="ds-data-terminal-card__stat-item-label" align="start">
         {label}
       </Text>
@@ -276,19 +280,19 @@ function CommandCard({
   return (
     <NavLinkAnchor href={path}>
       <Box
-        className="ds-data-terminal-card"
+        className="ds-data-terminal-card ds-data-terminal-card__root"
         data-part="root"
         data-variant="1"
         data-trend={trend}
         data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
       >
         {/* Terminal header */}
-        <Box data-part="terminal-bar">
+        <Box data-part="terminal-bar" className="ds-data-terminal-card__terminal-bar">
           <Flex align="center" gap={10}>
             <Flex gap={5}>
-              <Box data-part="terminal-dot" />
-              <Box data-part="terminal-dot" />
-              <Box data-part="terminal-dot" />
+              <Box data-part="terminal-dot" className="ds-data-terminal-card__terminal-dot" />
+              <Box data-part="terminal-dot" className="ds-data-terminal-card__terminal-dot" />
+              <Box data-part="terminal-dot" className="ds-data-terminal-card__terminal-dot" />
             </Flex>
             <Text className="ds-data-terminal-card__terminal-filename">
               {label.toLowerCase().replace(/\s+/g, '_')}.sys
@@ -296,14 +300,14 @@ function CommandCard({
           </Flex>
           <Flex align="center" gap={8}>
             <ActivityIndicator />
-            <Box data-part="heartbeat-dot" />
+            <Box data-part="heartbeat-dot" className="ds-data-terminal-card__heartbeat-dot" />
           </Flex>
         </Box>
 
         {/* Content */}
-        <Box data-part="content">
+        <Box data-part="content" className="ds-data-terminal-card__content">
           {/* Command prompt header */}
-          <Box data-part="prompt-header">
+          <Box data-part="prompt-header" className="ds-data-terminal-card__prompt-header">
             <Flex align="center" gap={8}>
               <Text className="ds-data-terminal-card__prompt-symbol">
                 $
@@ -312,19 +316,19 @@ function CommandCard({
               <Text className="ds-data-terminal-card__prompt-label">
                 {label.toUpperCase()}
               </Text>
-              <Box data-part="cursor" />
+              <Box data-part="cursor" className="ds-data-terminal-card__cursor" />
             </Flex>
           </Box>
 
           {/* Main value section */}
-          <Box data-part="value-section">
+          <Box data-part="value-section" className="ds-data-terminal-card__value-section">
             <Text className="ds-data-terminal-card__value" align="start">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
 
           {/* Stats grid - well segmented */}
-          <Box data-part="stats-grid">
+          <Box data-part="stats-grid" className="ds-data-terminal-card__stats-grid">
             <StatItem label={tOr('dataTerminalCard.statChange', 'CHANGE')}>
               <Flex align="center" gap={4}>
                 {isPositive ? (
@@ -350,13 +354,13 @@ function CommandCard({
           </Box>
 
           {/* Progress bar section */}
-          <Box data-part="progress-section">
+          <Box data-part="progress-section" className="ds-data-terminal-card__progress-section">
             <ProgressBar progress={progress} height={5} />
           </Box>
         </Box>
 
         {/* Actions footer (DEAD affordances — contract gap, see header) */}
-        <Box data-part="actions-footer">
+        <Box data-part="actions-footer" className="ds-data-terminal-card__actions-footer">
           <Flex gap={8}>
             <QuickAction icon={Eye} label={tOr('dataTerminalCard.actionView', 'VIEW')} />
             <QuickAction icon={Plus} label={tOr('dataTerminalCard.actionAdd', 'ADD')} />
@@ -393,31 +397,31 @@ function HUDCard({
   return (
     <NavLinkAnchor href={path}>
       <Box
-        className="ds-data-terminal-card"
+        className="ds-data-terminal-card ds-data-terminal-card__root"
         data-part="root"
         data-variant="2"
         data-trend={trend}
         data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
       >
         {/* Grid texture (motion is skin-owned) */}
-        <Box data-part="grid-texture" />
+        <Box data-part="grid-texture" className="ds-data-terminal-card__grid-texture" />
 
         {/* Scan line (motion is skin-owned) */}
-        <Box data-part="scan-line" />
+        <Box data-part="scan-line" className="ds-data-terminal-card__scan-line" />
 
         {/* Corner brackets (motion is skin-owned) */}
-        <Box data-part="corner-bracket" />
-        <Box data-part="corner-bracket" />
-        <Box data-part="corner-bracket" />
-        <Box data-part="corner-bracket" />
+        <Box data-part="corner-bracket" className="ds-data-terminal-card__corner-bracket" />
+        <Box data-part="corner-bracket" className="ds-data-terminal-card__corner-bracket" />
+        <Box data-part="corner-bracket" className="ds-data-terminal-card__corner-bracket" />
+        <Box data-part="corner-bracket" className="ds-data-terminal-card__corner-bracket" />
 
         {/* Content */}
-        <Box data-part="content">
+        <Box data-part="content" className="ds-data-terminal-card__content">
           {/* Header section */}
-          <Box data-part="section-divider">
+          <Box data-part="section-divider" className="ds-data-terminal-card__section-divider">
             <Flex align="start" justify="between">
               <Flex align="center" gap={12}>
-                <Box data-part="header-icon-box">
+                <Box data-part="header-icon-box" className="ds-data-terminal-card__header-icon-box">
                   <Icon data-part="header-icon" />
                 </Box>
                 <Box>
@@ -429,9 +433,9 @@ function HUDCard({
                   </Text>
                 </Box>
               </Flex>
-              <Box data-part="status-badge">
+              <Box data-part="status-badge" className="ds-data-terminal-card__status-badge">
                 <Flex align="center" gap={6}>
-                  <Box data-part="status-dot" />
+                  <Box data-part="status-dot" className="ds-data-terminal-card__status-dot" />
                   <Text className="ds-data-terminal-card__status-label">
                     {statusLabel}
                   </Text>
@@ -441,12 +445,12 @@ function HUDCard({
           </Box>
 
           {/* Main value section */}
-          <Box data-part="value-section">
+          <Box data-part="value-section" className="ds-data-terminal-card__value-section">
             <Text className="ds-data-terminal-card__value" align="start">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
-            <Flex align="center" gap={12} data-part="trend-row">
-              <Box data-part="trend-badge">
+            <Flex align="center" gap={12} data-part="trend-row" className="ds-data-terminal-card__trend-row">
+              <Box data-part="trend-badge" className="ds-data-terminal-card__trend-badge">
                 <Flex align="center" gap={6}>
                   {isPositive ? (
                     <TrendingUp data-part="trend-icon" />
@@ -465,7 +469,7 @@ function HUDCard({
           </Box>
 
           {/* Bottom stats section */}
-          <Box data-part="stats-panel">
+          <Box data-part="stats-panel" className="ds-data-terminal-card__stats-panel">
             <Flex align="center" justify="between">
               <Box>
                 <Text className="ds-data-terminal-card__completion-label">
@@ -475,7 +479,7 @@ function HUDCard({
                   {progress}%
                 </Text>
               </Box>
-              <Box data-part="progress-slot">
+              <Box data-part="progress-slot" className="ds-data-terminal-card__progress-slot">
                 <ProgressBar progress={progress} height={6} />
               </Box>
               <Flex align="center" gap={8}>
@@ -513,31 +517,31 @@ function CircuitCard({
   return (
     <NavLinkAnchor href={path}>
       <Box
-        className="ds-data-terminal-card"
+        className="ds-data-terminal-card ds-data-terminal-card__root"
         data-part="root"
         data-variant="3"
         data-trend={trend}
         data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
       >
         {/* Circuit pattern */}
-        <Box data-part="circuit-pattern" />
+        <Box data-part="circuit-pattern" className="ds-data-terminal-card__circuit-pattern" />
 
         {/* Data flow line (motion is skin-owned) */}
-        <Box data-part="flow-line" />
+        <Box data-part="flow-line" className="ds-data-terminal-card__flow-line" />
 
         {/* Node indicators (motion is skin-owned) */}
-        <Box data-part="node-dot" />
-        <Box data-part="node-dot-live" />
-        <Box data-part="node-dot" />
-        <Box data-part="node-dot" />
+        <Box data-part="node-dot" className="ds-data-terminal-card__node-dot" />
+        <Box data-part="node-dot-live" className="ds-data-terminal-card__node-dot-live" />
+        <Box data-part="node-dot" className="ds-data-terminal-card__node-dot" />
+        <Box data-part="node-dot" className="ds-data-terminal-card__node-dot" />
 
         {/* Content */}
-        <Box data-part="content">
+        <Box data-part="content" className="ds-data-terminal-card__content">
           {/* Header section */}
-          <Box data-part="section-divider">
+          <Box data-part="section-divider" className="ds-data-terminal-card__section-divider">
             <Flex align="center" justify="between">
               <Flex align="center" gap={10}>
-                <Box data-part="header-icon-box">
+                <Box data-part="header-icon-box" className="ds-data-terminal-card__header-icon-box">
                   <Icon data-part="header-icon" />
                 </Box>
                 <Box>
@@ -557,14 +561,14 @@ function CircuitCard({
           </Box>
 
           {/* Main value section */}
-          <Box data-part="value-section">
+          <Box data-part="value-section" className="ds-data-terminal-card__value-section">
             <Text className="ds-data-terminal-card__value" align="start">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
 
           {/* Stats grid section */}
-          <Box data-part="stats-grid">
+          <Box data-part="stats-grid" className="ds-data-terminal-card__stats-grid">
             <StatItem label={tOr('dataTerminalCard.statChange', 'CHANGE')}>
               <Flex align="center" gap={4}>
                 {isPositive ? (
@@ -590,7 +594,7 @@ function CircuitCard({
           </Box>
 
           {/* Progress section */}
-          <Box data-part="progress-section">
+          <Box data-part="progress-section" className="ds-data-terminal-card__progress-section">
             <ProgressBar progress={progress} height={5} />
           </Box>
 
@@ -624,22 +628,22 @@ function MatrixCard({
   return (
     <NavLinkAnchor href={path}>
       <Box
-        className="ds-data-terminal-card"
+        className="ds-data-terminal-card ds-data-terminal-card__root"
         data-part="root"
         data-variant="4"
         data-trend={trend}
         data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
       >
         {/* Dot matrix texture (motion is skin-owned) */}
-        <Box data-part="matrix-texture" />
+        <Box data-part="matrix-texture" className="ds-data-terminal-card__matrix-texture" />
 
         {/* Content */}
-        <Box data-part="content">
+        <Box data-part="content" className="ds-data-terminal-card__content">
           {/* Header section */}
-          <Box data-part="section-divider">
+          <Box data-part="section-divider" className="ds-data-terminal-card__section-divider">
             <Flex align="center" justify="between">
               <Flex align="center" gap={10}>
-                <Box data-part="header-icon-box">
+                <Box data-part="header-icon-box" className="ds-data-terminal-card__header-icon-box">
                   <Icon data-part="header-icon" />
                 </Box>
                 <Box>
@@ -656,14 +660,14 @@ function MatrixCard({
           </Box>
 
           {/* Main value section */}
-          <Box data-part="value-section">
+          <Box data-part="value-section" className="ds-data-terminal-card__value-section">
             <Text className="ds-data-terminal-card__value" align="start">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
 
           {/* Stats grid section */}
-          <Box data-part="stats-grid">
+          <Box data-part="stats-grid" className="ds-data-terminal-card__stats-grid">
             <StatItem label={tOr('dataTerminalCard.statChange', 'CHANGE')}>
               <Flex align="center" gap={4}>
                 {isPositive ? (
@@ -689,12 +693,12 @@ function MatrixCard({
           </Box>
 
           {/* Progress section */}
-          <Box data-part="progress-section">
+          <Box data-part="progress-section" className="ds-data-terminal-card__progress-section">
             <ProgressBar progress={progress} height={4} />
           </Box>
 
           {/* Footer section */}
-          <Flex align="center" justify="between" data-part="footer">
+          <Flex align="center" justify="between" data-part="footer" className="ds-data-terminal-card__footer">
             <ActivityIndicator />
             <Flex align="center" gap={6}>
               <Text className="ds-data-terminal-card__details-label">
@@ -767,22 +771,22 @@ export function DataTerminalStat({
 
   return (
     <Box
-      className="ds-data-terminal-stat"
+      className="ds-data-terminal-stat ds-data-terminal-card__root"
       data-part="root"
       data-trend={trend}
       data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
     >
-      <Box data-part="corner-bracket" />
-      <Box data-part="corner-bracket" />
+      <Box data-part="corner-bracket" className="ds-data-terminal-card__corner-bracket" />
+      <Box data-part="corner-bracket" className="ds-data-terminal-card__corner-bracket" />
 
-      <Flex align="center" gap={6} data-part="stat-header">
+      <Flex align="center" gap={6} data-part="stat-header" className="ds-data-terminal-stat__stat-header">
         <Icon data-part="stat-icon" />
         <Text className="ds-data-terminal-card__stat-label" align="start">
           {label.toUpperCase()}
         </Text>
       </Flex>
 
-      <Box data-part="value-section">
+      <Box data-part="value-section" className="ds-data-terminal-card__value-section">
         <Flex align="baseline" gap={6}>
           <Text className="ds-data-terminal-card__value" align="start">
             {typeof value === 'number' ? value.toLocaleString(locale) : value}

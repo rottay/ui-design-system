@@ -47,7 +47,7 @@ function SparklineDots({ dots, accent }: { dots: number[]; accent: AccentColor }
   const FLOOR = 0.15;
 
   return (
-    <Flex align="center" gap={6} data-part="spark-dots" aria-hidden="true">
+    <Flex align="center" gap={6} data-part="spark-dots" className="ds-stats-header__spark-dots" aria-hidden="true">
       {dots.slice(0, 7).map((val, i) => {
         const normalized = val / maxVal;
         const opacity = FLOOR + normalized * (1 - FLOOR);
@@ -56,6 +56,7 @@ function SparklineDots({ dots, accent }: { dots: number[]; accent: AccentColor }
           <Box
             key={`dot-${i}`}
             data-part="spark-dot"
+            className="ds-stats-header__spark-dot"
             data-accent={accent}
             data-dot-index={i}
             style={{
@@ -98,8 +99,8 @@ function ChangeIndicator({
     changeType === 'increase' ? DataTrendIcon : changeType === 'decrease' ? DataTrendDownIcon : null;
 
   return (
-    <Flex direction="column" align="end" gap={2} data-part="change-indicator">
-      <Flex align="center" gap={3} data-part="change-row" data-change={changeType}>
+    <Flex direction="column" align="end" gap={2} data-part="change-indicator" className="ds-stats-header__change-indicator">
+      <Flex align="center" gap={3} data-part="change-row" className="ds-stats-header__change-row" data-change={changeType}>
         {TrendIcon && <TrendIcon decorative size={13} />}
         <Text className="ds-stats-header__change-value" data-change={changeType}>
           {displayText}
@@ -132,6 +133,7 @@ function StatCard({ stat }: { stat: StatItem }) {
     <Box
       {...interaction.handlers}
       {...partAttributes('stat-card', interaction.state)}
+      className="ds-stats-header__stat-card"
       data-accent={accent}
       data-clickable={isClickable}
       role={isClickable ? 'button' : undefined}
@@ -172,7 +174,7 @@ function StatCard({ stat }: { stat: StatItem }) {
           />
         )}
         {stat.icon && (
-          <Box data-part="stat-icon" aria-hidden="true">
+          <Box data-part="stat-icon" className="ds-stats-header__stat-icon" aria-hidden="true">
             {stat.icon}
           </Box>
         )}
@@ -203,7 +205,7 @@ function StatCard({ stat }: { stat: StatItem }) {
       )}
 
       {/* Gradient glow from bottom (decorative) */}
-      <Box data-part="card-glow" aria-hidden="true" />
+      <Box data-part="card-glow" className="ds-stats-header__card-glow" aria-hidden="true" />
     </Box>
   );
 }
@@ -237,7 +239,7 @@ function StatsHeaderImpl({ stats, loading = false }: StatsHeaderProps) {
 
   return (
     <Box
-      className="ds-stats-header"
+      className="ds-stats-header ds-stats-header__root"
       data-part="root"
       data-columns={columns}
       data-loading={loading ? 'true' : 'false'}
