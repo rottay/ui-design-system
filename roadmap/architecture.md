@@ -579,6 +579,10 @@ apps see zero API change through `createEngineComponent`.
   - reach `done` only in the phase-6 window, because `done` consults its phase, and before WO-GAT-09.
 
   Nothing is moved by this amendment.
+- **AMENDMENT (2026-10-20, owner-approved G-1 wave mapping; the acceptance above stands verbatim)** — The owner approved G-1 route 1 on 2026-10-20 ([owner decision](./proposals.md#owner-decision-on-g-1-and-g-7--2026-10-20-approved-bounded)). The reviewed mapping lot that carries this amendment moves DS-IMP-061 and this WO from phase 1 to phase 6, which realizes the move the traceability amendment above records as queued.
+  - "Phase 1" in the Source IDs line, and "the DS-IMP-061 phase-1 pin" in the Outcome, the Acceptance gate and the Delegation prompt, now read as the strict mapped pin: the legacy phase-1 form, or phase 6 only as execute with authority WO-ARC-21.
+  - Every other word of the acceptance stands: the round-trip is proven in each vertical app, the DS never reads the DB, and the W4 exit cert passes. No DS fixture discharges it.
+  - This WO stays in progress with its dependencies. It reaches `done` only in the phase-6 window, under phase 6's own structured owner GO, and before WO-GAT-09. No phase is opened.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system` plus the vertical apps, prove the DB TenantThemeConfig round-trip (DS-IMP-061) from DB write to first paint per app, keeping schema/compiler ownership in the DS and plumb in the apps. Gate: round-trip proven per app, DS never reads the DB, W4 exit cert green, phase-1 pin holds. Fences: edit-only, no commits, never git-restore directories.
 
 ### WO-ARC-22 Chrome-less variants of the canonical controls (proposal E-1)

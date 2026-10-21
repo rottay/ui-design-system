@@ -236,27 +236,30 @@ function addSupportMilestone(registry, {
   return support;
 }
 
-function promoteTenantThemeAuthority(registry, { status = "done" } = {}) {
+function promoteTenantThemeAuthority(
+  registry,
+  { status = "done", phase = "1", authority = "WO-ARC-61" } = {},
+) {
   const item = registry.traceability["ds-improvements"].items.find(
     (candidate) => candidate.id === "DS-IMP-061",
   );
   Object.assign(item, {
     disposition: "execute",
-    authority: "WO-ARC-61",
-    phase: "1",
+    authority,
+    phase,
   });
   delete item.owner;
   delete item.reviewBy;
   delete item.reason;
   delete item.targetPhase;
-  const authority = workOrderFixture({
-    id: "WO-ARC-61",
-    phase: "1",
+  const authorityWorkOrder = workOrderFixture({
+    id: authority,
+    phase,
     status,
     sourceIds: ["DS-IMP-061"],
   });
-  registry.workOrders.push(authority);
-  return authority;
+  registry.workOrders.push(authorityWorkOrder);
+  return authorityWorkOrder;
 }
 
 function openPhase(registry, phase) {
@@ -1066,6 +1069,101 @@ test("the pre-write mutation validator includes DS trace and phase invariants", 
   assert.ok(errors.some((error) => error.includes(
     "DS-IMP-001: execute phase 1 must match authority WO-GAT-05 phase 0",
   )));
+});
+
+const TENANT_THEME_PIN_ERROR = "DS-IMP-061: TenantThemeConfig runtime authority must stay in Phase 1";
+const tenantThemePinErrors = (registry) => validateDsImprovementsTraceability(registry, { today: "2026-07-14" })
+  .filter((error) => error.includes(TENANT_THEME_PIN_ERROR));
+const findWorkOrder = (registry, id) => registry.workOrders.find((workOrder) => workOrder.id === id);
+const findTraceItem = (registry, id) => registry.traceability["ds-improvements"].items.find(
+  (candidate) => candidate.id === id,
+);
+
+test("DS-IMP-061 pin admits the legacy phase-1 forms and phase 6 only as execute authority WO-ARC-21", () => {
+  assert.deepEqual(tenantThemePinErrors(validRegistry()), []);
+
+  const legacyExecute = validRegistry();
+  promoteTenantThemeAuthority(legacyExecute);
+  assert.deepEqual(tenantThemePinErrors(legacyExecute), []);
+
+  const mapped = validRegistry();
+  promoteTenantThemeAuthority(mapped, { phase: "6", authority: "WO-ARC-21", status: "in-progress" });
+  assert.deepEqual(tenantThemePinErrors(mapped), []);
+});
+
+test("DS-IMP-061 pin refuses every other phase, authority, deferred target and disposition", () => {
+  for (const phase of ["0", "2A", "2B", "2C", "3", "4", "5"]) {
+    for (const authority of ["WO-ARC-21", "WO-ARC-61"]) {
+      const registry = validRegistry();
+      promoteTenantThemeAuthority(registry, { phase, authority });
+      assert.equal(tenantThemePinErrors(registry).length, 1, `execute ${phase} via ${authority}`);
+    }
+  }
+
+  const foreignAuthority = validRegistry();
+  promoteTenantThemeAuthority(foreignAuthority, { phase: "6", authority: "WO-ARC-61" });
+  assert.equal(tenantThemePinErrors(foreignAuthority).length, 1, "execute 6 via WO-ARC-61");
+
+  for (const targetPhase of ["6", "2A"]) {
+    const deferred = validRegistry();
+    findTraceItem(deferred, "DS-IMP-061").targetPhase = targetPhase;
+    assert.equal(tenantThemePinErrors(deferred).length, 1, `deferred to ${targetPhase}`);
+  }
+
+  for (const disposition of ["routed", "absorbed", "rejected"]) {
+    const registry = validRegistry();
+    findTraceItem(registry, "DS-IMP-061").disposition = disposition;
+    assert.equal(tenantThemePinErrors(registry).length, 1, `disposition ${disposition}`);
+  }
+});
+
+test("the mapped live registry keeps phase 2A behind WO-ARC-12 and its own structured ownerGo", () => {
+  const today = { today: LIVE_REGISTRY_TODAY };
+  const locked = liveRegistry();
+  const lockedArc17 = findWorkOrder(locked, "WO-ARC-17");
+  assert.equal(lockedArc17.phase, "2A");
+  findWorkOrder(locked, "WO-ARC-12").status = "done";
+  assert.match(phaseClaimBlocker(locked, lockedArc17, today), /phase 2A is locked/);
+
+  const opened = liveRegistry();
+  openPhase(opened, "2A");
+  const openedArc17 = findWorkOrder(opened, "WO-ARC-17");
+  const blocker = phaseClaimBlocker(opened, openedArc17, today);
+  assert.equal(blocker, "phase 2A has incomplete prior authorities: WO-ARC-12");
+  assert.ok(!blocker.includes("WO-ARC-21"));
+
+  findWorkOrder(opened, "WO-ARC-12").status = "done";
+  assert.equal(phaseClaimBlocker(opened, openedArc17, today), null);
+});
+
+test("WO-ARC-21 done is refused while phase 6 is locked", () => {
+  const registry = liveRegistry();
+  const arc21 = findWorkOrder(registry, "WO-ARC-21");
+  assert.equal(arc21.phase, "6");
+  assert.equal(findTraceItem(registry, "DS-IMP-061").phase, "6");
+  assert.equal(arc21.status, "in-progress");
+  assert.ok(validateDoneTransition(registry, arc21, { today: LIVE_REGISTRY_TODAY }).some(
+    (error) => error.startsWith("WO-ARC-21: phase 6 is locked"),
+  ));
+});
+
+test("the GAT-09 barrier still refuses while WO-ARC-21 is open", () => {
+  const errors = validateGat09CompletionBarrier(liveRegistry(), { today: LIVE_REGISTRY_TODAY });
+  assert.ok(errors.some((error) => error.includes("every other execute authority must be done")
+    && error.includes("WO-ARC-21=in-progress")));
+});
+
+test("the re-sealed fingerprint refuses moving DS-IMP-061 or WO-ARC-21 to any other phase", () => {
+  assert.deepEqual(validateRegistryMutationIntegrity(liveRegistry(), { today: LIVE_REGISTRY_TODAY }), []);
+
+  for (const phase of ["1", "5"]) {
+    const registry = liveRegistry();
+    findTraceItem(registry, "DS-IMP-061").phase = phase;
+    findWorkOrder(registry, "WO-ARC-21").phase = phase;
+    const errors = validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY });
+    assert.ok(errors.some((error) => error.includes("adjudicated plan fingerprint changed")), `phase ${phase}`);
+    assert.equal(errors.some((error) => error.includes(TENANT_THEME_PIN_ERROR)), phase === "5", `pin at ${phase}`);
+  }
 });
 
 test("the mutation guard rejects duplicate work-order ids and incoherent done metadata", () => {

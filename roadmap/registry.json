@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-20",
+ "updated": "2026-10-21",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -3184,13 +3184,18 @@
    "sourceIds": [
     "DS-IMP-061"
    ],
-   "phase": "1",
+   "phase": "6",
    "notes": "W4 divergence exit cert plus the app-side plumb; satisfies the DS-IMP-061 phase-1 pin. Post-C4 programme (2026-09-05): conserved unchanged; it is consumer migration, so it hangs off WO-CON-04 (milestone A: document v2 + mountTenantTheme + the per-app migration packages) and its scope narrows to app-bithire under owner scope D-31.",
    "progressLog": [
     {
      "at": "2026-10-12 14:00",
      "by": "Kimi DT",
      "note": "2026-10-12: DS-side preparation landed (00a86aab0, independently reviewed): the transport-parity DB leg now runs from serialized row bytes (json + jsonb) through hydrate->compile->mount, byte-identical to the static path with mutants and a write->read->write fixed-point proof; the showroom probe round-trips row bytes to first paint with 0 differing pixels; the frozen per-app probe contract is recorded at docs/consumer-contract/migration/db-first-paint-probe/. The app-side half stays blocked on the owner's D-31 cross-repo authorization. Not DONE."
+    },
+    {
+     "at": "2026-10-21 01:03",
+     "by": "codex-admin-dt",
+     "note": "Owner-approved G-1 route-1 mapping: DS-IMP-061 and WO-ARC-21 move from phase 1 to phase 6 with a strict two-form pin and re-sealed fingerprint. Full app-side DB-write-to-first-paint/W4 acceptance, dependencies and GAT-09 remain; each later phase needs its own structured ownerGo. No claim, DONE, app/DB work or phase opening. Exact candidate validation/review is retained in .tmp/ds-codex-admin-2026-10-20/g1-mapping-20261020/evidence/integration-head5877; total 170 and done 141 unchanged."
     }
    ],
    "claimedBy": "Kimi DT",
@@ -11211,7 +11216,7 @@
      "id": "DS-IMP-061",
      "disposition": "execute",
      "authority": "WO-ARC-21",
-     "phase": "1"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-062",

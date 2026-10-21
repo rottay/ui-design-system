@@ -102,6 +102,7 @@ const DS_IMPROVEMENTS_BOOTSTRAP_REGISTRY_WO = "WO-GAT-05";
 const DS_IMPROVEMENTS_BOOTSTRAP_PHASE_WO = "WO-GAT-06";
 const DS_IMPROVEMENTS_FINAL_CLAIM_WO = "WO-GAT-09";
 const DS_IMPROVEMENTS_TENANT_THEME_ID = "DS-IMP-061";
+const DS_IMPROVEMENTS_TENANT_THEME_MAPPED_AUTHORITY = "WO-ARC-21";
 const DS_IMPROVEMENTS_STATUS_AUTHORITY = "roadmap/registry.json";
 const DS_IMPROVEMENTS_OWNER_OPENER = "owner";
 const DS_IMPROVEMENTS_OWNER_GO_DECISION = "go";
@@ -126,7 +127,9 @@ const DS_IMPROVEMENTS_PHASE_INDEX = new Map(
 // discharged, GO durable at db861f4cb) and phase 1 opened per the recorded
 // owner GO of 2026-10-08 with independent checkpoint acceptance. Items,
 // authorities, sourceIds and WO topology are unchanged.
-const DS_IMPROVEMENTS_PLAN_SHA256 = "ca61cac3fc76bd321bc97bc267672e3a1db79e5a59339fb07aaa7ba255344d8d";
+// Owner-approved wave mapping update 2026-10-20 (G-1 route 1, roadmap/proposals.md): DS-IMP-061 and
+// its authority WO-ARC-21 move from phase 1 to phase 6; nothing else in the plan changes and no phase opens.
+const DS_IMPROVEMENTS_PLAN_SHA256 = "debdf5e355172160ff7d5a0a83d3f7cc1a9d7cba4f3f070df6adb82cfab31cdb";
 const DS_IMPROVEMENTS_SOURCE_REVISION = "8b618ab000b784fc7fa05bca96a1dcc9de80b3b9";
 const DS_IMPROVEMENTS_DOC_ROOT = path.resolve(
   ROOT,
@@ -2197,8 +2200,12 @@ export function validateDsImprovementsTraceability(
 
     if (id === DS_IMPROVEMENTS_TENANT_THEME_ID) {
       const phase = disposition === "deferred" ? item.targetPhase : item.phase;
-      if (!["deferred", "execute"].includes(disposition) || phase !== "1") {
-        errors.push(`${DS_IMPROVEMENTS_TENANT_THEME_ID}: TenantThemeConfig runtime authority must remain in Phase 1`);
+      const legacyPhaseOne = ["deferred", "execute"].includes(disposition) && phase === "1";
+      const mappedPhaseSix = disposition === "execute"
+        && phase === "6"
+        && item.authority === DS_IMPROVEMENTS_TENANT_THEME_MAPPED_AUTHORITY;
+      if (!legacyPhaseOne && !mappedPhaseSix) {
+        errors.push(`${DS_IMPROVEMENTS_TENANT_THEME_ID}: TenantThemeConfig runtime authority must stay in Phase 1, or execute in Phase 6 only through ${DS_IMPROVEMENTS_TENANT_THEME_MAPPED_AUTHORITY}`);
       }
     }
 
