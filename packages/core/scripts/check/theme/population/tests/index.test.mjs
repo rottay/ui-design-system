@@ -810,6 +810,8 @@ describe('theme population — the reviewed declaration keeps its identity acros
   const CONTEXTS = [[], ['@container ds-table-toolbar (max-width: 40rem)'], ['@media (forced-colors: active)']];
   const ALL_CONTEXTS = '[], [@container ds-table-toolbar (max-width: 40rem)], [@media (forced-colors: active)]';
   const DIVIDER_RULE = /^([ \t]*)\.ds-structure\.ds-table-toolbar \.ds-table-toolbar__divider\[data-part='divider'\] \{/gmu;
+  const literal = (text) => text.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+  const PAIRED_DIVIDER_RULE = new RegExp(`^([ \\t]*)${literal(S)},\\n\\1${literal(C)} \\{`, 'gmu');
   const formsOf = (selector, family = 'table-toolbar') => population.reviewedSelectorForms(selector, family);
   const entryIndex = () => readExclusions().entries.findIndex((entry) => entry.family === 'table-toolbar');
   const label = () => `entry ${entryIndex()} (table-toolbar/shape): `;
@@ -848,8 +850,14 @@ describe('theme population — the reviewed declaration keeps its identity acros
   const arm = (prelude, edit = null, setup = () => {}) => {
     const dir = sandbox();
     const file = join(dir, TT);
+    let paired = 0;
+    const unpaired = readFileSync(file, 'utf8').replace(PAIRED_DIVIDER_RULE, (_match, indent) => {
+      paired += 1;
+      return `${indent}${S} {`;
+    });
+    assert.ok(paired === 0 || paired === 3, `the three reviewed divider rules are authored in one form (paired: ${paired})`);
     let count = 0;
-    const armed = readFileSync(file, 'utf8').replace(DIVIDER_RULE, (_match, indent) => {
+    const armed = unpaired.replace(DIVIDER_RULE, (_match, indent) => {
       count += 1;
       return `${indent}${prelude(indent)} {`;
     });
@@ -900,20 +908,24 @@ describe('theme population — the reviewed declaration keeps its identity acros
     assert.deepEqual([delta(measured.registry, base.registry), delta(measured.floor, base.floor), delta(measured.pilot, base.pilot)], [[], [], []]);
   };
 
-  it('M01 HEAD identity: every reviewed byProperty declaration is authored only as its own selector and table-toolbar stays withdrawn from shape', () => {
+  it('M01 HEAD identity: every reviewed byProperty declaration is authored as exactly one reviewed form (its own selector or its carrier pair, never the class twin alone) and table-toolbar stays withdrawn from shape', () => {
     for (const entry of readExclusions().entries.filter((candidate) => candidate.path === 'byProperty')) {
       const selectors = cssRules(readFileSync(join(ROOT, entry.skin), 'utf8')).map((rule) => rule.selector);
       for (const reviewed of entry.declarations) {
         const forms = formsOf(reviewed.selector, entry.family);
         assert.equal(forms.part, reviewed.selector);
-        assert.ok(selectors.includes(forms.part), forms.part);
-        assert.ok(forms.pair !== null && !selectors.includes(forms.pair) && !selectors.includes(forms.classOnly), `${forms.part}: no carrier form on HEAD`);
+        assert.ok(forms.pair !== null, `${forms.part}: derives a carrier pair`);
+        assert.equal([forms.part, forms.pair].filter((form) => selectors.includes(form)).length, 1, `${forms.part}: authored as exactly one reviewed form`);
+        assert.ok(!selectors.includes(forms.classOnly), `${forms.part}: the class twin alone is not authored`);
       }
     }
+    const dividers = cssRules(readFileSync(join(ROOT, TT), 'utf8')).filter((rule) => [S, `${S}, ${C}`].includes(rule.selector));
+    assert.deepEqual(dividers.map((rule) => rule.atRules), CONTEXTS);
+    assert.equal(new Set(dividers.map((rule) => rule.selector)).size, 1, 'the three divider rules share one authored form');
     const declared = familyAxisDeclarations().get('table-toolbar');
     assert.equal(declared.axes.shape, undefined);
     assert.deepEqual(declared.notApplicable.shape.excludedDeclarations.map((declaration) => [declaration.selector, declaration.context, declaration.value]),
-      [[S, [], '1px']]);
+      [[dividers[0].selector, [], '1px']]);
     assert.ok(populationReport().axes.find((entry) => entry.axis === 'shape').notApplicable.some((entry) => entry.family === 'table-toolbar'));
   });
 
