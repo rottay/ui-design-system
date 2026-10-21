@@ -484,12 +484,12 @@ export function SavedViewsMenu({
   const triggerInteraction = useInteractionState();
 
   return (
-    <Box data-part="anchor" data-open={isOpen} className="ds-structure ds-saved-views-menu">
+    <Box data-part="anchor" data-open={isOpen} className="ds-structure ds-saved-views-menu ds-saved-views-menu__anchor">
       <Box
         as="button"
         type="button"
         data-open={isOpen}
-        className="ds-structure ds-saved-views-menu"
+        className="ds-structure ds-saved-views-menu ds-saved-views-menu__trigger"
         ref={setTriggerRef}
         {...triggerInteraction.handlers}
         {...partAttributes('trigger', triggerInteraction.state)}
@@ -499,9 +499,10 @@ export function SavedViewsMenu({
         aria-haspopup="dialog"
         aria-expanded={isOpen}
       >
-        <Flex data-part="trigger-body" align="center" justify="center">
+        <Flex data-part="trigger-body" className="ds-saved-views-menu__trigger-body" align="center" justify="center">
           <Box
             data-part="trigger-icon"
+            className="ds-saved-views-menu__trigger-icon"
             data-open={isOpen}
           >
             {/* Governed semantic role icon (layout.list) — the retired local
@@ -520,7 +521,7 @@ export function SavedViewsMenu({
         <Portal>
           <PortalScope snapshot={portalScope}>
           <Box
-            className="ds-structure ds-saved-views-menu-backdrop"
+            className="ds-structure ds-saved-views-menu-backdrop ds-saved-views-menu-backdrop__backdrop"
             data-part="backdrop"
             onClick={closeMenu}
           />
@@ -528,7 +529,7 @@ export function SavedViewsMenu({
           <Box
             data-part="panel"
             data-open={isOpen}
-            className="ds-structure ds-saved-views-menu-panel"
+            className="ds-structure ds-saved-views-menu-panel ds-saved-views-menu-panel__panel"
             role="dialog"
             aria-label={labels.panelLabel}
             ref={panelRef}
@@ -543,9 +544,9 @@ export function SavedViewsMenu({
               } as CSSProperties
             }
           >
-            <Box data-part="header">
+            <Box data-part="header" className="ds-saved-views-menu-panel__header">
               <Flex align="start" justify="between" gap={12}>
-                <Box data-part="header-copy">
+                <Box data-part="header-copy" className="ds-saved-views-menu-panel__header-copy">
                   <Text className="ds-saved-views-menu__header-title" size="sm" weight="medium">
                     {labels.headerTitle}
                   </Text>
@@ -566,11 +567,12 @@ export function SavedViewsMenu({
               {activeView && (
                 <Box
                   data-part="active-card"
+                  className="ds-saved-views-menu-panel__active-card"
                 >
                   <Flex align="start" justify="between" gap={12}>
-                    <Flex data-part="active-card-lead" align="start" gap={10}>
+                    <Flex data-part="active-card-lead" className="ds-saved-views-menu-panel__active-card-lead" align="start" gap={10}>
                       <ViewGlyph isSystem={activeView.isSystem} active />
-                      <Box data-part="active-card-copy">
+                      <Box data-part="active-card-copy" className="ds-saved-views-menu-panel__active-card-copy">
                         <Text className="ds-saved-views-menu__active-card-label" size="sm" weight="medium">
                           {activeView.label}
                         </Text>
@@ -592,7 +594,7 @@ export function SavedViewsMenu({
                     </Flex>
                   </Flex>
 
-                  <Flex data-part="active-card-actions" align="center" gap={8} wrap="wrap">
+                  <Flex data-part="active-card-actions" className="ds-saved-views-menu-panel__active-card-actions" align="center" gap={8} wrap="wrap">
                     {onViewSave && (
                       <ActionButton tone="neutral" onClick={handleDuplicateActiveView}>
                         <ActionCopyIcon decorative />
@@ -624,7 +626,7 @@ export function SavedViewsMenu({
               )}
             </Box>
 
-            <Box data-part="list">
+            <Box data-part="list" className="ds-saved-views-menu-panel__list">
               {systemViews.length > 0 && (
                 <Section title={labels.systemViewsSection} count={systemViews.length}>
                   {systemViews.map((view) => (
@@ -680,11 +682,12 @@ export function SavedViewsMenu({
               {personaViews.length === 0 && (onSaveCurrentView || onViewSave) && (
                 <Box
                   data-part="empty-state"
+                  className="ds-saved-views-menu-panel__empty-state"
                   data-empty-state="persona"
                 >
                   <Flex align="start" gap={10}>
                     <Sparkles data-part="empty-state-icon" />
-                    <Box data-part="empty-state-copy">
+                    <Box data-part="empty-state-copy" className="ds-saved-views-menu-panel__empty-state-copy">
                       <Text className="ds-saved-views-menu__empty-state-title" size="sm" weight="medium">
                         {labels.noPersonaTitle}
                       </Text>
@@ -702,6 +705,7 @@ export function SavedViewsMenu({
               {views.length === 0 && (
                 <Box
                   data-part="empty-state"
+                  className="ds-saved-views-menu-panel__empty-state"
                   data-empty-state="all"
                 >
                   <Sparkles data-part="empty-state-icon" />
@@ -735,9 +739,9 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <Box data-part="section">
-      <Flex data-part="section-bar" align="center" justify="between">
-        <Box as="span" data-part="section-header">
+    <Box data-part="section" className="ds-saved-views-menu-panel__section">
+      <Flex data-part="section-bar" className="ds-saved-views-menu-panel__section-bar" align="center" justify="between">
+        <Box as="span" data-part="section-header" className="ds-saved-views-menu-panel__section-header">
           {title}
         </Box>
         <CountPill label={String(count)} />
@@ -770,6 +774,7 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
       data-active={isActive}
       {...itemInteraction.handlers}
       {...partAttributes('view-item', itemInteraction.state)}
+      className="ds-saved-views-menu-panel__view-item"
     >
       <Flex align="stretch" justify="between" gap={6}>
         <button
@@ -779,9 +784,9 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
           onClick={() => onSelect(view.key)}
         >
           <Flex align="start" justify="between" gap={12}>
-            <Flex data-part="view-item-lead" align="start" gap={10}>
+            <Flex data-part="view-item-lead" className="ds-saved-views-menu-panel__view-item-lead" align="start" gap={10}>
               <ViewGlyph isSystem={view.isSystem} active={isActive} />
-              <Box data-part="view-item-copy">
+              <Box data-part="view-item-copy" className="ds-saved-views-menu-panel__view-item-copy">
                 <Flex align="center" gap={6} wrap="wrap">
                   <Text
                     className="ds-saved-views-menu__view-item-label"
@@ -806,7 +811,7 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
                 `data-part` survives, every other `data-*` is dropped, so the
                 state attribute rides a host element. */}
             {isActive && (
-              <Box data-part="checkmark" data-active={true}>
+              <Box data-part="checkmark" className="ds-saved-views-menu-panel__checkmark" data-active={true}>
                 <ActionConfirmIcon decorative />
               </Box>
             )}
@@ -852,6 +857,7 @@ function ActionButton({
       data-tone={tone}
       {...interaction.handlers}
       {...partAttributes('action-button', interaction.state)}
+      className="ds-saved-views-menu-panel__action-button"
       onClick={onClick}
     >
       {children}
@@ -864,7 +870,7 @@ function ViewGlyph({ isSystem, active }: { isSystem?: boolean; active?: boolean 
   // `decorative` (without it the facade renders null) and the compatibility
   // glyph would leak that prop to the DOM.
   return (
-    <Box data-part="glyph" data-active={!!active}>
+    <Box data-part="glyph" className="ds-saved-views-menu-panel__glyph" data-active={!!active}>
       {isSystem ? <LayoutGridIcon decorative /> : <Bookmark aria-hidden />}
     </Box>
   );
@@ -874,6 +880,7 @@ function CountPill({ label }: { label: string }) {
   return (
     <Box
       data-part="count-pill"
+      className="ds-saved-views-menu-panel__count-pill"
     >
       {label}
     </Box>
@@ -890,6 +897,7 @@ function StatusPill({
   return (
     <Box
       data-part="status-pill"
+      className="ds-saved-views-menu-panel__status-pill"
       data-tone={tone}
     >
       {tone === 'primary' ? <StatusFeaturedIcon decorative /> : null}

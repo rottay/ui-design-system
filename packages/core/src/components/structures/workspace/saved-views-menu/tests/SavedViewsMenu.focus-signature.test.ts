@@ -59,8 +59,10 @@ const KEYBOARD = ":is([data-state~='focus-visible'], :focus-visible)";
 const PANEL = '.ds-structure.ds-saved-views-menu-panel';
 const TARGETS = [
   `.ds-structure.ds-saved-views-menu[data-part='trigger']${KEYBOARD}`,
+  `.ds-structure.ds-saved-views-menu.ds-saved-views-menu__trigger${KEYBOARD}`,
   `${PANEL} [data-part='view-item-select']${KEYBOARD}`,
   `${PANEL} [data-part='action-button']${KEYBOARD}`,
+  `${PANEL} .ds-saved-views-menu-panel__action-button${KEYBOARD}`,
   `${PANEL} [data-part='delete']${KEYBOARD}`,
 ];
 const AUTHORED = RULES.filter((rule) => !rule.forced);

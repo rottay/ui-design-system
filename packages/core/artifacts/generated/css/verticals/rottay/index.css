@@ -85608,7 +85608,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* trigger ----------------------------------------------------------------- */
 
-.ds-structure.ds-saved-views-menu[data-part='trigger'] {
+.ds-structure.ds-saved-views-menu:is([data-part='trigger'], .ds-saved-views-menu__trigger) {
   /* geometry drained from the engine's retired inline styles (42px square);
      the coarse-pointer floor below lifts it to the touch channel */
   display: inline-flex;
@@ -85630,29 +85630,31 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-structure.ds-saved-views-menu[data-part='trigger'][data-open] {
+.ds-structure.ds-saved-views-menu:is([data-part='trigger'], .ds-saved-views-menu__trigger)[data-open] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
 }
 
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open]:is([data-state~='hovered'], :hover):not([data-open='true']) {
+  .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open]:is([data-state~='hovered'], :hover):not([data-open='true']),
+  .ds-structure.ds-saved-views-menu.ds-saved-views-menu__trigger[data-open]:is([data-state~='hovered'], :hover):not([data-open='true']) {
     border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
     background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
   }
 }
 
-.ds-structure.ds-saved-views-menu[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-structure.ds-saved-views-menu[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible),
+.ds-structure.ds-saved-views-menu.ds-saved-views-menu__trigger:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
 }
 
-.ds-structure.ds-saved-views-menu[data-part='trigger'][data-open='true'] {
+.ds-structure.ds-saved-views-menu:is([data-part='trigger'], .ds-saved-views-menu__trigger)[data-open='true'] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)));
   border-color: color-mix(in srgb, var(--ds-color-primary) 34%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu [data-part='trigger-icon'] {
+.ds-structure.ds-saved-views-menu :is([data-part='trigger-icon'], .ds-saved-views-menu__trigger-icon) {
   /* geometry drained from the engine's retired inline styles (28px chip) */
   display: flex;
   align-items: center;
@@ -85665,7 +85667,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   color: var(--ds-color-text-secondary);
 }
 
-.ds-structure.ds-saved-views-menu [data-part='trigger-icon'][data-open='true'] {
+.ds-structure.ds-saved-views-menu :is([data-part='trigger-icon'], .ds-saved-views-menu__trigger-icon)[data-open='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
   color: var(--ds-color-primary);
 }
@@ -85687,7 +85689,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* standalone portaled panel ---------------------------------------------- */
 
-.ds-structure.ds-saved-views-menu-backdrop[data-part='backdrop'] {
+.ds-structure.ds-saved-views-menu-backdrop:is([data-part='backdrop'], .ds-saved-views-menu-backdrop__backdrop) {
   position: fixed;
   inset: 0;
   z-index: calc(var(--ds-z-index-notification, 1800) + 190);
@@ -85707,7 +85709,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   }
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) {
   /* The clamp the render measures against the viewport, placed here and never
      inline. Physical on purpose: the measurement is a viewport rect, so a
      logical property would flip it under RTL.
@@ -85736,26 +85738,26 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   outline: none;
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] {
   border: var(--ds-edge-hairline-width, 1px) solid var(
     --ds-material-overlay-border,
     color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent)
   );
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='header'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='header'], .ds-saved-views-menu-panel__header) {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='header'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='header'], .ds-saved-views-menu-panel__header) {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__header-description {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] .ds-saved-views-menu__header-description {
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='count-pill'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='count-pill'], .ds-saved-views-menu-panel__count-pill) {
   border-radius: var(--ds-radius-full, 9999px);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, transparent);
   color: var(--ds-color-text-secondary);
@@ -85763,65 +85765,65 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 /* active card stays at 8%; StatusPill primary stays at 12% ---------------- */
 
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='active-card'], .ds-saved-views-menu-panel__active-card) {
   border-radius: var(--ds-radius-lg, 14px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='active-card'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='active-card'], .ds-saved-views-menu-panel__active-card) {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__active-card-description {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] .ds-saved-views-menu__active-card-description {
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button) {
   border-radius: var(--ds-radius-full, 9999px);
 }
 
 /* Glyph geometry for the governed semantic icons, drained from the engine's
    inline width/height so a tenant icon posture reaches them. Each host already
    carried its own part, so no new anatomy was needed. */
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'] svg {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button) svg {
   inline-size: 12px;
   block-size: 12px;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'] svg {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='status-pill'], .ds-saved-views-menu-panel__status-pill) svg {
   inline-size: 10px;
   block-size: 10px;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button)[data-tone='neutral'] {
   background: color-mix(in srgb, var(--ds-surface-card) 84%, var(--ds-color-bg-primary) 16%);
   color: var(--ds-color-text-secondary);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='neutral'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button)[data-tone='neutral'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 86%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button)[data-tone='primary'] {
   background: color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
   color: var(--ds-color-primary);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='primary'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button)[data-tone='primary'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 26%, transparent);
 }
 
 /* list sections ----------------------------------------------------------- */
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='section-header'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] :is([data-part='section-header'], .ds-saved-views-menu-panel__section-header) {
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='view-item'], .ds-saved-views-menu-panel__view-item) {
   border-radius: var(--ds-radius-lg, 14px);
   background: color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='view-item'], .ds-saved-views-menu-panel__view-item) {
   border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
 }
 
@@ -85839,30 +85841,30 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   box-shadow: var(--ds-focus-ring);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item'][data-active='true'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='view-item'], .ds-saved-views-menu-panel__view-item)[data-active='true'] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item'][data-active='true'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='view-item'], .ds-saved-views-menu-panel__view-item)[data-active='true'] {
   border-color: color-mix(in srgb, var(--ds-color-primary) 28%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__view-item-label {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] .ds-saved-views-menu__view-item-label {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__view-item-description {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] .ds-saved-views-menu__view-item-description {
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='checkmark'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='checkmark'], .ds-saved-views-menu-panel__checkmark) {
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   color: var(--ds-color-primary);
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='checkmark'] svg {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='checkmark'], .ds-saved-views-menu-panel__checkmark) svg {
   inline-size: 14px;
   block-size: 14px;
 }
@@ -85877,12 +85879,12 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   block-size: 13px;
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) [data-part='delete'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-danger) 18%, transparent);
 }
 
 /* Frame and glyph geometry drained from the engine's inline styles. */
-.ds-structure.ds-saved-views-menu-panel [data-part='glyph'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='glyph'], .ds-saved-views-menu-panel__glyph) {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -85893,41 +85895,41 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   background: color-mix(in srgb, var(--ds-color-bg-primary) 54%, transparent);
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='glyph'] svg {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='glyph'], .ds-saved-views-menu-panel__glyph) svg {
   inline-size: 14px;
   block-size: 14px;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='glyph'][data-active='true'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='glyph'], .ds-saved-views-menu-panel__glyph)[data-active='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
   color: var(--ds-color-primary);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='status-pill'], .ds-saved-views-menu-panel__status-pill) {
   border-radius: var(--ds-radius-full, 9999px);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'][data-tone='neutral'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='status-pill'], .ds-saved-views-menu-panel__status-pill)[data-tone='neutral'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, transparent);
   color: var(--ds-color-text-secondary);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'][data-tone='primary'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='status-pill'], .ds-saved-views-menu-panel__status-pill)[data-tone='primary'] {
   background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
   color: var(--ds-color-primary);
 }
 
 /* empty states ------------------------------------------------------------ */
 
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='empty-state'], .ds-saved-views-menu-panel__empty-state) {
   border-radius: var(--ds-radius-lg, 14px);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='empty-state'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='empty-state'], .ds-saved-views-menu-panel__empty-state) {
   border: var(--ds-edge-hairline-width, 1px) dashed color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-empty-state='persona'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='empty-state'], .ds-saved-views-menu-panel__empty-state)[data-empty-state='persona'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, transparent);
 }
 
@@ -85935,7 +85937,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__empty-state-description {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] .ds-saved-views-menu__empty-state-description {
   color: var(--ds-color-text-muted);
 }
 
@@ -85947,15 +85949,15 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 --------------------------------------------------------------------------- */
 
 /* header + section eyebrows */
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__header-title {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] .ds-saved-views-menu__header-title {
   font-size: var(--ds-font-size-sm);
 }
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__header-description,
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__active-card-description,
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] .ds-saved-views-menu__view-item-description {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] .ds-saved-views-menu__header-description,
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] .ds-saved-views-menu__active-card-description,
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] .ds-saved-views-menu__view-item-description {
   font-size: var(--ds-font-size-xs);
 }
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='section-header'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open] :is([data-part='section-header'], .ds-saved-views-menu-panel__section-header) {
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -85963,19 +85965,19 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 /* count + status pills: tabular-nums so tallies never jitter */
-.ds-structure.ds-saved-views-menu-panel [data-part='count-pill'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='count-pill'], .ds-saved-views-menu-panel__count-pill) {
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='status-pill'], .ds-saved-views-menu-panel__status-pill) {
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 600;
 }
 
 /* action buttons: geometry drained from the retired inline styles; type per
    tone + deliberate hover/focus/active */
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button) {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -85991,53 +85993,62 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
     color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button)[data-tone='primary'] {
   font-weight: 700;
 }
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu-panel__action-button[data-tone='neutral']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-surface-card) 70%, var(--ds-color-bg-primary) 30%);
     color: var(--ds-color-text-primary);
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='neutral']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='neutral']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-saved-views-menu-panel.ds-saved-views-menu-panel__panel .ds-saved-views-menu-panel__action-button[data-tone='neutral']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
   }
-  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu-panel__action-button[data-tone='primary']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='primary']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='primary']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-saved-views-menu-panel.ds-saved-views-menu-panel__panel .ds-saved-views-menu-panel__action-button[data-tone='primary']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 38%, transparent);
   }
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button']:is([data-state~='focus-visible'], :focus-visible),
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu-panel__action-button:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid transparent;
   outline-offset: var(--ds-focus-ring-offset);
   box-shadow: var(--ds-focus-ring);
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:is([data-state~='pressed'], :active) {
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:is([data-state~='pressed'], :active),
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu-panel__action-button[data-tone='neutral']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 60%, var(--ds-surface-card));
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:is([data-state~='pressed'], :active) {
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:is([data-state~='pressed'], :active),
+.ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu-panel__action-button[data-tone='primary']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
 }
 
 /* view items: the whole card lifts on hover; the select button wears the
    tenant focus signature it already owns */
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='view-item'], .ds-saved-views-menu-panel__view-item) {
   transition:
     background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu-panel [data-part='view-item']:is([data-state~='hovered'], :hover):not([data-active='true']) {
+  .ds-structure.ds-saved-views-menu-panel [data-part='view-item']:is([data-state~='hovered'], :hover):not([data-active='true']),
+  .ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu-panel__view-item:is([data-state~='hovered'], :hover):not([data-active='true']) {
     background: color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-primary) 4%);
     box-shadow: var(
       --ds-material-raised-shadow-hover,
       0 4px 14px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
     );
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item']:is([data-state~='hovered'], :hover):not([data-active='true']) {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item']:is([data-state~='hovered'], :hover):not([data-active='true']),
+  .ds-structure.ds-saved-views-menu-panel.ds-saved-views-menu-panel__panel .ds-saved-views-menu-panel__view-item:is([data-state~='hovered'], :hover):not([data-active='true']) {
     border-color: color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
   }
 }
@@ -86054,7 +86065,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     background: color-mix(in srgb, var(--ds-color-danger) 8%, transparent);
     color: var(--ds-color-danger);
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete']:is([data-state~='hovered'], :hover) {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-saved-views-menu-panel.ds-saved-views-menu-panel__panel [data-part='delete']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-danger) 34%, transparent);
   }
 }
@@ -86068,11 +86080,11 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    meet the canonical touch-target channel (the delete's inline 28px width
    loses to this min-* constraint by cascade, so no engine change is needed). */
 @media (hover: none), (pointer: coarse) {
-  .ds-structure.ds-saved-views-menu[data-part='trigger'] {
+  .ds-structure.ds-saved-views-menu:is([data-part='trigger'], .ds-saved-views-menu__trigger) {
     min-inline-size: var(--ds-touch-target-min, 44px);
     min-block-size: var(--ds-touch-target-min, 44px);
   }
-  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'],
+  .ds-structure.ds-saved-views-menu-panel :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button),
   .ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
     min-inline-size: var(--ds-touch-target-min, 44px);
     min-block-size: var(--ds-touch-target-min, 44px);
@@ -86083,13 +86095,13 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  * cross-fade; all of them go silent together, and the panel's entry
  * animation collapses with them. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-saved-views-menu[data-part='trigger'],
-  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'],
-  .ds-structure.ds-saved-views-menu-panel [data-part='view-item'],
+  .ds-structure.ds-saved-views-menu:is([data-part='trigger'], .ds-saved-views-menu__trigger),
+  .ds-structure.ds-saved-views-menu-panel :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button),
+  .ds-structure.ds-saved-views-menu-panel :is([data-part='view-item'], .ds-saved-views-menu-panel__view-item),
   .ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
     transition: none;
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) {
     animation: none;
   }
 }
@@ -86106,30 +86118,30 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    retune it. Only the panel's measured viewport clamp (top/left/width) is still
    inline — it is runtime data, not a decision. */
 
-.ds-structure.ds-saved-views-menu[data-part='anchor'] {
+.ds-structure.ds-saved-views-menu:is([data-part='anchor'], .ds-saved-views-menu__anchor) {
   position: relative;
   z-index: 1;
 }
-.ds-structure.ds-saved-views-menu[data-part='anchor'][data-open='true'] {
+.ds-structure.ds-saved-views-menu:is([data-part='anchor'], .ds-saved-views-menu__anchor)[data-open='true'] {
   z-index: 60;
 }
-.ds-structure.ds-saved-views-menu[data-part='trigger'] [data-part='trigger-body'] {
+.ds-structure.ds-saved-views-menu:is([data-part='trigger'], .ds-saved-views-menu__trigger) :is([data-part='trigger-body'], .ds-saved-views-menu__trigger-body) {
   min-inline-size: 0;
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
+.ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) {
   position: fixed;
   z-index: 2000;
   overflow: hidden;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='header'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='header'], .ds-saved-views-menu-panel__header) {
   padding: 16px 18px 14px;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='header-copy'],
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card-lead'],
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card-copy'],
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-copy'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='header-copy'], .ds-saved-views-menu-panel__header-copy),
+.ds-structure.ds-saved-views-menu-panel :is([data-part='active-card-lead'], .ds-saved-views-menu-panel__active-card-lead),
+.ds-structure.ds-saved-views-menu-panel :is([data-part='active-card-copy'], .ds-saved-views-menu-panel__active-card-copy),
+.ds-structure.ds-saved-views-menu-panel :is([data-part='empty-state-copy'], .ds-saved-views-menu-panel__empty-state-copy) {
   min-inline-size: 0;
 }
 .ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu__header-title,
@@ -86147,25 +86159,25 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   margin-block-start: 4px;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='active-card'], .ds-saved-views-menu-panel__active-card) {
   margin-block-start: 14px;
   padding: 14px;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card-actions'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='active-card-actions'], .ds-saved-views-menu-panel__active-card-actions) {
   margin-block-start: 12px;
 }
 
 /* the scroll region: the only part of the menu that owns a scroll frame */
-.ds-structure.ds-saved-views-menu-panel [data-part='list'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='list'], .ds-saved-views-menu-panel__list) {
   padding: 12px 12px 10px;
   max-block-size: var(--ds-saved-views-menu-list-max-block-size, 420px);
   overflow-y: auto;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-empty-state='persona'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='empty-state'], .ds-saved-views-menu-panel__empty-state)[data-empty-state='persona'] {
   padding: 18px 16px;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-empty-state='all'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='empty-state'], .ds-saved-views-menu-panel__empty-state)[data-empty-state='all'] {
   padding: 28px 16px;
   text-align: center;
 }
@@ -86180,14 +86192,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   margin: 0 auto 8px;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='section'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='section'], .ds-saved-views-menu-panel__section) {
   margin-block-end: 12px;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='section-bar'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='section-bar'], .ds-saved-views-menu-panel__section-bar) {
   padding: 0 6px 8px;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='view-item'], .ds-saved-views-menu-panel__view-item) {
   inline-size: 100%;
   padding: 0;
 }
@@ -86198,8 +86210,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   cursor: pointer;
   text-align: start;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item-lead'],
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item-copy'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='view-item-lead'], .ds-saved-views-menu-panel__view-item-lead),
+.ds-structure.ds-saved-views-menu-panel :is([data-part='view-item-copy'], .ds-saved-views-menu-panel__view-item-copy) {
   flex: 1;
   min-inline-size: 0;
 }
@@ -86224,7 +86236,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   cursor: pointer;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='count-pill'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='count-pill'], .ds-saved-views-menu-panel__count-pill) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -86233,7 +86245,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   padding-block: 0;
   padding-inline: 8px;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'] {
+.ds-structure.ds-saved-views-menu-panel :is([data-part='status-pill'], .ds-saved-views-menu-panel__status-pill) {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -86243,37 +86255,39 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 @media (forced-colors: active) {
-  .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open],
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open],
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='header'],
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='active-card'],
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'],
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item'],
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete'],
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='empty-state'] {
+  .ds-structure.ds-saved-views-menu:is([data-part='trigger'], .ds-saved-views-menu__trigger)[data-open],
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel)[data-open],
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='header'], .ds-saved-views-menu-panel__header),
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='active-card'], .ds-saved-views-menu-panel__active-card),
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='action-button'], .ds-saved-views-menu-panel__action-button),
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='view-item'], .ds-saved-views-menu-panel__view-item),
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) [data-part='delete'],
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='empty-state'], .ds-saved-views-menu-panel__empty-state) {
     border-color: ButtonText;
   }
 
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item'][data-active='true'] {
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='view-item'], .ds-saved-views-menu-panel__view-item)[data-active='true'] {
     border-color: Highlight;
   }
 
-  .ds-structure.ds-saved-views-menu [data-part='trigger-icon'],
-  .ds-structure.ds-saved-views-menu-panel [data-part='glyph'],
-  .ds-structure.ds-saved-views-menu-panel [data-part='checkmark'],
-  .ds-structure.ds-saved-views-menu-panel [data-part='status-pill'],
-  .ds-structure.ds-saved-views-menu-panel [data-part='count-pill'] {
+  .ds-structure.ds-saved-views-menu :is([data-part='trigger-icon'], .ds-saved-views-menu__trigger-icon),
+  .ds-structure.ds-saved-views-menu-panel :is([data-part='glyph'], .ds-saved-views-menu-panel__glyph),
+  .ds-structure.ds-saved-views-menu-panel :is([data-part='checkmark'], .ds-saved-views-menu-panel__checkmark),
+  .ds-structure.ds-saved-views-menu-panel :is([data-part='status-pill'], .ds-saved-views-menu-panel__status-pill),
+  .ds-structure.ds-saved-views-menu-panel :is([data-part='count-pill'], .ds-saved-views-menu-panel__count-pill) {
     color: CanvasText;
   }
 
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='status-pill'],
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='count-pill'] {
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='status-pill'], .ds-saved-views-menu-panel__status-pill),
+  .ds-structure.ds-saved-views-menu-panel:is([data-part='panel'], .ds-saved-views-menu-panel__panel) :is([data-part='count-pill'], .ds-saved-views-menu-panel__count-pill) {
     border: 1px solid ButtonText;
     background: transparent;
   }
 
   .ds-structure.ds-saved-views-menu[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-structure.ds-saved-views-menu.ds-saved-views-menu__trigger:is([data-state~='focus-visible'], :focus-visible),
   .ds-structure.ds-saved-views-menu-panel [data-part='action-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-structure.ds-saved-views-menu-panel .ds-saved-views-menu-panel__action-button:is([data-state~='focus-visible'], :focus-visible),
   .ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:is([data-state~='focus-visible'], :focus-visible),
   .ds-structure.ds-saved-views-menu-panel [data-part='delete']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
