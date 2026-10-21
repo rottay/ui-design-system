@@ -400,8 +400,13 @@ const aliasRestatements = (
   );
 };
 
-/** The W4 pin document's restatement count under the N1/D2 law. */
-const ALIAS_RESTATEMENT_COUNT = 255;
+/**
+ * The W4 pin document's restatement count under the N1/D2 law. Down from 255:
+ * 339181afb retired the --ds-command-home-panel-bg-strong emission (owner
+ * decisions 20 and 34), so the root-alias table no longer carries it and it is
+ * no longer restated. It is the only name that left; none joined.
+ */
+const ALIAS_RESTATEMENT_COUNT = 254;
 
 /**
  * Strip the restatement block from the artifact side. It must sit, whole and in
