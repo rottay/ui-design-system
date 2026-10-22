@@ -5,8 +5,6 @@
  * under REAL DOM focus rather than a stamped attribute -- and axe holds beyond
  * the pinned debt.
  */
-import { createRequire } from 'node:module';
-import { resolve as resolvePath } from 'node:path';
 import React from 'react';
 import { prerenderToNodeStream } from 'react-dom/static';
 import { describe, expect, it } from 'vitest';
@@ -22,6 +20,7 @@ import {
   axeDebt,
   describeCausality,
   mountArm,
+  resolveChromium,
   resolvedBaseCss,
   seriousFindings,
 } from '@tests/support/family-causality';
@@ -119,17 +118,8 @@ describeCausality({
  * A ring read at t=0 is the transition's start, not the family's paint.
  * ------------------------------------------------------------------------ */
 
-function chromiumDriver(): { launch(): Promise<any> } {
-  const required = createRequire(resolvePath(process.cwd(), 'package.json'));
-  for (const specifier of ['playwright', '@playwright/test']) {
-    try {
-      const module = required(specifier) as { chromium?: { launch(): Promise<any> } };
-      if (module.chromium) return module.chromium;
-    } catch {
-      // try the next driver
-    }
-  }
-  throw new Error('list-toolbar causality: no Playwright chromium is resolvable');
+function chromiumDriver() {
+  return resolveChromium();
 }
 
 interface FocusReading {

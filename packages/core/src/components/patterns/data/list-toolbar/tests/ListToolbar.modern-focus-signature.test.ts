@@ -67,6 +67,16 @@ const CONTROLS = [
 const CONTROL_FOCUS = `.ds-pattern-list-toolbar.ds-engine-modern :is(${CONTROLS.join(', ')}).ds-button[data-variant]${KEYBOARD}`;
 const TRIGGER_FOCUS = `.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-trigger.ds-list-toolbar__filter-trigger.ds-button[data-variant]${KEYBOARD}`;
 
+/** Identify the resting Modern filter rail by its exact legacy or same-owner folded selector. */
+function isFilterRail(rule: SkinRule): boolean {
+  const legacy =
+    ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-rail[data-part='filter-rail']";
+  const folded =
+    ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-rail:is([data-part='filter-rail'], .ds-list-toolbar__filter-rail)";
+  // Resting clearance belongs to the scrolling rail, not a forced-colors override.
+  return !rule.forced && (rule.selector === legacy || rule.selector === folded);
+}
+
 function declarations(rule: SkinRule, property: string): string[] {
   return Array.from(rule.body.matchAll(new RegExp(`(?:^|[;\\s])${property}:\\s*([^;]+);`, 'g')), (match) => match[1]!.trim());
 }
@@ -122,12 +132,60 @@ describe('list-toolbar -- every toolbar-owned control paints keyboard focus from
     }
   });
 
+  it("reads only the exact legacy or same-owner folded filter rail", () => {
+    const legacy =
+      ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-rail[data-part='filter-rail']";
+    const folded = `.ds-pattern-list-toolbar.ds-engine-modern
+      .ds-list-toolbar__filter-rail:is(
+        [data-part='filter-rail'],
+        .ds-list-toolbar__filter-rail
+      )`;
+    for (const selector of [legacy, folded]) {
+      expect(
+        skinRules(`${selector} { padding: 1px; }`).map(isFilterRail)
+      ).toEqual([true]);
+    }
+    const normalized = normalise(folded);
+    const refused = [
+      normalized.replace(".ds-pattern-list-toolbar", ".ds-pattern-other"),
+      normalized.replace(".ds-engine-modern", ".ds-engine-rustic"),
+      normalized.replace("[data-part='filter-rail']", "[data-part='root']"),
+      normalized.replace(
+        ", .ds-list-toolbar__filter-rail",
+        ", .ds-input-shell"
+      ),
+      normalized.replace(
+        ", .ds-list-toolbar__filter-rail",
+        ", .ds-list-toolbar__filter-rail, .extra"
+      ),
+      normalized.replace(", .ds-list-toolbar__filter-rail", ""),
+      normalized.replace(")", ""),
+      normalized.replace(
+        " .ds-list-toolbar__filter-rail:",
+        " > .ds-list-toolbar__filter-rail:"
+      ),
+      `${normalized}, .foreign`,
+      normalized.replace(
+        "[data-part='filter-rail'], .ds-list-toolbar__filter-rail",
+        ".ds-list-toolbar__filter-rail, [data-part='filter-rail']"
+      ),
+    ];
+    for (const selector of refused) {
+      expect(
+        skinRules(`${selector} { padding: 1px; }`).map(isFilterRail),
+        selector
+      ).toEqual([false]);
+    }
+    const forced = skinRules(
+      `@media (forced-colors: active) { ${folded} { padding: 1px; } }`
+    );
+    expect(forced.map(isFilterRail)).toEqual([false]);
+  });
+
   it('leaves room for the indicator inside the two scrolling hosts that would clip it', () => {
     const clearance =
       'var(--ds-toolbar-rail-focus-clearance, max(0.25rem, calc(var(--ds-focus-ring-offset) + max(2px, var(--ds-focus-ring-width)))))';
-    const rail = RULES.find(
-      (rule) => rule.selector === ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-rail[data-part='filter-rail']",
-    );
+    const rail = RULES.find(isFilterRail);
     expect(declarations(rail!, 'padding')).toEqual([clearance]);
     expect(declarations(rail!, 'margin')).toEqual([`calc(${clearance} * -1)`]);
     const density = RULES.find((rule) => rule.selector === '.ds-list-toolbar__density-options');
