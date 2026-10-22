@@ -35,7 +35,10 @@
 
 /* Root shell -------------------------------------------------------------- */
 
-.ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-part='root'] {
+.ds-pattern-list-toolbar.ds-engine-modern:is(
+    [data-part='root'],
+    .ds-pattern-list-toolbar__root
+  ):is([data-part='root'], .ds-pattern-list-toolbar__root) {
   container: ds-list-toolbar / inline-size;
   position: relative;
   isolation: isolate;
@@ -122,14 +125,20 @@
   animation: var(--ds-toolbar-entry-animation, none);
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-part='root']:focus-within {
+.ds-pattern-list-toolbar.ds-engine-modern:is(
+    [data-part='root'],
+    .ds-pattern-list-toolbar__root
+  ):is([data-part='root'], .ds-pattern-list-toolbar__root):focus-within {
   border-color: var(
     --ds-toolbar-focus-border,
     var(--ds-material-panel-border-hover, var(--ds-color-primary))
   );
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern[data-part='root']::before {
+.ds-pattern-list-toolbar.ds-engine-modern:is(
+    [data-part='root'],
+    .ds-pattern-list-toolbar__root
+  )::before {
   content: '';
   position: absolute;
   z-index: 0;
@@ -152,11 +161,14 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  > [data-part='main-row'],
+  > :is([data-part='main-row'], .ds-pattern-list-toolbar__main-row),
 .ds-pattern-list-toolbar.ds-engine-modern
-  > [data-part='mobile-layout'],
+  > :is([data-part='mobile-layout'], .ds-list-toolbar__mobile-layout),
 .ds-pattern-list-toolbar.ds-engine-modern
-  > [data-part='filter-chips-strip'] {
+  > :is(
+    [data-part='filter-chips-strip'],
+    .ds-pattern-list-toolbar__filter-chips-strip
+  ) {
   position: relative;
   z-index: 1;
 }
@@ -166,7 +178,10 @@
    layout shift), and it never blocks the controls — a slow refresh must not
    strand the search mid-typing. The sweep is one compositor-friendly
    background-position pass, scaled from the deliberate motion rung. */
-.ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-loading='true']::after {
+.ds-pattern-list-toolbar.ds-engine-modern:is(
+    [data-part='root'],
+    .ds-pattern-list-toolbar__root
+  )[data-loading='true']::after {
   content: '';
   position: absolute;
   z-index: 2;
@@ -316,7 +331,10 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__divider[data-part='divider'] {
+  .ds-list-toolbar__divider:is(
+    [data-part='divider'],
+    .ds-list-toolbar__divider
+  ) {
   inline-size: 1px;
   block-size: 1.25rem;
   flex: 0 0 auto;
@@ -336,7 +354,10 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__divider--compact[data-part='divider'] {
+  .ds-list-toolbar__divider--compact:is(
+    [data-part='divider'],
+    .ds-list-toolbar__divider
+  ) {
   block-size: 0.875rem;
   margin-inline: 0;
   opacity: 0.48;
@@ -348,15 +369,24 @@
    taller and stronger than the intra-row hairlines; the authored
    --ds-toolbar-divider-opacity channel keeps its proportion everywhere. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__controls[data-part='controls']
-  .ds-list-toolbar__divider[data-part='divider'] {
+  .ds-list-toolbar__controls:is(
+    [data-part='controls'],
+    .ds-list-toolbar__controls
+  )
+  .ds-list-toolbar__divider:is(
+    [data-part='divider'],
+    .ds-list-toolbar__divider
+  ) {
   block-size: 1.5rem;
   opacity: min(calc(var(--ds-toolbar-divider-opacity, 0.6) * 1.5), 1);
 }
 
 /* Filter controls --------------------------------------------------------- */
 
-.ds-list-toolbar__filter-menu[data-part='filter-menu'] {
+.ds-list-toolbar__filter-menu:is(
+    [data-part='filter-menu'],
+    .ds-list-toolbar__filter-menu
+  ) {
   min-inline-size: min(13rem, calc(100dvw - 2rem));
   max-inline-size: min(20rem, calc(100dvw - 2rem));
   max-block-size: min(22rem, calc(100dvh - 6rem));
@@ -368,7 +398,10 @@
   );
 }
 
-.ds-list-toolbar__settings-panel[data-part='settings-panel'] {
+.ds-list-toolbar__settings-panel:is(
+    [data-part='settings-panel'],
+    .ds-list-toolbar__settings-panel
+  ) {
   inline-size: min(20rem, calc(100dvw - 2rem));
   max-block-size: min(28rem, calc(100dvh - 6rem));
   overflow: auto;
@@ -613,7 +646,10 @@
 
 /* Mobile overflow --------------------------------------------------------- */
 
-.ds-list-toolbar__mobile-overflow-panel[data-part='mobile-overflow-panel'] {
+.ds-list-toolbar__mobile-overflow-panel:is(
+    [data-part='mobile-overflow-panel'],
+    .ds-list-toolbar__mobile-overflow-panel
+  ) {
   min-inline-size: min(15rem, calc(100dvw - 2rem));
   max-inline-size: min(22rem, calc(100dvw - 2rem));
   padding-block: var(--ds-spacing-2, 0.5rem);
@@ -663,7 +699,10 @@
 /* Title and search -------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__main-row[data-part='main-row'] {
+  .ds-list-toolbar__main-row:is(
+    [data-part='main-row'],
+    .ds-pattern-list-toolbar__main-row
+  ) {
   /* Density law: the fallbacks scale with the tenant's governed density
      channel, so a compact profile (BitHire 0.9) reads tighter and a spacious
      one (The Management) gains real air — an authored --ds-toolbar-* value
@@ -683,13 +722,19 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern[data-has-active-filters='true']
-  > .ds-list-toolbar__main-row[data-part='main-row'] {
+  > .ds-list-toolbar__main-row:is(
+    [data-part='main-row'],
+    .ds-pattern-list-toolbar__main-row
+  ) {
   border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__title-section[data-part='title-section'] {
+  .ds-list-toolbar__title-section:is(
+    [data-part='title-section'],
+    .ds-list-toolbar__title-section
+  ) {
   min-width: 0;
   flex: 0 1 auto;
   gap: var(--ds-toolbar-title-gap, var(--ds-spacing-2, 0.5rem));
@@ -697,7 +742,10 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__title-icon[data-part='title-icon'][data-part='title-icon'] {
+  .ds-list-toolbar__title-icon:is(
+    [data-part='title-icon'],
+    .ds-list-toolbar__title-icon
+  ):is([data-part='title-icon'], .ds-list-toolbar__title-icon) {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -750,7 +798,10 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__search-section[data-part='search-section'] {
+  .ds-list-toolbar__search-section:is(
+    [data-part='search-section'],
+    .ds-list-toolbar__search-section
+  ) {
   position: relative;
   flex: 1 1 15rem;
   min-inline-size: var(--ds-toolbar-search-min-width, 11.25rem);
@@ -759,7 +810,10 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern[data-has-title='false']
-  .ds-list-toolbar__search-section[data-part='search-section'] {
+  .ds-list-toolbar__search-section:is(
+    [data-part='search-section'],
+    .ds-list-toolbar__search-section
+  ) {
   flex-grow: 2;
   max-inline-size: var(--ds-toolbar-search-wide-max-width, 30rem);
 }
@@ -769,8 +823,14 @@
    finding: the accidental empty band between the search field and the filter
    rail at 390px). The mobile search keeps natural height and full width. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-layout[data-part='mobile-layout']
-  .ds-list-toolbar__search-section[data-part='search-section'] {
+  .ds-list-toolbar__mobile-layout:is(
+    [data-part='mobile-layout'],
+    .ds-list-toolbar__mobile-layout
+  )
+  .ds-list-toolbar__search-section:is(
+    [data-part='search-section'],
+    .ds-list-toolbar__search-section
+  ) {
   flex: 0 0 auto;
   max-inline-size: none;
 }
@@ -780,7 +840,10 @@
    read as a box inside a box. The --ds-toolbar-controls-* channels remain:
    a tenant that declares them restores the framed treatment. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__controls[data-part='controls'][data-part='controls'] {
+  .ds-list-toolbar__controls:is(
+    [data-part='controls'],
+    .ds-list-toolbar__controls
+  ):is([data-part='controls'], .ds-list-toolbar__controls) {
   flex: 0 0 auto;
   gap: var(
     --ds-toolbar-controls-gap,
@@ -810,7 +873,10 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-rail[data-part='filter-rail'] {
+  .ds-list-toolbar__filter-rail:is(
+    [data-part='filter-rail'],
+    .ds-list-toolbar__filter-rail
+  ) {
   flex: 0 1 auto;
   min-inline-size: 0;
   overflow-x: auto;
@@ -849,7 +915,10 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__saved-views[data-part='saved-views'][data-part='saved-views'] {
+  .ds-list-toolbar__saved-views:is(
+    [data-part='saved-views'],
+    .ds-list-toolbar__saved-views
+  ):is([data-part='saved-views'], .ds-list-toolbar__saved-views) {
   flex: 1 1 auto;
   min-inline-size: 0;
   overflow-x: auto;
@@ -885,7 +954,10 @@
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__primary-action-mobile-label[data-part='primary-action-mobile-label'] {
+    .ds-list-toolbar__primary-action-mobile-label:is(
+      [data-part='primary-action-mobile-label'],
+      .ds-list-toolbar__primary-action-mobile-label
+    ) {
     display: none;
   }
 }
@@ -902,7 +974,10 @@
    the W10 geometry law: same height and type size as every other toolbar
    control, while input.css's coarse-pointer floor still raises it for touch. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__search-section[data-part='search-section'] {
+  .ds-list-toolbar__search-section:is(
+    [data-part='search-section'],
+    .ds-list-toolbar__search-section
+  ) {
   --ds-input-bg: var(--ds-search-input-bg, var(--ds-search-bg, var(--ds-surface-control, var(--ds-color-bg-input))));
   --ds-input-border: var(--ds-search-input-border, var(--ds-search-border, var(--ds-color-border)));
   --ds-input-color: var(--ds-search-input-color, var(--ds-search-color, var(--ds-color-text-primary)));
@@ -913,7 +988,10 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__search-section[data-part='search-section']
+  .ds-list-toolbar__search-section:is(
+    [data-part='search-section'],
+    .ds-list-toolbar__search-section
+  )
   .ds-input-field[data-part='field'] {
   background: var(--ds-search-bg, transparent);
   border-radius: var(--ds-search-radius, var(--ds-toolbar-radius, var(--ds-radius-sm, 6px)));
@@ -921,7 +999,10 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__search-section[data-part='search-section']
+  .ds-list-toolbar__search-section:is(
+    [data-part='search-section'],
+    .ds-list-toolbar__search-section
+  )
   .ds-input-shell.ds-input-shell--modern[data-part='root'] {
   block-size: var(--ds-toolbar-search-height, var(--ds-button-sm-height, 2rem));
   font-size: var(--ds-toolbar-search-font-size, var(--ds-button-sm-font-size, 0.8125rem));
@@ -930,7 +1011,13 @@
 /* Active-filter strip ----------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'][data-part='filter-chips-strip'] {
+  .ds-list-toolbar__filter-chips-strip:is(
+    [data-part='filter-chips-strip'],
+    .ds-pattern-list-toolbar__filter-chips-strip
+  ):is(
+    [data-part='filter-chips-strip'],
+    .ds-pattern-list-toolbar__filter-chips-strip
+  ) {
   gap: var(--ds-spacing-2, 0.5rem);
   padding: var(
     --ds-toolbar-filter-strip-padding,
@@ -1143,7 +1230,10 @@
 
 @container ds-list-toolbar (max-width: 1080px) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-layout[data-part='mobile-layout'] {
+    .ds-list-toolbar__mobile-layout:is(
+      [data-part='mobile-layout'],
+      .ds-list-toolbar__mobile-layout
+    ) {
     gap: var(--ds-spacing-3, 0.75rem);
     padding: var(
       --ds-toolbar-compact-padding,
@@ -1153,7 +1243,10 @@
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-header[data-part='mobile-header'][data-part='mobile-header'] {
+    .ds-list-toolbar__mobile-header:is(
+      [data-part='mobile-header'],
+      .ds-list-toolbar__mobile-header
+    ):is([data-part='mobile-header'], .ds-list-toolbar__mobile-header) {
     gap: var(--ds-spacing-2, 0.5rem);
     padding-bottom: var(--ds-spacing-2, 0.5rem);
     border-bottom: var(--ds-edge-hairline-width, 1px) solid
@@ -1162,13 +1255,19 @@
 
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__mobile-header
-    .ds-list-toolbar__title-section[data-part='title-section'] {
+    .ds-list-toolbar__title-section:is(
+      [data-part='title-section'],
+      .ds-list-toolbar__title-section
+    ) {
     flex: 1 1 auto;
     overflow: hidden;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-actions[data-part='mobile-actions'] {
+    .ds-list-toolbar__mobile-actions:is(
+      [data-part='mobile-actions'],
+      .ds-list-toolbar__mobile-actions
+    ) {
     flex: 0 0 auto;
     gap: var(--ds-toolbar-control-gap, var(--ds-spacing-1, 0.25rem));
   }
@@ -1176,7 +1275,10 @@
   /* W10: the compact actions group and the filter rail are flat like their
      desktop counterparts — no second framed panel inside the shell. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-actions[data-part='mobile-actions'][data-part='mobile-actions'] {
+    .ds-list-toolbar__mobile-actions:is(
+      [data-part='mobile-actions'],
+      .ds-list-toolbar__mobile-actions
+    ):is([data-part='mobile-actions'], .ds-list-toolbar__mobile-actions) {
     padding: var(--ds-toolbar-mobile-actions-padding, 0);
     border: 1px solid var(--ds-toolbar-mobile-actions-border, transparent);
     border-radius: var(
@@ -1187,7 +1289,10 @@
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-rail[data-part='filter-rail'][data-part='filter-rail'] {
+    .ds-list-toolbar__filter-rail:is(
+      [data-part='filter-rail'],
+      .ds-list-toolbar__filter-rail
+    ):is([data-part='filter-rail'], .ds-list-toolbar__filter-rail) {
     /* C1 designed compaction: the rail bleeds to the shell's compact inline
        padding so pills scroll edge to edge instead of reading as an inset
        boxed strip, and the inline-end fade is the honest "more pills"
@@ -1247,7 +1352,10 @@
 
 @container ds-list-toolbar (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-layout[data-part='mobile-layout'] {
+    .ds-list-toolbar__mobile-layout:is(
+      [data-part='mobile-layout'],
+      .ds-list-toolbar__mobile-layout
+    ) {
     padding: var(
       --ds-toolbar-phone-padding,
       calc(0.625rem * var(--ds-density-effective-scale, 1))
@@ -1261,7 +1369,10 @@
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'] {
+    .ds-list-toolbar__filter-chips-strip:is(
+      [data-part='filter-chips-strip'],
+      .ds-pattern-list-toolbar__filter-chips-strip
+    ) {
     align-items: flex-start;
     padding: var(
       --ds-toolbar-phone-filter-strip-padding,
@@ -1279,7 +1390,10 @@
   /* Phone: the compact layout's inline rhythm steps down to 0.75rem — the
      rail bleed follows it so pills keep scrolling flush to the shell edge. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-rail[data-part='filter-rail'][data-part='filter-rail'] {
+    .ds-list-toolbar__filter-rail:is(
+      [data-part='filter-rail'],
+      .ds-list-toolbar__filter-rail
+    ):is([data-part='filter-rail'], .ds-list-toolbar__filter-rail) {
     margin-inline: calc(-0.75rem * var(--ds-density-effective-scale, 1));
     padding-inline: calc(0.75rem * var(--ds-density-effective-scale, 1));
   }
@@ -1355,12 +1469,27 @@
   /* Selectors here must match the specificity of the rules they neutralize
      (the base strip rule repeats its part twice to reach (0,5,0)); equal
      weight plus later source order is what lets `none` actually win. */
-  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-part='root'],
-  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root']::before,
+  .ds-pattern-list-toolbar.ds-engine-modern:is(
+      [data-part='root'],
+      .ds-pattern-list-toolbar__root
+    ):is([data-part='root'], .ds-pattern-list-toolbar__root),
+  .ds-pattern-list-toolbar.ds-engine-modern:is(
+      [data-part='root'],
+      .ds-pattern-list-toolbar__root
+    )::before,
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'][data-part='filter-chips-strip'],
+    .ds-list-toolbar__filter-chips-strip:is(
+      [data-part='filter-chips-strip'],
+      .ds-pattern-list-toolbar__filter-chips-strip
+    ):is(
+      [data-part='filter-chips-strip'],
+      .ds-pattern-list-toolbar__filter-chips-strip
+    ),
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__title-icon[data-part='title-icon'][data-part='title-icon'],
+    .ds-list-toolbar__title-icon:is(
+      [data-part='title-icon'],
+      .ds-list-toolbar__title-icon
+    ):is([data-part='title-icon'], .ds-list-toolbar__title-icon),
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip.ds-list-toolbar__filter-chip,
   .ds-pattern-list-toolbar.ds-engine-modern
@@ -1383,7 +1512,10 @@
 
   /* Reduced motion keeps the loading signal as a static, centered hairline
      segment — the state stays readable with zero movement. */
-  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-loading='true']::after {
+  .ds-pattern-list-toolbar.ds-engine-modern:is(
+      [data-part='root'],
+      .ds-pattern-list-toolbar__root
+    )[data-loading='true']::after {
     animation: none;
     background-position: 50% 0;
     opacity: 0.55;
@@ -1418,7 +1550,13 @@
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'][data-part='filter-chips-strip'] {
+    .ds-list-toolbar__filter-chips-strip:is(
+      [data-part='filter-chips-strip'],
+      .ds-pattern-list-toolbar__filter-chips-strip
+    ):is(
+      [data-part='filter-chips-strip'],
+      .ds-pattern-list-toolbar__filter-chips-strip
+    ) {
     background: Canvas;
     color: CanvasText;
   }
@@ -1475,7 +1613,10 @@
 
   /* The busy hairline's gradient is stripped; a solid system-highlight rule
      keeps the loading signal. */
-  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-loading='true']::after {
+  .ds-pattern-list-toolbar.ds-engine-modern:is(
+      [data-part='root'],
+      .ds-pattern-list-toolbar__root
+    )[data-loading='true']::after {
     background: Highlight;
   }
 }

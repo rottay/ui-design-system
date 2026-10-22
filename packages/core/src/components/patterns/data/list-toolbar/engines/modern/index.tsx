@@ -826,7 +826,9 @@ export default function ModernListToolbar({
       data-has-primary-action={!!primaryAction}
       data-loading={loading || undefined}
       aria-busy={loading || undefined}
-      className={`ds-pattern-list-toolbar ds-engine-modern ${className ?? ''}`}
+      className={`ds-pattern-list-toolbar ds-engine-modern ${
+        className ?? ""
+      } ds-pattern-list-toolbar__root`}
       style={{
         ...style,
       }}
@@ -964,7 +966,7 @@ export default function ModernListToolbar({
         /* ================================================================ */
         <Flex
           data-part='main-row'
-          className='ds-list-toolbar__main-row'
+          className="ds-list-toolbar__main-row ds-pattern-list-toolbar__main-row"
           align='center'
         >
           {/* ── Left section: Title + Count ────────────────────────── */}
@@ -1129,7 +1131,7 @@ export default function ModernListToolbar({
       {hasActiveFilters && (
         <Flex
           data-part='filter-chips-strip'
-          className='ds-list-toolbar__filter-chips-strip'
+          className="ds-list-toolbar__filter-chips-strip ds-pattern-list-toolbar__filter-chips-strip"
           align='center'
           wrap='wrap'
           role='region'
