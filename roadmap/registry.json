@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-21",
+ "updated": "2026-10-22",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -2994,6 +2994,11 @@
      "at": "2026-10-21 14:35",
      "by": "codex-admin-dt",
      "note": "LX1 saved-views-menu carriers 46d5acd10 integrated locally after distinct ADMIN3aca FINAL SOURCE8 ACCEPT, actual canonical N9 output/R8 review and f3 late literal C7 admission. Removes this cohort source/render/current-browser acceptance gap: 27 owner doors, 26 hooks, 109 arms (95 fold plus14 H1 pairs), zero registered; old4 doors/12 arms retained and all23 portal doors/9 P6 owners/twins independently measured. Native322 EXT, actual P1-P4 causal negatives/P2 eleven-shard322 exact coverage/P2V644 both norms, N7 all79 mount rows, currentAST6 DOM class-A sites and focus-reader old red/Na/Nb/restores accepted. Strict source and WHOLE tests0; unit298 and family-cut276 paired; all9 read-edge pairs have identical full payloads including named CQ2/LC7 reds. Original N6 whole run remains invalid at its stderr-count guard: only independently accepted n00-n10 joined with corrected73-step tail credited, no render replay. Offline N8 integration1PASS4FAIL5SKIP has zero Chromium credit; canonical BASE/CAND both real Chromium10PASS0skip and13 full semantic gate pairs identical after timing-only normalization. ONE official generator produced4 bundles, whole-byte one-skin replacement/+6864B each/engines unchanged. Actual C7 exact8 tree/0-1-0, CS-only negative one7-library finding, private-index/refs/worktrees closure accepted. Known appLint4violations3apps, oldformat RED parity and port3000 child noise retained; no freshWHOLEdist/globalgreen/runtime80 claim or graph repin. Actual minimum fixture retention after independent ordering review restored TSX/CSS from Git and verified package identity before unlinking only3 regular files plus1 RO TypeScript link and15 empty owned dirs; all unique valid/INVALID raw evidence and4 immutable source inputs retained. SharedS and privateF1 explicitly KEPT under namedLX1 postbook refresh reservation; no pool deletion/rename/writes by this cleanup and zero tree bytes freed claimed. Postbook boundedS10/F1gen4+book2 Git refresh/full8725 closures and P6 reviewed build/bind still owed before later credit gates. B1fec9 DATA binding expires at this HEAD move and requires bounded refresh/review before launch; EVI four pre-repair diagnostics are not SOURCE acceptance, fresh postrepair validation still owed. ARC12 stays in-progress141/170: remaining EXT/followups/mapper then strip/dead-arm/freeze and coherent final source/generated/dist/cascade/mount/states/isolation acceptance owed; 6axis/as-rendered/graph9.74>9.68/fleetW2W3/runtime80/GAT07 retain blocking receivers. No apps/DB/phaseGO/freeze exception/push/publication or WO close."
+    },
+    {
+     "at": "2026-10-22 00:41",
+     "by": "codex-admin-dt",
+     "note": "Integrated source-proven folded axis witness reader/test/helper changeset in ed8cc4e2f after distinct native Sol source and actual reviews. Three new causal tests red on old reader and green in both repaired arms; full paired outputs identical,358pass/5 inherited fails with22 raw browser skips UNMET. Scoped quality and physical restoration accepted; exact3 paths/C7 0-1-0/foreign10/index guarded. Helper prerequisite only: LX3 product SOURCE4/N3/consumers and accumulated gates still pending; no WO closure, no global green."
     }
    ],
    "claimedBy": "kimi-dt",
