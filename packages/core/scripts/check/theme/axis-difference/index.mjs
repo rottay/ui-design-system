@@ -204,7 +204,14 @@
 
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import {
+  existsSync,
+  lstatSync,
+  readFileSync,
+  readdirSync,
+  realpathSync,
+  statSync,
+} from "node:fs";
 import { createRequire } from 'node:module';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -385,11 +392,11 @@ const SELECTOR_RULE = /(^|\})([^{}@]+)\{/gu;
 const CLASS_TOKEN = /\.([A-Za-z][\w-]*)/gu;
 const ATTRIBUTE_TOKEN = /\[([\w-]+)(?:\s*=\s*['"]?([^\]'"]+)['"]?)?\]/gu;
 
-/** The compound selectors a stylesheet declares, one per comma-separated part. */
+/** The selectors a stylesheet declares, split only at top-level commas. */
 export function selectorParts(css) {
   const parts = [];
   for (const match of stripCssComments(css).matchAll(SELECTOR_RULE)) {
-    for (const part of match[2].split(',')) {
+    for (const part of selectorList(match[2])) {
       const trimmed = part.trim();
       if (trimmed.length > 0) parts.push(trimmed);
     }
@@ -535,11 +542,8 @@ export const rootCompound = (selector) => compoundPieces(selector)[0] ?? selecto
  */
 export function familyElement(css, { collapsedRoots = false } = {}) {
   const heads = selectorParts(css)
-    .map((selector) =>
-      selector
-        .replace(/:where\(([^()]*)\)/gu, '$1')
-        .replace(/:is\(([^()]*)\)/gu, '$1')
-        .trim())
+    // A folded root names alternatives, not the comma-joined union of its branches.
+    .flatMap((selector) => expandAlternatives(selector))
     .filter((selector) => isSingleElement(selector))
     .map((selector) => ({
       text: collapsedRoots ? selector : rootCompound(selector),
@@ -5905,6 +5909,1911 @@ export function composedPrimitiveStandIn(skins) {
   };
 }
 
+
+/** Fresh proof of the one owned default search Box; unsupported source keeps legacy geometry. */
+function searchBoxWitness(
+  root,
+  css,
+  rootElement,
+  skinFiles,
+  { family, partReach, nativePseudos }
+) {
+  const unsupported = (reason) => ({ context: null, reason });
+  if (family !== "list-toolbar" || !partReach)
+    return unsupported("unsupported-scope");
+  let phase = "source-snapshot-or-parser";
+  const paths = {
+    owner: LIST_TOOLBAR_ENGINE,
+    barrel: "src/components/primitives/layout/box/index.ts",
+    box: BOX_ENGINE,
+    contract: BOX_CONTRACT,
+    factory:
+      "src/infrastructure/runtime/engines/presentation/component-factory/index.tsx",
+    boundary:
+      "src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx",
+    responsive:
+      "src/infrastructure/runtime/responsive/viewport/style-properties/index.ts",
+    keys: "src/foundation/contracts/kernel/responsive/channels/index.ts",
+    popoverEntry: "src/components/primitives/overlay/popover/index.tsx",
+    popover:
+      "src/components/primitives/overlay/popover/engines/modern/index.tsx",
+    tooltipEntry: "src/components/primitives/display/tooltip/index.tsx",
+    tooltip:
+      "src/components/primitives/display/tooltip/engines/modern/index.tsx",
+  };
+  try {
+    const core = realpathSync(root);
+    if (core !== resolve(root)) return unsupported("root-alias");
+    const snapshots = [];
+    const snapshot = (file, beneathCore = true) => {
+      const absolute = resolve(core, file);
+      if (beneathCore && !absolute.startsWith(`${core}/`))
+        throw new Error("foreign source");
+      // No symlink in an imported source path, including its leaf. Installed
+      // parser resolution is pinned separately by admission, not an allowlist.
+      for (
+        let cursor = absolute;
+        cursor !== dirname(cursor);
+        cursor = dirname(cursor)
+      ) {
+        if (lstatSync(cursor).isSymbolicLink())
+          throw new Error("aliased source");
+        if (beneathCore && cursor === core) break;
+      }
+      const metadata = lstatSync(absolute);
+      if (!metadata.isFile() || metadata.nlink !== 1)
+        throw new Error("non-regular source");
+      const bytes = readFileSync(absolute, "utf8");
+      snapshots.push({
+        absolute,
+        hash: createHash("sha256").update(bytes).digest("hex"),
+      });
+      return bytes;
+    };
+    if (
+      skinFiles.map((file) => snapshot(relative(core, file))).join("\n") !== css
+    )
+      return unsupported("css-snapshot-mismatch");
+    const rootIdentity = JSON.stringify(rootElement);
+    const require = createRequire(resolve(core, "package.json"));
+    const parser = require.resolve("typescript");
+    snapshot(parser, false);
+    snapshot(resolve(dirname(parser), "../package.json"), false);
+    const ts = require("typescript");
+    const parse = (name, text) => {
+      const source = ts.createSourceFile(
+        name,
+        text,
+        ts.ScriptTarget.Latest,
+        true,
+        ts.ScriptKind.TSX
+      );
+      if (source.parseDiagnostics.length > 0)
+        throw new Error("unparsed source");
+      return source;
+    };
+    const sources = Object.fromEntries(
+      Object.entries(paths).map(([key, file]) => [
+        key,
+        parse(file, snapshot(file)),
+      ])
+    );
+    const walk = (node, predicate) => {
+      const found = [];
+      const visit = (entry) => {
+        if (predicate(entry)) found.push(entry);
+        ts.forEachChild(entry, visit);
+      };
+      visit(node);
+      return found;
+    };
+    const one = (items) => {
+      if (items.length !== 1) throw new Error("ambiguous source");
+      return items[0];
+    };
+    const variable = (source, name) =>
+      one(
+        walk(
+          source,
+          (node) =>
+            ts.isVariableDeclaration(node) &&
+            ts.isIdentifier(node.name) &&
+            node.name.text === name
+        )
+      );
+    const ordinary = (node, allowed = []) =>
+      !node.asteriskToken &&
+      !node.decorators?.length &&
+      (node.modifiers ?? []).every((modifier) =>
+        allowed.includes(modifier.kind)
+      ) &&
+      (node.parameters ?? []).every(
+        (parameter) =>
+          !parameter.decorators?.length &&
+          (parameter.modifiers?.length ?? 0) === 0
+      );
+    const fn = (source, name, allowed = [ts.SyntaxKind.ExportKeyword]) => {
+      const declaration = one(
+        walk(
+          source,
+          (node) => ts.isFunctionDeclaration(node) && node.name?.text === name
+        )
+      );
+      demand(ordinary(declaration, allowed));
+      return declaration;
+    };
+    const untyped = (node) => {
+      while (
+        node &&
+        (ts.isParenthesizedExpression(node) ||
+          ts.isAsExpression(node) ||
+          ts.isTypeAssertionExpression(node))
+      )
+        node = node.expression;
+      return node;
+    };
+    // A bounded syntax comparator for the data-flow expressions below. It
+    // ignores types/comments/quote spelling; it evaluates no JavaScript.
+    const shape = (node) => {
+      node = untyped(node);
+      if (!node || ts.isTypeNode(node)) return null;
+      if (ts.isJsxText(node)) return node.text.trim() || null;
+      const children = [];
+      ts.forEachChild(node, (child) => {
+        const value = shape(child);
+        if (value !== null) children.push(value);
+      });
+      return [
+        node.kind,
+        ts.isIdentifier(node) ||
+        ts.isStringLiteralLike(node) ||
+        ts.isNumericLiteral(node) ||
+        node.kind === ts.SyntaxKind.TemplateHead ||
+        node.kind === ts.SyntaxKind.TemplateMiddle ||
+        node.kind === ts.SyntaxKind.TemplateTail
+          ? node.text
+          : null,
+        children,
+      ];
+    };
+    const expression = (text) =>
+      variable(
+        parse("witness-expression.tsx", `const witness = (${text});`),
+        "witness"
+      ).initializer;
+    const same = (node, text) =>
+      JSON.stringify(shape(node)) === JSON.stringify(shape(expression(text)));
+    const sameStatement = (node, text) =>
+      JSON.stringify(shape(node)) ===
+      JSON.stringify(
+        shape(
+          fn(
+            parse("witness-statement.tsx", `function witness() { ${text} }`),
+            "witness",
+            []
+          ).body.statements[0]
+        )
+      );
+    const demand = (condition) => {
+      if (!condition) throw new Error("unsupported source");
+    };
+    const imported = (source, name, from) => {
+      const declaration = one(
+        source.statements.filter(
+          (node) =>
+            ts.isImportDeclaration(node) &&
+            node.moduleSpecifier.text === from &&
+            node.importClause?.namedBindings &&
+            ts.isNamedImports(node.importClause.namedBindings) &&
+            node.importClause.namedBindings.elements.some(
+              (entry) =>
+                entry.name.text === name &&
+                (entry.propertyName?.text ?? name) === name
+            )
+        )
+      );
+      demand(!declaration.importClause.isTypeOnly);
+      demand(
+        walk(
+          source,
+          (node) =>
+            (ts.isVariableDeclaration(node) ||
+              ts.isFunctionDeclaration(node) ||
+              ts.isParameter(node) ||
+              ts.isBindingElement(node) ||
+              ts.isClassDeclaration(node)) &&
+            node.name?.getText(source) === name
+        ).length === 0
+      );
+      return declaration;
+    };
+    const uses = (scope, name, allowed) =>
+      demand(
+        walk(
+          scope,
+          (node) =>
+            ts.isIdentifier(node) &&
+            node.text === name &&
+            !(
+              ts.isPropertyAssignment(node.parent) && node.parent.name === node
+            ) &&
+            !(
+              ts.isPropertyAccessExpression(node.parent) &&
+              node.parent.name === node
+            ) &&
+            !(ts.isJsxAttribute(node.parent) && node.parent.name === node) &&
+            !ts.isTypeNode(node.parent)
+        ).every((node) =>
+          allowed.some(
+            (container) =>
+              node === container ||
+              (node.pos >= container.pos && node.end <= container.end)
+          )
+        )
+      );
+    const arrow = (declaration) => {
+      const call = untyped(declaration.initializer);
+      demand(
+        ts.isCallExpression(call) &&
+          same(call.expression, "forwardRef") &&
+          call.arguments.length === 1 &&
+          ts.isArrowFunction(call.arguments[0]) &&
+          ordinary(call.arguments[0])
+      );
+      return call.arguments[0];
+    };
+    const returned = (body) =>
+      one(body.statements.filter(ts.isReturnStatement)).expression;
+    const key = (node) =>
+      ts.isIdentifier(node) || ts.isStringLiteral(node) ? node.text : null;
+    const property = (object, name) =>
+      one(
+        object.properties.filter(
+          (node) => ts.isPropertyAssignment(node) && key(node.name) === name
+        )
+      );
+
+    const constant = (declaration, allowed = []) =>
+      demand(
+        ts.isVariableDeclarationList(declaration.parent) &&
+          (declaration.parent.flags & ts.NodeFlags.Const) !== 0 &&
+          ordinary(declaration.parent.parent, allowed)
+      );
+    const exported = (source, name, declaration, references = []) => {
+      const statement = ts.isVariableDeclaration(declaration)
+        ? declaration.parent.parent
+        : declaration;
+      demand(
+        source.statements.includes(statement) &&
+          statement.modifiers?.some(
+            (node) => node.kind === ts.SyntaxKind.ExportKeyword
+          ) &&
+          !statement.modifiers?.some(
+            (node) => node.kind === ts.SyntaxKind.DefaultKeyword
+          )
+      );
+      demand(ordinary(statement, [ts.SyntaxKind.ExportKeyword]));
+      if (ts.isVariableDeclaration(declaration))
+        constant(declaration, [ts.SyntaxKind.ExportKeyword]);
+      uses(source, name, [declaration.name, ...references]);
+      demand(
+        source.statements.every(
+          (node) => !ts.isExportAssignment(node) || !node.isExportEquals
+        )
+      );
+      demand(
+        source.statements
+          .filter(ts.isExportDeclaration)
+          .every(
+            (node) =>
+              node.exportClause &&
+              ts.isNamedExports(node.exportClause) &&
+              node.exportClause.elements.every(
+                (entry) => entry.name.text !== name
+              )
+          )
+      );
+    };
+    const defaultExport = (source, declaration) =>
+      demand(
+        source.statements
+          .filter(
+            (node) =>
+              ts.isExportAssignment(node) ||
+              node.modifiers?.some(
+                (modifier) => modifier.kind === ts.SyntaxKind.DefaultKeyword
+              ) ||
+              (ts.isExportDeclaration(node) &&
+                (!node.exportClause ||
+                  !ts.isNamedExports(node.exportClause) ||
+                  node.exportClause.elements.some(
+                    (entry) => entry.name.text === "default"
+                  )))
+          )
+          .every((node) => node === declaration)
+      );
+    const unshadowed = (source, name) =>
+      demand(
+        walk(
+          source,
+          (node) =>
+            (ts.isVariableDeclaration(node) ||
+              ts.isFunctionDeclaration(node) ||
+              ts.isParameter(node) ||
+              ts.isBindingElement(node) ||
+              ts.isClassDeclaration(node)) &&
+            node.name?.getText(source) === name
+        ).length === 0
+      );
+
+    phase = "owner-binding";
+    // Same owner node, both responsive arms, with no caller-class contribution.
+    const owner = sources.owner;
+    imported(owner, "Box", "../../../../../primitives/layout/box");
+    const render = fn(owner, "ModernListToolbar", [
+      ts.SyntaxKind.ExportKeyword,
+      ts.SyntaxKind.DefaultKeyword,
+    ]);
+    defaultExport(owner, render);
+    uses(owner, "ModernListToolbar", [render.name]);
+    demand(
+      render.modifiers?.some(
+        (node) => node.kind === ts.SyntaxKind.DefaultKeyword
+      )
+    );
+    demand(
+      render.parameters.length === 1 &&
+        ts.isObjectBindingPattern(render.parameters[0].name)
+    );
+    const bindings = render.parameters[0].name.elements;
+    demand(bindings.every((node) => !node.dotDotDotToken));
+    demand(
+      one(bindings.filter((node) => node.name.getText(owner) === "className"))
+        .initializer === undefined
+    );
+    const output = untyped(returned(render.body));
+    demand(
+      ts.isJsxElement(output) &&
+        output.openingElement.tagName.getText(owner) === "Box"
+    );
+    const attrs = (opening) => opening.attributes.properties;
+    const attribute = (opening, name) =>
+      one(
+        attrs(opening).filter(
+          (node) => ts.isJsxAttribute(node) && node.name.text === name
+        )
+      );
+    const literal = (attribute) =>
+      ts.isStringLiteral(attribute.initializer)
+        ? attribute.initializer.text
+        : null;
+    const rootClass = attribute(output.openingElement, "className").initializer;
+    demand(
+      ts.isJsxExpression(rootClass) &&
+        ts.isTemplateExpression(rootClass.expression)
+    );
+    const template = rootClass.expression;
+    demand(
+      template.templateSpans.length === 1 &&
+        same(template.templateSpans[0].expression, "className ?? ''")
+    );
+    const defaultClasses =
+      `${template.head.text}${template.templateSpans[0].literal.text}`
+        .trim()
+        .split(/\s+/u)
+        .sort();
+    demand(
+      JSON.stringify(defaultClasses) ===
+        JSON.stringify([...rootElement.classes].sort())
+    );
+    demand(literal(attribute(output.openingElement, "data-part")) === "root");
+    demand(
+      attrs(output.openingElement).every(
+        (node) =>
+          ts.isJsxAttribute(node) && !["as", "engine"].includes(node.name.text)
+      )
+    );
+    demand(
+      new Set(attrs(output.openingElement).map((node) => node.name.text))
+        .size === attrs(output.openingElement).length
+    );
+    uses(render, "className", [
+      one(bindings.filter((node) => node.name.getText(owner) === "className")),
+      template,
+    ]);
+    phase = "icon-button-forwarding";
+    // Only this local helper's late spread has a closed caller/clone key domain.
+    const iconForwarding = () => {
+      imported(owner, "Button", "../../../../../primitives/inputs/button");
+      imported(owner, "Popover", "../../../../../primitives/overlay/popover");
+      imported(owner, "Tooltip", "../../../../../primitives/display/tooltip");
+      const icon = fn(owner, "IconButton", []);
+      const guardedIcon = parse(
+        "witness-icon.tsx",
+        `function IconButton({onClick, ariaLabel, tooltipText, children, ...rest}) {
+        const {'aria-label': _popoverLabel, title: _popoverTitle, ...forwarded} = rest;
+        const btn = <Button variant='ghost' size='sm' icon={children} className='ds-list-toolbar__icon-button' onClick={onClick} aria-label={ariaLabel} {...forwarded} />;
+        if (tooltipText) { return <Tooltip content={tooltipText} placement='bottom'>{btn}</Tooltip>; }
+        return btn;
+      }`
+      );
+      demand(
+        JSON.stringify(shape(icon)) ===
+          JSON.stringify(shape(fn(guardedIcon, "IconButton", [])))
+      );
+      const btn = variable(icon, "btn");
+      constant(btn);
+      const spread = one(walk(btn.initializer, ts.isJsxSpreadAttribute));
+      demand(same(spread.expression, "forwarded"));
+      const sites = walk(
+        owner,
+        (node) =>
+          ts.isJsxOpeningElement(node) &&
+          node.tagName.getText(owner) === "IconButton"
+      );
+      demand(sites.length === 3);
+      const expectedCalls = [
+        [
+          "SettingsDropdown",
+          `<IconButton onClick={() => onOpenChange(!open)} ariaLabel={messages.columnSettings} tooltipText={open ? undefined : messages.settings}><Settings2 size={15} /></IconButton>`,
+        ],
+        [
+          "MobileOverflow",
+          `<IconButton onClick={() => setOpen(!open)} ariaLabel={messages.moreOptions}><MoreHorizontal size={15} /></IconButton>`,
+        ],
+        [
+          "ModernListToolbar",
+          `<IconButton onClick={onExport} ariaLabel={messages.export} tooltipText={messages.export}><Download size={15} /></IconButton>`,
+        ],
+      ];
+      const owned = new Set();
+      const iconReferences = [icon.name];
+      let wrapped = 0;
+      for (const site of sites) {
+        const element = site.parent;
+        demand(ts.isJsxElement(element));
+        const caller = (() => {
+          let node = element.parent;
+          while (node && !ts.isFunctionDeclaration(node)) node = node.parent;
+          return node;
+        })();
+        const expected = expectedCalls.find(
+          ([name]) => caller?.name?.text === name
+        );
+        demand(
+          expected && !owned.has(expected[0]) && same(element, expected[1])
+        );
+        owned.add(expected[0]);
+        demand(
+          ordinary(
+            caller,
+            expected[0] === "ModernListToolbar"
+              ? [ts.SyntaxKind.ExportKeyword, ts.SyntaxKind.DefaultKeyword]
+              : []
+          )
+        );
+        iconReferences.push(site.tagName, element.closingElement.tagName);
+        const wrapper = element.parent;
+        if (expected[0] === "ModernListToolbar") {
+          // Parentheses preserve this exact JSX node; calls and other wrappers do not.
+          let branch = element;
+          while (
+            ts.isParenthesizedExpression(branch.parent) &&
+            branch.parent.expression === branch
+          )
+            branch = branch.parent;
+          const conditional = branch.parent;
+          const onExport = one(
+            bindings.filter((node) => node.name.getText(owner) === "onExport")
+          );
+          demand(
+            !onExport.propertyName &&
+              !onExport.initializer &&
+              !onExport.dotDotDotToken
+          );
+          demand(
+            walk(
+              caller,
+              (node) =>
+                (ts.isVariableDeclaration(node) ||
+                  ts.isParameter(node) ||
+                  ts.isBindingElement(node) ||
+                  ts.isFunctionDeclaration(node)) &&
+                node.name?.getText(owner) === "onExport"
+            ).every((node) => node === onExport)
+          );
+          demand(
+            caller === render &&
+              element.pos >= output.pos &&
+              element.end <= output.end &&
+              ts.isBinaryExpression(conditional) &&
+              ts.isIdentifier(conditional.left) &&
+              conditional.left.text === "onExport" &&
+              conditional.operatorToken.kind ===
+                ts.SyntaxKind.AmpersandAmpersandToken &&
+              conditional.right === branch
+          );
+          demand(
+            ts.isJsxExpression(conditional.parent) &&
+              conditional.parent.expression === conditional &&
+              ts.isJsxElement(conditional.parent.parent) &&
+              conditional.parent.parent.openingElement.tagName.getText(
+                owner
+              ) === "Flex"
+          );
+        } else {
+          wrapped += 1;
+          demand(
+            ts.isJsxElement(wrapper) &&
+              wrapper.openingElement.tagName.getText(owner) === "Popover"
+          );
+          demand(
+            wrapper.children.filter((node) => !ts.isJsxText(node)).length === 1
+          );
+          const properties = attrs(wrapper.openingElement);
+          demand(
+            properties.length === 6 &&
+              properties.every(
+                (node) =>
+                  ts.isJsxAttribute(node) &&
+                  [
+                    "trigger",
+                    "placement",
+                    "open",
+                    "onOpenChange",
+                    "arrow",
+                    "content",
+                  ].includes(node.name.text)
+              )
+          );
+          demand(
+            new Set(properties.map((node) => node.name.text)).size ===
+              properties.length
+          );
+        }
+      }
+      demand(owned.size === 3 && wrapped === 2);
+      uses(owner, "IconButton", iconReferences);
+      const publicRoute = (source, name, tooltip) => {
+        const dependency = imported(
+          source,
+          "createEngineComponent",
+          "../../../../infrastructure/runtime/engines/presentation/component-factory"
+        );
+        const declaration = variable(source, name);
+        let target = untyped(declaration.initializer);
+        if (tooltip) {
+          unshadowed(source, "Object");
+          demand(
+            ts.isCallExpression(target) &&
+              same(target.expression, "Object.assign") &&
+              target.arguments.length === 2
+          );
+          uses(source, "Object", [target.expression]);
+          const attachments = target.arguments[1];
+          demand(
+            ts.isObjectLiteralExpression(attachments) &&
+              attachments.properties.length === 2
+          );
+          for (const [index, field] of ["Trigger", "Content"].entries()) {
+            const entry = attachments.properties[index];
+            const importedName = `Tooltip${field}`;
+            const compoundImport = imported(source, importedName, "./compound");
+            demand(
+              ts.isPropertyAssignment(entry) &&
+                key(entry.name) === field &&
+                ts.isIdentifier(entry.name) &&
+                same(entry.initializer, importedName)
+            );
+            // Compound exports are value attachments, not a replacement render target.
+            uses(source, importedName, [
+              compoundImport,
+              entry.initializer,
+              ...source.statements.filter(ts.isExportDeclaration),
+            ]);
+          }
+          target = target.arguments[0];
+          exported(source, name, declaration);
+          demand(source.statements.filter(ts.isExportAssignment).length === 0);
+        } else {
+          const assignment = one(
+            source.statements.filter(ts.isExportAssignment)
+          );
+          demand(
+            !assignment.isExportEquals && same(assignment.expression, name)
+          );
+          defaultExport(source, assignment);
+          exported(source, name, declaration, [assignment.expression]);
+        }
+        demand(
+          ts.isCallExpression(target) &&
+            same(target.expression, "createEngineComponent") &&
+            target.arguments.length === 3
+        );
+        uses(source, "createEngineComponent", [dependency, target.expression]);
+        demand(
+          same(target.arguments[0], JSON.stringify(name)) &&
+            same(
+              target.arguments[1],
+              `{classic: () => import('./engines/classic'), modern: () => import('./engines/modern'), rustic: () => import('./engines/rustic')}`
+            )
+        );
+        const options = target.arguments[2];
+        demand(
+          ts.isObjectLiteralExpression(options) &&
+            options.properties.length === 1 &&
+            ts.isPropertyAssignment(options.properties[0]) &&
+            key(options.properties[0].name) === "admitProps"
+        );
+        const admission = options.properties[0].initializer;
+        demand(ts.isArrowFunction(admission) && ordinary(admission));
+        if (tooltip) {
+          imported(
+            source,
+            "refuseFrozenPlacement",
+            "../../runtime/overlay/positioning"
+          );
+          demand(
+            same(
+              admission,
+              `({placement}, engine) => refuseFrozenPlacement(engine, placement)`
+            )
+          );
+          uses(source, "refuseFrozenPlacement", [
+            source.statements.find(
+              (node) =>
+                ts.isImportDeclaration(node) &&
+                node.moduleSpecifier.text ===
+                  "../../runtime/overlay/positioning"
+            ),
+            admission.body,
+          ]);
+        } else {
+          const frozen = imported(
+            source,
+            "isFrozenEngineName",
+            "@/foundation/contracts/kernel/engine-identity"
+          );
+          demand(admission.parameters.length === 2);
+          demand(
+            JSON.stringify(shape(admission.parameters[0].name)) ===
+              JSON.stringify(
+                shape(
+                  untyped(expression("({anchor}) => anchor")).parameters[0].name
+                )
+              )
+          );
+          demand(
+            ts.isIdentifier(admission.parameters[1].name) &&
+              admission.parameters[1].name.text === "engine" &&
+              !admission.parameters[1].initializer &&
+              !admission.parameters[1].dotDotDotToken
+          );
+          demand(
+            !admission.parameters[0].initializer &&
+              !admission.parameters[0].dotDotDotToken &&
+              ts.isConditionalExpression(admission.body)
+          );
+          demand(
+            same(
+              admission.body.condition,
+              "anchor !== undefined && isFrozenEngineName(engine)"
+            ) && same(admission.body.whenFalse, "undefined")
+          );
+          demand(
+            ts.isTemplateExpression(admission.body.whenTrue) &&
+              admission.body.whenTrue.templateSpans.length === 1 &&
+              same(
+                admission.body.whenTrue.templateSpans[0].expression,
+                "engine"
+              )
+          );
+          uses(admission, "anchor", [
+            admission.parameters[0],
+            admission.body.condition,
+          ]);
+          uses(admission, "engine", [
+            admission.parameters[1],
+            admission.body.condition,
+            admission.body.whenTrue,
+          ]);
+          uses(source, "isFrozenEngineName", [
+            frozen,
+            admission.body.condition,
+          ]);
+        }
+      };
+      publicRoute(sources.popoverEntry, "Popover", false);
+      publicRoute(sources.tooltipEntry, "Tooltip", true);
+      const cloneKeys = (source, tooltip) => {
+        const declaration = variable(
+          source,
+          tooltip ? "ModernTooltip" : "Popover"
+        );
+        const name = declaration.name.text;
+        constant(declaration, tooltip ? [] : [ts.SyntaxKind.ExportKeyword]);
+        const call = untyped(declaration.initializer);
+        demand(
+          ts.isCallExpression(call) &&
+            call.arguments.length === 1 &&
+            same(call.expression, tooltip ? "forwardRef" : "React.forwardRef")
+        );
+        if (tooltip) {
+          const forward = imported(source, "forwardRef", "react");
+          uses(source, "forwardRef", [forward, call.expression]);
+        }
+        const renderer = call.arguments[0];
+        demand(
+          ts.isArrowFunction(renderer) &&
+            ordinary(renderer) &&
+            renderer.parameters.length === 2 &&
+            renderer.parameters
+              .map((node) => node.name.getText(source))
+              .join(",") === "props,ref"
+        );
+        const assignment = one(source.statements.filter(ts.isExportAssignment));
+        demand(!assignment.isExportEquals && same(assignment.expression, name));
+        defaultExport(source, assignment);
+        const display = one(
+          source.statements.filter(
+            (node) =>
+              ts.isExpressionStatement(node) &&
+              same(
+                node.expression,
+                `${name}.displayName = ${JSON.stringify(
+                  tooltip ? "ModernTooltip" : "Popover.Hermes"
+                )}`
+              )
+          )
+        );
+        if (!tooltip)
+          exported(source, name, declaration, [display, assignment.expression]);
+        else {
+          demand(
+            source.statements.includes(declaration.parent.parent) &&
+              !declaration.parent.parent.modifiers?.length
+          );
+          demand(
+            source.statements
+              .filter(ts.isExportDeclaration)
+              .every(
+                (node) =>
+                  node.exportClause &&
+                  ts.isNamedExports(node.exportClause) &&
+                  node.exportClause.elements.every(
+                    (entry) => ![name, "default"].includes(entry.name.text)
+                  )
+              )
+          );
+        }
+        uses(source, name, [declaration.name, display, assignment.expression]);
+        const cloneImport = imported(source, "cloneElement", "react");
+        const validImport = imported(source, "isValidElement", "react");
+        const react = one(
+          source.statements.filter(
+            (node) =>
+              ts.isImportDeclaration(node) &&
+              node.moduleSpecifier.text === "react"
+          )
+        ).importClause;
+        demand(!react.isTypeOnly && react.name?.text === "React");
+        unshadowed(source, "React");
+        const helper = fn(source, "describeTrigger", []);
+        const pattern = tooltip
+          ? `function describeTrigger(children, tooltipId, enabled, interactive) {
+          if (!isValidElement(children) || children.type === React.Fragment) return children;
+          const child = children;
+          const nativeTitle = child.props.title;
+          const accessibleName = child.props['aria-label'] ?? nativeTitle;
+          if (interactive) { return cloneElement(child, {'aria-controls': tooltipId, 'aria-expanded': enabled, 'aria-haspopup': 'dialog', 'aria-label': accessibleName, title: undefined}); }
+          return cloneElement(child, {'aria-describedby': appendDescribedBy(child.props['aria-describedby'], tooltipId, enabled), 'aria-label': accessibleName, title: undefined});
+        }`
+          : `function describeTrigger(children, surfaceId, open, role) {
+          if (!isValidElement(children) || children.type === React.Fragment) return children;
+          const child = children;
+          const nativeTitle = child.props.title;
+          return cloneElement(child, {'aria-controls': surfaceId, 'aria-expanded': open, 'aria-haspopup': role, 'aria-label': child.props['aria-label'] ?? nativeTitle, title: undefined});
+        }`;
+        demand(sameStatement(helper, pattern));
+        const clones = walk(
+          helper,
+          (node) =>
+            ts.isCallExpression(node) && same(node.expression, "cloneElement")
+        );
+        demand(clones.length === (tooltip ? 2 : 1));
+        const domain = new Set(
+          tooltip
+            ? [
+                "aria-controls",
+                "aria-expanded",
+                "aria-haspopup",
+                "aria-label",
+                "title",
+                "aria-describedby",
+              ]
+            : [
+                "aria-controls",
+                "aria-expanded",
+                "aria-haspopup",
+                "aria-label",
+                "title",
+              ]
+        );
+        for (const clone of clones) {
+          demand(
+            clone.arguments.length === 2 &&
+              same(clone.arguments[0], "child") &&
+              ts.isObjectLiteralExpression(clone.arguments[1])
+          );
+          const keys = clone.arguments[1].properties;
+          demand(
+            keys.every(
+              (node) =>
+                ts.isPropertyAssignment(node) &&
+                !ts.isComputedPropertyName(node.name) &&
+                domain.has(key(node.name))
+            )
+          );
+          demand(
+            new Set(keys.map((node) => key(node.name))).size === keys.length
+          );
+        }
+        uses(source, "cloneElement", [
+          cloneImport,
+          ...clones.map((node) => node.expression),
+        ]);
+        const valid = one(
+          walk(
+            helper,
+            (node) =>
+              ts.isCallExpression(node) &&
+              same(node.expression, "isValidElement")
+          )
+        );
+        uses(source, "isValidElement", [validImport, valid.expression]);
+        const fragment = one(
+          walk(
+            helper,
+            (node) =>
+              ts.isPropertyAccessExpression(node) &&
+              same(node, "React.Fragment")
+          )
+        );
+        uses(source, "React", [
+          react.name,
+          fragment,
+          ...(tooltip ? [] : [call.expression]),
+          ...walk(source, ts.isTypeNode),
+        ]);
+        if (tooltip) {
+          const append = fn(source, "appendDescribedBy", []);
+          demand(
+            sameStatement(
+              append,
+              `function appendDescribedBy(existing, tooltipId, enabled) {
+            const tokens = typeof existing === 'string' ? existing.split(/\\s+/).filter(Boolean) : [];
+            if (enabled && !tokens.includes(tooltipId)) tokens.push(tooltipId);
+            return tokens.length > 0 ? tokens.join(' ') : undefined;
+          }`
+            )
+          );
+          const appendCall = one(
+            walk(
+              helper,
+              (node) =>
+                ts.isCallExpression(node) &&
+                same(node.expression, "appendDescribedBy")
+            )
+          );
+          uses(source, "appendDescribedBy", [
+            append.name,
+            appendCall.expression,
+          ]);
+        }
+        const props = one(
+          walk(
+            renderer.body,
+            (node) =>
+              ts.isVariableDeclaration(node) &&
+              ts.isObjectBindingPattern(node.name) &&
+              node.name.elements.some(
+                (entry) => entry.name.getText(source) === "children"
+              )
+          )
+        );
+        constant(props);
+        demand(same(props.initializer, "props"));
+        const childEntry = one(
+          props.name.elements.filter(
+            (node) => node.name.getText(source) === "children"
+          )
+        );
+        demand(
+          !childEntry.initializer &&
+            !childEntry.dotDotDotToken &&
+            !childEntry.propertyName
+        );
+        uses(renderer, "props", [renderer.parameters[0], props.initializer]);
+        const described = variable(renderer, "describedTrigger");
+        constant(described);
+        if (tooltip) {
+          demand(
+            same(
+              described.initializer,
+              "describeTrigger(children, tooltipId, Boolean(isVisible && !disabled && hasRenderableContent), interactive)"
+            )
+          );
+        } else {
+          const anchor = one(
+            props.name.elements.filter(
+              (node) => node.name.getText(source) === "anchor"
+            )
+          );
+          demand(
+            !anchor.initializer &&
+              !anchor.dotDotDotToken &&
+              !anchor.propertyName
+          );
+          const anchored = variable(renderer, "anchored");
+          constant(anchored);
+          demand(same(anchored.initializer, "anchor !== undefined"));
+          demand(
+            walk(
+              renderer,
+              (node) =>
+                (ts.isVariableDeclaration(node) ||
+                  ts.isParameter(node) ||
+                  ts.isBindingElement(node)) &&
+                node.name?.getText(source) === "anchored"
+            ).length === 1
+          );
+          demand(
+            walk(
+              renderer,
+              (node) =>
+                (ts.isBinaryExpression(node) &&
+                  ["anchor", "anchored"].includes(node.left.getText(source)) &&
+                  node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
+                  node.operatorToken.kind <= ts.SyntaxKind.LastAssignment) ||
+                ((ts.isPrefixUnaryExpression(node) ||
+                  ts.isPostfixUnaryExpression(node)) &&
+                  [
+                    ts.SyntaxKind.PlusPlusToken,
+                    ts.SyntaxKind.MinusMinusToken,
+                  ].includes(node.operator) &&
+                  ["anchor", "anchored"].includes(node.operand.getText(source)))
+            ).length === 0
+          );
+          demand(
+            walk(
+              renderer,
+              (node) =>
+                (ts.isVariableDeclaration(node) ||
+                  ts.isParameter(node) ||
+                  ts.isBindingElement(node)) &&
+                node.name?.getText(source) === "anchor"
+            ).length === 1
+          );
+          demand(
+            walk(
+              renderer,
+              (node) =>
+                ts.isBinaryExpression(node) &&
+                same(node.left, "anchor") &&
+                node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
+                node.operatorToken.kind <= ts.SyntaxKind.LastAssignment
+            ).length === 0
+          );
+          demand(
+            same(
+              described.initializer,
+              "anchored ? null : describeTrigger(children, surfaceId, Boolean(isOpen), resolvedRole)"
+            )
+          );
+          const branch = one(
+            renderer.body.statements.filter(
+              (node) =>
+                ts.isIfStatement(node) && same(node.expression, "anchored")
+            )
+          );
+          demand(
+            ts.isBlock(branch.thenStatement) &&
+              !branch.elseStatement &&
+              ts.isJsxElement(untyped(returned(branch.thenStatement)))
+          );
+        }
+        const describeCall = one(
+          walk(
+            described.initializer,
+            (node) =>
+              ts.isCallExpression(node) &&
+              same(node.expression, "describeTrigger")
+          )
+        );
+        uses(source, "describeTrigger", [helper.name, describeCall.expression]);
+        uses(renderer, "children", [childEntry.name, describeCall]);
+        const output = untyped(returned(renderer.body));
+        demand(
+          ts.isJsxElement(output) &&
+            output.openingElement.tagName.getText(source) === "div"
+        );
+        const renderedChild = one(
+          output.children.filter(
+            (node) =>
+              ts.isJsxExpression(node) &&
+              node.expression &&
+              same(node.expression, "describedTrigger")
+          )
+        );
+        uses(renderer, "describedTrigger", [
+          described.name,
+          renderedChild.expression,
+        ]);
+        return domain;
+      };
+      const popoverKeys = cloneKeys(sources.popover, false);
+      cloneKeys(sources.tooltip, true);
+      const residual = [...popoverKeys].filter(
+        (name) => !["aria-label", "title"].includes(name)
+      );
+      demand(
+        residual.length === 3 &&
+          residual.every((name) =>
+            ["aria-controls", "aria-expanded", "aria-haspopup"].includes(name)
+          )
+      );
+      return spread;
+    };
+    const supportedSpread = iconForwarding();
+    phase = "owner-binding";
+    const hook = "ds-list-toolbar__search-section";
+    const openings = walk(
+      owner,
+      (node) => ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)
+    );
+    const sites = [];
+    for (const opening of openings) {
+      const properties = attrs(opening);
+      const classes = properties.filter(
+        (node) => ts.isJsxAttribute(node) && node.name.text === "className"
+      );
+      demand(classes.length <= 1);
+      for (const spread of properties.filter(ts.isJsxSpreadAttribute)) {
+        // Only the proved local helper may put its closed key set after className.
+        // Every other opaque emission/override retains the original refusal.
+        demand(
+          spread === supportedSpread ||
+            (classes.length === 1 &&
+              properties.indexOf(classes[0]) > properties.indexOf(spread) &&
+              literal(classes[0]) !== null)
+        );
+      }
+      if (classes.length === 0) continue;
+      const value = literal(classes[0]);
+      if (value === null) {
+        demand(opening === output.openingElement);
+        continue;
+      }
+      if (!value.split(/\s+/u).includes(hook)) continue;
+      demand(value === hook && opening.tagName.getText(owner) === "Box");
+      demand(
+        properties.every(
+          (node) =>
+            ts.isJsxAttribute(node) &&
+            !["as", "engine"].includes(node.name.text)
+        )
+      );
+      demand(
+        new Set(properties.map((node) => node.name.text)).size ===
+          properties.length
+      );
+      demand(literal(attribute(opening, "data-part")) === "search-section");
+      demand(opening.pos >= output.pos && opening.end <= output.end);
+      sites.push(opening);
+    }
+    demand(sites.length === 2);
+    const classSites = sites.map(
+      (site) => attribute(site, "className").initializer
+    );
+    demand(
+      walk(
+        owner,
+        (node) => ts.isStringLiteralLike(node) && node.text.includes(hook)
+      ).every((node) => classSites.includes(node))
+    );
+    demand(
+      walk(
+        owner,
+        (node) =>
+          ts.isCallExpression(node) &&
+          /^(?:React\.)?(?:createElement|cloneElement|jsx|jsxs)$/u.test(
+            node.expression.getText(owner)
+          )
+      ).length === 0
+    );
+    const responsiveOwner = one(
+      walk(
+        output,
+        (node) =>
+          ts.isConditionalExpression(node) &&
+          same(node.condition, "isCompact") &&
+          sites.every((site) => site.pos >= node.pos && site.end <= node.end)
+      )
+    );
+    demand(
+      sites.some(
+        (site) =>
+          site.pos >= responsiveOwner.whenTrue.pos &&
+          site.end <= responsiveOwner.whenTrue.end
+      )
+    );
+    demand(
+      sites.some(
+        (site) =>
+          site.pos >= responsiveOwner.whenFalse.pos &&
+          site.end <= responsiveOwner.whenFalse.end
+      )
+    );
+    // A shadowing Box or assignment to the imported binding is unsupported.
+    demand(
+      walk(
+        owner,
+        (node) =>
+          (ts.isVariableDeclaration(node) ||
+            ts.isParameter(node) ||
+            ts.isFunctionDeclaration(node)) &&
+          node.name?.getText(owner) === "Box"
+      ).length === 0
+    );
+    demand(
+      walk(
+        owner,
+        (node) => ts.isBinaryExpression(node) && same(node.left, "Box")
+      ).length === 0
+    );
+
+    phase = "box-export-routing";
+    // Resolve the public Modern loader; no per-component options/prop adapter.
+    exported(sources.barrel, "Box", variable(sources.barrel, "Box"));
+    uses(sources.barrel, "Box", [variable(sources.barrel, "Box").name]);
+    imported(
+      sources.barrel,
+      "createEngineComponent",
+      "../../../../infrastructure/runtime/engines/presentation/component-factory"
+    );
+    demand(
+      same(
+        variable(sources.barrel, "Box").initializer,
+        `createEngineComponent('Box', {
+      classic: () => import('./engines/classic'), modern: () => import('./engines/modern'), rustic: () => import('./engines/rustic')
+    })`
+      )
+    );
+    imported(sources.factory, "forwardRef", "react");
+    imported(sources.factory, "lazy", "react");
+    imported(sources.factory, "useMemo", "react");
+    imported(sources.factory, "Suspense", "react");
+    phase = "factory-binding";
+    const factory = fn(sources.factory, "createEngineComponent");
+    exported(sources.factory, "createEngineComponent", factory);
+    imported(sources.factory, "EngineErrorBoundary", "./error-boundary");
+    demand(
+      factory.parameters.length === 3 &&
+        factory.parameters
+          .map((node) => node.name.getText(sources.factory))
+          .join(",") === "displayName,loaders,options"
+    );
+    const routerDeclaration = variable(factory, "EngineRouter");
+    const router = arrow(routerDeclaration);
+    demand(
+      router.parameters.length === 2 &&
+        router.parameters
+          .map((node) => node.name.getText(sources.factory))
+          .join(",") === "props,ref"
+    );
+    demand(same(returned(factory.body), "EngineRouter"));
+    const routerName = one(
+      factory.body.statements.filter(
+        (node) =>
+          ts.isExpressionStatement(node) &&
+          same(node.expression, "EngineRouter.displayName = displayName")
+      )
+    );
+    uses(factory, "EngineRouter", [
+      routerDeclaration.name,
+      routerName,
+      returned(factory.body),
+    ]);
+    const forwarded = one(
+      walk(
+        router.body,
+        (node) =>
+          ts.isVariableDeclaration(node) &&
+          ts.isObjectBindingPattern(node.name) &&
+          node.name.elements.some(
+            (entry) => entry.name.getText(sources.factory) === "componentProps"
+          )
+      )
+    );
+    demand(same(forwarded.initializer, "props"));
+    demand(
+      forwarded.name.elements.length === 2 &&
+        forwarded.name.elements[0].propertyName?.text === "engine" &&
+        forwarded.name.elements[1].dotDotDotToken
+    );
+    const modernOnly = one(
+      router.body.statements.filter(
+        (node) =>
+          ts.isIfStatement(node) &&
+          same(node.expression, "activeEngine !== 'modern' && modernOnlyProps")
+      )
+    );
+    const route = returned(router.body);
+    demand(
+      same(
+        route,
+        `<EngineErrorBoundary onError={onError}>{withBoundary ? <Suspense fallback={fallback}><Component {...componentProps} ref={ref} /></Suspense> : <Component {...componentProps} ref={ref} />}</EngineErrorBoundary>`
+      )
+    );
+    uses(router, "componentProps", [forwarded.name, modernOnly, route]);
+    // No other path may mutate/escape props before the shallow forwarding copy.
+    const engine = variable(router, "activeEngine");
+    demand(same(engine.initializer, "props.engine ?? declaredEngine"));
+    const admission = one(
+      router.body.statements.filter(
+        (node) =>
+          ts.isIfStatement(node) &&
+          same(
+            node.expression,
+            "process.env.NODE_ENV !== 'production' && admitProps && activeEngine"
+          )
+      )
+    );
+    uses(router, "props", [
+      router.parameters[0],
+      engine,
+      admission,
+      forwarded.initializer,
+    ]);
+    demand(same(factory.parameters[2].initializer, "{}"));
+    const options = one(
+      walk(
+        factory.body,
+        (node) =>
+          ts.isVariableDeclaration(node) &&
+          ts.isObjectBindingPattern(node.name) &&
+          node.name.elements.some(
+            (entry) => entry.name.getText(sources.factory) === "admitProps"
+          )
+      )
+    );
+    demand(
+      same(options.initializer, "options") &&
+        one(
+          options.name.elements.filter(
+            (entry) => entry.name.getText(sources.factory) === "admitProps"
+          )
+        ).initializer === undefined
+    );
+    uses(factory, "options", [factory.parameters[2], options.initializer]);
+    // Selection is still the existing components lookup, never a wrapper or
+    // replacement that could consume/alter these props on the Modern branch.
+    const component = variable(router, "Component");
+    constant(component);
+    const mounted = variable(router, "mountedComponent");
+    const boundaryMode = variable(router, "withBoundary");
+    demand(
+      same(mounted.initializer, "useRef(Component)") &&
+        same(
+          boundaryMode.initializer,
+          "mountedOnClient || Component !== mountedComponent.current"
+        )
+    );
+    uses(router, "Component", [
+      component.name,
+      mounted.initializer,
+      boundaryMode.initializer,
+      route,
+    ]);
+    const memo = untyped(component.initializer);
+    demand(
+      ts.isCallExpression(memo) &&
+        same(memo.expression, "useMemo") &&
+        ts.isArrowFunction(memo.arguments[0]) &&
+        ordinary(memo.arguments[0])
+    );
+    const implementation = variable(factory, "implementation");
+    constant(implementation);
+    demand(
+      ts.isArrowFunction(implementation.initializer) &&
+        ordinary(implementation.initializer)
+    );
+    const loaderArrow = implementation.initializer;
+    demand(
+      loaderArrow.parameters.length === 1 &&
+        ts.isIdentifier(loaderArrow.parameters[0].name) &&
+        loaderArrow.parameters[0].name.text === "engine" &&
+        !loaderArrow.parameters[0].initializer &&
+        !loaderArrow.parameters[0].dotDotDotToken
+    );
+    const implementationBody = loaderArrow.body;
+    uses(loaderArrow, "engine", [
+      loaderArrow.parameters[0],
+      variable(implementationBody, "loader").initializer,
+      returned(implementationBody),
+    ]);
+    demand(
+      implementationBody.statements.length === 3 &&
+        same(
+          variable(implementationBody, "loader").initializer,
+          "loaders[engine]"
+        ) &&
+        ts.isIfStatement(implementationBody.statements[1]) &&
+        same(implementationBody.statements[1].expression, "loader") &&
+        same(
+          implementationBody.statements[1].thenStatement.expression,
+          "loader"
+        ) &&
+        ts.isArrowFunction(untyped(returned(implementationBody)))
+    );
+    const warm = one(factory.body.statements.filter(ts.isForOfStatement));
+    demand(
+      sameStatement(
+        warm,
+        `for (const engine of IMPLEMENTED_ENGINE_NAMES) {
+      const loader = loaders[engine];
+      if (loader) registerWarmableFamily(\`\${displayName}@\${engine}\`, loader);
+    }`
+      )
+    );
+    uses(factory, "loaders", [
+      factory.parameters[1],
+      variable(implementationBody, "loader").initializer,
+      warm,
+    ]);
+    uses(factory, "implementation", [
+      implementation.name,
+      variable(factory, "components").initializer,
+    ]);
+    demand(
+      same(
+        variable(factory, "components").initializer,
+        `{
+      ...Object.fromEntries(IMPLEMENTED_ENGINE_NAMES.map((engine) => [engine, lazy(implementation(engine))])),
+      [EXTENSION_ENGINE]: lazy(createCustomWrapper(displayName, undefined, customEnabled))
+    }`
+      )
+    );
+    const lookup = memo.arguments[0];
+    demand(
+      same(
+        variable(lookup, "resolved").initializer,
+        "components[activeEngine]"
+      ) && same(returned(lookup.body), "resolved")
+    );
+    demand(
+      lookup.body.statements.length === 5 &&
+        ts.isIfStatement(lookup.body.statements[0]) &&
+        same(lookup.body.statements[0].expression, "!activeEngine") &&
+        ts.isIfStatement(lookup.body.statements[3]) &&
+        same(lookup.body.statements[3].expression, "!resolved") &&
+        ts.isIfStatement(lookup.body.statements[1]) &&
+        same(
+          lookup.body.statements[1].expression,
+          "activeEngine === EXTENSION_ENGINE && customEnabled && componentPack"
+        ) &&
+        same(
+          lookup.body.statements[1].thenStatement.statements[0].expression,
+          "getPackLazyComponent(componentPack)"
+        )
+    );
+    uses(factory, "components", [
+      variable(factory, "components").name,
+      variable(lookup, "resolved").initializer,
+    ]);
+    phase = "boundary-binding";
+    const boundary = one(
+      walk(
+        sources.boundary,
+        (node) =>
+          ts.isClassDeclaration(node) &&
+          node.name?.text === "EngineErrorBoundary"
+      )
+    );
+    exported(sources.boundary, "EngineErrorBoundary", boundary);
+    imported(sources.boundary, "Component", "react");
+    demand(
+      boundary.heritageClauses.length === 1 &&
+        boundary.heritageClauses[0].types.length === 1 &&
+        same(boundary.heritageClauses[0].types[0].expression, "Component")
+    );
+    const constructor = one(
+      boundary.members.filter(ts.isConstructorDeclaration)
+    );
+    demand(
+      constructor.parameters.length === 1 &&
+        ts.isIdentifier(constructor.parameters[0].name) &&
+        constructor.parameters[0].name.text === "props" &&
+        !constructor.parameters[0].initializer &&
+        !constructor.parameters[0].dotDotDotToken
+    );
+    demand(ordinary(constructor));
+    uses(constructor, "props", [
+      constructor.parameters[0],
+      constructor.body.statements[0],
+    ]);
+    demand(
+      constructor.body.statements.length === 2 &&
+        same(constructor.body.statements[0].expression, "super(props)") &&
+        same(
+          constructor.body.statements[1].expression,
+          "this.state = { hasError: false }"
+        )
+    );
+    demand(
+      boundary.members.every(
+        (node) =>
+          ts.isConstructorDeclaration(node) ||
+          [
+            "getDerivedStateFromError",
+            "componentDidCatch",
+            "reset",
+            "render",
+          ].includes(node.name?.getText(sources.boundary))
+      )
+    );
+    const boundaryRender = one(
+      boundary.members.filter(
+        (node) =>
+          ts.isMethodDeclaration(node) &&
+          node.name.getText(sources.boundary) === "render"
+      )
+    );
+    demand(ordinary(boundaryRender));
+    demand(
+      boundaryRender.body.statements.length === 2 &&
+        ts.isIfStatement(boundaryRender.body.statements[0]) &&
+        same(
+          boundaryRender.body.statements[0].expression,
+          "this.state.hasError"
+        ) &&
+        same(
+          boundaryRender.body.statements[1].expression,
+          "this.props.children"
+        )
+    );
+
+    phase = "box-forwarding";
+    // Box's default tag and same-object attribute/child forwarding.
+    const box = sources.box;
+    imported(box, "forwardRef", "react");
+    const defaultsImport = imported(box, "BOX_DEFAULTS", "../../contracts");
+    imported(box, "isVoidElement", "../../contracts");
+    demand(
+      one(
+        box.statements.filter(
+          (node) =>
+            ts.isImportDeclaration(node) &&
+            node.moduleSpecifier.text === "react"
+        )
+      ).importClause.name?.text === "React"
+    );
+    unshadowed(box, "React");
+    const reactImport = one(
+      box.statements.filter(
+        (node) =>
+          ts.isImportDeclaration(node) && node.moduleSpecifier.text === "react"
+      )
+    ).importClause;
+    demand(!reactImport.isTypeOnly);
+    const boxDeclaration = variable(box, "ModernBox");
+    constant(boxDeclaration);
+    const boxRender = arrow(boxDeclaration);
+    demand(
+      boxRender.parameters.length === 2 &&
+        boxRender.parameters.map((node) => node.name.getText(box)).join(",") ===
+          "props,ref"
+    );
+    const boxExport = one(box.statements.filter(ts.isExportAssignment));
+    demand(
+      !boxExport.isExportEquals && same(boxExport.expression, "ModernBox")
+    );
+    defaultExport(box, boxExport);
+    const boxName = one(
+      box.statements.filter(
+        (node) =>
+          ts.isExpressionStatement(node) &&
+          same(node.expression, "ModernBox.displayName = 'ModernBox'")
+      )
+    );
+    uses(box, "ModernBox", [
+      boxDeclaration.name,
+      boxName,
+      boxExport.expression,
+    ]);
+    const destructure = one(
+      walk(
+        boxRender.body,
+        (node) =>
+          ts.isVariableDeclaration(node) &&
+          ts.isObjectBindingPattern(node.name) &&
+          node.name.elements.some(
+            (entry) => entry.name.getText(box) === "htmlAttributes"
+          )
+      )
+    );
+    demand(same(destructure.initializer, "props"));
+    const entries = destructure.name.elements;
+    demand(
+      entries[entries.length - 1].dotDotDotToken &&
+        entries[entries.length - 1].name.text === "htmlAttributes"
+    );
+    demand(
+      entries.every(
+        (entry) =>
+          entry.propertyName?.text !== "data-part" &&
+          entry.name.getText(box) !== "data-part"
+      )
+    );
+    const tag = one(
+      entries.filter((entry) => entry.propertyName?.text === "as")
+    );
+    demand(
+      tag.name.text === "Component" && same(tag.initializer, "BOX_DEFAULTS.as")
+    );
+    demand(
+      same(
+        one(entries.filter((entry) => entry.name.getText(box) === "className"))
+          .initializer,
+        "''"
+      )
+    );
+    demand(
+      one(entries.filter((entry) => entry.name.getText(box) === "children"))
+        .initializer === undefined
+    );
+    const defaultsDeclaration = variable(sources.contract, "BOX_DEFAULTS");
+    exported(sources.contract, "BOX_DEFAULTS", defaultsDeclaration);
+    uses(box, "BOX_DEFAULTS", [
+      one(
+        defaultsImport.importClause.namedBindings.elements.filter(
+          (node) => node.name.text === "BOX_DEFAULTS"
+        )
+      ).name,
+      tag.initializer,
+    ]);
+    const defaults = untyped(defaultsDeclaration.initializer);
+    demand(
+      ts.isObjectLiteralExpression(defaults) &&
+        same(property(defaults, "as").initializer, "'div'")
+    );
+    demand(defaults.properties.every(ts.isPropertyAssignment));
+    uses(sources.contract, "BOX_DEFAULTS", [
+      variable(sources.contract, "BOX_DEFAULTS").name,
+    ]);
+    demand(
+      same(
+        variable(boxRender, "classNames").initializer,
+        "['rottay-box', 'rottay-box--modern', className].filter(Boolean).join(' ')"
+      )
+    );
+    const elementProps = variable(boxRender, "elementProps");
+    const object = untyped(elementProps.initializer);
+    demand(ts.isObjectLiteralExpression(object));
+    demand(
+      same(object.properties[0].initializer, "'box-surface'") &&
+        key(object.properties[0].name) === "data-part"
+    );
+    demand(
+      ts.isSpreadAssignment(object.properties[1]) &&
+        same(object.properties[1].expression, "htmlAttributes")
+    );
+    demand(same(property(object, "className").initializer, "classNames"));
+    demand(
+      object.properties.filter(ts.isSpreadAssignment).length === 2 &&
+        same(
+          object.properties[object.properties.length - 1].expression,
+          "responsive.attrs"
+        )
+    );
+    demand(
+      object.properties.every(
+        (entry) =>
+          ts.isSpreadAssignment(entry) ||
+          (ts.isPropertyAssignment(entry) &&
+            [
+              "data-part",
+              "ref",
+              "className",
+              "data-radius",
+              "data-shadow",
+              "data-layout-motion",
+              "data-component",
+              "style",
+            ].includes(key(entry.name)))
+      )
+    );
+    demand(
+      new Set(
+        object.properties
+          .filter(ts.isPropertyAssignment)
+          .map((entry) => key(entry.name))
+      ).size ===
+        object.properties.length - 2
+    );
+    const classNames = variable(boxRender, "classNames");
+    uses(boxRender, "htmlAttributes", [destructure.name, object.properties[1]]);
+    uses(boxRender, "className", [destructure.name, classNames.initializer]);
+    uses(boxRender, "classNames", [
+      classNames.name,
+      property(object, "className").initializer,
+    ]);
+    const type = variable(boxRender, "ElementType");
+    demand(same(type.initializer, "Component"));
+    const element = variable(boxRender, "element");
+    constant(element);
+    uses(boxRender, "element", [element.name, returned(boxRender.body)]);
+    uses(box, "React", [reactImport.name, element.initializer]);
+    demand(
+      same(
+        element.initializer,
+        "isVoidElement(Component) ? React.createElement(ElementType, elementProps) : React.createElement(ElementType, elementProps, children)"
+      )
+    );
+    uses(boxRender, "elementProps", [elementProps.name, element.initializer]);
+    uses(boxRender, "children", [destructure.name, element.initializer]);
+    uses(boxRender, "Component", [
+      tag.name,
+      type.initializer,
+      element.initializer,
+    ]);
+    demand(same(returned(boxRender.body), "<>{element}</>"));
+    const voids = untyped(
+      variable(sources.contract, "VOID_ELEMENTS").initializer
+    );
+    demand(
+      ts.isNewExpression(voids) &&
+        same(voids.expression, "Set") &&
+        voids.arguments.length === 1 &&
+        ts.isArrayLiteralExpression(voids.arguments[0]) &&
+        voids.arguments[0].elements.every(ts.isStringLiteral) &&
+        !voids.arguments[0].elements.some((entry) => entry.text === "div")
+    );
+    const voidCheck = fn(sources.contract, "isVoidElement");
+    exported(sources.contract, "isVoidElement", voidCheck);
+    demand(
+      voidCheck.parameters.length === 1 &&
+        ts.isIdentifier(voidCheck.parameters[0].name) &&
+        voidCheck.parameters[0].name.text === "as" &&
+        !voidCheck.parameters[0].initializer &&
+        !voidCheck.parameters[0].dotDotDotToken
+    );
+    uses(voidCheck, "as", [voidCheck.parameters[0], returned(voidCheck.body)]);
+    demand(
+      voidCheck.body.statements.length === 1 &&
+        same(
+          returned(voidCheck.body),
+          "typeof as === 'string' && VOID_ELEMENTS.has(as)"
+        )
+    );
+    uses(sources.contract, "VOID_ELEMENTS", [
+      variable(sources.contract, "VOID_ELEMENTS").name,
+      returned(voidCheck.body),
+    ]);
+    imported(
+      box,
+      "generateResponsiveCSS",
+      "@/infrastructure/runtime/responsive/viewport/style-properties"
+    );
+    const responsiveValue = variable(boxRender, "responsive");
+    demand(
+      same(
+        responsiveValue.initializer,
+        "generateResponsiveCSS(responsiveEntries)"
+      )
+    );
+    uses(boxRender, "responsive", [
+      responsiveValue.name,
+      property(object, "style").initializer,
+      object.properties[object.properties.length - 1],
+    ]);
+    uses(
+      boxRender,
+      "ElementType",
+      [type.name, type.type, element.initializer].filter(Boolean)
+    );
+
+    phase = "responsive-key-domain";
+    // Only the two resolved keys may write attrs; unknown references keep legacy geometry.
+    const responsive = fn(sources.responsive, "generateResponsiveCSS");
+    exported(sources.responsive, "generateResponsiveCSS", responsive);
+    const attrsObject = variable(responsive, "attrs");
+    demand(same(attrsObject.initializer, "{}"));
+    const keyNames = [
+      "RESPONSIVE_CHANNEL_ATTRIBUTE",
+      "RESPONSIVE_CHANNEL_PRIORITY_ATTRIBUTE",
+    ];
+    const keyValues = ["data-ds-responsive", "data-ds-responsive-hard"];
+    const writes = [];
+    for (const [index, name] of keyNames.entries()) {
+      const keyDeclaration = variable(sources.keys, name);
+      exported(sources.keys, name, keyDeclaration);
+      uses(sources.keys, name, [keyDeclaration.name]);
+      imported(
+        sources.responsive,
+        name,
+        "@/foundation/contracts/kernel/responsive/channels"
+      );
+      demand(
+        same(
+          variable(sources.keys, name).initializer,
+          JSON.stringify(keyValues[index])
+        )
+      );
+      const write = one(
+        walk(
+          responsive,
+          (node) =>
+            ts.isBinaryExpression(node) &&
+            node.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
+            ts.isElementAccessExpression(node.left) &&
+            same(node.left.expression, "attrs") &&
+            same(node.left.argumentExpression, name)
+        )
+      );
+      writes.push(write.left.expression);
+    }
+    const projection = returned(responsive.body);
+    demand(same(projection, "{ attrs, channels: channels }"));
+    uses(responsive, "attrs", [
+      attrsObject.name,
+      ...writes,
+      one(
+        projection.properties.filter(
+          (entry) =>
+            ts.isShorthandPropertyAssignment(entry) &&
+            entry.name.text === "attrs"
+        )
+      ).name,
+    ]);
+    demand(
+      walk(responsive, ts.isReturnStatement).every(
+        (node) =>
+          same(node.expression, "EMPTY_PROJECTION") ||
+          node.expression === projection
+      )
+    );
+    demand(
+      same(
+        variable(sources.responsive, "EMPTY_PROJECTION").initializer,
+        "Object.freeze({ attrs: Object.freeze({}), channels: Object.freeze({}) })"
+      )
+    );
+    const fresh = () =>
+      snapshots.every(({ absolute, hash }) => {
+        const metadata = lstatSync(absolute);
+        return (
+          JSON.stringify(rootElement) === rootIdentity &&
+          metadata.isFile() &&
+          metadata.nlink === 1 &&
+          !metadata.isSymbolicLink() &&
+          realpathSync(absolute) === absolute &&
+          createHash("sha256").update(readFileSync(absolute)).digest("hex") ===
+            hash
+        );
+      });
+    phase = "source-freshness";
+    demand(fresh());
+    return {
+      context: {
+        css,
+        rootElement,
+        family,
+        partReach,
+        nativePseudos,
+        fresh,
+        sites: sites.map((node) => [node.pos, node.end]),
+      },
+      reason: null,
+    };
+  } catch {
+    return unsupported(phase);
+  }
+}
+
+/** Reduce proposals from ONE listed selector in ONE rule/axis, never global parts. */
+function witnessedSearchGroup(
+  sourceOutcome,
+  css,
+  rootElement,
+  options,
+  listed,
+  proposals
+) {
+  const context = sourceOutcome?.context ?? null;
+  if (context === null) return proposals;
+  if (
+    context.css !== css ||
+    context.rootElement !== rootElement ||
+    context.family !== options.family ||
+    context.partReach !== options.partReach ||
+    context.nativePseudos !== options.nativePseudos
+  ) {
+    sourceOutcome.reason = "context-mismatch";
+    return proposals;
+  }
+  if (
+    proposals.length !== 2 ||
+    proposals.some((proposal) => !proposal.ordinary)
+  )
+    return proposals;
+  try {
+    const fold = alternativeList(listed);
+    if (fold === null || !listed.slice(fold.start).startsWith(":is("))
+      return proposals;
+    const before = listed.slice(0, fold.start);
+    const after = listed.slice(fold.end);
+    // Keep raw scope/ancestry/tag/state identical. Initial support is the
+    // current owned compound and its unchanged existing input-field suffix.
+    if (
+      before !==
+        ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__search-section" ||
+      !/^ \.ds-input-field\[data-part=['"]field['"]\]$/u.test(after)
+    )
+      return proposals;
+    const arms = selectorList(fold.body);
+    if (arms.length !== 2) return proposals;
+    const stampedArm = arms.find((arm) =>
+      /^\[data-part=['"]search-section['"]\]$/u.test(arm)
+    );
+    if (
+      !stampedArm ||
+      arms.filter((arm) => arm === ".ds-list-toolbar__search-section")
+        .length !== 1
+    )
+      return proposals;
+    const originalSelector = spliceAlternative(before, stampedArm, after);
+    const syntheticSelector = spliceAlternative(
+      before,
+      ".ds-list-toolbar__search-section",
+      after
+    );
+    const retained = proposals.filter(
+      (proposal) => proposal.selector === originalSelector
+    );
+    const extra = proposals.filter(
+      (proposal) => proposal.selector === syntheticSelector
+    );
+    if (retained.length !== 1 || extra.length !== 1) return proposals;
+    const original = retained[0].chain;
+    const synthetic = extra[0].chain;
+    if (
+      original.length !== 2 ||
+      synthetic.length !== 2 ||
+      compoundKey(original[1]) !== compoundKey(synthetic[1]) ||
+      compoundKey(original[0]) !==
+        "div|ds-list-toolbar__search-section|data-part=search-section" ||
+      compoundKey(synthetic[0]) !==
+        "div|ds-list-toolbar__search-section.ds-list-toolbar__search-section|"
+    )
+      return proposals;
+    if (!context.fresh()) {
+      sourceOutcome.reason = "source-drift";
+      return proposals;
+    }
+    // Both expanded selector provenances are covered by this unchanged
+    // original node in THIS group. Nothing already in the global map is erased.
+    const coverage = new Map([
+      [originalSelector, retained[0]],
+      [syntheticSelector, retained[0]],
+    ]);
+    return coverage.size === 2 ? retained : proposals;
+  } catch {
+    sourceOutcome.reason = "freshness-read-failure";
+    return proposals;
+  }
+}
+
 /**
  * One family's parts, read off the rules of ONE stylesheet.
  *
@@ -5914,9 +7823,23 @@ export function composedPrimitiveStandIn(skins) {
  * refusals, so a selector refused for four axes is counted four times -- the
  * unit is the reading that was refused, not the string.
  */
-export function familyParts(css, rootElement, axes, {
-  family = null, partReach = true, nativePseudos = false, signature = [], standIn = null,
-} = {}) {
+export function familyParts(css, rootElement, axes, options = {}) {
+  return readFamilyParts(css, rootElement, axes, options, null);
+}
+
+function readFamilyParts(
+  css,
+  rootElement,
+  axes,
+  {
+    family = null,
+    partReach = true,
+    nativePseudos = false,
+    signature = [],
+    standIn = null,
+  } = {},
+  sourceOutcome = null
+) {
   const rules = cssRules(css);
   const parts = new Map();
   const rejected = {};
@@ -5934,6 +7857,7 @@ export function familyParts(css, rootElement, axes, {
     for (const rule of rules) {
       if (!rule.declarations.some((declaration) => authored.has(declaration.property))) continue;
       for (const listed of selectorList(rule.selector)) {
+        const proposals = [];
         for (const authoredSelector of expandAlternatives(listed)) {
           // The NATIVE scene mounts a node whose rule is gated on a forced
           // pseudo, with the pseudo stripped exactly as law 3 strips
@@ -5949,7 +7873,11 @@ export function familyParts(css, rootElement, axes, {
               ? familyElementPart(selector, family, rootElement)
               : null;
             if (element !== null) {
-              admit([element], authoredSelector, axis);
+              proposals.push({
+                chain: [element],
+                selector: authoredSelector,
+                ordinary: false,
+              });
               continue;
             }
             // A `:has()` is a condition on the SCENE, so it is retried below
@@ -5971,8 +7899,22 @@ export function familyParts(css, rootElement, axes, {
             standIns.push({ axis, selector: authoredSelector, ...composed });
             continue;
           }
-          admit(projection.chain, authoredSelector, axis);
+          proposals.push({
+            chain: projection.chain,
+            selector: authoredSelector,
+            ordinary: true,
+          });
         }
+        const admitted = witnessedSearchGroup(
+          sourceOutcome,
+          css,
+          rootElement,
+          { family, partReach, nativePseudos },
+          listed,
+          proposals
+        );
+        for (const proposal of admitted)
+          admit(proposal.chain, proposal.selector, axis);
       }
     }
   }
@@ -6302,7 +8244,13 @@ export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, 
   const proves = (value) => (proof ??= focusSignatureProof(root)).judgeValue(value) === null;
   const byFamily = new Map();
   // Every skin is read, whatever `only` narrows the run to: who owns a class is a fact of the tree, not of the selection.
-  const skins = new Map([...skinFamilies(root)].map(([family, files]) => [family, files.map((file) => readFileSync(file, 'utf8')).join('\n')]));
+  const skinFiles = skinFamilies(root);
+  const skins = new Map(
+    [...skinFiles].map(([family, files]) => [
+      family,
+      files.map((file) => readFileSync(file, "utf8")).join("\n"),
+    ])
+  );
   const standIn = composedPrimitives ? composedPrimitiveStandIn(skins) : null;
   for (const [family, css] of skins) {
     if (only && !only.includes(family)) continue;
@@ -6310,8 +8258,20 @@ export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, 
     if (!rootElement) continue;
     const declared = AXIS_IDS.filter((axis) => populations.get(axis).includes(family));
     const signature = focusSignatureReads(declarations.get(family), declared, proves);
+    const options = { family, partReach, nativePseudos, signature, standIn };
+    const sourceOutcome =
+      family === "list-toolbar" &&
+      css.includes(".ds-list-toolbar__search-section:is(")
+        ? searchBoxWitness(
+            root,
+            css,
+            rootElement,
+            skinFiles.get(family),
+            options
+          )
+        : null;
     const record = retireTwins(
-      familyParts(css, rootElement, declared, { family, partReach, nativePseudos, signature, standIn }),
+      readFamilyParts(css, rootElement, declared, options, sourceOutcome),
       retirements?.get(family) ?? [],
     );
     if (record.parts.length === 0 && Object.keys(record.rejected).length === 0) continue;

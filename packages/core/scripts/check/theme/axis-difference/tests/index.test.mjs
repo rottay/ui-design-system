@@ -34,6 +34,8 @@
  * and itself is not a control passing, it is a control with nothing to read.
  */
 import assert from 'node:assert/strict';
+import { createRequire } from "node:module";
+import { lstatSync, readdirSync, realpathSync } from "node:fs";
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -735,6 +737,60 @@ describe('axis-difference — the fixture is read off the skin, never invented',
     assert.deepEqual(selectorParts('/* .ds-ghost { color: red; } */\n.ds-real { color: blue; }'), ['.ds-real']);
   });
 
+  it("TOP-LEVEL commas keep approved folded selectors whole and still separate real selector groups", () => {
+    const folded =
+      ".ds-card:is([data-part='root'], .ds-card__root):where(.ds-card--modern, :is(.ds-a, .ds-b))";
+    assert.deepEqual(selectorParts(`${folded}, .ds-other { padding: 1px; }`), [
+      folded,
+      ".ds-other",
+    ]);
+    assert.deepEqual(selectorParts(".ds-a, .ds-b, .ds-c { padding: 1px; }"), [
+      ".ds-a",
+      ".ds-b",
+      ".ds-c",
+    ]);
+  });
+
+  it("the actual doubled folded-root grammar keeps the toolbar root and its parts ahead of a repeated sibling class", () => {
+    const root = ".ds-pattern-list-toolbar.ds-engine-modern";
+    const fold = ":is([data-part='root'], .ds-pattern-list-toolbar__root)";
+    const css = `${root}${fold}${fold} { padding: 1px; }
+      .ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty { padding: 1px; }`;
+    const element = familyElement(css);
+    assert.deepEqual(element.classes, [
+      "ds-pattern-list-toolbar",
+      "ds-engine-modern",
+      "ds-pattern-list-toolbar__root",
+    ]);
+    assert.deepEqual(element.attributes, { "data-part": "root" });
+    const projection = projectPartChain(
+      `${root} > [data-part='main-row']`,
+      element
+    );
+    assert.deepEqual(projection.chain.map(compoundKey), [
+      "div||data-part=main-row",
+    ]);
+    // A repaired root must not loosen any of the existing part refusals.
+    for (const [selector, reason] of [
+      [`.ds-other > [data-part='main-row']`, "head-not-the-family-root"],
+      [
+        `${root}[data-variant='ghost'] > [data-part='main-row']`,
+        "head-variant-gated",
+      ],
+      [
+        `${root} > [data-part='main-row'][data-tone='danger']`,
+        "part-variant-gated",
+      ],
+      [`${root} ~ [data-part='main-row']`, "sibling-combinator"],
+      [`${root} > [data-part='main-row']::after`, "pseudo-element"],
+    ])
+      assert.equal(
+        projectPartChain(selector, element).rejected,
+        reason,
+        selector
+      );
+  });
+
   it('a family whose skin publishes no mountable selector is null, not a zero reading', () => {
     assert.equal(familyElement('@media (min-width: 10px) { .ds-x .ds-y { color: red; } }'), null);
   });
@@ -744,6 +800,1210 @@ describe('axis-difference — the fixture is read off the skin, never invented',
     const mountable = [...elements].filter(([, element]) => element !== null).length;
     assert.ok(elements.size > 200, `only ${elements.size} families found; the walk is broken`);
     assert.ok(mountable / elements.size > 0.85, `only ${mountable} of ${elements.size} families mount`);
+  });
+});
+
+/** Only the admitted owning test creates this private leaf, under its S/F Core. */
+function withSearchWitnessFixture(check) {
+  const files = {
+    owner: "src/components/patterns/data/list-toolbar/engines/modern/index.tsx",
+    barrel: "src/components/primitives/layout/box/index.ts",
+    box: "src/components/primitives/layout/box/engines/modern/index.tsx",
+    contract: "src/components/primitives/layout/box/contracts/index.ts",
+    factory:
+      "src/infrastructure/runtime/engines/presentation/component-factory/index.tsx",
+    boundary:
+      "src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx",
+    responsive:
+      "src/infrastructure/runtime/responsive/viewport/style-properties/index.ts",
+    keys: "src/foundation/contracts/kernel/responsive/channels/index.ts",
+    popoverEntry: "src/components/primitives/overlay/popover/index.tsx",
+    popover:
+      "src/components/primitives/overlay/popover/engines/modern/index.tsx",
+    tooltipEntry: "src/components/primitives/display/tooltip/index.tsx",
+    tooltip:
+      "src/components/primitives/display/tooltip/engines/modern/index.tsx",
+    skin: "src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css",
+  };
+  assert.equal(realpathSync(ROOT), ROOT);
+  const leaf = mkdtempSync(join(ROOT, ".axis-search-witness-"));
+  const written = new Map();
+  const guard = (file) => {
+    assert.ok(file === leaf || file.startsWith(`${leaf}/`));
+    for (let cursor = file; cursor.startsWith(leaf); cursor = dirname(cursor)) {
+      if (!existsSync(cursor)) continue;
+      assert.equal(lstatSync(cursor).isSymbolicLink(), false, cursor);
+      assert.equal(realpathSync(cursor), cursor);
+      if (lstatSync(cursor).isFile()) assert.equal(lstatSync(cursor).nlink, 1);
+    }
+  };
+  const write = (name, text) => {
+    const file = join(leaf, files[name] ?? name);
+    guard(file);
+    mkdirSync(dirname(file), { recursive: true });
+    guard(file);
+    if (written.has(file))
+      assert.equal(readFileSync(file, "utf8"), written.get(file));
+    else assert.equal(existsSync(file), false);
+    writeFileSync(file, text, { flag: written.has(file) ? "w" : "wx" });
+    guard(file);
+    assert.equal(lstatSync(file).isFile(), true);
+    written.set(file, text);
+  };
+  try {
+    for (const [name, file] of Object.entries(files)) {
+      if (name === "skin") continue;
+      const source = join(ROOT, file);
+      assert.equal(realpathSync(source), source);
+      assert.equal(lstatSync(source).isFile(), true);
+      assert.equal(lstatSync(source).nlink, 1);
+      write(name, readFileSync(source, "utf8"));
+    }
+    write("package.json", '{"name":"@rottay/design-system","private":true}\n');
+    const rootElement = familyElements(ROOT, ["list-toolbar"]).get(
+      "list-toolbar"
+    );
+    const rootSelector = rootElement.classes.map((name) => `.${name}`).join("");
+    const head =
+      ".ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__search-section";
+    const tail = " .ds-input-field[data-part='field']";
+    const fold =
+      ":is([data-part='search-section'], .ds-list-toolbar__search-section)";
+    const rootRule = `${rootSelector}[data-part='root'] { padding: 1px; }`;
+    const rule = (selector) =>
+      `${selector} { border-radius: 1px; box-shadow: 0 0 2px black; }`;
+    const css = `${rootRule}\n${rule(`${head}${fold}${tail}`)}`;
+    write("skin", css);
+    const read = (options = {}) =>
+      familyAxisParts(leaf, ["list-toolbar"], null, {
+        composedPrimitives: false,
+        ...options,
+      }).get("list-toolbar");
+    const legacy = (text = css, options = {}) =>
+      familyParts(text, familyElement(text), ["rhythm", "shape", "depth"], {
+        family: "list-toolbar",
+        ...options,
+      });
+    const edit = (name, before, after) => {
+      const file = join(leaf, files[name]);
+      const text = written.get(file);
+      assert.ok(
+        text.includes(before),
+        `${name}: the current source seam must exist`
+      );
+      write(name, text.replace(before, after));
+    };
+    check({
+      leaf,
+      files,
+      write,
+      edit,
+      read,
+      legacy,
+      css,
+      head,
+      tail,
+      fold,
+      rootRule,
+      rule,
+      text: (name) => written.get(join(leaf, files[name])),
+    });
+  } finally {
+    // Refuse a replaced/aliased leaf or nested entry before recursive cleanup.
+    const visit = (dir) => {
+      guard(dir);
+      assert.equal(lstatSync(dir).isDirectory(), true);
+      for (const name of readdirSync(dir)) {
+        const file = join(dir, name);
+        guard(file);
+        if (lstatSync(file).isDirectory()) visit(file);
+        else {
+          assert.equal(lstatSync(file).isFile(), true);
+          assert.equal(lstatSync(file).nlink, 1);
+          assert.equal(readFileSync(file, "utf8"), written.get(file));
+        }
+      }
+    };
+    visit(leaf);
+    rmSync(leaf, { recursive: true, force: false });
+  }
+}
+
+describe("axis-difference — same-source search Box, same authored folded group", () => {
+  it("retains the original stamped search-section/input-field witness on both axes and in the native scene", () => {
+    withSearchWitnessFixture(({ read, legacy, css, head, tail }) => {
+      const expected = projectPartChain(
+        `${head}[data-part='search-section']${tail}`,
+        familyElement(css)
+      ).chain;
+      for (const nativePseudos of [false, true]) {
+        const actual = read({ nativePseudos });
+        assert.equal(
+          legacy(css, { nativePseudos }).parts.length,
+          2,
+          "source-free callers keep both legacy geometries"
+        );
+        assert.equal(
+          actual.parts.length,
+          1,
+          "the actual owned default Box co-stamps part and class"
+        );
+        assert.deepEqual(
+          actual.parts[0].chain,
+          expected,
+          "retain every original class, stamp, tag and descendant"
+        );
+        assert.deepEqual(actual.parts[0].axes, ["depth", "shape"]);
+        assert.equal(
+          actual.parts[0].selector,
+          `${head}[data-part='search-section']${tail}`
+        );
+        assert.deepEqual(actual.rejected, {});
+        assert.deepEqual(actual.standIns, []);
+      }
+      const noReach = read({ partReach: false });
+      assert.deepEqual(
+        noReach,
+        legacy(css, { partReach: false }),
+        "the reach mode is not borrowed from another invocation"
+      );
+    });
+  });
+
+  it("falls back on current owner/default/forwarding/key-domain drift without caching an earlier source proof", () => {
+    const mutations = [
+      ["owner", "data-part='search-section'", "data-part='another-section'"],
+      [
+        "owner",
+        "className='ds-list-toolbar__search-section'",
+        "className='ds-list-toolbar__other-section'",
+      ],
+      [
+        "owner",
+        "data-part='search-section'",
+        "as='section' data-part='search-section'",
+      ],
+      [
+        "owner",
+        "data-part='search-section'",
+        "{...messages} data-part='search-section'",
+      ],
+      [
+        "owner",
+        "className='ds-list-toolbar__search-section'",
+        "className={search}",
+      ],
+      [
+        "owner",
+        "data-part='search-section'",
+        "data-part='search-section' data-part='other-section'",
+      ],
+      [
+        "owner",
+        "../../../../../primitives/layout/box",
+        "../../../../../primitives/layout/flex",
+      ],
+      [
+        "owner",
+        "const [settingsOpen, setSettingsOpen]",
+        "const Box = () => null; const [settingsOpen, setSettingsOpen]",
+      ],
+      ["contract", 'as: "div"', 'as: "section"'],
+      [
+        "box",
+        '"data-part": "box-surface",\n    ...htmlAttributes,',
+        '...htmlAttributes,\n    "data-part": "box-surface",',
+      ],
+      [
+        "box",
+        '["rottay-box", "rottay-box--modern", className]',
+        '["rottay-box", "rottay-box--modern"]',
+      ],
+      [
+        "box",
+        "React.createElement(ElementType, elementProps, children)",
+        "React.createElement(ElementType, elementProps, null)",
+      ],
+      [
+        "box",
+        "const elementProps = {",
+        'responsive.attrs.className = "foreign"; const elementProps = {',
+      ],
+      [
+        "factory",
+        "const { engine: _, ...componentProps } = props;",
+        'const { engine: _, ...componentProps } = props; componentProps.className = "foreign";',
+      ],
+      [
+        "boundary",
+        "return this.props.children;",
+        "return <div>{this.props.children}</div>;",
+      ],
+      [
+        "responsive",
+        "attrs[RESPONSIVE_CHANNEL_ATTRIBUTE]",
+        'attrs["className"]',
+      ],
+      [
+        "responsive",
+        "return { attrs, channels: channels as CSSProperties };",
+        "return { attrs, channels: {} as CSSProperties };",
+      ],
+      [
+        "responsive",
+        "return { attrs, channels: channels as CSSProperties };",
+        "const alias = attrs; return { attrs, channels: channels as CSSProperties };",
+      ],
+      [
+        "responsive",
+        "return { attrs, channels: channels as CSSProperties };",
+        'Object.assign(attrs, {className: "foreign"}); return { attrs, channels: channels as CSSProperties };',
+      ],
+      [
+        "keys",
+        "RESPONSIVE_CHANNEL_ATTRIBUTE = 'data-ds-responsive'",
+        "RESPONSIVE_CHANNEL_ATTRIBUTE = 'className'",
+      ],
+    ];
+    withSearchWitnessFixture(({ edit, write, text, read, legacy }) => {
+      const parser = createRequire(join(ROOT, "package.json"))("typescript");
+      for (const [name, before, after] of mutations) {
+        assert.equal(
+          read().parts.length,
+          1,
+          `intact same-root proof before ${name}: ${after}`
+        );
+        const original = text(name);
+        assert.ok(original.includes(before), `${name}: exact current seam`);
+        const mutant = original.replace(before, after);
+        assert.equal(
+          parser.createSourceFile(
+            name,
+            mutant,
+            parser.ScriptTarget.Latest,
+            true,
+            parser.ScriptKind.TSX
+          ).parseDiagnostics.length,
+          0,
+          `${name}: syntactically valid source mutation`
+        );
+        try {
+          edit(name, before, after);
+          assert.deepEqual(read(), legacy(), `${name}: ${after}`);
+        } finally {
+          write(name, original);
+        }
+      }
+      const bindingMutants = [
+        [
+          "owner",
+          "direct IconButton remains the same-node onExport && RHS, never an alternative || branch",
+          [
+            [
+              "{onExport && (\n              <IconButton",
+              "{onExport || (\n              <IconButton",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "settings Popover child cannot supply a caller spread",
+          [
+            [
+              "onClick={() => onOpenChange(!open)}",
+              "{...{className: 'ds-list-toolbar__search-section'}} onClick={() => onOpenChange(!open)}",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "settings Popover child cannot override the helper class",
+          [
+            [
+              "onClick={() => onOpenChange(!open)}",
+              "className='ds-list-toolbar__search-section' onClick={() => onOpenChange(!open)}",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "mobile Popover child cannot supply a caller spread",
+          [
+            [
+              "onClick={() => setOpen(!open)}",
+              "{...{className: 'ds-list-toolbar__search-section'}} onClick={() => setOpen(!open)}",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "mobile Popover child cannot override the helper class",
+          [
+            [
+              "onClick={() => setOpen(!open)}",
+              "className='ds-list-toolbar__search-section' onClick={() => setOpen(!open)}",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "direct export child cannot supply a caller spread",
+          [
+            [
+              "onClick={onExport}",
+              "{...{className: 'ds-list-toolbar__search-section'}} onClick={onExport}",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "direct export child cannot override the helper class",
+          [
+            [
+              "onClick={onExport}",
+              "className='ds-list-toolbar__search-section' onClick={onExport}",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "forwarded rest cannot escape to an unknown sink",
+          [
+            [
+              "  const btn = (",
+              "  void JSON.stringify(forwarded);\n  const btn = (",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "rest cannot be mutated before its filtered copy",
+          [
+            [
+              "  const {\n    'aria-label': _popoverLabel,",
+              "  rest.className = 'ds-list-toolbar__search-section';\n  const {\n    'aria-label': _popoverLabel,",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "forwarded cannot acquire a forbidden class before the spread",
+          [
+            [
+              "  const btn = (",
+              "  forwarded.className = 'ds-list-toolbar__search-section';\n  const btn = (",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "btn cannot be rebound to a replacement element",
+          [
+            ["  const btn = (", "  let btn = ("],
+            [
+              "  if (tooltipText) {",
+              "  btn = <Button className='ds-list-toolbar__search-section' />;\n  if (tooltipText) {",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "a new local IconButton caller is not covered",
+          [
+            [
+              "  return btn;",
+              "  return <>{btn}<IconButton onClick={() => {}} ariaLabel='new'><Download size={15} /></IconButton></>;",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "a value alias cannot become an unproved caller",
+          [
+            [
+              "function ToolbarDivider() {",
+              "const AliasIconButton = IconButton;\nfunction ToolbarDivider() {",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "a rebound local helper is not supported",
+          [
+            [
+              "function ToolbarDivider() {",
+              "IconButton = () => null;\nfunction ToolbarDivider() {",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover clone cannot inject className",
+          [
+            [
+              "  return cloneElement(child, {",
+              "  return cloneElement(child, { className: 'ds-list-toolbar__search-section',",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover clone cannot inject 'data-part'",
+          [
+            [
+              "  return cloneElement(child, {",
+              "  return cloneElement(child, { 'data-part': 'search-section',",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover clone cannot inject as",
+          [
+            [
+              "  return cloneElement(child, {",
+              "  return cloneElement(child, { as: 'section',",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover clone cannot inject engine",
+          [
+            [
+              "  return cloneElement(child, {",
+              "  return cloneElement(child, { engine: 'custom',",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover clone cannot inject children",
+          [
+            [
+              "  return cloneElement(child, {",
+              "  return cloneElement(child, { children: null,",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover clone object cannot spread unknown keys",
+          [
+            [
+              "  return cloneElement(child, {",
+              "  return cloneElement(child, { ...{className: 'ds-list-toolbar__search-section'},",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover clone key cannot be computed",
+          [
+            [
+              "    'aria-controls': surfaceId,",
+              "    ['class' + 'Name']: 'ds-list-toolbar__search-section',\n    'aria-controls': surfaceId,",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover clone must target the same child",
+          [["return cloneElement(child, {", "return cloneElement(<div />, {"]],
+        ],
+        [
+          "popover",
+          "Popover clone cannot replace children through a third argument",
+          [
+            [
+              "    title: undefined,\n  });",
+              "    title: undefined,\n  }, <div className='ds-list-toolbar__search-section' />);",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover child props cannot mutate before cloning",
+          [
+            [
+              "  const nativeTitle = child.props.title;",
+              "  (child.props as Record<string, unknown>).className = 'ds-list-toolbar__search-section';\n  const nativeTitle = child.props.title;",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover child cannot escape before cloning",
+          [
+            [
+              "  const nativeTitle = child.props.title;",
+              "  void JSON.stringify(child);\n  const nativeTitle = child.props.title;",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover children cannot be replaced before describing",
+          [
+            ["      children,", "      children: ignoredChildren,"],
+            [
+              "    const anchored = anchor !== undefined;",
+              "    const children = <div className='ds-list-toolbar__search-section' />;\n    const anchored = anchor !== undefined;",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover describedTrigger must follow the real nonanchored branch",
+          [
+            [
+              "    const describedTrigger = anchored",
+              "    const describedTrigger = !anchored",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "Popover actual children must remain the rendered trigger",
+          [
+            [
+              "        {describedTrigger}",
+              "        {<div className='ds-list-toolbar__search-section' />}",
+            ],
+          ],
+        ],
+        [
+          "tooltip",
+          "Tooltip interactive clone cannot inject className",
+          [
+            [
+              "    return cloneElement(child, {",
+              "    return cloneElement(child, { className: 'ds-list-toolbar__search-section',",
+            ],
+          ],
+        ],
+        [
+          "tooltip",
+          "Tooltip noninteractive clone cannot inject className",
+          [
+            [
+              "\n  return cloneElement(child, {",
+              "\n  return cloneElement(child, { className: 'ds-list-toolbar__search-section',",
+            ],
+          ],
+        ],
+        [
+          "tooltip",
+          "Tooltip clone cannot use a replacement child",
+          [
+            [
+              "    return cloneElement(child, {",
+              "    return cloneElement(<div />, {",
+            ],
+          ],
+        ],
+        [
+          "tooltip",
+          "Tooltip child cannot escape before either clone branch",
+          [
+            [
+              "  const nativeTitle = child.props.title;",
+              "  void JSON.stringify(child);\n  const nativeTitle = child.props.title;",
+            ],
+          ],
+        ],
+        [
+          "tooltip",
+          "Tooltip append must keep the scalar accessibility value",
+          [
+            [
+              '      child.props["aria-describedby"],',
+              "      child.props as any,",
+            ],
+          ],
+        ],
+        [
+          "tooltip",
+          "Tooltip append helper must be ordinary synchronous",
+          [
+            [
+              "function appendDescribedBy(",
+              "async function appendDescribedBy(",
+            ],
+            [
+              "  enabled: boolean\n): string | undefined {",
+              "  enabled: boolean\n): Promise<string | undefined> {",
+            ],
+          ],
+        ],
+        [
+          "popoverEntry",
+          "public Popover loader must select the actual Modern source",
+          [
+            [
+              "modern: () => import('./engines/modern')",
+              "modern: () => import('./engines/rustic')",
+            ],
+          ],
+        ],
+        [
+          "popoverEntry",
+          "public Popover default cannot select another component",
+          [
+            [
+              "export default Popover;",
+              "const OtherPopover = () => null; export default OtherPopover;",
+            ],
+          ],
+        ],
+        [
+          "popoverEntry",
+          "Popover admission must receive scalar destructuring, not whole child props",
+          [
+            [
+              "admitProps: ({ anchor }, engine) =>",
+              "admitProps: (props, engine) =>",
+            ],
+            [
+              "      anchor !== undefined && isFrozenEngineName(engine)",
+              "      ((props as any).children = null, (props as any).anchor !== undefined && isFrozenEngineName(engine))",
+            ],
+          ],
+        ],
+        [
+          "tooltipEntry",
+          "Tooltip admission cannot mutate or escape the props object",
+          [
+            [
+              "admitProps: ({ placement }, engine) =>",
+              "admitProps: (props, engine) =>",
+            ],
+            [
+              "        refuseFrozenPlacement(engine, placement)",
+              "        ((props as any).children = null, refuseFrozenPlacement(engine, props.placement))",
+            ],
+          ],
+        ],
+        [
+          "tooltipEntry",
+          "Object.assign must be the intrinsic binding",
+          [
+            [
+              "export const Tooltip = Object.assign(",
+              "const Object = {assign: (_component: unknown, _fields: unknown) => () => null}; export const Tooltip = Object.assign(",
+            ],
+          ],
+        ],
+        [
+          "tooltipEntry",
+          "Object.assign target cannot replace the React component value",
+          [
+            [
+              "  createEngineComponent<TooltipProps>(",
+              "  ((_ignored: unknown) => () => null)(createEngineComponent<TooltipProps>(",
+            ],
+            ["    }\n  ),", "    }\n  )),"],
+          ],
+        ],
+        [
+          "tooltipEntry",
+          "Object.assign attachments cannot replace render",
+          [
+            [
+              "    Trigger: TooltipTrigger,",
+              "    render: TooltipTrigger, Trigger: TooltipTrigger,",
+            ],
+          ],
+        ],
+        [
+          "tooltipEntry",
+          "Object.assign attachments cannot use a computed key",
+          [
+            [
+              "    Trigger: TooltipTrigger,",
+              "    ['Tr' + 'igger']: TooltipTrigger,",
+            ],
+          ],
+        ],
+        [
+          "tooltipEntry",
+          "Object.assign attachments cannot include an opaque spread",
+          [
+            [
+              "    Trigger: TooltipTrigger,",
+              "    ...{render: TooltipTrigger}, Trigger: TooltipTrigger,",
+            ],
+          ],
+        ],
+        [
+          "popover",
+          "local describeTrigger cannot become async",
+          [
+            ["function describeTrigger(", "async function describeTrigger("],
+            ["): ReactNode {", "): Promise<ReactNode> {"],
+          ],
+        ],
+        [
+          "tooltip",
+          "local describeTrigger cannot become a generator",
+          [
+            ["function describeTrigger(", "function* describeTrigger("],
+            ["): ReactNode {", "): Generator<never, ReactNode, unknown> {"],
+          ],
+        ],
+        [
+          "popover",
+          "local describeTrigger cannot be rebound",
+          [
+            [
+              "export const Popover = React.forwardRef",
+              "describeTrigger = () => <div />; export const Popover = React.forwardRef",
+            ],
+          ],
+        ],
+        [
+          "boundary",
+          "decorated boundary can replace the runtime class while checked bodies stay unchanged",
+          [
+            [
+              "export class EngineErrorBoundary extends Component",
+              "const replaceBoundary = (Original: typeof EngineErrorBoundary) => class extends Original { render() { return <div />; } };\n@replaceBoundary\nexport class EngineErrorBoundary extends Component",
+            ],
+          ],
+        ],
+        [
+          "contract",
+          "async void checker returns a truthy Promise, not the modeled boolean",
+          [
+            [
+              "export function isVoidElement(as: ElementType | undefined): boolean {",
+              "export async function isVoidElement(as: ElementType | undefined): Promise<boolean> {",
+            ],
+          ],
+        ],
+        [
+          "contract",
+          "generator void checker returns a truthy iterator, not the modeled boolean",
+          [
+            [
+              "export function isVoidElement(as: ElementType | undefined): boolean {",
+              "export function* isVoidElement(as: ElementType | undefined): Generator<never, boolean, unknown> {",
+            ],
+          ],
+        ],
+        [
+          "factory",
+          "direct exported factory binding cannot be rebound",
+          [
+            [
+              "  return EngineRouter;\n}",
+              "  return EngineRouter;\n}\ncreateEngineComponent = (() => () => null) as typeof createEngineComponent;",
+            ],
+          ],
+        ],
+        [
+          "boundary",
+          "direct exported boundary binding cannot be rebound",
+          [
+            [
+              "    return this.props.children;\n  }\n}",
+              "    return this.props.children;\n  }\n}\nEngineErrorBoundary = class extends Component<EngineErrorBoundaryProps, State> { render() { return <div />; } } as typeof EngineErrorBoundary;",
+            ],
+          ],
+        ],
+        [
+          "owner",
+          "named default owner binding cannot be rebound",
+          [
+            [
+              "export default function ModernListToolbar",
+              "ModernListToolbar = (() => null) as typeof ModernListToolbar; export default function ModernListToolbar",
+            ],
+          ],
+        ],
+        [
+          "factory",
+          "direct exported factory cannot escape through a new alias",
+          [
+            [
+              "  return EngineRouter;\n}",
+              "  return EngineRouter;\n}\nconst escapedFactory = createEngineComponent;",
+            ],
+          ],
+        ],
+        [
+          "barrel",
+          "Box actual named export",
+          [
+            [
+              "export const Box =",
+              "const ForeignBox = () => null; export { ForeignBox as Box }; const Box =",
+            ],
+          ],
+        ],
+        [
+          "factory",
+          "factory actual named export",
+          [
+            [
+              "export function createEngineComponent",
+              "const ForeignFactory = () => () => null; export { ForeignFactory as createEngineComponent }; function createEngineComponent",
+            ],
+          ],
+        ],
+        [
+          "boundary",
+          "boundary actual named export",
+          [
+            [
+              "export class EngineErrorBoundary extends Component",
+              "class ForeignBoundary extends Component { render() { return <div />; } } export { ForeignBoundary as EngineErrorBoundary }; class EngineErrorBoundary extends Component",
+            ],
+          ],
+        ],
+        [
+          "contract",
+          "defaults actual named export",
+          [
+            [
+              "export const BOX_DEFAULTS:",
+              "const FOREIGN_DEFAULTS = { as: 'span' }; export { FOREIGN_DEFAULTS as BOX_DEFAULTS }; const BOX_DEFAULTS:",
+            ],
+          ],
+        ],
+        [
+          "contract",
+          "void checker actual named export",
+          [
+            [
+              "export function isVoidElement(",
+              "const foreignVoid = () => true; export { foreignVoid as isVoidElement }; function isVoidElement(",
+            ],
+          ],
+        ],
+        [
+          "responsive",
+          "generator actual named export",
+          [
+            [
+              "export function generateResponsiveCSS<",
+              "const foreignProjection = () => ({attrs: {className: 'foreign'}, channels: {}}); export { foreignProjection as generateResponsiveCSS }; function generateResponsiveCSS<",
+            ],
+          ],
+        ],
+        [
+          "keys",
+          "responsive key actual named export",
+          [
+            [
+              "export const RESPONSIVE_CHANNEL_ATTRIBUTE = 'data-ds-responsive';",
+              "const RESPONSIVE_CHANNEL_ATTRIBUTE = 'data-ds-responsive'; const foreignKey = 'className'; export { foreignKey as RESPONSIVE_CHANNEL_ATTRIBUTE };",
+            ],
+          ],
+        ],
+        [
+          "keys",
+          "responsive key let plus later write",
+          [
+            [
+              "export const RESPONSIVE_CHANNEL_ATTRIBUTE = 'data-ds-responsive';",
+              "export let RESPONSIVE_CHANNEL_ATTRIBUTE = 'data-ds-responsive'; RESPONSIVE_CHANNEL_ATTRIBUTE = 'className';",
+            ],
+          ],
+        ],
+        [
+          "keys",
+          "priority key let plus later write",
+          [
+            [
+              "export const RESPONSIVE_CHANNEL_PRIORITY_ATTRIBUTE = 'data-ds-responsive-hard';",
+              "export let RESPONSIVE_CHANNEL_PRIORITY_ATTRIBUTE = 'data-ds-responsive-hard'; RESPONSIVE_CHANNEL_PRIORITY_ATTRIBUTE = 'className';",
+            ],
+          ],
+        ],
+        [
+          "box",
+          "ModernBox actual default export",
+          [
+            [
+              "export default ModernBox;",
+              "const ForeignBox = () => null; export { ForeignBox as default };",
+            ],
+          ],
+        ],
+        [
+          "contract",
+          "void checker must use its own as parameter",
+          [
+            [
+              "export function isVoidElement(as:",
+              "const as = 'input'; export function isVoidElement(ignored:",
+            ],
+          ],
+        ],
+        [
+          "boundary",
+          "constructor must forward its own props parameter",
+          [
+            [
+              "export class EngineErrorBoundary extends Component",
+              "const props = {children: <div />}; export class EngineErrorBoundary extends Component",
+            ],
+            [
+              "constructor(props: EngineErrorBoundaryProps)",
+              "constructor(ignored: EngineErrorBoundaryProps)",
+            ],
+          ],
+        ],
+        [
+          "box",
+          "render-local React cannot redirect createElement",
+          [
+            [
+              "const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {",
+              "const baseCreate = React.createElement; const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => { const React = {createElement: (tag: any, attrs: any, ...children: any[]) => baseCreate(tag, {...attrs, 'data-part': 'foreign'}, ...children)};",
+            ],
+          ],
+        ],
+        [
+          "box",
+          "element cannot be replaced before the same Fragment return",
+          [
+            [
+              "const element = isVoidElement(Component)",
+              "let element = isVoidElement(Component)",
+            ],
+            [
+              "  return (\n    <>\n      {element}",
+              "  element = React.cloneElement(element, {'data-part': 'foreign'} as any);\n  return (\n    <>\n      {element}",
+            ],
+          ],
+        ],
+        [
+          "box",
+          "consumer cannot mutate BOX_DEFAULTS before destructuring",
+          [
+            [
+              "const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {",
+              "const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => { (BOX_DEFAULTS as {as: string}).as = 'span';",
+            ],
+          ],
+        ],
+        [
+          "factory",
+          "selected Component cannot be replaced before the same JSX",
+          [
+            [
+              "const Component = useMemo(() => {",
+              "let Component = useMemo(() => {",
+            ],
+            [
+              "const mountedComponent = useRef(Component);",
+              "Component = () => <div />; const mountedComponent = useRef(Component);",
+            ],
+          ],
+        ],
+        [
+          "factory",
+          "loader index must use the implementation arrow parameter",
+          [
+            [
+              "export function createEngineComponent",
+              "const engine: ImplementedEngineName = 'classic'; export function createEngineComponent",
+            ],
+            [
+              "    engine: ImplementedEngineName\n  ):",
+              "    ignored: ImplementedEngineName\n  ):",
+            ],
+          ],
+        ],
+        [
+          "factory",
+          "warm-template syntax is value-exact, not a DOM counterexample",
+          [
+            [
+              "registerWarmableFamily(`${displayName}@${engine}`, loader)",
+              "registerWarmableFamily(`${displayName}:different@${engine}`, loader)",
+            ],
+          ],
+        ],
+      ];
+      for (const [name, label, edits] of bindingMutants) {
+        assert.equal(
+          read().parts.length,
+          1,
+          `intact same-root proof before ${label}`
+        );
+        const original = text(name);
+        let mutant = original;
+        for (const [before, after] of edits) {
+          assert.ok(mutant.includes(before), `${label}: exact current seam`);
+          mutant = mutant.replace(before, after);
+        }
+        const parsed = parser.createSourceFile(
+          name,
+          mutant,
+          parser.ScriptTarget.Latest,
+          true,
+          parser.ScriptKind.TSX
+        );
+        assert.equal(
+          parsed.parseDiagnostics.length,
+          0,
+          `${label}: the source mutant must be syntactically valid`
+        );
+        try {
+          write(name, mutant);
+          assert.deepEqual(read(), legacy(), label);
+        } finally {
+          write(name, original);
+        }
+      }
+      const original = text("owner");
+      // A genuine split-site class and part is not same-node evidence.
+      write(
+        "owner",
+        original.replace(
+          /<Box(\s+data-part='search-section'[\s\S]*?)<\/Box>/u,
+          (_, body) =>
+            `<Flex${body.replace(
+              "className='ds-list-toolbar__search-section'",
+              "className='other'"
+            )}<Box className='ds-list-toolbar__search-section' /></Flex>`
+        )
+      );
+      assert.deepEqual(
+        read(),
+        legacy(),
+        "split/foreign/default-class-only site"
+      );
+      write("owner", "export default function ModernListToolbar( {");
+      const malformed = parser.createSourceFile(
+        "owner",
+        text("owner"),
+        parser.ScriptTarget.Latest,
+        true,
+        parser.ScriptKind.TSX
+      );
+      assert.ok(
+        malformed.parseDiagnostics.length > 0,
+        "the separate malformed-source control must actually be malformed"
+      );
+      assert.deepEqual(
+        read(),
+        legacy(),
+        "malformed current TSX supplies no proof"
+      );
+      write("owner", "export default function OtherOwner() { return null; }");
+      assert.deepEqual(
+        read(),
+        legacy(),
+        "a different/missing current owner supplies no proof"
+      );
+      write("owner", original);
+    });
+  });
+
+  it("selects the stamped original independently of fold order while preserving earlier global witnesses and every unsupported group", () => {
+    withSearchWitnessFixture(
+      ({
+        read,
+        legacy,
+        write,
+        edit,
+        text,
+        css,
+        head,
+        tail,
+        fold,
+        rootRule,
+        rule,
+      }) => {
+        const original = `${head}[data-part='search-section']${tail}`;
+        const synthetic = `${head}.ds-list-toolbar__search-section${tail}`;
+        const reversed = css.replace(
+          fold,
+          ":is(.ds-list-toolbar__search-section, [data-part='search-section'])"
+        );
+        write("skin", reversed);
+        assert.equal(read().parts.length, 1);
+        assert.equal(
+          read().parts[0].selector,
+          original,
+          "class-first traversal cannot win the admission race"
+        );
+        const prior = `${rootRule}\n${synthetic} { border-radius: 2px; }\n${rule(
+          `${head}${fold}${tail}`
+        )}`;
+        write("skin", prior);
+        const preserved = read();
+        assert.equal(
+          preserved.parts.length,
+          2,
+          "a separate earlier rule independently justified the class-only geometry"
+        );
+        assert.equal(preserved.parts[0].selector, synthetic);
+        assert.deepEqual(
+          preserved.parts[0].axes,
+          ["shape"],
+          "do not steal another rule/axis provenance"
+        );
+        assert.equal(preserved.parts[1].selector, original);
+        assert.deepEqual(preserved.parts[1].axes, ["depth", "shape"]);
+        const unsupported = [
+          `${rootRule}\n${rule(`${original}, ${synthetic}`)}`,
+          `${rootRule}\n${rule(original)}\n@media (min-width: 1px) { ${rule(
+            synthetic
+          )} }`,
+          css.replace(tail, " .ds-input-field"),
+          css.replace(
+            " .ds-list-toolbar__search-section:is(",
+            " > .ds-list-toolbar__search-section:is("
+          ),
+          css.replace(":is(", ":where("),
+          css.replace(
+            fold,
+            ":is([data-part='search-section'], .ds-list-toolbar__search-section, .third)"
+          ),
+          css.replace(tail, `${tail}:is(.one, .two)`),
+          css.replace(head, ".ds-other .ds-list-toolbar__search-section"),
+          css.replace(tail, `${tail}[data-tone='danger']`),
+          css.replace(tail, `${tail}:hover`),
+          css.replace(tail, `${tail}::after`),
+          css.replace(tail, ` +${tail}`),
+          css.replace(
+            fold,
+            `:is(${Array.from(
+              { length: ALTERNATIVE_LIMIT + 1 },
+              (_, index) => `.alternative-${index}`
+            ).join(", ")})`
+          ),
+        ];
+        for (const candidate of unsupported) {
+          write("skin", candidate);
+          for (const nativePseudos of [false, true]) {
+            assert.deepEqual(
+              read({ nativePseudos }),
+              legacy(candidate, { nativePseudos }),
+              candidate
+            );
+          }
+        }
+        // Equal paint cannot justify co-use when the actual source has an
+        // unstamped class-only site. A stamp-activated rule still paints A only.
+        const counterexample = `${css}\n${original} { border-radius: 7px; }`;
+        const owner = text("owner");
+        edit(
+          "owner",
+          "data-part='search-section'",
+          "data-part='other-section'"
+        );
+        write("skin", counterexample);
+        assert.deepEqual(read(), legacy(counterexample));
+        assert.equal(read().parts.length, 2);
+        write("owner", owner);
+      }
+    );
   });
 });
 
