@@ -2,6 +2,7 @@ import React from "react";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import postcss, { type Declaration, type Rule } from "postcss";
 import { describe, expect, it } from "vitest";
 import { fireEvent, waitFor } from "@testing-library/react";
 
@@ -1500,6 +1501,48 @@ const SKIN_DIR = join(
 // Every skin family under presentation/components/skin is one folder with a
 // single `index.css` owner, so the family name resolves the owner.
 const readSkin = (family: string) => readFileSync(join(SKIN_DIR, family, "index.css"), "utf8");
+/** The toast belongs to the export-button trigger, through its original part door. */
+const EXPORT_TOAST_PART =
+  ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']";
+/** The class door keeps the same trigger-to-toast descendant relationship. */
+const EXPORT_TOAST_CLASS =
+  ".ds-structure.ds-export-button.ds-export-button__root .ds-export-button__toast";
+
+/** Read one unambiguous default toast animation, without borrowing another rule's paint. */
+function exportToastAnimation(css: string): string | undefined {
+  const ownMembers = [EXPORT_TOAST_PART, EXPORT_TOAST_CLASS];
+  // Reduced-motion and other conditional rules cannot supply the default lifetime.
+  const rules = postcss
+    .parse(css)
+    .nodes.filter(
+      (node): node is Rule =>
+        node.type === "rule" &&
+        node.selectors.some((member) =>
+          ownMembers.includes(member.replace(/[ \t\r\n\f]+/g, " ").trim())
+        )
+    );
+  if (rules.length !== 1) return undefined;
+  const rule = rules[0];
+  // Inspect the raw header too: PostCSS may remove selector comments from .selector.
+  const members = postcss.list
+    .comma(rule.raws.selector?.raw ?? rule.selector)
+    .map((member) => member.replace(/[ \t\r\n\f]+/g, " ").trim());
+  if (
+    members.length > 2 ||
+    new Set(members).size !== members.length ||
+    members.some((member) => !ownMembers.includes(member))
+  )
+    return undefined;
+  const animations = rule.nodes.filter(
+    (node): node is Declaration =>
+      node.type === "decl" && /^animation$/i.test(node.prop)
+  );
+  // Duplicate declarations and !important must not become a last-wins false positive.
+  return animations.length === 1 && !animations[0].important
+    ? animations[0].value
+    : undefined;
+}
+
 /** Strip var(...) escape hatches, then hunt for raw color literals. */
 function rawColorLiterals(css: string): string[] {
   const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -1543,11 +1586,98 @@ describe("workspace chrome skins — R2 structural contract", () => {
 
   it("export-button fades the toast over the engine's own toast lifetime and honors reduced motion", () => {
     const css = readSkin("export-button");
-    const fade = /\[data-part='toast'\]\s*\{[^}]*?animation:\s*([^;]+);/.exec(css)?.[1];
+    const fade = exportToastAnimation(css);
     expect(fade).toBe("ds-export-toast-fade 1.8s ease forwards");
     const engine = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../export-button/index.tsx"), "utf8");
     expect(/setTimeout\(\(\) => setCopiedFeedback\(false\), (\d+)\)/.exec(engine)?.[1]).toBe("1800");
     expect(css).toContain("prefers-reduced-motion");
+  });
+
+  it("reads the export toast's part, class and comma-pair doors without changing its lifetime", () => {
+    const animation = "ds-export-toast-fade 1.8s ease forwards";
+    // Both pair orders name the same element and declaration; source order is unchanged.
+    for (const selector of [
+      EXPORT_TOAST_PART,
+      EXPORT_TOAST_CLASS,
+      `${EXPORT_TOAST_PART},\n${EXPORT_TOAST_CLASS}`,
+      `${EXPORT_TOAST_CLASS},\n${EXPORT_TOAST_PART}`,
+    ]) {
+      const css = `${selector} { animation: ${animation}; }
+.ds-unrelated-toast { animation: foreign-fade 9s; }
+@media (prefers-reduced-motion: reduce) { ${selector} { animation: none; } }`;
+      expect(exportToastAnimation(css)).toBe(animation);
+    }
+  });
+
+  it("refuses another owner's paint and ambiguous export-toast animation evidence", () => {
+    const animation = "ds-export-toast-fade 1.8s ease forwards";
+    const intact = `${EXPORT_TOAST_PART},\n${EXPORT_TOAST_CLASS} { animation: ${animation}; }`;
+    // These mutations must not satisfy the existing 1.8s assertion by borrowing a match.
+    for (const [cause, css] of [
+      [
+        "wrong lifetime",
+        `${EXPORT_TOAST_PART} { animation: ds-export-toast-fade 1.9s ease forwards; }`,
+      ],
+      [
+        "foreign owner",
+        `.ds-structure.ds-foreign[data-part='root'] [data-part='toast'] { animation: ${animation}; }`,
+      ],
+      [
+        "toast label",
+        `${EXPORT_TOAST_CLASS}-label { animation: ${animation}; }`,
+      ],
+      [
+        "extra descendant",
+        `.ds-structure.ds-export-button.ds-export-button__root .nested .ds-export-button__toast { animation: ${animation}; }`,
+      ],
+      [
+        "foreign comma member",
+        `${EXPORT_TOAST_CLASS}, .ds-foreign { animation: ${animation}; }`,
+      ],
+      [
+        "duplicate member",
+        `${EXPORT_TOAST_CLASS}, ${EXPORT_TOAST_CLASS} { animation: ${animation}; }`,
+      ],
+      [
+        "duplicate rule before",
+        `${EXPORT_TOAST_CLASS} { animation: none; } ${intact}`,
+      ],
+      [
+        "duplicate rule after",
+        `${intact} ${EXPORT_TOAST_CLASS} { animation: none; }`,
+      ],
+      [
+        "duplicate declaration before",
+        `${EXPORT_TOAST_CLASS} { animation: none; animation: ${animation}; }`,
+      ],
+      [
+        "duplicate declaration after",
+        `${EXPORT_TOAST_CLASS} { animation: ${animation}; animation: none; }`,
+      ],
+      [
+        "case-equivalent declaration",
+        `${EXPORT_TOAST_CLASS} { animation: ${animation}; ANIMATION: none; }`,
+      ],
+      [
+        "important declaration",
+        `${EXPORT_TOAST_CLASS} { animation: ${animation} !important; }`,
+      ],
+      [
+        "conditional only",
+        `@media (prefers-reduced-motion: reduce) { ${intact} }`,
+      ],
+      [
+        "comment-altered member",
+        `${EXPORT_TOAST_CLASS.replace(
+          "__toast",
+          "__/* foreign syntax */toast"
+        )} { animation: ${animation}; }`,
+      ],
+      ["missing animation", `${EXPORT_TOAST_CLASS} { opacity: 1; }`],
+    ]) {
+      expect(exportToastAnimation(intact), cause).toBe(animation);
+      expect(exportToastAnimation(css), cause).not.toBe(animation);
+    }
   });
 
   it.each([
