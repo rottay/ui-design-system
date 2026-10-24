@@ -8475,6 +8475,11 @@
      "at": "2026-10-24 10:38",
      "by": "claude-dt",
      "note": "ca26cdd58 charts adapt: 9 compact families accept Adapt<ChartAdaptation>, all scaffold roots stamp data-posture; independent SOURCE ccb0afc3 ACCEPT, 698/698 charts +48/48 new, 21/21 adapt-slot drills, 20/20 gate, typecheck/tests, structure and contract-changeset green. B5 measured repaired but EVI-02 stays open; 363 other FAM-09 findings and docs-engineering hooks:446,455/data-part:2660/visualization dependencies remain; no WO closure."
+    },
+    {
+     "at": "2026-10-24 11:56",
+     "by": "kimi-admin-dt",
+     "note": "D3/D8 integrated as 4e65c9dbb and 26ed94dfd from author 6f70c043 with independent NORMAL Opus HIGH review 59659285 ACCEPT_SOURCE_CANDIDATE. Motion fixture drills and legacyTransitionRead shared reader/parity/context/raw-case/comment controls passed; 4326-counter audit, structure, supplier and ESLint green; baseline adds only measured total2/frozen0/data-table1/card-compounds1. P1 colour251/255+drill and property-law roster drift remain separately owned reds; EVI02 stays open141/170 with no WO closure."
     }
    ]
   },
