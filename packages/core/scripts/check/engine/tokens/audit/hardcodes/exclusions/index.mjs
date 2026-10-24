@@ -10,7 +10,15 @@
  * (a zero length is never a literal either), and the
  * fallback-parity counters own DEF. GEN (compiled artifacts) is outside the
  * skin corpus by construction.
+ *
+ * A `partition` entry is not excused debt: it names sites another named
+ * instrument ratchets, so the census counts each site once. Its tokens are
+ * case-preserved custom-property names read inside `var()`, not literal
+ * tokens. `legacyTransitionRead` is the one class with a partition (the
+ * layout-alias transition reads motion-budget property-law owns; its alias
+ * list is imported, never restated) and the one context-independent class.
  */
+import { LAYOUT_ALIASES } from '../../../../../motion-budget/audits/property-law/index.mjs';
 
 /** At-rule contexts whose declarations are a policy floor, not a hardcode. */
 export const FLOOR_CONTEXTS = Object.freeze([
@@ -137,15 +145,34 @@ export const SKIN_LITERAL_EXCLUSIONS = Object.freeze({
       },
     ],
   },
+  legacyTransitionRead: {
+    tec: [],
+    floor: [],
+    partition: Object.freeze(LAYOUT_ALIASES.map((token) => ({
+      token,
+      properties: /^transition(?:-property)?$/,
+      reason: 'motion-budget property-law ratchets this layout alias inside a transition declaration',
+    }))),
+    contextIndependent: {
+      reason: 'a legacy alias read stays legacy in reduced-motion, forced-colors and keyframes; property-law exempts no context either',
+    },
+  },
 });
 
-/** True when `token` on `property` is excused for `klass` by a TEC or FLOOR entry. */
+/** True when `token` on `property` is excused for `klass` by a TEC, FLOOR or partition entry. */
 export function isExcluded(klass, token, property) {
   const entry = SKIN_LITERAL_EXCLUSIONS[klass];
   if (!entry) throw new Error(`skin literal class has no exclusion entry: ${klass}`);
-  return [...entry.tec, ...entry.floor].some(
+  return [...entry.tec, ...entry.floor, ...(entry.partition ?? [])].some(
     (rule) => rule.token === token && (!rule.properties || rule.properties.test(property)),
   );
+}
+
+/** True when `klass` also counts inside FLOOR and TEC contexts (its entry declares why). */
+export function isContextIndependent(klass) {
+  const entry = SKIN_LITERAL_EXCLUSIONS[klass];
+  if (!entry) throw new Error(`skin literal class has no exclusion entry: ${klass}`);
+  return Boolean(entry.contextIndependent);
 }
 
 /**

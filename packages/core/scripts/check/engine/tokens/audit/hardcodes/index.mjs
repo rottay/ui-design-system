@@ -8,12 +8,18 @@
  * (fallback included) are removed. A `var(--x, 12px)` is therefore never a
  * literal here: the fallback-parity counters own DEF. TEC and FLOOR
  * exclusions are declared in `./exclusions` and nowhere else.
+ *
+ * `legacyTransitionRead` (F-31, PL164 #7 proof only) reads names, not
+ * literals: one site per declaration whose raw value reads a
+ * `--ds-transition-*` alias, minus the layout-alias transition reads
+ * motion-budget property-law ratchets. The two instruments partition those
+ * reads by occurrence, so none is counted twice and none escapes both.
  */
 import { readFileSync } from 'node:fs';
 import postcss from 'postcss';
 import ts from 'typescript';
 
-import { FLOOR_CONTEXTS, TEC_CONTEXTS, isExcluded } from './exclusions/index.mjs';
+import { FLOOR_CONTEXTS, TEC_CONTEXTS, isContextIndependent, isExcluded } from './exclusions/index.mjs';
 
 export const SKIN_LITERAL_CLASSES = Object.freeze([
   'fontWeight',
@@ -33,6 +39,7 @@ export const SKIN_LITERAL_CLASSES = Object.freeze([
   'important',
   'dataTenant',
   'channelLiteral',
+  'legacyTransitionRead',
 ]);
 
 const LENGTH_RE = /(?<![\w.#-])-?(?:\d+\.?\d*|\.\d+)(?:px|rem|em)\b/gi;
@@ -78,6 +85,8 @@ const PROPERTY_CLASSES = [
   ['zIndex', /^z-index$/],
 ];
 const MOTION_PROPERTY_RE = /^(?:transition|animation)(?:-|$)/;
+const COMMENT_RE = /\/\*[\s\S]*?\*\//g;
+const LEGACY_TRANSITION_READ_RE = /var\(\s*(--ds-transition-[\w-]+)/g;
 
 /** Replace each balanced `name(` ... `)` call with ` V ` (nested calls included). */
 function stripCalls(value, name) {
@@ -130,10 +139,38 @@ function isZeroLength(token) {
   return /(?:px|rem|em)$/.test(token) && Number.parseFloat(token) === 0;
 }
 
+/**
+ * Every `--ds-transition-*` read in one declaration's raw value, comments blanked as
+ * property-law blanks them. The raw, case-preserved property decides the partition, because
+ * property-law's grammar is case-sensitive. The line is the declaration's start line.
+ */
+function legacyTransitionReads(decl) {
+  const value = decl.value.replace(COMMENT_RE, ' ');
+  return [...value.matchAll(LEGACY_TRANSITION_READ_RE)].map(([, name]) => ({
+    line: decl.source?.start?.line ?? 0,
+    name,
+    excluded: isExcluded('legacyTransitionRead', name, decl.prop),
+  }));
+}
+
+/**
+ * The `legacyTransitionRead` view of one stylesheet, from the reader the classifier uses:
+ * `[{ line, name, excluded }]` per occurrence. Throws when the stylesheet does not parse.
+ */
+export function legacyTransitionReadsInCss(css, from = 'skin.css') {
+  const reads = [];
+  postcss.parse(css, { from }).walkDecls((decl) => {
+    reads.push(...legacyTransitionReads(decl));
+  });
+  return reads;
+}
+
 function classifyDeclaration(decl) {
   const property = decl.prop.toLowerCase();
   const rest = literalRemainder(decl.value);
   const hits = [];
+
+  if (legacyTransitionReads(decl).some((read) => !read.excluded)) hits.push('legacyTransitionRead');
 
   if (property.startsWith('--')) {
     const tokens = [...matches(rest, LENGTH_RE), ...matches(rest, TIME_RE)];
@@ -202,8 +239,10 @@ export function countSkinLiteralsInCss(css, from = 'skin.css') {
   root.walkDecls((decl) => {
     const context = contextOf(decl);
     for (const klass of classifyDeclaration(decl)) {
-      if (context.floor) continue;
-      if (context.tecExcept && !context.tecExcept.has(klass)) continue;
+      if (!isContextIndependent(klass)) {
+        if (context.floor) continue;
+        if (context.tecExcept && !context.tecExcept.has(klass)) continue;
+      }
       record(klass, decl, `${decl.prop}: ${decl.value}${decl.important ? ' !important' : ''}`);
     }
   });
