@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-22",
+ "updated": "2026-10-23",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -3004,6 +3004,11 @@
      "at": "2026-10-22 16:59",
      "by": "codex-admin-dt",
      "note": "Integrated LX3 list-toolbar SOURCE4 in 4cf693158: independently accepted exact8 (TSX/skin/owning test/changeset plus four actually generated bundles), native/current AST evidence, full13paired comparisons and source/generated R8 semantics, actual C7 0-1-0 and final SOURCE4 review. Three proven portal cases plus19 ungated;353 remains UNARMED and622 excluded. Exact54 recoverable private C1 copies retired after distinct review/global held-FD proof; all unique invalid evidence and sourcepool reservations retained. Finite SOURCE4 lot only: current pooled HEAD refresh, P6/style-registry/build binding, remaining Wave-C cohorts/strip/dead-arm/freeze and accumulated coherent source/generated/dist certification remain. Inherited P2/CW2/axis failures,22 raw UNMET browser skips, fleet and graph9.74>9.68 remain blockers at their receivers; no global green, WO closure, phaseGO or denominator change."
+    },
+    {
+     "at": "2026-10-23 21:08",
+     "by": "codex-admin-dt",
+     "note": "Integrated LX2 column-menu SOURCE5 in 32af429c5: independently accepted exact9 (owner TSX, native skin, owning reader, changeset, fixed forced-colors floor alias and four actually generated mirrors). Current native three renders/G1, original A+S2 on real LOT with two causal negatives, P1-P4/P2 eleven-shard322/P2V and floor/format/source/tests/integration obligations accepted by exact scoped fingerprints and actual reviews. Full compiled axis BASE/CAND each444 tests:438pass/6same real failures/0skip; not global green or waiver. ONE generator check plus ONE write4 captured both skin/floor spans with full HEAD inverses/context/order/membership and unchanged engines. Canonical BASE6 and CAND7 all real rc0; actual conforming C7R3 private-index checker0-1-0 with escaped actual owner token accepted; R1 owner-predicate HOLD and R2 preCLI failure stay invalid. Real guarded ALWAYS restored all8 identities and removed only ownedCS; subsequent exact9 readmission recorded new C2/CS identity, C8/final SOURCE5 accepted; normal local commit tree/blobs match final independent33857 review. Prior WCB toast reader prerequisite7b6f61c8a is also recorded: exact2 accepted peer636b, causal causes and two current whole-WCB candidate unit runs (65 PASS each)/ALWAYS accepted, animation/lifetime semantics preserved. Only already-removed private C7 indexes checked absent; zero new deletion/bytes freed and all unique evidence plus source/pool reservations retained. LX2 closes its cohort acceptance gap (17/18 principal Wave-C cohorts integrated, not an ARC12 percentage); LX4/FU source/native/quality/current canonical followups, caller data-state mapping, strip, dead-arm/freeze and coherent source/generated/dist suite/browser/sighted certification remain. Six legacy axis/as-rendered/compare reds, graph9.74>9.68, fleet/runtime80/W2W3/GAT07 and other applicable debts remain real blockers at their receivers. ARC12 stays in-progress141/170; no WO close, phaseGO, denominator/budget change, apps/DB/push/publication."
     }
    ],
    "claimedBy": "kimi-dt",
