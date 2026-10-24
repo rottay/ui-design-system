@@ -711,9 +711,9 @@ test('a SYMMETRIC shorthand is not a site: the band must not fill with neutral p
  */
 const LIVE_SHORTHANDS = [
   [
-    'debt',
-    'runtime/engines/modern/framework-bridge/index.css',
-    "[data-engine='modern'] select | padding: 8px 32px 8px 12px",
+    "debt",
+    "runtime/engines/modern/framework-bridge/index.css",
+    "[data-engine='modern'] select:not([data-part='editor-input']) | padding: 8px 32px 8px 12px",
   ],
   [
     'stamp',

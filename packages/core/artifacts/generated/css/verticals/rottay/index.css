@@ -82143,7 +82143,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern:is(
-    [data-part='root'],
+    [data-part="root"],
     .ds-pattern-list-toolbar__root
   )::before {
   content: '';
@@ -83435,8 +83435,11 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   }
 }
 
-[dir='rtl']
-  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root']::before {
+[dir="rtl"]
+  .ds-pattern-list-toolbar.ds-engine-modern:is(
+    [data-part="root"],
+    .ds-pattern-list-toolbar__root
+  )::before {
   transform: translateX(120%);
   animation-direction: reverse;
 }

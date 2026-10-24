@@ -47,13 +47,40 @@ async function openPanel(): Promise<HTMLElement> {
  *    UNVERIFIED by this instrument, not proven live. The shared workspace
  *    contract test records the same gap.
  */
-const EXEMPT = (selector: string): boolean => selector.includes('[data-part=\'toast\']');
+// The class arms are paired with the same unmounted toast selectors above;
+// they keep that state UNVERIFIED rather than proving copied feedback live.
+const CLASS_TOAST_SELECTOR =
+  ".ds-structure.ds-export-button.ds-export-button__root .ds-export-button__toast";
+const EXEMPT = (selector: string): boolean =>
+  selector.includes("[data-part='toast']") ||
+  selector === CLASS_TOAST_SELECTOR ||
+  selector === `${CLASS_TOAST_SELECTOR} .ds-export-button__toast-label`;
 
 /** The Modern button answers to the `ds-` namespace; the frozen engines keep theirs. */
 const buttonEngineClass = (engine: string) =>
   engine === "modern" ? "ds-button--modern" : `rottay-button--${engine}`;
 
 describe("ExportButton skin reachability", () => {
+  it("keeps the unverified toast exclusion within its exact owner arms", () => {
+    for (const selector of [
+      ".ds-structure.ds-export-button[data-part='root'] [data-part='toast']",
+      ".ds-structure.ds-export-button[data-part='root'] [data-part='toast'] .ds-export-button__toast-label",
+      CLASS_TOAST_SELECTOR,
+      `${CLASS_TOAST_SELECTOR} .ds-export-button__toast-label`,
+    ]) {
+      expect(EXEMPT(selector), selector).toBe(true);
+    }
+    for (const selector of [
+      ".ds-structure.ds-export-button.ds-export-button__other .ds-export-button__toast",
+      ".ds-structure.ds-export-button.ds-export-button__root .ds-export-button__panel",
+      `${CLASS_TOAST_SELECTOR} .ds-export-button__toast-label-extra`,
+      ".ds-export-button__toast",
+      `${CLASS_TOAST_SELECTOR} .foreign-label`,
+    ]) {
+      expect(EXEMPT(selector), selector).toBe(false);
+    }
+  });
+
   it("every authored selector matches a node the family actually renders", async () => {
     const container = await openPanel();
     // `document`, because the panel is portalled out of the container.

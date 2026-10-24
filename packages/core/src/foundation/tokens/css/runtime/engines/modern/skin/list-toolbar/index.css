@@ -136,7 +136,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern:is(
-    [data-part='root'],
+    [data-part="root"],
     .ds-pattern-list-toolbar__root
   )::before {
   content: '';
@@ -1428,8 +1428,11 @@
   }
 }
 
-[dir='rtl']
-  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root']::before {
+[dir="rtl"]
+  .ds-pattern-list-toolbar.ds-engine-modern:is(
+    [data-part="root"],
+    .ds-pattern-list-toolbar__root
+  )::before {
   transform: translateX(120%);
   animation-direction: reverse;
 }
