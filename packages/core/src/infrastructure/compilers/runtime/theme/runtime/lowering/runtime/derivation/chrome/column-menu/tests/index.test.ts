@@ -4,6 +4,7 @@
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import postcss from "postcss";
 
 import { describe, expect, it } from "vitest";
 
@@ -59,16 +60,72 @@ const PANEL_FOCUS =
 const PANEL_ELEVATION =
   "var(--ds-column-menu-panel-shadow, var(--ds-material-overlay-shadow, var(--ds-elevation-4, 0 24px 64px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent))))";
 
-/** The declarations of every rule whose selector is exactly `selector`, in `css`. */
+/**
+ * Read the original ordered declarations through an exact column-menu selector member.
+ * @param css Authored or forced-colors slice of the owning skin, kept separate by the caller.
+ * @param selector One of the original surface/panel selectors pinned below by the assertions.
+ * @returns Every matching rule's declaration tuple, or no evidence for a foreign/ambiguous header.
+ * @throws When the stylesheet cannot be parsed; malformed input must not look like missing paint.
+ */
 function declarationsOf(css: string, selector: string): string[][] {
-  return [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
-    .filter((match) => match[1]!.trim() === selector)
-    .map((match) =>
-      match[2]!
-        .split(";")
-        .map((declaration) => declaration.trim())
-        .filter(Boolean)
+  const panel =
+    '.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="panel"]';
+  const isPanel = [panel, PANEL_FOCUS, `${PANEL_FOCUS}::after`].includes(
+    selector
+  );
+  if (!isPanel && selector !== SURFACE_FOCUS) return [];
+  // Only the owned panel token gets a class twin; the Popover surface stays foreign.
+  const twin = isPanel
+    ? selector.replace('[data-part="panel"]', ".ds-column-menu-panel__panel")
+    : selector;
+  const accepted = [selector, twin];
+  const tuples: string[][] = [];
+  let ambiguous = false;
+  postcss.parse(css).walkRules((rule) => {
+    // PostCSS's list parser preserves nested :is/:not commas as part of one member.
+    const members = postcss.list
+      .comma(rule.raws.selector?.raw ?? rule.selector)
+      .map((member) => member.replace(/\s+/g, " ").trim());
+    if (!members.some((member) => accepted.includes(member))) return;
+    if (
+      new Set(members).size !== members.length ||
+      members.some((member) => !accepted.includes(member))
+    ) {
+      ambiguous = true;
+      return;
+    }
+    const contexts: string[] = [];
+    for (
+      let parent = rule.parent;
+      parent && parent.type !== "root";
+      parent = parent.parent
+    ) {
+      if (parent.type !== "atrule") {
+        ambiguous = true;
+        return;
+      }
+      contexts.unshift(`@${parent.name} ${parent.params}`);
+    }
+    // The surface alone composes inside these containers; panel focus never borrows them.
+    const context = contexts.join("\n");
+    const allowed = ["", "@media (forced-colors: active)"];
+    if (!isPanel)
+      allowed.push(
+        "@container not (style(--ds-column-menu-panel-focus-ring: none) or style(--ds-column-menu-panel-shadow: none) or style(--ds-material-overlay-shadow: none) or style(--ds-elevation-4: none))",
+        "@container style(--ds-column-menu-panel-focus-ring: none)"
+      );
+    if (!allowed.includes(context)) {
+      ambiguous = true;
+      return;
+    }
+    // Preserve duplicate declarations, values and source order for the unchanged tuple assertions.
+    tuples.push(
+      rule.nodes
+        .filter((node) => node.type === "decl")
+        .map((node) => node.toString().trim())
     );
+  });
+  return ambiguous ? [] : tuples;
 }
 
 const FORCED_START = SKIN.indexOf("@media (forced-colors: active)");
@@ -79,6 +136,73 @@ const FORCED = SKIN.slice(FORCED_START, FORCED_END);
 const context = () => buildLoweringContext({ theme: firstPartyFixture("bithire") });
 
 describe("chrome/column-menu", () => {
+  it("reads the panel focus through the exact part, class and pair without splitting :is commas", () => {
+    const classFocus =
+      '.ds-structure.ds-column-menu-panel[data-part="surface"] .ds-column-menu-panel__panel:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))';
+    const expected = [
+      "outline: var(--ds-column-menu-panel-focus-outline, var(--ds-focus-ring-width) solid transparent)",
+      "outline-offset: var(--ds-column-menu-panel-focus-outline-offset, -2px)",
+    ];
+    // These are three representations of one owner's declarations, not three paint sources.
+    for (const header of [
+      PANEL_FOCUS,
+      classFocus,
+      `${PANEL_FOCUS}, ${classFocus}`,
+    ]) {
+      expect(
+        declarationsOf(`${header} { ${expected.join("; ")}; }`, PANEL_FOCUS)
+      ).toEqual([expected]);
+    }
+  });
+
+  it("cannot borrow a foreign, ambiguous, misplaced or altered panel focus tuple", () => {
+    const classFocus =
+      '.ds-structure.ds-column-menu-panel[data-part="surface"] .ds-column-menu-panel__panel:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))';
+    const expected = [
+      "outline: var(--ds-column-menu-panel-focus-outline, var(--ds-focus-ring-width) solid transparent)",
+      "outline-offset: var(--ds-column-menu-panel-focus-outline-offset, -2px)",
+    ];
+    const body = `${expected.join("; ")};`;
+    const intact = `${PANEL_FOCUS}, ${classFocus} { ${body} }`;
+    // Each causal change is preceded by the intact result; declarations must keep their order.
+    for (const [cause, css] of [
+      [
+        "wrong owner",
+        `${PANEL_FOCUS.replace(
+          "ds-column-menu-panel",
+          "ds-foreign-panel"
+        )} { ${body} }`,
+      ],
+      [
+        "wrong part",
+        `${PANEL_FOCUS.replace(
+          '[data-part="panel"]',
+          '[data-part="row"]'
+        )} { ${body} }`,
+      ],
+      [
+        "wrong hook",
+        `${classFocus.replace("__panel", "__header")} { ${body} }`,
+      ],
+      ["mixed member", `${PANEL_FOCUS}, .ds-foreign-panel { ${body} }`],
+      ["duplicate member", `${PANEL_FOCUS}, ${PANEL_FOCUS} { ${body} }`],
+      ["duplicate rule", `${intact} ${intact}`],
+      ["wrong context", `@media (hover: hover) { ${intact} }`],
+      [
+        "surface-only container",
+        `@container style(--ds-column-menu-panel-focus-ring: none) { ${intact} }`,
+      ],
+      ["wrong value", intact.replace("-2px", "-3px")],
+      [
+        "wrong order",
+        `${PANEL_FOCUS} { ${[...expected].reverse().join("; ")}; }`,
+      ],
+    ]) {
+      expect(declarationsOf(intact, PANEL_FOCUS), cause).toEqual([expected]);
+      expect(declarationsOf(css, PANEL_FOCUS), cause).not.toEqual([expected]);
+    }
+  });
+
   it("is registered once, at rank derived", () => {
     expect(
       FAMILY_DERIVERS.filter((deriver) => deriver === columnMenuChromeDeriver)

@@ -3713,6 +3713,7 @@ html.dark {
       [role="tooltip"],
       [data-part="surface"],
       [data-part="panel"],
+      .ds-structure.ds-column-menu-panel .ds-column-menu-panel__panel,
       [data-part="card"]
     ) {
     border: 1px solid ButtonBorder;
@@ -85077,7 +85078,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   padding: 0;
 }
 
-.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="panel"] {
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="panel"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__panel {
   position: relative;
   container: ds-column-menu-panel / inline-size;
   inline-size: 100%;
@@ -85135,7 +85138,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    the signature rides an overlay inset by its own reach, only while the panel
    itself holds focus. One decision, with its native fallback (F-37). */
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus)) {
+  [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(
+    :focus-within:not(:focus)
+  ),
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__panel:is(
+    [data-state~="focus-visible"],
+    :focus-visible
+  ):not(:focus-within:not(:focus)) {
   outline: var(
     --ds-column-menu-panel-focus-outline,
     var(--ds-focus-ring-width) solid transparent
@@ -85144,7 +85154,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after {
+  [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(
+    :focus-within:not(:focus)
+  )::after,
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__panel:is(
+    [data-state~="focus-visible"],
+    :focus-visible
+  ):not(:focus-within:not(:focus))::after {
   position: absolute;
   inset: calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width));
   z-index: var(--ds-z-index-relative-above, 1);
@@ -85160,7 +85177,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   pointer-events: none;
 }
 
-.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="header"] {
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="header"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__header {
   padding: var(--ds-column-menu-header-padding, 18px 20px 16px);
   border-bottom: var(
     --ds-column-menu-section-border,
@@ -85191,7 +85210,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="scroll-region"] {
+  [data-part="scroll-region"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__scroll-region {
   max-block-size: min(
     var(--ds-column-menu-body-max-block-size, 430px),
     calc(100dvh - var(--ds-column-menu-viewport-reservation, 152px))
@@ -85207,7 +85228,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="count-pill"] {
+  [data-part="count-pill"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__count-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -85235,7 +85258,11 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 
 .ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="row"],
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="action-row"] {
+  .ds-column-menu-panel__row,
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  [data-part="action-row"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__action-row {
   overflow: hidden;
   border: var(
     --ds-column-menu-row-border,
@@ -85274,14 +85301,22 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 .ds-structure.ds-column-menu-panel[data-part="surface"]
   [data-part="row-content"],
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="action-row-content"] {
+  .ds-column-menu-panel__row-content,
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  [data-part="action-row-content"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__action-row-content {
   padding: var(--ds-column-menu-row-padding, 13px 15px);
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
   [data-part="row"][data-visible="true"],
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="action-row"][data-visible="true"] {
+  .ds-column-menu-panel__row[data-visible="true"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  [data-part="action-row"][data-visible="true"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__action-row[data-visible="true"] {
   border-color: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
   background: var(
     --ds-column-menu-row-active-background,
@@ -85317,7 +85352,17 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   .ds-structure.ds-column-menu-panel[data-part="surface"]
     [data-part="row"]:is([data-state~="hovered"], :hover):not([data-visible="true"]):not([data-drag-target="true"]),
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="action-row"]:is([data-state~="hovered"], :hover):not([data-visible="true"]) {
+    .ds-column-menu-panel__row:is([data-state~="hovered"], :hover):not(
+      [data-visible="true"]
+    ):not([data-drag-target="true"]),
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="action-row"]:is([data-state~="hovered"], :hover):not(
+      [data-visible="true"]
+    ),
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__action-row:is([data-state~="hovered"], :hover):not(
+      [data-visible="true"]
+    ) {
     border-color: color-mix(in srgb, var(--ds-color-border-secondary) 68%, transparent);
     background: color-mix(
       in srgb,
@@ -85327,19 +85372,27 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   }
 }
 
-.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="row-copy"] {
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="row-copy"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__row-copy {
   min-inline-size: 0;
   flex: 1 1 auto;
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="row-main"],
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="action-row-main"] {
+  .ds-column-menu-panel__row-main,
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  [data-part="action-row-main"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__action-row-main {
   min-inline-size: 0;
   flex: 1 1 auto;
 }
 
-.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="row-meta"] {
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="row-meta"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__row-meta {
   margin-block-start: 4px;
 }
 
@@ -85398,7 +85451,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="group-content"] {
+  [data-part="group-content"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__group-content {
   padding-inline-start: 4px;
 }
 
@@ -85414,7 +85469,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="action-section"] {
+  [data-part="action-section"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__action-section {
   margin-block-start: var(--ds-column-menu-section-gap, 8px);
   padding-block-start: var(--ds-column-menu-section-padding-block-start, 14px);
   border-top: var(
@@ -85424,20 +85481,30 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="action-section-header"] {
+  [data-part="action-section-header"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__action-section-header {
   margin-block-end: 10px;
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
   [data-part="action-section-copy"],
 .ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__action-section-copy,
+.ds-structure.ds-column-menu-panel[data-part="surface"]
   [data-part="action-row-copy"],
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="header-copy"] {
+  .ds-column-menu-panel__action-row-copy,
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  [data-part="header-copy"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__header-copy {
   min-inline-size: 0;
 }
 
-.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="footer"] {
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="footer"],
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  .ds-column-menu-panel__footer {
   padding: var(--ds-column-menu-footer-padding, 12px);
   border-top: var(
     --ds-column-menu-section-border,
@@ -85489,17 +85556,23 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  * phone-only by construction. */
 @container ds-column-menu-panel (max-width: 420px) {
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="row-content"] {
+    [data-part="row-content"],
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__row-content {
     flex-wrap: wrap;
   }
 
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="row-main"] {
+    [data-part="row-main"],
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__row-main {
     flex-basis: 100%;
   }
 
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="row-actions"] {
+    [data-part="row-actions"],
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__row-actions {
     flex-basis: 100%;
     justify-content: flex-end;
   }
@@ -85508,14 +85581,26 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 @media (forced-colors: active) {
   .ds-structure.ds-column-menu-panel[data-part="surface"],
   .ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="header"],
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__header,
   .ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="row"],
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__row,
   .ds-structure.ds-column-menu-panel[data-part="surface"]
     [data-part="action-row"],
   .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__action-row,
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
     [data-part="action-section"],
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__action-section,
   .ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="footer"],
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="count-pill"] {
+    .ds-column-menu-panel__footer,
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="count-pill"],
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__count-pill {
     border-color: ButtonText;
   }
 
@@ -85532,13 +85617,27 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   }
 
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus)) {
+    [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(
+      :focus-within:not(:focus)
+    ),
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__panel:is(
+      [data-state~="focus-visible"],
+      :focus-visible
+    ):not(:focus-within:not(:focus)) {
     outline: max(2px, var(--ds-focus-ring-width)) solid Highlight;
     outline-offset: var(--ds-column-menu-panel-focus-outline-offset, -2px);
   }
 
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(:focus-within:not(:focus))::after {
+    [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible):not(
+      :focus-within:not(:focus)
+    )::after,
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__panel:is(
+      [data-state~="focus-visible"],
+      :focus-visible
+    ):not(:focus-within:not(:focus))::after {
     display: none;
   }
 }
@@ -85546,7 +85645,11 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="row"],
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="action-row"] {
+    .ds-column-menu-panel__row,
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="action-row"],
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    .ds-column-menu-panel__action-row {
     transition: none;
   }
 }

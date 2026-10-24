@@ -75,6 +75,7 @@
       [role="tooltip"],
       [data-part="surface"],
       [data-part="panel"],
+      .ds-structure.ds-column-menu-panel .ds-column-menu-panel__panel,
       [data-part="card"]
     ) {
     border: 1px solid ButtonBorder;

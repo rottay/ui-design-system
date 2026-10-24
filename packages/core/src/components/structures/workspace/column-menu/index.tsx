@@ -138,7 +138,11 @@ export interface ColumnMenuProps<T extends ColumnMenuColumn> {
 }
 
 function CountPill({ label }: { label: string }) {
-  return <Box data-part="count-pill">{label}</Box>;
+  return (
+    <Box data-part="count-pill" className="ds-column-menu-panel__count-pill">
+      {label}
+    </Box>
+  );
 }
 
 /** Small pin-left icon (pin rotated to point left). ROLE GAP: there is no
@@ -696,10 +700,14 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
           tabIndex={-1}
           {...panelInteraction.handlers}
           {...partAttributes("panel", panelInteraction.state)}
+          className="ds-column-menu-panel__panel"
         >
-          <Box data-part="header">
+          <Box data-part="header" className="ds-column-menu-panel__header">
             <Flex align="start" justify="between" gap={12}>
-              <Box data-part="header-copy">
+              <Box
+                data-part="header-copy"
+                className="ds-column-menu-panel__header-copy"
+              >
                 <Text className="ds-column-menu__header-title" size="sm" weight="medium">
                   {tOr("columnMenu.headerTitle", "Table columns")}
                 </Text>
@@ -725,7 +733,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
             </Flex>
           </Box>
 
-          <Box data-part="scroll-region">
+          <Box
+            data-part="scroll-region"
+            className="ds-column-menu-panel__scroll-region"
+          >
             <Flex direction="column" gap={8}>
               {(() => {
                 const renderColumnRow = (
@@ -755,11 +766,17 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     >
                       <Flex
                         data-part="row-content"
+                        className="ds-column-menu-panel__row-content"
                         align="center"
                         justify="between"
                         gap={10}
                       >
-                        <Flex data-part="row-main" align="center" gap={12}>
+                        <Flex
+                          data-part="row-main"
+                          className="ds-column-menu-panel__row-main"
+                          align="center"
+                          gap={12}
+                        >
                           <Button
                             variant="ghost"
                             size="xs"
@@ -789,7 +806,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             aria-label={column.title}
                             onChange={() => handleToggleColumn(column.key)}
                           />
-                          <Box data-part="row-copy">
+                          <Box
+                            data-part="row-copy"
+                            className="ds-column-menu-panel__row-copy"
+                          >
                             <Flex align="center" gap={6}>
                               <Text
                                 className="ds-column-menu__title"
@@ -821,7 +841,12 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 </Text>
                               )}
                             </Flex>
-                            <Flex data-part="row-meta" align="center" gap={6}>
+                            <Flex
+                              data-part="row-meta"
+                              className="ds-column-menu-panel__row-meta"
+                              align="center"
+                              gap={6}
+                            >
                               <Text
                                 className="ds-column-menu__description"
                                 data-visible={isVisible}
@@ -922,7 +947,12 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                         {/* Named so the narrow-container posture can drop the
                             cluster onto its own line; without a part the copy
                             column collapses under it at phone widths. */}
-                        <Flex data-part="row-actions" align="center" gap={4}>
+                        <Flex
+                          data-part="row-actions"
+                          className="ds-column-menu-panel__row-actions"
+                          align="center"
+                          gap={4}
+                        >
                           {/* Pin left/right toggles (only when onPinChange provided) */}
                           {onPinChange && (
                             <>
@@ -1048,6 +1078,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                         {!isCollapsed && (
                           <Flex
                             data-part="group-content"
+                            className="ds-column-menu-panel__group-content"
                             direction="column"
                             gap={6}
                           >
@@ -1068,14 +1099,21 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
               })()}
 
               {actions && actions.length > 0 && (
-                <Box data-part="action-section">
+                <Box
+                  data-part="action-section"
+                  className="ds-column-menu-panel__action-section"
+                >
                   <Flex
                     data-part="action-section-header"
+                    className="ds-column-menu-panel__action-section-header"
                     align="center"
                     justify="between"
                     gap={12}
                   >
-                    <Box data-part="action-section-copy">
+                    <Box
+                      data-part="action-section-copy"
+                      className="ds-column-menu-panel__action-section-copy"
+                    >
                       <Text
                         className="ds-column-menu__action-section-label"
                         size="xs"
@@ -1108,12 +1146,14 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                         >
                           <Flex
                             data-part="action-row-content"
+                            className="ds-column-menu-panel__action-row-content"
                             align="center"
                             justify="between"
                             gap={10}
                           >
                             <Flex
                               data-part="action-row-main"
+                              className="ds-column-menu-panel__action-row-main"
                               align="center"
                               gap={12}
                             >
@@ -1126,7 +1166,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                   handleToggleAction(action.key, action.locked)
                                 }
                               />
-                              <Box data-part="action-row-copy">
+                              <Box
+                                data-part="action-row-copy"
+                                className="ds-column-menu-panel__action-row-copy"
+                              >
                                 <Text
                                   className="ds-column-menu__title"
                                   data-visible={isVisible}
@@ -1166,7 +1209,13 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
             </Flex>
           </Box>
 
-          <Flex align="center" justify="between" gap={12} data-part="footer">
+          <Flex
+            align="center"
+            justify="between"
+            gap={12}
+            data-part="footer"
+            className="ds-column-menu-panel__footer"
+          >
             <Text className="ds-column-menu__footer-hint" size="xs">
               {tOr(
                 "columnMenu.footerHint",
@@ -1235,6 +1284,9 @@ function StatefulRow({
         onDragEnd?.(event);
       }}
       {...partAttributes("row", interaction.state)}
+      className={[rest.className, "ds-column-menu-panel__row"]
+        .filter(Boolean)
+        .join(" ")}
     >
       {children}
     </Box>
@@ -1252,6 +1304,9 @@ function StatefulActionRow({
       {...rest}
       {...interaction.handlers}
       {...partAttributes("action-row", interaction.state)}
+      className={[rest.className, "ds-column-menu-panel__action-row"]
+        .filter(Boolean)
+        .join(" ")}
     >
       {children}
     </Box>
