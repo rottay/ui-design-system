@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { stripScriptComments } from '../../../../../../libraries/comments/index.mjs';
 import { countMotionRecipeConsumers } from '../../../../../../libraries/engine/consumers/motion-recipes/index.mjs';
+import { withSourceFixture } from '../../context/fixtures/index.mjs';
 import { componentsDir } from '../../context/paths/index.mjs';
 import { matchBrace, stripBlockComments } from '../../parsing/index.mjs';
 
@@ -40,12 +41,16 @@ function countMotionLiteralsInText(text, fileName = 'source.tsx') {
   return { cubicBezier, rawDuration };
 }
 
+/**
+ * Aggregate motion literals and orphan motion tokens over the modern-engine sources. A
+ * `--hardcode-fixture-source` drill file joins the list, so a planted literal reds the real gate.
+ */
 function countMotionLiterals(files) {
   let cubicBezier = 0;
   let rawDuration = 0;
   let orphanTokens = 0;
   const orphanRe = new RegExp(ORPHAN_MOTION_NAMES.map((n) => n.replace(/[-]/g, '\\-')).join('|'), 'g');
-  for (const file of files) {
+  for (const file of withSourceFixture(files)) {
     const text = readFileSync(file, 'utf8');
     const perFile = countMotionLiteralsInText(text, file);
     cubicBezier += perFile.cubicBezier;

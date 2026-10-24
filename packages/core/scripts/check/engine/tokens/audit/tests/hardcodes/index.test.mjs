@@ -211,6 +211,37 @@ describe('engine-token-audit drills', { concurrency: true }, () => {
     assert.match(output, /inlineGeometry\.total=/);
   });
 
+  test('a cubic-bezier and a millisecond duration in engine TSX red both motion literal counters', () => {
+    const { status, output } = runGate({
+      '--hardcode-fixture-source':
+        "export const A = () => <div style={{ transition: 'opacity 150ms cubic-bezier(0.2, 0, 0, 1)' }} />;\n",
+    });
+    assert.equal(status, 1, output);
+    assert.match(output, /motion\.cubicBezierLiterals=[1-9]\d*; baseline=0/);
+    assert.match(output, /motion\.rawDurationLiterals=[1-9]\d*; baseline=0/);
+  });
+
+  test('a sub-second seconds duration in engine TSX reds the raw duration counter alone', () => {
+    const { status, output } = runGate({
+      '--hardcode-fixture-source': "export const A = () => <div style={{ transition: 'opacity .2s' }} />;\n",
+    });
+    assert.equal(status, 1, output);
+    assert.match(output, /motion\.rawDurationLiterals=[1-9]\d*; baseline=0/);
+    assert.doesNotMatch(output, /motion\.cubicBezierLiterals=/);
+  });
+
+  test('motion tokens, a loop tempo of 1s and a commented literal keep the motion counters green', () => {
+    const { status, output } = runGate({
+      '--hardcode-fixture-source': [
+        '// 150ms cubic-bezier(0,0,0,1)',
+        "export const A = () => <div style={{ transition: 'opacity var(--ds-motion-fast) var(--ds-motion-ease-out)',",
+        "  animation: 'spin 1s linear infinite' }} />;",
+        '',
+      ].join('\n'),
+    });
+    assert.equal(status, 0, output);
+  });
+
   test('a second root declarer reds the DUP count and names the drift', () => {
     const { status, output } = runGate({
       '--hardcode-fixture-foundation': ':root {\n  --ds-spacing-4: 99px;\n}\n',
