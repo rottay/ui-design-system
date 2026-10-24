@@ -155,6 +155,7 @@ export const GaugeChart = memo(function GaugeChart({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  adapt,
 }: GaugeChartProps) {
   // The modern renderer owns the normal responsive observer. This lightweight
   // measurement only activates for the legacy `autoCompact` API, which needs
@@ -175,6 +176,8 @@ export const GaugeChart = memo(function GaugeChart({
     autoCompact,
     compactBreakpoint,
     containerWidth: autoCompact ? scaffoldDimensions.width : undefined,
+    adapt,
+    containerRef: scaffoldRef,
   });
   const chartHeight = compactState.isCompact
     ? Math.max(height, compactState.minHeight)
@@ -305,6 +308,7 @@ export const GaugeChart = memo(function GaugeChart({
   const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
+      postureAttribute={compactState.postureAttribute}
       svgRef={legacySvgRef}
       width={width}
       height={chartHeight}

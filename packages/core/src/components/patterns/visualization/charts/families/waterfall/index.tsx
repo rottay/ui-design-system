@@ -126,6 +126,7 @@ export const WaterfallChart = memo(function WaterfallChart({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  adapt,
 }: WaterfallChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
@@ -136,7 +137,7 @@ export const WaterfallChart = memo(function WaterfallChart({
   const decreasePaint = decreaseColor ?? tones.toneFor('decrease');
   const totalPaint = totalColor ?? tones.toneFor('total');
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width, adapt, containerRef: scaffoldRef });
   const formatVal = formatValue ?? defaultFormatValue;
 
   // The pure geometry builder is the single running-total authority; the family
@@ -219,6 +220,7 @@ export const WaterfallChart = memo(function WaterfallChart({
   const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
+      postureAttribute={compactState.postureAttribute}
       svgRef={legacySvgRef}
       width={width}
       height={height}

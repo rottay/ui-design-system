@@ -121,13 +121,14 @@ export const Histogram = memo(function Histogram({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  adapt,
 }: HistogramProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
   const { dimensions } = useChartDimensions(width, height);
   const paint = useChartPaint({ family: 'histogram' });
   const chartPersonality = useChartPersonality({ animate, tooltip });
-  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width, adapt, containerRef: scaffoldRef });
   const fmtVal = formatValue ?? defaultFormatValue;
 
   // The pure geometry builder is the single binning authority; the family reads
@@ -225,6 +226,7 @@ export const Histogram = memo(function Histogram({
   const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
+      postureAttribute={compactState.postureAttribute}
       svgRef={legacySvgRef}
       width={width}
       height={height}

@@ -18,12 +18,12 @@
  *   one-vocabulary  no posture-named string set of its own outside the
  *                   contract's names.
  *
- * WHY IT IS RED TODAY, BY DESIGN. WO-INV-07 ships the contract, the runtime,
- * the reference implementation on `data-table` and this gate. The other
- * declared families adopt the slot in their own cuts, each of which is not
- * done until this gate is green for it (the family-cut gate enforces that
- * as a BLOCKING arm for a rostered layout-sensitive family). Until then a
- * whole-registry run lists them as findings rather than pretending otherwise.
+ * WHY A DECLARED FAMILY CAN BE RED. WO-INV-07 ships the contract, the runtime,
+ * the reference implementation on `data-table` and this gate. Every other
+ * declared family adopts the slot in its own cut, which is not done until this
+ * gate is green for it (the family-cut gate enforces that as a BLOCKING arm
+ * for a rostered layout-sensitive family). A family that loses an arm, or a
+ * newly declared one that has not adopted yet, is listed as a finding.
  *
  * THE CENSUS (`--census`). Every string set under `src` that spells posture
  * names -- a literal union or a string array with two or more viewport names,

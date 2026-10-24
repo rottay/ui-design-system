@@ -27,11 +27,15 @@ const ROOT = findPackageRoot(new URL('.', import.meta.url).pathname);
 const OWNER = 'src/components/patterns/data/data-table';
 const CONTRACTS = `${OWNER}/contracts/index.ts`;
 const PRESENTATION = `${OWNER}/presentation/table/index.tsx`;
+const CHARTS_OWNER = 'src/components/patterns/visualization/charts';
+const CHARTS_CONTRACTS = `${CHARTS_OWNER}/contracts/index.ts`;
+const CHARTS_COMPACT = `${CHARTS_OWNER}/runtime/responsive/compact-mode/index.ts`;
+const CHARTS_SCAFFOLD = `${CHARTS_OWNER}/presentation/scaffold/index.tsx`;
 
-function withSandbox(edit, run) {
+function withSandbox(edit, run, mirrored = [OWNER, CONTRACT_ROOT]) {
   const sandbox = mkdtempSync(join(tmpdir(), 'adapt-slot-drill-'));
   try {
-    for (const relativePath of [OWNER, CONTRACT_ROOT]) {
+    for (const relativePath of mirrored) {
       const target = join(sandbox, relativePath);
       mkdirSync(dirname(target), { recursive: true });
       cpSync(join(ROOT, relativePath), target, { recursive: true });
@@ -52,6 +56,8 @@ const patch = (sandbox, relativePath, replace) => {
 };
 
 const onlyDataTable = (sandbox) => collectAdaptSlot({ root: sandbox, only: 'data-table' }).findings;
+const onlyCharts = (sandbox) => collectAdaptSlot({ root: sandbox, only: 'charts' }).findings;
+const withChartsSandbox = (edit, run) => withSandbox(edit, run, [CHARTS_OWNER, CONTRACT_ROOT]);
 
 test('every declared layout-sensitive family has one owner and a cut, with no duplicates', () => {
   const families = readLayoutSensitiveFamilies();
@@ -71,16 +77,17 @@ test('the reference family holds every arm on the live tree', () => {
   assert.deepEqual(measurements[0].arms, { acceptsAdapt: true, stampsPosture: true, oneVocabulary: true });
 });
 
-test('a family whose cut has not landed is red, by design', () => {
-  const { findings } = collectAdaptSlot({ only: 'charts' });
-  assert.ok(findings.some((finding) => finding.includes('charts (WO-FAM-09): accepts-adapt')), JSON.stringify(findings));
-  assert.ok(findings.some((finding) => finding.includes('charts (WO-FAM-09): stamps-posture')), JSON.stringify(findings));
+test('charts holds every arm on the live tree', () => {
+  const { measurements, findings } = collectAdaptSlot({ only: 'charts' });
+  assert.deepEqual(findings, []);
+  assert.deepEqual(measurements[0].arms, { acceptsAdapt: true, stampsPosture: true, oneVocabulary: true });
 });
 
-test('the whole-registry run is red while any declared family lacks the slot', () => {
-  const { findings } = collectAdaptSlot();
-  assert.ok(findings.length > 0);
-  assert.equal(findings.filter((finding) => finding.startsWith('data-table')).length, 0);
+test('the whole-registry run is green: every declared family holds every arm', () => {
+  const { families, measurements, findings } = collectAdaptSlot();
+  assert.deepEqual(findings, []);
+  assert.equal(measurements.length, families.length);
+  assert.ok(measurements.every((measured) => Object.values(measured.arms).every(Boolean)), JSON.stringify(measurements));
 });
 
 test('an unknown family is refused by name, not skipped', () => {
@@ -159,6 +166,63 @@ test('a declared owner that does not exist is red', () => {
   );
 });
 
+test('the unedited charts sandbox mirror measures exactly what the live tree measures', () => {
+  withChartsSandbox(() => {}, (sandbox) => assert.deepEqual(onlyCharts(sandbox), []));
+});
+
+test('charts: removing BOTH `adapt` members turns accepts-adapt red', () => {
+  withChartsSandbox(
+    (sandbox) => {
+      patch(sandbox, CHARTS_CONTRACTS, (text) => text.replace('adapt?: Adapt<ChartAdaptation>;', ''));
+      patch(sandbox, CHARTS_COMPACT, (text) => text.replace('adapt?: Adapt<ChartAdaptation>;', ''));
+    },
+    (sandbox) => {
+      const findings = onlyCharts(sandbox);
+      assert.ok(findings.some((finding) => finding.includes('charts (WO-FAM-09): accepts-adapt')), JSON.stringify(findings));
+    },
+  );
+});
+
+test('charts: the gate is owner-wide, so the props member alone is not what it measures', () => {
+  // The hook options keep the arm green; the per-family props guarantee is
+  // ChartCapabilityTraits under typecheck:tests, not this gate.
+  withChartsSandbox(
+    (sandbox) => patch(sandbox, CHARTS_CONTRACTS, (text) => text.replace('adapt?: Adapt<ChartAdaptation>;', '')),
+    (sandbox) => assert.deepEqual(onlyCharts(sandbox), []),
+  );
+});
+
+test('charts: repointing BOTH useAdaptation imports is red', () => {
+  const repoint = (text) => text.replace(
+    "import { useAdaptation } from '@/infrastructure/runtime/adaptation';",
+    "import { useAdaptation } from './local-adaptation';",
+  );
+  withChartsSandbox(
+    (sandbox) => {
+      patch(sandbox, CHARTS_COMPACT, repoint);
+      patch(sandbox, CHARTS_SCAFFOLD, repoint);
+    },
+    (sandbox) => {
+      const findings = onlyCharts(sandbox);
+      assert.ok(findings.some((finding) => finding.includes('never resolves it through useAdaptation')), JSON.stringify(findings));
+    },
+  );
+});
+
+test('charts: a literal `data-posture` on every scaffold root is red', () => {
+  withChartsSandbox(
+    (sandbox) => patch(sandbox, CHARTS_SCAFFOLD, (text) => {
+      assert.equal(text.split('data-posture={stampedPosture}').length - 1, 3, 'the scaffold stamps its three lifecycle roots');
+      return text.replaceAll('data-posture={stampedPosture}', 'data-posture="compact"');
+    }),
+    (sandbox) => {
+      const findings = onlyCharts(sandbox);
+      assert.equal(findings.filter((finding) => finding.includes('literal `data-posture`')).length, 3, JSON.stringify(findings));
+      assert.ok(findings.some((finding) => finding.includes('stamps no computed `data-posture`')), JSON.stringify(findings));
+    },
+  );
+});
+
 test('the live census counts one posture vocabulary', () => {
   const census = censusPostureVocabulary();
   assert.deepEqual(census.vocabulary, {
@@ -198,10 +262,29 @@ test('the census does not mistake a non-posture set for a vocabulary', () => {
 
 test('family-cut holds a rostered layout-sensitive family to the slot as BLOCKING', () => {
   const producers = collectChannelProducers().producers;
-  const measured = measureFamily(resolveFamily('charts'), { producers });
-  assert.ok(measured.blocking.adaptSlot.length > 0);
-  const findings = judgeFamily(measured, { cut: 'WO-FAM-09' });
-  assert.ok(findings.some((finding) => finding.startsWith('charts: BLOCKING adapt-slot')), JSON.stringify(findings));
+  assert.deepEqual(measureFamily(resolveFamily('charts'), { producers }).blocking.adaptSlot, []);
+
+  withChartsSandbox(() => {}, (sandbox) => {
+    assert.deepEqual(measureFamily(resolveFamily('charts', sandbox), { producers }).blocking.adaptSlot, []);
+  });
+
+  withChartsSandbox(
+    (sandbox) => {
+      patch(sandbox, CHARTS_CONTRACTS, (text) => text.replace('adapt?: Adapt<ChartAdaptation>;', ''));
+      patch(sandbox, CHARTS_COMPACT, (text) => text.replace('adapt?: Adapt<ChartAdaptation>;', ''));
+    },
+    (sandbox) => {
+      const resolved = resolveFamily('charts', sandbox);
+      assert.deepEqual(resolved.componentDirs.map((dir) => dir.slice(sandbox.length + 1)), [CHARTS_OWNER]);
+      const measured = measureFamily(resolved, { producers });
+      assert.ok(measured.blocking.adaptSlot.length > 0);
+      const findings = judgeFamily(measured, { cut: 'WO-FAM-09' });
+      assert.ok(
+        findings.some((finding) => finding.startsWith('charts: BLOCKING adapt-slot charts (WO-FAM-09): accepts-adapt')),
+        JSON.stringify(findings),
+      );
+    },
+  );
 
   const button = measureFamily(resolveFamily('button'), { producers });
   assert.deepEqual(button.blocking.adaptSlot, []);

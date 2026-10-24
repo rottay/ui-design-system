@@ -151,6 +151,7 @@ export const LineChart = memo(function LineChart({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  adapt,
   insights,
 }: LineChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
@@ -159,7 +160,7 @@ export const LineChart = memo(function LineChart({
   const paint = useChartPaint({ family: 'line-chart', scheme: colorScheme, override: colors });
   const chartPersonality = useChartPersonality({ animate, curved, showDots, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
-  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width, adapt, containerRef: scaffoldRef });
   // The idle tooltip element preserves the tooltip-personality/skin contract
   // for the legacy overlay anatomy; live hover/focus/keyboard exploration now
   // flows through the shared interaction controller below.
@@ -274,6 +275,7 @@ export const LineChart = memo(function LineChart({
   const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
+      postureAttribute={compactState.postureAttribute}
       svgRef={legacySvgRef}
       width={width}
       height={height}

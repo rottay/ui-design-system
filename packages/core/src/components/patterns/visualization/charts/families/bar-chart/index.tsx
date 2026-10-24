@@ -159,6 +159,7 @@ export const BarChart = memo(function BarChart({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  adapt,
   insights,
 }: BarChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
@@ -167,7 +168,7 @@ export const BarChart = memo(function BarChart({
   const paint = useChartPaint({ family: 'bar-chart', scheme: colorScheme, override: colors });
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
-  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width, adapt, containerRef: scaffoldRef });
   const resolvedBarGap = Number.isFinite(barGap) ? Math.min(0.95, Math.max(0, barGap)) : 0.2;
   // Only an app-authored radius is threaded; otherwise the renderer resolves
   // the corner radius from the vertical grammar's mark posture.
@@ -353,6 +354,7 @@ export const BarChart = memo(function BarChart({
   const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
+      postureAttribute={compactState.postureAttribute}
       svgRef={legacySvgRef}
       width={width}
       height={height}

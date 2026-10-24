@@ -8,6 +8,8 @@
 
 import type { CSSProperties, ReactNode } from 'react';
 import type { ChartPersonalityTokens } from '../../../../../foundation/contracts';
+import type { Adapt } from '../../../../../foundation/contracts/kernel/adaptation';
+import type { ChartAdaptation } from '../../../../../foundation/contracts/kernel/adaptation/composition/families/charts';
 
 /** Personality-owned visual treatment for chart tooltip overlays. */
 export type ChartTooltipVariant = ChartPersonalityTokens['tooltipStyle'];
@@ -154,6 +156,15 @@ export interface ChartCompactProps<
   autoCompact?: boolean;
   /** Container width breakpoint below which compact mode activates (default: 640px) */
   compactBreakpoint?: number;
+  /**
+   * Per-posture compact activation. A viewport entry applies from the first
+   * (server) paint; a container entry once the chart's own box is measured.
+   * At the posture in force it outranks `compactMode` and `autoCompact`;
+   * `compact` still configures what compact mode hides.
+   *
+   * @example adapt={{ phone: { compactMode: true }, compact: { compactMode: true } }}
+   */
+  adapt?: Adapt<ChartAdaptation>;
 }
 
 export type ChartColorScheme =

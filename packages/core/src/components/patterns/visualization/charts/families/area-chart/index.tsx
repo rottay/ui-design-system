@@ -115,6 +115,7 @@ export const AreaChart = memo(function AreaChart({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  adapt,
 }: AreaChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
@@ -122,7 +123,7 @@ export const AreaChart = memo(function AreaChart({
   const paint = useChartPaint({ family: 'area-chart', scheme: colorScheme, override: colors });
   const chartPersonality = useChartPersonality({ animate, curved, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
-  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width, adapt, containerRef: scaffoldRef });
   // The idle tooltip element preserves the tooltip-personality/skin contract.
   // Live crosshair wiring for the migrated renderers lands with the shared
   // interaction controller (Stage C), not this migration.
@@ -224,6 +225,7 @@ export const AreaChart = memo(function AreaChart({
   const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
+      postureAttribute={compactState.postureAttribute}
       svgRef={legacySvgRef}
       width={width}
       height={height}

@@ -138,6 +138,7 @@ export const ScatterChart = memo(function ScatterChart({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  adapt,
 }: ScatterChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
@@ -150,7 +151,7 @@ export const ScatterChart = memo(function ScatterChart({
   const paint = useChartPaint({ family: 'scatter', scheme: colorScheme });
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = chartPersonality.colors;
-  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width, adapt, containerRef: scaffoldRef });
   // The idle tooltip element preserves the tooltip-personality/skin contract.
   // Live crosshair wiring for the migrated renderer lands with the shared
   // interaction controller (Stage C), not this migration.
@@ -248,6 +249,7 @@ export const ScatterChart = memo(function ScatterChart({
   const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
+      postureAttribute={compactState.postureAttribute}
       svgRef={legacySvgRef}
       width={width}
       height={height}

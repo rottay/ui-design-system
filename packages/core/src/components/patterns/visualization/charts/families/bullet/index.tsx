@@ -117,6 +117,7 @@ export const BulletChart = memo(function BulletChart({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  adapt,
 }: BulletChartProps) {
   const legacySvgRef = useRef<SVGSVGElement>(null);
   const items: BulletDataPoint[] = useMemo(
@@ -144,6 +145,8 @@ export const BulletChart = memo(function BulletChart({
     autoCompact,
     compactBreakpoint,
     containerWidth: dimensions.width,
+    adapt,
+    containerRef,
   });
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
 
@@ -248,6 +251,7 @@ export const BulletChart = memo(function BulletChart({
   const chart = (
     <ChartScaffold
       containerRef={containerRef}
+      postureAttribute={compactState.postureAttribute}
       svgRef={legacySvgRef}
       width={width}
       height={height}

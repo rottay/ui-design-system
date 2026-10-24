@@ -43,6 +43,7 @@ describe('useChartCompact', () => {
     expect(result.current.hideLegend).toBe(false);
     expect(result.current.compactTooltip).toBe(false);
     expect(result.current.maxTicks).toBe(Infinity);
+    expect(result.current.postureAttribute).toBe('desktop');
   });
 
   it('keeps compact mode inactive when configuration is provided without activation', () => {

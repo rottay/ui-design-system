@@ -101,6 +101,7 @@ export const PieChart = memo(function PieChart({
   compactMode,
   autoCompact,
   compactBreakpoint,
+  adapt,
 }: PieChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
@@ -108,7 +109,7 @@ export const PieChart = memo(function PieChart({
   const paint = useChartPaint({ family: 'pie-chart', scheme: colorScheme, override: colors });
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
-  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width, adapt, containerRef });
 
   const hasInvalidValue = data.some((item) => !Number.isFinite(item.value));
   const hasNegativeValue = data.some((item) => item.value < 0);
@@ -207,6 +208,7 @@ export const PieChart = memo(function PieChart({
   const chart = (
     <ChartScaffold
       containerRef={containerRef}
+      postureAttribute={compactState.postureAttribute}
       svgRef={legacySvgRef}
       width={width}
       height={height}

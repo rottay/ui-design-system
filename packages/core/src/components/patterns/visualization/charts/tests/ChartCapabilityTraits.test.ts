@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import type { Adapt } from '../../../../../foundation/contracts/kernel/adaptation';
+import type { ChartAdaptation } from '../../../../../foundation/contracts/kernel/adaptation/composition/families/charts';
 import type {
   AreaChartProps,
   BarChartProps,
@@ -34,7 +36,8 @@ type CapabilityKey =
   | 'compact'
   | 'compactMode'
   | 'autoCompact'
-  | 'compactBreakpoint';
+  | 'compactBreakpoint'
+  | 'adapt';
 
 type CompactCapabilityKey =
   | 'hideLegend'
@@ -48,7 +51,7 @@ type CompactOf<TProps extends { compact?: unknown }> = NonNullable<TProps['compa
 type CompactCapabilitiesOf<TProps extends { compact?: unknown }> =
   Extract<keyof CompactOf<TProps>, CompactCapabilityKey>;
 
-type CompactActivation = 'compact' | 'compactMode' | 'autoCompact' | 'compactBreakpoint';
+type CompactActivation = 'compact' | 'compactMode' | 'autoCompact' | 'compactBreakpoint' | 'adapt';
 type Legend = 'legend';
 type Colors = 'colors';
 type Scheme = 'colorScheme';
@@ -91,7 +94,12 @@ const capabilityContract = [
   typeContract<Equal<CompactCapabilitiesOf<BulletChartProps>, CompactCore>>(),
   typeContract<Equal<CompactCapabilitiesOf<GaugeChartProps>, CompactCore>>(),
   typeContract<Equal<CompactCapabilitiesOf<PieChartProps>, CompactSeriesLabels>>(),
+  typeContract<Equal<NonNullable<LineChartProps['adapt']>, Adapt<ChartAdaptation>>>(),
+  typeContract<Equal<NonNullable<GaugeChartProps['adapt']>, Adapt<ChartAdaptation>>>(),
 ] as const;
+
+// @ts-expect-error -- a chart without compact mode advertises no `adapt`.
+type RadarAdapt = RadarChartProps['adapt'];
 
 describe('chart capability traits', () => {
   it('keeps every public family contract narrowed to implemented capabilities', () => {
