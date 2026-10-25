@@ -53,6 +53,28 @@ const declarations = (body: string) =>
 const rulesFor = (rules: Rule[], selector: string) =>
   rules.filter((rule) => rule.selector === selector).map((rule) => declarations(rule.body));
 
+/**
+ * A selector as its part arm reads it: each own-block fold of a named part,
+ * `:is([data-part="p"], .ds-collection-workspace__p)`, reads back as
+ * `[data-part="p"]`. Any other drift (a widened `:is()`, a foreign block's
+ * class, a dropped compound) is left as written.
+ */
+function asPartSelector(selector: string, parts: readonly string[]): string {
+  let read = selector;
+  for (const part of parts) {
+    read = read.replace(
+      new RegExp(`:is\\(\\[data-part=(['"])${part}\\1\\],\\s*\\.ds-collection-workspace__${part}\\)`, 'g'),
+      `[data-part="${part}"]`,
+    );
+  }
+  return read;
+}
+
+const partRulesFor = (rules: Rule[], selector: string, parts: readonly string[]) =>
+  rules
+    .filter((rule) => asPartSelector(rule.selector, parts) === selector)
+    .map((rule) => declarations(rule.body));
+
 const POPOVER_SKIN = readFileSync(
   join(
     __dirname,
@@ -198,9 +220,10 @@ describe('CollectionWorkspace — own focus targets wear the tenant focus signat
   it('spaces the disclosure action row from its own content box, never from the workspace root', () => {
     // The disclosure mounts beside the root; a root-scoped rule would never reach the row.
     expect(
-      rulesFor(
+      partRulesFor(
         AUTHORED,
         '.ds-collection-workspace__filter-dropdown-content[data-part="filter-dropdown-content"] > .ds-collection-workspace__filter-dropdown-actions[data-part="filter-dropdown-actions"]',
+        ['filter-dropdown-content', 'filter-dropdown-actions'],
       ),
     ).toEqual([['margin-block-start: var(--ds-spacing-md)']]);
     expect(
