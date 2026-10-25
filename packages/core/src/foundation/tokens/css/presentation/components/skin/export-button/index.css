@@ -32,14 +32,16 @@
  */
 
 /* ---- root: the trigger's anchor (geometry drained from inline) ---- */
-.ds-structure.ds-export-button[data-part='root'] {
+.ds-structure.ds-export-button[data-part='root'],
+.ds-structure.ds-export-button.ds-export-button__root {
   position: relative;
   display: inline-flex;
 }
 
 /* ---- trigger-side toast (geometry drained from inline; success accent with
         icon + text, announced via role=status in the engine) ---- */
-.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] {
+.ds-structure.ds-export-button[data-part='root'] [data-part='toast'],
+.ds-structure.ds-export-button.ds-export-button__root .ds-export-button__toast {
   position: absolute;
   inset-block-start: -32px;
   inset-inline-start: 50%;
@@ -58,7 +60,10 @@
   animation: ds-export-toast-fade 1.8s ease forwards;
 }
 
-.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] .ds-export-button__toast-label {
+.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] .ds-export-button__toast-label,
+.ds-structure.ds-export-button.ds-export-button__root
+  .ds-export-button__toast
+  .ds-export-button__toast-label {
   color: inherit;
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
@@ -68,7 +73,8 @@
         end-alignment rides the `translate` property (mirrored under
         :dir(rtl)) so `transform` stays free for the entrance rise. ---- */
 
-.ds-structure.ds-export-button-panel[data-part='panel'] {
+.ds-structure.ds-export-button-panel[data-part='panel'],
+.ds-structure.ds-export-button-panel.ds-export-button-panel__panel {
   z-index: var(--ds-export-button-panel-z, var(--ds-z-index-popover, 1600));
   min-inline-size: var(--ds-export-button-panel-min-width, 200px);
   max-inline-size: calc(100dvw - 16px);
@@ -96,7 +102,8 @@
   }
 }
 
-.ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'] {
+.ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'],
+.ds-structure.ds-export-button-panel.ds-export-button-panel__panel[data-open="true"] {
   border: 1px solid var(--ds-color-border);
 }
 
@@ -110,6 +117,8 @@
         `engine="modern"` on its own composed controls to keep this rule
         alive. ---- */
 .ds-structure.ds-export-button-panel[data-part='panel'] .ds-export-button-item,
+.ds-structure.ds-export-button-panel.ds-export-button-panel__panel
+  .ds-export-button-item,
 .ds-structure.ds-export-button-panel[data-part='panel'] .ds-export-button-item {
   inline-size: 100%;
   justify-content: flex-start;
@@ -125,10 +134,13 @@
 /* Reduced motion: the toast appears/disappears instantly and the panel
  * entrance is silenced. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-export-button[data-part='root'] [data-part='toast'] {
+  .ds-structure.ds-export-button[data-part='root'] [data-part='toast'],
+  .ds-structure.ds-export-button.ds-export-button__root
+    .ds-export-button__toast {
     animation: none;
   }
-  .ds-structure.ds-export-button-panel[data-part='panel'] {
+  .ds-structure.ds-export-button-panel[data-part='panel'],
+  .ds-structure.ds-export-button-panel.ds-export-button-panel__panel {
     animation: none;
   }
 }
@@ -139,13 +151,17 @@
    panel keeps a system boundary; the composed Buttons (trigger and items)
    own their own forced-colors contracts. */
 @media (forced-colors: active) {
-  .ds-structure.ds-export-button[data-part='root'] [data-part='toast'] {
+  .ds-structure.ds-export-button[data-part='root'] [data-part='toast'],
+  .ds-structure.ds-export-button.ds-export-button__root
+    .ds-export-button__toast {
     border: 1px solid ButtonText;
     background: Canvas;
     color: CanvasText;
   }
   .ds-structure.ds-export-button-panel[data-part='panel'],
-  .ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'] {
+  .ds-structure.ds-export-button-panel.ds-export-button-panel__panel,
+  .ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'],
+  .ds-structure.ds-export-button-panel.ds-export-button-panel__panel[data-open="true"] {
     border: 1px solid ButtonText;
     background: Canvas;
     box-shadow: none;

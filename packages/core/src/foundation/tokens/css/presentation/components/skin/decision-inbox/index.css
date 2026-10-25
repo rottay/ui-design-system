@@ -62,12 +62,16 @@
   margin-block-start: var(--ds-spacing-2, 8px);
 }
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-header'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-header'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__divider.ds-decision-inbox__divider[data-divider-kind="skeleton-header"] {
   padding-block-end: var(--ds-spacing-sm, 8px);
   border-block-end: 1px solid var(--ds-color-border-secondary);
 }
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-row'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-row'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__divider.ds-decision-inbox__divider[data-divider-kind="skeleton-row"] {
   padding-block: var(--ds-spacing-sm, 8px);
   border-block-end: 1px solid var(--ds-color-border-subtle, var(--ds-color-border-secondary));
 }
@@ -95,28 +99,38 @@
 /* Content layout: column on mobile, row + review rail on desktop              */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__content[data-part='content'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__content[data-part='content'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__content.ds-decision-inbox__content {
   flex-direction: column;
   align-items: stretch;
 }
 
-.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__content[data-part='content'] {
+.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__content[data-part='content'],
+.ds-surface.ds-decision-inbox[data-mobile="false"]
+  .ds-decision-inbox__content.ds-decision-inbox__content {
   flex-direction: row;
 }
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__queue[data-part='queue'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__queue[data-part='queue'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__queue.ds-decision-inbox__queue {
   flex: 1 1 0%;
   min-inline-size: 0;
 }
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__review-rail[data-part='review-rail'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__review-rail[data-part='review-rail'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__review-rail.ds-decision-inbox__review-rail {
   inline-size: 100%;
   flex-shrink: 0;
 }
 
 /* The caller-supplied rail width arrives through a private runtime-instance
    bridge for the existing `reviewRail.width` prop. It is not a public hook. */
-.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__review-rail[data-part='review-rail'] {
+.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__review-rail[data-part='review-rail'],
+.ds-surface.ds-decision-inbox[data-mobile="false"]
+  .ds-decision-inbox__review-rail.ds-decision-inbox__review-rail {
   inline-size: var(--_ds-instance-decision-inbox-rail-width, 380px);
 }
 
@@ -133,7 +147,9 @@
 /* Review rail parts                                                           */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='review-rail'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='review-rail'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__divider.ds-decision-inbox__divider[data-divider-kind="review-rail"] {
   block-size: 1px;
   background: var(--ds-color-border-secondary);
 }
@@ -169,7 +185,9 @@
     background: Canvas;
   }
 
-  .ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'] {
+  .ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'],
+  .ds-surface.ds-decision-inbox
+    .ds-decision-inbox__divider.ds-decision-inbox__divider {
     background: ButtonBorder;
     border-color: ButtonBorder;
   }

@@ -85716,14 +85716,16 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  */
 
 /* ---- root: the trigger's anchor (geometry drained from inline) ---- */
-.ds-structure.ds-export-button[data-part='root'] {
+.ds-structure.ds-export-button[data-part='root'],
+.ds-structure.ds-export-button.ds-export-button__root {
   position: relative;
   display: inline-flex;
 }
 
 /* ---- trigger-side toast (geometry drained from inline; success accent with
         icon + text, announced via role=status in the engine) ---- */
-.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] {
+.ds-structure.ds-export-button[data-part='root'] [data-part='toast'],
+.ds-structure.ds-export-button.ds-export-button__root .ds-export-button__toast {
   position: absolute;
   inset-block-start: -32px;
   inset-inline-start: 50%;
@@ -85742,7 +85744,10 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   animation: ds-export-toast-fade 1.8s ease forwards;
 }
 
-.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] .ds-export-button__toast-label {
+.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] .ds-export-button__toast-label,
+.ds-structure.ds-export-button.ds-export-button__root
+  .ds-export-button__toast
+  .ds-export-button__toast-label {
   color: inherit;
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
@@ -85752,7 +85757,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         end-alignment rides the `translate` property (mirrored under
         :dir(rtl)) so `transform` stays free for the entrance rise. ---- */
 
-.ds-structure.ds-export-button-panel[data-part='panel'] {
+.ds-structure.ds-export-button-panel[data-part='panel'],
+.ds-structure.ds-export-button-panel.ds-export-button-panel__panel {
   z-index: var(--ds-export-button-panel-z, var(--ds-z-index-popover, 1600));
   min-inline-size: var(--ds-export-button-panel-min-width, 200px);
   max-inline-size: calc(100dvw - 16px);
@@ -85780,7 +85786,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   }
 }
 
-.ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'] {
+.ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'],
+.ds-structure.ds-export-button-panel.ds-export-button-panel__panel[data-open="true"] {
   border: 1px solid var(--ds-color-border);
 }
 
@@ -85794,6 +85801,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         `engine="modern"` on its own composed controls to keep this rule
         alive. ---- */
 .ds-structure.ds-export-button-panel[data-part='panel'] .ds-export-button-item,
+.ds-structure.ds-export-button-panel.ds-export-button-panel__panel
+  .ds-export-button-item,
 .ds-structure.ds-export-button-panel[data-part='panel'] .ds-export-button-item {
   inline-size: 100%;
   justify-content: flex-start;
@@ -85809,10 +85818,13 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* Reduced motion: the toast appears/disappears instantly and the panel
  * entrance is silenced. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-export-button[data-part='root'] [data-part='toast'] {
+  .ds-structure.ds-export-button[data-part='root'] [data-part='toast'],
+  .ds-structure.ds-export-button.ds-export-button__root
+    .ds-export-button__toast {
     animation: none;
   }
-  .ds-structure.ds-export-button-panel[data-part='panel'] {
+  .ds-structure.ds-export-button-panel[data-part='panel'],
+  .ds-structure.ds-export-button-panel.ds-export-button-panel__panel {
     animation: none;
   }
 }
@@ -85823,13 +85835,17 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    panel keeps a system boundary; the composed Buttons (trigger and items)
    own their own forced-colors contracts. */
 @media (forced-colors: active) {
-  .ds-structure.ds-export-button[data-part='root'] [data-part='toast'] {
+  .ds-structure.ds-export-button[data-part='root'] [data-part='toast'],
+  .ds-structure.ds-export-button.ds-export-button__root
+    .ds-export-button__toast {
     border: 1px solid ButtonText;
     background: Canvas;
     color: CanvasText;
   }
   .ds-structure.ds-export-button-panel[data-part='panel'],
-  .ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'] {
+  .ds-structure.ds-export-button-panel.ds-export-button-panel__panel,
+  .ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'],
+  .ds-structure.ds-export-button-panel.ds-export-button-panel__panel[data-open="true"] {
     border: 1px solid ButtonText;
     background: Canvas;
     box-shadow: none;
@@ -94186,12 +94202,16 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   margin-block-start: var(--ds-spacing-2, 8px);
 }
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-header'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-header'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__divider.ds-decision-inbox__divider[data-divider-kind="skeleton-header"] {
   padding-block-end: var(--ds-spacing-sm, 8px);
   border-block-end: 1px solid var(--ds-color-border-secondary);
 }
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-row'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-row'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__divider.ds-decision-inbox__divider[data-divider-kind="skeleton-row"] {
   padding-block: var(--ds-spacing-sm, 8px);
   border-block-end: 1px solid var(--ds-color-border-subtle, var(--ds-color-border-secondary));
 }
@@ -94219,28 +94239,38 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* Content layout: column on mobile, row + review rail on desktop              */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__content[data-part='content'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__content[data-part='content'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__content.ds-decision-inbox__content {
   flex-direction: column;
   align-items: stretch;
 }
 
-.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__content[data-part='content'] {
+.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__content[data-part='content'],
+.ds-surface.ds-decision-inbox[data-mobile="false"]
+  .ds-decision-inbox__content.ds-decision-inbox__content {
   flex-direction: row;
 }
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__queue[data-part='queue'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__queue[data-part='queue'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__queue.ds-decision-inbox__queue {
   flex: 1 1 0%;
   min-inline-size: 0;
 }
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__review-rail[data-part='review-rail'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__review-rail[data-part='review-rail'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__review-rail.ds-decision-inbox__review-rail {
   inline-size: 100%;
   flex-shrink: 0;
 }
 
 /* The caller-supplied rail width arrives through a private runtime-instance
    bridge for the existing `reviewRail.width` prop. It is not a public hook. */
-.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__review-rail[data-part='review-rail'] {
+.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__review-rail[data-part='review-rail'],
+.ds-surface.ds-decision-inbox[data-mobile="false"]
+  .ds-decision-inbox__review-rail.ds-decision-inbox__review-rail {
   inline-size: var(--_ds-instance-decision-inbox-rail-width, 380px);
 }
 
@@ -94257,7 +94287,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 /* Review rail parts                                                           */
 /* -------------------------------------------------------------------------- */
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='review-rail'] {
+.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='review-rail'],
+.ds-surface.ds-decision-inbox
+  .ds-decision-inbox__divider.ds-decision-inbox__divider[data-divider-kind="review-rail"] {
   block-size: 1px;
   background: var(--ds-color-border-secondary);
 }
@@ -94293,7 +94325,9 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
     background: Canvas;
   }
 
-  .ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'] {
+  .ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'],
+  .ds-surface.ds-decision-inbox
+    .ds-decision-inbox__divider.ds-decision-inbox__divider {
     background: ButtonBorder;
     border-color: ButtonBorder;
   }
@@ -97414,7 +97448,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * no repetition, no `!important`.
  */
 
-.ds-surface.ds-activity.ds-activity__pagination[data-part='pagination'] {
+.ds-surface.ds-activity.ds-activity__pagination[data-part='pagination'],
+.ds-surface.ds-activity.ds-activity__pagination.ds-activity__pagination {
   padding-block-start: var(--ds-spacing-4, 16px);
   border-block-start: 1px solid
     var(--ds-color-border-subtle, var(--ds-color-border));
@@ -97425,8 +97460,12 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 @media (pointer: coarse) {
   .ds-surface.ds-activity.ds-activity__pagination[data-part='pagination']
     [data-part='pagination-nav-button'],
+  .ds-surface.ds-activity.ds-activity__pagination.ds-activity__pagination
+    [data-part="pagination-nav-button"],
   .ds-surface.ds-activity.ds-activity__pagination[data-part='pagination']
-    [data-part='pagination-page-button'] {
+    [data-part='pagination-page-button'],
+  .ds-surface.ds-activity.ds-activity__pagination.ds-activity__pagination
+    [data-part="pagination-page-button"] {
     min-block-size: var(--ds-touch-target-min, 44px);
     min-inline-size: var(--ds-touch-target-min, 44px);
   }
@@ -97436,7 +97475,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    meta-navigation separation survives (static separator -> CanvasText; the
    composed Pagination already forces its own control frames). */
 @media (forced-colors: active) {
-  .ds-surface.ds-activity.ds-activity__pagination[data-part='pagination'] {
+  .ds-surface.ds-activity.ds-activity__pagination[data-part='pagination'],
+  .ds-surface.ds-activity.ds-activity__pagination.ds-activity__pagination {
     border-block-start-color: CanvasText;
   }
 }

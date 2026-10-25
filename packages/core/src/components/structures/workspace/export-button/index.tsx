@@ -290,7 +290,7 @@ export function ExportButton<T = unknown>({
       {/* Trigger */}
       <Box
         data-part="root"
-        className="ds-structure ds-export-button"
+        className="ds-structure ds-export-button ds-export-button__root"
         ref={setTriggerRef}
       >
         <Button
@@ -309,6 +309,7 @@ export function ExportButton<T = unknown>({
         {copiedFeedback && (
           <Box
             data-part="toast"
+            className="ds-export-button__toast"
             data-copied={true}
             role="status"
           >
@@ -336,7 +337,7 @@ export function ExportButton<T = unknown>({
             data-part="panel"
             data-open={open}
             id={panelId}
-            className="ds-structure ds-export-button-panel"
+              className="ds-structure ds-export-button-panel ds-export-button-panel__panel"
             ref={dropdownRef}
             role="menu"
             aria-label={tOr('exportButton.panelLabel', 'Export formats')}

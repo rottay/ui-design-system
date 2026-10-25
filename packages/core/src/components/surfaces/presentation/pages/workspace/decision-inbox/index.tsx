@@ -20,6 +20,8 @@ import { SurfaceEmptyState, SurfaceErrorState } from '../../../../../structures/
 import { PatternDataTable } from '../../../../../patterns/data/data-table';
 import { PatternFilterPanel } from '../../../../../patterns/forms/filter-panel';
 import { CommunicationInboxIcon } from '@/graphics/icons/semantic/generated/roles/communication-inbox';
+import { useDeclaredEngine } from "@/infrastructure/runtime/engines/composition/react/provider";
+import { isFrozenEngineName } from "@/foundation/contracts/kernel/engine-identity";
 import { Box } from '../../../../../primitives/layout/box';
 import { Stack } from '../../../../../primitives/layout/stack';
 import { Flex } from '../../../../../primitives/layout/flex';
@@ -164,6 +166,11 @@ function SlaBadge({ deadline, warningMin = 60, criticalMin = 15 }: {
 // ---------------------------------------------------------------------------
 
 function DecisionInboxSkeleton() {
+  // Modern Stack styles caller dividers through its divider slot class; a
+  // frozen engine keeps the caller divider class unchanged.
+  const stackDividerSlot = isFrozenEngineName(useDeclaredEngine())
+    ? undefined
+    : "rottay-stack-divider";
   return (
     <Stack className="ds-decision-inbox__skeleton" data-part="skeleton" spacing="md" aria-hidden="true">
       {/* Header skeleton */}
@@ -190,7 +197,9 @@ function DecisionInboxSkeleton() {
           <Stack spacing="sm">
             {/* Header row */}
             <Flex
-              className="ds-decision-inbox__divider"
+                className={["ds-decision-inbox__divider", stackDividerSlot]
+                  .filter(Boolean)
+                  .join(" ")}
               data-part="divider"
               data-divider-kind="skeleton-header"
               gap={4}
@@ -203,7 +212,9 @@ function DecisionInboxSkeleton() {
             {/* Data rows */}
             {Array.from({ length: 5 }).map((_, i) => (
               <Flex
-                className="ds-decision-inbox__divider"
+                  className={["ds-decision-inbox__divider", stackDividerSlot]
+                    .filter(Boolean)
+                    .join(" ")}
                 data-part="divider"
                 data-divider-kind="skeleton-row"
                 key={i}
@@ -258,6 +269,11 @@ function DecisionInboxSurfaceContent<T extends object>(props: DecisionInboxSurfa
   const batchReasonId = useId();
   const reviewReasonId = useId();
   const reviewRailTitleId = useId();
+  // Modern Stack styles caller dividers through its divider slot class; a
+  // frozen engine keeps the caller divider class unchanged.
+  const stackDividerSlot = isFrozenEngineName(useDeclaredEngine())
+    ? undefined
+    : "rottay-stack-divider";
 
   const workspace = useCollectionWorkspace({
     config: workspaceConfig,
@@ -606,7 +622,12 @@ function DecisionInboxSurfaceContent<T extends object>(props: DecisionInboxSurfa
 
                     {/* Divider */}
                     <Box
-                      className="ds-decision-inbox__divider"
+                        className={[
+                          "ds-decision-inbox__divider",
+                          stackDividerSlot,
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
                       data-part="divider"
                       data-divider-kind="review-rail"
                     />
@@ -643,7 +664,12 @@ function DecisionInboxSurfaceContent<T extends object>(props: DecisionInboxSurfa
 
                     {/* Divider before actions */}
                     <Box
-                      className="ds-decision-inbox__divider"
+                        className={[
+                          "ds-decision-inbox__divider",
+                          stackDividerSlot,
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
                       data-part="divider"
                       data-divider-kind="review-rail"
                     />
