@@ -3,6 +3,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
+import ts from "typescript";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { firstPartyFixture } from "@tests/support/theme-lowering";
@@ -37,6 +38,96 @@ const ENGINE = readFileSync(
   resolve(process.cwd(), "src/components/structures/feedback/surface-lifecycle/states/index.tsx"),
   "utf8"
 );
+
+/** The legacy classes retained on the one banner read site. */
+const LEGACY_BANNER_CLASSES = "ds-surface ds-stale-banner";
+/** The only appended class door admitted by the LC1 ruling; no suffix wildcard. */
+const BANNER_CLASS_HOOK = "ds-stale-banner__banner";
+
+/**
+ * Check the direct Flex root of the exported SurfaceStaleBanner, not text on another element.
+ * @param source The owning TSX source, inspected without executing the component.
+ * @returns Whether the root keeps its banner part and legacy classes, with only the authorised hook optional.
+ */
+function hasStaleBannerStamp(source: string): boolean {
+  const file = ts.createSourceFile(
+    "surface-states.tsx",
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX
+  );
+  const owners: ts.FunctionDeclaration[] = [];
+  for (const statement of file.statements) {
+    if (
+      ts.isFunctionDeclaration(statement) &&
+      statement.name?.text === "SurfaceStaleBanner"
+    )
+      owners.push(statement);
+  }
+  if (owners.length !== 1) return false;
+  const owner = owners[0];
+  const modifiers = owner?.modifiers;
+  if (
+    !owner ||
+    owner.asteriskToken ||
+    modifiers?.length !== 1 ||
+    modifiers[0]?.kind !== ts.SyntaxKind.ExportKeyword
+  ) {
+    return false;
+  }
+
+  // The fixture paints this direct return; unrelated or nested JSX cannot supply its stamp.
+  const returns: ts.ReturnStatement[] = [];
+  for (const statement of owner.body?.statements ?? []) {
+    if (ts.isReturnStatement(statement)) returns.push(statement);
+  }
+  if (returns.length !== 1) return false;
+  let root = returns[0]?.expression;
+  while (root && ts.isParenthesizedExpression(root)) root = root.expression;
+  if (
+    !root ||
+    !ts.isJsxElement(root) ||
+    root.openingElement.tagName.getText(file) !== "Flex"
+  )
+    return false;
+
+  let classes: ts.StringLiteral | undefined;
+  let part: ts.StringLiteral | undefined;
+  let classCount = 0;
+  let partCount = 0;
+  for (const attribute of root.openingElement.attributes.properties) {
+    // A spread could replace either binding; a duplicate or expression is not the admitted literal form.
+    if (ts.isJsxSpreadAttribute(attribute)) return false;
+    const name = attribute.name.getText(file);
+    if (name === "className") {
+      classCount += 1;
+      if (attribute.initializer && ts.isStringLiteral(attribute.initializer))
+        classes = attribute.initializer;
+    }
+    if (name === "data-part") {
+      partCount += 1;
+      if (attribute.initializer && ts.isStringLiteral(attribute.initializer))
+        part = attribute.initializer;
+    }
+  }
+  return (
+    classCount === 1 &&
+    partCount === 1 &&
+    part?.text === "banner" &&
+    (classes?.text === LEGACY_BANNER_CLASSES ||
+      classes?.text === `${LEGACY_BANNER_CLASSES} ${BANNER_CLASS_HOOK}`)
+  );
+}
+
+/** Small source fixtures keep the reader controls valid before and after the real class door lands. */
+const BANNER_SOURCE_FIXTURE = [
+  "export function SurfaceStaleBanner() {",
+  `  return (<Flex className="${LEGACY_BANNER_CLASSES}" data-part="banner">`,
+  `    <span data-part="description">Cached data</span>`,
+  "  </Flex>);",
+  "}",
+].join("\n");
 
 const PRODUCES = new Set<string>(surfaceLifecycleChromeDeriver.produces);
 
@@ -214,7 +305,76 @@ describe("chrome/surface-lifecycle channels under a local scope", () => {
   }, 180_000);
 
   it("probes the parts the engine stamps", () => {
-    expect(ENGINE).toContain(`className="ds-surface ds-stale-banner" data-part="banner"`);
+    // Bind the source pin to the banner root that the lifecycle fixture actually paints.
+    expect(hasStaleBannerStamp(ENGINE)).toBe(true);
+  });
+
+  it("accepts the banner's legacy classes and its one appended class door", () => {
+    // Keep both supported forms observable even after the real owner acquires its class door.
+    const armed = BANNER_SOURCE_FIXTURE.replace(
+      LEGACY_BANNER_CLASSES,
+      `${LEGACY_BANNER_CLASSES} ${BANNER_CLASS_HOOK}`
+    );
+    expect(armed).not.toBe(BANNER_SOURCE_FIXTURE);
+    expect(hasStaleBannerStamp(BANNER_SOURCE_FIXTURE)).toBe(true);
+    expect(hasStaleBannerStamp(armed)).toBe(true);
+  });
+
+  it("refuses a foreign, split or overriding banner stamp", () => {
+    const armedClasses = `${LEGACY_BANNER_CLASSES} ${BANNER_CLASS_HOOK}`;
+    const armed = BANNER_SOURCE_FIXTURE.replace(
+      LEGACY_BANNER_CLASSES,
+      armedClasses
+    );
+    const mutants = [
+      {
+        cause: "wrong class door",
+        source: armed.replace(BANNER_CLASS_HOOK, "ds-stale-banner__foreign"),
+      },
+      { cause: "missing base class", source: armed.replace("ds-surface ", "") },
+      {
+        cause: "part moved to a child",
+        source: armed
+          .replace('data-part="banner"', 'data-part="description"')
+          .replace(
+            '<span data-part="description">',
+            '<span data-part="banner">'
+          ),
+      },
+      {
+        cause: "duplicate class binding",
+        source: armed.replace(
+          'data-part="banner"',
+          `className="${LEGACY_BANNER_CLASSES}" data-part="banner"`
+        ),
+      },
+      {
+        cause: "later spread can replace the class",
+        source: armed.replace(
+          'data-part="banner"',
+          'data-part="banner" {...{ className: "foreign" }}'
+        ),
+      },
+      {
+        cause: "matching text only in a comment",
+        source:
+          armed.replace(`className="${armedClasses}" `, "") +
+          `\n// <Flex className="${LEGACY_BANNER_CLASSES}" data-part="banner" />`,
+      },
+      {
+        cause: "different owner",
+        source: armed.replace(
+          "function SurfaceStaleBanner",
+          "function ForeignStaleBanner"
+        ),
+      },
+    ];
+    for (const { cause, source } of mutants) {
+      // Each refusal has the same intact positive immediately before its single causal mutation is checked.
+      expect(hasStaleBannerStamp(armed), cause).toBe(true);
+      expect(source, cause).not.toBe(armed);
+      expect(hasStaleBannerStamp(source), cause).toBe(false);
+    }
   });
 
   it("measures a real read site and a real oracle for every channel in every scope", () => {

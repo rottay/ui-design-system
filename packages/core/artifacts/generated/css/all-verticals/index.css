@@ -91191,7 +91191,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
         lands on. The ink is the accent mixed toward the mode's own text
         ink -- `--ds-color-info` is an accent (the system's `--ds-color-info-ink`
         aliases it), and accents do not carry text. ---- */
-.ds-surface.ds-stale-banner[data-part='banner'] {
+.ds-surface.ds-stale-banner[data-part='banner'],
+.ds-surface.ds-stale-banner.ds-stale-banner__banner {
   padding: var(--ds-surface-lifecycle-stale-banner-padding-block, var(--ds-spacing-2, 8px))
     var(--ds-surface-lifecycle-stale-banner-padding-inline, var(--ds-spacing-3, 12px));
   border-radius: var(--ds-radius-md, 8px);
@@ -91200,7 +91201,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
   font-size: var(--ds-font-size-sm, 0.875rem);
 }
 
-.ds-surface.ds-stale-banner[data-part='banner'][data-part='banner'] {
+.ds-surface.ds-stale-banner[data-part='banner'][data-part='banner'],
+.ds-surface.ds-stale-banner.ds-stale-banner__banner.ds-stale-banner__banner {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-info-border, color-mix(in srgb, var(--ds-color-info) 20%, transparent));
 }
 

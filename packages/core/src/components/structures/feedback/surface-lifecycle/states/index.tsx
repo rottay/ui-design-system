@@ -267,7 +267,13 @@ export function SurfaceStaleBanner({
   const { tSurface } = useSurfaceTranslations();
 
   return (
-    <Flex className="ds-surface ds-stale-banner" data-part="banner" data-refreshing={refreshing ? 'true' : 'false'} gap={3} align="center">
+    <Flex
+      className="ds-surface ds-stale-banner ds-stale-banner__banner"
+      data-part="banner"
+      data-refreshing={refreshing ? "true" : "false"}
+      gap={3}
+      align="center"
+    >
       <Text className="ds-stale-banner__description">{message ?? tSurface('states.stale_message')}</Text>
       {onRefresh && (
         <Button className="ds-stale-banner__refresh" variant="ghost" size="sm" onClick={onRefresh} pending={refreshing}>
