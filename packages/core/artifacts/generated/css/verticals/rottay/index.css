@@ -28879,7 +28879,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
         the table: the rule anchors on the part itself (single stamp site,
         mobile-cards/row-actions), the portaled-content pattern of the
         sibling skins. ---- */
-[data-part="row-actions-menu"] {
+:where(.ds-data-table__row-actions-menu)[data-part="row-actions-menu"],
+:where(.ds-data-table__row-actions-menu).ds-data-table__row-actions-menu {
   min-inline-size: 9rem;
 }
 

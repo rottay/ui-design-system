@@ -23,7 +23,12 @@ export function RowActionsMenu({
       placement="bottomRight"
       aria-label={label}
       content={
-        <Flex direction="column" gap={4} data-part="row-actions-menu">
+        <Flex
+          direction="column"
+          gap={4}
+          data-part="row-actions-menu"
+          className="ds-data-table__row-actions-menu"
+        >
           {children}
         </Flex>
       }
