@@ -93420,14 +93420,14 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    ------------------------------------------------------------------------- */
 .ds-collection-workspace__filter-sheet-content[data-part="filter-sheet-content"],
 .ds-collection-workspace__preview-sheet-content[data-part="preview-sheet-content"],
-.ds-collection-workspace__filter-dropdown-content[data-part="filter-dropdown-content"] {
+.ds-collection-workspace__filter-dropdown-content:is([data-part="filter-dropdown-content"], .ds-collection-workspace__filter-dropdown-content) {
   min-inline-size: 0;
 }
 
 /* The filter disclosure mounts beside the workspace root, never inside it, so
    its action row is spaced from the disclosure's own content box. */
-.ds-collection-workspace__filter-dropdown-content[data-part="filter-dropdown-content"]
-  > .ds-collection-workspace__filter-dropdown-actions[data-part="filter-dropdown-actions"] {
+.ds-collection-workspace__filter-dropdown-content:is([data-part="filter-dropdown-content"], .ds-collection-workspace__filter-dropdown-content)
+  > .ds-collection-workspace__filter-dropdown-actions:is([data-part="filter-dropdown-actions"], .ds-collection-workspace__filter-dropdown-actions) {
   margin-block-start: var(--ds-spacing-md);
 }
 
