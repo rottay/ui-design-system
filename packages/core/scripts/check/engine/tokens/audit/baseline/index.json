@@ -4021,7 +4021,7 @@
   "color.componentLiterals.primitives/overlay/watermark/runtime/canvas-pattern/index.ts": 1,
   "color.componentLiterals.structures/feedback/surface-lifecycle/error-boundary/index.tsx": 6,
   "color.componentLiterals.surfaces/foundation/common/story-helpers/index.tsx": 4,
-  "color.componentHexLiterals": 255,
+  "color.componentHexLiterals": 251,
   "color.componentRgbaLiterals": 43,
   "inlineGeometry.patterns/commerce/pricing-table/engines/classic/index.tsx": 32,
   "inlineGeometry.patterns/commerce/pricing-table/engines/rustic/index.tsx": 35,
