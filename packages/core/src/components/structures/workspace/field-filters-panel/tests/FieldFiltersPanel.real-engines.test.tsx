@@ -92,6 +92,26 @@ function bColumn(selector: string): number {
   return classes + attrs + pseudos + notArgs;
 }
 
+/** Select suppression members individually; neighbours cannot lend specificity or root/control predicates. */
+function rusticSuppressionRules(
+  rules: ReturnType<typeof cssRules>
+): ReturnType<typeof cssRules> {
+  return rules.flatMap(({ selector, body }) =>
+    selector.split(",").flatMap((member) => {
+      const part = member.trim();
+      // The floor and both existing predicates must hold on this same comma-free member.
+      if (
+        part.includes(".ds-field-filters-panel__control") &&
+        part.includes("[data-part='root']") &&
+        bColumn(part) >= 7
+      ) {
+        return [{ selector: part, body }];
+      }
+      return [];
+    })
+  );
+}
+
 /** True if the declaration block sets a border COLOR (paints), not a `none`/`0` reset. */
 function paintsBorder(body: string): boolean {
   const re =
@@ -139,13 +159,71 @@ describe('FieldFiltersPanel skin — structural contract', () => {
     ).toEqual([]);
   });
 
-  it('carries the rustic-input suppression rule outranking the focused (0,6,0) input rules', () => {
-    const suppression = rules.filter(
-      ({ selector }) =>
-        selector.includes('.ds-field-filters-panel__control') &&
-        selector.includes("[data-part='root']") &&
-        bColumn(selector) >= 7
+  it("does not borrow suppression specificity or predicates across comma members", () => {
+    const weakLists = [
+      [
+        ".ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__control",
+        ".ds-structure.ds-field-filters-panel.ds-field-filters-panel__root .ds-field-filters-panel__control",
+      ],
+      [
+        ".ds-structure.ds-field-filters-panel[data-part='root'] [data-part='control-slot']",
+        ".ds-structure.ds-field-filters-panel.ds-field-filters-panel__root .ds-field-filters-panel__control-slot",
+      ],
+    ];
+    for (const members of weakLists) {
+      const selector = members.join(",\n");
+      // Reproduce the old false positive before checking the per-member exclusion.
+      expect(selector).toContain(".ds-field-filters-panel__control");
+      expect(selector).toContain("[data-part='root']");
+      expect(bColumn(selector)).toBeGreaterThanOrEqual(7);
+      for (const member of members) expect(bColumn(member)).toBeLessThan(7);
+      expect(
+        rusticSuppressionRules(
+          cssRules(`${selector} { margin-block-start: auto; }`)
+        )
+      ).toEqual([]);
+    }
+  });
+
+  it("finds the real (0,7,0) suppression member without admitting weaker neighbours", () => {
+    const selector =
+      ".ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card'] [data-part='control-slot'] .ds-field-filters-panel__control[data-part='root']";
+    const matches = rules.filter(
+      (rule) => rule.selector.replace(/\s+/g, " ") === selector
     );
+    expect(
+      matches,
+      "the real stylesheet must supply exactly one intact suppression rule"
+    ).toHaveLength(1);
+    const strong = matches[0]!;
+    expect(bColumn(strong.selector)).toBe(7);
+    expect(rusticSuppressionRules([strong])).toEqual([strong]);
+
+    const weak =
+      ".ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__control";
+    for (const members of [
+      [strong.selector, weak],
+      [weak, strong.selector],
+    ]) {
+      const mixed = cssRules(`${members.join(",\n")} { ${strong.body} }`);
+      expect(rusticSuppressionRules(mixed)).toEqual([strong]);
+    }
+    // Keep the exact floor and both original guards; a high-weight unrelated member is not suppression.
+    const rejected = [
+      selector.replace("[data-part='filter-card'] ", ""),
+      selector.replaceAll("[data-part='root']", "[data-part='control']"),
+      selector.replace(".ds-field-filters-panel__control", ".foreign-control"),
+    ];
+    expect(bColumn(rejected[0]!)).toBe(6);
+    for (const member of rejected) {
+      expect(
+        rusticSuppressionRules(cssRules(`${member} { ${strong.body} }`))
+      ).toEqual([]);
+    }
+  });
+
+  it('carries the rustic-input suppression rule outranking the focused (0,6,0) input rules', () => {
+    const suppression = rusticSuppressionRules(rules);
     expect(
       suppression.length,
       'the rustic-input suppression rule (>= (0,7,0), self-selecting via [data-part=root]) is missing'

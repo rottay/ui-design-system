@@ -24502,7 +24502,9 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   );
 }
 
-.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__control {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__control,
+.ds-structure.ds-field-filters-panel.ds-field-filters-panel__root
+  .ds-field-filters-panel__control {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
 }
 
@@ -24585,7 +24587,9 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 /* control slot: pins the control to the card floor, so every card in the
    auto-fit grid lands its Select/Input on one line regardless of how far
    its description wraps. */
-.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='control-slot'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='control-slot'],
+.ds-structure.ds-field-filters-panel.ds-field-filters-panel__root
+  .ds-field-filters-panel__control-slot {
   margin-block-start: auto;
 }
 

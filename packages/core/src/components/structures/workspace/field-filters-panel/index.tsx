@@ -323,7 +323,12 @@ function FilterCard({
           </Text>
         </Box>
       </Flex>
-      <Box data-part="control-slot">{children}</Box>
+      <Box
+        data-part="control-slot"
+        className="ds-field-filters-panel__control-slot"
+      >
+        {children}
+      </Box>
     </Box>
   );
 }
