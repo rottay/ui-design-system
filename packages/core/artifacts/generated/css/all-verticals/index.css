@@ -93442,10 +93442,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    Sheets / accordion / compact actions (content wrappers only — the overlay
    chrome belongs to AdaptiveOverlay).
    ------------------------------------------------------------------------- */
-.ds-surface.ds-collection-workspace
-  .ds-collection-workspace__filter-sheet-content[data-part="filter-sheet-content"],
-.ds-surface.ds-collection-workspace
-  .ds-collection-workspace__preview-sheet-content[data-part="preview-sheet-content"],
+.ds-collection-workspace__filter-sheet-content[data-part="filter-sheet-content"],
+.ds-collection-workspace__preview-sheet-content[data-part="preview-sheet-content"],
 .ds-collection-workspace__filter-dropdown-content[data-part="filter-dropdown-content"] {
   min-inline-size: 0;
 }

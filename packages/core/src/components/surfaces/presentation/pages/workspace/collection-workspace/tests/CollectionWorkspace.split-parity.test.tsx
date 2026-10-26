@@ -90,6 +90,11 @@ const CAPTURE_PATH = process.env.W7A_CAPTURE;
 // "utility-icon-toggle" | "control" | "fallback-open-link" -> "trigger": every scene but shell, rtl)
 // and E8-a 2d9e75af1 (phone title gains class ds-collection-render-dispatch__title). E3 4d8559be9
 // measured inert here. Attribute-only delta: tag sequence and text nodes are byte-identical.
+// Re-captured 2026-10-26 on ca35eb8f9, again attribute-only (tag sequence and text nodes unchanged):
+// d91b4123c (legacy toolbar title align "left" -> "start"); 60dd6ef1e Stack strip (content Stack
+// data-part "content" -> "root" in every modern scene, legacy root attribute order); class carriers
+// afe754ae2 (collection-header: shell, dropdown, frozen, phone), 1e0e68978 (search-command-bar: shell,
+// rtl), 06713a4c9 (collection-shell: shell), 6640b20bf (action-dock: phone), 4cf693158 (list-toolbar: legacy).
 const PINS: Record<string, unknown> = {
   "p1": {
     "keys": [
@@ -99,14 +104,14 @@ const PINS: Record<string, unknown> = {
     "alias": true
   },
   "p2": {
-    "legacy": "d780653d4409b3a10257e8e70ba497f9a1648250c7b4f3e6ded5ae2f1adea49f",
-    "headerless": "cb088608ed03c0f75e01d1cff4ea2002b13d6f18fd5527e22c6f668dcd4d1b93",
-    "shell": "09669eb42148136d5a68ad2c357d6fdecf9bcc605051cb6e4e54b096c46ff1d7",
-    "dropdown": "267859fefba1a4f74136f5508e7773097f60838de14b33634cea8da4559ea27a",
-    "frozen": "d90d8491cb581f8cfc9a253772e9d17afd2d7b0fb6fb10761fd8cea3baa25ba2",
-    "phone": "a0798aebf64d52141f4dd83cc89146a5c791c8860ce0eed69457fe44df239f10",
-    "accordion": "86a79fc265f3c420df597611c93212006b1a02a8c6e89241fa92443e33bab764",
-    "rtl": "731bcc94b43f3f076cbad00d70650fab69488ada4053ac0b7143c7f8890eb601"
+    "legacy": "6700ad79756fd5912e55c8a6095c9496705068260b598d497a132cef49944001",
+    "headerless": "b2aca517ed1a0cbe0cf3589f71adf5b8a46628022bac63044b9cbc6a3c7621e3",
+    "shell": "1f295b4e908990fab8f05cb7e83cff4a09f1df6c2230992e05a5d219c385ae68",
+    "dropdown": "e96950a10256335f785bad3c17af66151faec725f2e88e1bd4583cb5a4634ddb",
+    "frozen": "4a2445a5008afac4296c285459f0a16e0358553f9f3b7ef28b6a58a88c239a84",
+    "phone": "27f5ed4d33fe1d9d8a4047b5d2aafdbf8d810b020d0513ae140e5ee65eb329df",
+    "accordion": "24bf98152f2f3965b87272afbf7ee632d76923a5c4c6f93414870cebeaf8510a",
+    "rtl": "b933e1fe11a9124eac6e2c97ad53610ba35f5f6f7bab98bb4674949ca67e69b4"
   },
   "p2id": {
     "phone": {
@@ -122,14 +127,16 @@ const PINS: Record<string, unknown> = {
   },
   // Engine router: +1 useSyncExternalStore +2 useRef per render, insert-only vs the raw W7A_LEDGER_DIR dumps
   // (N = 66 legacy / 143 phone: 3303 + 198, 3658 + 429). A router hook added later re-derives these from the dumps.
+  // 715726bf0 rendered-families: +1 useContext per router render, +1 useContext +1 useState per provider
+  // render (2): 3501 + 66 + 4, 4087 + 143 + 4, insert-only.
   "p2hook": {
     "legacy": {
-      "count": 3501,
-      "sha256": "f06d276d253ef69ff36d2a5026509c527cdb4505de35bd41c9a0f1269d8fa6dd"
+      "count": 3571,
+      "sha256": "22122b0e470b251267bba0d20335ccf754ab03ff64d81825ab0b7a4649623c57"
     },
     "phone": {
-      "count": 4087,
-      "sha256": "d88bf56aa18702226c93f6d52e981970307a771689982ca4450be803a0170444"
+      "count": 4234,
+      "sha256": "96c0f0cc477ce45e9883b8e8594478b1fc440fa73aa7b271e09ef2ca90d1dcb8"
     }
   },
   "p3a": {
