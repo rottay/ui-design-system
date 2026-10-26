@@ -3054,6 +3054,11 @@
      "at": "2026-10-26 13:29",
      "by": "kimi-admin-dt",
      "note": "FU-9A integrated functionally at 2e2ad4d12 (tree 3e5503ca) and generated at 29e309cf5 (tree 22a3c9d0): ACTUAL peer 1f2c354f ACCEPT 557bd5f0; generation peer 5ad73d96 ACCEPT fd8014a0. G1 38 doors/55 arms/6 registered, ext11 phone repair, P1-P4+negatives, 240 unit+9 integration incl. AXE reader, typechecks, build/producers and C7[0,1,0] accepted. Producers OK; theme-graph remains RED at 9.77>9.68 with no waiver. Six-selector arm lot, live registry promotion, strip and ARC-12 closure remain open."
+    },
+    {
+     "at": "2026-10-26 15:23",
+     "by": "kimi-admin-dt",
+     "note": "FU-8A integrated functionally at 6d1b385d7 (tree 4511de67) and generated at 2ec17c925 (tree f487a26d): ACTUAL peer 32d4885b ACCEPT b53f7928; generation-final peer 9b5e252d ACCEPT f6cb3c4e. G1 prepair, EXT credit, P1-P4 with original-HEAD P2 and original/prePair-on-LOT chain, 355 unit+45 integration, typechecks, build/producers and C7[0,1,0] accepted. Root-aliases final check and full build green; theme-graph remains RED at 9.77>9.68 without waiver. No live registry promotion, strip or ARC-12 closure."
     }
    ],
    "claimedBy": "kimi-dt",
