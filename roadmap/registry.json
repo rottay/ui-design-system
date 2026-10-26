@@ -3049,6 +3049,11 @@
      "at": "2026-10-26 11:40",
      "by": "kimi-admin-dt",
      "note": "FU-9B L911/R2 integrated at b3ee7fb640d6f02913d2994755d3203589b11c2a (tree e30e55296a9b96570d778958aad296246e4c12fe): independent ACTUAL peer 55b32153-8a89-4f3e-9722-27481d6f3d6e ACCEPT sha256 3d3eea4a50a7977d3599c90436a48202633beafe18b3106262559785e7d7fd0b. AST, marker G1+EXT credit, P1-P4 with negatives, 91 unit+4 Chromium, css-build13/13 and C7[0,1,0] accepted after verified recovery; axis retains pre-existing debt with no R2-attributed delta. No :117/:122 strip, live ext9 promotion or WO/ARC12 closure; caller mapping, remaining FUs and full certification continue."
+    },
+    {
+     "at": "2026-10-26 13:29",
+     "by": "kimi-admin-dt",
+     "note": "FU-9A integrated functionally at 2e2ad4d12 (tree 3e5503ca) and generated at 29e309cf5 (tree 22a3c9d0): ACTUAL peer 1f2c354f ACCEPT 557bd5f0; generation peer 5ad73d96 ACCEPT fd8014a0. G1 38 doors/55 arms/6 registered, ext11 phone repair, P1-P4+negatives, 240 unit+9 integration incl. AXE reader, typechecks, build/producers and C7[0,1,0] accepted. Producers OK; theme-graph remains RED at 9.77>9.68 with no waiver. Six-selector arm lot, live registry promotion, strip and ARC-12 closure remain open."
     }
    ],
    "claimedBy": "kimi-dt",
