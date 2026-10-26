@@ -497,7 +497,10 @@ export function SearchCommandBar({
                   aria-label={tOr('searchCommandBar.enableMicrophone', 'Enable microphone')}
                 >
                   <Flex align="start" justify="between" gap={10}>
-                    <Box data-part="voice-help-copy">
+                    <Box
+                      data-part="voice-help-copy"
+                      className="ds-search-command-bar__voice-help-copy"
+                    >
                       <Text className="ds-search-command-bar__voice-help-title" size="sm" weight="medium">
                         {isVoicePermissionBlocked
                           ? tOr('searchCommandBar.enableMicrophone', 'Enable microphone')
@@ -532,28 +535,50 @@ export function SearchCommandBar({
                   >
                     {isVoicePermissionBlocked ? (
                       <>
-                        <Box as="li" data-part="voice-help-step">
+                        <Box
+                          as="li"
+                          data-part="voice-help-step"
+                          className="ds-search-command-bar__voice-help-step"
+                        >
                           {tOr('searchCommandBar.voiceHelpStepClickSiteControls', 'Click the site controls icon next to the URL.')}
                         </Box>
-                        <Box as="li" data-part="voice-help-step">
+                        <Box
+                          as="li"
+                          data-part="voice-help-step"
+                          className="ds-search-command-bar__voice-help-step"
+                        >
                           {tOr('searchCommandBar.voiceHelpStepSetPrefix', 'Set')} <strong>{tOr('searchCommandBar.microphone', 'Microphone')}</strong> {tOr('searchCommandBar.voiceHelpStepSetMiddle', 'to')} <strong>{tOr('searchCommandBar.voiceHelpAllow', 'Allow')}</strong>.
                         </Box>
-                        <Box as="li" data-part="voice-help-step">{tOr('searchCommandBar.voiceHelpStepReturnPrefix', 'Return here and press')} <strong>{tOr('searchCommandBar.titleSpeak', 'Speak')}</strong> {tOr('searchCommandBar.voiceHelpStepReturnSuffix', 'again.')}</Box>
+                        <Box as="li" data-part="voice-help-step" className="ds-search-command-bar__voice-help-step">{tOr('searchCommandBar.voiceHelpStepReturnPrefix', 'Return here and press')} <strong>{tOr('searchCommandBar.titleSpeak', 'Speak')}</strong> {tOr('searchCommandBar.voiceHelpStepReturnSuffix', 'again.')}</Box>
                       </>
                     ) : (
                       <>
-                        <Box as="li" data-part="voice-help-step">
+                        <Box
+                          as="li"
+                          data-part="voice-help-step"
+                          className="ds-search-command-bar__voice-help-step"
+                        >
                           {tOr('searchCommandBar.voiceHelpStepPressPrefix', 'Press')} <strong>{tOr('searchCommandBar.enableMicrophone', 'Enable microphone')}</strong> {tOr('searchCommandBar.voiceHelpStepPressSuffix', 'below.')}
                         </Box>
-                        <Box as="li" data-part="voice-help-step">
+                        <Box
+                          as="li"
+                          data-part="voice-help-step"
+                          className="ds-search-command-bar__voice-help-step"
+                        >
                           {tOr('searchCommandBar.voiceHelpStepApprove', 'Approve the browser permission prompt for this site.')}
                         </Box>
-                        <Box as="li" data-part="voice-help-step">{tOr('searchCommandBar.voiceHelpStepAutoStart', 'We will start listening as soon as access is granted.')}</Box>
+                        <Box as="li" data-part="voice-help-step" className="ds-search-command-bar__voice-help-step">{tOr('searchCommandBar.voiceHelpStepAutoStart', 'We will start listening as soon as access is granted.')}</Box>
                       </>
                     )}
                   </Box>
 
-                  <Flex align="center" justify="between" gap={12} data-part="voice-help-footer">
+                  <Flex
+                    align="center"
+                    justify="between"
+                    gap={12}
+                    data-part="voice-help-footer"
+                    className="ds-search-command-bar__voice-help-footer"
+                  >
                     <Text
                       className="ds-search-command-bar__voice-help-hint"
                       size="xs"
@@ -564,7 +589,12 @@ export function SearchCommandBar({
                           ? tOr('searchCommandBar.voiceHelpHintRequesting', 'If you do not see the prompt, check the browser site controls near the URL.')
                           : tOr('searchCommandBar.voiceHelpHintIdle', 'Grant access once and the mic button will switch to Speak.')}
                     </Text>
-                    <Flex align="center" gap={8} data-part="voice-help-actions">
+                    <Flex
+                      align="center"
+                      gap={8}
+                      data-part="voice-help-actions"
+                      className="ds-search-command-bar__voice-help-actions"
+                    >
                       <Button
                         variant="ghost"
                         size="sm"
