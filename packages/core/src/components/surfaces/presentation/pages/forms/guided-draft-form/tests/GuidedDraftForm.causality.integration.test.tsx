@@ -220,11 +220,13 @@ describeCausality({
  * this map. `bithire dark` stays pinned, unchanged at 3.41:1 (#2f5be8 on
  * #0d101a); 03d8f88fd (WO-ARC-12 L07) gave the label its owner class hook, so
  * axe now names the same node by that class and drops `data-size`.
+ * The row and main wrappers are served by their owner class hooks too, so axe
+ * names those two ancestors by class instead of `.rottay-flex`: same node, same debt.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
     'color-contrast': [
-      'button[data-active="true"] > span[data-state="visible"][data-part="content"] > span[data-part="label"] > .rottay-flex[data-part="section-nav-item-row"][data-align="center"] > .rottay-flex[data-part="section-nav-item-main"][data-align="center"] > .ds-guided-draft-form__section-nav-item-label[data-color="inherit"][data-size="sm"]',
+      'button[data-active="true"] > span[data-state="visible"][data-part="content"] > span[data-part="label"] > .ds-guided-draft-form__section-nav-item-row[data-part="section-nav-item-row"][data-align="center"] > .ds-guided-draft-form__section-nav-item-main[data-part="section-nav-item-main"][data-align="center"] > .ds-guided-draft-form__section-nav-item-label[data-color="inherit"][data-size="sm"]',
     ],
   },
 };

@@ -235,12 +235,13 @@ function DraftStatusBadge({
   return (
     <Flex
       data-part="draft-status"
+      className="ds-guided-draft-form__draft-status"
       data-status={status}
       role="status"
       align="center"
       gap={2}
     >
-      <Box data-part="draft-status-dot" data-status={status} aria-hidden="true" />
+      <Box data-part="draft-status-dot" className="ds-guided-draft-form__draft-status-dot" data-status={status} aria-hidden="true" />
       <Text className="ds-guided-draft-form__draft-status-label" size="xs" color={statusTone[status]}>
         {statusCopy[status]}
       </Text>
@@ -334,7 +335,7 @@ function SectionNav({
         >
           {tSurfaceOr('guided_draft_form.section_nav_label_plural', 'Sections')}
         </Text>
-        <Flex data-part="section-nav-list" gap={2} align="center">
+        <Flex data-part="section-nav-list" className="ds-guided-draft-form__section-nav-list" gap={2} align="center">
           {sections.map((section) => {
             const isActive = activeSection === section.key;
             return (
@@ -351,7 +352,7 @@ function SectionNav({
               >
                 <Flex align="center" gap={1}>
                   {section.icon && (
-                    <Box data-part="section-nav-item-icon" aria-hidden="true">
+                    <Box data-part="section-nav-item-icon" className="ds-guided-draft-form__section-nav-item-icon" aria-hidden="true">
                       {section.icon}
                     </Box>
                   )}
@@ -360,7 +361,7 @@ function SectionNav({
                   </Text>
                   {section.isComplete && <StatusSuccessIcon decorative size={14} />}
                   {section.hasErrors && (
-                    <Box data-part="section-nav-item-error-dot" aria-hidden="true" />
+                    <Box data-part="section-nav-item-error-dot" className="ds-guided-draft-form__section-nav-item-error-dot" aria-hidden="true" />
                   )}
                 </Flex>
               </Button>
@@ -406,7 +407,7 @@ function SectionNav({
               <Flex data-part="section-nav-item-row" className="ds-guided-draft-form__section-nav-item-row" align="center" gap={2}>
                 <Flex data-part="section-nav-item-main" className="ds-guided-draft-form__section-nav-item-main" align="center" gap={2}>
                   {section.icon && (
-                    <Box data-part="section-nav-item-icon" aria-hidden="true">
+                    <Box data-part="section-nav-item-icon" className="ds-guided-draft-form__section-nav-item-icon" aria-hidden="true">
                       {section.icon}
                     </Box>
                   )}
@@ -416,7 +417,7 @@ function SectionNav({
                 </Flex>
                 {section.isComplete && <StatusSuccessIcon decorative size={14} />}
                 {section.hasErrors && (
-                  <Box data-part="section-nav-item-error-dot" aria-hidden="true" />
+                  <Box data-part="section-nav-item-error-dot" className="ds-guided-draft-form__section-nav-item-error-dot" aria-hidden="true" />
                 )}
               </Flex>
             </Button>
@@ -452,7 +453,7 @@ function TemplateCard({
       <Card.Body>
         <Stack spacing="xs">
           {template.icon && (
-            <Box data-part="template-card-icon" aria-hidden="true">
+            <Box data-part="template-card-icon" className="ds-guided-draft-form__template-card-icon" aria-hidden="true">
               {template.icon}
             </Box>
           )}
@@ -504,7 +505,7 @@ function GuidedDraftFormSectionCard({
         <Box data-part="section-card-header" className="ds-guided-draft-form__section-card-header">
             <Flex align="center" gap={2}>
               {section.icon && (
-                <Box data-part="section-card-icon" aria-hidden="true">
+                <Box data-part="section-card-icon" className="ds-guided-draft-form__section-card-icon" aria-hidden="true">
                   {section.icon}
                 </Box>
               )}
@@ -519,7 +520,7 @@ function GuidedDraftFormSectionCard({
                 {section.title}
               </Heading>
               {section.isComplete && (
-                <Flex data-part="section-card-complete" align="center" gap={1}>
+                <Flex data-part="section-card-complete" className="ds-guided-draft-form__section-card-complete" align="center" gap={1}>
                   {/* Off the card ground the status tint no longer clears 4.5:1
                       as COPY; the semantic icon keeps the non-colour cue and the
                       label takes the ledger's reading ink. */}
@@ -528,7 +529,7 @@ function GuidedDraftFormSectionCard({
                 </Flex>
               )}
               {section.hasErrors && (
-                <Flex data-part="section-card-errors" align="center" gap={1}>
+                <Flex data-part="section-card-errors" className="ds-guided-draft-form__section-card-errors" align="center" gap={1}>
                   <StatusErrorIcon decorative size={14} />
                   <Text size="xs">{errorsLabel}</Text>
                 </Flex>
@@ -820,7 +821,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
         >
           <Card.Body>
             <Stack spacing="sm">
-              <Flex data-part="validation-summary-header" align="center" gap={2}>
+              <Flex data-part="validation-summary-header" className="ds-guided-draft-form__validation-summary-header" align="center" gap={2}>
                 {errorCount > 0 ? (
                   <StatusErrorIcon decorative size={16} />
                 ) : (
@@ -847,7 +848,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                     .join(' · ')}
                 </Text>
               </Flex>
-              <Box role="list" data-part="validation-issue-list">
+              <Box role="list" data-part="validation-issue-list" className="ds-guided-draft-form__validation-issue-list">
                 <Stack spacing="xs">
                   {validationIssues.slice(0, 5).map((issue, i) => {
                     const navigable =
@@ -857,11 +858,13 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                         role="listitem"
                         key={`${issue.field}-${i}`}
                         data-part="validation-issue"
+                        className="ds-guided-draft-form__validation-issue"
                         data-severity={issue.severity}
                       >
                         <Flex align="start" gap={2}>
                           <Box
                             data-part="validation-issue-dot"
+                            className="ds-guided-draft-form__validation-issue-dot"
                             data-severity={issue.severity}
                             aria-hidden="true"
                           />
@@ -934,7 +937,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                 {submitLoading ? submittingLabel : resolvedSubmitLabel}
               </Button>
               {secondaryActions && secondaryActions.length > 0 && (
-                <Flex data-part="submit-bar-secondary" gap={2}>
+                <Flex data-part="submit-bar-secondary" className="ds-guided-draft-form__submit-bar-secondary" gap={2}>
                   {secondaryActions.map((action) => (
                     <Button
                       key={action.key}
@@ -1020,10 +1023,10 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
         >
           <Card.Body>
             <Flex align="center" gap={3} wrap="wrap">
-              <Box data-part="draft-recovery-icon" aria-hidden="true">
+              <Box data-part="draft-recovery-icon" className="ds-guided-draft-form__draft-recovery-icon" aria-hidden="true">
                 <StatusDraftIcon decorative size={16} />
               </Box>
-              <Box data-part="draft-recovery-copy">
+              <Box data-part="draft-recovery-copy" className="ds-guided-draft-form__draft-recovery-copy">
                 <Text className="ds-guided-draft-form__draft-recovery-title" size="sm" weight="medium" as="p">
                   {tSurfaceOr(
                     'guided_draft_form.draft_recovery_title',
@@ -1043,7 +1046,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
                       )}
                 </Text>
               </Box>
-              <Flex data-part="draft-recovery-actions" gap={2}>
+              <Flex data-part="draft-recovery-actions" className="ds-guided-draft-form__draft-recovery-actions" gap={2}>
                 <Button size="sm" variant="primary" onClick={draftRecovery.onRecover}>
                   {tSurfaceOr('guided_draft_form.draft_recovery_recover', 'Recover')}
                 </Button>
@@ -1083,8 +1086,8 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
           )}
         </Box>
         {showFullChrome && showProgress && (
-          <Flex data-part="progress" align="center" gap={2}>
-            <Box data-part="progress-bar">
+          <Flex data-part="progress" className="ds-guided-draft-form__progress" align="center" gap={2}>
+            <Box data-part="progress-bar" className="ds-guided-draft-form__progress-bar">
               <Progress percent={progressPercent} strokeWidth={4} showInfo={false} />
             </Box>
             <Text className="ds-guided-draft-form__progress-count" size="xs" color="muted">
@@ -1119,6 +1122,7 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
       {showFullChrome && showTemplates && templates && templates.items.length > 0 && (
         <SurfacePostureSlot name="templates" asChild><Box
           data-part="template-picker"
+          className="ds-guided-draft-form__template-picker"
           id={templatePickerId}
           role="region"
           aria-label={tSurfaceOr(
