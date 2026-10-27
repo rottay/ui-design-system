@@ -614,6 +614,16 @@ function attributeName(attribute) {
   return ts.isJsxAttribute(attribute) && attribute.name ? attribute.name.getText() : '';
 }
 
+/**
+ * `data-part={undefined}` renders no attribute on any engine, so it stamps no part,
+ * literal or dynamic. Only the bare `undefined` identifier qualifies.
+ */
+function isStaticallyUndefined(initializer) {
+  const value = initializer && ts.isJsxExpression(initializer) ? initializer.expression : initializer;
+  const node = unwrapTransparent(value);
+  return Boolean(node) && ts.isIdentifier(node) && node.text === 'undefined';
+}
+
 function attributeLiterals(attribute) {
   if (!attribute.initializer) return [];
   if (ts.isStringLiteral(attribute.initializer)) return [attribute.initializer.text];
@@ -868,7 +878,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
      * family that stamps nothing. */
     if (ts.isPropertyAssignment(node)) {
       const key = node.name.getText(source).replace(/^['"]|['"]$/gu, '');
-      if (key === 'data-part') {
+      if (key === 'data-part' && !isStaticallyUndefined(node.initializer)) {
         stampsPartAttribute = true;
         const found = literalsIn(node.initializer);
         if (found.length === 0) dynamicParts += 1;
@@ -886,7 +896,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
     }
     if (ts.isJsxAttribute(node)) {
       const name = attributeName(node);
-      if (name === 'data-part') {
+      if (name === 'data-part' && !isStaticallyUndefined(node.initializer)) {
         stampsPartAttribute = true;
         const found = attributeLiterals(node);
         if (found.length === 0) dynamicParts += 1;

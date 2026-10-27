@@ -2,7 +2,7 @@
 "@rottay/design-system": major
 ---
 
-`PatternDataTable` no longer passes a caller `data-part` to the four `Stack`
+`PatternDataTable` no longer renders a caller `data-part` on the four `Stack`
 elements of its phone and toolbar anatomy. On the Classic and Rustic engines,
 which forward a caller `data-part`, these elements stop rendering it:
 
@@ -13,9 +13,14 @@ which forward a caller `data-part`, these elements stop rendering it:
   presentation and `data-part="record-list"` in the list presentation;
 - the default card's identity column, `data-part="mobile-card-primary"`.
 
-On Modern the rendered markup does not change: since
-`arc12-carriers-mp2-stack-strip` the Modern `Stack` stamps its own
-`data-part="root"` on these elements.
+Each of the four sites keeps a valueless `data-part={undefined}` key in
+source, in the position the caller value used to hold. It renders no attribute
+on any engine, so no caller part reaches the markup. On Modern it keeps the
+`Stack`'s own `data-part="root"` (stamped since
+`arc12-carriers-mp2-stack-strip`) as the first attribute, because React keeps
+an attribute where its key was first inserted. The Modern markup of these
+elements is therefore byte-equal to before this change, attribute order
+included.
 
 Replacement: select these elements by their owner class, which each one
 carries on every engine: `ds-data-table__mobile-root`,

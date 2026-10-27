@@ -1280,6 +1280,69 @@ test('INJECTION: an anatomy attribute authored as an object property is seen', (
   assert.ok(fromObject.parts.has('trigger'), '`partAttributes(\'trigger\', …)` stamps `trigger`');
 });
 
+const analyzeTsx = (text) => analyzeSource(
+  'planted.tsx',
+  ts.createSourceFile('planted.tsx', text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX),
+);
+
+test('CONTROL: a statically undefined `data-part` stamps nothing, literal or dynamic', () => {
+  const cases = [
+    ['<Stack data-part={undefined} />', [], 0, false],
+    ['<Stack data-part={(undefined as never)} />', [], 0, false],
+    ["<Stack {...{ 'data-part': undefined }} />", [], 0, false],
+    ['<Stack data-part="root" />', ['root'], 0, true],
+    ["<Stack data-part={on ? undefined : 'title'} />", ['title'], 0, true],
+    ['<Stack data-part={part} />', [], 1, true],
+    ['<Stack data-part={on ? undefined : part} />', [], 1, true],
+    ['<Stack data-part={void 0} />', [], 1, true],
+    ['<Stack data-part={undefinedPart} />', [], 1, true],
+    ['<Stack data-part />', [], 1, true],
+    ["<Stack {...{ 'data-part': part }} />", [], 1, true],
+  ];
+  for (const [jsx, parts, dynamicParts, stamps] of cases) {
+    const analyzed = analyzeTsx(`export const X = ({ on, part, undefinedPart }) => ${jsx};\n`);
+    assert.deepEqual([...analyzed.parts], parts, `${jsx}: parts`);
+    assert.equal(analyzed.dynamicParts, dynamicParts, `${jsx}: dynamic parts`);
+    assert.equal(analyzed.stampsPartAttribute, stamps, `${jsx}: stamps a part`);
+    assert.equal(analyzed.partOccurrences.length, parts.length, `${jsx}: element occurrences`);
+  }
+});
+
+test('PLANT: a valueless `data-part` key does not mute a dropped data-table part', () => {
+  // A dynamic part empties `partsConsumedNotStamped`; a valueless key must not count as one.
+  const resolved = resolveFamily('data-table');
+  const owner = resolved.sources.find((file) => file.endsWith(join('table', 'mobile-cards', 'index.tsx')));
+  assert.ok(owner, 'the data-table family measures its mobile-cards owner');
+  const live = readFileSync(owner, 'utf8');
+  const stamp = 'data-part="record-list-item"';
+  assert.equal(live.split(stamp).length, 2, 'the record-list-item part is stamped exactly once');
+  const dropped = live.replace(stamp, '');
+  const keyed = dropped.replace(/<Stack\b/gu, '<Stack data-part={undefined}');
+  assert.notEqual(keyed, dropped, 'the drill must plant at least one valueless key');
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-valueless-'));
+  try {
+    let arm = 0;
+    const measure = (text) => {
+      arm += 1;
+      const file = join(sandbox, `arm-${arm}.tsx`);
+      writeFileSync(file, text);
+      const sources = resolved.sources.map((entry) => (entry === owner ? file : entry));
+      const measured = measureFamily({ ...resolved, sources }, { producers: PRODUCERS });
+      const dynamicParts = sources.reduce((total, entry) => total + analyzeSource(entry).dynamicParts, 0);
+      return { missing: measured.detail.partsConsumedNotStamped, dynamicParts };
+    };
+    const control = measure(live);
+    assert.ok(!control.missing.includes('record-list-item'), 'the live owner stamps record-list-item');
+    assert.equal(control.dynamicParts, 0, 'the data-table family stamps no dynamic part');
+    assert.ok(measure(dropped).missing.includes('record-list-item'), 'the dropped part is reported');
+    const planted = measure(keyed);
+    assert.ok(planted.missing.includes('record-list-item'), 'the valueless keys do not hide the dropped part');
+    assert.equal(planted.dynamicParts, 0, 'a valueless key is not a dynamic part');
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+});
+
 test('the producer set is the SHARED one, never a second measurement', () => {
   const { declared, compiled, producers } = collectChannelProducers();
   assert.ok(declared.size > 0, 'the authored CSS declares channels');

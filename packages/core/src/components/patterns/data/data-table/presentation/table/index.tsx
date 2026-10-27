@@ -382,6 +382,9 @@ export function PatternDataTable<T extends object>(
         <Stack
           spacing="md"
           fullWidth
+          // Valueless on purpose: React keeps a prop's first-insertion position, so Modern's
+          // own data-part="root" renders first. It renders no part on any engine.
+          data-part={undefined}
           {...densityScopeAttributes(resolvedDensity)}
           data-recipe={resolvedRecipe}
           data-error={error ? "true" : "false"}
@@ -555,7 +558,9 @@ export function PatternDataTable<T extends object>(
         recipe={resolvedRecipe}
         toolbar={
           toolbar || filterPanel ? (
-            <Stack spacing="sm" className="ds-data-table__toolbar-stack">
+            // Valueless on purpose: React keeps a prop's first-insertion position, so Modern's
+            // own data-part="root" renders first. It renders no part on any engine.
+            <Stack spacing="sm" className="ds-data-table__toolbar-stack" data-part={undefined}>
               {toolbar}
               {filterPanel}
             </Stack>
