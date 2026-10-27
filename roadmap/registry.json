@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-26",
+ "updated": "2026-10-27",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -3059,6 +3059,11 @@
      "at": "2026-10-26 15:23",
      "by": "kimi-admin-dt",
      "note": "FU-8A integrated functionally at 6d1b385d7 (tree 4511de67) and generated at 2ec17c925 (tree f487a26d): ACTUAL peer 32d4885b ACCEPT b53f7928; generation-final peer 9b5e252d ACCEPT f6cb3c4e. G1 prepair, EXT credit, P1-P4 with original-HEAD P2 and original/prePair-on-LOT chain, 355 unit+45 integration, typechecks, build/producers and C7[0,1,0] accepted. Root-aliases final check and full build green; theme-graph remains RED at 9.77>9.68 without waiver. No live registry promotion, strip or ARC-12 closure."
+    },
+    {
+     "at": "2026-10-27 07:29",
+     "by": "kimi-dt",
+     "note": "Modern SOURCE repair f7615a540c488ed75cf3bfe57cc29c339bcc3a13 integrated on main: exact 7 paths; independent final peer eff0714d ACCEPT_INTEGRATION; family-cut 278/278 and attribute-order 10/10 green on HEAD. Deterministic witness ac94e323 accepted separately; fresh paired PRE+POST and r7 admission remain open. No WO closure."
     }
    ],
    "claimedBy": "kimi-dt",
