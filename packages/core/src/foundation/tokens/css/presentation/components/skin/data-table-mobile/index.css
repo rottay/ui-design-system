@@ -58,7 +58,6 @@
   container-type: inline-size;
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"],
 .ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root {
   --ds-card-bg: var(--ds-collection-card-bg, var(--ds-premium-card-bg));
   --ds-card-border: var(
@@ -88,17 +87,14 @@
   container-type: inline-size;
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="compact"],
 .ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root[data-density="compact"] {
   --ds-density-local-factor: var(--ds-density-factor-compact, 0.85);
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="comfortable"],
 .ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root[data-density="comfortable"] {
   --ds-density-local-factor: var(--ds-density-factor-comfortable, 1);
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="spacious"],
 .ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root[data-density="spacious"] {
   --ds-density-local-factor: var(--ds-density-factor-spacious, 1.15);
 }
@@ -163,7 +159,6 @@
   );
 }
 
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-primary"],
 .ds-pattern-data-table.ds-data-table--mobile .ds-data-table__mobile-card-primary {
   flex: 1;
   min-width: 0;
@@ -441,9 +436,7 @@
    affordance and meta line are painted here on the channels the cards already
    use. The swipe affordance and the row-actions menu are painted with them:
    they are the same records' trailing controls. */
-.ds-pattern-data-table.ds-data-table--mobile [data-part="record-cards"],
 .ds-pattern-data-table.ds-data-table--mobile .ds-data-table__record-cards,
-.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list"],
 .ds-pattern-data-table.ds-data-table--mobile .ds-data-table__record-list {
   min-inline-size: 0;
 }

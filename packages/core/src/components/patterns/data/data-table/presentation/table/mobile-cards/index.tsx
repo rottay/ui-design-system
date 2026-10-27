@@ -189,7 +189,6 @@ export function DataTableMobileCards<T extends object>({
     <Stack
       spacing={isListPresentation ? "xs" : "md"}
       className={`ds-pattern-data-table ds-data-table--mobile ${isListPresentation ? "ds-data-table__record-list" : "ds-data-table__record-cards"}`}
-      data-part={isListPresentation ? "record-list" : "record-cards"}
       role={isListPresentation ? "list" : undefined}
     >
       {data.map((row, index) => {
@@ -332,7 +331,7 @@ export function DataTableMobileCards<T extends object>({
             <Card.Body>
               <Stack spacing="md">
                 <Flex justify="between" align="start" gap={12}>
-                  <Stack spacing="xs" className="ds-data-table__mobile-card-primary" data-part="mobile-card-primary">
+                  <Stack spacing="xs" className="ds-data-table__mobile-card-primary">
                     {titleColumn && (
                       <Box data-part="mobile-card-title" className="ds-data-table__mobile-card-title">
                         {renderDefaultField(titleColumn, row, index)}

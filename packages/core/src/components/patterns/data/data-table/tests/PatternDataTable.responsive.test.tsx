@@ -176,7 +176,8 @@ describe('PatternDataTable responsive columns', () => {
       expect(await screen.findByText('Alice: selected')).toBeInTheDocument();
       expect(screen.getByText('Bob: not selected')).toBeInTheDocument();
       expect(screen.getByText('Actions for Alice')).toBeInTheDocument();
-      const mobileRoot = container.querySelector<HTMLElement>('[data-part="mobile-root"]');
+      const mobileRoot = container.querySelector<HTMLElement>('.ds-data-table__mobile-root');
+      expect(mobileRoot).not.toHaveAttribute('data-part', 'mobile-root');
       expect(mobileRoot).toHaveClass('product-mobile-table');
       expect(mobileRoot).toHaveAttribute('data-density', 'compact');
       expect(mobileRoot).toHaveAttribute('data-full-width', 'true');

@@ -382,7 +382,6 @@ export function PatternDataTable<T extends object>(
         <Stack
           spacing="md"
           fullWidth
-          data-part="mobile-root"
           {...densityScopeAttributes(resolvedDensity)}
           data-recipe={resolvedRecipe}
           data-error={error ? "true" : "false"}
@@ -556,7 +555,7 @@ export function PatternDataTable<T extends object>(
         recipe={resolvedRecipe}
         toolbar={
           toolbar || filterPanel ? (
-            <Stack spacing="sm" className="ds-data-table__toolbar-stack" data-part="toolbar-stack">
+            <Stack spacing="sm" className="ds-data-table__toolbar-stack">
               {toolbar}
               {filterPanel}
             </Stack>
