@@ -267,12 +267,34 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
   /* -- Measure section heights for smooth collapse animation ------------ */
 
   useEffect(() => {
-    const heights: Record<string, number> = {};
-    for (const [key, ref] of Object.entries(sectionContentRefs.current)) {
-      if (ref) heights[key] = ref.scrollHeight;
+    let active = true;
+    const measure = () => {
+      if (!active) return;
+      const heights: Record<string, number> = {};
+      for (const [key, ref] of Object.entries(sectionContentRefs.current)) {
+        if (ref) Reflect.set(heights, key, ref.scrollHeight);
+      }
+      setSectionHeights((previous) =>
+        Object.keys(previous).length === Object.keys(heights).length &&
+        Object.entries(heights).every(([key, height]) => readRecordValue(previous, key) === height)
+          ? previous
+          : heights
+      );
+    };
+    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
+    for (const ref of Object.values(sectionContentRefs.current)) {
+      // Observe natural content: the outer box can stay capped while its content grows.
+      if (ref?.firstElementChild) observer?.observe(ref.firstElementChild);
     }
-    setSectionHeights(heights);
-  }, [fields, currentValues]);
+    measure();
+    // DOMs without ResizeObserver still measure React commits and viewport reflow.
+    if (!observer && typeof window !== 'undefined') window.addEventListener('resize', measure);
+    return () => {
+      active = false;
+      observer?.disconnect();
+      if (!observer && typeof window !== 'undefined') window.removeEventListener('resize', measure);
+    };
+  });
 
   /* -- Read-only value renderer ----------------------------------------- */
 
@@ -920,7 +942,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               data-part="section-content"
               data-collapsed={isCollapsed}
               ref={(el) => {
-                Reflect.set(sectionContentRefs.current, section.key, el);
+                Reflect.set(sectionContentRefs.current, section.key, hasSectionHeader ? el : null);
               }}
               style={{
                 maxHeight: hasSectionHeader ? (isCollapsed ? 0 : contentHeight ?? 2000) : undefined,
