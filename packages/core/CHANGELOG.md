@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+- Follow the section-title weight posture for non-urgent Alert titles while
+  preserving urgent bold and label metrics.
 - Keep Modern Card content visible in shrink-to-fit, Flex and intrinsic
   compositions without imposing full width on every Card root.
 - Correct Modern Grid auto-fit measurement, inherited recipe invalidation and

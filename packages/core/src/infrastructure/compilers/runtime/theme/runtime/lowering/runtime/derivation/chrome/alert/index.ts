@@ -84,7 +84,7 @@ export function deriveAlertChannels(): Record<string, string> {
   vars["--ds-alert-title-color"] = "var(--ds-color-text-primary)";
   vars["--ds-alert-title-font-family"] = "var(--ds-type-label-font-family)";
   vars["--ds-alert-title-font-size"] = "var(--ds-type-label-font-size)";
-  vars["--ds-alert-title-font-weight"] = "var(--ds-font-weight-semibold)";
+  vars["--ds-alert-title-font-weight"] = "var(--ds-type-section-title-font-weight)";
   vars["--ds-alert-title-urgent-font-weight"] = "var(--ds-font-weight-bold)";
   vars["--ds-alert-title-line-height"] = "var(--ds-type-label-line-height)";
   vars["--ds-alert-title-letter-spacing"] = "var(--ds-letter-spacing-heading)";
