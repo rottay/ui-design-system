@@ -63,7 +63,7 @@ export function deriveCascaderChannels(): Record<string, string> {
   vars["--ds-cascader-divider"] = "var(--ds-color-border)";
   vars["--ds-cascader-empty-ink"] = "var(--ds-type-color-muted)";
   vars["--ds-cascader-option-ink"] = "var(--ds-color-text-primary)";
-  vars["--ds-cascader-option-bg-hover"] = "var(--ds-color-bg-hover, var(--ds-material-control-background-hover))";
+  vars["--ds-cascader-option-bg-hover"] = "var(--ds-material-control-background-hover, var(--ds-color-bg-hover))";
   vars["--ds-cascader-option-bg-selected"] = "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)";
   vars["--ds-cascader-option-border-selected"] = "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)";
   vars["--ds-cascader-chevron-ink"] = "var(--ds-color-text-muted)";

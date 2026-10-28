@@ -73,12 +73,14 @@ describeCausality({
   markup,
   targets: [
     { id: 'titleWeight', selector: TITLE, property: 'font-weight' },
+    { id: 'titleSize', selector: TITLE, property: 'font-size' },
     { id: 'titleGap', selector: TITLE, property: 'margin-bottom' },
     { id: 'pageSize', selector: PAGE_BUTTON, property: 'font-size' },
     { id: 'pageGap', selector: PAGINATION, property: 'margin-top' },
     { id: 'tableFont', selector: "#table [data-part='table']", property: 'font-size' },
   ],
   decisions: {
+    'typography.roleWeights': { value: 'light', moves: ['titleWeight'], holds: 'titleSize', in: VERTICALS },
     // `--ds-table-pagination-font-size` derives from the supporting type role,
     // so the type scale moves it while the spacing ramp holds.
     // `tableFont` moving is the single-font-authority proof: a literal fallback
@@ -107,17 +109,37 @@ describe('table derived channels and accessibility', () => {
     const result = await measureArms({
       vertical: 'bithire',
       markup,
-      arms: { base: {} },
+      arms: {
+        base: {},
+        light: { 'typography.roleWeights': 'light' },
+        regular: { 'typography.roleWeights': 'regular' },
+        strong: { 'typography.roleWeights': 'strong' },
+        sizeOnly: { 'typography.scale': 1.08 },
+        strongWithSize: { 'typography.roleWeights': 'strong', 'typography.scale': 1.08 },
+      },
       targets: [
         { id: 'titleWeight', selector: TITLE, property: 'font-weight' },
-        { id: 'semibold', selector: TITLE, property: '--ds-font-weight-semibold' },
+        { id: 'roleWeight', selector: TITLE, property: '--ds-type-section-title-font-weight' },
+        { id: 'titleSize', selector: TITLE, property: 'font-size' },
+        { id: 'pageWeight', selector: `${PAGE_BUTTON}[data-current='true']`, property: 'font-weight' },
         { id: 'cellNumeric', selector: "#table [data-part='cell'][data-field-type='number']", property: 'font-variant-numeric' },
         { id: 'pageNumeric', selector: "#table [data-part='pagination-range']", property: 'font-variant-numeric' },
       ],
     });
     const r = result.base!;
-    // The deriver relates the title weight to the foundation role, not a literal.
-    expect(r.titleWeight).toBe(r.semibold.trim());
+    expect(r.titleWeight).toBe(r.roleWeight.trim());
+    for (const [arm, expected] of [['light', '500'], ['regular', '600'], ['strong', '700']] as const) {
+      expect(result[arm]!.titleWeight).toBe(expected);
+      expect(result[arm]!.titleSize).toBe(r.titleSize);
+      expect(result[arm]!.pageWeight).toBe(r.pageWeight);
+      expect(result[arm]!.cellNumeric).toBe(r.cellNumeric);
+      expect(result[arm]!.pageNumeric).toBe(r.pageNumeric);
+    }
+    expect(result.sizeOnly!.titleWeight).toBe(r.titleWeight);
+    expect(result.sizeOnly!.titleSize).not.toBe(r.titleSize);
+    expect(result.strongWithSize!.titleWeight).toBe(result.strong!.titleWeight);
+    expect(result.strongWithSize!.titleSize).toBe(result.sizeOnly!.titleSize);
+    expect(result.strongWithSize!.pageWeight).toBe(r.pageWeight);
     // Figures align in a column on both the cell and the page counter.
     expect(r.cellNumeric).toBe('tabular-nums');
     expect(r.pageNumeric).toBe('tabular-nums');

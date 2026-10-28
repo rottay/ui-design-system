@@ -24,6 +24,7 @@ import {
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
+import { typographyDeriver } from "../../../typography";
 import { tableChromeDeriver } from "..";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
@@ -136,6 +137,92 @@ describe("chrome/table", () => {
         expect(result.channels[channel]).toBe(rank);
         expect(result.provenance.get(channel)?.rank).toBe(rank);
       }
+    }
+  });
+});
+
+const TITLE_WEIGHT = "--ds-table-title-font-weight";
+const OTHER_CHANNELS: Record<string, string> = {
+  "--ds-table-title-margin-block-end": "var(--ds-spacing-2)",
+  "--ds-table-footer-margin-block-start": "var(--ds-spacing-2)",
+  "--ds-table-cell-numeric": "tabular-nums",
+  "--ds-table-pagination-numeric": "tabular-nums",
+  "--ds-table-pagination-font-size": "var(--ds-type-supporting-font-size)",
+  "--ds-table-pagination-current-font-weight": "var(--ds-font-weight-semibold)",
+  "--ds-table-pagination-margin-block-start": "var(--ds-spacing-4)",
+  "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))",
+  "--ds-table-touch-target-min": "var(--ds-touch-target-min)",
+  "--ds-table-col-min-width": "var(--ds-spacing-0, 0)",
+  "--ds-table-sticky-top": "var(--ds-spacing-0, 0)",
+  "--ds-table-virtual-spacer": "var(--ds-spacing-0, 0)",
+  "--ds-table-cell-ellipsis-max-width": "var(--ds-spacing-80, 320px)",
+};
+
+function resolveWeight(value: string | undefined, channels: Record<string, string>): string {
+  if (value === undefined) throw new Error("Missing weight channel");
+  const reference = /^var\((--ds-[a-z0-9-]+)(?:,\s*(.*))?\)$/.exec(value);
+  if (reference === null) return value;
+  return resolveWeight(channels[reference[1]!] ?? reference[2], channels);
+}
+
+const WEIGHT_POSTURES = [
+  { roleWeights: "light", expected: "500" },
+  { roleWeights: "regular", expected: "600" },
+  { roleWeights: "strong", expected: "700" },
+] as const;
+
+describe("chrome/table title role weight", () => {
+  it.each(WEIGHT_POSTURES)("follows $roleWeights independently of section-title font-size", ({ roleWeights, expected }) => {
+    for (const fontSize of ["1rem", "2rem"]) {
+      const ctx = buildLoweringContext({
+        theme: {
+          ...MINIMAL_THEME,
+          typography: { roleWeights, roles: { sectionTitle: { fontSize } } },
+        },
+      });
+      const { channels } = runDerivation(ctx, [typographyDeriver, tableChromeDeriver]);
+      expect(channels["--ds-type-section-title-font-size"]).toBe(fontSize);
+      expect(resolveWeight(channels[TITLE_WEIGHT], channels)).toBe(expected);
+      expect(resolveWeight(channels["--ds-table-pagination-current-font-weight"], channels)).toBe("600");
+      const { [TITLE_WEIGHT]: titleWeight, ...otherChannels } = tableChromeDeriver.derive(ctx, {});
+      expect(titleWeight).toBe("var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold))");
+      expect(otherChannels).toEqual(OTHER_CHANNELS);
+    }
+  });
+
+  it("follows the authored section-title weight above the posture and label weight", () => {
+    for (const fontWeight of [300, 700]) {
+      const ctx = buildLoweringContext({
+        theme: {
+          ...MINIMAL_THEME,
+          typography: {
+            roleWeights: "strong",
+            roles: { sectionTitle: { fontWeight }, label: { fontWeight: 800 } },
+          },
+        },
+      });
+      const { channels } = runDerivation(ctx, [typographyDeriver, tableChromeDeriver]);
+      expect(channels["--ds-type-label-font-weight"]).toBe("800");
+      expect(resolveWeight(channels[TITLE_WEIGHT], channels)).toBe(String(fontWeight));
+      expect(resolveWeight(channels["--ds-table-pagination-current-font-weight"], channels)).toBe("600");
+    }
+  });
+
+  it("falls back to semibold only when the section-title role channel is absent", () => {
+    const titleWeight = tableChromeDeriver.derive(context(), {})[TITLE_WEIGHT];
+    expect(resolveWeight(titleWeight, { "--ds-font-weight-semibold": "600" })).toBe("600");
+    expect(resolveWeight(titleWeight, {
+      "--ds-type-section-title-font-weight": "300",
+      "--ds-font-weight-semibold": "900",
+    })).toBe("300");
+  });
+
+  it("preserves every other declared channel exactly", () => {
+    for (const fixture of FIXTURES) {
+      const ctx = buildLoweringContext({ theme: fixture.theme, tenant: fixture.tenant });
+      const { [TITLE_WEIGHT]: titleWeight, ...otherChannels } = tableChromeDeriver.derive(ctx, {});
+      expect(titleWeight).toBe("var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold))");
+      expect(otherChannels).toEqual(OTHER_CHANNELS);
     }
   });
 });

@@ -49,7 +49,7 @@ export const tableChromeDeriver: FamilyDeriver = {
 export function deriveTableChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
 
-  vars["--ds-table-title-font-weight"] = "var(--ds-font-weight-semibold)";
+  vars["--ds-table-title-font-weight"] = "var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold))";
   vars["--ds-table-title-margin-block-end"] = "var(--ds-spacing-2)";
   vars["--ds-table-footer-margin-block-start"] = "var(--ds-spacing-2)";
 

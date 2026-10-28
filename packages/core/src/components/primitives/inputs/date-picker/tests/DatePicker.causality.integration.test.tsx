@@ -58,6 +58,7 @@ describeCausality({
     { id: 'cellHeight', selector: SELECTED, property: '@rect.height' },
     { id: 'weekdaySize', selector: "#panel [data-part='weekday-header']", property: 'font-size' },
     { id: 'panelShadow', selector: "#panel [data-part='panel']", property: 'box-shadow' },
+    { id: 'navHover', selector: "#panel [data-part='nav-button']", property: 'background-color', attributes: { 'data-state': 'hovered' } },
     { id: 'cellHover', selector: "#panel [data-part='cell']:not([data-selected])", property: 'background-color', attributes: { 'data-state': 'hovered' } },
   ],
   decisions: {
@@ -66,7 +67,7 @@ describeCausality({
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: ['bithire', 'evnto'] },
     // `subtle`, not `strong`: bithire's preset already decides strong, so that arm
     // restated the baseline and moved nothing (D6-2c-ii-RED, 2026-09-15).
-    'states.emphasis': { value: 'subtle', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
+    'states.emphasis': { value: 'subtle', moves: ['disabledOpacity', 'navHover', 'cellHover'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['fontSize', 'weekdaySize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius', 'cellRadius'], holds: 'fontSize', in: VERTICALS },
     'shape.control-height': { value: 'tall', moves: ['height'], holds: 'radius', in: VERTICALS },

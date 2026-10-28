@@ -28,10 +28,23 @@ const OPTIONS = [
   { value: 'es', label: 'Spain', children: [{ value: 'mad', label: 'Madrid' }] },
 ];
 
+const optionMarkup = (() => {
+  const fixture = render(<ModernCascader options={OPTIONS} open />);
+  try {
+    const option = screen.getByRole('option', { name: /Portugal/ });
+    const dropdown = option.closest("[data-part='dropdown']");
+    if (!dropdown) throw new Error('Cascader option has no dropdown');
+    return dropdown.outerHTML;
+  } finally {
+    fixture.unmount();
+  }
+})();
+
 const markup = renderToStaticMarkup(
   <div>
     <div id="rest"><ModernCascader options={OPTIONS} defaultValue={['pt', 'lis']} allowClear /></div>
     <div id="error"><ModernCascader options={OPTIONS} status="error" /></div>
+    <div id="option-hover" dangerouslySetInnerHTML={{ __html: optionMarkup }} />
   </div>,
 );
 
@@ -42,6 +55,7 @@ describeCausality({
   family: 'cascader',
   markup,
   targets: [
+    { id: 'optionHover', selector: "#option-hover [data-part='menu-column']:first-child > li:first-child > [data-part='option']:not([data-selected='true']):not([data-disabled='true'])", property: 'background-color', attributes: { 'data-state': 'hovered' } },
     { id: 'focusRing', selector: REST, property: 'box-shadow', attributes: FOCUS },
     { id: 'errorBorder', selector: "#error [data-part='trigger']", property: 'border-top-color' },
     { id: 'disabledOpacity', selector: REST, property: 'opacity', attributes: { 'data-disabled': 'true' } },
@@ -57,7 +71,7 @@ describeCausality({
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: VERTICALS },
     // `subtle`, not `strong`: bithire's preset already decides strong, so that arm
     // restated the baseline and moved nothing (D6-2c-ii-RED, 2026-09-15).
-    'states.emphasis': { value: 'subtle', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
+    'states.emphasis': { value: 'subtle', moves: ['disabledOpacity', 'optionHover'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['fontSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'fontSize', in: VERTICALS },
     'shape.control-height': { value: 'tall', moves: ['height'], holds: 'radius', in: VERTICALS },

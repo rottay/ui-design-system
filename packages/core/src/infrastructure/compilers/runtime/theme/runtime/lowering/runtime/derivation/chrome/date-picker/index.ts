@@ -80,9 +80,9 @@ export function deriveDatePickerChannels(): Record<string, string> {
   vars["--ds-date-picker-title-ink"] = "var(--ds-color-text-primary)";
   vars["--ds-date-picker-weekday-ink"] = "var(--ds-type-color-muted)";
   vars["--ds-date-picker-nav-ink"] = "var(--ds-color-text-primary)";
-  vars["--ds-date-picker-nav-bg-hover"] = "var(--ds-color-bg-hover, var(--ds-material-control-background-hover))";
+  vars["--ds-date-picker-nav-bg-hover"] = "var(--ds-material-control-background-hover, var(--ds-color-bg-hover))";
   vars["--ds-date-picker-cell-ink"] = "var(--ds-color-text-primary)";
-  vars["--ds-date-picker-cell-bg-hover"] = "var(--ds-color-bg-hover, var(--ds-material-control-background-hover))";
+  vars["--ds-date-picker-cell-bg-hover"] = "var(--ds-material-control-background-hover, var(--ds-color-bg-hover))";
   vars["--ds-date-picker-cell-bg-selected"] = "var(--ds-color-primary)";
   vars["--ds-date-picker-cell-ink-selected"] = "var(--ds-color-text-on-primary)";
   vars["--ds-date-picker-band-bg"] = "var(--ds-wash-band)";

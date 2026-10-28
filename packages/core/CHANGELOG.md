@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- Let Modern DatePicker navigation and day-cell hover backgrounds follow the
+  control material and tenant emphasis, with palette hover as the fallback.
+- Let Modern Cascader option hover follow material state emphasis, retaining
+  the palette hover color as the fallback when material hover is absent.
+- Follow the section-title role weight for Modern Table titles, with semibold
+  as the fallback; preserve pagination weight and the other Table channels.
 - Bind public `Grid.Item` to the adaptive track limit and reset that limit at
   each public Grid root. Automatic endpoints clamp after measurement while
   anchored placement and frozen nested engines retain their own behavior.
