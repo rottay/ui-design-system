@@ -63,6 +63,7 @@ import type {
   GridAdaptation,
 } from "../../contracts";
 import { GRID_DEFAULTS, GRID_ITEM_DEFAULTS, GAP_MAP } from "../../contracts";
+import { GridTrackLimit, limitAutomaticColumnSpan } from "../../runtime/item-placement";
 import { useAdaptation } from "@/infrastructure/runtime/adaptation";
 import {
   projectResponsiveGrid,
@@ -297,9 +298,6 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
   return computedStyle;
 };
 
-/** Available explicit tracks for automatic column spans; explicit grids stay unbounded. */
-const GridTrackLimit = React.createContext<number | undefined>(undefined);
-
 /** Count resolved tracks, including collapsed auto-fit tracks, ignoring line names. */
 const countGridTracks = (template: string): number => {
   const tracks = template.replace(/\[[^\]]*\]/g, " ").trim().split(/\s+/);
@@ -423,11 +421,9 @@ const buildGridItemStyles = (props: GridItemProps, trackLimit?: number): CSSProp
     const requestedColSpan = resolveSpan(colSpan ?? span);
     const effectiveColStart = resolveLine(colStart);
     const effectiveColEnd = resolveLine(colEnd);
-    const automaticColumn = (effectiveColStart === undefined || effectiveColStart === "auto") &&
-      (effectiveColEnd === undefined || effectiveColEnd === "auto");
-    const effectiveColSpan = requestedColSpan !== undefined && trackLimit !== undefined && automaticColumn
-      ? Math.min(requestedColSpan, trackLimit)
-      : requestedColSpan;
+    const effectiveColSpan = limitAutomaticColumnSpan(
+      requestedColSpan, effectiveColStart, effectiveColEnd, trackLimit
+    );
     const effectiveRowSpan = resolveSpan(rowSpan);
     const effectiveRowStart = resolveLine(rowStart);
     const effectiveRowEnd = resolveLine(rowEnd);

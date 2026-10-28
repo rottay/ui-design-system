@@ -4,6 +4,9 @@
 
 ### Patch Changes
 
+- Bind public `Grid.Item` to the adaptive track limit and reset that limit at
+  each public Grid root. Automatic endpoints clamp after measurement while
+  anchored placement and frozen nested engines retain their own behavior.
 - Follow the section-title weight posture for non-urgent Alert titles while
   preserving urgent bold and label metrics.
 - Keep Modern Card content visible in shrink-to-fit, Flex and intrinsic

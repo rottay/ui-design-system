@@ -110,9 +110,11 @@
  * @package @rottay/design-system
  */
 
+import { createElement, forwardRef, type ComponentPropsWithoutRef, type ComponentRef } from "react";
 import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
 import type { GridProps } from "./contracts";
 import { GridItem } from "./compound";
+import { GridTrackLimit } from "./runtime/item-placement";
 
 // ============================================================================
 // TYPE EXPORTS
@@ -178,6 +180,23 @@ export { GridItem };
 // ENGINE-AWARE COMPONENT
 // ============================================================================
 
+const GridEngine = createEngineComponent<GridProps>("Grid", {
+  classic: () => import("./engines/classic"),
+  modern: () => import("./engines/modern"),
+  rustic: () => import("./engines/rustic"),
+});
+
+const GridRoot = forwardRef<
+  ComponentRef<typeof GridEngine>,
+  ComponentPropsWithoutRef<typeof GridEngine>
+>((props, ref) => createElement(
+  GridTrackLimit.Provider,
+  { value: undefined },
+  createElement(GridEngine, { ...props, ref })
+));
+
+GridRoot.displayName = "Grid";
+
 /**
  * The main Grid component with automatic engine resolution.
  *
@@ -202,11 +221,7 @@ export { GridItem };
  * ```
  */
 export const Grid = Object.assign(
-  createEngineComponent<GridProps>("Grid", {
-    classic: () => import("./engines/classic"),
-    modern: () => import("./engines/modern"),
-    rustic: () => import("./engines/rustic"),
-  }),
+  GridRoot,
   {
     /** Grid.Item compound component for positioning items within the grid */
     Item: GridItem,

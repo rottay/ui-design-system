@@ -57,9 +57,10 @@ import React, {
 } from "react";
 import type { GridItemProps } from "../contracts";
 import { GRID_ITEM_DEFAULTS } from "../contracts";
+import { GridTrackLimit, limitAutomaticColumnSpan } from "../runtime/item-placement";
 
 // Inline utility function
-const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
+const buildGridItemStyles = (props: GridItemProps, trackLimit?: number): CSSProperties => {
   const {
     span,
     colSpan,
@@ -78,7 +79,7 @@ const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
   const computedStyle: CSSProperties = { ...style };
   if (area) computedStyle.gridArea = area;
   else {
-    const effectiveColSpan = colSpan ?? span;
+    const effectiveColSpan = limitAutomaticColumnSpan(colSpan ?? span, colStart, colEnd, trackLimit);
     if (
       colStart !== undefined ||
       colEnd !== undefined ||
@@ -153,7 +154,8 @@ export const GridItem = forwardRef<HTMLElement, GridItemProps>((props, ref) => {
     ...restProps
   } = props;
 
-  const computedStyle = buildGridItemStyles(props);
+  const trackLimit = React.useContext(GridTrackLimit);
+  const computedStyle = buildGridItemStyles(props, trackLimit);
 
   const ElementType = Component as ElementType;
 
