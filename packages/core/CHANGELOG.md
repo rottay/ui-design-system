@@ -4,6 +4,16 @@
 
 ### Patch Changes
 
+- Neutralize spreadsheet-formula prefixes after optional whitespace in shared
+  CSV header and data cells before RFC 4180 quoting. Ordinary values and custom
+  cell-escape policies retain their existing behavior.
+- Keep Modern FormBuilder titled sections synchronized with validation errors
+  and later content growth by observing the inner fields container. Collapsed
+  sections remain at zero height and untitled sections stay uncapped; without
+  ResizeObserver, measurement follows FormBuilder commits and window resize.
+- Wire the public `useInlineEditing` props spread to PatternDataTable's existing
+  click, double-click and F2 triggers using the configured row key, preserving
+  commit, cancel, batch and save-error behavior.
 - Bind Modern FormField labels and validation messages to Slider, OTPInput,
   Rate and Upload controls. Preserve caller naming, range thumb names and OTP
   ID prefixes; give generated field IDs instance scope and keep Upload trigger

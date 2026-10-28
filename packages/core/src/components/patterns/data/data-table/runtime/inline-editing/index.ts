@@ -151,10 +151,10 @@ export function useInlineEditing<T extends object>(
   );
 
   const handleCellEditStart = useCallback(
-    (_row: T, _columnKey: string) => {
-      // State is already managed via editingCell
+    (row: T, columnKey: string) => {
+      startEdit(resolveRowKeyValue(row, rowKey), columnKey);
     },
-    [],
+    [rowKey, startEdit],
   );
 
   const handleCellEditCancel = useCallback(
