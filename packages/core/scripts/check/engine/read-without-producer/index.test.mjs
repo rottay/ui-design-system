@@ -18,7 +18,7 @@ import { join } from 'node:path';
 import test from 'node:test';
 
 import { collectSkinFiles } from '../../../libraries/engine/skins/files/index.mjs';
-import { collectChannelProducers } from '../../../libraries/tokens/producers/index.mjs';
+import { collectAuthoredStylesheets, collectChannelProducers, collectDeclaredChannels } from '../../../libraries/tokens/producers/index.mjs';
 import {
   BASELINE_PATH,
   classifyReadClass,
@@ -122,6 +122,7 @@ test('INJECTION: un nombre que solo vive dentro de un comentario CSS no entra al
 test('SHAPE: a name that HAS a producer can never be reported as debt', () => {
   const broken = {
     denominator: ['--ds-color-primary'],
+    producedNames: new Set(['--ds-color-primary']),
     debt: ['--ds-color-primary'],
     produced: 0,
   };
@@ -504,3 +505,247 @@ test('LEDGER SHAPE: a row with no owner field, or a null owner with no proposal 
     'an empty corpus is never a pass',
   );
 });
+
+function withAuthoredReadFixture(selector, run) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'producer-selector-contract-'));
+  const skin = join(sandbox, 'src/foundation/tokens/css/runtime/engines/modern/skin/probe/index.css');
+  try {
+    mkdirSync(join(skin, '..'), { recursive: true });
+    writeFileSync(skin, `${selector} { --ds-fixture-read: #123456; }\n.ds-probe { color: var(--ds-fixture-read); }\n`);
+    const files = collectModernSkinFiles(collectSkinFiles(sandbox));
+    const producers = collectDeclaredChannels(files);
+    run(classifyReadWithoutProducer(files, producers), producers);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+test('FIXTURE CONTRACT: an authored root declaration reaches the Modern reader', (t) => {
+  withAuthoredReadFixture(':root', (result, producers) => {
+    t.diagnostic(JSON.stringify(result));
+    assert.ok(producers.has('--ds-fixture-read'));
+    assert.deepEqual(result.denominator, ['--ds-fixture-read']);
+    assert.equal(result.produced, 1);
+    assert.deepEqual(result.debt, []);
+  });
+});
+
+test('FIXTURE CONTRACT: a disjoint sibling declaration gives the Modern reader no value', (t) => {
+  withAuthoredReadFixture('.ds-unrelated', (result, producers) => {
+    t.diagnostic(JSON.stringify(result));
+    assert.ok(producers.has('--ds-fixture-read'), 'the declaration exists; only selector reach differs');
+    assert.deepEqual(result.denominator, ['--ds-fixture-read']);
+    assert.deepEqual(result.debt, ['--ds-fixture-read'], 'same-file ownership and name membership cannot prove selector reach');
+    assert.equal(result.produced, 0);
+  });
+});
+
+
+const READ_REACH_CASES = [
+  ['root literal', ':root { --ds-semantic-read: red; }', true, true],
+  ['matched literal', '.ds-probe { --ds-semantic-read: red; }', true, false],
+  ['disjoint literal', '.ds-unrelated { --ds-semantic-read: red; }', false, false],
+  ['broken root value', ':root { --ds-semantic-read: var(--ds-missing); }', false, false],
+  ['root fallback value', ':root { --ds-semantic-read: var(--ds-missing, red); }', true, true],
+  ['root dependency', ':root { --ds-leaf: red; --ds-semantic-read: var(--ds-leaf); }', true, true],
+  ['later broken root', ':root { --ds-semantic-read: red; --ds-semantic-read: var(--ds-missing); }', false, false],
+  ['root cycle', ':root { --ds-semantic-read: var(--ds-semantic-read, red); }', false, false],
+];
+for (const [label, css, cssExpected, inlineExpected] of READ_REACH_CASES) {
+  test(`SEMANTIC CONTRACT: all read classes ${label}`, () => {
+    const modernPath = 'src/foundation/tokens/css/runtime/engines/modern/skin/probe/index.css';
+    const rootPath = 'src/foundation/tokens/css/foundation/base/probe/index.css';
+    const fixture = Object.fromEntries([
+      [rootPath, css],
+      [modernPath, '.ds-probe { color: var(--ds-semantic-read); }'],
+      [AGNOSTIC_SKIN, '.ds-probe { color: var(--ds-semantic-read); }'],
+      [COMPONENT_TSX, "export const style = { color: 'var(--ds-semantic-read)' };"],
+    ]);
+    withSandbox(fixture, (sandbox) => {
+      const producers = collectDeclaredChannels(collectAuthoredStylesheets(sandbox));
+      const modern = classifyReadWithoutProducer(collectModernSkinFiles(collectSkinFiles(sandbox)), producers);
+      const shared = classifyReadClass([join(sandbox, AGNOSTIC_SKIN)], 'css', producers);
+      const inline = classifyReadClass(collectComponentInlineFiles(sandbox), 'script', producers);
+      assert.equal(modern.debt.includes('--ds-semantic-read'), !cssExpected);
+      assert.equal(Boolean(Reflect.get(shared.debt, '--ds-semantic-read')), !cssExpected);
+      assert.equal(Boolean(Reflect.get(inline.debt, '--ds-semantic-read')), !inlineExpected);
+      assert.deepEqual(shapeFailures(modern, producers).failures, []);
+    });
+  });
+}
+
+test('SEMANTIC CONTRACT: producer credit is checked at every selector site', () => {
+  withSandbox(Object.fromEntries([
+    [AGNOSTIC_SKIN, '.ds-probe { --ds-semantic-read: red; color: var(--ds-semantic-read); } .ds-unrelated { color: var(--ds-semantic-read); }'],
+  ]), (sandbox) => {
+    const files = collectSharedPaintFiles(sandbox);
+    const producers = collectDeclaredChannels(files);
+    const measured = classifyReadClass(files, 'css', producers);
+    assert.deepEqual(Reflect.get(measured.debt, '--ds-semantic-read'), [AGNOSTIC_SKIN]);
+  });
+});
+
+test('SEMANTIC CONTRACT: a frozen root declaration cannot produce Modern/shared/inline paint', () => {
+  const frozenPath = 'src/foundation/tokens/css/runtime/engines/classic/skin/probe/index.css';
+  const modernPath = 'src/foundation/tokens/css/runtime/engines/modern/skin/probe/index.css';
+  withSandbox(Object.fromEntries([
+    [frozenPath, ':root { --ds-semantic-read: red; }'],
+    [modernPath, '.ds-probe { color: var(--ds-semantic-read); }'],
+    [AGNOSTIC_SKIN, '.ds-probe { color: var(--ds-semantic-read); }'],
+    [COMPONENT_TSX, "export const style = { color: 'var(--ds-semantic-read)' };"],
+  ]), (sandbox) => {
+    const producers = collectDeclaredChannels(collectAuthoredStylesheets(sandbox));
+    assert.ok(producers.has('--ds-semantic-read'));
+    assert.deepEqual(classifyReadWithoutProducer(collectModernSkinFiles(collectSkinFiles(sandbox)), producers).debt, ['--ds-semantic-read']);
+    assert.deepEqual(Reflect.get(classifyReadClass(collectSharedPaintFiles(sandbox), 'css', producers).debt, '--ds-semantic-read'), [AGNOSTIC_SKIN]);
+    assert.deepEqual(Reflect.get(classifyReadClass(collectComponentInlineFiles(sandbox), 'script', producers).debt, '--ds-semantic-read'), [COMPONENT_TSX]);
+  });
+});
+
+test('SEMANTIC CONTRACT: name-only compiler/producer membership cannot supply a value', () => {
+  withSandbox(Object.fromEntries([[AGNOSTIC_SKIN, '.ds-probe { color: var(--ds-semantic-read); }']]), (sandbox) => {
+    const files = collectSharedPaintFiles(sandbox);
+    assert.deepEqual(Reflect.get(classifyReadClass(files, 'css', new Set(['--ds-semantic-read'])).debt, '--ds-semantic-read'), [AGNOSTIC_SKIN]);
+  });
+});
+
+
+test('SEMANTIC CONTRACT: unsupported CSS read sites remain in the denominator as unproven', () => {
+  withSandbox(Object.fromEntries([
+    [AGNOSTIC_SKIN, ':root { --ds-semantic-read: red; } @supports (color: var(--ds-semantic-read)) { .ds-probe { color: var(--ds-semantic-read); } }'],
+  ]), (sandbox) => {
+    const files = collectSharedPaintFiles(sandbox);
+    const producers = collectDeclaredChannels(files);
+    const measured = classifyReadClass(files, 'css', producers);
+    assert.equal(measured.denominator, 1);
+    assert.deepEqual(Reflect.get(measured.debt, '--ds-semantic-read'), [AGNOSTIC_SKIN]);
+  });
+});
+
+test('SEMANTIC CONTRACT: actual authored collector excludes comment/generated/test producers', () => {
+  const rootPath = 'src/foundation/tokens/css/foundation/base/probe/index.css';
+  withSandbox(Object.fromEntries([
+    [rootPath, '/* :root { --ds-comment-only: red; } */ .ds-unrelated { --ds-disjoint-only: red; } :root { --ds-broken-only: var(--ds-missing); --ds-real-only: red; }'],
+    ['src/components/generated/probe/index.css', ':root { --ds-generated-only: red; }'],
+    ['src/components/tests/probe/index.css', ':root { --ds-test-only: red; }'],
+    [AGNOSTIC_SKIN, '.ds-probe { color: var(--ds-comment-only); background: var(--ds-generated-only); border-color: var(--ds-test-only); fill: var(--ds-disjoint-only); stroke: var(--ds-broken-only); outline-color: var(--ds-real-only); }'],
+  ]), (sandbox) => {
+    const producers = collectDeclaredChannels(collectAuthoredStylesheets(sandbox));
+    assert.equal(producers.has('--ds-comment-only'), false);
+    assert.equal(producers.has('--ds-generated-only'), false);
+    assert.equal(producers.has('--ds-test-only'), false);
+    assert.equal(producers.has('--ds-disjoint-only'), true);
+    assert.equal(producers.has('--ds-broken-only'), true);
+    const measured = classifyReadClass([join(sandbox, AGNOSTIC_SKIN)], 'css', producers);
+    assert.deepEqual(Object.keys(measured.debt).sort(), ['--ds-broken-only', '--ds-comment-only', '--ds-disjoint-only', '--ds-generated-only', '--ds-test-only']);
+  });
+});
+
+
+test('SEMANTIC CONTRACT: inline orphan/comment/interpolated/nonproductive controls retain their boundaries', () => {
+  const cases = [
+    ["export const style = { color: 'var(--ds-inline-orphan)' };", 1, 0, true],
+    ['// var(--ds-inline-orphan)\n/* var(--ds-inline-orphan) */\nexport const style = {};', 0, 0, false],
+    ['export const style = (key) => `var(--ds-inline-${key})`;', 0, 1, false],
+  ];
+  for (const [source, denominator, prefixes, debt] of cases) {
+    withSandbox(Object.fromEntries([[COMPONENT_TSX, source]]), (sandbox) => {
+      const measured = classifyReadClass(collectComponentInlineFiles(sandbox), 'script', collectDeclaredChannels(collectAuthoredStylesheets(sandbox)));
+      assert.equal(measured.denominator, denominator);
+      assert.equal(measured.prefixSites, prefixes);
+      assert.equal(Boolean(Reflect.get(measured.debt, '--ds-inline-orphan')), debt);
+    });
+  }
+  withSandbox(Object.fromEntries([
+    ['src/components/primitives/display/probe/tests/index.test.tsx', "export const style = 'var(--ds-inline-orphan)';"],
+    ['src/components/primitives/display/probe/engines/classic/index.tsx', "export const style = 'var(--ds-inline-orphan)';"],
+  ]), (sandbox) => assert.deepEqual(collectComponentInlineFiles(sandbox), []));
+});
+
+test('SEMANTIC CONTRACT: a frozen reader stays out and its productive neighbor stays visible', () => {
+  const frozen = 'src/foundation/tokens/css/runtime/engines/rustic/skin/probe/index.css';
+  const productive = 'src/foundation/tokens/css/foundation/probe/index.css';
+  withSandbox(Object.fromEntries([
+    [frozen, '.ds-probe { color: var(--ds-frozen-only); }'],
+    [productive, ':root { --other: var(--ds-productive-only); }'],
+  ]), (sandbox) => {
+    const files = collectSharedPaintFiles(sandbox);
+    const measured = classifyReadClass(files, 'css', collectDeclaredChannels(collectAuthoredStylesheets(sandbox)));
+    assert.deepEqual(Object.keys(measured.debt), ['--ds-productive-only']);
+    assert.deepEqual(Reflect.get(measured.debt, '--ds-productive-only'), [productive]);
+  });
+});
+
+
+const ADVERSARIAL_READ_CASES = [
+  ['separate indirect cycle recovers', ':root { --ds-a: var(--ds-b); --ds-b: var(--ds-a); --ds-semantic-read: var(--ds-a, red); }', true],
+  ['unselected cyclic fallback does not poison consumer', ':root { --ds-leaf: red; --ds-loop: var(--ds-loop); --ds-semantic-read: var(--ds-leaf, var(--ds-loop)); }', true],
+  ['cycle without fallback remains invalid', ':root { --ds-loop: var(--ds-loop); --ds-semantic-read: var(--ds-loop); }', false],
+  ['fallback references preserve cycle refusal', ':root { --ds-leaf: red; --ds-semantic-read: var(--ds-leaf, var(--ds-semantic-read)); }', false],
+  ['possible media invalidation survives empty reader conditions', ':root { --ds-semantic-read: red; } @media print { :root { --ds-semantic-read: var(--missing); } }', false],
+  ['possible supports invalidation survives empty reader conditions', ':root { --ds-semantic-read: red; } @supports (display: grid) { :root { --ds-semantic-read: var(--missing); } }', false],
+  ['possible conditional values all resolve', ':root { --ds-semantic-read: red; } @media print { :root { --ds-semantic-read: blue; } }', true],
+  ['anonymous important invalid beats unlayered important valid', '@layer { :root { --ds-semantic-read: var(--missing) !important; } } :root { --ds-semantic-read: red !important; }', false],
+  ['anonymous important valid beats unlayered important invalid', '@layer { :root { --ds-semantic-read: red !important; } } :root { --ds-semantic-read: var(--missing) !important; }', true],
+  ['earlier anonymous important winner stays valid', '@layer { :root { --ds-semantic-read: red !important; } } @layer { :root { --ds-semantic-read: var(--missing) !important; } }', true],
+  ['separate anonymous important layers keep first invalid winner', '@layer { :root { --ds-semantic-read: var(--missing) !important; } } @layer { :root { --ds-semantic-read: red !important; } }', false],
+  ['named layer order stays unresolved', '@layer alpha { :root { --ds-semantic-read: red; } } @layer beta { :root { --ds-semantic-read: var(--missing); } }', false],
+];
+for (const [label, css, expected] of ADVERSARIAL_READ_CASES) {
+  test(`ADVERSARIAL CONTRACT: all read classes ${label}`, () => {
+    const root = 'src/foundation/tokens/css/foundation/base/probe/index.css';
+    const modern = 'src/foundation/tokens/css/runtime/engines/modern/skin/probe/index.css';
+    const paint = '.ds-probe { color: var(--ds-semantic-read); }';
+    withSandbox(Object.fromEntries([
+      [root, css], [modern, paint], [AGNOSTIC_SKIN, paint],
+      [COMPONENT_TSX, "export const style = { color: 'var(--ds-semantic-read)' };"]
+    ]), (sandbox) => {
+      const producers = collectDeclaredChannels(collectAuthoredStylesheets(sandbox));
+      const skin = classifyReadWithoutProducer(collectModernSkinFiles(collectSkinFiles(sandbox)), producers);
+      const shared = classifyReadClass([join(sandbox, AGNOSTIC_SKIN)], 'css', producers);
+      const inline = classifyReadClass(collectComponentInlineFiles(sandbox), 'script', producers);
+      assert.equal(skin.debt.includes('--ds-semantic-read'), !expected);
+      assert.equal(Reflect.has(shared.debt, '--ds-semantic-read'), !expected);
+      assert.equal(Reflect.has(inline.debt, '--ds-semantic-read'), !expected);
+    });
+  });
+}
+
+const CONTENDER_LAYOUTS = ['conditional', 'cross-file', 'named-layer'];
+const CONTENDER_VALUES = [
+  ['cycle participant', 'var(--ds-semantic-read)', 'var(--branch, red)', false],
+  ['separate cycle recovery', 'var(--branch)', 'var(--branch, red)', true],
+  ['all valid alternatives', 'green', 'var(--branch, red)', true],
+  ['fallback cycle participant', 'var(--valid, var(--ds-semantic-read))', 'var(--branch, red)', false],
+  ['primary bypass of separate cycle', 'var(--branch)', 'var(--valid, var(--branch))', true],
+];
+for (const layout of CONTENDER_LAYOUTS) {
+  for (const [label, value, terminal, expected] of CONTENDER_VALUES) {
+    test(`CONTENDER CONTRACT: all read classes ${layout} ${label}`, () => {
+      const base = 'src/foundation/tokens/css/foundation/base/a/index.css';
+      const other = 'src/foundation/tokens/css/foundation/base/z/index.css';
+      const modern = 'src/foundation/tokens/css/runtime/engines/modern/skin/probe/index.css';
+      const root = `:root { --ds-semantic-read: ${terminal}; --valid: blue; }`;
+      const first = ':root { --branch: blue; }';
+      const later = `:root { --branch: ${value}; }`;
+      const css = layout === 'named-layer'
+        ? `${root} @layer alpha { ${first} } @layer beta { ${later} }`
+        : `${root} ${first} ${layout === 'conditional' ? `@media print { ${later} }` : ''}`;
+      const paint = '.ds-probe { color: var(--ds-semantic-read); }';
+      withSandbox(Object.fromEntries([
+        [base, css], [other, layout === 'cross-file' ? later : ''],
+        [modern, paint], [AGNOSTIC_SKIN, paint],
+        [COMPONENT_TSX, "export const style = { color: 'var(--ds-semantic-read)' };"],
+      ]), (sandbox) => {
+        const producers = collectDeclaredChannels(collectAuthoredStylesheets(sandbox));
+        const skin = classifyReadWithoutProducer(collectModernSkinFiles(collectSkinFiles(sandbox)), producers);
+        const shared = classifyReadClass([join(sandbox, AGNOSTIC_SKIN)], 'css', producers);
+        const inline = classifyReadClass(collectComponentInlineFiles(sandbox), 'script', producers);
+        assert.equal(skin.debt.includes('--ds-semantic-read'), !expected);
+        assert.equal(Reflect.has(shared.debt, '--ds-semantic-read'), !expected);
+        assert.equal(Reflect.has(inline.debt, '--ds-semantic-read'), !expected);
+        assert.deepEqual(shapeFailures(skin, producers).failures, []);
+      });
+    });
+  }
+}

@@ -29,12 +29,13 @@
  * hasta que se la borre. Un numero dejaria pasar un cambio de un nombre por
  * otro; el ledger no.
  *
- * UN SOLO WALKER y UN SOLO CONJUNTO DE PRODUCTORES. El corpus lo da
+ * UN SOLO WALKER y UN SOLO CENSO DE PRODUCTORES. El corpus lo da
  * `collectSkinFiles()` (el mismo del token-audit, del literal-ownership-gate y
  * de cascade-wiring), filtrado a `engines/modern`. Los productores los da
  * `libraries/tokens/producers`, el mismo modulo que usa el arma transitiva de
  * `cascade-wiring`: dos medidas distintas del mismo conjunto serian dos
- * verdades.
+ * verdades. El censo solo limita candidatos; el credito exige una declaracion
+ * efectiva con valor resoluble y alcance de selector al lector.
  *
  * BASELINE HONESTO, decrece-solo. El numero de hoy es grande a proposito: es la
  * medida, no una meta. Sube => rojo; baja => rojo con instruccion de bajar el
@@ -54,7 +55,7 @@ import {
   collectAuthoredStylesheets,
   collectChannelProducers,
 } from '../../../libraries/tokens/producers/index.mjs';
-import { varCalls } from '../cascade-wiring/index.mjs';
+import { collectProductionEvidence, varCalls } from '../cascade-wiring/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PACKAGE_ROOT = findPackageRoot(HERE);
@@ -112,19 +113,37 @@ export function collectComponentInlineFiles(root = PACKAGE_ROOT) {
 }
 
 /** Cada nombre `--ds-*` leido por la clase, con sus lectores. */
-function readersByName(files, kind) {
+function readersByName(files, kind, production) {
   const readers = new Map();
+  const unproduced = new Map();
   let prefixSites = 0;
-  const add = (name, file) => {
+  const add = (name, file, site = { file, selector: null, conditions: [] }) => {
     const set = readers.get(name) ?? new Set();
     set.add(readerPath(file));
     readers.set(name, set);
+    if (!production.hasProducedValue(name, site)) {
+      const failed = unproduced.get(name) ?? new Set();
+      failed.add(readerPath(file));
+      unproduced.set(name, failed);
+    }
   };
   for (const file of files) {
     const raw = readFileSync(file, 'utf8');
     if (kind === 'css') {
+      const counts = new Map();
       for (const call of varCalls(stripComments(raw))) {
-        if (call.name.startsWith('--ds-')) add(call.name, file);
+        if (call.name.startsWith('--ds-')) counts.set(call.name, (counts.get(call.name) ?? 0) + 1);
+      }
+      const covered = new Map();
+      for (const call of production.sites.get(file) ?? []) {
+        if (!counts.has(call.name)) continue;
+        add(call.name, file, call.site);
+        const occurrences = covered.get(call.name) ?? new Set();
+        occurrences.add(`${call.site.order}:${call.start}`);
+        covered.set(call.name, occurrences);
+      }
+      for (const [name, count] of counts) {
+        if ((covered.get(name)?.size ?? 0) < count) add(name, file, { file, selector: null, conditions: [], unproven: true });
       }
       continue;
     }
@@ -133,7 +152,7 @@ function readersByName(files, kind) {
       else add(match[1], file);
     }
   }
-  return { readers, prefixSites };
+  return { readers, unproduced, prefixSites };
 }
 
 /**
@@ -141,11 +160,9 @@ function readersByName(files, kind) {
  * pares nombre -> lectores, que es la forma que el ledger pina.
  */
 export function classifyReadClass(files, kind, producers) {
-  const { readers, prefixSites } = readersByName(files, kind);
-  const debt = {};
-  for (const name of [...readers.keys()].sort()) {
-    if (!producers.has(name)) debt[name] = [...readers.get(name)].sort();
-  }
+  const production = collectProductionEvidence(files, producers, { excludeFrozen: true });
+  const { readers, unproduced, prefixSites } = readersByName(files, kind, production);
+  const debt = Object.fromEntries([...unproduced.keys()].sort().map((name) => [name, [...unproduced.get(name)].sort()]));
   return { files: files.length, denominator: readers.size, debt, prefixSites };
 }
 
@@ -211,20 +228,16 @@ export function readClassFindings(label, measured, pinned) {
 /** La clasificacion completa, en una pasada sobre el corpus Modern. */
 export function classifyReadWithoutProducer(files = collectModernSkinFiles(), producers) {
   const producerSet = producers ?? collectChannelProducers().producers;
-  const read = new Set();
-  for (const file of files) {
-    const text = stripComments(readFileSync(file, 'utf8'));
-    for (const call of varCalls(text)) {
-      if (!call.name.startsWith('--ds-')) continue;
-      read.add(call.name);
-    }
-  }
-  const denominator = [...read].sort();
-  const debt = denominator.filter((name) => !producerSet.has(name));
+  const production = collectProductionEvidence(files, producerSet, { excludeFrozen: true });
+  const { readers, unproduced } = readersByName(files, 'css', production);
+  const denominator = [...readers.keys()].sort();
+  const debt = [...unproduced.keys()].sort();
+  const producedNames = new Set(denominator.filter((name) => !unproduced.has(name)));
   return {
     files: files.length,
     denominator,
     produced: denominator.length - debt.length,
+    producedNames,
     debt,
     producers: producerSet.size,
   };
@@ -233,14 +246,14 @@ export function classifyReadWithoutProducer(files = collectModernSkinFiles(), pr
 /**
  * Los invariantes de forma. Un contador puede estar verde y estar contando mal.
  */
-export function shapeFailures(result, producers) {
+export function shapeFailures(result) {
   const failures = [];
   const denominatorSet = new Set(result.denominator);
   for (const name of result.debt) {
     if (!denominatorSet.has(name)) {
       failures.push(`shape: ${name} is counted as debt but is not in the denominator`);
     }
-    if (producers.has(name)) {
+    if (result.producedNames?.has(name)) {
       failures.push(`shape: ${name} has a producer and must never be counted as debt`);
     }
   }
@@ -273,8 +286,9 @@ export function residueFindings(residue, { files, producers, compiledByKind }) {
       compiledByKind.kernel?.has(name) &&
       Object.entries(compiledByKind).every(([kind, set]) => kind === 'kernel' || !set.has(name)) &&
       !producers.declared.has(name);
+    const unproduced = new Set(classifyReadWithoutProducer([skin], producers.all).debt);
     const arms = [
-      ['readWithoutProducer', (name) => !producers.all.has(name)],
+      ['readWithoutProducer', (name) => unproduced.has(name)],
       ['kernelAuthorableWithoutRest', kernelOnly],
     ];
     for (const [arm, measured] of arms) {
