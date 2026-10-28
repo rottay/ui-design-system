@@ -386,3 +386,33 @@ describe("chrome/toolbar channels under a local scope", () => {
     }
   });
 });
+
+const WEIGHT_POSTURES = [
+  { roleWeights: "light", expected: "500" },
+  { roleWeights: "regular", expected: "600" },
+  { roleWeights: "strong", expected: "700" },
+] as const;
+
+describe("chrome/toolbar title weight projection without browser", () => {
+  it.each(WEIGHT_POSTURES)("lowers $roleWeights through the title role without adding density members", ({ roleWeights, expected }) => {
+    const theme = firstPartyFixture("bithire");
+    theme.typography = { ...theme.typography, roleWeights };
+    const root = lowerBlock({ theme });
+    const channels = new Map(Object.entries(root));
+    expect(channels.get("--ds-toolbar-title-font-weight")).toBe(
+      "var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600))"
+    );
+    expect(channels.get("--ds-type-section-title-font-weight")).toBe(expected);
+    const members = densityScopeMembers(FAMILY_DERIVERS, (derivers) => lowerBlock({ theme }, derivers));
+    expect(members.filter((channel) => PRODUCES.has(channel))).toEqual(
+      CHANNELS.filter((channel) => channel !== MASKED).sort()
+    );
+    expect(members).not.toContain("--ds-toolbar-title-font-weight");
+    const block = projectDensityScopeBlock(root, members, []);
+    const local = new Map(Object.entries(block?.cssVariables ?? {}));
+    expect(local.has("--ds-toolbar-title-font-weight")).toBe(false);
+    for (const channel of members) {
+      expect(local.get(channel)).toBe(channels.get(channel));
+    }
+  });
+});

@@ -1,17 +1,20 @@
 /**
- * The toolbar vocabulary at rest: every channel equals the one fallback the Modern
- * list-toolbar skin reads it with, and any higher-ranked statement still wins.
+ * The toolbar vocabulary: resting skin values, semantic title weight, and
+ * precedence for higher-ranked statements.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { deriveTypeRoleChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/roles";
+import { deriveTypeWeightChannels, roleWeightOverlay } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/weights";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { FAMILY_DERIVERS } from "../../..";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
-import { toolbarChromeDeriver } from "..";
+import { deriveToolbarChannels, toolbarChromeDeriver } from "..";
 
 const SKIN = readFileSync(
   resolve(process.cwd(), "src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar/index.css"),
@@ -104,11 +107,16 @@ describe("chrome/toolbar", () => {
     expect(toolbarChromeDeriver.rank).toBe("derived");
   });
 
-  it("states every declared channel at the single resting value the skin reads it with", () => {
+  it("states every declared channel at its skin rest or the semantic title weight", () => {
     const derived = toolbarChromeDeriver.derive(context(), {});
     expect(Object.keys(derived).sort()).toEqual([...toolbarChromeDeriver.produces].sort());
     for (const [channel, value] of Object.entries(derived)) {
       if (channel in SPLIT_SITE_GAPS) continue;
+      if (channel === "--ds-toolbar-title-font-weight") {
+        expect(value).toBe("var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600))");
+        expect(skinFallbacks(channel)).toEqual(["var(--ds-font-weight-semibold, 600)"]);
+        continue;
+      }
       const resting = skinFallbacks(channel).map(atThemeRoot);
       expect({ channel, resting }).toEqual({ channel, resting: [value] });
     }
@@ -172,5 +180,79 @@ describe("chrome/toolbar", () => {
         expect(result.provenance.get(channel)?.rank).toBe(rank);
       }
     }
+  });
+});
+
+function weights(theme: FlatTheme): Map<string, string> {
+  return new Map(Object.entries({
+    ...deriveTypeWeightChannels(theme),
+    ...deriveTypeRoleChannels(theme, undefined, {
+      numeric: {},
+      weights: roleWeightOverlay(theme),
+    }),
+  }));
+}
+
+function resolveWeight(value: string | undefined, channels: Map<string, string>): string {
+  if (value === undefined) throw new Error("Missing weight channel");
+  const reference = /^var\((--ds-[a-z0-9-]+)(?:,\s*(.*))?\)$/.exec(value);
+  if (reference === null) return value;
+  const [, channel, fallback] = reference;
+  if (channel === undefined) throw new Error("Missing reference name");
+  return resolveWeight(channels.get(channel) ?? fallback, channels);
+}
+
+const titleWeight = new Map(Object.entries(deriveToolbarChannels())).get("--ds-toolbar-title-font-weight");
+const postures = [
+  { roleWeights: "light", expected: "500" },
+  { roleWeights: "regular", expected: "600" },
+  { roleWeights: "strong", expected: "700" },
+] as const;
+
+describe("chrome/toolbar title weight", () => {
+  it.each(postures)("follows the real $roleWeights posture while preserving body and supporting weights", ({ roleWeights, expected }) => {
+    const channels = weights({ id: "posture", name: "Posture", typography: { roleWeights } });
+    expect(resolveWeight(titleWeight, channels)).toBe(expected);
+    expect(channels.get("--ds-type-body-font-weight")).toBe("400");
+    expect(channels.get("--ds-type-supporting-font-weight")).toBe("400");
+  });
+
+  it("follows a section-title-only 700 to 300 change while label remains independent", () => {
+    const theme = (fontWeight: number): FlatTheme => ({
+      id: "section-only", name: "Section only",
+      typography: { roles: { sectionTitle: { fontWeight }, label: { fontWeight: 800 } } },
+    });
+    const before = weights(theme(700));
+    const after = weights(theme(300));
+    expect(resolveWeight(titleWeight, before)).toBe("700");
+    expect(resolveWeight(titleWeight, after)).toBe("300");
+    expect(before.get("--ds-type-label-font-weight")).toBe("800");
+    expect(after.get("--ds-type-label-font-weight")).toBe("800");
+  });
+
+  it("lets the explicit section title outrank the posture and ignores the semibold constant", () => {
+    const channels = weights({
+      id: "specific", name: "Specific",
+      typography: { roleWeights: "strong", roles: { sectionTitle: { fontWeight: 300 }, label: { fontWeight: 800 } } },
+    });
+    channels.set("--ds-font-weight-semibold", "900");
+    expect(resolveWeight(titleWeight, channels)).toBe("300");
+  });
+
+  it("retains semibold then 600 when the role channel is absent", () => {
+    expect(resolveWeight(titleWeight, new Map([["--ds-font-weight-semibold", "650"]]))).toBe("650");
+    expect(resolveWeight(titleWeight, new Map())).toBe("600");
+  });
+
+  it("preserves title family, size, tracking, density geometry, search and material declarations", () => {
+    const channels = new Map(Object.entries(deriveToolbarChannels()));
+    expect(channels.get("--ds-toolbar-title-font-family")).toBe("var(--ds-type-section-title-font-family, var(--ds-font-family-heading))");
+    expect(channels.get("--ds-toolbar-title-font-size")).toBe("var(--ds-font-size-md)");
+    expect(channels.get("--ds-toolbar-title-letter-spacing")).toBe("var(--ds-type-section-title-letter-spacing, -0.015em)");
+    expect(channels.get("--ds-toolbar-title-gap")).toBe("var(--ds-spacing-2, 0.5rem)");
+    expect(channels.get("--ds-toolbar-search-font-size")).toBe("var(--ds-button-sm-font-size, 0.8125rem)");
+    expect(channels.get("--ds-toolbar-controls-bg")).toBe("transparent");
+    expect(channels.get("--ds-toolbar-control-focus-ring")).toBe("var(--ds-material-control-focus-ring, var(--ds-focus-ring))");
+    expect(toolbarChromeDeriver.scopes).toEqual(["density"]);
   });
 });

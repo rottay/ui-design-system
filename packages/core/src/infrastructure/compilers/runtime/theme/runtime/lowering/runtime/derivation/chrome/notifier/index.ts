@@ -145,7 +145,7 @@ export function deriveNotifierChannels(): Record<string, string> {
   vars["--ds-notifier-border-color"] = "var(--ds-color-border-subtle)";
   vars["--ds-notifier-title-font-family"] = "var(--ds-type-label-font-family)";
   vars["--ds-notifier-title-font-size"] = "var(--ds-type-label-font-size)";
-  vars["--ds-notifier-title-font-weight"] = "var(--ds-font-weight-semibold)";
+  vars["--ds-notifier-title-font-weight"] = "var(--ds-type-label-font-weight)";
   vars["--ds-notifier-title-urgent-font-weight"] = "var(--ds-font-weight-bold)";
   vars["--ds-notifier-title-line-height"] = "var(--ds-type-label-line-height)";
   vars["--ds-notifier-title-letter-spacing"] = "var(--ds-letter-spacing-heading)";

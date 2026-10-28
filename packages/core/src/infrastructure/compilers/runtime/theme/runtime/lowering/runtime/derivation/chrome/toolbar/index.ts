@@ -155,7 +155,7 @@ export function deriveToolbarChannels(): Record<string, string> {
   vars["--ds-toolbar-sheen-opacity"] = "0";
   vars["--ds-toolbar-title-font-family"] = "var(--ds-type-section-title-font-family, var(--ds-font-family-heading))";
   vars["--ds-toolbar-title-font-size"] = "var(--ds-font-size-md)";
-  vars["--ds-toolbar-title-font-weight"] = "var(--ds-font-weight-semibold, 600)";
+  vars["--ds-toolbar-title-font-weight"] = "var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600))";
   vars["--ds-toolbar-title-gap"] = "var(--ds-spacing-2, 0.5rem)";
   vars["--ds-toolbar-title-icon-size"] = "2rem";
   vars["--ds-toolbar-title-letter-spacing"] = "var(--ds-type-section-title-letter-spacing, -0.015em)";

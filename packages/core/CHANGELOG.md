@@ -4,6 +4,10 @@
 
 ### Patch Changes
 
+- Follow the label role weight for Notifier titles and the section-title role
+  weight for Toolbar titles, preserving urgent notification weights, title
+  metrics and local density behavior.
+
 - Let Modern DatePicker navigation and day-cell hover backgrounds follow the
   control material and tenant emphasis, with palette hover as the fallback.
 - Let Modern Cascader option hover follow material state emphasis, retaining
